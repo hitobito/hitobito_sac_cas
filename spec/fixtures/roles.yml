@@ -6,17 +6,17 @@
 
 admin:
   person: admin
-  group: root
-  type: Group::Root::Leader
+  group: ressort_it
+  type: Group::Ressort::ITSupport
 
-# TODO use group and type of the main base leader
-leader:
-  person: leader
-  group: root
-  type: Group::Root::Leader
+## TODO use group and type of the main base leader
+#leader:
+  #person: leader
+  #group: root
+  #type: Group::Root::Leader
 
-# TODO use group and type of the main base member
-member:
-  person: member
-  group: root
-  type: Group::Root::Member
+## TODO use group and type of the main base member
+#member:
+  #person: member
+  #group: root
+  #type: Group::Root::Member

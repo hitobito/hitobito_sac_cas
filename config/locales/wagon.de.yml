@@ -3,23 +3,116 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 de:
   activerecord:
     models:
 
       ### GROUPS
+      group/zentralverband:
+        one: Zentralverband
+        other: Zentralverbände
 
-      group/root:
-        one: Hauptgruppe
-        other: Hauptgruppen
+      group/ressort:
+        one: Ressort
+        other: Ressorts
 
+      group/externe_kontakte:
+        one: Externe Kontakte
+        other: Externe Kontakte
+
+      group/sektion:
+        one: Sektion
+        other: Sektionen
+
+      group/sektions_mitglieder:
+        one: Mitglieder
+        other: Mitglieder
+
+      group/sektions_vorstand:
+        one: Vorstand
+        other: Vorstände
+
+      group/sektions_kommission:
+        one: Kommission
+        other: Kommissionen
+
+      group/huette:
+        one: Hütte
+        other: Hütten
 
       ### ROLES
-
-      group/root/leader:
+      group/ressort/leitung:
         one: Leitung
-        description: Leitungspersonen verwalten die Applikation.
-      group/root/member:
+        description: Ressortleitung
+      group/ressort/mitarbeitende:
+        one: Mitarbeitende
+        description: Mitarbeitende Ressort
+      group/ressort/rechnungswesen:
+        one: Rechnungswesen
+        description: Rechnungswesen
+      group/ressort/mitgliederverwaltung:
+        one: Mitgliederverwaltung
+        description: Mitgliederverwaltung
+      group/ressort/kursverwaltung:
+        one: Mitgliederverwaltung
+        description: Mitgliederverwaltung
+      group/ressort/it_support:
+        one: IT Support
+        description: IT Support
+      group/externe_kontakte/kontakt:
+        one: Externer Kontakt
+        description: Externer Kontakt
+      group/sektion/kontaktperson:
+        one: Kontaktperson
+        description: Kontaktperson Sektion
+      group/sektions_vorstand/praesident:
+        one: Präsident
+        description: Präsident Sektion
+      group/sektions_vorstand/vize_praesident:
+        one: Vizepräsident
+        description: Vizepräsident Sektion
+      group/sektions_vorstand/vorstandsmitglied:
+        one: Vorstandsmitglied
+        description: Vorstandsmitglied Sektion
+      group/sektions_vorstand/kassier:
+        one: Kassier
+        description: Kassier Sektion
+      group/sektions_vorstand/mitgliederverwaltung:
+        one: Mitgliederverwaltung
+        description: Mitgliederverwaltung Sektion
+      group/sektions_kommission/leitung:
+        one: Kommissionsleitung
+        description: Kommissionsleitung
+      group/sektions_kommission/mitglied:
+        one: Kommissionsmitglied
+        description: Kommissionsmitglied
+      group/sektions_mitglieder/mitglied:
         one: Mitglied
-        description: Mitglieder sind alle anderen.
+        description: Mitglied Sektion
+      group/sektions_mitglieder/ehrenmitglied:
+        one: Ehrenmitglied
+        description: Ehrenmitglied Sektion
+      group/sektions_mitglieder/beguenstigt:
+        one: Begünstigt
+        description: Begünstigt Sektion
+      group/sektions_mitglieder/interessent:
+        one: Interessent*in
+        description: Interessent*in Sektion
+      group/huette/huettenchef:
+        one: Hüttenchef*in
+        description: Hüttenchef*in
+      group/huette/huettenwart:
+        one: Hüttenwart*in
+        description: Hüttenwart*in
+      group/huette/huettenwarts_partner:
+        one: Hüttenwartspartner*in
+        description: Hüttenwartspartner*in
+      group/huette/huetten_obmann:
+        one: Hüttenobmann
+        description: Hüttenobmann
+      group/huette/mitarbeitende:
+        one: Mitarbeitende
+        description: Mitarbeitende
+      group/huette/huettenbetreuer:
+        one: Hüttenbetreuer*in
+        description: Hüttenbetreuer*in

@@ -5,16 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+class Group::Sektion < ::Group
 
-module SacCas::Group
-  extend ActiveSupport::Concern
+  self.layer = true
 
-  included do
-    # Define additional used attributes
-    # self.used_attributes += [:website, :bank_account, :description]
-    # self.superior_attributes = [:bank_account]
-
-    root_types Group::Zentralverband
+  ### ROLES
+  class Kontaktperson < ::Role
+    self.permissions = [:contact_data]
   end
+
+  roles Kontaktperson
+
+  children Group::SektionsVorstand, Group::SektionsMitglieder, Group::SektionsKommission, Group::Huette
 
 end

@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
 
 class SacCasPersonSeeder < PersonSeeder
@@ -44,7 +43,7 @@ seeder = SacCasPersonSeeder.new
 
 seeder.seed_all_roles
 
-root = Group.root
+it_ressort = Group.find_by(name: 'Digitalisierung & IT')
 devs.each do |name, email|
-  seeder.seed_developer(name, email, root, Group::Root::Leader)
+  seeder.seed_developer(name, email, it_ressort, Group::Ressort::ITSupport)
 end

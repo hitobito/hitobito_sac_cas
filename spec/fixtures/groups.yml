@@ -3,17 +3,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 root:
   parent:
   lft: 1
-  rgt: 2
+  rgt: 4
   name: Hauptgruppe
-  type: Group::Root
+  type: Group::Zentralverband
   email: root@example.net
   address: Ophovener Str. 79a
   zip_code: 2843
   town: Neu Carlscheid
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
 
-# TODO add more groups
+ressort_it:
+  parent: root
+  lft: 2 
+  rgt: 3
+  name: Digitalisierung & IT
+  type: Group::Ressort
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>

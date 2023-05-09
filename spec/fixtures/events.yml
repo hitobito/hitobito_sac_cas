@@ -5,13 +5,12 @@
 
 
 top_event:
-  groups: root
+  groups: zentralverband
 
 top_course:
-  groups: root
+  groups: zentralverband
   type: Event::Course
   kind: dummy
   priorization: true
   requires_approval: true
   external_applications: true
-
