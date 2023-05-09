@@ -1,0 +1,14 @@
+[main]
+host = https://www.transifex.com
+
+[o:hitobito:p:hitobito_sac_cas:r:models-sac_cas]
+file_filter = config/locales/models.sac_cas.<lang>.yml
+source_file = config/locales/models.sac_cas.de.yml
+source_lang = de
+type        = YML
+
+[o:hitobito:p:hitobito_sac_cas:r:views-sac_cas]
+file_filter = config/locales/views.sac_cas.<lang>.yml
+source_file = config/locales/views.sac_cas.de.yml
+source_lang = de
+type        = YML

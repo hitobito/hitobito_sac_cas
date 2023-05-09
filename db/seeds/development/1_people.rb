@@ -1,5 +1,10 @@
 # frozen_string_literal: true
-# encoding: utf-8
+
+#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
 
 require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
 
@@ -15,21 +20,21 @@ class SacCasPersonSeeder < PersonSeeder
 end
 
 puzzlers = [
-  'Andreas Maierhofer',
   'Carlo Beltrame',
-  'Mathis Hofer',
   'Matthias Viehweger',
+  'Micha Luedi',
   'Nils Rauch',
+  'Oliver Dietschi',
   'Olivier Brian',
   'Pascal Simon',
-  'Pascal Zumkehr',
-  'Roland Studer',
-  'Tobias Hinderling',
-  'Severin Raez'
+  'Thomas Ellenberger'
 ]
 
 devs = {
-  'Customer Name' => 'customer@email.com'
+  'Stefan Sykes' => 'stefan.sykes@sac-cas.ch',
+  'Daniel Menet' => 'daniel.menet@sac-cas.ch',
+  'Nathalie König' => 'nathalie.koenig@sac-cas.ch',
+  'Reto Giger' => 'reto.giger@sac-cas.ch',
 }
 puzzlers.each do |puz|
   devs[puz] = "#{puz.split.last.downcase}@puzzle.ch"

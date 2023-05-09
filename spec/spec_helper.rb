@@ -1,4 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
 
 load File.expand_path('../../app_root.rb', __FILE__)
 ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)

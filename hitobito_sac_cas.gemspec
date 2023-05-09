@@ -8,11 +8,11 @@ Gem::Specification.new do |s|
   # rubocop:disable SingleSpaceBeforeFirstArg
   s.name        = 'hitobito_sac_cas'
   s.version     = HitobitoSacCas::VERSION
-  s.authors     = ['Your name']
-  s.email       = ['Your email']
-  # s.homepage    = 'TODO'
-  s.summary     = 'Sac Cas'
-  s.description = 'Wagon description'
+  s.authors     = ['Carlo Beltrame', 'Pascal Simon']
+  s.email       = ['beltrame@puzzle.ch', 'simon@puzzle.ch']
+  s.homepage    = 'sac-cas.ch'
+  s.summary     = 'SAC CAS'
+  s.description = 'Organization structure and specific features for SAC CAS'
 
   s.files = Dir['{app,config,db,lib}/**/*'] + ['Rakefile']
   s.test_files = Dir['test/**/*']
