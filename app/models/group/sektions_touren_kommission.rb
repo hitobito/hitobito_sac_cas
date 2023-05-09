@@ -5,16 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+class Group::SektionsTourenKommission < ::Group
 
-module SacCas::Group
-  extend ActiveSupport::Concern
-
-  included do
-    # Define additional used attributes
-    # self.used_attributes += [:website, :bank_account, :description]
-    # self.superior_attributes = [:bank_account]
-
-    root_types Group::Zentralverband
+  ### ROLES
+  class TourenChef < ::Role
+    self.permissions = [:group_full, :contact_data]
   end
+
+  class TourenLeiter < ::Role
+    self.permissions = []
+  end
+
+  roles TourenChef, TourenLeiter
 
 end

@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.version     = HitobitoSacCas::VERSION
   s.authors     = ['Carlo Beltrame', 'Pascal Simon']
   s.email       = ['beltrame@puzzle.ch', 'simon@puzzle.ch']
-  s.homepage    = 'sac-cas.ch'
+  s.homepage    = 'https://sac-cas.ch'
   s.summary     = 'SAC CAS'
   s.description = 'Organization structure and specific features for SAC CAS'
 
