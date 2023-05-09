@@ -1,0 +1,15 @@
+first:
+  label: Vorbereitung
+  event: top_course
+  start_at: 2023-03-01 00:00:00 +0100
+
+first_two:
+  label: Kurs
+  event: top_course
+  start_at: 2023-04-03 00:00:00 +0200
+  finish_at: 2023-04-10 00:00:00 +0200
+
+second:
+  label: Event
+  event: top_event
+  start_at: 2023-09-01 00:00:00 +0200

@@ -1,0 +1,7 @@
+dummy:
+  locale: 'de'
+  label: 'Dummy'
+  short_name: 'DMY'
+  event_kind_id:  <%= ActiveRecord::FixtureSet.identify(:dummy) %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
