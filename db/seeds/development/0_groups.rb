@@ -20,6 +20,11 @@ if root.address.blank?
   end
 end
 
-# TODO: define more groups
+['Leistungssport', 'Breitensport', 'Marketing', 'Hütten & Umwelt', 'Finanzen & Dienste', 'Digitalisierung & IT'].each do |r|
+  Group::Ressort.seed(:name, :parent_id, {
+    name: r,
+    parent_id: root.id
+  })
+end
 
 Group.rebuild!

@@ -5,5 +5,4 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 Group::Zentralverband.seed_once(:parent_id, name: 'Zentralverband')
