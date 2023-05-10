@@ -12,8 +12,10 @@ class Group::SektionsHuettenKommission < ::Group
     self.permissions = [:group_and_below_full, :contact_data]
   end
 
-  roles HuettenChef
+  class Kommissionsmitglied < ::Role
+    self.permissions = []
+  end
 
-  children Huette
+  roles HuettenChef, Kommissionsmitglied
 
 end

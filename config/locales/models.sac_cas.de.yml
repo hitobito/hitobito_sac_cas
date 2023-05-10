@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 de:
   activerecord:
     models:
@@ -88,8 +87,11 @@ de:
         one: Mitgliederdienst
         description: Mitgliederdienst Sektion
       group/sektions_huetten_kommission/huetten_chef:
-        one: Hüttenchef
-        description: Hüttenchef Sektion
+        one: Hüttenchef*in
+        description: Hüttenchef*in Sektion
+      group/sektions_huetten_kommission/kommissionsmitglied:
+        one: Kommissionsmitglied
+        description: Kommissionsmitglied
       group/sektions_mitglieder/mitglied:
         one: Mitglied
         description: Mitglied Sektion
@@ -100,23 +102,23 @@ de:
         one: Begünstigt
         description: Begünstigt Sektion
       group/sektions_mitglieder/interessent:
-        one: Interessent
-        description: Interessent Sektion
+        one: Interessent*in
+        description: Interessent*in Sektion
       group/sektions_touren_kommission/touren_chef:
-        one: Tourenchef
-        description: Tourenchef Sektion
+        one: Tourenchef*in
+        description: Tourenchef*in Sektion
       group/sektions_touren_kommission/touren_leiter:
-        one: Tourenchef
-        description: Tourenchef Sektion
+        one: Tourenleiter*in
+        description: Tourenleiter*in Sektion
       group/huette/huettenchef:
-        one: Hüttenchef
-        description: Hüttenchef
+        one: Hüttenchef*in
+        description: Hüttenchef*in
       group/huette/huettenwart:
-        one: Hüttenwart
-        description: Hüttenwart
+        one: Hüttenwart*in
+        description: Hüttenwart*in
       group/huette/huettenwarts_partner:
-        one: Hüttenwartspartner
-        description: Hüttenwartspartner
+        one: Hüttenwartspartner*in
+        description: Hüttenwartspartner*in
       group/huette/huetten_obmann:
         one: Hüttenobmann
         description: Hüttenobmann
@@ -124,5 +126,5 @@ de:
         one: Mitarbeitende
         description: Mitarbeitende
       group/huette/huettenbetreuer:
-        one: Hüttenbetreuer
-        description: Hüttenbetreuer
+        one: Hüttenbetreuer*in
+        description: Hüttenbetreuer*in
