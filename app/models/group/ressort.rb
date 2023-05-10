@@ -34,4 +34,6 @@ class Group::Ressort < ::Group
 
   roles Leitung, Mitarbeitende, Rechnungswesen, Mitgliederverwaltung, Kursverwaltung, ITSupport
 
+  children Group::ExterneKontakte
+
 end

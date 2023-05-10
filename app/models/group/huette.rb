@@ -7,6 +7,8 @@
 
 class Group::Huette < ::Group
 
+  self.layer = true
+
   ### ROLES
   class Huettenwart < ::Role
     self.permissions = [:group_full]
