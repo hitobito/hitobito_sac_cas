@@ -5,17 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsTourenKommission < ::Group
+class Group::SektionsKommission < ::Group
 
   ### ROLES
-  class TourenChef < ::Role
+  class Leitung < ::Role
     self.permissions = [:group_full, :contact_data]
   end
 
-  class TourenLeiter < ::Role
+  class Mitglied < ::Role
     self.permissions = []
   end
 
-  roles TourenChef, TourenLeiter
+  roles Leitung, Mitglied
 
 end

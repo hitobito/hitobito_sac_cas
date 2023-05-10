@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 require Rails.root.join('db', 'seeds', 'support', 'group_seeder')
 
 seeder = GroupSeeder.new
@@ -14,15 +13,19 @@ root = Group.roots.first
 srand(42)
 
 def seed_sektion(sektion)
+  Group::SektionsMitglieder.seed(:name, :parent_id, {
+    name: 'Mitglieder',
+    parent_id: sektion.id
+  })
   Group::SektionsVorstand.seed(:name, :parent_id, {
     name: 'Vorstand',
     parent_id: sektion.id
   })
-  Group::SektionsHuettenKommission.seed(:name, :parent_id, {
+  Group::SektionsKommission.seed(:name, :parent_id, {
     name: 'Hüttenkommission',
     parent_id: sektion.id
   })
-  Group::SektionsTourenKommission.seed(:name, :parent_id, {
+  Group::SektionsKommission.seed(:name, :parent_id, {
     name: 'Tourenkommission',
     parent_id: sektion.id
   })
@@ -72,6 +75,12 @@ end
 
 seed_hut(sektions.first, 'Matterhornbiwak')
 seed_hut(sektions.second, 'Domhütte')
+seed_hut(sektions.second, 'Spannorthütte')
+seed_hut(sektions.second, 'Täschhütte')
 seed_hut(sektions.third, 'Blüemlisalphütte')
+seed_hut(sektions.third, 'Baltschiederklause')
+seed_hut(sektions.third, 'Stockhornbiwak')
+seed_hut(sektions.third, 'Gestellenhütte')
+seed_hut(sektions.third, 'Sunnhüsi')
 
 Group.rebuild!

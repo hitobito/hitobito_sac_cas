@@ -16,6 +16,6 @@ class Group::Sektion < ::Group
 
   roles Kontaktperson
 
-  children Group::SektionsVorstand, Group::SektionsMitglieder, Group::SektionsTourenKommission, Group::SektionsHuettenKommission, Group::Huette
+  children Group::SektionsVorstand, Group::SektionsMitglieder, Group::SektionsKommission, Group::Huette
 
 end
