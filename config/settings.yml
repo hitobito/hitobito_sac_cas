@@ -10,6 +10,10 @@
 application:
   languages:
     de: Deutsch
+  logo:
+    image: logo.svg
+    height: 70
+    width: 200
 
   # non UI languages for assigning to person#language
   # additional_languages:
