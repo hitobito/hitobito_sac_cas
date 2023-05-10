@@ -3,24 +3,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 admin:
-  first_name: Chief
+  first_name: Anna
   last_name: Admin
-  email: admin@hitobito.example.comt
+  email: support@hitobito.example.com
   gender: m
   contact_data_visible: true
-  primary_group: root
+  primary_group: ressort_it
 
-leader:
-  first_name: A
-  last_name: Leader
-  email: a.leader@hitobito.example.com
-  contact_data_visible: true
-  primary_group: root
+#leader:
+  #first_name: A
+  #last_name: Leader
+  #email: a.leader@hitobito.example.com
+  #contact_data_visible: true
+  #primary_group: root
 
-member:
-  first_name: My
-  last_name: Member
-  email: member0@hitobito.example.com
-  primary_group: root
+#member:
+  #first_name: My
+  #last_name: Member
+  #email: member0@hitobito.example.com
+  #primary_group: root

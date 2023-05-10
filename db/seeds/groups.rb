@@ -6,4 +6,4 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-Group::Root.seed_once(:parent_id, name: 'Hauptgruppe')
+Group::Zentralverband.seed_once(:parent_id, name: 'Zentralverband')

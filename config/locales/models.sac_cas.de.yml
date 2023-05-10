@@ -33,13 +33,18 @@ de:
         one: Vorstand
         other: Vorstände
 
-      group/sektions_huettenkommission:
+      group/sektions_huetten_kommission:
         one: Hüttenkommission
         other: Hüttenkommissionen
 
-      group/sektions_tourenkommission:
+      group/sektions_touren_kommission:
         one: Tourenkommission
         other: Tourenkommissionen
+
+      group/huette:
+        one: Hütte
+        other: Hütten
+
 
 
       ### ROLES
@@ -58,7 +63,7 @@ de:
       group/ressort/kursverwaltung:
         one: Mitgliederverwaltung
         description: Mitgliederverwaltung
-      group/ressort/itsupport:
+      group/ressort/it_support:
         one: IT Support
         description: IT Support
       group/externe_kontakte/kontakt:
@@ -82,10 +87,7 @@ de:
       group/sektions_vorstand/mitgliederdienst:
         one: Mitgliederdienst
         description: Mitgliederdienst Sektion
-      group/sektions_huetten_kommission/huettenchef:
-        one: Hüttenchef
-        description: Hüttenchef Sektion
-      group/sektions_huetten_kommission/huettenchef:
+      group/sektions_huetten_kommission/huetten_chef:
         one: Hüttenchef
         description: Hüttenchef Sektion
       group/sektions_mitglieder/mitglied:
@@ -100,12 +102,15 @@ de:
       group/sektions_mitglieder/interessent:
         one: Interessent
         description: Interessent Sektion
-      group/sektions_tourenkommission/touren_chef:
+      group/sektions_touren_kommission/touren_chef:
         one: Tourenchef
         description: Tourenchef Sektion
-      group/sektions_tourenkommission/touren_leiter:
+      group/sektions_touren_kommission/touren_leiter:
         one: Tourenchef
         description: Tourenchef Sektion
+      group/huette/huettenchef:
+        one: Hüttenchef
+        description: Hüttenchef
       group/huette/huettenwart:
         one: Hüttenwart
         description: Hüttenwart

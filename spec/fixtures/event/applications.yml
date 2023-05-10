@@ -3,8 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-top_course_applicant:
-  priority_1_id: top_course
-  approved: true
-  waiting_list: true
+#top_course_applicant:
+  #priority_1_id: top_course
+  #approved: true
+  #waiting_list: true

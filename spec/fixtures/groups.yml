@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 2
+  rgt: 4
   name: Hauptgruppe
   type: Group::Zentralverband
   email: root@example.net
@@ -15,10 +15,10 @@ root:
   town: Neu Carlscheid
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
 
-root:
+ressort_it:
   parent: root
-  lft: 1
-  rgt: 2
+  lft: 2 
+  rgt: 3
   name: Digitalisierung & IT
   type: Group::Ressort
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
