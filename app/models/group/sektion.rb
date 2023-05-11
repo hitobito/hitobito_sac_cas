@@ -16,6 +16,9 @@ class Group::Sektion < ::Group
 
   roles Kontaktperson
 
-  children Group::SektionsVorstand, Group::SektionsMitglieder, Group::SektionsKommission, Group::Huette
+  children Group::SektionsVorstand,
+           Group::SektionsMitglieder,
+           Group::SektionsKommission,
+           Group::Huette
 
 end
