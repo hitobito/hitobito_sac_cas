@@ -36,10 +36,6 @@ de:
         one: Kommission
         other: Kommissionen
 
-      group/sektions_touren_kommission:
-        one: Kommission
-        other: Kommissionen
-
       group/huette:
         one: Hütte
         other: Hütten
@@ -81,9 +77,9 @@ de:
       group/sektions_vorstand/kassier:
         one: Kassier
         description: Kassier Sektion
-      group/sektions_vorstand/mitgliederdienst:
-        one: Mitgliederdienst
-        description: Mitgliederdienst Sektion
+      group/sektions_vorstand/mitgliederverwaltung:
+        one: Mitgliederverwaltung
+        description: Mitgliederverwaltung Sektion
       group/sektions_kommission/leitung:
         one: Kommissionsleitung
         description: Kommissionsleitung

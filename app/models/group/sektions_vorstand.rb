@@ -24,10 +24,10 @@ class Group::SektionsVorstand < ::Group
     self.permissions = [:layer_and_below_full, :contact_data, :finance]
   end
 
-  class Mitgliederdienst < ::Role
+  class Mitgliederverwaltung < ::Role
     self.permissions = [:layer_and_below_full, :contact_data]
   end
 
-  roles Praesident, VizePraesident, Vorstandsmitglied, Kassier, Mitgliederdienst
+  roles Praesident, VizePraesident, Vorstandsmitglied, Kassier, Mitgliederverwaltung
 
 end
