@@ -13,7 +13,6 @@ of SAC CAS.
     * Mitarbeitende: []
     * Rechnungswesen: [:layer_and_below_full, :finance]
     * Mitgliederverwaltung: [:layer_and_below_full]
-    * Mitgliederverwaltung: [:layer_and_below_full]
     * IT Support: [:layer_and_below_full, :admin]
   * Externe Kontakte
     * Externer Kontakt: []
