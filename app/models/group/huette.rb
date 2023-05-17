@@ -18,18 +18,22 @@ class Group::Huette < ::Group
     self.permissions = [:group_full]
   end
 
-  class HuettenObmann < ::Role
+  class Huettenchef < ::Role
+    self.permissions = [:group_full]
+  end
+
+  class Mitarbeiter < ::Role
     self.permissions = []
   end
 
-  class Mitarbeitende < ::Role
+  class Funktionaer < ::Role
     self.permissions = []
   end
 
-  class Huettenbetreuer < ::Role
-    self.permissions = []
-  end
-
-  roles Huettenwart, HuettenwartsPartner, HuettenObmann, Mitarbeitende, Huettenbetreuer
+  roles Huettenwart,
+    HuettenwartsPartner,
+    Huettenchef,
+    Mitarbeiter,
+    Funktionaer
 
 end

@@ -7,18 +7,18 @@ root:
   parent:
   lft: 1
   rgt: 4
-  name: Hauptgruppe
-  type: Group::Zentralverband
+  name: Schweizer Alpen-Club SAC
+  type: Group::SacCas
   email: root@example.net
   address: Ophovener Str. 79a
   zip_code: 2843
   town: Neu Carlscheid
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
 
-ressort_it:
+geschaeftsstelle:
   parent: root
   lft: 2 
   rgt: 3
-  name: Digitalisierung & IT
-  type: Group::Ressort
+  name: Geschäftsstelle
+  type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
