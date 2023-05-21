@@ -8,17 +8,17 @@ de:
     models:
 
       ### GROUPS
-      group/zentralverband:
-        one: Zentralverband
-        other: Zentralverbände
-
-      group/ressort:
-        one: Ressort
-        other: Ressorts
+      group/sac_cas:
+        one: Schweizer Alpen-Club SAC
+        other: Schweizer Alpen-Club SAC
 
       group/externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
+
+      group/geschaeftsstelle:
+        one: Geschäftsstelle
+        other: Geschäftsstelle
 
       group/sektion:
         one: Sektion
@@ -28,76 +28,96 @@ de:
         one: Mitglieder
         other: Mitglieder
 
-      group/sektions_vorstand:
-        one: Vorstand
-        other: Vorstände
+      group/sektions_funktionaere:
+        one: Funktionäre
+        other: Funktionäre
 
-      group/sektions_kommission:
-        one: Kommission
-        other: Kommissionen
+      group/sektions_tourenkommission:
+        one: Tourenkommission
+        other: Tourenkommissionen
 
       group/huette:
         one: Hütte
         other: Hütten
 
       ### ROLES
-      group/ressort/leitung:
-        one: Leitung
-        description: Ressortleitung
-      group/ressort/mitarbeitende:
-        one: Mitarbeitende
-        description: Mitarbeitende Ressort
-      group/ressort/rechnungswesen:
-        one: Rechnungswesen
-        description: Rechnungswesen
-      group/ressort/mitgliederverwaltung:
-        one: Mitgliederverwaltung
-        description: Mitgliederverwaltung
-      group/ressort/kursverwaltung:
-        one: Mitgliederverwaltung
-        description: Mitgliederverwaltung
-      group/ressort/it_support:
+      group/geschaeftsstelle/it_support:
         one: IT Support
         description: IT Support
+      group/geschaeftsstelle/verwaltung:
+        one: Verwaltung
+        description: Verwaltung
+      group/geschaeftsstelle/verwaltung_read_only:
+        one: Verwaltung (nur lesend)
+        description: Verwaltung nur lesend
+
       group/externe_kontakte/kontakt:
-        one: Externer Kontakt
-        description: Externer Kontakt
-      group/sektion/kontaktperson:
-        one: Kontaktperson
-        description: Kontaktperson Sektion
-      group/sektions_vorstand/praesident:
-        one: Präsident
-        description: Präsident Sektion
-      group/sektions_vorstand/vize_praesident:
-        one: Vizepräsident
-        description: Vizepräsident Sektion
-      group/sektions_vorstand/vorstandsmitglied:
-        one: Vorstandsmitglied
-        description: Vorstandsmitglied Sektion
-      group/sektions_vorstand/kassier:
-        one: Kassier
-        description: Kassier Sektion
-      group/sektions_vorstand/mitgliederverwaltung:
-        one: Mitgliederverwaltung
-        description: Mitgliederverwaltung Sektion
-      group/sektions_kommission/leitung:
-        one: Kommissionsleitung
-        description: Kommissionsleitung
-      group/sektions_kommission/mitglied:
-        one: Kommissionsmitglied
-        description: Kommissionsmitglied
-      group/sektions_mitglieder/mitglied:
-        one: Mitglied
-        description: Mitglied Sektion
+        one: Kontakt
+        description: Kontakt
+
+      group/sektions_funktionaere/verwaltung:
+        one: Verwaltung
+        description: Verwaltung Sektion
+      group/sektions_funktionaere/verwaltung_read_only:
+        one: Verwaltung (nur lesend)
+        description: Verwaltung Sektion (nur lesend)
+      group/sektions_funktionaere/praesidium:
+        one: Präsidium
+        description: Präsidium Sektion
+      group/sektions_funktionaere/vize_praesidium:
+        one: Vizepräsidium
+        description: Vizeräsidium Sektion
+      group/sektions_funktionaere/funktionaer:
+        one: Funktionär*in
+        description: Funktionär*in Sektion
+
+      group/sektions_mitglieder/einzel:
+        one: Einzel
+        description: Einzel-Mitglied
+      group/sektions_mitglieder/jugend:
+        one: Jugendmitglied
+        description: Jugendmitglied Sektion
+      group/sektions_mitglieder/familie:
+        one: Familie
+        description: Familienmitglied
+      group/sektions_mitglieder/frei_kind:
+        one: Frei Kind
+        description: Frei Kind
+      group/sektions_mitglieder/frei_fam:
+        one: Frei Fam
+        description: Frei Familie
+      group/sektions_mitglieder/abonnement:
+        one: Abonnement
+        description: Abonnement
+      group/sektions_mitglieder/geschenkmitgliedschaft:
+        one: Geschenkmitgliedschaft
+        description: Geschenkmitgliedschaft
       group/sektions_mitglieder/ehrenmitglied:
         one: Ehrenmitglied
-        description: Ehrenmitglied Sektion
+        description: Ehrenmitglied
       group/sektions_mitglieder/beguenstigt:
         one: Begünstigt
-        description: Begünstigt Sektion
-      group/sektions_mitglieder/interessent:
-        one: Interessent*in
-        description: Interessent*in Sektion
+        description: Begünstigt
+
+      group/sektions_tourenkommission/tourenchef_sommer:
+        one: Tourenchef*in Sommer
+        description: Tourenchef*in Sommer
+      group/sektions_tourenkommission/tourenchef_winter:
+        one: Tourenchef*in Winter
+        description: Tourenchef*in Winter
+      group/sektions_tourenkommission/tourenchef_klettern:
+        one: Tourenchef*in Klettern
+        description: Tourenchef*in Klettern
+      group/sektions_tourenkommission/tourenchef_senioren:
+        one: Tourenchef*in Senioren
+        description: Tourenchef*in Senioren
+      group/sektions_tourenkommission/tourenleiter_sommer:
+        one: Tourenleiter*in Sommer
+        description: Tourenleiter*in Sommer
+      group/sektions_tourenkommission/tourenleiter_winter:
+        one: Tourenleiter*in Winter
+        description: Tourenleiter*in Winter
+
       group/huette/huettenchef:
         one: Hüttenchef*in
         description: Hüttenchef*in
@@ -107,12 +127,9 @@ de:
       group/huette/huettenwarts_partner:
         one: Hüttenwartspartner*in
         description: Hüttenwartspartner*in
-      group/huette/huetten_obmann:
-        one: Hüttenobmann
-        description: Hüttenobmann
-      group/huette/mitarbeitende:
-        one: Mitarbeitende
+      group/huette/mitarbeiter:
+        one: Mitarbeiter*in
         description: Mitarbeitende
-      group/huette/huettenbetreuer:
-        one: Hüttenbetreuer*in
-        description: Hüttenbetreuer*in
+      group/huette/funktionaer:
+        one: Funktionär*in
+        description: Funktionär*in

@@ -12,7 +12,7 @@ describe :event_participation do
 
   subject { page }
 
-  let(:person) { people(:leader) }
+  let(:person) { people(:admin) }
   let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group]) }
   let(:group) { person.roles.first.group }
 

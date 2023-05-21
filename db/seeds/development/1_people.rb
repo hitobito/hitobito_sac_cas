@@ -43,7 +43,7 @@ seeder = SacCasPersonSeeder.new
 
 seeder.seed_all_roles
 
-it_ressort = Group.find_by(name: 'Digitalisierung & IT')
+geschaeftsstelle = Group::Geschaeftsstelle.first
 devs.each do |name, email|
-  seeder.seed_developer(name, email, it_ressort, Group::Ressort::ITSupport)
+  seeder.seed_developer(name, email, geschaeftsstelle, Group::Geschaeftsstelle::ITSupport)
 end

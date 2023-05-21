@@ -17,15 +17,11 @@ def seed_sektion(sektion)
     name: 'Mitglieder',
     parent_id: sektion.id
   })
-  Group::SektionsVorstand.seed(:name, :parent_id, {
-    name: 'Vorstand',
+  Group::SektionsFunktionaere.seed(:name, :parent_id, {
+    name: 'Funktionäre',
     parent_id: sektion.id
   })
-  Group::SektionsKommission.seed(:name, :parent_id, {
-    name: 'Hüttenkommission',
-    parent_id: sektion.id
-  })
-  Group::SektionsKommission.seed(:name, :parent_id, {
+  Group::SektionsTourenkommission.seed(:name, :parent_id, {
     name: 'Tourenkommission',
     parent_id: sektion.id
   })
@@ -45,27 +41,35 @@ if root.address.blank?
   end
 end
 
-['Leistungssport', 'Breitensport', 'Marketing', 'Hütten & Umwelt', 'Finanzen & Dienste', 'Digitalisierung & IT'].each do |r|
-  Group::Ressort.seed(:name, :parent_id, {
-    name: r,
-    parent_id: root.id
-  })
-end
+Group::Geschaeftsstelle.seed(:name, :parent_id, {
+  name: '1 Geschäftsstelle',
+  parent_id: root.id
+})
 
 Group::ExterneKontakte.seed(:name, :parent_id, {
-  name: 'Authoren',
-  parent_id: Group::Ressort.find_by(name: 'Marketing').id
+  name: '2 Externe Kontakte',
+  parent_id: root.id
+})
+
+Group::ExterneKontakte.seed(:name, :parent_id, {
+  name: 'Autoren',
+  parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
+})
+
+Group::ExterneKontakte.seed(:name, :parent_id, {
+  name: 'Druckereien',
+  parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
 })
 
 sektions = Group::Sektion.seed(
   :name, :parent_id,
-  { name: 'Matterhorn',
+  { name: 'SAC Matterhorn',
     parent_id: root.id
   },
-  { name: 'UTO',
+  { name: 'SAC UTO',
     parent_id: root.id
   },
-  { name: 'Blüemlisalp',
+  { name: 'SAC Blüemlisalp',
     parent_id: root.id
   })
 

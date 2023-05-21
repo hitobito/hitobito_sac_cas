@@ -5,17 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsKommission < ::Group
+class Group::SacCas < ::Group
 
-  ### ROLES
-  class Leitung < ::Role
-    self.permissions = [:group_full, :contact_data]
-  end
+  self.layer = true
+  self.event_types = [Event::Course]
 
-  class Mitglied < ::Role
-    self.permissions = []
-  end
-
-  roles Leitung, Mitglied
+  children Group::Geschaeftsstelle, Group::Sektion, Group::ExterneKontakte
 
 end

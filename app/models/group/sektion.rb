@@ -8,17 +8,12 @@
 class Group::Sektion < ::Group
 
   self.layer = true
+  self.event_types = [Event, Event::Course]
 
   ### ROLES
-  class Kontaktperson < ::Role
-    self.permissions = [:contact_data]
-  end
-
-  roles Kontaktperson
-
-  children Group::SektionsVorstand,
+  children Group::SektionsFunktionaere,
            Group::SektionsMitglieder,
-           Group::SektionsKommission,
+           Group::SektionsTourenkommission,
            Group::Huette
 
 end

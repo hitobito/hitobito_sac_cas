@@ -6,8 +6,8 @@
 
 admin:
   person: admin
-  group: ressort_it
-  type: Group::Ressort::ITSupport
+  group: geschaeftsstelle
+  type: Group::Geschaeftsstelle::ITSupport
 
 ## TODO use group and type of the main base leader
 #leader:
