@@ -17,7 +17,7 @@ class Group::Geschaeftsstelle < ::Group
   end
 
   class ITSupport < ::Role
-    self.permissions = [:admin, :impersonation]
+    self.permissions = [:layer_and_below_full, :admin, :impersonation]
   end
 
   roles Verwaltung, VerwaltungReadOnly, ITSupport
