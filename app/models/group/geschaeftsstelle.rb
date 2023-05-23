@@ -9,7 +9,7 @@ class Group::Geschaeftsstelle < ::Group
 
   ### ROLES
   class Verwaltung < ::Role
-    self.permissions = [:layer_and_below_full, :impersonation]
+    self.permissions = [:layer_and_below_full, :finance, :impersonation]
   end
 
   class VerwaltungReadOnly < ::Role
@@ -17,7 +17,7 @@ class Group::Geschaeftsstelle < ::Group
   end
 
   class ITSupport < ::Role
-    self.permissions = [:layer_and_below_full, :admin, :impersonation]
+    self.permissions = [:layer_and_below_full, :finance, :admin, :impersonation]
   end
 
   roles Verwaltung, VerwaltungReadOnly, ITSupport

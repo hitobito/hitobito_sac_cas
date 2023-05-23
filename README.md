@@ -7,39 +7,43 @@ of SAC CAS.
 ## Organization Hierarchy
 
 ```
-* Zentralverband
-  * Ressort
-    * Leitung: [:group_full]
-    * Mitarbeitende: []
-    * Rechnungswesen: [:layer_and_below_full, :finance]
-    * Mitgliederverwaltung: [:layer_and_below_full]
-    * IT Support: [:layer_and_below_full, :admin]
+* Schweizer Alpen-Club SAC
+  * Geschäftsstelle
+    * Verwaltung: [:layer_and_below_full, :finance, :impersonation]
+    * Verwaltung (nur lesend): [:layer_and_below_read]
+    * IT Support: [:layer_and_below_full, :finance, :admin, :impersonation]
   * Externe Kontakte
-    * Externer Kontakt: []
-* Sektion
+    * Kontakt: []
   * Sektion
-    * Kontaktperson: [:contact_data]
-  * Vorstand
-    * Präsident: [:layer_and_below_read, :contact_data]
-    * Vizepräsident: [:layer_and_below_read, :contact_data]
-    * Vorstandsmitglied: [:layer_read, :contact_data]
-    * Kassier: [:layer_and_below_full, :contact_data, :finance]
-    * Mitgliederdienst: [:layer_and_below_full, :contact_data]
-  * Mitglieder
-    * Mitglied: []
-    * Ehrenmitglied: []
-    * Begünstigt: []
-    * Interessent*in: []
-  * Kommission
-    * Kommissionsleitung: [:group_full, :contact_data]
-    * Kommissionsmitglied: []
-* Hütte
-  * Hütte
-    * Hüttenwart*in: [:group_full]
-    * Hüttenwartspartner*in: [:group_full]
-    * Hüttenobmann: []
-    * Mitarbeitende: []
-    * Hüttenbetreuer*in: []
+    * Funktionäre
+      * Präsidium: []
+      * Vizepräsidium: []
+      * Funktionär*in: []
+      * Verwaltung: [:layer_and_below_full]
+      * Verwaltung (nur lesend): [:layer_and_below_read]
+    * Mitglieder
+      * Einzel: []
+      * Jugendmitglied: []
+      * Frei Kind: []
+      * Frei Fam: []
+      * Abonnement: []
+      * Geschenkmitgliedschaft: []
+      * Ehrenmitglied: []
+      * Begünstigt: []
+    * Tourenkommission
+      * Tourenchef*in Sommer: [:group_full]
+      * Tourenchef*in Winter: [:group_full]
+      * Tourenchef*in Klettern: [:group_full]
+      * Tourenchef*in Senioren: [:group_full]
+      * Tourenleiter*in Sommer: [:group_full]
+      * Tourenleiter*in Winter: [:group_full]
+    * Hütte
+      * Hütte
+        * Hüttenwart*in: [:group_full]
+        * Hüttenwartspartner*in: [:group_full]
+        * Hüttenchef*in: [:group_full]
+        * Mitarbeiter*in: []
+        * Funktionär*in: []
 ```
 
 (Output of rake app:hitobito:roles)
