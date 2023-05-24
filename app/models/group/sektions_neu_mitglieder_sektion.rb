@@ -5,17 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::Sektion < ::Group
-
-  self.layer = true
-  self.event_types = [Event, Event::Course]
-
+class Group::SektionsNeuMitgliederSektion < ::Group
   ### ROLES
-  children Group::SektionsFunktionaere,
-    Group::SektionsMitglieder,
-    Group::SektionsNeuMitgliederZv,
-    Group::SektionsNeuMitgliederSektion,
-    Group::SektionsTourenkommission,
-    Group::Huette
+  class Mitglied < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
 
+  class Einzel < Mitglied; end
+  class Jugend < Mitglied; end
+  class Familie < Mitglied; end
+
+  roles Einzel, Jugend, Familie
 end

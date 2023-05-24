@@ -28,6 +28,14 @@ de:
         one: Mitglieder
         other: Mitglieder
 
+      group/sektions_neu_mitglieder_zv:
+        one: Neuanmeldung ZV
+        other: Neuanmeldungen ZV
+
+      group/sektions_neu_mitglieder_sektion:
+        one: Neuanmeldung Sektion
+        other: Neuanmeldungen Sektion
+
       group/sektions_funktionaere:
         one: Funktionäre
         other: Funktionäre
@@ -98,6 +106,26 @@ de:
       group/sektions_mitglieder/beguenstigt:
         one: Begünstigt
         description: Begünstigt
+
+      group/sektions_neu_mitglieder_sektion/einzel:
+        one: Neuanmeldung Einzel
+        description: Neuanmeldung Einzelmitgliedschaft
+      group/sektions_neu_mitglieder_sektion/jugend:
+        one: Neuanmeldung Jugend
+        description: Neuanmeldung Jugendmitgliedschaft
+      group/sektions_neu_mitglieder_sektion/familie:
+        one: Neuanmeldung Familie
+        description: Neuanmeldung Familienmitgliedschaft
+
+      group/sektions_neu_mitglieder_zv/einzel:
+        one: Neuanmeldung Einzel
+        description: Neuanmeldung Einzelmitgliedschaft
+      group/sektions_neu_mitglieder_zv/jugend:
+        one: Neuanmeldung Jugend
+        description: Neuanmeldung Jugendmitgliedschaft
+      group/sektions_neu_mitglieder_zv/familie:
+        one: Neuanmeldung Familie
+        description: Neuanmeldung Familienmitgliedschaft
 
       group/sektions_tourenkommission/tourenchef_sommer:
         one: Tourenchef*in Sommer
