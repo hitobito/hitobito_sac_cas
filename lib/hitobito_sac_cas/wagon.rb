@@ -23,6 +23,8 @@ module HitobitoSacCas
     config.to_prepare do
       # extend application classes here
       Group.include SacCas::Group
+
+      Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
     end
 
     initializer 'sac_cas.add_settings' do |_app|

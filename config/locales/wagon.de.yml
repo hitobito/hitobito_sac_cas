@@ -141,6 +141,8 @@ de:
 
   groups:
     self_registration:
+      conditions_sac_cas:
+        newsletter: Ich möchte einen Newsletter abonnieren
       fields:
         notes: Bemerkungen
         promo_code: Promocode
