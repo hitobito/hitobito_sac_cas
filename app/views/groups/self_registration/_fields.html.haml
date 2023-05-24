@@ -3,18 +3,18 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= fields.labeled_input_fields :first_name, :last_name
+= fields.labeled_input_fields :first_name, :last_name, { required: true }
 
 = fields.labeled_text_area(:address, rows: 2, data: { provide: 'entity',
                                                  updater: 'AddressTypeahead.update',
-                                                 url: addresses_query_url })
+                                                 url: addresses_query_url }, required: true)
 
-= fields.labeled(:zip_code, t('contactable.fields.zip_town')) do
+= fields.labeled(:zip_code, t('contactable.fields.zip_town'), required: true) do
   .zip-code-and-town-input-fields.address-input-fields.span6.input-span6
-    = fields.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10)
-    = fields.string_field(:town, class: 'span-none town-field')
+    = fields.string_field(:zip_code, class: 'span-none zip-code-field', maxlength: 10, required: true)
+    = fields.string_field(:town, class: 'span-none town-field', required: true)
 
-= fields.labeled(:country) do
+= fields.labeled(:country, required: true) do
   .span6.input-span6.shown{style: 'margin-left: 0px'}
     = country_select(fields.object.class.model_name.param_key,
                      'country',
@@ -22,18 +22,19 @@
                        selected: fields.object.country,
                        include_blank: true },
                      { class: 'chosen-select',
+                       required: true,
                        data: { placeholder: ' ',
                                chosen_no_results: t('global.chosen_no_results'),
                                typeahead_supported_countries: Settings.addresses.imported_countries } })
 
-= fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+= fields.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: true
 
 = field_set_tag do
-  = fields.labeled(:gender) do
+  = fields.labeled(:gender, required: true) do
     - (Person::GENDERS + ['']).each do |key|
       = fields.inline_radio_button(:gender, key, entry.person.gender_label(key))
 
-= fields.labeled_input_fields :birthday
+= fields.labeled_input_fields :birthday, required: true
 
 = field_set_tag do
   = fields.labeled_inline_fields_for :phone_numbers, 'phone_number_fields'
