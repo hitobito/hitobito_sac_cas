@@ -61,7 +61,7 @@ Group::ExterneKontakte.seed(:name, :parent_id, {
   parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
 })
 
-sektions = Group::Sektion.seed(
+sections = Group::Sektion.seed(
   :name, :parent_id,
   { name: 'SAC Matterhorn',
     parent_id: root.id
@@ -73,18 +73,33 @@ sektions = Group::Sektion.seed(
     parent_id: root.id
   })
 
-sektions.each do |s|
+sections.each do |s|
   seed_sektion(s)
 end
 
-seed_hut(sektions.first, 'Matterhornbiwak')
-seed_hut(sektions.second, 'Domhütte')
-seed_hut(sektions.second, 'Spannorthütte')
-seed_hut(sektions.second, 'Täschhütte')
-seed_hut(sektions.third, 'Blüemlisalphütte')
-seed_hut(sektions.third, 'Baltschiederklause')
-seed_hut(sektions.third, 'Stockhornbiwak')
-seed_hut(sektions.third, 'Gestellenhütte')
-seed_hut(sektions.third, 'Sunnhüsi')
+Group::SektionsNeuMitgliederSektion.seed(:name, :parent_id, {
+  name: 'Neuanmeldungen',
+  parent_id: sections.first.id
+})
+
+Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
+  name: 'Neuanmeldungen',
+  parent_id: sections.second.id
+})
+
+Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
+  name: 'Neuanmeldungen',
+  parent_id: sections.third.id
+})
+
+seed_hut(sections.first, 'Matterhornbiwak')
+seed_hut(sections.second, 'Domhütte')
+seed_hut(sections.second, 'Spannorthütte')
+seed_hut(sections.second, 'Täschhütte')
+seed_hut(sections.third, 'Blüemlisalphütte')
+seed_hut(sections.third, 'Baltschiederklause')
+seed_hut(sections.third, 'Stockhornbiwak')
+seed_hut(sections.third, 'Gestellenhütte')
+seed_hut(sections.third, 'Sunnhüsi')
 
 Group.rebuild!

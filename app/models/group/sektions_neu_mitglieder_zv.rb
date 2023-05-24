@@ -5,15 +5,4 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::ExterneKontakte < ::Group
-
-  ### ROLES
-  class Kontakt < ::Role
-    self.permissions = []
-  end
-
-  roles Kontakt
-
-  children Group::ExterneKontakte
-
-end
+class Group::SektionsNeuMitgliederZv < ::Group::SektionsNeuMitgliederSektion; end

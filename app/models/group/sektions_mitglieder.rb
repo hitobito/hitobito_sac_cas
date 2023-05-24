@@ -23,7 +23,7 @@ class Group::SektionsMitglieder < ::Group
   class Ehrenmitglied < Mitglied; end
   class Beguenstigt < Mitglied; end
 
-  roles Einzel, Jugend,
+  roles Einzel, Jugend, Familie,
     FreiKind, FreiFam,
     Abonnement, Geschenkmitgliedschaft,
     Ehrenmitglied, Beguenstigt
