@@ -5,6 +5,11 @@
 
 de:
   activerecord:
+    attributes:
+      person:
+        genders:
+          _nil: andere
+
     models:
 
       ### GROUPS
@@ -133,3 +138,9 @@ de:
       group/huette/funktionaer:
         one: Funktionär*in
         description: Funktionär*in
+
+  groups:
+    self_registration:
+      fields:
+        notes: Bemerkungen
+        promo_code: Promocode
