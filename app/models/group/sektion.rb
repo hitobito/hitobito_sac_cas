@@ -13,8 +13,8 @@ class Group::Sektion < ::Group
   ### ROLES
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
-    Group::SektionsNeuMitgliederZv,
     Group::SektionsNeuMitgliederSektion,
+    Group::SektionsNeuMitgliederZv,
     Group::SektionsTourenkommission,
     Group::Huette
 

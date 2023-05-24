@@ -7,14 +7,14 @@
 
 class Group::SektionsNeuMitgliederSektion < ::Group
   ### ROLES
-  class Mitglied < ::Role
+  class Neuanmeldung < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Einzel < Mitglied; end
-  class Jugend < Mitglied; end
-  class Familie < Mitglied; end
+  class Einzel < Neuanmeldung; end
+  class Jugend < Neuanmeldung; end
+  class Familie < Neuanmeldung; end
 
   roles Einzel, Jugend, Familie
 end
