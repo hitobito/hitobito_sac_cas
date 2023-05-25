@@ -5,6 +5,11 @@
 
 de:
   activerecord:
+    attributes:
+      person:
+        genders:
+          _nil: andere
+
     models:
 
       ### GROUPS
@@ -161,3 +166,11 @@ de:
       group/huette/funktionaer:
         one: Funktionär*in
         description: Funktionär*in
+
+  groups:
+    self_registration:
+      conditions_sac_cas:
+        newsletter: Ich möchte einen Newsletter abonnieren
+      fields:
+        notes: Bemerkungen
+        promo_code: Promocode

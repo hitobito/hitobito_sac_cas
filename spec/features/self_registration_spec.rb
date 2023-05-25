@@ -40,7 +40,11 @@ describe :self_registration do
 
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
+    fill_in 'Adresse', with: 'Musterplatz'
+    fill_in 'role_new_person_zip_code', with: '8000'
+    fill_in 'role_new_person_town', with: 'Zürich'
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+    fill_in 'Geburtstag', with: '01.01.1980'
 
     expect do
       find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # submit
