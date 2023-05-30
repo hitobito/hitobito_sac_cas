@@ -25,6 +25,7 @@ module HitobitoSacCas
       Group.include SacCas::Group
 
       Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
+      Person.include SacCas::Person
     end
 
     initializer 'sac_cas.add_settings' do |_app|

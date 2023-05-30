@@ -7,6 +7,7 @@ de:
   activerecord:
     attributes:
       person:
+        membership_years: Anzahl Mitglieder-Jahre
         genders:
           _nil: andere
 
