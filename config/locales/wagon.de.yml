@@ -168,6 +168,12 @@ de:
         one: Funktionär*in
         description: Funktionär*in
 
+  people:
+    show_event_sac_cas:
+      documents: Dokumente
+      membership: Mitgliederausweis
+      download: Anzeigen
+
   groups:
     self_registration:
       conditions_sac_cas:
@@ -175,3 +181,9 @@ de:
       fields:
         notes: Bemerkungen
         promo_code: Promocode
+
+  passes:
+    membership:
+      file_name_prefix: SAC-Mitgliederausweis
+      membership_years: Mitgliederjahre
+      title: Mitgliederausweis

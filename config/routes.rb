@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   language_scope do
     # Define wagon routes here
 
+    get '/people/:id/membership' => 'people/membership#show', as: 'membership'
   end
 
 end
