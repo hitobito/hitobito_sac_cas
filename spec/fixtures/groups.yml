@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 4
+  rgt: 10
   name: Schweizer Alpen-Club SAC
   type: Group::SacCas
   email: root@example.net
@@ -22,3 +22,27 @@ geschaeftsstelle:
   name: Geschäftsstelle
   type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
+
+be:
+  parent: root
+  lft: 4 
+  rgt: 9
+  name: Bern
+  type: Group::Sektion
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+
+be_funktionaere:
+  parent: be
+  lft: 5
+  rgt: 6
+  name: Funktionaere
+  type: Group::SektionsFunktionaere
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+
+be_mitglieder:
+  parent: be
+  lft: 7
+  rgt: 8
+  name: Mitglieder
+  type: Group::SektionsMitglieder
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
