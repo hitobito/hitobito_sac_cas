@@ -11,16 +11,20 @@ class People::MembershipVerifier
     Group::SektionsMitglieder::Einzel,
     Group::SektionsMitglieder::Jugend,
     Group::SektionsMitglieder::Familie
-  ]
+  ].freeze
 
   def initialize(person)
     @person = person
   end
 
   def member?
-    @person.roles.any? do |r|
+    membership_roles.any?
+  end
+
+  def membership_roles
+    @membership_roles ||= @person.roles.select do |r|
       MEMBERSHIP_ROLES.include?(r.class)
-    end
+    end.compact
   end
 
 end

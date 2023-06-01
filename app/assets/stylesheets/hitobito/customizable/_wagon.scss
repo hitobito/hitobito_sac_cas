@@ -3,6 +3,41 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
-#page-header a, .is-logged-out #page-header a {
+#page-header a,
+.is-logged-out #page-header a {
   color: $sac_black;
+}
+
+.membership-verify {
+  max-width: 1000px;
+
+  #page {
+    margin: auto;
+    width: 90%;
+    display: unset;
+  }
+
+  #content {
+    margin: 0 30px 30px 30px;
+    text-align: center;
+
+    .member-img {
+      width: 70%;
+      margin: auto;
+    }
+
+    .member-name {
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 4rem;
+      margin: auto;
+    }
+  }
+
+  header {
+    .root-address {
+      color: #fff;
+      margin: 0 0 30px 30px;
+    }
+  }
 }
