@@ -5,10 +5,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if can? :update, entry
+- if can?(:update, entry) && People::MembershipVerifier.new(entry).member?
   %h2= t('.documents')
   %div
     %dl.dl-horizontal
-      - if People::MembershipVerifier.new(entry).member?
-        = labeled t('.membership') do
-          = link_to t('.download'), membership_path(format: :pdf), target: :new
+      = labeled t('.membership') do
+        = link_to t('.download'), membership_path(format: :pdf), target: :new
