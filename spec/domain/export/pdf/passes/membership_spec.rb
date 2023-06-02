@@ -16,11 +16,11 @@ describe Export::Pdf::Passes::Membership do
   subject { described_class.new(member) }
 
   before do
-    member.update!(address: 'Wasserstrasse 42', zip_code: '4242', town: 'Kanuto')
+    member.update!(first_name: 'Bob', last_name: 'Muster', address: 'Wasserstrasse 42', zip_code: '4242', town: 'Kanuto')
   end
 
   it 'sanitizes filename' do
-    expect(subject.filename).to eq "SAC-Mitgliederausweis-#{year}-#{member.first_name.downcase}_#{member.last_name.downcase}.pdf"
+    expect(subject.filename).to eq "SAC-Mitgliederausweis-#{year}-bob_muster.pdf"
   end
 
   context 'text' do
