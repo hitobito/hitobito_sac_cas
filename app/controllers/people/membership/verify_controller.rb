@@ -25,7 +25,7 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
     token = params[:verify_token]
     return nil if token.blank?
 
-    Person.find_by(membership_verify_token: params[:verify_token])
+    Person.find_by(membership_verify_token: token)
   end
 
   def root

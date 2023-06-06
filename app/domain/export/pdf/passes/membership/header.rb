@@ -22,8 +22,7 @@ class Export::Pdf::Passes::Membership
     end
 
     def render_sac_info
-      info = ['CH-3000 Bern',
-              'info@sac-cas.ch - www.sac-cas.ch'].join(' - ')
+      info = ['info@sac-cas.ch', 'www.sac-cas.ch'].join(' - ')
       text(info, align: :center)
     end
 
