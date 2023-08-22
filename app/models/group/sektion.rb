@@ -16,6 +16,7 @@ class Group::Sektion < ::Group
     Group::SektionsNeuMitgliederSektion,
     Group::SektionsNeuMitgliederZv,
     Group::SektionsTourenkommission,
-    Group::Huette
+    Group::Huette,
+    Group::Sektion
 
 end
