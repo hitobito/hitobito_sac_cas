@@ -46,6 +46,10 @@ module Import
           puts 'ERROR: Cannot modify archived group'
           puts group.inspect
         end
+        ignoring_archival do
+          Group.update_all(lft: nil, rgt: nil)
+          Group.rebuild!(false)
+        end
       end
     end
 

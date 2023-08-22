@@ -46,6 +46,10 @@ module Import
           puts "Importing row using #{importer_class.name}"
           importer_class.new(row).import!
         end
+        ignoring_archival do
+          Group.update_all(lft: nil, rgt: nil)
+          Group.rebuild!(false)
+        end
       end
     end
 
