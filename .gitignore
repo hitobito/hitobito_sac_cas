@@ -13,6 +13,7 @@ zeus.json
 .idea
 .rakeTasks
 db/seeds/production/*.xlsx
+db/seeds/production/*.xlsx#
 
 # ignore Gemfile.lock for wagons
 Gemfile.lock
