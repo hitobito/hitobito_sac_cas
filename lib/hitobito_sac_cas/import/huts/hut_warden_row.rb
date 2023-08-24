@@ -25,7 +25,7 @@ module Import::Huts
       unless group_id
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut wardens belong to things other than huts
-        puts "Skipping hut warden for unknown hut #{owner_navision_id(@row)}"
+        puts "Skipping hut warden for unknown hut #{navision_id(@row)}"
         return
       end
       person.roles.where(
@@ -68,13 +68,6 @@ module Import::Huts
 
     def last_name(row)
       row[:related_last_name]
-    end
-
-    def parent_id(row)
-      Group.find_by(navision_id: owner_navision_id(row)).id
-    rescue
-      puts "WARNING: No parent id found for row #{row.inspect}"
-      Group.root.id
     end
 
     def owner_navision_id(row)

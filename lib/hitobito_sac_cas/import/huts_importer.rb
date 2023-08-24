@@ -25,13 +25,11 @@ module Import
       created_at: 'Gültig von',
     }
 
-    ROW_IMPORTERS = [
+    IMPORTERS = [
       Import::Huts::HutRow,
       Import::Huts::HutChiefRow,
       Import::Huts::HutWardenRow,
       Import::Huts::HutWardenPartnerRow,
-
-      Import::Huts::UnsupportedRow # must be last
     ]
 
     def initialize(path)
@@ -41,10 +39,10 @@ module Import
 
     def import!
       without_query_logging do
-        Import::XlsxReader.read(@path, 'Beziehungen_Data', headers: HEADERS) do |row|
-          importer_class = row_importer_for(row)
-          puts "Importing row using #{importer_class.name}"
-          importer_class.new(row).import!
+        IMPORTERS.each do |importer|
+          Import::XlsxReader.read(@path, 'Beziehungen_Data', headers: HEADERS) do |row|
+            importer.new(row).import! if importer.can_process?(row)
+          end
         end
         ignoring_archival do
           Group.update_all(lft: nil, rgt: nil)
@@ -62,8 +60,11 @@ module Import
       ActiveRecord::Base.logger = old_logger
     end
 
-    def row_importer_for(row)
-      ROW_IMPORTERS.find { |importer_class| importer_class.can_process?(row) }
+    def ignoring_archival
+      old_value = Group.archival_validation
+      Group.archival_validation = false
+      yield
+      Group.archival_validation = old_value
     end
 
   end

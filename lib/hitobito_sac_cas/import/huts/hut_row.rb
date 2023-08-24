@@ -11,7 +11,7 @@ module Import::Huts
   class HutRow
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4000V'
+      row[:verteilercode].to_s == '4000'
     end
 
     def initialize(row)
@@ -37,11 +37,11 @@ module Import::Huts
     end
 
     def navision_id(row)
-      row[:contact_navision_id].to_s.sub!(/^[0]*/, '')
+      row[:related_navision_id].to_s.sub!(/^[0]*/, '')
     end
 
     def name(row)
-      row[:contact_name]
+      row[:related_last_name]
     end
 
     def parent_id(row)
@@ -52,7 +52,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      row[:related_navision_id].to_s.sub!(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub!(/^[0]*/, '')
     end
   end
 end
