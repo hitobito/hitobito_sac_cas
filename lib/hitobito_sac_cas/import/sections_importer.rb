@@ -25,6 +25,8 @@ module Import
       phone: 'Telefon',
       email: 'E-Mail',
       homepage: 'Homepage',
+      zv_registrations: 'Mitgliederaufnahme durch GS',
+      locale: 'Sprachcode',
     }
 
     def initialize(path)
@@ -89,6 +91,7 @@ module Import
       group.email = email(row)
       set_homepage(row, group)
       group.archived_at = archived_at(row)
+      add_default_subgroups(row, group)
     end
 
     def section_name(row)
@@ -158,6 +161,41 @@ module Import
       return unless homepage.present?
       group.social_accounts.destroy_all
       group.social_accounts.build(name: homepage, label: 'Homepage')
+    end
+
+    def add_default_subgroups(row, group)
+      return if root?(row)
+      types = [
+        Group::SektionsMitglieder,
+        Group::SektionsFunktionaere,
+        Group::SektionsTourenkommission
+      ]
+      types.push(Group::SektionsNeuMitgliederZv) if zv_registrations(row)
+      types.push(Group::SektionsNeuMitgliederSektion) unless zv_registrations(row)
+      types.each do |type|
+        next if group.children.to_a.any? { |child| child.type == type.name }
+        name = type.model_name.human(locale: locale(row))
+        group.children.build(type: type.name, name: name)
+      end
+      binding.pry unless group.valid?
+    end
+
+    def zv_registrations(row)
+      row[:zv_registrations].to_s == 'Ja'
+    end
+
+    def locale(row)
+      {
+        'DES' => 'de',
+        'FRS' => 'fr',
+        'ITS' => 'it',
+      }.fetch(row[:locale].to_s, 'de')
+    end
+
+    def add_subgroup(group, type, name)
+      return if group.new_record?
+      return if Group.where(parent_id: group.id, type: type).exists?
+      group.children.build(type: type, name: name)
     end
   end
 end
