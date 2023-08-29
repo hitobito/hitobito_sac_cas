@@ -83,7 +83,7 @@ module Import
     end
 
     def set_data(row, group)
-      group.type = Group::Sektion.name
+      group.type = type(row)
       group.name = section_name(row)
       group.parent_id = parent_id(row)
       group.address = address(row)
@@ -99,7 +99,7 @@ module Import
       Regexp.last_match(1)
     end
 
-    def parent_id(row)
+    def parent(row)
       return nil if root?(row)
 
       # TODO fix the bug in the navision data export which requires this wrong ordering...
@@ -107,10 +107,21 @@ module Import
       parent = Group.find_by(navision_id: levels[1].to_s)
       raise levels[1].to_s unless parent&.id
       # Use the second to last present level as the parent navision_id
-      parent.id
+      parent
     rescue
-      puts "WARNING: No parent id found for row #{row.inspect}"
-      Group.root.id
+      puts "WARNING: No parent found for row #{row.inspect}"
+      Group.root
+    end
+
+    def parent_id(row)
+      parent(row)&.id
+    end
+
+    def type(row)
+      return Group::SacCas if root?(row)
+      parent_group = parent(row)
+      return Group::Sektion.name if parent_group.navision_id == '1000'
+      Group::Ortsgruppe
     end
 
     def root?(row)
@@ -177,7 +188,6 @@ module Import
         name = type.model_name.human(locale: locale(row))
         group.children.build(type: type.name, name: name)
       end
-      binding.pry unless group.valid?
     end
 
     def zv_registrations(row)

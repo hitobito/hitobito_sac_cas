@@ -31,6 +31,10 @@ de:
         one: Sektion
         other: Sektionen
 
+      group/ortsgruppe:
+        one: Ortsgruppe
+        other: Ortsgruppen
+
       group/sektions_mitglieder:
         one: Mitglieder
         other: Mitglieder
