@@ -40,7 +40,7 @@ module Import
           puts "Importing row #{row[:description]}"
           group = group_for(row)
           ignoring_archival do
-            set_data(row, group)
+            group = set_data(row, group)
             group.save!
           end
           puts "Finished importing #{group.name}"
@@ -83,7 +83,8 @@ module Import
     end
 
     def set_data(row, group)
-      group.type = type(row)
+      group.type = type(row)&.name
+      group = group.becomes(type(row))
       group.name = section_name(row)
       group.parent_id = parent_id(row)
       group.address = address(row)
@@ -92,6 +93,7 @@ module Import
       set_homepage(row, group)
       group.archived_at = archived_at(row)
       add_default_subgroups(row, group)
+      group
     end
 
     def section_name(row)
@@ -120,7 +122,7 @@ module Import
     def type(row)
       return Group::SacCas if root?(row)
       parent_group = parent(row)
-      return Group::Sektion.name if parent_group.navision_id == '1000'
+      return Group::Sektion if parent_group.navision_id == '1000'
       Group::Ortsgruppe
     end
 
@@ -186,7 +188,19 @@ module Import
       types.each do |type|
         next if group.children.to_a.any? { |child| child.type == type.name }
         name = type.model_name.human(locale: locale(row))
-        group.children.build(type: type.name, name: name)
+        group.children.build(
+          type: type.name,
+          name: name,
+          self_registration_role_type: self_registration_role_type(type)
+        )
+      end
+    end
+
+    def self_registration_role_type(type)
+      case type
+      when Group::SektionsNeuMitgliederSektion then Group::SektionsNeuMitgliederSektion::Einzel
+      when Group::SektionsNeuMitgliederZv then Group::SektionsNeuMitgliederZv::Einzel
+      else nil
       end
     end
 
