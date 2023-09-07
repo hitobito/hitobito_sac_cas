@@ -11,6 +11,7 @@ class Group::Sektion < ::Group
   self.event_types = [Event, Event::Course]
 
   ### ROLES
+
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuMitgliederSektion,

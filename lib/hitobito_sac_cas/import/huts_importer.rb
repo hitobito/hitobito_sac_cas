@@ -10,6 +10,8 @@ require_relative 'huts/hut_row.rb'
 require_relative 'huts/hut_chief_row.rb'
 require_relative 'huts/hut_warden_row.rb'
 require_relative 'huts/hut_warden_partner_row.rb'
+require_relative 'huts/hut_chairman_row.rb'
+require_relative 'huts/key_deposit_row.rb'
 require_relative 'huts/unsupported_row.rb'
 
 module Import
@@ -30,6 +32,8 @@ module Import
       Import::Huts::HutChiefRow,
       Import::Huts::HutWardenRow,
       Import::Huts::HutWardenPartnerRow,
+      Import::Huts::HutChairmanRow,
+      Import::Huts::KeyDepositRow,
     ]
 
     def initialize(path)

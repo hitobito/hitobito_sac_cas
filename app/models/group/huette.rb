@@ -26,6 +26,10 @@ class Group::Huette < ::Group
     self.permissions = []
   end
 
+  class Schluesseldepot < ::Role
+    self.permissions = []
+  end
+
   class Funktionaer < ::Role
     self.permissions = []
   end
@@ -34,6 +38,7 @@ class Group::Huette < ::Group
     HuettenwartsPartner,
     Huettenchef,
     Mitarbeiter,
+    Schluesseldepot,
     Funktionaer
 
 end

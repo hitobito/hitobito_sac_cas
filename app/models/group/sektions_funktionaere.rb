@@ -28,6 +28,10 @@ class Group::SektionsFunktionaere < ::Group
     self.permissions = [:layer_and_below_read]
   end
 
-  roles Praesidium, VizePraesidium, Funktionaer, Verwaltung, VerwaltungReadOnly
+  class Huettenobmann < ::Role
+    self.permissions = []
+  end
+
+  roles Praesidium, VizePraesidium, Funktionaer, Verwaltung, VerwaltungReadOnly, Huettenobmann
 
 end

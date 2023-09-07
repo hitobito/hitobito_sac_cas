@@ -86,6 +86,9 @@ de:
       group/sektions_funktionaere/vize_praesidium:
         one: Vizepräsidium
         description: Vizeräsidium Sektion
+      group/sektions_funktionaere/huettenobmann:
+        one: Hüttenobmann
+        description: Hüttenobmann Sektion
       group/sektions_funktionaere/funktionaer:
         one: Funktionär*in
         description: Funktionär*in Sektion
@@ -169,6 +172,9 @@ de:
       group/huette/mitarbeiter:
         one: Mitarbeiter*in
         description: Mitarbeitende
+      group/huette/schluesseldepot:
+        one: Schlüsseldepot
+        description: Schlüsseldepots
       group/huette/funktionaer:
         one: Funktionär*in
         description: Funktionär*in
