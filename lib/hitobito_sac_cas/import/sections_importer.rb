@@ -188,9 +188,6 @@ module Import
       types.each do |type|
         existing = group.children.select { |child| child.type == type.name }.first
         if existing.present?
-          if type == Group::SektionsNeuMitgliederZv
-            puts "existing #{type.name} found: #{existing.inspect}, role type: #{self_registration_role_type(type).inspect}"
-          end
           existing.update!(self_registration_role_type: self_registration_role_type(type))
         else
           name = type.model_name.human(locale: locale(row))
