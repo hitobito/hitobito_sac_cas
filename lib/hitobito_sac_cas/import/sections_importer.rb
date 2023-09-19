@@ -186,20 +186,27 @@ module Import
       types.push(Group::SektionsNeuMitgliederZv) if zv_registrations(row)
       types.push(Group::SektionsNeuMitgliederSektion) unless zv_registrations(row)
       types.each do |type|
-        next if group.children.to_a.any? { |child| child.type == type.name }
-        name = type.model_name.human(locale: locale(row))
-        group.children.build(
-          type: type.name,
-          name: name,
-          self_registration_role_type: self_registration_role_type(type)
-        )
+        existing = group.children.select { |child| child.type == type.name }.first
+        if existing.present?
+          if type == Group::SektionsNeuMitgliederZv
+            puts "existing #{type.name} found: #{existing.inspect}, role type: #{self_registration_role_type(type).inspect}"
+          end
+          existing.update!(self_registration_role_type: self_registration_role_type(type))
+        else
+          name = type.model_name.human(locale: locale(row))
+          group.children.build(
+            type: type.name,
+            name: name,
+            self_registration_role_type: self_registration_role_type(type)
+          )
+        end
       end
     end
 
     def self_registration_role_type(type)
-      case type
-      when Group::SektionsNeuMitgliederSektion then Group::SektionsNeuMitgliederSektion::Einzel
-      when Group::SektionsNeuMitgliederZv then Group::SektionsNeuMitgliederZv::Einzel
+      case type.to_s
+      when Group::SektionsNeuMitgliederSektion.to_s then Group::SektionsNeuMitgliederSektion::Einzel.to_s
+      when Group::SektionsNeuMitgliederZv.to_s then Group::SektionsNeuMitgliederZv::Einzel.to_s
       else nil
       end
     end
