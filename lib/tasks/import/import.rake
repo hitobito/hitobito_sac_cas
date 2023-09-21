@@ -7,6 +7,7 @@
 
 require_relative '../../hitobito_sac_cas/import/sections_importer.rb'
 require_relative '../../hitobito_sac_cas/import/huts_importer.rb'
+require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer.rb'
 
 namespace :import do
   desc 'Import sections from a navision export'
@@ -24,5 +25,11 @@ namespace :import do
     import_file_path = 'db/seeds/production/Hütten_Beziehungen_Export_20230704.xlsx'
     hut_relations_excel = Wagons.find('sac_cas').root.join(import_file_path)
     Import::HutsImporter.new(hut_relations_excel).import!
+  end
+
+  desc 'Import people for bluemlisalp section from a navision export'
+  task bluemlisalp_people: [:environment] do
+    bluemlisalp_people_excel = Wagons.find('sac_cas').root.join('db/seeds/production/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
+    Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
   end
 end
