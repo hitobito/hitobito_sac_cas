@@ -11,6 +11,8 @@ de:
         navision_id: Alte ID aus Navision
         genders:
           _nil: andere
+      group/sektion:
+        foundation_year: Gründungsjahr
 
     models:
 
@@ -204,3 +206,7 @@ de:
       file_name_prefix: SAC-Mitgliederausweis
       membership_years: Mitgliederjahre
       title: Mitgliederausweis
+  mounted_attributes:
+    form_tabs:
+      group/sektion:
+        default: Sektions Attribute
