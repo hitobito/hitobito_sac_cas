@@ -25,6 +25,7 @@ module Import
       phone: 'Telefon',
       email: 'E-Mail',
       homepage: 'Homepage',
+      youth_homepage: 'Homepage Jugend',
       zv_registrations: 'Mitgliederaufnahme durch GS',
       locale: 'Sprachcode',
     }
@@ -91,6 +92,7 @@ module Import
       set_phone(row, group)
       group.email = email(row)
       set_homepage(row, group)
+      set_youth_homepage(row, group)
       group.archived_at = archived_at(row)
       add_default_subgroups(row, group)
       group
@@ -174,6 +176,13 @@ module Import
       return unless homepage.present?
       group.social_accounts.destroy_all
       group.social_accounts.build(name: homepage, label: 'Homepage')
+    end
+
+    def set_youth_homepage(row, group)
+      homepage = row[:youth_homepage]
+      return unless homepage.present?
+      group.social_accounts.destroy_all
+      group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
     def add_default_subgroups(row, group)
