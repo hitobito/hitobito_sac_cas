@@ -29,7 +29,7 @@ describe "import:bluemlisalp_people" do
     allow_any_instance_of(Pathname).to receive(:join)
       .and_return(Wagons.find('sac_cas')
       .root
-      .join('spec/fixtures/files/valid_bluemlisalp_people.xlsx'))
+      .join('spec/fixtures/files/bluemlisalp_people.xlsx'))
   end
 
   it 'imports people and correct roles' do

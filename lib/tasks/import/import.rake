@@ -9,6 +9,8 @@ require_relative '../../hitobito_sac_cas/import/sections_importer.rb'
 require_relative '../../hitobito_sac_cas/import/huts_importer.rb'
 require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer.rb'
 
+
+# rubocop:disable Metrics/LineLength
 namespace :import do
   desc 'Import sections from a navision export'
   task sections: [:environment] do
@@ -33,3 +35,4 @@ namespace :import do
     Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
   end
 end
+# rubocop:enable Metrics/LineLength

@@ -139,15 +139,19 @@ module Import
       def set_phone(row, person)
         phone = row[:phone]
         phone_mobile = row[:phone_mobile]
-        return unless (phone.present? && Phonelib.valid?(phone)) || (phone_mobile.present? && Phonelib.valid?(phone_mobile))
+        return unless phone_valid?(phone) || phone_valid?(phone_mobile)
         person.phone_numbers.destroy_all
         person.phone_numbers.build(number: phone, label: 'Privat') if phone.present?
         person.phone_numbers.build(number: phone_mobile, label: 'Mobil') if phone_mobile.present?
       end
 
+      def phone_valid?(number)
+        (number.present? && Phonelib.valid?(number))
+      end
+
       def email(row)
         email = row[:email]
-        return nil unless email.present? && Truemail.valid?(email) && !::Person.exists?(email: email)
+        return unless email.present? && Truemail.valid?(email) && !::Person.exists?(email: email)
         email
       end
 
@@ -209,6 +213,7 @@ module Import
       def member_type(row)
         row[:member_type].to_s
       end
+
     end
   end
 end
