@@ -28,6 +28,7 @@ module Import
       youth_homepage: 'Homepage Jugend',
       zv_registrations: 'Mitgliederaufnahme durch GS',
       locale: 'Sprachcode',
+      foundation_year: 'Gründungsjahr',
     }
 
     def initialize(path)
@@ -95,6 +96,7 @@ module Import
       set_youth_homepage(row, group)
       group.archived_at = archived_at(row)
       add_default_subgroups(row, group)
+      group.foundation_year = foundation_year(row) if group.respond_to?(:foundation_year)
       group
     end
 
@@ -138,6 +140,10 @@ module Import
 
     def description(row)
       row[:description].to_s
+    end
+
+    def foundation_year(row)
+      row[:foundation_year].to_i
     end
 
     def archived_at(row)
@@ -187,11 +193,7 @@ module Import
 
     def add_default_subgroups(row, group)
       return if root?(row)
-      types = [
-        Group::SektionsMitglieder,
-        Group::SektionsFunktionaere,
-        Group::SektionsTourenkommission
-      ]
+      types = sektion_subgroup_types
       types.push(Group::SektionsNeuMitgliederZv) if zv_registrations(row)
       types.push(Group::SektionsNeuMitgliederSektion) unless zv_registrations(row)
       types.each do |type|
@@ -209,11 +211,20 @@ module Import
       end
     end
 
+    def sektion_subgroup_types
+      [ Group::SektionsMitglieder,
+        Group::SektionsFunktionaere,
+        Group::SektionsTourenkommission ]
+    end
+
     def self_registration_role_type(type)
       case type.to_s
-      when Group::SektionsNeuMitgliederSektion.to_s then Group::SektionsNeuMitgliederSektion::Einzel.to_s
-      when Group::SektionsNeuMitgliederZv.to_s then Group::SektionsNeuMitgliederZv::Einzel.to_s
-      else nil
+      when Group::SektionsNeuMitgliederSektion.to_s
+        Group::SektionsNeuMitgliederSektion::Einzel.to_s
+      when Group::SektionsNeuMitgliederZv.to_s
+        Group::SektionsNeuMitgliederZv::Einzel.to_s
+      else
+        nil
       end
     end
 

@@ -21,6 +21,8 @@ class Group::Sektion < ::Group
     Group::Ortsgruppe
 
   mounted_attr :foundation_year, :integer
-  validates :foundation_year, numericality: { greater_than: 1863, smaller_than: Time.zone.now.year + 2 }
+  validates :foundation_year,
+    numericality:
+    { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
 
 end
