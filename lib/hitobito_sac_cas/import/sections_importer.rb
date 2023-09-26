@@ -200,8 +200,12 @@ module Import
       types.push(Group::SektionsNeuMitgliederSektion) unless zv_registrations(row)
       types.each do |type|
         existing = group.children.select { |child| child.type == type.name }.first
+        name = type.model_name.human(locale: locale(row))
         if existing.present?
-          existing.update!(self_registration_role_type: self_registration_role_type(type))
+          existing.update!(
+            name: name,
+            self_registration_role_type: self_registration_role_type(type)
+          )
         else
           name = type.model_name.human(locale: locale(row))
           group.children.build(
