@@ -3,23 +3,48 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-de:
+fr:
   activerecord:
+
     models:
 
       ### GROUPS
+      group/externe_kontakte:
+        one: Contacts extérieurs
+        other: Contacts extérieurs
 
-      group/root:
-        one: Hauptgruppe
-        other: Hauptgruppen
+      group/geschaeftsstelle:
+        one: Secrétariat administratif
+        other: Secrétariats administratifs
 
+      group/sektion:
+        one: Section
+        other: Sections
 
-      ### ROLES
+      group/ortsgruppe:
+        one: Groupe local
+        other: Groupes locaux
 
-      group/root/leader:
-        one: Leitung
-        description: Leitungspersonen verwalten die Applikation.
-      group/root/member:
-        one: Mitglied
-        description: Mitglieder sind alle anderen.
+      group/sektions_mitglieder:
+        one: Membres
+        other: Membres
+
+      group/sektions_neu_mitglieder_zv:
+        one: Nouvelles inscriptions
+        other: Nouvelles inscriptions
+
+      group/sektions_neu_mitglieder_sektion:
+        one: Nouvelles inscriptions
+        other: Nouvelles inscriptions
+
+      group/sektions_funktionaere:
+        one: Fonctionnaires
+        other: Fonctionnaires
+
+      group/sektions_tourenkommission:
+        one: Commission des tournées
+        other: Commission des tournées
+
+      group/huette:
+        one: Cabane
+        other: Cabanes
