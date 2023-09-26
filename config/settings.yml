@@ -17,8 +17,8 @@ application:
     width: 200
 
   # non UI languages for assigning to person#language
-  # additional_languages:
-  #   en: Englisch
+  additional_languages:
+    it: Italiano
 
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application,

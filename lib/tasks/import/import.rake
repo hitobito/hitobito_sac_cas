@@ -7,7 +7,10 @@
 
 require_relative '../../hitobito_sac_cas/import/sections_importer.rb'
 require_relative '../../hitobito_sac_cas/import/huts_importer.rb'
+require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer.rb'
 
+
+# rubocop:disable Metrics/LineLength
 namespace :import do
   desc 'Import sections from a navision export'
   task sections: [:environment] do
@@ -25,4 +28,11 @@ namespace :import do
     hut_relations_excel = Wagons.find('sac_cas').root.join(import_file_path)
     Import::HutsImporter.new(hut_relations_excel).import!
   end
+
+  desc 'Import people for bluemlisalp section from a navision export'
+  task bluemlisalp_people: [:environment] do
+    bluemlisalp_people_excel = Wagons.find('sac_cas').root.join('db/seeds/production/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
+    Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
+  end
 end
+# rubocop:enable Metrics/LineLength
