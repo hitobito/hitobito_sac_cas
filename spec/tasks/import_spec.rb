@@ -11,7 +11,7 @@ Rails.application.load_tasks
 
 describe "import:bluemlisalp_people" do
 
-  let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '00001650') } }
+  let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '00001650', foundation_year: 1990) } }
   let(:bluemlisalp_member_group) { groups(:be_mitglieder) }
 
   let(:people_navision_ids) { ['213134', '102345', '459233', '348212', '131348'] }
@@ -68,13 +68,16 @@ describe "import:bluemlisalp_people" do
     expect(active_role.deleted_at).to be_nil
 
 
-    expect(active.phone_numbers.count).to eq(2)
+    expect(active.phone_numbers.count).to eq(3)
 
     mobile = active.phone_numbers.find_by(label: 'Mobil')
     expect(mobile.number).to eq('+41 79 300 30 30')
 
     main = active.phone_numbers.find_by(label: 'Privat')
     expect(main.number).to eq('+41 34 300 30 30')
+
+    main = active.phone_numbers.find_by(label: 'Direkt')
+    expect(main.number).to eq('+41 34 123 45 67')
   end
 
   it 'imports retired person' do

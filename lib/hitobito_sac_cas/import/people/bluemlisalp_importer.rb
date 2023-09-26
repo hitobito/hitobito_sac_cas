@@ -23,6 +23,7 @@ module Import
         email: 'E-Mail',
         postfach: 'Postfach',
         phone: 'Telefon',
+        phone_direct: 'Telefon direkt',
         phone_mobile: 'Mobiltelefon',
         birthday: 'Geburtsdatum',
         gender: 'Geschlecht',
@@ -139,10 +140,13 @@ module Import
       def set_phone(row, person)
         phone = row[:phone]
         phone_mobile = row[:phone_mobile]
-        return unless phone_valid?(phone) || phone_valid?(phone_mobile)
+        phone_direct = row[:phone_direct]
+        return unless [phone, phone_mobile, phone_direct].any? { |n| phone_valid?(n) }
         person.phone_numbers.destroy_all
+        # TODO label translated based on language?
         person.phone_numbers.build(number: phone, label: 'Privat') if phone.present?
         person.phone_numbers.build(number: phone_mobile, label: 'Mobil') if phone_mobile.present?
+        person.phone_numbers.build(number: phone_direct, label: 'Direkt') if phone_direct.present?
       end
 
       def phone_valid?(number)
