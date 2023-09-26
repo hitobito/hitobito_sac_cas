@@ -11,7 +11,7 @@ Rails.application.load_tasks
 
 describe "import:bluemlisalp_people" do
 
-  let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '00001650', foundation_year: 1990) } }
+  let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '1650', foundation_year: 1990) } }
   let(:bluemlisalp_member_group) { groups(:be_mitglieder) }
 
   let(:people_navision_ids) { ['213134', '102345', '459233', '348212', '131348'] }

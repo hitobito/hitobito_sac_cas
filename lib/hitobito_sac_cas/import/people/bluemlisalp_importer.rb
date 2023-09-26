@@ -189,7 +189,8 @@ module Import
       end
 
       def bluemlisalp_group(row)
-        ::Group::Sektion.find_by(navision_id: row[:group_navision_id])
+        navision_id = row[:group_navision_id].to_i
+        ::Group::Sektion.find_by(navision_id: navision_id)
       end
 
       def role_type(row)
