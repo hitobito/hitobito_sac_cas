@@ -50,10 +50,12 @@ module Import
           puts 'ERROR: Cannot modify archived group'
           puts group.inspect
         end
+        puts 'Rebuilding group hierarchy...'
         ignoring_archival do
           Group.update_all(lft: nil, rgt: nil)
           Group.rebuild!(false)
         end
+        puts 'Done.'
       end
     end
 
