@@ -32,7 +32,9 @@ namespace :import do
   desc 'Import people for bluemlisalp section from a navision export'
   task bluemlisalp_people: [:environment] do
     bluemlisalp_people_excel = Wagons.find('sac_cas').root.join('db/seeds/production/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
-    Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
+    Person.with_manual_membership_number do
+      Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
+    end
   end
 end
 # rubocop:enable Metrics/LineLength
