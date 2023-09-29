@@ -22,7 +22,7 @@ describe "import:bluemlisalp_people" do
   end
 
   before do
-    Person.where(navision_id: people_navision_ids).destroy_all
+    Person.where(membership_number: people_navision_ids).destroy_all
   end
 
   before do
@@ -41,7 +41,7 @@ describe "import:bluemlisalp_people" do
              Group::SektionsMitglieder::FreiFam]
 
     people_navision_ids.each_with_index do |id, index|
-      person = Person.find_by(navision_id: id)
+      person = Person.find_by(membership_number: id)
       expect(person).to be_present
       expect(person.roles.with_deleted.first).to be_a(roles[index])
     end
@@ -50,7 +50,7 @@ describe "import:bluemlisalp_people" do
   it 'imports active person' do
     Rake::Task["import:bluemlisalp_people"].invoke
 
-    active = Person.find_by(navision_id: people_navision_ids.second)
+    active = Person.find_by(membership_number: people_navision_ids.second)
 
     expect(active.first_name).to eq('Pascal')
     expect(active.last_name).to eq('Simon')
@@ -83,7 +83,7 @@ describe "import:bluemlisalp_people" do
   it 'imports retired person' do
     Rake::Task["import:bluemlisalp_people"].invoke
 
-    retired = Person.find_by(navision_id: people_navision_ids.first)
+    retired = Person.find_by(membership_number: people_navision_ids.first)
 
     expect(retired.first_name).to eq('Olivier')
     expect(retired.last_name).to eq('Brian')
@@ -105,6 +105,6 @@ describe "import:bluemlisalp_people" do
   it 'does not import invalid person' do
     Rake::Task["import:bluemlisalp_people"].invoke
 
-    expect(Person.find_by(navision_id: invalid_person_navision_id)).to be_nil
+    expect(Person.find_by(membership_number: invalid_person_navision_id)).to be_nil
   end
 end

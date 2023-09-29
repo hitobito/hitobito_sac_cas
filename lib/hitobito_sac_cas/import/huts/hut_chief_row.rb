@@ -43,7 +43,7 @@ module Import::Huts
     private
 
     def person_for(row)
-      Person.find_or_initialize_by(navision_id: owner_navision_id(row))
+      Person.find_or_initialize_by(membership_number: owner_navision_id(row))
     end
 
     def set_person_name(row, person)
