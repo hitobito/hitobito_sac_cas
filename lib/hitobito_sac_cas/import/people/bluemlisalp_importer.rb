@@ -106,7 +106,7 @@ module Import
       end
 
       def navision_id(row)
-        row[:navision_id].to_s
+        Integer(row[:navision_id].to_s.sub!(/^[0]*/, ''))
       end
 
       def first_name(row)

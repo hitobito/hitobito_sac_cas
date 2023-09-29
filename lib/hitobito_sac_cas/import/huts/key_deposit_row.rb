@@ -70,7 +70,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      row[:related_navision_id].to_s.sub!(/^[0]*/, '')
+      Integer(row[:related_navision_id].to_s.sub!(/^[0]*/, ''))
     end
 
     def created_at(row)
