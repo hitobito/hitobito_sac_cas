@@ -86,7 +86,7 @@ module Import
       end
 
       def person_for(row)
-        ::Person.find_or_initialize_by(navision_id: navision_id(row))
+        ::Person.find_or_initialize_by(membership_number: navision_id(row))
       end
 
       def set_data(row, person)
@@ -106,7 +106,7 @@ module Import
       end
 
       def navision_id(row)
-        row[:navision_id].to_s
+        Integer(row[:navision_id].to_s.sub!(/^[0]*/, ''))
       end
 
       def first_name(row)

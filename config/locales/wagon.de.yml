@@ -8,7 +8,7 @@ de:
     attributes:
       person:
         membership_years: Anzahl Mitglieder-Jahre
-        navision_id: Alte ID aus Navision
+        membership_number: Mitglied-Nr
         genders:
           _nil: andere
       group/sektion:

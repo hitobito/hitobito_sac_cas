@@ -42,7 +42,7 @@ module Import::Huts
     private
 
     def person_for(row)
-      Person.find_or_initialize_by(navision_id: owner_navision_id(row))
+      Person.find_or_initialize_by(membership_number: owner_navision_id(row))
     end
 
     def set_person_name(row, person)
@@ -73,7 +73,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      row[:related_navision_id].to_s.sub!(/^[0]*/, '')
+      Integer(row[:related_navision_id].to_s.sub!(/^[0]*/, ''))
     end
 
     def created_at(row)
