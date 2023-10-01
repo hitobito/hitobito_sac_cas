@@ -10,6 +10,7 @@ admin:
   gender: m
   contact_data_visible: true
   primary_group: ressort_it
+  membership_number: 500000
 
 #leader:
   #first_name: A

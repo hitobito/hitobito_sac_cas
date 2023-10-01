@@ -8,7 +8,7 @@ de:
     attributes:
       person:
         membership_years: Anzahl Mitglieder-Jahre
-        membership_number: Mitgliedschaftsnummer
+        membership_number: Mitglied-Nr
         genders:
           _nil: andere
       group/sektion:

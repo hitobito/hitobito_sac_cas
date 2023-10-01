@@ -6,26 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class ChangePeopleMembershipNumberDefault < ActiveRecord::Migration[6.1]
-  MIN_GENERATED_MEMBERSHIP_NUMBER = 500_000
-
   def up
-    # Create a sequence to generate unique membership numbers,
-    # starting from MIN_GENERATED_MEMBERSHIP_NUMBER
-    execute <<-SQL
-      CREATE SEQUENCE people_membership_number_seq START #{MIN_GENERATED_MEMBERSHIP_NUMBER};
-    SQL
+    Person.reset_column_information
 
-    # Update existing records without a membership_number with values from the sequence
-    execute <<-SQL
-      UPDATE people SET membership_number = NEXT VALUE FOR people_membership_number_seq WHERE membership_number IS NULL;
-    SQL
+    update_existing_people
 
-    # Set the sequence as default value for the membership_number column and make it NOT NULL.
-    # This will automatically generate a new membership_number for new records
-    # and will not overwrite existing membership numbers.
-    execute <<-SQL
-      ALTER TABLE people MODIFY COLUMN membership_number INT NOT NULL DEFAULT (NEXT VALUE FOR people_membership_number_seq);
-    SQL
+    # make membership_number not null
+    change_column :people, :membership_number, :integer, null: false
 
     # Add a unique index on the membership_number column
     add_index :people, :membership_number, unique: true
@@ -34,9 +21,16 @@ class ChangePeopleMembershipNumberDefault < ActiveRecord::Migration[6.1]
   def down
     remove_index :people, :membership_number
     change_column_null :people, :membership_number, true
-    change_column_default :people, :membership_number, nil
-    execute <<-SQL
-      DROP SEQUENCE people_membership_number_seq;
-    SQL
+  end
+
+  private
+
+  def update_existing_people
+    Person.where(membership_number: nil).each do |p|
+      next_number = p.next_membership_number
+      # use update_all to ignore attr_readonly :membership_number
+      # in Person model
+      Person.where(id: p.id).update_all(membership_number: next_number)
+    end
   end
 end
