@@ -20,6 +20,9 @@ module SacCas::Person
 
     before_validation :set_membership_number, if: :new_record?
 
+    # just make sure membership number is in a defined range
+    validates :membership_number, inclusion: 100000..999999
+
   end
 
   class_methods do

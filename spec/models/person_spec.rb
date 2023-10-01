@@ -27,21 +27,21 @@ describe Person do
     end
 
     it 'cannot be set for new records' do
-      person = Person.create!(first_name: 'John', membership_number: 123)
-      expect(person.membership_number).not_to eq 123
+      person = Person.create!(first_name: 'John', membership_number: 123123)
+      expect(person.membership_number).not_to eq 123123
     end
 
     it 'can be set for new records with Person.allow_manual_membership_number' do
       person = Person.with_manual_membership_number do
-        Person.create!(first_name: 'John', membership_number: 123)
+        Person.create!(first_name: 'John', membership_number: 123123)
       end
-      expect(person.reload.membership_number).to eq 123
+      expect(person.reload.membership_number).to eq 123123
     end
 
     it 'must be unique' do
       Person.with_manual_membership_number do
-        Person.create!(first_name: 'John', membership_number: 123)
-        expect { Person.create!(first_name: 'John', membership_number: 123) }.
+        Person.create!(first_name: 'John', membership_number: 123123)
+        expect { Person.create!(first_name: 'John', membership_number: 123123) }.
           to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
       end
     end
