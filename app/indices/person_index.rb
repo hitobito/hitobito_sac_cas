@@ -8,5 +8,5 @@
 module PersonIndex; end
 
 ThinkingSphinx::Index.define_partial :person do
-  indexes membership_number
+  indexes id
 end
