@@ -10,19 +10,13 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   included do
-
-    MIN_GENERATED_MEMBERSHIP_NUMBER = 500_000
     Person::INTERNAL_ATTRS += [:membership_verify_token]
+
+    attr_readonly :id
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
-    attr_readonly :membership_number
-
-    before_validation :set_membership_number, if: :new_record?
-
-    # just make sure membership number is in a defined range
-    validates :membership_number, inclusion: 100000..999999
-
+    before_create :approve_manual_membership_number
   end
 
   class_methods do
@@ -37,6 +31,10 @@ module SacCas::Person
     end
   end
 
+  def manually_set_membership_number?
+    self.class.instance_variable_get('@allow_manual_membership_number')
+  end
+
   def membership_years
     "#{first_name}#{last_name}".size
   end
@@ -47,25 +45,19 @@ module SacCas::Person
     token
   end
 
-  def next_membership_number
-    max = Person.maximum(:membership_number)
+  def membership_number
+    id
+  end
 
-    if max.nil?
-      next_number = MIN_GENERATED_MEMBERSHIP_NUMBER
-    elsif max >= MIN_GENERATED_MEMBERSHIP_NUMBER
-      next_number = max + 1
-    end
+  def membership_number=(value)
+    self.id = value
   end
 
   private
 
-  def set_membership_number
+  def approve_manual_membership_number
     return if manually_set_membership_number?
 
-    self.membership_number = next_membership_number
-  end
-
-  def manually_set_membership_number?
-    self.class.instance_variable_get('@allow_manual_membership_number')
+    self.id = nil
   end
 end

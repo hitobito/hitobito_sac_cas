@@ -86,7 +86,9 @@ module Import
       end
 
       def person_for(row)
-        ::Person.find_or_initialize_by(membership_number: navision_id(row))
+        ::Person.with_manual_membership_number do
+          ::Person.find_or_initialize_by(id: navision_id(row))
+        end
       end
 
       def set_data(row, person)

@@ -8,13 +8,7 @@
 require 'spec_helper'
 
 describe Person do
-  context '#membership_number' do
-    it 'is not validated for presence' do
-      person = Person.new(first_name: 'John')
-      person.valid?
-      expect(person.errors.where(:membership_number, :blank)).to be_empty
-    end
-
+  context '#membership_number (id)' do
     it 'is generated automatically' do
       person = Person.create!(first_name: 'John')
       expect(person.membership_number).to be_present
@@ -22,20 +16,23 @@ describe Person do
 
     it 'cannot be changed' do
       person = Person.create!(first_name: 'John')
-      expect { person.update!(membership_number: person.membership_number + 1) }.
-        not_to (change { person.reload.membership_number })
+      person.membership_number = 42
+      person.save!
+
+      expect(Person.exists?(42)).to eq(false)
     end
 
     it 'cannot be set for new records' do
       person = Person.create!(first_name: 'John', membership_number: 123123)
-      expect(person.membership_number).not_to eq 123123
+
+      expect(600_000..600_500).to include(person.membership_number)
     end
 
-    it 'can be set for new records with Person.allow_manual_membership_number' do
+    it 'can be set for new records with Person.allow_manual_id' do
       person = Person.with_manual_membership_number do
         Person.create!(first_name: 'John', membership_number: 123123)
       end
-      expect(person.reload.membership_number).to eq 123123
+      expect(person.reload.id).to eq 123123
     end
 
     it 'must be unique' do
