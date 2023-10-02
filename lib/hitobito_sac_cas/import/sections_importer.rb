@@ -50,16 +50,20 @@ module Import
           puts 'ERROR: Cannot modify archived group'
           puts group.inspect
         end
-        puts 'Rebuilding group hierarchy...'
-        ignoring_archival do
-          Group.update_all(lft: nil, rgt: nil)
-          Group.rebuild!(false)
-        end
+        rebuild_group_hierachy
         puts 'Done.'
       end
     end
 
     private
+
+    def rebuild_group_hierachy
+      puts 'Rebuilding group hierarchy...'
+      ignoring_archival do
+        Group.update_all(lft: nil, rgt: nil)
+        Group.rebuild!(false)
+      end
+    end
 
     def without_query_logging
       old_logger = ActiveRecord::Base.logger

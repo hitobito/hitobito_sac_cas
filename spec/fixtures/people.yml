@@ -3,14 +3,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+# BEWARE: always add id manually since we're using PK also for membership_number
+# this is because our mysql version only supports auto increment for pk.
+
 admin:
+  id: 600_000
   first_name: Anna
   last_name: Admin
   email: support@hitobito.example.com
   gender: m
   contact_data_visible: true
   primary_group: ressort_it
-  membership_number: 500000
 
 #leader:
   #first_name: A
