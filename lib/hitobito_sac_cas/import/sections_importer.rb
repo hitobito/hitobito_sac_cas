@@ -197,7 +197,7 @@ module Import
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def add_default_subgroups(row, group)
+    def add_default_subgroups(row, group) # rubocop:disable Metrics/MethodLength
       return if root?(row)
       types = sektion_subgroup_types
       types.push(Group::SektionsNeuMitgliederZv) if zv_registrations(row)

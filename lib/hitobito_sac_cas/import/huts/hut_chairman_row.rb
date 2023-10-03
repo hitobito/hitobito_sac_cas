@@ -18,7 +18,7 @@ module Import::Huts
       @row = row
     end
 
-    def import!
+    def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
       group_id = group_id(@row)
