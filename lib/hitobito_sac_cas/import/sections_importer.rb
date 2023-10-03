@@ -93,7 +93,7 @@ module Import
     def set_data(row, group)
       group.type = type(row)&.name
       group = group.becomes(type(row))
-      group.name = section_name(row)
+      group.name = root?(row) ? 'SAC/CAS' : section_name(row)
       group.parent_id = parent_id(row)
       group.address = address(row)
       set_phone(row, group)
