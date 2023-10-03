@@ -27,9 +27,10 @@ def seed_sektion(sektion)
   })
 end
 
-def seed_hut(sektion, name)
+def seed_hut(sektion, name, navision_id)
   Group::Huette.seed(:name, :parent_id, {
     name: name,
+    navision_id: navision_id,
     parent_id: sektion.id
   })
 end
@@ -96,14 +97,14 @@ Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
   parent_id: sections.third.id
 })
 
-seed_hut(sections.first, 'Matterhornbiwak')
-seed_hut(sections.second, 'Domhütte')
-seed_hut(sections.second, 'Spannorthütte')
-seed_hut(sections.second, 'Täschhütte')
-seed_hut(sections.third, 'Blüemlisalphütte')
-seed_hut(sections.third, 'Baltschiederklause')
-seed_hut(sections.third, 'Stockhornbiwak')
-seed_hut(sections.third, 'Gestellenhütte')
-seed_hut(sections.third, 'Sunnhüsi')
+seed_hut(sections.first, 'Matterhornbiwak', 99999942)
+seed_hut(sections.second, 'Domhütte', 81)
+seed_hut(sections.second, 'Spannorthütte', 255)
+seed_hut(sections.second, 'Täschhütte', 265)
+seed_hut(sections.third, 'Blüemlisalphütte', 1650)
+seed_hut(sections.third, 'Baltschiederklause', 25)
+seed_hut(sections.third, 'Stockhornbiwak', 258)
+seed_hut(sections.third, 'Ski- & Ferienhaus Obergestelen', 448786)
+seed_hut(sections.third, 'Sunnhüsi', 448785)
 
 Group.rebuild!
