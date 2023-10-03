@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-10-03T13:06:47.851Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15" etag="8p69I3bFemAoXY9dqex-" version="22.0.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-10-03T13:43:27.253Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15" etag="v7vSPHR49METZxBRSIuC" version="22.0.2" type="github">
   <diagram id="prtHgNgQTEPvFCAcTncT" name="Page-1">
-    <mxGraphModel dx="1384" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
+    <mxGraphModel dx="1799" dy="1069" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -40,6 +40,15 @@
           <mxGeometry width="160" relative="1" as="geometry">
             <mxPoint x="610" y="60" as="sourcePoint" />
             <mxPoint x="740" y="60" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eNqWfeT23x4aINy_8YnG-13" value="Nach jetzigem Stand würden die User dann im Hitobito UI landen" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="dNxyNK7c78bLwvsdeMH5-20">
+          <mxGeometry x="920" y="10" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eNqWfeT23x4aINy_8YnG-14" value="" style="edgeStyle=elbowEdgeStyle;fontSize=12;html=1;endFill=0;startFill=0;endSize=6;startSize=6;dashed=1;dashPattern=1 4;endArrow=none;startArrow=none;rounded=0;" edge="1" parent="dNxyNK7c78bLwvsdeMH5-20" source="eNqWfeT23x4aINy_8YnG-3" target="eNqWfeT23x4aINy_8YnG-13">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="950" y="90" as="sourcePoint" />
+            <mxPoint x="1110" y="90" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="dNxyNK7c78bLwvsdeMH5-21" value="Hitobito System" style="swimlane;html=1;startSize=20;horizontal=0;" parent="dNxyNK7c78bLwvsdeMH5-19" vertex="1">
@@ -88,10 +97,10 @@
           <mxGeometry x="20" y="550" width="1600" height="130" as="geometry" />
         </mxCell>
         <mxCell id="2reWwzxG0LPYJVmJGBfX-13" value="Unterlagen per Briefpost verschicken" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;" parent="2reWwzxG0LPYJVmJGBfX-12" vertex="1">
-          <mxGeometry x="680" y="25" width="120" height="80" as="geometry" />
+          <mxGeometry x="1270" y="25" width="120" height="80" as="geometry" />
         </mxCell>
         <mxCell id="2reWwzxG0LPYJVmJGBfX-14" value="" style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=end;symbol=terminate2;" parent="2reWwzxG0LPYJVmJGBfX-12" vertex="1">
-          <mxGeometry x="880" y="40" width="50" height="50" as="geometry" />
+          <mxGeometry x="1470" y="40" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="2reWwzxG0LPYJVmJGBfX-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="2reWwzxG0LPYJVmJGBfX-12" source="2reWwzxG0LPYJVmJGBfX-13" target="2reWwzxG0LPYJVmJGBfX-14" edge="1">
           <mxGeometry relative="1" as="geometry" />
