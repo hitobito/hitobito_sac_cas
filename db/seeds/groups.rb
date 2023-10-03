@@ -5,4 +5,4 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-Group::SacCas.seed_once(:parent_id, name: 'Schweizer Alpen-Club SAC')
+Group::SacCas.seed_once(:parent_id, name: 'SAC/CAS')

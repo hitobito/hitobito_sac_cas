@@ -7,7 +7,7 @@ root:
   parent:
   lft: 1
   rgt: 10
-  name: Schweizer Alpen-Club SAC
+  name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
   address: Ophovener Str. 79a
@@ -19,7 +19,7 @@ geschaeftsstelle:
   parent: root
   lft: 2 
   rgt: 3
-  name: Geschäftsstelle
+  name: 1 Geschäftsstelle
   type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
 

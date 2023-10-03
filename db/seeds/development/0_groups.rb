@@ -67,9 +67,13 @@ sections = Group::Sektion.seed(
     parent_id: root.id
   },
   { name: 'SAC UTO',
+    navision_id: 5300,
+    foundation_year: 1863,
     parent_id: root.id
   },
   { name: 'SAC Blüemlisalp',
+    navision_id: 1650,
+    foundation_year: 1874,
     parent_id: root.id
   })
 
