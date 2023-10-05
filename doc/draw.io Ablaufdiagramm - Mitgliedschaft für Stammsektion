@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-10-05T12:51:59.448Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15" etag="xPDu-rBJmdoWZb-b-nhL" version="22.0.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-10-05T13:06:59.372Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15" etag="4JjAHY08GCO7oEWIacAy" version="22.0.2" type="github">
   <diagram id="prtHgNgQTEPvFCAcTncT" name="Page-1">
     <mxGraphModel dx="1824" dy="1105" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
       <root>
@@ -190,7 +190,7 @@
         <mxCell id="2reWwzxG0LPYJVmJGBfX-19" value="Prüfung Neueintritts" style="points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];shape=mxgraph.bpmn.task;whiteSpace=wrap;rectStyle=rounded;size=10;html=1;container=1;expand=0;collapsible=0;taskMarker=abstract;" parent="2reWwzxG0LPYJVmJGBfX-10" vertex="1">
           <mxGeometry x="1805" y="80" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="HPItAkg7lJm_E-VMx24h-2" value="E-Mail erhalten &quot;Willkommen beim SAC&quot;" style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=eventNonint;symbol=message;" vertex="1" parent="2reWwzxG0LPYJVmJGBfX-10">
+        <mxCell id="HPItAkg7lJm_E-VMx24h-2" value="E-Mail erhalten &quot;Neue Registrierung&quot;" style="points=[[0.145,0.145,0],[0.5,0,0],[0.855,0.145,0],[1,0.5,0],[0.855,0.855,0],[0.5,1,0],[0.145,0.855,0],[0,0.5,0]];shape=mxgraph.bpmn.event;html=1;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;align=center;perimeter=ellipsePerimeter;outlineConnect=0;aspect=fixed;outline=eventNonint;symbol=message;" vertex="1" parent="2reWwzxG0LPYJVmJGBfX-10">
           <mxGeometry x="695" y="85" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="HPItAkg7lJm_E-VMx24h-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="2reWwzxG0LPYJVmJGBfX-10" source="HPItAkg7lJm_E-VMx24h-21" target="HPItAkg7lJm_E-VMx24h-23">
