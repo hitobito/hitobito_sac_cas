@@ -14,23 +14,7 @@ module SacCas::Person
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
-    before_save :approve_manual_membership_number
-  end
-
-  class_methods do
-    def with_manual_membership_number
-      # Store the original value of the class variable so we can restore it after the block.
-      original_value = @allow_manual_membership_number
-      @allow_manual_membership_number = true
-      # Yield to the block and return the result. Before returning, restore the original value.
-      yield.tap do
-        @allow_manual_membership_number = original_value
-      end
-    end
-  end
-
-  def manually_set_membership_number?
-    self.class.instance_variable_get('@allow_manual_membership_number')
+    alias_attribute :membership_number, :id
   end
 
   def membership_years
@@ -43,21 +27,4 @@ module SacCas::Person
     token
   end
 
-  def membership_number
-    id
-  end
-
-  def membership_number=(value)
-    self.id = value
-  end
-
-  private
-
-  def approve_manual_membership_number
-    return if manually_set_membership_number?
-
-    if id_changed?
-      self.id = id_was
-    end
-  end
 end
