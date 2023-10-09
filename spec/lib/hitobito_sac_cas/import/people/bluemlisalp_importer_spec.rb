@@ -6,10 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
+require_relative '../../../../../lib/hitobito_sac_cas/import/people/bluemlisalp_importer'
 
-Rails.application.load_tasks
-
-describe "import:bluemlisalp_people" do
+describe Import::People::BluemlisalpImporter do
+  let(:file) { file_fixture('bluemlisalp_people.xlsx') }
+  let(:importer) { described_class.new(file, output: double(puts: nil)) }
 
   let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '1650', foundation_year: 1990) } }
   let(:bluemlisalp_member_group) { groups(:be_mitglieder) }
@@ -17,23 +18,13 @@ describe "import:bluemlisalp_people" do
   let(:people_navision_ids) { ['213134', '102345', '459233', '348212', '131348'] }
   let(:invalid_person_navision_id) { '312311' }
 
-  after do
-    Rake::Task['import:bluemlisalp_people'].reenable
-  end
-
   before do
     Person.where(id: people_navision_ids).destroy_all
   end
 
-  before do
-    allow_any_instance_of(Pathname).to receive(:join)
-      .and_return(Wagons.find('sac_cas')
-      .root
-      .join('spec/fixtures/files/bluemlisalp_people.xlsx'))
-  end
-
   it 'imports people and correct roles' do
-    Rake::Task["import:bluemlisalp_people"].invoke
+    importer.import!
+ 
     roles = [Group::SektionsMitglieder::Einzel,
              Group::SektionsMitglieder::Jugend,
              Group::SektionsMitglieder::Familie,
@@ -48,7 +39,7 @@ describe "import:bluemlisalp_people" do
   end
 
   it 'imports active person' do
-    Rake::Task["import:bluemlisalp_people"].invoke
+    importer.import!
 
     active = Person.find(people_navision_ids.second)
 
@@ -81,7 +72,7 @@ describe "import:bluemlisalp_people" do
   end
 
   it 'imports retired person' do
-    Rake::Task["import:bluemlisalp_people"].invoke
+    importer.import!
 
     retired = Person.find(people_navision_ids.first)
 
@@ -103,7 +94,7 @@ describe "import:bluemlisalp_people" do
   end
 
   it 'does not import invalid person' do
-    Rake::Task["import:bluemlisalp_people"].invoke
+    importer.import!
 
     expect(Person.find_by(id: invalid_person_navision_id)).to be_nil
   end

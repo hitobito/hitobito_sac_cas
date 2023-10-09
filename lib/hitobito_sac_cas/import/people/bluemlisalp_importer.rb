@@ -54,23 +54,26 @@ module Import
         'FREI FAM' => 'Group::SektionsMitglieder::FreiFam'
       }
 
-      def initialize(path)
+      attr_reader :output
+
+      def initialize(path, output: STDOUT)
         raise 'Personen Bluemlisalp Export excel file not found' unless path.exist?
         @path = path
+        @output = output
       end
 
       def import!
         without_query_logging do
           Import::XlsxReader.read(@path, 'Data', headers: HEADERS) do |row|
-            puts "Importing row #{row[:first_name]} #{row[:last_name]}"
+            output.puts "Importing row #{row[:first_name]} #{row[:last_name]}"
             person = person_for(row)
             person = set_data(row, person)
             # TODO handle group not being found and thus no role
             begin
               person.save!
-              puts "Finished importing #{person.full_name}"
+              output.puts "Finished importing #{person.full_name}"
             rescue ActiveRecord::RecordInvalid => e
-              puts "CAN NOT IMPORT ROW WITH NAVISION ID: #{row[:navision_id]}\n#{e.message}"
+              output.puts "CAN NOT IMPORT ROW WITH NAVISION ID: #{row[:navision_id]}\n#{e.message}"
             end
           end
         end
@@ -86,9 +89,7 @@ module Import
       end
 
       def person_for(row)
-        ::Person.with_manual_membership_number do
-          ::Person.find_or_initialize_by(id: navision_id(row))
-        end
+        ::Person.find_or_initialize_by(id: navision_id(row))
       end
 
       def set_data(row, person)

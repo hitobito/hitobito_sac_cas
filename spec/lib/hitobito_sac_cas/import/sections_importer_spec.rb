@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
-require_relative '../../../../lib/hitobito_sac_cas/import/sections_importer.rb'
+require_relative '../../../../lib/hitobito_sac_cas/import/sections_importer'
 
 describe Import::SectionsImporter do
   let(:file) { file_fixture('bluemlisalp_sections.xlsx') }
