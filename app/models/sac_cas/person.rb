@@ -14,7 +14,7 @@ module SacCas::Person
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
-    before_create :approve_manual_membership_number
+    before_save :approve_manual_membership_number
   end
 
   class_methods do
@@ -56,6 +56,8 @@ module SacCas::Person
   def approve_manual_membership_number
     return if manually_set_membership_number?
 
-    self.id = nil
+    if id_changed?
+      self.id = id_was
+    end
   end
 end
