@@ -25,4 +25,5 @@ class Group::Sektion < ::Group
     numericality:
     { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
 
+  mounted_attr :section_canton, :text, enum: Cantons.short_name_strings.map(&:upcase)
 end
