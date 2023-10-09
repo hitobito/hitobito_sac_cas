@@ -5,7 +5,7 @@
 
 
 admin:
-  person: admin
+  person_id: 600_000
   group: geschaeftsstelle
   type: Group::Geschaeftsstelle::ITSupport
 
@@ -16,6 +16,6 @@ admin:
   #type: Group::Root::Leader
 
 mitglied:
-  person: mitglied
+  person_id: 600_001
   group: be_mitglieder
   type: Group::SektionsMitglieder::Einzel
