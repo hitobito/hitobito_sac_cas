@@ -12,18 +12,11 @@ admin:
   last_name: Admin
   email: support@hitobito.example.com
   gender: m
-  contact_data_visible: true
   primary_group: ressort_it
 
-#leader:
-  #first_name: A
-  #last_name: Leader
-  #email: a.leader@hitobito.example.com
-  #contact_data_visible: true
-  #primary_group: root
-
-#member:
-  #first_name: My
-  #last_name: Member
-  #email: member0@hitobito.example.com
-  #primary_group: root
+mitglied:
+  id: 600_001
+  first_name: Edmund
+  last_name: Hillary
+  email: e.hillary@hitobito.example.com
+  primary_group: be_mitglieder

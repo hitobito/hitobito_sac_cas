@@ -15,8 +15,7 @@ admin:
   #group: root
   #type: Group::Root::Leader
 
-## TODO use group and type of the main base member
-#member:
-  #person: member
-  #group: root
-  #type: Group::Root::Member
+mitglied:
+  person: mitglied
+  group: be_mitglieder
+  type: Group::SektionsMitglieder::Einzel
