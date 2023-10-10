@@ -27,9 +27,17 @@ module HitobitoSacCas
       Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
       Person.include SacCas::Person
 
+      [
+        Export::Tabular::People::Households,
+        Export::Tabular::People::ParticipationsFull,
+        Export::Tabular::People::ParticipationsHouseholds,
+        Export::Tabular::People::PeopleAddress,
+        Export::Tabular::People::PeopleFull
+      ].each { |klass| klass.prepend Export::Tabular::People::WithMembershipNumber }
+
       TableDisplay.register_column(Person,
                                    TableDisplays::People::MembershipYearsColumn,
-                                   [:membership_years]) 
+                                   [:membership_years])
     end
 
 
