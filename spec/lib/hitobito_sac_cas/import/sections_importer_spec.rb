@@ -21,7 +21,7 @@ describe Import::SectionsImporter do
   it 'imports section_canton attribute' do
     importer.import!
 
-    expect(Group::Sektion.find_by!(name: 'SAC Blüemlisalp').section_canton ).
+    expect(Group::Sektion.find_by!(name: 'SAC Blüemlisalp').section_canton).
       to eq 'BE'
   end
 end

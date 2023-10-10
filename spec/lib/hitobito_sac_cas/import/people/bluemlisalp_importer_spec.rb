@@ -12,10 +12,14 @@ describe Import::People::BluemlisalpImporter do
   let(:file) { file_fixture('bluemlisalp_people.xlsx') }
   let(:importer) { described_class.new(file, output: double(puts: nil)) }
 
-  let!(:bluemlisalp_group) { groups(:be).tap { |g| g.update!(navision_id: '1650', foundation_year: 1990) } }
+  let!(:bluemlisalp_group) do
+    groups(:be).tap do |g|
+      g.update!(navision_id: '1650', foundation_year: 1990)
+    end
+  end
   let(:bluemlisalp_member_group) { groups(:be_mitglieder) }
 
-  let(:people_navision_ids) { ['213134', '102345', '459233', '348212', '131348'] }
+  let(:people_navision_ids) { %w(213134 102345 459233 348212 131348) }
   let(:invalid_person_navision_id) { '312311' }
 
   before do
@@ -24,7 +28,7 @@ describe Import::People::BluemlisalpImporter do
 
   it 'imports people and correct roles' do
     importer.import!
- 
+
     roles = [Group::SektionsMitglieder::Einzel,
              Group::SektionsMitglieder::Jugend,
              Group::SektionsMitglieder::Familie,

@@ -23,13 +23,13 @@ describe Person do
     end
 
     it 'can be set for new records' do
-      person = Person.create!(first_name: 'John', membership_number: 123123)
-      expect(person.reload.id).to eq 123123
+      person = Person.create!(first_name: 'John', membership_number: 123_123)
+      expect(person.reload.id).to eq 123_123
     end
 
     it 'must be unique' do
-      Person.create!(first_name: 'John', membership_number: 123123)
-      expect { Person.create!(first_name: 'John', membership_number: 123123) }.
+      Person.create!(first_name: 'John', membership_number: 123_123)
+      expect { Person.create!(first_name: 'John', membership_number: 123_123) }.
         to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
     end
   end

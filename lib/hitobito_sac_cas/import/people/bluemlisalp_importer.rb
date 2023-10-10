@@ -32,7 +32,7 @@ module Import
         member_type: 'Mitgliederart',
         language: 'Sprachcode',
         role_created_at: 'Letztes Eintrittsdatum',
-        role_deleted_at: 'Letztes Austrittsdatum',
+        role_deleted_at: 'Letztes Austrittsdatum'
       }
 
       GENDERS = {
@@ -58,6 +58,7 @@ module Import
 
       def initialize(path, output: STDOUT)
         raise 'Personen Bluemlisalp Export excel file not found' unless path.exist?
+
         @path = path
         @output = output
       end
@@ -68,7 +69,7 @@ module Import
             output.puts "Importing row #{row[:first_name]} #{row[:last_name]}"
             person = person_for(row)
             person = set_data(row, person)
-            # TODO handle group not being found and thus no role
+            # TODO: handle group not being found and thus no role
             begin
               person.save!
               output.puts "Finished importing #{person.full_name}"
@@ -109,7 +110,7 @@ module Import
       end
 
       def navision_id(row)
-        Integer(row[:navision_id].to_s.sub!(/^[0]*/, ''))
+        Integer(row[:navision_id].to_s.sub!(/^0*/, ''))
       end
 
       def first_name(row)
@@ -124,7 +125,7 @@ module Import
         [
           row[:address_supplement],
           row[:address],
-          row[:postfach],
+          row[:postfach]
         ].select(&:present?).join("\n")
       end
 
@@ -145,8 +146,9 @@ module Import
         phone_mobile = row[:phone_mobile]
         phone_direct = row[:phone_direct]
         return unless [phone, phone_mobile, phone_direct].any? { |n| phone_valid?(n) }
+
         person.phone_numbers.destroy_all
-        # TODO label translated based on language?
+        # TODO: label translated based on language?
         person.phone_numbers.build(number: phone, label: 'Privat') if phone.present?
         person.phone_numbers.build(number: phone_mobile, label: 'Mobil') if phone_mobile.present?
         person.phone_numbers.build(number: phone_direct, label: 'Direkt') if phone_direct.present?
@@ -159,6 +161,7 @@ module Import
       def email(row)
         email = row[:email]
         return unless email.present? && Truemail.valid?(email) && !::Person.exists?(email: email)
+
         email
       end
 

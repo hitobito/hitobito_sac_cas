@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require_relative '../../hitobito_sac_cas/import/sections_importer.rb'
-require_relative '../../hitobito_sac_cas/import/huts_importer.rb'
-require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer.rb'
+require_relative '../../hitobito_sac_cas/import/sections_importer'
+require_relative '../../hitobito_sac_cas/import/huts_importer'
+require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer'
 
 
 # rubocop:disable Metrics/LineLength
@@ -21,8 +21,8 @@ namespace :import do
 
   desc 'Import huts from a navision export'
   task huts: [:environment] do
-    #huts_excel = Wagons.find('sac_cas').
-    #root.join('db/seeds/production/Hütten_Export_20230704.xlsx')
+    # huts_excel = Wagons.find('sac_cas').
+    # root.join('db/seeds/production/Hütten_Export_20230704.xlsx')
 
     import_file_path = 'db/seeds/production/Hütten_Beziehungen_Export_20230704.xlsx'
     hut_relations_excel = Wagons.find('sac_cas').root.join(import_file_path)
