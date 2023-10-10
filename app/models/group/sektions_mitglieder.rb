@@ -7,25 +7,19 @@
 
 class Group::SektionsMitglieder < ::Group
 
+  self.static_name = true
+
   ### ROLES
   class Mitglied < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Einzel < Mitglied; end
-  class Jugend < Mitglied; end
-  class Familie < Mitglied; end
-  class FreiKind < Mitglied; end
-  class FreiFam < Mitglied; end
   class Abonnement < Mitglied; end
-  class Geschenkmitgliedschaft < Mitglied; end
   class Ehrenmitglied < Mitglied; end
   class Beguenstigt < Mitglied; end
 
-  roles Einzel, Jugend, Familie,
-    FreiKind, FreiFam,
-    Abonnement, Geschenkmitgliedschaft,
+  roles Mitglied, Abonnement,
     Ehrenmitglied, Beguenstigt
 
 end

@@ -82,20 +82,20 @@ sections.each do |s|
   seed_sektion(s)
 end
 
-Group::SektionsNeuMitgliederSektion.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.first.id
-})
+#Group::SektionsNeuMitgliederSektion.seed(:name, :parent_id, {
+  #name: 'Neuanmeldungen',
+  #parent_id: sections.first.id
+#})
 
-Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.second.id
-})
+#Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
+  #name: 'Neuanmeldungen',
+  #parent_id: sections.second.id
+#})
 
-Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.third.id
-})
+#Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
+  #name: 'Neuanmeldungen',
+  #parent_id: sections.third.id
+#})
 
 seed_hut(sections.first, 'Matterhornbiwak', 99999942)
 seed_hut(sections.second, 'Domhütte', 81)

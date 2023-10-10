@@ -69,13 +69,13 @@ de:
         one: Mitglieder
         other: Mitglieder
 
-      group/sektions_neu_mitglieder_zv:
-        one: Neuanmeldung ZV
-        other: Neuanmeldungen ZV
+      group/sektions_neuanmeldungen_nv:
+        one: Neuanmeldung
+        other: Neuanmeldungen
 
-      group/sektions_neu_mitglieder_sektion:
-        one: Neuanmeldung Sektion
-        other: Neuanmeldungen Sektion
+      group/sektions_neuanmeldungen_sektion:
+        one: Neuanmeldung (zur Freigabe)
+        other: Neuanmeldungen (zur Freigabe)
 
       group/sektions_funktionaere:
         one: Funktionäre
@@ -99,11 +99,9 @@ de:
       group/geschaeftsstelle/verwaltung_read_only:
         one: Verwaltung (nur lesend)
         description: Verwaltung nur lesend
-
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
-
       group/sektions_funktionaere/verwaltung:
         one: Verwaltung
         description: Verwaltung Sektion
@@ -122,22 +120,9 @@ de:
       group/sektions_funktionaere/funktionaer:
         one: Funktionär*in
         description: Funktionär*in Sektion
-
-      group/sektions_mitglieder/einzel:
-        one: Einzel
-        description: Einzel-Mitglied
-      group/sektions_mitglieder/jugend:
-        one: Jugendmitglied
-        description: Jugendmitglied Sektion
-      group/sektions_mitglieder/familie:
-        one: Familie
-        description: Familienmitglied
-      group/sektions_mitglieder/frei_kind:
-        one: Frei Kind
-        description: Frei Kind
-      group/sektions_mitglieder/frei_fam:
-        one: Frei Fam
-        description: Frei Familie
+      group/sektions_mitglieder/mitglied:
+        one: Mitglied
+        description: Mitglied
       group/sektions_mitglieder/abonnement:
         one: Abonnement
         description: Abonnement
@@ -150,27 +135,12 @@ de:
       group/sektions_mitglieder/beguenstigt:
         one: Begünstigt
         description: Begünstigt
-
-      group/sektions_neu_mitglieder_sektion/einzel:
-        one: Neuanmeldung Einzel
-        description: Neuanmeldung Einzelmitgliedschaft
-      group/sektions_neu_mitglieder_sektion/jugend:
-        one: Neuanmeldung Jugend
-        description: Neuanmeldung Jugendmitgliedschaft
-      group/sektions_neu_mitglieder_sektion/familie:
-        one: Neuanmeldung Familie
-        description: Neuanmeldung Familienmitgliedschaft
-
-      group/sektions_neu_mitglieder_zv/einzel:
-        one: Neuanmeldung Einzel
-        description: Neuanmeldung Einzelmitgliedschaft
-      group/sektions_neu_mitglieder_zv/jugend:
-        one: Neuanmeldung Jugend
-        description: Neuanmeldung Jugendmitgliedschaft
-      group/sektions_neu_mitglieder_zv/familie:
-        one: Neuanmeldung Familie
-        description: Neuanmeldung Familienmitgliedschaft
-
+      group/sektions_neuanmeldungen_sektion/neuanmeldung:
+        one: Neuanmeldung
+        description: Neuanmeldung Mitgliedschaft
+      group/sektions_neuanmeldungen_nv/neuanmeldung:
+        one: Neuanmeldung
+        description: Neuanmeldung Mitgliedschaft
       group/sektions_tourenkommission/tourenchef_sommer:
         one: Tourenchef*in Sommer
         description: Tourenchef*in Sommer
@@ -189,7 +159,6 @@ de:
       group/sektions_tourenkommission/tourenleiter_winter:
         one: Tourenleiter*in Winter
         description: Tourenleiter*in Winter
-
       group/huette/huettenchef:
         one: Hüttenchef*in
         description: Hüttenchef*in

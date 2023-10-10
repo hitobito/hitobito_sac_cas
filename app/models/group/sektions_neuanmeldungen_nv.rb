@@ -5,16 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsNeuMitgliederSektion < ::Group
+class Group::SektionsNeuanmeldungenNv < ::Group
+
+  self.static_name = true
+
   ### ROLES
   class Neuanmeldung < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Einzel < Neuanmeldung; end
-  class Jugend < Neuanmeldung; end
-  class Familie < Neuanmeldung; end
-
-  roles Einzel, Jugend, Familie
+  roles Neuanmeldung
 end

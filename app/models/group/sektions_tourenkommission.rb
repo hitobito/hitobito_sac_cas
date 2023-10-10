@@ -7,6 +7,8 @@
 
 class Group::SektionsTourenkommission < ::Group
 
+  self.static_name = true
+
   ### ROLES
   class Tourenchef < ::Role
     self.permissions = [:group_full]

@@ -10,13 +10,18 @@ class Group::Ortsgruppe < ::Group
   self.layer = true
   self.event_types = [Event, Event::Course]
 
-  ### ROLES
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
-    Group::SektionsNeuMitgliederSektion,
-    Group::SektionsNeuMitgliederZv,
+    Group::SektionsNeuanmeldungenSektion,
+    Group::SektionsNeuanmeldungenNv,
     Group::SektionsTourenkommission,
     Group::Huette,
     Group::Ortsgruppe
+
+  self.default_children = [
+    Group::SektionsFunktionaere,
+    Group::SektionsMitglieder,
+    Group::SektionsNeuanmeldungenNv,
+    Group::SektionsTourenkommission ]
 
 end
