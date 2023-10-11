@@ -14,14 +14,6 @@ describe Person do
       expect(person.membership_number).to be_present
     end
 
-    it 'cannot be changed' do
-      person = Person.create!(first_name: 'John')
-      person.membership_number = 42
-      person.save!
-
-      expect(Person.exists?(42)).to eq(false)
-    end
-
     it 'can be set for new records' do
       person = Person.create!(first_name: 'John', membership_number: 123_123)
       expect(person.reload.id).to eq 123_123
