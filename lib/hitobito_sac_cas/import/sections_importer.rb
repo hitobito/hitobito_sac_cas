@@ -270,7 +270,7 @@ module Import
 
     def t(row, key, args)
       I18n.with_locale(locale(row)) do
-        I18n.translate(key, args)
+        I18n.translate(key, **args)
       end
     end
   end
