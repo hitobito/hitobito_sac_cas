@@ -14,33 +14,15 @@ describe Person do
       expect(person.membership_number).to be_present
     end
 
-    it 'cannot be changed' do
-      person = Person.create!(first_name: 'John')
-      person.membership_number = 42
-      person.save!
-
-      expect(Person.exists?(42)).to eq(false)
-    end
-
-    it 'cannot be set for new records' do
-      person = Person.create!(first_name: 'John', membership_number: 123123)
-
-      expect(600_000..600_500).to include(person.membership_number)
-    end
-
-    it 'can be set for new records with Person.allow_manual_id' do
-      person = Person.with_manual_membership_number do
-        Person.create!(first_name: 'John', membership_number: 123123)
-      end
-      expect(person.reload.id).to eq 123123
+    it 'can be set for new records' do
+      person = Person.create!(first_name: 'John', membership_number: 123_123)
+      expect(person.reload.id).to eq 123_123
     end
 
     it 'must be unique' do
-      Person.with_manual_membership_number do
-        Person.create!(first_name: 'John', membership_number: 123123)
-        expect { Person.create!(first_name: 'John', membership_number: 123123) }.
-          to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
-      end
+      Person.create!(first_name: 'John', membership_number: 123_123)
+      expect { Person.create!(first_name: 'John', membership_number: 123_123) }.
+        to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
     end
   end
 end

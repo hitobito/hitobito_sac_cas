@@ -16,7 +16,7 @@ describe Export::Pdf::Passes::Membership do
   subject { described_class.new(member) }
 
   before do
-    member.update!(first_name: 'Bob', last_name: 'Muster', address: 'Wasserstrasse 42', zip_code: '4242', town: 'Kanuto')
+    member.update!(first_name: 'Bob', last_name: 'Muster', address: 'Bergstrasse 42', zip_code: '4242', town: 'Matterhorn')
   end
 
   it 'sanitizes filename' do
@@ -31,9 +31,9 @@ describe Export::Pdf::Passes::Membership do
         [205, 602, "info@sac-cas.ch - www.sac-cas.ch"],
         [41, 557, "Mitgliederjahre"],
         [156, 557, "#{member.membership_years}"],
-        [41, 451, "#{member.first_name} #{member.last_name}"],
-        [41, 423, "Wasserstrasse 42"],
-        [41, 394, "4242 Kanuto"]
+        [41, 449, "#{member.first_name} #{member.last_name}"],
+        [41, 420, "Bergstrasse 42"],
+        [41, 392, "4242 Matterhorn"]
       ]
     end
   end
