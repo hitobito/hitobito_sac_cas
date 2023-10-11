@@ -70,11 +70,11 @@ de:
         other: Mitglieder
 
       group/sektions_neuanmeldungen_nv:
-        one: Neuanmeldung
+        one: Neuanmeldungen
         other: Neuanmeldungen
 
       group/sektions_neuanmeldungen_sektion:
-        one: Neuanmeldung (zur Freigabe)
+        one: Neuanmeldungen (zur Freigabe)
         other: Neuanmeldungen (zur Freigabe)
 
       group/sektions_funktionaere:
