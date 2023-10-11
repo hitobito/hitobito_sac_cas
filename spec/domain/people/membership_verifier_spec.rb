@@ -10,8 +10,8 @@ require 'spec_helper'
 describe People::MembershipVerifier do
 
   let(:verifier) { described_class.new(person) }
-  let(:person) { Fabricate(Group::SektionsMitglieder::Einzel.sti_name.to_sym, group: groups(:be_mitglieder)).person }
-  let!(:external_group) { Fabricate(Group::SektionsNeuMitgliederSektion.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
+  let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person }
+  let!(:neuanmeldungen) { Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
  }
 
   context '#member?' do
@@ -19,9 +19,9 @@ describe People::MembershipVerifier do
       expect(verifier.member?).to eq(true)
     end
 
-    it 'returns true if person has any non external role' do
-      Fabricate(Group::SektionsNeuMitgliederSektion::Einzel.name.to_sym,
-                group: external_group, person: person)
+    it 'returns true if person has one active member role' do
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
+                group: neuanmeldungen, person: person)
 
       expect(verifier.member?).to eq(true)
     end
@@ -32,32 +32,13 @@ describe People::MembershipVerifier do
       expect(verifier.member?).to eq(false)
     end
 
-    it 'returns false if person has only external role' do
+    it 'returns false if person has no active member role' do
       person.roles.destroy_all
-      Fabricate(Group::SektionsNeuMitgliederSektion::Einzel.name.to_sym,
-                group: external_group, person: person)
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
+                group: neuanmeldungen, person: person)
 
       expect(verifier.member?).to eq(false)
     end
   end
-
-  context 'membership_roles' do
-    let!(:non_membership_role) { Fabricate(Group::SektionsNeuMitgliederSektion::Einzel.name.to_sym, group: external_group) }
-    let!(:person) { non_membership_role.person }
-    let!(:membership_roles) do
-      [
-        Fabricate(Group::SektionsMitglieder::Einzel.sti_name.to_sym,
-                  group: groups(:be_mitglieder), person: person),
-        Fabricate(Group::SektionsMitglieder::Familie.sti_name.to_sym,
-                group: groups(:be_mitglieder), person: person)
-      ]
-    end
-
-    it 'returns only membership roles' do
-      expect(verifier.membership_roles).to match_array(membership_roles)
-    end
-    
-  end
-
 end
 

@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe Export::Pdf::Passes::Membership do
 
-  let(:member) { Fabricate(Group::SektionsMitglieder::Einzel.sti_name.to_sym, group: groups(:be_mitglieder)).person }
+  let(:member) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person }
   let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
   let(:year) { Time.zone.now.year }
 

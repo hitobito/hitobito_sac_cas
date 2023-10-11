@@ -10,7 +10,7 @@ require 'spec_helper'
 describe People::MembershipController, type: :controller do
 
   let(:member) do
-    Fabricate(Group::SektionsMitglieder::Einzel.sti_name.to_sym, group: groups(:be_mitglieder)).person
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person
   end
   let(:funktionaer) do
     Fabricate(Group::SektionsFunktionaere::Verwaltung.sti_name.to_sym,
@@ -44,8 +44,8 @@ describe People::MembershipController, type: :controller do
     context 'non member' do
 
       let(:non_member) do
-        neu = Fabricate(Group::SektionsNeuMitgliederSektion.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
-        Fabricate(Group::SektionsNeuMitgliederSektion::Einzel.sti_name.to_sym, group: neu).person
+        neu = Fabricate(Group::SektionsNeuanmeldungenNv.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: neu).person
       end
 
       it 'is not possible to download membership pass' do
