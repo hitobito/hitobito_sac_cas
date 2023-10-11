@@ -28,7 +28,7 @@ module Import
         birthday: 'Geburtsdatum',
         gender: 'Geschlecht',
         group_navision_id: 'Sektion',
-        role_type: 'Kategorie',
+        # role_type: 'Kategorie',
         member_type: 'Mitgliederart',
         language: 'Sprachcode',
         role_created_at: 'Letztes Eintrittsdatum',
@@ -185,7 +185,7 @@ module Import
       def set_role(row, person)
         person.roles.destroy_all
         person.roles.build(group: bluemlisalp_member_group(row),
-                           type: role_type(row),
+                           type: Group::Sektion::SektionsMitglieder::Mitglied,
                            created_at: role_created_at(row),
                            deleted_at: role_deleted_at(row))
       end
@@ -197,10 +197,6 @@ module Import
       def bluemlisalp_group(row)
         navision_id = row[:group_navision_id].to_i
         ::Group::Sektion.find_by(navision_id: navision_id)
-      end
-
-      def role_type(row)
-        ROLE_TYPES[row[:role_type].to_s]
       end
 
       def role_created_at(row)

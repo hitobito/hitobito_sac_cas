@@ -24,4 +24,8 @@ describe Import::SectionsImporter do
     expect(Group::Sektion.find_by!(name: 'SAC Blüemlisalp').section_canton).
       to eq 'BE'
   end
+
+  #context 'sub groups' do
+    #importer.import!
+  #end
 end
