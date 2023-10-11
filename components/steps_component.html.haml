@@ -1,0 +1,15 @@
+%div{data: { controller: stimulus_controller}}
+  .row
+    %ol.step-headers.offset-md-1
+      - each_step do |step|
+        %li{class: step.header_class}
+          = link_to(step.title, '#', data: stimulus_param(:index, step.index).merge(action: stimulus_action(:activate)))
+
+  - each_step do |step|
+
+    .step-content{class: step.content_class, data:  stimulus_value(:index, step.index)  }
+      = render step
+      .btn-toolbar.bottom
+        -# = link(:prev) unless first?(index)
+        -# = link(:next) unless last?(index)
+      = submit_buttons

@@ -1,0 +1,21 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.fields_for(:main_person_attributes, entry.main_person) do |ff|
+  = ff.labeled(:newsletter, '&nbsp;'.html_safe) do
+    %label.checkbox
+      = ff.check_box :newsletter
+      = t('.newsletter')
+
+  = field_set_tag do
+    = ff.labeled_input_field(:promocode)
+
+  - if entry.last_step?
+    = field_set_tag(nil, class: 'privacy-policy-fields') do
+      = render('people/privacy_policy_acceptance_field', f: ff, policy_finder: policy_finder)
+
+.btn-toolbar.bottom
+  = submit_button(f, t('groups.self_registration.form.submit'))
+  = c.back_link

@@ -10,8 +10,6 @@ require 'spec_helper'
 
 describe :self_registration, js: true do
 
-  subject { page }
-
   class Group::SelfRegistrationGroup < Group
     self.layer = true
 
@@ -35,40 +33,197 @@ describe :self_registration, js: true do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
-  it 'self registers and creates new person' do
-    visit group_self_registration_path(group_id: group)
-
+  def complete_main_person_form
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Adresse', with: 'Musterplatz'
-    fill_in 'role_new_person_zip_code', with: '8000'
-    fill_in 'role_new_person_town', with: 'Zürich'
+    fill_in 'groups_self_registration_main_person_attributes_zip_code', with: '8000'
+    fill_in 'groups_self_registration_main_person_attributes_town', with: 'Zürich'
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     fill_in 'Geburtstag', with: '01.01.1980'
-
-    expect do
-      find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # submit
-    end.to change { Person.count }.by(1)
-      .and change { ActionMailer::Base.deliveries.count }.by(1)
-
-    is_expected.to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
-
-    person = Person.find_by(email: 'max.muster@hitobito.example.com')
-    expect(person).to be_present
-
-    person.confirm # confirm email
-
-    person.password = person.password_confirmation = 'really_b4dPassw0rD'
-    person.save!
-
-    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: 'max.muster@hitobito.example.com'
-    fill_in 'Passwort', with: 'really_b4dPassw0rD'
-    
-    click_button 'Anmelden'
-
-    expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
-    expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
+    yield if block_given?
+    click_on 'Weiter'
   end
 
+  describe 'main_person' do
+    it 'validates and marks attributes' do
+      visit group_self_registration_path(group_id: group)
+      fill_in 'Haupt-E-Mail', with: 'support@hitobito.example.com'
+      click_on 'Weiter'
+      expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
+      expect(page).not_to have_link 'Weiter als Einzelmitglied'
+    end
 
+    it 'cannot proceed unless main person is valid' do
+      visit group_self_registration_path(group_id: group)
+      expect(page).not_to have_css '.control-group.error'
+      click_on 'Weiter'
+      expect(page).to have_content 'Vorname muss ausgefüllt werden'
+      expect(page).to have_css '.control-group.error'
+      expect(page).not_to have_link 'Weiter als Einzelmitglied'
+    end
+
+    it 'self registers and creates new person' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form do
+        choose 'männlich'
+        country_selector = "#groups_self_registration_main_person_attributes_country_chosen"
+        find("#{country_selector}").click
+        find("#{country_selector} ul.chosen-results li.active-result", text: 'Vereinigte Staaten').click
+      end
+      click_on 'Weiter als Einzelmitglied'
+
+      expect do
+        click_on 'Registrieren'
+      end.to change { Person.count }.by(1)
+        .and change { Role.count }.by(1)
+        .and change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+
+      person = Person.find_by(email: 'max.muster@hitobito.example.com')
+      expect(person).to be_present
+      expect(person.first_name).to eq 'Max'
+      expect(person.last_name).to eq 'Muster'
+      expect(person.address).to eq 'Musterplatz'
+      expect(person.zip_code).to eq '8000'
+      expect(person.town).to eq 'Zürich'
+      expect(person.country).to eq 'US'
+      expect(person.birthday).to eq Date.new(1980, 1, 1)
+
+      person.confirm # confirm email
+
+      person.password = person.password_confirmation = 'really_b4dPassw0rD'
+      person.save!
+
+      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'Passwort', with: 'really_b4dPassw0rD'
+
+      click_button 'Anmelden'
+
+      expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
+      expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
+    end
+
+    describe 'with privacy policy' do
+      before do
+
+        file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+        image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
+                                                       filename: 'logo.png',
+                                                       content_type: 'image/png').signed_id
+        group.layer_group.update(privacy_policy: image)
+        visit group_self_registration_path(group_id: group)
+      end
+
+      it 'sets privacy policy accepted' do
+        complete_main_person_form
+        click_on 'Weiter als Einzelmitglied'
+
+        check 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
+        expect do
+          click_on 'Registrieren'
+        end.to change { Person.count }.by(1)
+        person = Person.find_by(email: 'max.muster@hitobito.example.com')
+        expect(person.privacy_policy_accepted).to eq true
+      end
+    end
+  end
+
+  describe 'household' do
+    it 'can create several people in same household' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+
+      expect(page).to have_content 'Hier kannst du eine Famlienmitgliedschaft wählen.'
+
+      click_on 'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1981'
+        fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
+        choose 'weiblich'
+      end
+      click_on  'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(2)' do
+        fill_in 'Vorname', with: 'Maxi'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.2012'
+        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        choose 'andere'
+      end
+      click_on 'Weiter als Familienmitgliedschaft'
+
+      expect do
+        click_on 'Registrieren'
+      end.to change { Person.count }.by(3)
+        .and change { Role.count }.by(3)
+        .and change { ActionMailer::Base.deliveries.count }.by(1)
+
+      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+
+      people = Person.where(last_name: 'Muster')
+      expect(people).to have(3).items
+      expect(people.pluck(:household_key).compact.uniq).to have(1).item
+    end
+
+    it 'can add and remove housemate' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on  'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1981'
+        fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
+        choose 'weiblich'
+      end
+
+      click_on  'Eintrag hinzufügen'
+      within '#housemates_fields .fields:nth-child(2)' do
+        fill_in 'Vorname', with: 'Maxi'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.2012'
+        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        choose 'andere'
+      end
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        click_on 'Entfernen'
+      end
+      click_on 'Weiter als Familienmitgliedschaft'
+
+      expect do
+        click_on 'Registrieren'
+      end.to change { Person.count }.by(2)
+      people = Person.where(last_name: 'Muster')
+      expect(people).to have(2).items
+      expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
+    end
+
+    it 'validates emails within household' do
+      visit group_self_registration_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on  'Eintrag hinzufügen'
+
+      fill_in 'Vorname', with: 'Maxine'
+      fill_in 'Nachname', with: 'Muster'
+      fill_in 'Geburtstag', with: '01.01.1981'
+      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      choose 'weiblich'
+      click_on 'Weiter als Familienmitgliedschaft'
+
+      expect do
+        click_on 'Registrieren'
+      end.not_to change { Person.count }
+      expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
+      binding.pry
+      expect(page).to have_button 'Weiter als Familienmitgliedschaft'
+    end
+  end
 end
