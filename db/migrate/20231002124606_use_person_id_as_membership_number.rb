@@ -7,15 +7,17 @@
 
 class UsePersonIdAsMembershipNumber < ActiveRecord::Migration[6.1]
   def up
-    execute <<-SQL
-      ALTER TABLE people AUTO_INCREMENT = #{MIN_GENERATED_MEMBERSHIP_NUMBER};
-    SQL
+    if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::Mysql2Adapter'
+      execute <<-SQL
+        ALTER TABLE people AUTO_INCREMENT = #{MIN_GENERATED_MEMBERSHIP_NUMBER};
+      SQL
+    end
 
     remove_column :people, :membership_number
   end
 
   def down
-    add_column :people, :membership_number, :integer 
+    add_column :people, :membership_number, :integer
   end
 
   private
