@@ -9,6 +9,8 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   self.static_name = true
 
+  validates :type, uniqueness: { scope: :parent_id }
+
   ### ROLES
   class Neuanmeldung < ::Role
     self.permissions = []

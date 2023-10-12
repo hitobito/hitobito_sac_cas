@@ -9,6 +9,8 @@ class Group::SektionsMitglieder < ::Group
 
   self.static_name = true
 
+  validates :type, uniqueness: { scope: :parent_id }
+
   ### ROLES
   class Mitglied < ::Role
     self.permissions = []
