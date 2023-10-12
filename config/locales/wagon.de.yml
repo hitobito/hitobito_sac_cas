@@ -41,6 +41,12 @@ de:
           VS: Wallis
           ZG: Zug
           ZH: Zürich
+      role:
+        class:
+          kind:
+            neuanmeldung:
+              one: Neuanmeldung
+              other: Neuanmeldungen
 
     models:
 
