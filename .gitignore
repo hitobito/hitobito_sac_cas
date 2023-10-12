@@ -12,11 +12,16 @@ zeus.json
 .generators
 .idea
 .rakeTasks
+TODO.md
 db/seeds/production/*.xlsx
 db/seeds/production/*.xlsx#
 
 # ignore Gemfile.lock for wagons
 Gemfile.lock
+
+# only touched to make rails-vim work
+config/environment.rb
+
 
 # reports
 spec/coverage

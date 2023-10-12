@@ -27,6 +27,8 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Person::Household.prepend SacCas::Person::Household
       Role.prepend SacCas::Role
+      SelfRegistration.prepend SacCas::SelfRegistration
+      SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
 
       ## Abilities
@@ -46,7 +48,6 @@ module HitobitoSacCas
 
       ## Controllers
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
-      Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
 
