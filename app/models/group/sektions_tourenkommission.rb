@@ -9,8 +9,6 @@ class Group::SektionsTourenkommission < ::Group
 
   self.static_name = true
 
-  validates :type, uniqueness: { scope: :parent_id }
-
   ### ROLES
   class Tourenchef < ::Role
     self.permissions = [:group_full]

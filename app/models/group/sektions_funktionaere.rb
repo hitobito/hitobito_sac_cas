@@ -9,8 +9,6 @@ class Group::SektionsFunktionaere < ::Group
 
   self.static_name = true
 
-  validates :type, uniqueness: { scope: :parent_id }
-
   ### ROLES
   class Praesidium < ::Role
     self.permissions = []
