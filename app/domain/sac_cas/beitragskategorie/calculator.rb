@@ -13,6 +13,8 @@ module SacCas::Beitragskategorie
     end
 
     def calculate
+      return :familie if family_member?
+
       case age
       when 22..199
         :einzel
@@ -25,6 +27,12 @@ module SacCas::Beitragskategorie
 
     def age
       @person.years
+    end
+
+    def family_member?
+      return false if (17..21).include?(age)
+
+      @person.household_key?
     end
   end
 end

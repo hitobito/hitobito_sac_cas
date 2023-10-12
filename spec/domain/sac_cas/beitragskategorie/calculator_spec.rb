@@ -16,10 +16,15 @@ describe SacCas::Beitragskategorie::Calculator do
               group: groups(:be_mitglieder)
              ).person 
   end
+  let(:other_person) do
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+              group: groups(:be_mitglieder)
+             ).person 
+  end
 
   context '#calculate' do
     it 'returns einzel for person with 22 years or older' do
-      person.update!(birthday: Time.zone.today - 22.years)
+      person.update!(birthday: Time.zone.today - 42.years)
 
       expect(category).to eq(:einzel)
     end
@@ -31,12 +36,31 @@ describe SacCas::Beitragskategorie::Calculator do
     end
 
     it 'returns familie for family member' do
+      assign_household(person, other_person)
+
+      expect(category).to eq(:familie)
     end
 
-    it 'returns jugend for person between 17 and 21 if in same household/family with others' do
+    it 'returns jugend for person between 17 and 21 if in same household with others' do
+      assign_household(person, other_person)
+      person.update!(birthday: Time.zone.today - 18.years)
+
+      expect(category).to eq(:jugend)
     end
 
-    it 'returns nil for child younger than 6 years' do
+    it 'returns nil for person younger than 6 years' do
+      person.update!(birthday: Time.zone.today - 5.years)
+
+      expect(category).to eq(nil)
     end
   end
+
+  private
+
+  def assign_household(person, other)
+    ability = double
+    allow(ability).to receive(:update?).and_return(true)
+    Person::Household.new(person, ability, other, Person.first).save
+  end
+
 end
