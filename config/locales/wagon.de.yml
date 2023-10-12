@@ -300,6 +300,24 @@ de:
       fields:
         notes: Bemerkungen
         promo_code: Promocode
+      form:
+        main_person_title: Personendaten
+        single_or_household_title: Mitgliedschaftstyp
+        household_title: Familienmitglieder
+        summary_title: Zusammenfassung
+      household:
+        membership_info_box: >
+          Hier kannst du eine Famlienmitgliedschaft wählen. Diese ist für max. 2 Erwachsene (ab 23
+          Jahren) und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich. Die
+          Famlienmitgliedschaft ist auch für Paare ohne Kinder möglich. Eine Person wird als
+          Hauptkontakt definiert. Man erhält eine Rechnung und zwei Ausweise.
+        next_as_single_link: Weiter als Einzelmitglied
+        next_as_household_link: Weiter als Familienmitgliedschaft
+
+      summary:
+        newsletter: Ich möchte einen Newsletter abonnieren
+        promo_code: Promocode
+
     self_inscription:
       membership_role_exists: Du bist bereits Mitglied dieser Sektion
       form:
