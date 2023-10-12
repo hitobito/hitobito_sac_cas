@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+require_relative '../sac_cas/concerns/role_beitragskategorie'
+
 class Group::SektionsMitglieder < ::Group
 
   self.static_name = true
@@ -13,6 +15,8 @@ class Group::SektionsMitglieder < ::Group
 
   ### ROLES
   class Mitglied < ::Role
+    include ::SacCas::RoleBeitragskategorie
+
     self.permissions = []
     self.basic_permissions_only = true
   end

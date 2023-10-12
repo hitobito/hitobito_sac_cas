@@ -20,6 +20,8 @@ module SacCas::Beitragskategorie
         :einzel
       when 6..21
         :jugend
+      else
+        nil
       end
     end
 
