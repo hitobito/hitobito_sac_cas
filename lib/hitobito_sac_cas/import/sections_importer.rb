@@ -48,7 +48,7 @@ module Import
           ignoring_archival do
             group = set_data(row, group)
             group.save!
-            update_default_subgroups(row, group)
+            update_subgroups(row, group)
           end
           output.puts "Finished importing #{group.name}"
         rescue ActiveRecord::ReadOnlyRecord
@@ -210,50 +210,26 @@ module Import
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def update_default_subgroups(row, group) # rubocop:disable Metrics/MethodLength
+    def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
       return if root?(row)
 
-      types = sektion_subgroup_types
-      types.push(Group::SektionsNeuanmeldungenSektion) unless zv_registrations(row)
-      types.each do |type|
-        existing = group.children.select { |child| child.type == type.name }.first
-        if existing.present?
-          existing.update!(
-            name: name,
-            self_registration_role_type: self_registration_role_type(type),
-            deleted_at: nil,
-            custom_self_registration_title: self_registration_title(row, group)
-          )
-        elsif type == Group::SektionsNeuanmeldungenSektion
-          group.children.build(
-            type: type.name,
-            self_registration_role_type: self_registration_role_type(type),
-            custom_self_registration_title: self_registration_title(row, group)
-          ).save!
-        end
+      if zv_registrations(row)
+        neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by!(parent_id: group.id)
+        neuanmeldungen.update!(
+          self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+          custom_self_registration_title: self_registration_title(row, group)),
+          deleted_at: nil
+      else
+        Group::SektionsNeuanmeldungenSektion.create!(
+          parent_id: group.id,
+          self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+          custom_self_registration_title: self_registration_title(row, group)),
+          deleted_at: nil
       end
-    end
-
-    def sektion_subgroup_types
-      [ Group::SektionsMitglieder,
-        Group::SektionsNeuanmeldungenNv,
-        Group::SektionsFunktionaere,
-        Group::SektionsTourenkommission ]
     end
 
     def self_registration_title(row, group)
       t(row, 'groups/self_registration.new.title', group_name: group.name)
-    end
-
-    def self_registration_role_type(type)
-      case type.to_s
-      when Group::SektionsNeuanmeldungenSektion.to_s
-        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s
-      when Group::SektionsNeuanmeldungenNv.to_s
-        Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s
-      else
-        nil
-      end
     end
 
     def zv_registrations(row)
