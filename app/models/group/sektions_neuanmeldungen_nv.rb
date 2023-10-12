@@ -13,6 +13,9 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   ### ROLES
   class Neuanmeldung < ::Role
+    require_relative '../sac_cas/concerns/role_beitragskategorie'
+    include ::SacCas::RoleBeitragskategorie
+
     self.permissions = []
     self.basic_permissions_only = true
   end

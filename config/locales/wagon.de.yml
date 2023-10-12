@@ -47,6 +47,21 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
+      group/sektions_mitglieder/mitglied:
+        beitragskategorien:
+          einzel: Einzel
+          jugend: Jugend
+          familie: Familie
+      group/sektions_neuanmeldungen_nv/neuanmeldung:
+        beitragskategorien:
+          einzel: Einzel
+          jugend: Jugend
+          familie: Familie
+      group/sektions_neuanmeldungen_sektion/neuanmeldung:
+        beitragskategorien:
+          einzel: Einzel
+          jugend: Jugend
+          familie: Familie
 
     models:
 

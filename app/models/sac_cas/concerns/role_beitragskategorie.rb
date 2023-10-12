@@ -5,21 +5,31 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacCas::RoleBeitragskategorie 
+require_relative '../../../domain/sac_cas/beitragskategorie/calculator'
+
+module ::SacCas::RoleBeitragskategorie 
   extend ActiveSupport::Concern
 
   included do
     include I18nEnums
-    i18n_enum :beitragskategorie, [:einzel, :jugend, :familie]
+    i18n_enum :beitragskategorie, %w(einzel jugend familie).freeze
 
-    before_create :set_beitragskategorie
+    attr_readonly :beitragskategorie
+
+    before_validation :set_beitragskategorie
+
+    validates :beitragskategorie, presence: true
+  end
+
+  def to_s(format = :default)
+    "#{super} (#{beitragskategorie_label})"
   end
 
   private
 
   def set_beitragskategorie
     category =
-      SacCas::Beitragskategorie::Calculator
+      ::SacCas::Beitragskategorie::Calculator
       .new(person).calculate
     self.beitragskategorie = category
   end

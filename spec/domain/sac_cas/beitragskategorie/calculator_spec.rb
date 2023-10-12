@@ -11,16 +11,8 @@ require_relative '../../../../app/domain/sac_cas/beitragskategorie/calculator'
 describe SacCas::Beitragskategorie::Calculator do
 
   let(:category) { described_class.new(person.reload).calculate }
-  let(:person) do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-              group: groups(:be_mitglieder)
-             ).person 
-  end
-  let(:other_person) do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-              group: groups(:be_mitglieder)
-             ).person 
-  end
+  let(:person) { Fabricate(:person) }
+  let(:other_person) { Fabricate(:person) }
 
   context '#calculate' do
     it 'returns einzel for person with 22 years or older' do

@@ -51,7 +51,7 @@ module HitobitoSacCas
 
     initializer 'sac_cas.add_inflections' do |_app|
       ActiveSupport::Inflector.inflections do |inflect|
-        # inflect.irregular 'census', 'censuses'
+        inflect.irregular 'beitragskategorie', 'beitragskategorien'
       end
     end
 

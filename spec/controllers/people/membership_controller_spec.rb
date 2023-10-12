@@ -10,7 +10,11 @@ require 'spec_helper'
 describe People::MembershipController, type: :controller do
 
   let(:member) do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person
+    person = Fabricate(:person, birthday: Time.zone.today - 42.years)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+              person: person,
+              group: groups(:be_mitglieder))
+    person
   end
   let(:funktionaer) do
     Fabricate(Group::SektionsFunktionaere::Verwaltung.sti_name.to_sym,
