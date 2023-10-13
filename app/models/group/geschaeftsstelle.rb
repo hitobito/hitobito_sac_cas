@@ -8,18 +8,39 @@
 class Group::Geschaeftsstelle < ::Group
 
   ### ROLES
-  class Verwaltung < ::Role
-    self.permissions = [:layer_and_below_full, :finance, :impersonation]
+  class Mitgliederdienst < ::Role
+    self.permissions = [:layer_and_below_full, :impersonation]
   end
 
-  class VerwaltungReadOnly < ::Role
+  class Kursorganisation < ::Role
+    self.permissions = [:layer_full, :layer_and_below_read, :impersonation]
+  end
+
+  class Fundraising < ::Role
     self.permissions = [:layer_and_below_read]
   end
 
-  class ITSupport < ::Role
-    self.permissions = [:layer_and_below_full, :finance, :admin, :impersonation]
+  class Kommunikation < ::Role
+    self.permissions = [:layer_full, :layer_and_below_read]
   end
 
-  roles Verwaltung, VerwaltungReadOnly, ITSupport
+  class Rechnungswesen < ::Role
+    self.permissions = [:layer_full, :layer_and_below_read]
+  end
+
+  class Leistungssport < ::Role
+    self.permissions = [:layer_and_below_read]
+  end
+
+  class HuettenUmwelt < ::Role
+    self.permissions = [:layer_and_below_full]
+  end
+
+  class ITSupport < ::Role
+    self.permissions = [:layer_and_below_full, :admin, :impersonation]
+  end
+
+  roles Mitgliederdienst, Kursorganisation, Fundraising, Kommunikation,
+        Rechnungswesen, Leistungssport, HuettenUmwelt, ITSupport
 
 end
