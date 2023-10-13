@@ -222,7 +222,8 @@ module Import
         if existing.present?
           existing.update!(
             name: name,
-            self_registration_role_type: self_registration_role_type(type)
+            self_registration_role_type: self_registration_role_type(type),
+            deleted_at: nil,
           )
         else
           name = type.model_name.human(locale: locale(row))
