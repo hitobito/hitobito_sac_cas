@@ -24,8 +24,7 @@ class Person::Filter::NeuanmeldungenList
 
   def filter_params
     types = [
-      Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-      Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+      Group::SektionsNeuanmeldungenNv::Neuanmeldung
     ]
     ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
     {
