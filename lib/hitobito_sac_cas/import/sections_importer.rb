@@ -210,7 +210,7 @@ module Import
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
+    def update_subgroups(row, group)
       return if root?(row)
 
       if zv_registrations(row)
