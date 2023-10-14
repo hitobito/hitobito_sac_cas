@@ -11,8 +11,7 @@ describe People::MembershipVerifier do
 
   let(:verifier) { described_class.new(person) }
   let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person }
-  let!(:neuanmeldungen) { Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
- }
+  let(:neuanmeldungen_sektion) { groups(:be_neuanmeldungen_sektion) }
 
   context '#member?' do
     it 'returns true if person has member role' do
@@ -21,7 +20,7 @@ describe People::MembershipVerifier do
 
     it 'returns true if person has one active member role' do
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-                group: neuanmeldungen, person: person)
+                group: neuanmeldungen_sektion, person: person)
 
       expect(verifier.member?).to eq(true)
     end
@@ -35,7 +34,7 @@ describe People::MembershipVerifier do
     it 'returns false if person has no active member role' do
       person.roles.destroy_all
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-                group: neuanmeldungen, person: person)
+                group: neuanmeldungen_sektion, person: person)
 
       expect(verifier.member?).to eq(false)
     end

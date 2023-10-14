@@ -44,8 +44,7 @@ describe People::MembershipController, type: :controller do
     context 'non member' do
 
       let(:non_member) do
-        neu = Fabricate(Group::SektionsNeuanmeldungenNv.sti_name.to_sym, name: 'Neuanmeldungen', parent: groups(:be))
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: neu).person
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:be_neuanmeldungen_nv)).person
       end
 
       it 'is not possible to download membership pass' do
