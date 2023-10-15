@@ -23,9 +23,12 @@ module HitobitoSacCas
     config.to_prepare do
       # extend application classes here
       Group.include SacCas::Group
+      Person.include SacCas::Person
+
+      FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
 
       Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
-      Person.include SacCas::Person
+      PeopleController.send :prepend, SacCas::PeopleController
 
       TableDisplay.register_column(Person,
                                    TableDisplays::People::MembershipYearsColumn,

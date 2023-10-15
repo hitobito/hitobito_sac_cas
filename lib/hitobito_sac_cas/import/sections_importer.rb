@@ -48,6 +48,7 @@ module Import
           ignoring_archival do
             group = set_data(row, group)
             group.save!
+            update_subgroups(row, group)
           end
           output.puts "Finished importing #{group.name}"
         rescue ActiveRecord::ReadOnlyRecord
@@ -105,10 +106,8 @@ module Import
       set_homepage(row, group)
       set_youth_homepage(row, group)
       group.archived_at = archived_at(row)
-      add_default_subgroups(row, group)
       set_foundation_year(row, group)
       set_section_canton(row, group)
-
       group
     end
 
@@ -211,46 +210,26 @@ module Import
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def add_default_subgroups(row, group) # rubocop:disable Metrics/MethodLength
+    def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
       return if root?(row)
-      types = sektion_subgroup_types
-      types.push(Group::SektionsNeuMitgliederZv) if zv_registrations(row)
-      types.push(Group::SektionsNeuMitgliederSektion) unless zv_registrations(row)
-      types.each do |type|
-        existing = group.children.select { |child| child.type == type.name }.first
-        name = type.model_name.human(locale: locale(row))
-        if existing.present?
-          existing.update!(
-            name: name,
-            self_registration_role_type: self_registration_role_type(type),
-            deleted_at: nil,
-          )
-        else
-          name = type.model_name.human(locale: locale(row))
-          group.children.build(
-            type: type.name,
-            name: name,
-            self_registration_role_type: self_registration_role_type(type)
-          )
-        end
-      end
-    end
 
-    def sektion_subgroup_types
-      [ Group::SektionsMitglieder,
-        Group::SektionsFunktionaere,
-        Group::SektionsTourenkommission ]
-    end
-
-    def self_registration_role_type(type)
-      case type.to_s
-      when Group::SektionsNeuMitgliederSektion.to_s
-        Group::SektionsNeuMitgliederSektion::Einzel.to_s
-      when Group::SektionsNeuMitgliederZv.to_s
-        Group::SektionsNeuMitgliederZv::Einzel.to_s
+      if zv_registrations(row)
+        neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by!(parent_id: group.id)
+        neuanmeldungen.update!(
+          self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+          custom_self_registration_title: self_registration_title(row, group),
+          deleted_at: nil)
       else
-        nil
+        Group::SektionsNeuanmeldungenSektion.create!(
+          parent_id: group.id,
+          self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+          custom_self_registration_title: self_registration_title(row, group),
+          deleted_at: nil)
       end
+    end
+
+    def self_registration_title(row, group)
+      t(row, 'groups/self_registration.new.title', group_name: group.name)
     end
 
     def zv_registrations(row)
@@ -265,10 +244,10 @@ module Import
       }.fetch(row[:locale].to_s, 'de')
     end
 
-    def add_subgroup(group, type, name)
-      return if group.new_record?
-      return if Group.where(parent_id: group.id, type: type).exists?
-      group.children.build(type: type, name: name)
+    def t(row, key, args)
+      I18n.with_locale(locale(row)) do
+        I18n.translate(key, **args)
+      end
     end
   end
 end

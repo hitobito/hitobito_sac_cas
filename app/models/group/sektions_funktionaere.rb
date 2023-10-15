@@ -7,6 +7,8 @@
 
 class Group::SektionsFunktionaere < ::Group
 
+  self.static_name = true
+
   ### ROLES
   class Praesidium < ::Role
     self.permissions = []

@@ -26,19 +26,13 @@ describe Import::People::BluemlisalpImporter do
     Person.where(id: people_navision_ids).destroy_all
   end
 
-  it 'imports people and correct roles' do
+  it 'imports people and assigns member role' do
     importer.import!
 
-    roles = [Group::SektionsMitglieder::Einzel,
-             Group::SektionsMitglieder::Jugend,
-             Group::SektionsMitglieder::Familie,
-             Group::SektionsMitglieder::FreiKind,
-             Group::SektionsMitglieder::FreiFam]
-
-    people_navision_ids.each_with_index do |id, index|
+    people_navision_ids.each do |id|
       person = Person.find(id)
       expect(person).to be_present
-      expect(person.roles.with_deleted.first).to be_a(roles[index])
+      expect(person.roles.with_deleted.first).to be_a(Group::SektionsMitglieder::Mitglied)
     end
   end
 

@@ -8,9 +8,7 @@
 class People::MembershipVerifier
 
   MEMBERSHIP_ROLES = [
-    Group::SektionsMitglieder::Einzel,
-    Group::SektionsMitglieder::Jugend,
-    Group::SektionsMitglieder::Familie
+    Group::SektionsMitglieder::Mitglied
   ].freeze
 
   def initialize(person)

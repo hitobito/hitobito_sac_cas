@@ -10,13 +10,25 @@ class Group::Ortsgruppe < ::Group
   self.layer = true
   self.event_types = [Event, Event::Course]
 
-  ### ROLES
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
-    Group::SektionsNeuMitgliederSektion,
-    Group::SektionsNeuMitgliederZv,
+    Group::SektionsNeuanmeldungenSektion,
+    Group::SektionsNeuanmeldungenNv,
     Group::SektionsTourenkommission,
     Group::Huette,
     Group::Ortsgruppe
+
+  self.default_children = [
+    Group::SektionsFunktionaere,
+    Group::SektionsMitglieder,
+    Group::SektionsNeuanmeldungenNv,
+    Group::SektionsTourenkommission ]
+
+  mounted_attr :foundation_year, :integer
+  validates :foundation_year,
+            numericality:
+            { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
+
+  mounted_attr :section_canton, :text, enum: Cantons.short_name_strings.map(&:upcase)
 
 end

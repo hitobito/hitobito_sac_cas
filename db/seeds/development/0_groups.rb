@@ -12,21 +12,6 @@ seeder = GroupSeeder.new
 root = Group.roots.first
 srand(42)
 
-def seed_sektion(sektion)
-  Group::SektionsMitglieder.seed(:name, :parent_id, {
-    name: 'Mitglieder',
-    parent_id: sektion.id
-  })
-  Group::SektionsFunktionaere.seed(:name, :parent_id, {
-    name: 'Funktionäre',
-    parent_id: sektion.id
-  })
-  Group::SektionsTourenkommission.seed(:name, :parent_id, {
-    name: 'Tourenkommission',
-    parent_id: sektion.id
-  })
-end
-
 def seed_hut(sektion, name, navision_id)
   Group::Huette.seed(:name, :parent_id, {
     name: name,
@@ -65,6 +50,7 @@ Group::ExterneKontakte.seed(:name, :parent_id, {
 sections = Group::Sektion.seed(
   :name, :parent_id,
   { name: 'SAC Matterhorn',
+    foundation_year: 1899,
     parent_id: root.id
   },
   { name: 'SAC UTO',
@@ -77,25 +63,6 @@ sections = Group::Sektion.seed(
     foundation_year: 1874,
     parent_id: root.id
   })
-
-sections.each do |s|
-  seed_sektion(s)
-end
-
-Group::SektionsNeuMitgliederSektion.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.first.id
-})
-
-Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.second.id
-})
-
-Group::SektionsNeuMitgliederZv.seed(:name, :parent_id, {
-  name: 'Neuanmeldungen',
-  parent_id: sections.third.id
-})
 
 seed_hut(sections.first, 'Matterhornbiwak', 99999942)
 seed_hut(sections.second, 'Domhütte', 81)

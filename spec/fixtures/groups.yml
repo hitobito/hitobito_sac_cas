@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 10
+  rgt: 14
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
@@ -26,7 +26,7 @@ geschaeftsstelle:
 be:
   parent: root
   lft: 4 
-  rgt: 9
+  rgt: 13
   name: Bern
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
@@ -45,4 +45,18 @@ be_mitglieder:
   rgt: 8
   name: Mitglieder
   type: Group::SektionsMitglieder
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+
+be_neuanmeldungen_nv:
+  parent: be
+  lft: 9
+  rgt: 10
+  type: Group::SektionsNeuanmeldungenNv
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+
+be_neuanmeldungen_sektion:
+  parent: be
+  lft: 11
+  rgt: 12
+  type: Group::SektionsNeuanmeldungenSektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
