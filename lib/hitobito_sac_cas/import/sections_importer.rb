@@ -217,14 +217,14 @@ module Import
         neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by!(parent_id: group.id)
         neuanmeldungen.update!(
           self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-          custom_self_registration_title: self_registration_title(row, group)),
-          deleted_at: nil
+          custom_self_registration_title: self_registration_title(row, group),
+          deleted_at: nil)
       else
         Group::SektionsNeuanmeldungenSektion.create!(
           parent_id: group.id,
           self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
-          custom_self_registration_title: self_registration_title(row, group)),
-          deleted_at: nil
+          custom_self_registration_title: self_registration_title(row, group),
+          deleted_at: nil)
       end
     end
 
