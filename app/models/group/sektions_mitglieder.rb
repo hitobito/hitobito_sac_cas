@@ -9,11 +9,8 @@ class Group::SektionsMitglieder < ::Group
 
   self.static_name = true
 
-  validates :type, uniqueness: { scope: :parent_id }
-
   ### ROLES
   class Mitglied < ::Role
-    require_relative '../sac_cas/concerns/role_beitragskategorie'
     include ::SacCas::RoleBeitragskategorie
 
     self.permissions = []
