@@ -8,6 +8,8 @@
 module SacCas::Beitragskategorie
   class Calculator
 
+    BEITRAGSKATEGORIEN = %w(einzel jugend familie).freeze
+
     def initialize(person)
       @person = person
     end
