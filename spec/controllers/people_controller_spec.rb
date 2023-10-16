@@ -22,8 +22,14 @@ describe PeopleController do
   before { sign_in(admin) }
 
   it 'GET#index accepts filter params and lists neuanmeldungen' do
-    Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s, group: groups(:be_neuanmeldungen_nv))
-    Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s, group: groups(:be_neuanmeldungen_sektion))
+    person1 = Fabricate(:person, birthday: Time.zone.today - 42.years)
+    Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
+              group: groups(:be_neuanmeldungen_nv),
+              person: person1)
+    person2 = Fabricate(:person, birthday: Time.zone.today - 42.years)
+    Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
+              group: groups(:be_neuanmeldungen_sektion),
+              person: person2)
     roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
     get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }
 

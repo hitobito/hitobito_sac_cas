@@ -13,6 +13,7 @@ describe People::MembershipController, type: :controller do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
+              beitragskategorie: :einzel,
               group: groups(:be_mitglieder))
     person
   end
@@ -48,11 +49,16 @@ describe People::MembershipController, type: :controller do
     context 'non member' do
 
       let(:non_member) do
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:be_neuanmeldungen_nv)).person
+        person = Fabricate(:person, birthday: Time.zone.today - 42.years)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+                  person: person,
+                  beitragskategorie: :einzel,
+                  group: groups(:be_neuanmeldungen_nv))
+        person
       end
 
       it 'is not possible to download membership pass' do
-        sign_in(funktionaer)
+        sign_in(non_member)
 
         expect do
           get :show, params: { id: non_member.id, format: 'pdf' }

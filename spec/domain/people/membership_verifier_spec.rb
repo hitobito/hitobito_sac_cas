@@ -10,7 +10,13 @@ require 'spec_helper'
 describe People::MembershipVerifier do
 
   let(:verifier) { described_class.new(person) }
-  let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:be_mitglieder)).person }
+  let(:person) do
+    person = Fabricate(:person, birthday: Time.zone.today - 42.years)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+              person: person,
+              group: groups(:be_mitglieder))
+    person
+  end
   let(:neuanmeldungen_sektion) { groups(:be_neuanmeldungen_sektion) }
 
   context '#member?' do
