@@ -210,7 +210,7 @@ module Import
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
+    def update_subgroups(row, group)
       return if root?(row)
 
       if zv_registrations(row)
@@ -224,7 +224,8 @@ module Import
           Group::SektionsNeuanmeldungenSektion.find_or_initialize_by(
             parent_id: group.id)
 
-        neuanmeldungen.self_registration_role_type = Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+        neuanmeldungen.self_registration_role_type =
+          Group::SektionsNeuanmeldungenSektion::Neuanmeldung
         neuanmeldungen.custom_self_registration_title = self_registration_title(row, group)
         neuanmeldungen.deleted_at = nil
         neuanmeldungen.save!

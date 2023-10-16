@@ -1,15 +1,13 @@
+# frozen_string_literal: true
+
 #  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+class AddBeitragskategorieToRole < ActiveRecord::Migration[6.1]
 
-admin:
-  person_id: 600_000
-  group: geschaeftsstelle
-  type: Group::Geschaeftsstelle::ITSupport
-
-mitglied:
-  person_id: 600_001
-  group: be_mitglieder
-  type: Group::SektionsMitglieder::Mitglied
+  def change
+    add_column :roles, :beitragskategorie, :string, null: true
+  end
+end

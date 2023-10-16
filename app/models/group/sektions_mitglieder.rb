@@ -11,13 +11,27 @@ class Group::SektionsMitglieder < ::Group
 
   ### ROLES
   class Mitglied < ::Role
+    include ::SacCas::RoleBeitragskategorie
+
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Abonnement < Mitglied; end
-  class Ehrenmitglied < Mitglied; end
-  class Beguenstigt < Mitglied; end
+  class Abonnement < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Ehrenmitglied < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Beguenstigt < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
 
   roles Mitglied, Abonnement,
     Ehrenmitglied, Beguenstigt

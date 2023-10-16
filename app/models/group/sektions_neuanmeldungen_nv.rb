@@ -11,6 +11,8 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   ### ROLES
   class Neuanmeldung < ::Role
+    include ::SacCas::RoleBeitragskategorie
+
     self.permissions = []
     self.basic_permissions_only = true
   end
