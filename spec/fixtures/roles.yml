@@ -9,13 +9,7 @@ admin:
   group: geschaeftsstelle
   type: Group::Geschaeftsstelle::ITSupport
 
-## TODO use group and type of the main base leader
-#leader:
-  #person: leader
-  #group: root
-  #type: Group::Root::Leader
-
 mitglied:
   person_id: 600_001
   group: be_mitglieder
-  type: Group::SektionsMitglieder::Einzel
+  type: Group::SektionsMitglieder::Mitglied
