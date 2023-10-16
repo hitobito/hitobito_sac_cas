@@ -28,7 +28,7 @@ module Import
         birthday: 'Geburtsdatum',
         gender: 'Geschlecht',
         group_navision_id: 'Sektion',
-        # role_type: 'Kategorie',
+        beitragskategorie: 'Kategorie',
         member_type: 'Mitgliederart',
         language: 'Sprachcode',
         role_created_at: 'Letztes Eintrittsdatum',
@@ -46,12 +46,12 @@ module Import
         'ITS' => 'it'
       }
 
-      ROLE_TYPES = {
-        'EINZEL' => 'Group::SektionsMitglieder::Einzel',
-        'JUGEND' => 'Group::SektionsMitglieder::Jugend',
-        'FAMILIE' => 'Group::SektionsMitglieder::Familie',
-        'FREI KIND' => 'Group::SektionsMitglieder::FreiKind',
-        'FREI FAM' => 'Group::SektionsMitglieder::FreiFam'
+      BEITRAGSKATEGORIEN = {
+        'EINZEL' => :einzel,
+        'JUGEND' => :jugend,
+        'FAMILIE' => :familie,
+        'FREI KIND' => :familie,
+        'FREI FAM' => :familie
       }
 
       attr_reader :output
@@ -186,12 +186,17 @@ module Import
         person.roles.destroy_all
         person.roles.build(group: bluemlisalp_member_group(row),
                            type: Group::Sektion::SektionsMitglieder::Mitglied,
+                           beitragskategorie: beitragskategorie(row),
                            created_at: role_created_at(row),
                            deleted_at: role_deleted_at(row))
       end
 
       def bluemlisalp_member_group(row)
         ::Group::SektionsMitglieder.find_by(parent: bluemlisalp_group(row))
+      end
+
+      def beitragskategorie(row)
+        BEITRAGSKATEGORIEN[row[:beitragskategorie].to_s]
       end
 
       def bluemlisalp_group(row)

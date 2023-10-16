@@ -55,7 +55,7 @@ describe Import::People::BluemlisalpImporter do
 
     expect(active_role.created_at).to eq(DateTime.new(1899, 12, 31))
     expect(active_role.deleted_at).to be_nil
-
+    expect(active_role.beitragskategorie).to eq('jugend')
 
     expect(active.phone_numbers.count).to eq(3)
 
@@ -89,11 +89,23 @@ describe Import::People::BluemlisalpImporter do
 
     expect(retired_role.created_at).to eq(DateTime.new(1980, 12, 31))
     expect(retired_role.deleted_at).to eq(DateTime.new(2010, 1, 1))
+    expect(retired_role.beitragskategorie).to eq('einzel')
   end
 
   it 'does not import invalid person' do
     importer.import!
 
     expect(Person.find_by(id: invalid_person_navision_id)).to be_nil
+  end
+
+  it 'imports beitragskategorie' do
+    importer.import!
+
+    beitragskategorien =
+      Group::SektionsMitglieder::Mitglied
+      .where(person_id: people_navision_ids)
+      .pluck(:beitragskategorie)
+
+    expect(beitragskategorien).to eq(['jugend', 'familie', 'familie', 'familie'])
   end
 end

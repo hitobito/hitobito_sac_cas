@@ -14,7 +14,7 @@ module ::SacCas::RoleBeitragskategorie
 
     attr_readonly :beitragskategorie
 
-    before_validation :set_beitragskategorie
+    before_validation :set_beitragskategorie, unless: :beitragskategorie
 
     validates :beitragskategorie, presence: true
   end
