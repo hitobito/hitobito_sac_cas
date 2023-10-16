@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Beitragskategorie
-  class Calculator < Base
+  class Calculator
 
     def initialize(person)
       @person = person
