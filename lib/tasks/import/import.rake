@@ -14,24 +14,21 @@ require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer'
 namespace :import do
   desc 'Import sections from a navision export'
   task sections: [:environment] do
-    import_file_path = 'db/seeds/production/Sektion_Export_20230629.xlsx'
-    sections_excel = Wagons.find('sac_cas').root.join(import_file_path)
+    import_file_path = 'tmp/Sektion_Export_20230629.xlsx'
+    sections_excel = Rails.root.join(import_file_path)
     Import::SectionsImporter.new(sections_excel).import!
   end
 
   desc 'Import huts from a navision export'
   task huts: [:environment] do
-    # huts_excel = Wagons.find('sac_cas').
-    # root.join('db/seeds/production/Hütten_Export_20230704.xlsx')
-
-    import_file_path = 'db/seeds/production/Hütten_Beziehungen_Export_20230704.xlsx'
-    hut_relations_excel = Wagons.find('sac_cas').root.join(import_file_path)
+    import_file_path = 'tmp/Hütten_Beziehungen_Export_20230704.xlsx'
+    hut_relations_excel = Rails.root.join(import_file_path)
     Import::HutsImporter.new(hut_relations_excel).import!
   end
 
   desc 'Import people for bluemlisalp section from a navision export'
   task bluemlisalp_people: [:environment] do
-    bluemlisalp_people_excel = Wagons.find('sac_cas').root.join('db/seeds/production/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
+    bluemlisalp_people_excel = Rails.root.join('tmp/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
     Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
   end
 end
