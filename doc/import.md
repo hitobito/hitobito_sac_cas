@@ -1,7 +1,7 @@
 # SAC/CAS specific imports
 
 ```
-oc rsync ../hitobito_sac_cas/db/seeds/production/ delayed-job-764855cbfd-6mqfl-debug:/opt/app-root/src/vendor/wagons/hitobito_sac_cas/db/seeds/production/
+oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
 ## Import sections
