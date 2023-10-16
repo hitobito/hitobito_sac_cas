@@ -5,14 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require_relative '../../../domain/sac_cas/beitragskategorie/calculator'
-
 module ::SacCas::RoleBeitragskategorie 
   extend ActiveSupport::Concern
 
   included do
     include I18nEnums
-    i18n_enum :beitragskategorie, %w(einzel jugend familie).freeze
+    i18n_enum :beitragskategorie, ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN
 
     attr_readonly :beitragskategorie
 
