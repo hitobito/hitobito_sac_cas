@@ -164,7 +164,7 @@ module Import
 
       def email(row)
         email = row[:email]
-        return unless email.present? && Truemail.valid?(email) && !::Person.exists?(email: email)
+        return unless email.present? && !::Person.exists?(email: email)
 
         email
       end
