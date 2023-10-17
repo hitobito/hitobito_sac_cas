@@ -102,7 +102,7 @@ module Import
         person.town = town(row)
         email = email(row)
         if email.present?
-          person.email = email(row)
+          person.email = email
           person.confirm
         end
         set_phone(row, person)
