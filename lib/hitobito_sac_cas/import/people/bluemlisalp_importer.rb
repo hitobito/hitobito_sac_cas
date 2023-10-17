@@ -100,8 +100,12 @@ module Import
         person.country = country(row)
         person.zip_code = zip_code(row)
         person.town = town(row)
+        email = email(row)
+        if email.present?
+          person.email = email(row)
+          person.confirm
+        end
         set_phone(row, person)
-        person.email = email(row)
         person.birthday = birthday(row)
         person.gender = gender(row)
         person.language = language(row)

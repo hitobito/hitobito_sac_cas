@@ -67,6 +67,8 @@ describe Import::People::BluemlisalpImporter do
 
     main = active.phone_numbers.find_by(label: 'Direkt')
     expect(main.number).to eq('+41 34 123 45 67')
+
+    expect(active).to be_confirmed
   end
 
   it 'imports retired person' do
