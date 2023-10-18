@@ -20,11 +20,11 @@ class Group::SektionsTourenkommission < ::Group
   class TourenchefSenioren < Tourenchef; end
 
   class TourenleiterSommer < ::Role
-    self.permissions = [:group_read]
+    self.permissions = []
   end
 
   class TourenleiterWinter < ::Role
-    self.permissions = [:group_read]
+    self.permissions = []
   end
 
   roles TourenchefSommer,
