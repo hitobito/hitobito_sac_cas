@@ -18,8 +18,14 @@ class Group::SektionsTourenkommission < ::Group
   class TourenchefWinter < Tourenchef; end
   class TourenchefKlettern < Tourenchef; end
   class TourenchefSenioren < Tourenchef; end
-  class TourenleiterSommer < Tourenchef; end
-  class TourenleiterWinter < Tourenchef; end
+
+  class TourenleiterSommer < ::Role
+    self.permissions = []
+  end
+
+  class TourenleiterWinter < ::Role
+    self.permissions = []
+  end
 
   roles TourenchefSommer,
     TourenchefWinter,

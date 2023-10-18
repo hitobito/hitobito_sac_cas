@@ -6,68 +6,54 @@ of SAC CAS.
 
 ## Organization Hierarchy
 
+```
 * Schweizer Alpen-Club SAC
   * Geschäftsstelle
-    * Verwaltung: [:layer_and_below_full, :finance, :impersonation]
-    * Verwaltung (nur lesend): [:layer_and_below_read]
-    * IT Support: [:layer_and_below_full, :finance, :admin, :impersonation]
+    * Mitgliederdienst: [:layer_and_below_full, :impersonation]
+    * Kursorganisation: [:layer_full, :layer_and_below_read, :impersonation]
+    * Fundraising: [:layer_and_below_read]
+    * Kommunikation: [:layer_full, :layer_and_below_read]
+    * Rechnungswesen: [:layer_full, :layer_and_below_read]
+    * Leistungssport: [:layer_and_below_read]
+    * Hütten & Umwelt: [:layer_and_below_full]
+    * Digitalisierung & IT: [:layer_and_below_full, :admin, :impersonation]
   * Externe Kontakte
     * Kontakt: []
 * Sektion
+* Hütte
+  * Hütte
+    * Hüttenwart*in: [:group_full]
+    * Hüttenwartspartner*in: [:group_full]
+    * Hüttenchef*in: [:group_full]
+    * Mitarbeiter*in: []
+    * Schlüsseldepot: []
+    * Funktionär*in: []
+* Ortsgruppe
+* Global
   * Funktionäre
     * Präsidium: []
     * Vizepräsidium: []
+    * Mitgliederdienst: [:layer_and_below_full]
     * Funktionär*in: []
     * Verwaltung: [:layer_and_below_full]
     * Verwaltung (nur lesend): [:layer_and_below_read]
-    * Hüttenobmann: []
+    * Hüttenobmann: [:layer_read]
   * Mitglieder
     * Mitglied: []
     * Abonnement: []
     * Ehrenmitglied: []
     * Begünstigt: []
-  * Neuanmeldung (zur Freigabe)
+  * Neuanmeldungen (zur Freigabe)
     * Neuanmeldung: []
-  * Neuanmeldung
+  * Neuanmeldungen
     * Neuanmeldung: []
   * Tourenkommission
     * Tourenchef*in Sommer: [:group_full]
     * Tourenchef*in Winter: [:group_full]
     * Tourenchef*in Klettern: [:group_full]
     * Tourenchef*in Senioren: [:group_full]
-    * Tourenleiter*in Sommer: [:group_full]
-    * Tourenleiter*in Winter: [:group_full]
-  * Hütte
-    * Hütte
-      * Hüttenwart*in: [:group_full]
-      * Hüttenwartspartner*in: [:group_full]
-      * Hüttenchef*in: [:group_full]
-      * Mitarbeiter*in: []
-      * Schlüsseldepot: []
-      * Funktionär*in: []
-  * Ortsgruppe
-    * Funktionäre
-      * Präsidium: []
-      * Vizepräsidium: []
-      * Funktionär*in: []
-      * Verwaltung: [:layer_and_below_full]
-      * Verwaltung (nur lesend): [:layer_and_below_read]
-      * Hüttenobmann: []
-    * Mitglieder
-      * Mitglied: []
-      * Abonnement: []
-      * Ehrenmitglied: []
-      * Begünstigt: []
-    * Neuanmeldung (zur Freigabe)
-      * Neuanmeldung: []
-    * Neuanmeldung
-      * Neuanmeldung: []
-    * Tourenkommission
-      * Tourenchef*in Sommer: [:group_full]
-      * Tourenchef*in Winter: [:group_full]
-      * Tourenchef*in Klettern: [:group_full]
-      * Tourenchef*in Senioren: [:group_full]
-      * Tourenleiter*in Sommer: [:group_full]
-      * Tourenleiter*in Winter: [:group_full]
+    * Tourenleiter*in Sommer: [:group_read]
+    * Tourenleiter*in Winter: [:group_read]
+```
 
 (Output of rake app:hitobito:roles)
