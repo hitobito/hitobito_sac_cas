@@ -13,7 +13,7 @@ describe Export::Pdf::Passes::Membership do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
-              group: groups(:be_mitglieder))
+              group: groups(:bluemlisalp_mitglieder))
     person
   end
   let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }

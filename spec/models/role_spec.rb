@@ -10,21 +10,21 @@ require 'spec_helper'
 describe Role do
 
   let(:person) { Fabricate(:person) }
-  let(:be_mitglieder) { groups(:be_mitglieder) }
-  let(:be_neuanmeldungen_nv) { groups(:be_neuanmeldungen_nv) }
-  let(:be_neuanmeldungen_sektion) { groups(:be_neuanmeldungen_sektion) }
+  let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
+  let(:bluemlisalp_neuanmeldungen_nv) { groups(:bluemlisalp_neuanmeldungen_nv) }
+  let(:bluemlisalp_neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
   context 'Mitglied vs. Beitragskategorie' do
     it 'assigns correct beitragskategorie when creating new mitglied role' do
       person.update!(birthday: Time.zone.today - 33.years)
 
-      role = Group::SektionsMitglieder::Mitglied.create!(person: person, group: be_mitglieder)
+      role = Group::SektionsMitglieder::Mitglied.create!(person: person, group: bluemlisalp_mitglieder)
 
       expect(role.beitragskategorie).to eq('einzel')
     end
 
     it 'is not valid without beitragskategorie or person\'s birthdate' do
-      role = Group::SektionsMitglieder::Mitglied.new(person: person, group: be_mitglieder)
+      role = Group::SektionsMitglieder::Mitglied.new(person: person, group: bluemlisalp_mitglieder)
 
       expect(role).not_to be_valid
     end
@@ -34,12 +34,12 @@ describe Role do
 
       neuanmeldung_nv =
         Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
-          person: person, group: be_neuanmeldungen_nv)
+          person: person, group: bluemlisalp_neuanmeldungen_nv)
 
       expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
 
       neuanmeldung_sektion = Group::SektionsNeuanmeldungenSektion::Neuanmeldung.create!(
-        person: person, group: be_neuanmeldungen_sektion)
+        person: person, group: bluemlisalp_neuanmeldungen_sektion)
 
       expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
     end
@@ -47,13 +47,13 @@ describe Role do
     it 'is not valid without beitragskategorie or person\'s birthdate' do
       neuanmeldung_nv =
         Group::SektionsNeuanmeldungenNv::Neuanmeldung.new(
-          person: person, group: be_neuanmeldungen_nv)
+          person: person, group: bluemlisalp_neuanmeldungen_nv)
 
       expect(neuanmeldung_nv).not_to be_valid
 
       neuanmeldung_sektion =
         Group::SektionsNeuanmeldungenSektion::Neuanmeldung.new(
-          person: person, group: be_neuanmeldungen_sektion)
+          person: person, group: bluemlisalp_neuanmeldungen_sektion)
 
       expect(neuanmeldung_sektion).not_to be_valid
     end

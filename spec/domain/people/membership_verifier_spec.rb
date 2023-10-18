@@ -14,10 +14,10 @@ describe People::MembershipVerifier do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
-              group: groups(:be_mitglieder))
+              group: groups(:bluemlisalp_mitglieder))
     person
   end
-  let(:neuanmeldungen_sektion) { groups(:be_neuanmeldungen_sektion) }
+  let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
   context '#member?' do
     it 'returns true if person has member role' do

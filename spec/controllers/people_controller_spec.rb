@@ -24,11 +24,11 @@ describe PeopleController do
   it 'GET#index accepts filter params and lists neuanmeldungen' do
     person1 = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
-              group: groups(:be_neuanmeldungen_nv),
+              group: groups(:bluemlisalp_neuanmeldungen_nv),
               person: person1)
     person2 = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
-              group: groups(:be_neuanmeldungen_sektion),
+              group: groups(:bluemlisalp_neuanmeldungen_sektion),
               person: person2)
     roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
     get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }

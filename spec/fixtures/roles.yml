@@ -11,5 +11,5 @@ admin:
 
 mitglied:
   person_id: 600_001
-  group: be_mitglieder
+  group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied

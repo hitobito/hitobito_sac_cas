@@ -14,12 +14,12 @@ describe People::MembershipController, type: :controller do
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
               beitragskategorie: :einzel,
-              group: groups(:be_mitglieder))
+              group: groups(:bluemlisalp_mitglieder))
     person
   end
   let(:funktionaer) do
     Fabricate(Group::SektionsFunktionaere::Verwaltung.sti_name.to_sym,
-              group: groups(:be_funktionaere)).person
+              group: groups(:bluemlisalp_funktionaere)).person
   end
   context 'GET show' do
     it 'is possible to download own membership pass' do
@@ -53,7 +53,7 @@ describe People::MembershipController, type: :controller do
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
                   person: person,
                   beitragskategorie: :einzel,
-                  group: groups(:be_neuanmeldungen_nv))
+                  group: groups(:bluemlisalp_neuanmeldungen_nv))
         person
       end
 

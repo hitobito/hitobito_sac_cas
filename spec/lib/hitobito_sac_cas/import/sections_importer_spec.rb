@@ -15,6 +15,10 @@ describe Import::SectionsImporter do
   let(:ortsgruppe) { Group::Ortsgruppe.find_by!(navision_id: 1651) }
   let(:matterhorn) { Group::Sektion.find_by!(navision_id: 4242) }
 
+  before do
+    clear_sektion_fixtures
+  end
+
   it 'imports sections' do
     expect { importer.import! }.
       to change { Group::Sektion.count }.by(2).
@@ -101,5 +105,12 @@ describe Import::SectionsImporter do
     expected_sub_groups.each do |c|
       expect(c.where(parent_id: ortsgruppe.id).count).to eq(1)
     end
+  end
+
+  private
+
+  def clear_sektion_fixtures
+    Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
+    Group::Sektion.all.find_each { |s| s.really_destroy! }
   end
 end

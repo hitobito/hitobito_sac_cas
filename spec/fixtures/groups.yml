@@ -23,40 +23,41 @@ geschaeftsstelle:
   type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
 
-be:
+bluemlisalp:
   parent: root
   lft: 4 
   rgt: 13
-  name: Bern
+  name: SAC Blüemlisalp
   type: Group::Sektion
-  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+  navision_id: 1650
 
-be_funktionaere:
-  parent: be
+bluemlisalp_funktionaere:
+  parent: bluemlisalp
   lft: 5
   rgt: 6
   name: Funktionaere
   type: Group::SektionsFunktionaere
-  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
-be_mitglieder:
-  parent: be
+bluemlisalp_mitglieder:
+  parent: bluemlisalp
   lft: 7
   rgt: 8
   name: Mitglieder
   type: Group::SektionsMitglieder
-  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
-be_neuanmeldungen_nv:
-  parent: be
+bluemlisalp_neuanmeldungen_nv:
+  parent: bluemlisalp
   lft: 9
   rgt: 10
   type: Group::SektionsNeuanmeldungenNv
-  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
-be_neuanmeldungen_sektion:
-  parent: be
+bluemlisalp_neuanmeldungen_sektion:
+  parent: bluemlisalp
   lft: 11
   rgt: 12
   type: Group::SektionsNeuanmeldungenSektion
-  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:be) %>
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>

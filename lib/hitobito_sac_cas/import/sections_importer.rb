@@ -65,9 +65,19 @@ module Import
     def rebuild_group_hierachy
       output.puts 'Rebuilding group hierarchy...'
       ignoring_archival do
-        Group.update_all(lft: nil, rgt: nil)
-        Group.rebuild!(false)
+        without_group_create_default_children_callback do
+          Group.update_all(lft: nil, rgt: nil)
+          Group.rebuild!(false)
+        end
       end
+    end
+
+    # we have to do this to prevent creating the default children a second time
+    # see https://github.com/hitobito/hitobito/blob/master/app/models/group/types.rb#L41
+    def without_group_create_default_children_callback
+      Group.skip_callback(:save, :after, :create_default_children)
+      yield
+      Group.set_callback(:save, :after, :create_default_children)
     end
 
     def without_query_logging
