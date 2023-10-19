@@ -16,7 +16,7 @@ export default class extends Controller {
   activate(event) {
     event.preventDefault()
     event.stopPropagation()
-    const index = parseInt(this.getIndex(event.target.parentElement));
+    const index = this.getIndex(event.target.parentElement);
     this.activateStep(index)
   }
 
@@ -62,7 +62,7 @@ export default class extends Controller {
 
   back(event) {
     event.preventDefault()
-    const index = event.target.dataset['index']
+    const index = parseInt(event.target.dataset['index'])
     this.activateStep(index)
   }
 }
