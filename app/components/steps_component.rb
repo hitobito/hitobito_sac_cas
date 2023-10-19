@@ -22,12 +22,11 @@ class StepsComponent < ApplicationComponent
   end
 
   class IteratingComponent < ApplicationComponent
-    delegate :index, to: '@iterator'
     attr_reader :current_step
 
     def initialize(step:, iterator:)
       @step = step
-      @iterator = iterator
+      @index = iterator.index
     end
 
     private
@@ -37,13 +36,12 @@ class StepsComponent < ApplicationComponent
     end
 
     def active?
-      @iterator.index == @step
+      @index == @step
     end
 
     def stimulus_controller
       StepsComponent.name.underscore.gsub('/', '--').tr('_', '-')
     end
-
   end
 
   class HeaderComponent < IteratingComponent
@@ -59,7 +57,7 @@ class StepsComponent < ApplicationComponent
     private
 
     def markup
-      return title unless index <= @step
+      return title unless @index <= @step
 
       link_to(title, '#', data: { action: stimulus_action(:activate) })
     end
@@ -85,11 +83,12 @@ class StepsComponent < ApplicationComponent
     end
 
     def next_button(title = t('steps_component.next_link'))
-      helpers.submit_button(@form, title, name: :step, value: index)
+      helpers.submit_button(@form, title, name: :step, value: @index)
     end
 
     def back_link
-      link_to(t('global.button.back'), '#', class: 'link cancel', data: { action: stimulus_action(:back), index: index - 1 })
+      data = { action: stimulus_action(:back), index: @index - 1 }
+      link_to(t('global.button.back'), '#', class: 'link cancel', data: data)
     end
 
     private
@@ -97,6 +96,5 @@ class StepsComponent < ApplicationComponent
     def markup
       render(@partial, f: @form, c: self, required: false)
     end
-
   end
 end
