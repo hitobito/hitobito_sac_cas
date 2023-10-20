@@ -6,9 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
-require_relative '../../../../lib/hitobito_sac_cas/import/sections_importer'
+require_relative '../../../../lib/hitobito_sac_cas/import/sektionen_importer'
 
-describe Import::SectionsImporter do
+describe Import::SektionenImporter do
   let(:file) { file_fixture('sektionen.xlsx') }
   let(:importer) { described_class.new(file, output: double(puts: nil)) }
   let(:bluemlisalp) { Group::Sektion.find_by!(navision_id: 1650) }

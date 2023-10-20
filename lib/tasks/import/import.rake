@@ -5,18 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require_relative '../../hitobito_sac_cas/import/sections_importer'
-require_relative '../../hitobito_sac_cas/import/huts_importer'
-require_relative '../../hitobito_sac_cas/import/people/bluemlisalp_importer'
-
-
 # rubocop:disable Metrics/LineLength
 namespace :import do
-  desc 'Import sections from a navision export'
-  task sections: [:environment] do
-    import_file_path = 'tmp/Sektion_Export_20230629.xlsx'
-    sections_excel = Rails.root.join(import_file_path)
-    Import::SectionsImporter.new(sections_excel).import!
+  desc 'Import sections from a navision export (tmp/xlsx/sektionen.xlsx)'
+  task sektionen: [:environment] do
+    import_file_path = 'tmp/xlsx/sektionen.xlsx'
+    sektionen_excel = Rails.root.join(import_file_path)
+    Import::SektionenImporter.new(sektionen_excel).import!
   end
 
   desc 'Import huts from a navision export'
@@ -26,10 +21,9 @@ namespace :import do
     Import::HutsImporter.new(hut_relations_excel).import!
   end
 
-  desc 'Import people for bluemlisalp section from a navision export'
-  task bluemlisalp_people: [:environment] do
-    bluemlisalp_people_excel = Rails.root.join('tmp/Mitglieder_SAC_Blüemlisalp_Export_20230629.xlsx')
-    Import::People::BluemlisalpImporter.new(bluemlisalp_people_excel).import!
+  desc 'Import people (Hauptsektion) for sektion from a navision export FILE=tmp/xlsx/sektions_mitglieder.xlsx'
+  task sektions_mitglieder: [:environment] do
+    Import::Sektion::MitgliederImporter.new(Pathname(ENV['FILE'].to_s)).import!
   end
 end
 # rubocop:enable Metrics/LineLength

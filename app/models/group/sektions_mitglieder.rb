@@ -10,12 +10,7 @@ class Group::SektionsMitglieder < ::Group
   self.static_name = true
 
   ### ROLES
-  class Mitglied < ::Role
-    include ::SacCas::RoleBeitragskategorie
-
-    self.permissions = []
-    self.basic_permissions_only = true
-  end
+  class Mitglied < ::SacCas::Role::Mitglied; end
 
   class Abonnement < ::Role
     self.permissions = []
@@ -31,7 +26,6 @@ class Group::SektionsMitglieder < ::Group
     self.permissions = []
     self.basic_permissions_only = true
   end
-
 
   roles Mitglied, Abonnement,
     Ehrenmitglied, Beguenstigt

@@ -155,7 +155,7 @@ describe 'neuanmeldungen approval', js: true do
 
   def create_neuanmeldung
     Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-              group: neuanmeldungen, beitragskategorie: :einzel)
+              group: neuanmeldungen, beitragskategorie: :einzel, person: Fabricate(:person, birthday: 20.years.ago))
   end
 
   def person_selector(role)

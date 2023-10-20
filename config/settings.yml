@@ -11,6 +11,8 @@ application:
   languages:
     de: Deutsch
     fr: Français
+    it: Italiano
+    en: English
   logo:
     image: logo.svg
     height: 85

@@ -19,7 +19,8 @@ describe People::Neuanmeldungen::Reject do
       NEUANMELDUNG_ROLE_CLASS.sti_name,
       group: group,
       beitragskategorie: beitragskategorie,
-      created_at: 1.year.ago
+      created_at: 1.year.ago,
+      person: Fabricate(:person, birthday: 20.years.ago)
     )
   end
 

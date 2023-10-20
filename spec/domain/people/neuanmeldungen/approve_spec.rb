@@ -20,7 +20,8 @@ describe People::Neuanmeldungen::Approve do
       NEUANMELDUNG_ROLE_CLASS.sti_name,
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
-      created_at: 1.year.ago
+      created_at: 1.year.ago,
+      person: Fabricate(:person, birthday: 20.years.ago)
     )
   end
 
