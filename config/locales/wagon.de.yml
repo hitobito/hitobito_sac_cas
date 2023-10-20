@@ -4,6 +4,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 de:
+  activemodel:
+    attributes:
+      people/neuanmeldungen/reject:
+        note: Bemerkung
+
+    models:
+      people/neuanmeldungen/approve:
+        one: Anmeldung übernehmen
+        other: Anmeldungen übernehmen
+      people/neuanmeldungen/reject:
+        one: Anmeldung ablehnen
+        other: Anmeldungen ablehnen
+
   activerecord:
     attributes:
       person:
