@@ -12,7 +12,6 @@ zeus.json
 .generators
 .idea
 .rakeTasks
-TODO.md
 db/seeds/production/*.xlsx
 db/seeds/production/*.xlsx#
 
