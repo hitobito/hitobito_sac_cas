@@ -47,7 +47,7 @@ Group::ExterneKontakte.seed(:name, :parent_id, {
   parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
 })
 
-sections = Group::Sektion.seed(
+matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
   :name, :parent_id,
   { name: 'SAC Matterhorn',
     foundation_year: 1899,
@@ -64,14 +64,24 @@ sections = Group::Sektion.seed(
     parent_id: root.id
   })
 
-seed_hut(sections.first, 'Matterhornbiwak', 99999942)
-seed_hut(sections.second, 'Domhütte', 81)
-seed_hut(sections.second, 'Spannorthütte', 255)
-seed_hut(sections.second, 'Täschhütte', 265)
-seed_hut(sections.third, 'Blüemlisalphütte', 1650)
-seed_hut(sections.third, 'Baltschiederklause', 25)
-seed_hut(sections.third, 'Stockhornbiwak', 258)
-seed_hut(sections.third, 'Ski- & Ferienhaus Obergestelen', 448786)
-seed_hut(sections.third, 'Sunnhüsi', 448785)
+Group::SektionsNeuanmeldungenNv.seed_once(
+  :type, :parent_id,
+  { type: Group::SektionsNeuanmeldungenNv, parent_id: matterhorn.id },
+)
+
+Group::SektionsNeuanmeldungenSektion.seed_once(
+  :type, :parent_id,
+  { type: Group::SektionsNeuanmeldungenSektion.sti_name, parent_id: bluemlisalp.id },
+)
+
+seed_hut(matterhorn, 'Matterhornbiwak', 99999942)
+seed_hut(uto, 'Domhütte', 81)
+seed_hut(uto, 'Spannorthütte', 255)
+seed_hut(uto, 'Täschhütte', 265)
+seed_hut(bluemlisalp, 'Blüemlisalphütte', 1650)
+seed_hut(bluemlisalp, 'Baltschiederklause', 25)
+seed_hut(bluemlisalp, 'Stockhornbiwak', 258)
+seed_hut(bluemlisalp, 'Ski- & Ferienhaus Obergestelen', 448786)
+seed_hut(bluemlisalp, 'Sunnhüsi', 448785)
 
 Group.rebuild!
