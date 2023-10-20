@@ -235,6 +235,10 @@ de:
       documents: Dokumente
       membership: Mitgliederausweis
       download: Anzeigen
+    neuanmeldungen:
+      multiselect_actions:
+        accept: Übernehmen
+        reject: Ablehnen
 
   groups:
     self_registration:
