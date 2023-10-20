@@ -39,6 +39,7 @@ module HitobitoSacCas
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
 
+      Groups::SelfRegistration.prepend SacCas::Groups::SelfRegistration
 
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
 

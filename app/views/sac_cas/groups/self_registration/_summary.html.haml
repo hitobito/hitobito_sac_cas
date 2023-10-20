@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= f.fields_for(:main_person_attributes, entry.main_person) do |ff|
+= f.fields_for(:person_attributes, entry.person) do |ff|
   = ff.labeled(:newsletter, '&nbsp;'.html_safe) do
     %label.checkbox
       = ff.check_box :newsletter

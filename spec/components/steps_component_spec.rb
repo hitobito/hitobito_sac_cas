@@ -28,13 +28,13 @@ describe StepsComponent, type: :component do
 
 
   it 'does render header and content' do
-    html = render(partials: [:main_person], step: 0)
+    html = render(partials: [:person], step: 0)
     expect(html).to have_css("#{header_css} li.active a", text: 'Personendaten')
-    expect(html).to have_css('.row .step-content.main-person.active', text: 'main_person')
+    expect(html).to have_css('.row .step-content.main-person.active', text: 'person')
   end
 
   it 'renders two steps with second one active' do
-    html = render(partials: [:main_person, :household], step: 1)
+    html = render(partials: [:person, :household], step: 1)
 
     expect(html).to have_css("#{header_css} li:nth-child(1):not(.active) a", text: 'Personendaten')
     expect(html).to have_css("#{header_css} li:nth-child(2).active a", text: 'Familienmitglieder')
@@ -43,7 +43,7 @@ describe StepsComponent, type: :component do
   end
 
   it 'does render second step as text when on first' do
-    html = render(partials: [:main_person, :household], step: 0)
+    html = render(partials: [:person, :household], step: 0)
     expect(html).to have_link 'Personendaten'
     expect(html).not_to have_link 'Familienmitglieder'
   end

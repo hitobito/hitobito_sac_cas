@@ -295,7 +295,7 @@ de:
     groups:
       self_registration:
         form:
-          main_person_title: Personendaten
+          person_title: Personendaten
           single_or_household_title: Mitgliedschaftstyp
           household_title: Familienmitglieder
           summary_title: Zusammenfassung
@@ -311,8 +311,6 @@ de:
         summary:
           newsletter: Ich möchte einen Newsletter abonnieren
           promo_code: Promocode
-        main_person:
-          notes: Bemerkungen
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft

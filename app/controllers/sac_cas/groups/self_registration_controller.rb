@@ -73,18 +73,18 @@ class SacCas::Groups::SelfRegistrationController < ApplicationController
   end
 
   def send_password_reset_email
-    return unless entry.main_person_email.present?
+    return unless entry.person_email.present?
 
-    Person.send_reset_password_instructions(email: entry.main_person_email)
+    Person.send_reset_password_instructions(email: entry.person_email)
   end
 
   def success_message
-    key = entry.main_person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
+    key = entry.person.email.present? ? :signed_up_but_unconfirmed : :signed_up_but_no_email
     I18n.t("devise.registrations.#{key}")
   end
 
   def policy_finder
-    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.main_person)
+    @policy_finder ||= Group::PrivacyPolicyFinder.for(group: group, person: entry.person)
   end
 
 end

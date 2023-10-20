@@ -33,19 +33,19 @@ describe :self_registration, js: true do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
-  def complete_main_person_form
+  def complete_person_form
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Adresse', with: 'Musterplatz'
-    fill_in 'groups_self_registration_main_person_attributes_zip_code', with: '8000'
-    fill_in 'groups_self_registration_main_person_attributes_town', with: 'Zürich'
+    fill_in 'groups_self_registration_person_attributes_zip_code', with: '8000'
+    fill_in 'groups_self_registration_person_attributes_town', with: 'Zürich'
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     fill_in 'Geburtstag', with: '01.01.1980'
     yield if block_given?
     click_on 'Weiter'
   end
 
-  describe 'main_person' do
+  describe 'person' do
     it 'validates and marks attributes' do
       visit group_self_registration_path(group_id: group)
       fill_in 'Haupt-E-Mail', with: 'support@hitobito.example.com'
@@ -65,9 +65,9 @@ describe :self_registration, js: true do
 
     it 'self registers and creates new person' do
       visit group_self_registration_path(group_id: group)
-      complete_main_person_form do
+      complete_person_form do
         choose 'männlich'
-        country_selector = "#groups_self_registration_main_person_attributes_country_chosen"
+        country_selector = "#groups_self_registration_person_attributes_country_chosen"
         find("#{country_selector}").click
         find("#{country_selector} ul.chosen-results li.active-result", text: 'Vereinigte Staaten').click
       end
@@ -117,7 +117,7 @@ describe :self_registration, js: true do
       end
 
       it 'sets privacy policy accepted' do
-        complete_main_person_form
+        complete_person_form
         click_on 'Weiter als Einzelmitglied'
 
         check 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
@@ -133,7 +133,7 @@ describe :self_registration, js: true do
   describe 'household' do
     it 'can create several people in same household' do
       visit group_self_registration_path(group_id: group)
-      complete_main_person_form
+      complete_person_form
 
       expect(page).to have_content 'Hier kannst du eine Famlienmitgliedschaft wählen.'
 
@@ -172,7 +172,7 @@ describe :self_registration, js: true do
 
     it 'can add and remove housemate' do
       visit group_self_registration_path(group_id: group)
-      complete_main_person_form
+      complete_person_form
       click_on  'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(1)' do
@@ -208,7 +208,7 @@ describe :self_registration, js: true do
     it 'validates emails within household' do
       visit group_self_registration_path(group_id: group)
       visit group_self_registration_path(group_id: group)
-      complete_main_person_form
+      complete_person_form
       click_on  'Eintrag hinzufügen'
 
       fill_in 'Vorname', with: 'Maxine'

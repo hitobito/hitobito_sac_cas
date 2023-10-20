@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= f.fields_for(:main_person_attributes, entry.main_person) do |f|
+= f.fields_for(:person_attributes, entry.person) do |f|
   = field_set_tag do
     = render('shared/error_messages', errors: f.object.errors, object: f.object)
     = f.labeled_input_fields :first_name, :last_name, { required: required }
