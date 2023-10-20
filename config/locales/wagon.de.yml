@@ -240,6 +240,29 @@ de:
         accept: Übernehmen
         reject: Ablehnen
 
+  people/neuanmeldungen/approves:
+    new:
+      text:
+        one: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldung.
+        other: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldungen.
+      submit: '%{count} Übernehmen'
+    create:
+      success:
+        one: Anmeldung wurde übernommen
+        other: '%{count} Anmeldungen wurden übernommen'
+
+  people/neuanmeldungen/rejects:
+    new:
+      note_placeholder: optional
+      text:
+        one: Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldung.
+        other: Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldungen.
+      submit: '%{count} Ablehnen'
+    create:
+      success:
+        one: Anmeldung wurde abgelehnt
+        other: '%{count} Anmeldungen wurden abgelehnt'
+
   groups:
     self_registration:
       conditions_sac_cas:

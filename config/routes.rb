@@ -14,7 +14,17 @@ Rails.application.routes.draw do
     # Define wagon routes here
 
     get '/people/:id/membership' => 'people/membership#show', as: 'membership'
-    get '/verify_membership/:verify_token' => 'people/membership/verify#show', as: 'verify_membership'
+    get '/verify_membership/:verify_token' => 'people/membership/verify#show',
+        as: 'verify_membership'
+
+    resources :groups, only: [] do
+      namespace :people do
+        namespace :neuanmeldungen do
+          resource :approves, only: [:new, :create]
+          resource :rejects, only: [:new, :create]
+        end
+      end
+    end
   end
 
 end
