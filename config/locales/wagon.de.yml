@@ -224,6 +224,10 @@ de:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
   people:
+    roles:
+      roles_aside:
+        set_main_section: Hauptsektion setzen
+
     show_event_sac_cas:
       documents: Dokumente
       membership: Mitgliederausweis
@@ -257,6 +261,8 @@ de:
         other: '%{count} Anmeldungen wurden abgelehnt'
 
   groups:
+    sektion_secondary: Zusatzsektion
+
     self_registration:
       conditions_sac_cas:
         newsletter: Ich möchte einen Newsletter abonnieren

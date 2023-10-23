@@ -59,6 +59,7 @@ describe Role do
     end
   end
 
+<<<<<<< HEAD
 
   describe 'minimum age validation' do
     [
@@ -91,6 +92,38 @@ describe Role do
         person.birthday = 5.years.ago
         role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
         expect(role).to be_valid
+    end
+  end
+
+  describe 'primary_group' do
+    let(:admin) { people(:admin) }
+
+    it "updates primary_group when creating a new role" do
+      expect do
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: bluemlisalp_mitglieder, person: admin, beitragskategorie: :einzel)
+      end.to change { admin.reload.primary_group }.from(groups(:geschaeftsstelle)).to(bluemlisalp_mitglieder)
+    end
+
+    it "updates primary_group when destroying a new role" do
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: bluemlisalp_mitglieder, person: admin, beitragskategorie: :einzel)
+      expect do
+        role.destroy
+      end.to change { admin.reload.primary_group }.from(bluemlisalp_mitglieder).to(groups(:geschaeftsstelle))
+    end
+  end
+
+  describe '#to_s' do
+    let(:person) { people(:mitglied) }
+
+    it 'does not have zusatzsektion suffix on primary group role' do
+      expect(roles(:mitglied).to_s).to eq 'Mitglied (Einzel)'
+    end
+
+    it 'includes zusatzsektion suffix' do
+      other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
+        .find_by(type: Group::SektionsMitglieder)
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
+      expect(role.to_s).to eq 'Mitglied (Einzel) (Zusatzsektion)'
     end
   end
 end

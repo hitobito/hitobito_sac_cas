@@ -12,4 +12,11 @@ describe Group do
 
   include_examples 'group types'
 
+  describe '#preferred_primary?' do
+    it 'is true for SektionsMitglieder type' do
+      expect(Fabricate.build(Group::SektionsMitglieder.sti_name)).to be_preferred_primary
+      expect(Fabricate.build(Group::Sektion.sti_name)).not_to be_preferred_primary
+    end
+  end
+
 end

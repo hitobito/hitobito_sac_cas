@@ -25,6 +25,13 @@ module HitobitoSacCas
       # extend application classes here
       Group.include SacCas::Group
       Person.include SacCas::Person
+      Role.prepend SacCas::Role
+
+      ## Decorators
+      GroupDecorator.prepend SacCas::GroupDecorator
+
+      ## Abilities
+      PersonAbility.include SacCas::PersonAbility
 
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
 

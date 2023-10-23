@@ -12,7 +12,7 @@ admin:
   last_name: Admin
   email: support@hitobito.example.com
   gender: m
-  primary_group: ressort_it
+  primary_group: geschaeftsstelle
 
 mitglied:
   id: 600_001

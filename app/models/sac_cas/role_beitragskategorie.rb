@@ -22,7 +22,8 @@ module ::SacCas::RoleBeitragskategorie
   end
 
   def to_s(format = :default)
-    "#{super} (#{beitragskategorie_label})"
+    string = "#{super} (#{beitragskategorie_label})"
+    secondary? ? "#{string} (#{I18n.t('groups.sektion_secondary')})" : string
   end
 
   private
@@ -32,5 +33,9 @@ module ::SacCas::RoleBeitragskategorie
       ::SacCas::Beitragskategorie::Calculator
       .new(person).calculate
     self.beitragskategorie = category
+  end
+
+  def secondary?
+    person.primary_group_id != group_id && Groups::Primary::ROLE_TYPES.include?(type)
   end
 end

@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 admin:
   person_id: 600_000
   group: geschaeftsstelle
@@ -13,3 +12,4 @@ mitglied:
   person_id: 600_001
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
+  beitragskategorie: einzel
