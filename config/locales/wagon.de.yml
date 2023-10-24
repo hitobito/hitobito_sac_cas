@@ -268,6 +268,20 @@ de:
       fields:
         notes: Bemerkungen
         promo_code: Promocode
+    self_inscription:
+      form:
+        inscribe: Beitreten
+        description: Willst du dieser Sektion beitreten?
+
+  groups/self_inscription:
+    new:
+      details: Du trittst als %{beitragskategorie} bei.
+
+  roles:
+    beitragskategorie:
+      einzel: Einzelmitglied
+      jugend: Jugendmitglied
+      familie: Familienmitglied
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
