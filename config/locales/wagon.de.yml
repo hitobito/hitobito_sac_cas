@@ -223,6 +223,11 @@ de:
         one: Funktionär*in
         description: Funktionär*in
 
+  devise:
+    sessions:
+      form:
+        login_identity: Haupt‑E‑Mail / Mitglieder‑Nr
+
   people:
     show_event_sac_cas:
       documents: Dokumente
