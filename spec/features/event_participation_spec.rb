@@ -8,7 +8,7 @@
 
 require 'spec_helper'
 
-describe :event_participation do
+describe :event_participation, js: true do
 
   subject { page }
 

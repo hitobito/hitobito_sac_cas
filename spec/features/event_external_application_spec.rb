@@ -8,8 +8,7 @@
 
 require 'spec_helper'
 
-describe :event_external_application do
-
+describe :event_external_application, js: true do
   subject { page }
 
   let(:event) { Fabricate(:event, application_opening_at: 5.days.ago,

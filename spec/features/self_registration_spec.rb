@@ -8,7 +8,7 @@
 
 require 'spec_helper'
 
-describe :self_registration do
+describe :self_registration, js: true do
 
   subject { page }
 

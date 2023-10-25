@@ -7,20 +7,7 @@
 
 require 'spec_helper'
 
-describe 'neuanmeldungen approval' do
-
-  def create_neuanmeldung
-    Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-              group: neuanmeldungen, beitragskategorie: :einzel)
-  end
-
-  def person_selector(role)
-    "tr#person_#{role.person.id} input[name='ids[]']"
-  end
-
-  def check_person(role)
-    page.find(person_selector(role)).click
-  end
+describe 'neuanmeldungen approval', js: true do
 
   let(:neuanmeldungen) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldungen_approved) { groups(:bluemlisalp_neuanmeldungen_nv) }
@@ -162,5 +149,20 @@ describe 'neuanmeldungen approval' do
       expect(role1.reload).to be_deleted
       expect(role2.reload).to be_deleted
     end
+  end
+
+  private
+
+  def create_neuanmeldung
+    Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
+              group: neuanmeldungen, beitragskategorie: :einzel)
+  end
+
+  def person_selector(role)
+    "tr#person_#{role.person.id} input[name='ids[]']"
+  end
+
+  def check_person(role)
+    page.find(person_selector(role)).click
   end
 end
