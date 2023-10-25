@@ -31,8 +31,10 @@ module People
       private
 
       def approved_roles_group
-        group.parent.children.without_deleted.find_by(type: APPROVED_NEUANMELDUNGEN_GROUP.sti_name) ||
-          APPROVED_NEUANMELDUNGEN_GROUP.create!(parent: group.parent)
+        group
+          .parent.children.without_deleted
+          .find_by(type: APPROVED_NEUANMELDUNGEN_GROUP.sti_name) ||
+        APPROVED_NEUANMELDUNGEN_GROUP.create!(parent: group.parent)
       end
 
       def create_approved_role(role)
