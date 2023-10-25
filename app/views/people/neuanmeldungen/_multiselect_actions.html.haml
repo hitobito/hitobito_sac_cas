@@ -1,0 +1,25 @@
+-# frozen_string_literal: true
+
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.hidden
+  .multiselect
+    .count
+    = ti('selected')
+    .actions
+      = action_button(t('.accept'),
+        new_group_people_neuanmeldungen_approves_path(group_id: @group),
+        'user-check',
+        data: { checkable: true, method: :get },
+        remote: true)
+
+      = action_button(t('.reject'),
+          new_group_people_neuanmeldungen_rejects_path(group_id: @group),
+          'user-slash',
+          data: { checkable: true, method: :get },
+          remote: true)
+
+      = Dropdown::TagLists.new(self, @group, t('people.multiselect_actions.tag_lists'))
