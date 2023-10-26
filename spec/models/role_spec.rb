@@ -59,4 +59,38 @@ describe Role do
     end
   end
 
+
+  describe 'minimum age validation' do
+    [
+      [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+      [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+      [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv],
+    ].each do |role_type, group|
+      it "does not accept person without birthday for #{role_type}" do
+        person.birthday = nil
+        role = person.roles.build(type: role_type, group: groups(group))
+        expect(role).not_to be_valid
+        expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
+      end
+
+      it "accepts person exceeding age restriction for #{role_type}" do
+        person.birthday = 6.years.ago - 1.day
+        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        expect(role).to be_valid
+      end
+
+      it "rejects person below age restriction for #{role_type}" do
+        person.birthday = 5.years.ago
+        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        expect(role).not_to be_valid
+        expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
+      end
+    end
+
+    it 'accepts person below age limit on other group' do
+        person.birthday = 5.years.ago
+        role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
+        expect(role).to be_valid
+    end
+  end
 end

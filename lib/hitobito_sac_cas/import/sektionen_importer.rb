@@ -8,7 +8,7 @@
 require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
 
 module Import
-  class SectionsImporter
+  class SektionenImporter
 
     HEADERS = {
       navision_id: 'Sektionscode',

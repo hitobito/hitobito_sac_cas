@@ -6,9 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
-require_relative '../../../../../lib/hitobito_sac_cas/import/people/bluemlisalp_importer'
+require_relative '../../../../../lib/hitobito_sac_cas/import/sektion/mitglieder_importer'
 
-describe Import::People::BluemlisalpImporter do
+describe Import::Sektion::MitgliederImporter do
+
   let(:file) { file_fixture('bluemlisalp_people.xlsx') }
   let(:importer) { described_class.new(file, output: double(puts: nil)) }
 

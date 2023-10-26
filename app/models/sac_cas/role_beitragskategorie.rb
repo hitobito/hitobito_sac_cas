@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module ::SacCas::RoleBeitragskategorie 
+module ::SacCas::RoleBeitragskategorie
   extend ActiveSupport::Concern
 
   included do

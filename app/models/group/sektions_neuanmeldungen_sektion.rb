@@ -10,12 +10,7 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
   self.static_name = true
 
   ### ROLES
-  class Neuanmeldung < ::Role
-    include ::SacCas::RoleBeitragskategorie
-
-    self.permissions = []
-    self.basic_permissions_only = true
-  end
+  class Neuanmeldung < ::SacCas::Role::Mitglied; end
 
   roles Neuanmeldung
 end

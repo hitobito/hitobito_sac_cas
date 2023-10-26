@@ -5,12 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsNeuanmeldungenNv < ::Group
+class SacCas::Role::Mitglied < ::Role
+  include SacCas::Role::MitgliedMinimalAgeValidation
+  include SacCas::RoleBeitragskategorie
 
-  self.static_name = true
-
-  ### ROLES
-  class Neuanmeldung < ::SacCas::Role::Mitglied; end
-
-  roles Neuanmeldung
+  self.permissions = []
+  self.basic_permissions_only = true
 end

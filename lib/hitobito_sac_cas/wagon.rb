@@ -18,6 +18,7 @@ module HitobitoSacCas
       #{config.root}/app/abilities
       #{config.root}/app/domain
       #{config.root}/app/jobs
+      #{config.root}/lib/hitobito_sac_cas
     ]
 
     config.to_prepare do

@@ -4,17 +4,18 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
-## Import sections
+## Import sektionen
 
-`rails import:huts`
+`rails import:sektionen`
 
 ## Import huts
 
 `rails import:huts`
 
-## Import people
+## Import Mitglieder to Sektion
 
-`rails import:bluemlisalp_people`
+`rails import:sektions_mitglieder FILE=sektions_mitglieder.xlsx`
+
 
 ## Delete all Sektions
 
