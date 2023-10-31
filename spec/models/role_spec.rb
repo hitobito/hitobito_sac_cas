@@ -59,8 +59,6 @@ describe Role do
     end
   end
 
-<<<<<<< HEAD
-
   describe 'minimum age validation' do
     [
       [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
