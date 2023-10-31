@@ -226,7 +226,7 @@ de:
   people:
     roles:
       roles_aside:
-        set_main_section: Hauptsektion setzen
+        set_hauptsektion: Hauptsektion setzen
 
     show_event_sac_cas:
       documents: Dokumente
