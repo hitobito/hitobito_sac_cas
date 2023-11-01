@@ -11,7 +11,7 @@ module SacCas::Groups::SelfInscriptionController
   def new
     # validate calls #set_beitragskategorie on the role which calculates the beitragskategorie
     # from the person's age
-    @role = build_entry.tap(&:validate)
+    @role = build_role.tap(&:validate)
 
     # Neuanmeldung Role is always in a Neuanmeldungen Group which has a generic title unusable
     # for the user to identify the group. Therefore we use the parent group's name instead.

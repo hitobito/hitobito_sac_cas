@@ -63,11 +63,6 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
-      sac_cas/role/mitglied:
-        beitragskategorien:
-          einzel: Einzel
-          jugend: Jugend
-          familie: Familie
 
     models:
 
@@ -279,9 +274,9 @@ de:
 
   roles:
     beitragskategorie:
-      einzel: Einzelmitglied
-      jugend: Jugendmitglied
-      familie: Familienmitglied
+      einzel: Einzel
+      jugend: Jugend
+      familie: Familie
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
