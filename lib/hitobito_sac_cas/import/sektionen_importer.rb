@@ -197,7 +197,7 @@ module Import
       phone = row[:phone]
       return unless phone.present? && Phonelib.valid?(phone)
       group.phone_numbers.destroy_all
-      group.phone_numbers.build(number: phone, label: section_name(row))
+      group.phone_numbers.build(number: phone, label: 'Andere')
     end
 
     def email(row)
