@@ -67,6 +67,7 @@ de:
     errors:
       messages:
         too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
+        family_role_on_non_primary_group: 'Familienmitgliedschaften sind nur auf der Hauptsektion möglich.'
 
     models:
 

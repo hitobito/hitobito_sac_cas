@@ -5,19 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::Role::MitgliedAdultFamilyMembersCountValidation
+module SacCas::Role::MitgliedFamilyValidations
   extend ActiveSupport::Concern
 
   MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT = 2
 
   included do
     validate :assert_adult_family_members_count
+    validate :assert_family_on_primary_group
   end
 
   private
 
+  # There can only be MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults with beitragskategory=family in a household.
   def assert_adult_family_members_count
-    return unless person.household_key? &&
+    return unless person&.household_key? &&
       beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
       person.years >= SacCas::Beitragskategorie::Calculator::AGE_ADULT.begin
 
@@ -41,6 +43,15 @@ module SacCas::Role::MitgliedAdultFamilyMembersCountValidation
     return unless adult_housemates_count + 1 > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
 
     errors.add(:base, :too_many_adults_in_family, max_adults: MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT)
+  end
+
+  # Roles with beitragskategorie=family are only allowed on the primary group of a person.
+  def assert_family_on_primary_group
+    return unless beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
+
+    unless group == person&.primary_group
+      errors.add(:base, :family_role_on_non_primary_group)
+    end
   end
 
 end

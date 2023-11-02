@@ -8,7 +8,7 @@
 class SacCas::Role::Mitglied < ::Role
   self.abstract_class = true
 
-  include SacCas::Role::MitgliedAdultFamilyMembersCountValidation
+  include SacCas::Role::MitgliedFamilyValidations
   include SacCas::Role::MitgliedMinimalAgeValidation
   include SacCas::RoleBeitragskategorie
 

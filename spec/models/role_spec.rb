@@ -106,54 +106,72 @@ describe Role do
         def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42')
           person = Fabricate.build(:person, birthday: age.years.ago,
                                             household_key: household_key)
-          role_type.new(person: person, group: groups(group),
+          role = role_type.new(person: person, group: groups(group),
                         beitragskategorie: beitragskategorie)
+          person.primary_group = role.group
+          role
         end
 
-        context 'with beitragskategorie=familie' do
-          it 'accepts single adult person in household' do
-            expect(build_role).to be_valid
-          end
+        it 'beitragskategorie=familie is accepted on primary group' do
+          role = build_role
+          role.person.primary_group = role.group
 
-          it 'accepts second adult person in same household' do
-            # Add 1 adult
-            build_role.save!
-
-            # Test second adult
-            expect(build_role).to be_valid
-          end
-
-          it 'rejects third adult person in same household' do
-            # Add 2 adults
-            2.times { build_role.save! }
-
-            # Test third adult
-            third_adult = build_role
-            expect(third_adult).not_to be_valid
-            expect(third_adult.errors[:base]).to include('In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.')
-          end
-
-          it 'accepts third youth person in same household' do
-            # Add 2 adults and 2 youth
-            2.times { build_role.save! }
-            2.times { build_role(age: 17, beitragskategorie: :jugend).save! }
-
-            # Test third youth
-            third_youth = build_role(age: 17)
-            expect(third_youth).to be_valid
-          end
-
-          it 'accepts third adult in different household' do
-            # Add 2 adults
-            2.times { build_role(household_key: '1stHousehold').save! }
-
-            # Test third adult in different household
-            third_adult = build_role(household_key: '2ndHousehold')
-            expect(third_adult).to be_valid
-          end
+          expect(role).to be_valid
         end
 
-        context 'with beitragskategorie=einzel' do
+        it 'beitragskategorie=familie is rejected on non-primary group' do
+          role = build_role
+          role.person.primary_group = groups(:geschaeftsstelle)
+
+          expect(role).not_to be_valid
+          expect(role.errors[:base]).to include('Familienmitgliedschaften sind nur auf der Hauptsektion möglich.')
+        end
+
+        context 'adult family members count' do
+          context 'with beitragskategorie=familie' do
+            it 'accepts single adult person in household' do
+              expect(build_role).to be_valid
+            end
+
+            it 'accepts second adult person in same household' do
+              # Add 1 adult
+              build_role.save!
+
+              # Test second adult
+              expect(build_role).to be_valid
+            end
+
+            it 'rejects third adult person in same household' do
+              # Add 2 adults
+              2.times { build_role.save! }
+
+              # Test third adult
+              third_adult = build_role
+              expect(third_adult).not_to be_valid
+              expect(third_adult.errors[:base]).to include('In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.')
+            end
+
+            it 'accepts third youth person in same household' do
+              # Add 2 adults and 2 youth
+              2.times { build_role.save! }
+              2.times { build_role(age: 17, beitragskategorie: :jugend).save! }
+
+              # Test third youth
+              third_youth = build_role(age: 17)
+              expect(third_youth).to be_valid
+            end
+
+            it 'accepts third adult in different household' do
+              # Add 2 adults
+              2.times { build_role(household_key: '1stHousehold').save! }
+
+              # Test third adult in different household
+              third_adult = build_role(household_key: '2ndHousehold')
+              expect(third_adult).to be_valid
+            end
+          end
+
+          context 'with beitragskategorie=einzel' do
           it 'accepts third adult in same household' do
             # Add 2 adults with beitragskategorie=familie
             2.times { build_role(beitragskategorie: :familie).save! }
@@ -163,6 +181,7 @@ describe Role do
             # is not included in the family membership.
             third_adult = build_role(beitragskategorie: :einzel)
             expect(third_adult).to be_valid
+          end
           end
         end
       end
