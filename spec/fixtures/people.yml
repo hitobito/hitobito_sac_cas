@@ -13,6 +13,8 @@ admin:
   email: support@hitobito.example.com
   gender: m
   primary_group: geschaeftsstelle
+  birthday: <%= Date.new(2000, 1,1) %>
+  language: de
 
 mitglied:
   id: 600_001
@@ -20,3 +22,5 @@ mitglied:
   last_name: Hillary
   email: e.hillary@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
+  birthday: <%= Date.new(2000, 1,1) %>
+  language: de
