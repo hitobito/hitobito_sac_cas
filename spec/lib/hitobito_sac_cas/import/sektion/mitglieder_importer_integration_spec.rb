@@ -35,6 +35,7 @@ describe Import::Sektion::MitgliederImporter do
 
     active = Person.find(people_navision_ids.second)
 
+    expect(active.household_key).to be_nil
     expect(active.first_name).to eq('Pascal')
     expect(active.last_name).to eq('Simon')
     expect(active.address).to eq('Landweg 8A')
@@ -70,6 +71,7 @@ describe Import::Sektion::MitgliederImporter do
 
     retired = Person.find(people_navision_ids.first)
 
+    expect(retired.household_key).to eq('F12345')
     expect(retired.first_name).to eq('Olivier')
     expect(retired.last_name).to eq('Brian')
     expect(retired.address).to eq('Bernstrasse 3')

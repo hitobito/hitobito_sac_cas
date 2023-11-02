@@ -11,9 +11,6 @@ describe Import::Sektion::MitgliederImporter do
 
   let(:group) { groups(:bluemlisalp) }
 
-  let(:required_attrs) {
-  }
-
   def attrs(attrs = {})
     @navision_id ||= 123
     {

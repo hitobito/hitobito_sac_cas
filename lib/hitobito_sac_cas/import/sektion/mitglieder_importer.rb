@@ -13,6 +13,7 @@ module Import
 
       HEADERS = {
         navision_id: 'Mitgliedernummer',
+        household_key: 'Familien-Nr.',
         first_name: 'Vorname',
         last_name: 'Nachname',
         address_supplement: 'Adresszusatz',
