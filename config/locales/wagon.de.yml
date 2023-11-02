@@ -63,11 +63,6 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
-      sac_cas/role/mitglied:
-        beitragskategorien:
-          einzel: Einzel
-          jugend: Jugend
-          familie: Familie
 
     models:
 
@@ -223,6 +218,11 @@ de:
         one: Funktionär*in
         description: Funktionär*in
 
+  devise:
+    sessions:
+      form:
+        login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+
   people:
     show_event_sac_cas:
       documents: Dokumente
@@ -263,6 +263,20 @@ de:
       fields:
         notes: Bemerkungen
         promo_code: Promocode
+    self_inscription:
+      form:
+        inscribe: Beitreten
+        description: Willst du dieser Sektion beitreten?
+
+  groups/self_inscription:
+    new:
+      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
+
+  roles:
+    beitragskategorie:
+      einzel: Einzel
+      jugend: Jugend
+      familie: Familie
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft

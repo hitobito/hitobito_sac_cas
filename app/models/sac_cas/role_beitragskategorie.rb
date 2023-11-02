@@ -10,7 +10,9 @@ module ::SacCas::RoleBeitragskategorie
 
   included do
     include I18nEnums
-    i18n_enum :beitragskategorie, ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN
+    i18n_enum :beitragskategorie,
+              ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
+              i18n_prefix: 'roles.beitragskategorie'
 
     attr_readonly :beitragskategorie
 

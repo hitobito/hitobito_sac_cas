@@ -61,3 +61,4 @@ bluemlisalp_neuanmeldungen_sektion:
   rgt: 12
   type: Group::SektionsNeuanmeldungenSektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+  self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung

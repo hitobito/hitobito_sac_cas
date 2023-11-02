@@ -64,14 +64,18 @@ matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
     parent_id: root.id
   })
 
-Group::SektionsNeuanmeldungenNv.seed_once(
-  :type, :parent_id,
-  { type: Group::SektionsNeuanmeldungenNv, parent_id: matterhorn.id },
+matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
+matterhorn_neuanmeldungen.update!(
+  custom_self_registration_title: 'Registrierung zu SAC Matterhorn',
+  self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung 
 )
 
 Group::SektionsNeuanmeldungenSektion.seed_once(
   :type, :parent_id,
-  { type: Group::SektionsNeuanmeldungenSektion.sti_name, parent_id: bluemlisalp.id },
+  { type: Group::SektionsNeuanmeldungenSektion.sti_name,
+    parent_id: bluemlisalp.id,
+    custom_self_registration_title: 'Registrierung zu SAC Blüemlisalp',
+    self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
 )
 
 seed_hut(matterhorn, 'Matterhornbiwak', 99999942)
