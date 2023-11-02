@@ -221,7 +221,7 @@ de:
   devise:
     sessions:
       form:
-        login_identity: Haupt‑E‑Mail / Mitglieder‑Nr
+        login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
   people:
     show_event_sac_cas:
@@ -270,7 +270,7 @@ de:
 
   groups/self_inscription:
     new:
-      details: Du trittst als %{beitragskategorie} bei.
+      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
 
   roles:
     beitragskategorie:

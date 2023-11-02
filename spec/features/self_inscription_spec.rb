@@ -15,7 +15,7 @@ describe :self_inscription, js: true do
   let(:user) { people(:mitglied) }
 
   before do
-    user.update(birthday: 30.years.ago)
+    user.update!(birthday: 30.years.ago)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
     expect(group.self_registration_role_type).to be_present
     expect(user.reload.roles.where(group_id: group.id,
@@ -28,7 +28,7 @@ describe :self_inscription, js: true do
 
     expect(page).to have_selector('h1', text: 'Registrierung zu SAC Blüemlisalp')
     expect(page).to have_selector('p', text: 'Willst du dieser Sektion beitreten?')
-    expect(page).to have_selector('.details', text: 'Du trittst als Einzelmitglied bei.')
+    expect(page).to have_selector('.details', text: 'Du trittst mit Beitragskategorie Einzel bei.')
     expect(page).to have_selector('a.btn', text: 'Beitreten')
   end
 
