@@ -20,7 +20,7 @@ describe :login, js: true do
 
   it 'has correct login field label' do
     visit new_person_session_path
-    expect(page).to have_selector('label[for="person_login_identity"]', text: 'Haupt‑E‑Mail / Mitglieder‑Nr')
+    expect(page).to have_selector('label[for="person_login_identity"]', text: 'Haupt‑E‑Mail / Mitglied‑Nr')
   end
 
   it 'allows login with email' do
