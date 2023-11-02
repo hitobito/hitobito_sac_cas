@@ -64,6 +64,10 @@ de:
               one: Neuanmeldung
               other: Neuanmeldungen
 
+    errors:
+      messages:
+        too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
+
     models:
 
       ### GROUPS
