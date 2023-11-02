@@ -7,10 +7,11 @@
 
 module ::SacCas::RoleBeitragskategorie
   extend ActiveSupport::Concern
+  include I18nEnums
 
   included do
     include I18nEnums
-    i18n_enum :beitragskategorie,
+    i18n_enum :beitragskategorie, 
               ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
               i18n_prefix: 'roles.beitragskategorie'
 
@@ -19,6 +20,11 @@ module ::SacCas::RoleBeitragskategorie
     before_validation :set_beitragskategorie, unless: :beitragskategorie
 
     validates :beitragskategorie, presence: true
+  end
+
+  def beitragskategorie
+    value = read_attribute(:beitragskategorie)
+    value.inquiry if value
   end
 
   def to_s(format = :default)
