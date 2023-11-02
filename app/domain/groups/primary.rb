@@ -8,23 +8,34 @@
 module Groups
   class Primary
     ROLE_TYPES = [
-      Group::SektionsMitglieder::Mitglied.sti_name
+      Group::SektionsMitglieder::Mitglied.sti_name,
+      Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
+      Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name
     ].freeze
 
     GROUP_TYPES = ROLE_TYPES.collect(&:deconstantize).freeze
 
     def initialize(person)
       @person = person
+      @primary_group = person.primary_group
     end
 
     def identify
       preferred_roles.first&.group || roles.first&.group
     end
 
+    def identified?
+      preferred_roles.where(group: @primary_group).exists?
+    end
+
+    def preferred?(group)
+      preferred_roles.collect(&:group).include?(group)
+    end
+
     private
 
     def preferred_roles
-      roles.where(type: ROLE_TYPES)
+      @preferred_roles ||= roles.where(type: ROLE_TYPES)
     end
 
     def roles

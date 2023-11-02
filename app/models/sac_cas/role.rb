@@ -7,17 +7,23 @@
 
 module SacCas::Role
 
+  protected
+
+  def preferred_primary?
+    Groups::Primary::ROLE_TYPES.include?(type)
+  end
+
   private
 
   def set_first_primary_group
-    update_primary_group!
+    preferred_primary? ? set_preferred_primary! : super
   end
 
   def reset_primary_group
-    update_primary_group!
+    preferred_primary? ? set_preferred_primary! : super
   end
 
-  def update_primary_group!
+  def set_preferred_primary!
     person.update!(primary_group: Groups::Primary.new(person).identify)
   end
 end

@@ -17,6 +17,7 @@ describe 'person show page' do
     .children.find_by(type: Group::SektionsMitglieder)
   end
 
+
   describe 'roles' do
     describe 'her own' do
       before { sign_in(admin) }
@@ -50,25 +51,40 @@ describe 'person show page' do
     describe 'others' do
       before { sign_in(admin) }
 
-      it 'shows link to change main group' do
+      it 'shows Hauptgruppe setzen link to ' do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link 'Hauptgruppe setzen'
       end
 
-      it 'shows link to change main sektion' do
+      it 'shows icon Hauptsektion icon' do
         visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-        expect(page).to have_link 'Hauptsektion setzen'
+        expect(page).to have_css "i.fa.fa-star"
+        expect(page).to have_xpath "//i[@filled='true']"
+        expect(page).to have_xpath "//i[@title='Hauptsektion']"
       end
 
-      it 'only allows to change main sektion not main group' do
-        secondary = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel)
-        secondary_name = [secondary.group.parent.to_s, secondary.group.to_s].join(" / ")
-        third = Fabricate(Group::Geschaeftsstelle::ITSupport.sti_name, group: geschaeftsstelle, person: mitglied)
-        visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
-        expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel) (Zusatzsektion)")
-        expect(page).to have_link 'Hauptsektion setzen', count: 2
-        expect(page).not_to have_link 'Hauptgruppe setzen'
+      context 'with two sektion memberships' do
+        let!(:secondary) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel) }
+        let(:secondary_name) { [secondary.group.parent.to_s, secondary.group.to_s].join(" / ") }
+
+        it 'changing main sektion updates roles aside' do
+          visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
+          expect(page).to have_link 'Hauptsektion setzen', count: 1
+          expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
+          expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel) (Zusatzsektion)")
+
+          click_link 'Hauptsektion setzen'
+
+          expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel) (Zusatzsektion)")
+          expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel)")
+          expect(page).to have_link 'Hauptsektion setzen', count: 1
+        end
+
+        it 'only allows to change main sektion not main group' do
+          Fabricate(Group::Geschaeftsstelle::ITSupport.sti_name, group: geschaeftsstelle, person: mitglied)
+          visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
+          expect(page).not_to have_link 'Hauptgruppe setzen'
+        end
       end
     end
   end

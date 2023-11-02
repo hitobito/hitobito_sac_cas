@@ -87,26 +87,63 @@ describe Role do
     end
 
     it 'accepts person below age limit on other group' do
-        person.birthday = 5.years.ago
-        role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
-        expect(role).to be_valid
+      person.birthday = 5.years.ago
+      role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
+      expect(role).to be_valid
     end
   end
 
   describe 'primary_group' do
-    let(:admin) { people(:admin) }
+    let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
+    let(:primary) { groups(:geschaeftsstelle) }
+    let(:mitglieder) {  groups(:bluemlisalp_mitglieder) }
 
-    it "updates primary_group when creating a new role" do
-      expect do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: bluemlisalp_mitglieder, person: admin, beitragskategorie: :einzel)
-      end.to change { admin.reload.primary_group }.from(groups(:geschaeftsstelle)).to(bluemlisalp_mitglieder)
+    context 'with primary_group not a preferred_primary' do
+      let(:person) { people(:admin) }
+
+      it "does not change when creating normal role" do
+        expect do
+          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
+        end.not_to change { person.reload.primary_group }
+      end
+
+      it "does change when creating preferred role" do
+        expect do
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: person, beitragskategorie: :einzel)
+        end.to change { person.reload.primary_group }.from(primary).to(mitglieder)
+      end
+
+      it "does change back when destroying preferred role" do
+        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: person, beitragskategorie: :einzel)
+        expect do
+          role.destroy
+        end.to change { person.reload.primary_group }.from(mitglieder).to(primary)
+      end
     end
 
-    it "updates primary_group when destroying a new role" do
-      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: bluemlisalp_mitglieder, person: admin, beitragskategorie: :einzel)
-      expect do
-        role.destroy
-      end.to change { admin.reload.primary_group }.from(bluemlisalp_mitglieder).to(groups(:geschaeftsstelle))
+    context 'with primary_group a preferred_primary' do
+      let(:person) { people(:mitglied) }
+
+      it "does not change when creating normal role" do
+        expect do
+          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
+        end.not_to change { person.reload.primary_group }
+      end
+
+      it "does not change when creating preferred role" do
+        other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
+          .find_by(type: Group::SektionsMitglieder)
+        expect do
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
+        end.not_to change { person.reload.primary_group }
+      end
+
+      it "does change back when destroying preferred role" do
+        Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
+        expect do
+          roles(:mitglied).destroy
+        end.to change { person.reload.primary_group }.from(mitglieder).to(funktionaere)
+      end
     end
   end
 

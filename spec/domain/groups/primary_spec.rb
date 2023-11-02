@@ -18,6 +18,14 @@ describe Groups::Primary do
     described_class.new(person).identify
   end
 
+  it 'has expected ROLE_TYPES' do
+    expect(described_class::ROLE_TYPES).to eq [
+      Group::SektionsMitglieder::Mitglied.sti_name,
+      Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
+      Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name
+    ]
+  end
+
   it 'is nil when no roles exists' do
     expect(identify(Person.new)).to eq nil
   end

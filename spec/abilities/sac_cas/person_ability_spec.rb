@@ -9,32 +9,32 @@ require 'spec_helper'
 
 describe PersonAbility do
 
+  let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
-
+  subject(:ability) { Ability.new(person) }
 
   describe 'primary_group' do
-    context 'her own' do
-      subject(:ability) { Ability.new(mitglied) }
+    context 'mitglied updating himself' do
+      let(:person) { people(:mitglied) }
 
-      it 'is not permitted if primary group is a Group::SektionsMitglieder' do
+      it 'is not permitted if primary group is a preferred group' do
         expect(ability).not_to be_able_to(:primary_group, mitglied)
       end
 
-      it 'is permitted if primary_group is not a Group::SektionsMitglieder' do
+      it 'is not permitted if primary group is a non preferred group' do
         Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: mitglied)
         mitglied.update!(primary_group: funktionaere)
         expect(ability).to be_able_to(:primary_group, mitglied)
       end
 
       it 'is not permitted for other person' do
-        expect(ability).not_to be_able_to(:primary_group, people(:admin))
+        expect(ability).not_to be_able_to(:primary_group, mitglied)
       end
-
     end
 
-    describe 'others' do
-      subject(:ability) { Ability.new(people(:admin)) }
+    context 'admin updating mitglied' do
+      let(:person) { admin }
 
       it 'is permitted for other' do
         expect(ability).to be_able_to(:primary_group, mitglied)

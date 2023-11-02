@@ -9,12 +9,13 @@ module SacCas::PersonAbility
   extend ActiveSupport::Concern
 
   included do
-    on(Person) do
-      general(:primary_group).not_herself_sektion
+    on(::Person) do
+      general(:primary_group).only_herself_if_not_preferred_primary_role
     end
   end
 
-  def not_herself_sektion
-    Groups::Primary::GROUP_TYPES.include?(person.primary_group.type) ? !herself : true
+  def only_herself_if_not_preferred_primary_role
+    primary = Groups::Primary.new(person)
+    !(primary.identified? && herself)
   end
 end

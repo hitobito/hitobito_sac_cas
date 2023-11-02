@@ -7,12 +7,16 @@
 
 module SacCas::GroupDecorator
 
-  def primary_group_toggle_link(person)
-    group = object
-    if model.preferred_primary?
-      super(person, group, title: I18n.t('people.roles.roles_aside.set_hauptsektion'))
-    elsif !person.primary_group.preferred_primary?
-      super(person, group)
+  def primary_group_toggle_link(person, group)
+    primary = Groups::Primary.new(person)
+    return super(person, group) unless primary.identified?
+
+    if model.preferred_primary? && primary.preferred?(model)
+      if person.primary_group == model
+        helpers.icon(:star, filled: true, title: I18n.t('people.roles.roles_aside.hauptsektion'))
+      elsif can?(:primary_group, person)
+        super(person, group, title: I18n.t('people.roles.roles_aside.set_hauptsektion'))
+      end
     end
   end
 end

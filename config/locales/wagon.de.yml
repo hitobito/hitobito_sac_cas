@@ -226,6 +226,7 @@ de:
   people:
     roles:
       roles_aside:
+        hauptsektion: Hauptsektion
         set_hauptsektion: Hauptsektion setzen
 
     show_event_sac_cas:

@@ -16,24 +16,64 @@ describe SacCas::GroupDecorator, :draper_with_helpers do
   let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
   describe '#primary_group_toggle_link' do
+    before do
+      c = ApplicationController.new
+      c.request = ActionDispatch::TestRequest.new({})
+      allow(c).to receive(:current_person) { current_person }
+      Draper::ViewContext.current = c.view_context
+    end
+
     def render(person, group)
       html = GroupDecorator.new(group).primary_group_toggle_link(person, group)
       Capybara::Node::Simple.new(html) if html.present?
     end
 
-    it 'builds link Hauptsektion setzen' do
-      expect(render(mitglied, mitglieder)).to have_link 'Hauptsektion setzen'
+    context 'with permission change primary_group' do
+      let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
+      let(:current_person) { people(:admin) }
+
+      it 'builds Hauptsektion icon' do
+        node = render(mitglied, mitglieder)
+        expect(node).to have_css "i.fa.fa-star"
+        expect(node).to have_xpath "//i[@filled='true']"
+        expect(node).to have_xpath "//i[@title='Hauptsektion']"
+      end
+
+      it 'builds link Hauptgruppe setzen for other type for non preferred primary group' do
+        expect(sektion).not_to be_preferred_primary
+        mitglied.update_columns(primary_group_id: sektion.id)
+        expect(render(mitglied, sektion)).to have_link 'Hauptgruppe setzen'
+      end
+
+      it 'is blank for other type for for preferred primary group' do
+        expect(mitglied.primary_group).to be_preferred_primary
+        expect(render(mitglied, sektion)).to be_blank
+      end
     end
 
-    it 'builds link Hauptgruppe setzen for other type for non preferred primary group' do
-      expect(sektion).not_to be_preferred_primary
-      mitglied.update_columns(primary_group_id: sektion.id)
-      expect(render(mitglied, sektion)).to have_link 'Hauptgruppe setzen'
-    end
+    context 'for herself' do
+      let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
+      let(:current_person) { mitglied }
 
-    it 'is blank for other type for for preferred primary group' do
-      expect(mitglied.primary_group).to be_preferred_primary
-      expect(render(mitglied, sektion)).to be_blank
+      it 'builds Hauptsektion icon for primary group' do
+        node = render(mitglied, mitglieder)
+        expect(node).to have_css "i.fa.fa-star"
+        expect(node).to have_xpath "//i[@filled='true']"
+        expect(node).to have_xpath "//i[@title='Hauptsektion']"
+      end
+
+      it 'is blank for other preferred role other role' do
+        other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
+          .find_by(type: Group::SektionsMitglieder)
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel)
+        expect(other).to be_preferred_primary
+        expect(render(mitglied, other)).to be_blank
+      end
+
+      it 'is blank for any other role' do
+        expect(sektion).not_to be_preferred_primary
+        expect(render(mitglied, sektion)).to be_blank
+      end
     end
   end
 end
