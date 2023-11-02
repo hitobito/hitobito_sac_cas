@@ -10,49 +10,44 @@ require_relative '../../../../app/domain/sac_cas/beitragskategorie/calculator'
 
 describe SacCas::Beitragskategorie::Calculator do
 
-  let(:category) { described_class.new(person.reload).calculate }
-  let(:person) { Fabricate(:person) }
-  let(:other_person) { Fabricate(:person) }
+  def category(age: nil, household: false)
+    described_class.new(person(age, household)).calculate
+  end
+
+  def person(age, household)
+    birthday = Time.zone.today - age.years if age
+    household_key = 'household' if household
+    Fabricate.build(:person, birthday: birthday, household_key: household_key)
+  end
 
   context '#calculate' do
     it 'returns einzel for person with 22 years or older' do
-      person.update!(birthday: Time.zone.today - 42.years)
-
-      expect(category).to eq(:einzel)
+      expect(category(age: 22)).to eq(:einzel)
+      expect(category(age: 99)).to eq(:einzel)
     end
 
     it 'returns jugend for person between 6 and 21 years not in a family' do
-      person.update!(birthday: Time.zone.today - 11.years)
-
-      expect(category).to eq(:jugend)
+      expect(category(age: 6)).to eq(:jugend)
+      expect(category(age: 15)).to eq(:jugend)
+      expect(category(age: 21)).to eq(:jugend)
     end
 
-    it 'returns familie for family member' do
-      assign_household(person, other_person)
-
-      expect(category).to eq(:familie)
+    it 'returns familie for adult family member' do
+      expect(category(age: 22, household: true)).to eq(:familie)
+      expect(category(age: 99, household: true)).to eq(:familie)
     end
 
     it 'returns jugend for person between 17 and 21 if in same household with others' do
-      assign_household(person, other_person)
-      person.update!(birthday: Time.zone.today - 18.years)
-
-      expect(category).to eq(:jugend)
+      expect(category(age: 17, household: true)).to eq(:jugend)
+      expect(category(age: 21, household: true)).to eq(:jugend)
     end
 
     it 'returns nil for person younger than 6 years' do
-      person.update!(birthday: Time.zone.today - 5.years)
+      expect(category(age: 5)).to eq(nil)
+    end
 
-      expect(category).to eq(nil)
+    it 'returns nil for person without birthday' do
+      expect(category(age: nil)).to eq(nil)
     end
   end
-
-  private
-
-  def assign_household(person, other)
-    ability = double
-    allow(ability).to receive(:update?).and_return(true)
-    Person::Household.new(person, ability, other, Person.first).save
-  end
-
 end
