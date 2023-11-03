@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Export::Tabular::People::WithMembershipNumber
+module Export::Tabular::People::WithSacAdditions
 
   def person_attributes
-    [:membership_number] + super
+    [:membership_number, :family_id] + super
   end
 
 end

@@ -23,7 +23,7 @@ de:
   activerecord:
     attributes:
       person:
-        household_key: Familien ID
+        family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre
         membership_number: Mitglied-Nr
         genders:

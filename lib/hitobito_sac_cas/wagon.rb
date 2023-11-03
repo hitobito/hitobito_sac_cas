@@ -50,7 +50,7 @@ module HitobitoSacCas
         Export::Tabular::People::ParticipationsHouseholds,
         Export::Tabular::People::PeopleAddress,
         Export::Tabular::People::PeopleFull
-      ].each { |klass| klass.prepend Export::Tabular::People::WithMembershipNumber }
+      ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }
 
       TableDisplay.register_column(Person,
                                    TableDisplays::People::MembershipYearsColumn,

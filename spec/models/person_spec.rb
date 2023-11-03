@@ -8,6 +8,21 @@
 require 'spec_helper'
 
 describe Person do
+  context 'family_id' do
+    let(:group) { groups(:bluemlisalp_mitglieder) }
+    let(:person) { Fabricate(:person, household_key: 'F1234', birthday: 25.years.ago, primary_group: group) }
+
+    it 'is blank for person without role having beitragskategorie=familie' do
+      assert(person.roles.empty?)
+      expect(person.family_id).to be_nil
+    end
+
+    it 'returns household_key for person with role having beitragskategorie=familie' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: group, person: person)
+      expect(person.family_id).to eq person.household_key
+    end
+  end
+
   context '#membership_number (id)' do
     it 'is generated automatically' do
       person = Person.create!(first_name: 'John')
