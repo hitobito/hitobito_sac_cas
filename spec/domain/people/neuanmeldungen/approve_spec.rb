@@ -21,7 +21,8 @@ describe People::Neuanmeldungen::Approve do
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: 1.year.ago,
-      person: Fabricate(:person, birthday: 20.years.ago)
+      # Neuanmeldungen are only allowed on the primary group of the person, so we set it here accordingly
+      person: Fabricate(:person, birthday: 20.years.ago, primary_group: neuanmeldungen_sektion)
     )
   end
 
@@ -37,19 +38,25 @@ describe People::Neuanmeldungen::Approve do
   end
 
   it 'replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles' do
-    neuanmeldungen = [:einzel, :familie, :jugend].map { |cat| create_role(cat) }
+    neuanmeldungen = [:einzel, :einzel, :jugend, :familie].map { |cat| create_role(cat) }
 
     approver = described_class.new(
       group: neuanmeldungen_sektion,
-      people_ids: [neuanmeldungen.first.person.id, neuanmeldungen.third.person.id]
+      people_ids: [
+        neuanmeldungen.first.person.id,
+        neuanmeldungen.third.person.id,
+        neuanmeldungen.fourth.person.id
+      ]
     )
 
     expect { approver.call }.
-      to change { NEUANMELDUNG_ROLE_CLASS.count }.by(-2).
-      and change { NEUANMELDUNG_APPROVED_ROLE_CLASS.count }.by(2)
+      to change { NEUANMELDUNG_ROLE_CLASS.count }.by(-3).
+      and change { NEUANMELDUNG_APPROVED_ROLE_CLASS.count }.by(3)
 
     expect_role(neuanmeldungen.first, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
+    expect_role(neuanmeldungen.fourth, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
+
     expect_role(neuanmeldungen.second, NEUANMELDUNG_ROLE_CLASS, neuanmeldungen_sektion)
   end
 
