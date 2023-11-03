@@ -35,7 +35,7 @@ module HitobitoSacCas
 
       ## Resources
       GroupResource.include SacCas::GroupResource
-
+      PersonResource.include SacCas::PersonResource
 
 
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
