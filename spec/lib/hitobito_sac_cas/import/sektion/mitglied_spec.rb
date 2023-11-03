@@ -71,6 +71,7 @@ describe Import::Sektion::Mitglied do
       attrs[:navision_id] = 123
       attrs[:first_name] = :test
       expect(person.first_name).to eq 'test'
+      expect(person.primary_group).to eq group
     end
 
     it 'sets various attributes via through values' do

@@ -74,6 +74,7 @@ module Import
       end
 
       def assign_attributes(person) # rubocop:disable Metrics/AbcSize
+        person.primary_group = @group
         person.household_key = row[:household_key]
         person.first_name = row[:first_name]
         person.last_name = row[:last_name]
