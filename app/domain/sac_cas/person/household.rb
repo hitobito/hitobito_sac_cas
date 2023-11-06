@@ -15,6 +15,7 @@ module SacCas::Person::Household
 
     assign_children if adult?
     assign_parents if child?
+    self
   end
 
   def remove

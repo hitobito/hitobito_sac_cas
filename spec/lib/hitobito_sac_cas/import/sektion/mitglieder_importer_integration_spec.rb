@@ -10,8 +10,10 @@ require_relative '../../../../../lib/hitobito_sac_cas/import/sektion/mitglieder_
 
 describe Import::Sektion::MitgliederImporter do
 
+  let!(:root) { Fabricate(:person, email: Settings.root_email) }
+
   let(:file) { file_fixture('bluemlisalp_people.xlsx') }
-  let(:importer) { described_class.new(file, output: double(puts: nil)) }
+  let(:importer) { described_class.new(file, root, output: double(puts: nil)) }
 
   let(:people_navision_ids) { %w(213134 102345 459233 348212 131348) }
   let(:invalid_person_navision_id) { '312311' }
@@ -74,9 +76,12 @@ describe Import::Sektion::MitgliederImporter do
     expect(retired.household_key).to eq('F12345')
     expect(retired.first_name).to eq('Olivier')
     expect(retired.last_name).to eq('Brian')
-    expect(retired.address).to eq('Bernstrasse 3')
-    expect(retired.zip_code).to eq('3000')
-    expect(retired.town).to eq('Bern')
+
+    # the address should be one of the last imported person of the family/household
+    expect(retired.address).to eq('Seestrasse 12')
+    expect(retired.zip_code).to eq('8000')
+    expect(retired.town).to eq('Zürich')
+
     expect(retired.email).to eq('brian@puzzle.ch')
     expect(retired.birthday).to eq(DateTime.new(1960, 1, 1))
     expect(retired.gender).to eq('m')
@@ -88,6 +93,19 @@ describe Import::Sektion::MitgliederImporter do
     expect(retired_role.created_at).to eq(DateTime.new(1980, 12, 31))
     expect(retired_role.deleted_at).to eq(DateTime.new(2010, 1, 1))
     expect(retired_role.beitragskategorie).to eq('einzel')
+  end
+
+  it 'sets the address of all family/household members to the one of the last imported member' do
+    importer.import!
+
+    family = Person.where(household_key: 'F12345')
+    expect(family.count).to eq 3
+
+    expect(family).to all have_attributes(
+      address: 'Seestrasse 12',
+      zip_code: '8000',
+      town: 'Zürich'
+    )
   end
 
   it 'does not import invalid person' do

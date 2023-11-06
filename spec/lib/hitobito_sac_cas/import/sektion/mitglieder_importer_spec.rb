@@ -9,6 +9,7 @@ require 'spec_helper'
 
 describe Import::Sektion::MitgliederImporter do
 
+  let(:root) { Fabricate(:person, email: Settings.root_email) }
   let(:group) { groups(:bluemlisalp) }
 
   def attrs(attrs = {})
@@ -23,7 +24,7 @@ describe Import::Sektion::MitgliederImporter do
 
   let(:path) { instance_double(Pathname, exist?: true) }
   let(:output) {  double(:output, puts: true) }
-  subject(:importer) { described_class.new(path, output: output) }
+  subject(:importer) { described_class.new(path, root, output: output) }
 
   it 'noops if file does not exist' do
     expect(path).to receive(:exist?).and_return(false)
@@ -63,6 +64,27 @@ describe Import::Sektion::MitgliederImporter do
     expect do
       importer.import!
     end.to change { Person.count }.by(1)
+  end
+
+  describe 'families' do
+    before do
+      expect(importer).to receive(:each_row)
+        .and_yield(attrs(first_name: 'this-family-adult', birthday: 25.years.ago.to_date, household_key: 'this-family', beitragskategorie: 'FAMILIE'))
+        .and_yield(attrs(first_name: 'this-family-child', birthday: 10.years.ago.to_date, household_key: 'this-family', beitragskategorie: 'FAMILIE'))
+    end
+
+    it 'imports household_key' do
+      expect { importer.import! }.to change { Person.count }.by(2)
+      expect(Person.find_by(first_name: 'this-family-adult').household_key).to eq 'this-family'
+      expect(Person.find_by(first_name: 'this-family-child').household_key).to eq 'this-family'
+    end
+
+    it 'creates people_managers' do
+      expect { importer.import! }.to change { PeopleManager.count }.by(1)
+      pm = PeopleManager.last
+      expect(pm.manager).to eq Person.find_by(first_name: 'this-family-adult')
+      expect(pm.managed).to eq Person.find_by(first_name: 'this-family-child')
+    end
   end
 
   it 'logs error messages from people that could not be imported because of age' do
