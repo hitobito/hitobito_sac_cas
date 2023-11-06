@@ -56,6 +56,10 @@ describe Import::Sektion::Mitglied do
   describe 'person attributes' do
     subject(:person) { member.person }
 
+    it 'sets confirmed_at to skip devise confirmation email' do
+      expect(person.confirmed_at).to eq Time.zone.at(0)
+    end
+
     it 'assigns attributes to existing person found by navision_id' do
       Fabricate(:person, id: 123)
       attrs[:navision_id] = 123

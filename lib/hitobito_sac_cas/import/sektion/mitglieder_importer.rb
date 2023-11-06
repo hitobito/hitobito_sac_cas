@@ -85,7 +85,7 @@ module Import
         person.phone_numbers.except(&:new_record).destroy_all
         person.save!
         existing_emails << person.email if person.email
-        output.puts "Finished importing #{person.full_name}"
+        output.puts "Finished importing #{person.full_name} (#{person.id})"
       rescue ActiveRecord::RecordInvalid => e
         @errors << "CAN NOT IMPORT ROW WITH NAVISION ID: #{row[:navision_id]}\n#{e.message}"
       end

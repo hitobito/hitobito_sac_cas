@@ -66,15 +66,11 @@ module Import
         person.country = row[:country]
         person.town = row[:town]
         person.address = build_address
-
-        if email.present?
-          person.email = email
-          person.confirm
-        end
-
+        person.email = email if email.present?
         person.birthday = parse_datetime(row[:birthday])
         person.gender = GENDERS[row[:gender].to_s]
         person.language = LANGUAGES[row[:language].to_s]
+        person.confirmed_at = Time.zone.at(0) # easy way of skipping confirmation email
       end
 
       def build_phone_numbers(person)
