@@ -21,7 +21,7 @@ module SacCas::Role::MitgliedFamilyValidations
   def assert_adult_family_members_count
     return unless person&.household_key? &&
       beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
-      person.years >= SacCas::Beitragskategorie::Calculator::AGE_ADULT.begin
+      SacCas::Beitragskategorie::Calculator::AGE_ADULT.cover?(person.years)
 
     adult_housemates_count = person.
                              household_people.
@@ -33,7 +33,7 @@ module SacCas::Role::MitgliedFamilyValidations
         role.beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
         # Make sure the person has a birthday before we compare the years
         role.person.birthday? &&
-        role.person.years >= SacCas::Beitragskategorie::Calculator::AGE_ADULT.begin
+        SacCas::Beitragskategorie::Calculator::AGE_ADULT.cover?(role.person.years)
     end.
                              map(&:person_id). # A person might have multiple Mitglied roles, count one per person.
                              uniq.

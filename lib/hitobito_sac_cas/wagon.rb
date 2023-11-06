@@ -27,6 +27,8 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Role.prepend SacCas::Role
 
+      Person::Household.prepend SacCas::Person::Household
+
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
 

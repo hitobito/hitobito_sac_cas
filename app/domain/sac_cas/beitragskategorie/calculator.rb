@@ -32,6 +32,14 @@ module SacCas::Beitragskategorie
       end
     end
 
+    def adult?
+      AGE_ADULT.cover?(age)
+    end
+
+    def child?
+      AGE_MINOR_FAMILY_MEMBER.cover?(age)
+    end
+
     private
 
     def age
@@ -39,7 +47,7 @@ module SacCas::Beitragskategorie
     end
 
     def family_member?
-      return false unless AGE_ADULT.include?(age) || AGE_MINOR_FAMILY_MEMBER.include?(age)
+      return false unless AGE_ADULT.cover?(age) || AGE_MINOR_FAMILY_MEMBER.cover?(age)
 
       @person.household_key?
     end
