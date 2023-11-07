@@ -9,7 +9,7 @@ module SacCas::GroupDecorator
 
   def primary_group_toggle_link(person, group)
     primary = Groups::Primary.new(person)
-    return super(person, group) unless primary.identified?
+    return super(person, group) unless primary.preferred_exists?
 
     if model.preferred_primary? && primary.preferred?(model)
       if person.primary_group == model

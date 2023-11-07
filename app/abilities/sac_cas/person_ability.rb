@@ -16,6 +16,6 @@ module SacCas::PersonAbility
 
   def only_herself_if_not_preferred_primary_role
     primary = Groups::Primary.new(person)
-    !(primary.identified? && herself)
+    !(primary.preferred_exists? && herself)
   end
 end

@@ -20,14 +20,17 @@ module Groups
       @primary_group = person.primary_group
     end
 
+    # Returns the group of the first preferred role or the first role if no preferred role exists.
     def identify
       preferred_roles.first&.group || roles.first&.group
     end
 
-    def identified?
+    # Whether the person has at least one preferred role in the primary group.
+    def preferred_exists?
       preferred_roles.where(group: @primary_group).exists?
     end
 
+    # Whether the person has at least one preferred role in the given group.
     def preferred?(group)
       preferred_roles.collect(&:group).include?(group)
     end
