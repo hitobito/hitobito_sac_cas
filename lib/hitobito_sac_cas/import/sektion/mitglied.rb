@@ -77,6 +77,10 @@ module Import
         phone = row[:phone]
         phone_mobile = row[:phone_mobile]
         phone_direct = row[:phone_direct]
+
+        # reset phone numbers first since import might be run multiple times
+        person.phone_numbers = []
+
         return unless [phone, phone_mobile, phone_direct].any? { |n| phone_valid?(n) }
         # TODO: label translated based on language?
         person.phone_numbers.build(number: phone, label: 'Privat') if phone.present?
