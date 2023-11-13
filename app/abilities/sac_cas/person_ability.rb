@@ -5,19 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-module SacCas::Group
+module SacCas::PersonAbility
   extend ActiveSupport::Concern
 
   included do
-    # Define additional used attributes
-    # self.used_attributes += [:website, :bank_account, :description]
-    # self.superior_attributes = [:bank_account]
-
-    root_types Group::SacCas
+    on(::Person) do
+      general(:primary_group).only_herself_if_not_preferred_primary_role
+    end
   end
 
-  def preferred_primary?
-    Groups::Primary::GROUP_TYPES.include?(type)
+  def only_herself_if_not_preferred_primary_role
+    primary = Groups::Primary.new(person)
+    !(primary.preferred_exists? && herself)
   end
 end

@@ -17,7 +17,7 @@ root:
 
 geschaeftsstelle:
   parent: root
-  lft: 2 
+  lft: 2
   rgt: 3
   name: 1 Geschäftsstelle
   type: Group::Geschaeftsstelle
@@ -25,7 +25,7 @@ geschaeftsstelle:
 
 bluemlisalp:
   parent: root
-  lft: 4 
+  lft: 4
   rgt: 13
   name: SAC Blüemlisalp
   type: Group::Sektion

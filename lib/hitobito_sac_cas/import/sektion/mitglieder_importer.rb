@@ -82,7 +82,6 @@ module Import
 
       def import_person(person)
         person.roles.except(&:new_record).destroy_all
-        person.phone_numbers.except(&:new_record).destroy_all
         person.save!
         existing_emails << person.email if person.email
         output.puts "Finished importing #{person.full_name} (#{person.id})"

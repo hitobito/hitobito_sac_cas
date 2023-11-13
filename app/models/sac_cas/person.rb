@@ -27,5 +27,4 @@ module SacCas::Person
     update!(membership_verify_token: token)
     token
   end
-
 end
