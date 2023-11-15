@@ -9,9 +9,9 @@ module SacCas::Beitragskategorie
   class Calculator
 
     BEITRAGSKATEGORIEN = %w(einzel jugend familie).freeze
-    AGE_ADULT = 22..199
-    AGE_YOUTH = 6...AGE_ADULT.begin
-    AGE_MINOR_FAMILY_MEMBER = AGE_YOUTH.begin..16
+    AGE_RANGE_ADULT = 22..199
+    AGE_RANGE_YOUTH = 6...AGE_RANGE_ADULT.begin
+    AGE_RANGE_MINOR_FAMILY_MEMBER = AGE_RANGE_YOUTH.begin..17
 
     CATEGORY_ADULT = :einzel
     CATEGORY_YOUTH = :jugend
@@ -25,19 +25,19 @@ module SacCas::Beitragskategorie
       return CATEGORY_FAMILY if family_member?
 
       case age
-      when AGE_ADULT
+      when AGE_RANGE_ADULT
         CATEGORY_ADULT
-      when AGE_YOUTH
+      when AGE_RANGE_YOUTH
         CATEGORY_YOUTH
       end
     end
 
     def adult?
-      AGE_ADULT.cover?(age)
+      AGE_RANGE_ADULT.cover?(age)
     end
 
     def child?
-      AGE_MINOR_FAMILY_MEMBER.cover?(age)
+      AGE_RANGE_MINOR_FAMILY_MEMBER.cover?(age)
     end
 
     private
@@ -47,7 +47,7 @@ module SacCas::Beitragskategorie
     end
 
     def family_member?
-      return false unless AGE_ADULT.cover?(age) || AGE_MINOR_FAMILY_MEMBER.cover?(age)
+      return false unless AGE_RANGE_ADULT.cover?(age) || AGE_RANGE_MINOR_FAMILY_MEMBER.cover?(age)
 
       @person.household_key?
     end

@@ -37,8 +37,8 @@ describe SacCas::Beitragskategorie::Calculator do
       expect(category(age: 99, household: true)).to eq(:familie)
     end
 
-    it 'returns jugend for person between 17 and 21 if in same household with others' do
-      expect(category(age: 17, household: true)).to eq(:jugend)
+    it 'returns jugend for person between 18 and 21 if in same household with others' do
+      expect(category(age: 18, household: true)).to eq(:jugend)
       expect(category(age: 21, household: true)).to eq(:jugend)
     end
 
