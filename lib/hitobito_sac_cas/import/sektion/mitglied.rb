@@ -86,7 +86,7 @@ module Import
         if email.present?
           person.email = email
           # Do not call person#confirm here as it persists the record. Instead we set confirmed_at manually.
-          person.confirmed_at = Time.zone.now
+          person.confirmed_at = Time.zone.at(0)
         end
 
         person.birthday = parse_datetime(row[:birthday])
