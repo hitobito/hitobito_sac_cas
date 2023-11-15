@@ -43,7 +43,7 @@ module People
                   where(type: APPROVED_NEUANMELDUNGEN_ROLE.sti_name, person_id: role.person_id).
                   exists?
 
-        # The approved role can only be created in the primary group of the person, so set it accordingly
+        # The approved role is only allowed in primary group of the person, so set it accordingly
         role.person.update!(primary_group: approved_roles_group)
 
         APPROVED_NEUANMELDUNGEN_ROLE.create!(

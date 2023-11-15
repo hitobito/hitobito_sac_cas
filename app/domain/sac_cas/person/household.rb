@@ -30,7 +30,9 @@ module SacCas::Person::Household
   end
 
   def save
-    managers_changed = person.people_managers.any?(&:changed?) || person.people_manageds.any?(&:changed?)
+    managers_changed =
+      person.people_managers.any?(&:changed?) ||
+      person.people_manageds.any?(&:changed?)
 
     super
 
@@ -63,7 +65,8 @@ module SacCas::Person::Household
   # Find all people in the household that are in the given age category.
   # @param [Symbol] age_category One of :adult, :child
   def housemates_by_agegroup(age_category)
-    raise ArgumentError, "Invalid age category #{age_category}" unless %i[adult child].include?(age_category)
+    raise ArgumentError, "Invalid age category #{age_category}" unless
+      %i[adult child].include?(age_category)
 
     housemates.select do |other_person|
       SacCas::Beitragskategorie::Calculator.new(other_person).send("#{age_category}?")
