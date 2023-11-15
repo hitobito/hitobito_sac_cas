@@ -11,19 +11,15 @@ module SacCas::Role::MitgliedFamilyValidations
   MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT = 2
 
   included do
-    validate :assert_adult_family_members_count
+    validate :assert_adult_household_people_mitglieder_count
     validate :assert_family_on_primary_group
   end
 
   private
 
-  # There can only be MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults with beitragskategory=family in a household.
-  def assert_adult_family_members_count
-    return unless person&.household_key? &&
-      beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
-      SacCas::Beitragskategorie::Calculator::AGE_ADULT.cover?(person.years)
-
-    adult_housemates_count = person.
+  # Returns the number of adult family mitglieder in the household including the current person.
+  def adult_household_people_mitglieder_count
+    person.
                              household_people.
                              flat_map(&:roles).
                              select do |role|
@@ -33,14 +29,22 @@ module SacCas::Role::MitgliedFamilyValidations
         role.beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
         # Make sure the person has a birthday before we compare the years
         role.person.birthday? &&
-        SacCas::Beitragskategorie::Calculator::AGE_ADULT.cover?(role.person.years)
+        SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.cover?(role.person.years)
     end.
                              map(&:person_id). # A person might have multiple Mitglied roles, count one per person.
                              uniq.
                              count
+  end
+
+  # There can only be MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults with beitragskategory=family in a household.
+  def assert_adult_household_people_mitglieder_count
+    # We do not need to validate this if the current role has a beitragskategorie other than family or if the
+    # person of the current role is not an adult.
+    return unless beitragskategorie == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s &&
+      SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.cover?(person.years)
 
     # Including the current person, we can not have more than MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults.
-    return unless adult_housemates_count + 1 > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
+    return unless adult_household_people_mitglieder_count + 1 > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
 
     errors.add(:base, :too_many_adults_in_family, max_adults: MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT)
   end
