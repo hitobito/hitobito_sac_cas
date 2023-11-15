@@ -8,6 +8,8 @@
 module SacCas::Person::Household
   extend ActiveSupport::Concern
 
+  HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
+
   delegate :adult?, :child?, to: :beitragskategorie_calculator
 
   def assign
@@ -21,7 +23,7 @@ module SacCas::Person::Household
   def remove
     super
 
-    person.update(household_key: nil)
+    person.update!(household_key: nil)
 
     person.manageds.clear
     person.managers.clear
@@ -70,5 +72,9 @@ module SacCas::Person::Household
 
   def beitragskategorie_calculator
     @beitragskategorie_calculator ||= SacCas::Beitragskategorie::Calculator.new(person)
+  end
+
+  def next_key
+    "F#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
   end
 end

@@ -32,6 +32,16 @@ describe Person::Household do
     person
   end
 
+  context '#next_key' do
+    it 'increments sequence and returns new key' do
+      household = Person::Household.new(nil, nil, nil, nil)
+
+      old_value = Sequence.current_value(Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+      expect(household.send(:next_key)).to eq "F#{old_value + 1}"
+      expect(Sequence.current_value(Person::Household::HOUSEHOLD_KEY_SEQUENCE)).to eq old_value + 1
+    end
+  end
+
   context '#assign' do
     let(:adult) { create_person(25) }
     let(:other_adult) { create_person(25) }
