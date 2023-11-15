@@ -35,18 +35,21 @@ module Import
         role_deleted_at: 'Letztes Austrittsdatum'
       }.freeze
 
-      attr_reader :output, :path, :errors
+      attr_reader :output, :path, :errors, :invalid_emails
 
       def initialize(path, output: STDOUT)
         @path = path
         @output = output
         @errors = []
+        @invalid_emails = []
       end
 
       def import!
         with_file do
           each_row { |row| import_row(row) }
+          print_summary
           print_errors
+          print_invalid_emails
         end
       end
 
@@ -71,22 +74,34 @@ module Import
       end
 
       def import_row(row)
-        member = ::Import::Sektion::Mitglied.new(row, group: group(row), emails: existing_emails)
+        id = row[:group_navision_id].to_i
+        member = ::Import::Sektion::Mitglied.new(row, group: group(id), emails: existing_emails)
 
         if member.valid?
-          import_person(member.person)
+          import_person(member)
+        elsif only_invalid_email?(member)
+          import_person_without_email(member)
         else
           @errors << member.errors
         end
       end
 
-      def import_person(person)
-        person.roles.except(&:new_record).destroy_all
-        person.save!
-        existing_emails << person.email if person.email
-        output.puts "Finished importing #{person.full_name} (#{person.id})"
+      def import_person(member)
+        member.import!
+        existing_emails << member.email if member.email
+        output.puts "Finished importing #{member}"
       rescue ActiveRecord::RecordInvalid => e
         @errors << "CAN NOT IMPORT ROW WITH NAVISION ID: #{row[:navision_id]}\n#{e.message}"
+      end
+
+      def import_person_without_email(member)
+        @invalid_emails << "#{member}: #{member.email}"
+        member.person.email = nil
+        import_person(member)
+      end
+
+      def only_invalid_email?(member)
+        member.person.errors.attribute_names == [:email]
       end
 
       def without_query_logging
@@ -96,20 +111,32 @@ module Import
         ActiveRecord::Base.logger = old_logger
       end
 
-      def group(row)
+      def group(id)
         @groups ||= {}
-        @groups.fetch(row[:group_navision_id].to_i) do
-          navision_id = row[:group_navision_id].to_i
-          parent = ::Group::Sektion.find_by(navision_id: navision_id)
-          ::Group::SektionsMitglieder.find_by(parent: parent)
+        @groups[id] ||= ::Group::SektionsMitglieder.joins(:parent).find_by(parent: { navision_id: id })
+      end
+
+      def print_summary
+        @groups.each_value do |group|
+          active = group.roles.count
+          deleted = group.roles.deleted.count
+          output.puts "#{group} hat #{active} aktive, #{deleted} inaktive Rollen"
         end
       end
 
       def print_errors
-        output.puts 'Die folgenden Personen konnten nicht importiert werden:' if errors.present?
-        errors.each do |error|
-          output.puts " #{error}"
-        end
+        output_list("Die folgenden #{errors.size} Personen waren ungültig:", errors)
+      end
+
+      def print_invalid_emails
+        output_list("Die folgenden #{invalid_emails.size} Emails waren ungültig:", invalid_emails)
+      end
+
+      def output_list(text, list)
+        return if list.empty?
+
+        output.puts text
+        list.each { |item| output.puts " #{item}" }
       end
     end
   end

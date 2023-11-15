@@ -30,6 +30,7 @@ module Import
       }.freeze
 
       TARGET_ROLE = Group::SektionsMitglieder::Mitglied.sti_name
+      DEFAULT_DELETED_AT = Time.zone.local(2000, 1, 1)
 
       def initialize(row, group:, emails: [])
         @row = row
@@ -45,19 +46,32 @@ module Import
         end
       end
 
+      def email
+        @email ||= row[:email] if @emails.exclude?(row[:email])
+      end
+
       def valid?
-        @valid ||= person.valid?
+        @valid ||= person.valid? && !abo?
       end
 
       def errors
         @errors ||= valid? ? [] : build_error_messages
       end
 
+      def import!
+        delete_roles
+        person.save!
+      end
+
       def to_s
-        "#{navision_id} #{person}"
+        "#{person}(#{navision_id})"
       end
 
       private
+
+      def delete_roles
+        person.roles.with_deleted.where(group: @group, type: TARGET_ROLE).delete_all
+      end
 
       def assign_attributes(person) # rubocop:disable Metrics/AbcSize
         person.first_name = row[:first_name]
@@ -75,17 +89,15 @@ module Import
 
       def build_phone_numbers(person)
         phone = row[:phone]
-        phone_mobile = row[:phone_mobile]
-        phone_direct = row[:phone_direct]
+        mobile = row[:phone_mobile]
+        direct = row[:phone_direct]
 
         # reset phone numbers first since import might be run multiple times
         person.phone_numbers = []
 
-        return unless [phone, phone_mobile, phone_direct].any? { |n| phone_valid?(n) }
-        # TODO: label translated based on language?
-        person.phone_numbers.build(number: phone, label: 'Privat') if phone.present?
-        person.phone_numbers.build(number: phone_mobile, label: 'Mobil') if phone_mobile.present?
-        person.phone_numbers.build(number: phone_direct, label: 'Direkt') if phone_direct.present?
+        person.phone_numbers.build(number: phone, label: 'Privat') if phone_valid?(phone)
+        person.phone_numbers.build(number: mobile, label: 'Mobil') if phone_valid?(mobile)
+        person.phone_numbers.build(number: direct, label: 'Direkt') if phone_valid?(direct)
       end
 
       def build_role(person)
@@ -114,14 +126,10 @@ module Import
         (number.present? && Phonelib.valid?(number))
       end
 
-      def email
-        @email ||= row[:email] if @emails.exclude?(row[:email])
-      end
-
-      def parse_datetime(value)
+      def parse_datetime(value, default: nil)
         DateTime.parse(value.to_s)
       rescue Date::Error
-        nil
+        default
       end
 
       def beitragskategorie
@@ -136,11 +144,19 @@ module Import
         row[:member_type] == 'Ausgetreten'
       end
 
+      def abo?
+        row[:member_type] == 'Abonnent'
+      end
+
       def build_error_messages
-        [person.errors.full_messages, person.roles.first.errors.full_messages]
-          .flatten.join(', ').tap do |messages|
-            messages.prepend("#{person}(#{person.id}): ") if messages.present?
+        [person.errors.full_messages, person.roles.first.errors.full_messages, member_type_error]
+          .flatten.compact.join(', ').tap do |messages|
+            messages.prepend("#{self}: ") if messages.present?
           end
+      end
+
+      def member_type_error
+        'Abonnent ist nicht gültig' if abo?
       end
     end
   end
