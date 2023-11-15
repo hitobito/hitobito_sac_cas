@@ -71,14 +71,26 @@ describe Import::Sektion::MitgliederImporter do
   it 'logs error messages from people that could not be imported because of age' do
     expect(importer).to receive(:each_row)
       .and_yield(attrs(first_name: 'test', birthday: 3.days.ago))
-    expect(output).to receive(:puts).with(
-      'Die folgenden Personen konnten nicht importiert werden:'
-    ).with(' test(124): Rollen ist nicht gültig, Person muss ein Geburtsdatum haben ' \
-          'und mindestens 6 Jahre alt sein')
+    expect(output).to receive(:puts).with('Die folgenden 1 Personen waren ungültig:')
+    expect(output).to receive(:puts).with(' test(124): Rollen ist nicht gültig, Person muss ein ' \
+                                          'Geburtsdatum haben und mindestens 6 Jahre alt sein')
     expect do
       importer.import!
     end.not_to change { Person.count }
     expect(importer.errors).to have(1).item
+  end
+
+  it 'logs invalid emails but imports person without email' do
+    expect(importer).to receive(:each_row)
+      .and_yield(attrs(first_name: 'test', email: 'adsf@zcnet.ch'))
+    expect(Truemail).to receive(:valid?).with('adsf@zcnet.ch').and_return(false)
+
+    expect(output).to receive(:puts).with('Die folgenden 1 Emails waren ungültig:')
+    expect(output).to receive(:puts).with(' test(124): adsf@zcnet.ch')
+    expect do
+      importer.import!
+    end.to change { Person.count }
+    expect(importer.invalid_emails).to have(1).item
   end
 
   describe 'duplicate emails' do
@@ -126,7 +138,7 @@ describe Import::Sektion::MitgliederImporter do
       expect do
         2.times { importer.import! }
       end.to change { Person.count }.by(1)
-        .and change { Role.count }.by(1)
+        .and change { Role.with_deleted.count }.by(1)
         .and change { PhoneNumber.count }.by(1)
     end
   end

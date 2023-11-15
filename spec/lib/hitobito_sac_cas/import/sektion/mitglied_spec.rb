@@ -51,6 +51,12 @@ describe Import::Sektion::Mitglied do
       expect(member).not_to be_valid
       expect(member.errors).to eq 'Max Muster(123): Rollen ist nicht gültig, Group muss ausgefüllt werden'
     end
+
+    it 'is invalid with member_type Abonnent' do
+      attrs[:member_type] = 'Abonnent'
+      expect(member).not_to be_valid
+      expect(member.errors).to eq 'Max Muster(123): Abonnent ist nicht gültig'
+    end
   end
 
   describe 'person attributes' do
@@ -127,7 +133,9 @@ describe Import::Sektion::Mitglied do
 
     it 'ignores invalid phone numbers' do
       attrs[:phone] = '123'
-      expect(numbers).to be_empty
+      attrs[:phone_mobile]  = '079 12 34 560'
+      expect(numbers).to have(1).item
+      expect(numbers.first.number).to eq '079 12 34 560'
     end
   end
 
@@ -155,6 +163,12 @@ describe Import::Sektion::Mitglied do
       attrs[:role_deleted_at] = '1.1.1990'
       attrs[:member_type] = 'Ausgetreten'
       expect(role.deleted_at).to eq Date.new(1990, 1, 1)
+    end
+
+    it 'does not set deleted_at if member_type is Ausgetreten and timestamp cannot be parsed' do
+      attrs[:role_deleted_at] = 'asdf'
+      attrs[:member_type] = 'Ausgetreten'
+      expect(role.deleted_at).to be_nil
     end
 
     {
