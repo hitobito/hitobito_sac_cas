@@ -38,7 +38,7 @@ describe Export::Tabular::People::WithSacAdditions do
       end
     end
 
-    context 'family_key' do
+    context 'family_id' do
       it 'has the correct label' do
         expect(subject.attribute_labels[:family_id]).to eq 'Familien ID'
       end
@@ -64,7 +64,7 @@ describe Export::Tabular::People::WithSacAdditions do
 
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { person }
+      let(:tabular_entry) { person.reload }
 
       it_behaves_like 'has membership_number'
     end
@@ -78,7 +78,7 @@ describe Export::Tabular::People::WithSacAdditions do
 
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { Fabricate(:event_participation, person: person) }
+      let(:tabular_entry) { Fabricate(:event_participation, person: person.reload) }
 
       it_behaves_like 'has membership_number'
     end

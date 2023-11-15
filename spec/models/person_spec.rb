@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Person do
   context 'family_id' do
     let(:group) { groups(:bluemlisalp_mitglieder) }
-    let(:person) { Fabricate(:person, household_key: 'F1234', birthday: 25.years.ago, primary_group: group) }
+    let(:person) { Fabricate(:person, household_key: '1234ABCD', birthday: 25.years.ago, primary_group: group) }
 
     it 'is blank for person without role having beitragskategorie=familie' do
       assert(person.roles.empty?)
@@ -18,8 +18,8 @@ describe Person do
     end
 
     it 'returns household_key for person with role having beitragskategorie=familie' do
-      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: group, person: person)
-      expect(person.family_id).to eq person.household_key
+      person.roles.create!(type: Group::SektionsMitglieder::Mitglied.name, group: group)
+      expect(person.reload.family_id).to eq person.household_key
     end
   end
 
