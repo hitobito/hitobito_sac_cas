@@ -27,11 +27,16 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Role.prepend SacCas::Role
 
+      ## Abilities
+      PersonAbility.include SacCas::PersonAbility
+
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
 
-      ## Abilities
-      PersonAbility.include SacCas::PersonAbility
+      ## Resources
+      GroupResource.include SacCas::GroupResource
+
+
 
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
 
