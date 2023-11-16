@@ -13,9 +13,9 @@ module SacCas::GroupDecorator
 
     if model.preferred_primary? && primary.preferred?(model)
       if person.primary_group == model
-        helpers.icon(:star, filled: true, title: I18n.t('people.roles.roles_aside.hauptsektion'))
+        helpers.icon(:star, filled: true, title: I18n.t('people.roles.roles_aside.stammsektion'))
       elsif can?(:primary_group, person)
-        super(person, group, title: I18n.t('people.roles.roles_aside.set_hauptsektion'))
+        super(person, group, title: I18n.t('people.roles.roles_aside.set_stammsektion'))
       end
     end
   end

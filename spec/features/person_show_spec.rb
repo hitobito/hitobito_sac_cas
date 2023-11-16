@@ -56,11 +56,11 @@ describe 'person show page' do
         expect(page).to have_link 'Hauptgruppe setzen'
       end
 
-      it 'shows icon Hauptsektion icon' do
+      it 'shows icon Stammsektion icon' do
         visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
         expect(page).to have_css "i.fa.fa-star"
         expect(page).to have_xpath "//i[@filled='true']"
-        expect(page).to have_xpath "//i[@title='Hauptsektion']"
+        expect(page).to have_xpath "//i[@title='Stammsektion']"
       end
 
       context 'with two sektion memberships' do
@@ -69,15 +69,15 @@ describe 'person show page' do
 
         it 'changing main sektion updates roles aside' do
           visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-          expect(page).to have_link 'Hauptsektion setzen', count: 1
+          expect(page).to have_link 'Stammsektion setzen', count: 1
           expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
           expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel) (Zusatzsektion)")
 
-          click_link 'Hauptsektion setzen'
+          click_link 'Stammsektion setzen'
 
           expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel) (Zusatzsektion)")
           expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel)")
-          expect(page).to have_link 'Hauptsektion setzen', count: 1
+          expect(page).to have_link 'Stammsektion setzen', count: 1
         end
 
         it 'only allows to change main sektion not main group' do

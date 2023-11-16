@@ -232,8 +232,8 @@ de:
   people:
     roles:
       roles_aside:
-        hauptsektion: Hauptsektion
-        set_hauptsektion: Hauptsektion setzen
+        stammsektion: Stammsektion
+        set_stammsektion: Stammsektion setzen
 
     show_event_sac_cas:
       documents: Dokumente
