@@ -31,7 +31,7 @@ describe Groups::SelfRegistration do
       registration = build(person_attributes: { first_name: 'test' })
       expect(registration.person_attributes).to be_present
       expect(registration.person.first_name).to eq 'test'
-      expect(registration.person).to be_kind_of(Groups::SelfRegistration::MainPerson)
+      expect(registration.person).to be_kind_of(Groups::SelfRegistrations::MainPerson)
     end
 
     it 'does populate person phone number attributes' do
@@ -46,7 +46,7 @@ describe Groups::SelfRegistration do
       expect(registration.person_attributes).to be_blank
       expect(registration.person.first_name).to be_blank
       expect(registration.housemates_attributes).to be_present
-      expect(registration.housemates.first).to be_kind_of(Groups::SelfRegistration::Housemate)
+      expect(registration.housemates.first).to be_kind_of(Groups::SelfRegistrations::Housemate)
       expect(registration.housemates.first.first_name).to eq 'test'
       expect { registration.save }.to raise_error
     end
@@ -56,8 +56,8 @@ describe Groups::SelfRegistration do
     let(:required_attrs) { [:first_name] }
 
     before do
-      allow(Groups::SelfRegistration::MainPerson).to receive(:required_attrs).and_return(required_attrs)
-      allow(Groups::SelfRegistration::Housemate).to receive(:required_attrs).and_return(required_attrs)
+      allow(Groups::SelfRegistrations::MainPerson).to receive(:required_attrs).and_return(required_attrs)
+      allow(Groups::SelfRegistrations::Housemate).to receive(:required_attrs).and_return(required_attrs)
     end
 
     describe 'validations' do

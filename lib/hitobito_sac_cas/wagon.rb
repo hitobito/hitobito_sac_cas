@@ -58,8 +58,9 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
                                    TableDisplays::People::MembershipYearsColumn,
                                    [:membership_years])
-    end
 
+      #Groups::SelfRegistration.prepend SacCas::Groups::SelfRegistration
+    end
 
     initializer 'sac_cas.add_settings' do |_app|
       Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))

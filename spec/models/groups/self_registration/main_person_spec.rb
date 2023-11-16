@@ -7,11 +7,11 @@
 
 require 'spec_helper'
 
-describe Groups::SelfRegistration::MainPerson do
+describe Groups::SelfRegistrations::MainPerson do
   subject(:model) { described_class.new }
 
   it 'is a Housemate' do
-    expect(model).to be_kind_of(Groups::SelfRegistration::Housemate)
+    expect(model).to be_kind_of(Groups::SelfRegistrations::Housemate)
   end
 
   describe 'attribute assignments accept additiional attributes' do

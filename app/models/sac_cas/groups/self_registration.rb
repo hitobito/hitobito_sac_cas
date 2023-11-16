@@ -8,15 +8,21 @@
 module SacCas::Groups::SelfRegistration
   extend ActiveSupport::Concern
 
-  attr_accessor :housemates_attributes
+  attr_accessor :housemates, :housemates_attributes, :newsletter, :promocode
 
   prepended do
-    self.partials = [:person, :household, :summary]
+    self.steps = [
+      Groups::SelfRegistrations::SacCasPersonComponent,
+      Groups::SelfRegistrations::HouseholdComponent,
+      Groups::SelfRegistrations::SummaryComponent,
+    ]
   end
 
   def initialize(group:, params:)
     super
-    @housemates_attributes = extract_attrs(params, :housemates_attributes, array: true).to_a
+    @housemates_attributes = extract_attrs(params, :housemates_attributes, array: true, required: false).to_a
+    @newsletter = false
+    @promocode = nil
   end
 
   def save!
@@ -27,34 +33,27 @@ module SacCas::Groups::SelfRegistration
     end
   end
 
-  def valid?
-    super && housemates_valid?
-  end
-
   def housemates
     @housemates ||= build_housemates
   end
 
   private
 
-  def housemates_valid?
-    housemates.map(&:valid?).all?
-  end
-
   def build_person(attrs, model_class = Person)
     attrs = attrs.merge(
       primary_group_id: @group.id,
       household_key: household_key,
-      household_emails: household_emails
+      # TODO implement validation of email_taken
+      #household_emails: household_emails
     )
     super(attrs, model_class)
   end
 
   def build_housemates
-    @housemates_attributes.map do |attrs|
+    housemates_attributes.map do |attrs|
       next if attrs[:_destroy] == '1'
 
-      build_person(attrs, Housemate)
+      build_person(attrs, Groups::SelfRegistrations::Housemate)
     end.compact
   end
 
@@ -75,7 +74,7 @@ module SacCas::Groups::SelfRegistration
   end
 
   def household_key
-    if @housemates_attributes.present?
+    if housemates_attributes.present?
       @household_key ||= loop do
         key = SecureRandom.uuid
         break key if ::Person.where(household_key: key).none?
@@ -85,6 +84,10 @@ module SacCas::Groups::SelfRegistration
 
   def household_emails
     housemates_attributes.pluck(:email)
+  end
+
+  def set_self_in_nested
+    housemates.delete_if { |housemate| housemate.person.has_no_name? }
   end
 
 end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-class Groups::SelfRegistration::MainPerson < Groups::SelfRegistration::Housemate
+class Groups::SelfRegistrations::MainPerson < Groups::SelfRegistrations::Housemate
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
     :address, :zip_code, :town, :country,
@@ -33,7 +33,7 @@ class Groups::SelfRegistration::MainPerson < Groups::SelfRegistration::Housemate
 
   def person
     Person.new(attributes.except(:newsletter, :promocode)).tap do |p|
-      p.tag_list.add  "newsletter" if attributes[:newsletter]
+      p.tag_list.add "newsletter" if attributes[:newsletter]
       p.tag_list.add "promocode" if attributes[:promocode]
     end
   end

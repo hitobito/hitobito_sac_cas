@@ -6,10 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-class Groups::SelfRegistration::Housemate
-  include ActiveModel::Model
-  include ActiveModel::Validations
-  extend ActiveModel::Naming
+class Groups::SelfRegistrations::Housemate
+  include TransientModel
 
   class_attribute :required_attrs, default: [
     :first_name, :last_name, :email, :birthday

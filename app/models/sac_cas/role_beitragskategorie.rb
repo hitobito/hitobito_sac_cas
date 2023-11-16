@@ -19,7 +19,7 @@ module ::SacCas::RoleBeitragskategorie
 
     before_validation :set_beitragskategorie, unless: :beitragskategorie
 
-    validates :beitragskategorie, presence: true
+    #validates :beitragskategorie, presence: true
   end
 
   def beitragskategorie

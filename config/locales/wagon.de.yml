@@ -327,7 +327,3 @@ de:
     form_tabs:
       group/sektion:
         default: Sektions Attribute
-
-  steps_component:
-    next_link: Weiter
-    prev_link: Zurück

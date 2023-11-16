@@ -222,7 +222,6 @@ describe :self_registration, js: true do
         click_on 'Registrieren'
       end.not_to change { Person.count }
       expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
-      binding.pry
       expect(page).to have_button 'Weiter als Familienmitgliedschaft'
     end
   end

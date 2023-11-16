@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Groups::SelfRegistration::Housemate do
+describe Groups::SelfRegistrations::Housemate do
   subject(:mate) { described_class.new }
 
   describe 'attribute assignments' do

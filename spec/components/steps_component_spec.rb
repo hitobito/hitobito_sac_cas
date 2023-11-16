@@ -8,9 +8,9 @@
 require 'spec_helper'
 
 describe StepsComponent, type: :component do
-  let(:partials) { [] }
+  let(:steps) { [] }
   let(:header_css) { '.row .step-headers.offset-md-1' }
-  subject(:component) { described_class.new(partials: partials, form: :form, step: :step) }
+  subject(:component) { described_class.new(steps: steps, form: :form, step: :step) }
 
   before do
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:markup) do |component|
@@ -22,19 +22,21 @@ describe StepsComponent, type: :component do
     render_inline(described_class.new(**args.merge(form: :form)))
   end
 
-  it 'does not render when partials are empty' do
+  it 'does not render when steps are empty' do
     expect(component).not_to be_render
   end
 
 
   it 'does render header and content' do
-    html = render(partials: [:person], step: 0)
+    # TODO fix test
+    html = render(steps: [:person], step: 0)
     expect(html).to have_css("#{header_css} li.active a", text: 'Personendaten')
     expect(html).to have_css('.row .step-content.main-person.active', text: 'person')
   end
 
   it 'renders two steps with second one active' do
-    html = render(partials: [:person, :household], step: 1)
+    # TODO fix test
+    html = render(steps: [:person, :household], step: 1)
 
     expect(html).to have_css("#{header_css} li:nth-child(1):not(.active) a", text: 'Personendaten')
     expect(html).to have_css("#{header_css} li:nth-child(2).active a", text: 'Familienmitglieder')
@@ -43,7 +45,8 @@ describe StepsComponent, type: :component do
   end
 
   it 'does render second step as text when on first' do
-    html = render(partials: [:person, :household], step: 0)
+    # TODO fix test
+    html = render(steps: [:person, :household], step: 0)
     expect(html).to have_link 'Personendaten'
     expect(html).not_to have_link 'Familienmitglieder'
   end

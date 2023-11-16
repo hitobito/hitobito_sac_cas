@@ -24,8 +24,6 @@ Rails.application.routes.draw do
           resource :rejects, only: [:new, :create]
         end
       end
-      get 'self_registration' => 'sac_cas/groups/self_registration#new'
-      post 'self_registration' => 'sac_cas/groups/self_registration#create'
     end
   end
 
