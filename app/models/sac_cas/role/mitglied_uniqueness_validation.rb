@@ -9,6 +9,6 @@ module SacCas::Role::MitgliedUniquenessValidation
   extend ActiveSupport::Concern
 
   included do
-    validates :type, uniqueness: { scope: :person_id }
+    validates :type, uniqueness: { scope: [:person_id, :group_id] }
   end
 end

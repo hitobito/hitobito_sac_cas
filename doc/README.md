@@ -28,3 +28,7 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 
 ## Neuanmeldungen
+
+## Rollen
+
+Eine Person kann nur eine Mitglied-Rolle haben innerhalb einer Mitglieder Gruppe haben.
