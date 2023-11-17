@@ -113,7 +113,8 @@ module Import
 
       def group(id)
         @groups ||= {}
-        @groups[id] ||= ::Group::SektionsMitglieder.joins(:parent).find_by(parent: { navision_id: id })
+        @groups[id] ||= ::Group::SektionsMitglieder
+          .joins(:parent).find_by(parent: { navision_id: id })
       end
 
       def print_summary
