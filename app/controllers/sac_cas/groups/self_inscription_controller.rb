@@ -8,14 +8,56 @@
 module SacCas::Groups::SelfInscriptionController
   extend ActiveSupport::Concern
 
-  def new
-    # validate calls #set_beitragskategorie on the role which calculates the beitragskategorie
-    # from the person's age
-    @role = build_role.tap(&:validate)
+  included do
+    self.permitted_attrs = [:register_on, :register_as]
+    before_action :redirect_to_person_if_sektion_member?
 
-    # Neuanmeldung Role is always in a Neuanmeldungen Group which has a generic title unusable
-    # for the user to identify the group. Therefore we use the parent group's name instead.
-    title_group = @role.class.name.ends_with?('::Neuanmeldung') ? @group.parent : @group
-    @title = helpers.render_self_registration_title(title_group)
+    alias_method_chain :create, :entry
+  end
+
+  def new
+    @title = helpers.render_self_registration_title(entry.group_for_title)
+  end
+
+  def confirm
+    assign_attributes
+
+    if entry.valid?
+      render :confirm
+    else
+      render :new, entry: entry
+    end
+  end
+
+  def create_with_entry
+    assign_attributes
+
+    if entry.save!
+      send_notification_email
+      redirect_with_message(notice: t('.role_saved'))
+    else
+      render :new
+    end
+  end
+
+  private
+
+  def build_entry
+    SelfInscription.new(person: person, group: group)
+  end
+
+  def ivar_name(_klass)
+    :inscription
+  end
+
+  def assign_attributes
+    attributes = params[:self_inscription]&.permit(permitted_attrs)
+    entry.assign_attributes(attributes || {})
+  end
+
+  def redirect_to_person_if_sektion_member?
+    if self_registration_active? && entry.active_in_sektion?
+      redirect_with_message(notice: t('.membership_role_exists'))
+    end
   end
 end
