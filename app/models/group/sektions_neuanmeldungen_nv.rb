@@ -10,7 +10,9 @@ class Group::SektionsNeuanmeldungenNv < ::Group
   self.static_name = true
 
   ### ROLES
-  class Neuanmeldung < ::SacCas::Role::Mitglied; end
+  class Neuanmeldung < ::Role
+    include SacCas::Role::Mitglied
+  end
 
   roles Neuanmeldung
 end

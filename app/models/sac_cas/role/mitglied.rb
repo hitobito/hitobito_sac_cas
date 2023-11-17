@@ -5,13 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class SacCas::Role::Mitglied < ::Role
-  self.abstract_class = true
+module SacCas::Role::Mitglied
+  extend ActiveSupport::Concern
 
   include SacCas::Role::MitgliedFamilyValidations
   include SacCas::Role::MitgliedMinimalAgeValidation
   include SacCas::RoleBeitragskategorie
 
-  self.permissions = []
-  self.basic_permissions_only = true
+  included do
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
 end

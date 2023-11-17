@@ -10,7 +10,9 @@ class Group::SektionsMitglieder < ::Group
   self.static_name = true
 
   ### ROLES
-  class Mitglied < ::SacCas::Role::Mitglied; end
+  class Mitglied < ::Role
+    include SacCas::Role::Mitglied
+  end
 
   class Abonnement < ::Role
     self.permissions = []
