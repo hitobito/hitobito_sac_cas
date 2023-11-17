@@ -39,6 +39,8 @@ module ::SacCas::RoleBeitragskategorie
       ::SacCas::Beitragskategorie::Calculator
       .new(person).calculate
     self.beitragskategorie = category
+  rescue
+    # let's not break the `before_validation` chain in case of an error
   end
 
   def secondary?
