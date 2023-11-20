@@ -16,9 +16,11 @@ describe :event_external_application, js: true do
   let(:group) { groups(:root) }
 
   it 'creates an external event participation' do
+    pending('Event participations are not implemented yet for SAC'); raise NotImplementedError
+
     visit group_public_event_path(group_id: group, id: event)
 
-    find_all('#new_person input#person_email').first.fill_in(with: 'max.muster@hitobito.example.com')
+    find_all('#register_form input#person_email').first.fill_in(with: 'max.muster@hitobito.example.com')
 
     click_button('Weiter')
 
