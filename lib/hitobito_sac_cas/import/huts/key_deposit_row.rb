@@ -36,9 +36,7 @@ module Import::Huts
         created_at: created_at(@row),
         group_id: group_id,
       )
-      Person.with_manual_membership_number do
-        person.save!
-      end
+      person.save!
     end
 
     private
