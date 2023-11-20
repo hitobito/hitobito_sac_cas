@@ -78,6 +78,6 @@ module SacCas::Person::Household
   end
 
   def next_key
-    "F#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
+    "#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
   end
 end

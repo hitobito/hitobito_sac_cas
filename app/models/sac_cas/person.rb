@@ -19,7 +19,9 @@ module SacCas::Person
   end
 
   def family_id
-    household_key if roles.any? { |r| r.beitragskategorie&.familie? }
+    return unless roles.any? { |r| r.beitragskategorie&.familie? }
+
+    /\AF/ =~ household_key ? household_key : "F#{household_key}"
   end
 
   def membership_years

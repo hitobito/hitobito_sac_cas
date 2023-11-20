@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Export::Tabular::People::WithSacAdditions do
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
-  let(:person) { Fabricate(:person, household_key: 'F1234', birthday: 25.years.ago, primary_group: group) }
+  let(:person) { Fabricate(:person, household_key: '1234', birthday: 25.years.ago, primary_group: group) }
 
   shared_examples 'has membership_number' do
 
@@ -50,7 +50,7 @@ describe Export::Tabular::People::WithSacAdditions do
 
       it 'has value from household_key for person with beitragskategorie=familie' do
         Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: group, person: person)
-        expect(row[:family_id]).to eq person.household_key
+        expect(row[:family_id]).to eq person.family_id
       end
     end
 

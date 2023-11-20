@@ -17,9 +17,19 @@ describe Person do
       expect(person.family_id).to be_nil
     end
 
-    it 'returns household_key for person with role having beitragskategorie=familie' do
-      person.roles.create!(type: Group::SektionsMitglieder::Mitglied.name, group: group)
-      expect(person.reload.family_id).to eq person.household_key
+    context 'with role having beitragskategorie=familie' do
+      before do
+        person.roles.create!(type: Group::SektionsMitglieder::Mitglied.name, group: group)
+      end
+
+      it 'returns prefixed household_key for person' do
+        expect(person.reload.family_id).to eq "F#{person.household_key}"
+      end
+
+      it 'does not prefix household_key if already prefixed' do
+        person.household_key = "F42"
+        expect(person.family_id).to eq "F42"
+      end
     end
   end
 
