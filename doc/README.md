@@ -2,7 +2,7 @@
 
 ## Beitragskategorie
 
-Die Beitragskategorie definiert auf der Mitgliedschaft wie hoch die jährlichen Kosten ausfallen. 
+Die Beitragskategorie definiert auf der Mitgliedschaft wie hoch die jährlichen Kosten ausfallen.
 
 Es gibt dabei drei Kategorien: Einzel, Jugend, Familie
 
@@ -24,11 +24,24 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 ## Familie
 
-- Haushalt + Beitragskategorie
-
+-   Haushalt + Beitragskategorie
 
 ## Neuanmeldungen
 
 ## Rollen
 
-Eine Person kann nur eine Mitglied-Rolle haben innerhalb einer Mitglieder Gruppe haben.
+### Mitgliederrollen
+
+Als Mitgliederrollen zählen:
+
+-   `Group::SektionsNeuanmeldungenSektion::Neuanmeldung`
+-   `Group::SektionsNeuanmeldungenNv::Neuanmeldung`
+-   `Group::SektionsMitglieder::Mitglied`
+
+#### Validierungen
+
+-   Eine Person kann pro Gruppe nur eine einzige Mitglied-Rolle haben.
+
+#### Berechtigungen
+
+-   Die Hauptgruppe kann nicht geändert werden, solange die aktuelle Primärgruppe via einer Mitgliederrolle definiert ist.
