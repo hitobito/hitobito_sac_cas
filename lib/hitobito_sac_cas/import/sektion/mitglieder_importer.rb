@@ -13,6 +13,7 @@ module Import
 
       HEADERS = {
         navision_id: 'Mitgliedernummer',
+        household_key: 'Familien-Nr.',
         first_name: 'Vorname',
         last_name: 'Nachname',
         address_supplement: 'Adresszusatz',
@@ -35,10 +36,12 @@ module Import
         role_deleted_at: 'Letztes Austrittsdatum'
       }.freeze
 
-      attr_reader :output, :path, :errors, :invalid_emails
+      attr_reader :path, :current_user, :current_ability, :output, :errors, :invalid_emails
 
-      def initialize(path, output: STDOUT)
+      def initialize(path, current_user, output: STDOUT)
         @path = path
+        @current_user = current_user
+        @current_ability = Ability.new(current_user)
         @output = output
         @errors = []
         @invalid_emails = []
@@ -62,6 +65,10 @@ module Import
       end
 
       private
+
+      def root_user
+        @root_user ||= Person.find_by!(email: Settings.root_email)
+      end
 
       def with_file
         return yield if path.exist?
@@ -88,6 +95,7 @@ module Import
 
       def import_person(member)
         member.import!
+        assign_household(member.person)
         existing_emails << member.email if member.email
         output.puts "Finished importing #{member}"
       rescue ActiveRecord::RecordInvalid => e
@@ -102,6 +110,13 @@ module Import
 
       def only_invalid_email?(member)
         member.person.errors.attribute_names == [:email]
+      end
+
+      def assign_household(person)
+        return unless person.household_key? &&
+          ::Person.where(household_key: person.household_key).where.not(id: person.id).exists?
+
+        ::Person::Household.new(person, current_ability, person, current_user).assign.persist!
       end
 
       def without_query_logging
@@ -138,6 +153,13 @@ module Import
 
         output.puts text
         list.each { |item| output.puts " #{item}" }
+      end
+
+      def without_reset_primary_group
+        Role.skip_callback(:destroy, :after, :reset_primary_group, raise: false)
+        yield
+      ensure
+        Role.set_callback(:destroy, :after, :reset_primary_group)
       end
     end
   end

@@ -41,4 +41,52 @@ describe PeopleController do
     expect(people_table).to have(1).item
 
   end
+
+  context 'GET#show' do
+    context 'household_key' do
+      def make_person(beitragskategorie, role_class: Group::SektionsMitglieder::Mitglied, group: groups(:bluemlisalp_mitglieder))
+        Fabricate(
+          :person,
+          # the primary_group has to be the same as the role group so we can have beitragskategorie=familie
+          primary_group: group,
+          birthday: Time.zone.today - 33.years,
+          household_key: 'household-42'
+        ).tap do |person|
+          Fabricate(role_class.to_s,
+                    group: group,
+                    person: person,
+                    beitragskategorie: beitragskategorie
+          )
+        end
+      end
+
+      def expect_household_key(person, visible:)
+        matcher = visible ? :have_selector : :have_no_selector
+
+        get :show, params: { id: person.id, group_id: groups(:root).id }
+
+        expect(body).to send(matcher, 'dt', text: 'Familien ID')
+        expect(body).to send(matcher, 'dd', text: person.household_key)
+      end
+
+      it 'is shown for person with any role having beitragskategorie=familie' do
+        person = make_person(:familie)
+        expect_household_key(person, visible: true)
+      end
+
+      [:einzel, :jugend].each do |beitragskategorie|
+        it "is not shown for person with any role having beitragskategorie=#{beitragskategorie}" do
+          person = make_person(beitragskategorie)
+          expect_household_key(person, visible: false)
+        end
+      end
+
+      it "is not shown for person with non-mitglied role" do
+        person = make_person(nil, role_class: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
+        expect_household_key(person, visible: false)
+      end
+
+    end
+
+  end
 end

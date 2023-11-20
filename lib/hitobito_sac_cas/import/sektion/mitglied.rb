@@ -74,17 +74,25 @@ module Import
       end
 
       def assign_attributes(person) # rubocop:disable Metrics/AbcSize
+        person.primary_group = @group
+        person.household_key = row[:household_key]
         person.first_name = row[:first_name]
         person.last_name = row[:last_name]
         person.zip_code = row[:zip_code]
         person.country = row[:country]
         person.town = row[:town]
         person.address = build_address
-        person.email = email if email.present?
+
+        if email.present?
+          person.email = email
+          # Do not call person#confirm here as it persists the record.
+          # Instead we set confirmed_at manually.
+          person.confirmed_at = Time.zone.at(0)
+        end
+
         person.birthday = parse_datetime(row[:birthday])
         person.gender = GENDERS[row[:gender].to_s]
         person.language = LANGUAGES[row[:language].to_s]
-        person.confirmed_at = Time.zone.at(0) # easy way of skipping confirmation email
       end
 
       def build_phone_numbers(person)

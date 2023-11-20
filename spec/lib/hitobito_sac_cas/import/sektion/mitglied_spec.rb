@@ -15,6 +15,8 @@ describe Import::Sektion::Mitglied do
       navision_id: 123,
       first_name: 'Max',
       last_name: 'Muster',
+      email: 'max.muster@example.com',
+      gender: 'Weiblich',
       language: 'DES',
       beitragskategorie: 'EINZEL',
       birthday: 40.years.ago.to_date
@@ -23,6 +25,11 @@ describe Import::Sektion::Mitglied do
   subject(:member) { described_class.new(attrs, group: group, emails: emails) }
 
   before { travel_to(Time.zone.local(2022, 10, 20, 11, 11)) }
+
+  it '#person does not persist person' do
+    attrs[:phone_mobile] = '079 000 00 00'
+    expect { member.person }.not_to change { Person.count }
+  end
 
   describe 'validations' do
     it 'is valid with birthday 6 years ago' do
@@ -71,6 +78,7 @@ describe Import::Sektion::Mitglied do
       attrs[:navision_id] = 123
       attrs[:first_name] = :test
       expect(person.first_name).to eq 'test'
+      expect(person.primary_group).to eq group
     end
 
     it 'sets various attributes via through values' do

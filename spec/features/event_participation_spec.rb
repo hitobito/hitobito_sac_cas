@@ -21,10 +21,12 @@ describe :event_participation, js: true do
   end
 
   it 'creates an event participation' do
+    pending('Event participations are not implemented yet for SAC'); raise NotImplementedError
+
     visit group_event_path(group_id: group, id: event)
 
     click_link('Anmelden')
-
+    binding.pry
     find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
     fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')

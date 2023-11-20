@@ -18,6 +18,12 @@ module SacCas::Person
     alias_attribute :membership_number, :id
   end
 
+  def family_id
+    return unless roles.any? { |r| r.beitragskategorie&.familie? }
+
+    /\AF/ =~ household_key ? household_key : "F#{household_key}"
+  end
+
   def membership_years
     "#{first_name}#{last_name}".size
   end

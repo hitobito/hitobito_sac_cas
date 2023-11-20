@@ -23,6 +23,7 @@ de:
   activerecord:
     attributes:
       person:
+        family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre
         membership_number: Mitglied-Nr
         genders:
@@ -63,6 +64,11 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
+
+    errors:
+      messages:
+        too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
+        family_role_on_non_primary_group: 'Familienmitgliedschaften sind nur auf der Hauptsektion möglich.'
 
     models:
 

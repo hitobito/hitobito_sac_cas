@@ -27,6 +27,8 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Role.prepend SacCas::Role
 
+      Person::Household.prepend SacCas::Person::Household
+
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
 
@@ -35,7 +37,7 @@ module HitobitoSacCas
 
       ## Resources
       GroupResource.include SacCas::GroupResource
-
+      PersonResource.include SacCas::PersonResource
 
 
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
@@ -50,7 +52,7 @@ module HitobitoSacCas
         Export::Tabular::People::ParticipationsHouseholds,
         Export::Tabular::People::PeopleAddress,
         Export::Tabular::People::PeopleFull
-      ].each { |klass| klass.prepend Export::Tabular::People::WithMembershipNumber }
+      ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }
 
       TableDisplay.register_column(Person,
                                    TableDisplays::People::MembershipYearsColumn,
