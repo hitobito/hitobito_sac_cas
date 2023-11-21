@@ -67,17 +67,9 @@ describe 'person show page' do
         let!(:secondary) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel) }
         let(:secondary_name) { [secondary.group.parent.to_s, secondary.group.to_s].join(" / ") }
 
-        it 'changing main sektion updates roles aside' do
+        it 'can not change main sektion' do
           visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-          expect(page).to have_link 'Stammsektion setzen', count: 1
-          expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
-          expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel) (Zusatzsektion)")
-
-          click_link 'Stammsektion setzen'
-
-          expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel) (Zusatzsektion)")
-          expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel)")
-          expect(page).to have_link 'Stammsektion setzen', count: 1
+          expect(page).to_not have_link 'Stammsektion setzen', count: 1
         end
 
         it 'only allows to change main sektion not main group' do
