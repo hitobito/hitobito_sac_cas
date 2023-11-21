@@ -230,6 +230,11 @@ de:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
   people:
+    neuanmeldungen:
+      multiselect_actions:
+        accept: Übernehmen
+        reject: Ablehnen
+
     roles:
       roles_aside:
         stammsektion: Stammsektion
@@ -239,10 +244,9 @@ de:
       documents: Dokumente
       membership: Mitgliederausweis
       download: Anzeigen
-    neuanmeldungen:
-      multiselect_actions:
-        accept: Übernehmen
-        reject: Ablehnen
+
+    tabs:
+      memberships: Mitgliedschaften
 
   people/neuanmeldungen/approves:
     new:
