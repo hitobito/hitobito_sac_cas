@@ -256,43 +256,4 @@ describe Role do
       expect(role.to_s).to eq 'Mitglied (Einzel) (Zusatzsektion)'
     end
   end
-
-  describe 'uniqueness validation' do
-    context 'for Mitglied role' do
-      [
-        [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
-        [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
-        [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv],
-      ].each do |role_type, group|
-        before { person.update(birthday: 7.years.ago) }
-
-        it "does not accept person with same role type already present and active" do
-          role1 = person.roles.build(type: role_type, group: groups(group))
-          role1.save(validate: false)
-
-          role2 = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
-          expect(role2).to_not be_valid
-          expect(role2.errors[:type]).to include('ist bereits vergeben')
-        end
-
-        it "accepts person with same role type already present but inactive" do
-          role1 = person.roles.build(type: role_type, group: groups(group), created_at: 20.days.ago, deleted_at: 10.days.ago)
-          role1.save(validate: false)
-
-          role2 = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
-          expect(role2).to be_valid
-        end
-      end
-    end
-
-    context 'for non Mitglied role' do
-      it 'accepts person with same role type present and active' do
-        role1 = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
-        role1.save(validate: false)
-
-        role2 = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
-        expect(role2).to be_valid
-      end
-    end
-  end
 end

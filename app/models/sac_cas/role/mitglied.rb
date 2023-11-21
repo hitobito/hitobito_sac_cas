@@ -10,7 +10,6 @@ module SacCas::Role::Mitglied
 
   include SacCas::Role::MitgliedFamilyValidations
   include SacCas::Role::MitgliedMinimalAgeValidation
-  include SacCas::Role::MitgliedUniquenessValidation
   include SacCas::RoleBeitragskategorie
 
   included do
