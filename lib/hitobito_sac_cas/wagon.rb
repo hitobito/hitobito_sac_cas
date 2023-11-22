@@ -25,9 +25,9 @@ module HitobitoSacCas
       # extend application classes here
       Group.include SacCas::Group
       Person.include SacCas::Person
-      Role.prepend SacCas::Role
-
       Person::Household.prepend SacCas::Person::Household
+      Role.prepend SacCas::Role
+      Roles::Termination.prepend SacCas::Roles::Termination
 
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
