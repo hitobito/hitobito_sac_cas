@@ -11,7 +11,7 @@ class SacCasPersonSeeder < PersonSeeder
 
   def amount(role_type)
     case role_type.name.demodulize
-    when 'Member' then 5
+    when 'Mitglied' then 42
     when 'Neuanmeldung' then 3
     else 1
     end
@@ -20,8 +20,15 @@ class SacCasPersonSeeder < PersonSeeder
   def seed_role(person, group, role_type, **opts)
     super unless role_type < ::SacCas::RoleBeitragskategorie
 
-    cat = ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.sample
+    person.update!(birthday: (6..72).to_a.sample.years.ago)
+    cat = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
     super(person, group, role_type, **opts.merge(beitragskategorie: cat))
+  end
+
+  def person_attributes(role_type)
+    attrs = super
+    attrs.delete(:nickname)
+    attrs
   end
 
 end
