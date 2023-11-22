@@ -12,6 +12,8 @@ class Group::SektionsMitglieder < ::Group
   ### ROLES
   class Mitglied < ::Role
     include SacCas::Role::Mitglied
+
+    self.terminatable = true
   end
 
   class Abonnement < ::Role
@@ -30,6 +32,6 @@ class Group::SektionsMitglieder < ::Group
   end
 
   roles Mitglied, Abonnement,
-    Ehrenmitglied, Beguenstigt
+        Ehrenmitglied, Beguenstigt
 
 end
