@@ -44,7 +44,6 @@ module HitobitoSacCas
       FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
 
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
-      Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
       PeopleController.send :prepend, SacCas::PeopleController
 
       [
