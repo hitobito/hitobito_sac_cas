@@ -17,6 +17,9 @@ describe SelfInscription do
 
   let(:registration_role_type) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+  let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
+  let(:mitglied) { people(:mitglied) }
+
   let(:sektion) { groups(:bluemlisalp) }
 
   let(:person) { Fabricate.build(:person, birthday: 40.years.ago) }
@@ -43,13 +46,18 @@ describe SelfInscription do
     expect(model.group_for_title).to eq sektion
   end
 
+  it '#save! works for other groups' do
+    mitglieder.update!(self_registration_role_type: mitglieder.role_types.first.sti_name)
+    build(person: people(:mitglied), group: mitglieder).save!
+  end
+
   describe '#active_member?' do
     it 'is false without active sektion membership' do
       expect(model).not_to be_active_member
     end
 
     it 'is true with active membership' do
-      expect(build(person: people(:mitglied), group: group)).to be_active_member
+      expect(build(person: mitglied, group: group)).to be_active_member
     end
   end
 
@@ -59,11 +67,11 @@ describe SelfInscription do
     end
 
     it 'is false with active sektion membership in other sektion' do
-      expect(build(person: people(:mitglied), group: other_group)).not_to be_active_in_sektion
+      expect(build(person: mitglied, group: other_group)).not_to be_active_in_sektion
     end
 
     it 'is true with active sektion membership in same sektion' do
-      expect(build(person: people(:mitglied), group: group)).to be_active_in_sektion
+      expect(build(person: mitglied, group: group)).to be_active_in_sektion
     end
   end
 

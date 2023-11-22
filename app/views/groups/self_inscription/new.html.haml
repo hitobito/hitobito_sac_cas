@@ -5,7 +5,14 @@
 
 - title render_self_registration_title(entry.group_for_title)
 
-.details
-  %p= ti('details', beitragskategorie: entry.beitragskategorie_label, sektion: @group.parent)
 
-= render "form", entry: entry
+- if entry.neuanmeldung?
+  .details
+    %p= ti('details', beitragskategorie: entry.beitragskategorie_label, sektion: @group.parent)
+
+  = render "form", entry: entry
+- else
+  = action_button(t('groups.self_inscription.form.inscribe'),
+                    group_self_inscription_path,
+                    nil,
+                    method: :post)

@@ -27,6 +27,10 @@ class SelfInscription
     role.class.name.ends_with?('::Neuanmeldung') ? @group.parent : @group
   end
 
+  def neuanmeldung?
+    @group.is_a?(Group::SektionsNeuanmeldungenSektion)
+  end
+
   def attributes=(attrs = nil)
     assign_attributes(attrs.to_h)
   end
@@ -110,7 +114,7 @@ class SelfInscription
   end
 
   def role
-    @role ||= role_type.new(group: @group, person: @person).tap(&:set_beitragskategorie)
+    @role ||= role_type.new(group: @group, person: @person).tap(&:valid?)
   end
 
   def role_type
