@@ -295,6 +295,11 @@ de:
       jugend: Jugend
       familie: Familie
 
+  roles/terminations:
+    new:
+      sac_cas/role/mitglied:
+        text: Bist du sicher, dass du aus folgenden Sektionen austreten möchtest?
+
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
     not_found: Ungültiger Verifikationscode
