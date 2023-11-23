@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 14
+  rgt: 26
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
@@ -62,3 +62,50 @@ bluemlisalp_neuanmeldungen_sektion:
   type: Group::SektionsNeuanmeldungenSektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+
+matterhorn:
+  name: SAC Matterhorn
+  type: Group::Sektion
+  lft: 14
+  rgt: 25
+  parent: root
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+
+matterhorn_funktionaere:
+  name: Funktionaere
+  type: Group::SektionsFunktionaere
+  lft: 15
+  rgt: 16
+  parent: matterhorn
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+
+matterhorn_mitglieder:
+  name: Mitglieder
+  type: Group::SektionsMitglieder
+  lft: 17
+  rgt: 18
+  parent: matterhorn
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+
+matterhorn_neuanmeldungen:
+  name: Neuanmeldung
+  type: Group::SektionsNeuanmeldungenNv
+  lft: 19
+  rgt: 20
+  parent: matterhorn
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+
+matterhorn_neuanmeldungen_sektion:
+  name: Neuanmeldung (Zur Freigabe)
+  type: Group::SektionsNeuanmeldungenSektion
+  lft: 21
+  rgt: 22
+  parent: matterhorn
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+matterhorn_tourenkommission:
+  name: Tourenkommission
+  type: Group::SektionsTourenkommission
+  lft: 23
+  rgt: 24
+  parent: matterhorn
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
