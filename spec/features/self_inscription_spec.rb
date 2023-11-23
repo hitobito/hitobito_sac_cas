@@ -17,17 +17,7 @@ describe :self_inscription, js: true do
 
   let(:admin) { people(:admin) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-  let(:registration_role_type) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
-
-  ## Would be handy to have those in fixtures ..
-  let(:other_group) do
-    sektion = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023)
-
-    # TODO - is it expected that I have to create this group by hand?
-    Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name, parent: sektion).tap do |g|
-      g.update!(self_registration_role_type: registration_role_type)
-    end
-  end
+  let(:other_group) { groups(:matterhorn_neuanmeldungen_sektion) }
 
   before do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)

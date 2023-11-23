@@ -21,19 +21,8 @@ describe SelfInscription do
   let(:mitglied) { people(:mitglied) }
 
   let(:sektion) { groups(:bluemlisalp) }
-
   let(:person) { Fabricate.build(:person, birthday: 40.years.ago) }
-
-
-  ## Would be handy to have those in fixtures ..
-  let(:other_group) do
-    sektion = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023)
-
-    # TODO - is it expected that I have to create this group by hand?
-    Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name, parent: sektion).tap do |g|
-      g.update!(self_registration_role_type: registration_role_type)
-    end
-  end
+  let(:other_group) { groups(:matterhorn_neuanmeldungen_sektion) }
 
   it '#attributes= accepts and assigns attributes' do
     model.attributes = { register_on: :now, register_as: :new }
