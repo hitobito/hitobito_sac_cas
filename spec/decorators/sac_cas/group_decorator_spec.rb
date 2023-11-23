@@ -32,11 +32,11 @@ describe SacCas::GroupDecorator, :draper_with_helpers do
       let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
       let(:current_person) { people(:admin) }
 
-      it 'builds Hauptsektion icon' do
+      it 'builds Stammsektion icon' do
         node = render(mitglied, mitglieder)
         expect(node).to have_css "i.fa.fa-star"
         expect(node).to have_xpath "//i[@filled='true']"
-        expect(node).to have_xpath "//i[@title='Hauptsektion']"
+        expect(node).to have_xpath "//i[@title='Stammsektion']"
       end
 
       it 'builds link Hauptgruppe setzen for other type for non preferred primary group' do
@@ -55,11 +55,11 @@ describe SacCas::GroupDecorator, :draper_with_helpers do
       let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
       let(:current_person) { mitglied }
 
-      it 'builds Hauptsektion icon for primary group' do
+      it 'builds Stammsektion icon for primary group' do
         node = render(mitglied, mitglieder)
         expect(node).to have_css "i.fa.fa-star"
         expect(node).to have_xpath "//i[@filled='true']"
-        expect(node).to have_xpath "//i[@title='Hauptsektion']"
+        expect(node).to have_xpath "//i[@title='Stammsektion']"
       end
 
       it 'is blank for other preferred role other role' do

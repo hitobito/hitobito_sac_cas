@@ -10,12 +10,12 @@ module SacCas::PersonAbility
 
   included do
     on(::Person) do
-      general(:primary_group).only_herself_if_not_preferred_primary_role
+      general(:primary_group).if_not_preferred_primary_role
     end
   end
 
-  def only_herself_if_not_preferred_primary_role
+  def if_not_preferred_primary_role
     primary = Groups::Primary.new(person)
-    !(primary.preferred_exists? && herself)
+    !primary.preferred_exists?
   end
 end
