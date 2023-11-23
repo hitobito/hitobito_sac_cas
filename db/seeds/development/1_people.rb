@@ -13,6 +13,9 @@ class SacCasPersonSeeder < PersonSeeder
     case role_type.name.demodulize
     when 'Mitglied' then 42
     when 'Neuanmeldung' then 3
+    when 'Beguenstigt' then 0
+    when 'Ehrenmitglied' then 0
+    when 'Abonnement' then 0
     else 1
     end
   end
@@ -29,6 +32,43 @@ class SacCasPersonSeeder < PersonSeeder
     attrs = super
     attrs.delete(:nickname)
     attrs
+  end
+
+  def seed_families
+    Group::SektionsMitglieder.find_each do |m|
+      adult = seed_sac_adult
+      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: adult, group: m, beitragskategorie: :familie)
+      second_adult = seed_sac_adult
+      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: second_adult, group: m, beitragskategorie: :familie)
+      child = seed_sac_child
+      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: child, group: m, beitragskategorie: :familie)
+      create_or_update_household(adult, second_adult)
+      create_or_update_household(adult, child)
+    end
+  end
+
+  def create_or_update_household(person, second_person)
+    household = Person::Household.new(person, Ability.new(Person.root), second_person, Person.root)
+    household.assign
+    household.save
+  end
+
+  def seed_sac_adult
+    adult_attrs = standard_attributes(Faker::Name.first_name,
+                                      Faker::Name.last_name)
+    adult_attrs = adult_attrs.merge({ birthday: 27.years.ago })
+    adult = Person.seed(:email, adult_attrs).first
+    seed_accounts(adult, false)
+    adult
+  end
+
+  def seed_sac_child
+    child_attrs = standard_attributes(Faker::Name.first_name,
+                                      Faker::Name.last_name)
+    child_attrs.delete(:email)
+    child_attrs = child_attrs.merge({ birthday: 10.years.ago })
+    child = Person.seed(:first_name, child_attrs).first
+    child
   end
 
 end
@@ -61,6 +101,7 @@ end
 seeder = SacCasPersonSeeder.new
 
 seeder.seed_all_roles
+seeder.seed_families
 
 geschaeftsstelle = Group::Geschaeftsstelle.first
 devs.each do |name, email|
