@@ -30,84 +30,84 @@ $sac_huetten_privat: #ffbb00;
 // Grays
 // -------------------------
 $black: $sac_black !default;
-$grayDarker: darken($sac_gray_dark, 10%) !default;
-$grayDark: darken($sac_gray_dark, 5%) !default;
+$gray-darker: darken($sac_gray_dark, 10%) !default;
+$gray-dark: darken($sac_gray_dark, 5%) !default;
 $gray: $sac_gray_dark !default;
-$grayLight: $sac_gray !default;
-$grayLighter: $sac_gray_light !default;
+$gray-light: $sac_gray !default;
+$gray-lighter: $sac_gray_light !default;
 $white: #fff !default;
 
 // Colors
 // ----------------------------
 $blue: $sac_red !default;
-$blueDark: $sac_red_hover !default;
+$blue-dark: $sac_red_hover !default;
 $green: $sac_green !default;
-$greenDark: $sac_green_hover !default;
+$green-dark: $sac_green_hover !default;
 
 $orange: $sac_red !default;
-$orangeDark: $sac_red_hover !default;
+$orange-dark: $sac_red_hover !default;
 $purple: $sac_red_hover !default;
-$purpleDark: darken($sac_red_hover, 10%) !default;
+$purple-dark: darken($sac_red_hover, 10%) !default;
 
 $red: $sac_red !default;
 
-$textColor: $sac_black !default;
-$borderColor: $sac_gray_dotted_lines !default;
+$text-color: $sac_black !default;
+$border-color: $sac_gray_dotted_lines !default;
 
-$pageBackground: $sac_gray;
-$contentBackground: $sac_gray;
-$footerBackground: darken($sac_gray, 20%);
-$bodyBackground: $footerBackground !default;
+$page-background: $sac_gray;
+$content-background: $sac_gray;
+$footer-background: darken($sac_gray, 20%);
+$body-background: $footer-background !default;
 
-$focusColor: $sac_red;
-$shadowColor: $sac_gray_dark;
-$linkColor: $sac_red !default;
-$linkColorHover: $sac_red_hover !default;
+$focus-color: $sac_red;
+$shadow-color: $sac_gray_dark;
+$link-color: $sac_red !default;
+$link-color-hover: $sac_red_hover !default;
 
-$footerColor: $white;
-$footerColorHover: $white;
+$footer-color: $white;
+$footer-color-hover: $white;
 
-$tableColorHover: $sac_gray;
+$table-color-hover: $sac_gray;
 
 // Typography
 // -------------------------
-$sansFontFamily: Hind, Frutiger, Helvetica, Arial, sans-serif !default;
-$headingFontFamily: $sansFontFamily !default;
-$baseFontFamily: $sansFontFamily !default;
-$headingsFontWeight: normal !default; // instead of browser default, bold
+$sans-font-family: Hind, Frutiger, Helvetica, Arial, sans-serif !default;
+$heading-font-family: $sans-font-family !default;
+$base-font-family: $sans-font-family !default;
+$headings-font-weight: normal !default; // instead of browser default, bold
 
 // Decoration
 // -------------------------
-$borderRadius: 6px;
+$border-radius: 6px;
 
 // Rhythm
 // -------------------------
-$vSpace: 24px;
+$v-space: 24px;
 
 // FLUID GRID
 // --------------------------------------------------
 
 // Default
 // -------------------------
-$fluidGridColumnWidth: 6.382978723% !default;
-$fluidGridGutterWidth: 2.127659574% !default;
+$fluid-grid-column-width: 6.382978723% !default;
+$fluid-grid-gutter-width: 2.127659574% !default;
 
 // Portrait tablet to default desktop
 // -------------------------
-$fluidGridColumnWidthTablet: 5.801104972% !default;
-$fluidGridGutterWidthTablet: 2.762430939% !default;
+$fluid-grid-column-width-tablet: 5.801104972% !default;
+$fluid-grid-gutter-width-tablet: 2.762430939% !default;
 
 // Large desktop and up
 // -------------------------
-$fluidGridColumnWidthLarge: 5.982905983% !default;
-$fluidGridGutterWidthLarge: 2.564102564% !default;
+$fluid-grid-column-width-large: 5.982905983% !default;
+$fluid-grid-gutter-width-large: 2.564102564% !default;
 
 // RESPONSIVE DESIGN
 // --------------------------------------------------
 
 // Media widths
 // -------------------------
-$mediaPhone: 480px !default;
-$mediaTablet: 768px !default;
-$mediaDesktop: 980px !default;
-$mediaLarge: 1200px !default; // and upper
+$media-phone: 480px !default;
+$media-tablet: 768px !default;
+$media-desktop: 980px !default;
+$media-large: 1200px !default; // and upper
