@@ -12,16 +12,27 @@ module SacCas::Roles::Termination
       super.tap do |success|
         next unless success # terminating role failed, do not terminate dependent roles
 
-        dependent_roles.each do |role|
-          role.update!(terminated: true, delete_on: terminate_on)
-        end
+        terminate(dependent_roles)
+        terminate(family_member_roles)
       end
     end
   end
 
   # Returns all roles that will be terminated.
   def affected_roles
-    [role] + dependent_roles
+    @affected_roles ||= [role] + dependent_roles
+  end
+
+  def family_member_roles
+    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) &&
+      role.in_primary_group? &&
+      role.beitragskategorie.familie?
+
+    group_ids = affected_roles.map(&:group_id)
+
+    Group::SektionsMitglieder::Mitglied.
+      familie.
+      where(person_id: role.person.household_people, group_id: group_ids)
   end
 
   private
@@ -35,6 +46,14 @@ module SacCas::Roles::Termination
     Group::SektionsMitglieder::Mitglied.
       where(person_id: role.person_id).
       where.not(id: role.id)
+  end
+
+  def terminate(roles)
+    roles.each do |role|
+      role.delete_on = terminate_on
+      role.write_attribute(:terminated, true)
+      role.save!
+    end
   end
 
 end

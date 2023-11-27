@@ -9,20 +9,8 @@ require 'spec_helper'
 
 describe Roles::Termination do
   context 'call' do
-    let(:person) { people(:mitglied) }
-    let(:role) { roles(:mitglied) }
-
-    let(:other_sektion_mitglieder) do
-      Group::Sektion.
-        create!(name: 'other_sektion', parent: groups(:root), foundation_year: Date.today.year).
-        children.
-        find_by(type: 'Group::SektionsMitglieder')
-    end
-
-    let!(:other_sektion_role) do
-      Group::SektionsMitglieder::Mitglied.create!(person: role.person,
-                                                  group: other_sektion_mitglieder)
-    end
+    let(:person) { people(:familienmitglied) }
+    let(:role) { roles(:familienmitglied) }
 
     let(:terminate_on) { 1.month.from_now.to_date }
 
@@ -30,15 +18,17 @@ describe Roles::Termination do
 
 
     context '#affected_roles' do
+      let(:role) { roles(:mitglied) }
+
       context 'for a mitglied role' do
         it 'in the primary group returns the role and all other mitglied roles of the person' do
           assert role.group_id == role.person.primary_group_id
 
-          expect(subject.affected_roles).to eq [role, other_sektion_role]
+          expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
         end
 
         it 'not in the primary group returns only the role' do
-          role.person.update(primary_group_id: other_sektion_mitglieder.id)
+          role.person.update(primary_group_id: roles(:mitglied_zweitsektion).group_id)
 
           expect(subject.affected_roles).to eq [role]
         end
@@ -47,7 +37,8 @@ describe Roles::Termination do
       context 'for a non-mitglied role' do
         let(:role) do
           Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(person: person,
-                                                                group: groups(:bluemlisalp_neuanmeldungen_nv))
+                                                                group: groups(:bluemlisalp_neuanmeldungen_nv),
+                                                                beitragskategorie: 'einzel')
         end
 
         it 'in the primary group returns only the role' do
@@ -57,7 +48,7 @@ describe Roles::Termination do
         end
 
         it 'not in the primary group returns only the role' do
-          person.update!(primary_group_id: other_sektion_role.group_id)
+          expect(person.primary_group_id).not_to eq role.group_id # check precondition
 
           expect(subject.affected_roles).to eq [role]
         end
@@ -65,30 +56,95 @@ describe Roles::Termination do
 
     end
 
+    context '#family_member_roles' do
+      context 'for a mitglied role' do
+        it 'with beitragskategorie=familie returns the family_member roles' do
+          expect(role.beitragskategorie).to eq 'familie'
+
+          expect(subject.family_member_roles).to eq [roles(:familienmitglied2),
+                                                     roles(:familienmitglied_kind)]
+        end
+
+        (::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN - ['familie']).each do |category|
+          it "with beitragskategorie=#{category} returns empty list" do
+            role.beitragskategorie = category
+
+            expect(subject.family_member_roles).to eq []
+          end
+        end
+      end
+
+      context 'for a non-mitglied role' do
+        before { person.update!(primary_group_id: groups(:bluemlisalp_neuanmeldungen_nv).id) }
+        let(:role) do
+          Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(person: person,
+                                                                group: groups(:bluemlisalp_neuanmeldungen_nv),
+                                                                beitragskategorie: 'familie')
+        end
+
+        it 'returns empty list' do
+          expect(subject.family_member_roles).to eq []
+        end
+      end
+    end
+
     context '#call' do
-      it 'when valid terminates affected_roles and returns true' do
-        expect(subject.affected_roles).to eq [role, other_sektion_role]
-        expect(subject).to be_valid
+      context 'affected_roles' do
+        let(:role) { roles(:mitglied) }
 
-        expect do
-          expect(subject.call).to eq true
-        end.
-          to change { role.reload.terminated? }.from(false).to(true).
-          and change { role.reload.delete_on }.from(nil).to(terminate_on).
-          and change { other_sektion_role.reload.terminated? }.from(false).to(true).
-          and change { other_sektion_role.reload.delete_on }.from(nil).to(terminate_on)
+        it 'get terminated' do
+          expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
+
+          expect { subject.call }.
+            to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.delete_on }.from(nil).to(terminate_on).
+            and change {
+                  roles(:mitglied_zweitsektion).reload.terminated?
+                }.from(false).to(true).
+            and change { roles(:mitglied_zweitsektion).delete_on }.from(nil).to(terminate_on)
+        end
+
+        it 'dont get terminated if invalid' do
+          allow(subject).to receive(:valid?).and_return(false)
+          expect do
+            expect(subject.call).to eq false
+          end.
+            to not_change { role.reload.terminated? }.from(false).
+            and not_change { role.delete_on }.from(nil).
+            and not_change { roles(:mitglied_zweitsektion).reload.terminated? }.from(false).
+            and not_change { roles(:mitglied_zweitsektion).delete_on }.from(nil)
+        end
       end
 
-      it 'when invalid does not terminate affected_roles and return false' do
-        allow(subject).to receive(:valid?).and_return(false)
-        expect do
-          expect(subject.call).to eq false
-        end.
-          to not_change { role.reload.terminated? }.from(false).
-          and not_change { role.reload.delete_on }.from(nil).
-          and not_change { other_sektion_role.reload.terminated? }.from(false).
-          and not_change { other_sektion_role.reload.delete_on }.from(nil)
+      context 'family_member roles' do
+        it 'terminates family member roles' do
+          expect(subject.family_member_roles).to eq [roles(:familienmitglied2),
+                                                     roles(:familienmitglied_kind)]
+
+          expect { subject.call }.
+            to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.delete_on }.from(nil).to(terminate_on).
+            and change { roles(:familienmitglied2).reload.terminated? }.from(false).to(true).
+            and change { roles(:familienmitglied2).delete_on }.from(nil).to(terminate_on).
+            and change { roles(:familienmitglied_kind).reload.terminated? }.from(false).to(true).
+            and change { roles(:familienmitglied_kind).delete_on }.from(nil).to(terminate_on)
+        end
+
+        it 'dont get terminated if invalid' do
+          allow(subject).to receive(:valid?).and_return(false)
+          expect do
+            expect(subject.call).to eq false
+          end.
+            to not_change { role.reload.terminated? }.from(false).
+            and not_change { role.delete_on }.from(nil).
+            and not_change { roles(:familienmitglied2).reload.terminated? }.from(false).
+            and not_change { roles(:mitglied_zweitsektion).delete_on }.from(nil).
+            and not_change { roles(:familienmitglied_kind).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied_kind).delete_on }.from(nil)
+        end
       end
+
+
     end
   end
 end
