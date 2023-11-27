@@ -290,15 +290,17 @@ de:
     self_inscription:
       membership_role_exists: Du bist bereits Mitglied dieser Sektion
       form:
-        register_on_info: >
+        register_on_info: '
           Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag. Bei
-          Eintritt ab 01. Oktober entfällt der jährliche Beitrag für das laufende Jahr sogar ganz.
+          Eintritt ab 01. Oktober entfällt der jährliche Beitrag für das laufende Jahr sogar ganz.'
         register_as_info: '
           Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
           deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
           Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
           Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich.'
         inscribe: Beitreten
+      new:
+        role_exists: Du bist bereits Mitglied dieser Sektion
       confirm:
         title: Beitritt bestätigen
         information_text: >

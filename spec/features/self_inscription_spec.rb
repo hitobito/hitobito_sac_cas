@@ -24,9 +24,11 @@ describe :self_inscription, js: true do
   end
 
   it 'redirects if person is already a member of that group' do
+    mitglieder.update!(self_registration_role_type: Group::SektionsMitglieder::Mitglied.sti_name)
+
     sign_in(mitglied)
     visit group_self_inscription_path(group_id: mitglieder)
-    expect(page).to have_css('#flash .alert-success', text: 'Du bist bereits Mitglied dieser Sektion')
+    expect(page).to have_css('#flash .alert-error', text: 'Du bist bereits Mitglied dieser Sektion')
   end
 
   it 'has standard behaviour ' do
