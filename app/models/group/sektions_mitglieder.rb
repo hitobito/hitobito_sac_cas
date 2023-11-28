@@ -16,6 +16,12 @@ class Group::SektionsMitglieder < ::Group
     self.terminatable = true
   end
 
+  class MitgliedZusatzsektion < ::Role
+    include SacCas::Role::MitgliedZusatzsektion
+
+    self.terminatable = true
+  end
+
   class Abonnement < ::Role
     self.permissions = []
     self.basic_permissions_only = true
@@ -31,7 +37,7 @@ class Group::SektionsMitglieder < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Mitglied, Abonnement,
+  roles Mitglied, MitgliedZusatzsektion, Abonnement,
         Ehrenmitglied, Beguenstigt
 
 end

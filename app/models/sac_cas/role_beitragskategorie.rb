@@ -32,8 +32,7 @@ module ::SacCas::RoleBeitragskategorie
   end
 
   def to_s(format = :default)
-    string = "#{super} (#{beitragskategorie_label})"
-    secondary? ? "#{string} (#{I18n.t('groups.sektion_secondary')})" : string
+    "#{super} (#{beitragskategorie_label})"
   end
 
   private
@@ -45,9 +44,5 @@ module ::SacCas::RoleBeitragskategorie
     self.beitragskategorie = category
   rescue
     # let's not break the `before_validation` chain in case of an error
-  end
-
-  def secondary?
-    person.primary_group_id != group_id && Groups::Primary::ROLE_TYPES.include?(type)
   end
 end

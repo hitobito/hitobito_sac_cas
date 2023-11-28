@@ -16,14 +16,15 @@ describe Role do
 
   context 'Mitglied vs. Beitragskategorie' do
     it 'assigns correct beitragskategorie when creating new mitglied role' do
-      person.update!(birthday: Time.zone.today - 33.years)
+      person.update!(birthday: Time.zone.today - 17.years)
 
       role = Group::SektionsMitglieder::Mitglied.create!(person: person, group: bluemlisalp_mitglieder)
 
-      expect(role.beitragskategorie).to eq('einzel')
+      expect(role.beitragskategorie).to eq('jugend')
     end
 
-    it 'is not valid without beitragskategorie or person\'s birthdate' do
+    it 'is not valid without person\'s birthdate' do
+      person.update!(birthday: nil)
       role = Group::SektionsMitglieder::Mitglied.new(person: person, group: bluemlisalp_mitglieder)
 
       expect(role).not_to be_valid
@@ -44,7 +45,8 @@ describe Role do
       expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
     end
 
-    it 'is not valid without beitragskategorie or person\'s birthdate' do
+    it 'is not valid without person\'s birthdate' do\
+      person.update!(birthday: nil)
       neuanmeldung_nv =
         Group::SektionsNeuanmeldungenNv::Neuanmeldung.new(
           person: person, group: bluemlisalp_neuanmeldungen_nv)
@@ -238,15 +240,8 @@ describe Role do
   describe '#to_s' do
     let(:person) { people(:mitglied) }
 
-    it 'does not have zusatzsektion suffix on primary group role' do
-      expect(roles(:mitglied).to_s).to eq 'Mitglied (Einzel)'
-    end
-
-    it 'includes zusatzsektion suffix' do
-      other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
-        .find_by(type: Group::SektionsMitglieder)
-      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
-      expect(role.to_s).to eq 'Mitglied (Einzel) (Zusatzsektion)'
+    it 'includes the beitragskategorie label' do
+      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Einzel)'
     end
   end
 end

@@ -31,20 +31,7 @@ describe 'person show page' do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).not_to have_link 'Hauptgruppe setzen'
-        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
-      end
-
-      it 'labels role as Zusatzsektion' do
-        travel_to 1.day.ago do
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
-        end
-        secondary = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: admin, beitragskategorie: :einzel)
-        secondary_name = [secondary.group.parent.to_s, secondary.group.to_s].join(" / ")
-
-        visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
-        expect(page).not_to have_link 'Hauptgruppe setzen'
-        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Einzel)")
-        expect(page).to have_css('section.roles', text: "#{secondary_name}\nMitglied (Einzel) (Zusatzsektion)")
+        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Einzel)")
       end
     end
 

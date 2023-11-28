@@ -17,13 +17,19 @@ mitglied:
 mitglied_zweitsektion:
   person_id: 600_001
   group: matterhorn_mitglieder
-  type: Group::SektionsMitglieder::Mitglied
+  type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: einzel
 
 familienmitglied:
   person_id: 600_002
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
+  beitragskategorie: familie
+
+familienmitglied_zweitsektion:
+  person_id: 600_002
+  group: matterhorn_mitglieder
+  type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: familie
 
 familienmitglied2:
@@ -36,4 +42,10 @@ familienmitglied_kind:
   person_id: 600_004
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
+  beitragskategorie: familie
+
+familienmitglied_kind_zweitsektion:
+  person_id: 600_004
+  group: matterhorn_mitglieder
+  type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: familie
