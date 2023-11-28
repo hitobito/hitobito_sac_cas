@@ -240,6 +240,15 @@ de:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
+  person:
+    history:
+      index_notice_sac_cas:
+        sections_info_html: '
+          Hier kannst du deine Mitgliedschaften verwalten.
+          Informationen zu den verschiedenen SAC Sektionen findest du unter
+          <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
+
+
   people:
     roles:
       roles_aside:
