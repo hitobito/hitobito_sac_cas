@@ -19,7 +19,7 @@
             = ti('text', count: count)
             = render partial: 'fields', locals: { form: form }
         .modal-footer
-          = form.submit(ti('.submit', count: count))
+          = form.submit(ti('.submit', count: count), class: 'btn btn-sm btn-primary')
           = link_to(ti('button.cancel'), '#',
             class: 'link cancel',
             onclick: "event.preventDefault(); $('#neuanmeldungen-handler').modal('hide')")
