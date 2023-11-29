@@ -37,7 +37,6 @@ module HitobitoSacCas
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
 
       ## Decorators
-      GroupDecorator.prepend SacCas::GroupDecorator
 
       ## Resources
       GroupResource.include SacCas::GroupResource

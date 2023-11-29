@@ -27,10 +27,10 @@ describe 'person show page' do
         expect(page).to have_link 'Hauptgruppe setzen'
       end
 
-      it 'hides link to change main group if person is Mitglied in a Sektion' do
+      it 'shows link to change main group if person is Mitglied in a Sektion' do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
-        expect(page).not_to have_link 'Hauptgruppe setzen'
+        expect(page).to have_link 'Hauptgruppe setzen'
         expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Einzel)")
       end
     end
@@ -41,29 +41,6 @@ describe 'person show page' do
       it 'shows Hauptgruppe setzen link to ' do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link 'Hauptgruppe setzen'
-      end
-
-      it 'shows icon Stammsektion icon' do
-        visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-        expect(page).to have_css "i.fa.fa-star"
-        expect(page).to have_xpath "//i[@filled='true']"
-        expect(page).to have_xpath "//i[@title='Stammsektion']"
-      end
-
-      context 'with two sektion memberships' do
-        let!(:secondary) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel) }
-        let(:secondary_name) { [secondary.group.parent.to_s, secondary.group.to_s].join(" / ") }
-
-        it 'can not change main sektion' do
-          visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-          expect(page).to_not have_link 'Stammsektion setzen', count: 1
-        end
-
-        it 'only allows to change main sektion not main group' do
-          Fabricate(Group::Geschaeftsstelle::ITSupport.sti_name, group: geschaeftsstelle, person: mitglied)
-          visit group_person_path(group_id: mitglieder.id, id: mitglied.id)
-          expect(page).not_to have_link 'Hauptgruppe setzen'
-        end
       end
     end
   end

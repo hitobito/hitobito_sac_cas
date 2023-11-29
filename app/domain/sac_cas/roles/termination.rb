@@ -25,7 +25,6 @@ module SacCas::Roles::Termination
 
   def family_member_roles
     return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) &&
-      role.in_primary_group? &&
       role.beitragskategorie.familie?
 
     group_ids = affected_roles.map(&:group_id)
@@ -37,11 +36,11 @@ module SacCas::Roles::Termination
 
   private
 
-  # For a Group::SektionsMitglieder::Mitglied role that is in the primary group of the person,
-  # this returns all other Group::SektionsMitglieder::Mitglied roles of the same person.
-  # For any other role type or role that is not in the primary group, returns an empty array.
+  # For a Group::SektionsMitglieder::Mitglied role, this returns all other
+  # Group::SektionsMitglieder::Mitglied roles of the same person.
+  # For any other role type returns an empty array.
   def dependent_roles
-    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) && role.in_primary_group?
+    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied)
 
     Group::SektionsMitglieder::Mitglied.
       where(person_id: role.person_id).

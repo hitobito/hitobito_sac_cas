@@ -33,8 +33,8 @@ module People
       def approved_roles_group
         @approved_roles_group ||=
           group
-            .parent.children.without_deleted
-            .find_by(type: APPROVED_NEUANMELDUNGEN_GROUP.sti_name) ||
+          .parent.children.without_deleted
+          .find_by(type: APPROVED_NEUANMELDUNGEN_GROUP.sti_name) ||
           APPROVED_NEUANMELDUNGEN_GROUP.create!(parent: group.parent)
       end
 
@@ -42,9 +42,6 @@ module People
         return if approved_roles_group.roles.
                   where(type: APPROVED_NEUANMELDUNGEN_ROLE.sti_name, person_id: role.person_id).
                   exists?
-
-        # The approved role is only allowed in primary group of the person, so set it accordingly
-        role.person.update!(primary_group: approved_roles_group)
 
         APPROVED_NEUANMELDUNGEN_ROLE.create!(
           group: approved_roles_group,

@@ -18,31 +18,15 @@ describe PersonAbility do
     context 'mitglied updating himself' do
       let(:person) { people(:mitglied) }
 
-      it 'is not permitted if primary group is a preferred group' do
-        expect(ability).not_to be_able_to(:primary_group, mitglied)
-      end
-
-      it 'is permitted if primary group is a non preferred group' do
-        Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: mitglied)
-        mitglied.update!(primary_group: funktionaere)
+      it 'is permitted' do
         expect(ability).to be_able_to(:primary_group, mitglied)
-      end
-
-      it 'is not permitted for other person' do
-        expect(ability).not_to be_able_to(:primary_group, mitglied)
       end
     end
 
     context 'admin updating mitglied' do
       let(:person) { admin }
 
-      it 'is not permitted for other primary group is a preferred group' do
-        expect(ability).not_to be_able_to(:primary_group, mitglied)
-      end
-
-      it 'is permitted for other if primary group is a non preferred group' do
-        Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: mitglied)
-        mitglied.update!(primary_group: funktionaere)
+      it 'is permitted' do
         expect(ability).to be_able_to(:primary_group, mitglied)
       end
     end

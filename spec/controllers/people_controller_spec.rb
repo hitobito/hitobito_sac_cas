@@ -43,19 +43,17 @@ describe PeopleController do
 
   context 'GET#show' do
     context 'household_key' do
-      def make_person(beitragskategorie, role_class: Group::SektionsMitglieder::Mitglied, group: groups(:bluemlisalp_mitglieder))
+      def make_person(beitragskategorie, role_class: Group::SektionsMitglieder::Mitglied,
+                      group: groups(:bluemlisalp_mitglieder))
         Fabricate(
           :person,
-          # the primary_group has to be the same as the role group so we can have beitragskategorie=familie
-          primary_group: group,
           birthday: Time.zone.today - 33.years,
           household_key: 'household-42'
         ).tap do |person|
           Fabricate(role_class.to_s,
                     group: group,
                     person: person,
-                    beitragskategorie: beitragskategorie
-          )
+                    beitragskategorie: beitragskategorie)
         end
       end
 
@@ -80,8 +78,9 @@ describe PeopleController do
         end
       end
 
-      it "is not shown for person with non-mitglied role" do
-        person = make_person(nil, role_class: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
+      it 'is not shown for person with non-mitglied role' do
+        person = make_person(nil, role_class: Group::Geschaeftsstelle::ITSupport,
+                                  group: groups(:geschaeftsstelle))
         expect_household_key(person, visible: false)
       end
 

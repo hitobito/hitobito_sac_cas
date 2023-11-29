@@ -21,8 +21,7 @@ describe People::Neuanmeldungen::Approve do
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: 1.year.ago,
-      # Neuanmeldungen are only allowed on the primary group of the person, so we set it here accordingly
-      person: Fabricate(:person, birthday: 20.years.ago, primary_group: neuanmeldungen_sektion)
+      person: Fabricate(:person, birthday: 20.years.ago)
     )
   end
 

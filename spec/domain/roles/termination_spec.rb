@@ -20,40 +20,18 @@ describe Roles::Termination do
     context '#affected_roles' do
       let(:role) { roles(:mitglied) }
 
-      context 'for a mitglied role' do
-        it 'in the primary group returns the role and all other mitglied roles of the person' do
-          assert role.group_id == role.person.primary_group_id
-
-          expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
-        end
-
-        it 'not in the primary group returns only the role' do
-          role.person.update(primary_group_id: roles(:mitglied_zweitsektion).group_id)
-
-          expect(subject.affected_roles).to eq [role]
-        end
+      it 'for a mitglied role returns the role and all other mitglied roles of the person' do
+        expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
       end
 
-      context 'for a non-mitglied role' do
-        let(:role) do
-          Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(person: person,
-                                                                group: groups(:bluemlisalp_neuanmeldungen_nv),
-                                                                beitragskategorie: 'einzel')
-        end
-
-        it 'in the primary group returns only the role' do
-          person.update!(primary_group_id: role.group_id)
-
-          expect(subject.affected_roles).to eq [role]
-        end
-
-        it 'not in the primary group returns only the role' do
-          expect(person.primary_group_id).not_to eq role.group_id # check precondition
-
-          expect(subject.affected_roles).to eq [role]
-        end
+      it 'for a non-mitglied role returns only the role' do
+        role = Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
+          person: person,
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          beitragskategorie: 'einzel'
+        )
+        expect(subject.affected_roles).to eq [role]
       end
-
     end
 
     context '#family_member_roles' do
@@ -75,14 +53,12 @@ describe Roles::Termination do
       end
 
       context 'for a non-mitglied role' do
-        before { person.update!(primary_group_id: groups(:bluemlisalp_neuanmeldungen_nv).id) }
-        let(:role) do
-          Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(person: person,
-                                                                group: groups(:bluemlisalp_neuanmeldungen_nv),
-                                                                beitragskategorie: 'familie')
-        end
-
         it 'returns empty list' do
+          role = Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
+            person: person,
+            group: groups(:bluemlisalp_neuanmeldungen_nv),
+            beitragskategorie: 'familie'
+          )
           expect(subject.family_member_roles).to eq []
         end
       end
@@ -143,8 +119,6 @@ describe Roles::Termination do
             and not_change { roles(:familienmitglied_kind).delete_on }.from(nil)
         end
       end
-
-
     end
   end
 end

@@ -10,8 +10,6 @@ module SacCas::PersonAbility
 
   included do
     on(::Person) do
-      general(:primary_group).if_not_preferred_primary_role
-
       permission(:any).may(:memberships).herself_if_basic_permissions_only
 
       # first overwrite all rules with action :history which have been defined in
@@ -25,11 +23,6 @@ module SacCas::PersonAbility
 
   def never
     false
-  end
-
-  def if_not_preferred_primary_role
-    primary = Groups::Primary.new(person)
-    !primary.preferred_exists?
   end
 
   def herself_if_basic_permissions_only
