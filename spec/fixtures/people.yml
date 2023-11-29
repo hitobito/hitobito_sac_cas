@@ -24,3 +24,33 @@ mitglied:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= Date.new(2000, 1,1) %>
   language: de
+
+familienmitglied:
+  id: 600_002
+  first_name: Tenzing
+  last_name: Norgay
+  email: t.norgay@hitobito.example.com
+  primary_group: bluemlisalp_mitglieder
+  birthday: <%= Date.new(2000, 1,1) %>
+  language: de
+  household_key: 'happy-family'
+
+familienmitglied2:
+  id: 600_003
+  first_name: Frieda
+  last_name: Norgay
+  email: f.norgay@hitobito.example.com
+  primary_group: bluemlisalp_mitglieder
+  birthday: <%= 25.years.ago %>
+  language: de
+  household_key: 'happy-family'
+
+familienmitglied_kind:
+  id: 600_004
+  first_name: Nima
+  last_name: Norgay
+  email: n.norgay@hitobito.example.com
+  primary_group: bluemlisalp_mitglieder
+  birthday: <%= 10.years.ago %>
+  language: de
+  household_key: 'happy-family'

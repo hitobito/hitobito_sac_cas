@@ -25,9 +25,9 @@ module HitobitoSacCas
       # extend application classes here
       Group.include SacCas::Group
       Person.include SacCas::Person
-      Role.prepend SacCas::Role
-
       Person::Household.prepend SacCas::Person::Household
+      Role.prepend SacCas::Role
+      Roles::Termination.prepend SacCas::Roles::Termination
 
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
@@ -39,12 +39,16 @@ module HitobitoSacCas
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
 
+      ## Helpers
+      Sheet::Person.include SacCas::Sheet::Person
 
-      FilterNavigation::People.send :prepend, SacCas::FilterNavigation::People
+      FilterNavigation::People.prepend SacCas::FilterNavigation::People
 
+      ## Controllers
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.include SacCas::Groups::SelfRegistrationController
-      PeopleController.send :prepend, SacCas::PeopleController
+      PeopleController.prepend SacCas::PeopleController
+      Person::HistoryController.prepend SacCas::Person::HistoryController
 
       [
         Export::Tabular::People::Households,

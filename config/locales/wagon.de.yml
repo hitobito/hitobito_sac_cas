@@ -230,6 +230,11 @@ de:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
   people:
+    neuanmeldungen:
+      multiselect_actions:
+        accept: Übernehmen
+        reject: Ablehnen
+
     roles:
       roles_aside:
         stammsektion: Stammsektion
@@ -239,10 +244,9 @@ de:
       documents: Dokumente
       membership: Mitgliederausweis
       download: Anzeigen
-    neuanmeldungen:
-      multiselect_actions:
-        accept: Übernehmen
-        reject: Ablehnen
+
+    tabs:
+      memberships: Mitgliedschaften
 
   people/neuanmeldungen/approves:
     new:
@@ -290,6 +294,11 @@ de:
       einzel: Einzel
       jugend: Jugend
       familie: Familie
+
+  roles/terminations:
+    new:
+      sac_cas/role/mitglied:
+        text: Bist du sicher, dass du aus folgenden Sektionen austreten möchtest?
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft

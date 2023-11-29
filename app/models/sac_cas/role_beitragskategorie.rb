@@ -11,7 +11,7 @@ module ::SacCas::RoleBeitragskategorie
 
   included do
     include I18nEnums
-    i18n_enum :beitragskategorie, 
+    i18n_enum :beitragskategorie,
               ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
               i18n_prefix: 'roles.beitragskategorie'
 
@@ -20,6 +20,10 @@ module ::SacCas::RoleBeitragskategorie
     before_validation :set_beitragskategorie, unless: :beitragskategorie
 
     validates :beitragskategorie, presence: true
+
+    ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |category|
+      scope category, -> { where(beitragskategorie: category) }
+    end
   end
 
   def beitragskategorie
