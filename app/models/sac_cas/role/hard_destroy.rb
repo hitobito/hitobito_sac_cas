@@ -5,15 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsNeuanmeldungenNv < ::Group
 
-  self.static_name = true
+module SacCas::Role::HardDestroy
+  extend ActiveSupport::Concern
 
-  ### ROLES
-  class Neuanmeldung < ::Role
-    include SacCas::Role::Mitglied
-    include SacCas::Role::HardDestroy
+  def destroy(*)
+    really_destroy!
   end
-
-  roles Neuanmeldung
 end
+
