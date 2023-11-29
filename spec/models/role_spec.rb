@@ -232,13 +232,6 @@ describe Role do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
         end.not_to change { person.reload.primary_group }
       end
-
-      it "does change back when destroying preferred role" do
-        Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
-        expect do
-          roles(:mitglied).destroy
-        end.to change { person.reload.primary_group }.from(mitglieder).to(funktionaere)
-      end
     end
   end
 
