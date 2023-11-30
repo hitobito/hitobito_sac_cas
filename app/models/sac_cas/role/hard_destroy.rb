@@ -13,4 +13,3 @@ module SacCas::Role::HardDestroy
     really_destroy!
   end
 end
-

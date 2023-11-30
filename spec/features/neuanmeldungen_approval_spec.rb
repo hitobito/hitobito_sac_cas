@@ -119,8 +119,7 @@ describe 'neuanmeldungen approval', js: true do
 
       visit(group_people_path(group_id: neuanmeldungen_approved.id))
       expect(page).to have_text('Keine Einträge gefunden.')
-
-      expect(role1.reload).to be_deleted
+      expect{ role1.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'rejects multiple people' do
@@ -146,8 +145,8 @@ describe 'neuanmeldungen approval', js: true do
       visit(group_people_path(group_id: neuanmeldungen_approved.id))
       expect(page).to have_text('Keine Einträge gefunden.')
 
-      expect(role1.reload).to be_deleted
-      expect(role2.reload).to be_deleted
+      expect{ role1.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect{ role2.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
