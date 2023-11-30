@@ -1,0 +1,22 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+#confirm-dialog.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.bold.modal-title
+          %b= t('.title')
+
+      = standard_form(entry, url: group_self_inscription_path(group_id: @group.id)) do |f|
+        .modal-body
+          .row-fluid
+            =t('.information_text', sektion: @group.parent)
+          .row-fluid
+            = f.hidden_field :register_as
+            = f.hidden_field :register_on
+        .modal-footer
+          = submit_button(f, t('.submit_button'))
+          = link_to(ti('button.cancel'), '#', class: 'link cancel', onclick: "event.preventDefault(); $('#confirm-dialog').modal('hide')")

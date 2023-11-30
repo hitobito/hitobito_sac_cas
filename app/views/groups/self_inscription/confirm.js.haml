@@ -3,8 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= field_set_tag(nil, class: 'privacy-policy-fields') do
-  = f.labeled(:newsletter, '&nbsp;'.html_safe) do
-    %label.checkbox
-      = check_box_tag :newsletter
-      = t('.newsletter')
+$('#modal-placeholder').html("#{escape_javascript(render(partial: 'groups/self_inscription/confirm', entry: entry))}")
+$('#confirm-dialog').modal('show')

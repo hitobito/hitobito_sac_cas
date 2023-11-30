@@ -98,10 +98,12 @@ matterhorn_neuanmeldungen:
 matterhorn_neuanmeldungen_sektion:
   name: Neuanmeldung (Zur Freigabe)
   type: Group::SektionsNeuanmeldungenSektion
+  self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   lft: 21
   rgt: 22
   parent: matterhorn
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+
 matterhorn_tourenkommission:
   name: Tourenkommission
   type: Group::SektionsTourenkommission

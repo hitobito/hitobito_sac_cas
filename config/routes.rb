@@ -18,6 +18,8 @@ Rails.application.routes.draw do
         as: 'verify_membership'
 
     resources :groups, only: [] do
+      post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
+
       namespace :people do
         namespace :neuanmeldungen do
           resource :approves, only: [:new, :create]
@@ -32,5 +34,4 @@ Rails.application.routes.draw do
       end
     end
   end
-
 end

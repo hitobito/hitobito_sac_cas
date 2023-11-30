@@ -11,25 +11,90 @@ describe :self_inscription, js: true do
 
   subject { page }
 
+  let(:mitglied) { people(:mitglied) }
+  let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
+  let(:geschaeftsstelle) { groups(:geschaeftsstelle) }
+
+  let(:admin) { people(:admin) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-  let(:user) { people(:mitglied) }
+  let(:other_group) { groups(:matterhorn_neuanmeldungen_sektion) }
 
   before do
-    user.update!(birthday: 30.years.ago)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-    expect(group.self_registration_role_type).to be_present
-    expect(user.reload.roles.where(group_id: group.id,
-                                   type: group.self_registration_role_type)).not_to exist
   end
 
-  it 'the form has custom sac_cas content' do
-    sign_in(user)
-    visit group_self_inscription_path(group_id: group)
+  it 'redirects if person is already a member of that group' do
+    mitglieder.update!(self_registration_role_type: Group::SektionsMitglieder::Mitglied.sti_name)
 
-    expect(page).to have_selector('h1', text: 'Registrierung zu SAC Blüemlisalp')
-    expect(page).to have_selector('p', text: 'Willst du dieser Sektion beitreten?')
-    expect(page).to have_selector('.details', text: 'Du trittst mit Beitragskategorie Einzel bei.')
-    expect(page).to have_selector('a.btn', text: 'Beitreten')
+    sign_in(mitglied)
+    visit group_self_inscription_path(group_id: mitglieder)
+    expect(page).to have_css('#flash .alert-error', text: 'Du bist bereits Mitglied dieser Sektion')
   end
 
+  it 'has standard behaviour ' do
+    geschaeftsstelle.update!(self_registration_role_type: Group::Geschaeftsstelle::Fundraising)
+    sign_in(mitglied)
+    visit group_self_inscription_path(group_id: geschaeftsstelle)
+    click_link 'Beitreten'
+    expect(page).to have_css("#flash", text: 'Die Rolle wurde erfolgreich gespeichert')
+  end
+
+  describe 'sektion neuanmeldungen' do
+    describe 'form' do
+      it 'has custom sac_cas content' do
+        sign_in(admin)
+        visit group_self_inscription_path(group_id: group)
+        expect(page).to have_selector('h1', text: 'Registrierung zu SAC Blüemlisalp')
+        expect(page).to have_selector('.details', text: 'Du trittst mit Beitragskategorie Einzel bei.')
+        expect(page).to have_button 'Beitreten'
+      end
+    end
+
+    describe 'modal dialog' do
+      context 'simple' do
+        before do
+          sign_in(admin)
+          visit group_self_inscription_path(group_id: group)
+          choose 'Sofort'
+          choose 'Neue Stammsektion'
+          click_button 'Beitreten'
+          expect(page).to have_css('#confirm-dialog')
+        end
+
+        it 'can cancel triggers request, there doesnt keep state' do
+          click_link 'Abbrechen'
+          expect(page).not_to have_css('#confirm-dialog')
+          expect(page).to have_checked_field 'Sofort'
+        end
+
+        it 'creates role' do
+          click_button 'Beitritt beantragen'
+          expect(page).to have_css("#flash", text: 'Die Rolle wurde erfolgreich gespeichert')
+          expect(page).to have_css('section:nth-of-type(2)', text: 'SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)')
+          expect(page).not_to have_css('section:nth-of-type(3)', text: 'SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)')
+        end
+      end
+
+      context 'with variable date' do
+        around { |example| travel_to(Time.now.beginning_of_year) { example.run } }
+
+        before do
+          sign_in(admin)
+          visit group_self_inscription_path(group_id: group)
+          choose 'Neue Stammsektion'
+        end
+
+        it 'can create future role from Juli onwards' do
+          choose '01. Juli'
+          click_button 'Beitreten'
+          expect(page).to have_css('#confirm-dialog')
+
+          click_button 'Beitritt beantragen'
+          expect(page).to have_css("#flash", text: 'Die Rolle wurde erfolgreich gespeichert')
+          expect(page).not_to have_css('section:nth-of-type(2)', text: 'SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)')
+          expect(page).to have_css('section:nth-of-type(3)', text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (ab 01.07.2023)")
+        end
+      end
+    end
+  end
 end
