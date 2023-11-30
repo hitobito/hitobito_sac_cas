@@ -32,9 +32,6 @@ describe People::Neuanmeldungen::Approve do
     expect(actual_role).to be_a expected_role_class
     expect(actual_role.group).to eq expected_group
     expect(actual_role.beitragskategorie).to eq role.beitragskategorie
-
-    expected_with_deleted_count = role.instance_of?(expected_role_class) ? 1 : 2
-    expect(role.person.roles.with_deleted).to have(expected_with_deleted_count).item
   end
 
   it 'replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles' do
@@ -66,7 +63,7 @@ describe People::Neuanmeldungen::Approve do
 
     described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call
 
-    expect(neuanmeldung.reload).to be_deleted
+    expect { neuanmeldung.reload }.to raise_error(ActiveRecord::RecordNotFound)
     expect(neuanmeldung.person.roles).to have(1).item
     actual_role = neuanmeldung.person.roles.first
     expect(actual_role).to be_a NEUANMELDUNG_APPROVED_ROLE_CLASS

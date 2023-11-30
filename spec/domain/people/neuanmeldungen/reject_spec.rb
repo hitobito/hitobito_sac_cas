@@ -39,13 +39,8 @@ describe People::Neuanmeldungen::Reject do
     expect { subject.call }.to change { NEUANMELDUNG_ROLE_CLASS.count }.by(-2)
 
     expect(neuanmeldung_einzel.person.roles).to be_empty
-    expect(neuanmeldung_einzel.person.roles.with_deleted).to have(1).item
-
     expect(neuanmeldung_jugend.person.roles).to be_empty
-    expect(neuanmeldung_jugend.person.roles.with_deleted).to have(1).item
-
     expect(neuanmeldung_familie.person.roles).to have(1).item
-    expect(neuanmeldung_familie.person.roles.with_deleted).to have(1).item
   end
 
   it 'disables the Person login' do
