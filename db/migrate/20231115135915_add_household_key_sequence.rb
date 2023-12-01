@@ -10,7 +10,9 @@ class AddHouseholdKeySequence < ActiveRecord::Migration[6.1]
   HOUSEHOLD_KEY_STARTVALUE = 500_000
 
   def up
-    execute "INSERT IGNORE INTO sequences (name, current_value) VALUES ('#{SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE}', #{HOUSEHOLD_KEY_STARTVALUE})"
+    if ActiveRecord::Base.connection.adapter_name.downcase =~ /mysql/
+      execute "INSERT IGNORE INTO sequences (name, current_value) VALUES ('#{SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE}', #{HOUSEHOLD_KEY_STARTVALUE})"
+    end
   end
 
   def down
