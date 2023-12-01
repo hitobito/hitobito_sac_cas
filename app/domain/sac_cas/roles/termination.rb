@@ -9,13 +9,10 @@ module SacCas::Roles::Termination
 
   def call
     Role.transaction do
-      super.tap do |success|
-        next unless success # terminating role failed, do not terminate dependent roles
-
-        terminate(dependent_roles)
-        terminate(family_member_roles)
-      end
-    end
+      terminate(dependent_roles)
+      terminate(family_member_roles)
+      super || raise(ActiveRecord::Rollback)
+    end || false
   end
 
   # Returns all roles that will be terminated.
@@ -42,9 +39,8 @@ module SacCas::Roles::Termination
   def dependent_roles
     return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied)
 
-    Group::SektionsMitglieder::Mitglied.
-      where(person_id: role.person_id).
-      where.not(id: role.id)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.
+      where(person_id: role.person_id)
   end
 
   def terminate(roles)
