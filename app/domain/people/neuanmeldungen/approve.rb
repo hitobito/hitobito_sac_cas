@@ -46,7 +46,10 @@ module People
         APPROVED_NEUANMELDUNGEN_ROLE.create!(
           group: approved_roles_group,
           person: role.person,
-          beitragskategorie: role.beitragskategorie
+          beitragskategorie: role.beitragskategorie,
+          # TODO: in a later ticket: what timestamps should we set for created_at and delete_on?
+          created_at: role.created_at,
+          delete_on: role.delete_on
         )
       end
 

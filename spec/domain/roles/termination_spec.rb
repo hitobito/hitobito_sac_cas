@@ -81,11 +81,11 @@ describe Roles::Termination do
 
         expect { subject.call }.
           to change { role.reload.terminated? }.from(false).to(true).
-          and change { role.delete_on }.from(nil).to(terminate_on).
+          and change { role.delete_on }.to(terminate_on).
           and change {
                 roles(:mitglied_zweitsektion).reload.terminated?
               }.from(false).to(true).
-          and change { roles(:mitglied_zweitsektion).delete_on }.from(nil).to(terminate_on)
+          and change { roles(:mitglied_zweitsektion).delete_on }.to(terminate_on)
       end
 
       it 'dont get terminated if invalid' do
@@ -94,9 +94,9 @@ describe Roles::Termination do
           expect(subject.call).to eq false
         end.
           to not_change { role.reload.terminated? }.from(false).
-          and not_change { role.delete_on }.from(nil).
+          and not_change { role.delete_on }.
           and not_change { roles(:mitglied_zweitsektion).reload.terminated? }.from(false).
-          and not_change { roles(:mitglied_zweitsektion).delete_on }.from(nil)
+          and not_change { roles(:mitglied_zweitsektion).delete_on }
       end
     end
 
@@ -107,11 +107,11 @@ describe Roles::Termination do
 
         expect { subject.call }.
           to change { role.reload.terminated? }.from(false).to(true).
-          and change { role.delete_on }.from(nil).to(terminate_on).
+          and change { role.delete_on }.to(terminate_on).
           and change { roles(:familienmitglied2).reload.terminated? }.from(false).to(true).
-          and change { roles(:familienmitglied2).delete_on }.from(nil).to(terminate_on).
+          and change { roles(:familienmitglied2).delete_on }.to(terminate_on).
           and change { roles(:familienmitglied_kind).reload.terminated? }.from(false).to(true).
-          and change { roles(:familienmitglied_kind).delete_on }.from(nil).to(terminate_on)
+          and change { roles(:familienmitglied_kind).delete_on }.to(terminate_on)
       end
 
       it 'dont get terminated if invalid' do
@@ -120,11 +120,11 @@ describe Roles::Termination do
           expect(subject.call).to eq false
         end.
           to not_change { role.reload.terminated? }.from(false).
-          and not_change { role.delete_on }.from(nil).
+          and not_change { role.delete_on }.
           and not_change { roles(:familienmitglied2).reload.terminated? }.from(false).
-          and not_change { roles(:mitglied_zweitsektion).delete_on }.from(nil).
+          and not_change { roles(:mitglied_zweitsektion).delete_on }.
           and not_change { roles(:familienmitglied_kind).reload.terminated? }.from(false).
-          and not_change { roles(:familienmitglied_kind).delete_on }.from(nil)
+          and not_change { roles(:familienmitglied_kind).delete_on }
       end
     end
   end

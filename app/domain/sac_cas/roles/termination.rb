@@ -47,7 +47,11 @@ module SacCas::Roles::Termination
     roles.each do |role|
       role.delete_on = terminate_on
       role.write_attribute(:terminated, true)
-      role.save!
+      # We explicitely set the context to :destroy, because some validations are configured to
+      # run on [:create, :update] and we don't want them to run here. Technically we are doing
+      # an update, but as we are setting the delete_on attribute, we are treating this as a
+      # destroy operation.
+      role.save!(context: :destroy)
     end
   end
 

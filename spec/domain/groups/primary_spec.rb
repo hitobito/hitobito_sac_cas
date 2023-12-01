@@ -65,14 +65,24 @@ describe Groups::Primary do
     end
 
     it 'favours older over newer' do
-      travel_to 1.day.from_now do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: admin, beitragskategorie: :einzel)
-      end
+      Fabricate(
+        Group::SektionsMitglieder::Mitglied.sti_name,
+        group: other,
+        person: admin,
+        beitragskategorie: :einzel,
+        created_at: roles(:mitglied).created_at + 1.year,
+        delete_on: roles(:mitglied).delete_on + 1.year
+      )
       expect(identify(mitglied)).to eq mitglieder
 
-      travel_to 1.day.ago do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: mitglied, beitragskategorie: :einzel)
-      end
+      Fabricate(
+        Group::SektionsMitglieder::Mitglied.sti_name,
+        group: other,
+        person: mitglied,
+        beitragskategorie: :einzel,
+        created_at: roles(:mitglied).created_at - 1.year,
+        delete_on: roles(:mitglied).delete_on - 1.year
+      )
       expect(identify(mitglied)).to eq other
     end
   end

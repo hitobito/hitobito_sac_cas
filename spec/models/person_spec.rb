@@ -19,7 +19,7 @@ describe Person do
 
     context 'with role having beitragskategorie=familie' do
       before do
-        person.roles.create!(type: Group::SektionsMitglieder::Mitglied.name, group: group)
+        Fabricate(Group::SektionsMitglieder::Mitglied.name, group: group, person: person)
       end
 
       it 'returns prefixed household_key for person' do

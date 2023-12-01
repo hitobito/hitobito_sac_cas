@@ -18,15 +18,14 @@ describe Role do
     it 'assigns correct beitragskategorie when creating new mitglied role' do
       person.update!(birthday: Time.zone.today - 17.years)
 
-      role = Group::SektionsMitglieder::Mitglied.create!(person: person,
-                                                         group: bluemlisalp_mitglieder)
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.name, person: person, group: bluemlisalp_mitglieder)
 
       expect(role.beitragskategorie).to eq('jugend')
     end
 
     it 'is not valid without person\'s birthdate' do
       person.update!(birthday: nil)
-      role = Group::SektionsMitglieder::Mitglied.new(person: person, group: bluemlisalp_mitglieder)
+      role = Fabricate.build(Group::SektionsMitglieder::Mitglied.name, person: person, group: bluemlisalp_mitglieder)
 
       expect(role).not_to be_valid
     end
@@ -35,13 +34,13 @@ describe Role do
       person.update!(birthday: Time.zone.today - 17.years)
 
       neuanmeldung_nv =
-        Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
           person: person, group: bluemlisalp_neuanmeldungen_nv
         )
 
       expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
 
-      neuanmeldung_sektion = Group::SektionsNeuanmeldungenSektion::Neuanmeldung.create!(
+      neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
         person: person, group: bluemlisalp_neuanmeldungen_sektion
       )
 
@@ -51,14 +50,14 @@ describe Role do
     it 'is not valid without person\'s birthdate' do\
       person.update!(birthday: nil)
       neuanmeldung_nv =
-        Group::SektionsNeuanmeldungenNv::Neuanmeldung.new(
+        Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
           person: person, group: bluemlisalp_neuanmeldungen_nv
         )
 
       expect(neuanmeldung_nv).not_to be_valid
 
       neuanmeldung_sektion =
-        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.new(
+        Fabricate.build(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
           person: person, group: bluemlisalp_neuanmeldungen_sektion
         )
 
@@ -74,20 +73,20 @@ describe Role do
     ].each do |role_type, group|
       it "does not accept person without birthday for #{role_type}" do
         person.birthday = nil
-        role = person.roles.build(type: role_type, group: groups(group))
+        role = Fabricate.build(role_type.name, person: person, group: groups(group))
         expect(role).not_to be_valid
         expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
       end
 
       it "accepts person exceeding age restriction for #{role_type}" do
         person.birthday = 6.years.ago - 1.day
-        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        role = Fabricate.build(role_type.name, person: person, group: groups(group), beitragskategorie: :einzel)
         expect(role).to be_valid
       end
 
       it "rejects person below age restriction for #{role_type}" do
         person.birthday = 5.years.ago
-        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        role = Fabricate.build(role_type.name, person: person, group: groups(group), beitragskategorie: :einzel)
         expect(role).not_to be_valid
         expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
       end
@@ -95,7 +94,7 @@ describe Role do
 
     it 'accepts person below age limit on other group' do
       person.birthday = 5.years.ago
-      role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport,
+      role = Fabricate.build(Group::Geschaeftsstelle::ITSupport.name, person: person,
                                 group: groups(:geschaeftsstelle))
       expect(role).to be_valid
     end
@@ -114,7 +113,7 @@ describe Role do
         def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42')
           person = Fabricate.build(:person, birthday: age.years.ago,
                                             household_key: household_key)
-          role = role_type.new(person: person, group: groups(group),
+          role = Fabricate.build(role_type.name, person: person, group: groups(group),
                                beitragskategorie: beitragskategorie)
           person.primary_group = role.group
           role
@@ -252,7 +251,7 @@ describe Role do
     let(:person) { people(:mitglied) }
 
     it 'includes the beitragskategorie label' do
-      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Einzel)'
+      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Bis 31.12.2015) (Einzel)'
     end
   end
 end

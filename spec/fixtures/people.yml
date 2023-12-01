@@ -31,7 +31,7 @@ familienmitglied:
   last_name: Norgay
   email: t.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
-  birthday: <%= Date.new(2000, 1,1) %>
+  birthday: <%= 25.years.ago %>
   language: de
   household_key: 'happy-family'
 
