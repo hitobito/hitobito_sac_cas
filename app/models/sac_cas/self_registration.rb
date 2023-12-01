@@ -21,16 +21,13 @@ module SacCas::SelfRegistration
   end
 
   def save!
-    super do
-      housemates.collect(&:person).each do |person|
-        person.save!
-        create_role(person)
-      end
+    super.then do
+      housemates.all?(&:save!)
     end
   end
 
   def valid?
-    housemates.collect(&:valid?).all? && super
+    housemates.all?(&:valid?) && super
   end
 
   def housemates
@@ -39,8 +36,10 @@ module SacCas::SelfRegistration
 
   private
 
-  def extra_person_attrs
-    super.merge(household_key: household_key, household_emails: household_emails)
+  def build_person(*args)
+    super(*args) do |attrs|
+      attrs.merge(household_key: household_key, household_emails: household_emails)
+    end
   end
 
   def build_housemates
@@ -61,6 +60,6 @@ module SacCas::SelfRegistration
   end
 
   def household_emails
-    (housemates_attributes + [main_person_attributes]).pluck(:email)
+    (housemates_attributes + [main_person_attributes]).pluck(:email).compact
   end
 end

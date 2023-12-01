@@ -22,7 +22,7 @@ module SacCas::SelfRegistration::MainPerson
       :privacy_policy_accepted,
 
       # Internal attrs
-      :primary_group_id,
+      :primary_group,
       :household_key
     ]
 
@@ -34,7 +34,7 @@ module SacCas::SelfRegistration::MainPerson
   end
 
   def person
-    Person.new(attributes.except(:newsletter, :promocode)).tap do |p|
+    @person ||= Person.new(attributes.except(:newsletter, :promocode)).tap do |p|
       p.tag_list.add 'newsletter' if attributes[:newsletter]
       p.tag_list.add 'promocode' if attributes[:promocode]
     end

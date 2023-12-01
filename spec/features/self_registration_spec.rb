@@ -212,5 +212,38 @@ describe :self_registration, js: true do
       expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
       expect(page).to have_button 'Weiter als Familienmitgliedschaft'
     end
+
+    it 'validates birthday within household' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on  'Eintrag hinzufügen'
+
+      fill_in 'Vorname', with: 'Maxi'
+      fill_in 'Nachname', with: 'Muster'
+      fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+      choose 'weiblich'
+      click_on 'Weiter als Familienmitgliedschaft'
+      expect(page).to have_content 'Geburtstag muss ausgefüllt werden'
+    end
+
+
+    context 'bluemlisalp_neuanmeldungen_sektion' do
+      let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+      it 'validates birthday is valid' do
+        visit group_self_registration_path(group_id: group)
+        complete_main_person_form
+        click_on  'Eintrag hinzufügen'
+
+        fill_in 'Vorname', with: 'Maxi'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: I18n.l(1.day.ago.to_date)
+        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        choose 'weiblich'
+        click_on 'Weiter als Familienmitgliedschaft'
+        expect(page).to have_content 'Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein'
+        expect(page).to have_content 'Beitragskategorie muss ausgefüllt werden'
+      end
+    end
   end
 end
