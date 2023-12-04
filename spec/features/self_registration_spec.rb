@@ -60,9 +60,9 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form do
         choose 'männlich'
-        country_selector = "#self_registration_main_person_attributes_country_chosen"
+        country_selector = "#person_country"
         find("#{country_selector}").click
-        find("#{country_selector} ul.chosen-results li.active-result", text: 'Vereinigte Staaten').click
+        find("#{country_selector} div.ts-dropdown-content div[role='option']", text: 'Vereinigte Staaten').click
       end
       click_on 'Weiter als Einzelmitglied'
 
@@ -148,7 +148,7 @@ describe :self_registration, js: true do
         fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
-      click_on 'Weiter als Familienmitgliedschaft'
+      find('.btn-toolbar.bottom .btn-group button[type="submit"]', text: 'Weiter als Familienmitgliedschaft').click
 
       expect do
         click_on 'Registrieren'

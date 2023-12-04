@@ -58,12 +58,12 @@ describe :self_inscription, js: true do
           choose 'Sofort'
           choose 'Neue Stammsektion'
           click_button 'Beitreten'
-          expect(page).to have_css('#confirm-dialog')
+          expect(page).to have_selector('#confirm-dialog.modal')
         end
 
         it 'can cancel triggers request, there doesnt keep state' do
           click_link 'Abbrechen'
-          expect(page).not_to have_css('#confirm-dialog')
+          expect(page).not_to have_selector('#confirm-dialog.modal')
           expect(page).to have_checked_field 'Sofort'
         end
 
