@@ -32,7 +32,6 @@ root_email: hitobito-sac-cas@puzzle.ch
 people:
   people_managers:
     enabled: true
-    people_managers:
     self_service_managed_creation:
       enabled: false
 
