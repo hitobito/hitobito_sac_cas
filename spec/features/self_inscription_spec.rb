@@ -28,7 +28,7 @@ describe :self_inscription, js: true do
 
     sign_in(mitglied)
     visit group_self_inscription_path(group_id: mitglieder)
-    expect(page).to have_css('#flash .alert-error', text: 'Du bist bereits Mitglied dieser Sektion')
+    expect(page).to have_css('#flash .alert-danger', text: 'Du bist bereits Mitglied dieser Sektion')
   end
 
   it 'has standard behaviour ' do
