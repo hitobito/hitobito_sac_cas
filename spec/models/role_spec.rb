@@ -34,15 +34,15 @@ describe Role do
       person.update!(birthday: Time.zone.today - 17.years)
 
       neuanmeldung_nv =
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
+        Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
           person: person, group: bluemlisalp_neuanmeldungen_nv
-        )
+        ).tap(&:validate)
 
       expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
 
       neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
         person: person, group: bluemlisalp_neuanmeldungen_sektion
-      )
+      ).tap(&:validate)
 
       expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
     end

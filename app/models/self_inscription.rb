@@ -77,13 +77,16 @@ class SelfInscription
   end
 
   def save_role
-    active_membership_role.destroy! if replace_active_membership?
+    if replace_active_membership?
+      active_membership_role.destroy!
+      active_membership_role.update_column(:deleted_at, 1.day.ago.end_of_day)
+    end
     role.save!
   end
 
   def save_future_role
     convert_on = date_from_key(register_on)
-    active_membership_role.update!(delete_on: convert_on) if replace_active_membership?
+    active_membership_role.update!(delete_on: convert_on - 1.day) if replace_active_membership?
 
     FutureRole.create!(
       person: role.person,

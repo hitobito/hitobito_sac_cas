@@ -10,6 +10,7 @@ module SacCas::Role::MitgliedCommon
 
   include SacCas::Role::MitgliedFamilyValidations
   include SacCas::Role::MitgliedMinimalAgeValidation
+  include SacCas::Role::MitgliedNoOverlapValidation
   include SacCas::RoleBeitragskategorie
 
   included do

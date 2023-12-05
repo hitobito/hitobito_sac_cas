@@ -179,14 +179,14 @@ describe SelfInscription do
           model.register_on = :now
           expect { model.save! }.to change { neuanmeldungen.count }.by(1)
             .and not_change { neuanmeldungen_future.count }
-            .and change { role.reload.deleted_at }
+            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59))
         end
 
         it 'creates future role and marks existing membership role for deletion' do
           model.register_on = :jul
           travel_to(Date.new(2023, 5)) do
             expect { model.save! }.to change { neuanmeldungen_future.count }.by(1)
-              .and change { role.reload.delete_on }.to(Date.new(2023,7))
+              .and change { role.reload.delete_on }.to(Date.new(2023,6,30))
               .and not_change { neuanmeldungen.count }
           end
         end

@@ -9,6 +9,4 @@ module SacCas::Role::MitgliedHauptsektion
   extend ActiveSupport::Concern
 
   include SacCas::Role::MitgliedCommon
-  include SacCas::Role::MitgliedHauptsektionSingularRoleValidation
-
 end

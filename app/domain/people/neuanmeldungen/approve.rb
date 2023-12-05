@@ -22,8 +22,8 @@ module People
       def call
         applicable_roles.each do |role|
           Role.transaction do
-            create_approved_role(role)
             role.destroy!
+            create_approved_role(role)
           end
         end
       end
