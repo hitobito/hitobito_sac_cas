@@ -7,6 +7,14 @@
 
 module SacCas::Role
 
+  def start_on
+    created_at&.to_date
+  end
+
+  def end_on
+    [deleted_at&.to_date, archived_at&.to_date, delete_on].compact.min
+  end
+
   protected
 
   def preferred_primary?
