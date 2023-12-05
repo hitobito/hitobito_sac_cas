@@ -6,8 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 require 'spec_helper'
+require_relative '../shared_examples_mitglied'
 
 describe Group::SektionsMitglieder::MitgliedZusatzsektion do
+  it_behaves_like 'validates Mitglied timestamps'
+
   context 'validations' do
     it 'requires a concurrently active mitglied role' do
       person = Fabricate(:person)

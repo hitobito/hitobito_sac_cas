@@ -17,8 +17,6 @@ module SacCas::Role::MitgliedCommon
     self.basic_permissions_only = true
 
     validates :created_at, presence: true
-    validates :delete_on, presence: true, unless: :deleted_at
-    validates :deleted_at, presence: true, unless: :delete_on
   end
 
 end

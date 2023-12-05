@@ -6,8 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 require 'spec_helper'
+require_relative '../shared_examples_mitglied'
 
 describe Group::SektionsMitglieder::Mitglied do
+  it_behaves_like 'validates Mitglied timestamps'
+
   context 'validations' do
     context 'allows only one active mitglied role at a time' do
       it 'is enforced if the role is active now' do

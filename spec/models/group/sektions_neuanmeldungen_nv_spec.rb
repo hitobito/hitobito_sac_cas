@@ -6,9 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
+require_relative 'shared_examples_neuanmeldung'
 
 describe Group::SektionsNeuanmeldungenNv do
   describe Group::SektionsNeuanmeldungenNv::Neuanmeldung do
+    it_behaves_like 'validates Neuanmeldung timestamps'
+
     let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
     let(:person) { people(:admin) }
     subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }

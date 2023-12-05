@@ -17,7 +17,7 @@ module SacCas::Role::MitgliedMinimalAgeValidation
   private
 
   def assert_old_enough
-    if person.birthday.nil? || too_young?
+    if person&.birthday.nil? || too_young?
       errors.add(:person, :assert_old_enough, minimum_years: MINIMUM_YEARS)
     end
   end
