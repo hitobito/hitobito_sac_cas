@@ -34,7 +34,7 @@ module SacCas::Roles::Termination
   private
 
   # For a Group::SektionsMitglieder::Mitglied role, this returns all other
-  # Group::SektionsMitglieder::Mitglied roles of the same person.
+  # Group::SektionsMitglieder::MitgliedZusatzsektion roles of the same person.
   # For any other role type returns an empty array.
   def dependent_roles
     return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied)

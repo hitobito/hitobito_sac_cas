@@ -48,6 +48,7 @@ module People
           person: role.person,
           beitragskategorie: role.beitragskategorie,
           # TODO: in a later ticket: what timestamps should we set for created_at and delete_on?
+          # https://github.com/hitobito/hitobito_sac_cas/issues/176
           created_at: role.created_at,
           delete_on: role.delete_on
         )

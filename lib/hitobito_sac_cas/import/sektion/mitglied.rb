@@ -111,6 +111,7 @@ module Import
 
       def build_role(person)
         # TODO: in a later ticket: what should the fallback value be?
+        # https://github.com/hitobito/hitobito_sac_cas/issues/179
         created_at = parse_datetime(row[:role_created_at]) || Time.zone.at(0)
 
         if quitted?
@@ -125,7 +126,7 @@ module Import
         # TODO: in a later ticket: how should we handle roles when running the importer repeatedly?
         person.roles.find_or_initialize_by(
           group: @group,
-          type: Group::SektionsMitglieder::Mitglied.name,
+          type: Group::SektionsMitglieder::Mitglied.sti_name,
           beitragskategorie: category,
           created_at: created_at,
           deleted_at: deleted_at,

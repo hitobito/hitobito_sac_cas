@@ -119,6 +119,7 @@ class SelfInscription
       group: @group,
       person: @person,
       # TODO: in a later ticket: what values should we set for the timestamps?
+      # https://github.com/hitobito/hitobito_sac_cas/issues/178
       created_at: Time.zone.now,
       delete_on: Time.zone.today.end_of_year
     ).tap(&:valid?)
