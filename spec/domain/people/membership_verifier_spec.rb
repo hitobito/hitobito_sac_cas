@@ -10,23 +10,16 @@ require 'spec_helper'
 describe People::MembershipVerifier do
 
   let(:verifier) { described_class.new(person) }
-  let(:person) do
-    person = Fabricate(:person, birthday: Time.zone.today - 42.years)
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-              person: person,
-              group: groups(:bluemlisalp_mitglieder))
-    person
-  end
+  let(:person) { Fabricate(:person, birthday: Time.zone.today - 42.years) }
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
   context '#member?' do
     it 'returns true if person has member role' do
-      expect(verifier.member?).to eq(true)
-    end
-
-    xit 'returns true if person has one active member role' do
-      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-                group: neuanmeldungen_sektion, person: person)
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+                person: person,
+                group: groups(:bluemlisalp_mitglieder),
+                created_at: Time.zone.now.beginning_of_year,
+                delete_on: Time.zone.today.end_of_year)
 
       expect(verifier.member?).to eq(true)
     end
@@ -37,10 +30,12 @@ describe People::MembershipVerifier do
       expect(verifier.member?).to eq(false)
     end
 
-    it 'returns false if person has no active member role' do
-      person.roles.destroy_all
-      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
-                group: neuanmeldungen_sektion, person: person)
+    it 'returns false if person has neuanmeldung role' do
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
+                person: person,
+                group: neuanmeldungen_sektion,
+                created_at: Time.zone.now.beginning_of_year,
+                delete_on: Time.zone.today.end_of_year)
 
       expect(verifier.member?).to eq(false)
     end
