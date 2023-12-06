@@ -26,15 +26,20 @@ module SacCas::SelfRegistration
     end
   end
 
-  def valid?
-    housemates.all?(&:valid?) && super
-  end
-
   def housemates
     @housemates ||= build_housemates
   end
 
   private
+
+  def household_valid?
+    housemates.all?(&:valid?)
+  end
+
+  def summary_valid?
+    policy_finder = Group::PrivacyPolicyFinder.for(group: group, person: main_person)
+    policy_finder.acceptance_needed? ? main_person.person.privacy_policy_accepted? : true
+  end
 
   def build_person(*args)
     super(*args) do |attrs|

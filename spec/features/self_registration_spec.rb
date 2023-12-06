@@ -98,17 +98,16 @@ describe :self_registration, js: true do
 
     describe 'with privacy policy' do
       before do
-
         file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
         image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
                                                        filename: 'logo.png',
                                                        content_type: 'image/png').signed_id
         group.layer_group.update(privacy_policy: image)
         visit group_self_registration_path(group_id: group)
+        complete_main_person_form
       end
 
       it 'sets privacy policy accepted' do
-        complete_main_person_form
         click_on 'Weiter als Einzelmitglied'
         check 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
 
@@ -117,6 +116,15 @@ describe :self_registration, js: true do
         end.to change { Person.count }.by(1)
         person = Person.find_by(email: 'max.muster@hitobito.example.com')
         expect(person.privacy_policy_accepted).to eq true
+      end
+
+      it 'rerenders third page when invalid and submitting from second' do
+        click_on 'Weiter als Einzelmitglied'
+        click_on 'Familienmitglieder'
+        click_on 'Weiter als Einzelmitglied'
+        expect(page).to have_content 'Um die Registrierung abzuschliessen, muss der ' \
+          'Datenschutzerklärung zugestimmt werden.'
+        expect(page).to have_css 'li.active a', text: 'Zusammenfassung'
       end
     end
   end
@@ -227,6 +235,16 @@ describe :self_registration, js: true do
       end
       click_on 'Weiter als Einzelmitglied'
       expect(page).to have_button 'Registrieren'
+    end
+
+    describe 'using step navigator' do
+      it 'rerenders first page when invalid and submitting from second' do
+        click_on 'Weiter als Einzelmitglied'
+        click_on 'Personendaten'
+        fill_in 'Vorname', with: ''
+        click_on 'Weiter'
+        expect(page).to have_content 'Vorname muss ausgefüllt werden'
+      end
     end
 
     context 'bluemlisalp_neuanmeldungen_sektion' do
