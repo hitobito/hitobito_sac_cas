@@ -7,25 +7,24 @@
   = simple_format(t('.membership_info_box'))
 
 = f.nested_fields_for :housemates, nil, nil, model_object: SelfRegistration::Housemate.new, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
-  - c.with_model(ff.object) do
-    = field_set_tag do
-      = ff.error_messages
-      - [:first_name, :last_name].each do |attr|
-        = ff.labeled_input_field attr, { required: c.required?(attr) } if c.attr?(attr)
+  = field_set_tag do
+    = ff.error_messages
+    - [:first_name, :last_name].each do |attr|
+      = ff.labeled_input_field attr if ff.object.attr?(attr)
 
-      - if c.attr?(:email)
-        = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: c.required?(:email), class: 'd-inline'
-      - if c.attr?(:gender)
-        = field_set_tag do
-          = ff.labeled(:gender, required: c.required?(:gender)) do
-            - (Person::GENDERS + ['']).each do |key|
-              = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
+    - if ff.object.attr?(:email)
+      = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
+    - if ff.object.attr?(:gender)
+      = field_set_tag do
+        = ff.labeled(:gender) do
+          - (Person::GENDERS + ['']).each do |key|
+            = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
 
-      - if c.attr?(:birthday)
-        = ff.labeled_date_field :birthday, required: c.required?(:birthday)
-      .control-group
-        .controls
-          = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :remove }})
+    - if ff.object.attr?(:birthday)
+      = ff.labeled_date_field :birthday
+    .control-group
+      .controls
+        = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :remove }})
 
 %br
 - if entry.housemates.empty?
