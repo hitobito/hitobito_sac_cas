@@ -10,7 +10,7 @@
   = field_set_tag do
     = render('shared/error_messages', errors: ff.object.errors, object: ff.object)
     = ff.labeled_input_fields :first_name, :last_name, { required: required }
-    = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: required
+    = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login'), required: required, class: 'd-inline'
     = field_set_tag do
       = ff.labeled(:gender, required: required) do
         - (Person::GENDERS + ['']).each do |key|

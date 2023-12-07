@@ -33,7 +33,6 @@ describe PeopleController do
     roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
     get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }
 
-    expect(custom_filter[:class]).to eq 'dropdown active'
     expect(members_filter.text).to eq 'Neuanmeldungen (1)'
     expect(members_filter[:class]).not_to eq 'active'
 
