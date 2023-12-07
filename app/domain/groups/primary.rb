@@ -7,11 +7,7 @@
 
 module Groups
   class Primary
-    ROLE_TYPES = [
-      Group::SektionsMitglieder::Mitglied.sti_name,
-      Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
-      Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name
-    ].freeze
+    ROLE_TYPES = SacCas::MITGLIED_HAUPTSEKTION_ROLE_TYPES
 
     GROUP_TYPES = ROLE_TYPES.collect(&:deconstantize).freeze
 

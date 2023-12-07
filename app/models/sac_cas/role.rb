@@ -18,7 +18,7 @@ module SacCas::Role
   protected
 
   def preferred_primary?
-    Groups::Primary::ROLE_TYPES.include?(type)
+    SacCas::MITGLIED_HAUPTSEKTION_ROLE_TYPES.include?(type)
   end
 
   private
