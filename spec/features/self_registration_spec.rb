@@ -9,8 +9,6 @@
 require 'spec_helper'
 
 describe :self_registration, js: true do
-  Capybara.default_max_wait_time = 0.5
-
   class Group::SelfRegistrationGroup < Group
     self.layer = true
 
@@ -60,9 +58,9 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form do
         choose 'männlich'
-        country_selector = "#person_country"
+        country_selector = "#self_registration_main_person_attributes_country"
         find("#{country_selector}").click
-        find("#{country_selector} div.ts-dropdown-content div[role='option']", text: 'Vereinigte Staaten').click
+        find("#{country_selector} option", text: 'Vereinigte Staaten').click
       end
       click_on 'Weiter als Einzelmitglied'
 
