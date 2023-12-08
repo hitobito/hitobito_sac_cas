@@ -122,12 +122,22 @@ describe :self_registration, js: true do
   end
 
   describe 'household' do
-    it 'can create several people in same household' do
+    before do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
-
       expect(page).to have_content 'Indem du weitere Personen hinzufügst, wählst du eine'
+    end
 
+    it 'validates household required fields' do
+      click_on 'Eintrag hinzufügen'
+      click_on 'Weiter als Familienmitgliedschaft'
+      within '#housemates_fields .fields:nth-child(1)' do
+        field = page.find_field('Vorname')
+        expect(field.native.attribute('validationMessage')).to eq 'Please fill out this field.'
+      end
+    end
+
+    it 'can create several people in same household' do
       click_on 'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(1)' do
@@ -154,7 +164,8 @@ describe :self_registration, js: true do
         .and change { Role.count }.by(3)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
 
-      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
+      expect(page).to have_text('Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine ' \
+                                'E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.')
 
       people = Person.where(last_name: 'Muster')
       expect(people).to have(3).items
@@ -162,8 +173,6 @@ describe :self_registration, js: true do
     end
 
     it 'can add and remove housemate' do
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
       click_on  'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(1)' do
@@ -197,8 +206,6 @@ describe :self_registration, js: true do
     end
 
     it 'validates emails within household' do
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
       click_on  'Eintrag hinzufügen'
 
       fill_in 'Vorname', with: 'Maxine'
@@ -211,26 +218,21 @@ describe :self_registration, js: true do
       expect(page).to have_button 'Weiter als Familienmitgliedschaft'
     end
 
-    it 'validates birthday within household' do
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
+    it 'can continue with incomplete removed housemate' do
       click_on  'Eintrag hinzufügen'
-
-      fill_in 'Vorname', with: 'Maxi'
+      fill_in 'Vorname', with: 'Maxine'
       fill_in 'Nachname', with: 'Muster'
-      fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
-      choose 'weiblich'
-      click_on 'Weiter als Familienmitgliedschaft'
-      expect(page).to have_content 'Geburtstag muss ausgefüllt werden'
+      within '#housemates_fields .fields:nth-child(1)' do
+        click_on 'Entfernen'
+      end
+      click_on 'Weiter als Einzelmitglied'
+      expect(page).to have_button 'Registrieren'
     end
-
 
     context 'bluemlisalp_neuanmeldungen_sektion' do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
       it 'validates birthday is valid' do
-        visit group_self_registration_path(group_id: group)
-        complete_main_person_form
         click_on  'Eintrag hinzufügen'
 
         fill_in 'Vorname', with: 'Maxi'
