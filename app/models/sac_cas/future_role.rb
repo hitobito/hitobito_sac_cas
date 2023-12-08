@@ -15,4 +15,21 @@ module SacCas::FutureRole
     convert_on.end_of_year
   end
 
+  def build_new_role
+    return super unless becomes_mitglied_role?
+
+    super.tap do |role|
+      role.created_at = convert_on
+      role.delete_on = convert_on.end_of_year
+    end
+  end
+
+  def validate_target_type?
+    becomes_mitglied_role?
+  end
+
+  def becomes_mitglied_role?
+    target_type <= SacCas::Role::MitgliedCommon || false
+  end
+
 end
