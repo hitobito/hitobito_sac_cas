@@ -31,6 +31,7 @@ module SacCas::SelfRegistration::MainPerson
     ]
 
     attr_accessor(*attrs) # needs to be called for new attr accessors to be created
+    attr_accessor :step
   end
 
   def person

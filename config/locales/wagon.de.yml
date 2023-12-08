@@ -295,15 +295,19 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      create:
+        redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
       conditions_sac_cas:
         newsletter: Ich möchte einen Newsletter abonnieren
       fields:
         notes: Bemerkungen
         promo_code: Promocode
       form:
+        main_email_title: Haupt-E-Mail
         main_person_title: Personendaten
         single_or_household_title: Mitgliedschaftstyp
         household_title: Familienmitglieder
+        main_title: Familienmitglieder
         summary_title: Zusammenfassung
       household:
         membership_info_box: >
