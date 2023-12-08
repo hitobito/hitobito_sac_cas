@@ -11,7 +11,7 @@ class Group::SektionsMitglieder < ::Group
 
   ### ROLES
   class Mitglied < ::Role
-    include SacCas::Role::Mitglied
+    include SacCas::Role::MitgliedHauptsektion
 
     self.terminatable = true
 

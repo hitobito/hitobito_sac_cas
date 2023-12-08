@@ -24,7 +24,7 @@ module SacCas::Role::MitgliedFamilyValidations
       flat_map(&:roles).
       select do |role|
       # We only care about Mitglied roles
-      role.is_a?(SacCas::Role::Mitglied) &&
+      role.is_a?(SacCas::Role::MitgliedHauptsektion) &&
         # We only care about family beitragskategorie roles
         role.beitragskategorie&.familie? &&
         # Make sure the person has a birthday before we compare the years
