@@ -15,13 +15,16 @@ module SacCas::Role::MitgliedZusatzsektion
   end
 
   def assert_is_mitglied_during_validity_period
-    member_roles = Group::SektionsMitglieder::Mitglied.where(person_id: person_id)
+    # to simplify, only validate if both dates are set (otherwise the role will be invalid anyway)
+    return unless start_on && end_on
 
-    return if member_roles.any? do |role|
-      role.active_period.cover?(active_period)
+    days_to_check = active_period.to_a
+
+    Group::SektionsMitglieder::Mitglied.where(person_id: person_id).each do |mitglied|
+      days_to_check -= mitglied.active_period.to_a
     end
 
-    errors.add(:person, :must_have_mitglied_role)
+    errors.add(:person, :must_have_mitglied_role) if days_to_check.any?
   end
 
 end
