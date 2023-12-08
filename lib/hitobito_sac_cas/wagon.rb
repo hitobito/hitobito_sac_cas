@@ -34,6 +34,8 @@ module HitobitoSacCas
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
 
+      StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
+
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
 
@@ -48,6 +50,7 @@ module HitobitoSacCas
 
       ## Controllers
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
+      Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
 

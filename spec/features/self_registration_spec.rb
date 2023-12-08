@@ -33,27 +33,39 @@ describe :self_registration, js: true do
   end
 
   def complete_main_person_form
+    fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Adresse', with: 'Musterplatz'
     fill_in 'self_registration_main_person_attributes_zip_code', with: '8000'
     fill_in 'self_registration_main_person_attributes_town', with: 'Zürich'
-    fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     fill_in 'Geburtstag', with: '01.01.1980'
     yield if block_given?
     click_on 'Weiter'
   end
 
-  describe 'main_person' do
-    it 'validates and marks attributes' do
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form do
-        fill_in 'Haupt-E-Mail', with: 'support@hitobito.example.com'
-      end
-      expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
-      expect(page).not_to have_link 'Weiter als Einzelmitglied'
-    end
+  describe 'existing email' do
+    let(:person) { people(:mitglied) }
+    let(:password) { 'really_b4dPassw0rD' }
 
+    it 'redirects to login page' do
+      person.update!(password: password, password_confirmation: password)
+
+      visit group_self_registration_path(group_id: group)
+      fill_in 'Mail', with: 'e.hillary@hitobito.example.com'
+      click_on 'Weiter'
+      expect(page).to have_css '.alert-success', text: 'Es existiert bereits ein Login für diese E-Mail.'
+      expect(page).to have_css :h1, text: 'Anmelden'
+      expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr', with: 'e.hillary@hitobito.example.com'
+      fill_in 'Passwort', with: password
+      click_on 'Anmelden'
+      expect(page).to have_css :h1, text: 'Registrierung zu'
+      expect(page).to have_link 'Beitreten'
+    end
+  end
+
+  describe 'main_person' do
     it 'self registers and creates new person' do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form do

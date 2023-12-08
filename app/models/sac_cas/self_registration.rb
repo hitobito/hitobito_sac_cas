@@ -12,7 +12,9 @@ module SacCas::SelfRegistration
   prepended do
     attr_accessor :housemates_attributes
 
-    self.partials = [:main_person, :household, :summary]
+    self.partials = [:main_email, :main_person, :household, :summary]
+
+    delegate :email, to: :main_person
   end
 
   def initialize(group:, params:)
@@ -30,15 +32,27 @@ module SacCas::SelfRegistration
     @housemates ||= build_housemates
   end
 
+  def redirect_to_login?
+    first_step? && existing_valid_email?
+  end
+
   private
 
   def household_valid?
     housemates.all?(&:valid?)
   end
 
+  def main_email_valid?
+    main_person.email.present?
+  end
+
   def summary_valid?
     policy_finder = Group::PrivacyPolicyFinder.for(group: group, person: main_person)
     policy_finder.acceptance_needed? ? main_person.person.privacy_policy_accepted? : true
+  end
+
+  def existing_valid_email?
+    Person.where(email: email).exists? && Truemail.validate(email.to_s, with: :regex).result.success
   end
 
   def build_person(*args)
