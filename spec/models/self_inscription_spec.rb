@@ -56,10 +56,12 @@ describe SelfInscription do
     end
 
     it 'is false with active sektion membership in other sektion' do
-      expect(build(person: mitglied, group: other_group)).not_to be_active_in_sektion
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name.to_sym, person: person, group: other_group)
+      expect(build(person: person, group: other_group)).not_to be_active_in_sektion
     end
 
     it 'is true with active sektion membership in same sektion' do
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name.to_sym, person: person, group: group)
       expect(build(person: mitglied, group: group)).to be_active_in_sektion
     end
   end
