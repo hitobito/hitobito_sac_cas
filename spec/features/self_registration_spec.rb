@@ -126,7 +126,7 @@ describe :self_registration, js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      expect(page).to have_content 'Hier kannst du eine Famlienmitgliedschaft wählen.'
+      expect(page).to have_content 'Indem du weitere Personen hinzufügst, wählst du eine'
 
       click_on 'Eintrag hinzufügen'
 

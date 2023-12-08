@@ -307,10 +307,12 @@ de:
         summary_title: Zusammenfassung
       household:
         membership_info_box: >
-          Hier kannst du eine Famlienmitgliedschaft wählen. Diese ist für max. 2 Erwachsene (ab 23
-          Jahren) und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich. Die
-          Famlienmitgliedschaft ist auch für Paare ohne Kinder möglich. Eine Person wird als
-          Hauptkontakt definiert. Man erhält eine Rechnung und zwei Ausweise.
+          Indem du weitere Personen hinzufügst, wählst du eine Famlienmitgliedschaft. Diese ist für
+          max. 2 Erwachsene (ab 23 Jahren) und beliebig viele Kinder im Alter zwischen 6 und 17
+          Jahren möglich.
+
+
+          Die Famlienmitgliedschaft ist auch für Paare ohne Kinder möglich.
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft
 
