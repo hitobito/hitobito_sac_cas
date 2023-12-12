@@ -61,15 +61,6 @@ module SacCas::SelfRegistration
     end
   end
 
-  def role_attrs(person)
-    super.merge(
-      # TODO: in a later ticket: what timestamps should we set for created_at and delete_on?
-      # https://github.com/hitobito/hitobito_sac_cas/issues/177
-      created_at: Time.zone.now,
-      delete_on: Time.zone.today.end_of_year
-    )
-  end
-
   def build_housemates
     @housemates_attributes.map do |attrs|
       next if attrs[:_destroy] == '1'
