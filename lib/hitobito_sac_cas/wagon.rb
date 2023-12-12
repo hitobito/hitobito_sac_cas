@@ -28,6 +28,7 @@ module HitobitoSacCas
       Person::Household.prepend SacCas::Person::Household
       Role.prepend SacCas::Role
       SelfRegistration.prepend SacCas::SelfRegistration
+      SelfRegistration::Person.prepend SacCas::SelfRegistration::Person
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
 
