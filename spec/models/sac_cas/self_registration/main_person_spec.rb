@@ -11,7 +11,7 @@ describe SelfRegistration::MainPerson do
   subject(:model) { described_class.new }
 
   it 'is a Housemate' do
-    expect(model).to be_kind_of(SelfRegistration::Housemate)
+    expect(model).to be_kind_of(SelfRegistration::Person)
   end
 
   describe 'attribute assignments accept additiional attributes' do
@@ -21,9 +21,17 @@ describe SelfRegistration::MainPerson do
   end
 
   describe 'validations' do
-    it 'validates 8 fields' do
+    it 'validates required fields' do
       expect(model).not_to be_valid
-      expect(model.errors).to have(8).items
+      expect(model.errors.keys).to match_array [
+        :first_name,
+        :last_name,
+        :email,
+        :address,
+        :zip_code,
+        :town,
+        :birthday
+      ]
     end
   end
 

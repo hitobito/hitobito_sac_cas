@@ -30,14 +30,13 @@ module SacCas::SelfRegistration::MainPerson
       :first_name, :last_name, :email, :address, :zip_code, :town, :birthday
     ]
 
-    attr_accessor(*attrs) # needs to be called for new attr accessors to be created
     attr_accessor :step
   end
 
   def person
-    @person ||= Person.new(attributes.except(:newsletter, :promocode)).tap do |p|
-      p.tag_list.add 'newsletter' if attributes[:newsletter]
-      p.tag_list.add 'promocode' if attributes[:promocode]
+    @person ||= Person.new(attributes.except('newsletter', 'promocode').compact).tap do |p|
+      p.tag_list.add 'newsletter' if attributes['newsletter']
+      p.tag_list.add 'promocode' if attributes['promocode']
     end
   end
 end
