@@ -44,7 +44,6 @@ bluemlisalp_mitglieder:
   parent: bluemlisalp
   lft: 7
   rgt: 8
-  name: Mitglieder
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
@@ -64,50 +63,47 @@ bluemlisalp_neuanmeldungen_sektion:
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
 
 matterhorn:
-  name: SAC Matterhorn
-  type: Group::Sektion
+  parent: root
   lft: 14
   rgt: 25
-  parent: root
+  name: SAC Matterhorn
+  type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_funktionaere:
-  name: Funktionaere
-  type: Group::SektionsFunktionaere
+  parent: matterhorn
   lft: 15
   rgt: 16
-  parent: matterhorn
+  name: Funktionaere
+  type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_mitglieder:
-  name: Mitglieder
-  type: Group::SektionsMitglieder
+  parent: matterhorn
   lft: 17
   rgt: 18
-  parent: matterhorn
+  type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
-matterhorn_neuanmeldungen:
-  name: Neuanmeldung
-  type: Group::SektionsNeuanmeldungenNv
+matterhorn_neuanmeldungen_nv:
+  parent: matterhorn
   lft: 19
   rgt: 20
-  parent: matterhorn
+  type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_neuanmeldungen_sektion:
-  name: Neuanmeldung (Zur Freigabe)
-  type: Group::SektionsNeuanmeldungenSektion
-  self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+  parent: matterhorn
   lft: 21
   rgt: 22
-  parent: matterhorn
+  type: Group::SektionsNeuanmeldungenSektion
+  self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_tourenkommission:
-  name: Tourenkommission
-  type: Group::SektionsTourenkommission
+  parent: matterhorn
   lft: 23
   rgt: 24
-  parent: matterhorn
+  name: Tourenkommission
+  type: Group::SektionsTourenkommission
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
