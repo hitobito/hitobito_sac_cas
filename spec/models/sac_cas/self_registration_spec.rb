@@ -63,6 +63,7 @@ describe SelfRegistration do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
       it 'is invalid if person is too young' do
+        registration.step = 1
         registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
         expect(registration).not_to be_valid
         expect(registration.main_person).to have(1).error_on(:person)
@@ -97,6 +98,8 @@ describe SelfRegistration do
       }
     }
 
+    before { registration.step = 2 }
+
     context 'geschaeftsstelle' do
       let(:group) do
         groups(:geschaeftsstelle).tap { |g| g.update!(self_registration_role_type: g.role_types.first) }
@@ -116,14 +119,14 @@ describe SelfRegistration do
         expect(registration.housemates.second).to be_valid
       end
 
-      it 'is invalid if person email is used by housemate' do
+      it 'is invalid if person email is re-used by housemate' do
         registration.housemates_attributes = [
           housemate_attrs.merge(email: required_attrs[:email])
         ]
         expect(registration).not_to be_valid
         expect(registration.housemates.first).not_to be_valid
         expect(registration.housemates).to have(1).error_on(:email)
-        expect(registration.main_person).to have(1).error_on(:email)
+        expect(registration.main_person).to be_valid
       end
 
       it 'is valid if all attrs are present' do
