@@ -28,7 +28,8 @@ class SelfInscription
   end
 
   def neuanmeldung?
-    @group.is_a?(Group::SektionsNeuanmeldungenSektion)
+    @group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
+    @group.is_a?(Group::SektionsNeuanmeldungenNv)
   end
 
   def attributes=(attrs = nil)
