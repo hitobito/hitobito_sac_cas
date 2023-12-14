@@ -108,6 +108,31 @@ describe :self_registration, js: true do
       expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
     end
 
+    it 'can autocomplete address' do
+      Address.create!(
+        street_short: 'Belpstrasse',
+        street_short_old: 'Belpstrasse',
+        street_long: 'Belpstrasse',
+        street_long_old: 'Belpstrasse',
+        town: 'Bern',
+        state: 'BE',
+        zip_code: 3007,
+        numbers: ['36', '37', '38', '40', '41', '5a', '5b', '6A', '6B']
+      )
+      # expect(Address.count).to eq 3
+      visit group_self_registration_path(group_id: group)
+      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      click_on 'Weiter'
+      fill_in 'Adresse', with: 'Belp'
+      dropdown = find('ul[role="listbox"]')
+      expect(dropdown).to have_content('Belpstrasse 3007 Bern')
+
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern').click
+      expect(page).to have_field('self_registration_main_person_attributes_zip_code', with: '3007')
+      expect(page).to have_field('self_registration_main_person_attributes_town', with: 'Bern')
+      expect(page).to have_field('self_registration_main_person_attributes_address', with: 'Belpstrasse')
+    end
+
     describe 'with privacy policy' do
       before do
         file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
