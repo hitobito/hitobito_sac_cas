@@ -14,13 +14,26 @@ RSpec.describe PersonResource, type: :resource do
     let(:person) { people(:mitglied) }
 
     before do
-      params[:filter] = { id: person.id }
-      render
+      params[:filter] = { id: { eq: person.id } }
     end
 
     context 'family_id' do
       it 'is included' do
+        render
         expect(jsonapi_data[0].attributes.symbolize_keys.keys).to include :family_id
+      end
+    end
+
+    context 'membership_years' do
+      it 'is not included' do
+        render
+        expect(jsonapi_data[0].attributes.symbolize_keys.keys).not_to include :membership_years
+      end
+
+      it 'can be requested' do
+        params[:extra_fields] = { people: 'membership_years' }
+        render
+        expect(jsonapi_data[0].attributes.symbolize_keys.keys).to include :membership_years
       end
     end
   end
