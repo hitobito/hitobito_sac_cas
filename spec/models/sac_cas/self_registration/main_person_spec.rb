@@ -23,7 +23,7 @@ describe SelfRegistration::MainPerson do
   describe 'validations' do
     it 'validates required fields' do
       expect(model).not_to be_valid
-      expect(model.errors.keys).to match_array [
+      expect(model.errors.attribute_names).to match_array [
         :first_name,
         :last_name,
         :email,
