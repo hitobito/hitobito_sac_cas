@@ -152,8 +152,7 @@ describe :self_registration, js: true do
       click_on 'Eintrag hinzufügen'
       click_on 'Weiter als Familienmitgliedschaft'
       within '#housemates_fields .fields:nth-child(1)' do
-        field = page.find_field('Vorname')
-        expect(field.native.attribute('validationMessage')).to eq 'Please fill out this field.'
+        expect(page).to have_content 'Vorname muss ausgefüllt werden'
       end
     end
 
