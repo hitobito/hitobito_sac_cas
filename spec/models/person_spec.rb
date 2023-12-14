@@ -50,4 +50,67 @@ describe Person do
         to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
     end
   end
+
+  context '#membership_years' do
+    let(:person) { Fabricate(:person) }
+
+    let(:created_at) { Time.zone.parse('01-01-2000 12:00:00') }
+    let(:end_at) { created_at + 364.days }
+
+    def person_with_membership_years
+      Person.with_membership_years.find(person.id)
+    end
+
+    def create_role(**attrs)
+      Fabricate(Group::SektionsMitglieder::Mitglied.name,
+                group: groups(:bluemlisalp_mitglieder),
+                person: person,
+                **attrs.reverse_merge(created_at: created_at))
+    end
+
+    it 'raises error when not using scope :with_membership_years' do
+      expect { person.membership_years }.
+        to raise_error(RuntimeError, /use Person scope :with_membership_years/)
+    end
+
+    it 'is 0 for person without membership role' do
+      assert(person.roles.empty?)
+      expect(person_with_membership_years.membership_years).to eq 0
+    end
+
+    it 'includes membership_years of deleted roles' do
+      create_role(created_at: created_at, deleted_at: end_at)
+      expect(person_with_membership_years.membership_years).to eq 1
+    end
+
+    it 'includes membership_years of archived roles' do
+      create_role(created_at: created_at, archived_at: end_at)
+      expect(person_with_membership_years.membership_years).to eq 1
+    end
+
+    it 'includes membership_years of role to be deleted' do
+      create_role(created_at: created_at, delete_on: end_at)
+      expect(person_with_membership_years.membership_years).to eq 1
+    end
+
+    it 'with multiple membership roles returns the sum of role.membership_years' do
+      create_role(created_at: created_at, delete_on: created_at + 365.days)
+      create_role(created_at: created_at + 2.years, delete_on: created_at + 2.years + 365.days)
+      expect(person_with_membership_years.membership_years).to eq 2
+    end
+
+    it 'rounds down to full years' do
+      role = create_role(delete_on: created_at + 363.days)
+      expect(person_with_membership_years.membership_years).to eq 0
+
+      role.update(delete_on: created_at + 364.days)
+      expect(person_with_membership_years.membership_years).to eq 1
+
+      role.update(delete_on: created_at + 728.days)
+      expect(person_with_membership_years.membership_years).to eq 1
+
+      role.update(delete_on: created_at + 729.days)
+      expect(person_with_membership_years.membership_years).to eq 2
+    end
+  end
 end
