@@ -56,11 +56,11 @@ describe :self_registration, js: true do
       fill_in 'Mail', with: 'e.hillary@hitobito.example.com'
       click_on 'Weiter'
       expect(page).to have_css '.alert-success', text: 'Es existiert bereits ein Login für diese E-Mail.'
-      expect(page).to have_css :h1, text: 'Anmelden'
+      expect(page).to have_css 'h1', text: 'Anmelden'
       expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr', with: 'e.hillary@hitobito.example.com'
       fill_in 'Passwort', with: password
       click_on 'Anmelden'
-      expect(page).to have_css :h1, text: 'Registrierung zu'
+      expect(page).to have_css 'h1', text: 'Registrierung zu'
       expect(page).to have_link 'Beitreten'
     end
   end
