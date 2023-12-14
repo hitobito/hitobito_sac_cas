@@ -70,6 +70,7 @@ de:
           ZG: Zug
           ZH: Zürich
       role:
+        membership_years: Mitglieder-Jahre
         class:
           kind:
             neuanmeldung:
