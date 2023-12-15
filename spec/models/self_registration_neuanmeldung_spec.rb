@@ -36,11 +36,24 @@ describe SelfRegistrationNeuanmeldung do
       town: 'Zurich',
       email: 'max.muster@example.com',
       zip_code: '8000',
-      birthday: '01.01.2000'
+      birthday: '01.01.2000',
+      country: 'CH',
+      phone_numbers_attributes: {
+        '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
+      }
     }
   }
 
   describe 'main_person' do
+    it 'is invalid if person is too young' do
+      registration.step = 1
+      registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
+      expect(registration).not_to be_valid
+      expect(registration.main_person).to have(1).error_on(:person)
+      expect(registration.main_person).to have(1).error_on(:beitragskategorie)
+      expect(registration.main_person.role).to have(1).error_on(:person)
+    end
+
     it 'is invalid if person is too young' do
       registration.step = 1
       registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
@@ -82,6 +95,7 @@ describe SelfRegistrationNeuanmeldung do
 
     it 'is invalid if housemate is empty' do
       registration.housemates_attributes = [{}]
+
       expect(registration).not_to be_valid
       expect(registration.main_person).to be_valid
       expect(registration.housemates.first.errors).to have(6).attribute_names
@@ -119,7 +133,6 @@ describe SelfRegistrationNeuanmeldung do
       expect(registration.housemates.first).to be_valid
       expect(registration.housemates.second).to be_valid
     end
-
 
     it '#save! creates people and roles with household key' do
       registration.housemates_attributes = [

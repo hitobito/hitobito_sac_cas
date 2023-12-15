@@ -16,6 +16,23 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     end
   end
 
+  let(:required_attrs) {
+    {
+      first_name: 'Max',
+      last_name: 'Muster',
+      address: 'Musterplatz',
+      town: 'Zurich',
+      email: 'max.muster@example.com',
+      zip_code: '8000',
+      birthday: '01.01.2000',
+      country: 'CH',
+      phone_numbers_attributes: {
+        '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
+      }
+    }
+  }
+
+
   describe 'validations' do
     it 'validates required fields' do
       expect(model).not_to be_valid
@@ -26,8 +43,21 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
         :address,
         :zip_code,
         :town,
-        :birthday
+        :birthday,
+        :country,
+        :phone_numbers
       ]
+    end
+
+    it 'is valid if phone_nuber is missing' do
+      model.attributes = required_attrs.except(:phone_numbers_attributes)
+      expect(model).not_to be_valid
+      expect(model.errors.full_messages).to eq ['Telefonnummer muss ausgefüllt werden']
+    end
+
+    it 'is valid if required attrs are set' do
+      model.attributes = required_attrs
+      expect(model).to be_valid
     end
   end
 

@@ -25,11 +25,12 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
   ]
 
   self.required_attrs = [
-    :first_name, :last_name, :email, :address, :zip_code, :town, :birthday
+    :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country
   ]
 
-  delegate  :phone_numbers, :privacy_policy_accepted?, to: :person
+  delegate  :salutation_label, :phone_numbers, :privacy_policy_accepted?, to: :person
   validate :assert_privacy_policy
+  validate :assert_phone_number
 
   attr_accessor :step
 
@@ -37,14 +38,25 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
     ActiveModel::Name.new(SelfRegistration::MainPerson, nil)
   end
 
+  def self.human_attribute_name(*args)
+    return PhoneNumber.model_name.human if args.first =~ /phone_numbers/
+
+    super
+  end
+
   def person
     @person ||= Person.new(attributes.except('newsletter', 'promocode').compact).tap do |p|
       p.tag_list.add 'newsletter' if attributes['newsletter']
       p.tag_list.add 'promocode' if attributes['promocode']
+      p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?
     end
   end
 
   private
+
+  def assert_phone_number
+    errors.add(:phone_numbers, :blank) if phone_numbers.none?(&:valid?)
+  end
 
   def assert_privacy_policy
     if privacy_policy_accepted&.to_i&.zero?
