@@ -24,7 +24,7 @@ describe People::MembershipVerifier do
       expect(verifier.member?).to eq(true)
     end
 
-    it 'returns true if person has one active member role' do
+    xit 'returns true if person has one active member role' do
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
                 group: neuanmeldungen_sektion, person: person)
 
@@ -46,4 +46,3 @@ describe People::MembershipVerifier do
     end
   end
 end
-

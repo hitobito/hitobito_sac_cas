@@ -15,5 +15,9 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
     include SacCas::Role::HardDestroy
   end
 
-  roles Neuanmeldung
+  class NeuanmeldungZusatzsektion < ::Role
+    include SacCas::Role::MitgliedZusatzsektion
+  end
+
+  roles Neuanmeldung, NeuanmeldungZusatzsektion
 end

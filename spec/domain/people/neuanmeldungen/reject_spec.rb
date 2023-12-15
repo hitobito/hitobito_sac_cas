@@ -20,8 +20,7 @@ describe People::Neuanmeldungen::Reject do
       group: group,
       beitragskategorie: beitragskategorie,
       created_at: 1.year.ago,
-      # Neuanmeldungen are only allowed on the primary group of the person, so we set it here accordingly
-      person: Fabricate(:person, birthday: 20.years.ago, primary_group: group)
+      person: Fabricate(:person, birthday: 20.years.ago)
     )
   end
 

@@ -79,7 +79,8 @@ de:
     errors:
       messages:
         too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
-        family_role_on_non_primary_group: 'Familienmitgliedschaften sind nur auf der Hauptsektion möglich.'
+        only_one_mitglied_role_allowed_at_a_time: 'hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit.'
+        must_have_mitglied_role: 'muss Mitglied sein.'
 
     models:
 
@@ -178,8 +179,11 @@ de:
         one: Funktionär*in
         description: Funktionär*in Sektion
       group/sektions_mitglieder/mitglied:
-        one: Mitglied
-        description: Mitglied
+        one: Mitglied (Stammsektion)
+        description: Mitglied (Stammsektion)
+      group/sektions_mitglieder/mitglied_zusatzsektion:
+        one: Mitglied (Zusatzsektion)
+        description: Mitglied (Zusatzsektion)
       group/sektions_mitglieder/abonnement:
         one: Abonnement
         description: Abonnement
@@ -193,11 +197,17 @@ de:
         one: Begünstigt
         description: Begünstigt
       group/sektions_neuanmeldungen_sektion/neuanmeldung:
-        one: Neuanmeldung
-        description: Neuanmeldung Mitgliedschaft
+        one: Neuanmeldung (Stammsektion)
+        description: Neuanmeldung Mitgliedschaft (Stammesektion)
+      group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
+        one: Neuanmeldung (Zusatzsektion)
+        description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
       group/sektions_neuanmeldungen_nv/neuanmeldung:
-        one: Neuanmeldung
-        description: Neuanmeldung Mitgliedschaft
+        one: Neuanmeldung (Stammsektion)
+        description: Neuanmeldung Mitgliedschaft (Stammsektion)
+      group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
+        one: Neuanmeldung (Zusatzsektion)
+        description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
       group/sektions_tourenkommission/tourenchef_sommer:
         one: Tourenchef*in Sommer
         description: Tourenchef*in Sommer

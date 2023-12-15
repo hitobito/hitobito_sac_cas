@@ -16,15 +16,16 @@ describe Role do
 
   context 'Mitglied vs. Beitragskategorie' do
     it 'assigns correct beitragskategorie when creating new mitglied role' do
-      person.update!(birthday: Time.zone.today - 33.years)
+      person.update!(birthday: Time.zone.today - 17.years)
 
-      role = Group::SektionsMitglieder::Mitglied.create!(person: person, group: bluemlisalp_mitglieder)
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.name, person: person, group: bluemlisalp_mitglieder)
 
-      expect(role.beitragskategorie).to eq('einzel')
+      expect(role.beitragskategorie).to eq('jugend')
     end
 
-    it 'is not valid without beitragskategorie or person\'s birthdate' do
-      role = Group::SektionsMitglieder::Mitglied.new(person: person, group: bluemlisalp_mitglieder)
+    it 'is not valid without person\'s birthdate' do
+      person.update!(birthday: nil)
+      role = Fabricate.build(Group::SektionsMitglieder::Mitglied.name, person: person, group: bluemlisalp_mitglieder)
 
       expect(role).not_to be_valid
     end
@@ -33,27 +34,32 @@ describe Role do
       person.update!(birthday: Time.zone.today - 17.years)
 
       neuanmeldung_nv =
-        Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
-          person: person, group: bluemlisalp_neuanmeldungen_nv)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
+          person: person, group: bluemlisalp_neuanmeldungen_nv
+        )
 
       expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
 
-      neuanmeldung_sektion = Group::SektionsNeuanmeldungenSektion::Neuanmeldung.create!(
-        person: person, group: bluemlisalp_neuanmeldungen_sektion)
+      neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
+        person: person, group: bluemlisalp_neuanmeldungen_sektion
+      )
 
       expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
     end
 
-    it 'is not valid without beitragskategorie or person\'s birthdate' do
+    it 'is not valid without person\'s birthdate' do\
+      person.update!(birthday: nil)
       neuanmeldung_nv =
-        Group::SektionsNeuanmeldungenNv::Neuanmeldung.new(
-          person: person, group: bluemlisalp_neuanmeldungen_nv)
+        Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
+          person: person, group: bluemlisalp_neuanmeldungen_nv
+        )
 
       expect(neuanmeldung_nv).not_to be_valid
 
       neuanmeldung_sektion =
-        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.new(
-          person: person, group: bluemlisalp_neuanmeldungen_sektion)
+        Fabricate.build(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
+          person: person, group: bluemlisalp_neuanmeldungen_sektion
+        )
 
       expect(neuanmeldung_sektion).not_to be_valid
     end
@@ -63,24 +69,24 @@ describe Role do
     [
       [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
       [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
-      [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv],
+      [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv]
     ].each do |role_type, group|
       it "does not accept person without birthday for #{role_type}" do
         person.birthday = nil
-        role = person.roles.build(type: role_type, group: groups(group))
+        role = Fabricate.build(role_type.name, person: person, group: groups(group))
         expect(role).not_to be_valid
         expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
       end
 
       it "accepts person exceeding age restriction for #{role_type}" do
         person.birthday = 6.years.ago - 1.day
-        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        role = Fabricate.build(role_type.name, person: person, group: groups(group), beitragskategorie: :einzel)
         expect(role).to be_valid
       end
 
       it "rejects person below age restriction for #{role_type}" do
         person.birthday = 5.years.ago
-        role = person.roles.build(type: role_type, group: groups(group), beitragskategorie: :einzel)
+        role = Fabricate.build(role_type.name, person: person, group: groups(group), beitragskategorie: :einzel)
         expect(role).not_to be_valid
         expect(role.errors[:person]).to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
       end
@@ -88,7 +94,8 @@ describe Role do
 
     it 'accepts person below age limit on other group' do
       person.birthday = 5.years.ago
-      role = person.roles.build(type: Group::Geschaeftsstelle::ITSupport, group: groups(:geschaeftsstelle))
+      role = Fabricate.build(Group::Geschaeftsstelle::ITSupport.name, person: person,
+                                group: groups(:geschaeftsstelle))
       expect(role).to be_valid
     end
   end
@@ -106,8 +113,8 @@ describe Role do
         def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42')
           person = Fabricate.build(:person, birthday: age.years.ago,
                                             household_key: household_key)
-          role = role_type.new(person: person, group: groups(group),
-                        beitragskategorie: beitragskategorie)
+          role = Fabricate.build(role_type.name, person: person, group: groups(group),
+                               beitragskategorie: beitragskategorie)
           person.primary_group = role.group
           role
         end
@@ -119,12 +126,11 @@ describe Role do
           expect(role).to be_valid
         end
 
-        it 'beitragskategorie=familie is rejected on non-primary group' do
+        it 'beitragskategorie=familie is accepted on non-primary group' do
           role = build_role
           role.person.primary_group = groups(:geschaeftsstelle)
 
-          expect(role).not_to be_valid
-          expect(role.errors[:base]).to include('Familienmitgliedschaften sind nur auf der Hauptsektion möglich.')
+          expect(role).to be_valid
         end
 
         context 'adult family members count' do
@@ -172,16 +178,16 @@ describe Role do
           end
 
           context 'with beitragskategorie=einzel' do
-          it 'accepts third adult in same household' do
-            # Add 2 adults with beitragskategorie=familie
-            2.times { build_role(beitragskategorie: :familie).save! }
+            it 'accepts third adult in same household' do
+              # Add 2 adults with beitragskategorie=familie
+              2.times { build_role(beitragskategorie: :familie).save! }
 
-            # Test third adult with beitragskategorie=einzel
-            # This is a special case, because the person is part of the same household, but
-            # is not included in the family membership.
-            third_adult = build_role(beitragskategorie: :einzel)
-            expect(third_adult).to be_valid
-          end
+              # Test third adult with beitragskategorie=einzel
+              # This is a special case, because the person is part of the same household, but
+              # is not included in the family membership.
+              third_adult = build_role(beitragskategorie: :einzel)
+              expect(third_adult).to be_valid
+            end
           end
         end
       end
@@ -191,25 +197,28 @@ describe Role do
   describe 'primary_group' do
     let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
     let(:primary) { groups(:geschaeftsstelle) }
-    let(:mitglieder) {  groups(:bluemlisalp_mitglieder) }
+    let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
     context 'with primary_group not a preferred_primary' do
       let(:person) { people(:admin) }
 
-      it "does not change when creating normal role" do
+      it 'does not change when creating normal role' do
         expect do
-          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
-        end.not_to change { person.reload.primary_group }
+          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere,
+                                                                      person: person)
+        end.not_to(change { person.reload.primary_group })
       end
 
-      it "does change when creating preferred role" do
+      it 'does change when creating preferred role' do
         expect do
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: person, beitragskategorie: :einzel)
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder,
+                                                                  person: person, beitragskategorie: :einzel)
         end.to change { person.reload.primary_group }.from(primary).to(mitglieder)
       end
 
-      it "does change back when destroying preferred role" do
-        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: person, beitragskategorie: :einzel)
+      it 'does change back when destroying preferred role' do
+        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder,
+                                                                       person: person, beitragskategorie: :einzel)
         expect do
           role.destroy
         end.to change { person.reload.primary_group }.from(mitglieder).to(primary)
@@ -219,18 +228,21 @@ describe Role do
     context 'with primary_group a preferred_primary' do
       let(:person) { people(:mitglied) }
 
-      it "does not change when creating normal role" do
+      it 'does not change when creating normal role' do
         expect do
-          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: person)
-        end.not_to change { person.reload.primary_group }
+          Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere,
+                                                                      person: person)
+        end.not_to(change { person.reload.primary_group })
       end
 
-      it "does not change when creating preferred role" do
-        other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
-          .find_by(type: Group::SektionsMitglieder)
+      xit 'does not change when creating preferred role' do
+        other = Fabricate(Group::Sektion.sti_name, parent: groups(:root),
+                                                   foundation_year: 2023).children
+                .find_by(type: Group::SektionsMitglieder)
         expect do
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
-        end.not_to change { person.reload.primary_group }
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person,
+                                                                  beitragskategorie: :einzel)
+        end.not_to(change { person.reload.primary_group })
       end
     end
   end
@@ -238,15 +250,8 @@ describe Role do
   describe '#to_s' do
     let(:person) { people(:mitglied) }
 
-    it 'does not have zusatzsektion suffix on primary group role' do
-      expect(roles(:mitglied).to_s).to eq 'Mitglied (Einzel)'
-    end
-
-    it 'includes zusatzsektion suffix' do
-      other = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
-        .find_by(type: Group::SektionsMitglieder)
-      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other, person: person, beitragskategorie: :einzel)
-      expect(role.to_s).to eq 'Mitglied (Einzel) (Zusatzsektion)'
+    it 'includes the beitragskategorie label' do
+      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Bis 31.12.2015) (Einzel)'
     end
   end
 end

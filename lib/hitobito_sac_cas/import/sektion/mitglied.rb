@@ -70,7 +70,8 @@ module Import
       private
 
       def delete_roles
-        person.roles.with_deleted.where(group: @group, type: TARGET_ROLE).delete_all
+        # TODO: in a later ticket: how should we handle roles when running the importer repeatedly?
+        # person.roles.with_deleted.where(group: @group, type: TARGET_ROLE).delete_all
       end
 
       def assign_attributes(person) # rubocop:disable Metrics/AbcSize
@@ -109,16 +110,27 @@ module Import
       end
 
       def build_role(person)
-        created_at = parse_datetime(row[:role_created_at])
-        deleted_at = parse_datetime(row[:role_deleted_at]) if quitted?
+        # TODO: in a later ticket: what should the fallback value be?
+        # https://github.com/hitobito/hitobito_sac_cas/issues/179
+        created_at = parse_datetime(row[:role_created_at]) || Time.zone.at(0)
+
+        if quitted?
+          deleted_at = parse_datetime(row[:role_deleted_at])
+        else
+          # TODO: in a later ticket: to what value should we set delete_on in case deleted_at=nil?
+          delete_on = Time.zone.today.end_of_year
+        end
+
         category = BEITRAGSKATEGORIEN[row[:beitragskategorie]]
 
-        person.roles.build(
+        # TODO: in a later ticket: how should we handle roles when running the importer repeatedly?
+        person.roles.find_or_initialize_by(
           group: @group,
-          type: Group::SektionsMitglieder::Mitglied,
+          type: Group::SektionsMitglieder::Mitglied.sti_name,
           beitragskategorie: category,
           created_at: created_at,
-          deleted_at: deleted_at
+          deleted_at: deleted_at,
+          delete_on: delete_on
         )
       end
 

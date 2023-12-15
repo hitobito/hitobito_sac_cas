@@ -9,13 +9,10 @@ module SacCas::Roles::Termination
 
   def call
     Role.transaction do
-      super.tap do |success|
-        next unless success # terminating role failed, do not terminate dependent roles
-
-        terminate(dependent_roles)
-        terminate(family_member_roles)
-      end
-    end
+      terminate(dependent_roles)
+      terminate(family_member_roles)
+      super || raise(ActiveRecord::Rollback)
+    end || false
   end
 
   # Returns all roles that will be terminated.
@@ -25,7 +22,6 @@ module SacCas::Roles::Termination
 
   def family_member_roles
     return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) &&
-      role.in_primary_group? &&
       role.beitragskategorie.familie?
 
     group_ids = affected_roles.map(&:group_id)
@@ -37,22 +33,25 @@ module SacCas::Roles::Termination
 
   private
 
-  # For a Group::SektionsMitglieder::Mitglied role that is in the primary group of the person,
-  # this returns all other Group::SektionsMitglieder::Mitglied roles of the same person.
-  # For any other role type or role that is not in the primary group, returns an empty array.
+  # For a Group::SektionsMitglieder::Mitglied role, this returns all other
+  # Group::SektionsMitglieder::MitgliedZusatzsektion roles of the same person.
+  # For any other role type returns an empty array.
   def dependent_roles
-    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) && role.in_primary_group?
+    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied)
 
-    Group::SektionsMitglieder::Mitglied.
-      where(person_id: role.person_id).
-      where.not(id: role.id)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.
+      where(person_id: role.person_id)
   end
 
   def terminate(roles)
     roles.each do |role|
       role.delete_on = terminate_on
       role.write_attribute(:terminated, true)
-      role.save!
+      # We explicitely set the context to :destroy, because some validations are configured to
+      # run on [:create, :update] and we don't want them to run here. Technically we are doing
+      # an update, but as we are setting the delete_on attribute, we are treating this as a
+      # destroy operation.
+      role.save!(context: :destroy)
     end
   end
 

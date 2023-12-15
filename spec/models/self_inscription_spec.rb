@@ -170,7 +170,7 @@ describe SelfInscription do
       let(:group) { other_group }
 
       let(:person) { role.person }
-      let(:role) { roles(:mitglied).tap { |r| r.update!(created_at: 2.years.ago) } }
+      let(:role) { roles(:mitglied) }
 
       context 'replacing existing sektion' do
         before { model.register_as = :replace }
@@ -186,7 +186,7 @@ describe SelfInscription do
           model.register_on = :jul
           travel_to(Date.new(2023, 5)) do
             expect { model.save! }.to change { neuanmeldungen_future.count }.by(1)
-              .and change { role.reload.delete_on }.from(nil).to(Date.new(2023,7))
+              .and change { role.reload.delete_on }.to(Date.new(2023,7))
               .and not_change { neuanmeldungen.count }
           end
         end

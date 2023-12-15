@@ -93,7 +93,7 @@ describe :self_inscription, js: true do
           click_button 'Beitritt beantragen'
           expect(page).to have_css("#flash", text: 'Die Rolle wurde erfolgreich gespeichert')
           expect(page).not_to have_css('section:nth-of-type(2)', text: 'SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)')
-          expect(page).to have_css('section:nth-of-type(3)', text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (ab 01.07.2023)")
+          expect(page).to have_css('section:nth-of-type(3)', text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (Stammsektion) (ab 01.07.2023)")
         end
       end
     end

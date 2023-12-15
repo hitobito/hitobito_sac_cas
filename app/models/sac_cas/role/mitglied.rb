@@ -8,12 +8,7 @@
 module SacCas::Role::Mitglied
   extend ActiveSupport::Concern
 
-  include SacCas::Role::MitgliedFamilyValidations
-  include SacCas::Role::MitgliedMinimalAgeValidation
-  include SacCas::RoleBeitragskategorie
+  include SacCas::Role::MitgliedCommon
+  include SacCas::Role::MitgliedSingularRoleValidation
 
-  included do
-    self.permissions = []
-    self.basic_permissions_only = true
-  end
 end

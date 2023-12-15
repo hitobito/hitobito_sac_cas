@@ -20,9 +20,9 @@ describe People::Neuanmeldungen::Approve do
       NEUANMELDUNG_ROLE_CLASS.sti_name,
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
-      created_at: 1.year.ago,
-      # Neuanmeldungen are only allowed on the primary group of the person, so we set it here accordingly
-      person: Fabricate(:person, birthday: 20.years.ago, primary_group: neuanmeldungen_sektion)
+      created_at: Time.zone.now.beginning_of_year,
+      delete_on: Time.zone.today.end_of_year,
+      person: Fabricate(:person, birthday: 20.years.ago)
     )
   end
 
