@@ -39,6 +39,10 @@ de:
         membership_number: Mitglied-Nr
         genders:
           _nil: andere
+        salutations:
+          m: Mann
+          w: Frau
+          _nil: Andere
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
@@ -318,7 +322,7 @@ de:
         promo_code: Promocode
       form:
         main_email_title: Haupt-E-Mail
-        main_person_title: Personendaten
+        neuanmeldung_main_person_title: Personendaten
         single_or_household_title: Mitgliedschaftstyp
         household_title: Familienmitglieder
         main_title: Familienmitglieder

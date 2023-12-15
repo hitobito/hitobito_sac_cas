@@ -22,12 +22,16 @@ describe :self_registration_neuanmeldung, js: true do
   def complete_main_person_form
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
+    choose 'Mann'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Adresse', with: 'Musterplatz'
+    fill_in 'Geburtstag', with: '01.01.1980'
+    fill_in 'Telefonnummer', with: '+41 79 123 45 56'
     fill_in 'self_registration_main_person_attributes_zip_code', with: '8000'
     fill_in 'self_registration_main_person_attributes_town', with: 'Zürich'
-    fill_in 'Geburtstag', with: '01.01.1980'
+    find(:label, "Land").click
+    find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field('Newsletter')
     expect(page).not_to have_field('Promocode')
     yield if block_given?
@@ -58,11 +62,7 @@ describe :self_registration_neuanmeldung, js: true do
     let(:person) { Person.find_by(email: 'max.muster@hitobito.example.com') }
     it 'self registers and creates new person' do
       visit group_self_registration_path(group_id: group)
-      complete_main_person_form do
-        choose 'männlich'
-        find(:label, "Land").click
-        find(:option, text: "Vereinigte Staaten").click
-      end
+      complete_main_person_form
       click_on 'Weiter als Einzelmitglied'
 
       expect do
@@ -80,6 +80,7 @@ describe :self_registration_neuanmeldung, js: true do
       expect(person.zip_code).to eq '8000'
       expect(person.town).to eq 'Zürich'
       expect(person.country).to eq 'US'
+      expect(person.gender).to eq 'm'
       expect(person.birthday).to eq Date.new(1980, 1, 1)
 
       person.confirm # confirm email

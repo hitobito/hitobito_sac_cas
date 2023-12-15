@@ -113,4 +113,14 @@ describe Person do
       expect(person_with_membership_years.membership_years).to eq 2
     end
   end
+
+  describe '#salutation_label' do
+    subject(:person) { Fabricate.build(:person) }
+
+    ['m', 'w', nil].zip(%w(Mann Frau Andere)).each do |value, label|
+      it "is #{label} for #{value}" do
+        expect(person.salutation_label(value)).to eq label
+      end
+    end
+  end
 end
