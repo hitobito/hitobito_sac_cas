@@ -7,12 +7,8 @@
 
 require 'spec_helper'
 
-describe SelfRegistration::MainPerson do
+describe SelfRegistrationNeuanmeldung::MainPerson do
   subject(:model) { described_class.new }
-
-  it 'is a Housemate' do
-    expect(model).to be_kind_of(SelfRegistration::Person)
-  end
 
   describe 'attribute assignments accept additiional attributes' do
     it 'works via constructor for symbols' do

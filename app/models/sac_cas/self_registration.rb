@@ -11,6 +11,15 @@ module SacCas::SelfRegistration
 
   prepended do
     delegate :email, to: :main_person
+
+    def self.for(group)
+      case group
+      when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion then
+        SelfRegistrationNeuanmeldung
+      else
+        SelfRegistration
+      end
+    end
   end
 
   def redirect_to_login?

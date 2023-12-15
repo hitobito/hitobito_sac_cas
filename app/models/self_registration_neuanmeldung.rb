@@ -9,7 +9,6 @@
 class SelfRegistrationNeuanmeldung < SelfRegistration
   attr_accessor :housemates_attributes
 
-
   self.partials = [:main_email, :main_person, :household, :summary]
 
   def self.model_name
