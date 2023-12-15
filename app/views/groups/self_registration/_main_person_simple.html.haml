@@ -3,10 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= f.labeled(:newsletter, '&nbsp;'.html_safe) do
-  %label.checkbox
-    = f.check_box :newsletter
-    = t('groups.self_registration.summary.newsletter')
+- if f.object.is_a?(SelfRegistration::MainPerson)
+  = f.labeled(:newsletter, '&nbsp;'.html_safe) do
+    %label.checkbox
+      = f.check_box :newsletter
+      = t('groups.self_registration.summary.newsletter')
 
-= field_set_tag do
-  = f.labeled_input_field(:promocode)
+  = field_set_tag do
+    = f.labeled_input_field(:promocode)

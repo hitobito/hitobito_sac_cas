@@ -28,6 +28,8 @@ describe :self_registration_neuanmeldung, js: true do
     fill_in 'self_registration_main_person_attributes_zip_code', with: '8000'
     fill_in 'self_registration_main_person_attributes_town', with: 'Zürich'
     fill_in 'Geburtstag', with: '01.01.1980'
+    expect(page).not_to have_field('Newsletter')
+    expect(page).not_to have_field('Promocode')
     yield if block_given?
     click_on 'Weiter'
   end
