@@ -16,6 +16,22 @@ module SacCas::Groups::SelfRegistrationController
 
   private
 
+  def entry
+    @entry ||= self_registration_class.new(
+      group: group,
+      params: params.to_unsafe_h.deep_symbolize_keys
+    )
+  end
+
+  def self_registration_class
+    case group
+    when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion then
+      SelfRegistrationNeuanmeldung
+    else
+      SelfRegistration
+    end
+  end
+
   def redirect_to_login
     store_location_for(entry.main_person.person, group_self_inscription_path(group))
 

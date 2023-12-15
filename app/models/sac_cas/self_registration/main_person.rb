@@ -11,23 +11,15 @@ module SacCas::SelfRegistration::MainPerson
 
   prepended do
     self.attrs = [
-      :first_name, :last_name, :email, :gender, :birthday,
-      :address, :zip_code, :town, :country,
-      :additional_information,
-      :phone_numbers_attributes,
-
-      # Custom attrs
+      :first_name, :last_name, :nickname, :email,
       :newsletter,
       :promocode,
       :privacy_policy_accepted,
-
-      # Internal attrs
-      :primary_group,
-      :household_key
+      :primary_group
     ]
 
     self.required_attrs = [
-      :first_name, :last_name, :email, :address, :zip_code, :town, :birthday
+      :first_name, :last_name
     ]
 
     attr_accessor :step
