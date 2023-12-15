@@ -52,7 +52,8 @@ module SacCas::SelfRegistration
   end
 
   def existing_valid_email?
-    ::Person.where(email: email).exists? && Truemail.validate(email.to_s, with: :regex).result.success
+    ::Person.where(email: email).exists? &&
+      Truemail.validate(email.to_s, with: :regex).result.success
   end
 
   def build_person(*args)
