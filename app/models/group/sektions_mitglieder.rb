@@ -11,15 +11,21 @@ class Group::SektionsMitglieder < ::Group
 
   ### ROLES
   class Mitglied < ::Role
-    include SacCas::Role::Mitglied
+    include SacCas::Role::MitgliedHauptsektion
 
     self.terminatable = true
+
+    validates :delete_on, presence: { message: :must_be_present_unless_deleted },
+                          unless: :deleted_at?
   end
 
   class MitgliedZusatzsektion < ::Role
     include SacCas::Role::MitgliedZusatzsektion
 
     self.terminatable = true
+
+    validates :delete_on, presence: { message: :must_be_present_unless_deleted },
+                          unless: :deleted_at?
   end
 
   class Abonnement < ::Role

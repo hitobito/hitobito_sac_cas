@@ -34,15 +34,15 @@ describe Role do
       person.update!(birthday: Time.zone.today - 17.years)
 
       neuanmeldung_nv =
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
+        Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
           person: person, group: bluemlisalp_neuanmeldungen_nv
-        )
+        ).tap(&:validate)
 
       expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
 
       neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
         person: person, group: bluemlisalp_neuanmeldungen_sektion
-      )
+      ).tap(&:validate)
 
       expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
     end
@@ -244,6 +244,51 @@ describe Role do
                                                                   beitragskategorie: :einzel)
         end.not_to(change { person.reload.primary_group })
       end
+    end
+  end
+
+  context '#start_on' do
+    it 'returns nil if created_at is nil' do
+      role = Role.new(created_at: nil)
+      expect(role.start_on).to be_nil
+    end
+
+    it 'returns created_at date' do
+      role = Role.new(created_at: Time.zone.now)
+      expect(role.start_on).to eq role.created_at.to_date
+    end
+  end
+
+  context '#end_on' do
+    it 'returns nil if deleted_at and archived_at and delete_on are nil' do
+      role = Role.new(deleted_at: nil, archived_at: nil, delete_on: nil)
+      expect(role.end_on).to be_nil
+    end
+
+    it 'returns deleted_at date' do
+      role = Role.new(deleted_at: Time.zone.now, archived_at: nil, delete_on: nil)
+      expect(role.end_on).to eq role.deleted_at.to_date
+    end
+
+    it 'returns archived_at date' do
+      role = Role.new(archived_at: Time.zone.now, deleted_at: nil, delete_on: nil)
+      expect(role.end_on).to eq role.archived_at.to_date
+    end
+
+    it 'returns delete_on date' do
+      role = Role.new(delete_on: Time.zone.now, archived_at: nil, deleted_at: nil)
+      expect(role.end_on).to eq role.delete_on.to_date
+    end
+
+    it 'returns earliest date' do
+      role = Role.new(delete_on: Time.zone.today, archived_at: 1.day.ago, deleted_at: 2.days.ago)
+      expect(role.end_on).to eq role.deleted_at.to_date
+
+      role = Role.new(delete_on: Time.zone.today, archived_at: 2.days.ago, deleted_at: 1.days.ago)
+      expect(role.end_on).to eq role.archived_at.to_date
+
+      role = Role.new(delete_on: 2.days.ago, archived_at: 1.days.ago, deleted_at: Time.zone.now)
+      expect(role.end_on).to eq role.delete_on
     end
   end
 

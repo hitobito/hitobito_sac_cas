@@ -23,11 +23,13 @@ module HitobitoSacCas
 
     config.to_prepare do
       # extend application classes here
+      FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Person.include SacCas::Person
       Person::Household.prepend SacCas::Person::Household
       Role.prepend SacCas::Role
       SelfRegistration.prepend SacCas::SelfRegistration
+      SelfRegistration::Person.prepend SacCas::SelfRegistration::Person
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
 

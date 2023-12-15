@@ -7,10 +7,18 @@
 
 module SacCas::Role
 
+  def start_on
+    created_at&.to_date
+  end
+
+  def end_on
+    [deleted_at&.to_date, archived_at&.to_date, delete_on].compact.min
+  end
+
   protected
 
   def preferred_primary?
-    Groups::Primary::ROLE_TYPES.include?(type)
+    SacCas::MITGLIED_HAUPTSEKTION_ROLES.include?(type.safe_constantize)
   end
 
   private

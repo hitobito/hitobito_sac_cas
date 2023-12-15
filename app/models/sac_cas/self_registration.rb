@@ -52,22 +52,13 @@ module SacCas::SelfRegistration
   end
 
   def existing_valid_email?
-    Person.where(email: email).exists? && Truemail.validate(email.to_s, with: :regex).result.success
+    ::Person.where(email: email).exists? && Truemail.validate(email.to_s, with: :regex).result.success
   end
 
   def build_person(*args)
     super(*args) do |attrs|
       attrs.merge(household_key: household_key, household_emails: household_emails)
     end
-  end
-
-  def role_attrs(person)
-    super.merge(
-      # TODO: in a later ticket: what timestamps should we set for created_at and delete_on?
-      # https://github.com/hitobito/hitobito_sac_cas/issues/177
-      created_at: Time.zone.now,
-      delete_on: Time.zone.today.end_of_year
-    )
   end
 
   def build_housemates

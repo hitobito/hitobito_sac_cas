@@ -10,6 +10,7 @@ module SacCas::Role::MitgliedCommon
 
   include SacCas::Role::MitgliedFamilyValidations
   include SacCas::Role::MitgliedMinimalAgeValidation
+  include SacCas::Role::MitgliedNoOverlapValidation
   include SacCas::RoleBeitragskategorie
 
   included do
@@ -17,8 +18,6 @@ module SacCas::Role::MitgliedCommon
     self.basic_permissions_only = true
 
     validates :created_at, presence: true
-    validates :delete_on, presence: true, unless: :deleted_at
-    validates :deleted_at, presence: true, unless: :delete_on
   end
 
 end

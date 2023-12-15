@@ -5,10 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacCas::Role::Mitglied
+module SacCas::Role::MitgliedHauptsektion
   extend ActiveSupport::Concern
 
   include SacCas::Role::MitgliedCommon
-  include SacCas::Role::MitgliedSingularRoleValidation
-
 end
