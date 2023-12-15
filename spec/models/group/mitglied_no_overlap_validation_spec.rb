@@ -74,7 +74,7 @@ describe :mitglied_no_overlap_validation do
               delete_on: existing_role.delete_on
             )
 
-            expect(new_role).not_to be_valid
+            expect(new_role).not_to be_valid, "expected #{other_type.sti_name} to be invalid"
             expect(new_role.errors[:person]).to eq [error_message]
           end
         end
@@ -153,6 +153,7 @@ describe :mitglied_no_overlap_validation do
 
               new_role.delete_on = existing_role.created_at - 1.day
               new_role.created_at = existing_role.created_at - 2.days
+              new_role.validate
 
               expect(new_role.errors[:person]).not_to include(/bereits/)
             end

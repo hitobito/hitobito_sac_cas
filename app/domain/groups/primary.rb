@@ -7,7 +7,7 @@
 
 module Groups
   class Primary
-    ROLE_TYPES = SacCas::MITGLIED_HAUPTSEKTION_ROLE_TYPES
+    ROLE_TYPES = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name).freeze
 
     GROUP_TYPES = ROLE_TYPES.collect(&:deconstantize).freeze
 

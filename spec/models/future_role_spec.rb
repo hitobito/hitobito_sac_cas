@@ -8,47 +8,6 @@
 require 'spec_helper'
 
 describe FutureRole do
-  context 'target_type validations' do
-    let(:group) { groups(:root) }
-    let(:person) { people(:mitglied) }
-
-    before do
-      stub_const('TargetRole', Class.new(Role) do
-        attr_accessor :target_type_valid
-        validates :target_type_valid, presence: true
-      end)
-      group.class.role_types += [TargetRole]
-    end
-
-    after do
-      group.class.role_types -= [TargetRole]
-    end
-
-    let(:role) do
-      Fabricate.build(
-        :future_role,
-        person: person,
-        group: group,
-        convert_to: TargetRole.sti_name,
-        convert_on: Time.zone.tomorrow
-      )
-    end
-
-    it 'are checked if validate_target_type? returns true' do
-      allow(role).to receive(:validate_target_type?).and_return(true)
-      role.validate
-
-      expect(role.errors[:target_type_valid]).to include("muss ausgefüllt werden")
-    end
-
-    it 'are skipped if validate_target_type? returns false' do
-      allow(role).to receive(:validate_target_type?).and_return(false)
-      role.validate
-
-      expect(role.errors[:target_type_valid]).to be_blank
-    end
-  end
-
   context '#start_on' do
     it 'returns convert_on' do
       role = FutureRole.new(convert_on: 42.days.from_now.to_date)

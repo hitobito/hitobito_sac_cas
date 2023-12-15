@@ -12,16 +12,11 @@ module SacCas
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   ].freeze
 
-  MITGLIED_HAUPTSEKTION_ROLE_TYPES = MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name).freeze
-
   MITGLIED_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsMitglieder::MitgliedZusatzsektion,
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
   ].freeze
 
-  MITGLIED_ZUSATZSEKTION_ROLE_TYPES = MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name).freeze
-
   MITGLIED_ROLES = (MITGLIED_HAUPTSEKTION_ROLES + MITGLIED_ZUSATZSEKTION_ROLES).freeze
-  MITGLIED_ROLE_TYPES = MITGLIED_ROLES.map(&:sti_name).freeze
 end

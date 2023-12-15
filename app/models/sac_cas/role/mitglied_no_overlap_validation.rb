@@ -26,7 +26,7 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def assert_no_overlapping_primary_memberships
-    overlapping_roles(active_period, SacCas::MITGLIED_HAUPTSEKTION_ROLE_TYPES).tap do |conflicting_roles|
+    overlapping_roles(active_period, SacCas::MITGLIED_HAUPTSEKTION_ROLES).tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
     end.present?
   end
@@ -34,7 +34,7 @@ module SacCas::Role::MitgliedNoOverlapValidation
   def assert_no_overlapping_memberships_per_sektion
     this_sektion = role_sektion(self) or return # we can't validate without the sektion
 
-    overlapping_roles(active_period, SacCas::MITGLIED_ROLE_TYPES).
+    overlapping_roles(active_period, SacCas::MITGLIED_ROLES).
       select { |role| role_sektion(role) == this_sektion }.tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
     end.present?
@@ -42,7 +42,7 @@ module SacCas::Role::MitgliedNoOverlapValidation
 
   def overlapping_roles(period, role_types)
     Role.
-      where(type: role_types).
+      where(type: role_types.map(&:sti_name)).
       where(person_id: person_id).
       where.not(id: id).
       to_a.
