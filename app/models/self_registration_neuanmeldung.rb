@@ -9,7 +9,7 @@
 class SelfRegistrationNeuanmeldung < SelfRegistration
   attr_accessor :housemates_attributes
 
-  self.partials = [:main_email, :main_person, :household, :summary]
+  self.partials = [:main_email, :neuanmeldung_main_person, :household, :summary]
 
   def self.model_name
     ActiveModel::Name.new(SelfRegistration, nil)
@@ -75,5 +75,6 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   def household_emails
     (housemates_attributes + [main_person_attributes]).pluck(:email).compact
   end
+  alias_method :neuanmeldung_main_person_valid?, :main_person_valid?
 end
 

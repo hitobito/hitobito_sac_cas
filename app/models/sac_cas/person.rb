@@ -24,6 +24,11 @@ module SacCas::Person
     /\AF/ =~ household_key ? household_key : "F#{household_key}"
   end
 
+  def salutation_label(key)
+    prefix = "activerecord.attributes.person.salutations"
+    I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
+  end
+
   def membership_years
     "#{first_name}#{last_name}".size
   end
