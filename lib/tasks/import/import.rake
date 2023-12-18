@@ -21,9 +21,21 @@ namespace :import do
     Import::HutsImporter.new(hut_relations_excel).import!
   end
 
-  desc 'Import people (Stammsektion) for sektion from a navision export FILE=tmp/xlsx/sektions_mitglieder.xlsx'
+  desc 'Import all people from a navision export (options: FILE=tmp/xlsx/personen.xlsx)'
+  task people: [:environment] do
+    Import::PeopleImporter.new(
+      Pathname(ENV['FILE'].to_s),
+      Person.find_by!(email: Settings.root_email)
+    ).import!
+  end
+
+  desc 'Import people (Stammsektion) for sektion from a' \
+         'navision export FILE=tmp/xlsx/sektions_mitglieder.xlsx'
   task sektions_mitglieder: [:environment] do
-    Import::Sektion::MitgliederImporter.new(Pathname(ENV['FILE'].to_s), Person.find_by!(email: Settings.root_email)).import!
+    Import::Sektion::MitgliederImporter.new(
+      Pathname(ENV['FILE'].to_s),
+      Person.find_by!(email: Settings.root_email)
+    ).import!
   end
 end
 # rubocop:enable Metrics/LineLength
