@@ -16,4 +16,8 @@ module SacCas::Person::HistoryController
     authorize!(:memberships, entry)
   end
 
+  def roles_scope
+    super.with_membership_years
+  end
+
 end

@@ -16,16 +16,27 @@ module SacCas::Person
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
     alias_attribute :membership_number, :id
+
+    scope :with_membership_years, lambda { |selects: 'people.*'|
+      subquery_sql = Group::SektionsMitglieder::Mitglied.
+                     with_deleted.
+                     with_membership_years(selects: 'roles.person_id').
+                     to_sql
+
+      select(*Array.wrap(selects), 'FLOOR(SUM(COALESCE(membership_years, 0))) as membership_years').
+        joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id").
+        group('people.id')
+    }
+  end
+
+  def membership_years
+    read_attribute(:membership_years) or raise 'use Person scope :with_membership_years'
   end
 
   def family_id
     return unless roles.any? { |r| r.beitragskategorie&.familie? }
 
     /\AF/ =~ household_key ? household_key : "F#{household_key}"
-  end
-
-  def membership_years
-    "#{first_name}#{last_name}".size
   end
 
   def init_membership_verify_token!

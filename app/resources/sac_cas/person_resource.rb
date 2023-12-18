@@ -10,5 +10,10 @@ module SacCas::PersonResource
 
   included do
     attribute :family_id, :string, writable: false, sortable: false, filterable: false
+
+    extra_attribute :membership_years, :string, sortable: true, filterable: true
+    on_extra_attribute :membership_years do |scope|
+      scope.with_membership_years
+    end
   end
 end

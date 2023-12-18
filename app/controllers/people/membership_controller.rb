@@ -29,7 +29,7 @@ class People::MembershipController < ApplicationController
   end
 
   def person
-    @person ||= Person.find(params[:id])
+    @person ||= Person.with_membership_years.find(params[:id])
   end
 
   def pdf

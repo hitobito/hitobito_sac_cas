@@ -10,11 +10,14 @@ require 'spec_helper'
 describe Export::Tabular::People::WithSacAdditions do
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
-  let(:person) { Fabricate(:person, household_key: '1234', birthday: 25.years.ago, primary_group: group) }
+  let(:person) do
+    person = Fabricate(:person, household_key: '1234', birthday: 25.years.ago, primary_group: group)
+    Person.with_membership_years.find(person.id)
+  end
 
-  shared_examples 'has membership_number' do
+  shared_examples 'has sac additions' do
 
-    it 'prepends WithMembershipNumber' do
+    it 'prepends WithSacAdditions' do
       expect(tabular_class.ancestors).to include Export::Tabular::People::WithSacAdditions
 
       expect(tabular_class.ancestors.index(Export::Tabular::People::WithSacAdditions)).
@@ -64,9 +67,9 @@ describe Export::Tabular::People::WithSacAdditions do
 
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { person.reload }
+      let(:tabular_entry) { person }
 
-      it_behaves_like 'has membership_number'
+      it_behaves_like 'has sac additions'
     end
 
   end
@@ -78,9 +81,9 @@ describe Export::Tabular::People::WithSacAdditions do
 
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { Fabricate(:event_participation, person: person.reload) }
+      let(:tabular_entry) { Fabricate(:event_participation, person: person) }
 
-      it_behaves_like 'has membership_number'
+      it_behaves_like 'has sac additions'
     end
   end
 end

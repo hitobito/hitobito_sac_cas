@@ -39,4 +39,12 @@ module SacCas::PeopleController
     lookup_context.prefixes.unshift('people/neuanmeldungen') if registrations_for_approval?
   end
 
+  def find_entry
+    Person.with_membership_years.find(super.id)
+  end
+
+  def model_scope
+    super.with_membership_years
+  end
+
 end

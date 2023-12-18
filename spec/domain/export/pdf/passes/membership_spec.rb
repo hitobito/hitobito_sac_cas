@@ -14,7 +14,7 @@ describe Export::Pdf::Passes::Membership do
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
               group: groups(:bluemlisalp_mitglieder))
-    person
+    Person.with_membership_years.find(person.id)
   end
   let(:analyzer) { PDF::Inspector::Text.analyze(subject.render) }
   let(:year) { Time.zone.now.year }
@@ -53,4 +53,3 @@ describe Export::Pdf::Passes::Membership do
   end
 
 end
-
