@@ -21,9 +21,22 @@ namespace :import do
     Import::HutsImporter.new(hut_relations_excel).import!
   end
 
-  desc 'Import people (Stammsektion) for sektion from a navision export FILE=tmp/xlsx/sektions_mitglieder.xlsx'
-  task sektions_mitglieder: [:environment] do
-    Import::Sektion::MitgliederImporter.new(Pathname(ENV['FILE'].to_s), Person.find_by!(email: Settings.root_email)).import!
+  desc 'Import all people from a navision export xlsx' \
+         ' (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)'
+  task people: [:environment] do
+    Import::PeopleImporter.new(
+      Pathname(ENV['FILE'].to_s),
+      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+    ).import!
+  end
+
+  desc 'Import memberships from a navision export xlsx' \
+         ' (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)'
+  task memberships: [:environment] do
+    Import::Sektion::MembershipsImporter.new(
+      Pathname(ENV['FILE'].to_s),
+      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+    ).import!
   end
 end
 # rubocop:enable Metrics/LineLength

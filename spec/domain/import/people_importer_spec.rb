@@ -7,24 +7,25 @@
 
 require 'spec_helper'
 
-describe Import::Sektion::MitgliederImporter do
+describe Import::PeopleImporter do
 
   let(:root) { Fabricate(:person, email: Settings.root_email) }
   let(:group) { groups(:bluemlisalp) }
 
-  def attrs(attrs = {})
+  def attrs(**attrs)
     @navision_id ||= 123
-    {
-      language: :DES, group_navision_id: group.navision_id, beitragskategorie: 'EINZEL',
-      navision_id: (attrs.delete(:navision_id).presence ||  @navision_id += 1),
-      birthday: 40.years.ago.to_date
-    }.merge(attrs)
+    Import::PeopleImporter.headers.keys.map { |symbol| [symbol, nil] }.to_h.merge(
+      navision_id: attrs[:navision_id] || @navision_id += 1,
+      birthday: 40.years.ago.to_date,
+      language: :DES,
+      first_name: 'first-name',
+      last_name: 'last-name'
+    ).merge(attrs)
   end
 
-
   let(:path) { instance_double(Pathname, exist?: true) }
-  let(:output) {  double(:output, puts: true) }
-  subject(:importer) { described_class.new(path, root, output: output) }
+  let(:output) { double(:output, puts: true) }
+  subject(:importer) { described_class.new(path, output: output) }
 
   it 'noops if file does not exist' do
     expect(path).to receive(:exist?).and_return(false)
@@ -38,13 +39,12 @@ describe Import::Sektion::MitgliederImporter do
     expect do
       importer.import!
     end.to change { Person.count }.by(1)
-      .and change { Role.count }.by(1)
+                                  .and change { Role.count }.by(1)
 
     person = Person.find_by(first_name: 'test')
     expect(person.first_name).to eq 'test'
     expect(person.language).to eq 'de'
-    expect(person.roles.first.beitragskategorie).to eq 'einzel'
-    expect(person.roles.first.group).to eq groups(:bluemlisalp_mitglieder)
+    expect(person.roles.first.group.type).to eq 'Group::ExterneKontakte'
   end
 
   it 'creates multiple people' do
@@ -54,45 +54,25 @@ describe Import::Sektion::MitgliederImporter do
     expect do
       importer.import!
     end.to change { Person.count }.by(2)
-      .and change { Role.count }.by(2)
+                                  .and change { Role.count }.by(2)
   end
 
-  it 'updates existing if navision_id is identical' do
+  it 'updates existing person with id=navision_id' do
+    Fabricate(:person, id: 42, first_name: 'old name')
+
     expect(importer).to receive(:each_row)
-      .and_yield(attrs(first_name: 'test'))
-      .and_yield(attrs(first_name: 'test2', navision_id: @navision_id))
-    expect do
-      importer.import!
-    end.to change { Person.count }.by(1)
+      .and_yield(attrs(first_name: 'new name', navision_id: 42))
+
+    expect { importer.import! }.to change { Person.find(42).first_name }.to('new name').
+      and not_change { Person.count }
   end
 
-  describe 'families' do
-    before do
-      expect(importer).to receive(:each_row)
-        .and_yield(attrs(first_name: 'this-family-adult', birthday: 25.years.ago.to_date, household_key: 'this-family', beitragskategorie: 'FAMILIE'))
-        .and_yield(attrs(first_name: 'this-family-child', birthday: 10.years.ago.to_date, household_key: 'this-family', beitragskategorie: 'FAMILIE'))
-    end
-
-    it 'imports household_key' do
-      expect { importer.import! }.to change { Person.count }.by(2)
-      expect(Person.find_by(first_name: 'this-family-adult').household_key).to eq 'this-family'
-      expect(Person.find_by(first_name: 'this-family-child').household_key).to eq 'this-family'
-    end
-
-    it 'creates people_managers' do
-      expect { importer.import! }.to change { PeopleManager.count }.by(1)
-      pm = PeopleManager.last
-      expect(pm.manager).to eq Person.find_by(first_name: 'this-family-adult')
-      expect(pm.managed).to eq Person.find_by(first_name: 'this-family-child')
-    end
-  end
-
-  it 'logs error messages from people that could not be imported because of age' do
+  it 'logs error messages from people that could not be imported' do
     expect(importer).to receive(:each_row)
-      .and_yield(attrs(first_name: 'test', birthday: 3.days.ago))
+      .and_yield(attrs(birthday: '01.01.20000'))
     expect(output).to receive(:puts).with('Die folgenden 1 Personen waren ungültig:')
-    expect(output).to receive(:puts).with(' test(124): Rollen ist nicht gültig, Person muss ein ' \
-                                          'Geburtsdatum haben und mindestens 6 Jahre alt sein')
+    expect(output).to receive(:puts).
+      with(' last-name first-name (124): Geburtstag muss vor 01.01.10000 sein')
     expect do
       importer.import!
     end.not_to change { Person.count }
@@ -101,11 +81,11 @@ describe Import::Sektion::MitgliederImporter do
 
   it 'logs invalid emails but imports person without email' do
     expect(importer).to receive(:each_row)
-      .and_yield(attrs(first_name: 'test', email: 'adsf@zcnet.ch'))
+      .and_yield(attrs(email: 'adsf@zcnet.ch'))
     expect(Truemail).to receive(:valid?).with('adsf@zcnet.ch').and_return(false)
 
     expect(output).to receive(:puts).with('Die folgenden 1 Emails waren ungültig:')
-    expect(output).to receive(:puts).with(' test(124): adsf@zcnet.ch')
+    expect(output).to receive(:puts).with(' last-name first-name (124): adsf@zcnet.ch')
     expect do
       importer.import!
     end.to change { Person.count }
@@ -135,17 +115,29 @@ describe Import::Sektion::MitgliederImporter do
       end.to change { Person.count }.by(2)
       expect(Person.find_by(first_name: 'test2').email).to be_blank
     end
+
+    it 'ignores case for duplicate email detection' do
+      expect(importer).to receive(:each_row)
+        .and_yield(attrs(first_name: 'test1', email: 'test1@example.com'))
+        .and_yield(attrs(first_name: 'test2', email: 'Test1@example.com'))
+
+      expect do
+        importer.import!
+        expect(importer.errors).to be_empty
+      end.to change { Person.count }.by(2)
+      expect(Person.find_by(first_name: 'test2').email).to be_blank
+    end
   end
 
   describe 'callbacks' do
     it 'does not enqueue job nor sends email' do
-    expect(importer).to receive(:each_row)
-      .and_yield(attrs(first_name: 'test', email: 'test@example.com'))
-    expect do
-      importer.import!
-    end.to change { Person.count }.by(1)
-      .and not_change { Delayed::Job.count }
-      .and not_change { ActionMailer::Base.deliveries.size }
+      expect(importer).to receive(:each_row)
+        .and_yield(attrs(first_name: 'test', email: 'test@example.com'))
+      expect do
+        importer.import!
+      end.to change { Person.count }.by(1)
+                                    .and not_change { Delayed::Job.count }
+        .and(not_change { ActionMailer::Base.deliveries.size })
     end
   end
 
