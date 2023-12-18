@@ -38,7 +38,7 @@ describe Import::Sektion::Mitglied do
       expect(member.errors).to be_empty
     end
 
-    it 'is invalid with birthday 6 years ago' do
+    it 'is invalid with birthday less than 6 years ago' do
       attrs[:birthday] = (5.years + 11.month).ago
       expect(member).not_to be_valid
       expect(member.errors).to eq 'Max Muster(123): Rollen ist nicht gültig, Person muss ein Geburtsdatum haben ' \
