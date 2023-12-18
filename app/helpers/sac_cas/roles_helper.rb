@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module RolesHelper
+module SacCas::RolesHelper
 
   def format_role_membership_years(role)
     f(role.membership_years) if role.is_a?(Group::SektionsMitglieder::Mitglied)
