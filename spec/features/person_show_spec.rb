@@ -31,7 +31,7 @@ describe 'person show page' do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link 'Hauptgruppe setzen'
-        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Bis 31.12.2023) (Einzel)")
+        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (bis 31.12.2023) (Einzel)")
       end
     end
 

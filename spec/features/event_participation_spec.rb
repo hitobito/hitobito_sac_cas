@@ -26,7 +26,6 @@ describe :event_participation, js: true do
     visit group_event_path(group_id: group, id: event)
 
     click_link('Anmelden')
-    binding.pry
     find_all('.btn-toolbar.bottom .btn-group button[type="submit"]').first.click # "Weiter"
 
     fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')
