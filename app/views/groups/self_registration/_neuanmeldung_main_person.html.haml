@@ -11,7 +11,7 @@
         - (Person::GENDERS + ['']).each do |key|
           = f.inline_radio_button(:gender, key, f.object.salutation_label(key))
     = f.labeled_input_fields :first_name, :last_name
-    = f.labeled_date_field :birthday
+    = f.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
     = render 'contactable/address_fields', f: f
     = f.fields_for(:phone_numbers) do |ff|
       = ff.labeled(:number, PhoneNumber.model_name.human) do

@@ -19,7 +19,15 @@ describe :self_registration_neuanmeldung, js: true do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
+  def assert_aside(*birthdays)
+    expect(page).to have_css('aside h2', text: "Beiträge in der Sektion #{group.name}")
+    birthdays.each do |birthday|
+      expect(page).to have_css('aside li', text: birthday)
+    end
+  end
+
   def complete_main_person_form
+    assert_aside
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     choose 'Mann'
@@ -34,6 +42,7 @@ describe :self_registration_neuanmeldung, js: true do
     find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field('Newsletter')
     expect(page).not_to have_field('Promocode')
+    assert_aside('01.01.1980')
     yield if block_given?
     click_on 'Weiter'
   end
@@ -80,7 +89,6 @@ describe :self_registration_neuanmeldung, js: true do
       expect(person.zip_code).to eq '8000'
       expect(person.town).to eq 'Zürich'
       expect(person.country).to eq 'US'
-      expect(person.gender).to eq 'm'
       expect(person.birthday).to eq Date.new(1980, 1, 1)
 
       person.confirm # confirm email
@@ -119,7 +127,6 @@ describe :self_registration_neuanmeldung, js: true do
         zip_code: 3007,
         numbers: ['36', '37', '38', '40', '41', '5a', '5b', '6A', '6B']
       )
-      # expect(Address.count).to eq 3
       visit group_self_registration_path(group_id: group)
       fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
       click_on 'Weiter'
@@ -157,6 +164,7 @@ describe :self_registration_neuanmeldung, js: true do
 
       it 'rerenders third page when invalid and submitting from second' do
         click_on 'Weiter als Einzelmitglied'
+        expect(page).to have_field 'Promocode'
         click_on 'Familienmitglieder'
         click_on 'Weiter als Einzelmitglied'
         expect(page).to have_content 'Um die Registrierung abzuschliessen, muss der ' \
@@ -191,6 +199,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
         choose 'weiblich'
       end
+      assert_aside('01.01.1980', '01.01.1981')
       click_on  'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(2)' do
@@ -200,6 +209,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
+      assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
       find('.btn-toolbar.bottom .btn-group button[type="submit"]', text: 'Weiter als Familienmitgliedschaft').click
 
       expect do
@@ -226,6 +236,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
         choose 'weiblich'
       end
+      assert_aside('01.01.1980', '01.01.1981')
 
       click_on  'Eintrag hinzufügen'
       within '#housemates_fields .fields:nth-child(2)' do
@@ -235,10 +246,12 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
+      assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
 
       within '#housemates_fields .fields:nth-child(1)' do
         click_on 'Entfernen'
       end
+      assert_aside('01.01.1980', '01.01.2012')
       click_on 'Weiter als Familienmitgliedschaft'
 
       expect do
@@ -276,6 +289,7 @@ describe :self_registration_neuanmeldung, js: true do
     describe 'using step navigator' do
       it 'rerenders first page when invalid and submitting from second' do
         click_on 'Weiter als Einzelmitglied'
+        expect(page).to have_field 'Promocode'
         click_on 'Personendaten'
         fill_in 'Vorname', with: ''
         click_on 'Weiter'

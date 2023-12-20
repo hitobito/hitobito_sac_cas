@@ -26,9 +26,12 @@ module SacCas::Groups::SelfRegistrationController
   def redirect_to_login
     store_location_for(entry.main_person.person, group_self_inscription_path(group))
 
-    redirect_to(
-      new_person_session_path(person: { login_identity: entry.email }),
-      notice: t('.redirect_existing_email')
-    )
+    path = new_person_session_path(person: { login_identity: entry.email })
+    notice = t('.redirect_existing_email')
+
+    return redirect_to(path, notice: notice) unless request.xhr?
+
+    flash[:notice] = notice
+    render js: "window.location='#{path}';"
   end
 end

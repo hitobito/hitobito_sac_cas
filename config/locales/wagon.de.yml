@@ -378,6 +378,10 @@ de:
       sac_cas/role/mitglied:
         text: Bist du sicher, dass du aus folgenden Sektionen austreten möchtest?
 
+  self_registration:
+    fee_component:
+      title: Beiträge in der Sektion %{group}
+
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
     not_found: Ungültiger Verifikationscode

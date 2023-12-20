@@ -21,10 +21,10 @@
             = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
 
     - if ff.object.attr?(:birthday)
-      = ff.labeled_date_field :birthday
+      = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
     .control-group
       .controls
-        = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :remove }})
+        = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})
 
 %br
 - if entry.housemates.empty?

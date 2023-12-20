@@ -34,6 +34,10 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     @main_person ||= build_person(@main_person_attributes, SelfRegistrationNeuanmeldung::MainPerson)
   end
 
+  def birthdays
+    housemates.collect(&:birthday).unshift(main_person.birthday).compact.shuffle
+  end
+
   private
 
   def household_valid?
@@ -75,6 +79,5 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   def household_emails
     (housemates_attributes + [main_person_attributes]).pluck(:email).compact
   end
-  alias_method :neuanmeldung_main_person_valid?, :main_person_valid?
+  alias neuanmeldung_main_person_valid? main_person_valid?
 end
-
