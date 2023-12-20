@@ -14,7 +14,7 @@ module SacCas::SelfRegistration
 
     def self.for(group)
       case group
-      when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion then
+      when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion
         SelfRegistrationNeuanmeldung
       else
         SelfRegistration

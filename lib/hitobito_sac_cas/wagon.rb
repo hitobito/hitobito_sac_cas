@@ -36,6 +36,7 @@ module HitobitoSacCas
       ## Abilities
       PersonAbility.include SacCas::PersonAbility
 
+      StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
 
       ## Decorators
