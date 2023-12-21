@@ -18,6 +18,8 @@ describe :login, js: true do
     Person.devise_login_id_attrs = old_attrs
   end
 
+  after { logout }
+
   it 'has correct login field label' do
     visit new_person_session_path
     expect(page).to have_selector('label[for="person_login_identity"]', text: 'Haupt‑E‑Mail / Mitglied‑Nr')
