@@ -24,17 +24,15 @@ namespace :import do
   desc 'Import all people from a navision export (options: FILE=tmp/xlsx/personen.xlsx)'
   task people: [:environment] do
     Import::PeopleImporter.new(
-      Pathname(ENV['FILE'].to_s),
-      Person.find_by!(email: Settings.root_email)
+      Pathname(ENV['FILE'].to_s)
     ).import!
   end
 
   desc 'Import people (Stammsektion) for sektion from a' \
          'navision export FILE=tmp/xlsx/sektions_mitglieder.xlsx'
   task sektions_mitglieder: [:environment] do
-    Import::Sektion::MitgliederImporter.new(
-      Pathname(ENV['FILE'].to_s),
-      Person.find_by!(email: Settings.root_email)
+    Import::Sektion::MembershipsImporter.new(
+      Pathname(ENV['FILE'].to_s)
     ).import!
   end
 end

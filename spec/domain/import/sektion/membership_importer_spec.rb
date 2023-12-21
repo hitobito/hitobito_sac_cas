@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Import::Sektion::MitgliederImporter do
+describe Import::Sektion::MembershipsImporter do
 
   let(:root) { Fabricate(:person, email: Settings.root_email) }
   let(:group) { groups(:bluemlisalp) }
@@ -24,7 +24,7 @@ describe Import::Sektion::MitgliederImporter do
 
   let(:path) { instance_double(Pathname, exist?: true) }
   let(:output) {  double(:output, puts: true) }
-  subject(:importer) { described_class.new(path, root, output: output) }
+  subject(:importer) { described_class.new(path, output: output) }
 
   it 'noops if file does not exist' do
     expect(path).to receive(:exist?).and_return(false)

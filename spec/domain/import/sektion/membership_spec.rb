@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Import::Sektion::Mitglied do
+describe Import::Sektion::Membership do
   let(:emails) { [] }
   let(:group) { Group::SektionsMitglieder.new(id: 1) }
   let(:attrs) do
@@ -22,37 +22,19 @@ describe Import::Sektion::Mitglied do
       birthday: 40.years.ago.to_date
     }
   end
-  subject(:member) { described_class.new(attrs, group: group, emails: emails) }
+  let(:contact_group) { Group::ExterneKontakte.new(parent: groups(:root), name: 'test_contacts') }
+  subject(:membership) do
+    described_class.new(
+      attrs,
+      group: group,
+      placeholder_contact_group: contact_group,
+      current_ability: Ability.new(Person.root)
+    )
+  end
 
   before { travel_to(Time.zone.local(2022, 10, 20, 11, 11)) }
 
-  it '#person does not persist person' do
-    attrs[:phone_mobile] = '079 000 00 00'
-    expect { member.person }.not_to change { Person.count }
-  end
-
   describe 'validations' do
-    it 'is valid with birthday 6 years ago' do
-      attrs[:birthday] = 6.years.ago
-      expect(member).to be_valid
-      expect(member.errors).to be_empty
-    end
-
-    it 'is invalid with birthday less than 6 years ago' do
-      attrs[:birthday] = (5.years + 11.month).ago
-      expect(member).not_to be_valid
-      expect(member.errors).to eq 'Max Muster(123): Rollen ist nicht gültig, Person muss ein Geburtsdatum haben ' \
-        'und mindestens 6 Jahre alt sein'
-
-    end
-
-    it 'is invalid without birthday' do
-      attrs[:birthday] = nil
-      expect(member).not_to be_valid
-      expect(member.errors).to eq 'Max Muster(123): Rollen ist nicht gültig, Person muss ein Geburtsdatum haben ' \
-        'und mindestens 6 Jahre alt sein'
-    end
-
     it 'is invalid without group' do
       member = described_class.new(attrs.merge(birthday: 6.years.ago), group: nil)
       expect(member).not_to be_valid
@@ -61,13 +43,13 @@ describe Import::Sektion::Mitglied do
 
     it 'is invalid with member_type Abonnent' do
       attrs[:member_type] = 'Abonnent'
-      expect(member).not_to be_valid
-      expect(member.errors).to eq 'Max Muster(123): Abonnent ist nicht gültig'
+      expect(membership).not_to be_valid
+      expect(membership.errors).to eq 'Max Muster(123): Abonnent ist nicht gültig'
     end
   end
 
   describe 'person attributes' do
-    subject(:person) { member.person }
+    subject(:person) { membership.person }
 
     it 'sets confirmed_at to skip devise confirmation email' do
       expect(person.confirmed_at).to eq Time.zone.at(0)
@@ -111,44 +93,10 @@ describe Import::Sektion::Mitglied do
         3000
       TEXT
     end
-
-    it 'sets email to nil if email is included in passed emails array' do
-      emails << 'test@example.com'
-      attrs[:email] = 'test@example.com'
-      expect(member).to be_valid
-      expect(member.person.email).to be_blank
-    end
-  end
-
-  describe 'phone numbers' do
-    subject(:numbers) { member.person.phone_numbers }
-
-    it 'sets phone numbers' do
-      attrs[:phone] = '079 12 123 10'
-      attrs[:phone_mobile] = '079 12 123 11'
-      attrs[:phone_direct] = '079 12 123 12'
-      expect(numbers).to have(3).items
-
-      expect(numbers[0][:label]).to eq 'Privat'
-      expect(numbers[1][:label]).to eq 'Mobil'
-      expect(numbers[2][:label]).to eq 'Direkt'
-      expect(numbers[0][:number]).to eq '079 12 123 10'
-      expect(numbers[1][:number]).to eq '079 12 123 11'
-      expect(numbers[2][:number]).to eq '079 12 123 12'
-
-      expect(numbers.collect(&:public).uniq).to eq [true]
-    end
-
-    it 'ignores invalid phone numbers' do
-      attrs[:phone] = '123'
-      attrs[:phone_mobile]  = '079 12 34 560'
-      expect(numbers).to have(1).item
-      expect(numbers.first.number).to eq '079 12 34 560'
-    end
   end
 
   describe 'roles' do
-    subject(:role) { member.person.roles.first }
+    subject(:role) { membership.person.roles.first }
 
     before { attrs.merge!(beitragskategorie: 'EINZEL', birthday: 10.years.ago) }
 
