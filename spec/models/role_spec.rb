@@ -308,7 +308,7 @@ describe Role do
     let(:person) { people(:mitglied) }
 
     it 'includes the beitragskategorie label' do
-      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Bis 31.12.2015) (Einzel)'
+      expect(roles(:mitglied).to_s).to eq 'Mitglied (Stammsektion) (Einzel)'
     end
   end
 

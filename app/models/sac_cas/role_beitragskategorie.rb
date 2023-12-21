@@ -32,7 +32,11 @@ module ::SacCas::RoleBeitragskategorie
   end
 
   def to_s(format = :default)
-    "#{super} (#{beitragskategorie_label})"
+    if beitragskategorie_label
+      "#{super(:short)} (#{beitragskategorie_label})"
+    else
+      super
+    end
   end
 
   private
