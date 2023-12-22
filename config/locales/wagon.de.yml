@@ -283,6 +283,9 @@ de:
       membership: Mitgliederausweis
       download: Anzeigen
 
+    tabs:
+      history: Mitgliedschaften / Verlauf
+
   people/neuanmeldungen/approves:
     new:
       text:
