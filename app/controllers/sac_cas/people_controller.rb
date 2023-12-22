@@ -47,4 +47,8 @@ module SacCas::PeopleController
     super.with_membership_years
   end
 
+  def filter_entries
+    super.with_membership_years
+  end
+
 end
