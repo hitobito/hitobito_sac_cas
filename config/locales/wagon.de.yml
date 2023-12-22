@@ -283,9 +283,6 @@ de:
       membership: Mitgliederausweis
       download: Anzeigen
 
-    tabs:
-      memberships: Mitgliedschaften
-
   people/neuanmeldungen/approves:
     new:
       text:

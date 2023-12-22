@@ -32,9 +32,6 @@ module HitobitoSacCas
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
 
-      ## Abilities
-      PersonAbility.include SacCas::PersonAbility
-
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
 
@@ -45,8 +42,6 @@ module HitobitoSacCas
       PersonResource.include SacCas::PersonResource
 
       ## Helpers
-      Sheet::Person.include SacCas::Sheet::Person
-
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
 
       ## Controllers
