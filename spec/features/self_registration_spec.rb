@@ -21,6 +21,7 @@ describe :self_registration, js: true do
   end
 
   def complete_main_person_form
+    expect(page).to have_field('Vorname')
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
