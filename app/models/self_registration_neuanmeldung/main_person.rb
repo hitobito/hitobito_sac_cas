@@ -28,7 +28,7 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country
   ]
 
-  delegate  :salutation_label, :phone_numbers, :privacy_policy_accepted?, to: :person
+  delegate :salutation_label, :phone_numbers, :privacy_policy_accepted?, to: :person
   validate :assert_privacy_policy
   validate :assert_phone_number
 
