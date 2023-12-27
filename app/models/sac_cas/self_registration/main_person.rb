@@ -21,8 +21,6 @@ module SacCas::SelfRegistration::MainPerson
     self.required_attrs = [
       :first_name, :last_name
     ]
-
-    attr_accessor :step
   end
 
   def person

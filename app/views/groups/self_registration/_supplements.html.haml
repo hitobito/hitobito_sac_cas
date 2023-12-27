@@ -1,0 +1,33 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.fields_for(:supplements_attributes, entry.supplements) do |ff|
+  = ff.error_messages
+
+  = ff.labeled(:register_on) do
+    - ff.object.register_on_options.each do |key, label|
+      = ff.inline_radio_button :register_on, key, label
+  .well= t('groups.self_inscription.form.register_on_info')
+
+  = ff.labeled(:self_registration_reason_id) do
+    - ff.object.self_registration_reason_options.each do |key, label|
+      = ff.inline_radio_button :self_registration_reason_id, key, label
+      %br
+
+  = field_set_tag do
+    = ff.labeled_input_field(:promocode)
+
+  = ff.labeled(:others, '&nbsp;'.html_safe) do
+    = ff.label(:newsletter, class: 'd-block mt-2') do
+      = ff.check_box :newsletter
+      = t('.newsletter')
+    - %w(statutes contribution_regulations data_protection).each do |key|
+      = ff.label(key, class: 'd-block mt-2') do
+        = ff.check_box key
+        = t(".#{key}_text", link: link_to(*ff.object.link_translations(key)), target: :_blank).html_safe
+
+.btn-toolbar.bottom
+  = submit_button(f, t('groups.self_registration.form.submit'))
+  = c.back_link

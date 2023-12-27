@@ -6,33 +6,27 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
-
+class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::Person
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
     :address, :zip_code, :town, :country,
     :additional_information,
     :phone_numbers_attributes,
 
-    # Custom attrs
-    :newsletter,
-    :promocode,
-    :privacy_policy_accepted,
-
     # Internal attrs
     :primary_group,
-    :household_key
+    :household_key,
+    :supplements
   ]
 
   self.required_attrs = [
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country
   ]
 
-  delegate :salutation_label, :phone_numbers, :privacy_policy_accepted?, to: :person
-  validate :assert_privacy_policy
-  validate :assert_phone_number
+  delegate :newsletter, :promocode, :self_registration_reason_id, to: :supplements, allow_nil: true
+  delegate :salutation_label, :phone_numbers, to: :person
 
-  attr_accessor :step
+  validate :assert_phone_number
 
   def self.model_name
     ActiveModel::Name.new(SelfRegistration::MainPerson, nil)
@@ -44,11 +38,14 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
     super
   end
 
-  def person
-    @person ||= Person.new(attributes.except('newsletter', 'promocode').compact).tap do |p|
-      p.tag_list.add 'newsletter' if attributes['newsletter']
-      p.tag_list.add 'promocode' if attributes['promocode']
+  def person # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    @person ||= Person.new(attributes.compact.except('supplements')).tap do |p|
       p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?
+      p.self_registration_reason_id = self_registration_reason_id
+      p.privacy_policy_accepted_at = Time.zone.now if supplements&.links_present?
+
+      p.tag_list.add 'newsletter' if newsletter
+      p.tag_list.add 'promocode' if promocode
     end
   end
 
@@ -56,12 +53,5 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistration::Person
 
   def assert_phone_number
     errors.add(:phone_numbers, :blank) if phone_numbers.none?(&:valid?)
-  end
-
-  def assert_privacy_policy
-    if privacy_policy_accepted&.to_i&.zero?
-      message = I18n.t('groups.self_registration.create.flash.privacy_policy_not_accepted')
-      errors.add(:base, message)
-    end
   end
 end

@@ -326,7 +326,7 @@ de:
         single_or_household_title: Mitgliedschaftstyp
         household_title: Familienmitglieder
         main_title: Familienmitglieder
-        summary_title: Zusammenfassung
+        supplements_title: Zusatzdaten
       household:
         membership_info_box: >
           Indem du weitere Personen hinzufügst, wählst du eine Famlienmitgliedschaft. Diese ist für
@@ -338,9 +338,12 @@ de:
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft
 
-      summary:
+      supplements:
         newsletter: Ich möchte einen Newsletter abonnieren
         promo_code: Promocode
+        statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+        data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
 
     self_inscription:
       membership_role_exists: Du bist bereits Mitglied dieser Sektion

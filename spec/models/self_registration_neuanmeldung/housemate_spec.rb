@@ -7,13 +7,13 @@
 
 require 'spec_helper'
 
-describe SelfRegistrationNeuanmeldung::MainPerson do
+describe SelfRegistrationNeuanmeldung::Housemate do
   subject(:model) { described_class.new }
   subject(:role) { model.role }
 
   describe 'attribute assignments accept additiional attributes' do
     it 'works via constructor for symbols' do
-      expect(described_class.new(address: 'test').address).to eq 'test'
+      expect(described_class.new(first_name: 'test').first_name).to eq 'test'
     end
   end
 
@@ -21,15 +21,8 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     {
       first_name: 'Max',
       last_name: 'Muster',
-      address: 'Musterplatz',
-      town: 'Zurich',
-      email: 'max.muster@example.com',
-      zip_code: '8000',
       birthday: '01.01.2000',
-      country: 'CH',
-      phone_numbers_attributes: {
-        '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
-      }
+      email: 'maxine.muster@example.com'
     }
   }
 
@@ -40,19 +33,8 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
         :first_name,
         :last_name,
         :email,
-        :address,
-        :zip_code,
-        :town,
         :birthday,
-        :country,
-        :phone_numbers
       ]
-    end
-
-    it 'is valid if phone_nuber is missing' do
-      model.attributes = required_attrs.except(:phone_numbers_attributes)
-      expect(model).not_to be_valid
-      expect(model.errors.full_messages).to eq ['Telefonnummer muss ausgefüllt werden']
     end
 
     it 'is valid if required attrs are set' do
@@ -61,18 +43,9 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     end
   end
 
-  describe 'delegations' do
-    it 'reads phone_numbers from person' do
-      model.phone_numbers_attributes = {
-        '1' => { number: '079' }
-      }
-      expect(model.phone_numbers).to have(1).item
-    end
-  end
-
   describe 'role' do
+    before { model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)  }
     it 'builds role with expected type' do
-      model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
       expect(role).to be_kind_of(Group::SektionsNeuanmeldungenSektion::Neuanmeldung)
     end
   end
@@ -80,28 +53,8 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
   describe 'supplements' do
     let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new }
 
-    subject(:role) { model.role }
 
     before { model.supplements = supplements }
-
-    it 'does not assign tag' do
-      expect(model.person.tag_list).to be_empty
-    end
-
-    it 'assigns newsletter as tag' do
-      supplements.newsletter = 1
-      expect(model.person.tag_list).to eq ['newsletter']
-    end
-
-    it 'assigns promocode as tag' do
-      supplements.promocode = :test
-      expect(model.person.tag_list).to eq ['promocode']
-    end
-
-    it 'assigns self_registration_reason_id' do
-      supplements.self_registration_reason_id = 123
-      expect(model.self_registration_reason_id).to eq 123
-    end
 
     it 'sets privacy_policy_accepted_at' do
       supplements.statutes = true
