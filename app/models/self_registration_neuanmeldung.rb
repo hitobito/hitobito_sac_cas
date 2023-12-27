@@ -7,9 +7,9 @@
 
 
 class SelfRegistrationNeuanmeldung < SelfRegistration
-  attr_accessor :housemates_attributes
+  attr_accessor :housemates_attributes, :supplements_attributes
 
-  self.partials = [:main_email, :neuanmeldung_main_person, :household, :summary]
+  self.partials = [:main_email, :neuanmeldung_main_person, :household, :supplements]
 
   def self.model_name
     ActiveModel::Name.new(SelfRegistration, nil)
@@ -18,6 +18,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   def initialize(group:, params:)
     super
     @housemates_attributes = extract_attrs(params, :housemates_attributes, array: true).to_a
+    @supplements_attributes = extract_attrs(params, :supplements_attributes)
   end
 
   def save!
@@ -30,8 +31,12 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     @housemates ||= build_housemates
   end
 
+  def supplements
+    @supplements ||= Supplements.new(@supplements_attributes)
+  end
+
   def main_person
-    @main_person ||= build_person(@main_person_attributes, SelfRegistrationNeuanmeldung::MainPerson)
+    @main_person ||= build_person(@main_person_attributes, MainPerson)
   end
 
   def birthdays
@@ -48,14 +53,17 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     main_person.email.present?
   end
 
-  def summary_valid?
-    policy_finder = Group::PrivacyPolicyFinder.for(group: group, person: main_person)
-    policy_finder.acceptance_needed? ? main_person.person.privacy_policy_accepted? : true
+  def supplements_valid?
+    supplements.valid?
   end
 
   def build_person(*args)
     super(*args) do |attrs|
-      attrs.merge(household_key: household_key, household_emails: household_emails)
+      attrs.merge(
+        household_key: household_key,
+        household_emails: household_emails,
+        supplements: supplements
+      )
     end
   end
 
@@ -63,7 +71,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     @housemates_attributes.map do |attrs|
       next if attrs[:_destroy] == '1'
 
-      build_person(attrs, SelfRegistration::Housemate)
+      build_person(attrs, Housemate)
     end.compact
   end
 

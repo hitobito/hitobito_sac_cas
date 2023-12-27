@@ -91,8 +91,6 @@ describe SelfRegistrationNeuanmeldung do
 
     before { registration.step = 2 }
 
-    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-
     it 'is invalid if housemate is empty' do
       registration.housemates_attributes = [{}]
 
@@ -145,20 +143,85 @@ describe SelfRegistrationNeuanmeldung do
     end
   end
 
+  describe 'supplements' do
+    let(:params) { { main_person_attributes: required_attrs } }
+    before { registration.step = 3 }
+
+    it 'is invalid without input' do
+      expect(registration).not_to be_valid
+      expect(registration.supplements.errors.full_messages).to eq [
+        'Statuten muss akzeptiert werden',
+        'Beitragsreglement muss akzeptiert werden',
+        'Datenschutzerklärung muss akzeptiert werden'
+      ]
+    end
+
+    it 'is valid when all links have been accepted' do
+      registration.supplements_attributes = {
+        statutes: true,
+        contribution_regulations: true,
+        data_protection: true
+      }
+      expect(registration).to be_valid
+    end
+  end
+
   describe '#save!' do
-    it 'saves person with role outside of household' do
+    before do
       registration.main_person_attributes = { first_name: 'test', birthday: '01.01.2000' }
+    end
+
+    it 'saves person with role outside of household' do
       expect { registration.save! }.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
       expect(Person.find_by(first_name: 'test').household_key).to be_nil
     end
 
     it 'saves person and housemates with household key' do
-      registration.main_person_attributes = { first_name: 'test', birthday: '01.01.2000' }
       registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
       expect { registration.save! }.to change { Person.count }.by(2)
         .and change { Role.count }.by(2)
       expect(Person.where(first_name: 'test').pluck(:household_key).compact.uniq).to have(1).item
+    end
+
+    it 'saves person and with supplements' do
+      reason = SelfRegistrationReason.create!(text: 'soso')
+      registration.supplements_attributes = { self_registration_reason_id: reason.id, register_on: 'oct' }
+      expect { registration.save! }.to change { Person.count }.by(1)
+      person = Person.find_by(first_name: 'test')
+      expect(person.self_registration_reason).to eq reason
+    end
+
+    it 'saves person and future roles' do
+      registration.supplements_attributes = { register_on: 'jul' }
+      travel_to(Time.zone.local(2023, 3, 12)) do
+        expect { registration.save! }.to change { Person.count }.by(1)
+      end
+      person = Person.find_by(first_name: 'test')
+      expect(person.roles.last).to be_kind_of(FutureRole)
+    end
+
+    it 'saves housemate and future roles' do
+      registration.supplements_attributes = { register_on: 'jul' }
+      registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
+      travel_to(Time.zone.local(2023, 3, 12)) do
+        expect { registration.save! }.to change { Person.count }.by(2)
+          .and change { FutureRole.count }.by(2)
+      end
+    end
+
+    it 'sets privacy policy accepted' do
+      registration.supplements_attributes = {
+        statutes: true,
+        contribution_regulations: true,
+        data_protection: true
+      }
+      registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
+      travel_to(Time.zone.local(2023, 3, 12)) do
+        expect do
+          registration.save!
+        end.to change { Person.where.not(privacy_policy_accepted_at: nil).count }.by(2)
+      end
     end
   end
 end

@@ -5,9 +5,9 @@
 
 - if f.object.is_a?(SelfRegistration::MainPerson)
   = f.labeled(:newsletter, '&nbsp;'.html_safe) do
-    %label.checkbox
+    = f.label(:newsletter, class: 'mt-2') do
       = f.check_box :newsletter
-      = t('groups.self_registration.summary.newsletter')
+      = t('groups.self_registration.supplements.newsletter')
 
   = field_set_tag do
     = f.labeled_input_field(:promocode)

@@ -68,4 +68,7 @@ module SacCas::FutureRole
                              .new(person, reference_date: convert_on).calculate
   end
 
+  def relevant_attrs
+    super.merge(person: person)
+  end
 end
