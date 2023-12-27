@@ -16,7 +16,7 @@ describe 'people list page' do
     visit group_people_path(group_id: group.id)
   end
 
-  it 'allows showing the membership_years column' do
+  it 'allows showing the membership_years column', js: true do
     click_link('Spalten')
     check('Anzahl Mitglieder-Jahre')
     click_link('Spalten')
