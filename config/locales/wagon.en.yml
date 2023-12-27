@@ -1,0 +1,22 @@
+en:
+  self_registration:
+    infos_component:
+      title_questions: Questions about membership?
+      title_contact: Contact
+      title_documents: Documents
+      additional_infos: You can find more information in the %{link}.
+      address: |
+        Swiss Alpine Club SAC
+        Monbijoustrasse 61
+        P.O.Box
+        3000 Bern 14
+        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
+        mv(at)sac-cas.ch
+      link_faqs: https://www.sac-cas.ch/en/meta/faq/faq-membership/
+      link_faqs_title: FAQ
+      link_statutes: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Statuten-SAC_de.pdf
+      link_statutes_title: Statutes
+      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_G%C3%BCltig_ab_1.1.2021.pdf
+      link_contribution_regulations_title: Contribution regulations
+      link_data_protection: https://www.sac-cas.ch/en/meta/data-protection/
+      link_data_protection_title: Data protection

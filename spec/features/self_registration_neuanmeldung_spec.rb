@@ -71,6 +71,7 @@ describe :self_registration_neuanmeldung, js: true do
     let(:person) { Person.find_by(email: 'max.muster@hitobito.example.com') }
     it 'self registers and creates new person' do
       visit group_self_registration_path(group_id: group)
+      expect(page).to have_css('h2', text: 'Fragen zur Mitgliedschaft?')
       complete_main_person_form
       click_on 'Weiter als Einzelmitglied'
 
