@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require 'spec_helper'
-require_relative '../../../../lib/hitobito_sac_cas/import/sektionen_importer'
 
 describe Import::SektionenImporter do
   let(:file) { file_fixture('sektionen.xlsx') }
