@@ -10,16 +10,15 @@ module ::SacCas::RoleBeitragskategorie
   include I18nEnums
 
   included do
-    include I18nEnums
     i18n_enum :beitragskategorie,
               ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
               i18n_prefix: 'roles.beitragskategorie'
 
     attr_readonly :beitragskategorie
 
-    before_validation :set_beitragskategorie, unless: :beitragskategorie
+    before_validation :set_beitragskategorie
 
-    validates :beitragskategorie, presence: true
+    validates :beitragskategorie, presence: true, if: :validate_beitragskategorie?
 
     ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |category|
       scope category, -> { where(beitragskategorie: category) }
@@ -41,11 +40,18 @@ module ::SacCas::RoleBeitragskategorie
 
   private
 
+  # This method is called by the `before_validation` callback. It is used to
+  # determine whether the beitragskategorie should be validated or not.
+  # It is overwritten in the FutureRole to make the validation conditional
+  # on the target_type.
+  def validate_beitragskategorie?
+    true
+  end
+
   def set_beitragskategorie
-    category =
-      ::SacCas::Beitragskategorie::Calculator
-      .new(person).calculate
-    self.beitragskategorie = category
+    return if beitragskategorie?
+
+    self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
   rescue
     # let's not break the `before_validation` chain in case of an error
   end

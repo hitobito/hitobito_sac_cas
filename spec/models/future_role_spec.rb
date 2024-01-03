@@ -35,15 +35,72 @@ describe FutureRole do
     it 'returns true if convert_to is a SacCas::MITGLIED_ROLES' do
       SacCas::MITGLIED_ROLES.each do |role_type|
         role = FutureRole.new(convert_to: role_type.sti_name, group: group)
-        expect(role.validate_target_type?).to eq(true), "was unexpectedly false for #{role_type.sti_name}"
+        expect(role.validate_target_type?).to eq(true),
+                                              "was unexpectedly false for #{role_type.sti_name}"
       end
     end
 
     it 'returns false if convert_to is not a SacCas::MITGLIED_ROLES' do
       (Role.all_types - SacCas::MITGLIED_ROLES).each do |role_type|
         role = FutureRole.new(convert_to: role_type.sti_name, group: group)
-        expect(role.validate_target_type?).to eq(false), "was unexpectedly true for #{role_type.sti_name}"
+        expect(role.validate_target_type?).to eq(false),
+                                              "was unexpectedly true for #{role_type.sti_name}"
       end
+    end
+  end
+
+  describe '#to_s' do
+    it 'delegates to new role' do
+      role = FutureRole.new(
+        person: Fabricate(:person),
+        convert_to: 'Group::SektionsMitglieder::Mitglied',
+        convert_on: Date.today,
+        group: groups(:bluemlisalp_mitglieder)
+      )
+
+      expect(role.to_s).to eq role.send(:build_new_role).to_s
+    end
+
+    it 'falls back to super if new role can not be built' do
+      role = FutureRole.new(
+        person: Fabricate(:person),
+        convert_to: 'asdf',
+        convert_on: '01.02.2042',
+        group: groups(:bluemlisalp_mitglieder)
+      )
+
+      expect(role.to_s).to eq 'Zukünftige Rolle "asdf" (ab 01.02.2042)'
+    end
+  end
+
+  context 'beitragskategorie' do
+    it 'gets set for mitglied role' do
+      role = FutureRole.new(
+        person: Fabricate(:person),
+        convert_to: 'Group::SektionsMitglieder::Mitglied',
+        convert_on: Date.today,
+        group: groups(:bluemlisalp_mitglieder)
+      )
+
+      expect(SacCas::Beitragskategorie::Calculator).to receive(:new).
+        with(role.person, reference_date: role.convert_on).
+        at_least(:once).
+        and_call_original
+
+      expect { role.validate }.to change { role.beitragskategorie }.from(nil).to('einzel')
+    end
+
+    it 'does not get set for non-mitglied role' do
+      role = FutureRole.new(
+        person: Fabricate(:person),
+        convert_to: 'Group::Geschaeftsstelle::Mitgliederdienst',
+        convert_on: Date.today,
+        group: groups(:geschaeftsstelle)
+      )
+
+      expect(SacCas::Beitragskategorie::Calculator).not_to receive(:new)
+
+      expect { role.validate }.not_to change { role.beitragskategorie }.from(nil)
     end
   end
 end

@@ -6,6 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::FutureRole
+  extend ActiveSupport::Concern
+
+  prepended do
+    include SacCas::RoleBeitragskategorie
+  end
 
   def start_on
     convert_on
@@ -30,6 +35,47 @@ module SacCas::FutureRole
 
   def becomes_mitglied_role?
     target_type <= SacCas::Role::MitgliedCommon || false
+  end
+
+  def to_s(format = :default)
+    build_new_role.to_s(format)
+  rescue ActiveRecord::RecordNotFound => err
+    # It seems we can not build the target role, convert_to seems to be invalid.
+    # Let's fall back gracefully.
+    if err.message =~ /No role '.*' found/
+      return "#{model_name.human} \"#{convert_to}\" (#{formatted_start_date})"
+    end
+
+    raise err
+  end
+
+  private
+
+  # This method is called by the `before_validation` callback. It is used to
+  # determine whether the beitragskategorie should be validated or not.
+  # Only Mitglied roles have a beitragskategorie. So we only validate the
+  # beitragskategorie if becomes_mitglied_role? is true.
+  def validate_beitragskategorie?
+    becomes_mitglied_role?
+  end
+
+  def set_beitragskategorie
+    # only Mitglied roles have a beitragskategorie
+    return unless becomes_mitglied_role?
+
+    # We don't need to calculate the beitragskategorie if it is already set.
+    return if beitragskategorie?
+
+    # We need the convert_on date to calculate the beitragskategorie. But the
+    # FutureRole is invalid anyway without a convert_on date. So we can safely
+    # return here.
+    return if convert_on.blank?
+
+    # We need to calculate the beitragskategorie based on the convert_on date.
+    self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator
+                             .new(person, reference_date: convert_on).calculate
+  rescue
+    # let's not break the `before_validation` chain in case of an error
   end
 
 end

@@ -17,8 +17,9 @@ module SacCas::Beitragskategorie
     CATEGORY_YOUTH = :jugend
     CATEGORY_FAMILY = :familie
 
-    def initialize(person)
+    def initialize(person, reference_date: Time.zone.today)
       @person = person
+      @reference_date = reference_date
     end
 
     def calculate
@@ -43,7 +44,7 @@ module SacCas::Beitragskategorie
     private
 
     def age
-      @person.years
+      @person.years(@reference_date)
     end
 
     def family_member?

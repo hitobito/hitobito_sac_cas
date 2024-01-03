@@ -49,5 +49,13 @@ describe SacCas::Beitragskategorie::Calculator do
     it 'returns nil for person without birthday' do
       expect(category(age: nil)).to eq(nil)
     end
+
+    it 'respects reference_date' do
+      person = person(15, false)
+      expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:jugend)
+      expect(described_class.new(person,
+                                 reference_date: 7.years.from_now - 1.day).calculate).to eq(:jugend)
+      expect(described_class.new(person, reference_date: 7.years.from_now).calculate).to eq(:einzel)
+    end
   end
 end
