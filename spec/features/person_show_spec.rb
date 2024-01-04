@@ -28,10 +28,17 @@ describe 'person show page' do
       end
 
       it 'shows link to change main group if person is Mitglied in a Sektion' do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.sti_name,
+          group: mitglieder,
+          person: admin,
+          beitragskategorie: :einzel,
+          created_at: Date.new(2023, 2, 1),
+          delete_on: Date.new(2023, 12, 31)
+        )
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link 'Hauptgruppe setzen'
-        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Einzel) (bis 31.12.2023)")
+        expect(page).to have_css('section.roles', text: "SAC Blüemlisalp / Mitglieder\n Mitglied (Stammsektion) (Einzel) (bis 31.12.2023)")
       end
     end
 

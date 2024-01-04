@@ -77,7 +77,7 @@ describe :self_inscription, js: true do
       end
 
       context 'with variable date' do
-        around { |example| travel_to(Time.now.beginning_of_year) { example.run } }
+        around { |example| travel_to(Date.parse("01.01.2023")) { example.run } }
 
         before do
           sign_in(admin)
@@ -93,7 +93,11 @@ describe :self_inscription, js: true do
           click_button 'Beitritt beantragen'
           expect(page).to have_css("#flash", text: 'Die Rolle wurde erfolgreich gespeichert')
           expect(page).not_to have_css('section:nth-of-type(2)', text: 'SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)')
-          expect(page).to have_css('section:nth-of-type(3)', text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (Stammsektion) (ab 01.07.2023)")
+
+          expect(page).to have_css(
+                            'section:nth-of-type(3)',
+                            text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (Stammsektion) (ab 01.07.2023)"
+                          )
         end
       end
     end
