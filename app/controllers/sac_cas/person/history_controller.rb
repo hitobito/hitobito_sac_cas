@@ -7,14 +7,7 @@
 
 module SacCas::Person::HistoryController
 
-  # We use the same Controller in this wagon also for the memberships tab
-  # which checks for the :memberships permission instead of the :history permission.
-  # So we catch the CanCan::AccessDenied exception
-  def authorize_action
-    super
-  rescue CanCan::AccessDenied
-    authorize!(:memberships, entry)
-  end
+  private
 
   def roles_scope
     super.with_membership_years

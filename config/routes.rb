@@ -26,12 +26,6 @@ Rails.application.routes.draw do
           resource :rejects, only: [:new, :create]
         end
       end
-
-      resources :people, only: [] do
-        member do
-          get 'memberships' => 'person/history#index'
-        end
-      end
     end
   end
 end
