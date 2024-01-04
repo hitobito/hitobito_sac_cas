@@ -81,6 +81,7 @@ puzzlers = [
   'Oliver Dietschi',
   'Olivier Brian',
   'Pascal Simon',
+  'Pascal Zumkehr',
   'Thomas Ellenberger',
   'Tobias Stern',
   'Tobias Hinderling'
