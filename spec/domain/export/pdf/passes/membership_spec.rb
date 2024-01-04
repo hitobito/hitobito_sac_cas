@@ -33,7 +33,7 @@ describe Export::Pdf::Passes::Membership do
 
     it 'renders membership pass' do
       expect(text_with_position).to match_array [
-        [131, 634, "Mitgliederausweis 2023"],
+        [131, 634, "Mitgliederausweis #{year}"],
         [205, 602, "info@sac-cas.ch - www.sac-cas.ch"],
         [41, 557, "Mitgliederjahre"],
         [156, 557, "#{member.membership_years}"],
