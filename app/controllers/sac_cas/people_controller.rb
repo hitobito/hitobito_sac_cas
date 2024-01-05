@@ -12,12 +12,40 @@ module SacCas::PeopleController
 
   prepended do
     before_action :set_lookup_prefixes
+
+    before_save :set_newly_created_managed_people
+    after_save :assign_roles_for_newly_created_managed_people
   end
 
   def list_filter_args
     return super unless group.root? && no_filter_active?
 
     Person::Filter::NeuanmeldungenList.new(group, current_user).filter_params
+  end
+
+  def assign_roles_for_newly_created_managed_people
+    return unless @newly_created_managed_people.any?
+    
+    Role.transaction do
+      cloneable_mitglied_roles.each do |role|
+        @newly_created_managed_people.each do |p|
+          Role.create!(person: p,
+                       group: role.group,
+                       type: role.type,
+                       beitragskategorie: role.beitragskategorie,
+                       created_at: Time.zone.now,
+                       delete_on: role.delete_on)
+        end
+      end
+    end
+  end
+
+  def cloneable_mitglied_roles
+    entry.roles.where(type: SacCas::MITGLIED_ROLES, beitragskategorie: 'familie')
+  end
+
+  def set_newly_created_managed_people
+    @newly_created_managed_people = new_manageds.select(&:new_record?)
   end
 
   private

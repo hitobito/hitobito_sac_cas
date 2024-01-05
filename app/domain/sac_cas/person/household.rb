@@ -25,8 +25,9 @@ module SacCas::Person::Household
 
     person.update!(household_key: nil)
 
-    person.manageds.clear
-    person.managers.clear
+    # TODO what was this for
+    # person.manageds.clear
+    # person.managers.clear
   end
 
   def save
