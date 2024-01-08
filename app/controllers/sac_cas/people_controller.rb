@@ -13,7 +13,7 @@ module SacCas::PeopleController
   prepended do
     before_action :set_lookup_prefixes
 
-    before_save :set_newly_created_managed_people
+    before_save :newly_created_managed_people
     after_save :assign_roles_for_newly_created_managed_people
   end
 
@@ -21,6 +21,16 @@ module SacCas::PeopleController
     return super unless group.root? && no_filter_active?
 
     Person::Filter::NeuanmeldungenList.new(group, current_user).filter_params
+  end
+
+  def update
+    assign_attributes
+    if validate_new_manageds
+      updated = with_callbacks(:update, :save) { save_entry }
+      respond_with(entry, options.reverse_merge(success: updated, location: return_path), &block)
+    else
+      render :edit
+    end
   end
 
   def assign_roles_for_newly_created_managed_people
@@ -40,12 +50,29 @@ module SacCas::PeopleController
     end
   end
 
+  def validate_new_manageds
+    valid = true
+    if entry.years <= 22
+      valid = false
+      entry.errors.add(:base, :too_young_for_managed)
+    end
+
+    newly_created_managed_people.each do |p|
+      unless p.years&.between?(6, 17)
+        valid = false
+        entry.errors.add(:base, :new_managed_age_invalid)
+      end
+    end
+
+    return valid
+  end
+
   def cloneable_mitglied_roles
     entry.roles.where(type: SacCas::MITGLIED_ROLES, beitragskategorie: 'familie')
   end
 
-  def set_newly_created_managed_people
-    @newly_created_managed_people = new_manageds.select(&:new_record?)
+  def newly_created_managed_people
+    @newly_created_managed_people ||= new_manageds.select(&:new_record?)
   end
 
   private
