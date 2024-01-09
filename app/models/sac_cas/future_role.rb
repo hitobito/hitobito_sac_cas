@@ -39,14 +39,6 @@ module SacCas::FutureRole
 
   def to_s(format = :default)
     build_new_role.to_s(format)
-  rescue ActiveRecord::RecordNotFound => err
-    # It seems we can not build the target role, convert_to seems to be invalid.
-    # Let's fall back gracefully.
-    if err.message =~ /No role '.*' found/
-      return "#{model_name.human} \"#{convert_to}\" (#{formatted_start_date})"
-    end
-
-    raise err
   end
 
   private

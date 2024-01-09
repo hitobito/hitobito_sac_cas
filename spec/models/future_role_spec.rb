@@ -58,18 +58,11 @@ describe FutureRole do
         group: groups(:bluemlisalp_mitglieder)
       )
 
-      expect(role.to_s).to eq role.send(:build_new_role).to_s
-    end
+      new_role_double = instance_double(Role)
+      expect(new_role_double).to receive(:to_s).and_return('new role')
+      allow(role).to receive(:build_new_role).and_return(new_role_double)
 
-    it 'falls back to super if new role can not be built' do
-      role = FutureRole.new(
-        person: Fabricate(:person),
-        convert_to: 'asdf',
-        convert_on: '01.02.2042',
-        group: groups(:bluemlisalp_mitglieder)
-      )
-
-      expect(role.to_s).to eq 'Zukünftige Rolle "asdf" (ab 01.02.2042)'
+      expect(role.to_s).to eq 'new role'
     end
   end
 
