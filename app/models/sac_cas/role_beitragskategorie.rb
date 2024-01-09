@@ -52,7 +52,5 @@ module ::SacCas::RoleBeitragskategorie
     return if beitragskategorie?
 
     self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
-  rescue
-    # let's not break the `before_validation` chain in case of an error
   end
 end

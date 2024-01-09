@@ -74,8 +74,6 @@ module SacCas::FutureRole
     # We need to calculate the beitragskategorie based on the convert_on date.
     self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator
                              .new(person, reference_date: convert_on).calculate
-  rescue
-    # let's not break the `before_validation` chain in case of an error
   end
 
 end

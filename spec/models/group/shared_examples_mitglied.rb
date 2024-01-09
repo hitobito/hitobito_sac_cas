@@ -7,7 +7,7 @@
 
 shared_examples 'validates Mitglied timestamps' do
   it 'created_at is required' do
-    role = described_class.new
+    role = described_class.new(person: people(:mitglied))
     role.validate
     expect(role.errors[:created_at]).to include('muss ausgefüllt werden')
 
@@ -17,7 +17,7 @@ shared_examples 'validates Mitglied timestamps' do
   end
 
   it 'delete_on is required if deleted_at is blank' do
-    role = described_class.new
+    role = described_class.new(person: people(:mitglied))
     role.validate
     expect(role.errors[:delete_on]).to include('muss vorhanden sein, wenn nicht gelöscht.')
 
