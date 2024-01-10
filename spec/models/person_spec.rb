@@ -52,7 +52,7 @@ describe Person do
   end
 
   context '#membership_years' do
-    let(:person) { Fabricate(:person) }
+    let(:person) { Fabricate(:person, birthday: Date.parse('01-01-1985')) }
 
     let(:created_at) { Time.zone.parse('01-01-2000 12:00:00') }
     let(:end_at) { created_at + 364.days }
@@ -65,6 +65,7 @@ describe Person do
       Fabricate(Group::SektionsMitglieder::Mitglied.name,
                 group: groups(:bluemlisalp_mitglieder),
                 person: person,
+                beitragskategorie: 'einzel',
                 **attrs.reverse_merge(created_at: created_at))
     end
 

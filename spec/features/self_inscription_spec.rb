@@ -80,6 +80,7 @@ describe :self_inscription, js: true do
         around { |example| travel_to(Date.parse("01.01.2023")) { example.run } }
 
         before do
+          admin.update!(birthday: 25.years.ago) # person must have birthday to be able to join
           sign_in(admin)
           visit group_self_inscription_path(group_id: group)
           choose 'Neue Stammsektion'
@@ -96,7 +97,7 @@ describe :self_inscription, js: true do
 
           expect(page).to have_css(
                             'section:nth-of-type(3)',
-                            text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (Stammsektion) (ab 01.07.2023)"
+                            text: "SAC Blüemlisalp / Neuanmeldungen (zur Freigabe)\nNeuanmeldung (Stammsektion) (Einzel) (ab 01.07.2023)"
                           )
         end
       end
