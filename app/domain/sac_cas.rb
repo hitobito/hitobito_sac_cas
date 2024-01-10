@@ -18,5 +18,16 @@ module SacCas
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
   ].freeze
 
+  NEUANMELDUNG_HAUPTSEKTION_ROLES = [
+    ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+    ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+  ].freeze
+
+  NEUANMELDUNG_ZUSATZSEKTION_ROLES = [
+    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+    ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
+  ].freeze
+
   MITGLIED_ROLES = (MITGLIED_HAUPTSEKTION_ROLES + MITGLIED_ZUSATZSEKTION_ROLES).freeze
+  NEUANMELDUNG_ROLES = (NEUANMELDUNG_HAUPTSEKTION_ROLES + NEUANMELDUNG_ZUSATZSEKTION_ROLES).freeze
 end

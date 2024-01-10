@@ -43,6 +43,7 @@ module HitobitoSacCas
       ## Helpers
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
+      Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
 
       ## Controllers
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
@@ -59,9 +60,22 @@ module HitobitoSacCas
         Export::Tabular::People::PeopleFull
       ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }
 
+
+
       TableDisplay.register_column(Person,
-                                   TableDisplays::People::MembershipYearsColumn,
-                                   [:membership_years])
+                                   TableDisplays::ResolvingColumn,
+                                   [
+                                     :membership_years,
+                                     :beitragskategorie,
+                                     :antrag_fuer,
+                                     :antragsdatum,
+                                     :beitrittsdatum,
+                                     :confirmed_at,
+                                     :duplicate_exists,
+                                     :wiedereintritt,
+                                     :self_registration_reason,
+                                     :address_valid
+                                   ])
     end
 
 
