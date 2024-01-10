@@ -51,4 +51,8 @@ module SacCas::PeopleController
     super.with_membership_years
   end
 
+  def prepare_entries(entries)
+    super.includes(:primary_group)
+  end
+
 end

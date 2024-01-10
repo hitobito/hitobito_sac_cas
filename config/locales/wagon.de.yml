@@ -288,6 +288,7 @@ de:
         other: '%{count} Anmeldungen wurden abgelehnt'
 
   groups:
+    sektion_primary: Hauptsektion
     sektion_secondary: Zusatzsektion
 
     self_registration:
@@ -383,6 +384,12 @@ de:
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
 
+  table_displays:
+    person:
+      antrag_fuer: Antrag für
+      address_valid: Adresse gültig
+      confirmed_at: E-Mail bestätigt am
+      beitrittsdatum: Beitritt per
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
