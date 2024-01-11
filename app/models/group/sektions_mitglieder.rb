@@ -28,11 +28,6 @@ class Group::SektionsMitglieder < ::Group
                           unless: :deleted_at?
   end
 
-  class Abonnement < ::Role
-    self.permissions = []
-    self.basic_permissions_only = true
-  end
-
   class Ehrenmitglied < ::Role
     self.permissions = []
     self.basic_permissions_only = true
@@ -43,7 +38,6 @@ class Group::SektionsMitglieder < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Mitglied, MitgliedZusatzsektion, Abonnement,
-        Ehrenmitglied, Beguenstigt
+  roles Mitglied, MitgliedZusatzsektion, Ehrenmitglied, Beguenstigt
 
 end

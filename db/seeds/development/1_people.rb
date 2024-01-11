@@ -15,7 +15,7 @@ class SacCasPersonSeeder < PersonSeeder
     when 'Neuanmeldung' then 3
     when 'Beguenstigt' then 0
     when 'Ehrenmitglied' then 0
-    when 'Abonnement' then 0
+    when 'Tourenleiter' then 12
     else 1
     end
   end
