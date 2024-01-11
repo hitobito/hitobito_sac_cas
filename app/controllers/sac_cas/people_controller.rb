@@ -13,7 +13,6 @@ module SacCas::PeopleController
   prepended do
     before_action :set_lookup_prefixes
 
-    before_save :newly_created_managed_people
     after_save :assign_roles_for_newly_created_managed_people
   end
 
@@ -23,7 +22,7 @@ module SacCas::PeopleController
     Person::Filter::NeuanmeldungenList.new(group, current_user).filter_params
   end
 
-  def update
+  def update(options = {}, &block)
     assign_attributes
     if validate_new_manageds
       updated = with_callbacks(:update, :save) { save_entry }
@@ -34,11 +33,11 @@ module SacCas::PeopleController
   end
 
   def assign_roles_for_newly_created_managed_people
-    return unless @newly_created_managed_people.any?
+    return unless newly_created_managed_people.any?
     
     Role.transaction do
       cloneable_mitglied_roles.each do |role|
-        @newly_created_managed_people.each do |p|
+        newly_created_managed_people.each do |p|
           Role.create!(person: p,
                        group: role.group,
                        type: role.type,
@@ -51,20 +50,7 @@ module SacCas::PeopleController
   end
 
   def validate_new_manageds
-    valid = true
-    if entry.years <= 22
-      valid = false
-      entry.errors.add(:base, :too_young_for_managed)
-    end
-
-    newly_created_managed_people.each do |p|
-      unless p.years&.between?(6, 17)
-        valid = false
-        entry.errors.add(:base, :new_managed_age_invalid)
-      end
-    end
-
-    return valid
+    validate_entry_age! && validate_new_manageds_age!
   end
 
   def cloneable_mitglied_roles
@@ -76,6 +62,21 @@ module SacCas::PeopleController
   end
 
   private
+
+  def validate_entry_age!
+    return true unless entry.years <= 22
+
+    entry.errors.add(:base, :too_young_for_managed)
+    false
+  end
+
+  def validate_new_manageds_age!
+    return true if newly_created_managed_people.all? { _1.years&.between?(6, 17) }
+
+    entry.errors.add(:base, :new_managed_age_invalid)
+    false
+  end
+
 
   def registrations_for_approval?
     group.is_a?(Group::SektionsNeuanmeldungenSektion)
