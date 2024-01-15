@@ -5,6 +5,22 @@
 
 .well
   = simple_format(t('.membership_info_box'))
+- if entry.housemates.empty?
+  .btn-toolbar.top
+    %div
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
+- else
+  .btn-toolbar.top
+    .hidden
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    %div
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
 
 = f.nested_fields_for :housemates, nil, nil, model_object: SelfRegistration::Housemate.new, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
   = field_set_tag do
@@ -29,15 +45,17 @@
 %br
 - if entry.housemates.empty?
   .btn-toolbar.bottom
-    = c.next_button(t('.next_as_single_link'))
-    = c.back_link
-  .btn-toolbar.bottom.hidden
-    = c.next_button(t('.next_as_household_link'))
-    = c.back_link
+    %div
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
 - else
-  .btn-toolbar.bottom.hidden
-    = c.next_button(t('.next_as_single_link'))
-    = c.back_link
   .btn-toolbar.bottom
-    = c.next_button(t('.next_as_household_link'))
-    = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    %div
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
