@@ -303,6 +303,11 @@ de:
     tabs:
       history: Mitgliedschaften / Verlauf
 
+    manageds:
+      create_new_managed_person:
+        birthday_hint: '(dd.mm.yyyy) Kinder müssen zwischen 6 und 17 Jahre alt sein'
+
+
   people/neuanmeldungen/approves:
     new:
       text:
