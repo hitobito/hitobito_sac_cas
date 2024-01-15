@@ -29,6 +29,7 @@ module HitobitoSacCas
       Role.prepend SacCas::Role
       SelfRegistration.prepend SacCas::SelfRegistration
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
+      SelfRegistration::Housemate.prepend SacCas::SelfRegistration::Housemate
       Roles::Termination.prepend SacCas::Roles::Termination
 
       StepsComponent.prepend SacCas::StepsComponent
