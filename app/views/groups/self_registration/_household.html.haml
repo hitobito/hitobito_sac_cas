@@ -34,6 +34,9 @@
       = ff.labeled_input_field attr if ff.object.attr?(attr)
     - if ff.object.attr?(:birthday)
       = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+    - [:additional_email, :phone_number].each do |attr|
+      = ff.labeled_input_field attr if ff.object.attr?(attr)
+
     .control-group
       .controls
         = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})

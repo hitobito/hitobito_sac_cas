@@ -11,12 +11,27 @@ module SacCas::SelfRegistration::Housemate
 
   prepended do
     self.attrs = [
-      :first_name, :last_name, :gender, :birthday,
+      :first_name, :last_name, :gender, :birthday, :additional_email, :phone_number,
       :primary_group, :household_key, :_destroy, :household_emails
     ]
 
     self.required_attrs = [
       :first_name, :last_name, :gender, :birthday
     ]
+  end
+
+  def person
+    @person ||= Person.new(attributes.except('_destroy', 'household_emails', 'additional_email', 'phone_number')).tap do |p|
+      p.additional_emails.build(additional_email_attributes)
+      p.phone_numbers.build(phone_number_attributes)
+    end
+  end
+
+  def additional_email_attributes
+    {label: 'Privat', email: additional_email}
+  end
+
+  def phone_number_attributes
+    {label: 'Haupt-Telefon', number: phone_number}
   end
 end
