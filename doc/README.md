@@ -28,19 +28,29 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 ## Neuanmeldungen
 
+Jede Sektion besitzt die Untergruppe **Neuanmeldungen**. In dieser Gruppe landen Personen welche zu einer Sektion beitreten möchten. Will eine Sektion die Neuanmeldungen manuell prüfen und freigeben, besitzt diese zusätzlich die Untergruppe **Neuanmeldungen (zur Freigabe)**. Auf dieser Gruppe gibt es spezifische Actions um durch die Mitgliederverwaltung der Sektion eine Person freizugeben oder abzulehnen. Wir die Person freigegeben, landet diese in der Gruppe **Neuanmeldungen** und somit im Standard-Workflow für neue Mitglieder.
+Sobald die offene Mitgliederbeitragsrechnung bezahlt wurde, wird die Rolle der Person in **Neuanmeldungen** durch eine aktive Mitglieder-Rolle in der Sektions-Untergruppe **Mitglieder** ersetzt.
+
+### Rollen
+
+-   `Group::SektionsNeuanmeldungenSektion::Neuanmeldung` (Stammsektion)
+-   `Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion`
+-   `Group::SektionsNeuanmeldungenNv::Neuanmeldung` (Stammsektion)
+-   `Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion`
+
 ## Rollen
 
-### Mitgliederrollen
+### Aktive Mitgliederrollen
 
 Als Mitgliederrollen zählen:
 
--   `Group::SektionsNeuanmeldungenSektion::Neuanmeldung`
--   `Group::SektionsNeuanmeldungenNv::Neuanmeldung`
--   `Group::SektionsMitglieder::Mitglied`
+-   `Group::SektionsMitglieder::Mitglied` (Stammsektion)
+-   `Group::SektionsMitglieder::MitgliedZusatzsektion`
 
 #### Validierungen
 
--   Eine Person kann pro Gruppe nur eine einzige Mitglied-Rolle haben.
+-   Eine Person kann nur eine aktive Stammsektion Mitglieder-Rolle haben
+-   Um eine Zusatzsektion Rolle zu haben muss eine aktive Stammsektion Rolle vorhanden sein
 
 #### Berechtigungen
 
