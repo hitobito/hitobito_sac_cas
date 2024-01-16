@@ -50,7 +50,7 @@ module SacCas::PeopleController
   end
 
   def validate_new_manageds
-    validate_entry_age! && validate_new_manageds_age!
+    assert_entry_age! && assert_new_manageds_age!
   end
 
   def cloneable_mitglied_roles
@@ -63,20 +63,21 @@ module SacCas::PeopleController
 
   private
 
-  def validate_entry_age!
-    return true unless entry.years <= 22
+  def assert_entry_age!
+    age_range_adult = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT
+    return true if age_range_adult.include?(entry.years)
 
     entry.errors.add(:base, :too_young_for_managed)
     false
   end
 
-  def validate_new_manageds_age!
-    return true if newly_created_managed_people.all? { _1.years&.between?(6, 17) }
+  def assert_new_manageds_age!
+    age_range_youth = SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH
+    return true if newly_created_managed_people.all? { age_range_youth.include?(_1.years) }
 
     entry.errors.add(:base, :new_managed_age_invalid)
     false
   end
-
 
   def registrations_for_approval?
     group.is_a?(Group::SektionsNeuanmeldungenSektion)
