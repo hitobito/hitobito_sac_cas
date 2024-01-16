@@ -14,30 +14,17 @@ module Import
       self.headers = {
         navision_id: 'Mitgliedernummer',
         household_key: 'Familien-Nr.',
-        first_name: 'Vorname',
-        last_name: 'Nachname',
-        address_supplement: 'Adresszusatz',
-        address: 'Adresse',
-        country: 'Länder-/Regionscode',
-        town: 'Ort',
-        zip_code: 'PLZ',
-        email: 'E-Mail',
-        postfach: 'Postfach',
-        phone: 'Telefon',
-        phone_direct: 'Telefon direkt',
-        phone_mobile: 'Mobiltelefon',
-        birthday: 'Geburtsdatum',
-        gender: 'Geschlecht',
         group_navision_id: 'Sektion',
         beitragskategorie: 'Kategorie',
         member_type: 'Mitgliederart',
-        language: 'Sprachcode',
         last_joining_date: 'Letztes Eintrittsdatum',
         last_exit_date: 'Letztes Austrittsdatum',
         joining_year: 'Eintrittsjahr'
       }.freeze
 
       self.sheet_name = 'aktive_mitglieder'
+
+      self.class_attribute :target_role_type, default: Membership::TARGET_ROLE_TYPE
 
       attr_reader :membership_groups, :missing_sections
 
@@ -53,7 +40,7 @@ module Import
 
       def people_ids_already_having_membership
         @people_ids_already_having_membership ||= Set.new(
-          ::Person.joins(:roles).where(roles: { type: Membership::TARGET_ROLE }).pluck(:id)
+          ::Person.joins(:roles).where(roles: { type: target_role_type.sti_name }).pluck(:id)
         )
       end
 
@@ -92,9 +79,11 @@ module Import
 
       def print_summary
         membership_groups.each_value do |group|
-          active = group.roles.count
-          deleted = group.roles.deleted.count
-          output.puts "#{group.parent} hat #{active} aktive, #{deleted} inaktive Rollen"
+          active = target_role_type.where(group_id: group.id).count
+          deleted = target_role_type.where(group_id: group.id).deleted.count
+          output.puts(
+            "#{group.parent} hat #{active} aktive, #{deleted} inaktive Hauptmitgliedschaften"
+          )
         end
 
         output_list('Folgende Sektionen konnten nicht gefunden werden:', missing_sections.to_a)

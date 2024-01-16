@@ -41,7 +41,7 @@ describe Import::Sektion::Membership do
         current_ability: Ability.new(Person.root)
       )
       expect(member).not_to be_valid
-      expect(member.errors).to match(/Rollen ist nicht gültig, Group muss ausgefüllt werden/)
+      expect(member.errors).to match(/Group muss ausgefüllt werden/)
     end
 
     it 'is invalid with member_type Abonnent' do

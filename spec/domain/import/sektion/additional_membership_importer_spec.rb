@@ -7,18 +7,19 @@
 
 require 'spec_helper'
 
-describe Import::Sektion::MembershipsImporter do
+describe Import::Sektion::AdditionalMembershipsImporter do
   let(:group) { groups(:bluemlisalp) }
+  let(:membership_group) { groups(:bluemlisalp_mitglieder) }
 
   def attrs(create_person: true, **attrs)
     @navision_id ||= 123
     person_id = attrs.delete(:navision_id).presence || @navision_id += 1
     Fabricate(:person, id: person_id) unless Person.where(id: person_id).exists?
     {
+      navision_id: person_id,
       group_navision_id: group.navision_id,
       beitragskategorie: 'EINZEL',
-      navision_id: person_id,
-      last_joining_date: '1.1.1960'
+      joining_date: '1.1.1960'
     }.merge(attrs)
   end
 
@@ -42,7 +43,7 @@ describe Import::Sektion::MembershipsImporter do
     person = Person.find(id)
     expect(person.roles).to have(1).item
     role = person.roles.first
-    expect(role).to be_a Group::SektionsMitglieder::Mitglied
+    expect(role).to be_a Group::SektionsMitglieder::MitgliedZusatzsektion
     expect(role.beitragskategorie).to eq 'einzel'
     expect(role.group).to eq groups(:bluemlisalp_mitglieder)
     expect(role.created_at).to eq Time.zone.parse('1.1.1960')
@@ -60,8 +61,8 @@ describe Import::Sektion::MembershipsImporter do
   it 'updates existing if navision_id is identical' do
     id = 123
     expect(importer).to receive(:each_row)
-      .and_yield(attrs(navision_id: id, last_joining_date: '1.1.1960'))
-      .and_yield(attrs(navision_id: id, last_joining_date: '1.1.1970'))
+      .and_yield(attrs(navision_id: id, joining_date: '1.1.1960'))
+      .and_yield(attrs(navision_id: id, joining_date: '1.1.1970'))
     expect do
       importer.import!
     end.to change { Role.count }.by(1)
@@ -72,35 +73,45 @@ describe Import::Sektion::MembershipsImporter do
     expect(role.created_at).to eq Time.zone.parse('1.1.1970')
   end
 
-  describe 'families' do
-    let!(:family_adult) { Fabricate(:person, birthday: 25.years.ago.to_date) }
-    let!(:family_child) { Fabricate(:person, birthday: 10.years.ago.to_date) }
+  it 'does not check for existing main membership' do
+    id = 123
+    person = Fabricate(:person, id: id)
+    expect(person.roles).to be_empty
 
-    before do
-      expect(importer).to receive(:each_row)
-        .and_yield(attrs(
-                     navision_id: family_adult.id,
-                     household_key: 'this-family',
-                     beitragskategorie: 'FAMILIE'
-                   ))
-        .and_yield(attrs(
-                     navision_id: family_child.id,
-                     household_key: 'this-family',
-                     beitragskategorie: 'FAMILIE'
-                   ))
-    end
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id))
+      .and_yield(attrs(navision_id: id, joining_date: '1.1.1970'))
 
-    it 'imports household_key' do
-      expect { importer.import! }.to change { Role.count }.by(2)
-      expect(family_adult.reload.household_key).to eq 'this-family'
-      expect(family_child.reload.household_key).to eq 'this-family'
-    end
+    expect { importer.import! }.to change { Role.count }.by(1)
 
-    it 'creates people_managers' do
-      expect { importer.import! }.to change { PeopleManager.count }.by(1)
-      pm = PeopleManager.last
-      expect(pm.manager).to eq family_adult
-      expect(pm.managed).to eq family_child
+    expect(person.roles).to have(1).items
+    expect(person.roles.first).to be_a Group::SektionsMitglieder::MitgliedZusatzsektion
+
+    expect(importer.errors).to be_empty
+  end
+
+  it 'does check for membership overlap' do
+    id = 123
+    person = Fabricate(:person, id: id)
+    membership = Fabricate(
+      Group::SektionsMitglieder::Mitglied.sti_name,
+      group: membership_group,
+      person: person,
+      created_at: Time.current.beginning_of_year,
+      delete_on: Date.current.end_of_year
+    )
+
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id))
+
+    expect { importer.import! }.not_to change { Role.count }
+
+    expect(importer.errors).to include /Person ist bereits Mitglied/
+  end
+
+  it 'assigns beitragskategorie from file' do
+    Import::Sektion::Membership::BEITRAGSKATEGORIEN.each do |key, value|
+      expect(importer).to receive(:each_row).and_yield(attrs(beitragskategorie: key))
+      expect { importer.import! }.to change { Role.count }.by(1)
+      expect(Role.last.beitragskategorie).to eq value.to_s
     end
   end
 

@@ -26,6 +26,10 @@ class Group::SektionsMitglieder < ::Group
 
     validates :delete_on, presence: { message: :must_be_present_unless_deleted },
                           unless: :deleted_at?
+
+    # This is used by the import as we don't have the complete memberhip history of a person
+    # but have to import MitgliedZusatzsektion roles anyway.
+    attr_accessor :skip_mitglied_during_validity_period_validation
   end
 
   class Ehrenmitglied < ::Role

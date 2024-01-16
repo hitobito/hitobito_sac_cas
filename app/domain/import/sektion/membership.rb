@@ -18,7 +18,7 @@ module Import
         'FREI FAM' => :familie
       }.freeze
 
-      TARGET_ROLE = Group::SektionsMitglieder::Mitglied.sti_name
+      TARGET_ROLE_TYPE = Group::SektionsMitglieder::Mitglied
       DEFAULT_DELETE_ON = Date.new(2024, 12, 31)
       UNKNOWN_JOINING_DATE = Date.new(1900, 1, 1)
 
@@ -38,7 +38,7 @@ module Import
       end
 
       def valid?
-        @valid ||= person&.valid? && role.valid? && !abo?
+        @valid ||= role.valid? && !abo?
       end
 
       def errors
@@ -83,8 +83,10 @@ module Import
       end
 
       def build_role
+        return Role.new unless person
+
         person.roles.
-          where(group_id: @group&.id, type: Group::SektionsMitglieder::Mitglied.sti_name).
+          where(group_id: @group&.id, type: TARGET_ROLE_TYPE.sti_name).
           first_or_initialize.tap do |role|
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
@@ -140,7 +142,7 @@ module Import
       def build_error_messages
         return "Person #{navision_id} existiert nicht" unless person
 
-        [person.errors.full_messages, role.errors.full_messages, member_type_error]
+        [role.errors.full_messages, member_type_error]
           .flatten.compact.join(', ').tap do |messages|
             messages.prepend("#{self}: ") if messages.present?
           end
