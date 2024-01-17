@@ -12,6 +12,7 @@ class Group::SektionsTourenkommission < ::Group
   ### ROLES
   class Tourenchef < ::Role
     self.permissions = [:group_full]
+    self.two_factor_authentication_enforced = true
   end
 
   class TourenchefSommer < Tourenchef; end

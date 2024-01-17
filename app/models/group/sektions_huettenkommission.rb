@@ -14,6 +14,7 @@ class Group::SektionsHuettenkommission < ::Group
   ### ROLES
   class Huettenobmann < ::Role
     self.permissions = [:group_and_below_read]
+    self.two_factor_authentication_enforced = true
   end
 
   class Andere < ::Role

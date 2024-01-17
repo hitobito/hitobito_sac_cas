@@ -16,14 +16,17 @@ class Group::SektionsFunktionaere < ::Group
 
   class Mitgliederverwaltung < ::Role
     self.permissions = [:layer_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
   class Administration < ::Role
     self.permissions = [:layer_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
   class AdministrationReadOnly < ::Role
     self.permissions = [:layer_and_below_read]
+    self.two_factor_authentication_enforced = true
   end
 
   class Umweltbeauftragte < ::Role
