@@ -22,7 +22,6 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       first_name: 'Max',
       last_name: 'Muster',
       birthday: '01.01.2000',
-      email: 'maxine.muster@example.com'
     }
   }
 
@@ -32,7 +31,6 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       expect(model.errors.attribute_names).to match_array [
         :first_name,
         :last_name,
-        :email,
         :birthday,
       ]
     end

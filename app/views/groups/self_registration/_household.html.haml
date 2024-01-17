@@ -25,17 +25,15 @@
 = f.nested_fields_for :housemates, nil, nil, model_object: f.object.build_housemate, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
   = field_set_tag do
     = ff.error_messages
-    = field_set_tag do
-      = ff.labeled(:gender) do
-        - (Person::GENDERS + ['']).each do |key|
-          = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
+    = ff.labeled(:gender) do
+      - (Person::GENDERS + ['']).each do |key|
+        = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
     = ff.labeled_input_fields :first_name, :last_name
     = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
     = ff.labeled_input_fields :additional_email, :phone_number
 
-    .control-group
-      .controls
-        = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})
+    .col-xl-2.col-md-3.text-md-end.pe-3
+      = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})
 
 %br
 - if entry.housemates.empty?
