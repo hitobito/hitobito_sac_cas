@@ -15,6 +15,12 @@ module SacCas::Group
     # self.superior_attributes = [:bank_account]
 
     root_types Group::SacCas
+
+    alias_method :group_id, :id
+  end
+
+  def sektion_or_ortsgruppe?
+    [Group::Sektion, Group::Ortsgruppe].any? { |c| is_a?(c) }
   end
 
   def preferred_primary?
