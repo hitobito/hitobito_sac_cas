@@ -59,6 +59,7 @@ describe Import::SektionenImporter do
 
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
                            Group::SektionsMitglieder,
+                           Group::SektionsExterneKontakte,
                            Group::SektionsTourenkommission,
                            Group::SektionsFunktionaere]
 
@@ -76,6 +77,7 @@ describe Import::SektionenImporter do
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
                            Group::SektionsNeuanmeldungenSektion,
                            Group::SektionsMitglieder,
+                           Group::SektionsExterneKontakte,
                            Group::SektionsTourenkommission,
                            Group::SektionsFunktionaere]
 

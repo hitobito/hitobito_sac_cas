@@ -137,6 +137,10 @@ de:
         one: Hüttenkommission
         other: Hüttennkommission
 
+      group/sektions_externe_kontakte:
+        one: Externe Kontakte
+        other: Externe Kontakte
+
       group/sektions_huette:
         one: Hütte
         other: Hütte
@@ -244,6 +248,9 @@ de:
       group/sektions_huette/andere:
         one: Andere
         description: Andere
+      group/sektions_externe_kontakte/kontakt:
+        one: Kontakt
+        description: Kontakt
 
   devise:
     sessions:
