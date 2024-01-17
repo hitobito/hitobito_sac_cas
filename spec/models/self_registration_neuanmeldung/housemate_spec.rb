@@ -43,6 +43,32 @@ describe SelfRegistrationNeuanmeldung::Housemate do
     end
   end
 
+  describe 'additional_email' do
+    it 'is translated correctly' do
+      expect(model.class.human_attribute_name(:additional_email)).to eq 'E-Mail (optional)'
+    end
+
+    it 'is assigned as one of many additional_emails of person' do
+      model.additional_email = 'test@example.com'
+      email = model.person.additional_emails.first
+      expect(email.email).to eq 'test@example.com'
+      expect(email.label).to eq 'Privat'
+    end
+  end
+
+  describe 'phone_number' do
+    it 'is translated correctly' do
+      expect(model.class.human_attribute_name(:phone_number)).to eq 'Telefon (optional)'
+    end
+
+    it 'is assigned as one of many phone_numbers of person' do
+      model.phone_number = '+41 79 123 45 56'
+      number = model.person.phone_numbers.first
+      expect(number.number).to eq '+41 79 123 45 56'
+      expect(number.label).to eq 'Haupt-Telefon'
+    end
+  end
+
   describe 'role' do
     before { model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)  }
     it 'builds role with expected type' do

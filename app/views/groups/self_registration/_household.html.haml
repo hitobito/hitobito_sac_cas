@@ -22,20 +22,16 @@
       = c.next_button(t('.next_as_household_link'))
       = c.back_link
 
-= f.nested_fields_for :housemates, nil, nil, model_object: SelfRegistration::Housemate.new, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
+= f.nested_fields_for :housemates, nil, nil, model_object: f.object.build_housemate, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
   = field_set_tag do
     = ff.error_messages
-    - if ff.object.attr?(:gender)
-      = field_set_tag do
-        = ff.labeled(:gender) do
-          - (Person::GENDERS + ['']).each do |key|
-            = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
-    - [:first_name, :last_name].each do |attr|
-      = ff.labeled_input_field attr if ff.object.attr?(attr)
-    - if ff.object.attr?(:birthday)
-      = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
-    - [:additional_email, :phone_number].each do |attr|
-      = ff.labeled_input_field attr if ff.object.attr?(attr)
+    = field_set_tag do
+      = ff.labeled(:gender) do
+        - (Person::GENDERS + ['']).each do |key|
+          = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
+    = ff.labeled_input_fields :first_name, :last_name
+    = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+    = ff.labeled_input_fields :additional_email, :phone_number
 
     .control-group
       .controls

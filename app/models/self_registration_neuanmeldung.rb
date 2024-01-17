@@ -43,6 +43,10 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     housemates.collect(&:birthday).unshift(main_person.birthday).compact.shuffle
   end
 
+  def build_housemate
+    build_person({}, Housemate)
+  end
+
   private
 
   def household_valid?
