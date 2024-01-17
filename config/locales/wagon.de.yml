@@ -43,6 +43,9 @@ de:
           m: Mann
           w: Frau
           _nil: Andere
+      group:
+        group_id: Gruppen-ID
+        navision_id: NAV Sektions-ID
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
