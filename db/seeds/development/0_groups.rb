@@ -13,10 +13,11 @@ root = Group.roots.first
 srand(42)
 
 def seed_hut(sektion, name, navision_id)
-  Group::Huette.seed(:name, :parent_id, {
+  huettenkommission = Group::SektionsHuettenkommission.find_or_create_by(parent_id: sektion.id)
+  Group::SektionsHuette.seed(:name, :parent_id, {
     name: name,
     navision_id: navision_id,
-    parent_id: sektion.id
+    parent_id: huettenkommission.id
   })
 end
 

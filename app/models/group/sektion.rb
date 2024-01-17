@@ -15,13 +15,15 @@ class Group::Sektion < ::Group
     Group::SektionsNeuanmeldungenSektion,
     Group::SektionsNeuanmeldungenNv,
     Group::SektionsTourenkommission,
-    Group::Huette,
+    Group::SektionsHuettenkommission,
+    Group::SektionsExterneKontakte,
     Group::Ortsgruppe
 
   self.default_children = [
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenNv,
+    Group::SektionsExterneKontakte,
     Group::SektionsTourenkommission ]
 
   mounted_attr :foundation_year, :integer

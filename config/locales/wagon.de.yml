@@ -133,9 +133,17 @@ de:
         one: Tourenkommission
         other: Tourenkommissionen
 
-      group/huette:
+      group/sektions_huettenkommission:
+        one: Hüttenkommission
+        other: Hüttennkommission
+
+      group/sektions_externe_kontakte:
+        one: Externe Kontakte
+        other: Externe Kontakte
+
+      group/sektions_huette:
         one: Hütte
-        other: Hütten
+        other: Hütte
 
       ### ROLES
       group/geschaeftsstelle/mitgliederdienst:
@@ -165,39 +173,33 @@ de:
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
-      group/sektions_funktionaere/verwaltung:
-        one: Verwaltung
-        description: Verwaltung Sektion
-      group/sektions_funktionaere/verwaltung_read_only:
-        one: Verwaltung (nur lesend)
-        description: Verwaltung Sektion (nur lesend)
+      group/sektions_funktionaere/administration:
+        one: Administration
+        description: Administration
+      group/sektions_funktionaere/administration_read_only:
+        one: Administration (nur lesend)
+        description: Administration (nur lesend)
       group/sektions_funktionaere/praesidium:
         one: Präsidium
-        description: Präsidium Sektion
-      group/sektions_funktionaere/vize_praesidium:
-        one: Vizepräsidium
-        description: Vizeräsidium Sektion
-      group/sektions_funktionaere/mitgliederdienst:
-        one: Mitgliederdienst
-        description: Mitgliederdienst Sektion
-      group/sektions_funktionaere/huettenobmann:
-        one: Hüttenobmann
-        description: Hüttenobmann Sektion
-      group/sektions_funktionaere/funktionaer:
-        one: Funktionär*in
-        description: Funktionär*in Sektion
+        description: Präsidium
+      group/sektions_funktionaere/mitgliederverwaltung:
+        one: Mitgliederverwaltung
+        description: Mitgliederverwaltung Sektion
+      group/sektions_funktionaere/umweltbeauftragte:
+        one: Umweltbeauftragte*r
+        description: Umweltbeauftragte*r Sektion
+      group/sektions_funktionaere/kulturbeauftragte:
+        one: Kulturbeauftragte*r
+        description: Kulturbeauftragte*r Sektion
+      group/sektions_funktionaere/andere:
+        one: Andere
+        description: Andere
       group/sektions_mitglieder/mitglied:
         one: Mitglied (Stammsektion)
         description: Mitglied (Stammsektion)
       group/sektions_mitglieder/mitglied_zusatzsektion:
         one: Mitglied (Zusatzsektion)
         description: Mitglied (Zusatzsektion)
-      group/sektions_mitglieder/abonnement:
-        one: Abonnement
-        description: Abonnement
-      group/sektions_mitglieder/geschenkmitgliedschaft:
-        one: Geschenkmitgliedschaft
-        description: Geschenkmitgliedschaft
       group/sektions_mitglieder/ehrenmitglied:
         one: Ehrenmitglied
         description: Ehrenmitglied
@@ -228,30 +230,27 @@ de:
       group/sektions_tourenkommission/tourenchef_senioren:
         one: Tourenchef*in Senioren
         description: Tourenchef*in Senioren
-      group/sektions_tourenkommission/tourenleiter_sommer:
-        one: Tourenleiter*in Sommer
-        description: Tourenleiter*in Sommer
-      group/sektions_tourenkommission/tourenleiter_winter:
-        one: Tourenleiter*in Winter
-        description: Tourenleiter*in Winter
-      group/huette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
-      group/huette/huettenwart:
+      group/sektions_tourenkommission/tourenleiter:
+        one: Tourenleiter*in
+        description: Tourenleiter*in
+      group/sektions_huettenkommission/huettenobmann:
+        one: Hüttenobmann*frau
+        description: Hüttenobmann*frau
+      group/sektions_huettenkommission/andere:
+        one: Andere
+        description: Andere
+      group/sektions_huette/huettenwart:
         one: Hüttenwart*in
         description: Hüttenwart*in
-      group/huette/huettenwarts_partner:
-        one: Hüttenwartspartner*in
-        description: Hüttenwartspartner*in
-      group/huette/mitarbeiter:
-        one: Mitarbeiter*in
-        description: Mitarbeitende
-      group/huette/schluesseldepot:
-        one: Schlüsseldepot
-        description: Schlüsseldepots
-      group/huette/funktionaer:
-        one: Funktionär*in
-        description: Funktionär*in
+      group/sektions_huette/huettenchef:
+        one: Hüttenchef*in
+        description: Hüttenchef*in
+      group/sektions_huette/andere:
+        one: Andere
+        description: Andere
+      group/sektions_externe_kontakte/kontakt:
+        one: Kontakt
+        description: Kontakt
 
   devise:
     sessions:

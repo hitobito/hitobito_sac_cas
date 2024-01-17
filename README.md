@@ -20,40 +20,36 @@ of SAC CAS.
   * Externe Kontakte
     * Kontakt: []
 * Sektion
-* Hütte
-  * Hütte
-    * Hüttenwart*in: [:group_full]
-    * Hüttenwartspartner*in: [:group_full]
-    * Hüttenchef*in: [:group_full]
-    * Mitarbeiter*in: []
-    * Schlüsseldepot: []
-    * Funktionär*in: []
 * Ortsgruppe
 * Global
   * Funktionäre
     * Präsidium: []
-    * Vizepräsidium: []
-    * Mitgliederdienst: [:layer_and_below_full]
-    * Funktionär*in: []
-    * Verwaltung: [:layer_and_below_full]
-    * Verwaltung (nur lesend): [:layer_and_below_read]
-    * Hüttenobmann: [:layer_read]
+    * Mitgliederverwaltung: [:layer_and_below_full]
+    * Administration: [:layer_and_below_full]
+    * Administration (nur lesend): [:layer_and_below_read]
+    * Umweltbeauftragte*r: []
+    * Kulturbeauftragte*r: []
+    * Andere: []
   * Mitglieder
-    * Mitglied: []
-    * Abonnement: []
+    * Mitglied (Stammsektion): []
+    * Mitglied (Zusatzsektion): []
     * Ehrenmitglied: []
     * Begünstigt: []
   * Neuanmeldungen (zur Freigabe)
-    * Neuanmeldung: []
+    * Neuanmeldung (Stammsektion): []
+    * Neuanmeldung (Zusatzsektion): []
   * Neuanmeldungen
-    * Neuanmeldung: []
+    * Neuanmeldung (Stammsektion): []
+    * Neuanmeldung (Zusatzsektion): []
   * Tourenkommission
     * Tourenchef*in Sommer: [:group_full]
     * Tourenchef*in Winter: [:group_full]
     * Tourenchef*in Klettern: [:group_full]
     * Tourenchef*in Senioren: [:group_full]
-    * Tourenleiter*in Sommer: [:group_read]
-    * Tourenleiter*in Winter: [:group_read]
+    * Tourenleiter*in: []
+  * Hüttenkommission
+    * Hüttenobmann*frau: [:group_and_below_read]
+    * Andere: [:group_read]
 ```
 
 (Output of rake app:hitobito:roles)

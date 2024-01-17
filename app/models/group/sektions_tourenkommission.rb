@@ -12,6 +12,7 @@ class Group::SektionsTourenkommission < ::Group
   ### ROLES
   class Tourenchef < ::Role
     self.permissions = [:group_full]
+    self.two_factor_authentication_enforced = true
   end
 
   class TourenchefSommer < Tourenchef; end
@@ -19,19 +20,15 @@ class Group::SektionsTourenkommission < ::Group
   class TourenchefKlettern < Tourenchef; end
   class TourenchefSenioren < Tourenchef; end
 
-  class TourenleiterSommer < ::Role
+  class Tourenleiter < ::Role
     self.permissions = []
-  end
-
-  class TourenleiterWinter < ::Role
-    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   roles TourenchefSommer,
     TourenchefWinter,
     TourenchefKlettern,
     TourenchefSenioren,
-    TourenleiterSommer,
-    TourenleiterWinter
+    Tourenleiter
 
 end

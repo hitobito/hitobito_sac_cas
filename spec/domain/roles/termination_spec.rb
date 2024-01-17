@@ -18,9 +18,9 @@ describe Roles::Termination do
 
   context '#affected_roles' do
     around do |example|
-      Group::SektionsFunktionaere::Funktionaer.terminatable = true
+      Group::SektionsFunktionaere::Administration.terminatable = true
       example.run
-      Group::SektionsFunktionaere::Funktionaer.terminatable = false
+      Group::SektionsFunktionaere::Administration.terminatable = false
     end
 
     context 'for a mitglied role' do
@@ -33,7 +33,7 @@ describe Roles::Termination do
 
     context 'for a non-mitglied role' do
       let(:role) do
-        Group::SektionsFunktionaere::Funktionaer.create!(
+        Group::SektionsFunktionaere::Praesidium.create!(
           person: person,
           group: groups(:bluemlisalp_funktionaere)
         )

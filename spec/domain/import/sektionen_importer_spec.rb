@@ -54,11 +54,12 @@ describe Import::SektionenImporter do
     expect(neuanmeldungen_matterhorn.self_registration_role_type).to eq(nil)
   end
 
-  it 'creates sac default sub groups for sektion' do
+  it 'creates sac default sub groups for sektion + a ortsgruppe as sub group' do
     importer.import!
 
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
                            Group::SektionsMitglieder,
+                           Group::SektionsExterneKontakte,
                            Group::SektionsTourenkommission,
                            Group::SektionsFunktionaere]
 
@@ -76,6 +77,7 @@ describe Import::SektionenImporter do
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
                            Group::SektionsNeuanmeldungenSektion,
                            Group::SektionsMitglieder,
+                           Group::SektionsExterneKontakte,
                            Group::SektionsTourenkommission,
                            Group::SektionsFunktionaere]
 

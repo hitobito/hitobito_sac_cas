@@ -14,31 +14,38 @@ class Group::SektionsFunktionaere < ::Group
     self.permissions = []
   end
 
-  class VizePraesidium < ::Role
-    self.permissions = []
-  end
-
-  class Mitgliederdienst < ::Role
+  class Mitgliederverwaltung < ::Role
     self.permissions = [:layer_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
-  class Funktionaer < ::Role
-    self.permissions = []
-  end
-
-  class Verwaltung < ::Role
+  class Administration < ::Role
     self.permissions = [:layer_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
-  class VerwaltungReadOnly < ::Role
+  class AdministrationReadOnly < ::Role
     self.permissions = [:layer_and_below_read]
+    self.two_factor_authentication_enforced = true
   end
 
-  class Huettenobmann < ::Role
-    self.permissions = [:layer_read]
+  class Umweltbeauftragte < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
-  roles Praesidium, VizePraesidium, Mitgliederdienst, Funktionaer,
-        Verwaltung, VerwaltungReadOnly, Huettenobmann
+  class Kulturbeauftragte < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Andere < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  roles Praesidium, Mitgliederverwaltung, Administration,
+    AdministrationReadOnly, Umweltbeauftragte, Kulturbeauftragte,
+    Andere
 
 end
