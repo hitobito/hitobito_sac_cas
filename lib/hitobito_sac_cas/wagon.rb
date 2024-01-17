@@ -42,6 +42,7 @@ module HitobitoSacCas
 
       ## Helpers
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
+      MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
 
       ## Controllers
       Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
