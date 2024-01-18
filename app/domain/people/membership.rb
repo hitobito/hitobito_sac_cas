@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class People::MembershipVerifier
+class People::Membership
 
   MEMBERSHIP_ROLES = [
     Group::SektionsMitglieder::Mitglied
@@ -13,16 +13,28 @@ class People::MembershipVerifier
 
   def initialize(person)
     @person = person
+    @roles = MEMBERSHIP_ROLES.map(&:sti_name)
   end
 
-  def member?
-    membership_roles.any?
+  def active?
+    roles.any?
   end
 
-  def membership_roles
-    @membership_roles ||= @person.roles.select do |r|
-      MEMBERSHIP_ROLES.include?(r.class)
-    end.compact
+  def anytime?
+    roles.any? || any_future_role? || any_past_role?
   end
 
+  def roles
+    @person.roles.select { |r| MEMBERSHIP_ROLES.include?(r.class) }
+  end
+
+  private
+
+  def any_future_role?
+    @person.roles.future.where(convert_to: @roles).exists?
+  end
+
+  def any_past_role?
+    @person.roles.deleted.where(type: @roles).exists?
+  end
 end

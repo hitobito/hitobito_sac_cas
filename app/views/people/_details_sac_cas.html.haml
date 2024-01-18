@@ -4,4 +4,5 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = render_present_attrs(entry, :family_id)
-= render_attrs(entry, :membership_years, :membership_number)
+- if entry.membership_anytime?
+  = render_present_attrs(entry, :membership_number, :membership_years)

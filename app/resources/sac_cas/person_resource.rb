@@ -10,8 +10,14 @@ module SacCas::PersonResource
 
   included do
     attribute :family_id, :string, writable: false, sortable: false, filterable: false
+    attribute :membership_number, :integer, writable: false, sortable: false, fiterable: false do
+      @object.membership_number if @object.membership_anytime?
+    end
 
-    extra_attribute :membership_years, :string, sortable: true, filterable: true
+    extra_attribute :membership_years, :integer, sortable: true, filterable: true do
+      @object.membership_years if @object.membership_anytime?
+
+    end
     on_extra_attribute :membership_years do |scope|
       scope.with_membership_years
     end

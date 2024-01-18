@@ -33,15 +33,11 @@ class People::Membership::VerifyController < ActionController::Base # rubocop:di
   end
 
   def member?
-    @member ||= membership_verifier.member?
+    @member ||= person.membership_active?
   end
 
   def membership_roles
-    @membership_roles ||= membership_verifier.membership_roles
-  end
-
-  def membership_verifier
-    @membership_verifier ||= People::MembershipVerifier.new(person)
+    @membership_roles ||= person.membership_roles
   end
 
 end
