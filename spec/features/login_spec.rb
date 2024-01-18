@@ -20,15 +20,19 @@ describe :login, js: true do
 
   after { logout }
 
-  it 'has correct login field label' do
+  before do
     visit new_person_session_path
+    expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr'
+    expect(page).to have_field 'Passwort'
+  end
+
+  it 'has correct login field label' do
     expect(page).to have_selector('label[for="person_login_identity"]', text: 'Haupt‑E‑Mail / Mitglied‑Nr')
   end
 
   it 'allows login with email' do
-    visit new_person_session_path
-    fill_in 'person_login_identity', with: person.email
-    fill_in 'person_password', with: password
+    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.email
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_link 'Abmelden'
@@ -36,9 +40,8 @@ describe :login, js: true do
   end
 
   it 'allows login with membership_number' do
-    visit new_person_session_path
-    fill_in 'person_login_identity', with: person.membership_number
-    fill_in 'person_password', with: password
+    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.membership_number
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_link 'Abmelden'
@@ -46,9 +49,8 @@ describe :login, js: true do
   end
 
   it 'does not allow login with nickname' do
-    visit new_person_session_path
-    fill_in 'person_login_identity', with: person.nickname
-    fill_in 'person_password', with: password
+    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.nickname
+    fill_in 'Passwort', with: password
     click_button 'Anmelden'
 
     expect(page).to have_selector('#flash .alert.alert-danger', text: 'Ungültige Anmeldedaten.')
