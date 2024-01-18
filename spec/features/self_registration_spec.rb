@@ -36,6 +36,7 @@ describe :self_registration, js: true do
       person.update!(password: password, password_confirmation: password)
 
       visit group_self_registration_path(group_id: group)
+      expect(page).to have_field 'Mail'
       fill_in 'Mail', with: person.email
       click_on 'Registrieren'
       expect(page).to have_css '.alert-success', text: 'Es existiert bereits ein Login für diese E-Mail.'
