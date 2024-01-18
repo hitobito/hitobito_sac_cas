@@ -11,7 +11,9 @@ module SacCas::Person
 
   included do
     Person::INTERNAL_ATTRS += [:membership_verify_token]
-    self.devise_login_id_attrs << :membership_number
+    devise_login_id_attrs << :membership_number
+
+    delegate :active?, :anytime?, :roles, to: :membership, prefix: true
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
@@ -40,7 +42,7 @@ module SacCas::Person
   end
 
   def salutation_label(key)
-    prefix = "activerecord.attributes.person.salutations"
+    prefix = 'activerecord.attributes.person.salutations'
     I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
   end
 
@@ -49,4 +51,11 @@ module SacCas::Person
     update!(membership_verify_token: token)
     token
   end
+
+  private
+
+  def membership
+    @membership ||= People::Membership.new(self)
+  end
+
 end
