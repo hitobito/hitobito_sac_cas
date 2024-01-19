@@ -19,25 +19,24 @@ module SacCas::Role::MitgliedNoOverlapValidation
 
     case self
     when SacCas::Role::MitgliedHauptsektion
-      assert_no_overlapping_primary_memberships || assert_no_overlapping_memberships_per_sektion
+      assert_no_overlapping_primary_memberships
+      assert_no_overlapping_memberships_per_layer
     when SacCas::Role::MitgliedZusatzsektion
-      assert_no_overlapping_memberships_per_sektion
+      assert_no_overlapping_memberships_per_layer
     end
   end
 
   def assert_no_overlapping_primary_memberships
     overlapping_roles(active_period, SacCas::MITGLIED_HAUPTSEKTION_ROLES).tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
-    end.present?
+    end
   end
 
-  def assert_no_overlapping_memberships_per_sektion
-    this_sektion = role_sektion(self) or return # we can't validate without the sektion
-
+  def assert_no_overlapping_memberships_per_layer
     overlapping_roles(active_period, SacCas::MITGLIED_ROLES).
-      select { |role| role_sektion(role) == this_sektion }.tap do |conflicting_roles|
+      select { |role| role.layer_group == layer_group }.tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
-    end.present?
+    end
   end
 
   def overlapping_roles(period, role_types)

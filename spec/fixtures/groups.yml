@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 26
+  rgt: 34
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
@@ -26,7 +26,7 @@ geschaeftsstelle:
 bluemlisalp:
   parent: root
   lft: 4
-  rgt: 13
+  rgt: 21
   name: SAC Blüemlisalp
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
@@ -62,48 +62,78 @@ bluemlisalp_neuanmeldungen_sektion:
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
 
+bluemlisalp_ortsgruppe_ausserberg:
+  parent: :bluemlisalp
+  lft: 13
+  rgt: 20
+  type: Group::Ortsgruppe
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  navision_id: 1651
+
+bluemlisalp_ortsgruppe_ausserberg_mitglieder:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 14
+  rgt: 15
+  type: Group::SektionsMitglieder
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+
+bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 16
+  rgt: 17
+  type: Group::SektionsNeuanmeldungenNv
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+
+bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_sektion:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 18
+  rgt: 19
+  type: Group::SektionsNeuanmeldungenSektion
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+
 matterhorn:
   parent: root
-  lft: 14
-  rgt: 25
+  lft: 22
+  rgt: 33
   name: SAC Matterhorn
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_funktionaere:
   parent: matterhorn
-  lft: 15
-  rgt: 16
+  lft: 23
+  rgt: 24
   name: Funktionaere
   type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_mitglieder:
   parent: matterhorn
-  lft: 17
-  rgt: 18
+  lft: 25
+  rgt: 26
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_neuanmeldungen_nv:
   parent: matterhorn
-  lft: 19
-  rgt: 20
+  lft: 27
+  rgt: 28
   type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_neuanmeldungen_sektion:
   parent: matterhorn
-  lft: 21
-  rgt: 22
+  lft: 29
+  rgt: 30
   type: Group::SektionsNeuanmeldungenSektion
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_tourenkommission:
   parent: matterhorn
-  lft: 23
-  rgt: 24
+  lft: 31
+  rgt: 32
   name: Tourenkommission
   type: Group::SektionsTourenkommission
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
