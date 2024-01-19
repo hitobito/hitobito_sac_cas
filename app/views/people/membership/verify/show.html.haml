@@ -34,15 +34,15 @@
                 = role.group.layer_group.name
           - if member?
             %div{:class => 'alert alert-success'}
-              %span.icon.icon-ok
+              %span.fas.fa-check
               = t('verify_membership.status_valid')
           - else
             %div{:class => 'alert alert-danger'}
-              %span.icon.icon-remove-circle
+              %span.fas.fa-times-circle
               = t('verify_membership.status_invalid')
         -else
           %div{:class => 'alert alert-alert'}
-            %span.icon.icon-remove-circle
+            %span.fas.fa-times-circle
             = t('verify_membership.not_found')
 
     = render 'layouts/footer'
