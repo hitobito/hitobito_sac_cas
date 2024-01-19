@@ -1,7 +1,0 @@
-= standard_form(entry, url: group_self_registration_path) do |f|
-  = f.honeypot(:verification)
-  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
-
- = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
-    = f.help_block(t('groups.self_registration.form.has_account'), class: 'align-with-form')
-    = submit_button(f, t('groups.self_registration.form.to_login_page'), display_as_link: true)
