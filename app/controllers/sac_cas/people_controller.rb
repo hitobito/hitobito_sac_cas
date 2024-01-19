@@ -33,7 +33,7 @@ module SacCas::PeopleController
   end
 
   def assign_roles_for_newly_created_managed_people
-    return unless newly_created_managed_people.any?
+    return if newly_created_managed_people.empty?
     
     Role.transaction do
       cloneable_mitglied_roles.each do |role|
@@ -46,6 +46,18 @@ module SacCas::PeopleController
                        delete_on: role.delete_on)
         end
       end
+    end
+  end
+
+  def persist_household
+    assign_household_for_manageds
+
+    super
+  end
+
+  def assign_household_for_manageds
+    new_manageds.each do |managed|
+      Person::Household.new(entry, current_ability, managed, current_user).assign.persist!
     end
   end
 
@@ -72,7 +84,7 @@ module SacCas::PeopleController
   end
 
   def assert_new_manageds_age!
-    age_range_youth = SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH
+    age_range_youth = SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER
     return true if newly_created_managed_people.all? { age_range_youth.include?(_1.years) }
 
     entry.errors.add(:base, :new_managed_age_invalid)

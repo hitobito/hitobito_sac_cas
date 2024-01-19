@@ -25,9 +25,8 @@ module SacCas::Person::Household
 
     person.update!(household_key: nil)
 
-    # TODO what was this for
-    # person.manageds.clear
-    # person.managers.clear
+    person.manageds.clear
+    person.managers.clear
   end
 
   def save
@@ -50,7 +49,7 @@ module SacCas::Person::Household
     housemates_by_agegroup(:child).each do |child|
       next unless ability.can?(:update, child)
 
-      person.people_manageds.include?(child) || person.people_manageds.build(managed: child)
+      person.manageds.include?(child) || person.people_manageds.build(managed: child)
     end
   end
 
@@ -59,7 +58,7 @@ module SacCas::Person::Household
     housemates_by_agegroup(:adult).each do |adult|
       next unless ability.can?(:update, adult)
 
-      adult.people_managers.include?(person) || person.people_managers.build(manager: adult)
+      adult.managers.include?(person) || person.people_managers.build(manager: adult)
     end
   end
 

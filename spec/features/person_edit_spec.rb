@@ -68,7 +68,7 @@ describe 'person edit page', js: true do
 
           before { sign_in(mitglied) }
 
-          it 'creates new person as managed but assigns no role' do
+          it 'creates new person as managed and assigns no role but household' do
             visit edit_group_person_path(group_id: mitglieder.id, id: mitglied.id)
 
             find('a[data-association="people_manageds"]').click
@@ -97,6 +97,8 @@ describe 'person edit page', js: true do
             expect(managed.birthday).to eq(birthday.to_date)
 
             expect(managed.roles.size).to eq(0)
+
+            expect(managed.household_key).to eq(mitglied.household_key)
           end
 
           it 'does not create new person as managed if mitglied age is below 22' do
@@ -177,7 +179,7 @@ describe 'person edit page', js: true do
 
           before { sign_in(familienmitglied) }
 
-          it 'creates new person as managed and assigns role' do
+          it 'creates new person as managed and assigns role and household' do
             visit edit_group_person_path(group_id: mitglieder.id, id: familienmitglied.id)
 
             find('a[data-association="people_manageds"]').click
@@ -215,6 +217,8 @@ describe 'person edit page', js: true do
             expect(managed_zusatzmitglied_role.type).to eq('Group::SektionsMitglieder::MitgliedZusatzsektion')
             expect(managed_zusatzmitglied_role.beitragskategorie).to eq('familie')
             expect(managed_zusatzmitglied_role.group).to eq(groups(:matterhorn_mitglieder))
+
+            expect(familienmitglied.household_key).to eq(managed.household_key)
           end
         end
       end
