@@ -7,5 +7,5 @@
   - markup = j(render(SelfRegistration::FeeComponent.new(group: @group, birthdays: entry.birthdays), layout: false))
   $('.card').replaceWith("#{markup}")
 - else
-  $('form').replaceWith("#{j(render('form', entry: entry))}");
+  $('form[data-controller="autosubmit"]').replaceWith("#{j(render('form', entry: entry))}");
   $("[data-provide=entity]").each(App.setupEntityTypeahead);
