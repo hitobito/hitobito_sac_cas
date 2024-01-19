@@ -5,10 +5,4 @@
 
 = standard_form(entry, url: group_self_registration_path) do |f|
   = f.honeypot(:verification)
-  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f)
-
-- if entry.first_step?
-  = standard_form(entry, {url: group_self_inscription_path, method: :get}) do |f|
-    = f.indented do
-      = f.help_block(t('groups.self_registration.form.has_account'))
-    = form_buttons(f, submit_label: t('groups.self_registration.form.to_login_page'), cancel_url: '')
+  = render StepsComponent.new(partials: entry.partials, step: entry.step, form: f) 
