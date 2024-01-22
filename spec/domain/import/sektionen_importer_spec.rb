@@ -113,5 +113,7 @@ describe Import::SektionenImporter do
   def clear_sektion_fixtures
     Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
     Group::Sektion.all.find_each { |s| s.really_destroy! }
+    Group::Ortsgruppe.with_deleted.delete_all
+    Group::Sektion.with_deleted.delete_all
   end
 end
