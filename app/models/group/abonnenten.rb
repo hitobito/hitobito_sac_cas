@@ -5,14 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SacCas < ::Group
+class Group::Abonnenten < ::Group
 
-  self.layer = true
-  self.event_types = [Event::Course]
+  self.static_name = true
 
-  children Group::Geschaeftsstelle,
-           Group::Sektion,
-           Group::ExterneKontakte,
-           Group::Abonnenten
+  children Group::AboTourenPortal,
+           Group::AboMagazin,
+           Group::AboBasicLogin
 
 end
+

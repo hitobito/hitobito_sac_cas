@@ -5,14 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SacCas < ::Group
+class Group::AboMagazin < ::Group
 
-  self.layer = true
-  self.event_types = [Event::Course]
+  ### ROLES
+  class Abonnent < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
 
-  children Group::Geschaeftsstelle,
-           Group::Sektion,
-           Group::ExterneKontakte,
-           Group::Abonnenten
+  class Neuanmeldung < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  roles Abonnent, Neuanmeldung
 
 end

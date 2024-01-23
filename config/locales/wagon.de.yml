@@ -84,6 +84,22 @@ de:
         one: Geschäftsstelle
         other: Geschäftsstelle
 
+      group/abonnenten:
+        one: Abonnenten
+        other: Abonnenten
+
+      group/abo_magazin:
+        one: AboMagazin
+        other: AboMagazin
+
+      group/abo_touren_portal:
+        one: Touren-Portal
+        other: Touren-Portal
+
+      group/abo_basic_login:
+        one: SAC/CAS Login
+        other: SAC/CAS Login
+
       group/sektion:
         one: Sektion
         other: Sektionen
@@ -152,6 +168,21 @@ de:
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
+      group/abo_magazin/abonnent:
+        one: Abonnent
+        description: Abonnent
+      group/abo_magazin/neuanmeldung:
+        one: Neuanmeldung
+        description: Neuanmeldung
+      group/abo_touren_portal/abonnent:
+        one: Abonnent
+        description: Abonnent
+      group/abo_touren_portal/neuanmeldung:
+        one: Neuanmeldung
+        description: Neuanmeldung
+      group/abo_basic_login/basic_login:
+        one: BasicLogin
+        description: BasicLogin
       group/sektions_funktionaere/administration:
         one: Administration
         description: Administration
