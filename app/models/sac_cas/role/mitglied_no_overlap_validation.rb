@@ -19,28 +19,29 @@ module SacCas::Role::MitgliedNoOverlapValidation
 
     case self
     when SacCas::Role::MitgliedHauptsektion
-      assert_no_overlapping_primary_memberships || assert_no_overlapping_memberships_per_sektion
+      assert_no_overlapping_primary_memberships
+      assert_no_overlapping_memberships_per_layer
     when SacCas::Role::MitgliedZusatzsektion
-      assert_no_overlapping_memberships_per_sektion
+      assert_no_overlapping_memberships_per_layer
     end
   end
 
   def assert_no_overlapping_primary_memberships
     overlapping_roles(active_period, SacCas::MITGLIED_HAUPTSEKTION_ROLES).tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
-    end.present?
+    end
   end
 
-  def assert_no_overlapping_memberships_per_sektion
-    this_sektion = role_sektion(self) or return # we can't validate without the sektion
-
+  def assert_no_overlapping_memberships_per_layer
     overlapping_roles(active_period, SacCas::MITGLIED_ROLES).
-      select { |role| role_sektion(role) == this_sektion }.tap do |conflicting_roles|
+      select { |role| role.layer_group == layer_group }.tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
-    end.present?
+    end
   end
 
   def overlapping_roles(period, role_types)
+    return unless period.begin && period.end
+
     Role.
       where(type: role_types.map(&:sti_name)).
       where(person_id: person_id).
@@ -56,14 +57,18 @@ module SacCas::Role::MitgliedNoOverlapValidation
             :already_has_mitglied_role
           end
 
-    start_on = I18n.l(conflicting_role.active_period.begin, format: :default)
-    end_on = I18n.l(conflicting_role.active_period.end, format: :default)
+    start_on = format_date(conflicting_role.active_period.begin)
+    end_on = format_date(conflicting_role.active_period.end)
 
     errors.add(:person, key, start_on: start_on, end_on: end_on)
   end
 
   def role_sektion(role)
     role.group&.self_and_ancestors&.find_by(type: Group::Sektion.sti_name)
+  end
+
+  def format_date(date)
+    I18n.l(date, format: :default) if date
   end
 
 end

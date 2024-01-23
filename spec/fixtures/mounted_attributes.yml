@@ -8,3 +8,15 @@ bluemlisalp_foundation_year:
   value: 1942
   entry_type: Group
   entry: bluemlisalp
+
+bluemlisalp_ortsgruppe_ausserberg_foundation_year:
+  key: foundation_year
+  value: 1942
+  entry_type: Group
+  entry: bluemlisalp_ortsgruppe_ausserberg
+
+matterhorn_foundation_year:
+  key: foundation_year
+  value: 1942
+  entry_type: Group
+  entry: matterhorn

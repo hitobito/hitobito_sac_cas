@@ -15,6 +15,11 @@ module SacCas::Role::MitgliedZusatzsektion
   end
 
   def assert_is_mitglied_during_validity_period
+    # validation can be skipped by setting this attribute to truthy
+    # This is used by the import as we don't have the complete memberhip history of a person
+    # but have to import MitgliedZusatzsektion roles anyway.
+    return if try(:skip_mitglied_during_validity_period_validation)
+
     # to simplify, only validate if both dates are set (otherwise the role will be invalid anyway)
     return unless start_on && end_on
 

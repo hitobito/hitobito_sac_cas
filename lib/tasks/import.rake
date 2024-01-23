@@ -31,9 +31,18 @@ namespace :import do
   end
 
   desc 'Import memberships from a navision export xlsx' \
-         ' (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)'
+         ' (options: FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)'
   task memberships: [:environment] do
     Import::Sektion::MembershipsImporter.new(
+      Pathname(ENV['FILE'].to_s),
+      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+    ).import!
+  end
+
+  desc 'Import additional memberships from a navision export xlsx' \
+         ' (options: FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)'
+  task additonal_memberships: [:environment] do
+    Import::Sektion::AdditionalMembershipsImporter.new(
       Pathname(ENV['FILE'].to_s),
       skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
     ).import!

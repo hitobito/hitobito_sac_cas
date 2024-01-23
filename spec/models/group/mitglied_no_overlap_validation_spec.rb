@@ -38,7 +38,7 @@ describe :mitglied_no_overlap_validation do
           expect(new_role).to be_valid
         end
 
-        it 'denies concurrent active_period for same type in same sektion' do
+        it 'denies concurrent active_period for same type in same layer' do
           new_role = Fabricate.build(
             mitglied_type.sti_name,
             person: existing_role.person,
@@ -118,63 +118,153 @@ describe :mitglied_no_overlap_validation do
     end
   end
 
-  context 'no overlapping memberships per sektion' do
-    def create_existing_role(mitglied_type, *attrs)
-      Fabricate.build(mitglied_type, *attrs).tap {|p| p.save(validate: false) }
+  context do # no overlapping memberships per layer
+    let(:person) { Fabricate(:person) }
+
+    def build_role(type, group_fixture_name)
+      Fabricate.build(
+        type.sti_name,
+        person: person,
+        group: groups(group_fixture_name),
+        created_at: Time.zone.parse('2019-01-01'),
+        delete_on: Time.zone.parse('2019-12-31')
+      )
     end
 
-    let(:group) { groups(:bluemlisalp_mitglieder) }
+    def expect_overlap_error(role)
+      role.validate
+      expect(role.errors.errors).
+        to include(have_attributes(attribute: :person, type: :already_has_neuanmeldung_role)).
+          or(include(have_attributes(attribute: :person, type: :already_has_mitglied_role)))
+    end
 
-    SacCas::MITGLIED_ROLES.each do |mitglied_type|
-      context mitglied_type.sti_name do
-        let(:existing_role) do
-          create_existing_role(
-            mitglied_type.sti_name,
-            group: group,
-            created_at: Time.zone.parse('2019-01-01'),
-            delete_on: Time.zone.parse('2019-12-31')
-          )
+    def expect_no_overlap_error(role)
+      role.validate
+      expect(role.errors.errors).
+        not_to include(
+                 have_attributes(attribute: :person, type: :already_has_neuanmeldung_role),
+                 have_attributes(attribute: :person, type: :already_has_mitglied_role)
+               )
+    end
+
+    shared_examples 'deny concurrent role in same layer' do |existing:, new:|
+      context "for #{existing.first.sti_name} and #{new.first.sti_name}" do
+        let(:existing_role) { build_role(*existing).tap { |r| r.save(validate: false) } }
+        let(:new_role) { build_role(*new) }
+
+        it 'allows disjoint active_period' do
+          new_role.attributes = {
+            created_at: existing_role.delete_on + 1.day,
+            delete_on: existing_role.delete_on + 2.days
+          }
+          expect_no_overlap_error(new_role)
+
+          new_role.attributes = {
+            created_at: existing_role.created_at - 2.days,
+            delete_on: existing_role.created_at - 1.day
+          }
+
+          expect_no_overlap_error(new_role)
         end
 
-        (SacCas::MITGLIED_ROLES - [mitglied_type]).each do |other_type|
-          context "in same sektion with #{other_type.sti_name}" do
-            it "allows disjoint active_period" do
-              new_role = Fabricate.build(
-                other_type.sti_name,
-                person: existing_role.person,
-                group: existing_role.group,
-                created_at: existing_role.delete_on + 1.day,
-                delete_on: existing_role.delete_on + 2.days
-              )
+        it 'denies concurrent active_period' do
+          new_role.attributes = {
+            created_at: existing_role.created_at,
+            delete_on: existing_role.delete_on
+          }
 
-              new_role.validate
-
-              expect(new_role.errors[:person]).not_to include(/bereits/)
-
-              new_role.delete_on = existing_role.created_at - 1.day
-              new_role.created_at = existing_role.created_at - 2.days
-              new_role.validate
-
-              expect(new_role.errors[:person]).not_to include(/bereits/)
-            end
-
-            it 'denies concurrent active_period for same type in same sektion' do
-              new_role = Fabricate.build(
-                other_type.sti_name,
-                person: existing_role.person,
-                group: existing_role.group,
-                created_at: existing_role.created_at,
-                delete_on: existing_role.delete_on
-              )
-
-              new_role.validate
-
-              expect(new_role.errors[:person]).to include('hat bereits eine Neuanmeldung (von 01.01.2019 bis 31.12.2019).').
-                or(include('ist bereits Mitglied (von 01.01.2019 bis 31.12.2019).'))
-            end
-          end
+          expect_overlap_error(new_role)
         end
       end
     end
+
+    shared_examples 'allow concurrent role in lower layer' do |existing:, new:|
+      context "for #{existing.first.sti_name} and #{new.first.sti_name}" do
+        let(:existing_role) { build_role(*existing).tap { |r| r.save(validate: false) } }
+        let(:new_role) { build_role(*new) }
+
+        it 'allows concurrent active_period' do
+          new_role.attributes = {
+            created_at: existing_role.created_at,
+            delete_on: existing_role.delete_on
+          }
+
+          expect_no_overlap_error(new_role)
+        end
+      end
+    end
+
+    shared_examples 'deny concurrent role in lower layer' do |existing:, new:|
+      context "for #{existing.first.sti_name} and #{new.first.sti_name}" do
+        let(:existing_role) { build_role(*existing).tap { |r| r.save(validate: false) } }
+        let(:new_role) { build_role(*new) }
+
+        it 'denies concurrent active_period' do
+          new_role.attributes = {
+            created_at: existing_role.created_at,
+            delete_on: existing_role.delete_on
+          }
+
+          expect_overlap_error(new_role)
+        end
+      end
+    end
+
+    # Hauptsektion Mitgliedschaften/Neuanmeldungen
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder]
+
+    it_behaves_like 'deny concurrent role in lower layer',
+                    existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
+
+    it_behaves_like 'deny concurrent role in lower layer',
+                    existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+                    new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder]
+
+    it_behaves_like 'deny concurrent role in lower layer',
+                    existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+                    new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+                    new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
+
+    it_behaves_like 'deny concurrent role in lower layer',
+                    existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+                    new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+
+    # Zusatzsektion Mitgliedschaften/Neuanmeldungen
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder]
+
+    it_behaves_like 'allow concurrent role in lower layer',
+                    existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion]
+
+    it_behaves_like 'allow concurrent role in lower layer',
+                    existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+
+    # Hauptsektion + Zusatzsektion
+
+    it_behaves_like 'deny concurrent role in same layer',
+                    existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
+                    new: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder]
   end
 end

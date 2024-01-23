@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 26
+  rgt: 36
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
@@ -14,6 +14,7 @@ root:
   zip_code: 2843
   town: Neu Carlscheid
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 geschaeftsstelle:
   parent: root
@@ -22,23 +23,25 @@ geschaeftsstelle:
   name: 1 Geschäftsstelle
   type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 bluemlisalp:
   parent: root
   lft: 4
-  rgt: 13
+  rgt: 23
   name: SAC Blüemlisalp
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   navision_id: 1650
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 bluemlisalp_funktionaere:
   parent: bluemlisalp
   lft: 5
   rgt: 6
-  name: Funktionaere
   type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 bluemlisalp_mitglieder:
   parent: bluemlisalp
@@ -46,6 +49,7 @@ bluemlisalp_mitglieder:
   rgt: 8
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 bluemlisalp_neuanmeldungen_nv:
   parent: bluemlisalp
@@ -53,6 +57,7 @@ bluemlisalp_neuanmeldungen_nv:
   rgt: 10
   type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 bluemlisalp_neuanmeldungen_sektion:
   parent: bluemlisalp
@@ -61,49 +66,96 @@ bluemlisalp_neuanmeldungen_sektion:
   type: Group::SektionsNeuanmeldungenSektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+
+bluemlisalp_ortsgruppe_ausserberg:
+  parent: :bluemlisalp
+  lft: 13
+  rgt: 22
+  name: SAC Blüemlisalp Ausserberg
+  type: Group::Ortsgruppe
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  navision_id: 1651
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+
+bluemlisalp_ortsgruppe_ausserberg_mitglieder:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 14
+  rgt: 15
+  type: Group::SektionsMitglieder
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+
+bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 16
+  rgt: 17
+  type: Group::SektionsNeuanmeldungenNv
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+
+bluemlisalp_ortsgruppe_ausserberg_tourenkommission:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 18
+  rgt: 19
+  type: Group::SektionsTourenkommission
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+
+bluemlisalp_ortsgruppe_ausserberg_funktionaere:
+  parent: bluemlisalp_ortsgruppe_ausserberg
+  lft: 20
+  rgt: 21
+  type: Group::SektionsFunktionaere
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn:
   parent: root
-  lft: 14
-  rgt: 25
+  lft: 24
+  rgt: 35
   name: SAC Matterhorn
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn_funktionaere:
   parent: matterhorn
-  lft: 15
-  rgt: 16
-  name: Funktionaere
+  lft: 25
+  rgt: 26
   type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn_mitglieder:
   parent: matterhorn
-  lft: 17
-  rgt: 18
+  lft: 27
+  rgt: 28
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn_neuanmeldungen_nv:
   parent: matterhorn
-  lft: 19
-  rgt: 20
+  lft: 29
+  rgt: 30
   type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn_neuanmeldungen_sektion:
   parent: matterhorn
-  lft: 21
-  rgt: 22
+  lft: 31
+  rgt: 32
   type: Group::SektionsNeuanmeldungenSektion
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 matterhorn_tourenkommission:
   parent: matterhorn
-  lft: 23
-  rgt: 24
-  name: Tourenkommission
+  lft: 33
+  rgt: 34
   type: Group::SektionsTourenkommission
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
+  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
