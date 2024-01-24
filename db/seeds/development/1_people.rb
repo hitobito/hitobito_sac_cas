@@ -16,6 +16,8 @@ class SacCasPersonSeeder < PersonSeeder
     when 'Beguenstigt' then 0
     when 'Ehrenmitglied' then 0
     when 'Tourenleiter' then 12
+    when 'Abonnent' then 42
+    when 'BasicLogin' then 42
     else 1
     end
   end

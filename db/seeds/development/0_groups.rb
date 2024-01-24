@@ -52,16 +52,19 @@ matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
   :name, :parent_id,
   { name: 'SAC Matterhorn',
     foundation_year: 1899,
+    section_canton: 'VS',
     parent_id: root.id
   },
   { name: 'SAC UTO',
     navision_id: 5300,
     foundation_year: 1863,
+    section_canton: 'ZH',
     parent_id: root.id
   },
   { name: 'SAC Blüemlisalp',
     navision_id: 1650,
     foundation_year: 1874,
+    section_canton: 'BE',
     parent_id: root.id
   })
 
