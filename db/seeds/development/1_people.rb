@@ -37,14 +37,25 @@ class SacCasPersonSeeder < PersonSeeder
   def seed_families
     Group::SektionsMitglieder.find_each do |m|
       adult = seed_sac_adult
-      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: adult, group: m, beitragskategorie: :familie)
       second_adult = seed_sac_adult
-      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: second_adult, group: m, beitragskategorie: :familie)
       child = seed_sac_child
-      Group::SektionsMitglieder::Mitglied.seed(:person_id, person: child, group: m, beitragskategorie: :familie)
+
+      family_members = [adult, second_adult, child]
+
+      # skip if already in a household / family
+      return if family_members.any?(&:household_key)
+
       create_or_update_household(adult, second_adult)
       create_or_update_household(adult, child)
+
+      family_members.each do |p|
+        seed_sektion_familie_mitglied_role(p, m)
+      end
     end
+  end
+
+  def seed_sektion_familie_mitglied_role(person, sektion)
+    Group::SektionsMitglieder::Mitglied.seed(:person_id, person: person, group: sektion, beitragskategorie: :familie)
   end
 
   def create_or_update_household(person, second_person)

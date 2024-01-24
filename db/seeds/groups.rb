@@ -5,11 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-root = Group::SacCas.seed_once(:parent_id, name: 'SAC/CAS').first
+Group::SacCas.seed_once(:parent_id, name: 'SAC/CAS')
 
-abonnenten = Group::Abonnenten.seed_once(:parent_id, name: 'Abonnenten', parent_id: root.id).first
+Group::Abonnenten.seed_once(:parent_id, parent_id: Group.root.id)
+abonnenten = Group::Abonnenten.find_by(parent_id: Group.root.id)
 Group::AboMagazin.seed_once(:parent_id, :name, name: 'Die Alpen DE', parent_id: abonnenten.id)
 Group::AboMagazin.seed_once(:parent_id, :name, name: 'Les Alpes FR', parent_id: abonnenten.id)
 Group::AboMagazin.seed_once(:parent_id, :name, name: 'Le Alpi IT', parent_id: abonnenten.id)
-Group::AboTourenPortal.seed_once(:parent_id, :name, name: 'Touren-Portal', parent_id: abonnenten.id)
-Group::AboBasicLogin.seed_once(:parent_id, :name, name: 'SAC/CAS Login', parent_id: abonnenten.id)
+Group::AboTourenPortal.seed_once(:parent_id, parent_id: abonnenten.id)
+Group::AboBasicLogin.seed_once(:parent_id, parent_id: abonnenten.id)

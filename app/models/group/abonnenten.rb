@@ -14,4 +14,3 @@ class Group::Abonnenten < ::Group
            Group::AboBasicLogin
 
 end
-
