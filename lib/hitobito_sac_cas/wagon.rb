@@ -21,6 +21,8 @@ module HitobitoSacCas
     ]
 
     config.to_prepare do
+      HitobitoLogEntry.categories += %w(neuanmeldungen)
+
       # extend application classes here
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
