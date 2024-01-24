@@ -10,6 +10,9 @@ class Group::SacCas < ::Group
   self.layer = true
   self.event_types = [Event::Course]
 
-  children Group::Geschaeftsstelle, Group::Sektion, Group::ExterneKontakte
+  children Group::Geschaeftsstelle,
+           Group::Sektion,
+           Group::ExterneKontakte,
+           Group::Abonnenten
 
 end
