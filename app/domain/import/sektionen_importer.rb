@@ -111,6 +111,7 @@ module Import
       group.name = root?(row) ? 'SAC/CAS' : section_name(row)
       group.parent_id = parent_id(row)
       group.address = address(row)
+      set_language(row, group)
       set_phone(row, group)
       group.email = email(row)
       set_homepage(row, group)
@@ -161,6 +162,12 @@ module Import
 
     def description(row)
       row[:description].to_s
+    end
+
+    def set_language(row, group)
+      return unless group.respond_to?(:language=)
+
+      group.language = locale(row).upcase
     end
 
     def set_foundation_year(row, group)

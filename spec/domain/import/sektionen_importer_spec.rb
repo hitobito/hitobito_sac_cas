@@ -13,6 +13,7 @@ describe Import::SektionenImporter do
   let(:bluemlisalp) { Group::Sektion.find_by!(navision_id: 1650) }
   let(:ortsgruppe) { Group::Ortsgruppe.find_by!(navision_id: 1651) }
   let(:matterhorn) { Group::Sektion.find_by!(navision_id: 4242) }
+  let(:existing_bluemlisalp) { groups(:bluemlisalp) }
 
   before do
     clear_sektion_fixtures
@@ -29,9 +30,11 @@ describe Import::SektionenImporter do
 
     expect(bluemlisalp.section_canton).to eq('BE')
     expect(bluemlisalp.foundation_year).to eq(1874)
+    expect(bluemlisalp.language).to eq('DE')
 
     expect(matterhorn.section_canton).to eq('VS')
     expect(matterhorn.foundation_year).to eq(1988)
+    expect(matterhorn.language).to eq('DE')
   end
 
   it 'adds neuanmeldungen and enables self registration' do
@@ -105,6 +108,48 @@ describe Import::SektionenImporter do
 
     expected_sub_groups.each do |c|
       expect(c.where(parent_id: ortsgruppe.id).count).to eq(1)
+    end
+  end
+
+  describe '#set_language' do
+    it 'does not set for group without required mounted attr' do
+      group = Group::SacCas.new
+
+      importer.send(:set_language, { locale: 'ITS' }, group)
+
+      expect(group.respond_to?(:language)).to eq(false)
+    end
+
+    it 'sets DE for DES' do
+      group = Group::Sektion.new
+      importer.send(:set_language, { locale: 'DES' }, group)
+
+      expect(group.language).to eq('DE')
+    end
+
+    it 'sets FR for FRS' do
+      group = Group::Sektion.new
+      importer.send(:set_language, { locale: 'FRS' }, group)
+
+      expect(group.language).to eq('FR')
+    end
+
+    it 'sets IT for ITS' do
+      group = Group::Sektion.new
+      importer.send(:set_language, { locale: 'ITS' }, group)
+
+      expect(group.language).to eq('IT')
+    end
+
+    it 'falls back to DE' do
+      group = Group::Sektion.new
+      importer.send(:set_language, { locale: '' }, group)
+
+      expect(group.language).to eq('DE')
+
+      importer.send(:set_language, { locale: nil }, group)
+
+      expect(group.language).to eq('DE')
     end
   end
 
