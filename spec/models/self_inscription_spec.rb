@@ -24,13 +24,6 @@ describe SelfInscription do
   let(:person) { Fabricate.build(:person, birthday: 40.years.ago) }
   let(:other_group) { groups(:matterhorn_neuanmeldungen_sektion) }
 
-  it '#attributes= accepts and assigns attributes' do
-    model.attributes = { register_on: :now, register_as: :new }
-
-    expect(model.register_as).to eq :new
-    expect(model.register_on).to eq :now
-  end
-
   it '#title returns parent group' do
     expect(model.group_for_title).to eq sektion
   end
@@ -120,8 +113,8 @@ describe SelfInscription do
 
   describe 'validations' do
     it 'is valid because of default values' do
-      expect(model.register_on).to eq :now
-      expect(model.register_as).to eq :replace
+      expect(model.register_on).to eq 'now'
+      expect(model.register_as).to eq 'replace'
     end
 
     it 'requires register_on to be set' do
@@ -137,14 +130,17 @@ describe SelfInscription do
       it 'requires register_at to be set' do
         model.register_as = nil
         expect(model).not_to be_valid
-        expect(model).to have(1).error_on(:register_as)
+        expect(model.errors.errors).
+          to include have_attributes(attribute: :register_as, type: :blank)
       end
     end
   end
 
   describe 'save!' do
-    let(:neuanmeldungen) { person.roles.where(type: registration_role_type.sti_name) }
-    let(:neuanmeldungen_future) { person.roles.where(type: FutureRole.sti_name, convert_to: group.self_registration_role_type) }
+    let(:neuanmeldungen) { group.class.const_get('Neuanmeldung').where(person: person) }
+    let(:neuanmeldungen_future) { FutureRole.where(person: person, convert_to: group.class.const_get('Neuanmeldung').sti_name) }
+    let(:neuanmeldungen_zusatzsektion) { group.class.const_get('NeuanmeldungZusatzsektion').where(person: person) }
+    let(:neuanmeldungen_zusatzsektion_future) { FutureRole.where(person: person, convert_to: group.class.const_get('NeuanmeldungZusatzsektion').sti_name) }
 
     context 'without sektion membership' do
       let(:person) { people(:admin) }
@@ -153,6 +149,8 @@ describe SelfInscription do
         model.register_on = :now
         expect { model.save! }.to change { neuanmeldungen.count }.by(1)
           .and not_change { neuanmeldungen_future.count }
+          .and not_change { neuanmeldungen_zusatzsektion.count }
+          .and not_change { neuanmeldungen_zusatzsektion_future.count }
       end
 
       it 'creates future role' do
@@ -161,6 +159,8 @@ describe SelfInscription do
         travel_to(Date.new(2023, 5)) do
           expect { model.save! }.to change { neuanmeldungen_future.count }.by(1)
           .and not_change { neuanmeldungen.count }
+          .and not_change { neuanmeldungen_zusatzsektion.count }
+          .and not_change { neuanmeldungen_zusatzsektion_future.count }
         end
         expect(neuanmeldungen_future.first.convert_on).to eq Date.new(2023, 7, 1)
       end
@@ -168,17 +168,28 @@ describe SelfInscription do
 
     context 'with sektion membership' do
       let(:group) { other_group }
-
-      let(:person) { role.person }
       let(:role) { roles(:mitglied) }
+      let(:person) { role.person }
 
       context 'replacing existing sektion' do
         before { model.register_as = :replace }
 
-        it 'creates normal role and destroys existing membership role' do
+        it 'creates normal role and marks existing membership role as destroyed' do
           model.register_on = :now
           expect { model.save! }.to change { neuanmeldungen.count }.by(1)
             .and not_change { neuanmeldungen_future.count }
+            .and not_change { neuanmeldungen_zusatzsektion.count }
+            .and not_change { neuanmeldungen_zusatzsektion_future.count }
+            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59))
+        end
+
+        it 'with fresh membership, creates normal role and marks existing membership role as destroyed' do
+          role.update!(created_at: Time.current, delete_on: Date.current.end_of_year)
+          model.register_on = :now
+          expect { model.save! }.to change { neuanmeldungen.count }.by(1)
+            .and not_change { neuanmeldungen_future.count }
+            .and not_change { neuanmeldungen_zusatzsektion.count }
+            .and not_change { neuanmeldungen_zusatzsektion_future.count }
             .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59))
         end
 
@@ -188,26 +199,37 @@ describe SelfInscription do
             expect { model.save! }.to change { neuanmeldungen_future.count }.by(1)
               .and change { role.reload.delete_on }.to(Date.new(2023,6,30))
               .and not_change { neuanmeldungen.count }
+              .and not_change { neuanmeldungen_zusatzsektion.count }
+              .and not_change { neuanmeldungen_zusatzsektion_future.count }
           end
         end
       end
 
       context 'adding extra sektion' do
-        before { model.register_as = :extra }
+        before do
+          # make sure we have a valid primary membership for the whole validity of the new role
+          Group::SektionsMitglieder::Mitglied.where(person: person).
+            update_all(delete_on: 1.year.from_now)
+          model.register_as = :extra
+        end
 
-        it 'creates normal role and destroys existing membership role' do
+        it 'creates normal zusatzsektion role and does not destroy existing membership role' do
           model.register_on = :now
-          expect { model.save! }.to change { neuanmeldungen.count }.by(1)
+          expect { model.save! }.to change { neuanmeldungen_zusatzsektion.count }.by(1)
+            .and not_change { neuanmeldungen.count }
             .and not_change { neuanmeldungen_future.count }
+            .and not_change { neuanmeldungen_zusatzsektion_future.count }
           expect { role.reload }.not_to raise_error
         end
 
-        it 'creates future role and marks existing membership role for deletion' do
+        it 'creates future zusatzsektion role and does not mark existing membership role for deletion' do
           model.register_on = :jul
           travel_to(Date.new(2023, 5)) do
-            expect { model.save! }.to change { neuanmeldungen_future.count }.by(1)
-              .and not_change { role.reload.delete_on }
+            expect { model.save! }.to change { neuanmeldungen_zusatzsektion_future.count }.by(1)
               .and not_change { neuanmeldungen.count }
+              .and not_change { neuanmeldungen_zusatzsektion.count }
+              .and not_change { neuanmeldungen_future.count }
+              .and not_change { role.reload.delete_on }
           end
         end
       end

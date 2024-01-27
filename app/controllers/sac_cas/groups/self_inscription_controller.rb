@@ -8,11 +8,10 @@
 module SacCas::Groups::SelfInscriptionController
   extend ActiveSupport::Concern
 
-  included do
+  prepended do
     self.permitted_attrs = [:register_on, :register_as]
+    skip_before_action :redirect_to_group_if_necessary
     before_action :redirect_to_person_if_sektion_member?
-
-    alias_method_chain :create, :entry
   end
 
   def new
@@ -29,7 +28,7 @@ module SacCas::Groups::SelfInscriptionController
     end
   end
 
-  def create_with_entry
+  def create
     assign_attributes
 
     if entry.save!
