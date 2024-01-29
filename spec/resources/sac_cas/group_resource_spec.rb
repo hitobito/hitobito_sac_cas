@@ -20,20 +20,22 @@ describe GroupResource, type: :resource do
     expect(jsonapi_data[0].attributes['navision_id']).to eq 1650
   end
 
-  it 'includes foundation year and section canton as extra attribute' do
-    bluemlisalp.update!(created_at: 1.day.ago, foundation_year: 1900, section_canton: 'BE')
+  it 'includes foundation year, section canton and language as extra attribute' do
+    bluemlisalp.update!(created_at: 1.day.ago, foundation_year: 1900, section_canton: 'BE', language: 'FR')
     params[:filter] = { id: { eq: bluemlisalp.id } }
-    params[:extra_fields] = { groups: 'foundation_year,section_canton' }
+    params[:extra_fields] = { groups: 'foundation_year,section_canton,language' }
     render
     expect(jsonapi_data[0].attributes['foundation_year']).to eq '1900'
     expect(jsonapi_data[0].attributes['section_canton']).to eq 'BE'
+    expect(jsonapi_data[0].attributes['language']).to eq 'FR'
   end
 
   it 'returns blank values if group does not have underlying mounted attributes' do
     params[:filter] = { id: { eq: geschaeftsstelle.id } }
-    params[:extra_fields] = { groups: 'foundation_year,section_canton' }
+    params[:extra_fields] = { groups: 'foundation_year,section_canton,language' }
     render
     expect(jsonapi_data[0].attributes['foundation_year']).to be_blank
     expect(jsonapi_data[0].attributes['section_canton']).to be_blank
+    expect(jsonapi_data[0].attributes['language']).to be_blank
   end
 end

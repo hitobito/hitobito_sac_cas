@@ -49,9 +49,19 @@ de:
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
+        language: Sprache
+        languages:
+          DE: Deutsch
+          FR: Français
+          IT: Italiano
       group/ortsgruppe:
         foundation_year: Gründungsjahr
         section_canton: Kanton
+        language: Sprache
+        languages:
+          DE: Deutsch
+          FR: Français
+          IT: Italiano
       role:
         membership_years: Mitglieder-Jahre
         class:

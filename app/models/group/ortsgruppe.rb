@@ -30,4 +30,6 @@ class Group::Ortsgruppe < ::Group
 
   mounted_attr :section_canton, :text, enum: Cantons.short_name_strings.map(&:upcase)
 
+  mounted_attr :language, :text, enum: %w(DE FR IT), default: 'DE', null: false
+
 end
