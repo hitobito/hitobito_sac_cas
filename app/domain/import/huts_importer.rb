@@ -28,6 +28,7 @@ module Import
     }
 
     IMPORTERS = [
+      Import::Huts::HutComissionRow,
       Import::Huts::HutRow,
       Import::Huts::HutChiefRow,
       Import::Huts::HutWardenRow,

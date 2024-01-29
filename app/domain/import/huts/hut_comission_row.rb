@@ -8,7 +8,7 @@
 require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
 
 module Import::Huts
-  class HutRow
+  class HutComissionRow
 
     def self.can_process?(row)
       row[:verteilercode].to_s == '4000.0'
@@ -24,34 +24,21 @@ module Import::Huts
       group.save!
     end
 
-    private
-
     def group_for(row)
-      Group.find_or_initialize_by(navision_id: navision_id(row))
+      Group::SektionsHuettenkommission.find_or_initialize_by(parent_id: parent_id(row))
     end
 
     def set_data(row, group)
-      group.type = Group::SektionsHuette.name
-      group.name = name(row)
+      group.type = Group::SektionsHuettenkommission.name
+      group.name = group.class.label
       group.parent_id = parent_id(row)
     end
 
-    def navision_id(row)
-      row[:related_navision_id].to_s.sub(/^[0]*/, '')
-    end
-
-    def name(row)
-      row[:related_last_name]
-    end
-
     def parent_id(row)
-      Group::SektionsHuettenkommission.joins(:parent)
-                                      .find_by(parent: {
-                                        navision_id: owner_navision_id(row)
-                                      }).id
+      @parent_id ||= Group::Sektion.find_by(navision_id: owner_navision_id(row)).id
     rescue
       puts "WARNING: No parent id found for row #{row.inspect}"
-      Group.root.id
+      raise
     end
 
     def owner_navision_id(row)

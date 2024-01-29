@@ -11,7 +11,7 @@ module Import::Huts
   class HutWardenRow
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4005'
+      row[:verteilercode].to_s == '4005.0'
     end
 
     def initialize(row)
@@ -29,11 +29,11 @@ module Import::Huts
         return
       end
       person.roles.where(
-        type: Group::Huette::Huettenwart.name,
+        type: Group::SektionsHuette::Huettenwart.name,
         group_id: group_id,
       ).destroy_all
       person.roles.build(
-        type: Group::Huette::Huettenwart.name,
+        type: Group::SektionsHuette::Huettenwart.name,
         created_at: created_at(@row),
         group_id: group_id,
       )
@@ -53,13 +53,13 @@ module Import::Huts
 
     def group_id(row)
       # TODO handle nonexistent group
-      Group.find_by(type: Group::Huette.name, navision_id: navision_id(row)).id
+      Group.find_by(type: Group::SektionsHuette.name, navision_id: navision_id(row)).id
     rescue NoMethodError
       puts "Failed to find existing hut with navision id #{navision_id(row)}"
     end
 
     def navision_id(row)
-      row[:contact_navision_id].to_s.sub!(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
     end
 
     def first_name(row)
@@ -71,7 +71,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      Integer(row[:related_navision_id].to_s.sub!(/^[0]*/, ''))
+      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ''))
     end
 
     def created_at(row)

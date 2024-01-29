@@ -9,9 +9,10 @@ require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
 
 module Import::Huts
   class HutChairmanRow
+    include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4007'
+      row[:verteilercode].to_s == '4007.0'
     end
 
     def initialize(row)
@@ -28,14 +29,17 @@ module Import::Huts
         return
       end
       person.roles.where(
-        type: Group::SektionsFunktionaere::Huettenobmann.name,
+        type: Group::SektionsHuettenkommission::Huettenobmann.name,
         group_id: group_id,
       ).destroy_all
       person.roles.build(
-        type: Group::SektionsFunktionaere::Huettenobmann.name,
+        type: Group::SektionsHuettenkommission::Huettenobmann.name,
         created_at: created_at(@row),
         group_id: group_id,
       )
+
+      remove_placeholder_contact_role(person)
+
       person.save!
     end
 
@@ -52,16 +56,17 @@ module Import::Huts
 
     def group_id(row)
       # TODO handle nonexistent group
-      Group.find_by(type: Group::Sektion.name, navision_id: navision_id(row))
-           .descendants
-           .where(type: Group::SektionsFunktionaere).first.id
+      Group::SektionsHuettenkommission.joins(:parent)
+                                      .find_by(parent: {
+                                        navision_id: navision_id(row)
+                                      }).id
     rescue NoMethodError
       puts "Failed to find existing SektionsFunktionäre of section with " +
              "navision id #{navision_id(row)}"
     end
 
     def navision_id(row)
-      row[:contact_navision_id].to_s.sub!(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
     end
 
     def first_name(row)
@@ -73,7 +78,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      Integer(row[:related_navision_id].to_s.sub!(/^[0]*/, ''))
+      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ''))
     end
 
     def created_at(row)

@@ -9,9 +9,10 @@ require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
 
 module Import::Huts
   class KeyDepositRow
+    include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4007'
+      row[:verteilercode].to_s == '4011.0'
     end
 
     def initialize(row)
@@ -21,28 +22,33 @@ module Import::Huts
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
-      group_id = group_id(@row)
-      unless group_id
+      huette = huette(@row)
+      unless huette
         # TODO fix bugs in data export, where not all huts are exported
-        puts "Skipping key deposit for unknown hut #{navision_id(@row)}"
+        puts "Skipping key deposit for unknown hut #{huette_navision_id(@row)}"
         return
       end
       person.roles.where(
-        type: Group::Huette::Schluesseldepot.name,
-        group_id: group_id,
+        type: Group::SektionsHuette::Andere.name,
+        label: role_label(@row),
+        group_id: huette.id,
       ).destroy_all
       person.roles.build(
-        type: Group::Huette::Schluesseldepot.name,
+        type: Group::SektionsHuette::Andere.name,
+        label: role_label(@row),
         created_at: created_at(@row),
-        group_id: group_id,
+        group_id: huette.id,
       )
+
+      remove_placeholder_contact_role(person)
+
       person.save!
     end
 
     private
 
     def person_for(row)
-      Person.find_or_initialize_by(id: owner_navision_id(row))
+      Person.find_by(id: owner_navision_id(row))
     end
 
     def set_person_name(row, person)
@@ -50,15 +56,20 @@ module Import::Huts
       person.last_name = last_name(row)
     end
 
-    def group_id(row)
+    def huette(row)
       # TODO handle nonexistent group
-      Group.find_by(type: Group::Huette.name, navision_id: navision_id(row)).id
+      @huette ||= Group.find_by(type: Group::SektionsHuette.name,
+                                navision_id: huette_navision_id(row))
     rescue NoMethodError
-      puts "Failed to find existing hut with navision id #{navision_id(row)}"
+      puts "Failed to find existing hut with navision id #{huette_navision_id(row)}"
     end
 
-    def navision_id(row)
-      row[:contact_navision_id].to_s.sub!(/^[0]*/, '')
+    def huette_navision_id(row)
+      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
+    end
+
+    def owner_navision_id(row)
+      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ''))
     end
 
     def first_name(row)
@@ -69,12 +80,26 @@ module Import::Huts
       row[:related_last_name]
     end
 
-    def owner_navision_id(row)
-      Integer(row[:related_navision_id].to_s.sub!(/^[0]*/, ''))
-    end
-
     def created_at(row)
       row[:created_at]
+    end
+
+    def role_label(row)
+      t(row, 'activerecord.models.group/sektions_huette/schluesseldepot.one')
+    end
+
+    def t(row, key)
+      I18n.with_locale(locale(row)) do
+        I18n.translate(key)
+      end
+    end
+
+    def locale(row)
+      sektion(row).language.downcase
+    end
+
+    def sektion(row)
+      @sektion ||= Group::SektionsHuettenkommission.find(huette(row).parent_id).parent
     end
   end
 end
