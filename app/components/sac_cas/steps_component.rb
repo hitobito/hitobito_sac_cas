@@ -17,8 +17,8 @@ module SacCas::StepsComponent
             = render(HeaderComponent.with_collection(@partials, step: @step))
         .row
           - if @form.object.is_a?(SelfRegistrationNeuanmeldung)
-            .col= render(ContentComponent.with_collection(@partials, step: @step, form: @form))
-            .col
+            .col-lg= render(ContentComponent.with_collection(@partials, step: @step, form: @form))
+            .col-md
               = render(SelfRegistration::FeeComponent.new(group: @form.object.group, birthdays: @form.object.birthdays))
               = render(SelfRegistration::InfosComponent.new)
           - else
