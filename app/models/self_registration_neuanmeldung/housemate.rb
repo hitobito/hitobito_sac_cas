@@ -11,7 +11,6 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
   NON_ASSIGNABLE_ATTRIBUTES = %w(
     household_emails
     supplements
-    additional_email
     phone_number
     _destroy
   ).freeze
@@ -21,7 +20,7 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
   ]
 
   self.attrs = required_attrs + [
-    :gender, :email, :additional_email, :phone_number,
+    :gender, :email, :phone_number,
     :primary_group, :household_key, :_destroy, :household_emails, :supplements
   ]
 
@@ -29,9 +28,6 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
     @person ||= Person.new(attributes.except(*NON_ASSIGNABLE_ATTRIBUTES)).tap do |p|
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.links_present?
 
-      with_value_for(:additional_email) do |value|
-        p.additional_emails.build(email: value, label: 'Privat')
-      end
       with_value_for(:phone_number) do |value|
         p.phone_numbers.build(number: value, label: 'Haupt-Telefon')
       end

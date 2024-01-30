@@ -43,14 +43,12 @@ describe SelfRegistrationNeuanmeldung::Housemate do
 
   describe 'additional_email' do
     it 'is translated correctly' do
-      expect(model.class.human_attribute_name(:additional_email)).to eq 'E-Mail (optional)'
+      expect(model.class.human_attribute_name(:email)).to eq 'E-Mail (optional)'
     end
 
     it 'is assigned as one of many additional_emails of person' do
-      model.additional_email = 'test@example.com'
-      email = model.person.additional_emails.first
-      expect(email.email).to eq 'test@example.com'
-      expect(email.label).to eq 'Privat'
+      model.email = 'test@example.com'
+      expect(model.person.email).to eq 'test@example.com'
     end
   end
 
