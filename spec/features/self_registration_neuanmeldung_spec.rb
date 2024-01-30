@@ -150,7 +150,6 @@ describe :self_registration_neuanmeldung, js: true do
 
       it 'sets privacy policy accepted' do
         click_on 'Weiter als Einzelmitglied'
-        binding.pry
         check 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
 
         expect do

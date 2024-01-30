@@ -46,7 +46,7 @@ module HitobitoSacCas
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
 
       ## Controllers
-      Groups::SelfInscriptionController.include SacCas::Groups::SelfInscriptionController
+      Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController

@@ -7,20 +7,20 @@
 
 class SelfInscription
   include ActiveModel::Model
+  include ActiveModel::Attributes
 
-  attr_accessor :register_on, :register_as
+  attr_accessor :person, :group
+  attribute :register_on, :string, default: 'now'
+  attribute :register_as, :string, default: 'replace'
 
   delegate :beitragskategorie_label, to: :role
 
-  validates :register_on, presence: true
-  validates :register_as, presence: true, if: :active_member?
+  validates_presence_of :person, :group, :register_on, :register_as
+  validates :register_on, inclusion: { in: :register_on_keys, allow_blank: true }
+  validates :register_as, inclusion: { in: :register_as_keys, allow_blank: true }
 
-  def initialize(person:, group:)
-    @person = person
-    @group  = group
-
-    @register_on = :now
-    @register_as = :replace
+  def initialize(person:, group:, **opts)
+    super
   end
 
   def group_for_title
@@ -30,10 +30,6 @@ class SelfInscription
   def neuanmeldung?
     @group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
     @group.is_a?(Group::SektionsNeuanmeldungenNv)
-  end
-
-  def attributes=(attrs = nil)
-    assign_attributes(attrs.to_h)
   end
 
   def register_as_options
@@ -78,7 +74,7 @@ class SelfInscription
 
   def save_role
     if replace_active_membership?
-      active_membership_role.destroy!
+      active_membership_role.destroy!(always_soft_destroy: true)
       active_membership_role.update_column(:deleted_at, 1.day.ago.end_of_day)
     end
     role.save!
@@ -110,11 +106,11 @@ class SelfInscription
   end
 
   def sektion_membership_roles
-    role.person.roles.where(type: Group::SektionsMitglieder::Mitglied.sti_name)
+    person.roles.where(type: Group::SektionsMitglieder::Mitglied.sti_name)
   end
 
   def future?
-    !/now/.match(register_on)
+    register_on != 'now'
   end
 
   def role
@@ -123,17 +119,23 @@ class SelfInscription
       person: @person,
       # TODO: in a later ticket: what values should we set for the timestamps?
       # https://github.com/hitobito/hitobito_sac_cas/issues/178
-      created_at: Time.zone.now,
-      delete_on: Time.zone.today.end_of_year
+      created_at: Time.current,
+      delete_on: today.end_of_year
     ).tap(&:valid?)
   end
 
   def role_type
-    @group.self_registration_role_type.constantize
+    return @group.self_registration_role_type.constantize unless neuanmeldung?
+
+    case register_as
+      when /replace/ then @group.class.const_get('Neuanmeldung')
+      when /extra/ then @group.class.const_get('NeuanmeldungZusatzsektion')
+      else Role # won't be valid anyway but we need a role_type
+    end
   end
 
   def today
-    @today ||= Time.zone.today
+    @today ||= Date.current
   end
 
   def t(*keys)
