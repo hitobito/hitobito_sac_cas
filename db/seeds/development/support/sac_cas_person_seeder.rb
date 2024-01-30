@@ -65,13 +65,13 @@ class SacCasPersonSeeder < PersonSeeder
   def create_or_update_household(person, second_person)
     household = Person::Household.new(person, Ability.new(Person.root), second_person, Person.root)
     household.assign
-    household.save
+    household.persist!
   end
 
   def seed_sac_adult
     adult_attrs = standard_attributes(Faker::Name.first_name,
                                       Faker::Name.last_name)
-    adult_attrs = adult_attrs.merge({ birthday: 27.years.ago })
+    adult_attrs = adult_attrs.merge({ birthday: (27..47).to_a.sample.years.ago })
     adult = Person.seed(:email, adult_attrs).first
     seed_accounts(adult, false)
     adult
@@ -118,6 +118,8 @@ class SacCasPersonSeeder < PersonSeeder
   def update_role_dates(role_class)
     role_class.find_each do |r|
       yield(r) if block_given?
+      return if r.delete_on
+
       r.update!(created_at: membership_from(r.person),
                 delete_on: Date.today.end_of_year)
     end
