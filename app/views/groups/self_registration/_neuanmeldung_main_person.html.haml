@@ -6,8 +6,8 @@
 = f.fields_for(:main_person_attributes, f.object.main_person) do |f|
   = field_set_tag do
     = f.error_messages
-    = field_set_tag do
-      = f.labeled(:gender, Person.human_attribute_name(:salutation)) do
+    = f.labeled(:gender) do
+      = field_set_tag(nil, class: 'm-0 p-0') do
         - (Person::GENDERS + ['']).each do |key|
           = f.inline_radio_button(:gender, key, f.object.salutation_label(key))
     = f.labeled_input_fields :first_name, :last_name

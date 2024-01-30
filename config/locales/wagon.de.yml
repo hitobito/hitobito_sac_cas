@@ -24,6 +24,7 @@ de:
           replace: Neue Stammsektion (ersetzt deine Bisherige)
 
       self_registration/main_person:
+        gender: Geschlecht
         phone_numbers: Telefonnummer
       self_registration_neuanmeldung/housemate:
         email: E-Mail (optional)
