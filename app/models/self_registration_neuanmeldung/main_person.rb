@@ -32,12 +32,6 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     ActiveModel::Name.new(SelfRegistration::MainPerson, nil)
   end
 
-  def self.human_attribute_name(*args)
-    return PhoneNumber.model_name.human if args.first =~ /phone_numbers/
-
-    super
-  end
-
   def person # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
     @person ||= Person.new(attributes.compact.except('supplements')).tap do |p|
       p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?

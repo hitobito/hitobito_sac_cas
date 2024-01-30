@@ -22,6 +22,9 @@ de:
         register_as_options:
           extra: Zusatzsektion
           replace: Neue Stammsektion (ersetzt deine Bisherige)
+
+      self_registration/main_person:
+        phone_numbers: Telefonnummer
       self_registration_neuanmeldung/housemate:
         additional_email: E-Mail (optional)
         phone_number: Telefon (optional)
