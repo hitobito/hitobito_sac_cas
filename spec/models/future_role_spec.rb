@@ -86,7 +86,7 @@ describe FutureRole do
     it 'does not get set for non-mitglied role' do
       role = FutureRole.new(
         person: Fabricate(:person),
-        convert_to: 'Group::Geschaeftsstelle::Mitgliederdienst',
+        convert_to: 'Group::Geschaeftsstelle::Mitarbeiter',
         convert_on: Date.today,
         group: groups(:geschaeftsstelle)
       )

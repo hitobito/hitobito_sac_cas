@@ -99,7 +99,7 @@ describe Role do
 
     it 'accepts person below age limit on other group' do
       person.birthday = 5.years.ago
-      role = Fabricate.build(Group::Geschaeftsstelle::ITSupport.name,
+      role = Fabricate.build(Group::Geschaeftsstelle::Admin.name,
                              person: person,
                              group: groups(:geschaeftsstelle))
       expect(role).to be_valid
