@@ -16,7 +16,7 @@ namespace :import do
 
   desc 'Import huts from a navision export'
   task huts: [:environment] do
-    import_file_path = 'tmp/Hütten_Beziehungen_Export_20230704.xlsx'
+    import_file_path = 'tmp/xlsx/huetten_beziehungen.xlsx'
     hut_relations_excel = Rails.root.join(import_file_path)
     Import::HutsImporter.new(hut_relations_excel).import!
   end

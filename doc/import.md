@@ -4,18 +4,37 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
-## Import sektionen
+## 1. - People Import
+
+Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigend werden können.
+
+Importiert alle Navision Kontakte und legt diese Unter 'Top-Layer > Navision Import' ab.
+
+`rails import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+
+## 2. - Import sektionen
+
+Diesen Import laufen lassen damit alle Sektionen vorhanden sind.
 
 `rails import:sektionen`
 
-## Import huts
+file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
+
+## 3. Import huts
 
 `rails import:huts`
 
-## Import Mitglieder to Sektion
+file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
-`rails import:sektions_mitglieder FILE=sektions_mitglieder.xlsx`
+## 4. Import Mitglieder Stammsektion
 
+`rails import:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
+
+## 5. Import Mitglieder Zusatzsektion
+
+Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
+
+`rails import:additional_memberships FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)`
 
 ## Delete all Sektions
 

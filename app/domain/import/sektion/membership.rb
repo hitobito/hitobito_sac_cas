@@ -78,8 +78,10 @@ module Import
       end
 
       def remove_placeholder_contact_role
-        Group::ExterneKontakte::Kontakt.where(person: person,
-                                              group: placeholder_contact_group).delete_all
+        Group::ExterneKontakte::Kontakt
+          .where(person: person,
+                 group: placeholder_contact_group)
+          .find_each(&:really_destroy!)
       end
 
       def build_role

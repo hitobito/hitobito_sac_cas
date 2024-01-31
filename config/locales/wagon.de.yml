@@ -264,6 +264,13 @@ de:
         one: Kontakt
         description: Kontakt
 
+
+      group/sektions_huette/huettenwartspartner:
+        one: Hüttenwartspartner*in
+
+      group/sektions_huette/schluesseldepot:
+        one: Schlüsseldepot
+
   devise:
     sessions:
       form:
