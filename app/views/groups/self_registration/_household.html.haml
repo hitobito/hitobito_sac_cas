@@ -6,7 +6,7 @@
 .well
   = simple_format(t('.membership_info_box'))
 - if entry.housemates.empty?
-  .btn-toolbar.top
+  .btn-toolbar.top.d-none
     %div
       = c.next_button(t('.next_as_single_link'))
       = c.back_link
