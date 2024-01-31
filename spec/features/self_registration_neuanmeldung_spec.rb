@@ -80,7 +80,7 @@ describe :self_registration_neuanmeldung, js: true do
       visit group_self_registration_path(group_id: group)
       expect(page).to have_css('h2', text: 'Fragen zur Mitgliedschaft?')
       complete_main_person_form
-      click_on 'Weiter als Einzelmitglied'
+      click_on 'Weiter als Einzelmitglied', match: :first
 
       expect do
         complete_last_page
@@ -131,7 +131,7 @@ describe :self_registration_neuanmeldung, js: true do
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
 
-      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern').click
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern', match: :first).click
       expect(page).to have_field('self_registration_main_person_attributes_zip_code', with: '3007')
       expect(page).to have_field('self_registration_main_person_attributes_town', with: 'Bern')
       expect(page).to have_field('self_registration_main_person_attributes_address', with: 'Belpstrasse')
@@ -163,7 +163,7 @@ describe :self_registration_neuanmeldung, js: true do
         click_on 'Weiter als Einzelmitglied'
         expect(page).to have_field 'Promocode'
         click_on 'Familienmitglieder'
-        click_on 'Weiter als Einzelmitglied'
+        click_on 'Weiter als Einzelmitglied', match: :first
         expect(page).to have_content 'Um die Registrierung abzuschliessen, muss der ' \
           'Datenschutzerklärung zugestimmt werden.'
         expect(page).to have_css 'li.active a', text: 'Zusatzdaten'
@@ -180,7 +180,7 @@ describe :self_registration_neuanmeldung, js: true do
 
     it 'validates household required fields' do
       click_on 'Eintrag hinzufügen'
-      click_on 'Weiter als Familienmitgliedschaft'
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
       within '#housemates_fields .fields:nth-child(1)' do
         expect(page).to have_content 'Vorname muss ausgefüllt werden'
       end
@@ -193,7 +193,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Vorname', with: 'Maxine'
         fill_in 'Nachname', with: 'Muster'
         fill_in 'Geburtstag', with: '01.01.1981'
-        fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
+        fill_in 'E-Mail (optional)', with: 'maxine.muster@hitobito.example.com'
         choose 'weiblich'
       end
       assert_aside('01.01.1980', '01.01.1981')
@@ -203,7 +203,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
         fill_in 'Geburtstag', with: '01.01.2012'
-        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
       assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
@@ -230,7 +230,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Vorname', with: 'Maxine'
         fill_in 'Nachname', with: 'Muster'
         fill_in 'Geburtstag', with: '01.01.1981'
-        fill_in 'Haupt-E-Mail', with: 'maxine.muster@hitobito.example.com'
+        fill_in 'E-Mail (optional)', with: 'maxine.muster@hitobito.example.com'
         choose 'weiblich'
       end
       assert_aside('01.01.1980', '01.01.1981')
@@ -240,7 +240,7 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
         fill_in 'Geburtstag', with: '01.01.2012'
-        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
       assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
@@ -249,7 +249,7 @@ describe :self_registration_neuanmeldung, js: true do
         click_on 'Entfernen'
       end
       assert_aside('01.01.1980', '01.01.2012')
-      click_on 'Weiter als Familienmitgliedschaft'
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
 
       expect do
         complete_last_page
@@ -265,11 +265,26 @@ describe :self_registration_neuanmeldung, js: true do
       fill_in 'Vorname', with: 'Maxine'
       fill_in 'Nachname', with: 'Muster'
       fill_in 'Geburtstag', with: '01.01.1981'
-      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'E-Mail (optional)', with: 'max.muster@hitobito.example.com'
       choose 'weiblich'
-      click_on 'Weiter als Familienmitgliedschaft'
-      expect(page).to have_content 'Haupt-E-Mail ist bereits vergeben'
-      expect(page).to have_button 'Weiter als Familienmitgliedschaft'
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+      expect(page).to have_content 'E-Mail (optional) ist bereits vergeben'
+      expect(page).to have_button 'Weiter als Familienmitgliedschaft', match: :first
+    end
+
+    it 'validates phone_number of housemate' do
+      click_on  'Eintrag hinzufügen'
+
+      fill_in 'Vorname', with: 'Maxine'
+      fill_in 'Nachname', with: 'Muster'
+      fill_in 'Geburtstag', with: '01.01.1981'
+      fill_in 'E-Mail (optional)', with: 'max.muster@hitobito.example.com'
+      fill_in 'Telefon (optional)', with: '123'
+      choose 'weiblich'
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+      within '#housemates_fields .fields:nth-child(1)' do
+        expect(page).to have_content 'Telefon (optional) ist nicht gültig'
+      end
     end
 
     it 'can continue with incomplete removed housemate' do
@@ -279,13 +294,13 @@ describe :self_registration_neuanmeldung, js: true do
       within '#housemates_fields .fields:nth-child(1)' do
         click_on 'Entfernen'
       end
-      click_on 'Weiter als Einzelmitglied'
+      click_on 'Weiter als Einzelmitglied', match: :first
       expect(page).to have_button 'Registrieren'
     end
 
     describe 'using step navigator' do
       it 'rerenders first page when invalid and submitting from second' do
-        click_on 'Weiter als Einzelmitglied'
+        click_on 'Weiter als Einzelmitglied', match: :first
         expect(page).to have_field 'Promocode'
         check 'Ich habe die Statuten gelesen und stimme diesen zu'
         check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
@@ -306,9 +321,9 @@ describe :self_registration_neuanmeldung, js: true do
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
         fill_in 'Geburtstag', with: I18n.l(1.day.ago.to_date)
-        fill_in 'Haupt-E-Mail', with: 'maxi.muster@hitobito.example.com'
+        fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'weiblich'
-        click_on 'Weiter als Familienmitgliedschaft'
+        click_on 'Weiter als Familienmitgliedschaft', match: :first
         expect(page).to have_content 'Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein'
         expect(page).to have_content 'Beitragskategorie muss ausgefüllt werden'
       end
@@ -319,7 +334,7 @@ describe :self_registration_neuanmeldung, js: true do
     before do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
-      click_on 'Weiter als Einzelmitglied'
+      click_on 'Weiter als Einzelmitglied', match: :first
     end
 
     it 'persists newsletter and promocode as tags' do

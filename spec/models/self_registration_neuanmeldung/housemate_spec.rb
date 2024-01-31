@@ -22,7 +22,6 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       first_name: 'Max',
       last_name: 'Muster',
       birthday: '01.01.2000',
-      email: 'maxine.muster@example.com'
     }
   }
 
@@ -32,7 +31,6 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       expect(model.errors.attribute_names).to match_array [
         :first_name,
         :last_name,
-        :email,
         :birthday,
       ]
     end
@@ -40,6 +38,40 @@ describe SelfRegistrationNeuanmeldung::Housemate do
     it 'is valid if required attrs are set' do
       model.attributes = required_attrs
       expect(model).to be_valid
+    end
+
+    it 'is requires email to be valid' do
+      model.attributes = required_attrs.merge(email: 'asdfasdf')
+      expect(model).to have(1).error_on(:email)
+    end
+
+    it 'is requires phone_number to be valid' do
+      model.attributes = required_attrs.merge(phone_number: 'asdfasdf')
+      expect(model).to have(1).error_on(:phone_number)
+    end
+  end
+
+  describe 'additional_email' do
+    it 'is translated correctly' do
+      expect(model.class.human_attribute_name(:email)).to eq 'E-Mail (optional)'
+    end
+
+    it 'is assigned as one of many additional_emails of person' do
+      model.email = 'test@example.com'
+      expect(model.person.email).to eq 'test@example.com'
+    end
+  end
+
+  describe 'phone_number' do
+    it 'is translated correctly' do
+      expect(model.class.human_attribute_name(:phone_number)).to eq 'Telefon (optional)'
+    end
+
+    it 'is assigned as one of many phone_numbers of person' do
+      model.phone_number = '+41 79 123 45 56'
+      number = model.person.phone_numbers.first
+      expect(number.number).to eq '+41 79 123 45 56'
+      expect(number.label).to eq 'Haupt-Telefon'
     end
   end
 

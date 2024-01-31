@@ -96,7 +96,7 @@ describe SelfRegistrationNeuanmeldung do
 
       expect(registration).not_to be_valid
       expect(registration.main_person).to be_valid
-      expect(registration.housemates.first.errors).to have(6).attribute_names
+      expect(registration.housemates.first.errors).to have(5).attribute_names
     end
 
     it 'is invalid if any housemate is invalid' do

@@ -5,39 +5,50 @@
 
 .well
   = simple_format(t('.membership_info_box'))
+- if entry.housemates.empty?
+  .btn-toolbar.top.d-none
+    %div
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
+- else
+  .btn-toolbar.top
+    .hidden
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    %div
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
 
-= f.nested_fields_for :housemates, nil, nil, model_object: SelfRegistration::Housemate.new, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
+= f.nested_fields_for :housemates, nil, nil, model_object: f.object.build_housemate, data: { action: c.stimulus_action(:toggleHousemateButtons), mode: :add} do |ff|
   = field_set_tag do
     = ff.error_messages
-    - [:first_name, :last_name].each do |attr|
-      = ff.labeled_input_field attr if ff.object.attr?(attr)
+    = ff.labeled(:gender) do
+      - (Person::GENDERS + ['']).each do |key|
+        = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
+    = ff.labeled_input_fields :first_name, :last_name
+    = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+    = ff.labeled_input_fields :email, :phone_number
 
-    - if ff.object.attr?(:email)
-      = ff.labeled_input_field :email, help_inline: t('people.email_field.used_as_login')
-    - if ff.object.attr?(:gender)
-      = field_set_tag do
-        = ff.labeled(:gender) do
-          - (Person::GENDERS + ['']).each do |key|
-            = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
-
-    - if ff.object.attr?(:birthday)
-      = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
-    .control-group
-      .controls
-        = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})
+    .col-xl-2.col-md-3.text-md-end.pe-3
+      = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "#{c.stimulus_action(:toggleHousemateButtons)} click->autosubmit#save", mode: :remove }})
 
 %br
 - if entry.housemates.empty?
   .btn-toolbar.bottom
-    = c.next_button(t('.next_as_single_link'))
-    = c.back_link
-  .btn-toolbar.bottom.hidden
-    = c.next_button(t('.next_as_household_link'))
-    = c.back_link
+    %div
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link
 - else
-  .btn-toolbar.bottom.hidden
-    = c.next_button(t('.next_as_single_link'))
-    = c.back_link
   .btn-toolbar.bottom
-    = c.next_button(t('.next_as_household_link'))
-    = c.back_link
+    .hidden
+      = c.next_button(t('.next_as_single_link'))
+      = c.back_link
+    %div
+      = c.next_button(t('.next_as_household_link'))
+      = c.back_link

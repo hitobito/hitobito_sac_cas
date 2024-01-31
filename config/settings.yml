@@ -44,3 +44,14 @@ social_account:
     - Webseite
     - Webseite Jugend
     - Andere
+
+phone_number:
+  predefined_labels:
+    - Privat
+    - Mobil
+    - Arbeit
+    - Vater
+    - Mutter
+    - Fax
+    - Andere
+    - Haupt-Telefon

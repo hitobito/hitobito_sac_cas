@@ -7,18 +7,45 @@
 
 
 class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Person
+
+  NON_ASSIGNABLE_ATTRIBUTES = %w(
+    household_emails
+    supplements
+    phone_number
+    _destroy
+  ).freeze
+
   self.required_attrs = [
-    :first_name, :last_name, :email, :birthday
+    :first_name, :last_name, :birthday
   ]
 
   self.attrs = required_attrs + [
-    :gender, :primary_group, :household_key, :_destroy, :household_emails, :supplements
+    :gender, :email, :phone_number,
+    :primary_group, :household_key, :_destroy, :household_emails, :supplements
   ]
 
+  validate :assert_valid_phone_number
+
   def person
-    @person ||= Person.new(attributes.except('_destroy', 'household_emails',
-                                             'supplements')).tap do |p|
+    @person ||= Person.new(attributes.except(*NON_ASSIGNABLE_ATTRIBUTES)).tap do |p|
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.links_present?
+
+      with_value_for(:phone_number) do |value|
+        p.phone_numbers.build(number: value, label: 'Haupt-Telefon')
+      end
     end
+  end
+
+  private
+
+  def assert_valid_phone_number
+    unless phone_number.blank? || person.phone_numbers.first.valid?
+      errors.add(:phone_number, :invalid)
+    end
+  end
+
+  def with_value_for(key)
+    value = attributes[key.to_s]
+    yield value if value.present?
   end
 end
