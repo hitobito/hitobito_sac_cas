@@ -279,6 +279,11 @@
           "type": "string",
           "readable": true,
           "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "description": null
         }
       },
       "sorts": {
@@ -551,6 +556,13 @@
             "lt",
             "lte"
           ]
+        },
+        "with_deleted": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         },
         "with_archived": {
           "type": "boolean",
@@ -710,11 +722,17 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "membership_number": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
         "membership_years": {
-          "type": "string",
+          "type": "integer",
           "readable": true,
           "description": null
         }
@@ -959,6 +977,17 @@
         },
         "updated_at": {
           "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "membership_number": {
+          "type": "integer",
           "operators": [
             "eq",
             "not_eq",
