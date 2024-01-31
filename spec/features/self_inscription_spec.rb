@@ -32,7 +32,7 @@ describe :self_inscription, js: true do
   end
 
   it 'has standard behaviour ' do
-    geschaeftsstelle.update!(self_registration_role_type: Group::Geschaeftsstelle::Fundraising)
+    geschaeftsstelle.update!(self_registration_role_type: Group::Geschaeftsstelle::Mitarbeiter)
     sign_in(mitglied)
     visit group_self_inscription_path(group_id: geschaeftsstelle)
     click_link 'Beitreten'

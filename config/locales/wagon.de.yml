@@ -151,30 +151,15 @@ de:
         other: Hütte
 
       ### ROLES
-      group/geschaeftsstelle/mitgliederdienst:
-        one: Mitgliederdienst
-        description: Mitgliederdienst
-      group/geschaeftsstelle/kursorganisation:
-        one: Kursorganisation
-        description: Kursorganisation
-      group/geschaeftsstelle/fundraising:
-        one: Fundraising
-        description: Fundraising
-      group/geschaeftsstelle/kommunikation:
-        one: Kommunikation
-        description: Kommunikation
-      group/geschaeftsstelle/rechnungswesen:
-        one: Rechnungswesen
-        description: Rechnungswesen
-      group/geschaeftsstelle/leistungssport:
-        one: Leistungssport
-        description: Leistungssport
-      group/geschaeftsstelle/huetten_umwelt:
-        one: Hütten & Umwelt
-        description: Hütten & Umwelt
-      group/geschaeftsstelle/it_support:
-        one: Digitalisierung & IT
-        description: Digitalisierung & IT
+      group/geschaeftsstelle/mitarbeiter:
+        one: Mitarbeiter*in
+        description: Mitarbeiter*in
+      group/geschaeftsstelle/mitarbeiter_lesend:
+        one: Mitarbeiter*in (nur lesend)
+        description: Mitarbeiter*in (nur lesend)
+      group/geschaeftsstelle/admin:
+        one: Admin
+        description: Admin
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt

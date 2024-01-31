@@ -41,5 +41,5 @@ seeder.update_mitglieder_role_dates
 
 geschaeftsstelle = Group::Geschaeftsstelle.first
 devs.each do |name, email|
-  seeder.seed_developer(name, email, geschaeftsstelle, Group::Geschaeftsstelle::ITSupport)
+  seeder.seed_developer(name, email, geschaeftsstelle, Group::Geschaeftsstelle::Admin)
 end

@@ -79,7 +79,7 @@ describe PeopleController do
       end
 
       it 'is not shown for person with non-mitglied role' do
-        person = make_person(nil, role_class: Group::Geschaeftsstelle::ITSupport,
+        person = make_person(nil, role_class: Group::Geschaeftsstelle::Admin,
                                   group: groups(:geschaeftsstelle))
         expect_household_key(person, visible: false)
       end
