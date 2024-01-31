@@ -272,6 +272,21 @@ describe :self_registration_neuanmeldung, js: true do
       expect(page).to have_button 'Weiter als Familienmitgliedschaft', match: :first
     end
 
+    it 'validates phone_number of housemate' do
+      click_on  'Eintrag hinzufügen'
+
+      fill_in 'Vorname', with: 'Maxine'
+      fill_in 'Nachname', with: 'Muster'
+      fill_in 'Geburtstag', with: '01.01.1981'
+      fill_in 'E-Mail (optional)', with: 'max.muster@hitobito.example.com'
+      fill_in 'Telefon (optional)', with: '123'
+      choose 'weiblich'
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+      within '#housemates_fields .fields:nth-child(1)' do
+        expect(page).to have_content 'Telefon (optional) ist nicht gültig'
+      end
+    end
+
     it 'can continue with incomplete removed housemate' do
       click_on  'Eintrag hinzufügen'
       fill_in 'Vorname', with: 'Maxine'

@@ -39,6 +39,16 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       model.attributes = required_attrs
       expect(model).to be_valid
     end
+
+    it 'is requires email to be valid' do
+      model.attributes = required_attrs.merge(email: 'asdfasdf')
+      expect(model).to have(1).error_on(:email)
+    end
+
+    it 'is requires phone_number to be valid' do
+      model.attributes = required_attrs.merge(phone_number: 'asdfasdf')
+      expect(model).to have(1).error_on(:phone_number)
+    end
   end
 
   describe 'additional_email' do

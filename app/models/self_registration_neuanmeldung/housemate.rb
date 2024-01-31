@@ -24,6 +24,8 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
     :primary_group, :household_key, :_destroy, :household_emails, :supplements
   ]
 
+  validate :assert_valid_phone_number
+
   def person
     @person ||= Person.new(attributes.except(*NON_ASSIGNABLE_ATTRIBUTES)).tap do |p|
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.links_present?
@@ -35,6 +37,12 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
   end
 
   private
+
+  def assert_valid_phone_number
+    unless phone_number.blank? || person.phone_numbers.first.valid?
+      errors.add(:phone_number, :invalid)
+    end
+  end
 
   def with_value_for(key)
     value = attributes[key.to_s]
