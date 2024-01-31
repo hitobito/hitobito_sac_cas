@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -31,7 +31,7 @@ module Import::Huts
       person.roles.where(
         type: Group::SektionsHuettenkommission::Huettenobmann.name,
         group_id: group_id,
-      ).destroy_all
+      ).find_each(&:really_destroy!)
       person.roles.build(
         type: Group::SektionsHuettenkommission::Huettenobmann.name,
         created_at: created_at(@row),
@@ -55,7 +55,6 @@ module Import::Huts
     end
 
     def group_id(row)
-      # TODO handle nonexistent group
       Group::SektionsHuettenkommission.joins(:parent)
                                       .find_by(parent: {
                                         navision_id: navision_id(row)

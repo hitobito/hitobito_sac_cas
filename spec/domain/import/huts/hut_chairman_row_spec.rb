@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -26,8 +26,7 @@ describe Import::Huts::HutChairmanRow do
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
   let!(:hut_comission) { Fabricate(Group::SektionsHuettenkommission.sti_name.to_sym, parent: sektion) }
   let!(:hut) { Fabricate(Group::SektionsHuette.sti_name.to_sym, parent: hut_comission) }
-  let(:contact_role_group) { Group::ExterneKontakte.create!(name: 'Navision Import',
-                                                            parent_id: Group::SacCas.first!.id) }
+  let(:contact_role_group) { Group::ExterneKontakte.create!(name: 'Navision Import', parent_id: Group.root.id) }
 
   it 'imports role' do
     expect { importer.import! }.
