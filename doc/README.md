@@ -2,13 +2,13 @@
 
 ## Beitragskategorie
 
-Die Beitragskategorie definiert auf der Mitgliedschaft wie hoch die jährlichen Kosten ausfallen.
+Die Beitragskategorie definiert auf der Mitgliedschaft einer Sektion wie hoch die jährlichen Kosten ausfallen.
 
 Es gibt dabei drei Kategorien: Einzel, Jugend, Familie
 
 - Einzel: Für Einzel-Personen ab 22 Jahren
 - Jugend: Für Jugendliche von 6 bis 21 Jahren
-- Familie: Für Familien mit max. 2 Erwachsenen ab 22 Jahren sowie beliebig viele Kinder von 6 bis 17 Jahren
+- Familie: Für Familien mit max. 2 Erwachsenen ab 22 Jahren sowie beliebig viele Kinder von 6 bis 17 Jahren die im selben Haushalt wohnen.
 
 ### Hitobito
 
