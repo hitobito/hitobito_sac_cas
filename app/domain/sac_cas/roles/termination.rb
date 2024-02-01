@@ -8,11 +8,12 @@
 module SacCas::Roles::Termination
 
   def call
+    return false unless valid?
+
     Role.transaction do
-      terminate(dependent_roles)
-      terminate(family_member_roles)
-      super || raise(ActiveRecord::Rollback)
-    end || false
+      terminate(affected_roles + family_member_roles)
+      true
+    end
   end
 
   # Returns all roles that will be terminated.
@@ -44,15 +45,11 @@ module SacCas::Roles::Termination
   end
 
   def terminate(roles)
-    roles.each do |role|
-      role.delete_on = terminate_on
-      role.write_attribute(:terminated, true)
-      # We explicitely set the context to :destroy, because some validations are configured to
-      # run on [:create, :update] and we don't want them to run here. Technically we are doing
-      # an update, but as we are setting the delete_on attribute, we are treating this as a
-      # destroy operation.
-      role.save!(context: :destroy)
-    end
+    Role.where(id: roles.map(&:id)).update_all(
+      delete_on: terminate_on,
+      terminated: true,
+      updated_at: Time.current
+    )
   end
 
 end
