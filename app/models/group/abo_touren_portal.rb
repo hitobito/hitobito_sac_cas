@@ -13,6 +13,7 @@ class Group::AboTourenPortal < ::Group
   class Abonnent < ::Role
     self.permissions = []
     self.basic_permissions_only = true
+    self.terminatable = true
   end
 
   class Neuanmeldung < ::Role

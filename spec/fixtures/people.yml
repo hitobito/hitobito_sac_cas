@@ -36,7 +36,7 @@ familienmitglied:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
   language: de
-  household_key: 'happy-family'
+  household_key: '4242'
 
 familienmitglied2:
   id: 600_003
@@ -46,7 +46,7 @@ familienmitglied2:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
   language: de
-  household_key: 'happy-family'
+  household_key: '4242'
 
 familienmitglied_kind:
   id: 600_004
@@ -56,4 +56,14 @@ familienmitglied_kind:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 10.years.ago %>
   language: de
-  household_key: 'happy-family'
+  household_key: '4242'
+
+abonnent:
+  id: 600_005
+  first_name: Magazina
+  last_name: Leserate
+  email: magazina.l@hitobito.example.com
+  gender: f
+  primary_group: abo_die_alpen
+  birthday: <%= Date.new(1993, 6, 12) %>
+  language: de

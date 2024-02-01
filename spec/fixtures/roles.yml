@@ -48,6 +48,14 @@ familienmitglied2:
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
+familienmitglied2_zweitsektion:
+  person_id: 600_003
+  group: matterhorn_mitglieder
+  type: Group::SektionsMitglieder::MitgliedZusatzsektion
+  beitragskategorie: familie
+  created_at: 2015-01-01 00:00:00
+  delete_on: 2015-12-31
+
 familienmitglied_kind:
   person_id: 600_004
   group: bluemlisalp_mitglieder
@@ -61,5 +69,12 @@ familienmitglied_kind_zweitsektion:
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: familie
+  created_at: 2015-01-01 00:00:00
+  delete_on: 2015-12-31
+
+abonnent_alpen:
+  person_id: 600_005
+  group: abo_die_alpen
+  type: Group::AboMagazin::Abonnent
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31

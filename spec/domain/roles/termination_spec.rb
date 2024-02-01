@@ -15,63 +15,6 @@ describe Roles::Termination do
 
   let(:subject) { described_class.new(role: role, terminate_on: terminate_on) }
 
-
-  context '#affected_roles' do
-    around do |example|
-      Group::SektionsFunktionaere::Administration.terminatable = true
-      example.run
-      Group::SektionsFunktionaere::Administration.terminatable = false
-    end
-
-    context 'for a mitglied role' do
-      let(:role) { roles(:mitglied) }
-
-      it 'returns the role and all other mitglied roles of the person' do
-        expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
-      end
-    end
-
-    context 'for a non-mitglied role' do
-      let(:role) do
-        Group::SektionsFunktionaere::Praesidium.create!(
-          person: person,
-          group: groups(:bluemlisalp_funktionaere)
-        )
-      end
-
-      it 'for a non-mitglied role returns only the role' do
-        expect(subject.affected_roles).to eq [role]
-      end
-    end
-  end
-
-  context '#family_member_roles' do
-    context 'for a mitglied role' do
-      it 'with beitragskategorie=familie returns the family_member roles' do
-        expect(role.beitragskategorie).to eq 'familie'
-
-        expect(subject.family_member_roles).to eq [roles(:familienmitglied2),
-                                                   roles(:familienmitglied_kind)]
-      end
-
-      %w(einzel jugend).each do |category|
-        it "with beitragskategorie=#{category} returns empty list" do
-          role.beitragskategorie = category
-
-          expect(subject.family_member_roles).to eq []
-        end
-      end
-    end
-
-    context 'for a non-mitglied role' do
-      let(:role) { roles(:familienmitglied_zweitsektion) }
-
-      it 'returns empty list' do
-        expect(subject.family_member_roles).to eq []
-      end
-    end
-  end
-
   context '#call' do
     context 'role' do
       let(:role) { roles(:mitglied) }
@@ -108,12 +51,10 @@ describe Roles::Termination do
       end
     end
 
-    context 'affected_roles' do
+    context 'stammsektion' do
       let(:role) { roles(:mitglied) }
 
-      it 'get terminated' do
-        expect(subject.affected_roles).to eq [role, roles(:mitglied_zweitsektion)]
-
+      it 'terminates stammsektion and zusatzsektion roles' do
         expect { subject.call }.
           to change { role.reload.terminated? }.from(false).to(true).
           and change { role.delete_on }.to(terminate_on).
@@ -135,18 +76,33 @@ describe Roles::Termination do
       end
     end
 
-    context 'family_member roles' do
-      it 'terminates family member roles' do
-        expect(subject.family_member_roles).to eq [roles(:familienmitglied2),
-                                                   roles(:familienmitglied_kind)]
+    context 'zusatzsektion' do
+      let(:role) { roles(:mitglied_zweitsektion) }
 
+      it 'terminates zusatzsektion roles only' do
         expect { subject.call }.
           to change { role.reload.terminated? }.from(false).to(true).
           and change { role.delete_on }.to(terminate_on).
+          and not_change { roles(:mitglied).reload.terminated? }.from(false).
+        and not_change { roles(:mitglied).delete_on }
+      end
+    end
+
+    context 'family_member roles' do
+      it 'terminates stammsektion and zusatzsektion for all family members' do
+        expect { subject.call }.
+          to change { role.reload.terminated? }.from(false).to(true).
+          and change { role.delete_on }.to(terminate_on).
+          and change { roles(:familienmitglied_zweitsektion).reload.terminated? }.from(false).to(true).
+          and change { roles(:familienmitglied_zweitsektion).delete_on }.to(terminate_on).
           and change { roles(:familienmitglied2).reload.terminated? }.from(false).to(true).
           and change { roles(:familienmitglied2).delete_on }.to(terminate_on).
+          and change { roles(:familienmitglied2_zweitsektion).reload.terminated? }.from(false).to(true).
+          and change { roles(:familienmitglied2_zweitsektion).delete_on }.to(terminate_on).
           and change { roles(:familienmitglied_kind).reload.terminated? }.from(false).to(true).
-          and change { roles(:familienmitglied_kind).delete_on }.to(terminate_on)
+          and change { roles(:familienmitglied_kind).delete_on }.to(terminate_on).
+          and change { roles(:familienmitglied_kind_zweitsektion).reload.terminated? }.from(false).to(true).
+          and change { roles(:familienmitglied_kind_zweitsektion).delete_on }.to(terminate_on)
       end
 
       it 'dont get terminated if invalid' do
@@ -157,9 +113,46 @@ describe Roles::Termination do
           to not_change { role.reload.terminated? }.from(false).
           and not_change { role.delete_on }.
           and not_change { roles(:familienmitglied2).reload.terminated? }.from(false).
-          and not_change { roles(:mitglied_zweitsektion).delete_on }.
+          and not_change { roles(:familienmitglied2).delete_on }.
           and not_change { roles(:familienmitglied_kind).reload.terminated? }.from(false).
           and not_change { roles(:familienmitglied_kind).delete_on }
+      end
+
+      context 'abo roles' do
+        let(:role) do
+          Group::AboMagazin::Abonnent
+            .create!(group: groups(:abo_die_alpen), person: person)
+        end
+
+        it 'only terminates abo magazin but no other roles' do
+          expect { subject.call }.
+            to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.delete_on }.to(terminate_on).
+            and not_change { roles(:familienmitglied2).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied2).delete_on }.
+            and not_change { roles(:familienmitglied_kind).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied_kind).delete_on }
+        end
+      end
+
+      context 'zusatzsektion' do
+        let(:role) { roles(:familienmitglied2_zweitsektion) }
+
+        it 'terminates zusatzsektion for all family members roles only' do
+          expect { subject.call }.
+            to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.delete_on }.to(terminate_on).
+            and change { roles(:familienmitglied_zweitsektion).reload.terminated? }.from(false).to(true).
+            and change { roles(:familienmitglied_zweitsektion).delete_on }.to(terminate_on).
+            and change { roles(:familienmitglied_kind_zweitsektion).reload.terminated? }.from(false).to(true).
+            and change { roles(:familienmitglied_kind_zweitsektion).delete_on }.to(terminate_on).
+            and not_change { roles(:familienmitglied).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied).delete_on }.
+            and not_change { roles(:familienmitglied2).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied2).delete_on }.
+            and not_change { roles(:familienmitglied_kind).reload.terminated? }.from(false).
+            and not_change { roles(:familienmitglied_kind).delete_on }
+        end
       end
     end
   end
