@@ -54,7 +54,7 @@ describe Roles::Termination do
                                                    roles(:familienmitglied_kind)]
       end
 
-      (::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN - ['familie']).each do |category|
+      %w(einzel jugend).each do |category|
         it "with beitragskategorie=#{category} returns empty list" do
           role.beitragskategorie = category
 
@@ -73,6 +73,41 @@ describe Roles::Termination do
   end
 
   context '#call' do
+    context 'role' do
+      let(:role) { roles(:mitglied) }
+
+      it 'gets terminated' do
+        allow(subject).to receive(:valid?).and_return(true)
+
+        expect do
+          expect(subject.call).to eq true
+        end.
+          to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.reload.delete_on }.to(terminate_on)
+      end
+
+      it 'gets terminated even if role is invalid' do
+        allow_any_instance_of(Role).to receive(:valid?).and_return(false)
+        expect(role).to be_invalid
+
+        expect do
+          expect(subject.call).to eq true
+        end.
+          to change { role.reload.terminated? }.from(false).to(true).
+            and change { role.reload.delete_on }.to(terminate_on)
+      end
+
+      it 'does not get terminated when invalid' do
+        allow(subject).to receive(:valid?).and_return(false)
+
+        expect do
+          expect(subject.call).to eq false
+        end.
+          to not_change { role.reload.terminated? }.from(false).
+            and not_change { role.reload.delete_on }
+      end
+    end
+
     context 'affected_roles' do
       let(:role) { roles(:mitglied) }
 
