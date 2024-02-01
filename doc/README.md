@@ -6,17 +6,9 @@ Die Beitragskategorie definiert auf der Mitgliedschaft wie hoch die jährlichen 
 
 Es gibt dabei drei Kategorien: Einzel, Jugend, Familie
 
-### Einzel
-
-Für Einzel-Personen ab 22 Jahren
-
-### Jugend
-
-Für Jugendliche von 6 bis 21 Jahren
-
-### Familie
-
-Für Familien mit max. 2 Erwachsenen ab 22 Jahren sowie beliebig viele Kinder von 6 bis 17 Jahren
+- Einzel: Für Einzel-Personen ab 22 Jahren
+- Jugend: Für Jugendliche von 6 bis 21 Jahren
+- Familie: Für Familien mit max. 2 Erwachsenen ab 22 Jahren sowie beliebig viele Kinder von 6 bis 17 Jahren
 
 ### Hitobito
 
@@ -24,7 +16,7 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 ## Familie
 
--   Haushalt + Beitragskategorie
+In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert. 
 
 ## Neuanmeldungen
 
@@ -51,7 +43,3 @@ Als Mitgliederrollen zählen:
 
 -   Eine Person kann nur eine aktive Stammsektion Mitglieder-Rolle haben
 -   Um eine Zusatzsektion Rolle zu haben muss eine aktive Stammsektion Rolle vorhanden sein
-
-#### Berechtigungen
-
--   Die Hauptgruppe kann nicht geändert werden, solange die aktuelle Primärgruppe via einer Mitgliederrolle definiert ist.
