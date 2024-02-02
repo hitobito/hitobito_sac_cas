@@ -10,7 +10,7 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   included do
-    Person::INTERNAL_ATTRS += [:membership_verify_token]
+    Person::INTERNAL_ATTRS << :membership_verify_token
     devise_login_id_attrs << :membership_number
 
     delegate :active?, :anytime?, :roles, to: :membership, prefix: true
