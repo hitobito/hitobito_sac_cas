@@ -18,7 +18,7 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert.
 
-see `SacCas::People::SacFamily`
+see [`SacCas::People::SacFamily`](https://github.com/hitobito/hitobito_sac_cas/blob/master/app/domain/sac_cas/people/sac_family.rb)
 
 ## Neuanmeldungen
 
@@ -45,3 +45,7 @@ Als Mitgliederrollen zählen:
 
 -   Eine Person kann nur eine aktive Stammsektion Mitglieder-Rolle haben
 -   Um eine Zusatzsektion Rolle zu haben muss eine aktive Stammsektion Rolle vorhanden sein
+
+### Austritt
+
+Ein Mitglied hat die Möglichkeit unter Person / Verlauf seine Mitgliedschaft zu kündigen (Austritt). Dazu gibt es auf der Rolle ein boolean Flag :terminated. Die Basis-Funktionalität dazu ist bereits im Core definiert.
