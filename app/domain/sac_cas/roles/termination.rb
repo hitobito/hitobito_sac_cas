@@ -6,33 +6,41 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Roles::Termination
+  extend ActiveSupport::Concern
+
+  def self.prepended(base)
+    base.extend(ClassMethods)
+  end
 
   def call
     return false unless valid?
+    return super unless sac_terminatable?
 
     Role.transaction do
-      terminate(affected_roles + family_member_roles)
+      self.class.terminate(affected_roles, terminate_on)
+      if role.person.sac_family.member?
+        role.person.sac_family.update_terminated_roles
+      end
       true
     end
   end
 
-  # Returns all roles that will be terminated.
-  def affected_roles
-    @affected_roles ||= [role] + dependent_roles
-  end
-
-  def family_member_roles
-    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied) &&
-      role.beitragskategorie.familie?
-
-    group_ids = affected_roles.map(&:group_id)
-
-    Group::SektionsMitglieder::Mitglied.
-      familie.
-      where(person_id: role.person.household_people, group_id: group_ids)
-  end
-
   private
+
+  def sac_terminatable?
+    terminatable_mitglied_role_types
+      .include?(role.type)
+  end
+
+  def affected_roles
+    [role] + dependent_roles
+  end
+
+  def terminatable_mitglied_role_types
+    [Group::SektionsMitglieder::Mitglied,
+     Group::SektionsMitglieder::MitgliedZusatzsektion]
+      .collect(&:sti_name)
+  end
 
   # For a Group::SektionsMitglieder::Mitglied role, this returns all other
   # Group::SektionsMitglieder::MitgliedZusatzsektion roles of the same person.
@@ -44,12 +52,14 @@ module SacCas::Roles::Termination
       where(person_id: role.person_id)
   end
 
-  def terminate(roles)
-    Role.where(id: roles.map(&:id)).update_all(
-      delete_on: terminate_on,
-      terminated: true,
-      updated_at: Time.current
-    )
+  module ClassMethods
+    def terminate(roles, delete_on)
+      # use update_all to not trigger any validations while terminating
+      Role.where(id: roles.map(&:id)).update_all(
+        delete_on: delete_on,
+        terminated: true,
+        updated_at: Time.current
+      )
+    end
   end
-
 end

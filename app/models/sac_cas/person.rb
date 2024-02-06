@@ -52,6 +52,14 @@ module SacCas::Person
     token
   end
 
+  def sac_family
+    @sac_family ||= SacCas::People::SacFamily.new(self)
+  end
+
+  def sac_family_member?
+    sac_family.member?
+  end
+
   private
 
   def membership

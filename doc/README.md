@@ -14,9 +14,11 @@ Es gibt dabei drei Kategorien: Einzel, Jugend, Familie
 
 Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und auf dieser hinterlegt. Sie kann bei einer bestehenden Rolle nicht geändert werden (attr_readonly). Ist eine Wechsel der Beitragskategorie nötig, so muss die aktuelle Rolle terminiert und eine neue Rolle erstellt werden. Dies stellt sicher das der Beitragskategorie-Wechsel in der History der Person ersichtlich und dokumentiert ist.
 
-## Familie
+## SAC Familie
 
-In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert. 
+In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert.
+
+see `SacCas::People::SacFamily`
 
 ## Neuanmeldungen
 
