@@ -17,4 +17,7 @@ Dir[HitobitoSacCas::Wagon.root.join('spec/support/**/*.rb')].sort.each { |f| req
 
 RSpec.configure do |config|
   config.fixture_path = File.expand_path('../fixtures', __FILE__)
+
+  # disable 2FA for admins in test env since login is used in feature specs
+  config.before { allow(Group::Geschaeftsstelle::Admin).to receive(:two_factor_authentication_enforced).and_return(false) }
 end
