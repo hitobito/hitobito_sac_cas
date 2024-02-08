@@ -36,9 +36,7 @@ module SacCas::Person
   end
 
   def family_id
-    return unless roles.any? { |r| r.beitragskategorie&.familie? }
-
-    /\AF/ =~ household_key ? household_key : "F#{household_key}"
+    sac_family.id
   end
 
   def salutation_label(key)
@@ -53,7 +51,7 @@ module SacCas::Person
   end
 
   def sac_family
-    @sac_family ||= SacCas::People::SacFamily.new(self)
+    @sac_family ||= People::SacFamily.new(self)
   end
 
   def sac_family_member?
