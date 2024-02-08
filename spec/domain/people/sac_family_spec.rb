@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe SacCas::People::SacFamily do
+describe People::SacFamily do
   let(:adult) { people(:familienmitglied) }
   let(:adult2) { people(:familienmitglied2) }
   let(:child) { people(:familienmitglied_kind) }
@@ -114,6 +114,21 @@ describe SacCas::People::SacFamily do
       [adult, adult2, child].each do |p|
         expect(p.sac_family.member?).to eq(true)
       end
+    end
+  end
+
+  context '#id' do
+    it 'returns prefixed household_key for family member' do
+      expect(adult.family_id).to eq "F#{adult.household_key}"
+    end
+
+    it 'does not prefix household_key if already prefixed' do
+      adult.household_key = 'F42'
+      expect(adult.family_id).to eq 'F42'
+    end
+
+    it 'returns nil for non family member' do
+      expect(household_member_jugend.family_id).to be_nil
     end
   end
 

@@ -18,7 +18,7 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert.
 
-see [`SacCas::People::SacFamily`](https://github.com/hitobito/hitobito_sac_cas/blob/master/app/domain/sac_cas/people/sac_family.rb)
+see [`People::SacFamily`](https://github.com/hitobito/hitobito_sac_cas/blob/master/app/domain/people/sac_family.rb)
 
 ## Neuanmeldungen
 

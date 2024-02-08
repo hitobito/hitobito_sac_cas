@@ -5,9 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class SacCas::People::SacFamily
+class People::SacFamily
 
   FAMILY_MEMBER_ROLE_TYPES = SacCas::MITGLIED_HAUPTSEKTION_ROLES
+
+  delegate :household_key, to: '@person'
 
   def initialize(person)
     @person = person
@@ -54,7 +56,8 @@ class SacCas::People::SacFamily
   #end
 
   def member?
-    family_stammsektion.present?
+    household_key.present? &&
+      family_stammsektion.present?
   end
 
   def family_members
@@ -65,6 +68,12 @@ class SacCas::People::SacFamily
       .joins(:roles)
       .where(roles: { type: family_stammsektion_role_types, beitragskategorie: :familie },
              people: { household_key: @person.household_key })
+  end
+
+  def id
+    return unless member?
+
+    /\AF/ =~ household_key ? household_key : "F#{household_key}"
   end
 
   private
