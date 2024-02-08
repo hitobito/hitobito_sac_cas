@@ -25,15 +25,15 @@ module SacCas::Roles::Termination
     end
   end
 
+  def affected_roles
+    [role] + dependent_roles
+  end
+
   private
 
   def sac_terminatable?
     terminatable_mitglied_role_types
       .include?(role.type)
-  end
-
-  def affected_roles
-    [role] + dependent_roles
   end
 
   def terminatable_mitglied_role_types
