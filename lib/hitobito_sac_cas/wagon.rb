@@ -54,6 +54,8 @@ module HitobitoSacCas
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
 
+      Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
+
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
         Export::Tabular::People::Households,
