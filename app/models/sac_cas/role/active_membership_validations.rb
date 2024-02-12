@@ -8,7 +8,7 @@
 module SacCas::Role::ActiveMembershipValidations
   extend ActiveSupport::Concern
 
-  MEMBERSHIP_ROLES = [Group::SektionsMitglieder::Mitglied,
+  MITGLIED_ROLES = [Group::SektionsMitglieder::Mitglied,
                       Group::SektionsMitglieder::MitgliedZusatzsektion]
 
   included do
@@ -16,9 +16,9 @@ module SacCas::Role::ActiveMembershipValidations
   end
 
   def assert_has_active_membership_role
-    unless Role.exists?(type: MEMBERSHIP_ROLES.map(&:sti_name),
-                        person_id: person_id,
-                        group_id: group_id)
+    unless Role.exists?(type: MITGLIED_ROLES.map(&:sti_name),
+        person_id: person_id,
+        group_id: group_id)
       errors.add(:person, :must_have_mitglied_role_in_group)
     end
   end
