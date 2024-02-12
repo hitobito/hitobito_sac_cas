@@ -33,15 +33,11 @@ class Group::SektionsMitglieder < ::Group
   end
 
   class Ehrenmitglied < ::Role
-    include SacCas::Role::MitgliedZusatzsektion
-
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   class Beguenstigt < ::Role
-    include SacCas::Role::MitgliedZusatzsektion
-
     self.permissions = []
     self.basic_permissions_only = true
   end

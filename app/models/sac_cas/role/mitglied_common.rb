@@ -13,11 +13,29 @@ module SacCas::Role::MitgliedCommon
   include SacCas::Role::MitgliedNoOverlapValidation
   include SacCas::RoleBeitragskategorie
 
+  DEPENDANT_ROLE_TYPES = ['Group::SektionsMitglieder::Ehrenmitglied',
+                          'Group::SektionsMitglieder::Beguenstigt']
+
   included do
     self.permissions = []
     self.basic_permissions_only = true
 
     validates :created_at, presence: true
+
+    after_destroy :soft_delete_dependant_roles
+    after_real_destroy :hard_delete_dependant_roles
+  end
+
+  def soft_delete_dependant_roles
+    dependant_roles.update_all(deleted_at: deleted_at)
+  end
+
+  def hard_delete_dependant_roles
+    dependant_roles.destroy_all
+  end
+
+  def dependant_roles
+    person.roles.where(type: DEPENDANT_ROLE_TYPES, group: group)
   end
 
 end

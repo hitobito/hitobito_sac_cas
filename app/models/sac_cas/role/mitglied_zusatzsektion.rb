@@ -8,14 +8,10 @@
 module SacCas::Role::MitgliedZusatzsektion
   extend ActiveSupport::Concern
 
-  DEPENDANT_ROLE_TYPES = [Group::SektionsMitglieder::Ehrenmitglied, Group::SektionsMitglieder::Beguenstigt]
-
   include SacCas::Role::MitgliedCommon
 
   included do
     validate :assert_is_mitglied_during_validity_period, on: [:create, :update]
-
-    after_destroy :destroy_ehrenmitglied_and_beguenstigte_roles
   end
 
   def assert_is_mitglied_during_validity_period
@@ -34,13 +30,5 @@ module SacCas::Role::MitgliedZusatzsektion
     end
 
     errors.add(:person, :must_have_mitglied_role) if days_to_check.any?
-  end
-
-  def destroy_ehrenmitglied_and_beguenstigte_roles
-    dependant_roles = DEPENDANT_ROLE_TYPES.flat_map do |role_type|
-      person.roles.where(type: role_type.sti_name, group: group)
-    end
-
-    dependant_roles.update_all(deleted_at: deleted_at, delete_on: delete_on)
   end
 end
