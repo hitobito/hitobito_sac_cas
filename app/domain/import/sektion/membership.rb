@@ -50,6 +50,8 @@ module Import
           role.save!
           assign_household(row[:household_key])
           remove_placeholder_contact_role
+          assign_beguenstigt
+          assign_ehrenmitglied
         end
       end
 
@@ -58,6 +60,18 @@ module Import
       end
 
       private
+
+      def assign_beguenstigt
+        return unless beguenstigt?
+
+        Group::SektionsMitglieder::Beguenstigt.find_or_create_by!(person: person, group: @group)
+      end
+
+      def assign_ehrenmitglied
+        return unless ehrenmitglied?
+
+        Group::SektionsMitglieder::Ehrenmitglied.find_or_create_by!(person: person, group: @group)
+      end
 
       def assign_household(household_key)
         return if household_key.blank?
@@ -139,6 +153,14 @@ module Import
 
       def abo?
         row[:member_type] == 'Abonnent'
+      end
+
+      def beguenstigt?
+        row[:beguenstigt] == 'Ja'
+      end
+
+      def ehrenmitglied?
+        row[:ehrenmitglied] == 'Ja'
       end
 
       def build_error_messages

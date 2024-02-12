@@ -19,7 +19,9 @@ module Import
         member_type: 'Mitgliederart',
         last_joining_date: 'Letztes Eintrittsdatum',
         last_exit_date: 'Letztes Austrittsdatum',
-        joining_year: 'Eintrittsjahr'
+        joining_year: 'Eintrittsjahr',
+        ehrenmitglied: 'Ehrenmitglied Sektion',
+        beguenstigt: 'Begünstigter Sektion',
       }.freeze
 
       self.sheet_name = 'aktive_mitglieder'
