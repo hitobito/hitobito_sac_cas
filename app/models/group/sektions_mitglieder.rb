@@ -33,35 +33,17 @@ class Group::SektionsMitglieder < ::Group
   end
 
   class Ehrenmitglied < ::Role
+    include SacCas::Role::ActiveMembershipValidations
+
     self.permissions = []
     self.basic_permissions_only = true
-
-    validate :assert_has_active_membership_role
-
-    def assert_has_active_membership_role
-      unless Role.exists?(type: ['Group::SektionsMitglieder::Mitglied',
-                                 'Group::SektionsMitglieder::MitgliedZusatzsektion'],
-          person_id: person_id,
-          group_id: group_id)
-        errors.add(:person, :must_have_mitglied_role_in_group)
-      end
-    end
   end
 
   class Beguenstigt < ::Role
+    include SacCas::Role::ActiveMembershipValidations
+
     self.permissions = []
     self.basic_permissions_only = true
-
-    validate :assert_has_active_membership_role
-
-    def assert_has_active_membership_role
-      unless Role.exists?(type: ['Group::SektionsMitglieder::Mitglied',
-                                 'Group::SektionsMitglieder::MitgliedZusatzsektion'],
-          person_id: person_id,
-          group_id: group_id)
-        errors.add(:person, :must_have_mitglied_role_in_group)
-      end
-    end
   end
 
   roles Mitglied, MitgliedZusatzsektion, Ehrenmitglied, Beguenstigt
