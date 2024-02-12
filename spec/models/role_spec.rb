@@ -364,4 +364,108 @@ describe Role do
       end
     end
   end
+
+  [Group::SektionsMitglieder::Beguenstigt,
+   Group::SektionsMitglieder::Ehrenmitglied].each do |role_type|
+     describe role_type.label do
+       let(:person) { Fabricate(:person) }
+       let(:group) { groups(:bluemlisalp_mitglieder) }
+       let(:other_group) { groups(:matterhorn_mitglieder) }
+
+       it 'is invalid without Mitglied role in group' do
+         role = role_type.new(person: person, group: group)
+         expect(role).to_not be_valid
+         expect(role.errors[:person]).to include('muss Mitglied in der ausgewählten Gruppe sein.')
+       end
+
+       it 'is invalid with Mitglied role in different group' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
+
+         role = role_type.new(person: person, group: group)
+         expect(role).to_not be_valid
+         expect(role.errors[:person]).to include('muss Mitglied in der ausgewählten Gruppe sein.')
+       end
+
+       it 'is valid with Mitglied role in group' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person)
+
+         role = role_type.new(person: person, group: group)
+         expect(role).to be_valid
+       end
+
+       it 'is invalid without MitgliedZusatzsektion role in group' do
+         role = role_type.new(person: person, group: group)
+         expect(role).to_not be_valid
+         expect(role.errors[:person]).to include('muss Mitglied in der ausgewählten Gruppe sein.')
+       end
+
+       it 'is invalid with MitgliedZusatzsektion role in different group' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), person: person)
+         Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: other_group, person: person)
+
+         role = role_type.new(person: person, group: group)
+         expect(role).to_not be_valid
+         expect(role.errors[:person]).to include('muss Mitglied in der ausgewählten Gruppe sein.')
+       end
+
+       it 'is valid with MitgliedZusatzsektion role in group' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
+         Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person)
+
+         role = role_type.new(person: person, group: group)
+         expect(role).to be_valid
+       end
+
+       it 'gets soft deleted when Mitglied role gets soft deleted' do
+         mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, created_at: 1.year.ago)
+
+         role = role_type.create!(person: person, group: group)
+         expect(role).to be_valid
+
+         mitglied_role.destroy
+
+         role.reload
+         expect(role).to be_paranoia_destroyed
+         expect(role.deleted_at).to eq(mitglied_role.deleted_at)
+       end
+
+       it 'gets hard deleted when Mitglied role gets hard deleted' do
+         mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person)
+
+         role = role_type.create!(person: person, group: group)
+         expect(role).to be_valid
+
+         mitglied_role.destroy
+
+         expect(Role.exists?(id: role.id)).to eq(false)
+       end
+
+       it 'gets soft deleted when MitgliedZusatzsektion role gets soft deleted' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, created_at: 1.year.ago)
+         mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, created_at: 1.year.ago)
+
+         role = role_type.create!(person: person, group: group)
+         expect(role).to be_valid
+
+         mitglied_role.destroy
+
+         role.reload
+         expect(role).to be_paranoia_destroyed
+         expect(role.deleted_at).to eq(mitglied_role.deleted_at)
+       end
+
+       it 'gets hard deleted when MitgliedZusatzsektion role gets hard deleted' do
+         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
+         mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person)
+
+         role = role_type.create!(person: person, group: group)
+         expect(role).to be_valid
+
+         mitglied_role.destroy
+
+         expect(Role.exists?(id: role.id)).to eq(false)
+       end
+
+     end
+  end
 end
