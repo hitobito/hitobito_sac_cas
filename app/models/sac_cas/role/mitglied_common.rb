@@ -27,11 +27,11 @@ module SacCas::Role::MitgliedCommon
   end
 
   def soft_delete_dependant_roles
-    dependant_roles.update_all(deleted_at: deleted_at)
+    dependant_roles.each { _1.destroy(always_soft_destroy: true) }
   end
 
   def hard_delete_dependant_roles
-    dependant_roles.destroy_all
+    dependant_roles.each { _1.really_destroy! }
   end
 
   def dependant_roles

@@ -427,6 +427,7 @@ describe Role do
          role.reload
          expect(role).to be_paranoia_destroyed
          expect(role.deleted_at).to eq(mitglied_role.deleted_at)
+         expect(role.person.primary_group_id).to be_nil
        end
 
        it 'gets hard deleted when Mitglied role gets hard deleted' do
@@ -438,6 +439,7 @@ describe Role do
          mitglied_role.destroy
 
          expect(Role.exists?(id: role.id)).to eq(false)
+         expect(role.person.primary_group_id).to be_nil
        end
 
        it 'gets soft deleted when MitgliedZusatzsektion role gets soft deleted' do
@@ -452,6 +454,7 @@ describe Role do
          role.reload
          expect(role).to be_paranoia_destroyed
          expect(role.deleted_at).to eq(mitglied_role.deleted_at)
+         expect(role.person.primary_group).to eq(other_group)
        end
 
        it 'gets hard deleted when MitgliedZusatzsektion role gets hard deleted' do
@@ -464,6 +467,7 @@ describe Role do
          mitglied_role.destroy
 
          expect(Role.exists?(id: role.id)).to eq(false)
+         expect(role.person.primary_group).to eq(other_group)
        end
 
      end
