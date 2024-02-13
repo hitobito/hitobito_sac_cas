@@ -20,4 +20,9 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
   end
 
   roles Neuanmeldung, NeuanmeldungZusatzsektion
+
+  # make this read-only so nobody can disable self-registration on those groups
+  def self_registration_role_type
+    Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name
+  end
 end
