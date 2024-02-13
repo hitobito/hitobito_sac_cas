@@ -33,4 +33,8 @@ class Group::Ortsgruppe < ::Group
 
   mounted_attr :language, :text, enum: %w(DE FR IT), default: 'DE', null: false
 
+  def sac_cas_self_registration_url(host)
+    Groups::SektionSelfRegistrationLink.new(self, host).url
+  end
+
 end
