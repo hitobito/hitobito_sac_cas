@@ -84,6 +84,7 @@ de:
         too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
         only_one_mitglied_role_allowed_at_a_time: 'hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit.'
         must_have_mitglied_role: 'muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion.'
+        must_have_mitglied_role_in_group: 'muss Mitglied in der ausgewählten Gruppe sein.'
         must_be_present_unless_deleted: 'muss vorhanden sein, wenn nicht gelöscht.'
 
     models:

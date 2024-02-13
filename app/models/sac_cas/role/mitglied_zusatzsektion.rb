@@ -31,5 +31,4 @@ module SacCas::Role::MitgliedZusatzsektion
 
     errors.add(:person, :must_have_mitglied_role) if days_to_check.any?
   end
-
 end

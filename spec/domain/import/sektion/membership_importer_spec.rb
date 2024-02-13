@@ -18,7 +18,9 @@ describe Import::Sektion::MembershipsImporter do
       group_navision_id: group.navision_id,
       beitragskategorie: 'EINZEL',
       navision_id: person_id,
-      last_joining_date: '1.1.1960'
+      last_joining_date: '1.1.1960',
+      ehrenmitglied: 'Nein',
+      beguenstigt: 'Nein'
     }.merge(attrs)
   end
 
@@ -70,6 +72,90 @@ describe Import::Sektion::MembershipsImporter do
     expect(person.roles).to have(1).items
     role = person.roles.first
     expect(role.created_at).to eq Time.zone.parse('1.1.1970')
+  end
+
+  it 'creates ehrenmitglied role with Ja parameter' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, ehrenmitglied: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(2)
+
+    person = Person.find(id)
+    expect(person.roles).to have(2).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Ehrenmitglied.sti_name).first
+
+    expect(role).to be_present
+  end
+
+  it 'does not create second identical ehrenmitglied role' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, ehrenmitglied: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(2)
+
+    person = Person.find(id)
+    expect(person.roles).to have(2).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Ehrenmitglied.sti_name).first
+
+    expect(role).to be_present
+
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, ehrenmitglied: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(0)
+  end
+
+  it 'does not create ehrenmitglied role with non Ja parameter' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, ehrenmitglied: 'Nein'))
+    expect { importer.import! }.to change { Role.count }.by(1)
+
+    person = Person.find(id)
+    expect(person.roles).to have(1).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Ehrenmitglied.sti_name).first
+
+    expect(role).to_not be_present
+  end
+
+  it 'creates beguenstigt role with Ja parameter' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, beguenstigt: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(2)
+
+    person = Person.find(id)
+    expect(person.roles).to have(2).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Beguenstigt.sti_name).first
+
+    expect(role).to be_present
+  end
+
+  it 'does not create second identical beguenstigt role' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, beguenstigt: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(2)
+
+    person = Person.find(id)
+    expect(person.roles).to have(2).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Beguenstigt.sti_name).first
+
+    expect(role).to be_present
+
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, beguenstigt: 'Ja'))
+    expect { importer.import! }.to change { Role.count }.by(0)
+  end
+
+  it 'does not create beguenstigt role with non Ja parameter' do
+    id = 123
+    expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id, beguenstigt: 'Nein'))
+    expect { importer.import! }.to change { Role.count }.by(1)
+
+    person = Person.find(id)
+    expect(person.roles).to have(1).item
+
+    role = person.roles.where(type: Group::SektionsMitglieder::Beguenstigt.sti_name).first
+
+    expect(role).to_not be_present
   end
 
   describe 'families' do
