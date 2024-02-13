@@ -53,6 +53,7 @@ de:
       group:
         group_id: Gruppen-ID
         navision_id: NAV Sektions-ID
+        sac_cas_self_registration_url: SAC Selbstregistrierung
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton

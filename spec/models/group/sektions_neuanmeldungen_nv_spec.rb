@@ -21,4 +21,25 @@ describe Group::SektionsNeuanmeldungenNv do
       expect { role.destroy }.to change { Role.with_deleted.count }.by(-1)
     end
   end
+
+  describe 'self registration' do
+    let(:neuanmeldungen_nv) { groups(:bluemlisalp_neuanmeldungen_nv) }
+
+    it 'self registration is disabled if neuanmeldungen sektion is present' do
+      expect(neuanmeldungen_nv.self_registration_role_type).to be_nil
+
+      neuanmeldungen_nv.update!(self_registration_role_type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name)
+
+      expect(neuanmeldungen_nv.self_registration_role_type).to be_nil
+    end
+
+    it 'self registration role type cannot be changed' do
+      groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
+      expect(neuanmeldungen_nv.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
+
+      neuanmeldungen_nv.update!(self_registration_role_type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name)
+
+      expect(neuanmeldungen_nv.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
+    end
+  end
 end
