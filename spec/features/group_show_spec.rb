@@ -18,7 +18,7 @@ describe 'person show page' do
     it 'shows link' do
       visit group_path(id: sektion.id)
 
-      expect(page).to have_css('a', text: /http:\/\/127.0.0.1:[0-9]+\/groups\/#{neuanmeldungen_sektion.id}\/self_registration/)
+      expect(page).to have_css('a', text: /http:\/\/.+\/groups\/#{neuanmeldungen_sektion.id}\/self_registration/)
     end
   end
 end
