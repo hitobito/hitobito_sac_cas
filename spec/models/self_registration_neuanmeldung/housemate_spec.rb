@@ -49,6 +49,12 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       model.attributes = required_attrs.merge(phone_number: 'asdfasdf')
       expect(model).to have(1).error_on(:phone_number)
     end
+
+    it 'is invalid if too many adults exist' do
+      model.attributes = required_attrs.merge(adult_count: 2)
+      expect(model).to have(1).error_on(:base)
+      expect(model.errors.full_messages[0]).to start_with 'In einer Familienmitgliedschaft'
+    end
   end
 
   describe 'additional_email' do

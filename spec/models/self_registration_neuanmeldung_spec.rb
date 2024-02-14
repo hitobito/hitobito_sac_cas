@@ -125,17 +125,29 @@ describe SelfRegistrationNeuanmeldung do
     it 'is valid if for multiple housemates' do
       registration.housemates_attributes = [
         housemate_attrs,
-        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max')
+        housemate_attrs.merge(
+          email: 'max@example.com', first_name: 'Max', birthday: 15.years.ago.to_date
+        )
       ]
       expect(registration).to be_valid
       expect(registration.housemates.first).to be_valid
       expect(registration.housemates.second).to be_valid
     end
 
+    it 'is invalid if for more than 2 adult housemates' do
+      registration.housemates_attributes = [
+        housemate_attrs,
+        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max'),
+      ]
+      expect(registration.housemates.first).to be_valid
+      expect(registration.housemates.second).not_to be_valid
+    end
+
     it '#save! creates people and roles with household key' do
       registration.housemates_attributes = [
         housemate_attrs,
-        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max', birthday: 6.years.ago.to_date)
+        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max',
+birthday: 6.years.ago.to_date)
       ]
       expect { registration.save! }.to change { Person.count }.by(3)
         .and change { Role.count }.by(3)
@@ -186,7 +198,8 @@ describe SelfRegistrationNeuanmeldung do
 
     it 'saves person and with supplements' do
       reason = SelfRegistrationReason.create!(text: 'soso')
-      registration.supplements_attributes = { self_registration_reason_id: reason.id, register_on: 'oct' }
+      registration.supplements_attributes = { self_registration_reason_id: reason.id,
+register_on: 'oct' }
       expect { registration.save! }.to change { Person.count }.by(1)
       person = Person.find_by(first_name: 'test')
       expect(person.self_registration_reason).to eq reason
