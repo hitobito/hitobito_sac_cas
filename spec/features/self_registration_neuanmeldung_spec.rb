@@ -42,7 +42,6 @@ describe :self_registration_neuanmeldung, js: true do
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field('Newsletter')
-    expect(page).not_to have_field('Promocode')
     assert_aside('01.01.1980')
     yield if block_given?
     click_on 'Weiter'
@@ -164,7 +163,6 @@ with: 'Belpstrasse')
 
       it 'rerenders third page when invalid and submitting from second' do
         click_on 'Weiter als Einzelmitglied'
-        expect(page).to have_field 'Promocode'
         click_on 'Familienmitglieder'
         click_on 'Weiter als Einzelmitglied', match: :first
         expect(page).to have_content 'Um die Registrierung abzuschliessen, muss der ' \
@@ -332,7 +330,6 @@ text: 'Weiter als Familienmitgliedschaft').click
     describe 'using step navigator' do
       it 'rerenders first page when invalid and submitting from second' do
         click_on 'Weiter als Einzelmitglied', match: :first
-        expect(page).to have_field 'Promocode'
         check 'Ich habe die Statuten gelesen und stimme diesen zu'
         check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
         check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
@@ -362,17 +359,20 @@ text: 'Weiter als Familienmitgliedschaft').click
   end
 
   describe 'supplements' do
+    let(:root) { groups(:root) }
+    let(:list) { Fabricate(:mailing_list, group: root) }
+
     before do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on 'Weiter als Einzelmitglied', match: :first
     end
 
-    it 'persists newsletter and promocode as tags' do
-      check 'Ich möchte einen Newsletter abonnieren'
-      fill_in 'Promocode', with: 'Promo'
+    it 'creates excluding subscription if newsletter is unchecked' do
+      root.update!(sac_newsletter_mailing_list_id: list.id)
+      uncheck 'Ich möchte einen Newsletter abonnieren'
       complete_last_page
-      expect(person.tags).to have(2).items
+      expect(person.subscriptions.excluded).to have(1).items
     end
 
     it 'persists self_registration_reason' do

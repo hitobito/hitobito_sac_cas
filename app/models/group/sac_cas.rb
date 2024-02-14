@@ -15,4 +15,18 @@ class Group::SacCas < ::Group
            Group::ExterneKontakte,
            Group::Abonnenten
 
+  mounted_attr :sac_newsletter_mailing_list_id, :integer
+
+  validate :assert_sac_newsletter_mailing_list_id
+
+  private
+
+  def assert_sac_newsletter_mailing_list_id
+    return unless sac_newsletter_mailing_list_id
+    ids = mailing_lists.pluck(:id)
+
+    if ids.exclude?(sac_newsletter_mailing_list_id.to_i)
+      errors.add(:sac_newsletter_mailing_list_id, :inclusion)
+    end
+  end
 end

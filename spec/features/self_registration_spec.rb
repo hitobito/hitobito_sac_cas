@@ -87,16 +87,6 @@ describe :self_registration, js: true do
       expect(current_path).to eq("#{group_person_path(group_id: group, id: person, locale: :de)}.html")
     end
 
-    it 'persists newsletter and promocode as tags' do
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
-
-      check 'Ich möchte einen Newsletter abonnieren'
-      fill_in 'Promocode', with: 'Promo'
-      click_on 'Registrieren'
-      expect(person.tags).to have(2).items
-    end
-
     describe 'with privacy policy' do
       before do
 

@@ -54,6 +54,8 @@ de:
         group_id: Gruppen-ID
         navision_id: NAV Sektions-ID
         sac_cas_self_registration_url: SAC Selbstregistrierung
+      group/sac_cas:
+        sac_newsletter_mailing_list_id: Neuanmeldungs Abo Id
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
@@ -363,7 +365,6 @@ de:
 
       supplements:
         newsletter: Ich möchte einen Newsletter abonnieren
-        promo_code: Promocode
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
         data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
@@ -448,6 +449,8 @@ de:
       title: Mitgliederausweis
   mounted_attributes:
     form_tabs:
+      group/sac_cas:
+        default: SAC/CAS Attribute
       group/sektion:
         default: Sektions Attribute
       group/ortsgruppe:
