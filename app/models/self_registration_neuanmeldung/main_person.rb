@@ -7,6 +7,7 @@
 
 
 class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::Person
+
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
     :address, :zip_code, :town, :country,
@@ -24,6 +25,7 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
   ]
 
   include FutureRole::FormHandling
+  include SelfRegistration::AdultConsent
 
   delegate :newsletter, :self_registration_reason_id, to: :supplements, allow_nil: true
   delegate :salutation_label, :phone_numbers, to: :person

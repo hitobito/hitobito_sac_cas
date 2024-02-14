@@ -13,6 +13,9 @@
       = ff.inline_radio_button :self_registration_reason_id, key, label
       %br
 
+  = f.fields_for(:main_person) do |fp|
+    = render 'adult_consent_field', f: fp
+
   = ff.labeled(:others, '&nbsp;'.html_safe) do
     = ff.label(:newsletter, class: 'd-block mt-2') do
       = ff.check_box :newsletter
@@ -21,6 +24,7 @@
       = render 'agreement_link', f: ff, key: key, link: link_to(*ff.object.link_translations(key))
     - if ff.object.sektion_statuten_attached?
       = render 'agreement_link', f: ff, key: :sektion_statuten, link: link_to(*ff.object.sektion_statuten_link_args)
+
 
 .btn-toolbar.bottom
   = submit_button(f, t('groups.self_registration.form.submit'))
