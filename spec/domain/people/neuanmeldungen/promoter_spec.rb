@@ -152,6 +152,20 @@ describe People::Neuanmeldungen::Promoter do
         }.deep_stringify_keys
       )
     end
+
+    it 'does not log duplicate errors' do
+      neuanmeldung_role = create_neuanmeldung_role
+      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true).twice
+
+      expect(neuanmeldung_role).to receive(:destroy!).
+        and_raise('Oh my gosh, something ugly happened!').twice
+
+      expect { subject.promote(neuanmeldung_role) }.
+        to change { HitobitoLogEntry.count }.by(1)
+
+      expect { subject.promote(neuanmeldung_role) }.
+        to not_change { HitobitoLogEntry.count }
+    end
   end
 
   context '#promoteable?' do

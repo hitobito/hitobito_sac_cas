@@ -13,6 +13,8 @@ class People::Neuanmeldungen::Promoter
     PaidInvoiceCondition
   ].freeze
 
+  ERROR_CATEGORY = 'neuanmeldungen'
+
   def call
     candidate_roles.find_each { |role| promote(role) }
   end
@@ -72,8 +74,8 @@ class People::Neuanmeldungen::Promoter
   end
 
   def log_error(error, role)
-    Hitobito.logger.error(
-      'neuanmeldungen',
+    Hitobito.logger.error_replace(
+      ERROR_CATEGORY,
       error.message.presence || error.class.name,
       subject: role.person,
       payload: {
