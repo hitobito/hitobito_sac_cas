@@ -6,10 +6,7 @@
 = f.fields_for(:supplements_attributes, entry.supplements) do |ff|
   = ff.error_messages
 
-  = ff.labeled(:register_on) do
-    - ff.object.register_on_options.each do |key, label|
-      = ff.inline_radio_button :register_on, key, label
-  .well= t('groups.self_inscription.form.register_on_info')
+  = render 'shared/register_on_fields', f: ff
 
   = ff.labeled(:self_registration_reason_id) do
     - ff.object.self_registration_reason_options.each do |key, label|

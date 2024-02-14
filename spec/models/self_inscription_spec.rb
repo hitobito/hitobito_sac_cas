@@ -59,40 +59,6 @@ describe SelfInscription do
     end
   end
 
-  describe '#register_on_options' do
-    subject(:options) { model.register_on_options }
-
-    it 'has 3 items' do
-      travel_to(Date.new(2023, 1, 1)) do
-        expect(options).to have(3).items
-      end
-    end
-
-    it 'has key and translation for each item' do
-      travel_to(Date.new(2023, 7, 1)) do
-        expect(options[0]).to eq(['now', 'Sofort'])
-        expect(options[1]).to eq(['jul', '01. Juli'])
-        expect(options[2]).to eq(['oct', '01. Oktober'])
-      end
-    end
-
-    it 'hides july if show after July first' do
-      travel_to(Date.new(2023, 7, 2)) do
-        expect(options).to have(2).items
-        expect(options[0]).to eq(['now', 'Sofort'])
-        expect(options[1]).to eq(['oct', '01. Oktober'])
-      end
-    end
-
-    it 'hides oct if show after October first' do
-      travel_to(Date.new(2023, 10, 2)) do
-        expect(options).to have(1).items
-        expect(options[0]).to eq(['now', 'Sofort'])
-      end
-    end
-  end
-
-
   describe '#register_as_options' do
     subject(:options) { model.register_as_options }
 

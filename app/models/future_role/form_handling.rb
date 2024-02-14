@@ -9,8 +9,12 @@
 module FutureRole::FormHandling
   extend ActiveSupport::Concern
 
+  MAX_REGISTER_ON_KEYS = 2
+
   def register_on_keys
-    %w(now jul oct).reject { |key| date_from_key(key)&.past? }
+    %w(now jul oct).reject do |key|
+      date_from_key(key)&.past? || date_from_key(key)&.today?
+    end.take(MAX_REGISTER_ON_KEYS)
   end
 
   def register_on_options
@@ -23,6 +27,10 @@ module FutureRole::FormHandling
 
   private
 
+  def build_options(attr, list)
+    list.collect { |key| [key, t("#{attr}_options", key)] }
+  end
+
   def date_from_key(key)
     index = Date::ABBR_MONTHNAMES.index(key.to_s.capitalize)
     Date.new(today.year, index) if index
@@ -30,10 +38,6 @@ module FutureRole::FormHandling
 
   def today
     @today ||= Time.zone.today
-  end
-
-  def build_options(attr, list)
-    list.collect { |key| [key, t("#{attr}_options", key)] }
   end
 
   def t(*keys)

@@ -11,8 +11,6 @@ class SelfRegistrationNeuanmeldung::Person < SelfRegistration::Person
 
   delegate :register_on, to: :supplements, allow_nil: true
 
-  include FutureRole::FormHandling
-
   def role
     @role ||= (register_on_date ? build_future_role : build_role)
   end

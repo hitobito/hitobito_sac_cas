@@ -5,11 +5,7 @@
 
 = standard_form(entry, url: group_self_inscription_confirm_path(group_id: @group.id), remote: true) do |f|
   = f.error_messages
-
-  = f.labeled(:register_on) do
-    - f.object.register_on_options.each do |key, label|
-      = f.inline_radio_button :register_on, key, label
-  .well= t('.register_on_info')
+  = render 'shared/register_on_fields', f: f
 
   = f.labeled(:register_as) do
     - f.object.register_as_options.each do |key, label|
