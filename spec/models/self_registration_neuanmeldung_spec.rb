@@ -9,6 +9,7 @@ require 'spec_helper'
 
 describe SelfRegistrationNeuanmeldung do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+  let(:'1.1.2000') { 25.years.ago.beginning_of_year.to_date }
   let(:params) { {} }
 
   subject(:registration) { build(params) }
@@ -36,7 +37,7 @@ describe SelfRegistrationNeuanmeldung do
       town: 'Zurich',
       email: 'max.muster@example.com',
       zip_code: '8000',
-      birthday: '01.01.2000',
+      birthday: '1.1.2000',
       country: 'CH',
       phone_numbers_attributes: {
         '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
@@ -78,6 +79,22 @@ describe SelfRegistrationNeuanmeldung do
     end
   end
 
+  describe 'partials' do
+    it 'includes housholds when birthday is blank' do
+      expect(registration.partials).to include(:household)
+    end
+
+    it 'includes housholds when birthday is 23 years apo' do
+      registration.main_person_attributes = { birthday: 23.years.ago }
+      expect(registration.partials).to include(:household)
+    end
+
+    it 'exlcudes housholds when birthday is 22 years ago for households' do
+      registration.main_person_attributes = { birthday: 22.years.ago }
+      expect(registration.partials).not_to include(:household)
+    end
+  end
+
   describe 'housemates' do
     let(:params) { { main_person_attributes: required_attrs } }
     let(:housemate_attrs) {
@@ -85,7 +102,7 @@ describe SelfRegistrationNeuanmeldung do
         first_name: 'Maxine',
         last_name: 'Muster',
         email: 'maxine.muster@example.com',
-        birthday: '01.01.2000'
+        birthday: '1.1.2000'
       }
     }
 
@@ -180,7 +197,7 @@ birthday: 6.years.ago.to_date)
 
   describe '#save!' do
     before do
-      registration.main_person_attributes = { first_name: 'test', birthday: '01.01.2000' }
+      registration.main_person_attributes = { first_name: 'test', birthday: '1.1.2000' }
     end
 
     it 'saves person with role outside of household' do
@@ -190,10 +207,17 @@ birthday: 6.years.ago.to_date)
     end
 
     it 'saves person and housemates with household key' do
-      registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
+      registration.housemates_attributes = [{first_name: 'test', birthday: '1.1.2000' }]
       expect { registration.save! }.to change { Person.count }.by(2)
         .and change { Role.count }.by(2)
       expect(Person.where(first_name: 'test').pluck(:household_key).compact.uniq).to have(1).item
+    end
+
+    it 'saves person and ignores household when person is too young' do
+      registration.main_person_attributes = { first_name: 'test', birthday: 20.years.ago }
+      registration.housemates_attributes = [{first_name: 'test', birthday: '1.1.2000'}]
+      expect { registration.save! }.to change { Person.count }.by(1)
+      expect(Person.find_by(first_name: 'test').household_key).to be_blank
     end
 
     it 'saves person and with supplements' do
@@ -216,7 +240,7 @@ register_on: 'oct' }
 
     it 'saves housemate and future roles' do
       registration.supplements_attributes = { register_on: 'jul' }
-      registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
+      registration.housemates_attributes = [{first_name: 'test', birthday: '1.1.2000'}]
       travel_to(Time.zone.local(2023, 3, 12)) do
         expect { registration.save! }.to change { Person.count }.by(2)
           .and change { FutureRole.count }.by(2)
@@ -229,7 +253,7 @@ register_on: 'oct' }
         contribution_regulations: true,
         data_protection: true
       }
-      registration.housemates_attributes = [{first_name: 'test', birthday: '01.01.2000'}]
+      registration.housemates_attributes = [{first_name: 'test', birthday: '1.1.2000'}]
       travel_to(Time.zone.local(2023, 3, 12)) do
         expect do
           registration.save!
