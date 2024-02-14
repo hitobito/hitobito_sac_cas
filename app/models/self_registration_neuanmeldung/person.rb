@@ -17,6 +17,10 @@ class SelfRegistrationNeuanmeldung::Person < SelfRegistration::Person
     @role ||= (register_on_date ? build_future_role : build_role)
   end
 
+  def valid?
+    super && person.valid?
+  end
+
   private
 
   def build_future_role

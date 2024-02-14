@@ -71,11 +71,13 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     end
   end
 
-  def build_housemates
+  def build_housemates(adult_count = 1)
     @housemates_attributes.map do |attrs|
       next if attrs[:_destroy] == '1'
 
-      build_person(attrs, Housemate)
+      build_person(attrs.merge(adult_count: adult_count), Housemate).tap do |mate|
+        adult_count += 1 if mate.person.adult?
+      end
     end.compact
   end
 
@@ -91,5 +93,6 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   def household_emails
     (housemates_attributes + [main_person_attributes]).pluck(:email).compact
   end
+
   alias neuanmeldung_main_person_valid? main_person_valid?
 end

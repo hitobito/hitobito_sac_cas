@@ -58,6 +58,10 @@ module SacCas::Person
     sac_family.member?
   end
 
+  def adult?
+    birthday && years > SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+  end
+
   private
 
   def membership

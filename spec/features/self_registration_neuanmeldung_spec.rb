@@ -65,7 +65,8 @@ describe :self_registration_neuanmeldung, js: true do
       visit group_self_registration_path(group_id: group)
       fill_in 'Mail', with: person.email
       click_on 'Weiter'
-      expect(page).to have_css '.alert-success', text: 'Es existiert bereits ein Login für diese E-Mail.'
+      expect(page).to have_css '.alert-success',
+text: 'Es existiert bereits ein Login für diese E-Mail.'
       expect(page).to have_css 'h1', text: 'Anmelden'
       expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.email
       fill_in 'Passwort', with: password
@@ -131,10 +132,12 @@ describe :self_registration_neuanmeldung, js: true do
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
 
-      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern', match: :first).click
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern',
+match: :first).click
       expect(page).to have_field('self_registration_main_person_attributes_zip_code', with: '3007')
       expect(page).to have_field('self_registration_main_person_attributes_town', with: 'Bern')
-      expect(page).to have_field('self_registration_main_person_attributes_address', with: 'Belpstrasse')
+      expect(page).to have_field('self_registration_main_person_attributes_address',
+with: 'Belpstrasse')
     end
 
     xdescribe 'with privacy policy' do
@@ -207,7 +210,8 @@ describe :self_registration_neuanmeldung, js: true do
         choose 'andere'
       end
       assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
-      find('.btn-toolbar.bottom .btn-group button[type="submit"]', text: 'Weiter als Familienmitgliedschaft').click
+      find('.btn-toolbar.bottom .btn-group button[type="submit"]',
+text: 'Weiter als Familienmitgliedschaft').click
 
       expect do
         complete_last_page
@@ -223,7 +227,33 @@ describe :self_registration_neuanmeldung, js: true do
       expect(people.pluck(:household_key).compact.uniq).to have(1).item
     end
 
-    it 'can add and remove housemate' do
+    it 'validates we only can have one additional adult in household' do
+      click_on  'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1981'
+        fill_in 'E-Mail (optional)', with: 'maxine.muster@hitobito.example.com'
+        choose 'weiblich'
+      end
+      assert_aside('01.01.1980', '01.01.1981')
+
+      click_on  'Eintrag hinzufügen'
+      within '#housemates_fields .fields:nth-child(2)' do
+        fill_in 'Vorname', with: 'Maxi'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1978'
+        fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
+        choose 'andere'
+      end
+      assert_aside('01.01.1980', '01.01.1981', '01.01.1978')
+
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+      expect(page).to have_content 'In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.'
+    end
+
+    it 'cannot add and remove housemate' do
       click_on  'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(1)' do
@@ -258,6 +288,7 @@ describe :self_registration_neuanmeldung, js: true do
       expect(people).to have(2).items
       expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
     end
+
 
     it 'validates emails within household' do
       click_on  'Eintrag hinzufügen'
