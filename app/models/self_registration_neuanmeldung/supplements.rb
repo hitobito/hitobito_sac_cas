@@ -11,16 +11,21 @@ class SelfRegistrationNeuanmeldung::Supplements
   include ActiveModel::Attributes
   include FutureRole::FormHandling
 
+  include Rails.application.routes.url_helpers
+
   AGREEMENTS = [
     :statutes,
     :contribution_regulations,
-    :data_protection
+    :data_protection,
   ].freeze
 
   AGREEMENTS.each do |agreement|
     attribute agreement, :boolean, default: false
     validates agreement, acceptance: true
   end
+
+  attribute :section_statutes
+  validates :section_statutes, acceptance: true
 
   attribute :promocode, :boolean
   attribute :newsletter, :boolean
@@ -29,8 +34,16 @@ class SelfRegistrationNeuanmeldung::Supplements
 
   validates :register_on, presence: true
 
+  attr_reader :section
+
+  def initialize(params = {}, section = nil)
+    super(params)
+    @section = section
+    self.section_statutes = false if section_statutes_attached? && section_statutes.nil?
+  end
+
   def self.human_attribute_name(key, options = {})
-    links = Regexp.new(AGREEMENTS.join('|'))
+    links = Regexp.new((AGREEMENTS + %w(section_statutes)).join('|'))
     case key
     when /self_registration_reason_id/ then Person.human_attribute_name(key.to_s.gsub(/_id/, ''))
     when /register_on/ then SelfInscription.human_attribute_name(key)
@@ -45,13 +58,19 @@ class SelfRegistrationNeuanmeldung::Supplements
     end
   end
 
+  def section_statutes_attached?
+    section&.privacy_policy&.attached?
+  end
+
+  def section_statutes_link_args
+    label = I18n.t('link_section_statutes_title', scope: 'self_registration.infos_component')
+    path = rails_blob_path(section.privacy_policy, disposition: :attachment, only_path: true)
+    [label, path]
+  end
+
   def link_translations(key)
     ["link_#{key}_title", "link_#{key}"].map do |str|
       I18n.t(str, scope: 'self_registration.infos_component')
     end
-  end
-
-  def links_present?
-    AGREEMENTS.all? { |link| send(link).present? }
   end
 end
