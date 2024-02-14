@@ -7,8 +7,7 @@
 
 
 class SelfRegistrationNeuanmeldung < SelfRegistration
-
-  MINIMUM_YEARS_FOR_HOUSEHOLD = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+  MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
 
   attr_accessor :housemates_attributes, :supplements_attributes
 
@@ -106,7 +105,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
 
   def too_young_for_household?
     birthday = @main_person_attributes[:birthday]
-    ::Person.new(birthday: birthday).years <= MINIMUM_YEARS_FOR_HOUSEHOLD if birthday
+    ::Person.new(birthday: birthday).years <= MIN_ADULT_YEARS if birthday
   end
 
   alias neuanmeldung_main_person_valid? main_person_valid?

@@ -9,7 +9,6 @@ require 'spec_helper'
 
 describe SelfRegistrationNeuanmeldung do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-  let(:'1.1.2000') { 25.years.ago.beginning_of_year.to_date }
   let(:params) { {} }
 
   subject(:registration) { build(params) }
