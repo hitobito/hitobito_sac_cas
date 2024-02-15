@@ -33,8 +33,15 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     }
   }
 
+  describe 'default values' do
+    it 'sets country to CH' do
+      expect(model.country).to eq 'CH'
+    end
+  end
+
   describe 'validations' do
     it 'validates required fields' do
+      model.country = nil
       expect(model).not_to be_valid
       expect(model.errors.attribute_names).to match_array [
         :first_name,
