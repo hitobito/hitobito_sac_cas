@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe SelfRegistration::FeeComponent, type: :component do
 
-  let(:group) { Fabricate.build(:group, type: Group::SektionsNeuanmeldungenSektion) }
+  let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:attrs) { {group: group, birthdays: []} }
   let(:registration) { SelfRegistration.new }
 
@@ -20,8 +20,8 @@ describe SelfRegistration::FeeComponent, type: :component do
     expect(component).to be_render
   end
 
-  it 'does render title with name' do
-    expect(html).to have_css('h2.card-title', text: 'Beiträge in der Sektion Neuanmeldungen (zur Freigabe)')
+  it 'does render title with section name' do
+    expect(html).to have_css('h2.card-title', text: 'Beiträge in der Sektion SAC Blüemlisalp')
   end
 
   it 'does render birthdays if present' do

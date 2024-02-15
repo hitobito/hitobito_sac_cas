@@ -14,7 +14,7 @@ class SelfRegistration::FeeComponent < ApplicationComponent
   end
 
   def title
-    t('.title', group: @group)
+    t('.title', group: @group.layer_group)
   end
 
   def annual_fee

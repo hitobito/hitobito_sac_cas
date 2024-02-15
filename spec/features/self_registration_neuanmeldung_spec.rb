@@ -21,7 +21,7 @@ describe :self_registration_neuanmeldung, js: true do
   end
 
   def assert_aside(*birthdays)
-    expect(page).to have_css('aside h2', text: "Beiträge in der Sektion #{group.name}")
+    expect(page).to have_css('aside h2', text: "Beiträge in der Sektion #{group.layer_group.name}")
     birthdays.each do |birthday|
       expect(page).to have_css('aside li', text: birthday)
     end
@@ -36,7 +36,7 @@ describe :self_registration_neuanmeldung, js: true do
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Adresse', with: 'Musterplatz'
     fill_in 'Geburtstag', with: '01.01.1980'
-    fill_in 'Telefonnummer', with: '+41 79 123 45 56'
+    fill_in 'Telefon', with: '+41 79 123 45 56'
     fill_in 'self_registration_main_person_attributes_zip_code', with: '8000'
     fill_in 'self_registration_main_person_attributes_town', with: 'Zürich'
     find(:label, "Land").click
