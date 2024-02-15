@@ -32,6 +32,11 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     ActiveModel::Name.new(SelfRegistration::MainPerson, nil)
   end
 
+  def initialize(*args)
+    super
+    self.country ||= Settings.addresses.imported_countries.to_a.first
+  end
+
   def person # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
     @person ||= Person.new(attributes.compact.except('supplements')).tap do |p|
       p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?
