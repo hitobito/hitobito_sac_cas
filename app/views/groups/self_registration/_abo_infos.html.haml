@@ -1,0 +1,13 @@
+.offset-md-1
+  %table.table
+    %thead
+      %tr
+        %th=t('.annual_price_header')
+        %th=t('.delivery_country_header')
+    %tbody
+      %tr
+        %td=t('.price_with_vat', amount: format("%2.f", 60))
+        %td Schweiz
+      %tr
+        %td=t('.price_with_vat', amount: format("%2.f", 76))
+        %td Weltweit
