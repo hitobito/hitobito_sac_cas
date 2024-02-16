@@ -26,6 +26,8 @@ module SacCas::Person::Household
     self
   end
 
+  private
+
   def remove
     Person.transaction do
       super
@@ -49,8 +51,6 @@ module SacCas::Person::Household
       end
     end
   end
-
-  private
 
   # Add all children in the household to the adult person's "Elternzugang".
   def assign_children

@@ -9,7 +9,7 @@ module SacCas::PeopleManagersController
 
   def destroy
     super do |entry|
-      Person::Household.new(entry.managed, current_ability).remove
+      Person::Household.new(entry.managed, current_ability).leave.persist!
     end
   end
 

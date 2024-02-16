@@ -128,7 +128,7 @@ describe Person::Household do
       p1.people_manageds.build(managed: p2)
       household = build_household(p1, p2)
 
-      expect { household.save }.to change { PeopleManager.count }.by(1)
+      expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
       people_manager = PeopleManager.last
       expect(people_manager.manager).to eq p1
       expect(people_manager.managed).to eq p2
@@ -141,7 +141,7 @@ describe Person::Household do
       p2.people_managers.build(manager: p1)
       household = build_household(p2, p1)
 
-      expect { household.save }.to change { PeopleManager.count }.by(1)
+      expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
       people_manager = PeopleManager.last
       expect(people_manager.manager).to eq p1
       expect(people_manager.managed).to eq p2
@@ -154,7 +154,7 @@ describe Person::Household do
         p1 = create_person(25, household_key: 'household-of-two')
         p2 = create_person(25, household_key: 'household-of-two')
 
-        build_household(p1, p2).remove
+        build_household(p1, p2).send(:save)
 
         expect(p1.reload.household_key).to be_nil
         expect(p2.reload.household_key).to be_nil
@@ -165,7 +165,7 @@ describe Person::Household do
         p2 = create_person(25, household_key: 'household-of-many')
         p3 = create_person(25, household_key: 'household-of-many', beitragskategorie: :jugend)
 
-        build_household(p1, p2).remove
+        build_household(p1, p2).send(:save)
 
         expect(p1.reload.household_key).to be_nil
         expect(p2.reload.household_key).to eq 'household-of-many'
@@ -178,12 +178,12 @@ describe Person::Household do
       let!(:child) { create_person(10, managers: [parent]) }
 
       it 'get removed from manager' do
-        expect { build_household(parent, child).remove }.to change { PeopleManager.count }.by(-1)
+        expect { build_household(parent, child).send(:save) }.to change { PeopleManager.count }.by(-1)
         expect(parent.reload.manageds).to be_empty
       end
 
       it 'get removed from managed' do
-        expect { build_household(child, parent).remove }.to change { PeopleManager.count }.by(-1)
+        expect { build_household(child, parent).send(:save) }.to change { PeopleManager.count }.by(-1)
         expect(child.reload.managers).to be_empty
       end
     end
