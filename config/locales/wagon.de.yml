@@ -334,6 +334,8 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      neuanmeldung_main_person:
+        phone_placeholder: +41 77 123 45 67
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
       conditions_sac_cas:
