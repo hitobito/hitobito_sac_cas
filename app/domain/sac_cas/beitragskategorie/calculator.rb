@@ -10,8 +10,8 @@ module SacCas::Beitragskategorie
 
     BEITRAGSKATEGORIEN = %w(einzel jugend familie).freeze
     AGE_RANGE_ADULT = 22..199
-    AGE_RANGE_YOUTH = 6...AGE_RANGE_ADULT.begin
-    AGE_RANGE_MINOR_FAMILY_MEMBER = AGE_RANGE_YOUTH.begin..17
+    AGE_RANGE_MINOR_FAMILY_MEMBER = 6..17
+    AGE_RANGE_YOUTH = AGE_RANGE_MINOR_FAMILY_MEMBER.begin...AGE_RANGE_ADULT.begin
 
     CATEGORY_ADULT = :einzel
     CATEGORY_YOUTH = :jugend
@@ -66,5 +66,6 @@ module SacCas::Beitragskategorie
 
       @person.household_key?
     end
+
   end
 end
