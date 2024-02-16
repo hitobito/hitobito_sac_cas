@@ -14,8 +14,8 @@
     = f.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
     = render 'contactable/address_fields', f: f
     = f.fields_for(:phone_numbers) do |ff|
-      = ff.labeled(:number, PhoneNumber.model_name.human) do
-        = ff.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
+      = ff.labeled(:number, SelfRegistration::MainPerson.human_attribute_name(:phone_numbers)) do
+        = ff.input_field(:number, placeholder: t('.phone_placeholder'))
         = ff.hidden_field(:public)
         = ff.hidden_field(:label)
 

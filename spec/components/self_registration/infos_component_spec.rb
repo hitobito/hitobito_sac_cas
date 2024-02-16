@@ -42,7 +42,7 @@ describe SelfRegistration::InfosComponent, type: :component do
         Monbijoustrasse 61
         3000 Bern 14
         Tel: +41 31 370 18 18
-        mv(at)sac-cas.ch
+        mv@sac-cas.ch
       TEXT
     end
 
@@ -50,8 +50,8 @@ describe SelfRegistration::InfosComponent, type: :component do
       expect(body).to have_link('+41 31 370 18 18', href: 'tel:+41313701818')
     end
 
-    it 'does not render email as link' do
-      expect(body).not_to have_link('mv(at)sac-cas.ch')
+    it 'does render email as link' do
+      expect(body).to have_link('mv@sac-cas.ch')
     end
   end
 
