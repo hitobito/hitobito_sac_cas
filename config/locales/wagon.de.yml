@@ -182,6 +182,16 @@ de:
         must_have_mitglied_role_in_group: 'muss Mitglied in der ausgewählten Gruppe sein.'
         must_be_present_unless_deleted: 'muss vorhanden sein, wenn nicht gelöscht.'
 
+      models:
+        people_manager:
+          in_different_household: >-
+            %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
+            als Verwalter*in hinzugefügt werden.
+          managed_is_not_child: >-
+            %{name} ist %{age} Jahre alt und kann daher nicht als Kind hinzugefügt werden.
+          manager_is_not_adult: >-
+            %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
+
     models:
       cost_center:
         one: Kostenstelle
