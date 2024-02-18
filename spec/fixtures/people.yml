@@ -63,7 +63,7 @@ abonnent:
   first_name: Magazina
   last_name: Leserate
   email: magazina.l@hitobito.example.com
-  gender: f
+  gender: w
   primary_group: abo_die_alpen
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
