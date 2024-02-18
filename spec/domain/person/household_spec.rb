@@ -22,14 +22,16 @@ describe Person::Household do
       primary_group: groups(:bluemlisalp_mitglieder)
     ))
 
-    managers.each { |manager| PeopleManager.create!(manager: manager, managed: person) }
+    Array.wrap(managers).each { |manager| PeopleManager.create!(manager: manager, managed: person) }
 
-    Fabricate(
-      Group::SektionsMitglieder::Mitglied.name.to_sym,
-      person: person,
-      group: groups(:bluemlisalp_mitglieder),
-      beitragskategorie: beitragskategorie
-    )
+    if beitragskategorie
+      Fabricate(
+        Group::SektionsMitglieder::Mitglied.name.to_sym,
+        person: person,
+        group: groups(:bluemlisalp_mitglieder),
+        beitragskategorie: beitragskategorie
+      )
+    end
 
     person
   end
@@ -120,10 +122,49 @@ describe Person::Household do
     end
   end
 
+  context "#valid?" do
+    it 'is false if existing person and new person both have family memberships' do
+      p1 = create_person(25, beitragskategorie: :familie)
+      p2 = create_person(25, beitragskategorie: :familie)
+
+      expect(build_household(p1, p2)).not_to be_valid
+    end
+
+    it 'is true if existing person has family membership and new person does not' do
+      p1 = create_person(25, beitragskategorie: :familie)
+      p2 = create_person(25, beitragskategorie: :einzel)
+      expect(build_household(p1, p2)).to be_valid
+
+      p3 = create_person(25, beitragskategorie: :familie)
+      p4 = create_person(25, beitragskategorie: nil)
+      expect(build_household(p3, p4)).to be_valid
+    end
+
+    it 'is true if existing person does not have family membership and new person does' do
+      p1 = create_person(25, beitragskategorie: :einzel)
+      p2 = create_person(25, beitragskategorie: :familie)
+      expect(build_household(p1, p2)).to be_valid
+
+      p3 = create_person(25, beitragskategorie: nil)
+      p4 = create_person(25, beitragskategorie: :familie)
+      expect(build_household(p3, p4)).to be_valid
+    end
+
+    it 'is true if neither existing person nor new person have family memberships' do
+      p1 = create_person(25, beitragskategorie: :einzel)
+      p2 = create_person(25, beitragskategorie: :einzel)
+      expect(build_household(p1, p2)).to be_valid
+
+      p3 = create_person(25, beitragskategorie: nil)
+      p4 = create_person(25, beitragskategorie: nil)
+      expect(build_household(p3, p4)).to be_valid
+    end
+  end
+
   context '#save' do
     it 'persists managers' do
       p1 = create_person(25)
-      p2 = create_person(10)
+      p2 = create_person(10, beitragskategorie: nil)
 
       p1.people_manageds.build(managed: p2)
       household = build_household(p1, p2)
@@ -136,7 +177,7 @@ describe Person::Household do
 
     it 'persists manageds' do
       p1 = create_person(25)
-      p2 = create_person(10)
+      p2 = create_person(10, beitragskategorie: nil)
 
       p2.people_managers.build(manager: p1)
       household = build_household(p2, p1)
@@ -146,6 +187,15 @@ describe Person::Household do
       expect(people_manager.manager).to eq p1
       expect(people_manager.managed).to eq p2
     end
+
+    it 'raises if new family member already has family membership' do
+      p1 = create_person(25, beitragskategorie: :familie)
+      p2 = create_person(10, beitragskategorie: :familie)
+
+      household = build_household(p1, p2)
+
+      expect { household.send(:save) }.to raise_error('invalid')
+    end
   end
 
   context '#remove' do
@@ -154,7 +204,7 @@ describe Person::Household do
         p1 = create_person(25, household_key: 'household-of-two')
         p2 = create_person(25, household_key: 'household-of-two')
 
-        build_household(p1, p2).send(:save)
+        build_household(p1, p2).send(:remove)
 
         expect(p1.reload.household_key).to be_nil
         expect(p2.reload.household_key).to be_nil
@@ -165,7 +215,7 @@ describe Person::Household do
         p2 = create_person(25, household_key: 'household-of-many')
         p3 = create_person(25, household_key: 'household-of-many', beitragskategorie: :jugend)
 
-        build_household(p1, p2).send(:save)
+        build_household(p1, p2).send(:remove)
 
         expect(p1.reload.household_key).to be_nil
         expect(p2.reload.household_key).to eq 'household-of-many'
@@ -175,15 +225,15 @@ describe Person::Household do
 
     context 'people_managers' do
       let!(:parent) { create_person(25) }
-      let!(:child) { create_person(10, managers: [parent]) }
+      let!(:child) { create_person(10, managers: parent) }
 
       it 'get removed from manager' do
-        expect { build_household(parent, child).send(:save) }.to change { PeopleManager.count }.by(-1)
+        expect { build_household(parent, child).send(:remove) }.to change { PeopleManager.count }.by(-1)
         expect(parent.reload.manageds).to be_empty
       end
 
       it 'get removed from managed' do
-        expect { build_household(child, parent).send(:save) }.to change { PeopleManager.count }.by(-1)
+        expect { build_household(child, parent).send(:remove) }.to change { PeopleManager.count }.by(-1)
         expect(child.reload.managers).to be_empty
       end
     end

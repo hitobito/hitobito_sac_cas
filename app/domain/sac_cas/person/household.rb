@@ -18,6 +18,10 @@ module SacCas::Person::Household
     end
   end
 
+  def valid?
+    [assert_no_conflicting_family_membership, super].all?
+  end
+
   def assign
     super
 
@@ -50,6 +54,23 @@ module SacCas::Person::Household
         person.people_manageds.each(&:save!)
       end
     end
+
+    person.sac_family.update! # TODO: should this happen on PeopleManager change of household_key?
+  end
+
+  def assert_no_conflicting_family_membership
+    return true unless Role.where(person_id: existing_people, beitragskategorie: :familie).exists?
+
+    new_housemates_with_family_membership_role = Role.
+      where(person_id: new_people, beitragskategorie: :familie).
+      map(&:person).
+      uniq
+
+    new_housemates_with_family_membership_role.each do |other|
+      person.errors.
+        add(:base, :conflicting_family_membership, name: "#{other.first_name} #{other.last_name}")
+    end
+    new_housemates_with_family_membership_role.empty?
   end
 
   # Add all children in the household to the adult person's "Elternzugang".

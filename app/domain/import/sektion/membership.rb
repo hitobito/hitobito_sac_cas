@@ -47,8 +47,8 @@ module Import
 
       def import!
         role.transaction do
-          role.save!
           assign_household(row[:household_key])
+          role.save!
           remove_placeholder_contact_role
           assign_beguenstigt
           assign_ehrenmitglied

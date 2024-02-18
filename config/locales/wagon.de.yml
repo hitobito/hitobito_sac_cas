@@ -7,6 +7,10 @@ de:
   errors:
     messages:
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
+      conflicting_family_membership: >-
+        %{name} hat bereits eine Familienmitgliedschaft und kann daher
+        nicht einem Familienhaushalt hinzugefügt werden.
+
   activemodel:
     attributes:
       people/neuanmeldungen/reject:
