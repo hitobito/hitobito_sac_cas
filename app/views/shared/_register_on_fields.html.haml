@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - if f.object.register_on_options.one?
-  .well= t('groups.self_inscription.form.register_on_info')
+  .well= t('groups.self_inscription.form.register_on_info.oct')
   .row.mb-2
     .col-md-2.text-md-end
       = SelfInscription.human_attribute_name(:register_on)
@@ -14,4 +14,4 @@
   = f.labeled(:register_on) do
     - f.object.register_on_options.each do |key, label|
       = f.inline_radio_button :register_on, key, label
-  .well= t('groups.self_inscription.form.register_on_info')
+  .well= t("groups.self_inscription.form.register_on_info.#{f.object.register_on_keys.last}")

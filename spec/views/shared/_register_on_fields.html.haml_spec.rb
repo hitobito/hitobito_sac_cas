@@ -30,6 +30,8 @@ describe 'shared/_register_on_fields.html.haml' do
     expect(dom).to have_checked_field 'sofort'
     expect(dom).to have_unchecked_field '01. Juli'
     expect(dom).not_to have_field '01. Oktober'
+
+    expect(dom).to have_content 'Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.'
   end
 
   it 'renders now and oct checkboxes in july' do
@@ -39,6 +41,8 @@ describe 'shared/_register_on_fields.html.haml' do
     expect(dom).to have_checked_field 'sofort'
     expect(dom).to have_unchecked_field '01. Oktober'
     expect(dom).not_to have_field '01. Juli'
+
+    expect(dom).to have_content 'Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.'
   end
 
   it 'renders no checkboxes but label in october' do
@@ -50,6 +54,8 @@ describe 'shared/_register_on_fields.html.haml' do
     expect(dom).not_to have_field '01. Juli'
     expect(dom).not_to have_field '01. Oktober'
     expect(dom).not_to have_field 'sofort'
+
+    expect(dom).to have_content 'Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.'
   end
 end
 
