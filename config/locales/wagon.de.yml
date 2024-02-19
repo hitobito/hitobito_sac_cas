@@ -14,7 +14,7 @@ de:
       self_inscription:
         register_on: Eintrittsdatum per
         register_on_options:
-          now: heute
+          now: sofort
           jul: 01. Juli
           oct: 01. Oktober
 

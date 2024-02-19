@@ -18,7 +18,7 @@ describe FutureRole::FormHandling do
       it 'includes now and jul on 31 of june' do
         travel_to(Time.zone.local(2024, 6, 30)) do
           expect(model.register_on_options).to eq [
-            ['now', 'heute'],
+            ['now', 'sofort'],
             ['jul', '01. Juli'],
           ]
         end
@@ -27,7 +27,7 @@ describe FutureRole::FormHandling do
       it 'includes now and oct on first of july' do
         travel_to(Time.zone.local(2024, 7, 1)) do
           expect(model.register_on_options).to eq [
-            ['now', 'heute'],
+            ['now', 'sofort'],
             ['oct', '01. Oktober'],
           ]
         end
@@ -36,7 +36,7 @@ describe FutureRole::FormHandling do
       it 'includes only now on first of oct' do
         travel_to(Time.zone.local(2024, 10, 1)) do
           expect(model.register_on_options).to eq [
-            ['now', 'heute'],
+            ['now', 'sofort'],
           ]
         end
       end

@@ -27,7 +27,7 @@ describe 'shared/_register_on_fields.html.haml' do
     travel_to(Time.zone.local(2024, 6, 30)) do
       render partial: 'shared/register_on_fields', formats: [:html], locals: { f: form_builder }
     end
-    expect(dom).to have_checked_field 'heute'
+    expect(dom).to have_checked_field 'sofort'
     expect(dom).to have_unchecked_field '01. Juli'
     expect(dom).not_to have_field '01. Oktober'
   end
@@ -36,7 +36,7 @@ describe 'shared/_register_on_fields.html.haml' do
     travel_to(Time.zone.local(2024, 7, 1)) do
       render partial: 'shared/register_on_fields', formats: [:html], locals: { f: form_builder }
     end
-    expect(dom).to have_checked_field 'heute'
+    expect(dom).to have_checked_field 'sofort'
     expect(dom).to have_unchecked_field '01. Oktober'
     expect(dom).not_to have_field '01. Juli'
   end
@@ -46,10 +46,10 @@ describe 'shared/_register_on_fields.html.haml' do
       render partial: 'shared/register_on_fields', formats: [:html], locals: { f: form_builder }
     end
     expect(dom).to have_css('.row:nth-of-type(1) .col-md-2',  text: 'Eintrittsdatum per')
-    expect(dom).to have_css('.row:nth-of-type(1) .col-md',  text: 'heute')
+    expect(dom).to have_css('.row:nth-of-type(1) .col-md',  text: 'sofort')
     expect(dom).not_to have_field '01. Juli'
     expect(dom).not_to have_field '01. Oktober'
-    expect(dom).not_to have_field 'heute'
+    expect(dom).not_to have_field 'sofort'
   end
 end
 
