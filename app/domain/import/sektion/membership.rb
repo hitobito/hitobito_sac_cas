@@ -79,12 +79,14 @@ module Import
 
         if (other_person = ::Person.find_by(household_key: household_key))
           # Household key exists already, assign person to existing household
-          ::Person::Household.new(
+          household = ::Person::Household.new(
             person,
             current_ability,
             other_person,
             current_ability.user
-          ).assign.persist!
+          )
+          household.assign
+          household.persist!
         else
           # Household key does not exist yet, save it on the person
           person.update!(household_key: household_key)

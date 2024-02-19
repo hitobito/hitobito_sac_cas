@@ -23,11 +23,10 @@ module SacCas::Person::Household
   end
 
   def assign
-    super
-
-    assign_children if adult?
-    assign_parents if child?
-    self
+    super.tap do
+      assign_children if adult?
+      assign_parents if child?
+    end
   end
 
   private
