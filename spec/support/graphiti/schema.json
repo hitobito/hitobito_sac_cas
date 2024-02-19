@@ -270,6 +270,11 @@
           "readable": true,
           "description": null
         },
+        "sac_newsletter_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "foundation_year": {
           "type": "string",
           "readable": true,

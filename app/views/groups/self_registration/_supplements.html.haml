@@ -16,9 +16,6 @@
       = ff.inline_radio_button :self_registration_reason_id, key, label
       %br
 
-  = field_set_tag do
-    = ff.labeled_input_field(:promocode)
-
   = ff.labeled(:others, '&nbsp;'.html_safe) do
     = ff.label(:newsletter, class: 'd-block mt-2') do
       = ff.check_box :newsletter

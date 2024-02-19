@@ -23,7 +23,7 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country
   ]
 
-  delegate :newsletter, :promocode, :self_registration_reason_id, to: :supplements, allow_nil: true
+  delegate :newsletter, :self_registration_reason_id, to: :supplements, allow_nil: true
   delegate :salutation_label, :phone_numbers, to: :person
 
   validate :assert_phone_number
@@ -37,14 +37,17 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     self.country ||= Settings.addresses.imported_countries.to_a.first
   end
 
+  def save!
+    super.then do |success|
+      exclude_from_mailing_list if success && mailing_list && !newsletter
+    end
+  end
+
   def person # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
     @person ||= Person.new(attributes.compact.except('supplements')).tap do |p|
       p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?
       p.self_registration_reason_id = self_registration_reason_id
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.links_present?
-
-      p.tag_list.add 'newsletter' if newsletter
-      p.tag_list.add 'promocode' if promocode
     end
   end
 
@@ -52,5 +55,13 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
 
   def assert_phone_number
     errors.add(:phone_numbers, :blank) if phone_numbers.none?(&:valid?)
+  end
+
+  def exclude_from_mailing_list
+    mailing_list.subscriptions.create!(subscriber: person, excluded: true)
+  end
+
+  def mailing_list
+    @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
   end
 end

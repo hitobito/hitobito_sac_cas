@@ -12,8 +12,6 @@ module SacCas::SelfRegistration::MainPerson
   prepended do
     self.attrs = [
       :first_name, :last_name, :nickname, :email,
-      :newsletter,
-      :promocode,
       :privacy_policy_accepted,
       :primary_group
     ]
@@ -21,12 +19,5 @@ module SacCas::SelfRegistration::MainPerson
     self.required_attrs = [
       :first_name, :last_name
     ]
-  end
-
-  def person
-    @person ||= Person.new(attributes.except('newsletter', 'promocode').compact).tap do |p|
-      p.tag_list.add 'newsletter' if attributes['newsletter']
-      p.tag_list.add 'promocode' if attributes['promocode']
-    end
   end
 end

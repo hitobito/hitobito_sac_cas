@@ -91,20 +91,6 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
 
     before { model.supplements = supplements }
 
-    it 'does not assign tag' do
-      expect(model.person.tag_list).to be_empty
-    end
-
-    it 'assigns newsletter as tag' do
-      supplements.newsletter = 1
-      expect(model.person.tag_list).to eq ['newsletter']
-    end
-
-    it 'assigns promocode as tag' do
-      supplements.promocode = :test
-      expect(model.person.tag_list).to eq ['promocode']
-    end
-
     it 'assigns self_registration_reason_id' do
       supplements.self_registration_reason_id = 123
       expect(model.self_registration_reason_id).to eq 123
@@ -124,6 +110,34 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
       supplements.register_on = 'jul'
       travel_to(Time.zone.local(2023, 3, 12)) do
         expect(role).to be_kind_of(FutureRole)
+      end
+    end
+
+    describe 'newsletter' do
+      let(:root) { groups(:root) }
+      let!(:list) { Fabricate(:mailing_list, group: root) }
+
+      before do
+        root.update!(sac_newsletter_mailing_list_id: list.id)
+        model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
+        model.attributes = required_attrs
+      end
+
+      it 'creates excluding subscription' do
+        model.save!
+        expect(model.person.subscriptions.excluded.where(mailing_list: list)).to be_exist
+      end
+
+      it 'does not create excluding subscription if newsletter is set to 1' do
+        supplements.newsletter = 1
+        model.save!
+        expect(model.person.subscriptions.excluded.where(mailing_list: list)).not_to be_exist
+      end
+
+      it 'does not fail if list does not exist' do
+        list.destroy!
+        model.save!
+        expect(model.person.subscriptions.excluded.where(mailing_list: list)).not_to be_exist
       end
     end
   end
