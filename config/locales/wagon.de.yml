@@ -358,6 +358,8 @@ de:
         annual_price_header: Preis pro Jahr
         delivery_country_header: Versandsland
         price_with_vat: CHF %{amount} inkl. MwSt.
+        switzerland: Schweiz
+        international: Weltweit
 
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
