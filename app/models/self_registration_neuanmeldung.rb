@@ -7,6 +7,8 @@
 
 
 class SelfRegistrationNeuanmeldung < SelfRegistration
+  MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+
   attr_accessor :housemates_attributes, :supplements_attributes
 
   self.partials = [:main_email, :neuanmeldung_main_person, :household, :supplements]
@@ -19,6 +21,12 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
     super
     @housemates_attributes = extract_attrs(params, :housemates_attributes, array: true).to_a
     @supplements_attributes = extract_attrs(params, :supplements_attributes)
+  end
+
+  def partials
+    return self.class.partials - [:household] if too_young_for_household?
+
+    super
   end
 
   def save!
@@ -74,6 +82,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   def build_housemates(adult_count = 1)
     @housemates_attributes.map do |attrs|
       next if attrs[:_destroy] == '1'
+      next if too_young_for_household?
 
       build_person(attrs.merge(adult_count: adult_count), Housemate).tap do |mate|
         adult_count += 1 if mate.person.adult?
@@ -82,7 +91,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   end
 
   def household_key
-    if @housemates_attributes.present?
+    if @housemates_attributes.present? && !too_young_for_household?
       @household_key ||= loop do
         key = SecureRandom.uuid
         break key if ::Person.where(household_key: key).none?
@@ -92,6 +101,11 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
 
   def household_emails
     (housemates_attributes + [main_person_attributes]).pluck(:email).compact
+  end
+
+  def too_young_for_household?
+    birthday = @main_person_attributes[:birthday]
+    ::Person.new(birthday: birthday).years <= MIN_ADULT_YEARS if birthday
   end
 
   alias neuanmeldung_main_person_valid? main_person_valid?

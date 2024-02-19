@@ -361,6 +361,40 @@ text: 'Weiter als Familienmitgliedschaft').click
     end
   end
 
+  describe 'household age validations' do
+    let(:twenty_years_ago) { I18n.l(20.years.ago.to_date) }
+    it 'skips household when person is too young' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form do
+        fill_in 'Geburtstag', with: twenty_years_ago
+      end
+      expect(page).to have_css 'li.active', text: 'Zusatzdaten'
+      expect(page).not_to have_link 'Familienmitglieder'
+    end
+
+    it 'clears household members when person is too young' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on  'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1981'
+        fill_in 'E-Mail (optional)', with: 'maxine.muster@hitobito.example.com'
+        choose 'weiblich'
+      end
+
+      click_on 'Personendaten'
+      fill_in 'Geburtstag', with: twenty_years_ago
+      click_on 'Weiter'
+      assert_aside(twenty_years_ago)
+      expect do
+        complete_last_page
+      end.to change { Person.count }.by(1)
+    end
+  end
+
   describe 'supplements' do
     before do
       visit group_self_registration_path(group_id: group)
