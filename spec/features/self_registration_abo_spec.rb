@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
 require 'spec_helper'
 
 describe :self_registration do
@@ -28,5 +35,14 @@ describe :self_registration do
     expect do
       click_on 'Registrieren'
     end.to change { Person.count }.by(1)
+
+    person = Person.find_by(email: 'max.muster@hitobito.example.com')
+
+    expect(person).to be_present
+
+    phone_number = person.phone_numbers.first
+    expect(phone_number).to be_present
+    expect(phone_number.label).to eq('Mobil')
+    expect(phone_number.number).to eq('+41 79 123 45 56')
   end
 end
