@@ -251,7 +251,7 @@ register_on: 'oct' }
         statutes: true,
         contribution_regulations: true,
         data_protection: true,
-        section_statutes: true,
+        sektion_statuten: true,
       }
       registration.housemates_attributes = [{first_name: 'test', birthday: '1.1.2000'}]
       travel_to(Time.zone.local(2023, 3, 12)) do

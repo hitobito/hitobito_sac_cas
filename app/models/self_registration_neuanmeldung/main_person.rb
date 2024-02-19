@@ -47,10 +47,9 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     @person ||= Person.new(attributes.compact.except('supplements')).tap do |p|
       p.phone_numbers.build(label: 'Privat') if p.phone_numbers.empty?
       p.self_registration_reason_id = self_registration_reason_id
-      p.privacy_policy_accepted_at = Time.zone.now if supplements&.section_statutes
+      p.privacy_policy_accepted_at = Time.zone.now if supplements&.sektion_statuten
 
       p.tag_list.add 'newsletter' if newsletter
-      p.tag_list.add 'promocode' if promocode
     end
   end
 

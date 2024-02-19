@@ -33,17 +33,17 @@ describe SelfRegistrationNeuanmeldung::Supplements do
       expect(model).to be_valid
     end
 
-    context 'section_statutes are set on group' do
+    context 'sektion statuten are set on group' do
       let(:group) { double(:group, privacy_policy: double(:blob,  attached?: true)) }
       subject(:model) { described_class.new(required_attrs, group) }
 
       it 'is invalid if privacy_policy_acceptance is not set' do
         expect(model).not_to be_valid
-        expect(model.errors.attribute_names).to match_array [:section_statutes]
+        expect(model.errors.attribute_names).to match_array [:sektion_statuten]
       end
 
       it 'is valid if privacy_policy_acceptance is set' do
-        model.attributes = required_attrs.merge(section_statutes: true)
+        model.attributes = required_attrs.merge(sektion_statuten: true)
         expect(model).to be_valid
       end
     end

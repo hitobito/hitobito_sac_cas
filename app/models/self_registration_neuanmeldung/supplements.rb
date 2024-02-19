@@ -24,8 +24,8 @@ class SelfRegistrationNeuanmeldung::Supplements
     validates agreement, acceptance: true
   end
 
-  attribute :section_statutes
-  validates :section_statutes, acceptance: true
+  attribute :sektion_statuten
+  validates :sektion_statuten, acceptance: true
 
   attribute :promocode, :boolean
   attribute :newsletter, :boolean
@@ -34,16 +34,16 @@ class SelfRegistrationNeuanmeldung::Supplements
 
   validates :register_on, presence: true
 
-  attr_reader :section
+  attr_reader :sektion
 
-  def initialize(params = {}, section = nil)
+  def initialize(params = {}, sektion = nil)
     super(params)
-    @section = section
-    self.section_statutes = false if section_statutes_attached? && section_statutes.nil?
+    @sektion = sektion
+    self.sektion_statuten = false if sektion_statuten_attached? && sektion_statuten.nil?
   end
 
   def self.human_attribute_name(key, options = {})
-    links = Regexp.new((AGREEMENTS + %w(section_statutes)).join('|'))
+    links = Regexp.new((AGREEMENTS + %w(sektion_statuten)).join('|'))
     case key
     when /self_registration_reason_id/ then Person.human_attribute_name(key.to_s.gsub(/_id/, ''))
     when /register_on/ then SelfInscription.human_attribute_name(key)
@@ -58,13 +58,13 @@ class SelfRegistrationNeuanmeldung::Supplements
     end
   end
 
-  def section_statutes_attached?
-    section&.privacy_policy&.attached?
+  def sektion_statuten_attached?
+    sektion&.privacy_policy&.attached?
   end
 
-  def section_statutes_link_args
-    label = I18n.t('link_section_statutes_title', scope: 'self_registration.infos_component')
-    path = rails_blob_path(section.privacy_policy, disposition: :attachment, only_path: true)
+  def sektion_statuten_link_args
+    label = I18n.t('link_sektion_statuten_title', scope: 'self_registration.infos_component')
+    path = rails_blob_path(sektion.privacy_policy, disposition: :attachment, only_path: true)
     [label, path]
   end
 

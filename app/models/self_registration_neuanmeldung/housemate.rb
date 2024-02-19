@@ -30,7 +30,7 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
 
   def person
     @person ||= Person.new(attributes.except(*NON_ASSIGNABLE_ATTRIBUTES)).tap do |p|
-      p.privacy_policy_accepted_at = Time.zone.now if supplements&.section_statutes
+      p.privacy_policy_accepted_at = Time.zone.now if supplements&.sektion_statuten
       with_value_for(:phone_number) do |value|
         p.phone_numbers.build(number: value, label: 'Haupt-Telefon')
       end
