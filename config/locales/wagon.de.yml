@@ -366,6 +366,7 @@ de:
       supplements:
         newsletter: Ich möchte einen Newsletter abonnieren
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+        sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
         data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
 
@@ -423,6 +424,7 @@ de:
       link_faqs_title: FAQs
       link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_DE.pdf
       link_statutes_title: Statuten
+      link_sektion_statuten_title: Sektionsstatuten
       link_contribution_regulations:
         https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_Gültig_ab_1.1.2021.pdf
       link_contribution_regulations_title: Beitragsreglement

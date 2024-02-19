@@ -19,6 +19,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
 
   def initialize(group:, params:)
     super
+    @group = group
     @housemates_attributes = extract_attrs(params, :housemates_attributes, array: true).to_a
     @supplements_attributes = extract_attrs(params, :supplements_attributes)
   end
@@ -40,7 +41,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   end
 
   def supplements
-    @supplements ||= Supplements.new(@supplements_attributes)
+    @supplements ||= Supplements.new(@supplements_attributes, @group.layer_group)
   end
 
   def main_person

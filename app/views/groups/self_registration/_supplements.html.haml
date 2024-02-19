@@ -21,9 +21,9 @@
       = ff.check_box :newsletter
       = t('.newsletter')
     - %w(statutes contribution_regulations data_protection).each do |key|
-      = ff.label(key, class: 'd-block mt-2') do
-        = ff.check_box key
-        = t(".#{key}_text", link: link_to(*ff.object.link_translations(key)), target: :_blank).html_safe
+      = render 'agreement_link', f: ff, key: key, link: link_to(*ff.object.link_translations(key))
+    - if ff.object.sektion_statuten_attached?
+      = render 'agreement_link', f: ff, key: :sektion_statuten, link: link_to(*ff.object.sektion_statuten_link_args)
 
 .btn-toolbar.bottom
   = submit_button(f, t('groups.self_registration.form.submit'))

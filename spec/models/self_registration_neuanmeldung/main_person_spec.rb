@@ -100,6 +100,7 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
       supplements.statutes = true
       supplements.data_protection = true
       supplements.contribution_regulations = true
+      supplements.sektion_statuten = true
       travel_to(Time.zone.local(2023, 3, 12)) do
         expect(model.person.privacy_policy_accepted_at).to be_present
       end

@@ -51,6 +51,7 @@ describe :self_registration_neuanmeldung, js: true do
     check 'Ich habe die Statuten gelesen und stimme diesen zu'
     check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
     check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
+    yield if block_given?
     click_on 'Registrieren'
   end
 
@@ -433,6 +434,36 @@ text: 'Weiter als Familienmitgliedschaft').click
         end.to change { FutureRole.count }.by(1)
         expect(FutureRole.first.convert_on).to eq Date.new(2023, 7, 1)
       end
+    end
+  end
+
+  describe 'with section privacy policy' do
+    before do
+      file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
+      image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
+                                                     filename: 'logo.png',
+                                                     content_type: 'image/png').signed_id
+      group.layer_group.update(privacy_policy: image)
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on 'Weiter als Einzelmitglied', match: :first
+    end
+
+    it 'fails if section policy is not accepted' do
+      expect do
+        complete_last_page
+      end.not_to change { Person.count }
+      expect(page).to have_text 'Sektionsstatuten muss akzeptiert werden'
+    end
+
+    it 'sets privacy policy accepted' do
+      expect do
+        complete_last_page do
+          check 'Ich habe die Sektionsstatuten gelesen und stimme diesen zu'
+        end
+      end.to change { Person.count }.by(1)
+      person = Person.find_by(email: 'max.muster@hitobito.example.com')
+      expect(person.privacy_policy_accepted).to eq true
     end
   end
 end
