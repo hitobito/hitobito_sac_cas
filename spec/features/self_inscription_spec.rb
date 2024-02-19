@@ -55,7 +55,7 @@ describe :self_inscription, js: true do
         before do
           sign_in(admin)
           visit group_self_inscription_path(group_id: group)
-          choose 'Sofort'
+          choose 'sofort'
           choose 'Neue Stammsektion'
           click_button 'Beitreten'
           expect(page).to have_selector('#confirm-dialog.modal')

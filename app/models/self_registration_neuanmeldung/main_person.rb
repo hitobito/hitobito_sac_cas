@@ -23,10 +23,13 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country
   ]
 
+  include FutureRole::FormHandling
+
   delegate :newsletter, :self_registration_reason_id, to: :supplements, allow_nil: true
   delegate :salutation_label, :phone_numbers, to: :person
 
   validate :assert_phone_number
+
 
   def self.model_name
     ActiveModel::Name.new(SelfRegistration::MainPerson, nil)

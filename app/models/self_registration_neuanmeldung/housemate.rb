@@ -25,6 +25,7 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
     :gender, :email, :primary_group, :household_key
   ]
 
+  include FutureRole::FormHandling
   validate :assert_valid_phone_number
   validate :assert_adult_count
 

@@ -8,6 +8,7 @@
 class SelfInscription
   include ActiveModel::Model
   include ActiveModel::Attributes
+  include FutureRole::FormHandling
 
   attr_accessor :person, :group
   attribute :register_on, :string, default: 'now'
@@ -36,10 +37,6 @@ class SelfInscription
     build_options(:register_as, register_as_keys)
   end
 
-  def register_on_options
-    build_options(:register_on, register_on_keys)
-  end
-
   def active_member?
     sektion_membership_roles.exists?
   end
@@ -50,11 +47,7 @@ class SelfInscription
 
   def save!
     Role.transaction do
-      if future?
-        save_future_role
-      else
-        save_role
-      end
+      register_on_date ? save_future_role : save_role
     end
   end
 
@@ -62,14 +55,6 @@ class SelfInscription
 
   def register_as_keys
     active_member? ? %w(extra replace) : %w(replace)
-  end
-
-  def register_on_keys
-    %w(now jul oct).reject { |key| date_from_key(key)&.past? }
-  end
-
-  def build_options(attr, list)
-    list.collect { |key| [key, t("#{attr}_options", key)] }
   end
 
   def save_role
@@ -81,20 +66,16 @@ class SelfInscription
   end
 
   def save_future_role
-    convert_on = date_from_key(register_on)
-    active_membership_role.update!(delete_on: convert_on - 1.day) if replace_active_membership?
+    if replace_active_membership?
+      active_membership_role.update!(delete_on: register_on_date - 1.day)
+    end
 
     FutureRole.create!(
       person: role.person,
       group: role.group,
       convert_to: role.type,
-      convert_on: convert_on
+      convert_on: register_on_date
     )
-  end
-
-  def date_from_key(key)
-    index = Date::ABBR_MONTHNAMES.index(key.to_s.capitalize)
-    Date.new(today.year, index) if index
   end
 
   def replace_active_membership?
@@ -107,10 +88,6 @@ class SelfInscription
 
   def sektion_membership_roles
     person.roles.where(type: Group::SektionsMitglieder::Mitglied.sti_name)
-  end
-
-  def future?
-    register_on != 'now'
   end
 
   def role
@@ -132,13 +109,5 @@ class SelfInscription
       when /extra/ then @group.class.const_get('NeuanmeldungZusatzsektion')
       else Role # won't be valid anyway but we need a role_type
     end
-  end
-
-  def today
-    @today ||= Date.current
-  end
-
-  def t(*keys)
-    I18n.t(keys.join('.'), scope: 'activemodel.attributes.self_inscription')
   end
 end

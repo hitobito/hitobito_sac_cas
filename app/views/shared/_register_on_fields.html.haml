@@ -1,0 +1,17 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if f.object.register_on_options.one?
+  .well= t('groups.self_inscription.form.register_on_info.oct')
+  .row.mb-2
+    .col-md-2.text-md-end
+      = SelfInscription.human_attribute_name(:register_on)
+    .col-md
+      = f.object.register_on_options.first.last
+- else
+  = f.labeled(:register_on) do
+    - f.object.register_on_options.each do |key, label|
+      = f.inline_radio_button :register_on, key, label
+  .well= t("groups.self_inscription.form.register_on_info.#{f.object.register_on_keys.last}")
