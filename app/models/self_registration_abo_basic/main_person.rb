@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class SelfRegistrationAbo::MainPerson < SelfRegistrationAbo::Person
-  MIN_YEARS = 18
-
+class SelfRegistrationAboBasic::MainPerson < SelfRegistrationAbo::Person
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
     :address, :zip_code, :town, :country,
@@ -16,14 +14,6 @@ class SelfRegistrationAbo::MainPerson < SelfRegistrationAbo::Person
   ]
 
   self.required_attrs = [
-    :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country, :number
+    :first_name, :last_name, :email, :birthday
   ]
-
-  validate :assert_old_enough, if: -> { person.years }
-
-  private
-
-  def assert_old_enough
-    errors.add(:base, :must_be_older_than_18) if person.years < MIN_YEARS
-  end
 end

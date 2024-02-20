@@ -31,7 +31,7 @@ de:
         phone_number: Telefon (optional)
       self_registration_abo:
         issues_from_date: Ab Ausgabe
-      self_registration_abo/main_person:
+      self_registration_abo/person:
         gender: Anrede
         email: E-Mail
         address: Strasse und Nr.
