@@ -347,6 +347,8 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      neuanmeldung_main_person:
+        phone_placeholder: +41 77 123 45 67
       abo_issue:
         issues_from_date_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
