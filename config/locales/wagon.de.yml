@@ -29,6 +29,17 @@ de:
       self_registration_neuanmeldung/housemate:
         email: E-Mail (optional)
         phone_number: Telefon (optional)
+      self_registration_abo:
+        issues_from_date: Ab Ausgabe
+      self_registration_abo/main_person:
+        gender: Anrede
+        email: E-Mail
+        address: Strasse und Nr.
+        number: Mobil
+
+    errors:
+      messages:
+        must_be_older_than_18: Person muss 18 Jahre oder älter sein.
 
     models:
       people/neuanmeldungen/approve:
@@ -338,6 +349,18 @@ de:
     self_registration:
       neuanmeldung_main_person:
         phone_placeholder: +41 77 123 45 67
+      abo_issue:
+        issues_from_date_help: |
+          Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
+          Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
+          mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
+      abo_infos:
+        annual_price_header: Preis pro Jahr
+        delivery_country_header: Versandsland
+        price_with_vat: CHF %{amount} inkl. MwSt.
+        switzerland: Schweiz
+        international: Weltweit
+
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
       conditions_sac_cas:
@@ -348,6 +371,8 @@ de:
       form:
         main_email_title: Haupt-E-Mail
         neuanmeldung_main_person_title: Personendaten
+        abo_issue_title: Abo Auswahl
+        abo_main_person_title: Personendaten
         single_or_household_title: Mitgliedschaftstyp
         household_title: Familienmitglieder
         main_title: Familienmitglieder

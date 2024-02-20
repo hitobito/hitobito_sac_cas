@@ -1,0 +1,12 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.error_messages
+= field_set_tag do
+  = f.labeled_date_field :issues_from_date, required: true, help: simple_format(t('.issues_from_date_help'))
+
+= render 'abo_infos'
+.btn-toolbar.bottom.allign-with-form
+  = c.next_button

@@ -11,12 +11,26 @@ describe SelfRegistration do
   let(:group) { groups(:geschaeftsstelle).tap { |g| g.update!(self_registration_role_type: g.role_types.first) } }
   let(:params) { {} }
 
-
   subject(:registration) { build(params) }
 
   def build(params)
     nested_params = { self_registration: params }
     described_class.new(group: group, params: nested_params)
+  end
+
+  describe '::for factory method' do
+    [
+      [SelfRegistration, Group::SacCas, Group::Sektion],
+      [SelfRegistrationAbo, Group::AboMagazin, Group::AboTourenPortal],
+      [SelfRegistrationNeuanmeldung, Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion]
+    ].each do |registration_class, *group_classes|
+      group_classes.each do |group_class|
+        it "returns #{registration_class} for #{group_class}" do
+          registration = described_class.for(Fabricate.build(:group, type: group_class))
+          expect(registration).to eq registration_class
+        end
+      end
+    end
   end
 
   let(:required_attrs) {

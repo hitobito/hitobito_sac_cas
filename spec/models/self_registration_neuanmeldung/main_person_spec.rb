@@ -56,7 +56,7 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
       ]
     end
 
-    it 'is valid if phone_nuber is missing' do
+    it 'is invalid if phone_nuber is missing' do
       model.attributes = required_attrs.except(:phone_numbers_attributes)
       expect(model).not_to be_valid
       expect(model.errors.full_messages).to eq ['Telefon muss ausgefüllt werden']
