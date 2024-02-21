@@ -141,38 +141,6 @@ match: :first).click
       expect(page).to have_field('self_registration_main_person_attributes_address',
 with: 'Belpstrasse')
     end
-
-    xdescribe 'with privacy policy' do
-      before do
-        file = Rails.root.join('spec', 'fixtures', 'files', 'images', 'logo.png')
-        image = ActiveStorage::Blob.create_and_upload!(io: File.open(file, 'rb'),
-                                                       filename: 'logo.png',
-                                                       content_type: 'image/png').signed_id
-        group.layer_group.update!(created_at: 1.minute.ago, privacy_policy: image)
-        visit group_self_registration_path(group_id: group)
-        complete_main_person_form
-      end
-
-      it 'sets privacy policy accepted' do
-        click_on 'Weiter als Einzelmitglied'
-        check 'Ich erkläre mich mit den folgenden Bestimmungen einverstanden:'
-
-        expect do
-          complete_last_page
-        end.to change { Person.count }.by(1)
-        person = Person.find_by(email: 'max.muster@hitobito.example.com')
-        expect(person.privacy_policy_accepted).to eq true
-      end
-
-      it 'rerenders third page when invalid and submitting from second' do
-        click_on 'Weiter als Einzelmitglied'
-        click_on 'Familienmitglieder'
-        click_on 'Weiter als Einzelmitglied', match: :first
-        expect(page).to have_content 'Um die Registrierung abzuschliessen, muss der ' \
-          'Datenschutzerklärung zugestimmt werden.'
-        expect(page).to have_css 'li.active a', text: 'Zusatzdaten'
-      end
-    end
   end
 
   describe 'household' do
@@ -290,7 +258,6 @@ text: 'Weiter als Familienmitgliedschaft').click
       expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
     end
 
-
     it 'validates emails within household' do
       click_on  'Eintrag hinzufügen'
 
@@ -340,6 +307,16 @@ text: 'Weiter als Familienmitgliedschaft').click
         fill_in 'Vorname', with: ''
         click_on 'Weiter'
         expect(page).to have_content 'Vorname muss ausgefüllt werden'
+      end
+
+      it 'renders partial according to next step in wizard' do
+        click_on 'Weiter als Einzelmitglied', match: :first
+        check 'Ich habe die Statuten gelesen und stimme diesen zu'
+        click_on 'Haupt-E-Mail'
+        expect(page).to have_css 'li.active', text: 'Haupt-E-Mail'
+        expect(page).to have_button 'Weiter'
+        click_on 'Weiter'
+        expect(page).to have_css 'li.active', text: 'Personendaten'
       end
     end
 
