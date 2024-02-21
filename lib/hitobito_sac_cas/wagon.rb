@@ -49,6 +49,7 @@ module HitobitoSacCas
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
 
       ## Controllers
+      GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController
