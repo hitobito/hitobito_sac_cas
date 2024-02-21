@@ -29,4 +29,9 @@ class Group::SektionsNeuanmeldungenNv < ::Group
       Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name
     end
   end
+
+  # make this read-only and default for this type of group
+  def self_registration_require_adult_consent
+    true
+  end
 end

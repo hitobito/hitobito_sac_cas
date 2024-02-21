@@ -41,5 +41,13 @@ describe Group::SektionsNeuanmeldungenNv do
 
       expect(neuanmeldungen_nv.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
     end
+
+    it 'self registration require adult consent is always enabled' do
+      expect(neuanmeldungen_nv.self_registration_require_adult_consent).to eq(true)
+
+      neuanmeldungen_nv.update!(self_registration_require_adult_consent: false)
+
+      expect(neuanmeldungen_nv.self_registration_require_adult_consent).to eq(true) 
+    end
   end
 end
