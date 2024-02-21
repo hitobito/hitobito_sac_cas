@@ -57,6 +57,7 @@ describe SelfRegistrationNeuanmeldung::Housemate do
     end
   end
 
+
   describe 'additional_email' do
     it 'is translated correctly' do
       expect(model.class.human_attribute_name(:email)).to eq 'E-Mail (optional)'
@@ -111,5 +112,15 @@ describe SelfRegistrationNeuanmeldung::Housemate do
         expect(role).to be_kind_of(FutureRole)
       end
     end
+  end
+
+  it '#save! creates duplicate locator job'  do
+    model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
+    model.attributes = required_attrs
+    expect { model.save! }.to change {
+      Delayed::Job
+        .where("handler like '%Person::DuplicateLocatorJob%person_id: #{model.person.id}%'")
+        .count
+    }.by(1)
   end
 end
