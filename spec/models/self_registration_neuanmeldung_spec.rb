@@ -79,7 +79,12 @@ describe SelfRegistrationNeuanmeldung do
   end
 
   describe 'partials' do
+    it 'includes housholds when birthday is nil' do
+      expect(registration.partials).to include(:household)
+    end
+
     it 'includes housholds when birthday is blank' do
+      registration.main_person_attributes = { birthday: '' }
       expect(registration.partials).to include(:household)
     end
 
@@ -88,7 +93,7 @@ describe SelfRegistrationNeuanmeldung do
       expect(registration.partials).to include(:household)
     end
 
-    it 'exlcudes housholds when birthday is 22 years ago for households' do
+    it 'excludes housholds when birthday is 22 years ago for households' do
       registration.main_person_attributes = { birthday: 22.years.ago }
       expect(registration.partials).not_to include(:household)
     end

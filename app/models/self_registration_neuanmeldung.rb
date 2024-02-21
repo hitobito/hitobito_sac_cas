@@ -105,7 +105,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   end
 
   def too_young_for_household?
-    birthday = @main_person_attributes[:birthday]
+    birthday = @main_person_attributes[:birthday].presence
     ::Person.new(birthday: birthday).years <= MIN_ADULT_YEARS if birthday
   end
 
