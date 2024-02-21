@@ -88,6 +88,11 @@ describe SelfRegistrationNeuanmeldung do
       expect(registration.partials).to include(:household)
     end
 
+    it 'includes housholds when birthday is invalid' do
+      registration.main_person_attributes = { birthday: 'asdf' }
+      expect(registration.partials).to include(:household)
+    end
+
     it 'includes housholds when birthday is 23 years apo' do
       registration.main_person_attributes = { birthday: 23.years.ago }
       expect(registration.partials).to include(:household)
