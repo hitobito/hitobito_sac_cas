@@ -10,6 +10,7 @@ require 'spec_helper'
 describe SelfRegistrationNeuanmeldung::MainPerson do
   subject(:model) { described_class.new }
   subject(:role) { model.role }
+  let(:sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
   describe 'attribute assignments accept additiional attributes' do
     it 'works via constructor for symbols' do
@@ -65,6 +66,29 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     it 'is valid if required attrs are set' do
       model.attributes = required_attrs
       expect(model).to be_valid
+    end
+
+    context 'with group requiring adult consent' do
+      before do
+        sektion.update!(self_registration_require_adult_consent: true)
+        model.primary_group = sektion
+        model.attributes = required_attrs
+      end
+
+      it 'is valid when adult consent is not explicitly denied' do
+        expect(model).to be_valid
+      end
+
+      it 'is valid when adult consent is explicitly set' do
+        model.adult_consent = '1'
+        expect(model).to be_valid
+      end
+
+      it 'is invalid when adult consent is explicitly denied' do
+        model.adult_consent = '0'
+        expect(model).not_to be_valid
+        expect(model).to have(1).error_on(:adult_consent)
+      end
     end
   end
 
