@@ -32,9 +32,11 @@ describe :event_participation, js: true do
 
     expect do
       click_button('Anmelden')
+      expect(page).to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde " \
+                                "erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und " \
+                                "passe diese gegebenenfalls an.")
     end.to change { Event::Participation.count }.by(1)
 
-    is_expected.to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und passe diese gegebenenfalls an.")
     is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
     is_expected.to have_selector('dt', text: 'Anzahl Mitglieder-Jahre')
 

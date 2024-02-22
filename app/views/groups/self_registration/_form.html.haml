@@ -4,7 +4,8 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - # redirects are not interpreted when remote=true is on form, handle this in controller?
-- attrs = entry.last_step? ? {} : {data: { controller: 'autosubmit' }, remote: true}
+- attrs = { data: { turbo: 'false' } }
+- attrs = attrs.deep_merge(data: { controller: 'autosubmit' }, remote: true) unless entry.last_step?
 
 = standard_form(entry, {url: group_self_registration_path}.merge(attrs)) do |f|
   = render 'fields', f: f
