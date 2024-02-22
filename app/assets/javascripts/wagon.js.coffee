@@ -3,7 +3,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 document.addEventListener 'click', (e) ->
-  if !e.target.dataset['association'] == 'housemates'
+  if e.target.dataset['association'] != 'housemates'
     return
 
   mates = document.querySelectorAll '.household .fields:not([style="display: none;"])'
