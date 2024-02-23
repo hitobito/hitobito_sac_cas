@@ -24,8 +24,6 @@ module SacCas::Person::Household
     Person.transaction do
       super
 
-    person.update!(household_key: nil)
-
       person.manageds.clear
       person.managers.clear
     end
