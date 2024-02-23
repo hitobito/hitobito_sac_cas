@@ -431,9 +431,6 @@ de:
     global:
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
-    new:
-      sac_cas/role/mitglied:
-        text: Bist du sicher, dass du aus folgenden Sektionen austreten möchtest?
 
   self_registration:
     fee_component:
