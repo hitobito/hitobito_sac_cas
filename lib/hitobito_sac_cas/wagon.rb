@@ -57,6 +57,7 @@ module HitobitoSacCas
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController
+      PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
 
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
