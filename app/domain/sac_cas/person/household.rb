@@ -21,24 +21,28 @@ module SacCas::Person::Household
   end
 
   def remove
-    super
+    Person.transaction do
+      super
 
     person.update!(household_key: nil)
 
-    person.manageds.clear
-    person.managers.clear
+      person.manageds.clear
+      person.managers.clear
+    end
   end
 
   def save
-    managers_changed =
-      person.people_managers.any?(&:changed?) ||
-      person.people_manageds.any?(&:changed?)
+    Person.transaction do
+      managers_changed =
+        person.people_managers.any?(&:changed?) ||
+        person.people_manageds.any?(&:changed?)
 
-    super
+      super
 
-    if managers_changed
-      person.people_managers.each(&:save!)
-      person.people_manageds.each(&:save!)
+      if managers_changed
+        person.people_managers.each(&:save!)
+        person.people_manageds.each(&:save!)
+      end
     end
   end
 
