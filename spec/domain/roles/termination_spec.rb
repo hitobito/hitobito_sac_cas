@@ -156,4 +156,34 @@ describe Roles::Termination do
       end
     end
   end
+
+  context '#main_person' do
+    it 'returns role person' do
+      expect(subject.main_person).to eq role.person
+    end
+  end
+
+  context '#affected_people' do
+    context 'for stammsektion role' do
+      let(:role) { roles(:familienmitglied) }
+
+      it 'return all other family members' do
+        expected_people = role.person.sac_family.family_members - [role.person]
+        expect(expected_people).to be_present
+        expect(subject.affected_people).to match_array expected_people
+      end
+    end
+
+    context 'for other role' do
+      let(:role) do
+        Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+                        person: people(:familienmitglied),
+                        group: groups(:matterhorn_mitglieder))
+      end
+
+      it 'returns empty array' do
+        expect(subject.affected_people).to eq []
+      end
+    end
+  end
 end

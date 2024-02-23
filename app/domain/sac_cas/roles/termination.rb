@@ -8,10 +8,6 @@
 module SacCas::Roles::Termination
   extend ActiveSupport::Concern
 
-  def self.prepended(base)
-    base.extend(ClassMethods)
-  end
-
   def call
     return false unless valid?
     return super unless sac_terminatable?
@@ -26,7 +22,13 @@ module SacCas::Roles::Termination
   end
 
   def affected_roles
-    [role] + dependent_roles
+    super + dependent_roles
+  end
+
+  def affected_people
+    return [] unless stammsektion_membership? && role.beitragskategorie&.familie?
+
+    main_person.sac_family.family_members - [main_person]
   end
 
   private
@@ -46,13 +48,17 @@ module SacCas::Roles::Termination
   # Group::SektionsMitglieder::MitgliedZusatzsektion roles of the same person.
   # For any other role type returns an empty array.
   def dependent_roles
-    return [] unless role.is_a?(Group::SektionsMitglieder::Mitglied)
+    return [] unless stammsektion_membership?
 
     Group::SektionsMitglieder::MitgliedZusatzsektion.
       where(person_id: role.person_id)
   end
 
-  module ClassMethods
+  def stammsektion_membership?
+     role.is_a?(Group::SektionsMitglieder::Mitglied)
+  end
+
+  class_methods do
     def terminate(roles, delete_on)
       # use update_all to not trigger any validations while terminating
       Role.where(id: roles.map(&:id)).update_all(
