@@ -14,7 +14,8 @@ describe SelfRegistrationNeuanmeldung do
   subject(:registration) { build(params) }
 
   def build(params)
-    nested_params = { self_registration: params }
+    step = params.delete(:step)
+    nested_params = { step: step, self_registration: params }
     described_class.new(group: group, params: nested_params)
   end
 
@@ -46,7 +47,7 @@ describe SelfRegistrationNeuanmeldung do
 
   describe 'main_person' do
     it 'is invalid if person is too young' do
-      registration.step = 1
+      params[:step] = 1
       registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
       expect(registration).not_to be_valid
       expect(registration.main_person).to have(1).error_on(:person)
@@ -55,7 +56,7 @@ describe SelfRegistrationNeuanmeldung do
     end
 
     it 'is invalid if person is too young' do
-      registration.step = 1
+      params[:step] = 1
       registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
       expect(registration).not_to be_valid
       expect(registration.main_person).to have(1).error_on(:person)
@@ -115,7 +116,7 @@ describe SelfRegistrationNeuanmeldung do
       }
     }
 
-    before { registration.step = 2 }
+    before { params[:step] = 2 }
 
     it 'is invalid if housemate is empty' do
       registration.housemates_attributes = [{}]
@@ -183,7 +184,7 @@ birthday: 6.years.ago.to_date)
 
   describe 'supplements' do
     let(:params) { { main_person_attributes: required_attrs } }
-    before { registration.step = 3 }
+    before { params[:step] = 3 }
 
     it 'is invalid without input' do
       expect(registration).not_to be_valid
