@@ -78,3 +78,10 @@ abonnent_alpen:
   type: Group::AboMagazin::Abonnent
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
+
+tourenchef_bluemlisalp_ortsgruppe_ausserberg:
+  person_id: 600_006
+  group: bluemlisalp_ortsgruppe_ausserberg_tourenkommission
+  type: Group::SektionsTourenkommission::Tourenchef
+  created_at: 2015-01-01 00:00:00
+  delete_on: 2015-12-31

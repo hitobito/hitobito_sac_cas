@@ -67,3 +67,13 @@ abonnent:
   primary_group: abo_die_alpen
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
+
+tourenchef:
+  id: 600_006
+  first_name: Ida
+  last_name: Paschke
+  email: paschke-ida@hitobito.example.com
+  gender: f
+  primary_group: bluemlisalp_ortsgruppe_ausserberg_tourenkommission
+  birthday: <%= Date.new(1993, 6, 12) %>
+  language: de
