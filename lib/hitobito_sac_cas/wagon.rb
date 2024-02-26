@@ -60,6 +60,8 @@ module HitobitoSacCas
 
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
 
+      QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
+
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
         Export::Tabular::People::Households,

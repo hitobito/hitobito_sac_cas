@@ -91,6 +91,8 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
+      qualification_kind:
+        tourenchef_may_edit: Von Tourenchef bearbeitbar
 
     errors:
       messages:
