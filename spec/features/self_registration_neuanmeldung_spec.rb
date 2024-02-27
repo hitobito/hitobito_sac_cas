@@ -392,7 +392,7 @@ text: 'Weiter als Familienmitgliedschaft').click
     it 'persists self_registration_reason' do
       SelfRegistrationReason.create!(text: 'naja')
       reason = SelfRegistrationReason.create!(text: 'soso')
-      expect(page).to have_css('label', text: 'Vordefinierter Eintrittsgrund')
+      expect(page).to have_css('label', text: 'Eintrittsgrund')
       choose 'soso'
       complete_last_page
       expect(person.self_registration_reason).to eq reason
