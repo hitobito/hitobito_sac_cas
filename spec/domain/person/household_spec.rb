@@ -11,8 +11,8 @@ describe Person::Household do
 
   let(:user) { people(:root) }
 
-  def build_household(person, other)
-    Person::Household.new(person, Ability.new(user), other, people(:admin))
+  def build_household(person, other, **opts)
+    Person::Household.new(person, Ability.new(user), other, people(:admin), **opts)
   end
 
   def create_person(age, beitragskategorie: :familie, managers: [], **attrs)
@@ -140,6 +140,26 @@ describe Person::Household do
         household = build_household(child, other_child).tap(&:assign)
 
         expect { household.send(:save) }.not_to change { PeopleManager.count }
+      end
+    end
+
+    context 'sac_family' do
+      it 'calls sac_family.update!' do
+        household = build_household(adult, child).tap(&:assign)
+
+        expect(household).to be_maintain_sac_family
+        expect(adult.sac_family).to receive(:update!)
+
+        household.send(:save)
+      end
+
+      it 'does not call sac_family.update! with maintain_sac_family=false' do
+        household = build_household(adult, child, maintain_sac_family: false).tap(&:assign)
+
+        expect(household).not_to be_maintain_sac_family
+        expect(adult.sac_family).not_to receive(:update!)
+
+        household.send(:save)
       end
     end
 

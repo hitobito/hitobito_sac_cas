@@ -31,7 +31,7 @@ module Import
           current_ability: root_ability
         )
 
-        import_membership(membership)
+        import_membership(membership, row)
       end
 
       def print_summary

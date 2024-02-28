@@ -18,6 +18,13 @@ module SacCas::Person::Household
     end
   end
 
+  def maintain_sac_family? = !!@maintain_sac_family
+
+  def initialize(person, ability, other = nil, user = nil, maintain_sac_family: true)
+    @maintain_sac_family = maintain_sac_family
+    super(person, ability, other, user)
+  end
+
   def valid?
     [assert_no_conflicting_family_membership, super].all?
   end
@@ -38,11 +45,12 @@ module SacCas::Person::Household
       super
 
       create_missing_people_managers
-      person.sac_family.update!
+      person.sac_family.update! if maintain_sac_family?
     end
   end
 
   def assert_no_conflicting_family_membership
+    return true unless maintain_sac_family?
     return true unless Role.where(person_id: existing_people, beitragskategorie: :familie).exists?
 
     new_housemates_with_family_membership_role = Role.

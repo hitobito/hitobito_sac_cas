@@ -38,7 +38,9 @@ module Import
       end
 
       def valid?
-        @valid ||= role.valid? && !abo?
+        # Use context :import to skip the assert_adult_household_people_mitglieder_count
+        # validation that must be ignored during import
+        @valid ||= role.valid?(context: :import) && !abo?
       end
 
       def errors
@@ -48,7 +50,9 @@ module Import
       def import!
         role.transaction do
           assign_household(row[:household_key])
-          role.save!
+          # Use context :import to skip the assert_adult_household_people_mitglieder_count
+          # validation that must be ignored during import
+          role.save!(context: :import)
           remove_placeholder_contact_role
           assign_beguenstigt
           assign_ehrenmitglied
@@ -83,7 +87,8 @@ module Import
             person,
             current_ability,
             other_person,
-            current_ability.user
+            current_ability.user,
+            maintain_sac_family: false
           )
           household.assign
           household.persist!
