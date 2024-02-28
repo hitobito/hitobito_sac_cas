@@ -37,6 +37,9 @@ module HitobitoSacCas
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
 
+      ## Abilities
+      RoleAbility.prepend SacCas::RoleAbility
+
       ## Decorators
 
       ## Resources
@@ -49,6 +52,7 @@ module HitobitoSacCas
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
 
       ## Controllers
+      GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       PeopleController.prepend SacCas::PeopleController

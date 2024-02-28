@@ -29,9 +29,11 @@ class Group::Ortsgruppe < ::Group
             numericality:
             { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
 
-  mounted_attr :section_canton, :text, enum: Cantons.short_name_strings.map(&:upcase)
+  mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
 
-  mounted_attr :language, :text, enum: %w(DE FR IT), default: 'DE', null: false
+  mounted_attr :language, :string, enum: %w(DE FR IT), default: 'DE', null: false
+
+  mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
 
   def sac_cas_self_registration_url(host)
     Groups::SektionSelfRegistrationLink.new(self, host).url
