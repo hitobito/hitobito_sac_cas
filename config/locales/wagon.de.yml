@@ -26,6 +26,8 @@ de:
       self_registration/main_person:
         gender: Geschlecht
         phone_numbers: Telefon
+      self_registration_neuanmeldung/supplements:
+        adult_consent: Einverständniserklärung der Erziehungsberechtigten
       self_registration_neuanmeldung/housemate:
         email: E-Mail (optional)
         phone_number: Telefon (optional)

@@ -9,8 +9,6 @@ require 'spec_helper'
 
 describe FutureRole::FormHandling do
 
-  subject(:model) { SelfRegistrationNeuanmeldung::Supplements.new }
-
   shared_examples 'register_on_options' do
     let(:model) { described_class.new }
 
@@ -44,7 +42,9 @@ describe FutureRole::FormHandling do
   end
 
   describe SelfRegistrationNeuanmeldung::Supplements do
-    it_behaves_like 'register_on_options'
+    it_behaves_like 'register_on_options' do
+      let(:model) { described_class.new({}, groups(:bluemlisalp_neuanmeldungen_sektion)) }
+    end
   end
 
   describe SelfRegistrationNeuanmeldung::MainPerson do

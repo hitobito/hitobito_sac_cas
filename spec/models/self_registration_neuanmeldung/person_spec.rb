@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SelfRegistration::Person do
-  let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new }
+  let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
 
   shared_examples :role_building_model do |model_class|
     let(:model) { model_class.new }

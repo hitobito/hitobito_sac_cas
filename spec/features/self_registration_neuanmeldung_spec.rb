@@ -431,15 +431,21 @@ text: 'Weiter als Familienmitgliedschaft').click
 
     it 'cannot complete without accepting adult consent' do
       expect { complete_last_page(with_adult_consent: false) }.not_to change { Person.count }
-      expect(adult_consent_field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+      expect(page).to have_text 'Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden'
     end
 
     it 'can complete when accepting adult consent' do
       expect do
-        complete_last_page do
-          check adult_consent_text
-        end
+        complete_last_page
       end.to change { Person.count }.by(1)
+    end
+
+    it 'can still use step navigator' do
+      complete_last_page(with_adult_consent: false)
+      click_on 'Personendaten'
+      click_on 'Weiter'
+      expect(page).to have_css 'li.active', text: 'Familienmitglieder'
+      expect(page).not_to have_css('.alert-danger', text: 'Bestätigung des Einverständnisses der Erziehungsberechtigten')
     end
   end
 

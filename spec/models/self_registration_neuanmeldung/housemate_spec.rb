@@ -90,7 +90,7 @@ describe SelfRegistrationNeuanmeldung::Housemate do
   end
 
   describe 'supplements' do
-    let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new }
+    let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
 
 
     before { model.supplements = supplements }
