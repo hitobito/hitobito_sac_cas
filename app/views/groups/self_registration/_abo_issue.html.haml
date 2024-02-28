@@ -5,8 +5,9 @@
 
 = f.error_messages
 = field_set_tag do
-  = f.labeled_date_field :issues_from_date, required: true, help: simple_format(t('.issues_from_date_help'))
+  = f.labeled_date_field :issues_from, help: simple_format(t('.issues_from_help'))
 
-= render 'abo_infos'
 .btn-toolbar.bottom.allign-with-form
   = c.next_button
+
+= render 'shared_partial'

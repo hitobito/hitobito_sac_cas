@@ -21,8 +21,9 @@ describe SelfRegistration do
   describe '::for factory method' do
     [
       [SelfRegistration, Group::SacCas, Group::Sektion],
-      [SelfRegistrationAbo, Group::AboMagazin, Group::AboTourenPortal],
-      [SelfRegistrationAboBasic, Group::AboBasicLogin],
+      [SelfRegistration::AboTourenPortal, Group::AboTourenPortal],
+      [SelfRegistration::AboMagazin, Group::AboMagazin],
+      [SelfRegistration::AboBasicLogin, Group::AboBasicLogin],
       [SelfRegistrationNeuanmeldung, Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion]
     ].each do |registration_class, *group_classes|
       group_classes.each do |group_class|

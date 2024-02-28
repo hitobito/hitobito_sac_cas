@@ -31,8 +31,13 @@ de:
       self_registration_neuanmeldung/housemate:
         email: E-Mail (optional)
         phone_number: Telefon (optional)
-      self_registration_abo:
-        issues_from_date: Ab Ausgabe
+      self_registration/main_person/base:
+        gender: Anrede
+        number: Telefon
+        email: E-Mail
+        address: Strasse und Nr.
+      self_registration/abo_magazin:
+        issues_from: Ab Ausgabe
       self_registration_abo/person:
         gender: Anrede
         email: E-Mail
@@ -352,10 +357,13 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      emailless_main_person:
+        phone_placeholder: +41 77 123 45 67
+        newsletter: Ich möchte einen Newsletter abonnieren
       neuanmeldung_main_person:
         phone_placeholder: +41 77 123 45 67
       abo_issue:
-        issues_from_date_help: |
+        issues_from_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
           Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
           mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
@@ -375,8 +383,9 @@ de:
         promo_code: Promocode
       form:
         main_email_title: Haupt-E-Mail
+        emailless_main_person_title: Personendaten
         neuanmeldung_main_person_title: Personendaten
-        abo_issue_title: Abo Auswahl
+        abo_issue_title: Abo
         abo_main_person_title: Personendaten
         single_or_household_title: Mitgliedschaftstyp
         household_title: Familienmitglieder

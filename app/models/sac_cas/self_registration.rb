@@ -12,12 +12,16 @@ module SacCas::SelfRegistration
   prepended do
     delegate :email, to: :main_person
 
+    class_attribute :shared_partial
+
     def self.for(group)
       case group
       when Group::AboBasicLogin
-        SelfRegistrationAboBasic
-      when Group::AboMagazin, Group::AboTourenPortal
-        SelfRegistrationAbo
+        SelfRegistration::AboBasicLogin
+      when Group::AboMagazin
+        SelfRegistration::AboMagazin
+      when Group::AboTourenPortal
+        SelfRegistration::AboTourenPortal
       when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion
         SelfRegistrationNeuanmeldung
       else
