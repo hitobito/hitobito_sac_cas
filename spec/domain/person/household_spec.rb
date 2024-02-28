@@ -15,12 +15,14 @@ describe Person::Household do
     Person::Household.new(person, Ability.new(people(:admin)), other, people(:admin))
   end
 
-  def create_person(age, beitragskategorie: :familie, **attrs)
+  def create_person(age, beitragskategorie: :familie, managers: [], **attrs)
     person = Fabricate(:person, **attrs.reverse_merge(
       birthday: age.years.ago,
       town: 'Supertown',
       primary_group: groups(:bluemlisalp_mitglieder)
     ))
+
+    managers.each { |manager| PeopleManager.create!(manager: manager, managed: person) }
 
     Fabricate(
       Group::SektionsMitglieder::Mitglied.name.to_sym,
