@@ -335,6 +335,34 @@ text: 'Weiter als Familienmitgliedschaft').click
         expect(page).to have_content 'Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein'
       end
     end
+
+    context 'button groups' do
+      it 'has only bottom button toolbar without hosemate' do
+        expect(page).to have_selector('.btn-toolbar.bottom')
+        expect(page).to have_no_selector('.btn-toolbar.top')
+      end
+
+      it 'has both button groups with housemate' do
+        click_on('Eintrag hinzufügen')
+
+        expect(page).to have_selector('.btn-toolbar.bottom')
+        expect(page).to have_selector('.btn-toolbar.top')
+      end
+
+      it 'has both button groups with housemate when navigating back' do
+        click_on('Eintrag hinzufügen')
+        fill_in 'Vorname', with: 'Max'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1980'
+        within('.btn-toolbar.top') do
+          click_on('Weiter als Familienmitgliedschaft')
+        end
+        click_on('Zurück')
+
+        expect(page).to have_selector('.btn-toolbar.bottom')
+        expect(page).to have_selector('.btn-toolbar.top')
+      end
+    end
   end
 
   describe 'household age validations' do
