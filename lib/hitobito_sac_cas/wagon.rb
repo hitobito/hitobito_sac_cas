@@ -38,6 +38,7 @@ module HitobitoSacCas
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
 
       ## Abilities
+      QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
 
       ## Decorators
@@ -59,6 +60,9 @@ module HitobitoSacCas
       Person::HistoryController.prepend SacCas::Person::HistoryController
 
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
+
+      QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
+      QualificationsController.prepend SacCas::QualificationsController
 
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
