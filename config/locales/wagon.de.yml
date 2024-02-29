@@ -384,12 +384,11 @@ de:
         supplements_title: Zusatzdaten
       household:
         membership_info_box: >
-          Indem du weitere Personen hinzufügst, wählst du eine Famlienmitgliedschaft. Diese ist für
-          max. 2 Erwachsene (ab 23 Jahren) und beliebig viele Kinder im Alter zwischen 6 und 17
-          Jahren möglich.
+          Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für 
+          max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
-
-          Die Famlienmitgliedschaft ist auch für Paare ohne Kinder möglich.
+          Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft 
+          mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft
 
