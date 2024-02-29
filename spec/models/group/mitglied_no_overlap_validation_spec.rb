@@ -126,6 +126,7 @@ describe :mitglied_no_overlap_validation do
         type.sti_name,
         person: person,
         group: groups(group_fixture_name),
+        beitragskategorie: 'einzel',
         created_at: Time.zone.parse('2019-01-01'),
         delete_on: Time.zone.parse('2019-12-31')
       )

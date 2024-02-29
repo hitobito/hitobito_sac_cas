@@ -18,7 +18,7 @@ module ::SacCas::RoleBeitragskategorie
 
     before_validation :set_beitragskategorie
 
-    validates :beitragskategorie, presence: true, if: :validate_beitragskategorie?
+    before_save :ensure_beitragskategorie, if: :validate_beitragskategorie?
 
     ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |category|
       scope category, -> { where(beitragskategorie: category) }
@@ -52,5 +52,13 @@ module ::SacCas::RoleBeitragskategorie
     return if beitragskategorie?
 
     self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
+  end
+
+  def ensure_beitragskategorie
+    # This is a safeguard to ensure that the beitragskategorie is set before
+    # the record is saved. We assume this should never happen, as the beitragskategorie
+    # gets set in the `before_validation` callback. If it is not set, then the
+    # person.birthdate should have a validation error which makes the role record invalid.
+    raise "beitragskategorie not set" unless beitragskategorie?
   end
 end

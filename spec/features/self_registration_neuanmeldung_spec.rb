@@ -333,7 +333,6 @@ text: 'Weiter als Familienmitgliedschaft').click
         choose 'weiblich'
         click_on 'Weiter als Familienmitgliedschaft', match: :first
         expect(page).to have_content 'Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein'
-        expect(page).to have_content 'Beitragskategorie muss ausgefüllt werden'
       end
     end
   end
