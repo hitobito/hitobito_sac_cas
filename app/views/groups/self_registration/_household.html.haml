@@ -6,7 +6,7 @@
 .well
   = simple_format(t('.membership_info_box'))
 
-.btn-toolbar.top.d-none
+.btn-toolbar.top{class: "#{'d-none' if entry.housemates.empty?}" }
   .btn-group
     - if entry.housemates.empty?
       = c.next_button(t('.next_as_single_link'), class: 'next-as-single')
