@@ -12,6 +12,12 @@ module SacCas::Person::Household
 
   delegate :adult?, :child?, to: :beitragskategorie_calculator
 
+  module ClassMethods
+    def next_key
+      "#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
+    end
+  end
+
   def assign
     super
 
@@ -80,6 +86,6 @@ module SacCas::Person::Household
   end
 
   def next_key
-    "#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
+    self.class.next_key
   end
 end

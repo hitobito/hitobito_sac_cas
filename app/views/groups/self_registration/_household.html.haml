@@ -16,7 +16,7 @@
       = c.next_button(t('.next_as_household_link'), class: 'next-as-family')
   = c.back_link
 
-= f.nested_fields_for :housemates, nil, nil, model_object: SelfRegistrationNeuanmeldung::Housemate.new do |ff|
+= f.nested_fields_for :housemates, nil, nil, model_object: entry.build_housemate do |ff|
   = field_set_tag do
     = ff.error_messages
     = ff.labeled(:gender) do
@@ -24,7 +24,7 @@
         = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
     = ff.labeled_input_fields :first_name, :last_name
     = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
-    = ff.labeled_input_fields :email, :phone_number
+    = ff.labeled_input_fields :email, :number
 
     .col-xl-2.col-md-3.text-md-end.pe-3
       = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})

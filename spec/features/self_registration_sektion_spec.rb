@@ -28,16 +28,16 @@ describe :self_registration_neuanmeldung, js: true do
 
   def complete_main_person_form
     assert_aside
-    fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     choose 'Mann'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
-    fill_in 'Adresse', with: 'Musterplatz'
+    fill_in 'Strasse und Nr.', with: 'Musterplatz'
     fill_in 'Geburtstag', with: '01.01.1980'
     fill_in 'Telefon', with: '+41 79 123 45 56'
-    fill_in 'self_registration_main_person_attributes_zip_code', with: '8000'
-    fill_in 'self_registration_main_person_attributes_town', with: 'Zürich'
+    fill_in 'self_registration_sektion_main_person_attributes_zip_code', with: '8000'
+    fill_in 'self_registration_sektion_main_person_attributes_town', with: 'Zürich'
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field('Newsletter')
@@ -46,7 +46,7 @@ describe :self_registration_neuanmeldung, js: true do
     click_on 'Weiter'
   end
 
-  def complete_last_page(with_adult_consent: true)
+  def complete_last_page(with_adult_consent: false)
     if with_adult_consent
       check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
     end
@@ -128,17 +128,17 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
         numbers: ['36', '37', '38', '40', '41', '5a', '5b', '6A', '6B']
       )
       visit group_self_registration_path(group_id: group)
-      fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
+      fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
       click_on 'Weiter'
-      fill_in 'Adresse', with: 'Belp'
+      fill_in 'Strasse und Nr.', with: 'Belp'
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
 
       find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern',
 match: :first).click
-      expect(page).to have_field('self_registration_main_person_attributes_zip_code', with: '3007')
-      expect(page).to have_field('self_registration_main_person_attributes_town', with: 'Bern')
-      expect(page).to have_field('self_registration_main_person_attributes_address',
+      expect(page).to have_field('self_registration_sektion_main_person_attributes_zip_code', with: '3007')
+      expect(page).to have_field('self_registration_sektion_main_person_attributes_town', with: 'Bern')
+      expect(page).to have_field('self_registration_sektion_main_person_attributes_address',
 with: 'Belpstrasse')
     end
   end
@@ -458,13 +458,13 @@ text: 'Weiter als Familienmitgliedschaft').click
     end
 
     it 'cannot complete without accepting adult consent' do
-      expect { complete_last_page(with_adult_consent: false) }.not_to change { Person.count }
+      expect { complete_last_page }.not_to change { Person.count }
       expect(page).to have_text 'Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden'
     end
 
     it 'can complete when accepting adult consent' do
       expect do
-        complete_last_page
+        complete_last_page(with_adult_consent: true)
       end.to change { Person.count }.by(1)
     end
 

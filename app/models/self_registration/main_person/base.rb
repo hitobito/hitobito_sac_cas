@@ -18,7 +18,7 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
 
   def initialize(*args)
     super
-    self.country ||= Settings.addresses.imported_countries.to_a.first
+    self.country ||= Settings.addresses.imported_countries.to_a.first if respond_to?(:country)
   end
 
   def person
@@ -28,7 +28,7 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def save!
-    super.then do |success|
+    super.tap do |success|
       exclude_from_mailing_list if success && mailing_list && !newsletter
     end
   end
@@ -62,7 +62,7 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def role
-    @role ||= (register_on_date&.future? ? build_future_role : build_role)
+    @role ||= (future_role? ? build_future_role : build_role)
   end
 
   def build_future_role
@@ -82,5 +82,9 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
       created_at: Time.zone.now,
       delete_on: Time.zone.today.end_of_year
     )
+  end
+
+  def future_role?
+    respond_to?(:register_on_date) && register_on_date&.future?
   end
 end

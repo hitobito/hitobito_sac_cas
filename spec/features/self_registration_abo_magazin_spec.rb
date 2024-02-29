@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of

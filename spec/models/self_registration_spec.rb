@@ -24,7 +24,7 @@ describe SelfRegistration do
       [SelfRegistration::AboTourenPortal, Group::AboTourenPortal],
       [SelfRegistration::AboMagazin, Group::AboMagazin],
       [SelfRegistration::AboBasicLogin, Group::AboBasicLogin],
-      [SelfRegistrationNeuanmeldung, Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion]
+      [SelfRegistration::Sektion, Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion]
     ].each do |registration_class, *group_classes|
       group_classes.each do |group_class|
         it "returns #{registration_class} for #{group_class}" do

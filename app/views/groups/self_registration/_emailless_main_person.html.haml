@@ -11,15 +11,19 @@
         - (Person::GENDERS + ['']).each do |key|
           = ff.inline_radio_button(:gender, key, ff.object.salutation_label(key))
     = ff.labeled_input_fields :first_name, :last_name
-    = ff.labeled_date_field :birthday
+    - if entry.is_a?(SelfRegistration::Sektion)
+      = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+    - else
+      = ff.labeled_date_field :birthday
 
     = render 'contactable/address_fields', f: ff
     = ff.labeled_input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
 
     = ff.labeled(:others, '&nbsp;'.html_safe) do
-      = ff.label(:newsletter, class: 'd-block mt-2') do
-        = ff.check_box :newsletter
-        = t('.newsletter')
+      - if ff.object.attr?(:newsletter)
+        = ff.label(:newsletter, class: 'd-block mt-2') do
+          = ff.check_box :newsletter
+          = t('.newsletter')
       - %w(statutes contribution_regulations data_protection).each do |key|
         - if ff.object.attr?(key)
           = render 'agreement_link', f: ff, key: key, link: link_to(*ff.object.link_translations(key))

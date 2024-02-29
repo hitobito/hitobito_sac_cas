@@ -23,14 +23,6 @@ de:
           extra: Zusatzsektion
           replace: Neue Stammsektion (ersetzt deine Bisherige)
 
-      self_registration/main_person:
-        gender: Geschlecht
-        phone_numbers: Telefon
-      self_registration_neuanmeldung/supplements:
-        adult_consent: Einverständniserklärung der Erziehungsberechtigten
-      self_registration_neuanmeldung/housemate:
-        email: E-Mail (optional)
-        phone_number: Telefon (optional)
       self_registration/main_person/base:
         gender: Anrede
         number: Telefon
@@ -38,11 +30,11 @@ de:
         address: Strasse und Nr.
       self_registration/abo_magazin:
         issues_from: Ab Ausgabe
-      self_registration_abo/person:
-        gender: Anrede
-        email: E-Mail
-        address: Strasse und Nr.
-        number: Mobil
+      self_registration/sektion/housemate:
+        email: E-Mail (optional)
+        number: Telefon (optional)
+      self_registration/sektion/supplements:
+        adult_consent: Einverständniserklärung der Erziehungsberechtigten
 
     errors:
       messages:
@@ -393,10 +385,10 @@ de:
         supplements_title: Zusatzdaten
       household:
         membership_info_box: >
-          Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für 
+          Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
           max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
-          Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft 
+          Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
           mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft

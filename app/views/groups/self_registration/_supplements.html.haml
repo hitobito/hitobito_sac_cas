@@ -18,7 +18,6 @@
       = ff.check_box :newsletter
       = t('.newsletter')
 
-
     - if ff.object.requires_adult_consent?
       = ff.label(:adult_consent, class: 'd-block mt-2') do
         = ff.check_box :adult_consent
