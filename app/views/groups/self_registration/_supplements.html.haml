@@ -12,6 +12,7 @@
     - ff.object.self_registration_reason_options.each do |key, label|
       = ff.inline_radio_button :self_registration_reason_id, key, label
       %br
+
   = ff.labeled(:others, '&nbsp;'.html_safe) do
     = ff.label(:newsletter, class: 'd-block mt-2') do
       = ff.check_box :newsletter
@@ -24,10 +25,12 @@
         = t('groups.self_registration.adult_consent_field.caption')
 
     - %w(statutes contribution_regulations data_protection).each do |key|
-      = render 'agreement_link', f: ff, key: key, link: link_to(*ff.object.link_translations(key))
+      = render 'agreement_link', f: ff, key: key,
+          link: link_to(*ff.object.link_translations(key), target: :blank)
 
     - if ff.object.requires_sektion_statuten?
-      = render 'agreement_link', f: ff, key: :sektion_statuten, link: link_to(*ff.object.sektion_statuten_link_args)
+      = render 'agreement_link', f: ff, key: :sektion_statuten,
+          link: link_to(*ff.object.sektion_statuten_link_args, target: :blank)
 
 
 .btn-toolbar.bottom

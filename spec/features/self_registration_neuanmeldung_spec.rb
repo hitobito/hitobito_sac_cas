@@ -357,6 +357,7 @@ text: 'Weiter als Familienmitgliedschaft').click
         within('.btn-toolbar.top') do
           click_on('Weiter als Familienmitgliedschaft')
         end
+        expect(page).to have_css('li.active', text: 'Zusatzdaten')
         click_on('Zurück')
 
         expect(page).to have_selector('.btn-toolbar.bottom')
@@ -503,6 +504,18 @@ text: 'Weiter als Familienmitgliedschaft').click
       end.to change { Person.count }.by(1)
       person = Person.find_by(email: 'max.muster@hitobito.example.com')
       expect(person.privacy_policy_accepted).to eq true
+    end
+  end
+
+  describe 'document links' do
+    it 'should open privacy policy in new tab' do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_on 'Weiter als Einzelmitglied', match: :first
+
+      expect(page).to have_link('Statuten', target: '_blank')
+      expect(page).to have_link('Beitragsreglement', target: '_blank')
+      expect(page).to have_link('Datenschutzerklärung', target: '_blank')
     end
   end
 end
