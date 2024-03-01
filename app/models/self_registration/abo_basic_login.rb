@@ -5,14 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class SelfRegistrationAboBasic < SelfRegistrationAbo
-  self.partials = [:abo_issue, :abo_main_person]
+class SelfRegistration::AboBasicLogin < SelfRegistration
 
-  def self.model_name
-    ActiveModel::Name.new(SelfRegistrationAbo, nil)
-  end
+  self.partials = [:main_email, :emailless_main_person]
 
   def main_person
     @main_person ||= build_person(@main_person_attributes, MainPerson)
   end
+
+  private
+
+  def main_email_valid?
+    main_person.email.present?
+  end
+
+  alias_method :emailless_main_person_valid?, :main_person_valid?
 end

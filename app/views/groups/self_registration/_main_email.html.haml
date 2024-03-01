@@ -5,5 +5,8 @@
 
 = f.fields_for(:main_person_attributes, entry.main_person) do |ff|
   = ff.labeled_input_field :email, { required: true }
+
 .btn-toolbar.bottom.allign-with-form
   = c.next_button
+
+= render 'shared_partial'
