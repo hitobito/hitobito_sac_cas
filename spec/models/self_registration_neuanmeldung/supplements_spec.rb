@@ -8,7 +8,8 @@
 require 'spec_helper'
 
 describe SelfRegistrationNeuanmeldung::Supplements do
-  subject(:model) { described_class.new }
+  let(:group) { groups(:bluemlisalp_mitglieder) }
+  subject(:model) { described_class.new({}, group) }
 
   let(:required_attrs) {
     {
@@ -34,8 +35,10 @@ describe SelfRegistrationNeuanmeldung::Supplements do
     end
 
     context 'sektion statuten are set on group' do
-      let(:group) { double(:group, privacy_policy: double(:blob,  attached?: true)) }
-      subject(:model) { described_class.new(required_attrs, group) }
+      before do
+        allow(group.layer_group.privacy_policy).to receive(:attached?).and_return(true)
+        model.attributes = required_attrs
+      end
 
       it 'is invalid if privacy_policy_acceptance is not set' do
         expect(model).not_to be_valid
@@ -45,6 +48,24 @@ describe SelfRegistrationNeuanmeldung::Supplements do
       it 'is valid if privacy_policy_acceptance is set' do
         model.attributes = required_attrs.merge(sektion_statuten: true)
         expect(model).to be_valid
+      end
+    end
+
+    context 'with group requiring adult consent' do
+      before do
+        group.self_registration_require_adult_consent = true
+        model.attributes = required_attrs
+      end
+
+      it 'is valid when adult consent is explicitly set' do
+        model.adult_consent = '1'
+        expect(model).to be_valid
+      end
+
+      it 'is invalid when adult consent is explicitly denied' do
+        model.adult_consent = '0'
+        expect(model).not_to be_valid
+        expect(model).to have(1).error_on(:adult_consent)
       end
     end
   end

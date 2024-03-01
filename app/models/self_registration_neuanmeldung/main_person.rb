@@ -25,7 +25,6 @@ class SelfRegistrationNeuanmeldung::MainPerson < SelfRegistrationNeuanmeldung::P
   ]
 
   include FutureRole::FormHandling
-  include SelfRegistration::AdultConsent
 
   delegate :newsletter, :self_registration_reason_id, to: :supplements, allow_nil: true
   delegate :salutation_label, :phone_numbers, to: :person

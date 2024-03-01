@@ -41,7 +41,7 @@ class SelfRegistrationNeuanmeldung < SelfRegistration
   end
 
   def supplements
-    @supplements ||= Supplements.new(@supplements_attributes, @group.layer_group)
+    @supplements ||= Supplements.new(@supplements_attributes, @group)
   end
 
   def main_person

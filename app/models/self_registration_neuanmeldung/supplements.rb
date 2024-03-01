@@ -19,27 +19,34 @@ class SelfRegistrationNeuanmeldung::Supplements
     :data_protection,
   ].freeze
 
+  DYNAMIC_AGREEMENTS = [
+    :sektion_statuten,
+    :adult_consent
+  ]
+
   AGREEMENTS.each do |agreement|
     attribute agreement, :boolean, default: false
     validates agreement, acceptance: true
   end
 
-  attribute :sektion_statuten
-  validates :sektion_statuten, acceptance: true
+  DYNAMIC_AGREEMENTS.each do |agreement|
+    attribute agreement, :boolean
+    validates agreement, acceptance: true, if: :"requires_#{agreement}?"
+  end
 
   attribute :promocode, :boolean
   attribute :newsletter, :boolean
   attribute :register_on, :string, default: :now
-  attribute :self_registration_reason_id, :integer, default: -> { SelfRegistrationReason.first&.id }
+  attribute :self_registration_reason_id, :integer, default: :first_self_registration_reason_id
 
   validates :register_on, presence: true
 
-  attr_reader :sektion
-
-  def initialize(params = {}, sektion = nil)
+  def initialize(params = {}, group)
     super(params)
-    @sektion = sektion
-    self.sektion_statuten = false if sektion_statuten_attached? && sektion_statuten.nil?
+    @group = group
+
+    set_default_false_if_required(:adult_consent)
+    set_default_false_if_required(:sektion_statuten)
   end
 
   def self.human_attribute_name(key, options = {})
@@ -58,13 +65,9 @@ class SelfRegistrationNeuanmeldung::Supplements
     end
   end
 
-  def sektion_statuten_attached?
-    sektion&.privacy_policy&.attached?
-  end
-
   def sektion_statuten_link_args
     label = I18n.t('link_sektion_statuten_title', scope: 'self_registration.infos_component')
-    path = rails_blob_path(sektion.privacy_policy, disposition: :attachment, only_path: true)
+    path = rails_blob_path(privacy_policy, disposition: :attachment, only_path: true)
     [label, path]
   end
 
@@ -72,5 +75,27 @@ class SelfRegistrationNeuanmeldung::Supplements
     ["link_#{key}_title", "link_#{key}"].map do |str|
       I18n.t(str, scope: 'self_registration.infos_component')
     end
+  end
+
+  def requires_sektion_statuten?
+    sektion_statuten.blank? && privacy_policy.attached?
+  end
+
+  def requires_adult_consent?
+    @group.self_registration_require_adult_consent
+  end
+
+  private
+
+  def set_default_false_if_required(key)
+    self.send("#{key}=", false) if send(key).blank? && send("requires_#{key}?")
+  end
+
+  def first_self_registration_reason_id
+    SelfRegistrationReason.first&.id
+  end
+
+  def privacy_policy
+    @group.layer_group.privacy_policy
   end
 end

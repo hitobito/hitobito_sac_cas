@@ -191,7 +191,9 @@ birthday: 6.years.ago.to_date)
       expect(registration.supplements.errors.full_messages).to eq [
         'Statuten muss akzeptiert werden',
         'Beitragsreglement muss akzeptiert werden',
-        'Datenschutzerklärung muss akzeptiert werden'
+        'Datenschutzerklärung muss akzeptiert werden',
+        'Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden'
+
       ]
     end
 
@@ -199,7 +201,8 @@ birthday: 6.years.ago.to_date)
       registration.supplements_attributes = {
         statutes: true,
         contribution_regulations: true,
-        data_protection: true
+        data_protection: true,
+        adult_consent: true
       }
       expect(registration).to be_valid
     end
