@@ -8,7 +8,7 @@
 require 'spec_helper'
 
 describe People::Neuanmeldungen::Reject do
-  NEUANMELDUNG_ROLE_CLASS = Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+  let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
 
   let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
@@ -16,7 +16,7 @@ describe People::Neuanmeldungen::Reject do
 
   def create_role(beitragskategorie)
     Fabricate(
-      NEUANMELDUNG_ROLE_CLASS.sti_name,
+      neuanmeldung_role_class.sti_name,
       group: group,
       beitragskategorie: beitragskategorie,
       created_at: 1.year.ago,
@@ -35,7 +35,7 @@ describe People::Neuanmeldungen::Reject do
 
     subject = rejector([neuanmeldung_einzel.person.id, neuanmeldung_jugend.person.id])
 
-    expect { subject.call }.to change { NEUANMELDUNG_ROLE_CLASS.count }.by(-2)
+    expect { subject.call }.to change { neuanmeldung_role_class.count }.by(-2)
 
     expect(neuanmeldung_einzel.person.roles).to be_empty
     expect(neuanmeldung_jugend.person.roles).to be_empty

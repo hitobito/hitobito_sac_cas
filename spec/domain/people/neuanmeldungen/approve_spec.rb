@@ -8,8 +8,8 @@
 require 'spec_helper'
 
 describe People::Neuanmeldungen::Approve do
-  NEUANMELDUNG_ROLE_CLASS = Group::SektionsNeuanmeldungenSektion::Neuanmeldung
-  NEUANMELDUNG_APPROVED_ROLE_CLASS = Group::SektionsNeuanmeldungenNv::Neuanmeldung
+  let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
+  let(:neuanmeldung_approved_role_class) { Group::SektionsNeuanmeldungenNv::Neuanmeldung }
 
   let(:sektion) { groups(:bluemlisalp) }
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
@@ -17,7 +17,7 @@ describe People::Neuanmeldungen::Approve do
 
   def create_role(beitragskategorie)
     Fabricate(
-      NEUANMELDUNG_ROLE_CLASS.sti_name,
+      neuanmeldung_role_class.sti_name,
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: Time.zone.now.beginning_of_year,
@@ -47,14 +47,14 @@ describe People::Neuanmeldungen::Approve do
     )
 
     expect { approver.call }.
-      to change { NEUANMELDUNG_ROLE_CLASS.count }.by(-3).
-      and change { NEUANMELDUNG_APPROVED_ROLE_CLASS.count }.by(3)
+      to change { neuanmeldung_role_class.count }.by(-3).
+      and change { neuanmeldung_approved_role_class.count }.by(3)
 
-    expect_role(neuanmeldungen.first, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
-    expect_role(neuanmeldungen.third, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
-    expect_role(neuanmeldungen.fourth, NEUANMELDUNG_APPROVED_ROLE_CLASS, neuanmeldungen_nv)
+    expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
+    expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
+    expect_role(neuanmeldungen.fourth, neuanmeldung_approved_role_class, neuanmeldungen_nv)
 
-    expect_role(neuanmeldungen.second, NEUANMELDUNG_ROLE_CLASS, neuanmeldungen_sektion)
+    expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
   end
 
   it 'creates the SektionNeuanmeldungNv group if it does not exist' do
@@ -66,7 +66,7 @@ describe People::Neuanmeldungen::Approve do
     expect { neuanmeldung.reload }.to raise_error(ActiveRecord::RecordNotFound)
     expect(neuanmeldung.person.roles).to have(1).item
     actual_role = neuanmeldung.person.roles.first
-    expect(actual_role).to be_a NEUANMELDUNG_APPROVED_ROLE_CLASS
+    expect(actual_role).to be_a neuanmeldung_approved_role_class
     expect(actual_role.group).to be_a Group::SektionsNeuanmeldungenNv
     expect(actual_role.group.parent_id).to eq sektion.id
     expect(actual_role.group.id).not_to eq neuanmeldungen_nv.id
