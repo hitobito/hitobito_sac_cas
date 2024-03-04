@@ -11,6 +11,9 @@ module SacCas::Person
 
   included do
     Person::INTERNAL_ATTRS << :membership_verify_token
+
+    Person::LANGUAGES.delete(:en)
+
     devise_login_id_attrs << :membership_number
 
     Person.used_attributes.delete(:nickname)
