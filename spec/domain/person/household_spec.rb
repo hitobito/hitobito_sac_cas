@@ -9,10 +9,10 @@ require 'spec_helper'
 
 describe Person::Household do
 
-  let(:user) { Person.first }
+  let(:user) { people(:root) }
 
   def build_household(person, other)
-    Person::Household.new(person, Ability.new(people(:admin)), other, people(:admin))
+    Person::Household.new(person, Ability.new(user), other, people(:admin))
   end
 
   def create_person(age, beitragskategorie: :familie, managers: [], **attrs)
@@ -66,60 +66,6 @@ describe Person::Household do
         expect(household).to be_people_changed
       end
     end
-
-    context 'with adult person' do
-      it 'adds child to people_manageds' do
-        build_household(adult, child).assign
-
-        expect(adult.people_manageds).to have(1).item
-        expect(adult.people_manageds.first.managed).to eq child
-      end
-
-      it 'does not add child to people_managers' do
-        build_household(adult, child).assign
-
-        expect(adult.people_managers).to be_empty
-      end
-
-      it 'does not add adult to people_manageds' do
-        build_household(adult, other_adult).assign
-
-        expect(adult.people_manageds).to be_empty
-      end
-
-      it 'does not add adult to people_managers' do
-        build_household(adult, other_adult).assign
-
-        expect(adult.people_managers).to be_empty
-      end
-    end
-
-    context 'with child person' do
-      it 'adds adult to people_managers' do
-        build_household(child, adult).assign
-
-        expect(child.people_managers).to have(1).item
-        expect(child.people_managers.first.manager).to eq adult
-      end
-
-      it 'does not add adult to people_manageds' do
-        build_household(child, adult).assign
-
-        expect(child.people_manageds).to be_empty
-      end
-
-      it 'does not add child to people_managers' do
-        build_household(child, other_child).assign
-
-        expect(child.people_managers).to be_empty
-      end
-
-      it 'does not add child to people_manageds' do
-        build_household(child, other_child).assign
-
-        expect(child.people_manageds).to be_empty
-      end
-    end
   end
 
   context "#valid?" do
@@ -162,30 +108,39 @@ describe Person::Household do
   end
 
   context '#save' do
-    it 'persists managers' do
-      p1 = create_person(25)
-      p2 = create_person(10, beitragskategorie: nil)
+    let(:adult) { create_person(25, beitragskategorie: nil) }
+    let(:child) { create_person(10, beitragskategorie: nil) }
+    let(:other_adult) { create_person(25, beitragskategorie: nil) }
+    let(:other_child) { create_person(10, beitragskategorie: nil) }
 
-      p1.people_manageds.build(managed: p2)
-      household = build_household(p1, p2)
+    context 'with adult person' do
+      it 'adds child to manageds' do
+        household = build_household(adult, child).tap(&:assign)
 
-      expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
-      people_manager = PeopleManager.last
-      expect(people_manager.manager).to eq p1
-      expect(people_manager.managed).to eq p2
+        expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
+        expect(adult.manageds).to contain_exactly(child)
+      end
+
+      it 'does not create PeopleManager for other adult' do
+        household = build_household(adult, other_adult).tap(&:assign)
+
+        expect { household.send(:save) }.not_to change { PeopleManager.count }
+      end
     end
 
-    it 'persists manageds' do
-      p1 = create_person(25)
-      p2 = create_person(10, beitragskategorie: nil)
+    context 'with child person' do
+      it 'adds adult to managers' do
+        household = build_household(child, adult).tap(&:assign)
 
-      p2.people_managers.build(manager: p1)
-      household = build_household(p2, p1)
+        expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
+        expect(child.managers).to contain_exactly(adult)
+      end
 
-      expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
-      people_manager = PeopleManager.last
-      expect(people_manager.manager).to eq p1
-      expect(people_manager.managed).to eq p2
+      it 'does not create PeopleManager for other child' do
+        household = build_household(child, other_child).tap(&:assign)
+
+        expect { household.send(:save) }.not_to change { PeopleManager.count }
+      end
     end
 
     it 'raises if new family member already has family membership' do
