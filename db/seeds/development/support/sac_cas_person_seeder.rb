@@ -47,23 +47,28 @@ class SacCasPersonSeeder < PersonSeeder
       # skip if already in a household / family
       return if family_members.any?(&:household_key)
 
+      # make sure these people have no other roles
+      family_members.each do |p|
+        p.roles.find_each {|r| r.really_destroy!}
+      end
+
+      seed_sektion_familie_mitglied_role(adult, m)
+
       create_or_update_household(adult, second_adult)
       create_or_update_household(adult, child)
-
-      family_members.each do |p|
-        # make sure this person has no other roles
-        p.roles.find_each {|r| r.really_destroy!}
-        seed_sektion_familie_mitglied_role(p, m)
-      end
     end
   end
 
   def seed_sektion_familie_mitglied_role(person, sektion)
-    Group::SektionsMitglieder::Mitglied.seed(:person_id, person: person, group: sektion, beitragskategorie: :familie)
+    Group::SektionsMitglieder::Mitglied.seed(:person_id,
+                                             person: person,
+                                             group: sektion,
+                                             beitragskategorie: :familie,
+                                             delete_on: 1.year.from_now.end_of_year)
   end
 
   def create_or_update_household(person, second_person)
-    household = Person::Household.new(person, Ability.new(Person.root), second_person, Person.root)
+    household = Person::Household.new(person, Ability.new(Person.root), second_person)
     household.assign
     household.save
   end
