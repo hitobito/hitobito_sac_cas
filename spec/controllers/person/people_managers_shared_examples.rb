@@ -8,11 +8,18 @@
 require 'spec_helper'
 
 shared_examples 'people_managers#create' do
-  before { sign_in(people(:root)) }
+  before { sign_in(people(:admin)) }
+
+  def create_person(**opts)
+    Fabricate(:person, primary_group: groups(:externe_kontakte), **opts).tap do |person|
+      # add a role to make the person findable
+      Group::ExterneKontakte::Kontakt.create!(person: person, group: groups(:externe_kontakte))
+    end
+  end
 
   context '#create' do
-    let(:manager) { people(:mitglied) }
-    let(:managed) { people(:abonnent) }
+    let(:manager) { create_person(birthday: 25.years.ago) }
+    let(:managed) { create_person(birthday: 15.years.ago) }
 
     let(:params) do
       attr = described_class.assoc == :people_managers ? :manager_id : :managed_id
@@ -67,12 +74,19 @@ shared_examples 'people_managers#create' do
 end
 
 shared_examples 'people_managers#destroy' do
-  before { sign_in(people(:root)) }
+  before { sign_in(people(:admin)) }
 
-  let(:child) { people(:familienmitglied_kind) }
-  let(:parent) { people(:familienmitglied) }
-  let(:parent2) { people(:familienmitglied2) }
-  let(:entry) { PeopleManager.find_by(manager_id: parent.id, managed_id: child.id) }
+  def create_person(**opts)
+    Fabricate(:person, primary_group: groups(:externe_kontakte), **opts).tap do |person|
+      # add a role to make the person findable
+      Group::ExterneKontakte::Kontakt.create!(person: person, group: groups(:externe_kontakte))
+    end
+  end
+
+  let(:child) { create_person(birthday: 15.years.ago, household_key: 'happy-family') }
+  let(:parent) { create_person(birthday: 25.years.ago, household_key: 'happy-family') }
+  let(:parent2) { create_person(birthday: 25.years.ago, household_key: 'happy-family') }
+  let(:entry) { PeopleManager.create!(manager_id: parent.id, managed_id: child.id) }
 
   def params
     attr = described_class.assoc == :people_managers ? :managed_id : :manager_id
