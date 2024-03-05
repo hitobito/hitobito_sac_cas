@@ -19,10 +19,10 @@ module SacCas::Person
 
     alias_attribute :membership_number, :id
 
-    scope :with_membership_years, lambda { |selects: 'people.*'|
+    scope :with_membership_years, lambda { |selects = 'people.*'|
       subquery_sql = Group::SektionsMitglieder::Mitglied.
                      with_deleted.
-                     with_membership_years(selects: 'roles.person_id').
+                     with_membership_years('roles.person_id').
                      to_sql
 
       select(*Array.wrap(selects), 'FLOOR(SUM(COALESCE(membership_years, 0))) as membership_years').
