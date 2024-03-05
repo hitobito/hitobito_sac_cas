@@ -107,6 +107,8 @@ de:
               other: Neuanmeldungen
       qualification_kind:
         tourenchef_may_edit: Von Tourenchef bearbeitbar
+      qualification:
+        finish_at: Bis
 
     errors:
       messages:

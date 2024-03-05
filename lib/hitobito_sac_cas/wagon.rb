@@ -35,6 +35,7 @@ module HitobitoSacCas
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
       Qualification.include SacCas::Qualification
+      QualificationKind.include SacCas::QualificationKind
 
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
@@ -71,7 +72,6 @@ module HitobitoSacCas
 
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
       QualificationsController.prepend SacCas::QualificationsController
-      QualificationsController.permitted_attrs += [:finish_at]
 
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
