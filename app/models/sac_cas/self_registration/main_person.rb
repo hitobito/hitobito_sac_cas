@@ -11,7 +11,7 @@ module SacCas::SelfRegistration::MainPerson
 
   prepended do
     self.attrs = [
-      :first_name, :last_name, :nickname, :email,
+      :first_name, :last_name, :email,
       :privacy_policy_accepted,
       :primary_group
     ]

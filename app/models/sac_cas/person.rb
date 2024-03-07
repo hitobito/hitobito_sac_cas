@@ -13,6 +13,8 @@ module SacCas::Person
     Person::INTERNAL_ATTRS << :membership_verify_token
     devise_login_id_attrs << :membership_number
 
+    Person.used_attributes.delete(:nickname)
+
     delegate :active?, :anytime?, :roles, to: :membership, prefix: true
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }

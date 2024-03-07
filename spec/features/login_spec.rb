@@ -9,8 +9,7 @@ require 'spec_helper'
 
 describe :login, js: true do
   let(:password) { 'cNb@X7fTdiU4sWCMNos3gJmQV_d9e9' }
-  let(:nickname) { 'foobar' }
-  let(:person) { people(:mitglied).tap { |p| p.update!(password: password, nickname: 'foobar') } }
+  let(:person) { people(:mitglied).tap { |p| p.update!(password: password) } }
 
   around do |example|
     old_attrs = Person.devise_login_id_attrs.dup
@@ -46,14 +45,5 @@ describe :login, js: true do
 
     expect(page).to have_link 'Abmelden'
     expect(page).to have_selector('.content-header h1', text: person.full_name)
-  end
-
-  it 'does not allow login with nickname' do
-    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.nickname
-    fill_in 'Passwort', with: password
-    click_button 'Anmelden'
-
-    expect(page).to have_selector('#flash .alert.alert-danger', text: 'Ungültige Anmeldedaten.')
-    expect(page).to have_current_path(new_person_session_path(locale: :de))
   end
 end
