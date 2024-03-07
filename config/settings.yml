@@ -34,6 +34,8 @@ people:
     enabled: true
     self_service_managed_creation:
       enabled: false
+  family_members:
+    enabled: false
 
 social_account:
   predefined_labels:
