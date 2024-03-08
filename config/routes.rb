@@ -27,5 +27,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :cost_centers, except: [:show]
+    resources :cost_units, except: [:show]
   end
 end

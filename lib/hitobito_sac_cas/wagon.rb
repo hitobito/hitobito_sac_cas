@@ -40,6 +40,7 @@ module HitobitoSacCas
       ## Abilities
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
+      VariousAbility.prepend SacCas::VariousAbility
 
       ## Decorators
 
@@ -51,6 +52,9 @@ module HitobitoSacCas
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
+
+      admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
+      admin_item[:active_for] += %w(cost_centers cost_units)
 
       ## Controllers
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only

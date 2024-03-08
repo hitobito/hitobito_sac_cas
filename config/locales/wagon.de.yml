@@ -50,6 +50,16 @@ de:
 
   activerecord:
     attributes:
+      cost_center:
+        label: Bezeichnung
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      cost_unit:
+        label: Bezeichnung
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
       person:
         family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre
@@ -104,6 +114,13 @@ de:
         must_be_present_unless_deleted: 'muss vorhanden sein, wenn nicht gelöscht.'
 
     models:
+      cost_center:
+        one: Kostenstelle
+        other: Kostenstellen
+
+      cost_unit:
+        one: Kostenträger
+        other: Kostenträger
 
       ### GROUPS
       group/sac_cas:
