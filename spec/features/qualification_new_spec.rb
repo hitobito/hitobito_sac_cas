@@ -20,12 +20,12 @@ describe 'qualification new', js: true do
     expect(page).to_not have_field 'qualification_finish_at'
 
     select qualification_kind_without_validity.label, from: 'qualification_qualification_kind_id'
-    expect(page).to have_select('qualification_qualification_kind_id', selected: qualification_kind_without_validity.label) 
+    expect(page).to have_select('qualification_qualification_kind_id', selected: qualification_kind_without_validity.label)
 
     expect(page).to have_field 'Bis'
 
     select qualification_kind_with_validity.label, from: 'qualification_qualification_kind_id'
-    expect(page).to have_select('qualification_qualification_kind_id', selected: qualification_kind_with_validity.label) 
+    expect(page).to have_select('qualification_qualification_kind_id', selected: qualification_kind_with_validity.label)
 
     expect(page).to_not have_field 'qualification_finish_at'
   end

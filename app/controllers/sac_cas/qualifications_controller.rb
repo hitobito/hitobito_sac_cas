@@ -23,7 +23,7 @@ module SacCas::QualificationsController
 
     permitted
   end
-  
+
   def finish_at_manually_editable?
     param_qualification_kind && param_qualification_kind.finish_at_manually_editable?
   end
