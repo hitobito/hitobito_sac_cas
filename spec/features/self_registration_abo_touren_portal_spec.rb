@@ -30,7 +30,7 @@ describe :self_registration do
   end
 
   it 'creates person' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     expect(page).to have_text 'Preis pro Jahr'
     click_on 'Weiter'
@@ -42,7 +42,7 @@ describe :self_registration do
   end
 
   it 'subscribes to mailinglist' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     complete_main_person_form
@@ -62,7 +62,7 @@ describe :self_registration do
   end
 
   it 'opts out of mailinglist' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     complete_main_person_form
@@ -77,6 +77,18 @@ describe :self_registration do
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
       expect(page).to have_link('Anmelden')
     end
+  end
+
+  it 'validates that person is old enough' do
+    visit group_self_registration_path(group_id: group.id)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    complete_main_person_form
+    fill_in 'Geburtstag', with: 17.years.ago.to_date
+    expect do
+      click_on 'Registrieren'
+      expect(page).to have_text 'Person muss 18 Jahre oder älter sein.'
+    end.not_to change { Person.count }
   end
 
 end

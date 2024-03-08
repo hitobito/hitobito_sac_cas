@@ -23,6 +23,10 @@ describe SelfRegistration::AboBasicLogin do
     }
   }
 
+  it 'has expected main_person class' do
+    expect(registration.main_person).to be_kind_of(SelfRegistration::AboBasicLogin::MainPerson)
+  end
+
   it 'has main email and emailless_main_person partials' do
     expect(registration.partials).to eq [:main_email, :emailless_main_person]
   end

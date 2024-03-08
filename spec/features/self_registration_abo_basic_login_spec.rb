@@ -29,7 +29,7 @@ describe :self_registration do
   end
 
   it 'creates person' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     complete_main_person_form

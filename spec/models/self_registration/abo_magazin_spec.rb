@@ -31,6 +31,10 @@ describe SelfRegistration::AboMagazin do
     expect(registration.partials).to eq [:main_email, :emailless_main_person, :abo_issue]
   end
 
+  it 'has expected main_person class' do
+    expect(registration.main_person).to be_kind_of(SelfRegistration::Abo::MainPerson)
+  end
+
   describe 'validations' do
     describe 'main_email' do
       let(:params) { { step: 0 } }
@@ -54,6 +58,12 @@ describe SelfRegistration::AboMagazin do
       it 'is valid if all required attrs are present in second step' do
         registration.main_person_attributes = required_attrs
         expect(registration).to be_valid
+      end
+
+      it 'is invalid if person is too young' do
+        registration.main_person_attributes = required_attrs.merge(birthday: I18n.l(17.years.ago.to_date))
+        expect(registration).not_to be_valid
+        expect(registration.main_person.errors.full_messages).to eq ['Person muss 18 Jahre oder älter sein.']
       end
     end
 

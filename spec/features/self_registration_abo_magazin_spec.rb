@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
@@ -37,7 +38,7 @@ describe 'self_registration_abo_magazin', js: true do
   end
 
   it 'creates person' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     expect_active_step 'Haupt-E-Mail'
     expect_shared_partial
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
@@ -58,7 +59,7 @@ describe 'self_registration_abo_magazin', js: true do
   end
 
   it 'renders date validation message', js: true do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     expect_active_step 'Haupt-E-Mail'
     expect_shared_partial
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
@@ -80,7 +81,7 @@ describe 'self_registration_abo_magazin', js: true do
   end
 
   it 'subscribes to mailinglist' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     complete_main_person_form
@@ -100,7 +101,7 @@ describe 'self_registration_abo_magazin', js: true do
   end
 
   it 'opts out of mailinglist' do
-    visit group_self_registration_path(group_id: group)
+    visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
     complete_main_person_form
@@ -117,5 +118,17 @@ describe 'self_registration_abo_magazin', js: true do
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
       expect(page).to have_link('Anmelden')
     end
+  end
+
+  it 'validates that person is old enough' do
+    visit group_self_registration_path(group_id: group.id)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    complete_main_person_form
+    fill_in 'Geburtstag', with: 17.years.ago.to_date
+    expect do
+      click_on 'Weiter'
+      expect(page).to have_text 'Person muss 18 Jahre oder älter sein.'
+    end.not_to change { Person.count }
   end
 end
