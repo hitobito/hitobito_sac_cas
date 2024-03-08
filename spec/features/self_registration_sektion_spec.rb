@@ -20,9 +20,10 @@ describe :self_registration_neuanmeldung, js: true do
   end
 
   def assert_aside(*birthdays)
-    expect(page).to have_css('aside h2', text: "Beiträge in der Sektion #{group.layer_group.name}")
+    expect(page).to have_css('aside h2', text: 'Fragen zur Mitgliedschaft?')
+    expect(page).to have_css('aside#fees h2', text: "Beiträge in der Sektion #{group.layer_group.name}")
     birthdays.each do |birthday|
-      expect(page).to have_css('aside li', text: birthday)
+      expect(page).to have_css('aside#fees li', text: birthday)
     end
   end
 

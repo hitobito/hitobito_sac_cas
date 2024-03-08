@@ -5,7 +5,7 @@
 
 - if params[:autosubmit].present?
   - markup = j(render(SelfRegistration::FeeComponent.new(group: @group, birthdays: entry.birthdays), layout: false))
-  $('.card').replaceWith("#{markup}")
+  $('#fees').replaceWith("#{markup}")
 - else
   $('form[data-controller="autosubmit"]').replaceWith("#{j(render('form', entry: entry))}");
   $("[data-provide=entity]").each(App.setupEntityTypeahead);
