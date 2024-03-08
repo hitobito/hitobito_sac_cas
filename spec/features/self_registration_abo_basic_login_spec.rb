@@ -37,4 +37,42 @@ describe :self_registration do
       click_on 'Registrieren'
     end.to change { Person.count }.by(1)
   end
+
+  it 'subscribes to mailinglist' do
+    visit group_self_registration_path(group_id: group)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    complete_main_person_form
+    check 'Ich möchte einen Newsletter abonnieren'
+
+    expect do
+      click_on 'Registrieren'
+    end.to change { Person.count }.by(1)
+
+    sign_in(people(:admin))
+    person = Person.last
+    visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
+    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
+      expect(page).to have_link('Abmelden')
+    end
+  end
+
+  it 'opts out of mailinglist' do
+    visit group_self_registration_path(group_id: group)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    complete_main_person_form
+    uncheck 'Ich möchte einen Newsletter abonnieren'
+
+    expect do
+      click_on 'Registrieren'
+    end.to change { Person.count }.by(1)
+
+    sign_in(people(:admin))
+    person = Person.last
+    visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
+    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
+      expect(page).to have_link('Anmelden')
+    end
+  end
 end

@@ -1,0 +1,5 @@
+newsletter:
+  group: root
+  name: Newsletter
+  subscribable_for: anyone
+  subscribable_mode: opt_out
