@@ -3,6 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+sac_newsletter:
+  key: sac_newsletter_mailing_list_id
+  value: <%= ActiveRecord::FixtureSet.identify(:newsletter) %>
+  entry_type: Group
+  entry: root
+
 bluemlisalp_foundation_year:
   key: foundation_year
   value: 1942

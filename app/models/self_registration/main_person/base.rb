@@ -9,8 +9,10 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   delegate :salutation_label, :phone_numbers, to: :person
   validate :assert_valid_phone_number
 
+  attribute :newsletter, :boolean
+
   class_attribute :active_model_only_attrs
-  self.active_model_only_attrs = [:number]
+  self.active_model_only_attrs = [:number, :newsletter]
 
   attr_accessor :register_on_date
 

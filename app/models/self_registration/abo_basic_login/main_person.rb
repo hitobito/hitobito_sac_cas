@@ -18,7 +18,7 @@ class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson
 
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
-    :address, :zip_code, :town, :country, :number, :newsletter,
+    :address, :zip_code, :town, :country, :number,
     :primary_group
   ]
 
