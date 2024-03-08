@@ -319,6 +319,20 @@ text: 'Weiter als Familienmitgliedschaft').click
         click_on 'Weiter'
         expect(page).to have_css 'li.active', text: 'Personendaten'
       end
+
+      it 'shows buttons when navigating back and removing housemate' do
+        click_on  'Eintrag hinzufügen'
+
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: '01.01.1981'
+        click_on 'Weiter als Familienmitgliedschaft', match: :first
+        expect(page).to have_css 'li.active', text: 'Zusatzdaten'
+        click_on 'Familienmitglieder'
+        expect(page).to have_button 'Weiter als Familienmitglied'
+        click_on 'Entfernen'
+        expect(page).to have_button 'Weiter als Einzelmitglied'
+      end
     end
 
     context 'bluemlisalp_neuanmeldungen_sektion' do
