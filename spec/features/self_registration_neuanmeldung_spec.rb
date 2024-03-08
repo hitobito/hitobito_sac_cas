@@ -48,7 +48,7 @@ describe :self_registration_neuanmeldung, js: true do
 
   def complete_last_page(with_adult_consent: true)
     if with_adult_consent
-      check 'Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
+      check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
     end
     check 'Ich habe die Statuten gelesen und stimme diesen zu'
     check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
