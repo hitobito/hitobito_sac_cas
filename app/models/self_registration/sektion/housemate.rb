@@ -19,7 +19,7 @@ class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
   ]
 
   validate :assert_adult_count
-  delegate :register_on_date, to: :supplements, allow_nil: true
+  delegate :register_on_date, :newsletter, to: :supplements, allow_nil: true
 
   def person
     super.tap do |p|

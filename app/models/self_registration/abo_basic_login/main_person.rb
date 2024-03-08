@@ -16,6 +16,8 @@ class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson
     validates agreement, acceptance: true
   end
 
+  attribute :newsletter, :boolean
+
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
     :address, :zip_code, :town, :country, :number,
