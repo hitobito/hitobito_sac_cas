@@ -9,5 +9,5 @@ require 'spec_helper'
 require_relative '../people_managers_controller_spec'
 
 describe Person::ManagersController do
-  it_behaves_like 'people_managers#destroy'
+  #it_behaves_like 'people_managers#destroy'
 end

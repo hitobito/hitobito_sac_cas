@@ -7,12 +7,9 @@
 
 module SacCas::Role
 
-  def self.prepended(base) # rubocop:disable Metrics/MethodLength
-    base.class_eval do
-      scope :with_membership_years, lambda { |selects: 'roles.*'|
-        select(
-          *Array.wrap(selects),
-          <<~SQL
+  module ClassMethods # rubocop:disable Metrics/MethodLength
+    def select_with_membership_years
+      <<~SQL
             CASE
               -- membership_years is only calculated for Mitglied roles
               WHEN roles.type != "Group::SektionsMitglieder::Mitglied" THEN 0
@@ -30,9 +27,15 @@ module SacCas::Role
                     )
                 )/365
             END AS membership_years
-          SQL
-        )
-      }
+      SQL
+    end
+  end
+
+  def self.prepended(base) 
+    base.extend(ClassMethods)
+
+    base.class_eval do
+      scope :with_membership_years, ->(selects = 'roles.*') { select(selects, select_with_membership_years) }
     end
   end
 
