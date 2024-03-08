@@ -7,9 +7,10 @@
 
 require 'spec_helper'
 
-describe SelfRegistrationNeuanmeldung::Supplements do
+describe SelfRegistration::Sektion::Supplements do
   let(:group) { groups(:bluemlisalp_mitglieder) }
-  subject(:model) { described_class.new({}, group) }
+  let(:model) { described_class.new({}, group) }
+
 
   let(:required_attrs) {
     {

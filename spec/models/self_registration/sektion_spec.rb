@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe SelfRegistrationNeuanmeldung do
+describe SelfRegistration::Sektion do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:params) { {} }
 
@@ -15,18 +15,8 @@ describe SelfRegistrationNeuanmeldung do
 
   def build(params)
     step = params.delete(:step)
-    nested_params = { step: step, self_registration: params }
+    nested_params = { step: step, self_registration_sektion: params }
     described_class.new(group: group, params: nested_params)
-  end
-
-  describe 'constructor' do
-    it 'does populate person phone number attributes' do
-      registration = build({
-        main_person_attributes: { phone_numbers_attributes: { key: { number: '079', public: 0 } } }
-      })
-      expect(registration.main_person_attributes).to be_present
-      expect(registration.main_person.phone_numbers.first.number).to eq '079'
-    end
   end
 
   let(:required_attrs) {
@@ -39,11 +29,19 @@ describe SelfRegistrationNeuanmeldung do
       zip_code: '8000',
       birthday: '1.1.2000',
       country: 'CH',
-      phone_numbers_attributes: {
-        '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
-      }
+      number: '+41 79 123 45 67',
     }
   }
+
+  describe 'constructor' do
+    it 'does populate person phone number attributes' do
+      registration = build({
+        main_person_attributes: required_attrs
+      })
+      expect(registration.main_person_attributes).to be_present
+      expect(registration.main_person.phone_numbers.first.number).to start_with '+41 79'
+    end
+  end
 
   describe 'main_person' do
     it 'is invalid if person is too young' do
@@ -171,8 +169,7 @@ describe SelfRegistrationNeuanmeldung do
     it '#save! creates people and roles with household key' do
       registration.housemates_attributes = [
         housemate_attrs,
-        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max',
-birthday: 6.years.ago.to_date)
+        housemate_attrs.merge(email: 'max@example.com', first_name: 'Max', birthday: 6.years.ago.to_date)
       ]
       expect { registration.save! }.to change { Person.count }.by(3)
         .and change { Role.count }.by(3)
@@ -182,7 +179,10 @@ birthday: 6.years.ago.to_date)
 
   describe 'supplements' do
     let(:params) { { main_person_attributes: required_attrs } }
-    before { params[:step] = 3 }
+    before do
+      group.self_registration_require_adult_consent = true
+      params[:step] = 3
+    end
 
     it 'is invalid without input' do
       expect(registration).not_to be_valid
@@ -191,7 +191,6 @@ birthday: 6.years.ago.to_date)
         'Beitragsreglement muss akzeptiert werden',
         'Datenschutzerklärung muss akzeptiert werden',
         'Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden'
-
       ]
     end
 

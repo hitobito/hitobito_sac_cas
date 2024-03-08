@@ -16,7 +16,7 @@ module SacCas::StepsComponent
           %ol.step-headers.offset-md-1
             = render(HeaderComponent.with_collection(@partials, step: @step))
         .row
-          - if @form.object.is_a?(SelfRegistrationNeuanmeldung)
+          - if @form.object.is_a?(SelfRegistration::Sektion)
             .col-lg= render(ContentComponent.with_collection(@partials, step: @step, form: @form))
             .col-md
               = render(SelfRegistration::FeeComponent.new(group: @form.object.group, birthdays: @form.object.birthdays))

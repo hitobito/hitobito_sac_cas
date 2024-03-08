@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe SelfRegistrationNeuanmeldung::Housemate do
+describe SelfRegistration::Sektion::Housemate do
   subject(:model) { described_class.new }
   subject(:role) { model.role }
 
@@ -45,9 +45,9 @@ describe SelfRegistrationNeuanmeldung::Housemate do
       expect(model).to have(1).error_on(:email)
     end
 
-    it 'is requires phone_number to be valid' do
-      model.attributes = required_attrs.merge(phone_number: 'asdfasdf')
-      expect(model).to have(1).error_on(:phone_number)
+    it 'is requires number to be valid' do
+      model.attributes = required_attrs.merge(number: 'asdfasdf')
+      expect(model).to have(1).error_on(:number)
     end
 
     it 'is invalid if too many adults exist' do
@@ -69,16 +69,16 @@ describe SelfRegistrationNeuanmeldung::Housemate do
     end
   end
 
-  describe 'phone_number' do
+  describe 'number' do
     it 'is translated correctly' do
-      expect(model.class.human_attribute_name(:phone_number)).to eq 'Telefon (optional)'
+      expect(model.class.human_attribute_name(:number)).to eq 'Telefon (optional)'
     end
 
     it 'is assigned as one of many phone_numbers of person' do
-      model.phone_number = '+41 79 123 45 56'
+      model.number = '+41 79 123 45 56'
       number = model.person.phone_numbers.first
       expect(number.number).to eq '+41 79 123 45 56'
-      expect(number.label).to eq 'Haupt-Telefon'
+      expect(number.label).to eq 'Mobil'
     end
   end
 
@@ -90,8 +90,7 @@ describe SelfRegistrationNeuanmeldung::Housemate do
   end
 
   describe 'supplements' do
-    let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
-
+    let(:supplements) { SelfRegistration::Sektion::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
 
     before { model.supplements = supplements }
 

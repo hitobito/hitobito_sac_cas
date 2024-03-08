@@ -41,18 +41,10 @@ describe FutureRole::FormHandling do
     end
   end
 
-  describe SelfRegistrationNeuanmeldung::Supplements do
+  describe SelfRegistration::Sektion::Supplements do
     it_behaves_like 'register_on_options' do
       let(:model) { described_class.new({}, groups(:bluemlisalp_neuanmeldungen_sektion)) }
     end
-  end
-
-  describe SelfRegistrationNeuanmeldung::MainPerson do
-    it_behaves_like 'register_on_options'
-  end
-
-  describe SelfRegistrationNeuanmeldung::Housemate do
-    it_behaves_like 'register_on_options'
   end
 
   describe SelfInscription do

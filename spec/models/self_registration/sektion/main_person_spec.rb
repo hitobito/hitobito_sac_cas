@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe SelfRegistrationNeuanmeldung::MainPerson do
+describe SelfRegistration::Sektion::MainPerson do
   subject(:model) { described_class.new }
   subject(:role) { model.role }
   let(:sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
@@ -28,9 +28,7 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
       zip_code: '8000',
       birthday: '01.01.2000',
       country: 'CH',
-      phone_numbers_attributes: {
-        '0' => { number: '+41 79 123 45 67', label: 'Privat', public: '1' }
-      }
+      number: '+41 79 123 45 67'
     }
   }
 
@@ -53,12 +51,12 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
         :town,
         :birthday,
         :country,
-        :phone_numbers
+        :number
       ]
     end
 
     it 'is invalid if phone_nuber is missing' do
-      model.attributes = required_attrs.except(:phone_numbers_attributes)
+      model.attributes = required_attrs.except(:number)
       expect(model).not_to be_valid
       expect(model.errors.full_messages).to eq ['Telefon muss ausgefüllt werden']
     end
@@ -66,15 +64,6 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
     it 'is valid if required attrs are set' do
       model.attributes = required_attrs
       expect(model).to be_valid
-    end
-  end
-
-  describe 'delegations' do
-    it 'reads phone_numbers from person' do
-      model.phone_numbers_attributes = {
-        '1' => { number: '079' }
-      }
-      expect(model.phone_numbers).to have(1).item
     end
   end
 
@@ -86,7 +75,7 @@ describe SelfRegistrationNeuanmeldung::MainPerson do
   end
 
   describe 'supplements' do
-    let(:supplements) { SelfRegistrationNeuanmeldung::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
+    let(:supplements) { SelfRegistration::Sektion::Supplements.new({}, groups(:bluemlisalp_mitglieder)) }
 
     subject(:role) { model.role }
 

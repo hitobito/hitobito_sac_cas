@@ -13,6 +13,9 @@ class SelfRegistration::Abo::MainPerson < SelfRegistration::AboBasicLogin::MainP
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country, :number
   ]
 
+  attribute :newsletter, :boolean
+  self.active_model_only_attrs += [:newsletter]
+
   validate :assert_old_enough, if: -> { person.years }
 
   private

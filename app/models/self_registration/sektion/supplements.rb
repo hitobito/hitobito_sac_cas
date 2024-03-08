@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-class SelfRegistrationNeuanmeldung::Supplements
+class SelfRegistration::Sektion::Supplements
   include ActiveModel::Model
   include ActiveModel::Attributes
   include FutureRole::FormHandling
@@ -34,7 +34,6 @@ class SelfRegistrationNeuanmeldung::Supplements
     validates agreement, acceptance: true, if: :"requires_#{agreement}?"
   end
 
-  attribute :promocode, :boolean
   attribute :newsletter, :boolean
   attribute :register_on, :string, default: :now
   attribute :self_registration_reason_id, :integer, default: :first_self_registration_reason_id
@@ -82,7 +81,7 @@ class SelfRegistrationNeuanmeldung::Supplements
   end
 
   def requires_adult_consent?
-    @group.self_registration_require_adult_consent
+    @group.self_registration_require_adult_consent?
   end
 
   private

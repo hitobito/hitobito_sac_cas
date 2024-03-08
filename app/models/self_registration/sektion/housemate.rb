@@ -5,38 +5,29 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Person
+class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
   MAX_ADULT_COUNT = SacCas::Role::MitgliedFamilyValidations::MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
 
-  NON_ASSIGNABLE_ATTRIBUTES = %w(
-    household_emails
-    supplements
-    phone_number
-    adult_count
-    _destroy
-  ).freeze
+  self.active_model_only_attrs += [:household_emails, :supplements, :adult_count, :_destroy]
 
   self.required_attrs = [
     :first_name, :last_name, :birthday
   ]
 
-  self.attrs = required_attrs + NON_ASSIGNABLE_ATTRIBUTES + [
+  self.attrs = required_attrs + active_model_only_attrs +  [
     :gender, :email, :primary_group, :household_key
   ]
 
-  include FutureRole::FormHandling
-  validate :assert_valid_phone_number
   validate :assert_adult_count
+  delegate :register_on_date, :newsletter, to: :supplements, allow_nil: true
 
   def person
-    @person ||= Person.new(attributes.except(*NON_ASSIGNABLE_ATTRIBUTES)).tap do |p|
+    super.tap do |p|
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.sektion_statuten
-      with_value_for(:phone_number) do |value|
-        p.phone_numbers.build(number: value, label: 'Haupt-Telefon')
-      end
     end
   end
+
+  public :role
 
   private
 
@@ -44,17 +35,6 @@ class SelfRegistrationNeuanmeldung::Housemate < SelfRegistrationNeuanmeldung::Pe
     if adult_count.to_i >= MAX_ADULT_COUNT && person.adult?
       errors.add(:base, too_many_adults_message)
     end
-  end
-
-  def assert_valid_phone_number
-    unless phone_number.blank? || person.phone_numbers.first.valid?
-      errors.add(:phone_number, :invalid)
-    end
-  end
-
-  def with_value_for(key)
-    value = attributes[key.to_s]
-    yield value if value.present?
   end
 
   def too_many_adults_message

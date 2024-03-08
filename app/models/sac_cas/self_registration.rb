@@ -23,7 +23,7 @@ module SacCas::SelfRegistration
       when Group::AboTourenPortal
         SelfRegistration::AboTourenPortal
       when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion
-        SelfRegistrationNeuanmeldung
+        SelfRegistration::Sektion
       else
         SelfRegistration
       end
