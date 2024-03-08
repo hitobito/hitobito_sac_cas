@@ -35,7 +35,8 @@ module SacCas::Role
     base.extend(ClassMethods)
 
     base.class_eval do
-      scope :with_membership_years, ->(selects = 'roles.*') { select(selects, select_with_membership_years) }
+      scope :with_membership_years, ->(selects = 'roles.*') { select(selects,
+                                                                     select_with_membership_years) }
     end
   end
 
