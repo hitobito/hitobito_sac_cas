@@ -65,6 +65,13 @@ de:
       event/kind_category:
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
+      event_level:
+        label: Bezeichnung
+        code: Code
+        difficulty: Schwierigkeitsgrad
+        created_at: Erstellt
+        updated_at: Geändert
+        deleted_at: Gelöscht
       person:
         family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre
@@ -130,10 +137,12 @@ de:
       cost_center:
         one: Kostenstelle
         other: Kostenstellen
-
       cost_unit:
         one: Kostenträger
         other: Kostenträger
+      event_level:
+        one: Kursstufe
+        other: Kursstufen
 
       ### GROUPS
       group/sac_cas:
