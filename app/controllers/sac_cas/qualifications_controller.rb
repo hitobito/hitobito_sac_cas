@@ -25,11 +25,11 @@ module SacCas::QualificationsController
   end
 
   def finish_at_manually_editable?
-    param_qualification_kind && param_qualification_kind.finish_at_manually_editable?
+    param_qualification_kind&.finish_at_manually_editable?
   end
 
   def param_qualification_kind
-    QualificationKind.find_by(id: params[:qualification][:qualification_kind_id])
+    QualificationKind.find_by(id: params.dig(:qualification, :qualification_kind_id))
   end
 
 end

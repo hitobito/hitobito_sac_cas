@@ -29,7 +29,7 @@ describe QualificationsController do
   context 'POST create' do
     let(:qualification_params) { { qualification: { start_at: '01.03.2024', finish_at: '31.03.2024' } } }
 
-    it 'does not permit finish_at for qualification kinds with validity' do
+    it 'ignores finish_at for qualification kinds with validity' do
       qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
 
       expect do
@@ -41,7 +41,7 @@ describe QualificationsController do
       expect(qualification.finish_at).to eq(qualification.start_at.end_of_year + 2.years)
     end
 
-    it 'permits finish_at for qualification kinds without validity' do
+    it 'allows finish_at for qualification kinds without validity' do
       qualification_kind_id = Fabricate(:qualification_kind, validity: nil).id
 
       expect do
