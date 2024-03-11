@@ -10,10 +10,20 @@ module SacCas::Qualification
 
   included do
     before_validation :set_finish_at, unless: :finish_at
+
+    validate :assert_meaningful
   end
+
+  private
 
   def finish_at_manually_editable?
     qualification_kind.finish_at_manually_editable?
+  end
+
+  def assert_meaningful
+    unless duration.meaningful?
+      errors.add(:finish_at, :not_after_start)
+    end
   end
 
 end
