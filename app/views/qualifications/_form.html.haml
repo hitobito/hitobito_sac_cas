@@ -13,7 +13,7 @@
                                     entry.qualification_kind_id),
                  class: 'form-select form-select-sm mw-100 mw-md-60ch',
                  prompt: ta(:please_select),
-                 data: { action: 'form-field-toggle#toggle' })
+                 data: { action: 'form-field-toggle#toggle', 'form-field-toggle-target': 'select' })
   = f.labeled_input_fields(:origin, :start_at)
   %span.hidden{ data: { 'form-field-toggle-target': 'toggle' } }
     = f.labeled_input_field(:finish_at)
