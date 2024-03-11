@@ -16,10 +16,24 @@ module CostCommon
 
     scope :list, -> { order(:code) }
 
+    has_many :event_kind_categories, class_name: 'Event::KindCategory',
+      dependent: :restrict_with_error
+
     validates_by_schema
   end
 
   def to_s
     [code, label].join(" - ")
+  end
+
+  # NOTE ama - https://github.com/rails/rails/issues/21064
+  def errors
+    super.tap do |errors|
+      errors.each do |error|
+        if error.type == :"restrict_dependent_destroy.has_many"
+          error.options[:record].capitalize!
+        end
+      end
+    end
   end
 end
