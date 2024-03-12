@@ -8,5 +8,7 @@
 class AddTourenchefMayEditToQualificationKinds < ActiveRecord::Migration[6.1]
   def change
     add_column :qualification_kinds, :tourenchef_may_edit, :boolean, default: false, null: false
+
+    QualificationKind.reset_column_information
   end
 end
