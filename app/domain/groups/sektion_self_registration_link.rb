@@ -7,6 +7,7 @@
 
 class Groups::SektionSelfRegistrationLink
   delegate :group_self_registration_url,
+            :group_self_registration_path,
     to: 'Rails.application.routes.url_helpers'
 
   def initialize(sektion, host)
@@ -15,9 +16,10 @@ class Groups::SektionSelfRegistrationLink
   end
 
   def url
-    neuanmeldungen_id = neuanmeldungen_sektion_id || neuanmeldungen_nv_id
+    return unless neuanmeldungen_id = neuanmeldungen_sektion_id || neuanmeldungen_nv_id
+    return group_self_registration_path(group_id: neuanmeldungen_id) if @host.blank?
 
-    group_self_registration_url(host: @host, group_id: neuanmeldungen_id) if neuanmeldungen_id
+    group_self_registration_url(host: @host, group_id: neuanmeldungen_id)
   end
 
   private
