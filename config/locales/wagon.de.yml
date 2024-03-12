@@ -349,11 +349,6 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
-      emailless_main_person:
-        phone_placeholder: +41 77 123 45 67
-        newsletter: Ich möchte einen Newsletter abonnieren
-      neuanmeldung_main_person:
-        phone_placeholder: +41 77 123 45 67
       abo_issue:
         issues_from_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
@@ -365,10 +360,14 @@ de:
         price_with_vat: CHF %{amount} inkl. MwSt.
         switzerland: Schweiz
         international: Weltweit
-
+      adult_consent_field:
+        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
+      conditions_sac_cas:
+        newsletter: Ich möchte einen Newsletter abonnieren
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
-      conditions_sac_cas:
+      emailless_main_person:
+        phone_placeholder: +41 77 123 45 67
         newsletter: Ich möchte einen Newsletter abonnieren
       fields:
         notes: Bemerkungen
@@ -392,6 +391,8 @@ de:
           mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft
+      neuanmeldung_main_person:
+        phone_placeholder: +41 77 123 45 67
 
       supplements:
         newsletter: Ich möchte einen Newsletter abonnieren

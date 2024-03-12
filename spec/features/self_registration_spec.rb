@@ -89,7 +89,7 @@ describe :self_registration, js: true do
     describe 'with adult consent' do
       let(:adult_consent_field) { page.find_field(adult_consent_text) }
       let(:adult_consent_text) do
-        'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
+        'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
       end
 
       before do

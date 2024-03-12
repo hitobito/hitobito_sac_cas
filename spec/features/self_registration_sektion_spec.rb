@@ -49,7 +49,7 @@ describe :self_registration_neuanmeldung, js: true do
 
   def complete_last_page(with_adult_consent: false)
     if with_adult_consent
-      check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
+      check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
     end
     check 'Ich habe die Statuten gelesen und stimme diesen zu'
     check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
@@ -460,11 +460,6 @@ text: 'Weiter als Familienmitgliedschaft').click
   end
 
   describe 'with adult consent' do
-    let(:adult_consent_field) { page.find_field(adult_consent_text) }
-    let(:adult_consent_text) do
-      'Ich bestätige dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe.'
-    end
-
     before do
       group.update!(self_registration_require_adult_consent: true)
       visit group_self_registration_path(group_id: group)
