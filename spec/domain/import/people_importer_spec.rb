@@ -82,7 +82,7 @@ describe Import::PeopleImporter do
   it 'logs invalid emails but imports person without email' do
     expect(importer).to receive(:each_row)
       .and_yield(attrs(email: 'adsf@zcnet.ch'))
-    expect(Truemail).to receive(:valid?).with('adsf@zcnet.ch').and_return(false)
+    expect(Truemail).to receive(:valid?).at_least(1).times.with('adsf@zcnet.ch').and_return(false)
 
     expect(output).to receive(:puts).with('Die folgenden 1 Emails waren ungültig:')
     expect(output).to receive(:puts).with(' last-name first-name (124): adsf@zcnet.ch')
