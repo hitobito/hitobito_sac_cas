@@ -35,7 +35,7 @@
 #  index_event_kinds_on_level_id        (level_id)
 
 ---
-dummy:
+ski_course:
   cost_center: course
   cost_unit: ski
   level: ek

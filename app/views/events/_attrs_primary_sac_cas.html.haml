@@ -1,0 +1,14 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas
+
+%dl.dl-horizontal
+  - entry.used?(:language) do
+    = labeled_attr(entry, :language)
+
+  - entry.used?(:accomodation) do
+    = labeled_attr(entry, :accomodation)
+
+  - entry.used?(:start_point_of_time) do
+    = labeled_attr(entry, :start_point_of_time)

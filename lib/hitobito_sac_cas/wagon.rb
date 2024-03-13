@@ -26,6 +26,7 @@ module HitobitoSacCas
 
       # extend application classes here
       Event::Kind.prepend SacCas::Event::Kind
+      Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
