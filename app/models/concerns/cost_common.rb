@@ -14,9 +14,15 @@ module CostCommon
     validates :label, presence: true
     validates :code, uniqueness: true
 
+    default_scope { where(deleted_at: nil) }
+
     scope :list, -> { order(:code) }
+    scope :with_deleted, -> { unscope }
 
     has_many :event_kind_categories, class_name: 'Event::KindCategory',
+      dependent: :restrict_with_error
+
+    has_many :courses, class_name: 'Event::Course',
       dependent: :restrict_with_error
 
     validates_by_schema
@@ -26,13 +32,31 @@ module CostCommon
     [code, label].join(" - ")
   end
 
-  # NOTE ama - https://github.com/rails/rails/issues/21064
   def errors
-    super.tap do |errors|
-      errors.each do |error|
-        if error.type == :"restrict_dependent_destroy.has_many"
-          error.options[:record].capitalize!
-        end
+    super.tap { |errors| capitalize_dependent_records(errors) }
+  end
+
+  def destroy
+    return super if dependent_assocations_exist?
+
+    soft_destroy
+  end
+
+  private
+
+  def dependent_assocations_exist?
+    [event_kind_categories, courses].any?(&:exists?)
+  end
+
+  def soft_destroy
+    update(deleted_at: Time.zone.now)
+  end
+
+  # NOTE ama - https://github.com/rails/rails/issues/21064
+  def capitalize_dependent_records(errors)
+    errors.each do |error|
+      if error.type == :"restrict_dependent_destroy.has_many"
+        error.options[:record].capitalize!
       end
     end
   end

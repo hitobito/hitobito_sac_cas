@@ -53,12 +53,14 @@ de:
       cost_center:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
+        courses: Kurse
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
       cost_unit:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
+        courses: Kurse
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
