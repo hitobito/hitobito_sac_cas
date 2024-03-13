@@ -1,0 +1,10 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas
+
+.mt-4
+  - entry.used?(:season) do
+    = f.labeled_i18n_enum_field(:season, Event::Course.season_labels)
+  - entry.used?(:start_point_of_time) do
+    = f.labeled_i18n_enum_field(:start_point_of_time, Event::Course.start_point_of_time_labels)

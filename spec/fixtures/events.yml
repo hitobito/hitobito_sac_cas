@@ -11,6 +11,7 @@ top_course:
   groups: zentralverband
   type: Event::Course
   kind: dummy
+  language: de
   priorization: true
   requires_approval: true
   external_applications: true

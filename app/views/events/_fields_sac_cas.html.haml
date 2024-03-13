@@ -1,0 +1,19 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas
+
+- entry.used?(:language) do
+  = f.labeled_i18n_enum_field(:language, Event::Course.language_labels)
+- entry.used?(:cost_center_id) do
+  = f.labeled_input_field(:cost_center_id)
+- entry.used?(:cost_unit_id) do
+  = f.labeled_input_field(:cost_unit_id)
+- entry.used?(:annual) do
+  = f.labeled_input_field(:annual)
+- entry.used?(:link_participants) do
+  = f.labeled_input_field(:link_participants)
+- entry.used?(:link_leaders) do
+  = f.labeled_input_field(:link_leaders)
+- entry.used?(:link_survey) do
+  = f.labeled_input_field(:link_survey)
