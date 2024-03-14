@@ -52,19 +52,14 @@ de:
     attributes:
       cost_center:
         label: Bezeichnung
-        event_kind_categories: Kurskategorien
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
       cost_unit:
         label: Bezeichnung
-        event_kind_categories: Kurskategorien
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
-      event/kind_category:
-        cost_center_id: Kostenstelle
-        cost_unit_id: Kostenträger
       person:
         family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre

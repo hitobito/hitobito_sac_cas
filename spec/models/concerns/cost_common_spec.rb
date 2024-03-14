@@ -36,7 +36,6 @@ describe CostCommon do
 
     describe "::list" do
       it "sorts by code string value" do
-        described_class.delete_all
         Fabricate(fabricator, code: "test1")
         Fabricate(fabricator, code: "test2")
         Fabricate(fabricator, code: "test11")
@@ -58,29 +57,6 @@ describe CostCommon do
       model.code = "10"
       model.label = "dummy"
       expect(model.to_s).to eq "10 - dummy"
-    end
-
-    describe "#destroy" do
-      let(:other) { described_class == CostCenter ? CostUnit : CostCenter }
-      let(:other_model) { Fabricate(other.model_name.singular) }
-      let(:model) { Fabricate(fabricator) }
-      let!(:event_kind_category) do
-        category_attrs = [[fabricator, model], [other.model_name.singular, other_model]].to_h
-        category = Fabricate(:event_kind_category, category_attrs)
-      end
-
-      it "is prevented if associated event_kind_category exists " do
-        expect { model.destroy }.not_to change { described_class.count }
-        expect { other_model.destroy }.not_to change { other.count }
-        expect(model.errors.full_messages[0]).to eq 'Datensatz kann nicht gelöscht werden, ' \
-          'da abhängige Kurskategorien existieren.'
-      end
-
-      it "succeeds if no associated event_kind_category exists " do
-        event_kind_category.destroy!
-        expect { model.destroy }.to change { described_class.count }.by(-1)
-        expect { other_model.destroy }.to change { other.count }.by(-1)
-      end
     end
   end
 
