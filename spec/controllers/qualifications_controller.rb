@@ -11,10 +11,9 @@ describe QualificationsController do
 
   before { sign_in(person) }
   let(:params) { { group_id: person.primary_group.id, person_id: person.id } }
+  let(:person) { people(:tourenchef) }
 
   describe 'as tourenchef' do
-    let(:person) { people(:tourenchef) }
-
     context 'GET new' do
       it 'only renders editable qualification kinds' do
         visible = Fabricate(:qualification_kind, tourenchef_may_edit: true)
@@ -24,6 +23,34 @@ describe QualificationsController do
         expect(qualification_kinds).to include(visible)
         expect(qualification_kinds).to_not include(invisible)
       end
+    end
+  end
+
+  context 'POST create' do
+    let(:qualification_params) { { qualification: { start_at: '01.03.2024', finish_at: '31.03.2024' } } }
+
+    it 'ignores finish_at for qualification kinds with validity' do
+      qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
+
+      expect do
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+      end.to change { Qualification.count }.by(1)
+
+      qualification = person.qualifications.last
+
+      expect(qualification.finish_at).to eq(qualification.start_at.end_of_year + 2.years)
+    end
+
+    it 'allows finish_at for qualification kinds without validity' do
+      qualification_kind_id = Fabricate(:qualification_kind, validity: nil).id
+
+      expect do
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+      end.to change { Qualification.count }.by(1)
+
+      qualification = person.qualifications.last
+
+      expect(qualification.finish_at).to eq(Date.new(2024, 3, 31))
     end
   end
 end

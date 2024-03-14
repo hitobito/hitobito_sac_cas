@@ -16,4 +16,20 @@ module SacCas::QualificationsController
     end
   end
 
+  def permitted_attrs
+    permitted = self.class.permitted_attrs.dup
+
+    permitted << :finish_at if finish_at_manually_editable?
+
+    permitted
+  end
+
+  def finish_at_manually_editable?
+    param_qualification_kind&.finish_at_manually_editable?
+  end
+
+  def param_qualification_kind
+    QualificationKind.find_by(id: params.dig(:qualification, :qualification_kind_id))
+  end
+
 end
