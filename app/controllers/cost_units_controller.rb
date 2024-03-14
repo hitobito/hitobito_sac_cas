@@ -7,7 +7,6 @@
 
 class CostUnitsController < SimpleCrudController
   self.permitted_attrs = [:code, :label]
-  self.sort_mappings = { label: 'cost_units.label'}
 
   private
 

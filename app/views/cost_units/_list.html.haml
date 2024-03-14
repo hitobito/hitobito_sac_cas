@@ -1,4 +1,5 @@
 = crud_table do |t|
-  - t.sortable_attrs :code, :label
+  - t.sortable_attrs :code
+  - t.attr(:label)
   - t.sortable_attrs :updated_at
   - add_table_actions(t)
