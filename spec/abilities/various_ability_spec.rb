@@ -45,4 +45,3 @@ describe VariousAbility do
     end
   end
 end
-end
