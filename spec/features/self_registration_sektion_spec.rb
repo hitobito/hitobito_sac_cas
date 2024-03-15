@@ -58,6 +58,10 @@ describe :self_registration_neuanmeldung, js: true do
     click_on 'Registrieren'
   end
 
+  def format_date(time_or_date)
+    time_or_date.strftime('%d.%m.%Y')
+  end
+
   describe 'existing email' do
     let(:person) { people(:admin) }
     let(:password) { 'really_b4dPassw0rD' }
@@ -221,6 +225,21 @@ text: 'Weiter als Familienmitgliedschaft').click
 
       click_on 'Weiter als Familienmitgliedschaft', match: :first
       expect(page).to have_content 'In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.'
+    end
+
+    it 'validates we can not add youth in household' do
+      click_on  'Eintrag hinzufügen'
+
+      within '#housemates_fields .fields:nth-child(1)' do
+        fill_in 'Vorname', with: 'Maxine'
+        fill_in 'Nachname', with: 'Muster'
+        fill_in 'Geburtstag', with: format_date(20.years.ago)
+      end
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+
+      within('#error_explanation') do
+        expect(page).to have_content 'Jugendliche im Alter von 18 bis 21 Jahre können nicht in einer Familienmitgliedschaft aufgenommen werden'
+      end
     end
 
     it 'cannot add and remove housemate' do
