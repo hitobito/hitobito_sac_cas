@@ -17,12 +17,12 @@ module CostCommon
     default_scope { where(deleted_at: nil) }
 
     scope :list, -> { order(:code) }
-    scope :with_deleted, -> { unscope }
+    scope :with_deleted, -> { unscope(where: :deleted_at) }
 
     has_many :event_kind_categories, class_name: 'Event::KindCategory',
       dependent: :restrict_with_error
 
-    has_many :courses, class_name: 'Event::Course',
+    has_many :event_kinds, class_name: 'Event::Kind',
       dependent: :restrict_with_error
 
     validates_by_schema
@@ -45,7 +45,7 @@ module CostCommon
   private
 
   def dependent_assocations_exist?
-    [event_kind_categories, courses].any?(&:exists?)
+    [event_kind_categories, event_kinds].any?(&:exists?)
   end
 
   def soft_destroy

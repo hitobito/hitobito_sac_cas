@@ -1,7 +1,9 @@
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito.
 #
 # == Schema Information
 #
@@ -34,8 +36,25 @@
 #  index_event_kinds_on_cost_unit_id    (cost_unit_id)
 #  index_event_kinds_on_level_id        (level_id)
 
----
-dummy:
-  cost_center: course
-  cost_unit: ski
-  level: ek
+module SacCas::Event::Kind
+  extend ActiveSupport::Concern
+
+  prepended do
+    include I18nEnums
+    belongs_to :cost_center
+    belongs_to :cost_unit
+    belongs_to :level
+
+    validates :cost_center_id, presence: true
+    validates :cost_unit_id, presence: true
+
+    validates :kind_category, presence: true
+    validates :short_name, presence: true
+
+    SEASONS = %w(winter summer).freeze
+    ACCOMODATIONS = %w(no_overnight hut pension pension_or_hut bivouac).freeze
+
+    i18n_enum :season, SEASONS
+    i18n_enum :accomodation, ACCOMODATIONS
+  end
+end

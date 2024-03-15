@@ -13,7 +13,6 @@ describe CostCommon do
   let(:fabricator) { described_class.model_name.singular.to_s }
 
   shared_examples 'cost common' do
-
     describe '::validations' do
       it 'validates presence of label' do
         expect(model).not_to be_valid
@@ -68,18 +67,20 @@ describe CostCommon do
     let!(:model) { Fabricate(fabricator) }
 
     let!(:dependent_model) do
-      category_attrs = [[fabricator, model], [other.model_name.singular, other_model]].to_h
-      Fabricate(dependent_model_fabricator, category_attrs)
+      Fabricate(dependent_model_fabricator, {
+        "#{described_class.model_name.singular}_id" => model.id,
+        "#{other.model_name.singular}_id" => other_model.id,
+      })
     end
 
-    it 'is prevented if associated dependent_model exists ' do
+    it "is prevented if associated #{dependent_model_fabricator} exists" do
       expect { model.destroy }.not_to change { described_class.count }
       expect { other_model.destroy }.not_to change { other.count }
       expect(model.errors.full_messages[0]).to eq 'Datensatz kann nicht gelöscht werden, ' \
         "da abhängige #{dependent_model.model_name.human(count: 2)} existieren."
     end
 
-    it 'succeeds if no associated dependent_model exists ' do
+    it "succeeds if no associated #{dependent_model_fabricator} exists" do
       dependent_model.destroy!
       expect { model.destroy }.to change { described_class.count }.by(-1)
       expect { other_model.destroy }.to change { other.count }.by(-1)
@@ -89,13 +90,13 @@ describe CostCommon do
 
   describe CostUnit do
     it_behaves_like 'cost common'
-    it_behaves_like 'soft destroy', dependent_model_fabricator: :event_kind_category
-    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_course
+    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_event_kind
+    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_event_kind_category
   end
 
   describe CostUnit do
     it_behaves_like 'cost common'
-    it_behaves_like 'soft destroy', dependent_model_fabricator: :event_kind_category
-    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_course
+    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_event_kind
+    it_behaves_like 'soft destroy', dependent_model_fabricator: :sac_event_kind_category
   end
 end
