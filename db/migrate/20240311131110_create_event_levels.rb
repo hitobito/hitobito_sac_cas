@@ -17,11 +17,11 @@ class CreateEventLevels < ActiveRecord::Migration[6.1]
 
     reversible do |dir|
       dir.up do
-        EventLevel.create_translation_table!(label: { type: :string, null: false })
+        Event::Level.create_translation_table!(label: { type: :string, null: false })
       end
 
       dir.down do
-        EventLevel.drop_translation_table!
+        Event::Level.drop_translation_table!
       end
     end
   end

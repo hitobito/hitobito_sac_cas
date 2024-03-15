@@ -5,8 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module Sheet
-  class EventLevel < Sheet::Admin
+class Event::Level < ActiveRecord::Base
+  validates_by_schema
 
+  acts_as_paranoid
+
+  translates :label
+  validates :label, presence: true
+
+  def to_s
+    self.label
   end
 end

@@ -5,15 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class EventLevel < ActiveRecord::Base
-  validates_by_schema
+class Event::LevelAbility < AbilityDsl::Base
+  on(Event::Level) do
+    class_side(:index).if_admin
 
-  acts_as_paranoid
-
-  translates :label
-  validates :label, presence: true
-
-  def to_s
-    self.label
+    permission(:admin).may(:manage).all
   end
 end

@@ -65,7 +65,7 @@ de:
       event/kind_category:
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
-      event_level:
+      event/level:
         label: Bezeichnung
         code: Code
         difficulty: Schwierigkeitsgrad
@@ -140,7 +140,7 @@ de:
       cost_unit:
         one: Kostenträger
         other: Kostenträger
-      event_level:
+      event/level:
         one: Kursstufe
         other: Kursstufen
 

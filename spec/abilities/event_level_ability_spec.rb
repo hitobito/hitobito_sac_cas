@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe EventLevelAbility do
+describe Event::LevelAbility do
 
   def build_role(type)
     Fabricate.build(type.sti_name, group: group).tap do |r|
@@ -21,18 +21,18 @@ describe EventLevelAbility do
   context 'without admin permission' do
     let(:role) { Group::Geschaeftsstelle::Mitarbeiter }
 
-    it 'may not view nor manage EventLevel records' do
-      expect(ability).not_to be_able_to(:index, EventLevel)
-      expect(ability).not_to be_able_to(:manage, EventLevel.new)
+    it 'may not view nor manage Event::Level records' do
+      expect(ability).not_to be_able_to(:index, Event::Level)
+      expect(ability).not_to be_able_to(:manage, Event::Level.new)
     end
   end
 
   context 'with admin permission' do
     let(:role) { Group::Geschaeftsstelle::Admin }
 
-    it 'may view nor manage EventLevel records' do
-      expect(ability).to be_able_to(:index, EventLevel)
-      expect(ability).to be_able_to(:manage, EventLevel.new)
+    it 'may view nor manage Event::Level records' do
+      expect(ability).to be_able_to(:index, Event::Level)
+      expect(ability).to be_able_to(:manage, Event::Level.new)
     end
   end
 end

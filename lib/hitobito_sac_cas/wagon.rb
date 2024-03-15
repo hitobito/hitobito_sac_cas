@@ -44,7 +44,7 @@ module HitobitoSacCas
 
 
       ## Abilities
-      Ability.store.register EventLevelAbility
+      Ability.store.register Event::LevelAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       VariousAbility.prepend SacCas::VariousAbility

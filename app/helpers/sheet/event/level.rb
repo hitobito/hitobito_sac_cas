@@ -5,7 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class EventLevelsController < SimpleCrudController
+module Sheet
+  class Event::Level < Sheet::Admin
 
-  self.permitted_attrs = [:label, :code, :difficulty]
+  end
 end

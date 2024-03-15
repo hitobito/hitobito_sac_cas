@@ -5,10 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class EventLevelAbility < AbilityDsl::Base
-  on(EventLevel) do
-    class_side(:index).if_admin
+class Event::LevelsController < SimpleCrudController
 
-    permission(:admin).may(:manage).all
+  self.permitted_attrs = [:label, :code, :difficulty]
+
+  private
+
+  def self.model_class
+    Event::Level
   end
 end
