@@ -5,12 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class CostCentersController < SimpleCrudController
-  self.permitted_attrs = [:code, :label]
-
-  private
-
-  def list_entries
-    super.list
-  end
+Fabricator(:event_level, class_name: 'Event::Level') do
+  label { Faker::Lorem.words.join(" ") }
+  code  { Faker::Number.number }
+  difficulty  { Faker::Number.number }
 end

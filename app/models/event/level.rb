@@ -5,12 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class CostCentersController < SimpleCrudController
-  self.permitted_attrs = [:code, :label]
+class Event::Level < ActiveRecord::Base
+  validates_by_schema
 
-  private
+  acts_as_paranoid
 
-  def list_entries
-    super.list
+  translates :label
+  validates :label, presence: true
+
+  def to_s
+    self.label
   end
 end

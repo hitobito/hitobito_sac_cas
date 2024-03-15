@@ -5,12 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class CostCentersController < SimpleCrudController
-  self.permitted_attrs = [:code, :label]
+class Event::LevelsController < SimpleCrudController
+
+  self.permitted_attrs = [:label, :code, :difficulty]
 
   private
 
-  def list_entries
-    super.list
+  def self.model_class
+    Event::Level
   end
 end

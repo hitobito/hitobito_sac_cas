@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     get '/verify_membership/:verify_token' => 'people/membership/verify#show',
         as: 'verify_membership'
 
+    resources :event_levels, module: 'event', controller: 'levels', except: [:show]
+
     resources :groups, only: [] do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
 

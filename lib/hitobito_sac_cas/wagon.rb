@@ -39,8 +39,12 @@ module HitobitoSacCas
 
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
+      admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
+      admin[:active_for] << 'event_levels'
+
 
       ## Abilities
+      Ability.store.register Event::LevelAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       VariousAbility.prepend SacCas::VariousAbility
