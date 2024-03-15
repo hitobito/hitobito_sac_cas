@@ -11,7 +11,7 @@ describe 'code models', js: true do
   let(:admin) { people(:admin) }
   before { sign_in(admin) }
 
-  ['Kostenstellen', 'Kostenträger'].each do |model_name|
+  [['Kostenstellen', 1], ['Kostenträger', 2]].each do |model_name, row|
     it "can create edit and destroy #{model_name}" do
       sign_in(admin)
       visit root_path
@@ -23,12 +23,12 @@ describe 'code models', js: true do
       click_on 'Speichern'
       expect(page).to have_css('.alert-success', text: "code - dummy wurde erfolgreich erstellt.")
 
-      click_on 'Bearbeiten'
+      within("tbody tr:nth-child(#{row})") { click_on 'Bearbeiten' }
       fill_in 'Bezeichnung', with: 'update'
       click_on 'Speichern'
       expect(page).to have_css('.alert-success', text: "code - update wurde erfolgreich aktualisiert.")
 
-      click_on 'Löschen'
+      within("tbody tr:nth-child(#{row})") { click_on 'Löschen' }
       accept_alert
       expect(page).to have_css('.alert-success', text: "code - update wurde erfolgreich gelöscht.")
     end
