@@ -11,6 +11,7 @@ module SacCas::StepsComponent
   prepended do
     haml_template <<~HAML
       %div{data: { controller: stimulus_controller} }
+        = hidden_field_tag(:step, @step, data: stimulus_target('step'))
         = hidden_field_tag :autosubmit, ''
         .row
           %ol.step-headers.offset-md-1

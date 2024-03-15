@@ -27,10 +27,17 @@ describe :self_registration_neuanmeldung, js: true do
     end
   end
 
+  def assert_step(step_name)
+    expect(page).to have_css('.step-headers li.active', text: step_name),
+      "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+  end
+
   def complete_main_person_form
+    assert_step 'Haupt-E-Mail'
     assert_aside
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
     click_on 'Weiter'
+    assert_step 'Personendaten'
     choose 'Mann'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
@@ -47,7 +54,24 @@ describe :self_registration_neuanmeldung, js: true do
     click_on 'Weiter'
   end
 
-  def complete_last_page(with_adult_consent: false)
+  def complete_household_form
+    assert_step 'Familienmitglieder'
+    click_on  'Eintrag hinzufügen'
+
+    within '#housemates_fields .fields:nth-child(1)' do
+      fill_in 'Vorname', with: 'Maxine'
+      fill_in 'Nachname', with: 'Muster'
+      fill_in 'Geburtstag', with: '01.01.1981'
+      fill_in 'E-Mail (optional)', with: 'maxine.muster@hitobito.example.com'
+      choose 'weiblich'
+    end
+    yield if block_given?
+    click_on 'Weiter als Familienmitgliedschaft', match: :first
+  end
+
+  def complete_last_page(with_adult_consent: false, submit: true)
+    assert_step 'Zusatzdaten'
+    expect(page).to have_button('Registrieren'), 'expected to be on last page'
     if with_adult_consent
       check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
     end
@@ -55,7 +79,11 @@ describe :self_registration_neuanmeldung, js: true do
     check 'Ich habe das Beitragsreglement gelesen und stimme diesen zu'
     check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
     yield if block_given?
-    click_on 'Registrieren'
+    click_on 'Registrieren' if submit
+  end
+
+  def click_on_breadcrumb(link_text)
+    within('.step-headers') { click_on link_text }
   end
 
   def format_date(time_or_date)
@@ -146,6 +174,22 @@ match: :first).click
       expect(page).to have_field('self_registration_sektion_main_person_attributes_address',
 with: 'Belpstrasse')
     end
+
+    it 'validates required fields' do
+      visit group_self_registration_path(group_id: group)
+      fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+      click_on 'Weiter'
+      click_on 'Weiter', match: :first
+
+      expect(page).to have_selector('#error_explanation') # wait for the error message to appear
+      expect(find_field('Vorname')[:class]).to match /\bis-invalid\b/
+      expect(find_field('Nachname')[:class]).to match /\bis-invalid\b/
+      expect(find_field('Geburtstag')[:class]).to match /\bis-invalid\b/
+      expect(find_field('Strasse und Nr.')[:class]).to match /\bis-invalid\b/
+      expect(find_field('PLZ/Ort')[:class]).to match /\bis-invalid\b/
+      expect(find('#self_registration_sektion_main_person_attributes_town')[:class]).to match /\bis-invalid\b/
+      expect(find_field('Telefon')[:class]).to match /\bis-invalid\b/
+    end
   end
 
   describe 'household' do
@@ -158,8 +202,15 @@ with: 'Belpstrasse')
     it 'validates household required fields' do
       click_on 'Eintrag hinzufügen'
       click_on 'Weiter als Familienmitgliedschaft', match: :first
+
+      expect(page).to have_selector('#error_explanation') # wait for the error message to appear
       within '#housemates_fields .fields:nth-child(1)' do
-        expect(page).to have_content 'Vorname muss ausgefüllt werden'
+        expect(find_field('Vorname')[:class]).to match /\bis-invalid\b/
+        expect(find_field('Nachname')[:class]).to match /\bis-invalid\b/
+        expect(find_field('Geburtstag')[:class]).to match /\bis-invalid\b/
+
+        expect(find_field('E-Mail (optional)')[:class]).not_to match /\bis-invalid\b/
+        expect(find_field('Telefon (optional)')[:class]).not_to match /\bis-invalid\b/
       end
     end
 
@@ -179,13 +230,13 @@ with: 'Belpstrasse')
       within '#housemates_fields .fields:nth-child(2)' do
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
-        fill_in 'Geburtstag', with: '01.01.2012'
+        fill_in 'Geburtstag', with: format_date(15.years.ago)
         fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
-      assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
-      find('.btn-toolbar.bottom .btn-group button[type="submit"]',
-text: 'Weiter als Familienmitgliedschaft').click
+
+      assert_aside('01.01.1980', '01.01.1981', format_date(15.years.ago))
+      click_button('Weiter als Familienmitgliedschaft', match: :first)
 
       expect do
         complete_last_page
@@ -198,7 +249,7 @@ text: 'Weiter als Familienmitgliedschaft').click
 
       people = Person.where(last_name: 'Muster')
       expect(people).to have(3).items
-      expect(people.pluck(:household_key).compact.uniq).to have(1).item
+      expect(Person.where(household_key: people.first.household_key)).to have(3).items
     end
 
     it 'validates we only can have one additional adult in household' do
@@ -224,7 +275,10 @@ text: 'Weiter als Familienmitgliedschaft').click
       assert_aside('01.01.1980', '01.01.1981', '01.01.1978')
 
       click_on 'Weiter als Familienmitgliedschaft', match: :first
-      expect(page).to have_content 'In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.'
+
+      within('#error_explanation') do
+        expect(page).to have_content 'In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.'
+      end
     end
 
     it 'validates we can not add youth in household' do
@@ -242,7 +296,22 @@ text: 'Weiter als Familienmitgliedschaft').click
       end
     end
 
-    it 'cannot add and remove housemate' do
+    it 'can have many children in household' do
+      anchor_date = 15.years.ago.to_date
+      7.times.each do |i|
+        click_on  'Eintrag hinzufügen'
+        within "#housemates_fields .fields:nth-child(#{i+1})" do
+          fill_in 'Vorname', with: "Kind #{i+1}"
+          fill_in 'Nachname', with: 'Muster'
+          fill_in 'Geburtstag', with: format_date(anchor_date + i.years)
+        end
+      end
+      click_on 'Weiter als Familienmitgliedschaft', match: :first
+      expect(page).to have_button 'Registrieren'
+      expect(page).to have_no_selector '#error_explanation'
+    end
+
+    it 'can add and remove housemate' do
       click_on  'Eintrag hinzufügen'
 
       within '#housemates_fields .fields:nth-child(1)' do
@@ -258,16 +327,16 @@ text: 'Weiter als Familienmitgliedschaft').click
       within '#housemates_fields .fields:nth-child(2)' do
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
-        fill_in 'Geburtstag', with: '01.01.2012'
+        fill_in 'Geburtstag', with: format_date(15.years.ago)
         fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'andere'
       end
-      assert_aside('01.01.1980', '01.01.1981', '01.01.2012')
+      assert_aside('01.01.1980', '01.01.1981', format_date(15.years.ago))
 
       within '#housemates_fields .fields:nth-child(1)' do
         click_on 'Entfernen'
       end
-      assert_aside('01.01.1980', '01.01.2012')
+      assert_aside('01.01.1980', format_date(15.years.ago))
       click_on 'Weiter als Familienmitgliedschaft', match: :first
 
       expect do
@@ -362,7 +431,7 @@ text: 'Weiter als Familienmitgliedschaft').click
 
         fill_in 'Vorname', with: 'Maxi'
         fill_in 'Nachname', with: 'Muster'
-        fill_in 'Geburtstag', with: I18n.l(1.day.ago.to_date)
+        fill_in 'Geburtstag', with: format_date(1.day.ago)
         fill_in 'E-Mail (optional)', with: 'maxi.muster@hitobito.example.com'
         choose 'weiblich'
         click_on 'Weiter als Familienmitgliedschaft', match: :first
@@ -400,8 +469,8 @@ text: 'Weiter als Familienmitgliedschaft').click
     end
   end
 
-  describe 'household age validations' do
-    let(:twenty_years_ago) { I18n.l(20.years.ago.to_date) }
+  describe 'main person household age validations' do
+    let(:twenty_years_ago) { format_date(20.years.ago) }
     it 'skips household when person is too young' do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form do
@@ -411,11 +480,10 @@ text: 'Weiter als Familienmitgliedschaft').click
       expect(page).not_to have_link 'Familienmitglieder'
     end
 
-    it 'clears household members when person is too young' do
+    it 'clears household members when changing main person birthday too young' do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on  'Eintrag hinzufügen'
-
       within '#housemates_fields .fields:nth-child(1)' do
         fill_in 'Vorname', with: 'Maxine'
         fill_in 'Nachname', with: 'Muster'
@@ -545,6 +613,108 @@ text: 'Weiter als Familienmitgliedschaft').click
       expect(page).to have_link('Statuten', target: '_blank')
       expect(page).to have_link('Beitragsreglement', target: '_blank')
       expect(page).to have_link('Datenschutzerklärung', target: '_blank')
+    end
+  end
+
+  describe 'wizard stepping navigation' do
+    context 'for family registration' do
+      before do
+        visit group_self_registration_path(group_id: group)
+        complete_main_person_form
+        complete_household_form
+        assert_step 'Zusatzdaten'
+      end
+
+      it 'works with buttons' do
+        click_on 'Zurück', match: :first
+        assert_step 'Familienmitglieder'
+        click_on 'Zurück', match: :first
+        assert_step 'Personendaten'
+        click_on 'Zurück', match: :first
+        assert_step 'Haupt-E-Mail'
+        click_on 'Weiter', match: :first
+        assert_step 'Personendaten'
+        click_on 'Weiter', match: :first
+        assert_step 'Familienmitglieder'
+        click_on 'Weiter als Familienmitgliedschaft', match: :first
+        assert_step 'Zusatzdaten'
+      end
+
+      it 'works with breadcrumb links' do
+        click_on_breadcrumb 'Haupt-E-Mail'
+        assert_step 'Haupt-E-Mail'
+        click_on_breadcrumb 'Personendaten'
+        assert_step 'Personendaten'
+        click_on_breadcrumb 'Familienmitglieder'
+        assert_step 'Familienmitglieder'
+        click_on_breadcrumb 'Zusatzdaten'
+        assert_step 'Zusatzdaten'
+      end
+    end
+
+    context 'for single person registration' do
+      before do
+        visit group_self_registration_path(group_id: group)
+        complete_main_person_form
+        click_on 'Weiter als Einzelmitglied', match: :first
+        complete_last_page(submit: false)
+      end
+
+      it 'works with buttons' do
+        click_on 'Zurück', match: :first
+        assert_step 'Familienmitglieder'
+        click_on 'Zurück', match: :first
+        assert_step 'Personendaten'
+        click_on 'Zurück', match: :first
+        assert_step 'Haupt-E-Mail'
+        click_on 'Weiter', match: :first
+        assert_step 'Personendaten'
+        click_on 'Weiter', match: :first
+        assert_step 'Familienmitglieder'
+        click_on 'Weiter als Einzelmitglied'
+        assert_step 'Zusatzdaten'
+      end
+
+      it 'works with breadcrumb links' do
+        click_on_breadcrumb 'Haupt-E-Mail'
+        assert_step 'Haupt-E-Mail'
+        click_on_breadcrumb 'Personendaten'
+        assert_step 'Personendaten'
+        click_on_breadcrumb 'Familienmitglieder'
+        assert_step 'Familienmitglieder'
+        click_on_breadcrumb 'Zusatzdaten'
+        assert_step 'Zusatzdaten'
+      end
+    end
+
+    context 'for youth person registration' do
+      before do
+        visit group_self_registration_path(group_id: group)
+        complete_main_person_form do
+          fill_in 'Geburtstag', with: format_date(15.years.ago)
+        end
+        complete_last_page(submit: false)
+      end
+
+      it 'works with buttons' do
+        click_on 'Zurück', match: :first
+        assert_step 'Personendaten'
+        click_on 'Zurück', match: :first
+        assert_step 'Haupt-E-Mail'
+        click_on 'Weiter', match: :first
+        assert_step 'Personendaten'
+        click_on 'Weiter', match: :first
+        assert_step 'Zusatzdaten'
+      end
+
+      it 'works with breadcrumb links' do
+        click_on_breadcrumb 'Haupt-E-Mail'
+        assert_step 'Haupt-E-Mail'
+        click_on_breadcrumb 'Personendaten'
+        assert_step 'Personendaten'
+        click_on_breadcrumb 'Zusatzdaten'
+        assert_step 'Zusatzdaten'
+      end
     end
   end
 end
