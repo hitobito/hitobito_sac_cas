@@ -35,4 +35,14 @@ describe VariousAbility do
       expect(ability).to be_able_to(:manage, CostCenter.new)
     end
   end
+
+  context 'with admin permission' do
+    let(:role) { Group::Geschaeftsstelle::Admin }
+
+    it 'may not view nor manage CostCenter records' do
+      expect(ability).to be_able_to(:index, Event::Level)
+      expect(ability).to be_able_to(:manage, Event::Leve.new)
+    end
+  end
+end
 end

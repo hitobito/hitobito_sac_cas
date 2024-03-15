@@ -18,5 +18,10 @@ module SacCas::VariousAbility
       class_side(:index).if_admin
       permission(:admin).may(:manage).all
     end
+
+    on(Event::Level) do
+      class_side(:index).if_admin
+      permission(:admin).may(:manage).all
+    end
   end
 end
