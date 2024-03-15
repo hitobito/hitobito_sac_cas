@@ -6,6 +6,18 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:sac_course, from: :course) do
-  kind_id { ActiveRecord::FixtureSet.identify(:dummy) }
+  kind_id { ActiveRecord::FixtureSet.identify(:ski_course) }
 end
 
+Fabricator(:sac_event_kind, from: :event_kind) do
+  kind_category_id { ActiveRecord::FixtureSet.identify(:ski_course) }
+  short_name { Faker::Lorem.words.join }
+  level_id { ActiveRecord::FixtureSet.identify(:ek) }
+  cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
+  cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
+end
+
+Fabricator(:sac_event_kind_category, from: :event_kind_category) do
+  cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
+  cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
+end

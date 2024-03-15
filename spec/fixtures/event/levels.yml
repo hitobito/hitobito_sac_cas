@@ -1,0 +1,15 @@
+# == Schema Information
+#
+# Table name: event_levels
+#
+#  id         :bigint           not null, primary key
+#  code       :integer          not null
+#  deleted_at :datetime
+#  difficulty :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+
+---
+ek:
+  code: 1
+  difficulty: 1

@@ -53,17 +53,33 @@ de:
       cost_center:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
+        event_kinds: Kursarten
         courses: Kurse
-        created_at: Erstellt
         updated_at: Geändert
-        deleted_at: Gelöscht
       cost_unit:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
+        event_kinds: Kursarten
         courses: Kurse
-        created_at: Erstellt
         updated_at: Geändert
-        deleted_at: Gelöscht
+      event/kind:
+        accomodation: Unterkunft
+        accomodations:
+          no_overnight: ohne Übernachtung
+          hut: Hütte
+          pension: Pension/Berggasthaus
+          pension_or_hut: Pension/Berggasthaus oder Hütte
+          bivouac: Übernachtung im Freien/Biwak
+        cost_center_id: Kostenstelle
+        cost_unit_id: Kostenträger
+        season: Saison
+        seasons:
+          winter: Winter
+          summer: Sommer
+        reserve_accommodation: Unterkunft reservieren durch SAC
+        maximum_participants: Maximale Teilnehmerzahl
+        minimum_participants: Minimale Teilnehmerzahl
+        training_days: Ausbildungstage
       event/kind_category:
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger

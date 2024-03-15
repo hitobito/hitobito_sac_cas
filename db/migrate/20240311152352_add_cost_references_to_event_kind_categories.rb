@@ -41,7 +41,6 @@ class AddCostReferencesToEventKindCategories < ActiveRecord::Migration[6.1]
     execute "DELETE FROM #{kind} WHERE code = 'dummy';"
   end
 
-
   def update_kind_categories
     execute <<~SQL
     UPDATE event_kind_categories SET

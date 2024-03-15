@@ -8,18 +8,23 @@
 require 'spec_helper'
 
 describe Event::KindCategory do
-  describe "::validations" do
-    it "is not valid unless cost_center and cost_unit are set" do
-      model = Fabricate.build(:event_kind_category)
-      expect(model).to have(1).errors_on(:cost_center_id)
-      expect(model).to have(1).errors_on(:cost_unit_id)
+  describe '::validations' do
+    subject(:category) { Fabricate.build(:sac_event_kind_category) }
+
+    it 'is valid as builded by fabricator' do
+      expect(category).to be_valid
     end
 
-    it "is valid if cost_center and cost_unit is present" do
-      model = Fabricate.build(:event_kind_category,
-                              cost_center: cost_centers(:tour),
-                              cost_unit: cost_units(:ski))
-      expect(model).to be_valid
+    it 'validates presence of cost_center' do
+      category.cost_center_id = nil
+      expect(category).not_to be_valid
+      expect(category.errors[:cost_center_id]).to eq ['muss ausgefüllt werden']
+    end
+
+    it 'validates presence of cost_unit' do
+      category.cost_unit_id = nil
+      expect(category).not_to be_valid
+      expect(category.errors[:cost_unit_id]).to eq ['muss ausgefüllt werden']
     end
   end
 end

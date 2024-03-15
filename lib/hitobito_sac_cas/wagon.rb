@@ -25,6 +25,7 @@ module HitobitoSacCas
       HitobitoLogEntry.categories += %w(neuanmeldungen)
 
       # extend application classes here
+      Event::Kind.prepend SacCas::Event::Kind
       Event::KindCategory.prepend SacCas::Event::KindCategory
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
@@ -64,6 +65,17 @@ module HitobitoSacCas
       admin_item[:active_for] += %w(cost_centers cost_units)
 
       ## Controllers
+      Event::KindsController.permitted_attrs += [
+        :level_id,
+        :cost_center_id,
+        :cost_unit_id,
+        :maximum_participants,
+        :minimum_participants,
+        :training_days,
+        :season,
+        :reserve_accommodation,
+        :accomodation
+      ]
       Event::KindCategoriesController.permitted_attrs += [:cost_center_id, :cost_unit_id]
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
