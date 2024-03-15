@@ -41,7 +41,7 @@ describe VariousAbility do
 
     it 'may not view nor manage CostCenter records' do
       expect(ability).to be_able_to(:index, Event::Level)
-      expect(ability).to be_able_to(:manage, Event::Leve.new)
+      expect(ability).to be_able_to(:manage, Event::Level.new)
     end
   end
 end
