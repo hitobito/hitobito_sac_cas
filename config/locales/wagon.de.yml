@@ -70,6 +70,8 @@ de:
           pension: Pension/Berggasthaus
           pension_or_hut: Pension/Berggasthaus oder Hütte
           bivouac: Übernachtung im Freien/Biwak
+        level_id: Kursart
+        kind_category_id: Kurskategorie
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
         season: Saison
