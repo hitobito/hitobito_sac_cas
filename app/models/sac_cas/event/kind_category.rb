@@ -21,7 +21,6 @@
 # Indexes
 #
 #  index_event_kind_categories_on_cost_center_id                   (cost_center_id)
-#  index_event_kind_categories_on_cost_center_id_and_cost_unit_id  (cost_center_id,cost_unit_id) UNIQUE # rubocop:disable Metrics/LineLength
 #  index_event_kind_categories_on_cost_unit_id                     (cost_unit_id)
 #
 module SacCas::Event::KindCategory

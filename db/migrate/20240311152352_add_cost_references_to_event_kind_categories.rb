@@ -12,8 +12,6 @@ class AddCostReferencesToEventKindCategories < ActiveRecord::Migration[6.1]
       t.belongs_to :cost_unit
     end
 
-    add_index(:event_kind_categories, [:cost_center_id, :cost_unit_id], unique: true)
-
     reversible do |dir|
       dir.up do
         insert_default(:cost_centers)
