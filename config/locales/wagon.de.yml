@@ -257,11 +257,11 @@ de:
 
       ### ROLES
       group/geschaeftsstelle/mitarbeiter:
-        one: Mitarbeiter*in
-        description: Mitarbeiter*in
+        one: Mitarbeiter*in (schreibend)
+        description: Mitarbeiter*in (schreibend)
       group/geschaeftsstelle/mitarbeiter_lesend:
-        one: Mitarbeiter*in (nur lesend)
-        description: Mitarbeiter*in (nur lesend)
+        one: Mitarbeiter*in (lesend)
+        description: Mitarbeiter*in (lesend)
       group/geschaeftsstelle/admin:
         one: Admin
         description: Admin
