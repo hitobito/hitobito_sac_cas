@@ -6,6 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Person::HistoryController
+  extend ActiveSupport::Concern
+
+  def index
+    @external_trainings = ExternalTraining.where(person_id: @person.id)
+    super
+  end
 
   private
 

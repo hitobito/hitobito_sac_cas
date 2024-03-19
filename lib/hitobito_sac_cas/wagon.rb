@@ -51,6 +51,7 @@ module HitobitoSacCas
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
       PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
+      Ability.store.register ExternalTrainingAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
 

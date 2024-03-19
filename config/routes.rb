@@ -22,6 +22,9 @@ Rails.application.routes.draw do
     resources :groups, only: [] do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
 
+      resources :people, only: [] do
+        resources :external_trainings, except: [:edit, :show, :index]
+      end
       namespace :people do
         namespace :neuanmeldungen do
           resource :approves, only: [:new, :create]
