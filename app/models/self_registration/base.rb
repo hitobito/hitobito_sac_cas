@@ -19,7 +19,9 @@ class SelfRegistration::Base < SelfRegistration
   private
 
   def main_email_valid?
-    main_person.email.present?
+    main_person.valid_email?.tap do |valid|
+      main_person.errors.add(:email, :invalid) unless valid
+    end
   end
 
   alias_method :emailless_main_person_valid?, :main_person_valid?

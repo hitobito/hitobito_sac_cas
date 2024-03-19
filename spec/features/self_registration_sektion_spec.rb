@@ -19,6 +19,18 @@ describe :self_registration_neuanmeldung, js: true do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
+  def expect_active_step(step_name)
+    expect(page).
+      to have_css('.step-headers li.active', text: step_name),
+         "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+  end
+
+  def expect_validation_error(message)
+    within('.alert#error_explanation') do
+      expect(page).to have_content(message)
+    end
+  end
+
   def assert_aside(*birthdays)
     expect(page).to have_css('aside h2', text: 'Fragen zur Mitgliedschaft?')
     expect(page).to have_css('aside#fees h2', text: "Beiträge in der Sektion #{group.layer_group.name}")
@@ -56,6 +68,15 @@ describe :self_registration_neuanmeldung, js: true do
     check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
     yield if block_given?
     click_on 'Registrieren'
+  end
+
+  it 'validates email address' do
+    allow(Truemail).to receive(:valid?).with('max.muster@hitobito.example.com').and_return(false)
+    visit group_self_registration_path(group_id: group.id)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    expect_active_step('E-Mail')
+    expect_validation_error('E-Mail ist nicht gültig')
   end
 
   describe 'existing email' do
