@@ -55,6 +55,7 @@ module HitobitoSacCas
       RoleAbility.prepend SacCas::RoleAbility
 
       ## Decorators
+      RoleDecorator.prepend SacCas::RoleDecorator
 
       ## Resources
       GroupResource.include SacCas::GroupResource
