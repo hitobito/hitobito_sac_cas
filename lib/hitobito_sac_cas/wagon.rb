@@ -133,6 +133,28 @@ module HitobitoSacCas
       end
     end
 
+    initializer 'sac_cas.add_oidc_claims' do |_app|
+      Doorkeeper::OpenidConnect.configuration.claims[:picture_url] =
+        Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
+          name: :picture_url,
+          scope: :name,
+          response: [:user_info],
+          generator: Proc.new do |resource_owner|
+            resource_owner.decorate.picture_full_url
+          end
+        )
+
+      Doorkeeper::OpenidConnect.configuration.claims[:with_roles_picture_url] =
+        Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
+          name: :picture_url,
+          scope: :with_roles,
+          response: [:user_info],
+          generator: Proc.new do |resource_owner|
+            resource_owner.decorate.picture_full_url
+          end
+        )
+    end
+
     private
 
     def seed_fixtures
