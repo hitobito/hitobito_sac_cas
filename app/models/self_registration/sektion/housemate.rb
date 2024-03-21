@@ -19,6 +19,8 @@ class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
   ]
 
   validate :assert_adult_count
+  validate :assert_family_age
+
   delegate :register_on_date, :newsletter, to: :supplements, allow_nil: true
 
   def person
@@ -35,6 +37,14 @@ class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
     if adult_count.to_i >= MAX_ADULT_COUNT && person.adult?
       errors.add(:base, too_many_adults_message)
     end
+  end
+
+  def assert_family_age
+    calculator = SacCas::Beitragskategorie::Calculator.new(person)
+    return if calculator.family_age? # everyting in order, no need to check further
+
+    errors.add(:birthday, :too_young_for_family) if calculator.pre_school_child?
+    errors.add(:birthday, :youth_not_allowed_in_family) if calculator.youth?
   end
 
   def too_many_adults_message

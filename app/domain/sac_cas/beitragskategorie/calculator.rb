@@ -37,8 +37,22 @@ module SacCas::Beitragskategorie
       AGE_RANGE_ADULT.cover?(age)
     end
 
+    # Attention: overlap with child?, make sure to use it correctly depending on context
+    def youth?
+      AGE_RANGE_YOUTH.cover?(age)
+    end
+
+    # Attention: overlap with youth?, make sure to use it correctly depending on context
     def child?
       AGE_RANGE_MINOR_FAMILY_MEMBER.cover?(age)
+    end
+
+    def pre_school_child?
+      (0..AGE_RANGE_MINOR_FAMILY_MEMBER.begin).cover?(age)
+    end
+
+    def family_age?
+      adult? || child?
     end
 
     private

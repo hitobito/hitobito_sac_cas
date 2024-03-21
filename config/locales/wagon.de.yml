@@ -39,6 +39,9 @@ de:
     errors:
       messages:
         must_be_older_than_18: Person muss 18 Jahre oder älter sein.
+        youth_not_allowed_in_family: |
+          Jugendliche im Alter von 18 bis 21 Jahre können nicht
+          in einer Familienmitgliedschaft aufgenommen werden.
 
     models:
       people/neuanmeldungen/approve:
