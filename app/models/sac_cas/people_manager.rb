@@ -22,7 +22,7 @@ module SacCas::PeopleManager
       managed.household_key.nil?
 
     errors.
-      add(:manager_id, :in_different_household, name: manager_name)
+      add(:managed_id, :in_different_household, name: managed_name)
   end
 
   def manager_is_adult

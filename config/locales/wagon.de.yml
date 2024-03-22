@@ -186,7 +186,7 @@ de:
         people_manager:
           in_different_household: >-
             %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
-            als Verwalter*in hinzugefügt werden.
+            diesem Haushalt hinzugefügt werden.
           managed_is_not_child: >-
             %{name} ist %{age} Jahre alt und kann daher nicht als Kind hinzugefügt werden.
           manager_is_not_adult: >-

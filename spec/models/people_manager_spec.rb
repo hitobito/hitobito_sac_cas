@@ -11,14 +11,14 @@ describe PeopleManager do
   context 'validations' do
     it 'does not allow manager and managed to be in different households' do
       manager = Fabricate(:person, household_key: '1234')
-      managed = Fabricate(:person, household_key: '5678')
+      managed = Fabricate(:person, household_key: '5678', birthday: 15.years.ago)
       pm = PeopleManager.new(manager: manager, managed: managed)
 
       expect(pm).to_not be_valid
       expect(pm.errors.errors).to include(have_attributes(
-        attribute: :manager_id,
+        attribute: :managed_id,
         type: :in_different_household,
-        options: { name: "#{manager.first_name} #{manager.last_name}" }
+        options: { name: "#{managed.first_name} #{managed.last_name}" }
       ))
     end
 
