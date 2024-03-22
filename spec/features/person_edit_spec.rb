@@ -76,6 +76,25 @@ describe 'person edit page', :js do
         end
       end
 
+      it 'adding family person to family household shows validation error' do
+        other_family_member = Fabricate(:person, primary_group: groups(:matterhorn_mitglieder))
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.name.to_sym,
+          person: other_family_member,
+          group: groups(:matterhorn_mitglieder),
+          beitragskategorie: 'familie'
+        )
+
+        visit edit_group_person_path(group_id: family_adult.primary_group_id, id: family_adult.id)
+        fill_in 'household_query', with: other_family_member.first_name
+        find('.household_query_container ul[role="listbox"] li[role="option"]', text: other_family_member.first_name).click
+        expect(page).to have_selector(
+          '.household_pleople_ids_errors',
+          text: /#{other_family_member.full_name} hat bereits eine Familienmitgliedschaft/
+        )
+        expect(page).to have_no_selector('.household_key_people a', text: other_family_member.first_name)
+      end
+
       it 'removing person keeps membership' do
         Person::Household.new(non_family_adult, Ability.new(people(:admin)), family_adult).
           tap { |h| h.assign; h.persist! }
