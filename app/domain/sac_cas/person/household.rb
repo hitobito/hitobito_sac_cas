@@ -18,13 +18,18 @@ module SacCas::Person::Household
     end
   end
 
-  def assign
-    super
+  def maintain_sac_family? = !!@maintain_sac_family
 
-    assign_children if adult?
-    assign_parents if child?
-    self
+  def initialize(person, ability, other = nil, user = nil, maintain_sac_family: true)
+    @maintain_sac_family = maintain_sac_family
+    super(person, ability, other, user)
   end
+
+  def valid?
+    [assert_no_conflicting_family_membership, super].all?
+  end
+
+  private
 
   def remove
     Person.transaction do
@@ -37,48 +42,61 @@ module SacCas::Person::Household
 
   def save
     Person.transaction do
-      managers_changed =
-        person.people_managers.any?(&:changed?) ||
-        person.people_manageds.any?(&:changed?)
-
       super
 
-      if managers_changed
-        person.people_managers.each(&:save!)
-        person.people_manageds.each(&:save!)
+      create_missing_people_managers
+      person.sac_family.update! if maintain_sac_family?
+    end
+  end
+
+  def assert_no_conflicting_family_membership
+    return true unless maintain_sac_family?
+    return true unless Role.where(person_id: existing_people, beitragskategorie: :familie).exists?
+
+    new_housemates_with_family_membership_role = Role.
+      where(person_id: new_people, beitragskategorie: :familie).
+      map(&:person).
+      uniq
+
+    new_housemates_with_family_membership_role.each do |other|
+      person.errors.
+        add(:base, :conflicting_family_membership, name: "#{other.first_name} #{other.last_name}")
+    end
+    new_housemates_with_family_membership_role.empty?
+  end
+
+
+  # Add people managers for all missing combinations of adults and children in the household.
+  def create_missing_people_managers
+    household_adults.each do |adult|
+      next if ability.cannot?(:update, adult)
+
+      household_children.each do |child|
+        next if ability.cannot?(:update, child)
+        next if adult.manageds.include?(child)
+
+        PeopleManager.create!(manager: adult, managed: child)
       end
-    end
-  end
-
-  private
-
-  # Add all children in the household to the adult person's "Elternzugang".
-  def assign_children
-    housemates_by_agegroup(:child).each do |child|
-      next unless ability.can?(:update, child)
-
-      person.people_manageds.include?(child) || person.people_manageds.build(managed: child)
-    end
-  end
-
-  # Add the child person to the "Elternzugang" of all parents in the household.
-  def assign_parents
-    housemates_by_agegroup(:adult).each do |adult|
-      next unless ability.can?(:update, adult)
-
-      adult.people_managers.include?(person) || person.people_managers.build(manager: adult)
     end
   end
 
   # Find all people in the household that are in the given age category.
   # @param [Symbol] age_category One of :adult, :child
-  def housemates_by_agegroup(age_category)
+  def people_by_agegroup(age_category)
     raise ArgumentError, "Invalid age category #{age_category}" unless
       %i[adult child].include?(age_category)
 
-    housemates.select do |other_person|
-      SacCas::Beitragskategorie::Calculator.new(other_person).send("#{age_category}?")
+    people.select do |person|
+      SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")
     end
+  end
+
+  def household_adults
+    people_by_agegroup(:adult)
+  end
+
+  def household_children
+    people_by_agegroup(:child)
   end
 
   def beitragskategorie_calculator

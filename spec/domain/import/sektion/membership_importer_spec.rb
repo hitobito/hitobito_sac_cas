@@ -10,7 +10,7 @@ require 'spec_helper'
 describe Import::Sektion::MembershipsImporter do
   let(:group) { groups(:bluemlisalp) }
 
-  def attrs(create_person: true, **attrs)
+  def attrs(**attrs)
     @navision_id ||= 123
     person_id = attrs.delete(:navision_id).presence || @navision_id += 1
     Fabricate(:person, id: person_id) unless Person.where(id: person_id).exists?
@@ -48,6 +48,23 @@ describe Import::Sektion::MembershipsImporter do
     expect(role.beitragskategorie).to eq 'einzel'
     expect(role.group).to eq groups(:bluemlisalp_mitglieder)
     expect(role.created_at).to eq Time.zone.parse('1.1.1960')
+  end
+
+  it 'sets correct delete_on' do
+    expect(importer).to receive(:each_row).and_yield(attrs(last_exit_date: nil))
+    expect { importer.import! }.to change { Role.count }.by(1)
+
+    expect(Role.last.delete_on).to eq Import::Sektion::Membership::DEFAULT_DELETE_ON
+  end
+
+  it 'sets correct deleted_at for terminated membership' do
+    expect(importer).to receive(:each_row).and_yield(attrs(
+      last_exit_date: '31.12.1980',
+      member_type: 'Ausgetreten'
+    ))
+    expect { importer.import! }.to change { Role.only_deleted.count }.by(1)
+
+    expect(Role.with_deleted.last.deleted_at).to eq Time.zone.parse('31.12.1980')
   end
 
   it 'creates roles for multiple people' do

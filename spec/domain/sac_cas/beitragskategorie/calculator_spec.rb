@@ -14,10 +14,45 @@ describe SacCas::Beitragskategorie::Calculator do
     described_class.new(person(age, household)).calculate
   end
 
-  def person(age, household)
+  def person(age, household = false)
     birthday = Time.zone.today - age.years if age
     household_key = 'household' if household
     Fabricate.build(:person, birthday: birthday, household_key: household_key)
+  end
+
+  context '#family_age?' do
+    it 'returns true for adult' do
+      [22, 99].each do |age|
+        calculator = described_class.new(person(age))
+        expect(calculator.adult?).to eq(true), "expected #{age} to be adult"
+        expect(calculator.family_age?).to eq(true), "expected #{age} to be family_age"
+      end
+    end
+
+    it 'returns true for child' do
+      [6, 17].each do |age|
+        calculator = described_class.new(person(age))
+        expect(calculator.child?).to eq(true), "expected #{age} to be child"
+        expect(calculator.family_age?).to eq(true), "expected #{age} to be family_age"
+      end
+    end
+
+    it 'returns false for person younger than 6 years' do
+      calculator = described_class.new(person(5))
+      expect(calculator.family_age?).to eq(false)
+    end
+
+    it 'returns false for youth' do
+      [18, 21].each do |age|
+        calculator = described_class.new(person(age))
+        expect(calculator.family_age?).to eq(false), "expected #{age} to be youth"
+      end
+    end
+
+    it 'returns false for person without birthday' do
+      calculator = described_class.new(person(nil))
+      expect(calculator.family_age?).to eq(false)
+    end
   end
 
   context '#calculate' do

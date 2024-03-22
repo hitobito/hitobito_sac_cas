@@ -164,6 +164,15 @@ describe Role do
                 to include('In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.')
             end
 
+            it 'accepts third adult person in same household with non-default context' do
+              # Add 2 adults
+              2.times { build_role.save! }
+
+              # Test third adult
+              third_adult = build_role
+              expect(third_adult).to be_valid(:import)
+            end
+
             it 'accepts third youth person in same household' do
               # Add 2 adults and 2 youth
               2.times { build_role.save! }

@@ -65,10 +65,10 @@ module Import
           current_ability: root_ability
         )
 
-        import_membership(membership)
+        import_membership(membership, row)
       end
 
-      def import_membership(membership)
+      def import_membership(membership, row)
         if membership.valid?
           membership.import!
           output.puts "Finished importing #{membership}"

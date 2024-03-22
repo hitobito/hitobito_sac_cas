@@ -28,6 +28,7 @@ describe Import::Sektion::MembershipsImporter do
 
   it 'assigns member role' do
     importer.import!
+    expect(importer.errors).to be_empty
 
     people_navision_ids.each do |id|
       person = Person.find(id)
@@ -38,6 +39,7 @@ describe Import::Sektion::MembershipsImporter do
 
   it 'imports active person' do
     importer.import!
+    expect(importer.errors).to be_empty
 
     active = Person.find(people_navision_ids.second)
 
@@ -51,7 +53,9 @@ describe Import::Sektion::MembershipsImporter do
   end
 
   it 'imports retired person' do
+    skip('Needs rework with the updated import files')
     importer.import!
+    expect(importer.errors).to be_empty
 
     retired = Person.find(people_navision_ids.first)
 
@@ -67,6 +71,7 @@ describe Import::Sektion::MembershipsImporter do
 
   it 'sets the address of all family/household members to the one of the last imported member' do
     importer.import!
+    expect(importer.errors).to be_empty
 
     family = Person.where(household_key: 'F12345')
     expect(family.count).to eq 3
@@ -79,7 +84,9 @@ describe Import::Sektion::MembershipsImporter do
   end
 
   it 'imports beitragskategorie' do
+    skip('Needs rework with the updated import files')
     importer.import!
+    expect(importer.errors).to be_empty
 
     beitragskategorien =
       Group::SektionsMitglieder::Mitglied

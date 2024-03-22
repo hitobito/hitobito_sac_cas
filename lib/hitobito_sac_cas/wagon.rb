@@ -32,6 +32,7 @@ module HitobitoSacCas
       Group.include SacCas::Group
       Person.include SacCas::Person
       Person::Household.prepend SacCas::Person::Household
+      PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
       SelfRegistration.prepend SacCas::SelfRegistration
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
@@ -47,6 +48,7 @@ module HitobitoSacCas
 
       ## Abilities
       Ability.store.register Event::LevelAbility
+      PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       VariousAbility.prepend SacCas::VariousAbility

@@ -12,7 +12,10 @@ module SacCas::Role::MitgliedFamilyValidations
   AGE_RANGE_ADULT = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT
 
   included do
-    validate :assert_adult_household_people_mitglieder_count
+    # Explicitely run validation on create and update. This allows us to skip this validation
+    # on a case by case basis by setting the context to something other than :create or :update.
+    # This is used by the memberships_importer to skip this validation.
+    validate :assert_adult_household_people_mitglieder_count, on: [:create, :update]
   end
 
   private
