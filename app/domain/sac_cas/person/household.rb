@@ -60,7 +60,7 @@ module SacCas::Person::Household
 
     new_housemates_with_family_membership_role.each do |other|
       person.errors.
-        add(:base, :conflicting_family_membership, name: "#{other.first_name} #{other.last_name}")
+        add(:household_people_ids, :conflicting_family_membership, name: "#{other.first_name} #{other.last_name}")
     end
     new_housemates_with_family_membership_role.empty?
   end
