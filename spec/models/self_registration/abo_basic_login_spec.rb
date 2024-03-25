@@ -35,9 +35,16 @@ describe SelfRegistration::AboBasicLogin do
     describe 'main_email' do
       let(:params) { { step: 0 } }
 
-      it 'is valid if email is present in first step' do
+      it 'is valid if email is valid in first step' do
         registration.main_person_attributes = required_attrs.slice(:email)
+        allow(Truemail).to receive(:valid?).with(required_attrs[:email]).and_return(true)
         expect(registration).to be_valid
+      end
+
+      it 'is invalid if email is invalid in first step' do
+        registration.main_person_attributes = required_attrs.slice(:email)
+        allow(Truemail).to receive(:valid?).with(required_attrs[:email]).and_return(false)
+        expect(registration).not_to be_valid
       end
     end
 

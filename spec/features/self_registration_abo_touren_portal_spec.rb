@@ -29,6 +29,27 @@ describe :self_registration do
     check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
   end
 
+  def expect_active_step(step_name)
+    expect(page).
+      to have_css('.step-headers li.active', text: step_name),
+         "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+  end
+
+  def expect_validation_error(message)
+    within('.alert#error_explanation') do
+      expect(page).to have_content(message)
+    end
+  end
+
+  it 'validates email address' do
+    allow(Truemail).to receive(:valid?).with('max.muster@hitobito.example.com').and_return(false)
+    visit group_self_registration_path(group_id: group.id)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Weiter'
+    expect_active_step('E-Mail')
+    expect_validation_error('E-Mail ist nicht gültig')
+  end
+
   it 'creates person' do
     visit group_self_registration_path(group_id: group.id)
     fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'

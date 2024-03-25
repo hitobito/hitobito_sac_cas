@@ -19,6 +19,12 @@ describe :self_registration, js: true do
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
+  def expect_validation_error(message)
+    within('.alert#error_explanation') do
+      expect(page).to have_content(message)
+    end
+  end
+
   def complete_main_person_form
     expect(page).to have_field('Vorname')
     fill_in 'Vorname', with: 'Max'
@@ -26,6 +32,13 @@ describe :self_registration, js: true do
     fill_in 'Haupt-E-Mail', with: 'max.muster@hitobito.example.com'
   end
 
+  it 'validates email address' do
+    allow(Truemail).to receive(:valid?).with('max.muster@hitobito.example.com').and_return(false)
+    visit group_self_registration_path(group_id: group.id)
+    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
+    click_on 'Registrieren'
+    expect_validation_error('E-Mail ist nicht gültig')
+  end
 
   describe 'existing email' do
     let(:person) { people(:admin) }

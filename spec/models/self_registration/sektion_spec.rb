@@ -43,7 +43,23 @@ describe SelfRegistration::Sektion do
     end
   end
 
-  describe 'main_person' do
+  describe 'main_email' do
+    let(:params) { { step: 0 } }
+
+    it 'is valid if email is valid in first step' do
+      registration.main_person_attributes = required_attrs.slice(:email)
+      allow(Truemail).to receive(:valid?).with(required_attrs[:email]).and_return(true)
+      expect(registration).to be_valid
+    end
+
+    it 'is invalid if email is invalid in first step' do
+      registration.main_person_attributes = required_attrs.slice(:email)
+      allow(Truemail).to receive(:valid?).with(required_attrs[:email]).and_return(false)
+      expect(registration).not_to be_valid
+    end
+  end
+
+  describe 'emailless_main_person' do
     it 'is invalid if person is too young' do
       params[:step] = 1
       registration.main_person_attributes = required_attrs.merge(birthday: Date.today)
