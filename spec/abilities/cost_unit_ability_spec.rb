@@ -7,8 +7,7 @@
 
 require 'spec_helper'
 
-describe VariousAbility do
-
+describe CostUnitAbility do
   def build_role(type)
     Fabricate.build(type.sti_name, group: group).tap do |r|
       r.person.roles = [r]
@@ -21,27 +20,18 @@ describe VariousAbility do
   context 'without admin permission' do
     let(:role) { Group::Geschaeftsstelle::Mitarbeiter }
 
-    it 'may not view nor manage CostCenter records' do
-      expect(ability).not_to be_able_to(:index, CostCenter)
-      expect(ability).not_to be_able_to(:manage, CostCenter.new)
+    it 'may not view nor manage CostUnit records' do
+      expect(ability).not_to be_able_to(:index, CostUnit)
+      expect(ability).not_to be_able_to(:manage, CostUnit.new)
     end
   end
 
   context 'with admin permission' do
     let(:role) { Group::Geschaeftsstelle::Admin }
 
-    it 'may not view nor manage CostCenter records' do
-      expect(ability).to be_able_to(:index, CostCenter)
-      expect(ability).to be_able_to(:manage, CostCenter.new)
-    end
-  end
-
-  context 'with admin permission' do
-    let(:role) { Group::Geschaeftsstelle::Admin }
-
-    it 'may not view nor manage CostCenter records' do
-      expect(ability).to be_able_to(:index, Event::Level)
-      expect(ability).to be_able_to(:manage, Event::Level.new)
+    it 'may not view nor manage CostUnit records' do
+      expect(ability).to be_able_to(:index, CostUnit)
+      expect(ability).to be_able_to(:manage, CostUnit.new)
     end
   end
 end

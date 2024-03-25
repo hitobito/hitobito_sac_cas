@@ -48,10 +48,11 @@ module HitobitoSacCas
 
       ## Abilities
       Ability.store.register Event::LevelAbility
+      Ability.store.register CostCenterAbility
+      Ability.store.register CostUnitAbility
       PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
-      VariousAbility.prepend SacCas::VariousAbility
 
       ## Decorators
 
