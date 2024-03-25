@@ -18,11 +18,11 @@ on:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: 'sac-master'
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: 'sac-master'
 
 jobs:
   wagon_tests:
