@@ -167,12 +167,6 @@ de:
         finish_at: Bis
 
     errors:
-      models:
-        qualification:
-          attributes:
-            finish_at:
-              not_after_start: 'muss nach Seit liegen'
-
       messages:
         already_has_mitglied_role: ist bereits Mitglied (von %{start_on} bis %{end_on}).
         already_has_neuanmeldung_role: hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on}).
@@ -191,6 +185,10 @@ de:
             %{name} ist %{age} Jahre alt und kann daher nicht als Kind hinzugefügt werden.
           manager_is_not_adult: >-
             %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
+        qualification:
+          attributes:
+            finish_at:
+              not_after_start: 'muss nach Seit liegen'
 
     models:
       cost_center:
