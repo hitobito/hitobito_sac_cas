@@ -47,6 +47,7 @@ module HitobitoSacCas
 
 
       ## Abilities
+      Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
@@ -85,9 +86,11 @@ module HitobitoSacCas
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
+      MailingListsController.prepend SacCas::MailingListsController
       PeopleController.prepend SacCas::PeopleController
       PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
+      Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
 
