@@ -43,6 +43,8 @@ describe 'person edit page', :js do
   end
 
   context 'household' do
+    around { |example| Capybara.using_wait_time(10) { example.run } }
+
     context 'family memberships' do
       it 'adding non family person to family household adds membership' do
         add_to_household(family_adult, non_family_adult)
