@@ -8,7 +8,7 @@
 class CreateExternalTrainings < ActiveRecord::Migration[6.1]
   def change
     create_table :external_trainings do |t|
-      t.belongs_to :person
+      t.belongs_to :person, null: false
       t.belongs_to :event_kind
 
       t.string :name, null: false
