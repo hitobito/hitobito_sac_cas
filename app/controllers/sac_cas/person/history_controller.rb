@@ -9,7 +9,7 @@ module SacCas::Person::HistoryController
   extend ActiveSupport::Concern
 
   def index
-    @external_trainings = ExternalTraining.where(person_id: @person.id)
+    @external_trainings = ExternalTraining.where(person_id: @person.id).list
     super
   end
 
