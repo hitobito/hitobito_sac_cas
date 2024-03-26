@@ -11,8 +11,6 @@ describe ExternalTrainingAbility do
   let(:user) { role.person }
   let(:user_group) { role.group }
 
-  subject { Ability.new(user.reload) }
-
   let(:external_training) { Fabricate(:external_training, person: person) }
 
   context 'with layer_and_below_full' do
@@ -22,8 +20,8 @@ describe ExternalTrainingAbility do
       let(:person) { Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym, group: groups(:geschaeftsstelle)).person }
 
       it 'can create and destroy' do
-        is_expected.to be_able_to(:create, external_training)
-        is_expected.to be_able_to(:destroy, external_training)
+        expect(ability).to be_able_to(:create, external_training)
+        expect(ability).to be_able_to(:destroy, external_training)
       end
     end
 
@@ -31,8 +29,8 @@ describe ExternalTrainingAbility do
       let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)).person }
 
       it 'can create and destroy in layer below' do
-        is_expected.to be_able_to(:create, external_training)
-        is_expected.to be_able_to(:destroy, external_training)
+        expect(ability).to be_able_to(:create, external_training)
+        expect(ability).to be_able_to(:destroy, external_training)
       end
     end
   end
