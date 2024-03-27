@@ -8,32 +8,43 @@
 require 'spec_helper'
 
 describe ExternalTraining do
-  let(:date) { Date.new(2024, 3, 26) }
+  let(:today) { Date.new(2024, 3, 26) }
 
-  it 'is invalid when finish_at is before start_at' do
-    external_training = Fabricate.build(:external_training, person: people(:mitglied), start_at: 1.day.ago, finish_at: 1.month.ago)
+  describe 'validations' do
 
-    expect(external_training).to_not be_valid
-    expect(external_training.errors.full_messages).to eq(["Enddatum muss nach #{external_training.start_at.strftime('%d.%m.%Y')} sein"])
-  end
+    def build(start_at:, finish_at: )
+      Fabricate.build(:external_training, person: people(:mitglied), start_at: start_at, finish_at: finish_at)
+    end
 
-  it 'is valid when finish_at is after start_at' do
-    external_training = Fabricate.build(:external_training, person: people(:mitglied), start_at: 1.day.ago, finish_at: 1.month.from_now)
+    it 'is invalid when finish_at is before start_at' do
+      external_training = build(start_at: today, finish_at: today - 1.day)
+      expect(external_training).to_not be_valid
+      expect(external_training.errors.full_messages).to eq(
+        ["Enddatum muss #{external_training.start_at.strftime('%d.%m.%Y')} oder danach sein"]
+      )
+    end
 
-    expect(external_training).to be_valid
-    expect(external_training.errors.full_messages).to be_empty
+    it 'is valid when finish_at is after start_at' do
+      external_training = build(start_at: today, finish_at: today + 1.day)
+      expect(external_training).to be_valid
+    end
+
+    it 'is valid when finish_at is on start_at' do
+      external_training = build(start_at: today, finish_at: today)
+      expect(external_training).to be_valid
+    end
   end
 
   describe '.between' do
     it 'returns training within validity period' do
-      Fabricate(:external_training, start_at: date, finish_at: date + 1.day)
-      expect(ExternalTraining.between(date, date)).to have(1).item
-      expect(ExternalTraining.between(date, date + 1.day)).to have(1).item
-      expect(ExternalTraining.between(date - 1.day, date)).to have(1).item
-      expect(ExternalTraining.between(date - 2.days, date)).to have(1).item
-      expect(ExternalTraining.between(date - 2.days, date - 1.day)).to be_empty
-      expect(ExternalTraining.between(date + 1.days, date + 2.days)).to have(1).item
-      expect(ExternalTraining.between(date + 2.days, date + 2.days)).to be_empty
+      Fabricate(:external_training, start_at: today, finish_at: today + 1.day)
+      expect(ExternalTraining.between(today, today)).to have(1).item
+      expect(ExternalTraining.between(today, today + 1.day)).to have(1).item
+      expect(ExternalTraining.between(today - 1.day, today)).to have(1).item
+      expect(ExternalTraining.between(today - 2.days, today)).to have(1).item
+      expect(ExternalTraining.between(today - 2.days, today - 1.day)).to be_empty
+      expect(ExternalTraining.between(today + 1.days, today + 2.days)).to have(1).item
+      expect(ExternalTraining.between(today + 2.days, today + 2.days)).to be_empty
     end
   end
 
@@ -48,11 +59,11 @@ describe ExternalTraining do
     end
 
     it '#start_date returns start_at' do
-      expect(ExternalTraining.new(start_at: date).start_date).to eq date
+      expect(ExternalTraining.new(start_at: today).start_date).to eq today
     end
 
-    it '#qualification_date returns finish_at' do
-      expect(ExternalTraining.new(finish_at: date).qualification_date).to eq date
+    it '#qualification_today returns finish_at' do
+      expect(ExternalTraining.new(finish_at: today).qualification_date).to eq today
     end
   end
 end
