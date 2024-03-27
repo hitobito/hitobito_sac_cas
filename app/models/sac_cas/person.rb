@@ -18,6 +18,8 @@ module SacCas::Person
 
     Person.used_attributes.delete(:nickname)
 
+    has_many :external_trainings
+
     delegate :active?, :anytime?, :roles, to: :membership, prefix: true
 
     validates :membership_verify_token, uniqueness: { allow_blank: true }

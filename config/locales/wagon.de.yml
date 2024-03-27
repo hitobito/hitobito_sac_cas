@@ -77,7 +77,7 @@ de:
           pension: Pension/Berggasthaus
           pension_or_hut: Pension/Berggasthaus oder Hütte
           bivouac: Übernachtung im Freien/Biwak
-        level_id: Kursart
+        level_id: Kursstufe
         kind_category_id: Kurskategorie
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
@@ -121,6 +121,19 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+      external_training:
+        person: Person
+        event_kind: Kursart
+        event_kind_id: Kursart
+        name: Name
+        provider: Anbieter
+        start_at: Startdatum
+        finish_at: Enddatum
+        training_days: Ausbildungstage
+        link: Link
+        remarks: Bemerkung
+        created_at: Erstellt
+        updated_at: Geändert
       person:
         family_id: Familien ID
         membership_years: Anzahl Mitglieder-Jahre
@@ -200,6 +213,9 @@ de:
       event/level:
         one: Kursstufe
         other: Kursstufen
+      external_training:
+        one: Externe Ausbildung
+        other: Externe Ausbildungen
 
       ### GROUPS
       group/sac_cas:
