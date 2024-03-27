@@ -26,10 +26,26 @@ describe 'external_training model', js: true do
     fill_in 'Link', with: 'https://wasser.example.com'
     fill_in 'Bemerkung', with: 'Bla'
     all('button', text: 'Speichern').first.click
+
     expect(page).to have_css('.alert-success', text: "Schwimmkurs wurde erfolgreich erstellt.")
 
     within('#external_trainings') { click_on 'Löschen' }
     accept_alert
-    expect(page).to have_css('.alert-success', text: "Externe Ausbildung Schwimmkurs wurde erfolgreich gelöscht.")
+    expect(page).to have_css('.alert-success',
+text: "Externe Ausbildung Schwimmkurs wurde erfolgreich gelöscht.")
+  end
+
+  it "reloads qualification infos", js: true do
+    sign_in(admin)
+    visit history_group_person_path(group_id: mitglieder, id: mitglied)
+    click_on 'Erstellen'
+    fill_in 'Name', with: 'Skikurs'
+    fill_in 'Startdatum', with: '01.03.2024'
+    fill_in 'Enddatum', with: '06.03.2024'
+    select 'Dummy', from: 'external_training_event_kind_id'
+    expect(page).to have_css 'turbo-frame p', text: 'Verlängert existierende Qualifikation ' \
+      'Ski Leiter unmittelbar per 06.03.2024 (letztes Kursdatum).'
+    select '(keine)', from: 'external_training_event_kind_id'
+    expect(page).not_to have_css 'turbo-frame p'
   end
 end
