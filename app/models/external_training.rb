@@ -11,7 +11,7 @@ class ExternalTraining < ActiveRecord::Base
   belongs_to :person
   belongs_to :event_kind, class_name: 'Event::Kind'
 
-  validates_date :finish_at, after: :start_at
+  validates_date :finish_at, on_or_after: :start_at, allow_blank: true
 
   scope :list, -> { order(created_at: :desc) }
 
