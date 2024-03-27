@@ -1,0 +1,11 @@
+- id = :event_kind_turbo_frame
+- form_action = new_group_person_external_training_path(@group, @person)
+- prolonging_qualis = entry.kind&.qualification_kinds(%w(qualification prolongation), 'participant')
+
+= turbo_frame_tag(id)  do
+  = f.labeled_input_fields :event_kind_id, data: { action: 'forwarder#click' }
+  - if entry.kind && entry.qualification_date && prolonging_qualis.present?
+    %p.col-md-9.offset-md-3.offset-xl-2.mb-2
+      =  entry.kind.decorate.issued_qualifications_info_for_participants(entry.qualification_date)
+
+= render 'shared/hidden_submit', label: 'Load qualification info', formaction: form_action, turbo_frame: id

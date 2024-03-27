@@ -1,2 +1,6 @@
-= entry_form(cancel_url: history_group_person_path(@group, @person)) do |f|
-  = f.labeled_input_fields :event_kind_id, :name, :provider, :start_at, :finish_at, :training_days, :link, :remarks
+= entry_form(cancel_url: history_group_person_path(@group, @person), data: { controller: :forwarder }) do |f|
+  = f.labeled_input_fields :name, :provider
+  = f.labeled_input_field :start_at
+  = f.labeled_input_field :finish_at
+  = render 'event_kind_field_with_info', f: f
+  = f.labeled_input_fields :training_days, :link, :remarks

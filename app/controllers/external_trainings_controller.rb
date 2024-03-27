@@ -21,6 +21,7 @@ class ExternalTrainingsController < CrudController
 
   # load parents before authorization
   prepend_before_action :parent
+  before_render_form :load_event_kinds
 
   def create
     super(location: history_group_person_path(@group, @person))
@@ -36,4 +37,7 @@ class ExternalTrainingsController < CrudController
     @person.external_trainings.build
   end
 
+  def load_event_kinds
+    @event_kinds ||= Event::Kind.list
+  end
 end
