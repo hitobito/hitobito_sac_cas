@@ -15,8 +15,22 @@ class ExternalTraining < ActiveRecord::Base
 
   scope :list, -> { order(created_at: :desc) }
 
+  def self.between(start_date, end_date)
+    where('start_at <= :end_date AND finish_at >= :start_date ',
+          start_date: start_date, end_date: end_date).distinct
+  end
+
   def to_s
     name
   end
 
+  def start_date
+    start_at
+  end
+
+  def qualification_date
+    finish_at
+  end
+
+  alias_method :kind, :event_kind
 end

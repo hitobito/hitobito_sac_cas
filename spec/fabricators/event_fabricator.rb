@@ -7,6 +7,7 @@
 
 Fabricator(:sac_course, from: :course) do
   kind_id { ActiveRecord::FixtureSet.identify(:ski_course) }
+  number { sequence(:number) }
 end
 
 Fabricator(:sac_event_kind, from: :event_kind) do
