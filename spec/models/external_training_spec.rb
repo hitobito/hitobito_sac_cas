@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe ExternalTraining do
+  let(:date) { Date.new(2024, 3, 26) }
 
   it 'is invalid when finish_at is before start_at' do
     external_training = Fabricate.build(:external_training, person: people(:mitglied), start_at: 1.day.ago, finish_at: 1.month.ago)
@@ -23,4 +24,35 @@ describe ExternalTraining do
     expect(external_training.errors.full_messages).to be_empty
   end
 
+  describe '.between' do
+    it 'returns training within validity period' do
+      Fabricate(:external_training, start_at: date, finish_at: date + 1.day)
+      expect(ExternalTraining.between(date, date)).to have(1).item
+      expect(ExternalTraining.between(date, date + 1.day)).to have(1).item
+      expect(ExternalTraining.between(date - 1.day, date)).to have(1).item
+      expect(ExternalTraining.between(date - 2.days, date)).to have(1).item
+      expect(ExternalTraining.between(date - 2.days, date - 1.day)).to be_empty
+      expect(ExternalTraining.between(date + 1.days, date + 2.days)).to have(1).item
+      expect(ExternalTraining.between(date + 2.days, date + 2.days)).to be_empty
+    end
+  end
+
+  describe 'compatibility methods with events' do
+    it '#to_s returns name' do
+      expect(ExternalTraining.new(name: 'test').to_s).to eq 'test'
+    end
+
+    it '#kind returns event_kind' do
+      kind = event_kinds(:ski_course)
+      expect(ExternalTraining.new(event_kind: kind).kind).to eq kind
+    end
+
+    it '#start_date returns start_at' do
+      expect(ExternalTraining.new(start_at: date).start_date).to eq date
+    end
+
+    it '#qualification_date returns finish_at' do
+      expect(ExternalTraining.new(finish_at: date).qualification_date).to eq date
+    end
+  end
 end

@@ -24,17 +24,25 @@ class ExternalTrainingsController < CrudController
   before_render_form :load_event_kinds
 
   def create
-    super(location: history_group_person_path(@group, @person))
+    super(location: history_group_person_path(@group, @person)) do
+      qualifier.issue if entry.valid?
+    end
   end
 
   def destroy
-    super(location: history_group_person_path(@group, @person))
+    super(location: history_group_person_path(@group, @person)) do
+      qualifier.revoke
+    end
   end
 
   private
 
   def build_entry
     @person.external_trainings.build
+  end
+
+  def qualifier
+    @qualifier ||= ExternalTrainings::Qualifier.new(@person, entry, 'participant')
   end
 
   def load_event_kinds

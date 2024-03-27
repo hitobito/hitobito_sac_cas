@@ -58,6 +58,9 @@ module HitobitoSacCas
       ## Decorators
       RoleDecorator.prepend SacCas::RoleDecorator
 
+      ## Domain
+      Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
+
       ## Resources
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
