@@ -634,7 +634,7 @@ with: 'Belpstrasse')
         visit group_self_registration_path(group_id: group)
         complete_main_person_form
         click_on 'Weiter als Einzelmitglied', match: :first
-        complete_last_page(submit: false)
+        assert_step 'Zusatzdaten'
       end
 
       it 'can go back and forth' do
@@ -667,7 +667,7 @@ with: 'Belpstrasse')
         complete_main_person_form do
           fill_in 'Geburtstag', with: format_date(15.years.ago)
         end
-        complete_last_page(submit: false)
+        assert_step('Zusatzdaten')
       end
 
       it 'can go back and forth' do
