@@ -405,6 +405,11 @@ de:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
+  event:
+    kinds:
+      kind_category_field:
+        override_values: Werte übernehmen
+
   person:
     history:
       index_notice_sac_cas:

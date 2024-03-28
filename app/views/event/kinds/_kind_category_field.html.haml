@@ -1,0 +1,17 @@
+- #  copyright (c) 2024, schweizer alpen-club. this file is part of
+- #  hitobito_sac_cas and licensed under the affero general public license version 3
+- #  or later. see the copying file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+- turbo_frame = :cost_fields
+- button_label = t('.override_values')
+
+%div{data: { controller: :forwarder }}
+  = f.labeled :kind_category_id do
+    = f.input_field :kind_category_id, data: { action: 'forwarder#click' }
+    = button_tag(button_label,
+      class: 'ms-2 align-top btn btn-sm btn-outline-primary',
+      name: :force, formmethod: :get,
+      formaction: new_event_kind_path,
+      data: { turbo_frame: turbo_frame, turbo_submit_with: button_label })
+  = render 'shared/hidden_submit', label: 'Set course', formaction: new_event_kind_path, turbo_frame: turbo_frame

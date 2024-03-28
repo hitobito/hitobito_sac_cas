@@ -4,8 +4,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 ---
-ski_youth:
-  event_kind_category_id: <%= ActiveRecord::FixtureSet.identify(:ski_youth) %>
+ski_course:
+  event_kind_category_id: <%= ActiveRecord::FixtureSet.identify(:ski_course) %>
   locale: de
   label: Ski Technik Kurs
   created_at: <%= Time.zone.now %>

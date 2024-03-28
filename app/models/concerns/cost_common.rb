@@ -16,7 +16,7 @@ module CostCommon
 
     default_scope { where(deleted_at: nil) }
 
-    scope :list, -> { order(:code) }
+    scope :list, -> { includes(:translations).order(:code) }
     scope :with_deleted, -> { unscope(where: :deleted_at) }
 
     has_many :event_kind_categories, class_name: 'Event::KindCategory',
