@@ -56,6 +56,7 @@ module HitobitoSacCas
       RoleAbility.prepend SacCas::RoleAbility
 
       ## Decorators
+      GroupDecorator.prepend SacCas::GroupDecorator
       RoleDecorator.prepend SacCas::RoleDecorator
 
       ## Domain
