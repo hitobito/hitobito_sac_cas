@@ -1,0 +1,10 @@
+- #  copyright (c) 2024, schweizer alpen-club. this file is part of
+- #  hitobito_sac_cas and licensed under the affero general public license version 3
+- #  or later. see the copying file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+- stimulus_ctrl = 'form-field-inheritance'
+= f.labeled(:kind_category_id, data: { controller: stimulus_ctrl }) do
+  = f.input_field(:kind_category_id, data: { action: "#{stimulus_ctrl}#inherit" })
+  .form-text= link_to(t('global.link.override'), '', data: { action: "#{stimulus_ctrl}#override" })
+  = field_inheritance_values(@kind_categories, [:cost_center_id, :cost_unit_id])
