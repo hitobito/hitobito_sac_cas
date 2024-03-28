@@ -49,3 +49,7 @@ Als Mitgliederrollen zählen:
 ### Austritt
 
 Ein Mitglied hat die Möglichkeit unter Person / Verlauf seine Mitgliedschaft zu kündigen (Austritt). Dazu gibt es auf der Rolle ein boolean Flag :terminated. Die Basis-Funktionalität dazu ist bereits im Core definiert.
+
+## Abacus
+
+[Schnittstellen Dokumentation Abacus](./abacus.md)

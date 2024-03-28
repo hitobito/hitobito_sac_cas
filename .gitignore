@@ -23,6 +23,7 @@ Gemfile.lock
 # only touched to make rails-vim work
 config/environment.rb
 
+config/settings.local.yml
 
 # reports
 spec/coverage

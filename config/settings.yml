@@ -3,8 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-
 # Settings relevant for the hitobito_sac_cas wagon
 # Overrides settings from the main application
 application:
@@ -57,3 +55,10 @@ phone_number:
     - Fax
     - Andere
     - Haupt-Telefon
+
+invoice:
+  abacus:
+    host: <%= ENV['INVOICE_ABACUS_HOST'] %>
+    mandant: <%= ENV['INVOICE_ABACUS_MANDANT'] %>
+    username: <%= ENV['INVOICE_ABACUS_USERNAME'] %>
+    password: <%= ENV['INVOICE_ABACUS_PASSWORD'] %>
