@@ -74,6 +74,7 @@ module HitobitoSacCas
       admin_item[:active_for] += %w(cost_centers cost_units)
 
       ## Controllers
+      EventsController.prepend SacCas::EventsController
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.permitted_attrs += [:cost_center_id, :cost_unit_id]
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
