@@ -97,7 +97,9 @@ module SacCas::Event::Course
     ]
 
     self.used_attributes -= [
-      :cost
+      :cost,
+      :waiting_list,
+      :tentative_applications
     ]
 
     belongs_to :cost_center, optional: true
@@ -105,6 +107,8 @@ module SacCas::Event::Course
     validates :number, presence: true, uniqueness: { if: :number }
 
     delegate :level, to: :kind, allow_nil: true
+
+    attribute :waiting_list, default: false
   end
 
   def minimum_age
