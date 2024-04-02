@@ -70,8 +70,8 @@ de:
         courses: Kurse
         updated_at: Geändert
       event/kind:
-        accomodation: Unterkunft
-        accomodations:
+        accommodation: Unterkunft
+        accommodations:
           no_overnight: ohne Übernachtung
           hut: Hütte
           pension: Pension/Berggasthaus
@@ -90,7 +90,7 @@ de:
         minimum_participants: Minimale Teilnehmerzahl
         training_days: Ausbildungstage
       event/course:
-        accomodation: Unterkunft
+        accommodation: Unterkunft
         annual: Jährlich wiederkehrend
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger

@@ -10,7 +10,7 @@
 # Table name: event_kinds
 #
 #  id                     :integer          not null, primary key
-#  accomodation           :string(255)      default("no_overnight"), not null
+#  accommodation          :string(255)      default("no_overnight"), not null
 #  application_conditions :text(65535)
 #  deleted_at             :datetime
 #  general_information    :text(65535)
@@ -55,6 +55,6 @@ module SacCas::Event::Kind
     ACCOMODATIONS = %w(no_overnight hut pension pension_or_hut bivouac).freeze
 
     i18n_enum :season, SEASONS
-    i18n_enum :accomodation, ACCOMODATIONS
+    i18n_enum :accommodation, ACCOMODATIONS
   end
 end
