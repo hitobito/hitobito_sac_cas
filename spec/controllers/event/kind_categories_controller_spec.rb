@@ -8,10 +8,13 @@
 require 'spec_helper'
 
 describe Event::KindCategoriesController do
-  before { sign_in(people(:admin)) }
-  let(:dom) { Capybara::Node::Simple.new(response.body) }
+  before { sign_in(current_user) }
+  let(:current_user) { people(:admin) }
+  let(:category) { event_kind_categories(:ski_course) }
 
-  describe 'GET#index' do
+  context 'with rendered views' do
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
     render_views
 
     it 'GET#index lists cost_center and cost_unit' do
@@ -21,6 +24,12 @@ describe Event::KindCategoriesController do
       expect(dom).to have_css 'th', text: 'Kostenstelle'
       expect(dom).to have_css 'td', text: 'ski-1 - Ski Technik'
       expect(dom).to have_css 'td', text: 'kurs-1 - Kurse'
+    end
+
+    it 'GET#edit renders push down button' do
+      get :edit,  params: { id: category.id }
+      expect(response).to be_ok
+      expect(dom).to have_link 'Daten auf Kursarten übertragen'
     end
   end
 
@@ -34,5 +43,25 @@ describe Event::KindCategoriesController do
         }
       }
     end.to change { Event::KindCategory.count }.by(1)
+  end
+
+  it 'PUT#push_down updates cost models on associated event_kinds' do
+    event_kind = event_kinds(:ski_course)
+    event_kind.update_columns(kind_category_id: category.id, cost_center_id: -1, cost_unit_id: -1)
+
+    expect do
+      put :push_down, params: { id: category.id }
+    end.to change { event_kind.reload.cost_center_id }.from(-1).to(category.cost_center_id)
+      .and change { event_kind.cost_unit_id }.from(-1).to(category.cost_unit_id)
+  end
+
+  context 'unauthorized' do
+    let(:current_user) { people(:mitglied) }
+
+    it 'may not push down' do
+      expect do
+        put :push_down, params: { id: category.id }
+      end.to raise_error(CanCan::AccessDenied)
+    end
   end
 end

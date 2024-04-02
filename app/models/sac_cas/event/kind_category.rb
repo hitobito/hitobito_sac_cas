@@ -30,4 +30,8 @@ module SacCas::Event::KindCategory
     belongs_to :cost_center
     belongs_to :cost_unit
   end
+
+  def push_down_inherited_attributes!
+    kinds.update_all(cost_unit_id: cost_unit.id, cost_center_id: cost_center.id)
+  end
 end

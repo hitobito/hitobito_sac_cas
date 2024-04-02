@@ -27,4 +27,16 @@ describe Event::KindCategory do
       expect(category.errors[:cost_unit_id]).to eq ['muss ausgefüllt werden']
     end
   end
+
+  describe '#push_down_inherited_attributes' do
+    subject(:category) { event_kind_categories(:ski_course) }
+    let(:event_kind) { event_kinds(:ski_course) }
+
+    it 'overrides cost model on each associated event_kind' do
+      event_kind.update!(cost_center: Fabricate(:cost_center), cost_unit: Fabricate(:cost_unit))
+      category.push_down_inherited_attributes!
+      expect(event_kind.reload.cost_center).to eq category.cost_center
+      expect(event_kind.cost_unit).to eq category.cost_unit
+    end
+  end
 end
