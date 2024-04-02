@@ -9,7 +9,11 @@ require 'spec_helper'
 
 describe Event::Course do
   describe "::validations" do
-    subject(:course) { Fabricate.build(:course) }
+    subject(:course) do
+      course = Fabricate.build(:sac_course)
+      course.dates.build(start_at: Time.zone.local(2012, 5, 11))
+      course
+    end
 
     it "validates presence of number" do
       course.number = nil
@@ -22,6 +26,17 @@ describe Event::Course do
       course.number = 1
       expect(course).not_to be_valid
       expect(course.errors[:number]).to eq ['ist bereits vergeben']
+    end
+
+    it "validates presence of location in state ready" do
+      course.state = :ready
+      expect(course).not_to be_valid
+      expect(course.errors[:location]).to eq ['muss ausgefüllt werden']
+    end
+
+    it "does not validate presence of location in state created" do
+      course.state = :created
+      expect(course).to be_valid
     end
   end
 

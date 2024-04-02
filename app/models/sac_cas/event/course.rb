@@ -72,6 +72,8 @@ module SacCas::Event::Course
   LANGUAGES = %w(de_fr fr de it).freeze
   START_POINTS_OF_TIME = %w(day evening).freeze
 
+  WEAK_VALIDATION_STATES = %w(created canceled).freeze
+
   I18N_KIND = 'activerecord.attributes.event/kind'
 
   prepended do # rubocop:disable Metrics/BlockLength
@@ -109,6 +111,10 @@ module SacCas::Event::Course
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: { if: :number }
+    validates :description, :application_opening_at, :application_closing_at, :contact_id,
+              :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
+              :accomodation,
+              presence: { unless: :weak_validation_state? }
 
     delegate :level, to: :kind, allow_nil: true
 
@@ -117,5 +123,11 @@ module SacCas::Event::Course
 
   def minimum_age
     read_attribute(:minimum_age)
+  end
+
+  private
+
+  def weak_validation_state?
+    state.blank? || WEAK_VALIDATION_STATES.include?(state)
   end
 end
