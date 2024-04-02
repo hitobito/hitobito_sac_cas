@@ -20,7 +20,7 @@ describe Event::KindsController do
       :training_days,
       :season,
       :reserve_accommodation,
-      :accomodation
+      :accommodation
     )
   end
 

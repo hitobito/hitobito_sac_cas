@@ -28,7 +28,7 @@ describe Event::Course do
   describe "#used_attributes" do
     it "has expected additions" do
       expect(described_class.used_attributes).to include(
-        :accomodation,
+        :accommodation,
         :annual,
         :cost_center_id,
         :cost_unit_id,
@@ -57,8 +57,8 @@ describe Event::Course do
       ].to_h
     end
 
-    it "accomodation is configured as an i18n_enum" do
-      expect(described_class.accomodation_labels).to eq [
+    it "accommodation is configured as an i18n_enum" do
+      expect(described_class.accommodation_labels).to eq [
         [:bivouac, "Übernachtung im Freien/Biwak"],
         [:hut, "Hütte"],
         [:no_overnight, "ohne Übernachtung"],

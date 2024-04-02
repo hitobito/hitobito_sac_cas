@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 #  id                               :integer          not null, primary key
-#  accomodation                     :string(255)      default("no_overnight"), not null
+#  accommodation                    :string(255)      default("no_overnight"), not null
 #  annual                           :boolean          default(TRUE), not null
 #  applicant_count                  :integer          default(0)
 #  application_closing_at           :date
@@ -79,7 +79,7 @@ module SacCas::Event::Course
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :accomodation, Event::Kind::ACCOMODATIONS, i18n_prefix: "#{I18N_KIND}.accomodations"
+    i18n_enum :accommodation, Event::Kind::ACCOMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations"
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
 
     self.used_attributes += [
@@ -91,7 +91,7 @@ module SacCas::Event::Course
       :link_leaders,
       :link_survey,
       :reserve_accommodation,
-      :accomodation,
+      :accommodation,
       :season,
       :start_point_of_time,
       :minimum_age

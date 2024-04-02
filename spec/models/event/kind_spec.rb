@@ -10,7 +10,7 @@
 # Table name: event_kinds
 #
 #  id                     :integer          not null, primary key
-#  accomodation           :string(255)      default("no_overnight"), not null
+#  accommodation          :string(255)      default("no_overnight"), not null
 #  application_conditions :text(65535)
 #  deleted_at             :datetime
 #  general_information    :text(65535)
