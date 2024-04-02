@@ -39,3 +39,4 @@ ski_course:
   cost_center: course
   cost_unit: ski
   level: ek
+  kind_category: ski_course

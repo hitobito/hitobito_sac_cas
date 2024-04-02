@@ -76,7 +76,7 @@ module HitobitoSacCas
       ## Controllers
       EventsController.prepend SacCas::EventsController
       Event::KindsController.prepend SacCas::Event::KindsController
-      Event::KindCategoriesController.permitted_attrs += [:cost_center_id, :cost_unit_id]
+      Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController

@@ -413,6 +413,17 @@ de:
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+  event:
+    kind_categories:
+      push_down:
+        success: Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle
+          zugeordneten Kursarten übertragen.
+
+      actions_edit:
+        push_down_button: Daten auf Kursarten übertragen
+        push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
+          Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
+          überschrieben.
 
   person:
     history:
