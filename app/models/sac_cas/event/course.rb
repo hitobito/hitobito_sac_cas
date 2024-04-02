@@ -25,6 +25,7 @@
 #  link_survey                      :string(255)
 #  location                         :text(65535)
 #  maximum_participants             :integer
+#  minimum_participants             :integer
 #  minimum_age                      :integer
 #  motto                            :string(255)
 #  name                             :string(255)

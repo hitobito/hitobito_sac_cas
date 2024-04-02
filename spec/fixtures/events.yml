@@ -3,14 +3,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
+---
 top_event:
-  groups: zentralverband
+  groups: root
 
 top_course:
-  groups: zentralverband
+  groups: root
   type: Event::Course
-  kind: dummy
+  kind: ski_course
   language: de
   priorization: true
   requires_approval: true
