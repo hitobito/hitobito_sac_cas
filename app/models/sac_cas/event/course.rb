@@ -69,12 +69,13 @@
 module SacCas::Event::Course
   extend ActiveSupport::Concern
 
-  prepended do
-    include I18nEnums
-    LANGUAGES = %w(de_fr fr de it).freeze
-    START_POINTS_OF_TIME = %w(day evening).freeze
+  LANGUAGES = %w(de_fr fr de it).freeze
+  START_POINTS_OF_TIME = %w(day evening).freeze
 
-    I18N_KIND = 'activerecord.attributes.event/kind'
+  I18N_KIND = 'activerecord.attributes.event/kind'
+
+  prepended do # rubocop:disable Metrics/BlockLength
+    include I18nEnums
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
@@ -102,6 +103,9 @@ module SacCas::Event::Course
       :tentative_applications
     ]
 
+    self.possible_states = %w(created application_open application_paused application_closed
+                              assignment_closed ready closed canceled)
+
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: { if: :number }
@@ -112,6 +116,6 @@ module SacCas::Event::Course
   end
 
   def minimum_age
-    self.read_attribute(:minimum_age)
+    read_attribute(:minimum_age)
   end
 end
