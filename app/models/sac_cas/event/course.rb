@@ -82,7 +82,7 @@ module SacCas::Event::Course
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :accommodation, Event::Kind::ACCOMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations"
+    i18n_enum :accommodation, Event::Kind::ACCOMMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations"  # rubocop:disable Metrics/LineLength
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
 
     self.used_attributes += [
@@ -114,7 +114,7 @@ module SacCas::Event::Course
     validates :number, presence: true, uniqueness: { if: :number }
     validates :description, :application_opening_at, :application_closing_at, :contact_id,
               :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
-              :accomodation,
+              :accommodation,
               presence: { unless: :weak_validation_state? }
 
     delegate :level, to: :kind, allow_nil: true

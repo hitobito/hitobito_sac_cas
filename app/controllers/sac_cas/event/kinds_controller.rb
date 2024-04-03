@@ -18,7 +18,7 @@ module SacCas::Event::KindsController
       :training_days,
       :season,
       :reserve_accommodation,
-      :accomodation
+      :accommodation
     ]
   end
 

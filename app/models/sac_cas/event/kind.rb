@@ -52,9 +52,9 @@ module SacCas::Event::Kind
     validates :short_name, presence: true
 
     SEASONS = %w(winter summer).freeze
-    ACCOMODATIONS = %w(no_overnight hut pension pension_or_hut bivouac).freeze
+    ACCOMMODATIONS = %w(no_overnight hut pension pension_or_hut bivouac).freeze
 
     i18n_enum :season, SEASONS
-    i18n_enum :accommodation, ACCOMODATIONS
+    i18n_enum :accommodation, ACCOMMODATIONS
   end
 end
