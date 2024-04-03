@@ -11,7 +11,27 @@ top_course:
   groups: root
   type: Event::Course
   kind: ski_course
+  number: 123
   language: de
   priorization: true
   requires_approval: true
   external_applications: true
+
+closed:
+  groups: root
+  type: Event::Course
+  kind: ski_course
+  state: application_closed
+  number: 101
+  language: de
+  priorization: true
+  requires_approval: true
+  external_applications: true
+  contact: admin
+  location: On top
+  application_opening_at: <%= Time.zone.parse("2024-3-01") %>
+  application_closing_at: <%= Time.zone.parse("2024-3-06") %>
+  season: winter
+  start_point_of_time: day
+  cost_center: tour
+  cost_unit: ski

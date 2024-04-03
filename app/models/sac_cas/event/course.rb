@@ -74,6 +74,7 @@ module SacCas::Event::Course
   START_POINTS_OF_TIME = %w(day evening).freeze
 
   WEAK_VALIDATION_STATES = %w(created canceled).freeze
+  APPLICATION_OPEN_STATES = %w(application_open application_paused).freeze
 
   I18N_KIND = 'activerecord.attributes.event/kind'
 
@@ -120,6 +121,7 @@ module SacCas::Event::Course
     delegate :level, to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
+    before_save :adjust_state, if: :application_closing_at_changed?
   end
 
   def minimum_age
@@ -130,5 +132,15 @@ module SacCas::Event::Course
 
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)
+  end
+
+  def adjust_state
+    if application_closing_at.try(:past?) && APPLICATION_OPEN_STATES.include?(state)
+      self.state = 'application_closed'
+    end
+
+    if application_closing_at.try(:future?) && application_closed?
+      self.state = 'application_open'
+    end
   end
 end

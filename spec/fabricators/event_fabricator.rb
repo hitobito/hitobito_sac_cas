@@ -10,6 +10,23 @@ Fabricator(:sac_course, from: :course) do
   number { sequence(:number) }
 end
 
+Fabricator(:sac_open_course, from: :sac_course) do
+  contact_id { ActiveRecord::FixtureSet.identify(:admin) }
+  cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
+  cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
+  location { Faker::Lorem.words.join }
+  description { Faker::Lorem.words.join }
+  number { sequence(:number) }
+  language { 'de' }
+  season { 'winter' }
+  start_point_of_time { 'day' }
+  application_opening_at  { Time.zone.yesterday }
+  application_closing_at  { Time.zone.tomorrow }
+  before_create do |event|
+    event.dates.build(start_at: 1.week.from_now) if event.dates.empty?
+  end
+end
+
 Fabricator(:sac_event_kind, from: :event_kind) do
   kind_category_id { ActiveRecord::FixtureSet.identify(:ski_course) }
   short_name { Faker::Lorem.words.join }
