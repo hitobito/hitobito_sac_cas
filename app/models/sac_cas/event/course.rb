@@ -78,6 +78,11 @@ module SacCas::Event::Course
 
   I18N_KIND = 'activerecord.attributes.event/kind'
 
+  INHERITED_ATTRIBUTES = [
+    :application_conditions, :minimum_participants, :maximum_participants, :minimum_age, :season,
+    :training_days, :reserve_accommodation, :accommodation, :cost_center_id, :cost_unit_id
+  ]
+
   prepended do # rubocop:disable Metrics/BlockLength
     include I18nEnums
 
