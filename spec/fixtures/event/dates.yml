@@ -19,3 +19,9 @@ second:
   label: Event
   event: top_event
   start_at: 2023-09-01 00:00:00 +0200
+
+
+closed:
+  label: Event
+  event: closed
+  start_at: 2024-04-01 00:00:00 +0200
