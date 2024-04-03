@@ -25,6 +25,7 @@ class AddCostReferencesToEventKindCategories < ActiveRecord::Migration[6.1]
     end
     change_column_null(:event_kind_categories, :cost_center_id, false)
     change_column_null(:event_kind_categories, :cost_unit_id, false)
+    Event::KindCategory.reset_column_information
   end
 
   private

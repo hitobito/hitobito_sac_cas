@@ -9,5 +9,7 @@ class RenameEventsAccomodationColumn < ActiveRecord::Migration[6.1]
   def change
     rename_column(:event_kinds, :accomodation, :accommodation)
     rename_column(:events, :accomodation, :accommodation)
+    Event.reset_column_information
+    Event::Course.reset_column_information
   end
 end
