@@ -19,6 +19,4 @@
   = f.labeled_input_field(:link_survey)
 
 - if entry.kind_class == Event::Kind
-  = field_inheritance_values(@kinds, [:application_conditions, :minimum_participants,
-    :maximum_participants, :minimum_age, :season, :training_days, :reserve_accommodation,
-    :accommodation, :cost_center_id, :cost_unit_id])
+  = field_inheritance_values(@kinds, Event::Course::INHERITED_ATTRIBUTES)

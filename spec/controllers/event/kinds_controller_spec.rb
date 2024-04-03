@@ -8,8 +8,9 @@
 require 'spec_helper'
 
 describe Event::KindsController do
-  before { sign_in(people(:admin)) }
-  let(:dom) { Capybara::Node::Simple.new(response.body) }
+  before { sign_in(current_user) }
+  let(:current_user) { people(:admin) }
+  let(:kind) { event_kinds(:ski_course) }
 
   it 'permits additional attributes' do
     expect(described_class.permitted_attrs).to include(
@@ -22,6 +23,18 @@ describe Event::KindsController do
       :reserve_accommodation,
       :accommodation
     )
+  end
+
+  context 'with rendered views' do
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    render_views
+
+    it 'GET#edit has push down button' do
+      get :edit, params: { id: kind.id }
+      expect(response).to be_ok
+      expect(dom).to have_link 'Daten auf Kurse übertragen'
+    end
   end
 
   it 'POST#create creates new event_kind' do
@@ -37,5 +50,26 @@ describe Event::KindsController do
         }
       }
     end.to change { Event::Kind.count }.by(1)
+  end
+
+  it 'PUT#push_down updates cost models on associated event_kinds' do
+    course = events(:top_course)
+    kind.update(maximum_participants: 10, minimum_participants: 0)
+    course.update_columns(state: :created, kind_id: kind.id, minimum_age: 12)
+
+    expect do
+      put :push_down, params: { id: kind.id }
+    end.to change { course.reload.maximum_participants }.from(nil).to(10)
+      .and not_change { course.minimum_age }
+  end
+
+  context 'unauthorized' do
+    let(:current_user) { people(:mitglied) }
+
+    it 'may not push down' do
+      expect do
+        put :push_down, params: { id: kind.id }
+      end.to raise_error(CanCan::AccessDenied)
+    end
   end
 end
