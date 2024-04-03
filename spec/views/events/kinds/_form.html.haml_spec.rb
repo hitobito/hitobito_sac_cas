@@ -15,6 +15,7 @@ describe 'event/kinds/_form.html.haml' do
     assign(:qualification_kinds, [])
     assign(:prolongations, [])
     assign(:preconditions, [])
+    assign(:kind_categories, [])
     allow(view).to receive_messages(entry: kind, model_class: Event::Kind, path_args: [kind])
   end
 
