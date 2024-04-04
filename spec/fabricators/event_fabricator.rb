@@ -7,7 +7,7 @@
 
 Fabricator(:sac_course, from: :course) do
   kind_id { ActiveRecord::FixtureSet.identify(:ski_course) }
-  number { sequence(:number) }
+  number { sequence(:number, 10000) }
 end
 
 Fabricator(:sac_open_course, from: :sac_course) do
@@ -16,7 +16,7 @@ Fabricator(:sac_open_course, from: :sac_course) do
   cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
   location { Faker::Lorem.words.join }
   description { Faker::Lorem.words.join }
-  number { sequence(:number) }
+  number { sequence(:number, 1000) }
   language { 'de' }
   season { 'winter' }
   start_point_of_time { 'day' }

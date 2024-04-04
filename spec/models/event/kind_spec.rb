@@ -73,8 +73,8 @@ describe Event::Kind do
     end
   end
 
-  describe '#push_inherited_attributes_to_courses!' do
-    let(:course) { events(:top_course) }
+  describe '#push_down_inherited_attributes!' do
+    let(:course) { events(:closed) }
     let(:kind) { event_kinds(:ski_course) }
     let(:kind_attrs) {
       {
@@ -107,7 +107,7 @@ describe Event::Kind do
 
     it 'updates course attributes' do
       expect do
-        kind.push_inherited_attributes_to_courses!
+        kind.push_down_inherited_attributes!
       end.to change { read_course_attrs }.to(kind_attrs)
     end
 
@@ -118,7 +118,7 @@ describe Event::Kind do
       end
 
       kind.save!
-      expect { kind.push_inherited_attributes_to_courses! }.to change { course.translations.count }.by(1)
+      expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
       I18n.with_locale('de') { expect(course.application_conditions).to eq 'de' }
       I18n.with_locale('fr') { expect(course.application_conditions).to eq 'fr' }
     end
@@ -128,22 +128,22 @@ describe Event::Kind do
       course.update!(minimum_age: 12)
 
       expect do
-        kind.push_inherited_attributes_to_courses!
+        kind.push_down_inherited_attributes!
       end.not_to change { course.reload.minimum_age }
     end
 
     it 'noops if course state is ignored' do
-      %w(completed canceled).each do |state|
+      %w(closed canceled).each do |state|
         course.update!(state: state)
         expect do
-          kind.push_inherited_attributes_to_courses!
+          kind.push_down_inherited_attributes!
         end.not_to change { read_course_attrs }
       end
     end
 
     it 'noops when course is not associated with kind' do
       course.update_columns(kind_id: -1)
-      expect { kind.push_inherited_attributes_to_courses! }.not_to change  { read_course_attrs }
+      expect { kind.push_down_inherited_attributes! }.not_to change  { read_course_attrs }
     end
   end
 end

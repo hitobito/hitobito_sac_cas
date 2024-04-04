@@ -11,7 +11,7 @@ top_course:
   groups: root
   type: Event::Course
   kind: ski_course
-  number: 123
+  number: 10
   language: de
   priorization: true
   requires_approval: true
