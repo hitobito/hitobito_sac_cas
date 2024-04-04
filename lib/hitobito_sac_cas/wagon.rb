@@ -28,6 +28,7 @@ module HitobitoSacCas
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
+      Event::Participation.prepend SacCas::Event::Participation
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Person.include SacCas::Person
@@ -51,10 +52,11 @@ module HitobitoSacCas
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
-      PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       Ability.store.register ExternalTrainingAbility
-      QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
+      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
+      PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
+      QualificationAbility.include SacCas::QualificationAbility
 
       ## Decorators
       RoleDecorator.prepend SacCas::RoleDecorator
@@ -70,6 +72,7 @@ module HitobitoSacCas
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
+      Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
       admin_item[:active_for] += %w(cost_centers cost_units)
@@ -78,6 +81,7 @@ module HitobitoSacCas
       EventsController.prepend SacCas::EventsController
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
+      Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
