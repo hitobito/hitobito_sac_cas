@@ -10,8 +10,8 @@ module SacCas::FilterNavigation::People
   TOURENLEITER_FILTERS = {
     tour_guides_active: { quali_validity: :active },
     tour_guides_stalled: { quali_validity: :not_active_but_reactivateable },
-    tour_guides_inactive: { quali_validity: :active, role_kind: :invert },
-    tour_guides_none: { quali_validity: :not_active, role_kind: :invert }
+    tour_guides_inactive: { quali_validity: :active, role_kind: :inactive },
+    tour_guides_none: { quali_validity: :not_active, role_kind: :inactive }
   }.freeze
 
   def initialize(*args)
@@ -51,7 +51,7 @@ module SacCas::FilterNavigation::People
   def role_filter(role_kind)
     {
       role_type_ids: Group::SektionsTourenkommission::Tourenleiter.id,
-      role_kind: role_kind
+      kind: role_kind
     }.compact
   end
 
