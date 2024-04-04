@@ -8,7 +8,7 @@
 module SacCas::Event::KindCategoriesController
   extend ActiveSupport::Concern
 
-  prepended  do
+  prepended do
     self.permitted_attrs += [:cost_center_id, :cost_unit_id]
   end
 

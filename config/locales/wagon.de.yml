@@ -105,6 +105,12 @@ de:
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
         minimum_age: Mindestalter
+        participation_states:
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          summoned: Aufgeboten
+          anulled: Annuliert
         reserve_accommodation: Unterkunft reservieren durch SAC
         season: Saison
         start_point_of_time: Kursbeginn
@@ -433,6 +439,11 @@ de:
         push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
+
+    participations:
+      summoned_notice: "%{participant} wurde aufgeboten."
+      actions_show_youth:
+        summon_button: Aufbieten
   person:
     history:
       index_notice_sac_cas:
