@@ -70,6 +70,7 @@ module HitobitoSacCas
       ## Resources
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
+      Event::CourseResource.include SacCas::Event::CourseResource
       Event::KindResource.include SacCas::Event::KindResource
 
       ## Helpers
