@@ -8,3 +8,4 @@
 * Neuanmeldungen bei Sektionen können verwaltet werden (annehmen, ablehnen) (hitobito_sac_cas#109)
 * Einloggen mit Mitglied-Nr. oder Haupt-E-Mail-Adresse möglich (hitobito_sac_cas#119)
 * Anmeldeformular zeigt für bestehende Mitglieder Beitragskategorie der Mitgliedschaft an (hitobito_sac_cas#119)
+* Beim Etikettendruck wird bei jeder Person das Land immer gedruckt. Falls bei einer Person kein Land abgespeichert ist, wird Schweiz gedruckt (hitobito_sac_cas#426)
