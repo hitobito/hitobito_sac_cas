@@ -19,6 +19,7 @@ module SacCas::Person
     Person.used_attributes.delete(:nickname)
 
     has_many :external_trainings
+    has_many :roles_with_deleted, -> { with_deleted }, class_name: 'Role', foreign_key: 'person_id'
 
     delegate :active?, :anytime?, :roles, to: :membership, prefix: true
 

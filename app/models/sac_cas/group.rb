@@ -19,6 +19,10 @@ module SacCas::Group
     alias_method :group_id, :id
   end
 
+  def navision_id_padded
+    navision_id&.to_s&.rjust(8, '0')
+  end
+
   def sektion_or_ortsgruppe?
     [Group::Sektion, Group::Ortsgruppe].any? { |c| is_a?(c) }
   end
