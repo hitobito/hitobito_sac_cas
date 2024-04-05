@@ -39,6 +39,7 @@ module HitobitoSacCas
       Roles::Termination.prepend SacCas::Roles::Termination
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
+      Contactable.prepend SacCas::Contactable
 
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
