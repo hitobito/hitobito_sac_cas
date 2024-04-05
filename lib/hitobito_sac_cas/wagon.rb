@@ -50,6 +50,7 @@ module HitobitoSacCas
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
+      GroupAbility.prepend SacCas::GroupAbility
       PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       Ability.store.register ExternalTrainingAbility
       QualificationAbility.include SacCas::QualificationAbility

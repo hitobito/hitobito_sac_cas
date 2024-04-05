@@ -433,6 +433,9 @@ de:
         push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
+  mitglieder:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+
   person:
     history:
       index_notice_sac_cas:
