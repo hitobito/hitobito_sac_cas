@@ -70,6 +70,7 @@ module HitobitoSacCas
       ## Resources
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
+      Event::KindResource.include SacCas::Event::KindResource
 
       ## Helpers
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
