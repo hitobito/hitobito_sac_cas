@@ -16,8 +16,10 @@ class Group::SacCas < ::Group
            Group::Abonnenten
 
   mounted_attr :sac_newsletter_mailing_list_id, :integer
+  mounted_attr :course_admin_email, :string
 
   validate :assert_sac_newsletter_mailing_list_id
+  validate :assert_valid_course_admin_email
 
   private
 
@@ -27,6 +29,13 @@ class Group::SacCas < ::Group
 
     if ids.exclude?(sac_newsletter_mailing_list_id.to_i)
       errors.add(:sac_newsletter_mailing_list_id, :inclusion)
+    end
+  end
+
+  def assert_valid_course_admin_email
+    return unless course_admin_email.present?
+    unless Truemail.valid?(course_admin_email.to_s)
+      errors.add(:course_admin_email, :invalid)
     end
   end
 end

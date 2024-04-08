@@ -165,6 +165,7 @@ de:
         sac_cas_self_registration_url: SAC Selbstregistrierung
       group/sac_cas:
         sac_newsletter_mailing_list_id: SAC Newsletter Abo ID
+        course_admin_email: E-Mail Kursadministration
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
