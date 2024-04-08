@@ -10,6 +10,7 @@ module SacCas::EventsController
 
   prepended do
     before_render_form :preload_translated_associations
+    before_render_show :load_state_stepper
   end
 
   private
@@ -19,5 +20,11 @@ module SacCas::EventsController
 
     @cost_centers = CostCenter.includes(:translations).list
     @cost_units = CostUnit.includes(:translations).list
+  end
+
+  def load_state_stepper
+    return unless  entry.type == 'Event::Course'
+
+    @state_stepper = Events::Courses::StateStepper.new(entry)
   end
 end

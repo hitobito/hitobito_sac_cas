@@ -44,6 +44,12 @@ Rails.application.routes.draw do
       resources :mitglieder_exports, only: [:create],
                                      constraints: { format: 'csv' },
                                      defaults: { format: 'csv' }
+
+      resources :events, only: [] do
+        member do
+          put  'step_state' => 'events/courses/state_stepping#update'
+        end
+      end
     end
 
     resources :cost_centers, except: [:show]

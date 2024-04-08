@@ -586,6 +586,16 @@ de:
           Profil übernommen werden.
 
   events:
+    actions_show_sac_cas:
+      state_buttons:
+        created: Zurück als Entwurf
+        application_open: Publizieren
+        application_paused: Anmeldung pausieren
+        application_closed: Anmeldung abschliessen
+        assignment_closed: Zuteilung abschliessen
+        ready: Bereit zur Durchführung
+        closed: Abschliessen
+        canceled: Absagen
     form_tabs:
       communication: Kommunikation
     general_fields:
@@ -601,6 +611,9 @@ de:
         success_multiple:
           "%{model} wurde erfolgreich für %{names} erstellt."
 
+  events/courses/state_stepping:
+    flash:
+      success: Status wurde auf %{state} gesetzt.
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
