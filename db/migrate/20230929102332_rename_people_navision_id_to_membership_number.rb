@@ -9,7 +9,7 @@ class RenamePeopleNavisionIdToMembershipNumber < ActiveRecord::Migration[6.1]
 
   def up
     rename_column :people, :navision_id, :membership_number
-    change_column :people, :membership_number, :integer, null: true
+    execute "ALTER TABLE people ALTER COLUMN membership_number TYPE integer USING (membership_number::integer)"
   end
 
   def down

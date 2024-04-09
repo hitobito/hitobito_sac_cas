@@ -10,23 +10,22 @@ module SacCas::Role
   module ClassMethods # rubocop:disable Metrics/MethodLength
     def select_with_membership_years
       <<~SQL
-            CASE
-              -- membership_years is only calculated for Mitglied roles
-              WHEN roles.type != "Group::SektionsMitglieder::Mitglied" THEN 0
-              ELSE (
-                1 + DATEDIFF(
-                      LEAST(
-                        -- LEAST will return NULL if any of the arguments is NULL.
-                        -- Any value that can be NULL must have a fallback value higher than today.
-                        CURRENT_DATE(),
-                        COALESCE(DATE(roles.deleted_at), '9999-12-31'),
-                        COALESCE(DATE(roles.archived_at), '9999-12-31'),
-                        COALESCE(roles.delete_on, '9999-12-31')
-                      ),
-                      DATE(roles.created_at)
-                    )
-                )/365
-            END AS membership_years
+      CASE
+            -- membership_years is only calculated for Mitglied roles
+            WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+            ELSE (
+                1 + 
+                (CAST(DATE_PART('day', LEAST(
+                    -- LEAST will return NULL if any of the arguments is NULL.
+                    -- Any value that can be NULL must have a fallback value higher than today.
+                    CURRENT_DATE,
+                    COALESCE(DATE(roles.deleted_at), '9999-12-31'),
+                    COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                    COALESCE(roles.delete_on, '9999-12-31')
+                )) AS double precision) - CAST(DATE_PART('day', DATE(roles.created_at)) AS double precision))
+                / 365
+            )
+        END AS membership_years
       SQL
     end
   end
