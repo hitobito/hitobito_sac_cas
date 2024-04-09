@@ -33,7 +33,10 @@ describe Event::KindsController do
     it 'GET#edit has push down button' do
       get :edit, params: { id: kind.id }
       expect(response).to be_ok
-      expect(dom).to have_link 'Daten auf Kurse übertragen'
+
+      link = dom.find_link 'Daten auf Kurse übertragen'
+      expect(link[:href]).to eq "/de/event_kinds/#{kind.id}/push_down"
+      expect(link[:'data-method']).to eq 'put'
     end
   end
 
