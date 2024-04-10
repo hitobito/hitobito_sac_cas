@@ -9,14 +9,40 @@ require 'spec_helper'
 
 describe Event::ParticipationsController do
   before { sign_in(people(:admin)) }
-  let(:group) { course.groups.first }
-  let(:course) do
+
+  let(:group) { event.groups.first }
+  let(:event) do
     Fabricate(:sac_course, groups: [groups(:root)], applications_cancelable: true).tap do |c|
       c.dates.first.update_columns(start_at: 1.day.from_now)
     end
   end
-  let(:participation) { Fabricate(:event_participation, event: course) }
-  let(:params) { { group_id: group.id, event_id: course.id, id: participation.id } }
+  let(:params) { { group_id: group.id, event_id: event.id } }
+
+  describe 'GET#index' do
+    render_views
+    subject(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    before do
+      participation = Fabricate(:event_participation, event: event)
+      Fabricate(Event::Role::Participant.sti_name, participation: participation)
+    end
+
+    it 'renders state column' do
+      get :index, params: params
+      expect(dom).to have_css 'th a', text: 'Status'
+      expect(dom).to have_css 'td', text: 'Bestätigt'
+    end
+
+    context 'event without state' do
+      let(:event) { events(:top_event) }
+
+      it 'hides state column' do
+        get :index, params: params
+        expect(dom).not_to have_css 'th a', text: 'Status'
+        expect(dom).not_to have_css 'td', text: 'Bestätigt'
+      end
+    end
+  end
 
   context 'GET#new' do
     render_views
@@ -39,7 +65,7 @@ describe Event::ParticipationsController do
     end
 
     it 'renders aside for course' do
-      get :new, params: { group_id: group.id, event_id: course.id }
+      get :new, params: { group_id: group.id, event_id: event.id }
       expect(dom).to have_css 'main form'
       expect(dom).to have_css '.stepwizard-step', count: 3
       expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
@@ -50,10 +76,12 @@ describe Event::ParticipationsController do
   context 'GET#show' do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
+    let(:participation) { Fabricate(:event_participation, event: event) }
+    let(:params) { { group_id: group.id, event_id: event.id, id: participation.id } }
 
     it 'includes cancel_statement field in cancel popover' do
-      Fabricate(:event_application, participation: participation, priority_1: course,
-                  priority_2: course)
+      Fabricate(:event_application, participation: participation, priority_1: event,
+                  priority_2: event)
       get :show, params: params
       button = dom.find_button 'Abmelden'
       content = Capybara::Node::Simple.new(button['data-bs-content'])
@@ -133,6 +161,9 @@ describe Event::ParticipationsController do
   end
 
   context 'state changes' do
+    let(:participation) { Fabricate(:event_participation, event: event) }
+    let(:params) { { group_id: group.id, event_id: event.id, id: participation.id } }
+
     it 'PUT summon sets participation state to abset' do
       put :summon, params: params
       participation.reload
@@ -177,7 +208,7 @@ describe Event::ParticipationsController do
 
     it 'PUT#cancel fails if participation cancels but not cancelable by participant' do
       freeze_time
-      course.update_columns(applications_cancelable: false)
+      event.update_columns(applications_cancelable: false)
       participation.update!(person: people(:admin))
       put :cancel, params: params.merge({
         event_participation: { canceled_at: 1.day.ago }

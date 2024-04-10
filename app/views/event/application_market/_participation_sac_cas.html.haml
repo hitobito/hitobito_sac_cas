@@ -3,7 +3,5 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-= table(entries, class: 'table table-striped table-hover') do |t|
-  - t.attr(:label)
-  - t.sortable_attrs(:code, :difficulty, :updated_at)
-  - add_table_actions(t)
+- if participation.event.possible_participation_states.any?
+  %td= participation.decorate.state_translated
