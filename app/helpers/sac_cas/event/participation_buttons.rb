@@ -12,10 +12,10 @@ module SacCas::Event::ParticipationButtons
     self.conditions = {
       cancel: [:unconfirmed, :applied, :assigned, :summoned],
       reject: [:unconfirmed, :applied],
-      summon: [:assigned, if: -> { event.state == 'ready' }],
+      summon: [:assigned, if: -> { @event.state == 'ready' }],
       absent: [:assigned, :summoned, :attended],
-      attend: [:absent, if: -> { event.closed? }],
-      assign: [:unconfirmed, :applied, :absent, if: -> { !event.closed? }]
+      attend: [:absent, if: -> { @event.closed? }],
+      assign: [:unconfirmed, :applied, :absent, if: -> { !@event.closed? }]
     }
   end
 end
