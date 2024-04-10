@@ -11,4 +11,10 @@ module SacCas::EventsHelper
       safe_auto_link(entry.application_conditions, html: { target: '_blank' })
     end
   end
+
+  def format_event_unconfirmed_count(event)
+    if event.unconfirmed_count.positive? && can?(:application_market, event)
+      badge(event.unconfirmed_count, :secondary)
+    end
+  end
 end
