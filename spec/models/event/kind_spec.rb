@@ -84,7 +84,6 @@ describe Event::Kind do
         maximum_participants: 3,
         training_days: 4,
         season: 'winter',
-        reserve_accommodation: true,
         accommodation: 'hut',
         reserve_accommodation: false,
         cost_center_id: 1,
@@ -116,34 +115,47 @@ describe Event::Kind do
         kind.label = l
         kind.application_conditions = l
       end
-
       kind.save!
       expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
       I18n.with_locale('de') { expect(course.application_conditions).to eq 'de' }
       I18n.with_locale('fr') { expect(course.application_conditions).to eq 'fr' }
     end
 
-    it 'does not update existing values with blanks' do
+    it 'overrides existing values with blanks' do
       kind.update!(minimum_age: nil)
       course.update!(minimum_age: 12)
 
       expect do
         kind.push_down_inherited_attributes!
-      end.not_to change { course.reload.minimum_age }
-    end
-
-    it 'noops if course state is ignored' do
-      %w(closed canceled).each do |state|
-        course.update!(state: state)
-        expect do
-          kind.push_down_inherited_attributes!
-        end.not_to change { read_course_attrs }
-      end
+      end.to change { course.reload.minimum_age }.from(12).to(nil)
     end
 
     it 'noops when course is not associated with kind' do
       course.update_columns(kind_id: -1)
       expect { kind.push_down_inherited_attributes! }.not_to change  { read_course_attrs }
+    end
+
+    describe 'ignored states' do
+      %w(closed canceled).each do |ignored|
+        before { course.update!(state: ignored) }
+
+        it "noops for course in #{ignored} state" do
+          expect do
+            kind.push_down_inherited_attributes!
+          end.not_to change { read_course_attrs }
+        end
+
+        it 'updates translated application_conditions column' do
+          with_locales do |l|
+            kind.label = l
+            kind.application_conditions = l
+          end
+          kind.save!
+          expect { kind.push_down_inherited_attributes! }.not_to change { course.translations.count }
+          I18n.with_locale('de') { expect(course.application_conditions).to be_blank }
+          I18n.with_locale('fr') { expect(course.application_conditions).to be_blank }
+        end
+      end
     end
   end
 end

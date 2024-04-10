@@ -61,7 +61,7 @@ module SacCas::Event::Kind
   def push_down_inherited_attributes!
     attrs = Event::Course::INHERITED_ATTRIBUTES.collect { |attr| [attr, send(attr)] }.to_h
     Event::Kind.transaction do
-      push_down_events.update_all(attrs.except(:application_conditions).compact)
+      push_down_events.update_all(attrs.except(:application_conditions))
       push_down_application_conditions!
     end
   end
