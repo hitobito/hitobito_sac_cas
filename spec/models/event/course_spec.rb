@@ -184,4 +184,23 @@ describe Event::Course do
       end
     end
   end
+
+  describe '#refresh_participant_counts!' do
+    let(:course) { events(:top_course) }
+    let(:admin) { people(:admin) }
+
+    it 'updates unconfirmed_count' do
+      Fabricate(:event_participation, event: course)
+      Fabricate(:event_participation, event: course, state: :unconfirmed)
+      unconfirmed = Fabricate(:event_participation, event: course, state: :unconfirmed)
+      expect do
+        course.refresh_participant_counts!
+      end.to change { course.reload.unconfirmed_count }.from(0).to(2)
+
+      unconfirmed.update!(state: :assigned)
+      expect do
+        course.refresh_participant_counts!
+      end.to change { course.reload.unconfirmed_count }.from(2).to(1)
+    end
+  end
 end

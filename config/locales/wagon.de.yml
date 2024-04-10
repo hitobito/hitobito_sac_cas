@@ -69,6 +69,8 @@ de:
         event_kinds: Kursarten
         courses: Kurse
         updated_at: Geändert
+      event:
+        unconfirmed_count: Unbestätigte
       event/kind:
         accommodation: Unterkunft
         accommodations:

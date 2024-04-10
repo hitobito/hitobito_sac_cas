@@ -5,6 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# == Schema Information
+#
+# Table name: events
+#
 #  id                               :integer          not null, primary key
 #  accommodation                    :string(255)      default("no_overnight"), not null
 #  annual                           :boolean          default(TRUE), not null
@@ -25,8 +29,8 @@
 #  link_survey                      :string(255)
 #  location                         :text(65535)
 #  maximum_participants             :integer
-#  minimum_participants             :integer
 #  minimum_age                      :integer
+#  minimum_participants             :integer
 #  motto                            :string(255)
 #  name                             :string(255)
 #  notify_contact_on_participations :boolean          default(FALSE), not null
@@ -48,6 +52,7 @@
 #  tentative_applications           :boolean          default(FALSE), not null
 #  training_days                    :decimal(5, 2)
 #  type                             :string(255)
+#  unconfirmed_count                :integer          default(0), not null
 #  waiting_list                     :boolean          default(TRUE), not null
 #  created_at                       :datetime
 #  updated_at                       :datetime
@@ -61,11 +66,11 @@
 #
 # Indexes
 #
-#  index_events_on_kind_id  (kind_id)
 #  index_events_on_cost_center_id       (cost_center_id)
 #  index_events_on_cost_unit_id         (cost_unit_id)
 #  index_events_on_kind_id              (kind_id)
 #  index_events_on_shared_access_token  (shared_access_token)
+#
 
 module SacCas::Event::Course
   extend ActiveSupport::Concern

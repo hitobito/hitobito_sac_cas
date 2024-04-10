@@ -20,7 +20,6 @@ second:
   event: top_event
   start_at: 2023-09-01 00:00:00 +0200
 
-
 closed:
   label: Event
   event: closed
