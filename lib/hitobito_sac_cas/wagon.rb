@@ -70,6 +70,7 @@ module HitobitoSacCas
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
       RoleDecorator.prepend SacCas::RoleDecorator
+      Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
 
       ## Domain
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
@@ -93,6 +94,7 @@ module HitobitoSacCas
 
       ## Controllers
       EventsController.prepend SacCas::EventsController
+      Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
