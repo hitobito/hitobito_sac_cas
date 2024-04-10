@@ -3,11 +3,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+slk_de:
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:slk) %>
+  locale: de
+  label: Schneeleiterkurs
+  short_name: SLK
+  general_information: Hier lernst du alles, um im Schnee zu leiten.
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
 
 dummy:
-  locale: 'de'
-  label: 'Dummy'
-  short_name: 'DMY'
-  event_kind_id:  <%= ActiveRecord::FixtureSet.identify(:ski_course) %>
+  locale: "de"
+  label: "Dummy"
+  short_name: "DMY"
+  event_kind_id: <%= ActiveRecord::FixtureSet.identify(:ski_course) %>
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
