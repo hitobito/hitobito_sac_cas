@@ -143,11 +143,11 @@ module SacCas::Event::Course
   end
 
   def adjust_state
-    if application_closing_at.try(:past?) && APPLICATION_OPEN_STATES.include?(state)
+    if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
       self.state = 'application_closed'
     end
 
-    if application_closing_at.try(:future?) && application_closed?
+    if application_closed? && %w(today? future?).any? { application_closing_at.try(_1) }
       self.state = 'application_open'
     end
   end

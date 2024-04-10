@@ -173,9 +173,9 @@ describe Event::Course do
         expect(course.state).to eq 'application_closed'
       end
 
-      it 'does not change state if closing date changes to today' do
+      it 'does change state if closing date changes to today' do
         course.update!(application_closing_at: Time.zone.today)
-        expect(course.state).to eq 'application_closed'
+        expect(course.state).to eq 'application_open'
       end
 
       it 'opens course for application state if closing date changes to future' do
