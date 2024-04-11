@@ -23,4 +23,53 @@ describe Event::Participation do
       end
     end
   end
+
+  describe '#particpant_cancelable?' do
+    let(:course) do
+      Fabricate.build(:sac_course).tap { |e| e.dates.build(start_at: 10.days.from_now) }
+    end
+
+    subject(:participation) { Fabricate.build(:event_participation, event: course) }
+
+    it 'may not be canceled by participant if applications are not cancelable' do
+      course.applications_cancelable = false
+      expect(participation).not_to be_particpant_cancelable
+    end
+
+    it 'may not be canceled by participant if course is in annulled state' do
+      course.applications_cancelable = true
+      course.state = 'annulled'
+      expect(participation).not_to be_particpant_cancelable
+    end
+
+    it 'may not be canceled by participant if course starts today' do
+      course.applications_cancelable = true
+      course.state = 'application_open'
+      course.dates.first.start_at = Time.zone.now
+      expect(participation).not_to be_particpant_cancelable
+    end
+
+    it 'may not be canceled by participant if course started in the past' do
+      course.applications_cancelable = true
+      course.state = 'application_open'
+      course.dates.first.start_at = 1.day.ago
+      expect(participation).not_to be_particpant_cancelable
+    end
+
+    it 'may not be canceled by participant if any date is in the past' do
+      course.applications_cancelable = true
+      course.state = 'application_open'
+      course.dates.build.start_at = 1.day.from_now
+      course.dates.build.start_at = 1.day.ago
+      expect(participation).not_to be_particpant_cancelable
+    end
+
+
+    it 'may be canceled otherwise' do
+      course.applications_cancelable = true
+      course.state = 'application_open'
+      course.dates.first.start_at = 1.day.from_now
+      expect(participation).to be_particpant_cancelable
+    end
+  end
 end

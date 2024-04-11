@@ -148,6 +148,8 @@ de:
         created_at: Erstellt
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/participation:
+        cancel_statement: Begründung
       external_training:
         person: Person
         event_kind: Kursart
@@ -454,6 +456,11 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+
+      popover_participant_cancels:
+        cancel_info: Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? Eine Abmeldung
+          kann nicht rückgängig gemacht werden. Mit der Abmeldung werden allfällige Bearbeitungs-
+          und Annullationsgebühren in Rechnung gestellt.
 
   events:
     form_tabs:

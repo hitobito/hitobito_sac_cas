@@ -10,8 +10,8 @@ require 'spec_helper'
 describe Event::ParticipationAbility do
 
   def build(group, person: people(:admin), event: nil)
-    event ||= Event::Course.new(groups: [groups(group)])
-    Event::Participation.new(event: event, person: person)
+    event ||= Event::Course.new(groups: [groups(group)], id: -1, supports_applications: true)
+    Event::Participation.new(event: event, person: person, application_id: -1)
   end
 
   def build_role(key, role)
@@ -27,16 +27,29 @@ describe Event::ParticipationAbility do
     let(:participation) { build(:bluemlisalp_funktionaere, event: top_course) }
     let(:role) { build_role(:bluemlisalp_funktionaere, 'Andere') }
 
-    it 'event leader may summon' do
-      build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-        .roles.create!(type: Event::Role::Leader.sti_name)
-      expect(subject).to be_able_to(:summon, participation)
+    describe 'summon' do
+      it 'leader may summon' do
+        build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
+          .roles.create!(type: Event::Role::Leader.sti_name)
+        expect(subject).to be_able_to(:summon, participation)
+      end
+
+      it 'participant may not summon' do
+        build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
+          .roles.create!(type: Event::Role::Participant.sti_name)
+        expect(subject).not_to be_able_to(:summon, participation)
+      end
     end
 
-    it 'event participant may not summon' do
-      build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-        .roles.create!(type: Event::Role::Participant.sti_name)
-      expect(subject).not_to be_able_to(:summon, participation)
+    describe 'cancel'  do
+      it 'may not cancel others' do
+        expect(subject).not_to be_able_to(:cancel, participation)
+      end
+
+      it 'may cancel her own' do
+        participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
+        expect(subject).to be_able_to(:cancel, participation)
+      end
     end
   end
 
@@ -44,24 +57,28 @@ describe Event::ParticipationAbility do
     context 'root' do
       let(:role) { build_role(:geschaeftsstelle, 'Mitarbeiter') }
 
-      it 'may summon for event in layer' do
-        expect(subject).to be_able_to(:summon, build(:root))
-      end
+      [:summon, :cancel].each do |action|
+        it "may #{action} for event in layer" do
+          expect(subject).to be_able_to(action, build(:root))
+        end
 
-      it 'may not summon for event in lower layer' do
-        expect(subject).not_to be_able_to(:summon, build(:bluemlisalp_funktionaere))
+        it "may not #{action} for event in lower layer" do
+          expect(subject).not_to be_able_to(action, build(:bluemlisalp_funktionaere))
+        end
       end
     end
 
     context 'sektion' do
       let(:role) { build_role(:bluemlisalp_funktionaere, 'Administration') }
 
-      it 'may summon for event in layer' do
-        expect(subject).to be_able_to(:summon, build(:bluemlisalp_funktionaere))
-      end
+      [:summon, :cancel].each do |action|
+        it "may #{action} for event in layer" do
+          expect(subject).to be_able_to(action, build(:bluemlisalp_funktionaere))
+        end
 
-      it 'may summon for event in uppper layer' do
-        expect(subject).not_to be_able_to(:summon, build(:root))
+        it "may #{action} for event in uppper layer" do
+          expect(subject).not_to be_able_to(action, build(:root))
+        end
       end
     end
   end
@@ -69,12 +86,14 @@ describe Event::ParticipationAbility do
   context 'group_full' do
     let(:role) { build_role(:matterhorn_tourenkommission, 'TourenchefWinter') }
 
-    it 'may not summon on group above' do
-      expect(subject).not_to be_able_to(:summon, build(:matterhorn))
-    end
+    [:summon, :cancel].each do |action|
+      it "may not #{action} on group above" do
+        expect(subject).not_to be_able_to(action, build(:matterhorn))
+      end
 
-    it 'may summon on group' do
-      expect(subject).to be_able_to(:summon, build(:matterhorn_tourenkommission))
+      it "may #{action} on group" do
+        expect(subject).to be_able_to(action, build(:matterhorn_tourenkommission))
+      end
     end
   end
 end

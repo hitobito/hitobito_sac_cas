@@ -12,6 +12,11 @@ module SacCas::Event::Participation
     before_save :update_previous_state, if: :state_changed?
   end
 
+  def particpant_cancelable?
+    event.applications_cancelable? && event.state != 'annulled' &&
+      event.dates.map(&:start_at).min.future?
+  end
+
   private
 
   def update_previous_state
