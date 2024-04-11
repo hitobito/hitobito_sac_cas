@@ -57,6 +57,6 @@ describe SacCas::Export::MitgliederExportJob do
 
   it 'file name' do
     job.perform
-    expect(file.filename).to eq("adressen_#{group.navision_id_padded}.csv")
+    expect(file.filename).to eq("Adressen_#{group.navision_id_padded}.csv")
   end
 end
