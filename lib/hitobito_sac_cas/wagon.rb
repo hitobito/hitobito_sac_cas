@@ -75,6 +75,7 @@ module HitobitoSacCas
       Event::KindResource.include SacCas::Event::KindResource
 
       ## Helpers
+      EventsHelper.prepend SacCas::EventsHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
