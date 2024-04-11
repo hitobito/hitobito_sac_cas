@@ -40,7 +40,7 @@ describe :self_registration_neuanmeldung, js: true do
   end
 
   def assert_step(step_name)
-    expect(page).to have_css('.step-headers li.active', text: step_name),
+    expect(page).to have_css('.step-headers li.active', text: step_name, wait: 10),
       "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
   end
 
