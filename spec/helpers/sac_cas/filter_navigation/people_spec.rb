@@ -60,25 +60,25 @@ describe 'FilterNavigation::People' do
     it 'Aktive Tourenleiter filters for role and active qualification' do
       query = parse_link_query('Aktive Tourenleiter')
       expect(query['filters[qualification][validity]']).to eq 'active'
-      expect(query['filters[role][role_kind]']).to be_nil
+      expect(query['filters[role][kind]']).to be_nil
     end
 
     it 'Sistierte Tourenleiter filters for role and not_active_but_reactivateable' do
       query = parse_link_query('Sistierte Tourenleiter')
       expect(query['filters[qualification][validity]']).to eq 'not_active_but_reactivateable'
-      expect(query['filters[role][role_kind]']).to be_nil
+      expect(query['filters[role][kind]']).to be_nil
     end
 
-    it 'Inaktive Tourenleiter filters for inverted role and active qualification' do
+    it 'Inaktive Tourenleiter filters for inactive role and active qualification' do
       query = parse_link_query('Inaktive Tourenleiter')
       expect(query['filters[qualification][validity]']).to eq 'active'
-      expect(query['filters[role][role_kind]']).to eq 'invert'
+      expect(query['filters[role][kind]']).to eq 'inactive'
     end
 
-    it 'Keine Tourenleiter filters for inverted role and not_active qualification' do
+    it 'Keine Tourenleiter filters for inactive role and not_active qualification' do
       query = parse_link_query('Keine Tourenleiter')
       expect(query['filters[qualification][validity]']).to eq 'not_active'
-      expect(query['filters[role][role_kind]']).to eq 'invert'
+      expect(query['filters[role][kind]']).to eq 'inactive'
     end
   end
 
