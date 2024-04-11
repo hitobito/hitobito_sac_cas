@@ -595,14 +595,12 @@ with: 'Belpstrasse')
 
   describe 'wizard stepping navigation' do
     context 'for family registration' do
-      before do
+      it 'can go back and forth' do
         visit group_self_registration_path(group_id: group)
         complete_main_person_form
         complete_household_form
         assert_step 'Zusatzdaten'
-      end
 
-      it 'can go back and forth' do
         click_on 'Zurück', match: :first
         assert_step 'Familienmitglieder'
         click_on 'Weiter', match: :first
