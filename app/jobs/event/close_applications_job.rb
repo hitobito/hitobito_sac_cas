@@ -8,10 +8,16 @@
 class Event::CloseApplicationsJob < RecurringJob
   run_every 1.day
 
+  private
+
   def perform_internal
     Event::Course
       .where(state: %w(application_open application_paused))
       .where(application_closing_at: [...Time.zone.today])
       .update_all(state: :application_closed)
+  end
+
+  def next_run
+    interval.from_now.midnight + 5.minutes
   end
 end

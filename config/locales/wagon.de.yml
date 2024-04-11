@@ -105,6 +105,12 @@ de:
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
         minimum_age: Mindestalter
+        participation_states:
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          summoned: Aufgeboten
+          anulled: Annuliert
         reserve_accommodation: Unterkunft reservieren durch SAC
         season: Saison
         start_point_of_time: Kursbeginn
@@ -159,6 +165,7 @@ de:
         sac_cas_self_registration_url: SAC Selbstregistrierung
       group/sac_cas:
         sac_newsletter_mailing_list_id: SAC Newsletter Abo ID
+        course_admin_email: E-Mail Kursadministration
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
@@ -433,6 +440,18 @@ de:
         push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
+
+    participations:
+      summoned_notice: "%{participant} wurde aufgeboten."
+      actions_show_youth:
+        summon_button: Aufbieten
+
+  filter_navigation/people:
+    tour_guides_none: Keine Tourenleiter
+    tour_guides_active: Aktive Tourenleiter
+    tour_guides_stalled: Sistierte Tourenleiter
+    tour_guides_inactive: Inaktive Tourenleiter
+
   mitglieder:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 

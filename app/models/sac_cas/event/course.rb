@@ -115,6 +115,9 @@ module SacCas::Event::Course
     self.possible_states = %w(created application_open application_paused application_closed
                               assignment_closed ready closed canceled)
 
+    self.possible_participation_states = %w(unconfirmed applied rejected assigned summoned
+                                            attended absent canceled annulled)
+
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: { if: :number }
@@ -140,11 +143,11 @@ module SacCas::Event::Course
   end
 
   def adjust_state
-    if application_closing_at.try(:past?) && APPLICATION_OPEN_STATES.include?(state)
+    if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
       self.state = 'application_closed'
     end
 
-    if application_closing_at.try(:future?) && application_closed?
+    if application_closed? && %w(today? future?).any? { application_closing_at.try(_1) }
       self.state = 'application_open'
     end
   end

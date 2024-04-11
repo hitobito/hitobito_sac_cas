@@ -22,6 +22,14 @@ Rails.application.routes.draw do
     resources :groups, only: [] do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
 
+      resources :events, only: [] do
+        scope module: 'event' do
+          resources :participations, only: [] do
+            put :summon, on: :member
+          end
+        end
+      end
+
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
       end
