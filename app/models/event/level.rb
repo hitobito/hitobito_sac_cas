@@ -17,11 +17,12 @@
 #  updated_at :datetime         not null
 
 class Event::Level < ActiveRecord::Base
+
+  include Paranoia::Globalized
+
+  translates :label, :description
+
   validates_by_schema
-
-  acts_as_paranoid
-
-  translates :label
   validates :label, presence: true
 
   def to_s

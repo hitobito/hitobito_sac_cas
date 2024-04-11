@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-# rubocop:disable Metrics/LineLength
 namespace :import do
   desc 'Import sections from a navision export (tmp/xlsx/sektionen.xlsx)'
   task sektionen: [:environment] do
@@ -48,4 +47,3 @@ namespace :import do
     ).import!
   end
 end
-# rubocop:enable Metrics/LineLength

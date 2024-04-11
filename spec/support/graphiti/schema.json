@@ -900,7 +900,7 @@
     },
     {
       "name": "Event::LevelResource",
-      "type": "levels",
+      "type": "event_levels",
       "graphql_entrypoint": "levels",
       "description": null,
       "attributes": {
@@ -927,6 +927,12 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
@@ -939,6 +945,8 @@
         "code": {
         },
         "difficulty": {
+        },
+        "description": {
         }
       },
       "filters": {
@@ -988,6 +996,21 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
           ]
         }
       },

@@ -146,6 +146,7 @@ de:
       event/level:
         label: Bezeichnung
         code: Code
+        description: Beschreibung
         difficulty: Schwierigkeitsgrad
         created_at: Erstellt
         updated_at: Geändert
@@ -476,6 +477,10 @@ de:
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+
+  event/levels:
+    new:
+      title: Kursstufe erstellen
 
   person:
     history:
