@@ -63,7 +63,7 @@ describe Event::KindsController do
     expect do
       put :push_down, params: { id: kind.id }
     end.to change { course.reload.maximum_participants }.from(nil).to(10)
-      .and not_change { course.minimum_age }
+      .and change { course.minimum_age }
   end
 
   context 'unauthorized' do
