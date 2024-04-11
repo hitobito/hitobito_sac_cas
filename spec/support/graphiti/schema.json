@@ -1300,6 +1300,26 @@
           "type": "string",
           "readable": true,
           "description": null
+        },
+        "has_youth_organization": {
+          "type": "boolean",
+          "readable": true,
+          "description": null
+        },
+        "members_count": {
+          "type": "integer",
+          "readable": true,
+          "description": "The number of `Mitglied` roles in the direct children of this group. It does not\ninclude roles nested deeper below (e.g. on a Sektion it counts only Sektionsmitglieder\nbut not Ortsgruppenmitglieder)..\nIs `null` for all groups other than `Sektion` and `Ortsgruppe`.\n"
+        },
+        "membership_admission_through_gs": {
+          "type": "boolean",
+          "readable": true,
+          "description": "Membership applications are processed by the Geschäftsstelle.\n"
+        },
+        "membership_self_registration_url": {
+          "type": "string",
+          "readable": true,
+          "description": null
         }
       },
       "sorts": {
