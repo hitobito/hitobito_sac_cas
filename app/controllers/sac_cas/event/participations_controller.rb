@@ -10,9 +10,30 @@ module SacCas::Event::ParticipationsController
 
   prepended do
     define_model_callbacks :summon
+    before_cancel :assert_participant_cancelable?
+  end
+
+  def cancel
+    entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
+    entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
+    entry.canceled_at = Time.zone.today if participant_cancels?
+    change_state('canceled', 'cancel')
   end
 
   def summon
     change_state('summoned', 'summon')
+  end
+
+  private
+
+  def assert_participant_cancelable?
+    if participant_cancels? && !entry.particpant_cancelable?
+      entry.errors.add(:base, :invalid)
+      throw :abort
+    end
+  end
+
+  def participant_cancels?
+    entry.person == current_user
   end
 end

@@ -32,6 +32,7 @@ module HitobitoSacCas
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
       Event::Participation.prepend SacCas::Event::Participation
+      Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Person.include SacCas::Person

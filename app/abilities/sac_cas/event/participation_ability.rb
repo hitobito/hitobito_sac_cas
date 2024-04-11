@@ -10,9 +10,12 @@ module SacCas::Event::ParticipationAbility
 
   prepended do
     on(Event::Participation) do
+      permission(:any).may(:cancel).her_own_or_for_participations_full_events
+
       permission(:any).may(:summon).for_participations_full_events
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer
+      general(:summon).if_application
     end
   end
 end
