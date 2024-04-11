@@ -92,6 +92,8 @@ de:
       event/course:
         accommodation: Unterkunft
         annual: Jährlich wiederkehrend
+        book_discount_code: Rabattcode Buchversand
+        brief_description: Kurzbeschreibung
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
         level: Kursstufe
@@ -104,6 +106,13 @@ de:
         link_leaders: Link Kurskader
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
+        meals: Verpflegung
+        meals_options:
+          breakfast: Frühstück
+          half_board: Halbpension
+          lunch: Lunch
+          self_cooking: Selbst gekochte Mahlzeiten
+          full_board: Vollpension
         minimum_age: Mindestalter
         participation_states:
           unconfirmed: Unbestätigt
@@ -111,8 +120,11 @@ de:
           assigned: Bestätigt
           summoned: Aufgeboten
           anulled: Annuliert
+        program: Programm
         reserve_accommodation: Unterkunft reservieren durch SAC
         season: Saison
+        specialities: Besonderes
+        similar_tours: Vergleichstouren
         start_point_of_time: Kursbeginn
         start_point_of_times:
           day: Tag
@@ -199,11 +211,11 @@ de:
       messages:
         already_has_mitglied_role: ist bereits Mitglied (von %{start_on} bis %{end_on}).
         already_has_neuanmeldung_role: hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on}).
-        too_many_adults_in_family: 'In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen.'
-        only_one_mitglied_role_allowed_at_a_time: 'hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit.'
-        must_have_mitglied_role: 'muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion.'
-        must_have_mitglied_role_in_group: 'muss Mitglied in der ausgewählten Gruppe sein.'
-        must_be_present_unless_deleted: 'muss vorhanden sein, wenn nicht gelöscht.'
+        too_many_adults_in_family: "In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen."
+        only_one_mitglied_role_allowed_at_a_time: "hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit."
+        must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
+        must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
+        must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
 
       models:
         people_manager:
@@ -217,7 +229,7 @@ de:
         qualification:
           attributes:
             finish_at:
-              not_after_start: 'muss nach Seit liegen'
+              not_after_start: "muss nach Seit liegen"
 
     models:
       cost_center:
@@ -408,11 +420,8 @@ de:
       group/sektions_externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
-
-
       group/sektions_huette/huettenwartspartner:
         one: Hüttenwartspartner*in
-
       group/sektions_huette/schluesseldepot:
         one: Schlüsseldepot
 
@@ -420,31 +429,35 @@ de:
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+
   event:
     kinds:
       push_down:
         success: Die gespeicherten Daten wurden auf alle aktiven Kurse übertragen.
-
       actions_edit:
         push_down_button: Daten auf Kurse übertragen
-        push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten auf alle aktiven Kurse
+        push_down_button_confirm:
+          Wollen Sie wirklich die gespeicherten Daten auf alle aktiven Kurse
           übertragen? Dabei werden die aktuellen Werte überschrieben.
-
     kind_categories:
       push_down:
-        success: Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle
+        success:
+          Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle
           zugeordneten Kursarten übertragen.
-
       actions_edit:
         push_down_button: Daten auf Kursarten übertragen
-        push_down_button_confirm: Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
+        push_down_button_confirm:
+          Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
-
     participations:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+
+  events:
+    form_tabs:
+      communication: Kommunikation
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
@@ -459,7 +472,6 @@ de:
           Hier kannst du deine Mitgliedschaften verwalten.
           Informationen zu den verschiedenen SAC Sektionen findest du unter
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
-
 
   people:
     neuanmeldungen:
@@ -485,11 +497,11 @@ de:
       text:
         one: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldung.
         other: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldungen.
-      submit: '%{count} Übernehmen'
+      submit: "%{count} Übernehmen"
     create:
       success:
         one: Anmeldung wurde übernommen
-        other: '%{count} Anmeldungen wurden übernommen'
+        other: "%{count} Anmeldungen wurden übernommen"
 
   people/neuanmeldungen/rejects:
     new:
@@ -497,11 +509,11 @@ de:
       text:
         one: Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldung.
         other: Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldungen.
-      submit: '%{count} Ablehnen'
+      submit: "%{count} Ablehnen"
     create:
       success:
         one: Anmeldung wurde abgelehnt
-        other: '%{count} Anmeldungen wurden abgelehnt'
+        other: "%{count} Anmeldungen wurden abgelehnt"
 
   groups:
     sektion_primary: Hauptsektion
@@ -566,11 +578,11 @@ de:
         register_on_info:
           jul: Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.
           oct: Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.
-        register_as_info: '
+        register_as_info: "
           Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
           deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
           Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
-          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich.'
+          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich."
         inscribe: Beitreten
       new:
         role_exists: Du bist bereits Mitglied dieser Sektion
@@ -615,8 +627,7 @@ de:
       link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_DE.pdf
       link_statutes_title: Statuten
       link_sektion_statuten_title: Sektionsstatuten
-      link_contribution_regulations:
-        https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_Gültig_ab_1.1.2021.pdf
+      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_Gültig_ab_1.1.2021.pdf
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung

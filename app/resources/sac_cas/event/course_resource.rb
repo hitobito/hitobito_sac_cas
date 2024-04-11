@@ -12,9 +12,17 @@ module SacCas::Event::CourseResource
     with_options writable: false do
       attribute :language, :string
       attribute :accommodation, :string
+      attribute :meals, :string
       attribute :season, :string
       attribute :start_point_of_time, :string
       attribute :minimum_age, :integer
+    end
+
+    with_options writable: false, filterable: false do
+      attribute :brief_description, :string
+      attribute :specialities, :string
+      attribute :similar_tours, :string
+      attribute :program, :string
     end
   end
 end

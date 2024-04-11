@@ -7,3 +7,5 @@
   = f.labeled_input_field(:reserve_accommodation)
 - entry.used?(:accommodation) do
   = f.labeled_i18n_enum_field(:accommodation, Event::Course.accommodation_labels)
+- entry.used?(:meals) do
+  = f.labeled_i18n_enum_field(:meals, Event::Course.meals_labels)

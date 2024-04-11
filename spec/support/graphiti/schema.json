@@ -305,6 +305,12 @@
           "writable": false,
           "description": null
         },
+        "meals": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "season": {
           "type": "string",
           "readable": true,
@@ -322,6 +328,30 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "brief_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "specialities": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "similar_tours": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "program": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
@@ -333,11 +363,21 @@
         },
         "accommodation": {
         },
+        "meals": {
+        },
         "season": {
         },
         "start_point_of_time": {
         },
         "minimum_age": {
+        },
+        "brief_description": {
+        },
+        "specialities": {
+        },
+        "similar_tours": {
+        },
+        "program": {
         }
       },
       "filters": {
@@ -432,6 +472,21 @@
           ]
         },
         "accommodation": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "meals": {
           "type": "string",
           "operators": [
             "eq",

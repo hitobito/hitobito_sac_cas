@@ -1,0 +1,6 @@
+invoice:
+  abacus:
+    host: https://sac-cas.erp.abraxas-apps.ch
+    mandant: 39999
+    username: 223bfa10-514c-8a52-3378-55224270acf5
+    password: 034e3608-c1f9-1da7-6b8c-c3be5c7cf3aa

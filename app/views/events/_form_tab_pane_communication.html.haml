@@ -1,0 +1,28 @@
+-#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+-#  hitobito_pbs and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_pbs.
+
+- if entry.is_a?(Event::Course)
+  #communication.tab-pane
+    = field_set_tag do
+      - entry.used?(:brief_description) do
+        = f.labeled_input_field(:brief_description)
+      - entry.used?(:specialities) do
+        = f.labeled_input_field(:specialities)
+      - entry.used?(:similar_tours) do
+        = f.labeled_input_field(:similar_tours)
+      - entry.used?(:program) do
+        = f.labeled_input_field(:program)
+
+    = field_set_tag do
+      - entry.used?(:link_participants) do
+        = f.labeled_input_field(:link_participants)
+      - entry.used?(:link_leaders) do
+        = f.labeled_input_field(:link_leaders)
+      - entry.used?(:link_survey) do
+        = f.labeled_input_field(:link_survey)
+      - entry.used?(:book_discount_code) do
+        = f.labeled_input_field(:book_discount_code)
+
+

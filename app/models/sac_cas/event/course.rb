@@ -71,6 +71,7 @@ module SacCas::Event::Course
   extend ActiveSupport::Concern
 
   LANGUAGES = %w(de_fr fr de it).freeze
+  MEALS = %w(breakfast half_board lunch self_cooking full_board).freeze
   START_POINTS_OF_TIME = %w(day evening).freeze
 
   WEAK_VALIDATION_STATES = %w(created canceled).freeze
@@ -86,9 +87,12 @@ module SacCas::Event::Course
   prepended do # rubocop:disable Metrics/BlockLength
     include I18nEnums
 
+    translates :brief_description, :specialities, :similar_tours, :program
+
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :accommodation, Event::Kind::ACCOMMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations"  # rubocop:disable Metrics/LineLength
+    i18n_enum :accommodation, Event::Kind::ACCOMMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations" # rubocop:disable Metrics/LineLength
+    i18n_enum :meals, MEALS, i18n_prefix: 'activerecord.attributes.event/course.meals_options'
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
 
     self.used_attributes += [
@@ -101,13 +105,20 @@ module SacCas::Event::Course
       :link_survey,
       :reserve_accommodation,
       :accommodation,
+      :meals,
       :season,
       :start_point_of_time,
-      :minimum_age
+      :minimum_age,
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :book_discount_code
     ]
 
     self.used_attributes -= [
       :cost,
+      :motto,
       :waiting_list,
       :tentative_applications
     ]

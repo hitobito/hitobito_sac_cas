@@ -1,0 +1,19 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas
+
+- if entry.is_a?(Event::Course)
+  %dl.dl-horizontal
+    - if entry.brief_description?
+      = labeled(Event::Course.human_attribute_name(:brief_description)) do
+        %p.multiline= safe_auto_link(entry.brief_description, html: { target: '_blank' })
+    - if entry.specialities?
+      = labeled(Event::Course.human_attribute_name(:specialities)) do
+        %p.multiline= safe_auto_link(entry.specialities, html: { target: '_blank' })
+    - if entry.similar_tours?
+      = labeled(Event::Course.human_attribute_name(:similar_tours)) do
+        %p.multiline= safe_auto_link(entry.similar_tours, html: { target: '_blank' })
+    - if entry.program?
+      = labeled(Event::Course.human_attribute_name(:program)) do
+        %p.multiline= safe_auto_link(entry.program, html: { target: '_blank' })

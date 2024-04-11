@@ -11,12 +11,7 @@
   = f.labeled_input_field(:cost_unit_id)
 - entry.used?(:annual) do
   = f.labeled_input_field(:annual)
-- entry.used?(:link_participants) do
-  = f.labeled_input_field(:link_participants)
-- entry.used?(:link_leaders) do
-  = f.labeled_input_field(:link_leaders)
-- entry.used?(:link_survey) do
-  = f.labeled_input_field(:link_survey)
+
 
 - if entry.kind_class == Event::Kind
   = field_inheritance_values(@kinds, Event::Course::INHERITED_ATTRIBUTES)
