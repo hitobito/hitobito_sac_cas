@@ -445,6 +445,13 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+
+  filter_navigation/people:
+    tour_guides_none: Keine Tourenleiter
+    tour_guides_active: Aktive Tourenleiter
+    tour_guides_stalled: Sistierte Tourenleiter
+    tour_guides_inactive: Inaktive Tourenleiter
+
   person:
     history:
       index_notice_sac_cas:
