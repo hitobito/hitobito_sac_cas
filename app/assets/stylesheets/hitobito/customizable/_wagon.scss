@@ -8,6 +8,10 @@
   color: $sac_black;
 }
 
+.table-borderless {
+  border-bottom: none !important;
+}
+
 .membership-verify {
   max-width: 1000px;
 

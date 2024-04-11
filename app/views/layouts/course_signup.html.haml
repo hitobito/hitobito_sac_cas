@@ -1,0 +1,14 @@
+- #  copyright (c) 2024, schweizer alpen-club. this file is part of
+- #  hitobito_sac_cas and licensed under the affero general public license version 3
+- #  or later. see the copying file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+= content_for(:content) do
+  = yield(:top)
+  .row
+    %main.col-lg
+      = yield(:main)
+    .col-md
+      = render 'shared/course_signup_aside'
+
+= render template: 'layouts/application'

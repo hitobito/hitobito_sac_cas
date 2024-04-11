@@ -18,6 +18,24 @@ describe Event::ParticipationsController do
   let(:participation) { Fabricate(:event_participation, event: course) }
   let(:params) { { group_id: group.id, event_id: course.id, id: participation.id } }
 
+  context 'GET#new' do
+    render_views
+    let(:dom)  { Capybara::Node::Simple.new(response.body) }
+
+    it 'does not render aside for event' do
+      event = Fabricate(:event)
+      get :new, params: { group_id: event.groups.first.id, event_id: event.id }
+      expect(dom).to have_css '#content > form'
+      expect(dom).not_to have_css 'aside'
+    end
+
+    it 'renders aside for course' do
+      get :new, params: { group_id: group.id, event_id: course.id }
+      expect(dom).to have_css 'main form'
+      expect(dom).to have_css 'aside.card', count: 2
+    end
+  end
+
   context 'GET#show' do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
