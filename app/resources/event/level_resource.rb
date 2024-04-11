@@ -6,14 +6,16 @@
 # https://github.com/hitobito/hitobito
 
 class Event::LevelResource < ApplicationResource
+  self.type = 'event_levels'
 
   with_options writable: false do
     attribute :label, :string
     attribute :code, :integer
     attribute :difficulty, :integer
+    attribute :description, :string
   end
 
   def base_scope
-    Event::Level.where(deleted_at: nil)
+    Event::Level.where(deleted_at: nil).list
   end
 end

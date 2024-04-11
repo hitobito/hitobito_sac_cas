@@ -1,4 +1,3 @@
-= table(entries, class: 'table table-striped table-hover') do |t|
-  - t.attr(:label)
-  - t.sortable_attrs(:code, :difficulty, :updated_at)
+= crud_table do |t|
+  - t.sortable_attrs(:label, :code, :difficulty, :updated_at, :deleted_at)
   - add_table_actions(t)

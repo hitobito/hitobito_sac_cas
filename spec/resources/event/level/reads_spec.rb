@@ -14,14 +14,14 @@ describe Event::LevelResource, type: :resource do
       :label,
       :code,
       :difficulty,
+      :description
     ]
   end
 
   it 'includes additional attributes' do
     render
     data = jsonapi_data[0]
-    expect(data.attributes.symbolize_keys.keys).to match_array [:id,
-                                                                :jsonapi_type] + serialized_attrs
-
+    expect(data.attributes.symbolize_keys.keys)
+      .to match_array([:id, :jsonapi_type] + serialized_attrs)
   end
 end

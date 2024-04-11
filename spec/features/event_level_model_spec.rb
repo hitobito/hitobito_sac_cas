@@ -14,22 +14,24 @@ describe 'event_level model', js: true do
   it "can create edit and destroy Kursstufe" do
     sign_in(admin)
     visit root_path
+
     click_on 'Einstellungen'
     click_on 'Kursstufen'
     click_on 'Erstellen'
+
     fill_in 'Code', with: '1'
-    fill_in 'Bezeichnung', with: 'dummy'
+    fill_in 'Bezeichnung', with: 'A - dummy'
     fill_in 'Schwierigkeitsgrad', with: '20'
     click_on 'Speichern'
-    expect(page).to have_css('.alert-success', text: "dummy wurde erfolgreich erstellt.")
+    expect(page).to have_css('.alert-success', text: "A - dummy wurde erfolgreich erstellt.")
 
-    within("tbody tr:nth-child(1)") { click_on 'Bearbeiten' }
-    fill_in 'Bezeichnung', with: 'update'
+    within("tbody tr:first-child") { click_on 'Bearbeiten' }
+    fill_in 'Bezeichnung', with: 'Z - update'
     click_on 'Speichern'
-    expect(page).to have_css('.alert-success', text: "update wurde erfolgreich aktualisiert.")
+    expect(page).to have_css('.alert-success', text: "Z - update wurde erfolgreich aktualisiert.")
 
-    within("tbody tr:nth-child(1)") { click_on 'Löschen' }
+    within("tbody tr:last-child") { click_on 'Löschen' }
     accept_alert
-    expect(page).to have_css('.alert-success', text: "Kursstufe wurde erfolgreich gelöscht.")
+    expect(page).to have_css('.alert-success', text: "Kursstufe Z - update wurde erfolgreich gelöscht.")
   end
 end

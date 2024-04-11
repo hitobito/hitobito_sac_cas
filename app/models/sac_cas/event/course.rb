@@ -96,8 +96,10 @@ module SacCas::Event::Course
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :accommodation, Event::Kind::ACCOMMODATIONS, i18n_prefix: "#{I18N_KIND}.accommodations" # rubocop:disable Metrics/LineLength
     i18n_enum :meals, MEALS, i18n_prefix: 'activerecord.attributes.event/course.meals_options'
+    i18n_enum :accommodation,
+              Event::Kind::ACCOMMODATIONS,
+              i18n_prefix: "#{I18N_KIND}.accommodations"
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
 
     self.used_attributes += [

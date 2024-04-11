@@ -5,21 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::LevelsController < SimpleCrudController
-
-  self.permitted_attrs = [:label, :code, :difficulty, :description]
-
-  self.sort_mappings = {
-    label: 'event_level_translations.label'
-  }
-
-  def self.model_class
-    Event::Level
-  end
-
-  private
-
-  def list_entries
-    super.list
+class AddEventLevelsDescription < ActiveRecord::Migration[6.1]
+  def change
+    add_column :event_level_translations, :description, :text
   end
 end
