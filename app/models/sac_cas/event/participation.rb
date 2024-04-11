@@ -15,7 +15,7 @@ module SacCas::Event::Participation
   private
 
   def update_previous_state
-    if %w(cancelled annulled).include?(state)
+    if %w(canceled annulled).include?(state)
       self.previous_state = state_was
     end
   end

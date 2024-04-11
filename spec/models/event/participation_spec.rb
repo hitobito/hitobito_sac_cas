@@ -12,10 +12,13 @@ describe Event::Participation do
   describe '::callbacks' do
     subject(:participation) { Fabricate(:event_participation, event: events(:top_course)) }
 
-    %w(cancelled annulled).each do |state|
-      it "sets previous state when updating to #{state}" do
+    [
+      {state: :canceled, canceled_at: Time.zone.today},
+      {state: :annulled}
+    ].each do |attrs|
+      it "sets previous state when updating to #{attrs[:state]}" do
         expect do
-          participation.update!(state: state)
+          participation.update!(attrs)
         end.to change { participation.reload.previous_state }.from(nil).to('assigned')
       end
     end
