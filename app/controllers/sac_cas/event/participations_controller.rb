@@ -11,6 +11,7 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
     before_cancel :assert_participant_cancelable?
+    layout :derrive_layout, only: :new
   end
 
   def cancel
@@ -24,7 +25,17 @@ module SacCas::Event::ParticipationsController
     change_state('summoned', 'summon')
   end
 
+  def new
+    request.variant = :course if event.course?
+    super
+  end
+
+
   private
+
+  def derrive_layout
+    event.course? ? 'course_signup' : 'application'
+  end
 
   def assert_participant_cancelable?
     if participant_cancels? && !entry.particpant_cancelable?
