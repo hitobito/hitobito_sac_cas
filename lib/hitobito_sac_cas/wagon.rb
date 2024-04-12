@@ -162,7 +162,7 @@ module HitobitoSacCas
           name: :picture_url,
           scope: :name,
           response: [:user_info],
-          generator: Proc.new do |resource_owner|
+          generator: proc do |resource_owner|
             resource_owner.decorate.picture_full_url
           end
         )
@@ -172,7 +172,7 @@ module HitobitoSacCas
           name: :picture_url,
           scope: :with_roles,
           response: [:user_info],
-          generator: Proc.new do |resource_owner|
+          generator: proc do |resource_owner|
             resource_owner.decorate.picture_full_url
           end
         )

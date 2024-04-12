@@ -10,4 +10,5 @@
     = render 'event/participations/step_wizard', step: 2
 
 - content_for(:main) do
-  = render 'form', submit_label: t('event.participations.form.apply')
+  - submit_label = entry.subsidizable? ? t('global.button.next') : t('event.participations.form.apply')
+  = render 'form', submit_label: submit_label

@@ -9,6 +9,7 @@
     %main.col-lg
       = yield(:main)
     .col-md
-      = render 'shared/course_signup_aside'
+      = turbo_frame_tag :course_signup_aside do
+        = render 'shared/course_signup_aside', total: 1300, subsidy: entry.subsidy_amount
 
 = render template: 'layouts/application'

@@ -30,8 +30,12 @@ module SacCas::Event::ParticipationsController
     super
   end
 
-
   private
+
+  def after_create_path
+    return super unless entry.subsidizable?
+    new_group_event_participation_subsidy_path(group, event, entry)
+  end
 
   def derrive_layout
     event.course? ? 'course_signup' : 'application'

@@ -462,7 +462,26 @@ de:
           Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
+    participation:
+      subsidies:
+        new:
+          title: Subventionsbeitrag beantragen
+          subsidy_field: "Subventionierten Preis von CHF %{amount} beantragen"
+          subsidy_link_label: Subventionsantrag
+          subsidy_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf
+          general_info: Für diesen Kurs gibt es die Möglichkeit als SAC-Mitglied einen
+            Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen
+            möchtest.
+          detail_info_header: Was muss ich tun um einen Subventionsantrag zu stellen?
+          detail_info_text: Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin
+            bestätig den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum
+            subventionierten Kurspreis. Wir bitten dich, gegenbenenfalls das Formular %{link}
+            auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor
+            Kursbeginn zu retournieren</b>.
+
     participations:
+      step_wizard_sac_cas:
+        subsidy_title: Subventionsbeitrag
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten

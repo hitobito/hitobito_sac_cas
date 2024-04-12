@@ -1,0 +1,30 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+- title t('.title')
+
+- content_for(:main) do
+  = render 'event/participations/step_wizard', step: 3
+
+  .well=t('.general_info')
+  - form_options = { url: group_event_participation_subsidy_path, cancel_url: particpation_path,
+    submit_label: t('event.participations.form.apply'), buttons_bottom: true, buttons_top: false,
+    data: { controller: :forwarder } }
+
+  = crud_form(entry, form_options) do |f|
+    - text = t('.subsidy_field', amount: Event::Participation::DUMMY_SUBSIDY)
+
+    = f.labeled(:subsidy, '&nbsp;'.html_safe) do
+      = f.input_field(:subsidy, data: { action: 'forwarder#click' }, caption: text)
+
+    = render('shared/hidden_submit',
+        formaction: new_group_event_participation_subsidy_path,
+        turbo_frame: :course_signup_aside,
+        label: Event::Participation.human_attribute_name(:subsidy))
+
+  .well
+    - link = link_to(t('.subsidy_link_label'), t('.subsidy_link_href'), target: :blank).html_safe
+    %h2=t('.detail_info_header')
+    %p= simple_format(sanitize(t('.detail_info_text', link: link), attributes: %w(href target)))

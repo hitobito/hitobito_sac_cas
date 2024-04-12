@@ -26,6 +26,7 @@ Rails.application.routes.draw do
         scope module: 'event' do
           resources :participations, only: [] do
             put :summon, on: :member
+            resource :subsidy, module: 'participation', only: [:new, :update]
           end
         end
       end

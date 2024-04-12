@@ -58,6 +58,33 @@ describe Event::ParticipationsController do
     end
   end
 
+  context 'POST#create' do
+    let(:participation_id) { assigns(:participation).id }
+    let(:new_subsidy_path) { new_group_event_participation_subsidy_path(participation_id: participation_id) }
+    let(:participation_path) { group_event_participation_path(id: participation_id) }
+    let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
+
+    context 'event' do
+      let(:event) { Fabricate(:event) }
+
+      it 'redirects to participation path' do
+        post :create, params: params.except(:id)
+        expect(response).to redirect_to(participation_path)
+      end
+    end
+
+    it 'redirects to participation path when participation is not subsidizable' do
+      post :create, params: params.except(:id)
+      expect(response).to redirect_to(participation_path)
+    end
+
+    it 'redirects to subsidies if participation is for a mitglied' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: people(:admin), beitragskategorie: :einzel)
+      post :create, params: params.except(:id)
+      expect(response).to redirect_to(new_subsidy_path)
+    end
+  end
+
   context 'state changes' do
     it 'PUT summon sets participation state to abset' do
       put :summon, params: params
