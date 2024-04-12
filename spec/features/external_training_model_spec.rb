@@ -45,6 +45,7 @@ text: "Externe Ausbildung Schwimmkurs wurde erfolgreich gelöscht.")
     select 'Dummy', from: 'external_training_event_kind_id'
     expect(page).to have_css 'turbo-frame p', text: 'Verlängert existierende Qualifikation ' \
       'Ski Leiter unmittelbar per 06.03.2024 (letztes Kursdatum).'
+    expect(page).to have_select 'external_training_event_kind_id', selected: 'DMY (Dummy)'
     select '(keine)', from: 'external_training_event_kind_id'
     expect(page).not_to have_css 'turbo-frame p'
   end
