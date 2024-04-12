@@ -69,8 +69,11 @@ module SacCas::Event::Kind
   private
 
   def push_down_application_conditions!
-    translations.where.not(application_conditions: nil).each do |t|
-      kind_attrs = t.attributes.slice(*%w(application_conditions locale created_at updated_at))
+    translations.each do |t|
+      columns = %w(general_information application_conditions locale created_at updated_at)
+      kind_attrs = t.attributes.slice(*columns).transform_keys! do |key|
+        key == 'general_information' ? 'description' : key
+      end
       event_attrs = push_down_events.map { |e| kind_attrs.merge(event_id: e.id) }
       Event::Translation.upsert_all(event_attrs) if event_attrs.present?
     end

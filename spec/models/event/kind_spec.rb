@@ -121,6 +121,17 @@ describe Event::Kind do
       I18n.with_locale('fr') { expect(course.application_conditions).to eq 'fr' }
     end
 
+    it 'updates translated description with general_information column' do
+      with_locales do |l|
+        kind.label = l
+        kind.general_information = l
+      end
+      kind.save!
+      expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
+      I18n.with_locale('de') { expect(course.description).to eq 'de' }
+      I18n.with_locale('fr') { expect(course.description).to eq 'fr' }
+    end
+
     it 'overrides existing values with blanks' do
       kind.update!(minimum_age: nil)
       course.update!(minimum_age: 12)
