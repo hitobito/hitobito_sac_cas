@@ -39,6 +39,10 @@ Rails.application.routes.draw do
           resource :rejects, only: [:new, :create]
         end
       end
+
+      resources :mitglieder_exports, only: [:create],
+                                     constraints: { format: 'csv' },
+                                     defaults: { format: 'csv' }
     end
 
     resources :cost_centers, except: [:show]

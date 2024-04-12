@@ -465,6 +465,9 @@ de:
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
 
+  mitglieder_exports:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+
   person:
     history:
       index_notice_sac_cas:
@@ -516,6 +519,8 @@ de:
         other: "%{count} Anmeldungen wurden abgelehnt"
 
   groups:
+    actions_show_sac_cas:
+      export_mitglieder: CSV Mitglieder
     sektion_primary: Hauptsektion
     sektion_secondary: Zusatzsektion
 
