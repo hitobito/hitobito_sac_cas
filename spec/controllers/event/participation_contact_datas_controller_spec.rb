@@ -33,4 +33,37 @@ describe Event::ParticipationContactDatasController  do
       expect(dom).to have_css '#content > form'
     end
   end
+
+  context 'PATCH#update' do
+    let(:person) { people(:admin) }
+
+    it 'stores attributes on person if valid' do
+      course.update(required_contact_attrs: %w(phone_numbers))
+      number = person.phone_numbers.create!(label: 'dummy', number: '+41790000000')
+      patch :update, params: {
+        group_id: group.id,
+        event_id: course.id,
+        event_participation_contact_data: {
+          gender: 'm',
+          email: person.email,
+          first_name: person.first_name,
+          birthday: '01.01.2002',
+          address: 'Musterplatz',
+          zip_code: 1234,
+          town: 'Zürich',
+          country: 'CH',
+          last_name: 'NewName',
+          phone_numbers_attributes: {
+            '1' => { id: number.id, label: number.label, number: '+41791111111', _destroy: false }
+          }
+        },
+        event_role: {
+          type: 'Event::Role::Participant'
+        }
+      }
+      puts entry.errors.full_messages
+      expect(entry).to have(0).errors
+      expect(person.reload.last_name).to eq 'NewName'
+    end
+  end
 end

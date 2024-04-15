@@ -465,6 +465,11 @@ de:
           kann nicht rückgängig gemacht werden. Mit der Abmeldung werden allfällige Bearbeitungs-
           und Annullationsgebühren in Rechnung gestellt.
 
+    participation_contact_datas:
+      fields:
+        overrides_person_data_info: Bitte beachte, dass die hier eingegebenen Anpassungen in dein
+          Profil übernommen werden.
+
   events:
     form_tabs:
       communication: Kommunikation

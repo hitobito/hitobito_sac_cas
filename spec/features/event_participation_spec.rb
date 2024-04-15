@@ -19,6 +19,17 @@ describe :event_participation, js: true do
   before do
     sign_in(person)
   end
+  def complete_contact_data
+    choose 'Mann'
+    fill_in 'Strasse und Nr.', with: 'Musterplatz'
+    fill_in 'Geburtstag', with: '01.01.1980'
+    fill_in 'Telefon', with: '+41 79 123 45 56'
+    fill_in 'event_participation_contact_data_zip_code', with: '8000'
+    fill_in 'event_participation_contact_data_town', with: 'Zürich'
+    find(:label, "Land").click
+    find(:option, text: "Vereinigte Staaten").click
+  end
+
 
   it 'creates an event participation' do
     # pending('Event participations are not implemented yet for SAC'); raise NotImplementedError
@@ -26,7 +37,9 @@ describe :event_participation, js: true do
     visit group_event_path(group_id: group, id: event)
 
     click_link('Anmelden')
-    within('.top') { click_button('Weiter') }
+
+    complete_contact_data
+    first(:button, 'Weiter').click
 
     fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')
 

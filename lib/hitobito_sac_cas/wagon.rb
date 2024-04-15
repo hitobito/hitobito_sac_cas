@@ -28,11 +28,13 @@ module HitobitoSacCas
       HitobitoLogEntry.categories += %w(neuanmeldungen)
 
       # extend application classes here
+      Event.prepend SacCas::Event
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
       Event::Participation.prepend SacCas::Event::Participation
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
+      Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group

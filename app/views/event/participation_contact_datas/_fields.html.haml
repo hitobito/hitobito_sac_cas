@@ -1,0 +1,21 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.labeled(:gender) do
+  = field_set_tag(nil, class: 'm-0 p-0') do
+    - (Person::GENDERS + ['']).each do |key|
+      = f.inline_radio_button(:gender, key, f.object.salutation_label(key))
+= f.labeled_input_fields :first_name, :last_name, :email
+= f.labeled_date_field :birthday
+= render 'contactable/address_fields', f: f
+- phone_number = entry.phone_numbers.first || PhoneNumber.new(label: 'Mobile', public: true)
+= f.fields_for(:phone_numbers, phone_number) do |ff|
+  = ff.labeled(:number, SelfRegistration::MainPerson::Base.human_attribute_name(:number)) do
+    = ff.input_field(:number)
+    = ff.hidden_field(:public)
+    = ff.hidden_field(:translated_label)
+    = ff.hidden_field(:_destroy, value: false)
+
+.well=t('.overrides_person_data_info')

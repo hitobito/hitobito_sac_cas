@@ -9,17 +9,17 @@ module SacCas::Event::ParticipationContactDatasController
   extend ActiveSupport::Concern
 
   prepended do
-    layout :derrive_layout, only: :edit
-  end
-
-  def edit
-    request.variant = :course if event.course?
-    super
+    before_action :set_request_variant
+    layout :derrive_layout, only: [:update, :edit]
   end
 
   private
 
   def derrive_layout
     event.course? ? 'course_signup' : 'application'
+  end
+
+  def set_request_variant
+    request.variant = :course if event.course?
   end
 end
