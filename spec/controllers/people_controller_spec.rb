@@ -21,24 +21,46 @@ describe PeopleController do
 
   before { sign_in(admin) }
 
-  it 'GET#index accepts filter params and lists neuanmeldungen' do
-    person1 = Fabricate(:person, birthday: Time.zone.today - 42.years)
-    Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
-              group: groups(:bluemlisalp_neuanmeldungen_nv),
-              person: person1)
-    person2 = Fabricate(:person, birthday: Time.zone.today - 42.years)
-    Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
-              group: groups(:bluemlisalp_neuanmeldungen_sektion),
-              person: person2)
-    roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
-    get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }
+  context 'GET#index' do
+    it 'accepts filter params and lists neuanmeldungen' do
+      person1 = Fabricate(:person, birthday: Time.zone.today - 42.years)
+      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
+                group: groups(:bluemlisalp_neuanmeldungen_nv),
+                person: person1)
+      person2 = Fabricate(:person, birthday: Time.zone.today - 42.years)
+      Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
+                group: groups(:bluemlisalp_neuanmeldungen_sektion),
+                person: person2)
+      roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
+      get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }
 
-    expect(members_filter.text).to eq 'Neuanmeldungen (1)'
-    expect(members_filter[:class]).not_to eq 'active'
+      expect(members_filter.text).to eq 'Neuanmeldungen (1)'
+      expect(members_filter[:class]).not_to eq 'active'
 
-    expect(pagination_info).to eq '1 Person angezeigt.'
-    expect(people_table).to have(1).item
+      expect(pagination_info).to eq '1 Person angezeigt.'
+      expect(people_table).to have(1).item
 
+    end
+
+    context 'with format=csv and param recipients=true' do
+      it 'calls ... with ...' do
+        expect do
+          get :index, params: {
+            format: :csv,
+            group_id: groups(:bluemlisalp_mitglieder),
+            recipients: true
+          }
+          expect(response).to be_redirect
+        end.to change { Delayed::Job.count }.by(1)
+
+        job = Delayed::Job.last.payload_object
+        expect(job).to be_a(Export::PeopleExportJob)
+
+        expect(Export::Tabular::People::SacRecipients).
+          to receive(:export)
+        job.perform
+      end
+    end
   end
 
   context 'GET#show' do

@@ -436,6 +436,9 @@ de:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
+  dropdown/people_export:
+    recipients: Empfänger
+
   event:
     kinds:
       push_down:
