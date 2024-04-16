@@ -8,15 +8,16 @@
 require 'spec_helper'
 
 describe Export::PeopleExportJob do
-
   let(:user) { people(:root) }
+  let(:group) { groups(:bluemlisalp_mitglieder) }
+
   let(:filename) { AsyncDownloadFile.create_name('people_export', user.id) }
   let(:file) { AsyncDownloadFile.from_filename(filename, :csv) }
   let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
   it 'works when including attribute membership_years' do
     job = Export::PeopleExportJob.new(
-      :csv, user.id, groups(:bluemlisalp_mitglieder).id, {},
+      :csv, user.id, group.id, {},
                                 full: true, filename: filename
     )
 
@@ -27,6 +28,17 @@ describe Export::PeopleExportJob do
     expect(csv).to have(4).items
     expect(csv.first["﻿Mitglied-Nr"]).to eq "600001"
     expect(csv.first["Anzahl Mitglieder-Jahre"]).to eq "1"
+  end
+
+  context 'with recipients param' do
+    subject do
+      Export::PeopleExportJob.new(:csv, user.id, group.id, {}, recipients: true, filename: 'dummy')
+    end
+
+    it 'uses SacRecipients tabular export' do
+      expect(Export::Tabular::People::SacRecipients).to receive(:export)
+      subject.perform
+    end
   end
 
 end

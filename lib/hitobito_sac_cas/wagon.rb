@@ -106,11 +106,14 @@ module HitobitoSacCas
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
-      Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
-
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
       QualificationsController.prepend SacCas::QualificationsController
 
+      ## Jobs
+      Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
+      Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
+
+      ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
         Export::Tabular::People::Households,

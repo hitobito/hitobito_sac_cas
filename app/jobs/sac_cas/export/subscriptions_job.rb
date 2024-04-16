@@ -5,11 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::Export::PeopleExportJob
-
-  def entries
-    super.with_membership_years
-  end
+module SacCas::Export::SubscriptionsJob
 
   private
 
@@ -20,7 +16,7 @@ module SacCas::Export::PeopleExportJob
   end
 
   def recipients_data
-    Export::Tabular::People::SacRecipients.export(@format, entries, group)
+    Export::Tabular::People::SacRecipients.export(@format, entries, mailing_list.group)
   end
 
 end
