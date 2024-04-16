@@ -11,6 +11,9 @@ describe Export::Tabular::People::SacMitglieder do
   let(:group) { groups(:bluemlisalp) }
   subject(:tabular) { described_class.new(group) }
 
+  its(:model_class) { is_expected.to eq Person }
+  its(:row_class) { is_expected.to eq Export::Tabular::People::SacMitgliedRow }
+
   it '#new with group other than Sektion or Ortsgruppe raises ArgumentError' do
     expect { described_class.new(groups(:bluemlisalp_mitglieder)) }.
       to raise_error(ArgumentError, 'Argument must be a Sektion or Ortsgruppe')
@@ -21,40 +24,42 @@ describe Export::Tabular::People::SacMitglieder do
   end
 
   it '#attributes' do
-    expect(tabular.attributes).to eq([
-                                       :id,
-                                       :layer_navision_id,
-                                       :first_name,
-                                       :last_name,
-                                       :adresszusatz,
-                                       :address,
-                                       :postfach,
-                                       :zip_code,
-                                       :town,
-                                       :country,
-                                       :birthday,
-                                       :phone_number_direct,
-                                       :phone_number_private,
-                                       :empty, # 1 leere Spalte
-                                       :phone_number_mobile,
-                                       :phone_number_fax,
-                                       :email,
-                                       :gender,
-                                       :empty, # 1 leere Spalte
-                                       :language,
-                                       :eintrittsjahr,
-                                       :begünstigt,
-                                       :ehrenmitglied,
-                                       :beitragskategorie,
-                                       :s_info_1,
-                                       :s_info_2,
-                                       :s_info_3,
-                                       :bemerkungen,
-                                       :saldo,
-                                       :empty, # 1 leere Spalte
-                                       :anzahl_die_alpen,
-                                       :anzahl_sektionsbulletin
-                                     ])
+    expect(tabular.attributes).to eq(
+      [
+        :id,
+        :layer_navision_id,
+        :first_name,
+        :last_name,
+        :adresszusatz,
+        :address,
+        :postfach,
+        :zip_code,
+        :town,
+        :country,
+        :birthday,
+        :phone_number_direct,
+        :phone_number_private,
+        :empty, # 1 leere Spalte
+        :phone_number_mobile,
+        :phone_number_fax,
+        :email,
+        :gender,
+        :empty, # 1 leere Spalte
+        :language,
+        :eintrittsjahr,
+        :begünstigt,
+        :ehrenmitglied,
+        :beitragskategorie,
+        :s_info_1,
+        :s_info_2,
+        :s_info_3,
+        :bemerkungen,
+        :saldo,
+        :empty, # 1 leere Spalte
+        :anzahl_die_alpen,
+        :anzahl_sektionsbulletin
+      ]
+    )
   end
 
   describe '#list' do

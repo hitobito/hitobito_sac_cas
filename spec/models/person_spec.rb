@@ -126,6 +126,17 @@ describe Person do
     end
   end
 
+  describe 'navision_id' do
+    it 'is the same as id' do
+      person = Person.create!(first_name: 'John')
+      expect(person.navision_id).to eq person.id
+    end
+
+    it 'attribute has the correct column name' do
+      expect(Person.human_attribute_name('navision_id')).to eq 'Navision-Nr.'
+    end
+  end
+
   describe 'country' do
     it 'label falls back to swiss' do
       expect(Person.new(country: 'DE').country_label).to eq('Deutschland')

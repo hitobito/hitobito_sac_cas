@@ -6,13 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class SacMitglieder < Export::Tabular::Base
-
-    self.model_class = ::Person
-    self.row_class = Export::Tabular::People::SacMitgliedRow
-
-    attr_reader :group
-
+  class SacMitglieder < Export::Tabular::SacGroupPeopleBase
 
     def initialize(group)
       unless group.is_a?(Group::Sektion) || group.is_a?(Group::Ortsgruppe)
@@ -20,7 +14,7 @@ module Export::Tabular::People
       end
 
       @group = group
-      super(mitglieder)
+      super(mitglieder, group)
     end
 
     def labels
@@ -79,10 +73,6 @@ module Export::Tabular::People
 
     def non_layer_children_ids
       group.children.reject(&:layer?).map(&:id)
-    end
-
-    def row_for(entry, format = nil)
-      row_class.new(entry, group, format)
     end
 
   end

@@ -26,6 +26,7 @@ module SacCas::Person
     validates :membership_verify_token, uniqueness: { allow_blank: true }
 
     alias_attribute :membership_number, :id
+    alias_attribute :navision_id, :id
 
     scope :with_membership_years, lambda { |selects = 'people.*'|
       subquery_sql = Group::SektionsMitglieder::Mitglied.
