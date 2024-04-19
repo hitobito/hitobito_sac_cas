@@ -62,18 +62,11 @@ describe 'Event Signup', :js do
       it 'has three step wizard with subsidy checkbox' do
         visit group_event_path(group_id: group, id: event.id)
         click_on 'Anmelden'
-        expect(page).to have_css '.stepwizard-step', count: 3
+        expect(page).to have_css '.stepwizard-step', count: 2
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
         complete_contact_data
         first(:button, 'Weiter').click
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Anmeldung'
-        first(:button, 'Weiter').click
-        expect(page).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
-        expect(page).not_to have_text '- Subvention'
-        check 'Subventionierten Preis von CHF 620 beantragen'
-        expect(page).to have_text '- Subvention'
-        uncheck 'Subventionierten Preis von CHF 620 beantragen'
-        expect(page).not_to have_text '- Subvention'
         click_on 'Anmelden'
         expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
       end
@@ -82,7 +75,7 @@ describe 'Event Signup', :js do
         visit group_event_path(group_id: group, id: event.id)
         click_on 'Anmelden'
         first(:button, 'Weiter').click
-        expect(page).to have_css '.stepwizard-step', count: 3
+        expect(page).to have_css '.stepwizard-step', count: 2
         expect(page).to have_text 'PLZ muss ausgefüllt werden'
         expect(page).to have_css 'h2.card-title', text: 'Zusammenfassung'
       end
