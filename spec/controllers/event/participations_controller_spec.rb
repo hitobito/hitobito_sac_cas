@@ -26,12 +26,23 @@ describe Event::ParticipationsController do
       event = Fabricate(:event)
       get :new, params: { group_id: event.groups.first.id, event_id: event.id }
       expect(dom).to have_css '#content > form'
+      expect(dom).to have_css '.stepwizard-step', count: 2
+      expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+      expect(dom).not_to have_css 'aside'
+    end
+
+    it 'does not render aside and wizard for someone else' do
+      get :new, params: { group_id: group.id, event_id: course.id, for_someone_else: true }
+      expect(dom).to have_css '#content > form'
+      expect(dom).not_to have_css '.stepwizard-step', count: 2
       expect(dom).not_to have_css 'aside'
     end
 
     it 'renders aside for course' do
       get :new, params: { group_id: group.id, event_id: course.id }
       expect(dom).to have_css 'main form'
+      expect(dom).to have_css '.stepwizard-step', count: 3
+      expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
       expect(dom).to have_css 'aside.card', count: 2
     end
   end
@@ -59,13 +70,15 @@ describe Event::ParticipationsController do
   end
 
   context 'POST#create' do
+    render_views
+    let(:dom)  { Capybara::Node::Simple.new(response.body) }
     let(:participation_id) { assigns(:participation).id }
     let(:new_subsidy_path) { new_group_event_participation_subsidy_path(participation_id: participation_id) }
     let(:participation_path) { group_event_participation_path(id: participation_id) }
     let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
     context 'event' do
-      let(:event) { Fabricate(:event) }
+      let(:course) { Fabricate(:event) }
 
       it 'redirects to participation path' do
         post :create, params: params.except(:id)
@@ -73,16 +86,50 @@ describe Event::ParticipationsController do
       end
     end
 
-    it 'redirects to participation path when participation is not subsidizable' do
-      post :create, params: params.except(:id)
+    it 'redirects to participation path' do
+      post :create, params: params.except(:id).merge(step: 'summary')
       expect(response).to redirect_to(participation_path)
     end
 
-    it 'redirects to subsidies if participation is for a mitglied' do
-      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: people(:admin), beitragskategorie: :einzel)
-      post :create, params: params.except(:id)
-      expect(response).to redirect_to(new_subsidy_path)
+    context 'not subsidizable' do
+      it 'renders summary after answers' do
+        post :create, params: params.except(:id).merge(step: 'answers')
+        expect(response).to render_template('new')
+        expect(dom).to have_css '.stepwizard-step', count: 3
+        expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+      end
+
+      it 'goes back to answers from summary' do
+        post :create, params: params.except(:id).merge(step: 'summary', back: 'true')
+        expect(response).to render_template('new')
+        expect(dom).to have_css '.stepwizard-step', count: 3
+        expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+      end
+
+      it 'redirects to contact data when going back from answers' do
+        post :create, params: params.except(:id).merge(step: 'answers', back: 'true')
+        expect(response).to redirect_to(contact_data_group_event_participations_path(group, course))
+      end
     end
+
+    context 'subsidizable' do
+      before { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: people(:admin), beitragskategorie: :einzel) }
+
+      it 'renders subsidy after answers' do
+        post :create, params: params.except(:id).merge(step: 'answers')
+        expect(response).to render_template('new')
+        expect(dom).to have_css '.stepwizard-step', count: 4
+        expect(dom).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
+      end
+
+      it 'goes back to subsidy from summary' do
+        post :create, params: params.except(:id).merge(step: 'summary', back: true)
+        expect(response).to render_template('new')
+        expect(dom).to have_css '.stepwizard-step', count: 4
+        expect(dom).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
+      end
+    end
+
   end
 
   context 'state changes' do

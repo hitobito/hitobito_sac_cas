@@ -44,12 +44,24 @@ describe 'Event Signup', :js do
     let(:group) { groups(:root) }
     let(:event) { Fabricate(:sac_open_course, groups: [group], state: :application_open) }
 
-    it 'has two step wizard' do
+    it 'has multi step wizard without subsidy' do
       visit group_event_path(group_id: group, id: event.id)
       click_on 'Anmelden'
-      expect(page).to have_css '.stepwizard-step', count: 2
+      expect(page).to have_css '.stepwizard-step', count: 3
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
       complete_contact_data
       first(:button, 'Weiter').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+      first(:button, 'Zurück').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
+      first(:button, 'Weiter').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+      first(:button, 'Weiter').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+      first(:button, 'Zurück').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+      first(:button, 'Weiter').click
+      expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
       click_on 'Anmelden'
       expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
     end
@@ -59,14 +71,29 @@ describe 'Event Signup', :js do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: admin)
       end
 
-      it 'has three step wizard with subsidy checkbox' do
+      it 'has multi step wizard with subsidy checkbox' do
         visit group_event_path(group_id: group, id: event.id)
         click_on 'Anmelden'
-        expect(page).to have_css '.stepwizard-step', count: 2
+        expect(page).to have_css '.stepwizard-step', count: 4
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
         complete_contact_data
         first(:button, 'Weiter').click
-        expect(page).to have_css '.stepwizard-step.is-current', text: 'Anmeldung'
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
+        first(:button, 'Weiter').click
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
+        expect(page).not_to have_text '- Subvention'
+        check 'Subventionierten Preis von CHF 620 beantragen'
+        expect(page).to have_text '- Subvention'
+        first(:button, 'Weiter').click
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+        expect(page).to have_text '- Subvention'
+        first(:button, 'Zurück').click
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
+        uncheck 'Subventionierten Preis von CHF 620 beantragen'
+        expect(page).not_to have_text '- Subvention'
+        first(:button, 'Weiter').click
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+        expect(page).not_to have_text '- Subvention'
         click_on 'Anmelden'
         expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
       end
@@ -74,8 +101,11 @@ describe 'Event Signup', :js do
       it 'rerenders in correct layout when form is invalid' do
         visit group_event_path(group_id: group, id: event.id)
         click_on 'Anmelden'
+        expect(page).to have_css '.stepwizard-step', count: 4
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
+
         first(:button, 'Weiter').click
-        expect(page).to have_css '.stepwizard-step', count: 2
+        expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
         expect(page).to have_text 'PLZ muss ausgefüllt werden'
         expect(page).to have_css 'h2.card-title', text: 'Zusammenfassung'
       end

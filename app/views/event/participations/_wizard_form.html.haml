@@ -1,0 +1,25 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+
+= standard_form(path_args(entry)) do |f|
+  = hidden_field_tag :step, @step
+  - if params[:event_role]
+    = hidden_field_tag('event_role[type]', params[:event_role][:type])
+
+  = f.error_messages
+
+  #answers{class: @step != 'answers' ? 'd-none' : nil}
+    = render 'answers_step', f: f
+  #subsidy{class: @step != 'subsidy' ? 'd-none' : nil}
+    = render 'subsidy_step', f: f
+  #summary{class: @step != 'summary' ? 'd-none' : nil}
+    = render 'summary_step', f: f
+
+  = button_toolbar(f, toolbar_class: 'bottom') do
+    = submit_button(f, @step == 'summary' ? t('event.participations.form.apply') : t('global.button.next'))
+    .btn-group
+      = f.button(t('global.button.back'), name: :back, value: true, class: 'btn btn-sm mt-2')
+    = cancel_link(group_event_path(@group, @event))

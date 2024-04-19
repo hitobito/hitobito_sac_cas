@@ -1,0 +1,36 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+
+.stepwizard
+  .stepwizard-step{class: (step == 1 ? 'is-current' : 'is-disabled')}
+    %a.stepwizard-link{href: '#', data: { bs_toggle: :tab }, role: :tab}
+      .stepwizard-number
+        1
+      .stepwizard-title
+        = t('event.participation_contact_datas.edit.wizard_title')
+
+  .stepwizard-step{class: (step == 'answers' || step == 2 ? 'is-current' : 'is-disabled')}
+    %a.stepwizard-link{href: '#answers', data: { bs_toggle: :tab }, role: :tab}
+      .stepwizard-number
+        2
+      .stepwizard-title
+        = t('.answers_title')
+
+  - if @event.course?
+    - if entry.subsidizable?
+      .stepwizard-step{class: (step == 'subsidy' ? 'is-current' : 'is-disabled')}
+        %a.stepwizard-link{href: '#subsidy', data: { bs_toggle: :tab }, role: :tab}
+          .stepwizard-number
+            3
+          .stepwizard-title
+            = t('.subsidy_title')
+
+    .stepwizard-step{class: (step == 'summary' ? 'is-current' : 'is-disabled')}
+      %a.stepwizard-link{href: '#summary', data: { bs_toggle: :tab }, role: :tab}
+        .stepwizard-number
+          = entry.subsidizable? ? 4 : 3
+        .stepwizard-title
+          = t('.summary_title')

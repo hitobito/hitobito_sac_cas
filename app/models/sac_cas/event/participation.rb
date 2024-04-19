@@ -37,4 +37,3 @@ module SacCas::Event::Participation
     end
   end
 end
-
