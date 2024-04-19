@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class SelfRegistrationNeuanmeldung::Sektion::MainPerson < SelfRegistration::MainPerson::Base
+class SelfRegistration::Sektion::MainPerson < SelfRegistration::MainPerson::Base
   self.required_attrs = [
     :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country, :number
   ]
