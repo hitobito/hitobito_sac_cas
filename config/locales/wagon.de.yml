@@ -152,6 +152,7 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/participation:
+        additional_information: Bemerkungen
         cancel_statement: Begründung
       external_training:
         person: Person
@@ -464,6 +465,8 @@ de:
           überschrieben.
 
     participations:
+      edit:
+        title: Zusatzdaten
       step_wizard:
         answers_title: Zusatzdaten
         subsidy_title: Subventionsbeitrag
