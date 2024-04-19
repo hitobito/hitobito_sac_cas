@@ -4,5 +4,7 @@ class AddInternalKeyToMailingLists < ActiveRecord::Migration[6.1]
     # independent of `id` and `name` attributes. This is necessary for reliably
     # identify the record during (repeated) seeding.
     add_column :mailing_lists, :internal_key, :string
+
+    MailingList.reset_column_information
   end
 end
