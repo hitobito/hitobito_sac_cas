@@ -1727,6 +1727,21 @@
           "type": "belongs_to",
           "description": null,
           "resource": "GroupResource"
+        },
+        "phone_numbers": {
+          "type": "has_many",
+          "description": null,
+          "resource": "PhoneNumberResource"
+        },
+        "social_accounts": {
+          "type": "has_many",
+          "description": null,
+          "resource": "SocialAccountResource"
+        },
+        "additional_emails": {
+          "type": "has_many",
+          "description": null,
+          "resource": "AdditionalEmailResource"
         }
       },
       "stats": {
@@ -2136,12 +2151,6 @@
           "writable": "guarded",
           "description": null
         },
-        "language": {
-          "type": "string",
-          "readable": true,
-          "writable": true,
-          "description": null
-        },
         "family_id": {
           "type": "string",
           "readable": true,
@@ -2190,8 +2199,6 @@
         "gender": {
         },
         "birthday": {
-        },
-        "language": {
         }
       },
       "filters": {
@@ -2383,21 +2390,6 @@
             "gte",
             "lt",
             "lte"
-          ]
-        },
-        "language": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
           ]
         },
         "updated_at": {
