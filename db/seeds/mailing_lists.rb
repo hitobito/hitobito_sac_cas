@@ -6,23 +6,23 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 # Seed the newsletter with `seed_once` to avoid overwriting changed attributes.
-list = MailingList.seed(
+list = MailingList.seed_once(
   :internal_key,
   internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY,
   group_id: Group.root.id,
   name: 'SAC/CAS Newsletter',
   subscribable_for: 'configured',
   subscribable_mode: 'opt_out'
-).first
+).first || MailingList.find_by(internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY)
 
-subscription = Subscription.seed(
+subscription = Subscription.seed_once(
   :mailing_list_id,
   :subscriber_id,
   :subscriber_type,
   mailing_list_id: list.id,
   subscriber_id: Group.root.id,
   subscriber_type: Group.sti_name
-).first
+).first || Subscription.find_by(mailing_list_id: list.id, subscriber_id: Group.root.id, subscriber_type: Group.sti_name)
 
 RelatedRoleType.seed_once(
   :relation_id,
