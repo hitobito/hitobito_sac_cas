@@ -494,6 +494,13 @@ de:
           subventionierten Kurspreis. Wir bitten dich, gegenbenenfalls das Formular %{link}
           auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor
           Kursbeginn zu retournieren</b>.
+      summary_step:
+        annulation_remarks: |
+          Der Abschluss einer Annullationskostenversicherung wird empfohlen. Folgende Rücktrittskosten würden bei Abmeldung vor Kursbeginn durch den Kunden/die Kundin getragen:
+          
+          30 - 20 Tage: 50 % des Preises
+          19 - 10 Tage: 75 % des Preises
+          9 - 0 Tage: 100 % des Preises
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
