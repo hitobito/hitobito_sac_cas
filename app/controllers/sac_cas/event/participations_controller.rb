@@ -8,10 +8,15 @@
 module SacCas::Event::ParticipationsController
   extend ActiveSupport::Concern
 
+  WIZARD_STEPS = %w(contact answers subsidy summary).freeze
+
   prepended do
     define_model_callbacks :summon
+
+    permitted_attrs << :subsidy
+
+    around_create :proceed_wizard
     before_cancel :assert_participant_cancelable?
-    layout :derrive_layout, only: :new
   end
 
   def cancel
@@ -26,15 +31,61 @@ module SacCas::Event::ParticipationsController
   end
 
   def new
-    request.variant = :course if event.course?
+    @step = 'answers' if event.course?
     super
   end
 
-
   private
 
-  def derrive_layout
-    event.course? ? 'course_signup' : 'application'
+  def proceed_wizard
+    @step = params[:step]
+
+    if @step && params[:back]
+      previous_step
+      render_step
+    elsif @step && @step != available_steps.last
+      next_step if entry.valid?
+      render_step
+    else
+      yield
+    end
+  end
+
+  def render_step
+    if @step == available_steps.first
+      options = {}
+      options[:event_role] = { type: params_role_type } if params_role_type
+      redirect_to contact_data_group_event_participations_path(group, event, options)
+    else
+      render :new, status: :unprocessable_entity
+    end
+    false
+  end
+
+  def change_step
+    if params[:back]
+      previous_step
+    else
+      next_step
+    end
+  end
+
+  def next_step
+    i = available_steps.index(@step)
+    @step = available_steps[i + 1]
+  end
+
+  def previous_step
+    i = available_steps.index(@step)
+    @step = available_steps[i - 1]
+  end
+
+  def available_steps
+    @available_steps ||= begin
+      steps = WIZARD_STEPS
+      steps -= ['subsidy'] unless entry.subsidizable?
+      steps
+    end
   end
 
   def assert_participant_cancelable?

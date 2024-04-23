@@ -3,22 +3,25 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
+
 %aside.card
   .card-body
     %h2.mb-2.card-title=t('.summary_title')
     .card-text
-      %table.table.table-borderless.table-with-total
+      %table.table.table-borderless
         %tbody
           %tr
             %td=t('.summary_course_price')
-            %td.text-end=number_to_currency(1300, unit: 'CHF', format: '%n %u')
-          %tr
-            %td=t('.summary_subsidy')
-            %td.text-end= number_to_currency(50, unit: 'CHF', format: '%n %u')
+            %td.text-end=number_to_currency(total, unit: 'CHF', format: '%n %u')
+
+          - if subsidy.positive?
+            %tr
+              %td=t('.summary_subsidy')
+              %td.text-end= number_to_currency(subsidy, unit: 'CHF', format: '%n %u')
         %tfoot
           %tr.border-top
             %td= t('.summary_total')
-            %td.text-end.fw-bold= number_to_currency(1300 - 50, unit: 'CHF', format: '%n %u')
+            %td.text-end.fw-bold= number_to_currency(total - subsidy, unit: 'CHF', format: '%n %u')
 
 %aside.card
   .card-body

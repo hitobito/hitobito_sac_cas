@@ -1,0 +1,15 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+
+= f.fields_for(:answers, @answers.reject(&:admin?)) do |fans|
+  = render 'event/answers/fields', f: fans
+
+= f.labeled_text_area(:additional_information)
+
+- if entry.application
+  = render 'application_fields', f: f
+
+%p= t('event.participations.form.explain_required_checkmark') if @event.questions.any?(&:required?)

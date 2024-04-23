@@ -1,0 +1,23 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+
+%p= t('.general_info')
+
+%div.mb-3{data: { controller: 'forwarder' }}
+
+  = f.input_field(:subsidy,
+      caption: t('.subsidy_field', amount: Event::Participation::DUMMY_SUBSIDY),
+      data: { action: 'forwarder#click' })
+
+  = button_tag(Event::Participation.human_attribute_name(:subsidy),
+      data: { forwarder_target: :click, turbo_frame: :course_signup_aside },
+      hidden: true)
+
+.well
+  %h2= t('.detail_info_header')
+
+  - link = link_to(t('.subsidy_link_label'), t('.subsidy_link_href'), target: :blank).html_safe
+  %p= simple_format(sanitize(t('.detail_info_text', link: link), attributes: %w(href target)))

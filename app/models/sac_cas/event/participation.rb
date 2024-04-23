@@ -8,8 +8,20 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
+  DUMMY_SUBSIDY = 620
+
   prepended do
     before_save :update_previous_state, if: :state_changed?
+  end
+
+  def subsidy_amount
+    subsidy ? DUMMY_SUBSIDY : 0
+  end
+
+  def subsidizable?
+    event.course? && person.roles.any? do |role|
+      role.class.include?(SacCas::Role::MitgliedHauptsektion)
+    end
   end
 
   def particpant_cancelable?
@@ -25,4 +37,3 @@ module SacCas::Event::Participation
     end
   end
 end
-

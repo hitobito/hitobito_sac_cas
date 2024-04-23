@@ -11,6 +11,8 @@ module SacCas::Event::ParticipationContactData
   prepended do
     delegate :salutation_label, to: :person
 
+    delegate :subsidy_amount, :subsidizable?, to: :participation
+
     class << self
       delegate :human_attribute_name, to: SelfRegistration::MainPerson::Base
     end
@@ -22,4 +24,9 @@ module SacCas::Event::ParticipationContactData
                                     :town, :country]
   end
 
+  private
+
+  def participation
+    @participation ||= Event::Participation.new(event: @event, person: @person)
+  end
 end
