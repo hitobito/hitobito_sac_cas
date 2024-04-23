@@ -535,6 +535,9 @@ de:
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
 
+  global:
+    phone_placeholder: +41 77 123 45 67
+
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
@@ -617,7 +620,6 @@ de:
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
       emailless_main_person:
-        phone_placeholder: +41 77 123 45 67
         newsletter: Ich möchte einen Newsletter abonnieren
       fields:
         notes: Bemerkungen
@@ -641,8 +643,6 @@ de:
           mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
         next_as_single_link: Weiter als Einzelmitglied
         next_as_household_link: Weiter als Familienmitgliedschaft
-      neuanmeldung_main_person:
-        phone_placeholder: +41 77 123 45 67
 
       supplements:
         newsletter: Ich möchte einen Newsletter abonnieren
