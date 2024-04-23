@@ -84,6 +84,7 @@ module HitobitoSacCas
       EventsHelper.prepend SacCas::EventsHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
+      Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
 
@@ -106,11 +107,16 @@ module HitobitoSacCas
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
-      Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
-
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
       QualificationsController.prepend SacCas::QualificationsController
 
+      SubscriptionsController.prepend SacCas::SubscriptionsController
+
+      ## Jobs
+      Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
+      Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
+
+      ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
         Export::Tabular::People::Households,

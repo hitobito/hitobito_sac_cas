@@ -55,4 +55,8 @@ module SacCas::PeopleController
     super.includes(:primary_group)
   end
 
+  def tabular_params(**)
+    super.merge(params.slice(:recipients).permit!)
+  end
+
 end

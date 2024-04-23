@@ -148,7 +148,7 @@ module Import
     def type(row)
       return Group::SacCas if root?(row)
       parent_group = parent(row)
-      return Group::Sektion if parent_group.navision_id == '1000'
+      return Group::Sektion if parent_group.navision_id == 1000
       Group::Ortsgruppe
     end
 

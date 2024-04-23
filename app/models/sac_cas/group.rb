@@ -17,6 +17,8 @@ module SacCas::Group
     root_types Group::SacCas
 
     alias_method :group_id, :id
+
+    attribute :navision_id, :integer
   end
 
   def navision_id_padded

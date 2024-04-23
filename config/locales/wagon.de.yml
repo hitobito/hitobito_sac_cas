@@ -168,10 +168,11 @@ de:
         updated_at: Geändert
       person:
         family_id: Familien ID
-        membership_years: Anzahl Mitglieder-Jahre
-        membership_number: Mitglied-Nr
         genders:
           _nil: andere
+        membership_years: Anzahl Mitglieder-Jahre
+        membership_number: Mitglied-Nr
+        navision_id: Navision-Nr.
         salutations:
           m: Mann
           w: Frau
@@ -434,6 +435,9 @@ de:
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+
+  dropdown/people_export:
+    recipients: Empfänger
 
   event:
     kinds:

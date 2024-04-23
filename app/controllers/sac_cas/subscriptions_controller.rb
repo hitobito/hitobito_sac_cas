@@ -5,22 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::Export::PeopleExportJob
-
-  def entries
-    super.with_membership_years
-  end
+module SacCas::SubscriptionsController
 
   private
 
-  def data
-    return recipients_data if @options[:recipients]
-
-    super
+  def tabular_params(**)
+    super.merge(params.slice(:recipients).permit!)
   end
-
-  def recipients_data
-    Export::Tabular::People::SacRecipients.export(@format, entries, group)
-  end
-
 end
