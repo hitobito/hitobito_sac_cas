@@ -24,7 +24,7 @@ module SacCas::Groups::SelfInscriptionController
     if entry.valid?
       render :confirm
     else
-      render :new, entry: entry
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ module SacCas::Groups::SelfInscriptionController
       send_notification_email
       redirect_with_message(notice: t('.role_saved'))
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
