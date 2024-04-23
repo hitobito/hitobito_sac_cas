@@ -9,10 +9,9 @@ require 'spec_helper'
 
 describe Event::ParticipationsController do
   before { sign_in(people(:admin)) }
-
   let(:group) { event.groups.first }
   let(:event) do
-    Fabricate(:sac_course, groups: [groups(:root)], applications_cancelable: true).tap do |c|
+    Fabricate(:sac_open_course, groups: [groups(:root)], applications_cancelable: true).tap do |c|
       c.dates.first.update_columns(start_at: 1.day.from_now)
     end
   end
@@ -101,7 +100,6 @@ describe Event::ParticipationsController do
     render_views
     let(:dom)  { Capybara::Node::Simple.new(response.body) }
     let(:participation_id) { assigns(:participation).id }
-    let(:new_subsidy_path) { new_group_event_participation_subsidy_path(participation_id: participation_id) }
     let(:participation_path) { group_event_participation_path(id: participation_id) }
     let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
@@ -109,15 +107,37 @@ describe Event::ParticipationsController do
       let(:event) { Fabricate(:event) }
 
       it 'redirects to participation path' do
-        post :create, params: params.except(:id)
-        expect(response).to redirect_to(participation_path)
+        expect do
+          post :create, params: { group_id: group.id, event_id: event.id }
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
       end
     end
 
     it 'redirects to participation path' do
-      post :create, params: params.except(:id).merge(step: 'summary')
-      expect(response).to redirect_to(participation_path)
+      expect do
+        post :create, params: { group_id: group.id, event_id: event.id, step: 'summary', event_participation: { terms_and_conditions: '1', adult_consent: '1' } }
+        expect(response).to redirect_to(participation_path)
+      end.to change { Event::Participation.count }.by(1)
     end
+
+    it 'checks conditions for root courses' do
+      expect do
+        post :create, params: { group_id: group.id, event_id: event.id, step: 'summary' }
+        expect(response).to render_template('new')
+        expect(dom).to have_css '#error_explanation', text: 'AGB muss akzeptiert werden'
+      end.not_to change { Event::Participation.count }
+    end
+
+    it 'does not check conditions for non root courses' do
+      event.groups = [groups(:bluemlisalp)]
+      event.update!(globally_visible: true)
+      expect do
+        post :create, params: { group_id: groups(:bluemlisalp).id, event_id: event.id, step: 'summary' }
+        expect(response).to redirect_to(participation_path)
+      end.to change { Event::Participation.count }.by(1)
+    end
+
 
     context 'not subsidizable' do
       it 'renders summary after answers' do

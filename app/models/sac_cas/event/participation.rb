@@ -12,6 +12,10 @@ module SacCas::Event::Participation
 
   prepended do
     before_save :update_previous_state, if: :state_changed?
+
+    attr_accessor :adult_consent, :terms_and_conditions, :check_root_conditions
+
+    validates :adult_consent, :terms_and_conditions, acceptance: { if: :check_root_conditions }
   end
 
   def subsidy_amount
@@ -27,6 +31,13 @@ module SacCas::Event::Participation
   def particpant_cancelable?
     event.applications_cancelable? && event.state != 'annulled' &&
       event.dates.map(&:start_at).min.future?
+  end
+
+  def check_root_conditions!
+    # set values to false because validates acceptance does not work with nil
+    self.adult_consent ||= false
+    self.terms_and_conditions ||= false
+    self.check_root_conditions = true
   end
 
   private

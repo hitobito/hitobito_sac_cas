@@ -42,7 +42,7 @@ describe 'Event Signup', :js do
 
   context 'course' do
     let(:group) { groups(:root) }
-    let(:event) { Fabricate(:sac_open_course, groups: [group], state: :application_open) }
+    let(:event) { Fabricate(:sac_open_course, groups: [group]) }
 
     it 'has multi step wizard without subsidy' do
       visit group_event_path(group_id: group, id: event.id)
@@ -62,6 +62,8 @@ describe 'Event Signup', :js do
       expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
       first(:button, 'Weiter').click
       expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+      check 'Ja, ich erkläre mich mit den AGB einverstanden'
+      check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
       click_on 'Anmelden'
       expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
     end
@@ -95,6 +97,10 @@ describe 'Event Signup', :js do
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
         expect(page).to have_text admin.to_s
         expect(page).not_to have_text '- Subvention'
+        click_on 'Anmelden'
+        expect(page).to have_text 'AGB muss akzeptiert werden'
+        check 'Ja, ich erkläre mich mit den AGB einverstanden'
+        check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
         click_on 'Anmelden'
         expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
       end

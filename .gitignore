@@ -13,6 +13,7 @@ zeus.json
 .idea
 .rakeTasks
 .nvimrc
+.byebug_history
 TODO.md
 db/seeds/production/*.xlsx
 db/seeds/production/*.xlsx#
