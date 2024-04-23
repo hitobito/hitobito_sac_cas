@@ -6,12 +6,8 @@
 - title t('.title')
 
 - if event.course?
-  - content_for(:top) do
-    = render 'event/participations/step_wizard', step: 1
-  - content_for(:main) do
+  = render 'event/participations/course_signup', step: 1 do
     = render 'form', buttons_top: false
-
-  = render 'event/participations/course_signup'
 
 - else
   = render 'event/participations/step_wizard', step: 1

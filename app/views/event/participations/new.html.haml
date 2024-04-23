@@ -7,16 +7,11 @@
 - title t('event.participations.form.title_new', role: entry.roles.first.class.model_name.human)
 
 - if @event.course? && !params[:for_someone_else]
-  - content_for(:top) do
-    = render 'event/participations/step_wizard', step: @step
-
-  - content_for(:main) do
+  = render 'course_signup', step: @step do
     = render 'wizard_form'
-
-  = render 'course_signup'
 
 - else
   - unless params[:for_someone_else]
-    = render 'event/participations/step_wizard', step: 2
+    = render 'step_wizard', step: 2
 
   = render 'form', submit_label: t('event.participations.form.apply')

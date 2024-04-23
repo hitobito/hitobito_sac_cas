@@ -467,6 +467,15 @@ de:
     participations:
       edit:
         title: Zusatzdaten
+      course_signup_aside:
+        summary_title: Zusammenfassung
+        summary_course_price: Kurskosten
+        summary_subsidy: "- Subvention"
+        summary_total: Total
+        contact_title: Fragen zur Anmeldung
+        contact_text: |
+          Du erreichst uns zu unseren Geschäftszeiten
+          Mo bis Fr 08:00 - 17:00 Uhr.
       step_wizard:
         answers_title: Zusatzdaten
         subsidy_title: Subventionsbeitrag
@@ -688,17 +697,6 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
-
-  shared:
-    course_signup_aside:
-      summary_title: Zusammenfassung
-      summary_course_price: Kurskosten
-      summary_subsidy: "- Subvention"
-      summary_total: Total
-      contact_title: Fragen zur Anmeldung
-      contact_text: |
-        Du erreichst uns zu unseren Geschäftszeiten
-        Mo bis Fr 08:00 - 17:00 Uhr.
 
   table_displays:
     person:
