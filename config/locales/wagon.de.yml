@@ -448,6 +448,9 @@ de:
         push_down_button_confirm:
           Wollen Sie wirklich die gespeicherten Daten auf alle aktiven Kurse
           übertragen? Dabei werden die aktuellen Werte überschrieben.
+      kind_category_field:
+        category_overrides_link_title: 'Folgende Felder werden übernommen: Kostenstelle,
+          Kostenträger'
     kind_categories:
       push_down:
         success:
@@ -477,6 +480,10 @@ de:
   events:
     form_tabs:
       communication: Kommunikation
+    general_fields:
+      kind_overrides_link_title: 'Folgende Felder werden übernommen: Beschreibung,
+        Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
+        Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger'
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter

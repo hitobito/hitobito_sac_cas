@@ -6,5 +6,7 @@
 - stimulus_ctrl = 'form-field-inheritance'
 = f.labeled(:kind_category_id, data: { controller: stimulus_ctrl }) do
   = f.input_field(:kind_category_id, data: { action: "#{stimulus_ctrl}#inherit" })
-  .form-text= link_to(t('global.link.override'), '', data: { action: "#{stimulus_ctrl}#override" })
+  .form-text
+    = link_to(t('global.link.override'), '#', title: t('.category_overrides_link_title'),
+      data: { action: "#{stimulus_ctrl}#override" })
   = field_inheritance_values(@kind_categories, [:cost_center_id, :cost_unit_id])
