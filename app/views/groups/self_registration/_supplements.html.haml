@@ -25,11 +25,11 @@
 
     - %w(statutes contribution_regulations data_protection).each do |key|
       = render 'agreement_link', f: ff, key: key,
-          link: link_to(*ff.object.link_translations(key), target: :blank)
+          link: link_to(*ff.object.link_translations(key), target: :_blank)
 
     - if ff.object.requires_sektion_statuten?
       = render 'agreement_link', f: ff, key: :sektion_statuten,
-          link: link_to(*ff.object.sektion_statuten_link_args, target: :blank)
+          link: link_to(*ff.object.sektion_statuten_link_args, target: :_blank)
 
 
 .btn-toolbar.bottom

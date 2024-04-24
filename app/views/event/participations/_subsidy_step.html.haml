@@ -17,7 +17,7 @@
       hidden: true)
 
 .well
-  %h2= t('.detail_info_header')
+  %h3= t('.detail_info_header')
 
-  - link = link_to(t('.subsidy_link_label'), t('.subsidy_link_href'), target: :blank).html_safe
-  %p= simple_format(sanitize(t('.detail_info_text', link: link), attributes: %w(href target)))
+  - link = link_to(t('.subsidy_link_label'), t('.subsidy_link_href'), target: :_blank)
+  %p= t('.detail_info_text', link: link).html_safe

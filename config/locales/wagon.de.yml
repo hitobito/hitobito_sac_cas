@@ -476,7 +476,7 @@ de:
         subsidy_field: "Subventionierten Preis von CHF %{amount} beantragen"
         subsidy_link_label: Subventionsantrag
         subsidy_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf
-        general_info: Für diesen Kurs gibt es die Möglichkeit als SAC-Mitglied einen
+        general_info: Für diesen Kurs gibt es die Möglichkeit, als SAC-Mitglied einen
           Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen
           möchtest.
         detail_info_header: Was muss ich tun um einen Subventionsantrag zu stellen?
