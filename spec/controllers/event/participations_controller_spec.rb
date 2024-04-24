@@ -58,7 +58,7 @@ describe Event::ParticipationsController do
     end
 
     it 'does not render aside and wizard for someone else' do
-      get :new, params: { group_id: group.id, event_id: course.id, for_someone_else: true }
+      get :new, params: { group_id: group.id, event_id: event.id, for_someone_else: true }
       expect(dom).to have_css '#content > form'
       expect(dom).not_to have_css '.stepwizard-step', count: 2
       expect(dom).not_to have_css 'aside'
@@ -106,7 +106,7 @@ describe Event::ParticipationsController do
     let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
     context 'event' do
-      let(:course) { Fabricate(:event) }
+      let(:event) { Fabricate(:event) }
 
       it 'redirects to participation path' do
         post :create, params: params.except(:id)
@@ -136,7 +136,7 @@ describe Event::ParticipationsController do
 
       it 'redirects to contact data when going back from answers' do
         post :create, params: params.except(:id).merge(step: 'answers', back: 'true')
-        expect(response).to redirect_to(contact_data_group_event_participations_path(group, course))
+        expect(response).to redirect_to(contact_data_group_event_participations_path(group, event))
       end
     end
 
