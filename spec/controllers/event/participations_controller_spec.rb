@@ -8,7 +8,8 @@
 require 'spec_helper'
 
 describe Event::ParticipationsController do
-  before { sign_in(people(:admin)) }
+  before { sign_in(user) }
+  let(:user) { people(:admin) }
   let(:group) { event.groups.first }
   let(:event) do
     Fabricate(:sac_open_course, groups: [groups(:root)], applications_cancelable: true).tap do |c|
@@ -98,10 +99,12 @@ describe Event::ParticipationsController do
 
   context 'POST#create' do
     render_views
+    let(:user) { people(:mitglied) }
     let(:dom)  { Capybara::Node::Simple.new(response.body) }
     let(:participation_id) { assigns(:participation).id }
     let(:participation_path) { group_event_participation_path(id: participation_id) }
     let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
+    let(:newsletter) { MailingList.find(Group.root.sac_newsletter_mailing_list_id) }
 
     context 'event' do
       let(:event) { Fabricate(:event) }
@@ -116,17 +119,23 @@ describe Event::ParticipationsController do
 
     it 'redirects to participation path' do
       expect do
-        post :create, params: { group_id: group.id, event_id: event.id, step: 'summary', event_participation: { terms_and_conditions: '1', adult_consent: '1' } }
+        post :create,
+             params: {
+              group_id: group.id,
+              event_id: event.id,
+              step: 'summary',
+              event_participation: { terms_and_conditions: '1', adult_consent: '1', newsletter: '1' } }
         expect(response).to redirect_to(participation_path)
       end.to change { Event::Participation.count }.by(1)
     end
 
     it 'checks conditions for root courses' do
       expect do
-        post :create, params: { group_id: group.id, event_id: event.id, step: 'summary' }
+        post :create, params: { group_id: group.id, event_id: event.id, step: 'summary', event_participation: { newsletter: '0' } }
         expect(response).to render_template('new')
         expect(dom).to have_css '#error_explanation', text: 'AGB muss akzeptiert werden'
       end.not_to change { Event::Participation.count }
+      expect(newsletter.subscribed?(user)).to be_truthy
     end
 
     it 'does not check conditions for non root courses' do
@@ -138,8 +147,75 @@ describe Event::ParticipationsController do
       end.to change { Event::Participation.count }.by(1)
     end
 
+    context 'newsletter' do
+      it 'is defined and user is subscribed by default' do
+        expect(Group.root.sac_newsletter_mailing_list_id).to be_present
+        expect(MailingList.where(id: Group.root.sac_newsletter_mailing_list_id)).to be_exist
+        expect(newsletter.subscribed?(user)).to be_truthy
+      end
+
+      context 'subscribed' do
+        it 'does nothing if newsletter is true' do
+          expect do
+            post :create,
+                params: {
+                  group_id: group.id,
+                  event_id: event.id,
+                  step: 'summary',
+                  event_participation: { terms_and_conditions: '1', adult_consent: '1', newsletter: '1' } }
+            expect(response).to redirect_to(participation_path)
+          end.to change { Event::Participation.count }.by(1)
+          expect(newsletter.subscribed?(user)).to be_truthy
+        end
+
+        it 'unsubscribe from sac mailing list' do
+          expect do
+            post :create,
+                params: {
+                  group_id: group.id,
+                  event_id: event.id,
+                  step: 'summary',
+                  event_participation: { terms_and_conditions: '1', adult_consent: '1', newsletter: '0' } }
+            expect(response).to redirect_to(participation_path)
+          end.to change { Event::Participation.count }.by(1)
+          expect(newsletter.subscribed?(user)).to be_falsey
+        end
+      end
+
+      context 'unsubscribed' do
+        before { newsletter.subscriptions.create!(subscriber: user, excluded: true)  }
+
+        it 'subscribes to sac mailing list' do
+          expect do
+            post :create,
+                params: {
+                  group_id: group.id,
+                  event_id: event.id,
+                  step: 'summary',
+                  event_participation: { terms_and_conditions: '1', adult_consent: '1', newsletter: '1' } }
+            expect(response).to redirect_to(participation_path)
+          end.to change { Event::Participation.count }.by(1)
+          expect(newsletter.subscribed?(user)).to be_truthy
+        end
+
+        it 'does nothing if newsletter is false' do
+          expect do
+            post :create,
+                params: {
+                  group_id: group.id,
+                  event_id: event.id,
+                  step: 'summary',
+                  event_participation: { terms_and_conditions: '1', adult_consent: '1', newsletter: '0' } }
+            expect(response).to redirect_to(participation_path)
+          end.to change { Event::Participation.count }.by(1)
+          expect(newsletter.subscribed?(user)).to be_falsey
+        end
+      end
+    end
 
     context 'not subsidizable' do
+      let(:user) { people(:admin) }
+
       it 'renders summary after answers' do
         post :create, params: params.except(:id).merge(step: 'answers')
         expect(response).to render_template('new')
@@ -161,8 +237,6 @@ describe Event::ParticipationsController do
     end
 
     context 'subsidizable' do
-      before { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: people(:admin), beitragskategorie: :einzel) }
-
       it 'renders subsidy after answers' do
         post :create, params: params.except(:id).merge(step: 'answers')
         expect(response).to render_template('new')

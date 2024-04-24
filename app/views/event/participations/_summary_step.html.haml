@@ -39,3 +39,6 @@
 
   - link = link_to(t('.terms_and_conditions_link_label'), t('.terms_and_conditions_link_href'), target: :_blank)
   = f.boolean_field(:terms_and_conditions, caption: t(".terms_and_conditions_text", link: link).html_safe)
+
+  - if @group.sac_newsletter_mailing_list_id
+    = f.boolean_field(:newsletter, caption: t('.subscribe_newsletter'))
