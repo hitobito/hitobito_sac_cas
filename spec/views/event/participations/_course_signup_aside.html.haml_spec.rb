@@ -5,7 +5,7 @@
 
 require 'spec_helper'
 
-describe 'shared/_course_signup_aside.html.haml' do
+describe 'event/participations/_course_signup_aside.html.haml' do
   include FormatHelper
 
   before { expect(view).to receive_messages(total: 1300, subsidy: 620) }

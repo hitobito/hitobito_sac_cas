@@ -467,6 +467,15 @@ de:
     participations:
       edit:
         title: Zusatzdaten
+      course_signup_aside:
+        summary_title: Zusammenfassung
+        summary_course_price: Kurskosten
+        summary_subsidy: "- Subvention"
+        summary_total: Total
+        contact_title: Fragen zur Anmeldung
+        contact_text: |
+          Du erreichst uns zu unseren Geschäftszeiten
+          Mo bis Fr 08:00 - 17:00 Uhr.
       step_wizard:
         answers_title: Zusatzdaten
         subsidy_title: Subventionsbeitrag
@@ -485,6 +494,13 @@ de:
           subventionierten Kurspreis. Wir bitten dich, gegenbenenfalls das Formular %{link}
           auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor
           Kursbeginn zu retournieren</b>.
+      summary_step:
+        annulation_remarks: |
+          Der Abschluss einer Annullationskostenversicherung wird empfohlen. Folgende Rücktrittskosten würden bei Abmeldung vor Kursbeginn durch den Kunden/die Kundin getragen:
+          
+          30 - 20 Tage: 50 % des Preises
+          19 - 10 Tage: 75 % des Preises
+          9 - 0 Tage: 100 % des Preises
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
@@ -688,17 +704,6 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
-
-  shared:
-    course_signup_aside:
-      summary_title: Zusammenfassung
-      summary_course_price: Kurskosten
-      summary_subsidy: "- Subvention"
-      summary_total: Total
-      contact_title: Fragen zur Anmeldung
-      contact_text: |
-        Du erreichst uns zu unseren Geschäftszeiten
-        Mo bis Fr 08:00 - 17:00 Uhr.
 
   table_displays:
     person:

@@ -93,6 +93,7 @@ describe 'Event Signup', :js do
         expect(page).not_to have_text '- Subvention'
         first(:button, 'Weiter').click
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+        expect(page).to have_text admin.to_s
         expect(page).not_to have_text '- Subvention'
         click_on 'Anmelden'
         expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'

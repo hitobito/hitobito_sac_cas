@@ -3,5 +3,32 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
 
+= section("#{@event.name} (#{@event.number})") do
+  = @event.dates_full
 
-TODO Zusammenfassung
+= section(t('event.participation_contact_datas.edit.wizard_title')) do
+  .mb-2
+    = entry.person.salutation_label(entry.person.gender)
+    %br
+    %strong= entry.person
+  .mb-2
+    = entry.person.complete_address
+  .mb-2
+    = "#{Person.human_attribute_name(:birthday)}: #{l(entry.person.birthday)}"
+    %br
+    = "#{SelfRegistration::MainPerson::Base.human_attribute_name(:number)}: #{entry.person.phone_numbers.first&.number}"
+    %br
+    = "#{SelfRegistration::MainPerson::Base.human_attribute_name(:email)}: #{entry.person.email}"
+
+
+= section(t('event.participations.step_wizard.answers_title')) do
+  %dl
+    - entry.answers.each do |answer|
+      %dt= sanitize(answer.question.question)
+      %dd= answer.answer || t('event.participations.no_answer_given')
+
+    %dt= t('activerecord.attributes.event/participation.additional_information')
+    %dd.multiline= entry.additional_information.presence || '-'
+
+.alert.alert-info
+  = simple_format(t('.annulation_remarks'))
