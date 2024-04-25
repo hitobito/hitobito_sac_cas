@@ -152,7 +152,7 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/participation:
-        additional_information: Bemerkungen
+        additional_information: Kommentar
         cancel_statement: Begründung
       external_training:
         person: Person

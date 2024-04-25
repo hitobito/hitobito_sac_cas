@@ -41,7 +41,7 @@ describe :event_participation, js: true do
     complete_contact_data
     first(:button, 'Weiter').click
 
-    fill_in('Bemerkungen', with: 'Wichtige Bemerkungen über meine Teilnahme')
+    fill_in('Kommentar', with: 'Wichtige Bemerkungen über meine Teilnahme')
 
     expect do
       click_button('Anmelden')
