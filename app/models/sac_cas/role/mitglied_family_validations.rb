@@ -20,7 +20,7 @@ module SacCas::Role::MitgliedFamilyValidations
 
   private
 
-  # Returns the number of adult family mitglieder in the household including the current person.
+  # Returns the number of adult family mitglieder in the household excluding the current person.
   def adult_household_people_mitglieder_count
     person.
       household_people.
