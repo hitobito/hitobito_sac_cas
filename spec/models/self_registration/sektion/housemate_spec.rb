@@ -82,6 +82,12 @@ describe SelfRegistration::Sektion::Housemate do
     end
   end
 
+  describe 'person' do
+    it 'sets family_main_person=false' do
+      expect(model.person.family_main_person).to be false
+    end
+  end
+
   describe 'role' do
     before { model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)  }
     it 'builds role with expected type' do

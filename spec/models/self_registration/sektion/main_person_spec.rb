@@ -67,6 +67,12 @@ describe SelfRegistration::Sektion::MainPerson do
     end
   end
 
+  describe 'person' do
+    it 'sets family_main_person=true' do
+      expect(model.person.family_main_person).to be true
+    end
+  end
+
   describe 'role' do
     it 'builds role with expected type' do
       model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
