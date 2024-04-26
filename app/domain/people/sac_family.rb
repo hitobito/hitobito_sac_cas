@@ -88,6 +88,10 @@ class People::SacFamily
     housemates - family_members
   end
 
+  def main_person
+    family_members.find(&:family_main_person)
+  end
+
   private
 
   def update_membership!(new_family_member)

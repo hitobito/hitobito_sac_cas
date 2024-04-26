@@ -172,6 +172,7 @@ de:
       person:
         digital_correspondence: Mitgliederausweis & Rechnungsstellung
         family_id: Familien ID
+        family_main_person: Familienrechnungsempfänger
         genders:
           _nil: andere
         membership_years: Anzahl Mitglieder-Jahre

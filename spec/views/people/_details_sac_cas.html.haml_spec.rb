@@ -16,6 +16,43 @@ describe 'people/_details_sac_cas.html.haml' do
     allow(controller).to receive_messages(current_user: Person.new)
   end
 
+  context 'family member' do
+    let(:person) { people(:familienmitglied2)}
+
+    it 'renders family_id' do
+      expect(person.family_id).to be_present # check assumption
+      label_node = dom.find('dl dt', text: I18n.t('activerecord.attributes.person.family_id'))
+      value_node = label_node.find('+dd')
+      expect(value_node.text).to eq person.family_id
+    end
+
+    describe 'family_main_person' do
+      let(:label_node) { dom.find('dl dt', text: I18n.t('activerecord.attributes.person.family_main_person')) }
+      subject(:value_node) { label_node.find('+dd') }
+
+      it 'renders unknown if family has no main person' do
+        # clear family_main_person for all family members
+        Person.where(household_key: person.household_key).update_all(family_main_person: false)
+
+        expect(value_node.text).to eq I18n.t('global.unknown')
+      end
+
+      it 'renders true if person is main person' do
+        # clear family_main_person for all family members and set it for this person
+        Person.where(household_key: person.household_key).update_all(family_main_person: false)
+        person.update!(family_main_person: true)
+
+        expect(value_node.text).to eq I18n.t('global.yes')
+      end
+
+      it 'renders link to main person if person is not main person' do
+        expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
+
+        expect(value_node).to have_link(person.sac_family.main_person.to_s, href: person_path(person.sac_family.main_person))
+      end
+    end
+  end
+
   context 'member' do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
@@ -49,6 +86,11 @@ describe 'people/_details_sac_cas.html.haml' do
     it 'hides membership info' do
       expect(dom).not_to have_css 'dl dt', text: 'Anzahl Mitglieder-Jahre'
       expect(dom).not_to have_css 'dl dt', text: 'Mitglied-Nr'
+    end
+
+    it 'hides family info' do
+      expect(dom).not_to have_css 'dl dt', text: I18n.t('activerecord.attributes.person.family_id')
+      expect(dom).not_to have_css 'dl dt', text: I18n.t('activerecord.attributes.person.family_main_person')
     end
   end
 end
