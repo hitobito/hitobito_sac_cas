@@ -11,6 +11,7 @@ describe Event::ParticipationButtons do
   include LayoutHelper
   include UtilityHelper
 
+  let(:person) { Person.new(id: 1) }
   let(:group) { Fabricate.build(:group, id: 1) }
   let(:event) { Fabricate.build(:course, id: 1, groups: [group], state: 'open') }
   let(:participation) { Fabricate.build(:event_participation, id: 1, event: event) }
@@ -27,6 +28,7 @@ describe Event::ParticipationButtons do
     assign(:event, event)
     allow(self).to receive(:can?).and_return(true)
     allow(view).to receive(:entry).and_return(participation)
+    allow(self).to receive(:current_user).and_return(person)
   end
 
   shared_examples 'conditional action' do |label, states:, condition: nil, assert: :link|
@@ -47,7 +49,28 @@ describe Event::ParticipationButtons do
     end
   end
 
-  it_behaves_like 'conditional action', 'Abmelden', states: %w(unconfirmed applied assigned summoned), assert: :button
+  it_behaves_like 'conditional action', 'Abmelden', states: %w(unconfirmed applied assigned summoned), assert: :button do
+    context 'his own participation' do
+      before do
+        participation.person = person
+        participation.state = 'assigned'
+        event.dates.build(start_at: 3.days.from_now)
+      end
+
+      it 'shows button when participant_cancelable' do
+        event.applications_cancelable = true
+        expect(participation).to be_participant_cancelable
+        expect(dom).to have_button('Abmelden')
+      end
+
+      it 'shows button when not participant_cancelable' do
+        event.applications_cancelable = false
+        expect(participation).not_to be_participant_cancelable
+        expect(dom).not_to have_button('Abmelden')
+      end
+    end
+  end
+
   it_behaves_like 'conditional action', 'Ablehnen', states: %w(unconfirmed applied)
   it_behaves_like 'conditional action', 'Nicht erschienen', states: %w(assigned attended summoned)
 

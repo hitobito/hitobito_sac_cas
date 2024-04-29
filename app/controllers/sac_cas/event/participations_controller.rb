@@ -128,7 +128,7 @@ module SacCas::Event::ParticipationsController
   end
 
   def assert_participant_cancelable?
-    if participant_cancels? && !entry.particpant_cancelable?
+    if participant_cancels? && !entry.participant_cancelable?
       entry.errors.add(:base, :invalid)
       throw :abort
     end

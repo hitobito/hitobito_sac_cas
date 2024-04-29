@@ -22,7 +22,7 @@ module SacCas::Event::ParticipationBanner
   end
 
   def can_destroy?
-    can?(:cancel, @user_participation) && @user_participation.particpant_cancelable?
+    can?(:cancel, @user_participation) && @user_participation.participant_cancelable?
   end
 
   def render_cancel_popover

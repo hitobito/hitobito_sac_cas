@@ -16,6 +16,11 @@ module SacCas::Event::ParticipationAbility
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer
       general(:summon).if_application
+      general(:destroy).unless_her_own
     end
+  end
+
+  def unless_her_own
+    !her_own
   end
 end

@@ -28,7 +28,7 @@ module SacCas::Event::Participation
     end
   end
 
-  def particpant_cancelable?
+  def participant_cancelable?
     event.applications_cancelable? && event.state != 'annulled' &&
       event.dates.map(&:start_at).min.future?
   end

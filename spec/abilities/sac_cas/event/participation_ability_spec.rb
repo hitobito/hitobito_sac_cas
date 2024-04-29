@@ -51,6 +51,17 @@ describe Event::ParticipationAbility do
         expect(subject).to be_able_to(:cancel, participation)
       end
     end
+
+    describe 'destroy'  do
+      it 'may not destroy others' do
+        expect(subject).not_to be_able_to(:destroy, participation)
+      end
+
+      it 'may not destroy own' do
+        participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
+        expect(subject).not_to be_able_to(:destroy, participation)
+      end
+    end
   end
 
   context 'layer_and_below_full' do

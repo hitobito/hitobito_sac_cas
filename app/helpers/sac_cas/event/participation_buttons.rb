@@ -10,12 +10,24 @@ module SacCas::Event::ParticipationButtons
 
   prepended do
     self.conditions = {
-      cancel: [:unconfirmed, :applied, :assigned, :summoned],
+      cancel: [:unconfirmed, :applied, :assigned, :summoned, if: -> { cancelable? }],
       reject: [:unconfirmed, :applied],
       summon: [:assigned, if: -> { @event.state == 'ready' }],
       absent: [:assigned, :summoned, :attended],
       attend: [:absent, if: -> { @event.closed? }],
       assign: [:unconfirmed, :applied, :absent, if: -> { !@event.closed? }]
     }
+  end
+
+  private
+
+  def cancelable?
+    return can?(:cancel, @participation) unless her_own?
+
+    can?(:cancel, @participation) && @participation.participant_cancelable?
+  end
+
+  def her_own?
+    @template.current_user.id == @participation.person_id
   end
 end
