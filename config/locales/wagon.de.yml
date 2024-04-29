@@ -506,6 +506,7 @@ de:
         terms_and_conditions_text: Ja, ich erkläre mich mit den %{link} einverstanden
         terms_and_conditions_link_label: AGB
         terms_and_conditions_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf
+        subscribe_newsletter: Ja, ich möchte über Neuigkeiten des Schweizer Alpen-Club SAC informiert werden
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten

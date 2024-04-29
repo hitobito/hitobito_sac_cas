@@ -62,6 +62,7 @@ describe 'Event Signup', :js do
       expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
       first(:button, 'Weiter').click
       expect(page).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
+      expect(page).to have_checked_field('event_participation[newsletter]')
       check 'Ja, ich erkläre mich mit den AGB einverstanden'
       check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
       click_on 'Anmelden'

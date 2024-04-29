@@ -13,9 +13,10 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    permitted_attrs << :subsidy << :adult_consent << :terms_and_conditions
+    permitted_attrs << :subsidy << :adult_consent << :terms_and_conditions << :newsletter
 
     around_create :proceed_wizard
+    after_create :subscribe_newsletter
     before_cancel :assert_participant_cancelable?
   end
 
@@ -94,6 +95,38 @@ module SacCas::Event::ParticipationsController
     entry.check_root_conditions! if group.root?
   end
 
+  def subscribe_newsletter
+    return if !subscribe_newsletter? || entry.new_record?
+
+    mailing_list = MailingList.find_by(id: group.sac_newsletter_mailing_list_id)
+    return unless mailing_list
+
+    if true?(entry.newsletter)
+      include_person_in_newsletter(mailing_list)
+    else
+      mailing_list.exclude_person(entry.person)
+    end
+  end
+
+  def subscribe_newsletter?
+    event.course? &&
+    group.root? &&
+    group.sac_newsletter_mailing_list_id &&
+    !params[:for_someone_else]
+  end
+
+  def include_person_in_newsletter(mailing_list)
+    # The newsletter mailing list is opt-out and only available for certain roles.
+    # (see db/seeds/mailing_lists.rb)
+    # Therefore, removing potential exclusions is all to do for a subscription.
+    mailing_list
+      .subscriptions
+      .where(subscriber_id: entry.person.id,
+             subscriber_type: Person.sti_name,
+             excluded: true)
+      .destroy_all
+  end
+
   def assert_participant_cancelable?
     if participant_cancels? && !entry.particpant_cancelable?
       entry.errors.add(:base, :invalid)
@@ -103,5 +136,11 @@ module SacCas::Event::ParticipationsController
 
   def participant_cancels?
     entry.person == current_user
+  end
+
+  def build_entry
+    super.tap do |e|
+      e.newsletter = true if subscribe_newsletter?
+    end
   end
 end

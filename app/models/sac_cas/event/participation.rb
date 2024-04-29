@@ -13,7 +13,7 @@ module SacCas::Event::Participation
   prepended do
     before_save :update_previous_state, if: :state_changed?
 
-    attr_accessor :adult_consent, :terms_and_conditions, :check_root_conditions
+    attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
     validates :adult_consent, :terms_and_conditions, acceptance: { if: :check_root_conditions }
   end
