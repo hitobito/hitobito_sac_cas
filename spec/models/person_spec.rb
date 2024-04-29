@@ -148,4 +148,32 @@ describe Person do
       expect(Person.new.ignored_country?).to eq(false)
     end
   end
+
+  describe 'digital_correspondence' do
+    it 'gets set to true when password is first set' do
+      password = 'verysafepasswordfortesting'
+      person = Fabricate(:person, digital_correspondence: false)
+      expect(person.digital_correspondence).to eq(false)
+
+      person.password = person.password_confirmation = password
+      person.save!
+
+      expect(person.digital_correspondence).to eq(true)
+    end
+
+    it 'does not set to true when password is updated' do
+      password = 'verysafepasswordfortesting'
+      person = Fabricate(:person, password: password, password_confirmation: password)
+      expect(person.digital_correspondence).to eq(true)
+
+      person.update!(digital_correspondence: false)
+
+      expect(person.digital_correspondence).to eq(false)
+
+      person.password = person.password_confirmation = 'updatedpasswordalsoverysafeyes'
+      person.save!
+
+      expect(person.digital_correspondence).to eq(false)
+    end
+  end
 end

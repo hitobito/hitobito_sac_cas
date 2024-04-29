@@ -83,6 +83,7 @@ module HitobitoSacCas
 
       ## Helpers
       EventsHelper.prepend SacCas::EventsHelper
+      PeopleHelper.prepend SacCas::PeopleHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
@@ -102,6 +103,7 @@ module HitobitoSacCas
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
+      PeopleController.permitted_attrs << :digital_correspondence
       PeopleController.prepend SacCas::PeopleController
       PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
