@@ -11,6 +11,7 @@ Fabricator(:sac_course, from: :course) do
 end
 
 Fabricator(:sac_open_course, from: :sac_course) do
+  state { :application_open }
   contact_id { ActiveRecord::FixtureSet.identify(:admin) }
   cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
   cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }

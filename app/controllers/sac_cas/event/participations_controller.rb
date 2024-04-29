@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    permitted_attrs << :subsidy
+    permitted_attrs << :subsidy << :adult_consent << :terms_and_conditions
 
     around_create :proceed_wizard
     before_cancel :assert_participant_cancelable?
@@ -37,17 +37,19 @@ module SacCas::Event::ParticipationsController
 
   private
 
-  def proceed_wizard
+  def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @step = params[:step]
+    return yield if @step.blank? || !event.course?
 
-    if @step && params[:back]
+    if params[:back]
       previous_step
       render_step
-    elsif @step && @step != available_steps.last
+    elsif @step == available_steps.last
+      finish_wizard
+      yield
+    else
       next_step if entry.valid?
       render_step
-    else
-      yield
     end
   end
 
@@ -86,6 +88,10 @@ module SacCas::Event::ParticipationsController
       steps -= ['subsidy'] unless entry.subsidizable?
       steps
     end
+  end
+
+  def finish_wizard
+    entry.check_root_conditions! if group.root?
   end
 
   def assert_participant_cancelable?

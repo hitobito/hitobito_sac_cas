@@ -154,6 +154,8 @@ de:
       event/participation:
         additional_information: Kommentar
         cancel_statement: Begründung
+        adult_consent: Altersbestätigung
+        terms_and_conditions: AGB
       external_training:
         person: Person
         event_kind: Kursart
@@ -501,6 +503,9 @@ de:
           30 - 20 Tage: 50 % des Preises
           19 - 10 Tage: 75 % des Preises
           9 - 0 Tage: 100 % des Preises
+        terms_and_conditions_text: Ja, ich erkläre mich mit den %{link} einverstanden
+        terms_and_conditions_link_label: AGB
+        terms_and_conditions_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
