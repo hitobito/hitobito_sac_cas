@@ -101,7 +101,7 @@ module SacCas::Event::ParticipationsController
     mailing_list = MailingList.find_by(id: group.sac_newsletter_mailing_list_id)
     return unless mailing_list
 
-    if %w(1 true).include?(entry.newsletter.to_s)
+    if true?(entry.newsletter)
       include_person_in_newsletter(mailing_list)
     else
       mailing_list.exclude_person(entry.person)
