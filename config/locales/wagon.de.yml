@@ -228,6 +228,9 @@ de:
         must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
 
       models:
+        group/sektions_tourenkommission/tourenleiter:
+          requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
+
         people_manager:
           in_different_household: >-
             %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
@@ -500,7 +503,7 @@ de:
       summary_step:
         annulation_remarks: |
           Der Abschluss einer Annullationskostenversicherung wird empfohlen. Folgende Rücktrittskosten würden bei Abmeldung vor Kursbeginn durch den Kunden/die Kundin getragen:
-          
+
           30 - 20 Tage: 50 % des Preises
           19 - 10 Tage: 75 % des Preises
           9 - 0 Tage: 100 % des Preises

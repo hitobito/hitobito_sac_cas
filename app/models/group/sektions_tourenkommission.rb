@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsTourenkommission < ::Group
+class Group::SektionsTourenkommission < Group
 
   self.static_name = true
 
@@ -23,12 +23,22 @@ class Group::SektionsTourenkommission < ::Group
   class Tourenleiter < ::Role
     self.permissions = []
     self.basic_permissions_only = true
+
+    before_validation :assert_active_qualification
+
+    private
+
+    def assert_active_qualification
+      unless person.qualifications.active(created_at || Time.zone.today).exists?
+        errors.add(:base, :requires_active_qualification)
+      end
+    end
   end
 
   roles TourenchefSommer,
-    TourenchefWinter,
-    TourenchefKlettern,
-    TourenchefSenioren,
-    Tourenleiter
+        TourenchefWinter,
+        TourenchefKlettern,
+        TourenchefSenioren,
+        Tourenleiter
 
 end
