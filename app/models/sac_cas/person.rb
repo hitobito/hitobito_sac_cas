@@ -28,6 +28,8 @@ module SacCas::Person
     alias_attribute :membership_number, :id
     alias_attribute :navision_id, :id
 
+    before_save :set_digital_correspondence, if: :password_initialized?
+
     scope :with_membership_years, lambda { |selects = 'people.*'|
       subquery_sql = Group::SektionsMitglieder::Mitglied.
                      with_deleted.
@@ -42,6 +44,14 @@ module SacCas::Person
 
   def membership_years
     read_attribute(:membership_years) or raise 'use Person scope :with_membership_years'
+  end
+
+  def set_digital_correspondence
+    self.digital_correspondence = true
+  end
+
+  def password_initialized?
+    encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
   end
 
   def family_id
