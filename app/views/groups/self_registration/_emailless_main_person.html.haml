@@ -17,7 +17,7 @@
       = ff.labeled_date_field :birthday
 
     = render 'contactable/address_fields', f: ff
-    = ff.labeled_input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
+    = ff.labeled_input_field(:number, placeholder: ti('.phone_placeholder'))
 
     = ff.labeled(:others, '&nbsp;'.html_safe) do
       - if ff.object.attr?(:newsletter)

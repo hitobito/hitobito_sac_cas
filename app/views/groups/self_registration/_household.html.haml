@@ -24,7 +24,8 @@
         = ff.inline_radio_button(:gender, key, ff.object.gender_label(key))
     = ff.labeled_input_fields :first_name, :last_name
     = ff.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
-    = ff.labeled_input_fields :email, :number
+    = ff.labeled_input_field :email
+    = ff.labeled_input_field :number, placeholder: ti('.phone_placeholder')
 
     .col-xl-2.col-md-3.text-md-end.pe-3
       = ff.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
