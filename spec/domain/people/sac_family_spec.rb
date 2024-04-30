@@ -154,7 +154,7 @@ describe People::SacFamily do
   context '#update!' do
     before { freeze_time }
 
-    let!(:family_head) { Fabricate(:person, household_key: 'this-household', birthday: today - 40.years) }
+    let!(:family_head) { Fabricate(:person, household_key: 'this-household', birthday: today - 40.years, family_main_person: true) }
     subject { described_class.new(family_head) }
 
     {

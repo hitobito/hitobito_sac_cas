@@ -70,7 +70,8 @@ describe PeopleController do
         Fabricate(
           :person,
           birthday: Time.zone.today - 33.years,
-          household_key: 'household-42'
+          household_key: 'household-42',
+          family_main_person: true
         ).tap do |person|
           Fabricate(role_class.to_s,
                     group: group,

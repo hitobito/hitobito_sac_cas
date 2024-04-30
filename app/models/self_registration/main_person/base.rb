@@ -26,7 +26,7 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def save!
-    super.tap do |success|
+    super(context: 'selfreg').tap do |success|
       exclude_from_mailing_list if success && mailing_list && !newsletter
     end
   end

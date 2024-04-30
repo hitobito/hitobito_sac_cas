@@ -10,46 +10,56 @@ module SacCas::Role::MitgliedFamilyValidations
 
   MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT = 2
   AGE_RANGE_ADULT = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT
+  CATEGORY_FAMILY = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
   included do
     # Explicitely run validation on create and update. This allows us to skip this validation
     # on a case by case basis by setting the context to something other than :create or :update.
-    # This is used by the memberships_importer to skip this validation.
-    validate :assert_adult_household_people_mitglieder_count, on: [:create, :update]
+    # This is used by the memberships_importer and the selfreg workflow to skip these validations.
+    with_options(on: [:create, :update]) do
+      validate :assert_adult_family_mitglieder_count
+      validate :assert_single_family_main_person
+    end
   end
 
   private
 
-  # Returns the number of adult family mitglieder in the household excluding the current person.
-  def adult_household_people_mitglieder_count
-    person.
+  # Returns all family mitglieder including the current person.
+  def family_mitglieder
+    people = person.
       household_people.
-      flat_map(&:roles).
-      select do |role|
-      # We only care about Mitglied roles
-      role.is_a?(SacCas::Role::MitgliedHauptsektion) &&
-        # We only care about family beitragskategorie roles
-        role.beitragskategorie&.familie? &&
-        # Make sure the person has a birthday before we compare the years
-        role.person.birthday? &&
-        AGE_RANGE_ADULT.cover?(role.person.years)
-    end.
-      map(&:person_id). # A person might have multiple Mitglied roles, count one per person.
-      uniq.
-      count
+      joins(:roles).
+      merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES, beitragskategorie: CATEGORY_FAMILY)).to_a
+
+    people << person
+  end
+
+  def adult_family_mitglieder_count
+    family_mitglieder.
+      select {|family_mitglied| AGE_RANGE_ADULT.cover?(family_mitglied.years) }.
+      size
   end
 
   # There can only be MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults with beitragskategory=family
   # in a household.
-  def assert_adult_household_people_mitglieder_count
+  def assert_adult_family_mitglieder_count
     # We do not need to validate this if the current role has a beitragskategorie other than family
     # or if the person of the current role is not an adult.
     return unless beitragskategorie&.familie? && AGE_RANGE_ADULT.cover?(person.years)
 
     # Including current person, we can not have more than MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults.
-    return unless adult_household_people_mitglieder_count + 1 > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
+    return unless adult_family_mitglieder_count > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
 
     errors.add(:base, :too_many_adults_in_family, max_adults: MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT)
+  end
+
+  def assert_single_family_main_person
+    # We do not need to validate this if the current role has a beitragskategorie other than family.
+    return unless beitragskategorie&.familie?
+
+    return if family_mitglieder.count(&:family_main_person) == 1
+
+    errors.add(:base, :must_have_one_family_main_person_in_family)
   end
 
 end

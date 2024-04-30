@@ -19,7 +19,8 @@ describe Person::Household do
     person = Fabricate(:person, **attrs.reverse_merge(
       birthday: age.years.ago,
       town: 'Supertown',
-      primary_group: groups(:bluemlisalp_mitglieder)
+      primary_group: groups(:bluemlisalp_mitglieder),
+      family_main_person: true
     ))
 
     Array.wrap(managers).each { |manager| PeopleManager.create!(manager: manager, managed: person) }
@@ -177,7 +178,7 @@ describe Person::Household do
     context 'basic functionality from core' do
       it 'dissolves household of two' do
         p1 = create_person(25, household_key: 'household-of-two')
-        p2 = create_person(25, household_key: 'household-of-two')
+        p2 = create_person(25, household_key: 'household-of-two', family_main_person: false)
 
         build_household(p1, p2).send(:remove)
 
@@ -187,8 +188,8 @@ describe Person::Household do
 
       it 'removes person from household' do
         p1 = create_person(25, household_key: 'household-of-many')
-        p2 = create_person(25, household_key: 'household-of-many')
-        p3 = create_person(25, household_key: 'household-of-many', beitragskategorie: :jugend)
+        p2 = create_person(25, household_key: 'household-of-many', family_main_person: false)
+        p3 = create_person(25, household_key: 'household-of-many', family_main_person: false, beitragskategorie: :jugend)
 
         build_household(p1, p2).send(:remove)
 

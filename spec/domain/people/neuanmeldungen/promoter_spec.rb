@@ -9,9 +9,11 @@ require 'spec_helper'
 
 describe People::Neuanmeldungen::Promoter do
 
-  def create_neuanmeldung_role(**opts)
+  def create_neuanmeldung_role(family_main_person: true, **opts)
+    person = Fabricate(:person, family_main_person: family_main_person)
     Fabricate(
       :role,
+      person: person,
       **opts.reverse_merge(
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym,
         group: groups(:bluemlisalp_neuanmeldungen_nv),

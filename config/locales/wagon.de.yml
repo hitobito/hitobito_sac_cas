@@ -223,9 +223,10 @@ de:
         already_has_neuanmeldung_role: hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on}).
         too_many_adults_in_family: "In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen."
         only_one_mitglied_role_allowed_at_a_time: "hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit."
+        must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
-        must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
+        must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss es 1 Familienrechnungsempfänger haben."
 
       models:
         group/sektions_tourenkommission/tourenleiter:
