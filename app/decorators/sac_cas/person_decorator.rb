@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
+module SacCas::PersonDecorator
+  extend ActiveSupport::Concern
+
+  def as_typeahead
+    { id: id, label: h.h(full_label_with_changed_suffix) }
+  end
+
+  private
+
+  def full_label_with_changed_suffix
+    suffix = [model.birthday&.year, model.id].compact.join("; ")
+
+    to_s.tap do |label|
+      label << ", #{town}" if town?
+      label << " (#{full_name})" if company? && full_name.present?
+      label << " (#{suffix})"
+    end
+  end
+
+end
