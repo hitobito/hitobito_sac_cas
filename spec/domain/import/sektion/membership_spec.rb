@@ -96,4 +96,20 @@ describe Import::Sektion::Membership do
       end
     end
   end
+
+  describe '#import!' do
+    {
+      einzel: 'EINZEL',
+      jugend: 'JUGEND',
+      familie: ['FAMILIE', 'FREI KIND', 'FREI FAM']
+    }.each do |kind, values|
+      Array(values).each do |value|
+        it "sets person.family_main_person when raw beitragskategorie value is 'FAMILIE'" do
+          attrs[:beitragskategorie] = value
+          membership.import!
+          expect(membership.role.person.family_main_person).to eq(value == 'FAMILIE')
+        end
+      end
+    end
+  end
 end
