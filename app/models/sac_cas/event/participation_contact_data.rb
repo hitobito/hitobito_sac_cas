@@ -29,4 +29,15 @@ module SacCas::Event::ParticipationContactData
   def participation
     @participation ||= Event::Participation.new(event: @event, person: @person)
   end
+
+  def assert_required_contact_attrs_valid
+    super.tap do
+      person.phone_numbers.first.valid?
+
+      message = [
+        SelfRegistration::MainPerson::Base.human_attribute_name(:number), t('errors.messages.blank')
+      ].join(' ')
+      errors.add(:base, message) if person.phone_numbers.first.number.blank?
+    end
+  end
 end
