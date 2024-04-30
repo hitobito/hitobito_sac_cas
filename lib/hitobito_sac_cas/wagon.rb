@@ -70,9 +70,15 @@ module HitobitoSacCas
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
       RoleDecorator.prepend SacCas::RoleDecorator
+      PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
 
       ## Domain
+      SearchStrategies::SqlConditionBuilder.matchers.merge!(
+        'people.id' => SearchStrategies::SqlConditionBuilder::IdMatcher,
+        'people.birthday' => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
+      )
+
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
 
       ## Resources
@@ -107,6 +113,7 @@ module HitobitoSacCas
       PeopleController.prepend SacCas::PeopleController
       PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
+      Person::QueryController.prepend SacCas::Person::QueryController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
