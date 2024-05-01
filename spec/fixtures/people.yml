@@ -37,7 +37,7 @@ familienmitglied:
   birthday: <%= 25.years.ago %>
   language: de
   household_key: '4242'
-  family_main_person: true
+  sac_family_main_person: true
 
 familienmitglied2:
   id: 600_003

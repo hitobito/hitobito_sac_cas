@@ -172,7 +172,7 @@ de:
       person:
         digital_correspondence: Mitgliederausweis & Rechnungsstellung
         family_id: Familien ID
-        family_main_person: Familienrechnungsempfänger
+        sac_family_main_person: Rechnungen an (Familie)
         genders:
           _nil: andere
         membership_years: Anzahl Mitglieder-Jahre
@@ -227,7 +227,7 @@ de:
         must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
-        must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss es 1 Familienrechnungsempfänger haben."
+        must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
 
       models:
         group/sektions_tourenkommission/tourenleiter:

@@ -20,7 +20,7 @@ class SelfRegistration::Sektion::MainPerson < SelfRegistration::MainPerson::Base
 
   def person
     super.tap do |p|
-      p.family_main_person = true
+      p.sac_family_main_person = true
       p.self_registration_reason_id = self_registration_reason_id
       p.privacy_policy_accepted_at = Time.zone.now if supplements&.sektion_statuten
     end

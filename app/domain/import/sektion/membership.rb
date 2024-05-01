@@ -100,7 +100,7 @@ module Import
       end
 
       def mark_family_main_person
-        person.update(family_main_person: true) if family_main_person?
+        person.update(sac_family_main_person: true) if family_main_person?
       end
 
       def remove_placeholder_contact_role

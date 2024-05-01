@@ -29,7 +29,8 @@ module SacCas::Role::MitgliedFamilyValidations
     people = person.
       household_people.
       joins(:roles).
-      merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES, beitragskategorie: CATEGORY_FAMILY)).to_a
+      merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES,
+                       beitragskategorie: CATEGORY_FAMILY)).to_a
 
     people << person
   end
@@ -57,7 +58,7 @@ module SacCas::Role::MitgliedFamilyValidations
     # We do not need to validate this if the current role has a beitragskategorie other than family.
     return unless beitragskategorie&.familie?
 
-    return if family_mitglieder.count(&:family_main_person) == 1
+    return if family_mitglieder.count(&:sac_family_main_person) == 1
 
     errors.add(:base, :must_have_one_family_main_person_in_family)
   end

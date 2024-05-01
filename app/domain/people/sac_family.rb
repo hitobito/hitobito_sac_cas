@@ -89,7 +89,7 @@ class People::SacFamily
   end
 
   def main_person
-    family_members.find(&:family_main_person)
+    family_members.find(&:sac_family_main_person)
   end
 
   private

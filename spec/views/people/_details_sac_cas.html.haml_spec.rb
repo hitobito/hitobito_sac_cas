@@ -27,26 +27,33 @@ describe 'people/_details_sac_cas.html.haml' do
     end
 
     describe 'family_main_person' do
-      let(:label_node) { dom.find('dl dt', text: I18n.t('activerecord.attributes.person.family_main_person')) }
+      let(:label_node) { dom.find('dl dt', text: I18n.t('activerecord.attributes.person.sac_family_main_person')) }
       subject(:value_node) { label_node.find('+dd') }
 
       it 'renders unknown if family has no main person' do
         # clear family_main_person for all family members
-        Person.where(household_key: person.household_key).update_all(family_main_person: false)
+        Person.where(household_key: person.household_key).update_all(sac_family_main_person: false)
 
         expect(value_node.text).to eq I18n.t('global.unknown')
       end
 
       it 'renders true if person is main person' do
         # clear family_main_person for all family members and set it for this person
-        Person.where(household_key: person.household_key).update_all(family_main_person: false)
-        person.update!(family_main_person: true)
+        Person.where(household_key: person.household_key).update_all(sac_family_main_person: false)
+        person.update!(sac_family_main_person: true)
 
         expect(value_node.text).to eq I18n.t('global.yes')
       end
 
+      it 'renders main person name if person is not main person' do
+        expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
+
+        expect(value_node).to have_text(person.sac_family.main_person.to_s)
+      end
+
       it 'renders link to main person if person is not main person' do
         expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
+        expect(view).to receive(:can?).with(:read, person.sac_family.main_person).and_return(true)
 
         expect(value_node).to have_link(person.sac_family.main_person.to_s, href: person_path(person.sac_family.main_person))
       end
@@ -90,7 +97,7 @@ describe 'people/_details_sac_cas.html.haml' do
 
     it 'hides family info' do
       expect(dom).not_to have_css 'dl dt', text: I18n.t('activerecord.attributes.person.family_id')
-      expect(dom).not_to have_css 'dl dt', text: I18n.t('activerecord.attributes.person.family_main_person')
+      expect(dom).not_to have_css 'dl dt', text: I18n.t('activerecord.attributes.person.sac_family_main_person')
     end
   end
 end
