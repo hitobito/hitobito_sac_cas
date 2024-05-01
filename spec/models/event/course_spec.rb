@@ -203,4 +203,38 @@ describe Event::Course do
       end.to change { course.reload.unconfirmed_count }.from(2).to(1)
     end
   end
+
+  describe '#default_participation_state' do
+    let(:course) { Fabricate.build(:sac_course, participant_count: 1, maximum_participants: 2) }
+    let(:application) { Fabricate.build(:event_application) }
+    let(:participation) { Fabricate.build(:event_participation, event: course, application: application, state: 'assigned') }
+
+    subject(:state) { course.default_participation_state(participation) }
+
+    context 'without automatic_assignment' do
+      before { course.automatic_assignment = false }
+
+      it 'returns unconfirmed if places are available' do
+        expect(state).to eq 'unconfirmed'
+      end
+
+      it 'returns applied if course has no places available' do
+        course.participant_count = 2
+        expect(state).to eq 'applied'
+      end
+    end
+
+    context 'with automatic_assignment' do
+      before { course.automatic_assignment = true }
+
+      it 'returns applied if places are available' do
+        expect(state).to eq 'applied'
+      end
+
+      it 'returns applied if course has no places available' do
+        course.participant_count = 2
+        expect(state).to eq 'applied'
+      end
+    end
+  end
 end

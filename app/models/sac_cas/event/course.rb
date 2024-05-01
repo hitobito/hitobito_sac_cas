@@ -156,6 +156,12 @@ module SacCas::Event::Course
     read_attribute(:minimum_age)
   end
 
+  def default_participation_state(participation, for_someone_else = false)
+    return 'unconfirmed' if super == 'applied' && (places_available? && !automatic_assignment?)
+
+    super
+  end
+
   private
 
   def weak_validation_state?
