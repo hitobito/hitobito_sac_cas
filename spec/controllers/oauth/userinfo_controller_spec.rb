@@ -69,7 +69,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
               role: 'Group::Geschaeftsstelle::Admin',
               role_class: 'Group::Geschaeftsstelle::Admin',
               role_name: 'Admin',
-              permissions: ['layer_and_below_full', 'admin', 'impersonation'],
+              permissions: ['layer_and_below_full', 'admin', 'impersonation', 'read_all_people'],
               layer_group_id: user.roles.first.group.layer_group_id
             }
           ]
