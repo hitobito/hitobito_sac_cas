@@ -28,6 +28,7 @@ module SacCas::Person
     alias_attribute :membership_number, :id
     alias_attribute :navision_id, :id
 
+    attribute :digital_correspondence, :boolean
     before_save :set_digital_correspondence, if: :password_initialized?
 
     scope :with_membership_years, lambda { |selects = 'people.*'|
