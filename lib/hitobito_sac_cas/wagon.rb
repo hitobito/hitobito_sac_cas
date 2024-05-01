@@ -56,11 +56,14 @@ module HitobitoSacCas
 
 
       ## Abilities
+      Role::Types::Permissions << :read_all_people
       Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
       Ability.store.register ExternalTrainingAbility
+      PersonAbility.prepend SacCas::PersonAbility
+      PersonReadables.prepend SacCas::PersonReadables
       RoleAbility.prepend SacCas::RoleAbility
       GroupAbility.prepend SacCas::GroupAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
@@ -74,6 +77,8 @@ module HitobitoSacCas
 
       ## Domain
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
+      SearchStrategies::Sql.prepend SacCas::SearchStrategies::Sql
+      SearchStrategies::Sphinx.prepend SacCas::SearchStrategies::Sphinx
 
       ## Resources
       GroupResource.include SacCas::GroupResource
