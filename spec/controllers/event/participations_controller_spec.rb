@@ -217,41 +217,76 @@ describe Event::ParticipationsController do
       let(:user) { people(:admin) }
 
       it 'renders summary after answers' do
-        post :create, params: params.except(:id).merge(step: 'answers')
+        post :create, params: params.merge(step: 'answers')
         expect(response).to render_template('new')
         expect(dom).to have_css '.stepwizard-step', count: 3
         expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusammenfassung'
       end
 
       it 'goes back to answers from summary' do
-        post :create, params: params.except(:id).merge(step: 'summary', back: 'true')
+        post :create, params: params.merge(step: 'summary', back: 'true')
         expect(response).to render_template('new')
         expect(dom).to have_css '.stepwizard-step', count: 3
         expect(dom).to have_css '.stepwizard-step.is-current', text: 'Zusatzdaten'
       end
 
       it 'redirects to contact data when going back from answers' do
-        post :create, params: params.except(:id).merge(step: 'answers', back: 'true')
+        post :create, params: params.merge(step: 'answers', back: 'true')
         expect(response).to redirect_to(contact_data_group_event_participations_path(group, event))
       end
     end
 
     context 'subsidizable' do
       it 'renders subsidy after answers' do
-        post :create, params: params.except(:id).merge(step: 'answers')
+        post :create, params: params.merge(step: 'answers')
         expect(response).to render_template('new')
         expect(dom).to have_css '.stepwizard-step', count: 4
         expect(dom).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
       end
 
       it 'goes back to subsidy from summary' do
-        post :create, params: params.except(:id).merge(step: 'summary', back: true)
+        post :create, params: params.merge(step: 'summary', back: true)
         expect(response).to render_template('new')
         expect(dom).to have_css '.stepwizard-step', count: 4
         expect(dom).to have_css '.stepwizard-step.is-current', text: 'Subventionsbeitrag'
       end
     end
 
+    describe 'default states' do
+      let(:mitglied) { people(:mitglied) }
+      let(:participation) { assigns(:participation) }
+
+      context 'without automatic_assignment' do
+        before { course.automatic_assignment = false }
+
+        it 'sets participation state to unconfirmed' do
+          post :create, params: params.merge(event_participation: { person_id: user.id })
+          expect(participation.state).to eq 'unconfirmed'
+        end
+
+        it 'sets participation state to applied if no places are available' do
+          event.update!(maximum_participants: 2, participant_count: 2)
+          post :create, params: params.merge(event_participation: { person_id: user.id })
+          expect(participation.state).to eq 'applied'
+        end
+      end
+
+      context 'with automatic_assignment' do
+        before { course.automatic_assignment = true }
+
+        it 'sets participation state to assigned' do
+          post :create, params: params.merge(event_participation: { person_id: user.id })
+          expect(participation.state).to eq 'assigned'
+        end
+
+        it 'sets participation state to applied if no places are available' do
+          event.update!(maximum_participants: 2, participant_count: 2)
+
+          post :create, params: params.merge(event_participation: { person_id: user.id })
+          expect(participation.state).to eq 'applied'
+        end
+      end
+    end
   end
 
   context 'state changes' do
