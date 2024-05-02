@@ -13,7 +13,7 @@ describe 'event/participations/_course_signup_aside.html.haml' do
 
   context 'summary' do
     it 'has static content' do
-      expect(dom).to have_css 'h2.card-title', text: 'Zusammenfassung'
+      expect(dom).to have_css 'h2.card-title', text: 'Kostenübersicht'
       expect(dom).to have_css '.card-text > table'
     end
   end

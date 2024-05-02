@@ -12,16 +12,16 @@
         %tbody
           %tr
             %td=t('.summary_course_price')
-            %td.text-end=number_to_currency(total, unit: 'CHF', format: '%n %u')
+            %td.text-end=number_to_currency(total, unit: 'CHF', format: '%u %n')
 
           - if subsidy.positive?
             %tr
               %td=t('.summary_subsidy')
-              %td.text-end= number_to_currency(subsidy, unit: 'CHF', format: '%n %u')
+              %td.text-end= number_to_currency(subsidy, unit: 'CHF', format: '%u %n')
         %tfoot
           %tr.border-top
             %td= t('.summary_total')
-            %td.text-end.fw-bold= number_to_currency(total - subsidy, unit: 'CHF', format: '%n %u')
+            %td.text-end.fw-bold= number_to_currency(total - subsidy, unit: 'CHF', format: '%u %n')
 
 %aside.card
   .card-body

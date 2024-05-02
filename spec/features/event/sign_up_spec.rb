@@ -115,7 +115,7 @@ describe 'Event Signup', :js do
         first(:button, 'Weiter').click
         expect(page).to have_css '.stepwizard-step.is-current', text: 'Kontaktangaben'
         expect(page).to have_text 'PLZ muss ausgefüllt werden'
-        expect(page).to have_css 'h2.card-title', text: 'Zusammenfassung'
+        expect(page).to have_css 'h2.card-title', text: 'Kostenübersicht'
       end
     end
   end
