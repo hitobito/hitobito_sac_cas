@@ -4,7 +4,7 @@
 - #  https://github.com/hitobito/hitobito_sac_cas
 
 - if can?(:update, entry)
-  - @state_stepper.available_steps.each do |state|
+  - @state_stepper&.available_steps&.each do |state|
     = action_button(t(".state_buttons.#{state}"),
                     step_state_group_event_path(@group, @event, { state: state }),
                     nil,

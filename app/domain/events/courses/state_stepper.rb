@@ -28,13 +28,7 @@ class Events::Courses::StateStepper
   end
 
   def available_steps
-    available = stepping_definitions[@course.state.to_sym].select do |step|
-      @course.state = step
-      @course.valid?
-    end
-    @course.restore_attributes
-
-    available
+    stepping_definitions[@course.state.to_sym]
   end
 
   def step_possible?(state)

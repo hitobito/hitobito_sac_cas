@@ -7,12 +7,18 @@
 
 class Events::Courses::StateSteppingController < ApplicationController
 
+  @@helper = Object.new
+                   .extend(ActionView::Helpers::TranslationHelper)
+                   .extend(ActionView::Helpers::OutputSafetyHelper)
+
   def update
     authorize!(:update, entry)
 
-    if step_possible?
-      entry.update!(state: next_step)
+    entry.state = next_step
+    if entry.save
       set_success_notice
+    else
+      set_failure_notice
     end
 
     redirect_to group_event_path
@@ -21,6 +27,14 @@ class Events::Courses::StateSteppingController < ApplicationController
   def set_success_notice
     flash.now[:notice] = t('events/courses/state_stepping.flash.success',
                            state: entry.decorate.state_translated)
+  end
+
+  def set_failure_notice
+    flash[:alert] ||= error_messages.presence
+  end
+
+  def error_messages
+    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
   end
 
   def next_step
@@ -36,7 +50,7 @@ class Events::Courses::StateSteppingController < ApplicationController
   end
 
   def entry
-    Event::Course.find(params[:id])
+    @entry ||= Event::Course.find(params[:id])
   end
 
 end

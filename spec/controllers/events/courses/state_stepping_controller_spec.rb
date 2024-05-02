@@ -39,8 +39,10 @@ describe Events::Courses::StateSteppingController do
         expect(response).to redirect_to(group_event_path(group, course))
       end
 
-      it 'does not update state if step is possible' do
-        put :update, params: { group_id: group.id, id: course.id, state: 'application_closed' }
+      it 'does not update state if step makes event invalid' do
+        course = events(:top_course)
+
+        put :update, params: { group_id: group.id, id: course.id, state: 'application_open' }
 
         course.reload
 
