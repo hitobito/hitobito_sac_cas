@@ -10,4 +10,20 @@ module SacCas::PeopleHelper
     key = entry.digital_correspondence ? :digital : :print
     t(:"people.fields_sac_cas.digital_correspondence.#{key}")
   end
+
+  def format_person_sac_family_main_person(person)
+    main_person = person.sac_family.main_person
+
+    if person == main_person
+      f(true)
+    elsif main_person.nil?
+      ti('.unknown')
+    else
+      if can?(:read, main_person)
+        link_to(main_person.to_s, main_person)
+      else
+        main_person.to_s
+      end
+    end
+  end
 end

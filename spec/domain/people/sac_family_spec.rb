@@ -89,6 +89,14 @@ describe People::SacFamily do
     end
   end
 
+  context '#main_person' do
+    it 'finds person with family_main_person set' do
+      expect(adult.sac_family_main_person).to be true # check assumption
+
+      expect(child.sac_family.main_person).to eq adult
+    end
+  end
+
   context '#adult_family_members' do
     it { expect(adult.sac_family.adult_family_members).to contain_exactly(adult, adult2) }
   end
@@ -154,7 +162,7 @@ describe People::SacFamily do
   context '#update!' do
     before { freeze_time }
 
-    let!(:family_head) { Fabricate(:person, household_key: 'this-household', birthday: today - 40.years) }
+    let!(:family_head) { Fabricate(:person, household_key: 'this-household', birthday: today - 40.years, sac_family_main_person: true) }
     subject { described_class.new(family_head) }
 
     {

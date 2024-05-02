@@ -17,11 +17,11 @@ module Import
       end
 
       def valid?
-        @valid ||= role.valid?
+        @valid ||= role.valid?(:import)
       end
 
       def import!
-        role.save!
+        role.save!(context: :import)
       end
 
       private

@@ -20,7 +20,7 @@ describe People::Neuanmeldungen::Reject do
       group: group,
       beitragskategorie: beitragskategorie,
       created_at: 1.year.ago,
-      person: Fabricate(:person, birthday: 20.years.ago)
+      person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true)
     )
   end
 

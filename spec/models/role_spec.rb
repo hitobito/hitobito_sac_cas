@@ -116,9 +116,11 @@ describe Role do
         let(:role_type) { role_type }
         let(:group) { group }
 
-        def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42')
-          person = Fabricate.build(:person, birthday: age.years.ago,
-                                            household_key: household_key)
+        def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42', family_main_person: false)
+          person = Fabricate.build(:person,
+                                   birthday: age.years.ago,
+                                   household_key: household_key,
+                                   sac_family_main_person: family_main_person).tap(&:save!)
           role = Fabricate.build(role_type.name, person: person, group: groups(group),
                                                  beitragskategorie: beitragskategorie)
           person.primary_group = role.group
@@ -126,14 +128,14 @@ describe Role do
         end
 
         it 'beitragskategorie=familie is accepted on primary group' do
-          role = build_role
+          role = build_role(family_main_person: true)
           role.person.primary_group = role.group
 
           expect(role).to be_valid
         end
 
         it 'beitragskategorie=familie is accepted on non-primary group' do
-          role = build_role
+          role = build_role(family_main_person: true)
           role.person.primary_group = groups(:geschaeftsstelle)
 
           expect(role).to be_valid
@@ -142,12 +144,12 @@ describe Role do
         context 'adult family members count' do
           context 'with beitragskategorie=familie' do
             it 'accepts single adult person in household' do
-              expect(build_role).to be_valid
+              expect(build_role(family_main_person: true)).to be_valid
             end
 
             it 'accepts second adult person in same household' do
               # Add 1 adult
-              build_role.save!
+              build_role(family_main_person: true).save!
 
               # Test second adult
               expect(build_role).to be_valid
@@ -155,7 +157,8 @@ describe Role do
 
             it 'rejects third adult person in same household' do
               # Add 2 adults
-              2.times { build_role.save! }
+              build_role(family_main_person: true).save!
+              build_role.save!
 
               # Test third adult
               third_adult = build_role
@@ -166,7 +169,8 @@ describe Role do
 
             it 'accepts third adult person in same household with non-default context' do
               # Add 2 adults
-              2.times { build_role.save! }
+              build_role(family_main_person: true).save!
+              build_role.save!
 
               # Test third adult
               third_adult = build_role
@@ -174,8 +178,10 @@ describe Role do
             end
 
             it 'accepts third youth person in same household' do
-              # Add 2 adults and 2 youth
-              2.times { build_role.save! }
+              # Add 2 adults
+              build_role(family_main_person: true).save!
+              build_role.save!
+              # and 2 youth
               2.times { build_role(age: 17, beitragskategorie: :jugend).save! }
 
               # Test third youth
@@ -185,10 +191,11 @@ describe Role do
 
             it 'accepts third adult in different household' do
               # Add 2 adults
-              2.times { build_role(household_key: '1stHousehold').save! }
+              build_role(household_key: '1stHousehold', family_main_person: true).save!
+              build_role(household_key: '1stHousehold').save!
 
               # Test third adult in different household
-              third_adult = build_role(household_key: '2ndHousehold')
+              third_adult = build_role(household_key: '2ndHousehold', family_main_person: true)
               expect(third_adult).to be_valid
             end
           end
@@ -196,13 +203,69 @@ describe Role do
           context 'with beitragskategorie=einzel' do
             it 'accepts third adult in same household' do
               # Add 2 adults with beitragskategorie=familie
-              2.times { build_role(beitragskategorie: :familie).save! }
+              build_role(beitragskategorie: :familie, family_main_person: true).save!
+              build_role(beitragskategorie: :familie).save!
 
               # Test third adult with beitragskategorie=einzel
               # This is a special case, because the person is part of the same household, but
               # is not included in the family membership.
               third_adult = build_role(beitragskategorie: :einzel)
               expect(third_adult).to be_valid
+            end
+          end
+        end
+
+        context 'family main person' do
+          context 'with beitragskategorie=familie' do
+            it 'is valid if own person is solo main person' do
+              expect(build_role(family_main_person: true)).to be_valid
+            end
+
+            it 'is valid if other family member is solo main person' do
+              build_role(family_main_person: true).save!
+              expect(build_role(family_main_person: false)).to be_valid
+            end
+
+            it 'is invalid if no other family member is main person' do
+              role = build_role(family_main_person: false)
+              expect(role).to be_invalid
+              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+
+              build_role(family_main_person: false).save(validate: false) # skip validations as it would be invalid
+
+              expect(role).to be_invalid
+              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+            end
+
+            it 'is invalid when main person if other family member is also main person' do
+              build_role(family_main_person: true).save!
+
+              role = build_role(family_main_person: true)
+              expect(role).to be_invalid
+              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+            end
+
+            it 'is invalid if more than one other family member are main person' do
+              build_role(family_main_person: true).save!
+              build_role(family_main_person: true).save(validate: false) # skip validations as it would be invalid
+
+              role = build_role(family_main_person: false)
+              expect(role).to be_invalid
+              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+            end
+          end
+
+          context 'with beitragskategorie=einzel' do
+            it 'ignores attribute' do
+              role = build_role(family_main_person: false, beitragskategorie: :einzel)
+              expect(role).to be_valid
+
+              role.person.sac_family_main_person = true
+              expect(role).to be_valid
+
+              build_role(family_main_person: true, beitragskategorie: :einzel).save!
+              build_role(family_main_person: false, beitragskategorie: :einzel).save!
+              expect(role).to be_valid
             end
           end
         end
@@ -426,6 +489,7 @@ describe Role do
        end
 
        it 'gets soft deleted when Mitglied role gets soft deleted' do
+         freeze_time
          mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, created_at: 1.year.ago)
 
          role = role_type.create!(person: person, group: group)
@@ -452,6 +516,7 @@ describe Role do
        end
 
        it 'gets soft deleted when MitgliedZusatzsektion role gets soft deleted' do
+         freeze_time
          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, created_at: 1.year.ago)
          mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, created_at: 1.year.ago)
 

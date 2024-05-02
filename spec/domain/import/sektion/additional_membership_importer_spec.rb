@@ -89,7 +89,7 @@ describe Import::Sektion::AdditionalMembershipsImporter do
     expect(importer.errors).to be_empty
   end
 
-  it 'does check for membership overlap' do
+  it 'does not check for membership overlap' do
     id = 123
     person = Fabricate(:person, id: id)
     membership = Fabricate(
@@ -102,9 +102,9 @@ describe Import::Sektion::AdditionalMembershipsImporter do
 
     expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id))
 
-    expect { importer.import! }.not_to change { Role.count }
+    expect { importer.import! }.to change { Role.count }.by(1)
 
-    expect(importer.errors).to include /Person ist bereits Mitglied/
+    expect(importer.errors).to be_empty
   end
 
   it 'assigns beitragskategorie from file' do
