@@ -31,7 +31,7 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def valid?
-    super && person.valid?
+    super('selfreg') && person.valid?('selfreg')
   end
 
   private
