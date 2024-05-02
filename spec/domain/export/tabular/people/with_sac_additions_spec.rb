@@ -11,7 +11,7 @@ describe Export::Tabular::People::WithSacAdditions do
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:person) do
-    person = Fabricate(:person, household_key: '1234', birthday: 25.years.ago, primary_group: group, family_main_person: true)
+    person = Fabricate(:person, household_key: '1234', birthday: 25.years.ago, primary_group: group, sac_family_main_person: true)
     Person.with_membership_years.find(person.id)
   end
 

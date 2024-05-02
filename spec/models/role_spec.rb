@@ -120,7 +120,7 @@ describe Role do
           person = Fabricate.build(:person,
                                    birthday: age.years.ago,
                                    household_key: household_key,
-                                   family_main_person: family_main_person).tap(&:save!)
+                                   sac_family_main_person: family_main_person).tap(&:save!)
           role = Fabricate.build(role_type.name, person: person, group: groups(group),
                                                  beitragskategorie: beitragskategorie)
           person.primary_group = role.group
@@ -260,7 +260,7 @@ describe Role do
               role = build_role(family_main_person: false, beitragskategorie: :einzel)
               expect(role).to be_valid
 
-              role.person.family_main_person = true
+              role.person.sac_family_main_person = true
               expect(role).to be_valid
 
               build_role(family_main_person: true, beitragskategorie: :einzel).save!

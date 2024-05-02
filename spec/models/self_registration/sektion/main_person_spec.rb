@@ -68,8 +68,8 @@ describe SelfRegistration::Sektion::MainPerson do
   end
 
   describe 'person' do
-    it 'sets family_main_person=true' do
-      expect(model.person.family_main_person).to be true
+    it 'sets sac_family_main_person=true' do
+      expect(model.person.sac_family_main_person).to be true
     end
   end
 

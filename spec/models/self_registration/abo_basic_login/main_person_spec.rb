@@ -62,7 +62,7 @@ describe SelfRegistration::AboBasicLogin::MainPerson do
       expect { model.save! }.
         to change { Person.count }.by(1).
         and change { Role.count }.by(1).
-        and change { jobs.count }.by(1)
+        and change { Delayed::Job.count }.by(1)
     end
 
     it 'persists attributes' do

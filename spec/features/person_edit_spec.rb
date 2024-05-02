@@ -77,7 +77,7 @@ describe 'person edit page', :js do
       end
 
       it 'adding family person to family household shows validation error' do
-        other_family_member = Fabricate(:person, family_main_person: true, primary_group: groups(:matterhorn_mitglieder))
+        other_family_member = Fabricate(:person, sac_family_main_person: true, primary_group: groups(:matterhorn_mitglieder))
         Fabricate(
           Group::SektionsMitglieder::Mitglied.name.to_sym,
           person: other_family_member,

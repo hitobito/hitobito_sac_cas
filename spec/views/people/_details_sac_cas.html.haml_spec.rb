@@ -26,7 +26,7 @@ describe 'people/_details_sac_cas.html.haml' do
       expect(value_node.text).to eq person.family_id
     end
 
-    describe 'family_main_person' do
+    describe 'sac_family_main_person' do
       let(:label_node) { dom.find('dl dt', text: I18n.t('activerecord.attributes.person.sac_family_main_person')) }
       subject(:value_node) { label_node.find('+dd') }
 

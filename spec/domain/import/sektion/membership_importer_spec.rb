@@ -176,7 +176,7 @@ describe Import::Sektion::MembershipsImporter do
   end
 
   describe 'families' do
-    let!(:family_adult) { Fabricate(:person, birthday: 25.years.ago.to_date) }
+    let!(:family_adult) { Fabricate(:person, birthday: 25.years.ago.to_date, sac_family_main_person: true) }
     let!(:family_child) { Fabricate(:person, birthday: 10.years.ago.to_date) }
 
     before do

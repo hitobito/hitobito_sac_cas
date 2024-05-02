@@ -83,8 +83,8 @@ describe SelfRegistration::Sektion::Housemate do
   end
 
   describe 'person' do
-    it 'sets family_main_person=false' do
-      expect(model.person.family_main_person).to be false
+    it 'sets sac_family_main_person=false' do
+      expect(model.person.sac_family_main_person).to be false
     end
   end
 

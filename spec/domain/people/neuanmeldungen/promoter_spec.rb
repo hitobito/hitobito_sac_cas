@@ -10,7 +10,7 @@ require 'spec_helper'
 describe People::Neuanmeldungen::Promoter do
 
   def create_neuanmeldung_role(family_main_person: true, **opts)
-    person = Fabricate(:person, family_main_person: family_main_person)
+    person = Fabricate(:person, sac_family_main_person: family_main_person)
     Fabricate(
       :role,
       person: person,
