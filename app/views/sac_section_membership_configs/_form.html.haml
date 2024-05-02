@@ -1,0 +1,39 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- title "#{entry.class.model_name.human} (#{entry.valid_from})"
+
+= render(SacMembershipConfigs::ValidFromSelectorComponent.new(parent, available_configs))
+
+= entry_form(cancel_url: cancel_url, buttons_top: false) do |f|
+  - if entry.new_record?
+    = field_set_tag do
+      = f.labeled_input_field :valid_from
+
+  = field_set_tag(t('sac_section_membership_configs.form.fees')) do
+    .row.mb-2
+      .d-flex.col-md-9.col-lg-8.col-xl-8.mw-63ch.offset-md-3.offset-xl-2
+        - [:adult, :family, :youth].each do |category|
+          .col-4.mr-5
+            = t(".membership_#{category}")
+
+    - [:section_fee, :section_entry_fee].each do |field|
+      = f.labeled("#{field}_adult", t(".#{field}"), class: 'd-flex') do
+        - [:adult, :family, :youth].each do |category|
+          .col-4.mr-5
+            = f.with_addon(t('global.currency'), f.input_field("#{field}_#{category}"))
+
+    .row.mt-4
+    = f.labeled_input_field :bulletin_postage_abroad, addon: t('global.currency')
+
+  = field_set_tag(t('.reductions')) do
+    = f.labeled_input_fields :sac_fee_exemption_for_honorary_members,
+                             :section_fee_exemption_for_honorary_members,
+                             :sac_fee_exemption_for_benefited_members,
+                             :section_fee_exemption_for_benefited_members
+    = f.labeled_input_field :reduction_amount, addon: t('global.currency')
+    = f.labeled_input_field :reduction_required_membership_years, addon: t('global.years')
+    = f.labeled_input_field :reduction_required_age, addon: t('global.years')
+

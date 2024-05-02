@@ -17,7 +17,7 @@ describe People::MembershipController, type: :controller do
               group: groups(:bluemlisalp_mitglieder))
     person
   end
-  let(:mitgliederdienst) do
+  let(:mitgliederverwaltung_sektion) do
     Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
               group: groups(:bluemlisalp_funktionaere)).person
   end
@@ -31,7 +31,7 @@ describe People::MembershipController, type: :controller do
     end
 
     it 'is possible to download membership pass for writable person' do
-      sign_in(mitgliederdienst)
+      sign_in(mitgliederverwaltung_sektion)
 
       get :show, params: { id: member.id, format: 'pdf' }
 
@@ -42,7 +42,7 @@ describe People::MembershipController, type: :controller do
       sign_in(member)
 
       expect do
-        get :show, params: { id: mitgliederdienst.id, format: 'pdf' }
+        get :show, params: { id: mitgliederverwaltung_sektion.id, format: 'pdf' }
       end.to raise_error(CanCan::AccessDenied)
     end
 

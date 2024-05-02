@@ -30,7 +30,7 @@ class Group::SacCas < ::Group
 
   validate :assert_valid_course_admin_email
 
-  has_many :sac_membership_configs
+  has_many :sac_membership_configs, dependent: :destroy
 
   private
 

@@ -2,190 +2,61 @@
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
-= render(SacMembershipConfigs::ValidFromSelectorComponent.new(entry: entry, available_configs: available_configs))
+
+- title "#{entry.class.model_name.human} (#{entry.valid_from})"
+
+= render(SacMembershipConfigs::ValidFromSelectorComponent.new(parent, available_configs))
 
 = entry_form(cancel_url: cancel_url, buttons_top: false) do |f|
   - if entry.new_record?
     = field_set_tag do
-      = render(SacMembershipConfigs::FieldRowsComponent.new(form: f, attrs: [:valid_from]))
+      = f.labeled_input_field(:valid_from)
 
   = field_set_tag(t('sac_membership_configs.form.fees')) do
-    .container.ml-0
-      .row
-        .col-3.p-1
-        .col-3.p-1
-          = t('.membership_adult')
-        .col-3.p-1
-          = t('.membership_family')
-        .col-3.p-1
-          = t('.membership_youth')
-      .row
-        .col-3.p-1
-          = t('.sac_fee')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :sac_fee_adult
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :sac_fee_family
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :sac_fee_youth
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = t('.entry_fee')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :entry_fee_adult
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :entry_fee_family
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :entry_fee_youth
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = t('.hut_solidarity_fee_without_hut')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_without_hut_adult
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_without_hut_family
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_without_hut_youth
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = t('.hut_solidarity_fee_with_hut')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_with_hut_adult
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_with_hut_family
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :hut_solidarity_fee_with_hut_youth
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = t('.magazine_fee')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :magazine_fee_adult
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :magazine_fee_family
-            %span.input-group-text
-              = t('global.currency')
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :magazine_fee_youth
-            %span.input-group-text
-              = t('global.currency')
-      .row.pt-5
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:service_fee)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :service_fee
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:magazine_postage_abroad)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :magazine_postage_abroad
-            %span.input-group-text
-              = t('global.currency')
+    .row.mb-2
+      .d-flex.col-md-9.col-lg-8.col-xl-8.mw-63ch.offset-md-3.offset-xl-2
+        - [:adult, :family, :youth].each do |category|
+          .col-4.mr-5
+            = t(".membership_#{category}")
+
+    - [:sac_fee, :entry_fee, :hut_solidarity_fee_without_hut, :hut_solidarity_fee_with_hut, :magazine_fee].each do |field|
+      = f.labeled("#{field}_adult", t(".#{field}"), class: 'd-flex') do
+        - [:adult, :family, :youth].each do |category|
+          .col-4.mr-5
+            = f.with_addon(t('global.currency'), f.input_field("#{field}_#{category}"))
+
+    .row.mt-4
+    = f.labeled_input_field :magazine_postage_abroad, addon: t('global.currency')
+    = f.labeled_input_field :service_fee, addon: t('global.currency')
 
   = field_set_tag(t('.reductions')) do
-    .container.ml-0
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:reduction_amount)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :reduction_amount
-            %span.input-group-text
-              = t('global.currency')
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:reduction_required_membership_years)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :reduction_required_membership_years
-            %span.input-group-text
-              = t('global.years')
+    = f.labeled_input_field :reduction_amount, addon: t('global.currency')
+    = f.labeled_input_field :reduction_required_membership_years, addon: t('global.years')
 
   = field_set_tag(t('.discounts')) do
-    .container.ml-0
-      .row
-        .col-3.p-1
-        .col-3.p-1
+    .row.mb-2
+      .d-flex.col-md-9.col-lg-8.col-xl-8.mw-63ch.offset-md-3.offset-xl-2
+        .col-4.mr-5
           = t('.discount_date')
-        .col-3.p-1
+        .col-4
           = t('.discount')
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:discount_date_1)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_date_1
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_percent_1
-            %span.input-group-text
-              = '%'
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:discount_date_2)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_date_2
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_percent_2
-            %span.input-group-text
-              = '%'
-      .row
-        .col-3.p-1
-          = SacMembershipConfig.human_attribute_name(:discount_date_3)
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_date_3
-        .col-3.p-1
-          .input-group.input-group-sm
-            = f.input_field :discount_percent_3
-            %span.input-group-text
-              = '%'
+    - [1, 2, 3].each do |i|
+      = f.labeled("discount_date_#{i}", class: 'd-flex') do
+        .col-4.mr-5
+          = f.input_field("discount_date_#{i}")
+        .col-4
+          = f.with_addon('%', f.input_field("discount_percent_#{i}"))
 
   = field_set_tag(t('.article_numbers')) do
-    = render(SacMembershipConfigs::ArticleNumberFieldRowsComponent.new(form: f))
+    = f.labeled_input_fields :sac_fee_article_number,
+                             :sac_entry_fee_article_number,
+                             :hut_solidarity_fee_article_number,
+                             :magazine_fee_article_number,
+                             :magazine_postage_abroad_article_number,
+                             :section_fee_article_number,
+                             :section_entry_fee_article_number,
+                             :section_bulletin_postage_abroad_article_number,
+                             :service_fee_article_number,
+                             :balancing_payment_article_number,
+                             :course_fee_article_number
+

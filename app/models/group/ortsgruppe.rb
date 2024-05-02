@@ -24,16 +24,16 @@ class Group::Ortsgruppe < ::Group
     Group::SektionsNeuanmeldungenNv,
     Group::SektionsTourenkommission ]
 
-  mounted_attr :foundation_year, :integer
   validates :foundation_year,
             numericality:
             { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
 
+  mounted_attr :foundation_year, :integer
   mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
-
   mounted_attr :language, :string, enum: %w(DE FR IT), default: 'DE', null: false
-
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
+
+  has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
 
   def sac_cas_self_registration_url(host)
     Groups::SektionSelfRegistrationLink.new(self, host).url

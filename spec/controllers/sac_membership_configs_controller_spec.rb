@@ -44,6 +44,12 @@ describe SacMembershipConfigsController do
         get :index, params: { group_id: Group.root.id }
       end.to raise_error(CanCan::AccessDenied)
     end
+
+    it 'is unavailable if access by other group than root layer' do
+      get :index, params: { group_id: groups(:bluemlisalp).id }
+
+      expect(response).to be_not_found
+    end
   end
 
   context 'GET show' do

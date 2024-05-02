@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :groups, only: [] do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
       resources :sac_membership_configs, except: [:destroy]
+      resources :sac_section_membership_configs, except: [:destroy]
 
       resources :events, only: [] do
         scope module: 'event' do

@@ -1,8 +1,0 @@
-.container.ml-0
-  - @attrs.each do |attr|
-    .row
-      .col-3.p-1
-        = SacMembershipConfig.human_attribute_name(attr)
-      .col-3.p-1
-        .input-group.input-group-sm
-          = @form.input_field attr

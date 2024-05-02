@@ -5,13 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacMembershipConfigs
-  class FieldRowsComponent < ApplicationComponent
-
-    def initialize(form:, attrs:)
-      @form = form
-      @attrs = attrs
-    end
-
+module Sheet
+  class SacSectionMembershipConfig < Base
+    self.parent_sheet = Sheet::Group
   end
 end

@@ -4,6 +4,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 de:
+  global:
+    phone_placeholder: +41 77 123 45 67
+    currency: CHF
+    years: Jahre
+
   errors:
     messages:
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
@@ -248,20 +253,39 @@ de:
         magazine_postage_abroad: Porto Ausland SAC Magazin
         reduction_amount: Reduktionsbetrag
         reduction_required_membership_years: Reduktion ab Mitgliedsjahren
-        sac_fee_article_number: Zentralverbandsbeitrag, Artikelnummer
-        sac_entry_fee_article_number: Zentralverbandseintrittsgebühren, Artikelnummer
-        hut_solidarity_fee_article_number: Hüttensolidaritätsbeitrag, Artikelnummer
-        magazine_fee_article_number: Abogebühr SAC Magazin, Artikelnummer
-        section_bulletin_postage_abroad_article_number: Porto Ausland Sektionsbulletin, Artikelnummer
-        service_fee_article_number: Servicegebühr, Artikelnummer
-        balancing_payment_article_number: Sektionseintrittsgebühren, Artikelnummer
-        course_fee_article_number: Porto Ausland Sektionsbulletin, Artikelnummer
+        sac_fee_article_number: Zentralverbandsbeitrag
+        sac_entry_fee_article_number: Zentralverbandseintrittsgebühren
+        hut_solidarity_fee_article_number: Hüttensolidaritätsbeitrag
+        magazine_fee_article_number: Abogebühr SAC Magazin
+        magazine_postage_abroad_article_number: Porto Ausland SAC Magazin
+        section_entry_fee_article_number: Sektionseintrittsgebühren
+        section_fee_article_number: Sektionsbeitrag
+        section_bulletin_postage_abroad_article_number: Porto Ausland Sektionsbulletin
+        service_fee_article_number: Servicegebühr
+        balancing_payment_article_number: Ausgleichszahlungen
+        course_fee_article_number: Kursgebühren
         discount_date_1: Rabattdatum 1
         discount_percent_1: Rabattprozent 1
         discount_date_2: Rabattdatum 2
         discount_percent_2: Rabattprozent 2
         discount_date_3: Rabattdatum 3
         discount_percent_3: Rabattprozent 3
+      sac_section_membership_config:
+        valid_from: Gültig ab Jahr
+        section_fee_adult: Sektionsbeitrag, Mitgliedschaft Einzel
+        section_fee_family: Sektionsbeitrag, Mitgliedschaft Familie
+        section_fee_youth: Sektionsbeitrag, Mitgliedschaft Jugend
+        section_entry_fee_adult: Eintrittsgebühr, Mitgliedschaft Einzel
+        section_entry_fee_family: Eintrittsgebühr, Mitgliedschaft Familie
+        section_entry_fee_youth: Eintrittsgebühr, Mitgliedschaft Jugend
+        bulletin_postage_abroad: Porto Ausland Sektionsbulletin
+        sac_fee_exemption_for_honorary_members: Zentralverbandsgebührenerlass für Ehrenmitglieder
+        section_fee_exemption_for_honorary_members: Sektionsgebührenerlass für Ehrenmitglieder
+        sac_fee_exemption_for_benefited_members: Zentralverbandsgebührenerlass für Begünstigte
+        section_fee_exemption_for_benefited_members: Sektionsgebührenerlass für Begünstigte
+        reduction_amount: Reduktionsbetrag Mitgliedsjahre/Alter
+        reduction_required_membership_years: Reduktion ab Mitgliedsjahren
+        reduction_required_age: Reduktion ab Altersjahren
 
     errors:
       messages:
@@ -305,6 +329,9 @@ de:
         one: Externe Ausbildung
         other: Externe Ausbildungen
       sac_membership_config:
+        one: Parameter für Mitgliedschaftsrechnungen
+        other: Parameter für Mitgliedschaftsrechnungen
+      sac_section_membership_config:
         one: Parameter für Mitgliedschaftsrechnungen
         other: Parameter für Mitgliedschaftsrechnungen
 
@@ -505,6 +532,7 @@ de:
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
+    sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
 
   event:
     kinds:
@@ -621,11 +649,6 @@ de:
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
     tour_guides_expired: Abgelaufene Tourenleiter
-
-  global:
-    phone_placeholder: +41 77 123 45 67
-    currency: CHF
-    years: Jahre
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -843,7 +866,41 @@ de:
       discounts: Rabatte für Eintritte innerhalb des Jahres
       discount_date: Ab Datum
       discount: Rabatt
-      article_numbers: Artikelnummern Abacus
+      article_numbers: Produktnummern Abacus
+      valid_from: Gültig ab Jahr
+      service_fee: Dienstleistungsgebühr
+      magazine_postage_abroad: Porto Ausland SAC Magazin
+      reduction_amount: Reduktionsbetrag
+      reduction_required_membership_years: Reduktion ab Mitgliedsjahren
+      discount_date_1: Rabattdatum 1
+      discount_percent_1: Rabattprozent 1
+      discount_date_2: Rabattdatum 2
+      discount_percent_2: Rabattprozent 2
+      discount_date_3: Rabattdatum 3
+      discount_percent_3: Rabattprozent 3
+    global:
+      link:
+        add: Neu
+
+  sac_section_membership_configs:
+    form:
+      fees: Gebühren
+      membership_adult: Mitgliedschaft Einzel
+      membership_family: Mitgliedschaft Familie
+      membership_youth: Mitgliedschaft Jugend
+      section_fee: Sektionsbeitrag
+      section_entry_fee: Eintrittsgebühr
+      bulletin_fee: Abogebühr Sektionsbulletin
+      reductions: Reduktionen
+      valid_from: Gültig ab Jahr
+      bulletin_postage_abroad: Porto Ausland Sektionsbulletin
+      sac_fee_exemption_for_honorary_members: Zentralverbandsgebührenerlass für Ehrenmitglieder
+      section_fee_exemption_for_honorary_members: Sektionsgebührenerlass für Ehrenmitglieder
+      sac_fee_exemption_for_benefited_members: Zentralverbandsgebührenerlass für Begünstigte
+      section_fee_exemption_for_benefited_members: Sektionsgebührenerlass für Begünstigte
+      reduction_amount: Reduktionsbetrag Mitgliedsjahre/Alter
+      reduction_required_membership_years: Reduktion ab Mitgliedsjahren
+      reduction_required_age: Reduktion ab Altersjahren
     global:
       link:
         add: Neu

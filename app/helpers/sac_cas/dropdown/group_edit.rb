@@ -13,5 +13,19 @@ module SacCas::Dropdown::GroupEdit
                template.group_sac_membership_configs_path(
                  group_id: Group.root.id))
     end
+
+    if sac_section_or_ortsgruppe? &&
+        template.can?(:index, SacSectionMembershipConfig)
+      add_item(translate(:sac_section_membership_configs),
+               template.group_sac_section_membership_configs_path(
+                 group_id: group.id))
+    end
+  end
+
+  private
+
+  def sac_section_or_ortsgruppe?
+    group_types = SacSectionMembershipConfig.group_types
+    group_types.one? {|t| group.is_a?(t) }
   end
 end
