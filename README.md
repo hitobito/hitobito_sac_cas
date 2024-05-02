@@ -9,9 +9,9 @@ of SAC CAS.
 ```
     * Schweizer Alpen-Club SAC
       * Geschäftsstelle
-        * Mitarbeiter*in: 2FA [:layer_and_below_full]
-        * Mitarbeiter*in (nur lesend): 2FA [:layer_and_below_read]
-        * Admin: 2FA [:layer_and_below_full, :admin, :impersonation]
+        * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]
+        * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]
+        * Admin: 2FA [:layer_and_below_full, :admin, :impersonation, :read_all_people]
       * Externe Kontakte
         * Kontakt: []
       * Touren-Portal
