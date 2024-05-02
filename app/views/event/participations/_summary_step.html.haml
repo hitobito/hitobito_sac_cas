@@ -25,10 +25,10 @@
   %dl
     - entry.answers.each do |answer|
       %dt= sanitize(answer.question.question)
-      %dd= answer.answer || t('event.participations.no_answer_given')
+      %dd= answer.answer.presence || t('event.participations.no_answer_given')
 
     %dt= t('activerecord.attributes.event/participation.additional_information')
-    %dd.multiline= entry.additional_information.presence || '-'
+    %dd.multiline= entry.additional_information.presence || t('event.participations.no_answer_given')
 
 .alert.alert-info
   = simple_format(t('.annulation_remarks'))
