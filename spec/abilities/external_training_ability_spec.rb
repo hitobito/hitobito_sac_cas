@@ -40,7 +40,9 @@ describe ExternalTrainingAbility do
     let(:role) { Fabricate(Group::SektionsTourenkommission::TourenchefSommer.name.to_sym, group: groups(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission)) }
 
     context 'in same group' do
-      let(:person) { Fabricate(Group::SektionsTourenkommission::Tourenleiter.name.to_sym, group: groups(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission)).person }
+      let(:person) { Fabricate(Group::SektionsTourenkommission::Tourenleiter.name.to_sym,
+                               group: groups(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission),
+                               person: Fabricate(:person, qualifications: [Fabricate(:qualification)])).person }
       it 'can create and destroy' do
         is_expected.to be_able_to(:create, external_training)
         is_expected.to be_able_to(:destroy, external_training)

@@ -257,7 +257,7 @@ describe Event::ParticipationsController do
       let(:participation) { assigns(:participation) }
 
       context 'without automatic_assignment' do
-        before { course.automatic_assignment = false }
+        before { event.update!(automatic_assignment: false) }
 
         it 'sets participation state to unconfirmed' do
           post :create, params: params.merge(event_participation: { person_id: user.id })
@@ -272,7 +272,7 @@ describe Event::ParticipationsController do
       end
 
       context 'with automatic_assignment' do
-        before { course.automatic_assignment = true }
+        before { event.update!(automatic_assignment: true) }
 
         it 'sets participation state to assigned' do
           post :create, params: params.merge(event_participation: { person_id: user.id })

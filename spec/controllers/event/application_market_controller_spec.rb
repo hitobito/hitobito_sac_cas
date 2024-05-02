@@ -51,7 +51,7 @@ describe Event::ApplicationMarketController do
 
       before do
         create_application.tap { |p| p.update_columns(active: true, state: :assigned) }
-        create_application
+        create_application.tap { |p| p.update_columns(active: false, state: :applied) }
       end
 
       it 'shows participation state for applications' do
