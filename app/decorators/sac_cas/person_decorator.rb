@@ -12,6 +12,12 @@ module SacCas::PersonDecorator
     { id: id, label: h.h(full_label_with_changed_suffix) }
   end
 
+  def as_quicksearch
+    super.tap do |data|
+      data[:label] = "#{data[:label]} [#{model.id}]"
+    end
+  end
+
   private
 
   def full_label_with_changed_suffix
