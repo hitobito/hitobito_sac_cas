@@ -100,7 +100,10 @@ describe 'Event Signup', :js do
         expect(page).not_to have_text '- Subvention'
         click_on 'Anmelden'
         expect(page).to have_text 'AGB muss akzeptiert werden'
-        check 'Ja, ich erkläre mich mit den AGB einverstanden'
+        with_retries do
+          check 'Ja, ich erkläre mich mit den AGB einverstanden'
+          expect(page).to have_checked_field 'Ja, ich erkläre mich mit den AGB einverstanden'
+        end
         check 'Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe'
         click_on 'Anmelden'
         expect(page).to have_content 'Es wurde eine Voranmeldung für Teilnahme'
