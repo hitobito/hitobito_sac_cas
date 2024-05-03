@@ -23,7 +23,8 @@ module HitobitoSacCas
     config.to_prepare do
       JobManager.wagon_jobs += [
         PromoteNeuanmeldungenJob,
-        Event::CloseApplicationsJob
+        Event::CloseApplicationsJob,
+        Roles::Termination
       ]
       HitobitoLogEntry.categories += %w(neuanmeldungen)
 
