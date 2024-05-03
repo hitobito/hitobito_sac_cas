@@ -20,11 +20,11 @@ describe FullTextController, type: :controller do
 
     before { sign_in(user) }
 
-    it 'renders id column' do
+    it 'renders membership_number column' do
       get :index, params: { q: Person.first.first_name }
 
-      expect(dom.all(:css, '.table thead th:last')[0].text).to include 'Id'
-      expect(dom.all(:css, '.table tr td:last')[0].text).to include Person.first.id.to_s
+      expect(dom.all(:css, '.table thead th:last')[0].text).to include 'Mitglied-Nr'
+      expect(dom.all(:css, '.table tr td:last')[0].text).to include Person.first.membership_number.to_s
     end
   end
 
