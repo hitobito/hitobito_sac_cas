@@ -8,7 +8,7 @@
 module SacCas::Role::MitgliedMinimalAgeValidation
   extend ActiveSupport::Concern
 
-  MINIMUM_YEARS = 6
+  MINIMUM_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
 
   included do
     validate :assert_old_enough
