@@ -8,5 +8,5 @@
 = standard_form(entry,
                 url: cancel_group_event_participation_path(@group, @event, entry),
                 method: :put) do |f|
-  = f.labeled_input_field(:cancel_statement)
+  = f.labeled_input_field(:cancel_statement, label_class: 'col-md-3 col-xl-3 pb-1 required', required: true)
   = form_buttons(f, submit_label: t('event.participations.actions_show_youth.cancel_button'), cancel_url: '#')

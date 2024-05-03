@@ -86,6 +86,8 @@ describe Event::ParticipationsController do
       button = dom.find_button 'Abmelden'
       content = Capybara::Node::Simple.new(button['data-bs-content'])
       expect(content).to have_field 'Begründung'
+      cancel_statement = content.find_field 'Begründung'
+      expect(cancel_statement['required']).to eq 'required'
     end
 
     it 'includes cancel_statement on show page' do

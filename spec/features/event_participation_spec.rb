@@ -58,4 +58,53 @@ describe :event_participation, js: true do
     expect(participation).to be_present
   end
 
+  describe 'canceling participation' do
+    let(:group) { groups(:root) }
+    let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
+    let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application) }
+    let(:event) { Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
+
+    before do
+      participation.update!(state: :assigned)
+      event.update(applications_cancelable: true)
+      event.dates.first.update_columns(start_at: 2.days.from_now)
+    end
+
+    context 'on event' do
+      it 'requires a reason when canceling' do
+        visit group_event_path(group_id: group, id: event)
+        click_button 'Abmelden'
+        within('.popover-body') { click_on 'Abmelden' }
+        expect( find_field('Begründung').native.attribute('validationMessage')).to eq 'Please fill out this field.'
+      end
+
+      it 'can cancel with reason' do
+        visit group_event_path(group_id: group, id: event)
+        click_button 'Abmelden'
+        fill_in 'Begründung', with: 'Krank'
+        within('.popover-body') { click_on 'Abmelden' }
+        expect(page).not_to have_button 'Abmelden'
+        expect(page).not_to have_css('.popover-body')
+      end
+    end
+
+    context 'on participation' do
+      it 'requires a reason when canceling' do
+        visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
+        click_button 'Abmelden'
+        within('.popover-body') { click_on 'Abmelden' }
+        expect( find_field('Begründung').native.attribute('validationMessage')).to eq 'Please fill out this field.'
+      end
+
+      it 'can cancel with reason' do
+        visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
+        click_button 'Abmelden'
+        fill_in 'Begründung', with: 'Krank'
+        within('.popover-body') { click_on 'Abmelden' }
+        expect(page).not_to have_button 'Abmelden'
+        expect(page).not_to have_css('.popover-body')
+      end
+    end
+  end
+
 end
