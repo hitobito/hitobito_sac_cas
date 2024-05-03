@@ -53,7 +53,7 @@ describe PersonDecorator do
     subject(:label) { person.decorate.as_quicksearch[:label] }
 
     it 'includes id' do
-      expect(label).to eq "Max Muster / Maxi, Zürich (2014) [#{person.id}]"
+      expect(label).to eq "Max Muster / Maxi, Zürich (2014; #{person.id})"
     end
   end
 end
