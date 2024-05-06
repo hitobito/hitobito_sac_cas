@@ -14,14 +14,19 @@ class Events::Courses::StateSteppingController < ApplicationController
   def update
     authorize!(:update, entry)
 
+    save_next_step if step_possible?
+
+    redirect_to group_event_path
+  end
+
+  def save_next_step
     entry.state = next_step
+
     if entry.save
       set_success_notice
     else
       set_failure_notice
     end
-
-    redirect_to group_event_path
   end
 
   def set_success_notice

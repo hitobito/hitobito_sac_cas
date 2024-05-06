@@ -39,6 +39,15 @@ describe Events::Courses::StateSteppingController do
         expect(response).to redirect_to(group_event_path(group, course))
       end
 
+      it 'does not update state if step is impossible' do
+        expect(course).to_not receive(:state=)
+
+        put :update, params: { group_id: group.id, id: course.id, state: 'ready' }
+
+        expect(course.state).to eq('created')
+        expect(response).to redirect_to(group_event_path(group, course))
+      end
+
       it 'does not update state if step makes event invalid' do
         course = events(:top_course)
 
