@@ -9,17 +9,17 @@ class Group::Geschaeftsstelle < ::Group
 
   ### ROLES
   class Mitarbeiter < ::Role
-    self.permissions = [:layer_and_below_full]
+    self.permissions = [:layer_and_below_full, :read_all_people]
     self.two_factor_authentication_enforced = true
   end
 
   class MitarbeiterLesend < ::Role
-    self.permissions = [:layer_and_below_read]
+    self.permissions = [:layer_and_below_read, :read_all_people]
     self.two_factor_authentication_enforced = true
   end
 
   class Admin < ::Role
-    self.permissions = [:layer_and_below_full, :admin, :impersonation]
+    self.permissions = [:layer_and_below_full, :admin, :impersonation, :read_all_people]
     self.two_factor_authentication_enforced = true
   end
 
