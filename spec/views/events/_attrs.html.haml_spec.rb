@@ -9,11 +9,12 @@ describe 'events/_attrs.html.haml' do
   include FormatHelper
 
   let(:dom) { render; Capybara::Node::Simple.new(@rendered)  }
+  let(:person) { Person.new }
 
   before do
     allow(view).to receive_messages(entry: EventDecorator.decorate(event))
-    allow(controller).to receive_messages(current_user: Person.new)
-    allow(controller).to receive_messages(current_person: top_leader)
+    allow(controller).to receive_messages(current_user: person)
+    allow(controller).to receive_messages(current_person: person)
   end
 
   context 'event' do
