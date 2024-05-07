@@ -13,8 +13,9 @@ describe SacCas::Export::MitgliederExportJob do
   subject(:job) { described_class.new(user.id, group.id) }
 
   let(:file) { job.send(:async_download_file) }
-  let(:csv) { CSV.parse(file.read.lines[0...-1].join, col_sep: '$') }
-  let(:summary_line) { file.read.lines.last }
+  let(:contents) { file.generated_file.download.force_encoding('ISO-8859-1') }
+  let(:csv) { CSV.parse(contents.lines[0...-1].join, col_sep: '$') }
+  let(:summary_line) { contents.lines.last }
 
   it 'creates a CSV-Export' do
     freeze_time
@@ -30,11 +31,11 @@ describe SacCas::Export::MitgliederExportJob do
     )
 
     expect(summary_line).to eq(
-      '* * * Dateiende * * * / ' \
+      ('* * * Dateiende * * * / ' \
       "#{group.navision_id_padded} / " \
-      'Anzahl Datensätze: 4 / ' \
+      "Anzahl Datens\xE4tze: 4 / " \
       "#{Time.zone.now.strftime('%d.%m.%Y')} / " \
-      "#{Time.zone.now.strftime('%H:%M')}"
+      "#{Time.zone.now.strftime('%H:%M')}").force_encoding('ISO-8859-1')
     )
   end
 
@@ -43,7 +44,7 @@ describe SacCas::Export::MitgliederExportJob do
       person = people(:mitglied)
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
       expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
-      expect(file.read).to match /\$#{person.first_name}\$#{person.last_name}\$/
+      expect(contents).to match /\$#{person.last_name}\$#{person.first_name}\$/
     end
 
     it 'has quotation marks for multiline strings' do
@@ -51,7 +52,7 @@ describe SacCas::Export::MitgliederExportJob do
       person.update!(first_name: "Hello\nWorld")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
       expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
-      expect(file.read).to match /\$"#{person.first_name}"\$#{person.last_name}\$/
+      expect(contents).to match /\$#{person.last_name}\$"#{person.first_name}"\$/
     end
   end
 

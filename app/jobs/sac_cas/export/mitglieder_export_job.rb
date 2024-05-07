@@ -13,7 +13,7 @@ class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
   def initialize(user_id, group_id, **options)
     @group_id = group_id
     filename = "Adressen_#{group.navision_id_padded}"
-    super(:csv, user_id, filename: filename, **options)
+    super(:csv, user_id, filename: filename, encoding: ENCODING, **options)
   end
 
   def data

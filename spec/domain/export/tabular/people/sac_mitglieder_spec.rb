@@ -27,9 +27,9 @@ describe Export::Tabular::People::SacMitglieder do
     expect(tabular.attributes).to eq(
       [
         :id,
-        :layer_navision_id,
-        :first_name,
+        :layer_navision_id_padded,
         :last_name,
+        :first_name,
         :adresszusatz,
         :address,
         :postfach,
@@ -37,10 +37,10 @@ describe Export::Tabular::People::SacMitglieder do
         :town,
         :country,
         :birthday,
-        :phone_number_direct,
-        :phone_number_private,
+        :phone_number_direkt,
+        :phone_number_privat,
         :empty, # 1 leere Spalte
-        :phone_number_mobile,
+        :phone_number_mobil,
         :phone_number_fax,
         :email,
         :gender,

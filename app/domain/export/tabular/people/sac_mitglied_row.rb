@@ -102,9 +102,9 @@ module Export::Tabular::People
       end
     end
 
-    # Navision ID des exportierten Layers als Zahl, ohne Zero-Padding
-    def layer_navision_id
-      group.navision_id
+    # Navision ID des exportierten Layers als Zahl, mit Zero-Padding
+    def layer_navision_id_padded
+      group.navision_id_padded
     end
 
     # Beliebige Telefonnummer mit dem angegebenen Label.
