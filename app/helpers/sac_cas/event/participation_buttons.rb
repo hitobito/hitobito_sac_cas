@@ -21,6 +21,21 @@ module SacCas::Event::ParticipationButtons
 
   private
 
+
+  def build_cancel_button
+    return super unless her_own?
+
+    popover = render('event/participations/popover_participant_cancels', entry: @participation)
+    action_button(t('.cancel_button'),
+                  nil,
+                  :'times-circle',
+                  data: {
+                    bs_toggle: 'popover',
+                    bs_placement: :bottom,
+                    bs_content: popover.to_str
+                  })
+  end
+
   def cancelable?
     return can?(:cancel, @participation) unless her_own?
 
