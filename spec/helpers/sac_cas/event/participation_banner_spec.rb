@@ -15,7 +15,7 @@ describe Event::ParticipationBanner do
   let(:group) { Fabricate.build(:group, id: 1) }
   let(:event) { Fabricate.build(:course, id: 1, groups: [group], state: 'open') }
   let(:participation) do
-    Fabricate.build(:event_participation, id: 1, event: event, application_id: -1)
+    Fabricate.build(:event_participation, id: 1, event: event, application_id: -1, state: 'applied')
   end
   let(:name) { [participation.person.first_name, participation.person.last_name].join(' ') }
   let(:dom) { Capybara::Node::Simple.new(banner.render) }
@@ -64,6 +64,11 @@ describe Event::ParticipationBanner do
 
     it 'hides Abmelden button when not permitted because participation has no application' do
       participation.application_id = nil
+      expect(dom).not_to have_button 'Abmelden'
+    end
+
+    it 'hides Abmelden button when state does not allow cancel' do
+      participation.state = 'rejected'
       expect(dom).not_to have_button 'Abmelden'
     end
   end
