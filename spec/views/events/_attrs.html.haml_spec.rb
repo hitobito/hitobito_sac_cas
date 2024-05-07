@@ -13,6 +13,7 @@ describe 'events/_attrs.html.haml' do
   before do
     allow(view).to receive_messages(entry: EventDecorator.decorate(event))
     allow(controller).to receive_messages(current_user: Person.new)
+    allow(controller).to receive_messages(current_person: top_leader)
   end
 
   context 'event' do
