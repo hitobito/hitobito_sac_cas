@@ -13,7 +13,8 @@ class Group::SacCas < ::Group
   children Group::Geschaeftsstelle,
            Group::Sektion,
            Group::ExterneKontakte,
-           Group::Abonnenten
+           Group::Abonnenten,
+           Group::Ehrenmitglieder
 
   mounted_attr :sac_newsletter_mailing_list_id, :integer
   mounted_attr :course_admin_email, :string
