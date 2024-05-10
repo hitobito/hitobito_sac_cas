@@ -27,7 +27,7 @@ describe 'FilterNavigation::People' do
 
   shared_examples 'having Tourenleiter filters' do
     let(:tourenleiter_id)  { Group::SektionsTourenkommission::Tourenleiter.id.to_s }
-    let(:other_ids) { Role.subclasses.map { |r| r.id.to_s } - [tourenleiter_id] }
+    let(:kind_ids) { QualificationKind.pluck(:id).map(&:to_s) }
 
     def parse_link_query(link)
       link = dom.find_link(link)
@@ -36,49 +36,50 @@ describe 'FilterNavigation::People' do
     end
 
     it 'has common shared filter attributes' do
-      quali_a = Fabricate(:qualification_kind, label: 'SAC Tourenleiter A')
-      quali_b = Fabricate(:qualification_kind, label: 'SAC Tourenleiter B')
-      quali_c = Fabricate(:qualification_kind, label: 'Other Quali C')
-      quali_d = Fabricate(:qualification_kind, label: 'SAC Tourenleiter D', validity: nil)
-
       ['Aktive Tourenleiter',
        'Sistierte Tourenleiter',
        'Inaktive Tourenleiter',
-       'Keine Tourenleiter'].each do |label|
+       'Keine Tourenleiter',
+       'Abgelaufene Tourenleiter'].each do |label|
          query = parse_link_query(label)
-
          expect(query['name']).to eq label
          expect(query['range']).to eq 'deep'
-         expect(query['filters[qualification][match]']).to eq 'one'
-         expect(query['filters[role][role_type_ids]']).to eq tourenleiter_id
-
-         quali_kinds = query['filters[qualification][qualification_kind_ids]'].split('-')
-         expect(quali_kinds).to match_array [quali_a.id.to_s, quali_b.id.to_s]
        end
     end
 
-    it 'Aktive Tourenleiter filters for role and active qualification' do
+    it 'Aktive Tourenleiter filters for role only' do
       query = parse_link_query('Aktive Tourenleiter')
-      expect(query['filters[qualification][validity]']).to eq 'active'
-      expect(query['filters[role][kind]']).to be_nil
+      expect(query['filters[role][role_type_ids]']).to eq tourenleiter_id
+      expect(query['filters[role][kind]']).to eq 'active'
     end
 
-    it 'Sistierte Tourenleiter filters for role and not_active_but_reactivateable' do
+    it 'Sistierte Tourenleiter filters for not_active_but_reactivateable qualifications only' do
       query = parse_link_query('Sistierte Tourenleiter')
+      expect(query['filters[role]']).to be_nil
       expect(query['filters[qualification][validity]']).to eq 'not_active_but_reactivateable'
-      expect(query['filters[role][kind]']).to be_nil
+      expect(query['filters[qualification][qualification_kind_ids]'].split('-')).to match_array(kind_ids)
     end
 
-    it 'Inaktive Tourenleiter filters for inactive role and active qualification' do
+    it 'Inaktive Tourenleiter filters for role and active qualifications' do
       query = parse_link_query('Inaktive Tourenleiter')
-      expect(query['filters[qualification][validity]']).to eq 'active'
+      expect(query['filters[role][role_type_ids]']).to eq tourenleiter_id
       expect(query['filters[role][kind]']).to eq 'inactive'
+      expect(query['filters[qualification][validity]']).to eq 'active'
+      expect(query['filters[qualification][qualification_kind_ids]'].split('-')).to match_array(kind_ids)
     end
 
-    it 'Keine Tourenleiter filters for inactive role and not_active qualification' do
+    it 'Keine Tourenleiter filters for none qualifications only' do
       query = parse_link_query('Keine Tourenleiter')
-      expect(query['filters[qualification][validity]']).to eq 'not_active'
-      expect(query['filters[role][kind]']).to eq 'inactive'
+      expect(query['filters[role]']).to be_nil
+      expect(query['filters[qualification][validity]']).to eq 'none'
+      expect(query['filters[qualification][qualification_kind_ids]'].split('-')).to match_array(kind_ids)
+    end
+
+    it 'Abgelaufene Tourenleiter filters for only_expired qualifications only' do
+      query = parse_link_query('Abgelaufene Tourenleiter')
+      expect(query['filters[role]']).to be_nil
+      expect(query['filters[qualification][validity]']).to eq 'only_expired'
+      expect(query['filters[qualification][qualification_kind_ids]'].split('-')).to match_array(kind_ids)
     end
   end
 
