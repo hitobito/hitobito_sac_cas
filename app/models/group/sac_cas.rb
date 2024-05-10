@@ -15,20 +15,26 @@ class Group::SacCas < ::Group
            Group::ExterneKontakte,
            Group::Abonnenten
 
-  mounted_attr :sac_newsletter_mailing_list_id, :integer
-  mounted_attr :course_admin_email, :string
+  class << self
+    def mount_mailing_lists(*keys)
+      @@mounted_mailing_list_attrs = keys.map { |key| :"sac_#{key}_mailing_list_id" }
+      @@mounted_mailing_list_attrs.each { |attr| mounted_attr attr, :integer }
 
-  validate :assert_sac_newsletter_mailing_list_id
+      validate :assert_mounted_mailing_list_attrs
+    end
+  end
+
+  mounted_attr :course_admin_email, :string
+  mount_mailing_lists :newsletter, :inside, :tourenportal, :magazin, :huettenportal
+
   validate :assert_valid_course_admin_email
 
   private
 
-  def assert_sac_newsletter_mailing_list_id
-    return unless sac_newsletter_mailing_list_id
-    ids = mailing_lists.pluck(:id)
-
-    if ids.exclude?(sac_newsletter_mailing_list_id.to_i)
-      errors.add(:sac_newsletter_mailing_list_id, :inclusion)
+  def assert_mounted_mailing_list_attrs
+    mapped_lists = @@mounted_mailing_list_attrs.map { |key| [key, send(key)] }.to_h.compact
+    mapped_lists.each do |key, id|
+      errors.add(key, :inclusion) unless mailing_lists.where(id: id).exists?
     end
   end
 

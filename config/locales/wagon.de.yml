@@ -188,6 +188,12 @@ de:
         sac_cas_self_registration_url: SAC Selbstregistrierung
       group/sac_cas:
         sac_newsletter_mailing_list_id: SAC Newsletter Abo ID
+        sac_magazine_mailing_list_id: Die Alpen Abo ID
+        sac_inside_mailing_list_id: SAC Inside Abo ID
+        sac_tourenportal_mailing_list_id: SAC Tourenportal Abo ID
+        sac_magazin_mailing_list_id: SAC Magazin Abo ID
+        sac_huettenportal_mailing_list_id: SAC Hüttenportal Abo ID
+
         course_admin_email: E-Mail Kursadministration
       group/sektion:
         foundation_year: Gründungsjahr

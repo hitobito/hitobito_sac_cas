@@ -11,22 +11,26 @@ describe Group::SacCas do
   let(:group) { groups(:root) }
 
   context 'validations' do
-    context 'sac_newsletter_mailing_list_id' do
-      it 'allows empty value' do
-        expect(group).to be_valid
-      end
+    [:newsletter, :inside, :tourenportal, :magazin, :huettenportal].each do |key|
+      context "sac_#{key}_mailing_list_id" do
+        let(:attr) { "sac_#{key}_mailing_list_id" }
 
-      it 'allows value of group mailing_list' do
-        list = Fabricate(:mailing_list, group: group)
-        group.sac_newsletter_mailing_list_id = list.id
-        expect(group).to be_valid
-      end
+        it 'allows empty value' do
+          expect(group).to be_valid
+        end
 
-      it 'does not allow value from other groups' do
-        list = Fabricate(:mailing_list, group: groups(:geschaeftsstelle))
-        group.sac_newsletter_mailing_list_id = list.id
-        expect(group).not_to be_valid
-        expect(group).to have(1).error_on(:sac_newsletter_mailing_list_id)
+        it 'allows value of group mailing_list' do
+          list = Fabricate(:mailing_list, group: group)
+          group.send("#{attr}=", list.id)
+          expect(group).to be_valid
+        end
+
+        it 'does not allow value from other groups' do
+          list = Fabricate(:mailing_list, group: groups(:geschaeftsstelle))
+          group.send("#{attr}=", list.id)
+          expect(group).not_to be_valid
+          expect(group).to have(1).error_on(attr)
+        end
       end
     end
 
