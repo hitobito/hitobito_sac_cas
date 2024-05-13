@@ -12,6 +12,8 @@ of SAC CAS.
         * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]
         * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]
         * Admin: 2FA [:layer_and_below_full, :admin, :impersonation, :read_all_people]
+      * Ehrenmitglieder
+        * Ehrenmitglied: []
       * Externe Kontakte
         * Kontakt: []
       * Touren-Portal
