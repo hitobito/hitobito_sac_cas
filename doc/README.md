@@ -1,10 +1,36 @@
 # SAC/CAS
 
+## Naming
+
+Die SAC spezifischen Begriffe versuchen wir möglichst in Deutsch zu halten und diese nicht auf Englisch zu übersetzen. Das hilft spezifische Begriffe sofort zu erkennen und fördert die Verständlichkeit.
+
+Wir verwenden bewusst hier einen Mix aus englisch und deutschen Begriffen.
+
+Bei der Namensdefinition kannst du dich fragen: `Macht es Sinn den Begriff auf Englisch zu übersetzen, macht es den Code verständlicher wenn wir diesen auf Deutsch belassen?`
+
+Happy Naming!
+
+### Deutsche Beispiele
+
+- wir verwenden den deutschen Begriff **Sektion** anstatt Section, da Section als technischer Begriff z.B. im UI verwendet wird
+- Alle Gruppen Klassen: Ortsgruppe, Geschaeftsstelle, AboMagazin, usw.
+- SAC spezifische Rollen: Beguenstigt, Ehrenmitglied, usw.
+
+### Englische Beispiele
+
+- Beitragskategorien: Adult, Youth, Family
+- Allgemeine Begriffe: fee, postage abroad
+- SacFamily für SAC Familien
+
+### sac Prefix
+
+Einen sac-Prefix kann man z.B. bei SAC spezifischen Attributen verwenden. Es gibt z.B. auf der Person ein Attribut `sac_family_main_person`. Der Begriff Family wird zum Teil auch im Core oder Youth Wagon verwendet, so ist auf ein Blick klar das es sich um eine SAC spezifische Erweiterung/Konzept handelt.
+
 ## Beitragskategorie
 
 Die Beitragskategorie definiert auf der Mitgliedschaft einer Sektion wie hoch die jährlichen Kosten ausfallen.
 
-Es gibt dabei drei Kategorien: Einzel, Jugend, Familie
+Es gibt dabei drei Kategorien: Einzel, Jugend, Familie (adult, youth, family)
 
 - Einzel: Für Einzel-Personen ab 22 Jahren
 - Jugend: Für Jugendliche von 6 bis 21 Jahren
