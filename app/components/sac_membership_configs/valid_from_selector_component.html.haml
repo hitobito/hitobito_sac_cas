@@ -1,0 +1,6 @@
+%ul.pagination.pagination-sm
+  - @available_configs.each do |config|
+    %li.page-item{ class: [active?(config) && 'active'] }
+      = link_to_edit_config(config)
+  %li.page-item{ class: [@entry.new_record? && 'active'] }
+    = link_new_config

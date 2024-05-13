@@ -63,6 +63,7 @@ module HitobitoSacCas
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
       Ability.store.register ExternalTrainingAbility
+      Ability.store.register SacMembershipConfigAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
       RoleAbility.prepend SacCas::RoleAbility
@@ -101,6 +102,7 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
+      Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }

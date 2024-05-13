@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     resources :groups, only: [] do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
+      resources :sac_membership_configs, except: [:destroy]
 
       resources :events, only: [] do
         scope module: 'event' do

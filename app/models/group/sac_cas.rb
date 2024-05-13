@@ -30,6 +30,8 @@ class Group::SacCas < ::Group
 
   validate :assert_valid_course_admin_email
 
+  has_many :sac_membership_configs
+
   private
 
   def assert_mounted_mailing_list_attrs
