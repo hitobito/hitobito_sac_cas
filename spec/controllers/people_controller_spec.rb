@@ -108,6 +108,73 @@ describe PeopleController do
       end
 
     end
+  end
 
+  context 'GET#edit' do
+    let(:mitglied) { people(:mitglied) }
+    let(:admin) { people(:admin) }
+    let(:mitgliederverwalter) do
+      Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+                group: groups(:bluemlisalp_funktionaere)).person
+    end
+    let(:sektion) { groups(:bluemlisalp_mitglieder) }
+
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    it 'should disable birthdate field for member' do
+      sign_in(mitglied)
+      get :edit, params: { id: mitglied.id, group_id: sektion.id }
+
+      expect(dom).to have_css('#person_birthday[readonly]')
+    end
+
+    it 'should not disable birthdate field for admin' do
+      sign_in(admin)
+
+      get :edit, params: { id: mitglied.id, group_id: sektion.id }
+      expect(dom).to have_css('#person_birthday')
+      expect(dom).to have_no_css('#person_birthday[readonly]')
+    end
+
+    it 'should not disable birthdate field for mitgliederdienst' do
+      sign_in(mitgliederverwalter)
+
+      get :edit, params: { id: mitglied.id, group_id: sektion.id }
+      expect(dom).to have_no_css('#person_birthday[readonly]')
+    end
+  end
+
+  context 'PATCH#update' do
+    let(:mitglied) { people(:mitglied) }
+    let(:admin) { people(:admin) }
+    let(:mitgliederverwalter) do
+      Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+                group: groups(:bluemlisalp_funktionaere)).person
+    end
+
+    let(:sektion) { groups(:bluemlisalp_mitglieder) }
+
+    let(:new_date) { new_date = Date.new(2023,1,1) }
+
+    it 'should not be possible for mitglied to update their birthdate' do
+      sign_in(mitglied)
+      patch :update, params: { id: mitglied.id, group_id: sektion.id, person: { first_name: "Andi", birthday:  new_date  } }
+      expect(mitglied.reload.first_name).to eq 'Andi'
+      expect(mitglied.reload.birthday).not_to eq(new_date)
+    end
+
+    it 'should be possible for admin to update any persons birthdate' do
+      sign_in(admin)
+      patch :update, params: { id: mitglied.id, group_id: sektion.id, person: { first_name: "Andi", birthday:  new_date  } }
+      expect(mitglied.reload.first_name).to eq 'Andi'
+      expect(mitglied.reload.birthday).to eq(new_date)
+    end
+
+    it 'should possible for mitgliederverwalter to update person in sektion' do
+      sign_in(mitgliederverwalter)
+      patch :update, params: { id: mitglied.id, group_id: sektion.id, person: { first_name: "Andi", birthday:  new_date  } }
+      expect(mitglied.reload.first_name).to eq 'Andi'
+      expect(mitglied.reload.birthday).to eq(new_date)
+    end
   end
 end

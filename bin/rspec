@@ -1,10 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-# shellcheck disable=SC2068
-# SC2068: Double quote array expansions to avoid re-splitting elements.
-
-if [[ $DISABLE_SPRING ]]; then
-  bundle exec rspec $@
+if ENV['DISABLE_SPRING']
+  system("bundle exec rspec #{ARGV.join(' ')}")
 else
-  bundle exec spring rspec $@
-fi
+  system("bundle exec spring rspec #{ARGV.join(' ')}")
+end
