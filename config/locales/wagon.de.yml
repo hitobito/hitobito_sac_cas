@@ -271,6 +271,10 @@ de:
         one: Schweizer Alpen-Club SAC
         other: Schweizer Alpen-Club SAC
 
+      group/ehrenmitglieder:
+        one: Ehrenmitglieder
+        other: Ehrenmitglieder
+
       group/externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
@@ -336,6 +340,9 @@ de:
         other: Hütte
 
       ### ROLES
+      group/ehrenmitglieder/ehrenmitglied:
+        one: Ehrenmitglied
+        description: Ehrenmitglied
       group/geschaeftsstelle/mitarbeiter:
         one: Mitarbeiter*in (schreibend)
         description: Mitarbeiter*in (schreibend)

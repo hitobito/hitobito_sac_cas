@@ -13,7 +13,8 @@ class Group::SacCas < ::Group
   children Group::Geschaeftsstelle,
            Group::Sektion,
            Group::ExterneKontakte,
-           Group::Abonnenten
+           Group::Abonnenten,
+           Group::Ehrenmitglieder
 
   class << self
     def mount_mailing_lists(*keys)
