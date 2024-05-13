@@ -546,6 +546,7 @@ de:
     tour_guides_active: Aktive Tourenleiter
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
+    tour_guides_expired: Abgelaufene Tourenleiter
 
   global:
     phone_placeholder: +41 77 123 45 67

@@ -8,10 +8,11 @@
 module SacCas::FilterNavigation::People
 
   TOURENLEITER_FILTERS = {
-    tour_guides_active: { quali_validity: :active },
-    tour_guides_stalled: { quali_validity: :not_active_but_reactivateable },
-    tour_guides_inactive: { quali_validity: :active, role_kind: :inactive },
-    tour_guides_none: { quali_validity: :not_active, role_kind: :inactive }
+    tour_guides_active: { role: :active },
+    tour_guides_stalled: { qualification: :not_active_but_reactivateable },
+    tour_guides_inactive: { role: :inactive, qualification: :active },
+    tour_guides_none: { qualification: :none },
+    tour_guides_expired: { qualification: :only_expired },
   }.freeze
 
   def initialize(*args)
@@ -35,9 +36,9 @@ module SacCas::FilterNavigation::People
     end
   end
 
-  def add_tourenleiter_filter(name, role_kind: nil, quali_validity:)
-    filters = { role: role_filter(role_kind), qualification: quali_filter(quali_validity) }
-    dropdown.add_item(name, path(name: name, range: :deep, filters: filters))
+  def add_tourenleiter_filter(name, role: nil, qualification: nil)
+    filters = { role: role_filter(role), qualification: quali_filter(qualification) }
+    dropdown.add_item(name, path(name: name, range: :deep, filters: filters.compact))
   end
 
   def quali_filter(validity)
@@ -45,21 +46,17 @@ module SacCas::FilterNavigation::People
       qualification_kind_ids: qualification_kind_ids.join(Person::Filter::Base::ID_URL_SEPARATOR),
       validity: validity,
       match: :one
-    }
+    } if validity
   end
 
   def role_filter(role_kind)
     {
       role_type_ids: Group::SektionsTourenkommission::Tourenleiter.id,
       kind: role_kind
-    }.compact
+    }.compact if role_kind
   end
 
   def qualification_kind_ids
-    @qualification_kind_ids ||= QualificationKind
-      .joins(:translations)
-      .where.not(validity: nil)
-      .where('qualification_kind_translations.label LIKE "SAC Tourenleiter%"')
-      .pluck(:id)
+    @qualification_kind_ids ||= QualificationKind.pluck(:id)
   end
 end
