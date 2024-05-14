@@ -39,7 +39,7 @@ describe SelfRegistration do
     {
       first_name: 'Max',
       last_name: 'Muster',
-      address: 'Musterplatz',
+      address: 'Musterplatz 23',
     }
   }
 

@@ -7,14 +7,14 @@
 
 class SelfRegistration::Sektion::MainPerson < SelfRegistration::MainPerson::Base
   self.required_attrs = [
-    :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country, :number
+    :first_name, :last_name, :email, :street, :housenumber, :zip_code,
+    :town, :birthday, :country, :number
   ]
-
-  self.attrs += [:household_key, :supplements]
+  self.attrs += [:household_key, :supplements, :address_care_of, :postbox]
   self.active_model_only_attrs += [:supplements, :household_emails]
 
-  delegate :self_registration_reason_id, :register_on_date, :newsletter, to: :supplements,
-    allow_nil: true
+  delegate :self_registration_reason_id, :register_on_date, :newsletter,
+           to: :supplements, allow_nil: true
 
   public :role
 

@@ -53,7 +53,8 @@ describe :self_registration_neuanmeldung, js: true do
     choose 'Mann'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
-    fill_in 'Strasse und Nr.', with: 'Musterplatz'
+    fill_in 'self_registration_sektion_main_person_attributes_street', with: 'Musterplatz'
+    fill_in 'self_registration_sektion_main_person_attributes_housenumber', with: '42'
     fill_in 'Geburtstag', with: '01.01.1980'
     fill_in 'Telefon', with: '+41 79 123 45 56'
     fill_in 'self_registration_sektion_main_person_attributes_zip_code', with: '8000'
@@ -150,7 +151,7 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
       expect(person).to be_present
       expect(person.first_name).to eq 'Max'
       expect(person.last_name).to eq 'Muster'
-      expect(person.address).to eq 'Musterplatz'
+      expect(person.address).to eq 'Musterplatz 42'
       expect(person.zip_code).to eq '8000'
       expect(person.town).to eq 'Zürich'
       expect(person.country).to eq 'US'
@@ -184,16 +185,16 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
       visit group_self_registration_path(group_id: group)
       fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
       click_on 'Weiter'
-      fill_in 'Strasse und Nr.', with: 'Belp'
+      fill_in 'self_registration_sektion_main_person_attributes_street', with: 'Belp'
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content('Belpstrasse 3007 Bern')
 
-      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern',
-match: :first).click
+      find('ul[role="listbox"] li[role="option"]', text: 'Belpstrasse 3007 Bern', match: :first)
+        .click
+
       expect(page).to have_field('self_registration_sektion_main_person_attributes_zip_code', with: '3007')
       expect(page).to have_field('self_registration_sektion_main_person_attributes_town', with: 'Bern')
-      expect(page).to have_field('self_registration_sektion_main_person_attributes_address',
-with: 'Belpstrasse')
+      expect(page).to have_field('self_registration_sektion_main_person_attributes_street', with: 'Belpstrasse')
     end
 
     it 'validates required fields' do
@@ -206,7 +207,7 @@ with: 'Belpstrasse')
       expect(find_field('Vorname')[:class]).to match /\bis-invalid\b/
       expect(find_field('Nachname')[:class]).to match /\bis-invalid\b/
       expect(find_field('Geburtstag')[:class]).to match /\bis-invalid\b/
-      expect(find_field('Strasse und Nr.')[:class]).to match /\bis-invalid\b/
+      expect(find('#self_registration_sektion_main_person_attributes_street')[:class]).to match /\bis-invalid\b/
       expect(find_field('PLZ/Ort')[:class]).to match /\bis-invalid\b/
       expect(find('#self_registration_sektion_main_person_attributes_town')[:class]).to match /\bis-invalid\b/
       expect(find_field('Telefon')[:class]).to match /\bis-invalid\b/

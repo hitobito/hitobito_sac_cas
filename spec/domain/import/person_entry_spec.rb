@@ -92,15 +92,17 @@ describe Import::PersonEntry do
       expect(person).to be_valid
     end
 
-    it 'sets combined address attributes' do
+    it 'sets address attributes' do
       row[:address_supplement] = 'test'
       row[:address] = 'Landweg 1a'
       row[:postfach] = 'Postfach 3000'
-      expect(person.address).to eq <<~TEXT.strip
-        test
-        Landweg 1a
-        Postfach 3000
-      TEXT
+
+      expect(person.address_care_of).to eq 'test'
+      expect(person.street).to eq 'Landweg'
+      expect(person.housenumber).to eq '1a'
+      expect(person.postbox).to eq 'Postfach 3000'
+
+      expect(person.address).to eq 'Landweg 1a'
     end
 
     it 'language defaults to de' do

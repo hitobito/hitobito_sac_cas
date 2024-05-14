@@ -20,8 +20,8 @@ class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson
 
   self.attrs = [
     :first_name, :last_name, :email, :gender, :birthday,
-    :address, :zip_code, :town, :country, :number,
-    :primary_group
+    :address_care_of, :street, :housenumber, :postbox, :zip_code, :town, :country,
+    :number, :primary_group
   ]
 
   self.required_attrs = [

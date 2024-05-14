@@ -105,12 +105,16 @@ module Import
       Group.find_or_initialize_by(navision_id: navision_id(row))
     end
 
-    def set_data(row, group)
+    def set_data(row, group) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       group.type = type(row)&.name
       group = group.becomes(type(row))
       group.name = root?(row) ? 'SAC/CAS' : section_name(row)
       group.parent_id = parent_id(row)
-      group.address = address(row)
+      group.address_care_of = row[:address_supplement]
+      group.street, group.housenumber = address(row)
+      group.postbox = row[:postbox]
+      group.zip_code = row[:zip_code]
+      group.town = row[:town]
       set_language(row, group)
       set_phone(row, group)
       group.email = email(row)
@@ -188,12 +192,10 @@ module Import
     end
 
     def address(row)
-      [
-        row[:address_supplement],
-        row[:address],
-        row[:postfach],
-        zip_code_and_town(row),
-      ].select(&:present?).join("\n")
+      address = row[:address]
+      return if address.blank?
+
+      Address::Parser.new(address).parse
     end
 
     def zip_code_and_town(row)

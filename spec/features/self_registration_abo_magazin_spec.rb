@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
@@ -36,7 +35,8 @@ describe 'self_registration_abo_magazin', js: true do
     choose 'Mann'
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
-    fill_in 'Strasse und Nr', with: 'Musterplatz'
+    fill_in 'self_registration_abo_magazin_main_person_attributes_street', with: 'Musterplatz'
+    fill_in 'self_registration_abo_magazin_main_person_attributes_housenumber', with: '42'
     fill_in 'Geburtstag', with: '01.01.1980'
     fill_in 'Telefon', with: '+41 79 123 45 56'
     fill_in 'self_registration_abo_magazin_main_person_attributes_zip_code', with: '8000'

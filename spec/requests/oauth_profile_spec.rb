@@ -5,20 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require "spec_helper"
+require 'spec_helper'
 
 RSpec.describe 'GET oauth/profile', type: :request do
   let(:application) { Fabricate(:application) }
   let(:user)        { people(:mitglied) }
   let(:json) { JSON.parse(response.body) }
-  let(:token)  {
+  let(:token)  do
     Fabricate(:access_token, application: application, scopes: "name #{scope}",
-              resource_owner_id: user.id ) }
+                             resource_owner_id: user.id)
+  end
 
 
 
   def make_request(skip_checks: true)
-    get '/oauth/profile', headers: { 'Authorization': 'Bearer ' + token.token, 'X-Scope': scope }
+    get '/oauth/profile', headers: { Authorization: 'Bearer ' + token.token, 'X-Scope': scope }
     return if skip_checks
 
     expect(response).to have_http_status(:ok)
@@ -41,7 +42,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
         town: user.town,
         country: user.country,
         picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
-        phone: nil,
+        phone: nil
       }.deep_stringify_keys)
     end
   end
@@ -78,7 +79,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
           role_name: 'Mitglied (Stammsektion)',
           permissions: [],
           layer_group_id: user.roles.first.group.layer_group_id
-        },{
+        }, {
           group_id: user.roles.second.group_id,
           group_name: user.roles.second.group.name,
           role: 'Group::SektionsMitglieder::MitgliedZusatzsektion',

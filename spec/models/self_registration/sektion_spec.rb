@@ -23,7 +23,10 @@ describe SelfRegistration::Sektion do
     {
       first_name: 'Max',
       last_name: 'Muster',
-      address: 'Musterplatz',
+      address_care_of: 'c/o Musterleute',
+      street: 'Musterplatz',
+      housenumber: '42',
+      postbox: 'Postfach 23',
       town: 'Zurich',
       email: 'max.muster@example.com',
       zip_code: '8000',

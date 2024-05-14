@@ -48,7 +48,8 @@ describe Event::ParticipationContactDatasController  do
           email: person.email,
           first_name: person.first_name,
           birthday: '01.01.2002',
-          address: 'Musterplatz',
+          street: 'Musterplatz',
+          housenumber: '23',
           zip_code: 1234,
           town: 'Zürich',
           country: 'CH',
@@ -61,8 +62,7 @@ describe Event::ParticipationContactDatasController  do
           type: 'Event::Role::Participant'
         }
       }
-      puts entry.errors.full_messages
-      expect(entry).to have(0).errors
+      expect(entry).to have(0).errors, "Should not have errors, but has: #{entry.errors.full_messages.to_sentence}"
       expect(person.reload.last_name).to eq 'NewName'
     end
   end
