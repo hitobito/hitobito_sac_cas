@@ -23,6 +23,6 @@ class SelfRegistration::Abo::MainPerson < SelfRegistration::AboBasicLogin::MainP
   private
 
   def assert_old_enough
-    errors.add(:base, :must_be_older_than_18) if person.years < MIN_YEARS
+    errors.add(:base, :must_be_older_than_18) if person.years < MIN_YEARS # rubocop:disable Naming/VariableNumber
   end
 end

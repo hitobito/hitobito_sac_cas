@@ -615,7 +615,7 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
         click_on 'Weiter', match: :first
         assert_step 'Familienmitglieder'
 
-        # TODO: can not go to first page as it clears the hosemates somehow. See #415
+        # TODO: can not go to first page as it clears the housemates somehow. See #415
         # click_on 'Zurück', match: :first
         # click_on 'Zurück', match: :first
         # assert_step 'Haupt-E-Mail'

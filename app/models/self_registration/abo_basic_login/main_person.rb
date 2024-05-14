@@ -8,7 +8,7 @@
 class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson::Base
   AGREEMENTS = [
     :statutes,
-    :data_protection,
+    :data_protection
   ].freeze
 
   AGREEMENTS.each do |agreement|
@@ -31,7 +31,7 @@ class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson
   self.active_model_only_attrs += [:newsletter] + AGREEMENTS
 
   def self.human_attribute_name(key, options = {})
-    links = Regexp.new((AGREEMENTS).join('|'))
+    links = Regexp.new(AGREEMENTS.join('|'))
     case key
     when links then I18n.t("link_#{key}_title", scope: 'self_registration.infos_component')
     else super(key, options)
