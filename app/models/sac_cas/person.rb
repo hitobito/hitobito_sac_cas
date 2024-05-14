@@ -10,6 +10,8 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   included do
+    CORRESPONDENCES = ['digital', 'print']
+
     Person::LANGUAGES.delete(:en)
 
     devise_login_id_attrs << :membership_number
@@ -24,7 +26,9 @@ module SacCas::Person
     alias_attribute :membership_number, :id
     alias_attribute :navision_id, :id
 
-    attribute :digital_correspondence, :boolean
+    i18n_enum :correspondence, CORRESPONDENCES
+    i18n_setter :correspondence, CORRESPONDENCES
+
     before_save :set_digital_correspondence, if: :password_initialized?
 
     scope :with_membership_years, lambda { |selects = 'people.*'|
@@ -44,7 +48,7 @@ module SacCas::Person
   end
 
   def set_digital_correspondence
-    self.digital_correspondence = true
+    self.correspondence = 'digital'
   end
 
   def password_initialized?

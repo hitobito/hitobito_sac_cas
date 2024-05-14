@@ -1,3 +1,3 @@
-= f.labeled(:digital_correspondence) do
-  = f.inline_radio_button(:digital_correspondence, true, t('.digital_correspondence.digital'))
-  = f.inline_radio_button(:digital_correspondence, false, t('.digital_correspondence.print'))
+= f.labeled(:correspondence) do
+  - SacCas::Person::CORRESPONDENCES.each do |key|
+    = f.inline_radio_button(:correspondence, key, t("activerecord.attributes.person.correspondences.#{key}") )

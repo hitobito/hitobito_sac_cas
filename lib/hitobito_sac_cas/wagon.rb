@@ -119,7 +119,7 @@ module HitobitoSacCas
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
-      PeopleController.permitted_attrs << :digital_correspondence
+      PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
       PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
