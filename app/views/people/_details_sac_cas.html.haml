@@ -6,5 +6,5 @@
 = render_attrs(entry, :digital_correspondence)
 - if entry.family_id.present?
   = render_attrs(entry, :family_id, :sac_family_main_person)
-- if entry.membership_anytime?
+- if entry.sac_membership_anytime?
   = render_present_attrs(Person.with_membership_years.find(entry.id), :membership_number, :membership_years)

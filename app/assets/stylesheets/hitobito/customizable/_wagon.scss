@@ -12,40 +12,12 @@
   border-bottom: none !important;
 }
 
-.membership-verify {
-  max-width: 1000px;
-
-  #page {
-    margin: auto;
-    width: 90%;
-    display: unset;
-  }
-
-  header img {
-    height: 120px;
-  }
-
-  #content {
-    margin: 0 30px 30px 30px;
-    text-align: center;
-
-    .member-img {
-      width: 70%;
-      margin: auto;
-    }
-
-    .member-name {
-      font-size: 1rem;
-      font-weight: bold;
-      line-height: 4rem;
-      margin: auto;
-    }
-  }
-
+#membership-verify {
   header {
-    .root-address {
-      color: #fff;
-      margin: 0 0 30px 30px;
+    #logo {
+      img {
+        width: 100%;
+      }
     }
   }
 }

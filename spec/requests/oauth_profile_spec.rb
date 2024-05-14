@@ -31,7 +31,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
                                 zip_code: user.zip_code,
                                 town: user.town,
                                 country: user.country,
-                                picture_url: /\/packs-test\/media\/images\/profil-.*\.png/,
+                                picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
                               }.deep_stringify_keys)
       end
     end
@@ -59,7 +59,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
                              birthday: user.birthday.to_s.presence,
                              primary_group_id: user.primary_group_id,
                              language: user.language,
-                             picture_url: /\/packs-test\/media\/images\/profil-.*\.png/,
+                             picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
                              roles: [{
                                group_id: user.roles.first.group_id,
                                group_name: user.roles.first.group.name,

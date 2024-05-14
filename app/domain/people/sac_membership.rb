@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class People::Membership
+class People::SacMembership
 
   MEMBERSHIP_ROLES = [
     Group::SektionsMitglieder::Mitglied

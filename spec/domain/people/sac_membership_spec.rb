@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe People::Membership do
+describe People::SacMembership do
   let(:person) { Fabricate(:person, birthday: Time.zone.today - 42.years) }
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 

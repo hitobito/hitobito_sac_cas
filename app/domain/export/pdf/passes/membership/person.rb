@@ -43,21 +43,9 @@ class Export::Pdf::Passes::Membership
     end
 
     def verify_qr_code
-      qr_code = RQRCode::QRCode.new(verify_url).as_png(size: 220).to_s
+      qr_code = People::Membership::VerificationQrCode.new(person).generate
+      qr_code = qr_code.as_png(size: 220).to_s
       StringIO.new(qr_code)
-    end
-
-    def verify_url
-      host = ENV.fetch('RAILS_HOST_NAME', 'localhost:3000')
-      Rails
-        .application
-        .routes
-        .url_helpers
-        .verify_membership_url(host: host, verify_token: membership_verify_token)
-    end
-
-    def membership_verify_token
-      person.membership_verify_token.presence || person.init_membership_verify_token!
     end
 
     def t(key)
