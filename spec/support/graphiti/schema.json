@@ -1349,12 +1349,32 @@
           "readable": true,
           "description": null
         },
+        "course_admin_email": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "sac_newsletter_mailing_list_id": {
           "type": "string",
           "readable": true,
           "description": null
         },
-        "course_admin_email": {
+        "sac_inside_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "sac_tourenportal_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "sac_magazin_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "sac_huettenportal_mailing_list_id": {
           "type": "string",
           "readable": true,
           "description": null
