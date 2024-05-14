@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     # Define wagon routes here
 
     get '/people/:id/membership' => 'people/membership#show', as: 'membership'
+    get '/people/query_external_training' => 'person/query_external_training#index',
+        as: :query_external_training
 
     resources :event_levels, module: 'event', controller: 'levels', except: [:show]
 

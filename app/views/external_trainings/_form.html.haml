@@ -1,6 +1,20 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas
+
 = entry_form(cancel_url: history_group_person_path(@group, @person), data: { controller: :forwarder }) do |f|
   = f.labeled_input_fields :name, :provider
   = f.labeled_input_field :start_at
   = f.labeled_input_field :finish_at
   = render 'event_kind_field_with_info', f: f
   = f.labeled_input_fields :training_days, :link, :remarks
+  = field_set_tag do
+    = f.labeled(:other_people_ids, '') do
+      = f.collection_select(:other_people_ids, @other_people.to_a, :id, :to_s, {},
+        { multiple: true, placeholder: I18n.t('global.search.placeholder_person'),
+        data: { controller: 'tom-select',
+        tom_select_url_value: query_external_training_path,
+        tom_select_no_results_value: I18n.t('global.no_list_entries'),
+        tom_select_label_value: 'label' } })
+      = f.help_inline(t('.help_other_people'))
