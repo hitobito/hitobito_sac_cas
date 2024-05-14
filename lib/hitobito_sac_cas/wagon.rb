@@ -40,6 +40,7 @@ module HitobitoSacCas
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Person.include SacCas::Person
+      People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       Person::Household.prepend SacCas::Person::Household
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role

@@ -10,8 +10,6 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   included do
-    Person::INTERNAL_ATTRS << :membership_verify_token
-
     Person::LANGUAGES.delete(:en)
 
     devise_login_id_attrs << :membership_number
@@ -21,9 +19,7 @@ module SacCas::Person
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: 'Role', foreign_key: 'person_id'
 
-    delegate :active?, :anytime?, :roles, to: :membership, prefix: true
-
-    validates :membership_verify_token, uniqueness: { allow_blank: true }
+    delegate :active?, :anytime?, :roles, to: :sac_membership, prefix: true
 
     alias_attribute :membership_number, :id
     alias_attribute :navision_id, :id
@@ -64,12 +60,6 @@ module SacCas::Person
     I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
   end
 
-  def init_membership_verify_token!
-    token = SecureRandom.base58(24)
-    update!(membership_verify_token: token)
-    token
-  end
-
   def sac_family
     @sac_family ||= People::SacFamily.new(self)
   end
@@ -84,8 +74,8 @@ module SacCas::Person
 
   private
 
-  def membership
-    @membership ||= People::Membership.new(self)
+  def sac_membership
+    @sac_membership ||= People::SacMembership.new(self)
   end
 
 end
