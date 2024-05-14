@@ -18,7 +18,7 @@ describe ExternalTrainingsController do
   before { sign_in(people(:admin)) }
 
   describe 'POST#create' do
-    let(:ski_leader_qualis) { person.qualifications.where(qualification_kind: ski_leader) }
+    let(:ski_leader_qualis) { Qualification.where(qualification_kind: ski_leader) }
     let(:params) {
       {
         group_id: group.id,
@@ -39,6 +39,7 @@ describe ExternalTrainingsController do
         expect(response).to redirect_to(history_group_person_path(group, person))
       end.to change { ExternalTraining.count }.by(1)
         .and not_change { Qualification.count }
+      expect(flash[:notice]).to eq 'Externe Ausbildung <i>Skikurs</i> wurde erfolgreich erstellt.'
     end
 
     it 'creates qualification if event qualifies' do
@@ -46,6 +47,53 @@ describe ExternalTrainingsController do
       expect do
         post :create, params: params
       end.to change { ski_leader_qualis.count }.by(1)
+    end
+
+    context 'with other people' do
+      let(:admin) { people(:admin) }
+      let(:tourenchef) { people(:tourenchef) }
+
+      before { params[:external_training][:other_people_ids] = [admin.id, tourenchef.id] }
+
+      it 'creates trainings for people listed as other_ids' do
+        expect do
+          post :create, params: params
+        end.to change { ExternalTraining.count }.by(3)
+        expect(flash[:notice]).to eq 'Externe Ausbildung <i>Skikurs</i> wurde erfolgreich für ' \
+          'Edmund Hillary, Anna Admin und Ida Paschke erstellt.'
+      end
+
+      it 'ignores person if it also listed in other_people_ids' do
+        params[:external_training][:other_people_ids] += [person.id]
+        expect do
+          post :create, params: params
+        end.to change { ExternalTraining.count }.by(3)
+      end
+
+      it 'creates qualification if event qualifies' do
+        create_event_kind_quali_kind(ski_course, ski_leader, category: :qualification)
+        expect do
+          post :create, params: params
+        end.to change { ski_leader_qualis.count }.by(3)
+      end
+
+      context 'as mitglied' do
+        let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
+        let(:verwalter) do
+          Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
+                    group: funktionaere).person
+        end
+
+        it 'ignores person for which current user has no write permission' do
+          sign_in(verwalter)
+          params[:external_training][:other_people_ids] = [admin.id, verwalter.id]
+          expect do
+            post :create, params: params
+          end.to change { ExternalTraining.count }.by(2)
+            .and change { verwalter.external_trainings.count }.by(1)
+            .and not_change { admin.external_trainings.count }
+        end
+      end
     end
 
     context 'existing qualification' do

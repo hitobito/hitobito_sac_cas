@@ -166,6 +166,7 @@ de:
         finish_at: Enddatum
         training_days: Ausbildungstage
         link: Link
+        other_people_ids: Weitere Personen
         remarks: Bemerkung
         created_at: Erstellt
         updated_at: Geändert
@@ -234,12 +235,12 @@ de:
         entry_fee_adult: Eintrittsgebühr, Mitgliedschaft Einzel
         entry_fee_family: Eintrittsgebühr, Mitgliedschaft Familie
         entry_fee_youth: Eintrittsgebühr, Mitgliedschaft Jugend
-        hut_solidarity_fee_with_hut_adult: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Einzel 
-        hut_solidarity_fee_with_hut_family: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Familie 
-        hut_solidarity_fee_with_hut_youth: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Jugend 
-        hut_solidarity_fee_without_hut_adult: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Einzel 
-        hut_solidarity_fee_without_hut_family: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Familie 
-        hut_solidarity_fee_without_hut_youth: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Jugend 
+        hut_solidarity_fee_with_hut_adult: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Einzel
+        hut_solidarity_fee_with_hut_family: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Familie
+        hut_solidarity_fee_with_hut_youth: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Jugend
+        hut_solidarity_fee_without_hut_adult: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Einzel
+        hut_solidarity_fee_without_hut_family: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Familie
+        hut_solidarity_fee_without_hut_youth: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Jugend
         magazine_fee_adult: Abogebühr SAC Magazin, Mitgliedschaft Einzel
         magazine_fee_family: Abogebühr SAC Magazin, Mitgliedschaft Familie
         magazine_fee_youth: Abogebühr SAC Magazin, Mitgliedschaft Jugend
@@ -591,6 +592,15 @@ de:
       kind_overrides_link_title: 'Folgende Felder werden übernommen: Beschreibung,
         Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
         Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger'
+
+  external_trainings:
+    form:
+      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
+    create:
+      flash:
+        success_multiple:
+          "%{model} wurde erfolgreich für %{names} erstellt."
+
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter

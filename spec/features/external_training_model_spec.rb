@@ -35,6 +35,16 @@ describe 'external_training model', js: true do
 text: "Externe Ausbildung Schwimmkurs wurde erfolgreich gelöscht.")
   end
 
+  it "can multiselect people" do
+    sign_in(admin)
+    visit history_group_person_path(group_id: mitglieder, id: mitglied)
+    click_on 'Erstellen'
+    fill_in 'Weitere Personen', with: 'Tenzing'
+    find('.option.active', text: 'Norgay').click
+    fill_in 'Weitere Personen', with: 'Paschke'
+    find('.option.active', text: 'Ida').click
+  end
+
   it "reloads qualification infos", js: true do
     sign_in(admin)
     visit history_group_person_path(group_id: mitglieder, id: mitglied)
