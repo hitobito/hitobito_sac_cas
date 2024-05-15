@@ -19,17 +19,20 @@ class People::MembershipInvoicePositionsController < ApplicationController
 
   def csv
     CSV.generate do |csv|
-      csv << positions.first.keys
+      csv << positions.first.keys if positions.present?
       positions.each do |hash|
         csv << hash.values
       end
     end
   end
 
-  def positions
+  def positions # rubocop:disable Metrics/CyclomaticComplexity
     @positions ||=
       if entry.new_entry_membership_role
         generator.new_entry_positions.map(&:to_h)
+      elsif entry.new_additional_section_membership_roles.present?
+        section = entry.new_additional_section_membership_roles.first.layer_group
+        generator.new_additional_section_positions(section).map(&:to_h)
       else
         generator.membership_positions.map(&:to_h)
       end

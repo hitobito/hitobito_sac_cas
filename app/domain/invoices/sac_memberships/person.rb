@@ -44,6 +44,14 @@ module Invoices
           active_roles_of_type(Group::SektionsNeuanmeldungenNv::Neuanmeldung).first
       end
 
+      def new_additional_section_membership_roles
+        active_roles_of_type(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion)
+      end
+
+      def new_additional_section_membership_role(section)
+        new_additional_section_membership_roles.find { |r| r.layer_group.id == section.id }
+      end
+
       def sac_honorary_member?
         return @sac_honorary_member if defined?(@sac_honorary_member)
 

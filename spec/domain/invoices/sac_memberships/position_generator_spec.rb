@@ -637,4 +637,72 @@ describe Invoices::SacMemberships::PositionGenerator do
     end
   end
 
+  context 'new section' do
+    let(:positions) { described_class.new(person).new_additional_section_positions(main_section) }
+
+    context 'without neuanmeldung' do
+      it 'generates no positions' do
+        expect(positions).to eq([])
+      end
+    end
+
+    context 'with neuanmeldung' do
+      let(:model) { Fabricate(:person) }
+
+      before do
+        Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
+          person: model,
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          created_at: date
+        )
+      end
+
+      it 'generates positions' do
+        expect(positions.size).to eq(2)
+
+        expect(positions[0].name).to eq('section_fee')
+        expect(positions[0].amount).to eq(42.0)
+        expect(positions[1].name).to eq('service_fee')
+        expect(positions[1].amount).to eq(1.0)
+      end
+
+      context 'living abroad' do
+        before do
+          model.update!(country: 'DE')
+          context.fetch_section(additional_section).bulletin_postage_abroad = 0
+        end
+
+
+        it 'generates positions' do
+          expect(positions.size).to eq(3)
+
+          expect(positions[0].name).to eq('section_fee')
+          expect(positions[0].amount).to eq(42.0)
+          expect(positions[1].name).to eq('section_bulletin_postage_abroad')
+          expect(positions[1].amount).to eq(13.0)
+          expect(positions[2].name).to eq('service_fee')
+          expect(positions[2].amount).to eq(1.0)
+        end
+      end
+    end
+
+    context 'with ignored neuanmeldung sektion' do
+
+      before do
+        # this role is ignored
+        Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.create!(
+          person: model,
+          group: groups(:bluemlisalp_neuanmeldungen_sektion),
+          created_at: date
+        )
+      end
+
+      it 'generates positions' do
+        expect(positions.size).to eq(0)
+      end
+
+    end
+
+  end
+
 end

@@ -50,6 +50,13 @@ module Invoices
         build_positions(SECTION_POSITIONS + SAC_POSITIONS + NEW_ENTRY_POSITIONS, role)
       end
 
+      def new_additional_section_positions(section)
+        role = person.new_additional_section_membership_role(section)
+        return [] unless role
+
+        build_positions(SECTION_POSITIONS + [Positions::ServiceFee], role)
+      end
+
       private
 
       def build_positions(classes, role)
