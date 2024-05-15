@@ -8,6 +8,7 @@
 module Invoices
   module SacMemberships
     class Person
+
       attr_reader :model, :context
       attr_writer :sac_magazine_mailing_list
 
@@ -36,6 +37,11 @@ module Invoices
       def additional_membership_roles
         @additional_membership_roles ||=
           active_roles_of_type(Group::SektionsMitglieder::MitgliedZusatzsektion)
+      end
+
+      def new_entry_membership_role
+        @new_entry_membership_role ||=
+          active_roles_of_type(Group::SektionsNeuanmeldungenNv::Neuanmeldung).first
       end
 
       def sac_honorary_member?

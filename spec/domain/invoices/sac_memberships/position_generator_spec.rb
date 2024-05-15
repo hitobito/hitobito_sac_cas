@@ -12,7 +12,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
   let(:additional_section) { groups(:matterhorn) }
-  let(:positions) { described_class.new(person).generate }
+  let(:positions) { described_class.new(person).membership_positions }
   let(:magazine_list) { mailing_lists(:sac_magazine) }
 
   before do
@@ -566,6 +566,74 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions[4].amount).to eq(1.0)
       expect(positions[5].name).to eq('section_fee')
       expect(positions[5].amount).to eq(56.0)
+    end
+  end
+
+  context 'new entry' do
+    let(:positions) { described_class.new(person).new_entry_positions }
+
+    context 'without neuanmeldung' do
+      it 'generates no positions' do
+        expect(positions).to eq([])
+      end
+    end
+
+    context 'with neuanmeldung' do
+      let(:model) { Fabricate(:person) }
+
+      before do
+        Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
+          person: model,
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          created_at: date
+        )
+      end
+
+      it 'generates positions' do
+        expect(positions.size).to eq(7)
+
+        expect(positions[0].name).to eq('section_fee')
+        expect(positions[0].amount).to eq(42.0)
+        expect(positions[1].name).to eq('sac_fee')
+        expect(positions[1].amount).to eq(40.0)
+        expect(positions[2].name).to eq('hut_solidarity_fee')
+        expect(positions[2].amount).to eq(20.0)
+        expect(positions[3].name).to eq('sac_magazine')
+        expect(positions[3].amount).to eq(25.0)
+        expect(positions[4].name).to eq('service_fee')
+        expect(positions[4].amount).to eq(1.0)
+
+        expect(positions[5].name).to eq('sac_entry_fee')
+        expect(positions[5].amount).to eq(10.0)
+        expect(positions[5].group).to eq(nil)
+        expect(positions[5].debitor).to eq(person)
+        expect(positions[5].creditor.to_s).to eq(sac.to_s)
+        expect(positions[5].article_number).to eq(config.sac_entry_fee_article_number)
+
+        expect(positions[6].name).to eq('section_entry_fee')
+        expect(positions[6].amount).to eq(10.0)
+        expect(positions[6].group).to eq(nil)
+        expect(positions[6].debitor).to eq(person)
+        expect(positions[6].creditor.to_s).to eq(main_section.to_s)
+        expect(positions[6].article_number).to eq(config.section_entry_fee_article_number)
+      end
+    end
+
+    context 'with ignored neuanmeldung sektion' do
+
+      before do
+        # this role is ignored
+        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.create!(
+          person: model,
+          group: groups(:bluemlisalp_neuanmeldungen_sektion),
+          created_at: date
+        )
+      end
+
+      it 'generates positions' do
+        expect(positions.size).to eq(0)
+      end
+
     end
   end
 

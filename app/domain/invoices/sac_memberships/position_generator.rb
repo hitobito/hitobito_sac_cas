@@ -22,44 +22,49 @@ module Invoices
         Positions::SectionBulletinPostageAbroad
       ].freeze
 
+      NEW_ENTRY_POSITIONS = [
+        Positions::SacEntryFee,
+        Positions::SectionEntryFee
+      ].freeze
+
       attr_reader :person
 
       def initialize(person)
         @person = person
       end
 
-      def generate
-        positions = collect_main_membership_positions
+      def membership_positions
+        positions = build_positions(SECTION_POSITIONS + SAC_POSITIONS,
+                                    person.main_membership_role)
+        positions.push(*build_balancing_positions(positions))
         person.additional_membership_roles.each do |role|
           positions.push(*build_positions(SECTION_POSITIONS, role))
         end
-        positions.filter(&:active?)
+        positions
+      end
+
+      def new_entry_positions
+        role = person.new_entry_membership_role
+        return [] unless role
+
+        build_positions(SECTION_POSITIONS + SAC_POSITIONS + NEW_ENTRY_POSITIONS, role)
       end
 
       private
 
-      def collect_main_membership_positions
-        role = person.main_membership_role
-        positions = []
-        positions.push(*build_positions(SECTION_POSITIONS, role))
-        positions.push(*build_positions(SAC_POSITIONS, role))
-        positions.push(*build_balancing_positions(positions, role))
-        positions
-      end
-
       def build_positions(classes, role)
-        classes.map { |klass| klass.new(person, role) }
+        classes.map { |klass| klass.new(person, role) }.filter(&:active?)
       end
 
       # Charge section for sac positions that are exempted from
       # the invoice for Ehrenmitglieder or Begünstigte.
-      def build_balancing_positions(positions, role)
+      def build_balancing_positions(positions)
         positions.filter_map do |position|
           next unless position.requires_balancing_payment?
 
           amount = position.amount
           position.amount = 0
-          Positions::BalancingPayment.new(person, role, amount)
+          Positions::BalancingPayment.new(person, person.main_membership_role, amount)
         end
       end
 

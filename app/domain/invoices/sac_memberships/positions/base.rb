@@ -57,8 +57,7 @@ module Invoices
         def requires_balancing_payment?
           balancing_payment_possible &&
             sac_fee_exemption? &&
-            amount.positive? &&
-            active?
+            amount.positive?
         end
 
         def to_h

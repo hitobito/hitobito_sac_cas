@@ -27,11 +27,20 @@ class People::MembershipInvoicePositionsController < ApplicationController
   end
 
   def positions
-    @positions ||= Invoices::SacMemberships::PositionGenerator.new(entry).generate.map(&:to_h)
+    @positions ||=
+      if entry.new_entry_membership_role
+        generator.new_entry_positions.map(&:to_h)
+      else
+        generator.membership_positions.map(&:to_h)
+      end
+  end
+
+  def generator
+    Invoices::SacMemberships::PositionGenerator.new(entry)
   end
 
   def entry
-    Invoices::SacMemberships::Person.new(person, context)
+    @entry ||= Invoices::SacMemberships::Person.new(person, context)
   end
 
   def context
