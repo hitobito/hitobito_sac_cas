@@ -17,6 +17,7 @@ class Group::Sektion < ::Group
     Group::SektionsTourenkommission,
     Group::SektionsHuettenkommission,
     Group::SektionsExterneKontakte,
+    Group::SektionsHuette,
     Group::Ortsgruppe
 
   self.default_children = [

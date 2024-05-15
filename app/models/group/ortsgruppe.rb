@@ -16,7 +16,8 @@ class Group::Ortsgruppe < ::Group
     Group::SektionsNeuanmeldungenNv,
     Group::SektionsTourenkommission,
     Group::SektionsExterneKontakte,
-    Group::SektionsHuettenkommission
+    Group::SektionsHuettenkommission,
+    Group::SektionsHuette
 
   self.default_children = [
     Group::SektionsFunktionaere,
