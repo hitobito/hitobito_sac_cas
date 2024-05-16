@@ -6,11 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::PeopleHelper
-  def format_person_digital_correspondence(entry)
-    key = entry.digital_correspondence ? :digital : :print
-    t(:"people.fields_sac_cas.digital_correspondence.#{key}")
-  end
-
   def format_person_sac_family_main_person(person)
     main_person = person.sac_family.main_person
 

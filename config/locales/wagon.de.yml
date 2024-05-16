@@ -170,9 +170,12 @@ de:
         created_at: Erstellt
         updated_at: Geändert
       person:
-        digital_correspondence: Mitgliederausweis & Rechnungsstellung
+        correspondence: Mitgliederausweis & Rechnungsstellung
         family_id: Familien ID
         sac_family_main_person: Rechnungen an (Familie)
+        correspondences:
+          digital: Digital
+          print: Physisch
         genders:
           _nil: andere
         membership_years: Anzahl Mitglieder-Jahre
@@ -617,11 +620,6 @@ de:
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
 
   people:
-    fields_sac_cas:
-      digital_correspondence:
-        digital: Digital
-        print: Physisch
-
     neuanmeldungen:
       multiselect_actions:
         accept: Übernehmen

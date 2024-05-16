@@ -149,31 +149,31 @@ describe Person do
     end
   end
 
-  describe 'digital_correspondence' do
-    it 'gets set to true when password is first set' do
+  describe 'correspondence' do
+    it 'gets set to digital when password is first set' do
       password = 'verysafepasswordfortesting'
-      person = Fabricate(:person, digital_correspondence: false)
-      expect(person.digital_correspondence).to eq(false)
+      person = Fabricate(:person, correspondence: 'print')
+      expect(person.correspondence).to eq('print')
 
       person.password = person.password_confirmation = password
       person.save!
 
-      expect(person.digital_correspondence).to eq(true)
+      expect(person.correspondence).to eq('digital')
     end
 
     it 'does not set to true when password is updated' do
       password = 'verysafepasswordfortesting'
       person = Fabricate(:person, password: password, password_confirmation: password)
-      expect(person.digital_correspondence).to eq(true)
+      expect(person.correspondence).to eq('digital')
 
-      person.update!(digital_correspondence: false)
+      person.update!(correspondence: 'print')
 
-      expect(person.digital_correspondence).to eq(false)
+      expect(person.correspondence).to eq('print')
 
       person.password = person.password_confirmation = 'updatedpasswordalsoverysafeyes'
       person.save!
 
-      expect(person.digital_correspondence).to eq(false)
+      expect(person.correspondence).to eq('print')
     end
   end
 end
