@@ -14,10 +14,47 @@
 
 #membership-verify {
   header {
+    justify-content: end;
     #logo {
       img {
         width: 100%;
       }
+    }
+  }
+
+  #details {
+    #member-info {
+      dl {
+        display: flex;
+        flex-direction: column;
+
+        div {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+
+    .alert-success {
+      background-color: rgb(128, 255, 0); // cmyk(50, 0, 100, 0)
+      color: black;
+    }
+
+    .alert-danger {
+      background-color: rgb(255, 179, 128); // cmyk(50, 0, 100, 0)
+      color: black;
+    }
+
+    #logo-reciprocate {
+      height: 4em;
+      display: flex;
+      justify-content: center;
+    }
+  }
+  #footer {
+    margin: 0;
+    img {
+      width: 100%;
     }
   }
 }
