@@ -33,4 +33,8 @@ module SacCas::GroupDecorator
     object.social_accounts.any? { |account| account.label == 'Homepage JO' }
   end
 
+  # Sort roles alphabetically, but make "Andere" show up last.
+  def role_types
+    klass.role_types.sort_by { |role| [role.name.demodulize.eql?('Andere') ? 1 : 0, role.label] }
+  end
 end

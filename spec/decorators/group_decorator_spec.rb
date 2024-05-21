@@ -34,6 +34,18 @@ describe GroupDecorator do
     Fabricate(:person, birthday: 25.years.ago, primary_group_id: group.id)
   end
 
+  describe '#possible_roles' do
+    context 'Sektion Funktionaere Roles' do
+      let(:group) { groups(:bluemlisalp_funktionaere) }
+      it 'puts andere to the end of the list' do
+          expected_role_list = ['Administration', 'Administration (nur lesend)',
+                                'Kulturbeauftragte*r', 'Mitgliederverwaltung',
+                                'Präsidium', 'Umweltbeauftragte*r', 'Andere']
+          expect(decorator.role_types.map(&:label)).to eq(expected_role_list)
+      end
+    end
+  end
+
   describe '#members_count' do
     context 'for Sektion' do
       let(:group) { groups(:bluemlisalp) }
