@@ -129,8 +129,7 @@ module SacCas::Event::Course
       :waiting_list,
       :tentative_applications,
       :required_contact_attrs,
-      :hidden_contact_attrs,
-      :state
+      :hidden_contact_attrs
     ]
 
     self.possible_states = %w(created application_open application_paused application_closed
