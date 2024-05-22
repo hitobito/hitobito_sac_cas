@@ -14,3 +14,9 @@ Fabricator(:external_training) do
   finish_at { 5.days.ago }
   training_days { 5 }
 end
+
+Fabricator(:external_training_skip_issue_qualifications, from: :external_training) do
+  before_create do |training|
+    training.singleton_class.skip_callback(:save, :after, :issue_qualifications)
+  end
+end

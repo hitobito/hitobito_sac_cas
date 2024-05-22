@@ -294,7 +294,7 @@ describe ExternalTrainings::Qualifier do
   end
 
   def create_external_training(start_at:, finish_at: start_at, kind: nil, training_days: 2, qualification: false)
-    Fabricate(:external_training, {
+    Fabricate(:external_training_skip_issue_qualifications, {
       person: mitglied,
       event_kind: kind || ski_course,
       start_at: start_at,

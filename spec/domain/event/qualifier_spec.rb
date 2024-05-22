@@ -52,7 +52,7 @@ describe Event::Qualifier do
   end
 
   def create_external_training(start_at, training_days:)
-    Fabricate(:external_training, {
+    Fabricate(:external_training_skip_issue_qualifications, {
       person: person,
       event_kind: ski_course,
       start_at: start_at,
