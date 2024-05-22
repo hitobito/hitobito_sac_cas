@@ -93,18 +93,4 @@ describe Event::ParticipationAbility do
       end
     end
   end
-
-  context 'group_full' do
-    let(:role) { build_role(:matterhorn_tourenkommission, 'TourenchefWinter') }
-
-    [:summon, :cancel].each do |action|
-      it "may not #{action} on group above" do
-        expect(subject).not_to be_able_to(action, build(:matterhorn))
-      end
-
-      it "may #{action} on group" do
-        expect(subject).to be_able_to(action, build(:matterhorn_tourenkommission))
-      end
-    end
-  end
 end

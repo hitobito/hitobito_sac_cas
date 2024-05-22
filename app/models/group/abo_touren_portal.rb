@@ -21,6 +21,26 @@ class Group::AboTourenPortal < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Abonnent, Neuanmeldung
+  class Autor < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Community < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Admin < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Andere < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  roles Abonnent, Neuanmeldung, Admin, Autor, Community, Andere
 
 end

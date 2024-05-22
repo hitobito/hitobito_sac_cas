@@ -11,6 +11,9 @@ class Group::SacCas < ::Group
   self.event_types = [Event::Course]
 
   children Group::Geschaeftsstelle,
+           Group::Geschaeftsleitung,
+           Group::Zentralvorstand,
+           Group::Kommission,
            Group::Sektion,
            Group::ExterneKontakte,
            Group::Abonnenten,

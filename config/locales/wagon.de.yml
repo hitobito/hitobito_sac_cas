@@ -348,9 +348,21 @@ de:
         one: Externe Kontakte
         other: Externe Kontakte
 
+      group/geschaeftsleitung:
+        one: Geschäftsleitung
+        other: Geschäftsleitung
+
       group/geschaeftsstelle:
         one: Geschäftsstelle
         other: Geschäftsstelle
+
+      group/kommission:
+        one: Kommission
+        other: Kommission
+
+      group/zentralvorstand:
+        one: Zentralvorstand
+        other: Zentralvorstand
 
       group/abonnenten:
         one: Abonnenten
@@ -389,20 +401,28 @@ de:
         other: Neuanmeldungen (zur Freigabe)
 
       group/sektions_funktionaere:
-        one: Funktionäre
-        other: Funktionäre
+        one: Sektionsfunktionäre
+        other: Sektionsfunktionäre
 
       group/sektions_tourenkommission:
-        one: Tourenkommission
-        other: Tourenkommissionen
-
-      group/sektions_huettenkommission:
-        one: Hüttenkommission
-        other: Hüttennkommission
+        one: Touren und Kurse
+        other: Touren und Kurse
 
       group/sektions_externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
+
+      group/sektions_kommission:
+        one: Kommission
+        other: Kommission
+
+      group/sektions_vorstand:
+        one: Vorstand
+        other: Vorstand
+
+      group/sektions_huettenkommission:
+        one: Hütten
+        other: Hütten
 
       group/sektions_huette:
         one: Hütte
@@ -419,8 +439,38 @@ de:
         one: Mitarbeiter*in (lesend)
         description: Mitarbeiter*in (lesend)
       group/geschaeftsstelle/admin:
-        one: Admin
-        description: Admin
+        one: Administration
+        description: Administration
+      group/geschaeftsstelle/andere:
+        one: Andere
+        description: Andere
+      group/geschaeftsleitung/geschaeftsfuehrung:
+        one: Geschäftsführung
+        description: Geschäftsführung
+      group/geschaeftsleitung/ressortleitung:
+        one: Ressortleitung
+        description: Ressortleitung
+      group/geschaeftsleitung/andere:
+        one: Andere
+        description: Andere
+      group/kommission/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/kommission/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/kommission/andere:
+        one: Andere
+        description: Andere
+      group/zentralvorstand/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/zentralvorstand/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/zentralvorstand/andere:
+        one: Andere
+        description: Andere
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
@@ -430,12 +480,30 @@ de:
       group/abo_magazin/neuanmeldung:
         one: Neuanmeldung
         description: Neuanmeldung
+      group/abo_magazin/autor:
+        one: Autor*in
+        description: Autor*in
+      group/abo_magazin/andere:
+        one: Andere
+        description: Andere
       group/abo_touren_portal/abonnent:
         one: Abonnent
         description: Abonnent
+      group/abo_touren_portal/admin:
+        one: Administration
+        description: Administration
       group/abo_touren_portal/neuanmeldung:
         one: Neuanmeldung
         description: Neuanmeldung
+      group/abo_touren_portal/autor:
+        one: Autor*in
+        description: Autor*in
+      group/abo_touren_portal/community:
+        one: Community
+        description: Community
+      group/abo_touren_portal/andere:
+        one: Andere
+        description: Andere
       group/abo_basic_login/basic_login:
         one: Basis Konto
         description: Basis Konto
@@ -451,12 +519,12 @@ de:
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Mitgliederverwaltung
         description: Mitgliederverwaltung Sektion
-      group/sektions_funktionaere/umweltbeauftragte:
-        one: Umweltbeauftragte*r
-        description: Umweltbeauftragte*r Sektion
-      group/sektions_funktionaere/kulturbeauftragte:
-        one: Kulturbeauftragte*r
-        description: Kulturbeauftragte*r Sektion
+      group/sektions_funktionaere/finanzen:
+        one: Finanzen
+        description: Finanzen
+      group/sektions_funktionaere/redaktion:
+        one: Redaktion
+        description: Redaktion
       group/sektions_funktionaere/andere:
         one: Andere
         description: Andere
@@ -484,6 +552,24 @@ de:
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
         one: Neuanmeldung (Zusatzsektion)
         description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
+      group/sektions_kommission/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_kommission/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_kommission/andere:
+        one: Andere
+        description: Andere
+      group/sektions_vorstand/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_vorstand/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_vorstand/andere:
+        one: Andere
+        description: Andere
       group/sektions_tourenkommission/tourenchef_sommer:
         one: Tourenchef*in Sommer
         description: Tourenchef*in Sommer
@@ -497,8 +583,20 @@ de:
         one: Tourenchef*in Senioren
         description: Tourenchef*in Senioren
       group/sektions_tourenkommission/tourenleiter:
-        one: Tourenleiter*in
-        description: Tourenleiter*in
+        one: Tourenleiter*in (mit Qualifikation)
+        description: Tourenleiter*in (mit Qualifikation)
+      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
+        one: Tourenleiter*in (ohne Qualifikation)
+        description: Tourenleiter*in (ohne Qualifikation)
+      group/sektions_tourenkommission/jo_chef:
+        one: JO-Chef*in
+        description: JO-Chef*in
+      group/sektions_tourenkommission/js_coach:
+        one: J+S Coach
+        description: J+S Coach
+      group/sektions_tourenkommission/andere:
+        one: Andere
+        description: Andere
       group/sektions_huettenkommission/huettenobmann:
         one: Hüttenobmann*frau
         description: Hüttenobmann*frau
@@ -511,9 +609,6 @@ de:
       group/sektions_huette/huettenchef:
         one: Hüttenchef*in
         description: Hüttenchef*in
-      group/sektions_huette/andere:
-        one: Andere
-        description: Andere
       group/sektions_externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
@@ -521,6 +616,9 @@ de:
         one: Hüttenwartspartner*in
       group/sektions_huette/schluesseldepot:
         one: Schlüsseldepot
+      group/sektions_huette/andere:
+        one: Andere
+        description: Andere
 
   devise:
     sessions:
