@@ -13,7 +13,7 @@ describe Group::SektionsTourenkommission do
   describe Group::SektionsTourenkommission::Tourenleiter do
     let(:person) { people(:tourenchef) }
     let(:kind) { qualification_kinds(:snowboard_leader) }
-    subject(:role) { Fabricate.build(described_class.to_s, group: group, person: person) }
+    subject(:role) { Fabricate.build(described_class.sti_name, group: group, person: person) }
 
     it 'is invalid without qualifications' do
       expect(role).not_to be_valid

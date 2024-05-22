@@ -11,7 +11,7 @@ class Group::SektionsTourenkommission < Group
 
   ### ROLES
   class Tourenchef < ::Role
-    self.permissions = [:group_full]
+    self.permissions = [:layer_and_below_full]
     self.two_factor_authentication_enforced = true
   end
 
@@ -20,10 +20,12 @@ class Group::SektionsTourenkommission < Group
   class TourenchefKlettern < Tourenchef; end
   class TourenchefSenioren < Tourenchef; end
 
-  class Tourenleiter < ::Role
+  class TourenleiterOhneQualifikation < ::Role
     self.permissions = []
     self.basic_permissions_only = true
+  end
 
+  class Tourenleiter < TourenleiterOhneQualifikation
     before_validation :assert_active_qualification
 
     private
@@ -35,10 +37,27 @@ class Group::SektionsTourenkommission < Group
     end
   end
 
+  class JoChef < ::Role
+    self.permissions = []
+  end
+
+  class JsCoach < ::Role
+    self.permissions = []
+  end
+
+  class Andere < ::Role
+    self.permissions = []
+  end
+
+
   roles TourenchefSommer,
         TourenchefWinter,
         TourenchefKlettern,
         TourenchefSenioren,
-        Tourenleiter
+        Tourenleiter,
+        TourenleiterOhneQualifikation,
+        JoChef,
+        JsCoach,
+        Andere
 
 end

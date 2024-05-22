@@ -5,21 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::Geschaeftsstelle < ::Group
+class Group::Geschaeftsleitung < ::Group
+
+  self.static_name = true
 
   ### ROLES
-  class Mitarbeiter < ::Role
-    self.permissions = [:layer_and_below_full, :read_all_people]
-    self.two_factor_authentication_enforced = true
-  end
-
-  class MitarbeiterLesend < ::Role
+  class Geschaeftsfuehrung < ::Role
     self.permissions = [:layer_and_below_read, :read_all_people]
     self.two_factor_authentication_enforced = true
   end
 
-  class Admin < ::Role
-    self.permissions = [:layer_and_below_full, :admin, :impersonation, :read_all_people]
+  class Ressortleitung < ::Role
+    self.permissions = [:layer_and_below_read, :read_all_people]
     self.two_factor_authentication_enforced = true
   end
 
@@ -28,6 +25,6 @@ class Group::Geschaeftsstelle < ::Group
     self.two_factor_authentication_enforced = true
   end
 
-  roles Mitarbeiter, MitarbeiterLesend, Admin, Andere
+  roles Geschaeftsfuehrung, Ressortleitung, Andere
 
 end

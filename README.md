@@ -9,29 +9,75 @@ of SAC CAS.
 ```
     * Schweizer Alpen-Club SAC
       * Geschäftsstelle
-        * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]
-        * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]
-        * Admin: 2FA [:layer_and_below_full, :admin, :impersonation, :read_all_people]
-      * Ehrenmitglieder
-        * Ehrenmitglied: []
+        * Mitarbeiter*in (schreibend): [:layer_and_below_full, :read_all_people]
+        * Mitarbeiter*in (lesend): [:layer_and_below_read, :read_all_people]
+        * Administration: [:layer_and_below_full, :admin, :impersonation, :read_all_people]
+        * Andere: 2FA [:layer_and_below_read, :read_all_people]
+      * Geschäftsleitung
+        * Geschäftsführung: 2FA [:layer_and_below_read, :read_all_people]
+        * Ressortleitung: 2FA [:layer_and_below_read, :read_all_people]
+        * Andere: 2FA [:layer_and_below_read, :read_all_people]
+      * Zentralvorstand
+        * Präsidium: []
+        * Mitglied: []
+        * Andere: []
+      * Kommission
+        * Präsidium: []
+        * Mitglied: []
+        * Andere: []
       * Externe Kontakte
         * Kontakt: []
       * Touren-Portal
         * Abonnent: []
         * Neuanmeldung: []
+        * Administration: []
+        * Autor*in: []
+        * Community: []
+        * Andere: []
       * AboMagazin
         * Abonnent: []
         * Neuanmeldung: []
+        * Autor*in: []
+        * Andere: []
       * SAC/CAS Login
         * Basis Konto: []
-    * Sektion, Ortsgruppe
-      * Funktionäre
-        * Präsidium: []
+      * Ehrenmitglieder
+        * Ehrenmitglied: []
+    * Sektion
+    * Ortsgruppe
+    * Global
+      * Sektionsfunktionäre
+        * Präsidium: [:layer_and_below_read]
         * Mitgliederverwaltung: 2FA [:layer_and_below_full]
         * Administration: 2FA [:layer_and_below_full]
         * Administration (nur lesend): 2FA [:layer_and_below_read]
-        * Umweltbeauftragte*r: []
-        * Kulturbeauftragte*r: []
+        * Finanzen: []
+        * Redaktion: []
+        * Andere: []
+      * Hütten
+        * Hüttenobmann*frau: 2FA [:group_and_below_read]
+        * Andere: [:group_read]
+      * Hütte
+        * Hüttenwart*in: [:group_read]
+        * Hüttenchef*in: [:group_read]
+        * Andere: [:group_read]
+      * Touren Und Kurse
+        * Tourenchef*in Sommer: 2FA [:layer_and_below_full]
+        * Tourenchef*in Winter: 2FA [:layer_and_below_full]
+        * Tourenchef*in Klettern: 2FA [:layer_and_below_full]
+        * Tourenchef*in Senioren: 2FA [:layer_and_below_full]
+        * Tourenleiter*in (mit Qualifikation): []
+        * Tourenleiter*in (ohne Qualifikation): []
+        * JO-Chef*in: []
+        * J+S Coach: []
+        * Andere: []
+      * Kommission
+        * Präsidium: []
+        * Mitglied: []
+        * Andere: []
+      * Vorstand
+        * Präsidium: []
+        * Mitglied: []
         * Andere: []
       * Mitglieder
         * Mitglied (Stammsektion): []
@@ -44,15 +90,6 @@ of SAC CAS.
       * Neuanmeldungen
         * Neuanmeldung (Stammsektion): []
         * Neuanmeldung (Zusatzsektion): []
-      * Tourenkommission
-        * Tourenchef*in Sommer: 2FA [:group_full]
-        * Tourenchef*in Winter: 2FA [:group_full]
-        * Tourenchef*in Klettern: 2FA [:group_full]
-        * Tourenchef*in Senioren: 2FA [:group_full]
-        * Tourenleiter*in: []
-      * Hüttenkommission
-        * Hüttenobmann*frau: 2FA [:group_and_below_read]
-        * Andere: [:group_read]
       * Externe Kontakte
         * Kontakt: []
 ```

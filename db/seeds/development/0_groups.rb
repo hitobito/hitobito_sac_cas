@@ -71,7 +71,7 @@ matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
 matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
 matterhorn_neuanmeldungen.update!(
   custom_self_registration_title: 'Registrierung zu SAC Matterhorn',
-  self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung 
+  self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung
 )
 
 Group::SektionsNeuanmeldungenSektion.seed_once(

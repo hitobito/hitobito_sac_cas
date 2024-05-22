@@ -11,12 +11,16 @@ class Group::Ortsgruppe < ::Group
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
+    Group::SektionsHuettenkommission,
+    Group::SektionsTourenkommission,
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenSektion,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsTourenkommission,
-    Group::SektionsExterneKontakte,
-    Group::SektionsHuettenkommission
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
+    Group::SektionsExterneKontakte
 
   self.default_children = [
     Group::SektionsFunktionaere,
