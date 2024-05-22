@@ -11,6 +11,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
   let(:user) { people(:admin) }
   let(:app) { Oauth::Application.create!(name: 'MyApp', redirect_uri: redirect_uri) }
   let(:redirect_uri) { 'urn:ietf:wg:oauth:2.0:oob' }
+  let(:data) { JSON.parse(response.body) }
 
   describe 'GET#show' do
     context 'with name scope' do
@@ -22,17 +23,18 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       it 'shows the userinfo' do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to match({
-                                                     sub: user.id.to_s,
-                                                     first_name: user.first_name,
-                                                     last_name: user.last_name,
-                                                     nickname: user.nickname,
-                                                     address: user.address,
-                                                     zip_code: user.zip_code,
-                                                     town: user.town,
-                                                     country: user.country,
-                                                     picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
-                                                   }.deep_stringify_keys)
+        expect(data).to match({
+          sub: user.id.to_s,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          nickname: user.nickname,
+          address: user.address,
+          zip_code: user.zip_code,
+          town: user.town,
+          country: user.country,
+          phone_number: nil,
+          picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
+        }.deep_stringify_keys)
       end
     end
 
@@ -45,7 +47,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       it 'shows the userinfo' do
         get :show, params: { access_token: token.token }
         expect(response.status).to eq 200
-        expect(JSON.parse(response.body)).to match({
+        expect(data).to match({
           sub: user.id.to_s,
           first_name: user.first_name,
           last_name: user.last_name,
@@ -61,6 +63,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
+          phone_number: nil,
+          membership_years: 0,
           picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
           roles: [
             {
@@ -74,6 +78,19 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
             }
           ]
         }.deep_stringify_keys)
+      end
+
+    end
+    context 'with with_groups scope' do
+      let(:token) do
+        app.access_tokens.create!(resource_owner_id: user.id,
+                                  scopes: 'openid with_groups', expires_in: 2.hours)
+      end
+
+      it 'has user_groups key' do
+        get :show, params: { access_token: token.token }
+        expect(response.status).to eq 200
+        expect(data['user_groups']).to include 'SAC_employee'
       end
     end
   end
