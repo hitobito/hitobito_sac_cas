@@ -5,22 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Events::Courses::StateSteppingController < ApplicationController
-
-  @@helper = Object.new
-                   .extend(ActionView::Helpers::TranslationHelper)
-                   .extend(ActionView::Helpers::OutputSafetyHelper)
+class Events::Courses::StateController < ApplicationController
 
   def update
     authorize!(:update, entry)
 
-    save_next_step if step_possible?
+    save_next_state if state_possible?
 
     redirect_to group_event_path
   end
 
-  def save_next_step
-    entry.state = next_step
+  private
+
+  def save_next_state
+    entry.state = next_state
 
     if entry.save
       set_success_notice
@@ -30,7 +28,7 @@ class Events::Courses::StateSteppingController < ApplicationController
   end
 
   def set_success_notice
-    flash.now[:notice] = t('events/courses/state_stepping.flash.success',
+    flash.now[:notice] = t('events/courses/state.flash.success',
                            state: entry.decorate.state_translated)
   end
 
@@ -39,19 +37,15 @@ class Events::Courses::StateSteppingController < ApplicationController
   end
 
   def error_messages
-    @@helper.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
+    helpers.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
   end
 
-  def next_step
+  def next_state
     params[:state]
   end
 
-  def step_possible?
-    stepper.step_possible?(next_step)
-  end
-
-  def stepper
-    @stepper ||= Events::Courses::StateStepper.new(entry)
+  def state_possible?
+    entry.state_possible?(next_state)
   end
 
   def entry

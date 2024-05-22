@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Events::Courses::StateSteppingController do
+describe Events::Courses::StateController do
 
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
@@ -28,7 +28,7 @@ describe Events::Courses::StateSteppingController do
     context 'as admin' do
       before { sign_in(admin) }
 
-      it 'updates state if step is possible' do
+      it 'updates state if state change is possible' do
         put :update, params: { group_id: group.id, id: course.id, state: 'application_open' }
 
         course.reload
@@ -39,7 +39,7 @@ describe Events::Courses::StateSteppingController do
         expect(response).to redirect_to(group_event_path(group, course))
       end
 
-      it 'does not update state if step is impossible' do
+      it 'does not update state if new state is not available' do
         expect(course).to_not receive(:state=)
 
         put :update, params: { group_id: group.id, id: course.id, state: 'ready' }

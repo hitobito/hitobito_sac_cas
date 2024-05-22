@@ -47,7 +47,7 @@ Rails.application.routes.draw do
 
       resources :events, only: [] do
         member do
-          put  'step_state' => 'events/courses/state_stepping#update'
+          put  'state' => 'events/courses/state#update'
         end
       end
     end

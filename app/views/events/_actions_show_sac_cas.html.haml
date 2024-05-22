@@ -3,10 +3,5 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas
 
-- if can?(:update, entry)
-  - @state_stepper&.available_steps&.each do |state|
-    = action_button(t(".state_buttons.#{state}"),
-                    step_state_group_event_path(@group, @event, { state: state }),
-                    nil,
-                    method: :put)
-
+- if entry.course? && can?(:update, entry)
+  = Dropdown::Events::Courses::State.new(self, entry)

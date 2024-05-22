@@ -611,7 +611,7 @@ de:
         success_multiple:
           "%{model} wurde erfolgreich für %{names} erstellt."
 
-  events/courses/state_stepping:
+  events/courses/state:
     flash:
       success: Status wurde auf %{state} gesetzt.
 
