@@ -82,6 +82,7 @@ module HitobitoSacCas
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
 
       ## Domain
+      OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
         'people.id' => SearchStrategies::SqlConditionBuilder::IdMatcher,
         'people.birthday' => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
@@ -178,26 +179,8 @@ module HitobitoSacCas
       end
     end
 
-    initializer 'sac_cas.add_oidc_claims' do |_app|
-      Doorkeeper::OpenidConnect.configuration.claims[:picture_url] =
-        Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
-          name: :picture_url,
-          scope: :name,
-          response: [:user_info],
-          generator: proc do |resource_owner|
-            resource_owner.decorate.picture_full_url
-          end
-        )
-
-      Doorkeeper::OpenidConnect.configuration.claims[:with_roles_picture_url] =
-        Doorkeeper::OpenidConnect::Claims::NormalClaim.new(
-          name: :picture_url,
-          scope: :with_roles,
-          response: [:user_info],
-          generator: proc do |resource_owner|
-            resource_owner.decorate.picture_full_url
-          end
-        )
+    initializer 'sac_cas.append_doorkeeper_scope' do |_app|
+      Doorkeeper.configuration.scopes.add "with_groups"
     end
 
     private
