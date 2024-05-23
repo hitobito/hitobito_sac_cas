@@ -1,13 +1,14 @@
 -# frozen_string_literal: true
+- # Named with z so it will show up at the end.
 
 -#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if can?(:update, entry) && entry.sac_membership_active?
-  %h2= t('.documents')
+- if can?(:update, entry) && entry.sac_membership_anytime?
   %div
     %dl.dl-horizontal
-      = labeled t('.membership') do
-        = link_to t('.download'), membership_path(format: :pdf), target: :new
+    .d-flex.justify-content-center
+      .qr-code-wrapper
+        = qr_code_image_tag(entry)

@@ -676,11 +676,6 @@ de:
         stammsektion: Stammsektion
         set_stammsektion: Stammsektion setzen
 
-    show_event_sac_cas:
-      documents: Dokumente
-      membership: Mitgliederausweis
-      download: Anzeigen
-
     tabs:
       history: Mitgliedschaften / Verlauf
 

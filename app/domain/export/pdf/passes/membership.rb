@@ -56,4 +56,3 @@ module Export::Pdf::Passes
 
   end
 end
-
