@@ -91,6 +91,7 @@ module SacCas::Event::Course
 
   prepended do # rubocop:disable Metrics/BlockLength
     include I18nEnums
+    include Events::Courses::State
 
     translates :brief_description, :specialities, :similar_tours, :program
 
@@ -131,9 +132,6 @@ module SacCas::Event::Course
       :required_contact_attrs,
       :hidden_contact_attrs
     ]
-
-    self.possible_states = %w(created application_open application_paused application_closed
-                              assignment_closed ready closed canceled)
 
     self.possible_participation_states = %w(unconfirmed applied rejected assigned summoned
                                             attended absent canceled annulled)

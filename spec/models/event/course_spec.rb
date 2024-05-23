@@ -29,13 +29,13 @@ describe Event::Course do
     end
 
     it 'validates presence of location in state ready' do
-      course.state = :ready
+      allow(course).to receive(:state).and_return(:ready)
       expect(course).not_to be_valid
       expect(course.errors[:location]).to eq ['muss ausgefüllt werden']
     end
 
     it 'does not validate presence of location in state created' do
-      course.state = :created
+      expect(course.state).to eq('created')
       expect(course).to be_valid
     end
   end
@@ -235,6 +235,70 @@ describe Event::Course do
         course.participant_count = 2
         expect(state).to eq 'applied'
       end
+    end
+  end
+
+  describe '#available_states' do
+    let(:course) { events(:closed) }
+
+    it 'lists available states for state :created' do
+      expect(course).to receive(:state).and_return(:created)
+      expect(course.available_states).to eq([:application_open])
+    end
+
+    it 'lists available states for state :application_open' do
+      expect(course).to receive(:state).and_return(:application_open)
+      expect(course.available_states).to eq([:application_paused, :created, :canceled])
+    end
+
+    it 'lists available states for state :application_paused' do
+      expect(course).to receive(:state).and_return(:application_paused)
+      expect(course.available_states).to eq([:application_open])
+    end
+
+    it 'lists available states for state :application_closed' do
+      expect(course).to receive(:state).and_return(:application_closed)
+      expect(course.available_states).to eq([:assignment_closed, :canceled])
+    end
+
+    it 'lists available states for state :assignment_closed' do
+      expect(course).to receive(:state).and_return(:assignment_closed)
+      expect(course.available_states).to eq([:ready, :canceled])
+    end
+
+    it 'lists available states for state :ready' do
+      expect(course).to receive(:state).and_return(:ready)
+      expect(course.available_states).to eq([:closed, :canceled])
+    end
+
+    it 'lists available states for state :canceled' do
+      expect(course).to receive(:state).and_return(:canceled)
+      expect(course.available_states).to eq([:application_open])
+    end
+
+    it 'lists available states for state :closed' do
+      expect(course).to receive(:state).and_return(:closed)
+      expect(course.available_states).to eq([:ready])
+    end
+  end
+
+  describe 'state change validation' do
+    let(:course) { events(:closed) }
+
+    it 'state cannot be changed from closed to created' do
+      expect(course).to be_valid
+      course.state = :created
+
+      expect(course).not_to be_valid
+      expect(course.errors.attribute_names).to include(:state)
+      expect(course.errors[:state].first).to eq('State cannot be changed from application_closed to created')
+    end
+
+    it 'state can be changed from application_closed to canceled' do
+      expect(course).to be_valid
+      course.state = :canceled
+
+      expect(course).to be_valid
     end
   end
 end
