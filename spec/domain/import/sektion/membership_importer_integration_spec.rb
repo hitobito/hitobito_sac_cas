@@ -49,7 +49,7 @@ describe Import::Sektion::MembershipsImporter do
 
     expect(active_role.created_at).to eq(Time.zone.parse('1899-12-31'))
     expect(active_role.deleted_at).to be_nil
-    expect(active_role.beitragskategorie).to eq('jugend')
+    expect(active_role.beitragskategorie).to eq('youth')
   end
 
   it 'imports retired person' do
@@ -66,7 +66,7 @@ describe Import::Sektion::MembershipsImporter do
 
     expect(retired_role.created_at).to eq(Time.zone.parse('1980-12-31'))
     expect(retired_role.deleted_at).to eq(Time.zone.parse('2010-1-1'))
-    expect(retired_role.beitragskategorie).to eq('einzel')
+    expect(retired_role.beitragskategorie).to eq('adult')
   end
 
   it 'sets the address of all family/household members to the one of the last imported member' do
@@ -93,6 +93,6 @@ describe Import::Sektion::MembershipsImporter do
       .where(person_id: people_navision_ids)
       .pluck(:beitragskategorie)
 
-    expect(beitragskategorien).to eq(%w(jugend familie familie familie))
+    expect(beitragskategorien).to eq(%w(youth family family family))
   end
 end

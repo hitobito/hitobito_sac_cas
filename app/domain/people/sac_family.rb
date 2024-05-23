@@ -23,7 +23,7 @@ class People::SacFamily
   def update!
     # do nothing unless we find a family membership in the household
     return unless family_stammsektion
-    
+
     non_family_housemates.each {|new_family_member| update_membership!(new_family_member) }
   end
 
@@ -32,13 +32,13 @@ class People::SacFamily
       .roles
       .where(type: terminatable_member_role_types,
              terminated: true,
-             beitragskategorie: :familie)
+             beitragskategorie: :family)
 
     affected_family_roles = Role
       .where(type: terminatable_member_role_types,
              group_id: terminated_roles.collect(&:group_id),
              terminated: false,
-             beitragskategorie: :familie,
+             beitragskategorie: :family,
              person_id: family_members.collect(&:id))
 
     delete_on = terminated_roles.first.delete_on
@@ -57,7 +57,7 @@ class People::SacFamily
 
   def member?
     household_key.present? &&
-      @person.roles.where(beitragskategorie: :familie).exists?
+      @person.roles.where(beitragskategorie: :family).exists?
   end
 
   def id
@@ -72,7 +72,7 @@ class People::SacFamily
     family_stammsektion.people
                        .distinct
                        .joins(:roles)
-                       .where(roles: { type: stammsektion_role_types, beitragskategorie: :familie },
+                       .where(roles: { type: stammsektion_role_types, beitragskategorie: :family },
                               people: { household_key: @person.household_key })
   end
 
@@ -144,18 +144,18 @@ class People::SacFamily
   def family_member_role_scope(type:)
     Role.where(
       person: housemates,
-      beitragskategorie: :familie,
+      beitragskategorie: :family,
       type: type
     )
   end
 
   #def update_children
      #add all children to household
-     #add all mitglieder roles with Beitragskategorie familie to children
+     #add all mitglieder roles with Beitragskategorie family to children
   #end
 
   #def update_adults
-     #is there adults in same household that are allowed to get mitglied familie roles?
+     #is there adults in same household that are allowed to get mitglied family roles?
   #end
 
   def stammsektion_role_types

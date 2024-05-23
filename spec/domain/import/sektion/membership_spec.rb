@@ -60,7 +60,7 @@ describe Import::Sektion::Membership do
       expect(role.group).to eq group
       expect(role.type).to eq 'Group::SektionsMitglieder::Mitglied'
       expect(role).to be_valid
-      expect(role.beitragskategorie).to eq 'einzel'
+      expect(role.beitragskategorie).to eq 'adult'
     end
 
     it 'reads only created_at' do
@@ -84,9 +84,9 @@ describe Import::Sektion::Membership do
     end
 
     {
-      einzel: 'EINZEL',
-      jugend: 'JUGEND',
-      familie: ['FAMILIE', 'FREI KIND', 'FREI FAM']
+      adult: 'EINZEL',
+      youth: 'JUGEND',
+      family: ['FAMILIE', 'FREI KIND', 'FREI FAM']
     }.each do |kind, values|
       Array(values).each do |value|
         it "sets role beitragskategorie to #{kind} for #{value}" do
@@ -99,9 +99,9 @@ describe Import::Sektion::Membership do
 
   describe '#import!' do
     {
-      einzel: 'EINZEL',
-      jugend: 'JUGEND',
-      familie: ['FAMILIE', 'FREI KIND', 'FREI FAM']
+      adult: 'EINZEL',
+      youth: 'JUGEND',
+      family: ['FAMILIE', 'FREI KIND', 'FREI FAM']
     }.each do |kind, values|
       Array(values).each do |value|
         it "sets person.sac_family_main_person when raw beitragskategorie value is 'FAMILIE'" do

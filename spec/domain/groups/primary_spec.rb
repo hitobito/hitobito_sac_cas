@@ -48,7 +48,7 @@ describe Groups::Primary do
 
   it 'favours preferred_role over other'  do
     travel_to 1.day.from_now do
-      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :einzel)
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :adult)
     end
     expect(identify(admin)).to eq mitglieder
 
@@ -69,7 +69,7 @@ describe Groups::Primary do
         Group::SektionsMitglieder::Mitglied.sti_name,
         group: other,
         person: admin,
-        beitragskategorie: :einzel,
+        beitragskategorie: :adult,
         created_at: roles(:mitglied).created_at + 1.year,
         delete_on: roles(:mitglied).delete_on + 1.year
       )
@@ -79,7 +79,7 @@ describe Groups::Primary do
         Group::SektionsMitglieder::Mitglied.sti_name,
         group: other,
         person: mitglied,
-        beitragskategorie: :einzel,
+        beitragskategorie: :adult,
         created_at: roles(:mitglied).created_at - 1.year,
         delete_on: roles(:mitglied).delete_on - 1.year
       )

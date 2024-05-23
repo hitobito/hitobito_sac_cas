@@ -80,7 +80,7 @@ describe SelfRegistration::Sektion do
       registration.main_person_attributes = required_attrs
       expect(registration).to be_valid
       expect(registration.main_person.role).to be_valid
-      expect(registration.main_person.role.beitragskategorie).to eq 'einzel'
+      expect(registration.main_person.role.beitragskategorie).to eq 'adult'
     end
 
     it '#save! creates person and role' do

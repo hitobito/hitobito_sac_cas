@@ -767,9 +767,9 @@ de:
 
   roles:
     beitragskategorie:
-      einzel: Einzel
-      jugend: Jugend
-      familie: Familie
+      adult: Einzel
+      youth: Jugend
+      family: Familie
 
   roles/terminations:
     global:

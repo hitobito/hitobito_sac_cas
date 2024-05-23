@@ -89,12 +89,12 @@ describe PeopleController do
         expect(body).to send(matcher, 'dd', text: person.household_key)
       end
 
-      it 'is shown for person with any role having beitragskategorie=familie' do
-        person = make_person(:familie)
+      it 'is shown for person with any role having beitragskategorie=family' do
+        person = make_person(:family)
         expect_household_key(person, visible: true)
       end
 
-      [:einzel, :jugend].each do |beitragskategorie|
+      [:adult, :youth].each do |beitragskategorie|
         it "is not shown for person with any role having beitragskategorie=#{beitragskategorie}" do
           person = make_person(beitragskategorie)
           expect_household_key(person, visible: false)

@@ -11,11 +11,11 @@ module Import
       attr_reader :row, :placeholder_contact_group, :current_ability
 
       BEITRAGSKATEGORIEN = {
-        'EINZEL' => :einzel,
-        'JUGEND' => :jugend,
-        'FAMILIE' => :familie,
-        'FREI KIND' => :familie,
-        'FREI FAM' => :familie
+        'EINZEL' => :adult,
+        'JUGEND' => :youth,
+        'FAMILIE' => :family,
+        'FREI KIND' => :family,
+        'FREI FAM' => :family
       }.freeze
 
       TARGET_ROLE_TYPE = Group::SektionsMitglieder::Mitglied

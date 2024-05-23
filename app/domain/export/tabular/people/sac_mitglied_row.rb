@@ -8,6 +8,12 @@
 module Export::Tabular::People
   class SacMitgliedRow < Export::Tabular::Row
 
+    BEITRAGSKATEGORIEN = {
+      adult: 'EINZEL',
+      youth: 'JUGEND',
+      family: 'FAMILIE'
+    }.stringify_keys.freeze
+
     attr_reader :group
 
     def initialize(entry, group, format = nil)
@@ -49,7 +55,7 @@ module Export::Tabular::People
       return @beitragskategorie if defined?(@beitragskategorie)
 
       role = role_in_layer(*(SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES))
-      @beitragskategorie = role&.beitragskategorie&.upcase
+      @beitragskategorie = BEITRAGSKATEGORIEN[role&.beitragskategorie&.to_s]
     end
 
     # Bemerkungen (Zusätzliche Daten, Person#additional_information)

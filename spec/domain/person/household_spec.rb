@@ -15,7 +15,7 @@ describe Person::Household do
     Person::Household.new(person, Ability.new(user), other, people(:admin), **opts)
   end
 
-  def create_person(age, beitragskategorie: :familie, managers: [], **attrs)
+  def create_person(age, beitragskategorie: :family, managers: [], **attrs)
     person = Fabricate(:person, **attrs.reverse_merge(
       birthday: age.years.ago,
       town: 'Supertown',
@@ -71,35 +71,35 @@ describe Person::Household do
 
   context "#valid?" do
     it 'is false if existing person and new person both have family memberships' do
-      p1 = create_person(25, beitragskategorie: :familie)
-      p2 = create_person(25, beitragskategorie: :familie)
+      p1 = create_person(25, beitragskategorie: :family)
+      p2 = create_person(25, beitragskategorie: :family)
 
       expect(build_household(p1, p2)).not_to be_valid
     end
 
     it 'is true if existing person has family membership and new person does not' do
-      p1 = create_person(25, beitragskategorie: :familie)
-      p2 = create_person(25, beitragskategorie: :einzel)
+      p1 = create_person(25, beitragskategorie: :family)
+      p2 = create_person(25, beitragskategorie: :adult)
       expect(build_household(p1, p2)).to be_valid
 
-      p3 = create_person(25, beitragskategorie: :familie)
+      p3 = create_person(25, beitragskategorie: :family)
       p4 = create_person(25, beitragskategorie: nil)
       expect(build_household(p3, p4)).to be_valid
     end
 
     it 'is true if existing person does not have family membership and new person does' do
-      p1 = create_person(25, beitragskategorie: :einzel)
-      p2 = create_person(25, beitragskategorie: :familie)
+      p1 = create_person(25, beitragskategorie: :adult)
+      p2 = create_person(25, beitragskategorie: :family)
       expect(build_household(p1, p2)).to be_valid
 
       p3 = create_person(25, beitragskategorie: nil)
-      p4 = create_person(25, beitragskategorie: :familie)
+      p4 = create_person(25, beitragskategorie: :family)
       expect(build_household(p3, p4)).to be_valid
     end
 
     it 'is true if neither existing person nor new person have family memberships' do
-      p1 = create_person(25, beitragskategorie: :einzel)
-      p2 = create_person(25, beitragskategorie: :einzel)
+      p1 = create_person(25, beitragskategorie: :adult)
+      p2 = create_person(25, beitragskategorie: :adult)
       expect(build_household(p1, p2)).to be_valid
 
       p3 = create_person(25, beitragskategorie: nil)
@@ -165,8 +165,8 @@ describe Person::Household do
     end
 
     it 'raises if new family member already has family membership' do
-      p1 = create_person(25, beitragskategorie: :familie)
-      p2 = create_person(10, beitragskategorie: :familie)
+      p1 = create_person(25, beitragskategorie: :family)
+      p2 = create_person(10, beitragskategorie: :family)
 
       household = build_household(p1, p2)
 
@@ -189,7 +189,7 @@ describe Person::Household do
       it 'removes person from household' do
         p1 = create_person(25, household_key: 'household-of-many')
         p2 = create_person(25, household_key: 'household-of-many', sac_family_main_person: false)
-        p3 = create_person(25, household_key: 'household-of-many', sac_family_main_person: false, beitragskategorie: :jugend)
+        p3 = create_person(25, household_key: 'household-of-many', sac_family_main_person: false, beitragskategorie: :youth)
 
         build_household(p1, p2).send(:remove)
 

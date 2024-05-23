@@ -56,25 +56,25 @@ describe SacCas::Beitragskategorie::Calculator do
   end
 
   context '#calculate' do
-    it 'returns einzel for person with 22 years or older' do
-      expect(category(age: 22)).to eq(:einzel)
-      expect(category(age: 99)).to eq(:einzel)
+    it 'returns adult for person with 22 years or older' do
+      expect(category(age: 22)).to eq(:adult)
+      expect(category(age: 99)).to eq(:adult)
     end
 
-    it 'returns jugend for person between 6 and 21 years not in a family' do
-      expect(category(age: 6)).to eq(:jugend)
-      expect(category(age: 15)).to eq(:jugend)
-      expect(category(age: 21)).to eq(:jugend)
+    it 'returns youth for person between 6 and 21 years not in a family' do
+      expect(category(age: 6)).to eq(:youth)
+      expect(category(age: 15)).to eq(:youth)
+      expect(category(age: 21)).to eq(:youth)
     end
 
-    it 'returns familie for adult family member' do
-      expect(category(age: 22, household: true)).to eq(:familie)
-      expect(category(age: 99, household: true)).to eq(:familie)
+    it 'returns family for adult family member' do
+      expect(category(age: 22, household: true)).to eq(:family)
+      expect(category(age: 99, household: true)).to eq(:family)
     end
 
-    it 'returns jugend for person between 18 and 21 if in same household with others' do
-      expect(category(age: 18, household: true)).to eq(:jugend)
-      expect(category(age: 21, household: true)).to eq(:jugend)
+    it 'returns youth for person between 18 and 21 if in same household with others' do
+      expect(category(age: 18, household: true)).to eq(:youth)
+      expect(category(age: 21, household: true)).to eq(:youth)
     end
 
     it 'returns nil for person younger than 6 years' do
@@ -87,10 +87,10 @@ describe SacCas::Beitragskategorie::Calculator do
 
     it 'respects reference_date' do
       person = person(15, false)
-      expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:jugend)
+      expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
       expect(described_class.new(person,
-                                 reference_date: 7.years.from_now - 1.day).calculate).to eq(:jugend)
-      expect(described_class.new(person, reference_date: 7.years.from_now).calculate).to eq(:einzel)
+                                 reference_date: 7.years.from_now - 1.day).calculate).to eq(:youth)
+      expect(described_class.new(person, reference_date: 7.years.from_now).calculate).to eq(:adult)
     end
   end
 end

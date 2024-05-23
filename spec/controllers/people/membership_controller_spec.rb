@@ -13,7 +13,7 @@ describe People::MembershipController, type: :controller do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
               person: person,
-              beitragskategorie: :einzel,
+              beitragskategorie: :adult,
               group: groups(:bluemlisalp_mitglieder))
     person
   end
@@ -52,7 +52,7 @@ describe People::MembershipController, type: :controller do
         person = Fabricate(:person, birthday: Time.zone.today - 42.years)
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
                   person: person,
-                  beitragskategorie: :einzel,
+                  beitragskategorie: :adult,
                   group: groups(:bluemlisalp_neuanmeldungen_nv))
         person
       end

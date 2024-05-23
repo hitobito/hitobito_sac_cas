@@ -22,7 +22,7 @@ describe Role do
                        person: person,
                        group: bluemlisalp_mitglieder)
 
-      expect(role.beitragskategorie).to eq('jugend')
+      expect(role.beitragskategorie).to eq('youth')
     end
 
     it 'is not valid without person\'s birthdate' do
@@ -41,13 +41,13 @@ describe Role do
         Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
                         person: person, group: bluemlisalp_neuanmeldungen_nv).tap(&:validate)
 
-      expect(neuanmeldung_nv.beitragskategorie).to eq('jugend')
+      expect(neuanmeldung_nv.beitragskategorie).to eq('youth')
 
       neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
                                        person: person,
                                        group: bluemlisalp_neuanmeldungen_sektion).tap(&:validate)
 
-      expect(neuanmeldung_sektion.beitragskategorie).to eq('jugend')
+      expect(neuanmeldung_sektion.beitragskategorie).to eq('youth')
     end
 
     it 'is not valid without person\'s birthdate' do\
@@ -83,14 +83,14 @@ describe Role do
       it "accepts person exceeding age restriction for #{role_type}" do
         person.birthday = 6.years.ago - 1.day
         role = Fabricate.build(role_type.name, person: person, group: groups(group),
-                                               beitragskategorie: :einzel)
+                                               beitragskategorie: :adult)
         expect(role).to be_valid
       end
 
       it "rejects person below age restriction for #{role_type}" do
         person.birthday = 5.years.ago
         role = Fabricate.build(role_type.name, person: person, group: groups(group),
-                                               beitragskategorie: :einzel)
+                                               beitragskategorie: :adult)
         expect(role).not_to be_valid
         expect(role.errors[:person]).
           to include('muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein')
@@ -116,7 +116,7 @@ describe Role do
         let(:role_type) { role_type }
         let(:group) { group }
 
-        def build_role(age: 22, beitragskategorie: :familie, household_key: 'household42', family_main_person: false)
+        def build_role(age: 22, beitragskategorie: :family, household_key: 'household42', family_main_person: false)
           person = Fabricate.build(:person,
                                    birthday: age.years.ago,
                                    household_key: household_key,
@@ -127,14 +127,14 @@ describe Role do
           role
         end
 
-        it 'beitragskategorie=familie is accepted on primary group' do
+        it 'beitragskategorie=family is accepted on primary group' do
           role = build_role(family_main_person: true)
           role.person.primary_group = role.group
 
           expect(role).to be_valid
         end
 
-        it 'beitragskategorie=familie is accepted on non-primary group' do
+        it 'beitragskategorie=family is accepted on non-primary group' do
           role = build_role(family_main_person: true)
           role.person.primary_group = groups(:geschaeftsstelle)
 
@@ -142,7 +142,7 @@ describe Role do
         end
 
         context 'adult family members count' do
-          context 'with beitragskategorie=familie' do
+          context 'with beitragskategorie=family' do
             it 'accepts single adult person in household' do
               expect(build_role(family_main_person: true)).to be_valid
             end
@@ -182,7 +182,7 @@ describe Role do
               build_role(family_main_person: true).save!
               build_role.save!
               # and 2 youth
-              2.times { build_role(age: 17, beitragskategorie: :jugend).save! }
+              2.times { build_role(age: 17, beitragskategorie: :youth).save! }
 
               # Test third youth
               third_youth = build_role(age: 17)
@@ -200,23 +200,23 @@ describe Role do
             end
           end
 
-          context 'with beitragskategorie=einzel' do
+          context 'with beitragskategorie=adult' do
             it 'accepts third adult in same household' do
-              # Add 2 adults with beitragskategorie=familie
-              build_role(beitragskategorie: :familie, family_main_person: true).save!
-              build_role(beitragskategorie: :familie).save!
+              # Add 2 adults with beitragskategorie=family
+              build_role(beitragskategorie: :family, family_main_person: true).save!
+              build_role(beitragskategorie: :family).save!
 
-              # Test third adult with beitragskategorie=einzel
+              # Test third adult with beitragskategorie=adult
               # This is a special case, because the person is part of the same household, but
               # is not included in the family membership.
-              third_adult = build_role(beitragskategorie: :einzel)
+              third_adult = build_role(beitragskategorie: :adult)
               expect(third_adult).to be_valid
             end
           end
         end
 
         context 'family main person' do
-          context 'with beitragskategorie=familie' do
+          context 'with beitragskategorie=family' do
             it 'is valid if own person is solo main person' do
               expect(build_role(family_main_person: true)).to be_valid
             end
@@ -255,16 +255,16 @@ describe Role do
             end
           end
 
-          context 'with beitragskategorie=einzel' do
+          context 'with beitragskategorie=adult' do
             it 'ignores attribute' do
-              role = build_role(family_main_person: false, beitragskategorie: :einzel)
+              role = build_role(family_main_person: false, beitragskategorie: :adult)
               expect(role).to be_valid
 
               role.person.sac_family_main_person = true
               expect(role).to be_valid
 
-              build_role(family_main_person: true, beitragskategorie: :einzel).save!
-              build_role(family_main_person: false, beitragskategorie: :einzel).save!
+              build_role(family_main_person: true, beitragskategorie: :adult).save!
+              build_role(family_main_person: false, beitragskategorie: :adult).save!
               expect(role).to be_valid
             end
           end
@@ -292,14 +292,14 @@ describe Role do
         expect do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
                     group: mitglieder,
-                    person: person, beitragskategorie: :einzel)
+                    person: person, beitragskategorie: :adult)
         end.to change { person.reload.primary_group }.from(primary).to(mitglieder)
       end
 
       it 'does change back when destroying preferred role' do
         role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
                          group: mitglieder,
-                         person: person, beitragskategorie: :einzel)
+                         person: person, beitragskategorie: :adult)
         expect do
           role.destroy
         end.to change { person.reload.primary_group }.from(mitglieder).to(primary)
@@ -325,7 +325,7 @@ describe Role do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
                     group: other,
                     person: person,
-                    beitragskategorie: :einzel)
+                    beitragskategorie: :adult)
         end.not_to(change { person.reload.primary_group })
       end
     end

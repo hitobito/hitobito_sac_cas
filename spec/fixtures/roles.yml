@@ -12,7 +12,7 @@ mitglied:
   person_id: 600_001
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
-  beitragskategorie: einzel
+  beitragskategorie: adult
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -20,7 +20,7 @@ mitglied_zweitsektion:
   person_id: 600_001
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
-  beitragskategorie: einzel
+  beitragskategorie: adult
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -28,7 +28,7 @@ familienmitglied:
   person_id: 600_002
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -36,7 +36,7 @@ familienmitglied_zweitsektion:
   person_id: 600_002
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -44,7 +44,7 @@ familienmitglied2:
   person_id: 600_003
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -52,7 +52,7 @@ familienmitglied2_zweitsektion:
   person_id: 600_003
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -60,7 +60,7 @@ familienmitglied_kind:
   person_id: 600_004
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 
@@ -68,7 +68,7 @@ familienmitglied_kind_zweitsektion:
   person_id: 600_004
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
-  beitragskategorie: familie
+  beitragskategorie: family
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
 

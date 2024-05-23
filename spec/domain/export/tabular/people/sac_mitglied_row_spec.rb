@@ -123,7 +123,7 @@ describe Export::Tabular::People::SacMitgliedRow do
       it 'returns role#beitragskategorie' do
         role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
                          group: groups(:bluemlisalp_mitglieder), person: person)
-        expect(row.beitragskategorie).to eq(role.beitragskategorie.upcase)
+        expect(row.beitragskategorie).to eq('EINZEL')
       end
     end
 
@@ -133,7 +133,7 @@ describe Export::Tabular::People::SacMitgliedRow do
                   group: groups(:matterhorn_mitglieder), person: person)
         role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
                          group: groups(:bluemlisalp_mitglieder), person: person)
-        expect(row.beitragskategorie).to eq(role.beitragskategorie.upcase)
+        expect(row.beitragskategorie).to eq('EINZEL')
       end
     end
   end

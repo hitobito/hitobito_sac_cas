@@ -51,10 +51,10 @@ module SacCas::Person::Household
 
   def assert_no_conflicting_family_membership
     return true unless maintain_sac_family?
-    return true unless Role.where(person_id: existing_people, beitragskategorie: :familie).exists?
+    return true unless Role.where(person_id: existing_people, beitragskategorie: :family).exists?
 
     new_housemates_with_family_membership_role = Role.
-      where(person_id: new_people, beitragskategorie: :familie).
+      where(person_id: new_people, beitragskategorie: :family).
       map(&:person).
       uniq
 

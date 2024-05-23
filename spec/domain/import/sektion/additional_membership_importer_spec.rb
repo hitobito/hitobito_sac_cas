@@ -44,7 +44,7 @@ describe Import::Sektion::AdditionalMembershipsImporter do
     expect(person.roles).to have(1).item
     role = person.roles.first
     expect(role).to be_a Group::SektionsMitglieder::MitgliedZusatzsektion
-    expect(role.beitragskategorie).to eq 'einzel'
+    expect(role.beitragskategorie).to eq 'adult'
     expect(role.group).to eq groups(:bluemlisalp_mitglieder)
     expect(role.created_at).to eq Time.zone.parse('1.1.1960')
   end

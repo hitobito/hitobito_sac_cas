@@ -80,7 +80,7 @@ describe FutureRole do
         at_least(:once).
         and_call_original
 
-      expect { role.validate }.to change { role.beitragskategorie }.from(nil).to('einzel')
+      expect { role.validate }.to change { role.beitragskategorie }.from(nil).to('adult')
     end
 
     it 'does not get set for non-mitglied role' do

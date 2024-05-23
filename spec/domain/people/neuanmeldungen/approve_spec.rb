@@ -35,7 +35,7 @@ describe People::Neuanmeldungen::Approve do
   end
 
   it 'replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles' do
-    neuanmeldungen = [:einzel, :einzel, :jugend, :familie].map { |cat| create_role(cat) }
+    neuanmeldungen = [:adult, :adult, :youth, :family].map { |cat| create_role(cat) }
 
     approver = described_class.new(
       group: neuanmeldungen_sektion,
@@ -59,7 +59,7 @@ describe People::Neuanmeldungen::Approve do
 
   it 'creates the SektionNeuanmeldungNv group if it does not exist' do
     neuanmeldungen_nv.destroy!
-    neuanmeldung = create_role(:einzel)
+    neuanmeldung = create_role(:adult)
 
     described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call
 

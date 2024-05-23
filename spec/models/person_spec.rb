@@ -55,7 +55,7 @@ describe Person do
       Fabricate(Group::SektionsMitglieder::Mitglied.name,
                 group: groups(:bluemlisalp_mitglieder),
                 person: person,
-                beitragskategorie: 'einzel',
+                beitragskategorie: 'adult',
                 **attrs.reverse_merge(created_at: created_at))
     end
 

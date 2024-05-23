@@ -8,14 +8,10 @@
 module SacCas::Beitragskategorie
   class Calculator
 
-    BEITRAGSKATEGORIEN = %w(einzel jugend familie).freeze
+    BEITRAGSKATEGORIEN = %w(adult youth family).freeze
     AGE_RANGE_ADULT = 22..199
     AGE_RANGE_MINOR_FAMILY_MEMBER = 6..17
     AGE_RANGE_YOUTH = AGE_RANGE_MINOR_FAMILY_MEMBER.begin...AGE_RANGE_ADULT.begin
-
-    CATEGORY_ADULT = :einzel
-    CATEGORY_YOUTH = :jugend
-    CATEGORY_FAMILY = :familie
 
     def initialize(person, reference_date: Time.zone.today)
       @person = person
@@ -23,13 +19,13 @@ module SacCas::Beitragskategorie
     end
 
     def calculate
-      return CATEGORY_FAMILY if family_member?
+      return :family if family_member?
 
       case age
       when AGE_RANGE_ADULT
-        CATEGORY_ADULT
+        :adult
       when AGE_RANGE_YOUTH
-        CATEGORY_YOUTH
+        :youth
       end
     end
 

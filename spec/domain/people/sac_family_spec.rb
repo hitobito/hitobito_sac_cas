@@ -21,24 +21,24 @@ describe People::SacFamily do
     end
   end
 
-  let!(:household_member_jugend) do
+  let!(:household_member_youth) do
     person = Fabricate(:person, household_key: '4242', birthday: today - 19.years)
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:bluemlisalp_mitglieder),
       person: person,
-      beitragskategorie: :jugend,
+      beitragskategorie: :youth,
       created_at: today.beginning_of_year,
       delete_on: end_of_year
     )
     person
   end
 
-  let!(:household_member_einzel) do
+  let!(:household_member_adult) do
     person = Fabricate(:person, household_key: '4242', birthday: today - 42.years)
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:bluemlisalp_mitglieder),
       person: person,
-      beitragskategorie: :einzel,
+      beitragskategorie: :adult,
       created_at: today.beginning_of_year,
       delete_on: end_of_year
     )
@@ -50,7 +50,7 @@ describe People::SacFamily do
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:matterhorn_mitglieder),
       person: person,
-      beitragskategorie: :einzel,
+      beitragskategorie: :adult,
       created_at: today.beginning_of_year,
       delete_on: end_of_year
     )
@@ -63,7 +63,7 @@ describe People::SacFamily do
     end
 
     it 'returns all family members when called on non-family housemate' do
-      expect(household_member_einzel.sac_family.family_members).to contain_exactly(adult, adult2, child)
+      expect(household_member_adult.sac_family.family_members).to contain_exactly(adult, adult2, child)
     end
 
     it 'returns all family members linked by neuanmeldung roles' do
@@ -76,14 +76,14 @@ describe People::SacFamily do
       expect(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.count).to eq(6)
 
       family_members = adult.sac_family.family_members
-      
+
       expect(family_members).to include adult
       expect(family_members).to include adult2
       expect(family_members).to include child
 
-      expect(family_members).not_to include household_member_jugend
+      expect(family_members).not_to include household_member_youth
       expect(family_members).not_to include household_other_sektion_member
-      expect(family_members).not_to include household_member_einzel
+      expect(family_members).not_to include household_member_adult
 
       expect(family_members.count).to eq(3)
     end
@@ -107,9 +107,9 @@ describe People::SacFamily do
         adult,
         adult2,
         child,
-        household_member_jugend,
+        household_member_youth,
         household_other_sektion_member,
-        household_member_einzel
+        household_member_adult
       )
     end
   end
@@ -117,9 +117,9 @@ describe People::SacFamily do
   context '#non_family_housemates' do
     it do
       expect(adult.sac_family.non_family_housemates).to contain_exactly(
-        household_member_jugend,
+        household_member_youth,
         household_other_sektion_member,
-        household_member_einzel
+        household_member_adult
       )
     end
   end
@@ -133,8 +133,8 @@ describe People::SacFamily do
       expect(household_other_sektion_member.sac_family.member?).to eq(false)
     end
 
-    it 'is not a family member if in same household but jugend mitglied' do
-      expect(household_member_jugend.sac_family.member?).to eq(false)
+    it 'is not a family member if in same household but youth mitglied' do
+      expect(household_member_youth.sac_family.member?).to eq(false)
     end
 
     it 'is family member' do
@@ -155,7 +155,7 @@ describe People::SacFamily do
     end
 
     it 'returns nil for non family member' do
-      expect(household_member_jugend.family_id).to be_nil
+      expect(household_member_youth.family_id).to be_nil
     end
   end
 

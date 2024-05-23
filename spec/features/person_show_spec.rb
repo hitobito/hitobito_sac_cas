@@ -32,7 +32,7 @@ describe 'person show page' do
           Group::SektionsMitglieder::Mitglied.sti_name,
           group: mitglieder,
           person: admin,
-          beitragskategorie: :einzel,
+          beitragskategorie: :adult,
           created_at: Date.new(2023, 2, 1),
           delete_on: Date.new(2023, 12, 31)
         )

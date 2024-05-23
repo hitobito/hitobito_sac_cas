@@ -28,13 +28,13 @@ describe TableDisplays::Resolver, type: :helper do
 
   it_behaves_like 'resolver', attr: :beitragskategorie, label: 'Beitragskategorie' do
     it 'returns Beitragskategorie from role' do
-      person.roles.build(group_id: 1, beitragskategorie: :einzel)
+      person.roles.build(group_id: 1, beitragskategorie: :adult)
       expect(resolver.to_s).to eq 'Einzel'
     end
 
     it 'returns reads from all roles' do
-      person.roles.build(group_id: 1, beitragskategorie: :einzel)
-      person.roles.build(group_id: 1, beitragskategorie: :familie)
+      person.roles.build(group_id: 1, beitragskategorie: :adult)
+      person.roles.build(group_id: 1, beitragskategorie: :family)
       expect(resolver.to_s).to eq 'Einzel, Familie'
     end
   end

@@ -63,7 +63,7 @@ class SacCasPersonSeeder < PersonSeeder
     Group::SektionsMitglieder::Mitglied.seed(:person_id,
                                              person: person,
                                              group: sektion,
-                                             beitragskategorie: :familie,
+                                             beitragskategorie: :family,
                                              delete_on: 1.year.from_now.end_of_year)
   end
 
@@ -152,6 +152,6 @@ class SacCasPersonSeeder < PersonSeeder
       (1..max_years).to_a.sample.years.ago
     else
       (1..11).to_a.sample.months.ago
-    end 
+    end
   end
 end

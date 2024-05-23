@@ -10,7 +10,6 @@ module SacCas::Role::MitgliedFamilyValidations
 
   MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT = 2
   AGE_RANGE_ADULT = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT
-  CATEGORY_FAMILY = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
   included do
     # Explicitely run validation on create and update. This allows us to skip this validation
@@ -30,7 +29,7 @@ module SacCas::Role::MitgliedFamilyValidations
       household_people.
       joins(:roles).
       merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES,
-                       beitragskategorie: CATEGORY_FAMILY)).to_a
+                       beitragskategorie: :family)).to_a
 
     people << person
   end
@@ -46,7 +45,7 @@ module SacCas::Role::MitgliedFamilyValidations
   def assert_adult_family_mitglieder_count
     # We do not need to validate this if the current role has a beitragskategorie other than family
     # or if the person of the current role is not an adult.
-    return unless beitragskategorie&.familie? && AGE_RANGE_ADULT.cover?(person.years)
+    return unless beitragskategorie&.family? && AGE_RANGE_ADULT.cover?(person.years)
 
     # Including current person, we can not have more than MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults.
     return unless adult_family_mitglieder_count > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
@@ -56,7 +55,7 @@ module SacCas::Role::MitgliedFamilyValidations
 
   def assert_single_family_main_person
     # We do not need to validate this if the current role has a beitragskategorie other than family.
-    return unless beitragskategorie&.familie?
+    return unless beitragskategorie&.family?
 
     return if family_mitglieder.count(&:sac_family_main_person) == 1
 

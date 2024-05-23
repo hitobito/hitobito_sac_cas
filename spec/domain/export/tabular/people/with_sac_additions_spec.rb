@@ -46,12 +46,12 @@ describe Export::Tabular::People::WithSacAdditions do
         expect(subject.attribute_labels[:family_id]).to eq 'Familien ID'
       end
 
-      it 'has blank value for person without beitragskategorie=familie' do
+      it 'has blank value for person without beitragskategorie=family' do
         assert(person.roles.empty?)
         expect(row[:family_id]).to be_nil
       end
 
-      it 'has value from household_key for person with beitragskategorie=familie' do
+      it 'has value from household_key for person with beitragskategorie=family' do
         Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: group, person: person)
         expect(row[:family_id]).to eq person.family_id
       end

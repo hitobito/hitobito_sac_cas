@@ -82,7 +82,7 @@ describe 'person edit page', :js do
           Group::SektionsMitglieder::Mitglied.name.to_sym,
           person: other_family_member,
           group: groups(:matterhorn_mitglieder),
-          beitragskategorie: 'familie'
+          beitragskategorie: 'family'
         )
 
         visit edit_group_person_path(group_id: family_adult.primary_group_id, id: family_adult.id)

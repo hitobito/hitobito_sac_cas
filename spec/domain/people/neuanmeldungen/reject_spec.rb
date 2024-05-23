@@ -12,7 +12,7 @@ describe People::Neuanmeldungen::Reject do
 
   let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-  let(:neuanmeldung) { create_role(:einzel) }
+  let(:neuanmeldung) { create_role(:adult) }
 
   def create_role(beitragskategorie)
     Fabricate(
@@ -29,9 +29,9 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it 'deletes the Neuanmeldung roles' do
-    neuanmeldung_einzel = create_role(:einzel)
-    neuanmeldung_familie = create_role(:familie)
-    neuanmeldung_jugend = create_role(:jugend)
+    neuanmeldung_einzel = create_role(:adult)
+    neuanmeldung_familie = create_role(:family)
+    neuanmeldung_jugend = create_role(:youth)
 
     subject = rejector([neuanmeldung_einzel.person.id, neuanmeldung_jugend.person.id])
 

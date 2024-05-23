@@ -26,7 +26,7 @@ module SacCas::Roles::Termination
   end
 
   def affected_people
-    return [] unless stammsektion_membership? && role.beitragskategorie&.familie?
+    return [] unless stammsektion_membership? && role.beitragskategorie&.family?
 
     main_person.sac_family.family_members - [main_person]
   end
