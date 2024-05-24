@@ -15,6 +15,7 @@ describe Sftp do
                         private_key: 'private key',
                         port: 22)
   end
+  let(:session) { instance_double('Net::SFTP::Session') }
 
   subject { Sftp.new(config) }
 
@@ -22,8 +23,6 @@ describe Sftp do
     before { config.delete_field!(:private_key) }
 
     it 'creates connection with password credential' do
-      session = double
-
       expect(::Net::SFTP).to receive(:start)
                          .with('sftp.local', 'hitobito', { password: 'password',
                                                            non_interactive: true,
@@ -39,8 +38,6 @@ describe Sftp do
     before { config.delete_field!(:password) }
 
     it 'creates connection with private key' do
-      session = double
-
       expect(::Net::SFTP).to receive(:start)
                         .with('sftp.local', 'hitobito', { key_data: ['private key'],
                                                           non_interactive: true,

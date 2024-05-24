@@ -8,32 +8,9 @@
 require 'spec_helper'
 
 describe Export::BackupMitgliederExportJob do
-  subject(:job) { described_class.new }
-  let(:relevant_groups) { Group.where(type: [::Group::Sektion, ::Group::Ortsgruppe]) }
-
-  context 'rescheduling' do
-    it 'reschedules for tomorrow  at 5 minutes past midnight' do
-      job.perform
-      next_job = Delayed::Job.find_by("handler like '%BackupMitgliederExportJob%'")
-      expect(next_job.run_at).to eq Time.zone.tomorrow + 5.minutes
-    end
-  end
-
-  context 'perform' do
-    it 'only iterates over relevant groups' do
-      exporter = double
-      allow(exporter).to receive(:call)
-
-      relevant_groups.each do |group|
-        expect(BackupMitgliederExport).to receive(:new)
-          .with(group, an_instance_of(Sftp))
-          .and_return(exporter)
-
-      end
-
-      job.perform
-    end
-  end
+  subject(:job) { described_class.new(group.id).tap { _1.instance_variable_set(:@sftp, sftp) } }
+  let(:group) { groups(:bluemlisalp) }
+  let(:sftp) { double(:sftp) }
 
   context 'logging' do
     let(:notifications) { Hash.new {|h, k| h[k] = [] } }
@@ -58,20 +35,10 @@ describe Export::BackupMitgliederExportJob do
       exporter = double
       allow(exporter).to receive(:call)
 
-      error_group = relevant_groups.first
-
       error = Sftp::ConnectionError.new('permission denied')
 
-      expect(BackupMitgliederExport).to receive(:new)
-                                    .with(error_group, an_instance_of(Sftp))
-                                    .and_raise(error)
-      expect(job).to receive(:error).with(job, error, group: error_group)
-      
-      (relevant_groups - [error_group]).each do |group|
-        expect(BackupMitgliederExport).to receive(:new)
-          .with(group, an_instance_of(Sftp))
-          .and_return(exporter)
-      end
+      expect(sftp).to receive(:directory?).and_raise(error)
+      expect(job).to receive(:error).with(job, error, group: group)
 
       job = subscribe { run_job(subject) }
 
@@ -99,9 +66,39 @@ describe Export::BackupMitgliederExportJob do
         group_id: nil,
         finished_at: an_instance_of(ActiveSupport::TimeWithZone),
         status: 'success',
-        payload: { errors: [[error_group.id, error]] },
+        payload: { errors: [[group.id, error]] },
         attempt: 0
       )
+    end
+  end
+
+  context 'perform' do
+    it 'tries to upload csv for group' do
+      csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
+      root_folder_path_expectation = "sektionen/"
+      folder_path_expectation = "sektionen/1650/"
+      file_path_expectation = "sektionen/1650/Adressen_00001650.csv"
+
+      expect(sftp).to receive(:directory?).with(root_folder_path_expectation).and_return(true)
+      expect(sftp).to receive(:directory?).with(folder_path_expectation).and_return(true)
+      expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
+
+      job.perform
+    end
+
+    it 'tries to upload csv for group and create directories if not present' do
+      csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
+      root_folder_path_expectation = "sektionen/"
+      folder_path_expectation = "sektionen/1650/"
+      file_path_expectation = "sektionen/1650/Adressen_00001650.csv"
+
+      expect(sftp).to receive(:directory?).with(root_folder_path_expectation).and_return(false)
+      expect(sftp).to receive(:create_remote_dir).with(root_folder_path_expectation)
+      expect(sftp).to receive(:directory?).with(folder_path_expectation).and_return(false)
+      expect(sftp).to receive(:create_remote_dir).with(folder_path_expectation)
+      expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
+
+      job.perform
     end
   end
 end
