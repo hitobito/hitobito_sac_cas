@@ -15,9 +15,11 @@ class Sftp
   end
 
   def upload_file(data, file_path)
-    handle = @connection.open!(file_path, 'w')
-    @connection.write!(handle, 0, data)
-    @connection.close(handle)
+    create_missing_directories(file_path)
+
+    handle = connection.open!(file_path, 'w')
+    connection.write!(handle, 0, data)
+    connection.close(handle)
   end
 
   def create_remote_dir(name)
@@ -31,6 +33,12 @@ class Sftp
   end
 
   private
+
+  def create_missing_directories(file_path)
+    Pathname.new(file_path).dirname.descend do |directory_path|
+      create_remote_dir(directory_path.to_s) unless directory?(directory_path.to_s)
+    end
+  end
 
   def connection
     @connection ||= Net::SFTP.start(@config.host, @config.user, options).tap(&:connect!)

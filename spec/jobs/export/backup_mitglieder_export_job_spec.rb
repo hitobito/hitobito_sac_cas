@@ -37,7 +37,7 @@ describe Export::BackupMitgliederExportJob do
 
       error = Sftp::ConnectionError.new('permission denied')
 
-      expect(sftp).to receive(:directory?).and_raise(error)
+      expect(sftp).to receive(:upload_file).and_raise(error)
       expect(job).to receive(:error).with(job, error, group: group)
 
       job = subscribe { run_job(subject) }
@@ -75,27 +75,8 @@ describe Export::BackupMitgliederExportJob do
   context 'perform' do
     it 'tries to upload csv for group' do
       csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
-      root_folder_path_expectation = "sektionen/"
-      folder_path_expectation = "sektionen/1650/"
       file_path_expectation = "sektionen/1650/Adressen_00001650.csv"
 
-      expect(sftp).to receive(:directory?).with(root_folder_path_expectation).and_return(true)
-      expect(sftp).to receive(:directory?).with(folder_path_expectation).and_return(true)
-      expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
-
-      job.perform
-    end
-
-    it 'tries to upload csv for group and create directories if not present' do
-      csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
-      root_folder_path_expectation = "sektionen/"
-      folder_path_expectation = "sektionen/1650/"
-      file_path_expectation = "sektionen/1650/Adressen_00001650.csv"
-
-      expect(sftp).to receive(:directory?).with(root_folder_path_expectation).and_return(false)
-      expect(sftp).to receive(:create_remote_dir).with(root_folder_path_expectation)
-      expect(sftp).to receive(:directory?).with(folder_path_expectation).and_return(false)
-      expect(sftp).to receive(:create_remote_dir).with(folder_path_expectation)
       expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
 
       job.perform

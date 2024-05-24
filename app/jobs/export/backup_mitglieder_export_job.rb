@@ -16,11 +16,8 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def perform
-    sftp.create_remote_dir(root_folder_path) unless sftp.directory?(root_folder_path)
-    sftp.create_remote_dir(folder_path) unless sftp.directory?(folder_path)
-
     sftp.upload_file(csv, file_path)
-  rescue StandardError => e
+  rescue => e
     error(self, e, group: @group)
     @errors << [@group.id, e]
   end
@@ -49,15 +46,10 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def file_path
-    "#{folder_path}Adressen_#{@group.navision_id_padded}.csv"
+    [
+      'sektionen',
+      @group.navision_id,
+      "Adressen_#{@group.navision_id_padded}.csv"
+    ].join('/')
   end
-
-  def folder_path
-    "#{root_folder_path}#{@group.navision_id}/"
-  end
-
-  def root_folder_path
-    'sektionen/'
-  end
-
 end
