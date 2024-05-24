@@ -32,7 +32,7 @@ module SacCas::Role::MitgliedCommon
   end
 
   def hard_delete_dependant_roles
-    dependant_roles.each { _1.really_destroy! }
+    dependant_roles.with_deleted.each { _1.really_destroy! }
   end
 
   def dependant_roles
