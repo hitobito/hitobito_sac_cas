@@ -34,6 +34,12 @@ Rails.application.routes.draw do
 
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
+
+        # Test route to check invoice positions for a person.
+        # Remove once invoices are sent to abacus
+        member do
+          get 'membership_invoice_positions' => 'people/membership_invoice_positions#show'
+        end
       end
       namespace :people do
         namespace :neuanmeldungen do

@@ -35,10 +35,10 @@ end
 
 seeder = SacCasPersonSeeder.new
 
-seeder.seed_all_roles
-seeder.seed_families
-seeder.update_mitglieder_role_dates
-seeder.seed_some_ehrenmitglieder_beguenstigt_roles
+#seeder.seed_all_roles
+#seeder.seed_families
+#seeder.update_mitglieder_role_dates
+#seeder.seed_some_ehrenmitglieder_beguenstigt_roles
 
 geschaeftsstelle = Group::Geschaeftsstelle.first
 devs.each do |name, email|

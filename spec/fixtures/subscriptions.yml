@@ -1,4 +1,9 @@
-newsletter_subscsription:
+newsletter_subscription:
   mailing_list: newsletter
+  subscriber: root
+  subscriber_type: Group
+
+sac_magazine_subscription:
+  mailing_list: sac_magazine
   subscriber: root
   subscriber_type: Group

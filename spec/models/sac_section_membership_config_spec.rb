@@ -32,10 +32,10 @@ require 'spec_helper'
 
 describe SacSectionMembershipConfig do
 
-  let(:config) { sac_section_membership_configs(:'2024') }
+  let(:config) { sac_section_membership_configs(:bluemlisalp_2024) }
 
   context 'group' do
-    let(:new_config) { config.dup }
+    let(:new_config) { config.dup.tap { |c| c.valid_from = 2025 } }
 
     it 'cannot belong to top layer' do
       new_config.group = groups(:root)
@@ -47,8 +47,6 @@ describe SacSectionMembershipConfig do
     end
 
     it 'can belong to sektion' do
-      new_config.group = groups(:matterhorn)
-
       expect(new_config).to be_valid
     end
 

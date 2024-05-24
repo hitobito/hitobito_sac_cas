@@ -13,7 +13,7 @@ describe SacSectionMembershipConfigsController do
     Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
               group: groups(:bluemlisalp_funktionaere)).person
   end
-  let(:latest_config) { sac_section_membership_configs(:'2024') }
+  let(:latest_config) { sac_section_membership_configs(:bluemlisalp_2024) }
   let!(:older_config) do
     config = latest_config.dup
     config.valid_from = 2023

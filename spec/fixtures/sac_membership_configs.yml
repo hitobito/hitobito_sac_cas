@@ -46,31 +46,31 @@
 
 '2024':
   valid_from: '2024'
-  sac_fee_adult: 10
-  sac_fee_family: 10
-  sac_fee_youth: 10
+  sac_fee_adult: 40
+  sac_fee_family: 50
+  sac_fee_youth: 20
   entry_fee_adult: 10
-  entry_fee_family: 10
+  entry_fee_family: 15
   entry_fee_youth: 10
   hut_solidarity_fee_with_hut_adult: 10
   hut_solidarity_fee_with_hut_family: 10
   hut_solidarity_fee_with_hut_youth: 10
-  hut_solidarity_fee_without_hut_adult: 10
-  hut_solidarity_fee_without_hut_family: 10
-  hut_solidarity_fee_without_hut_youth: 10
-  magazine_fee_adult: 10
-  magazine_fee_family: 10
-  magazine_fee_youth: 10
-  service_fee: 10
+  hut_solidarity_fee_without_hut_adult: 20
+  hut_solidarity_fee_without_hut_family: 20
+  hut_solidarity_fee_without_hut_youth: 20
+  magazine_fee_adult: 25
+  magazine_fee_family: 25
+  magazine_fee_youth: 15
+  service_fee: 1
   magazine_postage_abroad: 10
   reduction_amount: 10
   reduction_required_membership_years: 50
-  discount_date_1: '1.1.'
-  discount_percent_1: 0
-  discount_date_2: '1.7.'
-  discount_percent_2: 50
-  discount_date_3: '1.10.'
-  discount_percent_3: 100
+  discount_date_1: '1.7.'
+  discount_percent_1: 50
+  discount_date_2: '1.10.'
+  discount_percent_2: 100
+  discount_date_3:
+  discount_percent_3:
   sac_fee_article_number: 42
   sac_entry_fee_article_number: 43
   hut_solidarity_fee_article_number: 44

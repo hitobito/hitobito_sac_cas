@@ -31,10 +31,10 @@ module SacCas::Person
 
     before_save :set_digital_correspondence, if: :password_initialized?
 
-    scope :with_membership_years, lambda { |selects = 'people.*'|
+    scope :with_membership_years, lambda { |selects = 'people.*', date = Time.zone.today|
       subquery_sql = Group::SektionsMitglieder::Mitglied.
                      with_deleted.
-                     with_membership_years('roles.person_id').
+                     with_membership_years('roles.person_id', date).
                      to_sql
 
       select(*Array.wrap(selects), 'FLOOR(SUM(COALESCE(membership_years, 0))) as membership_years').

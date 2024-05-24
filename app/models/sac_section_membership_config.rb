@@ -30,6 +30,12 @@
 
 class SacSectionMembershipConfig < ApplicationRecord
 
+  class << self
+    def active(date = Time.zone.today)
+      where(valid_from: ..date.year).order(valid_from: :desc).first
+    end
+  end
+
   attr_readonly :valid_from, :group_id
 
   belongs_to :group

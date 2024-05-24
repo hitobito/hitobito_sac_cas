@@ -9,7 +9,7 @@ require 'spec_helper'
 
 describe SacSectionMembershipConfigAbility do
 
-  let(:config) { sac_section_membership_configs(:'2024') }
+  let(:config) { sac_section_membership_configs(:bluemlisalp_2024) }
   let(:admin) { people(:admin) }
   let(:mitgliederverwaltung_sektion) do
     Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
@@ -39,10 +39,7 @@ describe SacSectionMembershipConfigAbility do
     end
 
     it 'is not permitted for mitgliederverwaltung sektion for other sektion' do
-      other_sac_section_config = config.dup
-      other_sac_section_config.group = groups(:matterhorn)
-      other_sac_section_config.save!
-
+      other_sac_section_config =  sac_section_membership_configs(:matterhorn_2024)
       expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, other_sac_section_config)
     end
   end

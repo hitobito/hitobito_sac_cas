@@ -66,4 +66,21 @@ describe SacMembershipConfig do
     expect(error_keys).not_to include(:discount_date_3)
   end
 
+  context '#discount_percent' do
+    it 'returns 0 with all empty fields' do
+      config.discount_date_1 = nil
+      config.discount_date_2 = nil
+      config.discount_date_3 = nil
+      expect(config.discount_percent(Date.new(2024, 8, 1))).to eq(0)
+    end
+
+    it 'returns percent of mid year dates' do
+      expect(config.discount_percent(Date.new(2024, 1, 1))).to eq(0)
+      expect(config.discount_percent(Date.new(2024, 6, 10))).to eq(0)
+      expect(config.discount_percent(Date.new(2024, 7, 1))).to eq(50)
+      expect(config.discount_percent(Date.new(2024, 10, 2))).to eq(100)
+      expect(config.discount_percent(Date.new(2024, 12, 31))).to eq(100)
+    end
+  end
+
 end

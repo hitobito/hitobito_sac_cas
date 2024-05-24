@@ -26,7 +26,7 @@
 #  reduction_required_age                          :integer
 #
 
-'2024':
+bluemlisalp_2024:
   group: bluemlisalp
   valid_from: '2024'
   section_fee_adult: 42
@@ -36,10 +36,28 @@
   section_entry_fee_family: 20
   section_entry_fee_youth: 5
   bulletin_postage_abroad: 13
+  sac_fee_exemption_for_honorary_members: true
+  section_fee_exemption_for_honorary_members: true
+  sac_fee_exemption_for_benefited_members: false
+  section_fee_exemption_for_benefited_members: true
+  reduction_amount: 10
+  reduction_required_membership_years: 25
+  reduction_required_age: 60
+
+matterhorn_2024:
+  group: matterhorn
+  valid_from: '2024'
+  section_fee_adult: 56
+  section_fee_family: 88
+  section_fee_youth: 32
+  section_entry_fee_adult: 15
+  section_entry_fee_family: 25
+  section_entry_fee_youth: 10
+  bulletin_postage_abroad: 10
   sac_fee_exemption_for_honorary_members: false
   section_fee_exemption_for_honorary_members: true
   sac_fee_exemption_for_benefited_members: true
   section_fee_exemption_for_benefited_members: false
-  reduction_amount: 10
-  reduction_required_membership_years: 50
-  reduction_required_age: 42
+  reduction_amount: 15
+  reduction_required_membership_years: 30
+  reduction_required_age:

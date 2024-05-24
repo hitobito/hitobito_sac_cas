@@ -1,47 +1,51 @@
 newsletter_tourenportal_abonnent:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::AboTourenPortal::Abonnent"
 
 newsletter_tourenportal_neuanmeldung:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::AboTourenPortal::Neuanmeldung"
 
 newsletter_magazin_abonnent:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::AboMagazin::Abonnent"
 
 newsletter_magazin_neuanmeldung:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::AboMagazin::Neuanmeldung"
 
 newsletter_basic_login:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::AboBasicLogin::BasicLogin"
 
 newsletter_sektions_mitglied:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsMitglieder::Mitglied"
 
 newsletter_sektions_mitglied_zusatzsektion:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsMitglieder::MitgliedZusatzsektion"
 
 newsletter_sektions_mitglied_ehrenmitglied:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsMitglieder::Ehrenmitglied"
 
 newsletter_sektions_mitglied_beguenstigt:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsMitglieder::Beguenstigt"
 
 newsletter_sektions_neuanmeldungen_sektion:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
 
 newsletter_sektions_neuanmeldungen_sektion_zusatzsektion:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion"
 
 newsletter_sektions_neuanmeldungen_nv:
-  relation: newsletter_subscsription (Subscription)
+  relation: newsletter_subscription (Subscription)
   role_type: "Group::SektionsNeuanmeldungenNv::Neuanmeldung"
+
+sac_magazine_mitglieder:
+  relation: sac_magazine_subscription (Subscription)
+  role_type: "Group::SektionsMitglieder::Mitglied"

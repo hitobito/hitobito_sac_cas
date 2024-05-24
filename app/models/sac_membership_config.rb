@@ -52,6 +52,12 @@
 
 class SacMembershipConfig < ApplicationRecord
 
+  class << self
+    def active(date = Time.zone.today)
+      where(valid_from: ..date.year).order(valid_from: :desc).first
+    end
+  end
+
   attr_readonly :valid_from
 
   validates_by_schema
@@ -68,4 +74,16 @@ class SacMembershipConfig < ApplicationRecord
   def to_s
     valid_from
   end
+
+  def discount_percent(date)
+    index = [3, 2, 1].find do |i|
+      discount_date = send("discount_date_#{i}")
+      next nil if discount_date.blank?
+
+      Date.parse("#{discount_date}#{date.year}") <= date
+    end
+
+    index ? send("discount_percent_#{index}").to_i : 0
+  end
+
 end

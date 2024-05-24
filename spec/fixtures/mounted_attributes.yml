@@ -9,6 +9,12 @@ sac_newsletter:
   entry_type: Group
   entry: root
 
+sac_magazine:
+  key: sac_magazin_mailing_list_id
+  value: <%= ActiveRecord::FixtureSet.identify(:sac_magazine) %>
+  entry_type: Group
+  entry: root
+
 bluemlisalp_foundation_year:
   key: foundation_year
   value: 1942
