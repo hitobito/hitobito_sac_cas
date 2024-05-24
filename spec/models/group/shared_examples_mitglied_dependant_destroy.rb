@@ -34,7 +34,7 @@ shared_examples 'Mitglied dependant destroy' do
 
     mitglied_role.destroy
 
-    expect(Role.exists?(id: role.id)).to eq(false)
+    expect(Role.with_deleted.exists?(id: role.id)).to eq(false)
     expect(role.person.primary_group_id).to be_nil
   end
 
@@ -63,7 +63,7 @@ shared_examples 'Mitglied dependant destroy' do
 
     mitglied_role.destroy
 
-    expect(Role.exists?(id: role.id)).to eq(false)
+    expect(Role.with_deleted.exists?(id: role.id)).to eq(false)
     expect(role.person.primary_group).to eq(other_group)
   end
 end
