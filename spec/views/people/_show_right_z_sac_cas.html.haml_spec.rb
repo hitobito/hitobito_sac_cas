@@ -21,12 +21,15 @@ describe 'people/_show_right_z_sac_cas.html.haml' do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
     it 'renders membership info for active membership' do
-      expect(dom).to have_css '.qr-code-wrapper'
+      expect(dom).to have_css 'section.sac_membership'
+      expect(dom).to have_css 'section.sac_membership .qr-code-wrapper'
     end
 
     it 'renders membership info for past membership' do
       person.roles.destroy_all
-      expect(dom).to have_css '.qr-code-wrapper'
+
+      expect(dom).to have_css 'section.sac_membership'
+      expect(dom).to have_css 'section.sac_membership .qr-code-wrapper'
     end
 
     it 'renders membership info for future membership' do
@@ -37,7 +40,9 @@ describe 'people/_show_right_z_sac_cas.html.haml' do
         convert_on: 1.month.from_now,
         convert_to: Group::SektionsMitglieder::Mitglied.sti_name
       )
-      expect(dom).to have_css '.qr-code-wrapper'
+
+      expect(dom).to have_css 'section.sac_membership'
+      expect(dom).to have_css 'section.sac_membership .qr-code-wrapper'
     end
   end
 
@@ -45,7 +50,7 @@ describe 'people/_show_right_z_sac_cas.html.haml' do
     let(:person) { people(:admin) }
 
     it 'hides membership info' do
-      expect(dom).not_to have_css '.qr-code-wrapper'
+      expect(dom).not_to have_css 'section.sac_membership'
     end
 
   end

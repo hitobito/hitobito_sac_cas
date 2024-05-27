@@ -679,6 +679,10 @@ de:
     tabs:
       history: Mitgliedschaften / Verlauf
 
+    show_right_z_sac_cas:
+      section_sac_membership: SAC Mitgliedschaft
+      qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
+
   people/neuanmeldungen/approves:
     new:
       text:

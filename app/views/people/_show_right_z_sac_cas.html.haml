@@ -7,8 +7,13 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - if can?(:update, entry) && entry.sac_membership_anytime?
-  %div
-    %dl.dl-horizontal
-    .d-flex.justify-content-center
-      .qr-code-wrapper
-        = qr_code_image_tag(entry)
+  %section.sac_membership
+    %h2= t('.section_sac_membership')
+
+    %div
+      %dl.dl-horizontal
+      .d-flex.justify-content-center
+        .qr-code-wrapper
+          = qr_code_image_tag(entry)
+          .hint
+            = t('.qr_code_hint')
