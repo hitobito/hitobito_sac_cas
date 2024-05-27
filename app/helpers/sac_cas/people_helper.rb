@@ -13,12 +13,19 @@ module SacCas::PeopleHelper
       f(true)
     elsif main_person.nil?
       ti('.unknown')
+    elsif can?(:read, main_person)
+      link_to(main_person.to_s, main_person)
     else
-      if can?(:read, main_person)
-        link_to(main_person.to_s, main_person)
-      else
-        main_person.to_s
-      end
+      main_person.to_s
     end
+  end
+
+  def qr_code_image_tag(person, html_options = {})
+    qr_code = People::Membership::VerificationQrCode.new(person).generate
+    qr_code_png = qr_code.as_png(size: 220)
+    qr_code_data = Base64.encode64(qr_code_png.to_blob)
+    default_options = { alt: 'QR Code', size: '220x220' }
+    options = default_options.merge(html_options)
+    image_tag("data:image/png;base64,#{qr_code_data}", options)
   end
 end

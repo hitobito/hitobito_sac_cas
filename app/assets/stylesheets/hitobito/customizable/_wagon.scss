@@ -25,3 +25,14 @@
 .turbo-progress-bar {
   background-color: $link-color !important;
 }
+
+.qr-code-wrapper {
+  padding: 5px;
+  border: 1px solid #c6c7c8;
+  border-radius: 10px;
+  .hint {
+    text-align: center;
+    width: 180px;
+    margin: auto;
+  }
+}
