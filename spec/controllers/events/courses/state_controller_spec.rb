@@ -12,7 +12,7 @@ describe Events::Courses::StateController do
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:group) { groups(:root) }
-  let(:course) { events(:closed).tap { _1.update!(state: 'created') } }
+  let(:course) { Fabricate(:sac_course) }
 
   describe 'PUT#update' do
     context 'as mitglied' do
@@ -26,16 +26,17 @@ describe Events::Courses::StateController do
     end
 
     context 'as admin' do
+      let(:course) { Fabricate(:sac_open_course) }
       before { sign_in(admin) }
 
       it 'updates state if state change is possible' do
-        put :update, params: { group_id: group.id, id: course.id, state: 'application_open' }
+        put :update, params: { group_id: group.id, id: course.id, state: 'created' }
 
         course.reload
 
-        expect(flash[:notice]).to eq('Status wurde auf Publiziert gesetzt.')
+        expect(flash[:notice]).to eq('Status wurde auf Entwurf gesetzt.')
 
-        expect(course.state).to eq('application_open')
+        expect(course.state).to eq('created')
         expect(response).to redirect_to(group_event_path(group, course))
       end
 
@@ -44,12 +45,12 @@ describe Events::Courses::StateController do
 
         put :update, params: { group_id: group.id, id: course.id, state: 'ready' }
 
-        expect(course.state).to eq('created')
+        expect(course.state).to eq('application_open')
         expect(response).to redirect_to(group_event_path(group, course))
       end
 
       it 'does not update state if step makes event invalid' do
-        course = events(:top_course)
+        course = Fabricate(:sac_course)
 
         put :update, params: { group_id: group.id, id: course.id, state: 'application_open' }
 

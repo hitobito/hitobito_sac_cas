@@ -148,7 +148,7 @@ describe Event::Kind do
 
     describe 'ignored states' do
       %w(closed canceled).each do |ignored|
-        before { course.update!(state: ignored) }
+        before { course.update_columns(state: ignored) }
 
         it "noops for course in #{ignored} state" do
           expect do

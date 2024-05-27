@@ -19,7 +19,7 @@ describe Event::CloseApplicationsJob do
   end
 
   context 'application_open' do
-    let(:course) { Fabricate(:sac_open_course, state: :application_open) }
+    let(:course) { Fabricate(:sac_open_course) }
     it 'updates course state when application_closing_at is in the past' do
       travel_to(course.application_closing_at + 1.day) do
         expect { job.perform }.to change { course.reload.state }.to('application_closed')
@@ -34,7 +34,11 @@ describe Event::CloseApplicationsJob do
   end
 
   context 'application_paused' do
-    let(:course) { Fabricate(:sac_open_course, state: :application_paused) }
+    let(:course) do
+      course = Fabricate(:sac_open_course)
+      course.update!(state: :application_paused)
+      course
+    end
     it 'updates course state when application_closing_at is in the past' do
       travel_to(course.application_closing_at + 1.day) do
         expect { job.perform }.to change { course.reload.state }.to('application_closed')
