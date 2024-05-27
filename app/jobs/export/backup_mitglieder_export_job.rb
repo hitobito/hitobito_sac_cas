@@ -46,10 +46,6 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def file_path
-    [
-      'sektionen',
-      @group.navision_id,
-      "Adressen_#{@group.navision_id_padded}.csv"
-    ].join('/')
+    "sektionen/#{@group.navision_id}/Adressen_#{@group.navision_id_padded}.csv"
   end
 end
