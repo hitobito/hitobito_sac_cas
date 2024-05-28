@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require_relative 'membership/header'
 require_relative 'membership/person'
 require_relative 'membership/footer'
 
@@ -39,13 +38,14 @@ module Export::Pdf::Passes
     def render_options
       @options.to_h.merge(
         page_size: 'A4',
-        page_layout: :portrait
+        page_layout: :portrait,
+        margin: [0, 0, 0, 0]
       )
     end
 
     def sections
       @sections ||=
-        [Export::Pdf::Passes::Sections::Logo, Header, Person, Footer].collect do |section|
+        [Export::Pdf::Passes::Sections::Logo, Person, Footer].collect do |section|
           section.new(pdf, @person, {})
         end
     end

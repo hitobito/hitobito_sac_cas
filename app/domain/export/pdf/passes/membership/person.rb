@@ -11,29 +11,26 @@ class Export::Pdf::Passes::Membership
     alias person model
 
     def render
-      pdf.move_down(20)
-      table_data = [[row_membership], [row_address_qr]]
-      table(table_data, cell_style: { border_width: 0 })
+      table_data = [[row_membership]]
+
+      bounding_box([68, 711], width: 260, height: 500) do
+        table(table_data, cell_style: { border_width: 0 })
+      end
+
+      image(verify_qr_code, at: [47, 147], width: 110, height: 110)
+      bounding_box([176, 102], width: 200, height: 300) do
+        membertext = [person_name, person_membership_number].flatten.join("\n\n")
+        pdf.text_box(membertext, size: 9, style: :bold)
+      end
     end
 
     private
 
-    def row_address_qr
-      data = [[person_address, { image: verify_qr_code }]]
-      pdf.make_table(data) do
-        cells.borders = []
-        cells.size = 24
-        cells.font_style = :bold
-        cells.valign = :center
-        columns(1).width = 280
-      end
-    end
-
     def row_membership
-      attrs = [[t('membership_years'), person.membership_years]]
+      attrs = [[person_address]]
       pdf.make_table(attrs) do
         cells.borders = []
-        cells.size = 16
+        cells.size = 9
         columns([1, 3]).font_style = :bold
       end
     end
@@ -42,15 +39,22 @@ class Export::Pdf::Passes::Membership
       ::Person::Address.new(person).for_letter
     end
 
+    def person_name
+      "#{person.person_name}"
+    end
+
+    def person_membership_number
+      "#{t('member')}: #{person.membership_number}"
+    end
+
     def verify_qr_code
       qr_code = People::Membership::VerificationQrCode.new(person).generate
-      qr_code = qr_code.as_png(size: 220).to_s
+      qr_code = qr_code.as_png(size: 70).to_s
       StringIO.new(qr_code)
     end
 
     def t(key)
       I18n.t("passes.membership.#{key}")
     end
-
   end
 end
