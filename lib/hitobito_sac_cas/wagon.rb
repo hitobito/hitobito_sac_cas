@@ -125,6 +125,7 @@ module HitobitoSacCas
       PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Person::QueryController.prepend SacCas::Person::QueryController
+      Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
