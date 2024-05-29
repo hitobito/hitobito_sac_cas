@@ -24,22 +24,22 @@ class People::SacFamily
     # do nothing unless we find a family membership in the household
     return unless family_stammsektion
 
-    non_family_housemates.each {|new_family_member| update_membership!(new_family_member) }
+    non_family_housemates.each { |new_family_member| update_membership!(new_family_member) }
   end
 
   def update_terminated_roles
     terminated_roles = @person
-      .roles
-      .where(type: terminatable_member_role_types,
-             terminated: true,
-             beitragskategorie: :family)
+                       .roles
+                       .where(type: terminatable_member_role_types,
+                              terminated: true,
+                              beitragskategorie: :family)
 
     affected_family_roles = Role
-      .where(type: terminatable_member_role_types,
-             group_id: terminated_roles.collect(&:group_id),
-             terminated: false,
-             beitragskategorie: :family,
-             person_id: family_members.collect(&:id))
+                            .where(type: terminatable_member_role_types,
+                                   group_id: terminated_roles.collect(&:group_id),
+                                   terminated: false,
+                                   beitragskategorie: :family,
+                                   person_id: family_members.collect(&:id))
 
     delete_on = terminated_roles.first.delete_on
     Roles::Termination.terminate(affected_family_roles, delete_on)
@@ -90,6 +90,14 @@ class People::SacFamily
 
   def main_person
     family_members.find(&:sac_family_main_person)
+  end
+
+  def set_family_main_person
+    ActiveRecord::Base.transaction do
+      family_members.where(sac_family_main_person: true)
+                    .update_all(sac_family_main_person: false)
+      @person.update!(sac_family_main_person: true)
+    end
   end
 
   private

@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     # Define wagon routes here
 
     get '/people/:id/membership' => 'people/membership#show', as: 'membership'
+    put '/people/:id/sac_family_main_person' => 'people/sac_family_main_person#update', as: 'sac_family_main_person'
+
     get '/people/query_external_training' => 'person/query_external_training#index',
         as: :query_external_training
 
