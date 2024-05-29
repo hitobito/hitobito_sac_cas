@@ -6,6 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas
+
+  SAC_MITARBEITER_ROLES = [
+    ::Group::Geschaeftsstelle::Mitarbeiter,
+    ::Group::Geschaeftsstelle::Admin
+  ].freeze
+
   MITGLIED_HAUPTSEKTION_ROLES = [
     ::Group::SektionsMitglieder::Mitglied,
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,

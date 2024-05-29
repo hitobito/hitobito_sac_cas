@@ -23,6 +23,16 @@ describe Person::QueryHouseholdController do
       end
     end
 
+    context 'without required sac mitarbeiter role' do
+      let(:person) { Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+
+      it 'is unauthorized' do
+        expect do
+          get :index, params: { q: '1993' }
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
 
     it 'finds by birthday' do
       get :index, params: { q: '1993' }
