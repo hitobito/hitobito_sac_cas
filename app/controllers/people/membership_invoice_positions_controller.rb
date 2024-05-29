@@ -12,7 +12,7 @@ class People::MembershipInvoicePositionsController < ApplicationController
   def show
     authorize!(:update, person)
 
-    send_data csv, type: 'text/plain; charset=utf-8', disposition: 'inline'
+    render plain: csv, type: 'text/plain; charset=utf-8'
   end
 
   private
