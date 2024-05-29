@@ -10,7 +10,7 @@ require 'spec_helper'
 describe :self_registration, js: true do
   let(:group) { groups(:bluemlisalp_funktionaere) }
 
-  let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
+  let(:self_registration_role) {  Group::SektionsFunktionaere::Praesidium }
 
   before do
     group.self_registration_role_type = self_registration_role
@@ -51,7 +51,8 @@ describe :self_registration, js: true do
       expect(page).to have_field 'Mail'
       fill_in 'Mail', with: person.email
       click_on 'Registrieren'
-      expect(page).to have_css '.alert-success', text: 'Es existiert bereits ein Login für diese E-Mail.'
+      expect(page).to have_css '.alert-success', 
+text: 'Es existiert bereits ein Login für diese E-Mail.'
       expect(page).to have_css 'h1', text: 'Anmelden'
       expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.email
       fill_in 'Passwort', with: password
@@ -96,7 +97,8 @@ describe :self_registration, js: true do
       click_button 'Anmelden'
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
-      expect(current_path).to eq("#{group_person_path(group_id: group, id: person, locale: :de)}.html")
+      expect(current_path).to eq("#{group_person_path(group_id: group, id: person, 
+locale: :de)}.html")
     end
 
     describe 'with adult consent' do
