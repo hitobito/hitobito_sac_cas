@@ -9,10 +9,15 @@
 module SacCas::PersonAbility
   extend ActiveSupport::Concern
 
+
   prepended do
     on(Person) do
       permission(:read_all_people).may(:read_all_people, :show).everybody
+      class_side(:create_households).if_sac_mitarbeiter
     end
   end
 
+  def if_sac_mitarbeiter
+    SacCas::SAC_MITARBEITER_ROLES.any? { |r| role_type?(r) }
+  end
 end

@@ -8,7 +8,6 @@
 require 'spec_helper'
 
 describe PersonAbility do
-
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
@@ -28,6 +27,28 @@ describe PersonAbility do
 
       it 'is permitted' do
         expect(ability).to be_able_to(:primary_group, mitglied)
+      end
+    end
+  end
+
+  describe 'create_households' do
+    [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::Admin].each do |role_type|
+      context role_type do
+        let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
+
+        it 'is permitted' do
+          expect(ability).to be_able_to(:create_households, mitglied)
+        end
+      end
+    end
+
+    [Group::SektionsFunktionaere::Mitgliederverwaltung, Group::SektionsFunktionaere::Administration].each do |role_type|
+      context role_type do
+        let(:person) { Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+
+        it 'is not permitted' do
+          expect(ability).not_to be_able_to(:create_households, mitglied)
+        end
       end
     end
   end
