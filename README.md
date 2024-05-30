@@ -9,9 +9,9 @@ of SAC CAS.
 ```
     * Schweizer Alpen-Club SAC
       * Geschäftsstelle
-        * Mitarbeiter*in (schreibend): [:layer_and_below_full, :read_all_people]
-        * Mitarbeiter*in (lesend): [:layer_and_below_read, :read_all_people]
-        * Administration: [:layer_and_below_full, :admin, :impersonation, :read_all_people]
+        * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]
+        * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]
+        * Administration: 2FA [:layer_and_below_full, :admin, :impersonation, :read_all_people]
         * Andere: 2FA [:layer_and_below_read, :read_all_people]
       * Geschäftsleitung
         * Geschäftsführung: 2FA [:layer_and_below_read, :read_all_people]
@@ -61,11 +61,11 @@ of SAC CAS.
         * Hüttenwart*in: [:group_read]
         * Hüttenchef*in: [:group_read]
         * Andere: [:group_read]
-      * Touren Und Kurse
-        * Tourenchef*in Sommer: 2FA [:layer_and_below_full]
-        * Tourenchef*in Winter: 2FA [:layer_and_below_full]
-        * Tourenchef*in Klettern: 2FA [:layer_and_below_full]
-        * Tourenchef*in Senioren: 2FA [:layer_and_below_full]
+      * Touren und Kurse
+        * Tourenchef*in Sommer: 2FA [:group_full, :layer_and_below_read]
+        * Tourenchef*in Winter: 2FA [:group_full, :layer_and_below_read]
+        * Tourenchef*in Klettern: 2FA [:group_full, :layer_and_below_read]
+        * Tourenchef*in Senioren: 2FA [:group_full, :layer_and_below_read]
         * Tourenleiter*in (mit Qualifikation): []
         * Tourenleiter*in (ohne Qualifikation): []
         * JO-Chef*in: []

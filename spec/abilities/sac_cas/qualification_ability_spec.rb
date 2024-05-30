@@ -40,6 +40,11 @@ describe QualificationAbility do
           expect(ability).to_not be_able_to(:create, qualification)
         end
 
+        it 'is permitted to create for member in same layer as tourenchef role' do
+          qualification.person = ausserberg_mitglied
+          expect(ability).to be_able_to(:create, qualification)
+        end
+
         context 'with tourenchef role in layer above' do
           let(:bluemlisalp_tourenkommission) { Fabricate(Group::SektionsTourenkommission.sti_name.to_sym,
                                                          parent: groups(:bluemlisalp)) }
@@ -55,11 +60,6 @@ describe QualificationAbility do
       end
 
       context 'for non readable person' do
-        it 'is not permitted to create in same layer as tourenchef role' do
-          qualification.person = ausserberg_mitglied
-          expect(ability).to_not be_able_to(:create, qualification)
-        end
-
         it 'is not permitted to create in different layer than tourenchef role' do
           qualification.person = matterhorn_mitglied
           expect(ability).to_not be_able_to(:create, qualification)
@@ -82,15 +82,14 @@ describe QualificationAbility do
           qualification.person = matterhorn_mitglied
           expect(ability).to_not be_able_to(:create, qualification)
         end
-      end
 
-      context 'for non readable person' do
-        it 'is not permitted to create in same layer as tourenchef role' do
+        it 'is not permitted to create for member in same layer as tourenchef role' do
           qualification.person = ausserberg_mitglied
           expect(ability).to_not be_able_to(:create, qualification)
         end
+      end
 
-
+      context 'for non readable person' do
         it 'is not permitted to create in different layer than tourenchef role' do
           qualification.person = matterhorn_mitglied
           expect(ability).to_not be_able_to(:create, qualification)
