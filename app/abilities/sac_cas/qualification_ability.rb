@@ -23,7 +23,9 @@ module SacCas::QualificationAbility
   end
 
   def in_course_layer_or_below_unless_sektions_mitgliederverwaltung
-    in_course_layer_or_below && !role_type?(Group::SektionsFunktionaere::Mitgliederverwaltung)
+    without_role(Group::SektionsFunktionaere::Mitgliederverwaltung) do
+      in_course_layer_or_below
+    end
   end
 
   def for_tourenchef_qualification_as_tourenchef_in_layer

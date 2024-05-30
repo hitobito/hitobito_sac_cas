@@ -121,6 +121,11 @@ describe QualificationAbility do
         expect(ability).to be_able_to(:create, qualification)
         expect(ability).to be_able_to(:destroy, qualification)
       end
+
+      it 'is permitted to create and destroy even with Mitgliederverwaltungs role' do
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
+      end
     end
 
     describe Group::SektionsFunktionaere::Administration do
@@ -138,6 +143,13 @@ describe QualificationAbility do
       it 'is not permitted to create and destroy' do
         expect(ability).not_to be_able_to(:create, qualification)
         expect(ability).not_to be_able_to(:destroy, qualification)
+      end
+
+      it 'is permitted if has another role with layer_and_below_full' do
+        Fabricate(Group::Geschaeftsstelle::Admin.sti_name, group: groups(:geschaeftsstelle), person: person)
+
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
       end
     end
   end

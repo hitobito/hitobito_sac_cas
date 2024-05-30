@@ -24,6 +24,8 @@ class ExternalTrainingAbility < AbilityDsl::Base
   end
 
   def in_same_layer_or_below_unless_sektions_mitgliederverwaltung
-    in_same_layer_or_below && !role_type?(Group::SektionsFunktionaere::Mitgliederverwaltung)
+    without_role(Group::SektionsFunktionaere::Mitgliederverwaltung) do
+      in_same_layer_or_below
+    end
   end
 end
