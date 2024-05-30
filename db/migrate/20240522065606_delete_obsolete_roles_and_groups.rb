@@ -9,8 +9,8 @@ class DeleteObsoleteRolesAndGroups < ActiveRecord::Migration[6.1]
   def up
     return unless connection.adapter_name =~ /mysql/i
 
-    execute "DELETE FROM roles WHERE type='Group::SektionsFuntionaere::Umweltbeauftragte'"
-    execute "DELETE FROM roles WHERE type='Group::SektionsFuntionaere::Kulturbeauftragte'"
+    execute "DELETE FROM roles WHERE type='Group::SektionsFunktionaere::Umweltbeauftragte'"
+    execute "DELETE FROM roles WHERE type='Group::SektionsFunktionaere::Kulturbeauftragte'"
 
     execute <<~SQL
       DELETE groups FROM groups
