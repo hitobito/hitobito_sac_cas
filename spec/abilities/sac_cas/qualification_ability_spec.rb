@@ -11,7 +11,8 @@ describe QualificationAbility do
 
   let(:tourenchef_may_edit_qualification_kind) { Fabricate(:qualification_kind, tourenchef_may_edit: true) }
   let(:tourenchef_may_not_edit_qualification_kind) { Fabricate(:qualification_kind, tourenchef_may_edit: false) }
-  let(:bluemlisalp_mitglied) { people(:mitglied) }
+  let(:bluemlisalp_mitglied) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                                         group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)).person }
   let(:person) { people(:tourenchef) }
 
   subject(:ability) { Ability.new(person) }
@@ -25,7 +26,7 @@ describe QualificationAbility do
                   person: person,
                   group: groups(:bluemlisalp_funktionaere))
         qualification.person = bluemlisalp_mitglied
-        expect(ability).to_not be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:create, qualification)
       end
 
       it 'is not permitted to create for non readable person in layer with tourenchef role' do
@@ -52,7 +53,7 @@ describe QualificationAbility do
     context 'regarding qualification_kind with tourenchef_may_edit false' do
       let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind) }
 
-      it 'is permitted to create for readable person in layer with tourenchef role' do
+      it 'is not permitted to create for readable person in layer with tourenchef role' do
         Fabricate(Group::SektionsFunktionaere::AdministrationReadOnly.sti_name.to_sym,
                   person: person,
                   group: groups(:bluemlisalp_funktionaere))
