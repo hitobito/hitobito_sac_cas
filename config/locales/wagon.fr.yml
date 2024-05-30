@@ -78,4 +78,5 @@ fr:
 
   people:
     show_right_z_sac_cas:
-      download: Télécharger la carte de membre
+      download: Télécharger
+      download_pdf: La carte de membre PDF

@@ -28,4 +28,8 @@ module SacCas::PeopleHelper
     options = default_options.merge(html_options)
     image_tag("data:image/png;base64,#{qr_code_data}", options)
   end
+
+  def people_sac_membership_download_dropdown(person)
+    Dropdown::People::SacMembership::Download.new(self, person).to_s
+  end
 end

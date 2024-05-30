@@ -8,7 +8,10 @@
 
 - if can?(:update, entry) && entry.sac_membership_anytime?
   %section.sac_membership
-    %h2= t('.section_sac_membership')
+    %h2
+      = t('.section_sac_membership') 
+      .float-end
+        = people_sac_membership_download_dropdown(entry)
 
     %div
       %dl.dl-horizontal
@@ -18,6 +21,3 @@
             = qr_code_image_tag(entry)
             .hint
               = t('.qr_code_hint')
-          .download
-            .btn-group
-              = button t('.download'), membership_path(entry, format: :pdf),  :download, target: :new
