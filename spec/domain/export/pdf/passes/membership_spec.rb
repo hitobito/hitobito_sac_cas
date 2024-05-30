@@ -157,6 +157,29 @@ describe Export::Pdf::Passes::Membership do
     end
   end
 
+  context 'country' do
+    before do
+      member.update!(country: 'DE')
+    end
+
+    it 'does include the countries name in full' do
+      expect(text_with_position(analyzer).flatten).to include "Deutschland"
+    end
+
+    it 'does translate the country' do
+      I18n.with_locale(:fr) do
+        expect(text_with_position(analyzer).flatten).to include "Allemagne"
+      end
+    end
+
+    it 'does not include Switzerland' do
+      member.update!(country: 'CH')
+      texts = text_with_position(analyzer).flatten
+      expect(texts).not_to include "Schweiz"
+      expect(texts).not_to include "CH"
+    end
+  end
+
   private
   def extract_image_objects(page_no = 1)
     rendered_pdf = pdf.try(:render) || pdf
