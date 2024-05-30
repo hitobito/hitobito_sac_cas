@@ -40,11 +40,11 @@ describe Export::Pdf::Passes::Membership do
 
     let(:texts) {
       [
-        [73, 697, "#{member.first_name} #{member.last_name}"],
-        [73, 687, "Bergstrasse 42"],
-        [73, 676, "4242 Matterhorn"],
-        [176, 96, "Bob Muster"],
-        [176, 74, "Mitglied: #{member.membership_number}"],
+        [65, 705, "#{member.first_name} #{member.last_name}"],
+        [65, 694, "Bergstrasse 42"],
+        [65, 684, "4242 Matterhorn"],
+        [160, 96, "Bob Muster"],
+        [160, 74, "Mitglied: #{member.membership_number}"],
         [61, 148, "Mitgliederausweis"],
         [510, 83, "SAC-Partner"],
         [309, 182, "REGA 1414                    SOS Europe 112"],
@@ -71,7 +71,7 @@ describe Export::Pdf::Passes::Membership do
 
     let(:expected_image_positions) {
       [{x:141.208,y:130.585,width:721, height:301, displayed_width:103520.459, displayed_height:18047.057},
-        {x:47.0,y:37.0,width:70, height:70, displayed_width:7700.0, displayed_height:7700.0},
+        {x:47.0,y:37.0,width:70, height:70, displayed_width:7000.0, displayed_height:7700.0},
         {x:14.0,y:193.3,width:640, height:384, displayed_width:12800.0, displayed_height:4608.0},
         {x:496.714,y:157.55607,width:458, height:375, displayed_width:18267.329999999998, displayed_height:12246.348750000001},
         {x:499.0,y:33.126,width:70, height:70, displayed_width:3850.0, displayed_height:3850.0}]

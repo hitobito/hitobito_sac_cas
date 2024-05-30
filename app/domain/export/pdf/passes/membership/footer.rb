@@ -7,13 +7,50 @@
 
 class Export::Pdf::Passes::Membership
   class Footer < Export::Pdf::Section
+    EMERGENCY_SERVICES_DETAILS = "REGA 1414#{' ' * 20}SOS Europe 112".freeze
+
+    TITLE_POSITION = [61.409, 155.561].freeze
+    TITLE_ALIGN = :left
+    TITLE_SIZE = 10
+    TITLE_STYLE = :bold
+
+    RECIPROCITY_IMAGE_POSITION = [496.714, 190.213].freeze
+    RECIPROCITY_IMAGE_WIDTH = 39.885
+
+    RIGHT_SIDE_LEFT_START = 309.425
+    EMERGENCY_TEXT_POSITION = [RIGHT_SIDE_LEFT_START, 188.1799].freeze
+    EMERGENCY_TEXT_SIZE = 8
+
+    SAC_CAS_LINK_COLOR = 'ED1C24'
+    SAC_CAS_LINK_POSITION = [489.973, 153.408].freeze
+    SAC_CAS_LINK_SIZE = 7
+
+    SPONSOR_QR_CODE_POSITION = [499, 88.126].freeze
+    SPONSOR_QR_CODE_WIDTH = 55
+    SPONSOR_CODE_POSITION = [499, 87].freeze
+    SPONSOR_CODE_SIZE = 6
+
+    TEXT_BOX_WIDTH = 170.017
+    TEXT_BOX_HEIGHT = 28.063
+    GRAY_BOXES_Y_POSITION = [175.307, 144.307].freeze
+    TEXT_BOX_FILL_COLOR = 'EFEFEF'
+    TEXT_BOX_COLOR = '231f20'
+
+    DASHED_BOX_SCISSORS_IMAGE_POSITION = [14, 205.3].freeze
+    DASHED_BOX_SCISSORS_IMAGE_WIDTH = 20
+    DASH_PATTERN = [2, { style: 2 }].freeze
+
+    MEMBERSHIP_CARD_HEIGHT = 162
+    MEMBERSHIP_CARD_WIDTH = 256
+    LEFT_MARGIN = 39
+    BOTTOM_MARGIN = 37
 
     def render
       text_box title,
-               at: [61.409, 155.561],
-               align: :left,
-               size: 10,
-               style: :bold
+               at: TITLE_POSITION,
+               align: TITLE_ALIGN,
+               size: TITLE_SIZE,
+               style: TITLE_STYLE
 
       draw_back
       draw_dashed_box
@@ -22,66 +59,64 @@ class Export::Pdf::Passes::Membership
     private
 
     def draw_back
-      pdf.image(reciprocity_image_path, position: :left, at: [496.714, 190.213],
-                                        width: 39.885)
+      pdf.image(reciprocity_image_path, position: :left, at: RECIPROCITY_IMAGE_POSITION,
+                                        width: RECIPROCITY_IMAGE_WIDTH)
 
       draw_sponsor_code
 
-      right_side_left_start = 309.425
-
-      text_box 'REGA 1414                    SOS Europe 112',
-               at: [right_side_left_start,
-                    188.1799],
+      text_box EMERGENCY_SERVICES_DETAILS,
+               at: EMERGENCY_TEXT_POSITION,
                style: :bold,
-               size: 8
+               size: EMERGENCY_TEXT_SIZE
 
-      write_in_boxes(right_side_left_start)
+      write_in_boxes(RIGHT_SIDE_LEFT_START)
 
       sac_cas_link
     end
 
     def sac_cas_link
-      fill_color('ED1C24') do
+      fill_color(SAC_CAS_LINK_COLOR) do
         text_box 'www.sac-cas.ch',
-                 at: [489.973,
-                      153.408],
-                 size: 7
+                 at: SAC_CAS_LINK_POSITION,
+                 size: SAC_CAS_LINK_SIZE
       end
     end
 
     def draw_sponsor_code
-      sponsor_qr_code_width = 55
-      pdf.image(sponsor_qr_code, position: :left, at: [499, 88.126],
-                                 width: sponsor_qr_code_width)
+      pdf.image(sponsor_qr_code, position: :left, at: SPONSOR_QR_CODE_POSITION,
+                                 width: SPONSOR_QR_CODE_WIDTH)
       text_box t('sac_partner'),
-               at: [499,
-                    87],
+               at: SPONSOR_CODE_POSITION,
                align: :center,
-               size: 6,
-               width: sponsor_qr_code_width
+               size: SPONSOR_CODE_SIZE,
+               width: SPONSOR_QR_CODE_WIDTH
     end
 
     def write_in_boxes(right_side_left_start)
-      text_box_width = 170.017
-      text_box_height = 28.063
-      gray_boxes_y_position = [175.307, 144.307]
-
-      fill_color('EFEFEF') do
-        gray_boxes_y_position.each do |y_position|
-          pdf.fill_rectangle [right_side_left_start, y_position], text_box_width,
-                             text_box_height
+      fill_color(TEXT_BOX_FILL_COLOR) do
+        GRAY_BOXES_Y_POSITION.each do |y_position|
+          pdf.fill_rectangle [right_side_left_start, y_position], TEXT_BOX_WIDTH,
+                             TEXT_BOX_HEIGHT
         end
       end
 
-      fill_color('231f20') do
-        ["Notfallnummer / N° d'urgence / No. di emergenza",
-         "Notfallkontakt / Contact d'urgence / Contatto di emergenza"].each_with_index do |text, i|
+      fill_color(TEXT_BOX_COLOR) do
+        [build_multilanguage_string('emergency_number'),
+         build_multilanguage_string('emergency_contact')].each_with_index do |text, i|
           text_box text,
-                   at: [right_side_left_start + 2, gray_boxes_y_position[i] - 3],
+                   at: [right_side_left_start + 2, GRAY_BOXES_Y_POSITION[i] - 3],
                    align: :left,
                    size: 6
         end
       end
+    end
+
+    def build_multilanguage_string(key)
+      [:de, :fr, :it].map do |lang|
+        I18n.with_locale(lang) do
+          t(key)
+        end
+      end.join(' / ')
     end
 
     def fill_color(color)
@@ -92,14 +127,11 @@ class Export::Pdf::Passes::Membership
     end
 
     def dashed_box_points
-      membership_card_height = 162
-      membership_card_width = 256
-
-      left = 39
-      right = membership_card_width + left
-      bottom = 37
-      top = membership_card_height + bottom
-      back_right = (membership_card_width * 2) + left
+      left = LEFT_MARGIN
+      right = MEMBERSHIP_CARD_WIDTH + left
+      bottom = BOTTOM_MARGIN
+      top = MEMBERSHIP_CARD_HEIGHT + bottom
+      back_right = (MEMBERSHIP_CARD_WIDTH * 2) + left
 
       front_points = [
         [[left, top], [right, top]], [[left, top], [left, bottom]],
@@ -116,9 +148,9 @@ class Export::Pdf::Passes::Membership
     end
 
     def draw_dashed_box
-      pdf.image(scissors_image_path, position: :left, at: [14, 205.3],
-                                     width: 20)
-      pdf.dash(2, space: 2)
+      pdf.image(scissors_image_path, position: :left, at: DASHED_BOX_SCISSORS_IMAGE_POSITION,
+                                     width: DASHED_BOX_SCISSORS_IMAGE_WIDTH)
+      pdf.dash(*DASH_PATTERN)
 
       # Draw the lines for both boxes
       dashed_box_points.each do |start_point, end_point|

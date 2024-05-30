@@ -72,7 +72,9 @@ fr:
       title: Carte membre
       member: Membre
       sac_partner: Partenaire CAS
-      sponsor_url: 'https://www.sac-cas.ch/fr/le-cas/nos-partenaires/'
+      sponsor_url: https://www.sac-cas.ch/fr/le-cas/nos-partenaires/
+      emergency_number: N° d'urgence
+      emergency_contact: Contact d'urgence
 
   people:
     show_right_z_sac_cas:

@@ -10,33 +10,41 @@ class Export::Pdf::Passes::Membership
 
     alias person model
 
-    def render
-      table_data = [[row_membership]]
+    ADDRESS_BOUNDING_BOX_WIDTH = 180
+    ADDRESS_BOUNDING_BOX_HEIGHT = 500
+    ADDRESS_BOUNDING_BOX_POSITION = [65, 711].freeze
+    ADDRESS_SIZE = 9
 
-      bounding_box([68, 711], width: 260, height: 500) do
-        table(table_data, cell_style: { border_width: 0 })
+    QR_CODE_POSITION = [47, 147].freeze
+    QR_CODE_WIDTH = 100
+    QR_CODE_HEIGHT = 110
+
+    MEMBER_TEXT_BOX_POSITION = [160, 102].freeze
+    MEMBER_TEXT_BOX_WIDTH = 120
+    MEMBER_TEXT_BOX_HEIGHT = 300
+    MEMBER_TEXT_SIZE = 9
+    MEMBER_TEXT_STYLE = :bold
+    TEXT_OVERFLOW = :shrink_to_fit
+
+    def render
+      bounding_box(ADDRESS_BOUNDING_BOX_POSITION, width: ADDRESS_BOUNDING_BOX_WIDTH) do
+        pdf.text_box(person_address, size: ADDRESS_SIZE,
+                                     overflow: TEXT_OVERFLOW)
       end
 
-      image(verify_qr_code, at: [47, 147], width: 110, height: 110)
-      bounding_box([176, 102], width: 200, height: 300) do
+      image(verify_qr_code, at: QR_CODE_POSITION, width: QR_CODE_WIDTH, height: QR_CODE_HEIGHT)
+      bounding_box(MEMBER_TEXT_BOX_POSITION, width: MEMBER_TEXT_BOX_WIDTH,
+                                             height: MEMBER_TEXT_BOX_HEIGHT) do
         membertext = [person_name, person_membership_number].flatten.join("\n\n")
-        pdf.text_box(membertext, size: 9, style: :bold)
+        pdf.text_box(membertext, size: MEMBER_TEXT_SIZE, style: MEMBER_TEXT_STYLE,
+                                 overflow: TEXT_OVERFLOW)
       end
     end
 
     private
 
-    def row_membership
-      attrs = [[person_address]]
-      pdf.make_table(attrs) do
-        cells.borders = []
-        cells.size = 9
-        columns([1, 3]).font_style = :bold
-      end
-    end
-
     def person_address
-      ::Person::Address.new(person).for_letter
+      ::Person::Address.new(person).for_membership_pass
     end
 
     def person_name

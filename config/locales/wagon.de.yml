@@ -945,6 +945,8 @@ de:
       member: Mitglied
       sac_partner: SAC-Partner
       sponsor_url: 'https://www.sac-cas.ch/de/der-sac/unsere-partner/'
+      emergency_number: 'Notfallnummer'
+      emergency_contact: 'Notfallkontakt'
 
   mounted_attributes:
     form_tabs:
