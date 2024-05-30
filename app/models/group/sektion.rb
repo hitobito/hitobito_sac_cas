@@ -11,11 +11,14 @@ class Group::Sektion < ::Group
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
+    Group::SektionsTourenkommission,
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenSektion,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsTourenkommission,
-    Group::SektionsHuettenkommission,
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
     Group::SektionsExterneKontakte,
     Group::Ortsgruppe
 
@@ -24,7 +27,8 @@ class Group::Sektion < ::Group
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenNv,
     Group::SektionsExterneKontakte,
-    Group::SektionsTourenkommission ]
+    Group::SektionsTourenkommission
+  ]
 
   mounted_attr :foundation_year, :integer
   validates :foundation_year,

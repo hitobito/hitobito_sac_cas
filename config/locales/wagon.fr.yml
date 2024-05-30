@@ -41,10 +41,6 @@ fr:
         one: Fonctionnaires
         other: Fonctionnaires
 
-      group/sektions_tourenkommission:
-        one: Commission des tournées
-        other: Commission des tournées
-
       group/huette:
         one: Cabane
         other: Cabanes

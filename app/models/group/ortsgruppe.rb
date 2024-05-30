@@ -11,18 +11,23 @@ class Group::Ortsgruppe < ::Group
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
+    Group::SektionsTourenkommission,
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenSektion,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsTourenkommission,
-    Group::SektionsExterneKontakte,
-    Group::SektionsHuettenkommission
+    Group::SektionsKommission,
+    Group::SektionsVorstand,
+    Group::SektionsExterneKontakte
 
   self.default_children = [
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsTourenkommission ]
+    Group::SektionsExterneKontakte,
+    Group::SektionsTourenkommission
+  ]
 
   validates :foundation_year,
             numericality:

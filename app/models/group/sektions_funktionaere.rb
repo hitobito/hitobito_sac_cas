@@ -9,9 +9,11 @@ class Group::SektionsFunktionaere < ::Group
 
   self.static_name = true
 
+  children Group::SektionsHuettenkommission
+
   ### ROLES
   class Praesidium < ::Role
-    self.permissions = []
+    self.permissions = [:layer_and_below_read]
   end
 
   class Mitgliederverwaltung < ::Role
@@ -29,12 +31,12 @@ class Group::SektionsFunktionaere < ::Group
     self.two_factor_authentication_enforced = true
   end
 
-  class Umweltbeauftragte < ::Role
+  class Finanzen < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Kulturbeauftragte < ::Role
+  class Redaktion < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -45,7 +47,6 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   roles Praesidium, Mitgliederverwaltung, Administration,
-    AdministrationReadOnly, Umweltbeauftragte, Kulturbeauftragte,
-    Andere
+    AdministrationReadOnly, Finanzen, Redaktion, Andere
 
 end

@@ -98,10 +98,13 @@ describe Import::SektionenImporter do
     expect(ortsgruppe.section_canton).to eq('VS')
     expect(ortsgruppe.foundation_year).to eq(1975)
 
-    expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
-                           Group::SektionsMitglieder,
-                           Group::SektionsTourenkommission,
-                           Group::SektionsFunktionaere]
+    expected_sub_groups = [
+      Group::SektionsFunktionaere,
+      Group::SektionsMitglieder,
+      Group::SektionsNeuanmeldungenNv,
+      Group::SektionsExterneKontakte,
+      Group::SektionsTourenkommission
+    ]
 
     expected_sub_group_count = expected_sub_groups.count
     expect(ortsgruppe.children.count).to eq(expected_sub_group_count)

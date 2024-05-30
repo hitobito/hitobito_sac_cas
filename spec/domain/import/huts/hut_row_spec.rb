@@ -23,7 +23,8 @@ describe Import::Huts::HutRow do
   end
 
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
-  let!(:hut_comission) { Fabricate(Group::SektionsHuettenkommission.sti_name.to_sym, parent: sektion) }
+  let!(:funktionaere) { sektion.children.find { |child| child.type == 'Group::SektionsFunktionaere' } }
+  let!(:hut_comission) { Fabricate(Group::SektionsHuettenkommission.sti_name.to_sym, parent: funktionaere) }
 
   it 'imports group' do
     expect { importer.import! }.

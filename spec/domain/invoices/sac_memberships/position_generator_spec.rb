@@ -259,8 +259,10 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context 'with huts' do
+    let(:funktionaere) { main_section.children.find { |child| child.type == 'Group::SektionsFunktionaere' } }
+
     before do
-      kommission = Group::SektionsHuettenkommission.create!(parent: main_section, name: 'Hüttenkommission')
+      kommission = Group::SektionsHuettenkommission.create!(parent: funktionaere, name: 'Hüttenkommission')
       Group::SektionsHuette.create!(parent: kommission, name: 'Blüemlisalphütte')
     end
 
