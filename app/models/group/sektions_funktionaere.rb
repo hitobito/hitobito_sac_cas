@@ -11,10 +11,6 @@ class Group::SektionsFunktionaere < ::Group
 
   children Group::SektionsHuettenkommission
 
-  self.default_children = [
-    Group::SektionsHuettenkommission
-  ]
-
   ### ROLES
   class Praesidium < ::Role
     self.permissions = [:layer_and_below_read]

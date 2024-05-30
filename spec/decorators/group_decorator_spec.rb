@@ -39,8 +39,8 @@ describe GroupDecorator do
       let(:group) { groups(:bluemlisalp_funktionaere) }
       it 'puts andere to the end of the list' do
           expected_role_list = ['Administration', 'Administration (nur lesend)',
-                                'Kulturbeauftragte*r', 'Mitgliederverwaltung',
-                                'Präsidium', 'Umweltbeauftragte*r', 'Andere']
+                                'Finanzen', 'Mitgliederverwaltung',
+                                'Präsidium', 'Redaktion', 'Andere']
           expect(decorator.role_types.map(&:label)).to eq(expected_role_list)
       end
     end

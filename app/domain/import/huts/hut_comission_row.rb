@@ -35,10 +35,12 @@ module Import::Huts
     end
 
     def parent_id(row)
-      @parent_id ||= Group::Sektion.find_by(navision_id: owner_navision_id(row)).id
+      @parent_id ||= Group::Sektion.find_by(navision_id: owner_navision_id(row))
+                                   .children
+                                   .find { |child| child.type == 'Group::SektionsFunktionaere' }
+                                   .id
     rescue
-      puts "WARNING: No parent id found for row #{row.inspect}"
-      raise
+      raise "WARNING: No parent id found for row #{row.inspect}"
     end
 
     def owner_navision_id(row)

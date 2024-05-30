@@ -23,12 +23,13 @@ let(:importer) { described_class.new(row) }
   end
 
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
+  let(:funktionaere) { sektion.children.find { |child| child.type == 'Group::SektionsFunktionaere' } }
 
   it 'imports group' do
     expect { importer.import! }.
       to change { Group.count }.by(1)
 
-    group = Group::SektionsHuettenkommission.find_by(parent: sektion)
+    group = Group::SektionsHuettenkommission.find_by(parent: funktionaere)
 
     expect(group).to be_present
     expect(group.name).to eq(group.class.label)
@@ -38,7 +39,7 @@ let(:importer) { described_class.new(row) }
     expect { importer.import! }.
       to change { Group.count }.by(1)
 
-    group = Group::SektionsHuettenkommission.find_by(parent: sektion)
+    group = Group::SektionsHuettenkommission.find_by(parent: funktionaere)
 
     expect(group).to be_present
     expect(group.name).to eq(group.class.label)

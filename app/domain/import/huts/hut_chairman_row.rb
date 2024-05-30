@@ -55,10 +55,10 @@ module Import::Huts
     end
 
     def group_id(row)
-      Group::SektionsHuettenkommission.joins(:parent)
-                                      .find_by(parent: {
-                                        navision_id: navision_id(row)
-                                      }).id
+      Group::Sektion.find_by(navision_id: navision_id(row))
+                    .descendants
+                    .find { |child| child.type == 'Group::SektionsHuettenkommission' }
+                    .id
     rescue NoMethodError
       puts "Failed to find existing SektionsFunktionäre of section with " +
              "navision id #{navision_id(row)}"

@@ -99,7 +99,7 @@ module Import::Huts
     end
 
     def sektion(row)
-      @sektion ||= Group::SektionsHuettenkommission.find(huette(row).parent_id).parent
+      @sektion ||= Group::SektionsHuettenkommission.find(huette(row).parent_id).parent.parent
     end
   end
 end
