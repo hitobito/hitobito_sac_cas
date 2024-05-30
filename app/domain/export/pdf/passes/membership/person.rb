@@ -21,7 +21,7 @@ class Export::Pdf::Passes::Membership
 
     MEMBER_TEXT_BOX_POSITION = [160, 102].freeze
     MEMBER_TEXT_BOX_WIDTH = 120
-    MEMBER_TEXT_BOX_HEIGHT = 300
+    MEMBER_TEXT_BOX_HEIGHT = 50
     MEMBER_TEXT_SIZE = 9
     MEMBER_TEXT_STYLE = :bold
     TEXT_OVERFLOW = :shrink_to_fit

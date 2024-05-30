@@ -118,6 +118,45 @@ describe Export::Pdf::Passes::Membership do
     end
   end
 
+  context 'longer text' do
+    let(:texts) {[
+      [61, 148, "Mitgliederausweis"],
+      [65, 621, "4242 Matterhorn"],
+      [65, 632, "Bergstrasse 42"],
+      [65, 642, "Chokyumei-no Chosuke"],
+      [65, 653, "no Ponpokopii-no Ponpokona-no"],
+      [65, 663, "Shuringan Shuringan-no Gurindai Gurindai-"],
+      [65, 673, "Yaburakoji-no Burakoji Paipopaipo Paipo-no"],
+      [65, 684, "Furaimatsu Kuunerutokoro-ni Sumutokoro"],
+      [65, 694, "Kaijarisuigyo-no Suigyomatsu Unraimatsu"],
+      [65, 705, "Jugemu Jugemu Goko-no Surikire"],
+      [160, 57, "Mitglied: #{member.membership_number}"],
+      [160, 69, "no Ponpokona-no Chokyumei-no Chosuke"],
+      [160, 75, "Shuringan-no Gurindai Gurindai-no Ponpokopii-"],
+      [160, 81, "Burakoji Paipopaipo Paipo-no Shuringan"],
+      [160, 87, "Kuunerutokoro-ni Sumutokoro Yaburakoji-no"],
+      [160, 92, "no Suigyomatsu Unraimatsu Furaimatsu"],
+      [160, 98, "Jugemu Jugemu Goko-no Surikire Kaijarisuigyo-"],
+      [309, 182, "REGA 1414                    SOS Europe 112"],
+      [311, 137, "Notfallkontakt / Contact d'urgence / Contatto di emergenza"],
+      [311, 168, "Notfallnummer / N° d'urgence / No. di emergenza"],
+      [490, 148, "www.sac-cas.ch"],
+      [510, 83, "SAC-Partner"]
+    ]}
+
+    before do
+      member.first_name = %w[Jugemu Jugemu Goko-no Surikire Kaijarisuigyo-no
+      Suigyomatsu Unraimatsu Furaimatsu Kuunerutokoro-ni Sumutokoro Yaburakoji-no Burakoji Paipopaipo].join(' ')
+      member.last_name = %w[Paipo-no Shuringan Shuringan-no Gurindai Gurindai-no Ponpokopii-no
+      Ponpokona-no Chokyumei-no Chosuke].join(' ')
+      member.save
+    end
+
+    it 'supports longer names' do
+      expect(text_with_position(analyzer)).to match_array texts
+    end
+  end
+
   private
   def extract_image_objects(page_no = 1)
     rendered_pdf = pdf.try(:render) || pdf
