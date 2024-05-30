@@ -11,7 +11,6 @@ class Group::Sektion < ::Group
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
-    Group::SektionsHuettenkommission,
     Group::SektionsTourenkommission,
     Group::SektionsKommission,
     Group::SektionsVorstand,

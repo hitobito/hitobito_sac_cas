@@ -9,6 +9,12 @@ class Group::SektionsFunktionaere < ::Group
 
   self.static_name = true
 
+  children Group::SektionsHuettenkommission
+
+  self.default_children = [
+    Group::SektionsHuettenkommission
+  ]
+
   ### ROLES
   class Praesidium < ::Role
     self.permissions = [:layer_and_below_read]
