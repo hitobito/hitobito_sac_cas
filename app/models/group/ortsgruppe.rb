@@ -26,7 +26,9 @@ class Group::Ortsgruppe < ::Group
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsTourenkommission ]
+    Group::SektionsExterneKontakte,
+    Group::SektionsTourenkommission
+  ]
 
   validates :foundation_year,
             numericality:
