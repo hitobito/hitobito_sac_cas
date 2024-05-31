@@ -35,6 +35,9 @@ Rails.application.routes.draw do
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
 
+        resources :membership_changes, only: [:new, :create], module: 'people'
+        get :membership_changes, to: 'people/membership_changes#new'
+
         # Test route to check invoice positions for a person.
         # Remove once invoices are sent to abacus
         member do

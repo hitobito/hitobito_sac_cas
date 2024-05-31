@@ -1,0 +1,8 @@
+= f.fields_for(entry.step_at(step_index).step_name, entry.step_at(step_index)) do |ff|
+  = ff.error_messages
+  = ff.labeled_input_field :email
+
+.btn-toolbar.bottom.allign-with-form
+  = c.navigation_links
+
+= render 'shared_partial'
