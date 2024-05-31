@@ -8,6 +8,13 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
+    wizards/steps/main_email_title: Haupt-E-Mail
+    wizards/steps/membership_onboarding/main_person_title: Personendaten
+    wizards/steps/membership_onboarding/household_title: Familienmitglieder
+    wizards/steps/membership_onboarding/supplements_title: Zusatzdaten
+    wizards/steps/signup_basic_login/main_person_title: Personendaten
+    wizards/steps/membership_change/choose_date_title: Datum wählen
+    wizards/steps/membership_change/summary_title: Bestätigen
 
   errors:
     messages:
@@ -785,6 +792,13 @@ de:
       section_sac_membership: SAC Mitgliedschaft
       qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
 
+
+  people/membership_changes:
+    global:
+      wizards/steps/choose_sektion_title: Sektion wählen
+      wizards/steps/membership_change/choose_date_title: Datum wählen
+      wizards/steps/membership_change/summary_title: Bestätigung
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -815,6 +829,8 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      basic_login_person:
+        newsletter: Ich möchte einen Newsletter abonnieren
       abo_issue:
         issues_from_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
@@ -838,6 +854,8 @@ de:
         notes: Bemerkungen
         promo_code: Promocode
       form:
+        basic_login_main_email_title: Haupt-E-Mail
+        basic_login_person_title: Personendaten
         main_email_title: Haupt-E-Mail
         emailless_main_person_title: Personendaten
         neuanmeldung_main_person_title: Personendaten
@@ -847,6 +865,7 @@ de:
         household_title: Familienmitglieder
         main_title: Familienmitglieder
         supplements_title: Zusatzdaten
+
       household:
         membership_info_box: >
           Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
@@ -888,6 +907,24 @@ de:
   groups/self_inscription:
     new:
       details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
+
+  wizards:
+    steps:
+      membership_onboarding:
+        supplements:
+          newsletter: Ich möchte einen Newsletter abonnieren
+        household:
+          membership_info_box: >
+            Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
+            max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
+
+            Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
+            mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+          next_as_single_link: Weiter als Einzelmitglied
+          next_as_household_link: Weiter als Familienmitgliedschaft
+      signup_basic_login:
+        main_person:
+          newsletter: Ich möchte einen Newsletter abonnieren
 
   roles:
     beitragskategorie:

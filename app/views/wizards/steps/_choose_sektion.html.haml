@@ -1,0 +1,7 @@
+= f.fields_for(entry.step_at(step_index), entry.step_at(step_index)) do |choose_sektion_form|
+  = choose_sektion_form.labeled_collection_select :group_id, entry.step_at(step_index).groups, :id, :name, {prompt: true}, data: { action: 'change->autosubmit#save' }
+
+.btn-toolbar.bottom.allign-with-form
+  = c.navigation_links
+
+= render 'shared_partial'

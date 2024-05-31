@@ -1,0 +1,45 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.well
+  = simple_format(t('.membership_info_box'))
+
+.btn-toolbar.top{class: "#{'d-none' if entry.household.empty?}" }
+  .btn-group
+    - if entry.household.empty?
+      = c.next_button(t('.next_as_single_link'), class: 'next-as-single')
+      = c.next_button(t('.next_as_household_link'), class: 'next-as-family d-none')
+    - else
+      = c.next_button(t('.next_as_single_link'), class: 'next-as-single d-none')
+      = c.next_button(t('.next_as_household_link'), class: 'next-as-family')
+  = c.back_link unless entry.first_step?
+
+= f.fields_for(entry.step_at(step_index).step_name, entry.step_at(step_index)) do |household_fields|
+  = household_fields.nested_fields_for :housemates do |housemate_fields|
+    = field_set_tag do
+      = housemate_fields.error_messages
+      = housemate_fields.labeled(:gender) do
+        - (Person::GENDERS + ['']).each do |key|
+          = housemate_fields.inline_radio_button(:gender, key, housemate_fields.object.gender_label(key))
+      = housemate_fields.labeled_input_fields :first_name, :last_name
+      = housemate_fields.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+      = housemate_fields.labeled_input_field :email
+      = housemate_fields.labeled_input_field :number, placeholder: ti('.phone_placeholder')
+
+      .col-xl-2.col-md-3.text-md-end.pe-3
+        = housemate_fields.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
+
+%br
+  .btn-toolbar.bottom.housemates
+    .btn-group
+      - if entry.household.empty?
+        = c.next_button(t('.next_as_single_link'), class: 'next-as-single')
+        = c.next_button(t('.next_as_household_link'), class: 'next-as-family d-none')
+      - else
+        = c.next_button(t('.next_as_single_link'), class: 'next-as-single d-none')
+        = c.next_button(t('.next_as_household_link'), class: 'next-as-family')
+    = c.back_link
+
+= render 'shared_partial'

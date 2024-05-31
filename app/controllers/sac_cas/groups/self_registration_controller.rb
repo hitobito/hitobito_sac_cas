@@ -9,24 +9,27 @@ module SacCas::Groups::SelfRegistrationController
   extend ActiveSupport::Concern
 
   def create
-    return super unless entry.redirect_to_login?
+    return redirect_to_login if email_taken?
 
-    redirect_to_login
+    super
+  end
+
+  def model_class
+    @model_class ||= Groups::SacRegistrationWizards.for(group)
   end
 
   private
 
-  def entry
-    @entry ||= SelfRegistration.for(group).new(
-      group: group,
-      params: params.to_unsafe_h.deep_symbolize_keys
-    )
+  def email_taken?
+    main_person_email = entry.person.email.presence or return false
+
+    Person.where(email: main_person_email).exists?
   end
 
   def redirect_to_login
-    store_location_for(entry.main_person.person, group_self_inscription_path(group))
+    store_location_for(entry.person, group_self_inscription_path(group))
 
-    path = new_person_session_path(person: { login_identity: entry.email })
+    path = new_person_session_path(person: { login_identity: entry.person.email })
     notice = t('.redirect_existing_email')
 
     return redirect_to(path, notice: notice) unless request.xhr?

@@ -1,2 +1,5 @@
 .alert.alert-warning
   = t('.sections_info_html')
+- if can?(:edit, @person)
+  %span.float-end= action_button("Stammsektion wechseln", new_group_person_membership_change_path(group_id: @group, person_id: @person), 'pen')
+  %span.float-end= action_button("Zusatzsektion", new_group_person_membership_change_path(group_id: @group, person_id: @person), 'plus')
