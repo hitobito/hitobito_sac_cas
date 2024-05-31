@@ -66,6 +66,7 @@ module HitobitoSacCas
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
+      AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
       RoleAbility.prepend SacCas::RoleAbility

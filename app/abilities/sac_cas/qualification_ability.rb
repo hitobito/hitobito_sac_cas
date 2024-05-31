@@ -17,6 +17,14 @@ module SacCas::QualificationAbility
   included do
     on(Qualification) do
       permission(:any).may(:create, :destroy).for_tourenchef_qualification_as_tourenchef_in_layer
+      permission(:layer_and_below_full).may(:create, :destroy)
+        .in_course_layer_or_below_unless_sektions_mitgliederverwaltung
+    end
+  end
+
+  def in_course_layer_or_below_unless_sektions_mitgliederverwaltung
+    without_role(Group::SektionsFunktionaere::Mitgliederverwaltung) do
+      in_course_layer_or_below
     end
   end
 

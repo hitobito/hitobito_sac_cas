@@ -23,6 +23,12 @@ describe QualificationAbility do
 
   subject(:ability) { Ability.new(person) }
 
+  def fabricate_readonly_role(group)
+    Fabricate(Group::SektionsFunktionaere::AdministrationReadOnly.sti_name.to_sym,
+              person: ausserberg_tourenchef,
+              group: group)
+  end
+
   describe 'as tourenchef' do
     context 'regarding qualification_kind with tourenchef_may_edit true' do
       let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind) }
@@ -98,9 +104,52 @@ describe QualificationAbility do
     end
   end
 
-  def fabricate_readonly_role(group)
-    Fabricate(Group::SektionsFunktionaere::AdministrationReadOnly.sti_name.to_sym,
-              person: ausserberg_tourenchef,
-              group: group)
+  describe 'with layer_and_below_full' do
+    let(:bluemlisalp_mitglied) { people(:mitglied) }
+    let(:qualification_kind) { qualification_kinds(:ski_leader) }
+    let(:qualification) { Fabricate(:qualification, qualification_kind: qualification_kind, person: bluemlisalp_mitglied) }
+
+    def create_funktionaer(role)
+      Fabricate(role.sti_name, group: groups(:bluemlisalp_funktionaere))
+    end
+
+    context 'layer_and_below_full in top layer' do
+      let(:person) { people(:admin) }
+
+      it 'is permitted to create and destroy' do
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
+      end
+
+      it 'is permitted to create and destroy even with Mitgliederverwaltungs role' do
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
+      end
+    end
+
+    describe Group::SektionsFunktionaere::Administration do
+      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person }
+
+      it 'is permitted to create and destroy' do
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
+      end
+    end
+
+    describe Group::SektionsFunktionaere::Mitgliederverwaltung do
+      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Mitgliederverwaltung).person }
+
+      it 'is not permitted to create and destroy' do
+        expect(ability).not_to be_able_to(:create, qualification)
+        expect(ability).not_to be_able_to(:destroy, qualification)
+      end
+
+      it 'is permitted if has another role with layer_and_below_full' do
+        Fabricate(Group::Geschaeftsstelle::Admin.sti_name, group: groups(:geschaeftsstelle), person: person)
+
+        expect(ability).to be_able_to(:create, qualification)
+        expect(ability).to be_able_to(:destroy, qualification)
+      end
+    end
   end
 end

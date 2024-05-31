@@ -79,18 +79,18 @@ describe ExternalTrainingsController do
 
       context 'as mitglied' do
         let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
-        let(:verwalter) do
-          Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
+        let(:funktionaere_admin) do
+          Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
                     group: funktionaere).person
         end
 
         it 'ignores person for which current user has no write permission' do
-          sign_in(verwalter)
-          params[:external_training][:other_people_ids] = [admin.id, verwalter.id]
+          sign_in(funktionaere_admin)
+          params[:external_training][:other_people_ids] = [admin.id, funktionaere_admin.id]
           expect do
             post :create, params: params
           end.to change { ExternalTraining.count }.by(2)
-            .and change { verwalter.external_trainings.count }.by(1)
+            .and change { funktionaere_admin.external_trainings.count }.by(1)
             .and not_change { admin.external_trainings.count }
         end
       end
