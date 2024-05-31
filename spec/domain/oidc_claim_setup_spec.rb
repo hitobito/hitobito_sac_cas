@@ -22,8 +22,8 @@ describe OidcClaimSetup do
       end
 
       it 'returns first number with matching label' do
-        owner.phone_numbers.create!(label: 'Haupt-Telefonnummer', number: '0791234560')
-        owner.phone_numbers.create!(label: 'Haupt-Telefonnummer', number: '0791234561')
+        owner.phone_numbers.create!(label: 'Haupt-Telefon', number: '0791234560')
+        owner.phone_numbers.create!(label: 'Haupt-Telefon', number: '0791234561')
         expect(claims[:phone]).to eq '+41 79 123 45 60'
       end
     end
@@ -42,7 +42,7 @@ describe OidcClaimSetup do
   context 'with_roles' do
     let(:scope) { :with_roles }
 
-    describe 'membership_years'do
+    describe 'membership_years' do
       it 'is blank when no matching number exists' do
         expect(claim_keys).to include('membership_years')
       end
@@ -54,9 +54,9 @@ describe OidcClaimSetup do
     it_behaves_like 'shared claims'
   end
 
-  context 'with_groups' do
+  context 'user_groups' do
     let(:role) { roles(:admin) }
-    let(:scope) { :with_groups }
+    let(:scope) { :user_groups }
     let(:user_groups) { claims[:user_groups] }
 
     def create_role(key, role)

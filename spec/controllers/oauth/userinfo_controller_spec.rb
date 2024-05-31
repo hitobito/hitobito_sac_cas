@@ -32,7 +32,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,
-          phone_number: nil,
+          phone: nil,
           picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
         }.deep_stringify_keys)
       end
@@ -63,7 +63,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
-          phone_number: nil,
+          phone: nil,
           membership_years: 0,
           picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
           roles: [
@@ -81,10 +81,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
       end
 
     end
-    context 'with with_groups scope' do
+    context 'with user_groups scope' do
       let(:token) do
         app.access_tokens.create!(resource_owner_id: user.id,
-                                  scopes: 'openid with_groups', expires_in: 2.hours)
+                                  scopes: 'openid user_groups', expires_in: 2.hours)
       end
 
       it 'has user_groups key' do

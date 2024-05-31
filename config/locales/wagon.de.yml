@@ -627,7 +627,7 @@ de:
 
   doorkeeper:
     scopes:
-      with_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
+      user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
 
   dropdown/people_export:
     recipients: Empfänger

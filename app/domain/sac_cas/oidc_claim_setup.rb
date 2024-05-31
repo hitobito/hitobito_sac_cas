@@ -9,7 +9,6 @@ module SacCas::OidcClaimSetup
 
   extend ActiveSupport::Concern
 
-  PHONE_NUMBER_LABEL = 'Haupt-Telefonnummer'.freeze
   INFERRED_ROLE_LABLES = {
     section_functionary: Group::SektionsFunktionaere.roles,
     section_president: [Group::SektionsFunktionaere::Praesidium],
@@ -36,7 +35,7 @@ module SacCas::OidcClaimSetup
     add_claim(:phone, scope: [:name, :with_roles])
 
     add_claim(:membership_years, scope: :with_roles)
-    add_claim(:user_groups, scope: :with_groups)
+    add_claim(:user_groups, scope: :user_groups)
   end
 
   private
@@ -46,7 +45,7 @@ module SacCas::OidcClaimSetup
   end
 
   def phone(owner)
-    owner.phone_numbers.order(:id).find_by(label: PHONE_NUMBER_LABEL)&.number
+    owner.phone_numbers.order(:id).find_by(label: SacCas.main_phone_label)&.number
   end
 
   def membership_years(owner)

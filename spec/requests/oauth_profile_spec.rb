@@ -41,7 +41,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
         town: user.town,
         country: user.country,
         picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
-        phone_number: nil,
+        phone: nil,
       }.deep_stringify_keys)
     end
   end
@@ -68,7 +68,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
         primary_group_id: user.primary_group_id,
         language: user.language,
         picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
-        phone_number: nil,
+        phone: nil,
         membership_years: 1,
         roles: [{
           group_id: user.roles.first.group_id,
@@ -91,8 +91,8 @@ RSpec.describe 'GET oauth/profile', type: :request do
     end
   end
 
-  context 'with scope "with_groups" in request' do
-    let(:scope) { 'with_groups' }
+  context 'with scope "user_groups" in request' do
+    let(:scope) { 'user_groups' }
 
     it 'succeeds' do
       make_request
@@ -100,7 +100,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
     end
 
     it 'is forbidden to be used without names scope on token' do
-      token.update!(scopes: 'with_groups')
+      token.update!(scopes: 'user_groups')
       make_request
       expect(response).to have_http_status(:forbidden)
     end

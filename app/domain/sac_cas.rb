@@ -38,4 +38,10 @@ module SacCas
   NEUANMELDUNG_ROLES = (NEUANMELDUNG_HAUPTSEKTION_ROLES + NEUANMELDUNG_ZUSATZSEKTION_ROLES).freeze
 
   NEWSLETTER_MAILING_LIST_INTERNAL_KEY = 'sac_newsletter'
+
+  def main_phone_label
+    Settings.phone_number.predefined_labels.find { |l| l =~ /Haupt/ }
+  end
+
+  module_function :main_phone_label
 end
