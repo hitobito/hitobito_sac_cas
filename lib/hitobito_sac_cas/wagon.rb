@@ -39,6 +39,7 @@ module HitobitoSacCas
       Event::Participatable.prepend SacCas::Event::Participatable
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
+      Household.prepend SacCas::Household
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
