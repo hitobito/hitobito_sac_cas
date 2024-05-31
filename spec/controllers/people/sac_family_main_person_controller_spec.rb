@@ -21,62 +21,6 @@ describe People::SacFamilyMainPersonController, type: :controller do
     end
   end
 
-  let!(:household_member_youth) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 19.years)
-    Group::SektionsMitglieder::Mitglied.create!(
-      group: groups(:bluemlisalp_mitglieder),
-      person: person,
-      beitragskategorie: :youth,
-      created_at: today.beginning_of_year,
-      delete_on: end_of_year
-    )
-    person
-  end
-
-  let!(:household_member_adult) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 42.years)
-    Group::SektionsMitglieder::Mitglied.create!(
-      group: groups(:bluemlisalp_mitglieder),
-      person: person,
-      beitragskategorie: :adult,
-      created_at: today.beginning_of_year,
-      delete_on: end_of_year
-    )
-    person
-  end
-
-  let!(:household_other_sektion_member) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 88.years)
-    Group::SektionsMitglieder::Mitglied.create!(
-      group: groups(:matterhorn_mitglieder),
-      person: person,
-      beitragskategorie: :adult,
-      created_at: today.beginning_of_year,
-      delete_on: end_of_year
-    )
-    person
-  end
-
-  let(:person) do
-    person = Fabricate(:person, birthday: Time.zone.today - 42.years,  household_key: 'household-99')
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-              person: person,
-              beitragskategorie: :adult,
-              group: groups(:bluemlisalp_mitglieder)
-              )
-    person
-  end
-
-  let(:other_person) do
-    other_person = Fabricate(:person, birthday: Time.zone.today - 42.years, household_key: 'household-99' )
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-              person: other_person,
-              beitragskategorie: :adult,
-              group: groups(:bluemlisalp_mitglieder),
-              )
-      other_person
-  end
-
   let(:mitgliederverwaltung_sektion) do
     Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
               group: groups(:bluemlisalp_funktionaere)).person
@@ -86,19 +30,19 @@ describe 'PUT #update' do
   before { sign_in mitgliederverwaltung_sektion }
 
   context 'when the person is already the main family person' do
-    before { person.update!(sac_family_main_person: true) }
+    before { adult.update!(sac_family_main_person: true) }
 
     it 'redirects to the person show view' do
-      put :update, params: { id: person.id }
-      expect(response).to redirect_to(person)
+      put :update, params: { id: adult.id }
+      expect(response).to redirect_to(adult)
     end
   end
 
   context 'when the person is not associated with any household' do
-    before { person.update!(household_key: nil) }
+    before { adult.update!(household_key: nil) }
 
     it 'returns a 422 status with an error message' do
-      put :update, params: { id: person.id }
+      put :update, params: { id: adult.id }
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.body).to eq('Person is not associated with any household')
     end
@@ -112,7 +56,7 @@ describe 'PUT #update' do
       adult.reload
       adult2.reload
       child.reload
-      expect(person.sac_family_main_person).to be_truthy
+      expect(adult.sac_family_main_person).to be_truthy
       expect(adult2.sac_family_main_person).to be_falsey
       expect(child.sac_family_main_person).to be_falsey
     end
@@ -126,18 +70,25 @@ describe 'PUT #update' do
       adult.reload
       adult2.reload
       child.reload
-      expect(person.sac_family_main_person).to be_falsey
+      expect(adult.sac_family_main_person).to be_falsey
       expect(adult2.sac_family_main_person).to be_truthy
       expect(child.sac_family_main_person).to be_falsey
+    end
+
+    it 'only allows adults to become main persons' do
+      expect do
+        put :update, params: { id: child.id }
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 
   context 'when the user does not have permissions' do
-    before { sign_in person }
+    before { sign_in adult }
 
-    it 'returns a 403 status with an error message' do
-      put :update, params: { id: person.id } rescue
-      expect(response).to have_http_status(:forbidden)
+    it 'denies access' do
+      expect do
+        put :update, params: { id: adult.id }
+      end.to raise_error(CanCan::AccessDenied)
     end
   end
 end

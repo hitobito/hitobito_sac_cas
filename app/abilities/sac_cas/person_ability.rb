@@ -22,9 +22,8 @@ module SacCas::PersonAbility
     end
 
     def if_all_household_member_writable
-      if person.household_people.count < 1
-        return false
-      end
+      return false if person.household_people.count.clamp(0, 1).zero?
+      return false unless person.adult?
 
       person.household_people.all? do |household_person|
         Ability.new(user).can?(:update, household_person)
