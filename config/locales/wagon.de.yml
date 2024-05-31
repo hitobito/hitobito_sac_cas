@@ -625,6 +625,10 @@ de:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
 
+  doorkeeper:
+    scopes:
+      user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
+
   dropdown/people_export:
     recipients: Empfänger
 
