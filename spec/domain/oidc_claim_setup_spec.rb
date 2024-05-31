@@ -16,15 +16,15 @@ describe OidcClaimSetup do
   subject(:claims) { Doorkeeper::OpenidConnect::ClaimsBuilder.generate(token, response) }
 
   shared_examples 'shared claims' do
-    describe 'phone_number' do
+    describe 'phone' do
       it 'is blank when no matching number exists' do
-        expect(claim_keys).to include('phone_number')
+        expect(claim_keys).to include('phone')
       end
 
       it 'returns first number with matching label' do
         owner.phone_numbers.create!(label: 'Haupt-Telefonnummer', number: '0791234560')
         owner.phone_numbers.create!(label: 'Haupt-Telefonnummer', number: '0791234561')
-        expect(claims[:phone_number]).to eq '+41 79 123 45 60'
+        expect(claims[:phone]).to eq '+41 79 123 45 60'
       end
     end
   end
@@ -127,7 +127,7 @@ describe OidcClaimSetup do
     end
 
     it 'includes huts_functionary key when matching role exists' do
-      group = Fabricate(Group::SektionsHuettenkommission.sti_name, parent: groups(:bluemlisalp))
+      group = Fabricate(Group::SektionsHuettenkommission.sti_name, parent: groups(:bluemlisalp_funktionaere))
       create_role(group, 'Huettenobmann')
       expect(user_groups).to include 'huts_functionary'
     end

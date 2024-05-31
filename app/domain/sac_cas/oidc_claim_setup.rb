@@ -33,7 +33,7 @@ module SacCas::OidcClaimSetup
     super
 
     add_claim(:picture_url, scope: [:name, :with_roles])
-    add_claim(:phone_number, scope: [:name, :with_roles])
+    add_claim(:phone, scope: [:name, :with_roles])
 
     add_claim(:membership_years, scope: :with_roles)
     add_claim(:user_groups, scope: :with_groups)
@@ -45,7 +45,7 @@ module SacCas::OidcClaimSetup
     owner.decorate.picture_full_url
   end
 
-  def phone_number(owner)
+  def phone(owner)
     owner.phone_numbers.order(:id).find_by(label: PHONE_NUMBER_LABEL)&.number
   end
 
