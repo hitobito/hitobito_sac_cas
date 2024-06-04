@@ -16,7 +16,8 @@ describe Event::ParticipationContactData do
       {
         first_name: 'Max',
         last_name: 'Muster',
-        address: 'Musterplatz',
+        street: 'Musterplatz',
+        housenumber: '23',
         email: 'max.muster@example.com',
         zip_code: '8000',
         town: 'Zürich',

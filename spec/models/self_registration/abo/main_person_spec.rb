@@ -16,7 +16,10 @@ describe SelfRegistration::Abo::MainPerson do
       last_name: 'Muster',
       email: 'max.muster@example.com',
       birthday: '01.01.2000',
-      address: 'Musterplatz',
+      address_care_of: 'c/o Musterleute',
+      street: 'Musterplatz',
+      housenumber: '42',
+      postbox: 'Postfach 23',
       town: 'Zürich',
       zip_code: '8000',
       number: '+41 79 123 45 67',
@@ -39,7 +42,8 @@ describe SelfRegistration::Abo::MainPerson do
         :first_name,
         :last_name,
         :email,
-        :address,
+        :street,
+        :housenumber,
         :zip_code,
         :town,
         :birthday,
@@ -86,7 +90,7 @@ describe SelfRegistration::Abo::MainPerson do
       expect(person.first_name).to eq 'Max'
       expect(person.last_name).to eq 'Muster'
       expect(person.birthday).to eq Date.new(2000, 1, 1)
-      expect(person.address).to eq 'Musterplatz'
+      expect(person.address).to eq 'Musterplatz 42'
       expect(person.town).to eq 'Zürich'
       expect(person.zip_code).to eq '8000'
       expect(person.phone_numbers.first.number).to eq '+41 79 123 45 67'

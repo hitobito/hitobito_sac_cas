@@ -65,7 +65,9 @@ module Import
       person.zip_code = row.fetch(:zip_code)
       person.country = row.fetch(:country)
       person.town = row.fetch(:town)
-      person.address = build_address
+      person.address_care_of = row.fetch(:address_supplement)
+      person.street, person.housenumber = parse_address
+      person.postbox = row.fetch(:postfach)
 
       if email.present?
         person.email = email
@@ -101,16 +103,15 @@ module Import
       )
     end
 
-    def build_address
-      [
-        row.fetch(:address_supplement),
-        row.fetch(:address),
-        row.fetch(:postfach)
-      ].select(&:present?).join("\n")
+    def parse_address
+      address = row.fetch(:address)
+      return if address.blank?
+
+      Address::Parser.new(address).parse
     end
 
     def phone_valid?(number)
-      (number.present? && Phonelib.valid?(number))
+      number.present? && Phonelib.valid?(number)
     end
 
     def parse_datetime(value, default: nil)

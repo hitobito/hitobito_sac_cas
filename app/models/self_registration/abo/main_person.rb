@@ -10,8 +10,10 @@ class SelfRegistration::Abo::MainPerson < SelfRegistration::AboBasicLogin::MainP
   MIN_YEARS = 18
 
   self.required_attrs = [
-    :first_name, :last_name, :email, :address, :zip_code, :town, :birthday, :country, :number
+    :first_name, :last_name, :email, :street, :housenumber, :zip_code,
+    :town, :birthday, :country, :number
   ]
+  self.attrs += [:address_care_of, :postbox]
 
   attribute :newsletter, :boolean
   self.active_model_only_attrs += [:newsletter]
@@ -21,6 +23,6 @@ class SelfRegistration::Abo::MainPerson < SelfRegistration::AboBasicLogin::MainP
   private
 
   def assert_old_enough
-    errors.add(:base, :must_be_older_than_18) if person.years < MIN_YEARS
+    errors.add(:base, :must_be_older_than_18) if person.years < MIN_YEARS # rubocop:disable Naming/VariableNumber
   end
 end

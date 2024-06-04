@@ -14,7 +14,7 @@ describe SelfRegistration::Sektion::MainPerson do
 
   describe 'attribute assignments accept additiional attributes' do
     it 'works via constructor for symbols' do
-      expect(described_class.new(address: 'test').address).to eq 'test'
+      expect(described_class.new(street: 'test').street).to eq 'test'
     end
   end
 
@@ -22,7 +22,8 @@ describe SelfRegistration::Sektion::MainPerson do
     {
       first_name: 'Max',
       last_name: 'Muster',
-      address: 'Musterplatz',
+      street: 'Musterplatz',
+      housenumber: '23',
       town: 'Zurich',
       email: 'max.muster@example.com',
       zip_code: '8000',
@@ -46,7 +47,8 @@ describe SelfRegistration::Sektion::MainPerson do
         :first_name,
         :last_name,
         :email,
-        :address,
+        :street,
+        :housenumber,
         :zip_code,
         :town,
         :birthday,

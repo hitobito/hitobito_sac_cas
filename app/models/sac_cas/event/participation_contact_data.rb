@@ -17,11 +17,11 @@ module SacCas::Event::ParticipationContactData
       delegate :human_attribute_name, to: SelfRegistration::MainPerson::Base
     end
 
-    self.contact_attrs = [:first_name, :last_name, :email, :address, :zip_code, :town,
-                          :country, :gender, :birthday, :phone_numbers]
+    self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street, :housenumber,
+                          :postbox, :zip_code, :town, :country, :gender, :birthday, :phone_numbers]
 
-    self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :address, :zip_code,
-                                    :town, :country]
+    self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :street,
+                                    :housenumber, :zip_code, :town, :country]
   end
 
   private

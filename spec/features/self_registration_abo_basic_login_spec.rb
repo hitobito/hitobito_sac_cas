@@ -20,7 +20,7 @@ describe :self_registration do
     fill_in 'Vorname', with: 'Max'
     fill_in 'Nachname', with: 'Muster'
     fill_in 'Geburtstag', with: '01.01.1980'
-    fill_in 'Strasse und Nr', with: 'Musterplatz'
+    fill_in 'self_registration_abo_basic_login_main_person_attributes_street', with: 'Musterplatz'
     fill_in 'Telefon', with: '+41 79 123 45 56'
     fill_in 'self_registration_abo_basic_login_main_person_attributes_zip_code', with: '8000'
     fill_in 'self_registration_abo_basic_login_main_person_attributes_town', with: 'Zürich'

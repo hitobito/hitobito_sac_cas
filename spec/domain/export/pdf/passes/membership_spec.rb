@@ -25,7 +25,7 @@ describe Export::Pdf::Passes::Membership do
   subject { described_class.new(member) }
 
   before do
-    member.update!(first_name: 'Bob', last_name: 'Muster', address: 'Bergstrasse 42', zip_code: '4242', town: 'Matterhorn')
+    member.update!(first_name: 'Bob', last_name: 'Muster', street: 'Bergstrasse', housenumber: '42', zip_code: '4242', town: 'Matterhorn')
   end
 
   it 'sanitizes filename' do

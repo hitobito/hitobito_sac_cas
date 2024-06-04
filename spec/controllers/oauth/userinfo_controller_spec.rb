@@ -33,7 +33,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           town: user.town,
           country: user.country,
           phone: nil,
-          picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
+          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/
         }.deep_stringify_keys)
       end
     end
@@ -55,7 +55,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           company_name: user.company_name,
           company: user.company,
           email: user.email,
-          address: user.address,
+          address_care_of: user.address_care_of,
+          street: user.street,
+          housenumber: user.housenumber,
+          postbox: user.postbox,
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,
@@ -65,7 +68,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           language: user.language,
           phone: nil,
           membership_years: 0,
-          picture_url: /\/packs-test\/media\/images\/profile-.*\.svg/,
+          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/,
           roles: [
             {
               group_id: user.roles.first.group_id,
@@ -73,7 +76,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
               role: 'Group::Geschaeftsstelle::Admin',
               role_class: 'Group::Geschaeftsstelle::Admin',
               role_name: 'Administration',
-              permissions: ['layer_and_below_full', 'admin', 'impersonation', 'read_all_people'],
+              permissions: %w(layer_and_below_full admin impersonation read_all_people),
               layer_group_id: user.roles.first.group.layer_group_id
             }
           ]

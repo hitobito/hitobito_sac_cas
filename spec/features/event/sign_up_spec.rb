@@ -8,7 +8,8 @@ describe 'Event Signup', :js do
 
   def complete_contact_data
     choose 'Mann'
-    fill_in 'Strasse und Nr.', with: 'Musterplatz'
+    fill_in 'event_participation_contact_data_street', with: 'Musterplatz'
+    fill_in 'event_participation_contact_data_housenumber', with: '42'
     fill_in 'Geburtstag', with: '01.01.1980'
     fill_in 'Telefon', with: '+41 79 123 45 56'
     fill_in 'event_participation_contact_data_zip_code', with: '8000'
@@ -29,7 +30,7 @@ describe 'Event Signup', :js do
       first(:button, 'Weiter').click
       click_on 'Anmelden'
       expect(page).to have_content 'Teilnahme von Anna Admin in Eventus wurde erfolgreich erstellt'
-      expect(admin.reload.address).to eq 'Musterplatz'
+      expect(admin.reload.address).to eq 'Musterplatz 42'
       expect(admin.gender).to eq 'm'
       expect(admin.zip_code).to eq '8000'
       expect(admin.town).to eq 'Zürich'

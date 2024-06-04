@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class SelfRegistration::MainPerson::Base < SelfRegistration::Person
-  delegate :salutation_label, :phone_numbers, to: :person
+  delegate :salutation_label, :phone_numbers, :address, to: :person
   validate :assert_valid_phone_number
 
   class_attribute :active_model_only_attrs

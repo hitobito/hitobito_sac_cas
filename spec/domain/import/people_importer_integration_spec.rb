@@ -35,7 +35,9 @@ describe Import::PeopleImporter do
 
     expect(person.first_name).to eq('Vorname 1')
     expect(person.last_name).to eq('Nachname 1')
-    expect(person.address).to eq("Adresszusatz 1\nAdresse 1\nPostfach 1")
+    expect(person.address_care_of).to eq('Adresszusatz 1')
+    expect(person.address).to eq('Adresse 1')
+    expect(person.postbox).to eq('Postfach 1')
     expect(person.zip_code).to eq('3000')
     expect(person.town).to eq('Bern')
     expect(person.email).to eq('email1@example.com')

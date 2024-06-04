@@ -8,7 +8,7 @@
 require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
 
 module Import
-  class SektionenImporter
+  class SektionenImporter # rubocop:disable Metrics/ClassLength
 
     HEADERS = {
       navision_id: 'Sektionscode',
@@ -29,18 +29,19 @@ module Import
       youth_homepage: 'Homepage Jugend',
       zv_registrations: 'Mitgliederaufnahme durch GS',
       locale: 'Sprachcode',
-      foundation_year: 'Gründungsjahr',
+      foundation_year: 'Gründungsjahr'
     }
 
     attr_reader :output
 
-    def initialize(path, output: STDOUT)
+    def initialize(path, output: $stdout)
       raise 'Sektion Export excel file not found' unless path.exist?
+
       @path = path
       @output = output
     end
 
-    def import!
+    def import! # rubocop:disable Metrics/MethodLength
       without_query_logging do
         Import::XlsxReader.read(@path, 'Data', headers: HEADERS) do |row|
           output.puts "Importing row #{row[:description]}"
@@ -95,7 +96,7 @@ module Import
     end
 
     def group_for(row)
-      # TODO handle case where root group does not exist yet?
+      # TODO: handle case where root group does not exist yet?
       if root?(row)
         group = Group.root
         group.navision_id = '1000'
@@ -105,12 +106,16 @@ module Import
       Group.find_or_initialize_by(navision_id: navision_id(row))
     end
 
-    def set_data(row, group)
+    def set_data(row, group) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       group.type = type(row)&.name
       group = group.becomes(type(row))
       group.name = root?(row) ? 'SAC/CAS' : section_name(row)
       group.parent_id = parent_id(row)
-      group.address = address(row)
+      group.address_care_of = row[:address_supplement]
+      group.street, group.housenumber = address(row)
+      group.postbox = row[:postbox]
+      group.zip_code = row[:zip_code]
+      group.town = row[:town]
       set_language(row, group)
       set_phone(row, group)
       group.email = email(row)
@@ -124,16 +129,18 @@ module Import
 
     def section_name(row)
       return description(row) unless description(row) =~ /^#{Regexp.quote(navision_id(row))} (.*)$/
+
       Regexp.last_match(1)
     end
 
     def parent(row)
       return nil if root?(row)
 
-      # TODO fix the bug in the navision data export which requires this wrong ordering...
+      # TODO: fix the bug in the navision data export which requires this wrong ordering...
       levels = [row[:parent_level_2], row[:parent_level_3], row[:parent_level_1]].select(&:present?)
       parent = Group.find_by(navision_id: levels[1].to_s)
       raise levels[1].to_s unless parent&.id
+
       # Use the second to last present level as the parent navision_id
       parent
     rescue
@@ -147,8 +154,10 @@ module Import
 
     def type(row)
       return Group::SacCas if root?(row)
+
       parent_group = parent(row)
       return Group::Sektion if parent_group.navision_id == 1000
+
       Group::Ortsgruppe
     end
 
@@ -183,17 +192,15 @@ module Import
     end
 
     def archived_at(row)
-      # TODO fix the bug in the navision data export which marks the root group as inactive
+      # TODO: fix the bug in the navision data export which marks the root group as inactive
       !root?(row) && row[:inactive] == 'Ja' ? Date.today : nil
     end
 
     def address(row)
-      [
-        row[:address_supplement],
-        row[:address],
-        row[:postfach],
-        zip_code_and_town(row),
-      ].select(&:present?).join("\n")
+      address = row[:address]
+      return if address.blank?
+
+      Address::Parser.new(address).parse
     end
 
     def zip_code_and_town(row)
@@ -203,6 +210,7 @@ module Import
     def set_phone(row, group)
       phone = row[:phone]
       return unless phone.present? && Phonelib.valid?(phone)
+
       group.phone_numbers.destroy_all
       group.phone_numbers.build(number: phone, label: 'Andere')
     end
@@ -210,12 +218,14 @@ module Import
     def email(row)
       email = row[:email]
       return nil unless email.present? && Truemail.valid?(email)
+
       email
     end
 
     def set_homepage(row, group)
       homepage = row[:homepage]
       return unless homepage.present?
+
       group.social_accounts.destroy_all
       group.social_accounts.build(name: homepage, label: 'Homepage')
     end
@@ -223,11 +233,12 @@ module Import
     def set_youth_homepage(row, group)
       homepage = row[:youth_homepage]
       return unless homepage.present?
+
       group.social_accounts.destroy_all
       group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
     end
 
-    def update_subgroups(row, group)
+    def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
       return if root?(row)
 
       if zv_registrations(row)
@@ -235,11 +246,13 @@ module Import
         neuanmeldungen.update!(
           self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
           custom_self_registration_title: self_registration_title(row, group),
-          deleted_at: nil)
+          deleted_at: nil
+        )
       else
         neuanmeldungen =
           Group::SektionsNeuanmeldungenSektion.find_or_initialize_by(
-            parent_id: group.id)
+            parent_id: group.id
+          )
 
         neuanmeldungen.self_registration_role_type =
           Group::SektionsNeuanmeldungenSektion::Neuanmeldung
@@ -261,13 +274,13 @@ module Import
       {
         'DES' => 'de',
         'FRS' => 'fr',
-        'ITS' => 'it',
+        'ITS' => 'it'
       }.fetch(row[:locale].to_s, 'de')
     end
 
     def t(row, key, args)
       I18n.with_locale(locale(row)) do
-        I18n.translate(key, **args)
+        I18n.t(key, **args)
       end
     end
   end

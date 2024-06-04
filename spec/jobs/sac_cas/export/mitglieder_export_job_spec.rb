@@ -33,7 +33,7 @@ describe SacCas::Export::MitgliederExportJob do
     expect(summary_line).to eq(
       ('* * * Dateiende * * * / ' \
       "#{group.navision_id_padded} / " \
-      "Anzahl Datens\xE4tze: 4 / " \
+      "Anzahl Datensätze: 4 / " \
       "#{Time.zone.now.strftime('%d.%m.%Y')} / " \
       "#{Time.zone.now.strftime('%H:%M')}").force_encoding('ISO-8859-1')
     )

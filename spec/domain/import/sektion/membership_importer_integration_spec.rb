@@ -19,7 +19,8 @@ describe Import::Sektion::MembershipsImporter do
       Fabricate(
         :person,
         id: id,
-        address: "Seestrasse #{id}",
+        street: 'Seestrasse',
+        housenumber: "#{id}",
         zip_code: id[0..3],
         town: 'Zürich'
       )

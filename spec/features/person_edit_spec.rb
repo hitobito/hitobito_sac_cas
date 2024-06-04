@@ -50,7 +50,7 @@ describe 'person edit page', :js do
         add_to_household(family_adult, non_family_adult)
 
         click_on non_family_adult.full_name
-        expect(page).to have_selector('.content-header h1', text: non_family_adult.full_name)
+        expect(find('.content-header h1')).to have_content(non_family_adult.full_name)
         within('section.roles') do
           expect(page).to have_selector('tr', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion)")
           expect(page).to have_selector('tr', text: "SAC Matterhorn / Mitglieder\nMitglied (Zusatzsektion)")
