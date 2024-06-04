@@ -59,12 +59,17 @@
 }
 
 .qr-code-wrapper {
-  padding: 5px;
-  border: 1px solid #c6c7c8;
-  border-radius: 10px;
+  display: flex;
+  margin-top: 25px;
+
   .hint {
     text-align: center;
     width: 180px;
     margin: auto;
+  }
+  .inner {
+    padding: 5px;
+    border: 1px solid #c6c7c8;
+    border-radius: 10px;  
   }
 }

@@ -10,47 +10,59 @@ class Export::Pdf::Passes::Membership
 
     alias person model
 
+    ADDRESS_BOUNDING_BOX_WIDTH = 180
+    ADDRESS_BOUNDING_BOX_HEIGHT = 500
+    ADDRESS_BOUNDING_BOX_POSITION = [65, 711].freeze
+    ADDRESS_SIZE = 9
+
+    QR_CODE_POSITION = [47, 147].freeze
+    QR_CODE_WIDTH = 100
+    QR_CODE_HEIGHT = 110
+
+    MEMBER_TEXT_BOX_POSITION = [160, 102].freeze
+    MEMBER_TEXT_BOX_WIDTH = 120
+    MEMBER_TEXT_BOX_HEIGHT = 50
+    MEMBER_TEXT_SIZE = 9
+    MEMBER_TEXT_STYLE = :bold
+    TEXT_OVERFLOW = :shrink_to_fit
+
     def render
-      pdf.move_down(20)
-      table_data = [[row_membership], [row_address_qr]]
-      table(table_data, cell_style: { border_width: 0 })
+      bounding_box(ADDRESS_BOUNDING_BOX_POSITION, width: ADDRESS_BOUNDING_BOX_WIDTH) do
+        pdf.text_box(person_address, size: ADDRESS_SIZE,
+                                     overflow: TEXT_OVERFLOW)
+      end
+
+      image(verify_qr_code, at: QR_CODE_POSITION, width: QR_CODE_WIDTH, height: QR_CODE_HEIGHT)
+      bounding_box(MEMBER_TEXT_BOX_POSITION, width: MEMBER_TEXT_BOX_WIDTH,
+                                             height: MEMBER_TEXT_BOX_HEIGHT) do
+        membertext = [person_name, person_membership_number].flatten.join("\n\n")
+        pdf.text_box(membertext, size: MEMBER_TEXT_SIZE, style: MEMBER_TEXT_STYLE,
+                                 overflow: TEXT_OVERFLOW)
+      end
     end
 
     private
 
-    def row_address_qr
-      data = [[person_address, { image: verify_qr_code }]]
-      pdf.make_table(data) do
-        cells.borders = []
-        cells.size = 24
-        cells.font_style = :bold
-        cells.valign = :center
-        columns(1).width = 280
-      end
-    end
-
-    def row_membership
-      attrs = [[t('membership_years'), person.membership_years]]
-      pdf.make_table(attrs) do
-        cells.borders = []
-        cells.size = 16
-        columns([1, 3]).font_style = :bold
-      end
-    end
-
     def person_address
-      ::Person::Address.new(person).for_letter
+      ::Person::Address.new(person).for_membership_pass
+    end
+
+    def person_name
+      "#{person.person_name}"
+    end
+
+    def person_membership_number
+      "#{t('member')}: #{person.membership_number}"
     end
 
     def verify_qr_code
       qr_code = People::Membership::VerificationQrCode.new(person).generate
-      qr_code = qr_code.as_png(size: 220).to_s
+      qr_code = qr_code.as_png(size: 70).to_s
       StringIO.new(qr_code)
     end
 
     def t(key)
       I18n.t("passes.membership.#{key}")
     end
-
   end
 end

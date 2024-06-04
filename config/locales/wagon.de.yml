@@ -789,6 +789,8 @@ de:
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft
       qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
+      download: Download
+      download_pdf: Mitgliederausweis PDF
 
   people/neuanmeldungen/approves:
     new:
@@ -945,8 +947,12 @@ de:
   passes:
     membership:
       file_name_prefix: SAC-Mitgliederausweis
-      membership_years: Mitgliederjahre
       title: Mitgliederausweis
+      member: Mitglied
+      sac_partner: SAC-Partner
+      sponsor_url: 'https://www.sac-cas.ch/de/der-sac/unsere-partner/'
+      emergency_number: 'Notfallnummer'
+      emergency_contact: 'Notfallkontakt'
 
   mounted_attributes:
     form_tabs:

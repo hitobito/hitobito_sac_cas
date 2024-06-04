@@ -66,6 +66,28 @@ describe People::MembershipController, type: :controller do
       end
     end
 
+    context 'former member' do
+
+      let(:former_member) do
+        person = Fabricate(:person, birthday: Time.zone.today - 42.years)
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+          person: person,
+          beitragskategorie: :adult,
+          group: groups(:bluemlisalp_mitglieder),
+          created_at: 3.days.ago,
+          deleted_at: 1.days.ago
+          )
+        person
+      end
+
+      it 'is possible to download membership pass' do
+        sign_in(former_member)
+
+        expect do
+          get :show, params: { id: former_member.id, format: 'pdf' }
+        end.not_to raise_error
+      end
+    end
   end
 
 end

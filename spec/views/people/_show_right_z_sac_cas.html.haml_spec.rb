@@ -20,6 +20,10 @@ describe 'people/_show_right_z_sac_cas.html.haml' do
   context 'member' do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
+    it 'renders download button for active membership' do
+      expect(dom).to have_link(nil, href: membership_path(person, format: :pdf))
+    end
+
     it 'renders membership info for active membership' do
       expect(dom).to have_css 'section.sac_membership'
       expect(dom).to have_css 'section.sac_membership .qr-code-wrapper'
@@ -53,5 +57,8 @@ describe 'people/_show_right_z_sac_cas.html.haml' do
       expect(dom).not_to have_css 'section.sac_membership'
     end
 
+    it 'does not render download button for active membership' do
+      expect(dom).not_to have_link(nil, href: membership_path(person, format: :pdf))
+    end
   end
 end

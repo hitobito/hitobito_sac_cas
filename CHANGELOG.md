@@ -10,3 +10,4 @@
 * Anmeldeformular zeigt für bestehende Mitglieder Beitragskategorie der Mitgliedschaft an (hitobito_sac_cas#119)
 * Beim Etikettendruck wird bei jeder Person das Land immer gedruckt. Falls bei einer Person kein Land abgespeichert ist, wird Schweiz gedruckt (hitobito_sac_cas#426)
 * Die Rollentypen werden nun alphabetisch sortiert im Auswahlmenü mit Ausnahme der Rolle "Andere" (hitobito_sac_cas#552)
+* Analoger Mitgliederausweis PDF im neuen Design (hitobito_sac_cas#530)

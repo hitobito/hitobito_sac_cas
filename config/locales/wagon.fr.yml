@@ -65,3 +65,18 @@ fr:
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: https://www.sac-cas.ch/fr/meta/protection-des-donnees/
       link_data_protection_title: Protection des données
+
+  passes:
+    membership:
+      file_name_prefix: SAC-CarteMembre
+      title: Carte membre
+      member: Membre
+      sac_partner: Partenaire CAS
+      sponsor_url: https://www.sac-cas.ch/fr/le-cas/nos-partenaires/
+      emergency_number: N° d'urgence
+      emergency_contact: Contact d'urgence
+
+  people:
+    show_right_z_sac_cas:
+      download: Télécharger
+      download_pdf: La carte de membre PDF

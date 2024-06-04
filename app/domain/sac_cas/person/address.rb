@@ -4,15 +4,18 @@
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
-
-module SacCas::People::Membership::Verifier
+#
+module SacCas::Person::Address
   extend ActiveSupport::Concern
-
-  def member?
-    @person.sac_membership_active?
+  def for_membership_pass
+    (person_and_company_name + address_with_multilanguage_country).compact.join("\n")
   end
 
-  def sac_membership_anytime?
-    @person.sac_membership_anytime?
+  def address_with_multilanguage_country
+    [
+      @person.address.to_s.strip,
+      [@person.zip_code, @person.town].compact.join(' ').squish,
+      Country.new(country).name
+    ]
   end
 end

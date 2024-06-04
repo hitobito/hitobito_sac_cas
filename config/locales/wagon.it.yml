@@ -20,3 +20,17 @@ it:
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: https://www.sac-cas.ch/it/datenschutz/
       link_data_protection_title: Protezione dei dati
+
+  passes:
+    membership:
+      file_name_prefix: CAS-TesseraMembro
+      title: Tessera di Membro
+      member: Membro
+      sac_partner: Partner CAS
+      sponsor_url: https://www.sac-cas.ch/it/il-cas/i-nostri-partner/
+      emergency_number: No. di emergenza
+      emergency_contact: Contatto di emergenza
+
+  people:
+    show_right_z_sac_cas:
+      download: tbdScarica la tessera di socio
