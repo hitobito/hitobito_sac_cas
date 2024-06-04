@@ -12,4 +12,7 @@ module SacCas::People::Membership::Verifier
     @person.sac_membership_active?
   end
 
+  def sac_membership_anytime?
+    @person.sac_membership_anytime?
+  end
 end

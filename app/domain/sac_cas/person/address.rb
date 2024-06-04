@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 #
 module SacCas::Person::Address
-
+  extend ActiveSupport::Concern
   def for_membership_pass
     (person_and_company_name + address_with_multilanguage_country).compact.join("\n")
   end
