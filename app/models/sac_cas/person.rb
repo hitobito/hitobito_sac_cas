@@ -18,6 +18,8 @@ module SacCas::Person
 
     Person.used_attributes.delete(:nickname)
 
+    reflect_on_attachment(:picture).variant(:profile, resize_to_fill: [200, 200])
+
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: 'Role', foreign_key: 'person_id'
 
@@ -74,6 +76,10 @@ module SacCas::Person
 
   def adult?
     birthday && years > SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+  end
+
+  def picture_profile_default
+    'profile.svg' # default image for profile variant
   end
 
   private

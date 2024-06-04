@@ -1,0 +1,25 @@
+- if person
+  #member-info.mb-2
+    %div
+      =t('.membership_number', membership_number: person.membership_number)
+    %div
+      - membership_years = Person.where(id: person.id).with_membership_years.first.membership_years
+      =t('.membership_years', membership_years: membership_years)
+
+  #sections.pt-2.border-top.mb-2
+    - main_section_role = person.roles.find_by(type: Group::SektionsMitglieder::Mitglied.sti_name)
+    - if main_section_role.present?
+      %div
+        %div
+          %strong= main_section_role.to_s
+        %div
+          %strong= main_section_role.group.layer_group.to_s
+    - person.roles.where(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name).each do |secondary_role|
+      %div
+        %div= secondary_role.to_s
+        %div= secondary_role.group.layer_group.to_s
+
+  #tour-guides.pt-2.border-top.mb-5
+
+  #logo-reciprocate
+    = image_pack_tag('logo_gegenrecht.svg', alt: 'gegenrecht logo')

@@ -22,7 +22,7 @@ describe People::Membership::VerifyController do
       person.roles.destroy_all
 
       visit "/verify_membership/#{token}"
-      expect(page).to have_css('.alert-danger', text: 'Keine gültige Mitgliedschaft')
+      expect(page).to have_css('.alert-danger', text: 'Mitgliedschaft ungültig')
     end
 
     it 'shows valid membership information' do

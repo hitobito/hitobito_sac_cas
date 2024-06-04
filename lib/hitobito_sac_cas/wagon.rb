@@ -135,6 +135,8 @@ module HitobitoSacCas
 
       SubscriptionsController.prepend SacCas::SubscriptionsController
 
+      People::Membership::VerifyController.include Localizable
+
       ## Jobs
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob

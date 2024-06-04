@@ -14,10 +14,42 @@
 
 #membership-verify {
   header {
+    flex-direction: row-reverse;
+
     #logo {
       img {
         width: 100%;
       }
+    }
+
+    #root-address {
+      text-align: left;
+    }
+  }
+
+  #details {
+    #member-info {
+      dl {
+        display: flex;
+        flex-direction: column;
+
+        div {
+          display: flex;
+          justify-content: center;
+        }
+      }
+    }
+
+    #logo-reciprocate {
+      height: 4em;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  #sponsors {
+    img {
+      width: 100%;
     }
   }
 }

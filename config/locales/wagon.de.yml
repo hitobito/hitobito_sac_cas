@@ -768,6 +768,11 @@ de:
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
 
   people:
+    membership:
+      verify:
+        member_details_sac_cas:
+          membership_number: 'Mitglied: %{membership_number}'
+          membership_years: 'Anzahl Mitgliedsjahre: %{membership_years}'
     neuanmeldungen:
       multiselect_actions:
         accept: Übernehmen
@@ -935,7 +940,7 @@ de:
     title: Verifizierung SAC CAS Mitgliedschaft
     not_found: Ungültiger Verifikationscode
     status_valid: Mitgliedschaft gültig
-    status_invalid: Keine gültige Mitgliedschaft
+    status_invalid: Mitgliedschaft ungültig
 
   passes:
     membership:
