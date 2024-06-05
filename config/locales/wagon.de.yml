@@ -672,6 +672,16 @@ de:
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
           Mo bis Fr 08:00 - 17:00 Uhr.
+      states:
+        absent: Keine Teilnahme an diesem Kurs.
+        annulled: Dieser Kurs wurde abgesagt.
+        applied: Du bist für diesen Kurs auf der Warteliste (unverbindlich). Bis zur Durchführung kannst du nachrücken.
+        assigned: Deine Anmeldung für diesen Kurs ist bestätigt.
+        attended: Du hast an diesem Kurs teilgenommen.
+        canceled: Du wurdest von diesem Kurs abgemeldet.
+        rejected: Die Aufnahmekriterien sind nicht erfüllt. Deshalb mussten wir deine Anmeldung leider ablehnen.
+        summoned: Du bist für diesen Kurs aufgeboten.
+        unconfirmed: Du bist für diesen Kurs vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden.
       step_wizard:
         answers_title: Zusatzdaten
         subsidy_title: Subventionsbeitrag
