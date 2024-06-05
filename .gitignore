@@ -24,6 +24,7 @@ Gemfile.lock
 # only touched to make rails-vim work
 config/environment.rb
 
+config/abacus.yml
 config/settings.local.yml
 
 # reports
