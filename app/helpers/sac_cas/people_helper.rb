@@ -20,7 +20,7 @@ module SacCas::PeopleHelper
     end
   end
 
-  def qr_code_image_tag(person, html_options = {})
+  def people_sac_membership_qr_code(person, html_options = {})
     verification_qr_code = People::Membership::VerificationQrCode.new(person)
     qr_code = verification_qr_code.generate
     verify_url = verification_qr_code.verify_url
