@@ -106,7 +106,7 @@ module Invoices
       private
 
       def sac_magazine_mailing_list
-        @sac_magazine_mailing_list ||= MailingList.find(Group.root.sac_magazin_mailing_list_id)
+        @sac_magazine_mailing_list ||= MailingList.find(Group.root.sac_magazine_mailing_list_id)
       end
 
       def active_roles_of_type(type)

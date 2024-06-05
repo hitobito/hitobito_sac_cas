@@ -19,28 +19,24 @@ class Group::SacCas < ::Group
            Group::Abonnenten,
            Group::Ehrenmitglieder
 
-  class << self
-    def mount_mailing_lists(*keys)
-      @@mounted_mailing_list_attrs = keys.map { |key| :"sac_#{key}_mailing_list_id" }
-      @@mounted_mailing_list_attrs.each { |attr| mounted_attr attr, :integer }
-
-      validate :assert_mounted_mailing_list_attrs
-    end
-  end
-
   mounted_attr :course_admin_email, :string
-  mount_mailing_lists :newsletter, :inside, :tourenportal, :magazin, :huettenportal
+  mounted_attr :sac_newsletter_mailing_list_id, :integer
+  mounted_attr :sac_magazine_mailing_list_id, :integer
 
   validate :assert_valid_course_admin_email
+  validate :assert_mounted_mailing_list_attrs
 
   has_many :sac_membership_configs, dependent: :destroy
 
   private
 
   def assert_mounted_mailing_list_attrs
-    mapped_lists = @@mounted_mailing_list_attrs.map { |key| [key, send(key)] }.to_h.compact
-    mapped_lists.each do |key, id|
-      errors.add(key, :inclusion) unless mailing_lists.where(id: id).exists?
+    unless mailing_lists.where(id: sac_newsletter_mailing_list_id).exists?
+      errors.add(:sac_newsletter_mailing_list_id, :inclusion)
+    end
+    unless sac_magazine_mailing_list_id.nil? ||
+      mailing_lists.where(id: sac_magazine_mailing_list_id).exists?
+      errors.add(:sac_magazine_mailing_list_id, :inclusion)
     end
   end
 
