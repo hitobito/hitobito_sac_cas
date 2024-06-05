@@ -22,7 +22,8 @@ module SacCas::Event::ParticipationBanner
   end
 
   def can_destroy?
-    %w(applied assigned summoned unconfirmed).include?(@user_participation.state)
+    can?(:cancel, @user_participation) && @user_participation.participant_cancelable? &&
+      Event::ParticipationButtons.conditions[:cancel].include?(@user_participation.state.to_sym)
   end
 
   def render_cancel_popover
