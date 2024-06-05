@@ -19,7 +19,11 @@
         %div= secondary_role.to_s
         %div= secondary_role.group.layer_group.to_s
 
-  #tour-guides.pt-2.border-top.mb-5
+  #tour-guides.pt-2.border-top.mb-2
+  - tour_guide_role = person.roles.find_by(type: Group::SektionsTourenkommission::Tourenleiter.sti_name)
+  - if tour_guide_role.present?
+    %div.mb-2
+      = t('.tour_guide')
 
   #logo-reciprocate
     = image_pack_tag('logo_gegenrecht.svg', alt: 'gegenrecht logo')
