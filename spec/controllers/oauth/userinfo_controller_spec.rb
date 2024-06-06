@@ -29,11 +29,15 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           last_name: user.last_name,
           nickname: user.nickname,
           address: user.address,
+          address_care_of: user.address_care_of,
+          street: user.street,
+          housenumber: user.housenumber,
+          postbox: user.postbox,
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,
           phone: nil,
-          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/
+          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/
         }.deep_stringify_keys)
       end
     end
@@ -55,6 +59,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           company_name: user.company_name,
           company: user.company,
           email: user.email,
+          address: user.address,
           address_care_of: user.address_care_of,
           street: user.street,
           housenumber: user.housenumber,
@@ -68,7 +73,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           language: user.language,
           phone: nil,
           membership_years: 0,
-          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/,
+          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
           roles: [
             {
               group_id: user.roles.first.group_id,
