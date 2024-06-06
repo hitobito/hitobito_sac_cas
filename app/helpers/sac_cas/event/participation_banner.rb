@@ -35,15 +35,12 @@ module SacCas::Event::ParticipationBanner
     t(@user_participation.state, scope: 'event.participations.states')
   end
 
-  def status_class    
-    state = @user_participation.state.to_sym
-    alert_class = if %i[assigned attended summoned].include? state
-                    :success
-                  elsif %i[unconfirmed applied absent].include? state
-                    :warning
-                  else
-                    :danger
-                  end
+  def status_class
+    alert_class = {
+      assigned: :success, attended: :success, summoned: :success,
+      unconfirmed: :warning, applied: :warning, absent: :warning,
+      annulled: :danger, canceled: :danger, rejected: :danger
+    }[@user_participation.state.to_sym]
 
     "alert alert-#{alert_class}"
   end
