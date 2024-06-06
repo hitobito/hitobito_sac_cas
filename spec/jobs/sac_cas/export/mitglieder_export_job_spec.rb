@@ -35,7 +35,7 @@ describe SacCas::Export::MitgliederExportJob do
       "#{group.navision_id_padded} / " \
       "Anzahl Datensätze: 4 / " \
       "#{Time.zone.now.strftime('%d.%m.%Y')} / " \
-      "#{Time.zone.now.strftime('%H:%M')}").force_encoding('ISO-8859-1')
+      "#{Time.zone.now.strftime('%H:%M')}").encode('ISO-8859-1')
     )
   end
 
