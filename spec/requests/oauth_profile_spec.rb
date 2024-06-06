@@ -38,10 +38,14 @@ RSpec.describe 'GET oauth/profile', type: :request do
         last_name: user.last_name,
         nickname: user.nickname,
         address: user.address,
+        address_care_of: user.address_care_of,
+        street: user.street,
+        postbox: user.postbox,
+        housenumber: user.housenumber,
         zip_code: user.zip_code,
         town: user.town,
         country: user.country,
-        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/,
+        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
         phone: nil
       }.deep_stringify_keys)
     end
@@ -61,6 +65,10 @@ RSpec.describe 'GET oauth/profile', type: :request do
         company: user.company,
         email: user.email,
         address: user.address,
+        address_care_of: user.address_care_of,
+        street: user.street,
+        postbox: user.postbox,
+        housenumber: user.housenumber,
         zip_code: user.zip_code,
         town: user.town,
         country: user.country,
@@ -68,7 +76,7 @@ RSpec.describe 'GET oauth/profile', type: :request do
         birthday: user.birthday.to_s.presence,
         primary_group_id: user.primary_group_id,
         language: user.language,
-        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.png/,
+        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
         phone: nil,
         membership_years: 1,
         roles: [{
