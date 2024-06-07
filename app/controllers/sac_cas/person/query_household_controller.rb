@@ -12,10 +12,6 @@ module SacCas::Person::QueryHouseholdController
     self.search_columns = [:id, :birthday, :first_name, :last_name, :email]
   end
 
-  def scope
-    Person.only_public_data
-  end
-
   def authorize_action
     authorize!(:create_households, Person)
   end
