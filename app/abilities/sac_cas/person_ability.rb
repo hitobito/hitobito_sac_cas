@@ -22,7 +22,7 @@ module SacCas::PersonAbility
     end
 
     def if_all_household_member_writable
-      return false if person.household_people.count.clamp(0, 1).zero?
+      return false if person.household_people.empty?
       return false unless person.adult?
 
       person.household_people.all? do |household_person|

@@ -92,7 +92,7 @@ class People::SacFamily
     family_members.find(&:sac_family_main_person)
   end
 
-  def set_family_main_person
+  def set_family_main_person!
     ActiveRecord::Base.transaction do
       family_members.where(sac_family_main_person: true)
                     .update_all(sac_family_main_person: false)

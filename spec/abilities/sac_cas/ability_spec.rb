@@ -12,7 +12,8 @@ describe Ability do
 
   %i[root admin].each do |person_key|
     context "as #{person_key}" do
-      let(:ability) { Ability.new(people(person_key)) }
+      let(:person)  { people(person_key)}
+      let(:ability) { Ability.new(person) }
 
       context 'groups' do
         let(:group) { groups(:root) }
@@ -79,7 +80,67 @@ describe Ability do
           expect(ability).not_to be_able_to(:destroy, Subscription.new(mailing_list: newsletter))
         end
       end
+
+      context 'household' do
+        let!(:household_person1) { Fabricate(:person) }
+        let!(:household_person2) { Fabricate(:person) }
+
+        context 'when person has no household people' do
+          it 'cannot set family main person' do
+            expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
+          end
+        end
+
+        context 'when person is not an adult' do
+          before do
+            person.update!(birthday: 17.years.ago)
+          end
+
+          it 'cannot set family main person' do
+            expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
+          end
+        end
+
+        context 'when person is an adult and all household people are writable' do
+          before do
+            person.update!(birthday: 44.years.ago)
+            create_household([household_person1, household_person2])
+            allow(ability).to receive(:can?).with(:update, household_person1).and_return(true)
+            allow(ability).to receive(:can?).with(:update, household_person2).and_return(true)
+          end
+
+          it 'can set family main person' do
+            expect(ability).to be_able_to(:set_sac_family_main_person, person)
+          end
+        end
+
+        context 'when person is an adult and not all household people are writable' do
+
+          before do
+            person.update!(birthday: 44.years.ago)
+            create_household([household_person1, household_person2])
+
+            allow(ability).to receive(:can?).with(:update, household_person1).and_return(true)
+            allow(ability).to receive(:can?).with(:update, household_person2).and_return(false)
+          end
+
+          it 'cannot set family main person' do
+            expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
+          end
+        end
+      end
+
     end
 
+  end
+  private
+
+  def create_household(people_in_household_with_person)
+    household = Household.new(person)
+    people_in_household_with_person.each do |person|
+      household.add(person)
+    end
+    household.save
+    household.reload
   end
 end
