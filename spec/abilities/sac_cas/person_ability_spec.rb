@@ -79,9 +79,9 @@ describe PersonAbility do
         person.update!(birthday: 44.years.ago)
         create_household([household_person1, household_person2])
 
-
-        allow(ability).to receive(:can?).with(:update, household_person1).and_return(true)
-        allow(ability).to receive(:can?).with(:update, household_person2).and_return(true)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(person).and_return(true)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person1).and_return(true)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person2).and_return(true)
       end
 
       it 'can set family main person' do
@@ -95,8 +95,9 @@ describe PersonAbility do
         person.update!(birthday: 44.years.ago)
         create_household([household_person1, household_person2])
 
-        allow(ability).to receive(:can?).with(:update, household_person1).and_return(true)
-        allow(ability).to receive(:can?).with(:update, household_person2).and_return(false)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(person).and_return(true)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person1).and_return(false)
+        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person2).and_return(true)
       end
 
       it 'cannot set family main person' do
