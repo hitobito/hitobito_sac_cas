@@ -53,7 +53,7 @@ describe 'people/_details_sac_cas.html.haml' do
 
       it 'renders link to main person if person is not main person' do
         expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
-        expect(view).to receive(:can?).with(:read, person.sac_family.main_person).and_return(true)
+        expect(view).to receive(:can?).with(:show, person.sac_family.main_person).and_return(true)
 
         expect(value_node).to have_link(person.sac_family.main_person.to_s, href: person_path(person.sac_family.main_person))
       end
