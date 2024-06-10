@@ -57,6 +57,7 @@ module HitobitoSacCas
 
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
+      HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
       admin[:active_for] << 'event_levels'
 
