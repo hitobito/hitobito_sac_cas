@@ -10,6 +10,13 @@ module SacCas::Household
 
   HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
 
+  prepended do
+    validate :assert_adult_member, on: :update
+    validate :assert_minimum_member_size, on: :update
+    validate :assert_removed_member_email, on: :update
+    validate :assert_adult_member_with_email, on: :update
+  end
+
   def initialize(reference_person, maintain_sac_family: true)
     super(reference_person)
     @maintain_sac_family = maintain_sac_family
@@ -74,5 +81,42 @@ module SacCas::Household
 
   def maintain_sac_family?
     @maintain_sac_family
+  end
+
+  def assert_adult_member
+    if adult_members.count.zero?
+      errors.add(:base, :at_least_one_adult)
+    end
+
+    if adult_members.count > 2
+      errors.add(:base, :not_more_than_two_adults)
+    end
+  end
+
+  def assert_minimum_member_size
+    if members.count < 2
+      errors.add(:base, :at_least_two_members)
+    end
+  end
+
+  def assert_removed_member_email
+    removed_people = Person.where(household_key: household_key)
+                           .where.not(id: members.map { _1.person.id })
+
+    if removed_people.any? { _1.email.blank? }
+      errors.add(:base, :removed_member_has_no_email)
+    end
+  end
+
+  def assert_adult_member_with_email
+    if adult_members.none? { |member| member.person.email.present? }
+      errors.add(:base, :no_adult_member_with_email)
+    end
+  end
+
+  def adult_members
+    members.select do |member|
+      ::SacCas::Beitragskategorie::Calculator.new(member.person).adult?
+    end
   end
 end

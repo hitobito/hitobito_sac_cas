@@ -51,6 +51,15 @@ de:
         youth_not_allowed_in_family: |
           Jugendliche im Alter von 18 bis 21 Jahre können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
+      models:
+        household:
+          attributes:
+            base:
+              at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
+              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter Email Adresse.
+              not_more_than_two_adults: Eine Familie darf höchstens 2 erwachsene Personen enthalten.
+              at_least_two_members: Eine Familie muss mindestens 2 Personen enthalten.
+              removed_member_has_no_email: Die entfernte Person besitzt keine bestätigte Email Adresse.
 
     models:
       people/neuanmeldungen/approve:
