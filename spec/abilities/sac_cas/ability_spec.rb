@@ -12,7 +12,7 @@ describe Ability do
 
   %i[root admin].each do |person_key|
     context "as #{person_key}" do
-      let(:ability) { Ability.new(person) }
+      let(:ability) { Ability.new(people(person_key)) }
 
       context 'groups' do
         let(:group) { groups(:root) }
@@ -79,5 +79,7 @@ describe Ability do
           expect(ability).not_to be_able_to(:destroy, Subscription.new(mailing_list: newsletter))
         end
       end
+    end
+
   end
 end
