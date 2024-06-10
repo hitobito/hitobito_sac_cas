@@ -8,6 +8,7 @@
 # Settings relevant for the hitobito_sac_cas wagon
 # Overrides settings from the main application
 application:
+  name: SAC/CAS-Portal
   languages:
     de: Deutsch
     fr: Français
