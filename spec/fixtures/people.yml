@@ -78,3 +78,13 @@ tourenchef:
   primary_group: bluemlisalp_ortsgruppe_ausserberg_tourenkommission
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
+
+tourenleiter:
+  id: 600_007
+  first_name: Alina
+  last_name: Müller
+  email: alina-müller@hitobito.example.com
+  gender: f
+  primary_group: matterhorn_tourenkommission
+  birthday: <%= Date.new(1993, 6, 12) %>
+  language: de

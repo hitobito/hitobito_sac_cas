@@ -85,3 +85,10 @@ tourenchef_bluemlisalp_ortsgruppe_ausserberg:
   type: Group::SektionsTourenkommission::TourenchefSommer
   created_at: 2015-01-01 00:00:00
   delete_on: 2015-12-31
+
+tourenleiter_matterhorn_tourenkommission:
+  person_id: 600_007
+  group: matterhorn_tourenkommission
+  type: Group::SektionsTourenkommission::Tourenleiter
+  created_at: 2015-01-01 00:00:00
+  delete_on: 2015-12-31
