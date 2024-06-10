@@ -31,6 +31,16 @@ describe People::Membership::VerifyController do
       # TODO re-activate when adding sac custom extensions
       #expect(page).to have_text 'Mitglied (Stammsektion) (Einzel) - SAC Blüemlisalp'
       expect(page).to have_css('.alert-success', text: 'Mitgliedschaft gültig')
+      expect(page).not_to have_text I18n.t('people.membership.verify.member_details_sac_cas.tour_guide')
+    end
+
+    context 'as active tour guide' do
+      let(:person) { people(:tourenleiter) }
+
+      it 'shows tour guide information' do
+        visit "/verify_membership/#{token}"
+        expect(page).to have_text I18n.t('people.membership.verify.member_details_sac_cas.tour_guide')
+      end
     end
   end
 end
