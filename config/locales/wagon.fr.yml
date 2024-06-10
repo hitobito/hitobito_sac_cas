@@ -77,6 +77,10 @@ fr:
       emergency_contact: Contact d'urgence
 
   people:
+    membership:
+      verify:
+        member_details_sac_cas:
+          tour_guide: Chef·fe de courses en activité
     show_right_z_sac_cas:
       download: Télécharger
       download_pdf: La carte de membre PDF

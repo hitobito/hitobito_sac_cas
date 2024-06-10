@@ -32,5 +32,9 @@ it:
       emergency_contact: Contatto di emergenza
 
   people:
+    membership:
+      verify:
+        member_details_sac_cas:
+          tour_guide: Capogita attivo/a
     show_right_z_sac_cas:
       download: tbdScarica la tessera di socio
