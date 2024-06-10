@@ -54,66 +54,39 @@ describe PersonAbility do
   end
 
   describe 'household' do
-    let(:person) { mitglied }
-    let!(:household_person1) { Fabricate(:person) }
-    let!(:household_person2) { Fabricate(:person) }
+    let(:admin_ability) { Ability.new(admin) }
+    let(:mitglied_ability) { Ability.new(mitglied) }
+    let(:familienmitglied2) { people(:familienmitglied2) }
+    let(:familienmitglied2_ability) { Ability.new(familienmitglied2) }
 
-    context 'when person has no household people' do
-      it 'cannot set family main person' do
-        expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
+    let(:mitgliederverwaltung_sektion) do
+      Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+                group: groups(:bluemlisalp_funktionaere)).person
+    end
+    let(:mitgliederverwaltung_sektion_ability) { Ability.new(mitgliederverwaltung_sektion) }
+
+    let(:child) { people(:familienmitglied_kind) }
+
+    context 'sac_family_main_person' do
+      it 'can be set as admin' do
+        expect(admin_ability).to be_able_to(:set_sac_family_main_person, familienmitglied2)
+      end
+
+      it 'cannot be set as mitglied' do
+        expect(mitglied_ability).not_to be_able_to(:set_sac_family_main_person, familienmitglied2)
+      end
+
+      it 'cannot be set as yourself' do
+        expect(familienmitglied2_ability).not_to be_able_to(:set_sac_family_main_person, familienmitglied2)
+      end
+
+      it 'can be set as mitgliederverwaltung_sektion' do
+        expect(mitgliederverwaltung_sektion_ability).to be_able_to(:set_sac_family_main_person, familienmitglied2)
+      end
+
+      it 'cannot set when person is not an adult' do
+        expect(mitgliederverwaltung_sektion_ability).not_to be_able_to(:set_sac_family_main_person, child)
       end
     end
-
-    context 'when person is not an adult' do
-      before do
-        person.update!(birthday: 17.years.ago)
-      end
-
-      it 'cannot set family main person' do
-        expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
-      end
-    end
-
-    context 'when person is an adult and all household people are writable' do
-      before do
-        person.update!(birthday: 44.years.ago)
-        create_household([household_person1, household_person2])
-
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(person).and_return(true)
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person1).and_return(true)
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person2).and_return(true)
-      end
-
-      it 'can set family main person' do
-        expect(ability).to be_able_to(:set_sac_family_main_person, person)
-      end
-    end
-
-    context 'when person is an adult and not all household people are writable' do
-
-      before do
-        person.update!(birthday: 44.years.ago)
-        create_household([household_person1, household_person2])
-
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(person).and_return(true)
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person1).and_return(false)
-        allow_any_instance_of(PersonAbility).to receive(:can_update_household_person?).with(household_person2).and_return(true)
-      end
-
-      it 'cannot set family main person' do
-        expect(ability).not_to be_able_to(:set_sac_family_main_person, person)
-      end
-    end
-  end
-
-  private
-
-  def create_household(people_in_household_with_person)
-    household = Household.new(person)
-    people_in_household_with_person.each do |person|
-      household.add(person)
-    end
-    household.save
-    household.reload
   end
 end

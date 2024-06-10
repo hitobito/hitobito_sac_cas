@@ -13,7 +13,7 @@ module SacCas::PeopleHelper
       f(true)
     elsif main_person.nil?
       ti('.unknown')
-    elsif can?(:read, main_person)
+    elsif can?(:show, main_person)
       link_to(main_person.to_s, main_person)
     else
       main_person.to_s
