@@ -20,7 +20,7 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
     end
   end
 
-  context 'tour leader' do
+  context 'tour guide' do
     let(:person) { people(:mitglied) }
 
     it 'renders tour guide info for active tour guide' do
