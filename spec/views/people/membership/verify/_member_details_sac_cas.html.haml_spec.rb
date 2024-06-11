@@ -10,7 +10,6 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
 
   subject(:tour_guide_info) { 'Aktive/r Tourenleiter/in' }
   let(:dom) { render; Capybara::Node::Simple.new(@rendered)  }
-  let(:person) { people(:tourenleiter) }
 
   before { allow(view).to receive_messages(person: person) }
 
@@ -23,9 +22,18 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
   end
 
   context 'tour guide' do
-    let(:person) { people(:tourenleiter) }
+    let(:person) { people(:mitglied) }
 
     it 'renders tour guide info for active tour guides' do
+      person.qualifications.create!(
+        qualification_kind: qualification_kinds(:ski_leader),
+        start_at: 1.month.ago
+      )
+      person.roles.create!(
+        type: Group::SektionsTourenkommission::Tourenleiter.sti_name,
+        group: groups(:matterhorn_tourenkommission)
+      )
+
       expect(dom).to have_text tour_guide_info
     end
   end
