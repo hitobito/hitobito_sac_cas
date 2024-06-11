@@ -21,7 +21,7 @@ class SelfRegistration::Sektion < SelfRegistration::Base
   end
 
   def save!
-    super.then do |success|
+    super.then do |_success|
       housemates.all?(&:save!)
     end
   end
@@ -56,7 +56,7 @@ class SelfRegistration::Sektion < SelfRegistration::Base
     super(*args) do |attrs|
       attrs.merge(
         household_key: household_key,
-        supplements: supplements,
+        supplements: supplements
       )
     end
   end
@@ -74,7 +74,7 @@ class SelfRegistration::Sektion < SelfRegistration::Base
   end
 
   def household_key
-    @household_key ||= ::Person::Household.next_key if household?
+    @household_key ||= Household.new(Person.new).next_key if household?
   end
 
   def household_emails
