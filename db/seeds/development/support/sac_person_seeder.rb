@@ -49,7 +49,7 @@ class SacPersonSeeder < PersonSeeder
 
       # make sure these people have no other roles
       family_members.each do |p|
-        p.roles.find_each {|r| r.really_destroy!}
+        p.roles.find_each { |r| r.really_destroy! }
       end
 
       seed_sektion_familie_mitglied_role(adult, m)
@@ -68,15 +68,15 @@ class SacPersonSeeder < PersonSeeder
   end
 
   def create_or_update_household(person, second_person)
-    household = Person::Household.new(person, Ability.new(Person.root), second_person)
-    household.assign
-    household.persist!
+    person.household.add(second_person)
+    person.household.save!
   end
 
   def seed_sac_adult(family_main_person: false)
     adult_attrs = standard_attributes(Faker::Name.first_name,
                                       Faker::Name.last_name)
-    adult_attrs = adult_attrs.merge({ birthday: 27.years.ago, sac_family_main_person: family_main_person })
+    adult_attrs = adult_attrs.merge({ birthday: 27.years.ago,
+                                      sac_family_main_person: family_main_person })
     adult = Person.seed(:email, adult_attrs).first
     seed_accounts(adult, false)
     adult
@@ -87,8 +87,7 @@ class SacPersonSeeder < PersonSeeder
                                       Faker::Name.last_name)
     child_attrs.delete(:email)
     child_attrs = child_attrs.merge({ birthday: 10.years.ago })
-    child = Person.seed(:first_name, child_attrs).first
-    child
+    Person.seed(:first_name, child_attrs).first
   end
 
   # for mitglieder roles, from/to has to be set to be valid
@@ -106,7 +105,8 @@ class SacPersonSeeder < PersonSeeder
 
     mitglied_role_types = [Group::SektionsMitglieder::Mitglied,
                            Group::SektionsMitglieder::MitgliedZusatzsektion].each(&:sti_name)
-    mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id, :group_id).sample(21)
+    mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id,
+                                                                    :group_id).sample(21)
     mitglied_role_ids.each do |person_id, group_id|
       if rand(2) == 1
         Group::SektionsMitglieder::Ehrenmitglied.create!(person_id: person_id, group_id: group_id)
@@ -132,7 +132,8 @@ class SacPersonSeeder < PersonSeeder
       person: person,
       group: mitglieder_groups.sample,
       created_at: membership_from(person),
-      delete_on: Date.today.end_of_year)
+      delete_on: Date.today.end_of_year
+    )
   end
 
   def update_role_dates(role_class)
