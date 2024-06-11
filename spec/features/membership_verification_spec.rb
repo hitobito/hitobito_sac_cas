@@ -31,6 +31,25 @@ describe People::Membership::VerifyController do
       # TODO re-activate when adding sac custom extensions
       #expect(page).to have_text 'Mitglied (Stammsektion) (Einzel) - SAC Blüemlisalp'
       expect(page).to have_css('.alert-success', text: 'Mitgliedschaft gültig')
+      expect(page).not_to have_text 'Aktive/r Tourenleiter/in'
+    end
+
+    context 'as active tour guide' do
+      let(:person) { people(:mitglied) }
+
+      it 'shows tour guide information' do
+        person.qualifications.create!(
+          qualification_kind: qualification_kinds(:ski_leader),
+          start_at: 1.month.ago
+        )
+        person.roles.create!(
+          type: Group::SektionsTourenkommission::Tourenleiter.sti_name,
+          group: groups(:matterhorn_tourenkommission)
+        )
+
+        visit "/verify_membership/#{token}"
+        expect(page).to have_text 'Aktive/r Tourenleiter/in'
+      end
     end
   end
 end

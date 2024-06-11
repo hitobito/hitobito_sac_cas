@@ -176,4 +176,39 @@ describe Person do
       expect(person.correspondence).to eq('print')
     end
   end
+
+  describe '#sac_tour_guide?' do
+    let(:member) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:matterhorn_mitglieder)).person }
+    let(:tourenkommission) { groups(:matterhorn_tourenkommission) }
+
+    before do
+      member.qualifications.create!(
+        qualification_kind: qualification_kinds(:ski_leader),
+        start_at: 1.month.ago
+      )
+    end
+
+    [Group::SektionsTourenkommission::Tourenleiter,
+     Group::SektionsTourenkommission::TourenleiterOhneQualifikation].each do |role_class|
+       it "is tour guide if active #{role_class} role" do
+         role_class.create!(person: member, group: tourenkommission)
+         expect(member.sac_tour_guide?).to eq(true)
+       end
+     end
+
+    it 'is not tour guide without tour guide role' do
+      expect(member.sac_tour_guide?).to eq(false)
+    end
+
+    [Group::SektionsTourenkommission::Tourenleiter,
+     Group::SektionsTourenkommission::TourenleiterOhneQualifikation].each do |role_class|
+       it "is not tour guide if inactive #{role_class} role" do
+         role = role_class.create!(person: member, group: tourenkommission)
+         role.update_columns(created_at: 20.years.ago)
+         role.destroy!
+
+         expect(member.sac_tour_guide?).to eq(false)
+       end
+     end
+  end
 end

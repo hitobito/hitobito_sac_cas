@@ -20,16 +20,32 @@ module SacCas::PeopleHelper
     end
   end
 
-  def qr_code_image_tag(person, html_options = {})
-    qr_code = People::Membership::VerificationQrCode.new(person).generate
+  def people_sac_membership_qr_code(person, html_options = {})
+    verification_qr_code = People::Membership::VerificationQrCode.new(person)
+    qr_code = verification_qr_code.generate
     qr_code_png = qr_code.as_png(size: 220)
     qr_code_data = Base64.encode64(qr_code_png.to_blob)
     default_options = { alt: 'QR Code', size: '220x220' }
     options = default_options.merge(html_options)
-    image_tag("data:image/png;base64,#{qr_code_data}", options)
+    image = image_tag("data:image/png;base64,#{qr_code_data}", options)
+
+    if Rails.env.development?
+      people_sac_membership_qr_code_clickable(verification_qr_code, image)
+    else
+      image
+    end
   end
 
   def people_sac_membership_download_dropdown(person)
     Dropdown::People::SacMembership::Download.new(self, person).to_s
+  end
+
+  private
+
+  def people_sac_membership_qr_code_clickable(verification_qr_code, image)
+    verify_url = verification_qr_code.verify_url
+    link_to(verify_url, target: '_blank', rel: 'noopener') do
+      image
+    end
   end
 end

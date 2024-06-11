@@ -19,7 +19,10 @@
         %div= secondary_role.to_s
         %div= secondary_role.group.layer_group.to_s
 
-  #tour-guides.pt-2.border-top.mb-5
+  #tour-guides.pt-2.border-top.mb-2
+  - if person.sac_tour_guide?
+    %div.mb-2
+      = t('.tour_guide')
 
-  #logo-reciprocate
+  #logo-reciprocate.pt-5.border-top.mb-2
     = image_pack_tag('logo_gegenrecht.svg', alt: 'gegenrecht logo')
