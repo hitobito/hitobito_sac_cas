@@ -1,0 +1,22 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.fields_for(entry.step_at(step_index).step_name, entry.step_at(step_index)) do |main_person_fields|
+  = field_set_tag do
+    = main_person_fields.error_messages
+    = main_person_fields.labeled(:gender) do
+      = field_set_tag(nil, class: 'm-0 p-0') do
+        - (Person::GENDERS + ['']).each do |key|
+          = main_person_fields.inline_radio_button(:gender, key, main_person_fields.object.salutation_label(key))
+    = main_person_fields.labeled_input_fields :first_name, :last_name
+    = main_person_fields.labeled_date_field :birthday, data: { action: 'focusout->autosubmit#save' }
+
+    = render 'contactable/address_fields', f: main_person_fields
+    = main_person_fields.labeled_input_field(:phone_number, placeholder: ti('.phone_placeholder'))
+
+.btn-toolbar.bottom.allign-with-form
+  = c.navigation_links
+
+= render 'shared_partial'
