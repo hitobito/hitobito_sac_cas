@@ -44,4 +44,9 @@ class Group::Ortsgruppe < ::Group
     Groups::SektionSelfRegistrationLink.new(self, host).url
   end
 
+  def neuanmeldungen_target_group
+    children.to_a.find { |c| c.is_a?(Group::SektionsNeuanmeldungenSektion) } ||
+      children.to_a.find { |c| c.is_a?(Group::SektionsNeuanmeldungenNv) }
+  end
+
 end

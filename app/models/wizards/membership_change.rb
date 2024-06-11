@@ -7,7 +7,7 @@ module Wizards
     ]
 
     def step_after(step_class_or_name)
-      return super unless step_class_or_name == :start
+      return super unless step_class_or_name == :_start
 
       sac_mitarbeiter? ? :choose_date : :summary
     end
