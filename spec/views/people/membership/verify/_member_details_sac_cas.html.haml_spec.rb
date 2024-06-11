@@ -8,7 +8,7 @@ require 'spec_helper'
 describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
   include FormatHelper
 
-  subject(:tour_guide_info) { I18n.t('people.membership.verify.member_details_sac_cas.tour_guide') }
+  subject(:tour_guide_info) { 'Aktive/r Tourenleiter/in' }
   let(:dom) { render; Capybara::Node::Simple.new(@rendered)  }
   let(:person) { people(:tourenleiter) }
 
