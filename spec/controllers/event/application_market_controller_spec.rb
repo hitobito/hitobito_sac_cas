@@ -67,5 +67,19 @@ describe Event::ApplicationMarketController do
         expect(dom).not_to have_css 'tbody#participants tr:nth-of-type(1) td', text: 'Bestätigt'
       end
     end
+
+    describe 'summoned' do
+      render_views
+      subject(:dom) { Capybara::Node::Simple.new(response.body) }
+
+      before do
+        create_application.tap { |p| p.update_columns(active: true, state: :summoned) }
+      end
+
+      it 'shows summoned applications on the left side' do
+        get :index, params: params
+        expect(dom).to have_css 'tbody#participants tr:nth-of-type(1) td', text: 'Aufgeboten'
+      end
+    end
   end
 end
