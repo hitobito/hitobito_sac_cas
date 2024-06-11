@@ -84,15 +84,8 @@ module SacImports
 
         if (other_person = ::Person.find_by(household_key: household_key))
           # Household key exists already, assign person to existing household
-          household = ::Person::Household.new(
-            person,
-            current_ability,
-            other_person,
-            current_ability.user,
-            maintain_sac_family: false
-          )
-          household.assign
-          household.persist!
+          other_person.household.add(person)
+          other_person.household.save!
         else
           # Household key does not exist yet, save it on the person
           person.update!(household_key: household_key)
