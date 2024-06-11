@@ -33,7 +33,7 @@ puzzlers.each do |puz|
   devs[puz] = "#{puz.split.last.downcase}@puzzle.ch"
 end
 
-seeder = SacCasPersonSeeder.new
+seeder = SacPersonSeeder.new
 
 seeder.seed_all_roles
 seeder.seed_families
