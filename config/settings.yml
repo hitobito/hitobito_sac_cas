@@ -45,7 +45,7 @@ sftp:
 
 people:
   people_managers:
-    enabled: true
+    enabled: false
     self_service_managed_creation:
       enabled: false
   family_members:

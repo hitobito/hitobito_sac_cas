@@ -87,7 +87,9 @@ module HitobitoSacCas
       GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
-      PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
+      RoleAbility.prepend SacCas::RoleAbility
+      GroupAbility.prepend SacCas::GroupAbility
+      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
 
@@ -143,7 +145,6 @@ module HitobitoSacCas
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
-      PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Person::QueryController.prepend SacCas::Person::QueryController
       Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
