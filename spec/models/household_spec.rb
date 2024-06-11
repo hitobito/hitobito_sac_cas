@@ -15,12 +15,7 @@ describe Household do
   let(:second_child) { Fabricate(:person, birthday: Date.new(2014, 4, 13)) }
   let(:second_adult) { Fabricate(:person, birthday: Date.new(1998, 11, 6)) }
 
-  subject!(:household) do
-    Household.new(person)
-    # h = Household.new(person).tap { _1.add(adult) }
-    # h.save
-    # h
-  end
+  subject!(:household) { Household.new(person) }
 
   before { travel_to(Date.new(2024, 5, 31)) }
 
