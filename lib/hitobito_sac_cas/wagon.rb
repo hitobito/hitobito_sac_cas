@@ -53,7 +53,6 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
-      Person::Household.prepend SacCas::Person::Household
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
       Roles::Termination.prepend SacCas::Roles::Termination
