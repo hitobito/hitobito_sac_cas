@@ -34,6 +34,11 @@ module SacCas
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
   ].freeze
 
+  NEUANMELDUNG_TOURENLEITER_ROLES = [
+    ::Group::SektionsTourenkommission::Tourenleiter,
+    ::Group::SektionsTourenkommission::TourenleiterOhneQualifikation
+  ].freeze
+
   MITGLIED_ROLES = (MITGLIED_HAUPTSEKTION_ROLES + MITGLIED_ZUSATZSEKTION_ROLES).freeze
   NEUANMELDUNG_ROLES = (NEUANMELDUNG_HAUPTSEKTION_ROLES + NEUANMELDUNG_ZUSATZSEKTION_ROLES).freeze
 

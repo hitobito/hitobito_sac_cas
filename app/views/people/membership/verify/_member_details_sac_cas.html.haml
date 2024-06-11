@@ -20,7 +20,7 @@
         %div= secondary_role.group.layer_group.to_s
 
   #tour-guides.pt-2.border-top.mb-2
-  - tour_guide_role = person.roles.find_by(type: Group::SektionsTourenkommission::Tourenleiter.sti_name)
+  - tour_guide_role = person.roles.find_by(type: NEUANMELDUNG_TOURENLEITER_ROLES)
   - if tour_guide_role.present?
     %div.mb-2
       = t('.tour_guide')
