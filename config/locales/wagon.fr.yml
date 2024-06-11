@@ -29,6 +29,18 @@ fr:
         one: Membres
         other: Membres
 
+      group/sektions_neuanmeldungen_nv:
+        one: Nouvelles inscriptions
+        other: Nouvelles inscriptions
+
+      group/sektions_neuanmeldungen_sektion:
+        one: Nouvelles inscriptions (pour validation)
+        other: Nouvelles inscriptions (pour validation)
+
+      group/sektions_externe_kontakte:
+        one: Contacts externes
+        other: Contacts externes
+
       group/sektions_neu_mitglieder_zv:
         one: Nouvelles inscriptions
         other: Nouvelles inscriptions
@@ -40,6 +52,10 @@ fr:
       group/sektions_funktionaere:
         one: Fonctionnaires
         other: Fonctionnaires
+
+      group/sektions_tourenkommission:
+        one: Tours et cours
+        other: Tours et cours
 
       group/huette:
         one: Cabane
