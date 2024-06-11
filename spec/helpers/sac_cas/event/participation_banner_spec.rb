@@ -72,5 +72,15 @@ describe Event::ParticipationBanner do
       expect(dom).not_to have_button 'Abmelden'
     end
   end
-end
 
+  context 'participation states' do
+    it 'shows the correct flash message' do
+      t('event.participations.states').each do |state, msg|
+        participation.state = state
+        dom = Capybara::Node::Simple.new(banner.render)
+
+        expect(dom).to have_text msg
+      end
+    end
+  end
+end

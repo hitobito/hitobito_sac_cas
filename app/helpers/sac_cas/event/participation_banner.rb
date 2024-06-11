@@ -30,4 +30,24 @@ module SacCas::Event::ParticipationBanner
     @context.render('event/participations/popover_participant_cancels',
                     entry: @user_participation).to_s
   end
+
+  def status_text
+    t(@user_participation.state, scope: 'event.participations.states')
+  end
+
+  def status_class
+    alert_class = {
+      assigned: :success,
+      attended: :success,
+      summoned: :success,
+      unconfirmed: :warning,
+      applied: :warning,
+      absent: :warning,
+      annulled: :danger,
+      canceled: :danger,
+      rejected: :danger
+    }[@user_participation.state.to_sym]
+
+    "alert alert-#{alert_class}"
+  end
 end

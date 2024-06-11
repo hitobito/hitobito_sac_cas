@@ -7,7 +7,7 @@
 
 require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
 
-class SacCasPersonSeeder < PersonSeeder
+class SacPersonSeeder < PersonSeeder
 
   def amount(role_type)
     case role_type.name.demodulize
