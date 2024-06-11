@@ -48,11 +48,4 @@ module SacCas::PeopleHelper
       image
     end
   end
-
-  def people_sac_membership_qr_code_clickable(verification_qr_code, image)
-    verify_url = verification_qr_code.verify_url
-    link_to(verify_url, target: '_blank', rel: 'noopener') do
-      image
-    end
-  end
 end
