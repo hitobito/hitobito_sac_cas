@@ -8,7 +8,6 @@ require 'spec_helper'
 describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
   include FormatHelper
 
-  subject(:tour_guide_info) { 'Aktive/r Tourenleiter/in' }
   let(:dom) { render; Capybara::Node::Simple.new(@rendered)  }
 
   before { allow(view).to receive_messages(person: person) }
@@ -17,7 +16,7 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
     let(:person) { people(:mitglied) }
 
     it 'hides tour guide info' do
-      expect(dom).not_to have_text tour_guide_info
+      expect(dom).not_to have_text 'Aktive/r Tourenleiter/in'
     end
   end
 
@@ -34,7 +33,7 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
         group: groups(:matterhorn_tourenkommission)
       )
 
-      expect(dom).to have_text tour_guide_info
+      expect(dom).to have_text 'Aktive/r Tourenleiter/in'
     end
   end
 end

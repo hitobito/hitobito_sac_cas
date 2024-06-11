@@ -34,6 +34,23 @@ describe People::Membership::VerifyController, type: :controller do
 
         expect(dom).to have_selector('#membership-verify #details #sections div', text: 'Mitglied (Zusatzsektion) (Einzel)')
         expect(dom).to have_selector('#membership-verify #details #sections div', text: 'SAC Matterhorn')
+
+        expect(dom).not_to have_selector('#membership-verify #details div', text: 'Aktive/r Tourenleiter/in')
+      end
+
+      it 'confirms active tour guide' do
+        person.qualifications.create!(
+          qualification_kind: qualification_kinds(:ski_leader),
+          start_at: 1.month.ago
+        )
+        person.roles.create!(
+          type: Group::SektionsTourenkommission::Tourenleiter.sti_name,
+          group: groups(:matterhorn_tourenkommission)
+        )
+
+        get :show, params: { verify_token: verify_token }
+
+        expect(dom).to have_selector('#membership-verify #details div', text: 'Aktive/r Tourenleiter/in')
       end
 
       it 'confirms invalid membership' do
