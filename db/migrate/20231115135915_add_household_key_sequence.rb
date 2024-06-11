@@ -11,7 +11,7 @@ class AddHouseholdKeySequence < ActiveRecord::Migration[6.1]
 
   def up
     if ActiveRecord::Base.connection.adapter_name.downcase =~ /mysql/
-      execute "INSERT IGNORE INTO sequences (name, current_value) VALUES ('#{SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE}', #{HOUSEHOLD_KEY_STARTVALUE})"
+      execute "INSERT IGNORE INTO sequences (name, current_value) VALUES ('#{SacCas::Household::HOUSEHOLD_KEY_SEQUENCE}', #{HOUSEHOLD_KEY_STARTVALUE})"
     end
   end
 
