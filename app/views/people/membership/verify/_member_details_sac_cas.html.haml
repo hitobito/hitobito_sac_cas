@@ -20,8 +20,7 @@
         %div= secondary_role.group.layer_group.to_s
 
   #tour-guides.pt-2.border-top.mb-2
-  - tour_guide_role = person.roles.find_by(type: SacCas::NEUANMELDUNG_TOURENLEITER_ROLES)
-  - if tour_guide_role.present?
+  - if person.sac_tour_guide?
     %div.mb-2
       = t('.tour_guide')
 

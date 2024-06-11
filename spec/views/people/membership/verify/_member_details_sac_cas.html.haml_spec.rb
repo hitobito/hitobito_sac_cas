@@ -20,10 +20,10 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
     end
   end
 
-  context 'tour guide' do
+  context 'tour leader' do
     let(:person) { people(:mitglied) }
 
-    it 'renders tour guide info for active tour guides' do
+    it 'renders tour guide info for active tour guide' do
       person.qualifications.create!(
         qualification_kind: qualification_kinds(:ski_leader),
         start_at: 1.month.ago

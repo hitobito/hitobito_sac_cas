@@ -82,6 +82,10 @@ module SacCas::Person
     'profile.svg' # default image for profile variant
   end
 
+  def sac_tour_guide?
+    roles.where(type: SacCas::TOUR_GUIDE_ROLES).exists?
+  end
+
   private
 
   def sac_membership
