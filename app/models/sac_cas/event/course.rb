@@ -136,6 +136,12 @@ module SacCas::Event::Course
     self.possible_participation_states = %w(unconfirmed applied rejected assigned summoned
                                             attended absent canceled annulled)
 
+    self.active_participation_states = %w(assigned summoned attended)
+
+    self.revoked_participation_states = %w(rejected canceled absent annulled)
+
+    self.countable_participation_states = %w(unconfirmed applied assigned summoned attended absent)
+
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: { if: :number }

@@ -295,10 +295,10 @@ describe Event::ParticipationsController do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:params) { { group_id: group.id, event_id: event.id, id: participation.id } }
 
-    it 'PUT summon sets participation state to abset' do
+    it 'PUT summon sets participation state to summoned' do
       put :summon, params: params
       participation.reload
-      expect(participation.active).to be false
+      expect(participation.active).to be true
       expect(participation.state).to eq 'summoned'
       expect(flash[:notice]).to match /wurde aufgeboten/
     end
