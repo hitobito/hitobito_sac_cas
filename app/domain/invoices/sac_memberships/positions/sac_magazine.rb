@@ -11,7 +11,7 @@ module Invoices
       class SacMagazine < Base
 
         self.group = :sac_fee
-        self.balancing_payment_possible = true
+        self.section_payment_possible = true
 
         def article_number
           config.magazine_fee_article_number

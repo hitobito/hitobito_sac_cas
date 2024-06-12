@@ -1,0 +1,6 @@
+# configuration for abacus api to send invoices
+abacus:
+  host:
+  mandant:
+  username:
+  password:

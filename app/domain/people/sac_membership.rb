@@ -28,6 +28,10 @@ class People::SacMembership
     @person.roles.select { |r| MEMBERSHIP_ROLES.include?(r.class) }
   end
 
+  def billable?
+    active? || @person.roles.any? { |r| r.is_a?(Invoices::SacMemberships::Member::NEW_ENTRY_ROLE) }
+  end
+
   private
 
   def any_future_role?

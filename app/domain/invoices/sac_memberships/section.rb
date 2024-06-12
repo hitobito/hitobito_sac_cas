@@ -19,30 +19,32 @@ module Invoices
         @date = date
       end
 
-      def reduction?(person) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      def reduction?(member) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         if reduction_required_membership_years.to_i.positive? &&
           reduction_required_age.to_i.positive?
-          person.membership_years >= reduction_required_membership_years &&
-            person.age >= reduction_required_age
+          member.membership_years >= reduction_required_membership_years &&
+            member.age >= reduction_required_age
         elsif reduction_required_membership_years.to_i.positive?
-          person.membership_years >= reduction_required_membership_years
+          member.membership_years >= reduction_required_membership_years
         elsif reduction_required_age.to_i.positive?
-          person.age >= reduction_required_age
+          member.age >= reduction_required_age
         else
           false
         end
       end
 
-      def section_fee_exemption?(person)
-        person.sac_honorary_member? ||
-          (section_fee_exemption_for_honorary_members && person.section_honorary_member?(self)) ||
-          (section_fee_exemption_for_benefited_members && person.section_benefited_member?(self))
+      # Is the member exempt from fees of this section?
+      def section_fee_exemption?(member)
+        member.sac_honorary_member? ||
+          (section_fee_exemption_for_honorary_members && member.section_honorary_member?(self)) ||
+          (section_fee_exemption_for_benefited_members && member.section_benefited_member?(self))
       end
 
-      def sac_fee_exemption?(person)
-        person.sac_honorary_member? ||
-          (sac_fee_exemption_for_honorary_members && person.section_honorary_member?(self)) ||
-          (sac_fee_exemption_for_benefited_members && person.section_benefited_member?(self))
+      # Is the member exempt from fees of the sac zentralverband?
+      def sac_fee_exemption?(member)
+        member.sac_honorary_member? ||
+          (sac_fee_exemption_for_honorary_members && member.section_honorary_member?(self)) ||
+          (sac_fee_exemption_for_benefited_members && member.section_benefited_member?(self))
       end
 
       def huts?

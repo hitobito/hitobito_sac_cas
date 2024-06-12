@@ -20,7 +20,7 @@ module HitobitoSacCas
       #{config.root}/app/jobs
     ]
 
-    config.to_prepare do
+    config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         PromoteNeuanmeldungenJob,
         Event::CloseApplicationsJob,
@@ -42,6 +42,7 @@ module HitobitoSacCas
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
+      Invoice.prepend SacCas::Invoice
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
@@ -72,13 +73,13 @@ module HitobitoSacCas
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
+      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
+      GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
-      RoleAbility.prepend SacCas::RoleAbility
-      GroupAbility.prepend SacCas::GroupAbility
-      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       QualificationAbility.include SacCas::QualificationAbility
+      RoleAbility.prepend SacCas::RoleAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
@@ -178,6 +179,7 @@ module HitobitoSacCas
 
     initializer 'sac_cas.add_settings' do |_app|
       Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
+      Settings.add_source!(File.join(paths['config'].existent, 'settings.local.yml'))
       Settings.reload!
     end
 

@@ -24,9 +24,10 @@ describe People::MembershipInvoicePositionsController, type: :controller do
 
       expect(response).to have_http_status(:ok)
       csv = CSV.parse(response.body)
-      expect(csv.size).to eq(7)
-      expect(csv.second).to eq(["section_fee", nil, "42.0", "98", "Edmund Hillary", "SAC Blüemlisalp"])
-      expect(csv.map(&:first)).to eq(["name", "section_fee", "sac_fee", "hut_solidarity_fee", "sac_magazine", "service_fee", "section_fee"])
+      expect(csv.size).to eq(6)
+      expect(csv.second).to eq(["sac_fee", "sac_fee", "40.0", "42", "SAC/CAS"])
+      expect(csv.fifth).to eq(["section_fee", nil, "42.0", "98", "SAC Blüemlisalp"])
+      expect(csv.map(&:first)).to eq(["name", "sac_fee", "hut_solidarity_fee", "sac_magazine", "section_fee", "section_fee"])
     end
   end
 
