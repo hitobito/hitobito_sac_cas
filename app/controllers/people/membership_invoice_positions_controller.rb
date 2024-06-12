@@ -26,24 +26,23 @@ class People::MembershipInvoicePositionsController < ApplicationController
     end
   end
 
-  def positions # rubocop:disable Metrics/CyclomaticComplexity
+  def positions
     @positions ||=
-      if entry.new_entry_membership_role
-        generator.new_entry_positions.map(&:to_h)
-      elsif entry.new_additional_section_membership_roles.present?
-        section = entry.new_additional_section_membership_roles.first.layer_group
-        generator.new_additional_section_positions(section).map(&:to_h)
-      else
-        generator.membership_positions.map(&:to_h)
-      end
+      Invoices::SacMemberships::PositionGenerator.new(member).generate(current_role).map(&:to_h)
   end
 
-  def generator
-    Invoices::SacMemberships::PositionGenerator.new(entry)
+  def current_role
+    if member.new_entry_role
+      member.new_entry_role
+    elsif member.new_additional_section_membership_roles.present?
+      member.new_additional_section_membership_roles.first
+    else
+      member.main_membership_role
+    end
   end
 
-  def entry
-    @entry ||= Invoices::SacMemberships::Person.new(person, context)
+  def member
+    @member ||= Invoices::SacMemberships::Member.new(person, context)
   end
 
   def context

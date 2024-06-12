@@ -9,13 +9,16 @@
 module SacCas::PersonAbility
   extend ActiveSupport::Concern
 
-
   prepended do
     on(Person) do
-      permission(:read_all_people).may(:read_all_people, :show).everybody
       class_side(:create_households).if_sac_mitarbeiter
-      permission(:any).may(:set_sac_family_main_person)
-                      .if_person_is_adult_and_all_household_members_writable
+      permission(:read_all_people).may(:read_all_people, :show).everybody
+      permission(:layer_and_below_full)
+        .may(:index_invoices, :create_membership_invoice)
+        .if_sac_mitarbeiter
+      permission(:any)
+        .may(:set_sac_family_main_person)
+        .if_person_is_adult_and_all_household_members_writable
     end
 
     def if_sac_mitarbeiter

@@ -7,45 +7,48 @@
 
 module Invoices
   module SacMemberships
-    class Person
+    class Member
 
-      attr_reader :model, :context
+      MAIN_MEMBERSHIP_ROLE = Group::SektionsMitglieder::Mitglied
+      ADDITIONAL_SECTION_ROLE = Group::SektionsMitglieder::MitgliedZusatzsektion
+      NEW_ENTRY_ROLE = Group::SektionsNeuanmeldungenNv::Neuanmeldung
+      NEW_ADDITIONAL_SECTION_ROLE = Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+
+      attr_reader :person, :context
       attr_writer :sac_magazine_mailing_list
 
-      delegate :id, :to_s, :sac_family_main_person?, to: :model
+      delegate :id, :to_s, :language, :sac_family_main_person?, to: :person
       delegate :date, to: :context
 
       # Person model
-      def initialize(model, context)
-        @model = model
+      def initialize(person, context)
+        @person = person
         @context = context
       end
 
       def age
-        @age ||= model.years(Date.new(date.year, 12, 31))
+        @age ||= person.years(Date.new(date.year, 12, 31))
       end
 
       def membership_years
         # person must have been loaded with .with_membership_years(date)
-        model.membership_years
+        person.membership_years
       end
 
       def main_membership_role
-        @main_membership_role ||= active_roles_of_type(Group::SektionsMitglieder::Mitglied).first
+        @main_membership_role ||= active_roles_of_type(MAIN_MEMBERSHIP_ROLE).first
       end
 
       def additional_membership_roles
-        @additional_membership_roles ||=
-          active_roles_of_type(Group::SektionsMitglieder::MitgliedZusatzsektion)
+        @additional_membership_roles ||= active_roles_of_type(ADDITIONAL_SECTION_ROLE)
       end
 
-      def new_entry_membership_role
-        @new_entry_membership_role ||=
-          active_roles_of_type(Group::SektionsNeuanmeldungenNv::Neuanmeldung).first
+      def new_entry_role
+        @new_entry_role ||= active_roles_of_type(NEW_ENTRY_ROLE).first
       end
 
       def new_additional_section_membership_roles
-        active_roles_of_type(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion)
+        active_roles_of_type(NEW_ADDITIONAL_SECTION_ROLE)
       end
 
       def new_additional_section_membership_role(section)
@@ -69,13 +72,35 @@ module Invoices
       end
 
       def living_abroad?
-        !model.swiss?
+        !person.swiss?
       end
 
       def sac_magazine?
         return @sac_magazine if defined?(@sac_magazine)
 
-        @sac_magazine = sac_magazine_mailing_list.subscribed?(model)
+        @sac_magazine = sac_magazine_mailing_list.subscribed?(person)
+      end
+
+      def paying_person?(role)
+        !role.beitragskategorie.family? || sac_family_main_person?
+      end
+
+      def service_fee?(role)
+        paying_person?(role) ||
+          additional_membership_roles.any? { |r| !r.beitragskategorie.family? }
+      end
+
+      def membership_cards?(role)
+        paying_person?(role) &&
+          (role == main_membership_role || role == new_entry_role)
+      end
+
+      def family_members
+        person
+          .household_people
+          .order_by_name
+          .includes(:roles)
+          .select { |p| active_main_membership_role?(p) }
       end
 
       private
@@ -89,7 +114,15 @@ module Invoices
       end
 
       def active_roles
-        @active_roles ||= model.roles.select { |r| r.active_period.cover?(date) }
+        @active_roles ||= active_roles_of(person)
+      end
+
+      def active_roles_of(person)
+        person.roles.select { |r| r.active_period.cover?(date) }
+      end
+
+      def active_main_membership_role?(person)
+        active_roles_of(person).any? { |r| r.is_a?(MAIN_MEMBERSHIP_ROLE) }
       end
     end
   end

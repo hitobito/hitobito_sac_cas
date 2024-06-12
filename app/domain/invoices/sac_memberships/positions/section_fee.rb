@@ -14,7 +14,7 @@ module Invoices
           return 0 if section_fee_exemption?
 
           amount = beitragskategorie_fee(section)
-          amount -= section.reduction_amount.to_i if section.reduction?(person)
+          amount -= section.reduction_amount.to_i if section.reduction?(member)
           amount
         end
 

@@ -13,8 +13,7 @@ module Invoices
         Positions::SacFee,
         Positions::HutSolidarityFee,
         Positions::SacMagazine,
-        Positions::SacMagazinePostageAbroad,
-        Positions::ServiceFee
+        Positions::SacMagazinePostageAbroad
       ].freeze
 
       SECTION_POSITIONS = [
@@ -27,52 +26,42 @@ module Invoices
         Positions::SectionEntryFee
       ].freeze
 
-      attr_reader :person
+      attr_reader :member
 
-      def initialize(person)
-        @person = person
+      def initialize(member)
+        @member = member
       end
 
+      def generate(role)
+        case role
+        when Member::MAIN_MEMBERSHIP_ROLE then membership_positions
+        when Member::NEW_ENTRY_ROLE then new_entry_positions(role)
+        when Member::NEW_ADDITIONAL_SECTION_ROLE then new_additional_section_positions(role)
+        else raise ArgumentError, "Invalid role type #{role.class} given"
+        end
+      end
+
+      private
+
       def membership_positions
-        positions = build_positions(SECTION_POSITIONS + SAC_POSITIONS,
-                                    person.main_membership_role)
-        positions.push(*build_balancing_positions(positions))
-        person.additional_membership_roles.each do |role|
+        positions = build_positions(SAC_POSITIONS + SECTION_POSITIONS,
+                                    member.main_membership_role)
+        member.additional_membership_roles.each do |role|
           positions.push(*build_positions(SECTION_POSITIONS, role))
         end
         positions
       end
 
-      def new_entry_positions
-        role = person.new_entry_membership_role
-        return [] unless role
-
-        build_positions(SECTION_POSITIONS + SAC_POSITIONS + NEW_ENTRY_POSITIONS, role)
+      def new_entry_positions(role)
+        build_positions(SAC_POSITIONS + SECTION_POSITIONS + NEW_ENTRY_POSITIONS, role)
       end
 
-      def new_additional_section_positions(section)
-        role = person.new_additional_section_membership_role(section)
-        return [] unless role
-
-        build_positions(SECTION_POSITIONS + [Positions::ServiceFee], role)
+      def new_additional_section_positions(role)
+        build_positions(SECTION_POSITIONS, role)
       end
-
-      private
 
       def build_positions(classes, role)
-        classes.map { |klass| klass.new(person, role) }.filter(&:active?)
-      end
-
-      # Charge section for sac positions that are exempted from
-      # the invoice for Ehrenmitglieder or Begünstigte.
-      def build_balancing_positions(positions)
-        positions.filter_map do |position|
-          next unless position.requires_balancing_payment?
-
-          amount = position.amount
-          position.amount = 0
-          Positions::BalancingPayment.new(person, person.main_membership_role, amount)
-        end
+        classes.map { |klass| klass.new(member, role) }.filter(&:active?)
       end
 
     end

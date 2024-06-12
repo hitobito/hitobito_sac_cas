@@ -3,14 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-newsletter:
+root:
   group: root
-  name: Newsletter
-  subscribable_for: anyone
-  subscribable_mode: opt_out
-
-sac_magazine:
-  group: root
-  name: Die Alpen
-  subscribable_for: anyone
-  subscribable_mode: opt_out
+  payment_slip: no_ps

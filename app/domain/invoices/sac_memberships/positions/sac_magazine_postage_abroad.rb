@@ -10,10 +10,10 @@ module Invoices
     module Positions
       class SacMagazinePostageAbroad < Base
 
-        self.balancing_payment_possible = true
+        self.section_payment_possible = true
 
         def active?
-          abroad_postage? && person.sac_magazine?
+          abroad_postage? && member.sac_magazine?
         end
 
         def gross_amount

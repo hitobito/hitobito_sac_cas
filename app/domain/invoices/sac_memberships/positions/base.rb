@@ -10,26 +10,22 @@ module Invoices
     module Positions
       class Base
 
-        class_attribute :group, :balancing_payment_possible
+        class_attribute :group, :section_payment_possible
 
-        attr_reader :person, :role, :context
+        attr_reader :member, :role, :context
         attr_writer :amount
 
         delegate :date, :config, :mid_year_discount, :sac, to: :context
         delegate :beitragskategorie, to: :role
 
-        def initialize(person, role)
-          @person = person
+        def initialize(member, role)
+          @member = member
           @role = role
-          @context = person.context
+          @context = member.context
         end
 
         def active?
           true
-        end
-
-        def debitor
-          person
         end
 
         def creditor
@@ -37,7 +33,7 @@ module Invoices
         end
 
         def amount
-          return 0 if person.sac_honorary_member?
+          return 0 if member.sac_honorary_member?
 
           @amount ||= [gross_amount, 0].max * mid_year_discount
         end
@@ -54,10 +50,41 @@ module Invoices
           context.config.send("#{name}_article_number")
         end
 
-        def requires_balancing_payment?
-          balancing_payment_possible &&
+        def section_pays?
+          return @section_pays if defined?(@section_pays)
+
+          @section_pays = section_payment_possible &&
             sac_fee_exemption? &&
             amount.positive?
+        end
+
+        def invoice_amount
+          section_pays? ? 0 : amount
+        end
+
+        def label
+          I18n.t("invoices.sac_memberships.positions.#{name}", section: section.to_s)
+        end
+
+        def label_group
+          group ? I18n.t("invoices.sac_memberships.positions.#{group}") : label
+        end
+
+        def label_beitragskategorie
+          I18n.t("invoices.sac_memberships.beitragskategorie.#{beitragskategorie}")
+        end
+
+        def to_abacus_invoice_position
+          Invoices::Abacus::InvoicePosition.new(
+            name: label,
+            grouping: label_group,
+            details: label_beitragskategorie,
+            amount: invoice_amount,
+            article_number: article_number,
+            other_creditor_id: creditor == section ? section.id : nil,
+            other_debitor_id: section_pays? ? section.id : nil,
+            other_debitor_amount: section_pays? ? amount : nil
+          )
         end
 
         def to_h
@@ -66,7 +93,6 @@ module Invoices
             group: group,
             amount: amount,
             article_number: article_number,
-            debitor: debitor.to_s,
             creditor: creditor.to_s
           }
         end
@@ -88,19 +114,19 @@ module Invoices
         end
 
         def paying_person?
-          !beitragskategorie.family? || person.sac_family_main_person?
+          member.paying_person?(role)
         end
 
         def abroad_postage?
-          person.living_abroad? && paying_person?
+          member.living_abroad? && paying_person?
         end
 
         def section_fee_exemption?
-          section.section_fee_exemption?(person)
+          section.section_fee_exemption?(member)
         end
 
         def sac_fee_exemption?
-          section.sac_fee_exemption?(person)
+          section.sac_fee_exemption?(member)
         end
 
       end

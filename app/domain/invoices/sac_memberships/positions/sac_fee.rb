@@ -11,7 +11,7 @@ module Invoices
       class SacFee < Base
 
         self.group = :sac_fee
-        self.balancing_payment_possible = true
+        self.section_payment_possible = true
 
         def gross_amount
           amount = beitragskategorie_fee
@@ -23,7 +23,7 @@ module Invoices
 
         def sac_fee_reduction?
           config.reduction_required_membership_years.to_i.positive? &&
-            person.membership_years >= config.reduction_required_membership_years
+            member.membership_years >= config.reduction_required_membership_years
         end
 
       end
