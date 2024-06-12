@@ -8,14 +8,14 @@
 module SacCas::Beitragskategorie
   class Calculator
 
-    BEITRAGSKATEGORIEN = [CATEGORY_ADULT, CATEGORY_YOUTH, CATEGORY_FAMILY].freeze
+    CATEGORY_ADULT = :adult
+    CATEGORY_YOUTH = :youth
+    CATEGORY_FAMILY = :family
+    BEITRAGSKATEGORIEN = [CATEGORY_ADULT, CATEGORY_YOUTH, CATEGORY_FAMILY].map(&:to_s).freeze
+    
     AGE_RANGE_ADULT = 22..199
     AGE_RANGE_MINOR_FAMILY_MEMBER = 6..17
     AGE_RANGE_YOUTH = AGE_RANGE_MINOR_FAMILY_MEMBER.begin...AGE_RANGE_ADULT.begin
-
-    CATEGORY_ADULT = :adult
-    CATEGORY_YOUTH = :youth
-    CATEGORY_FAMILY = :familie
     
     def initialize(person, reference_date: Time.zone.today)
       @person = person
