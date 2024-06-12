@@ -116,7 +116,6 @@ module HitobitoSacCas
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
-      Sheet::Group::NavLeft.prepend SacCas::Sheet::Group::NavLeft
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
       admin_item[:active_for] += %w(cost_centers cost_units)
