@@ -40,7 +40,7 @@ describe Household do
       household = Household.new(child)
       household.add(second_child)
       expect(household.valid?).to eq false
-      expect(household.errors[:base]).to match_array(['Der Haushalt enthält keine erwachsene Person mit bestätigter Email Adresse.',
+      expect(household.errors[:base]).to match_array(['Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.',
                                                       'Eine Familie muss mindestens 1 erwachsene Person enthalten.'])
     end
 
@@ -62,7 +62,7 @@ describe Household do
       adult.update_attribute(:email, '')
       household.remove(adult)
       expect(household.valid?).to eq false
-      expect(household.errors[:base]).to match_array(['Die entfernte Person besitzt keine bestätigte Email Adresse.'])
+      expect(household.errors[:base]).to match_array(['Die entfernte Person besitzt keine bestätigte E-Mail Adresse.'])
     end
 
     it 'is invalid if it contains no adult with confirmed email' do
@@ -70,7 +70,13 @@ describe Household do
       household = Household.new(adult)
       household.add(child)
       expect(household.valid?).to eq false
-      expect(household.errors[:base]).to match_array(['Der Haushalt enthält keine erwachsene Person mit bestätigter Email Adresse.'])
+      expect(household.errors[:base]).to match_array(['Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.'])
+    end
+
+    it 'is invalid in destroy context with blank email' do
+      person.email = nil
+      expect(household.valid?(:destroy)).to eq false
+      expect(household.errors['members[0].base']).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
     end
   end
 

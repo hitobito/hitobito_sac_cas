@@ -27,8 +27,7 @@ describe HouseholdMember do
     it 'is invalid if birthday is blank' do
       person.update_attribute(:birthday, nil)
       expect(household_member.valid?).to eq false
-      expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat kein Geburtsdatum.",
-                                                             "#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
+      expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat kein Geburtsdatum."])
     end
 
     it 'is invalid if birthday is below 6 years old' do
@@ -75,7 +74,7 @@ describe HouseholdMember do
       it 'is invalid if member has no confirmed email' do
         person.update_attribute(:email, '')
         expect(household_member.valid?(:destroy)).to eq false
-        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte Email Adresse."])
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
       end
 
       it 'is invalid if member has termination planned' do

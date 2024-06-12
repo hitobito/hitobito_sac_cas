@@ -84,11 +84,11 @@ module SacCas::Household
   end
 
   def assert_adult_member
-    if adult_members.count.zero?
+    if adults.count.zero?
       errors.add(:base, :at_least_one_adult)
     end
 
-    if adult_members.count > 2
+    if adults.count > 2
       errors.add(:base, :not_more_than_two_adults)
     end
   end
@@ -109,14 +109,12 @@ module SacCas::Household
   end
 
   def assert_adult_member_with_email
-    if adult_members.none? { |member| member.person.email.present? }
+    if adults.none? { _1.email.present? }
       errors.add(:base, :no_adult_member_with_email)
     end
   end
 
-  def adult_members
-    members.select do |member|
-      ::SacCas::Beitragskategorie::Calculator.new(member.person).adult?
-    end
+  def adults
+    @adults ||= people_by_agegroup(:adult)
   end
 end

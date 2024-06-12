@@ -21,30 +21,26 @@ module SacCas::Households::MemberValidator
 
   def assert_birthday
     if person.birthday.blank?
-      @member.errors.add(:base,
-                         :birthday_missing,
-                         person_name: person.full_name)
+      add_error(:birthday_missing)
     end
   end
 
   def assert_family_age_range
-    unless SacCas::Beitragskategorie::Calculator.new(person).family_age?
-      @member.errors.add(:base,
-                         :family_age_range_not_fulfilled,
-                         person_name: person.full_name)
+    if person.birthday.present? && !SacCas::Beitragskategorie::Calculator.new(person).family_age?
+      add_error(:family_age_range_not_fulfilled)
     end
   end
 
   def assert_no_conflicting_family_membership
     if person.household_key != household.household_key &&
-        person.roles.where(beitragskategorie: :family).exists?
-      @member.errors.add(:base, :conflicting_family_membership, name: person.full_name)
+        person.roles.exists?(beitragskategorie: :family)
+      add_error(:conflicting_family_membership, :name)
     end
   end
 
   def assert_no_membership_in_other_section
     if member_main_section != household_reference_person_main_section
-      @member.errors.add(:base, :membership_in_other_section, person_name: person.full_name)
+      add_error(:membership_in_other_section)
     end
   end
 
@@ -54,5 +50,9 @@ module SacCas::Households::MemberValidator
 
   def household_reference_person_main_section
     Group::SektionsMitglieder::Mitglied.find_by(person_id: household.reference_person.id)&.group
+  end
+
+  def add_error(key, name_key = :person_name)
+    @member.errors.add(:base, key, **{ name_key => person.full_name })
   end
 end

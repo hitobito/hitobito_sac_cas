@@ -56,19 +56,19 @@ de:
           attributes:
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
-              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter Email Adresse.
+              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.
               not_more_than_two_adults: Eine Familie darf höchstens 2 erwachsene Personen enthalten.
               at_least_two_members: Eine Familie muss mindestens 2 Personen enthalten.
-              removed_member_has_no_email: Die entfernte Person besitzt keine bestätigte Email Adresse.
+              removed_member_has_no_email: Die entfernte Person besitzt keine bestätigte E-Mail Adresse.
         household_member:
           attributes:
             base:
-              birthday_missing: '%{person_name} hat kein Geburtsdatum.'
-              family_age_range_not_fulfilled: '%{person_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren.'
-              in_other_household_present: '%{person_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist.'
-              membership_in_other_section:  '%{person_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion.' 
-              no_email: '%{person_name} hat keine bestätigte Email Adresse.'
-              planned_termination: '%{person_name} hat einen Austritt geplant.' 
+              birthday_missing: "%{person_name} hat kein Geburtsdatum."
+              family_age_range_not_fulfilled: "%{person_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."
+              in_other_household_present: "%{person_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist."
+              membership_in_other_section: "%{person_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."
+              no_email: "%{person_name} hat keine bestätigte E-Mail Adresse."
+              planned_termination: "%{person_name} hat einen Austritt geplant."
 
     models:
       people/neuanmeldungen/approve:
