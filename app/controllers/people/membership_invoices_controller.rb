@@ -17,19 +17,29 @@ class People::MembershipInvoicesController < ApplicationController
   private
 
   def generate_invoice
-    if invoicer.generate
-      set_flash(:success, abacus_key: invoicer.invoice.abacus_sales_order_key)
-    else
-      set_flash(:alert, message: invoicer.error_messages.join(', '))
+    handle_exceptions do
+      if invoicer.generate
+        set_flash(:success, abacus_key: invoicer.invoice.abacus_sales_order_key)
+      else
+        set_flash(:alert, message: invoicer.error_messages.join(', '))
+      end
     end
-  rescue RestClient::Exception => e
-    set_flash(:alert, message: "#{e.message} (#{e.response.body}")
-  rescue => e
-    set_flash(:alert, message: e.message)
   end
 
   def set_flash(type, **args)
-    flash[type] = t("people.membership_invoices.#{type}_notice", **args) # rubocop:disable Rails/ActionControllerFlashBeforeRender
+    kind = type == :success ? :notice : :alert
+    flash[kind] = t("people.membership_invoices.#{type}_notice", **args) # rubocop:disable Rails/ActionControllerFlashBeforeRender
+  end
+
+  def handle_exceptions
+    yield
+  rescue => e
+    set_flash(:alert, message: e.message)
+    options = {}
+    if e.respond_to?(:response)
+      options[:extra] = { response: e.response.body.force_encoding('UTF-8') }
+    end
+    Raven.capture_exception(e, options)
   end
 
   def invoicer

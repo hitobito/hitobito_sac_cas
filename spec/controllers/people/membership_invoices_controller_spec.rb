@@ -42,7 +42,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { Invoice.count }.by(1)
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:success]).to eq('Die Rechnung wurde erfolgreich an Abacus übermittelt. Auftrag-Nr. 19')
+      expect(flash[:notice]).to eq('Die Rechnung wurde erfolgreich an Abacus übermittelt. Auftrag-Nr. 19')
     end
 
     it 'handles failure in abacus request' do
