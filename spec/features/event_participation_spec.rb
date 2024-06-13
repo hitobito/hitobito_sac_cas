@@ -76,7 +76,7 @@ describe :event_participation, js: true do
         visit group_event_path(group_id: group, id: event)
         click_button 'Abmelden'
         within('.popover-body') { click_on 'Abmelden' }
-        expect( find_field('Begründung').native.attribute('validationMessage')).to eq 'Please fill out this field.'
+        expect( find_field('Begründung').native.attribute('validationMessage')).to match(/Please fill (out|in) this field./)
       end
 
       it 'can cancel with reason' do
@@ -94,7 +94,7 @@ describe :event_participation, js: true do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button 'Abmelden'
         within('.popover-body') { click_on 'Abmelden' }
-        expect( find_field('Begründung').native.attribute('validationMessage')).to eq 'Please fill out this field.'
+        expect( find_field('Begründung').native.attribute('validationMessage')).to match(/Please fill (out|in) this field./)
       end
 
       it 'can cancel with reason' do

@@ -301,4 +301,19 @@ describe Event::Course do
       expect(course).to be_valid
     end
   end
+
+  describe 'when state changes to assignment_closed' do
+    let(:course) { events(:closed) }
+
+    # set up participants who have been rejected
+    let (:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
+    let (:rejected_participation) { Fabricate(:event_participation, event: course, application: application, state: 'rejected') }
+
+    it 'queues job to notify rejected participants' do
+      expect {
+        rejected_participation
+        course.update!(state: :assignment_closed)
+      }.to change { Delayed::Job.where('handler LIKE ?', '%ParticipationRejectionJob%').count }.by(1)
+    end
+  end
 end

@@ -43,6 +43,7 @@ module HitobitoSacCas
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
+      Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Household.prepend SacCas::Household

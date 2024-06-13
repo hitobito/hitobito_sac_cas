@@ -51,7 +51,7 @@ describe :self_registration, js: true do
       expect(page).to have_field 'Mail'
       fill_in 'Mail', with: person.email
       click_on 'Registrieren'
-      expect(page).to have_css '.alert-success', 
+      expect(page).to have_css '.alert-success',
 text: 'Es existiert bereits ein Login für diese E-Mail.'
       expect(page).to have_css 'h1', text: 'Anmelden'
       expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.email
@@ -97,7 +97,7 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
       click_button 'Anmelden'
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
-      expect(current_path).to eq("#{group_person_path(group_id: group, id: person, 
+      expect(current_path).to eq("#{group_person_path(group_id: group, id: person,
 locale: :de)}.html")
     end
 
@@ -115,7 +115,7 @@ locale: :de)}.html")
       it 'cannot complete without accepting adult consent' do
         complete_main_person_form
         expect { click_on 'Registrieren' }.not_to(change { Person.count })
-        expect(adult_consent_field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+        expect(adult_consent_field.native.attribute('validationMessage')).to match(/Please (check|tick) this box if you want to proceed./)
       end
 
       it 'can complete when accepting adult consent' do
@@ -153,7 +153,7 @@ locale: :de)}.html")
         end.not_to(change { Person.count })
 
         field = page.find_field('Ich erkläre mich mit den folgenden Bestimmungen einverstanden:')
-        expect(field.native.attribute('validationMessage')).to eq 'Please check this box if you want to proceed.'
+        expect(field.native.attribute('validationMessage')).to match(/Please (check|tick) this box if you want to proceed./)
 
         # flash not rendered because of native html require
         expect(page).not_to have_text('Um die Registrierung abzuschliessen, muss der Datenschutzerklärung zugestimmt werden.')
