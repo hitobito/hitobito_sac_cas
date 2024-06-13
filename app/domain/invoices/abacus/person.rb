@@ -143,12 +143,12 @@ module Invoices
       end
 
       def communication_attrs
-        [
-          primary_email_attrs
-        ]
+        [primary_email_attrs].compact
       end
 
       def primary_email_attrs
+        return if entity.email.blank?
+
         # limit strings according to Abacus field lengths
         {
           subject_id: subject_id,

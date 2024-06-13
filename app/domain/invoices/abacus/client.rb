@@ -43,7 +43,7 @@ module Invoices
         response = RestClient.send(method, *request_args(method, path, params))
         decode_json(response.body)
       rescue RestClient::BadRequest => e
-        msg = JSON.parse(e.response.body).dig('error', 'message')
+        msg = response_error_message(e)
         e.message = msg if msg.present?
         raise e
       end
@@ -111,6 +111,12 @@ module Invoices
       def token_endpoint
         response = RestClient.get(config.host + OPENID_CONFIG_PATH)
         JSON.parse(response.body)['token_endpoint']
+      end
+
+      def response_error_message(exception)
+        JSON.parse(exception.response.body).dig('error', 'message')
+      rescue # do not fail if response is not JSON
+        nil
       end
 
       def encode_json(attrs)
