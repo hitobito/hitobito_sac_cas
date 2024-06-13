@@ -43,33 +43,19 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "label": {
-        },
-        "public": {
-        },
-        "contactable_id": {
-        },
-        "contactable_type": {
-        },
-        "email": {
-        }
+        "id": {},
+        "label": {},
+        "public": {},
+        "contactable_id": {},
+        "contactable_type": {},
+        "email": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "label": {
           "type": "string",
@@ -88,21 +74,12 @@
         },
         "public": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "contactable_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "contactable_type": {
           "type": "string",
@@ -135,12 +112,9 @@
           ]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -354,91 +328,49 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "language": {
-        },
-        "accommodation": {
-        },
-        "meals": {
-        },
-        "season": {
-        },
-        "start_point_of_time": {
-        },
-        "minimum_age": {
-        },
-        "brief_description": {
-        },
-        "specialities": {
-        },
-        "similar_tours": {
-        },
-        "program": {
-        }
+        "id": {},
+        "language": {},
+        "accommodation": {},
+        "meals": {},
+        "season": {},
+        "start_point_of_time": {},
+        "minimum_age": {},
+        "brief_description": {},
+        "specialities": {},
+        "similar_tours": {},
+        "program": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "kind_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "type": {
           "type": "string",
-          "operators": [
-            "eq"
-          ]
+          "operators": ["eq"]
         },
         "group_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq"
-          ]
+          "operators": ["eq", "not_eq"]
         },
         "before_or_on": {
           "type": "date",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "after_or_on": {
           "type": "date",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "state": {
@@ -548,14 +480,7 @@
         },
         "minimum_age": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -581,9 +506,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -629,34 +552,18 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "event_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -667,9 +574,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -691,31 +596,19 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -803,66 +696,31 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "maximum_participants": {
-        },
-        "minimum_participants": {
-        },
-        "training_days": {
-        },
-        "season": {
-        },
-        "accommodation": {
-        }
+        "id": {},
+        "maximum_participants": {},
+        "minimum_participants": {},
+        "training_days": {},
+        "season": {},
+        "accommodation": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "maximum_participants": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "minimum_participants": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "training_days": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "season": {
           "type": "string",
@@ -908,9 +766,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -950,31 +806,18 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "label": {
-        },
-        "code": {
-        },
-        "difficulty": {
-        },
-        "description": {
-        }
+        "id": {},
+        "label": {},
+        "code": {},
+        "difficulty": {},
+        "description": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "label": {
           "type": "string",
@@ -993,25 +836,11 @@
         },
         "code": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "difficulty": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "description": {
           "type": "string",
@@ -1029,12 +858,9 @@
           ]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -1146,71 +972,39 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "kind_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "type": {
           "type": "string",
-          "operators": [
-            "eq"
-          ]
+          "operators": ["eq"]
         },
         "group_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq"
-          ]
+          "operators": ["eq", "not_eq"]
         },
         "before_or_on": {
           "type": "date",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "after_or_on": {
           "type": "date",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         }
       },
@@ -1227,15 +1021,10 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       },
       "polymorphic": true,
-      "children": [
-        "EventResource",
-        "Event::CourseResource"
-      ]
+      "children": ["EventResource", "Event::CourseResource"]
     },
     {
       "name": "GroupResource",
@@ -1364,6 +1153,26 @@
           "readable": true,
           "description": null
         },
+        "foundation_year": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "section_canton": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "mitglied_termination_by_section_only": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "course_admin_email": {
           "type": "string",
           "readable": true,
@@ -1394,26 +1203,6 @@
           "readable": true,
           "description": null
         },
-        "foundation_year": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "section_canton": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "language": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "mitglied_termination_by_section_only": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
         "has_youth_organization": {
           "type": "boolean",
           "readable": true,
@@ -1436,56 +1225,30 @@
         }
       },
       "sorts": {
-        "id": {
-        },
-        "name": {
-        },
-        "short_name": {
-        },
-        "display_name": {
-        },
-        "description": {
-        },
-        "layer": {
-        },
-        "type": {
-        },
-        "email": {
-        },
-        "address": {
-        },
-        "zip_code": {
-        },
-        "town": {
-        },
-        "country": {
-        },
-        "require_person_add_requests": {
-        },
-        "self_registration_url": {
-        },
-        "archived_at": {
-        },
-        "created_at": {
-        },
-        "updated_at": {
-        },
-        "deleted_at": {
-        },
-        "navision_id": {
-        }
+        "id": {},
+        "name": {},
+        "short_name": {},
+        "display_name": {},
+        "description": {},
+        "layer": {},
+        "type": {},
+        "email": {},
+        "address": {},
+        "zip_code": {},
+        "town": {},
+        "country": {},
+        "require_person_add_requests": {},
+        "self_registration_url": {},
+        "archived_at": {},
+        "created_at": {},
+        "updated_at": {},
+        "deleted_at": {},
+        "navision_id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "name": {
           "type": "string",
@@ -1549,9 +1312,7 @@
         },
         "layer": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "type": {
@@ -1601,14 +1362,7 @@
         },
         "zip_code": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "town": {
           "type": "string",
@@ -1642,9 +1396,7 @@
         },
         "require_person_add_requests": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "self_registration_url": {
@@ -1664,72 +1416,33 @@
         },
         "archived_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "created_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "deleted_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "with_deleted": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "with_archived": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "navision_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -1780,9 +1493,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -1852,34 +1563,18 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "invoice_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -1890,9 +1585,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -1974,45 +1667,22 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "group_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "recipient_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -2033,9 +1703,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -2063,37 +1731,23 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        }
+        "id": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "leads_course_id": {
           "type": "integer",
-          "operators": [
-            "eq"
-          ]
+          "operators": ["eq"]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -2213,48 +1867,26 @@
         }
       },
       "sorts": {
-        "id": {
-        },
-        "first_name": {
-        },
-        "last_name": {
-        },
-        "nickname": {
-        },
-        "company_name": {
-        },
-        "company": {
-        },
-        "email": {
-        },
-        "address": {
-        },
-        "zip_code": {
-        },
-        "town": {
-        },
-        "country": {
-        },
-        "primary_group_id": {
-        },
-        "gender": {
-        },
-        "birthday": {
-        },
-        "language": {
-        }
+        "id": {},
+        "first_name": {},
+        "last_name": {},
+        "nickname": {},
+        "company_name": {},
+        "company": {},
+        "email": {},
+        "address": {},
+        "zip_code": {},
+        "town": {},
+        "country": {},
+        "primary_group_id": {},
+        "gender": {},
+        "birthday": {},
+        "language": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "first_name": {
           "type": "string",
@@ -2318,9 +1950,7 @@
         },
         "company": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "email": {
@@ -2400,14 +2030,7 @@
         },
         "primary_group_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "gender": {
           "type": "string",
@@ -2426,14 +2049,7 @@
         },
         "birthday": {
           "type": "date",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "language": {
           "type": "string",
@@ -2452,25 +2068,11 @@
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "membership_number": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -2506,9 +2108,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -2554,33 +2154,19 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "label": {
-        },
-        "public": {
-        },
-        "contactable_id": {
-        },
-        "contactable_type": {
-        },
-        "number": {
-        }
+        "id": {},
+        "label": {},
+        "public": {},
+        "contactable_id": {},
+        "contactable_type": {},
+        "number": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "label": {
           "type": "string",
@@ -2599,21 +2185,12 @@
         },
         "public": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "contactable_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "contactable_type": {
           "type": "string",
@@ -2646,12 +2223,9 @@
           ]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -2709,59 +2283,29 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "person_id": {
-        },
-        "group_id": {
-        },
-        "label": {
-        },
-        "type": {
-        },
-        "created_at": {
-        },
-        "updated_at": {
-        },
-        "deleted_at": {
-        }
+        "id": {},
+        "person_id": {},
+        "group_id": {},
+        "label": {},
+        "type": {},
+        "created_at": {},
+        "updated_at": {},
+        "deleted_at": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "person_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "group_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "label": {
           "type": "string",
@@ -2795,36 +2339,15 @@
         },
         "created_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "deleted_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         }
       },
       "relationships": {
@@ -2845,9 +2368,7 @@
         }
       },
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     },
     {
@@ -2893,33 +2414,19 @@
           "description": null
         }
       },
-      "extra_attributes": {
-      },
+      "extra_attributes": {},
       "sorts": {
-        "id": {
-        },
-        "label": {
-        },
-        "public": {
-        },
-        "contactable_id": {
-        },
-        "contactable_type": {
-        },
-        "name": {
-        }
+        "id": {},
+        "label": {},
+        "public": {},
+        "contactable_id": {},
+        "contactable_type": {},
+        "name": {}
       },
       "filters": {
         "id": {
           "type": "integer_id",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "label": {
           "type": "string",
@@ -2938,21 +2445,12 @@
         },
         "public": {
           "type": "boolean",
-          "operators": [
-            "eq"
-          ],
+          "operators": ["eq"],
           "single": true
         },
         "contactable_id": {
           "type": "integer",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
+          "operators": ["eq", "not_eq", "gt", "gte", "lt", "lte"]
         },
         "contactable_type": {
           "type": "string",
@@ -2985,12 +2483,9 @@
           ]
         }
       },
-      "relationships": {
-      },
+      "relationships": {},
       "stats": {
-        "total": [
-          "count"
-        ]
+        "total": ["count"]
       }
     }
   ],

@@ -33,6 +33,12 @@ event:
 # to this address to set a password.
 root_email: hitobito-sac-cas@puzzle.ch
 
+sftp:
+  config:
+    <% if ENV['RAILS_SFTP_CONFIG'].present? %>
+      <%= "{ #{ENV['RAILS_SFTP_CONFIG']} }" %>
+    <% end %>
+
 people:
   people_managers:
     enabled: true

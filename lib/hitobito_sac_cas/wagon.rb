@@ -22,6 +22,7 @@ module HitobitoSacCas
 
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
+        Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Event::CloseApplicationsJob,
         Roles::TerminateTourenleiterJob
