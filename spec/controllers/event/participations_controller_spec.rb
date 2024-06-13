@@ -295,7 +295,7 @@ describe Event::ParticipationsController do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:params) { { group_id: group.id, event_id: event.id, id: participation.id } }
 
-    it 'PUT summon sets participation state to summoned' do
+    it 'PUT summon sets participation active and state to summoned' do
       put :summon, params: params
       participation.reload
       expect(participation.active).to be true
