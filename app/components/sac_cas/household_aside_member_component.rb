@@ -16,9 +16,7 @@ module SacCas::HouseholdAsideMemberComponent
             family_main_person_toggle_link(member)
           end +
           content_tag(:td) do
-            content_tag(:strong) do
-              person_entry(member)
-            end +
+            person_entry(member) +
             content_tag(:span, member_years(member))
           end
         end
@@ -33,6 +31,7 @@ module SacCas::HouseholdAsideMemberComponent
     def family_main_person_toggle_link(member,
                                        title: I18n.t('people.roles_aside.set_main_group'))
       return ''.html_safe unless SacCas::Beitragskategorie::Calculator.new(member).adult?
+      return ''.html_safe unless member.sac_family_member?
 
       path = nil
       if member.sac_family_main_person?

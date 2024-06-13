@@ -12,13 +12,5 @@ module SacCas::HouseholdAsideComponent
     def section_name
       t('.section_name')
     end
-
-    def people_in_household?
-      @person.family_members.exists?
-    end
-
-    def entries
-      [person, *person.family_members]
-    end
   end
 end
