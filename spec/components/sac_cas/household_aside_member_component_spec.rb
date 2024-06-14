@@ -44,7 +44,7 @@ describe HouseholdAsideMemberComponent, type: :component do
     stub_can(:show, true)
     stub_can(:set_sac_family_main_person, true)
     rendered_component = render_inline(component)
-    expect(rendered_component).to have_selector('td a', text: 'Tenzing Norgay') do |a|
+    expect(rendered_component).to have_selector('td', text: 'Tenzing Norgay') do |a|
       expect(a.ancestor('tr')).to have_selector('span[title="Familienrechnungsempfänger"]')
     end
     expect(rendered_component).to have_selector('td a', text: 'Frieda Norgay') do |a|
