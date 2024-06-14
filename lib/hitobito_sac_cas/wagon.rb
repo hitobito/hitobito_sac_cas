@@ -20,6 +20,10 @@ module HitobitoSacCas
       #{config.root}/app/jobs
     ]
 
+    if Rails.env.development?
+      config.view_component.preview_paths << "#{config.root}/spec/components/previews"
+      config.view_component.preview_controller = 'WizardsPreviewsController'
+    end
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         Export::BackupMitgliederScheduleJob,
@@ -191,7 +195,7 @@ module HitobitoSacCas
     end
 
     initializer 'sac_cas.append_doorkeeper_scope' do |_app|
-      Doorkeeper.configuration.scopes.add "user_groups"
+      Doorkeeper.configuration.scopes.add 'user_groups'
     end
 
     private
