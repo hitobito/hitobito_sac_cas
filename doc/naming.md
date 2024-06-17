@@ -34,4 +34,4 @@ Einen sac-Prefix kann man z.B. bei SAC spezifischen Attributen verwenden. Es gib
 | Eintrittsgebühr           | entry_fee                      |                                               |
 |                           |                                |                                               |
 | **Kurse/Touren**          |                                |                                               |
-| Tourenleiter*in           | tour_guide                     | Group::SektionsTourenkommission::Tourenleiter |
+| Tourenleiter*in           | tour_guide, sac_tour_guide     | Group::SektionsTourenkommission::Tourenleiter |
