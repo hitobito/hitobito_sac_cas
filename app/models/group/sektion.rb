@@ -41,16 +41,10 @@ class Group::Sektion < ::Group
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
 
   def sorting_name
-    display_name.delete_prefix(name_prefix).strip
+    display_name.delete_prefix('SAC ').delete_prefix('CAS ')
   end
 
   def sac_cas_self_registration_url(host)
     Groups::SektionSelfRegistrationLink.new(self, host).url
-  end
-
-  private
-
-  def name_prefix
-    language == 'DE' ? 'SAC' : 'CAS'
   end
 end
