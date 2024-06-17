@@ -902,16 +902,6 @@ de:
       fields:
         notes: Bemerkungen
         promo_code: Promocode
-      form:
-        main_email_title: Haupt-E-Mail
-        emailless_main_person_title: Personendaten
-        neuanmeldung_main_person_title: Personendaten
-        abo_issue_title: Abo
-        abo_main_person_title: Personendaten
-        single_or_household_title: Mitgliedschaftstyp
-        household_title: Familienmitglieder
-        main_title: Familienmitglieder
-        supplements_title: Zusatzdaten
       household:
         membership_info_box: >
           Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
@@ -953,6 +943,18 @@ de:
   groups/self_inscription:
     new:
       details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
+
+  groups/self_registration:
+    global:
+      main_email_title: Haupt-E-Mail
+      emailless_main_person_title: Personendaten
+      neuanmeldung_main_person_title: Personendaten
+      abo_issue_title: Abo
+      abo_main_person_title: Personendaten
+      single_or_household_title: Mitgliedschaftstyp
+      household_title: Familienmitglieder
+      main_title: Familienmitglieder
+      supplements_title: Zusatzdaten
 
   roles:
     beitragskategorie:
