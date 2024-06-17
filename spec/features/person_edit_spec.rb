@@ -49,7 +49,9 @@ describe 'person edit page', :js do
       it 'adding non family person to family household adds membership' do
         add_to_household(family_adult, non_family_adult)
 
-        click_on non_family_adult.full_name
+        within('.contactable') do
+          click_on non_family_adult.full_name
+        end
         expect(find('.content-header h1')).to have_content(non_family_adult.full_name)
         within('section.roles') do
           expect(page).to have_selector('tr', text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion)")

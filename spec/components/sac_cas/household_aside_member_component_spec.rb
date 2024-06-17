@@ -14,37 +14,52 @@ describe HouseholdAsideMemberComponent, type: :component do
   subject(:component) { described_class.new(person: familienmitglied) }
 
   it 'renders a person in the household with link' do
-    allow(component).to receive(:link_person?).and_return(true)
-    rendered_component = render_inline(component).to_html.squish
-    expect(
-      rendered_component
-    ).to include(
-      '<a data-turbo-frame="_top" href="/de/people/600002">Tenzing Norgay</a></strong> (25)'
-    )
-
-    expect(
-      rendered_component
-    ).to have_text 'Tenzing Norgay'
+    stub_can(:show, true)
+    stub_can(:set_sac_family_main_person, true)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_selector('a[data-turbo-frame="_top"][href="/de/people/600002"]', text: 'Tenzing Norgay')
+    expect(rendered_component).to have_selector('span', text: '(25)')
+    expect(rendered_component).to have_text 'Tenzing Norgay'
   end
 
   it 'renders a person in the household without link' do
-    allow(component).to receive(:link_person?).and_return(false)
-    rendered_component = render_inline(component).to_html.squish
-
-    expect(
-      rendered_component
-    ).to include(
-      '<strong>Frieda Norgay</strong> (25)'
-    )
-
+    stub_can(:show, false)
+    stub_can(:set_sac_family_main_person, false)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_selector('strong', text: 'Frieda Norgay')
+    expect(rendered_component).to have_selector('span', text: '(25)')
     expect(rendered_component).to have_text('Frieda Norgay (25)')
   end
 
   it 'renders all people in the household with ages' do
-    allow(component).to receive(:link_person?).and_return(false)
-    rendered_component = render_inline(component).to_html.squish
+    stub_can(:show, false)
+    stub_can(:set_sac_family_main_person, false)
+    rendered_component = render_inline(component)
     expect(rendered_component).to have_text('Tenzing Norgay (25)')
     expect(rendered_component).to have_text('Frieda Norgay (25)')
     expect(rendered_component).to have_text('Nima Norgay (10)')
+  end
+
+  it 'renders people with main person link' do
+    stub_can(:show, true)
+    stub_can(:set_sac_family_main_person, true)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_selector('td', text: 'Tenzing Norgay') do |a|
+      expect(a.ancestor('tr')).to have_selector('span[title="Familienrechnungsempfänger"]')
+    end
+    expect(rendered_component).to have_selector('td a', text: 'Frieda Norgay') do |a|
+      expect(a.ancestor('tr')).to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
+    end
+
+    expect(rendered_component).to have_selector('td a', text: 'Nima Norgay') do |a|
+      expect(a.ancestor('tr')).not_to have_selector('span[title="Familienrechnungsempfänger"]')
+      expect(a.ancestor('tr')).not_to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
+    end
+  end
+
+  private
+
+  def stub_can(permission, result)
+    allow(component).to receive(:can?).with(permission, anything).and_return(result)
   end
 end
