@@ -5,22 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::Sektion < ::Group
+class Group::Sektion < Group
+  include Groups::WithNeuanmeldung
 
   self.layer = true
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
-    Group::SektionsTourenkommission,
-    Group::SektionsKommission,
-    Group::SektionsVorstand,
-    Group::SektionsMitglieder,
-    Group::SektionsNeuanmeldungenSektion,
-    Group::SektionsNeuanmeldungenNv,
-    Group::SektionsKommission,
-    Group::SektionsVorstand,
-    Group::SektionsExterneKontakte,
-    Group::Ortsgruppe
+           Group::SektionsTourenkommission,
+           Group::SektionsKommission,
+           Group::SektionsVorstand,
+           Group::SektionsMitglieder,
+           Group::SektionsNeuanmeldungenSektion,
+           Group::SektionsNeuanmeldungenNv,
+           Group::SektionsKommission,
+           Group::SektionsVorstand,
+           Group::SektionsExterneKontakte,
+           Group::Ortsgruppe
 
   self.default_children = [
     Group::SektionsFunktionaere,
@@ -44,7 +45,4 @@ class Group::Sektion < ::Group
     display_name.delete_prefix('SAC ').delete_prefix('CAS ')
   end
 
-  def sac_cas_self_registration_url(host)
-    Groups::SektionSelfRegistrationLink.new(self, host).url
-  end
 end
