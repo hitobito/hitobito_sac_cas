@@ -16,9 +16,9 @@ class Groups::SektionSelfRegistrationLink
   end
 
   def url
-    return unless group
-    return group_self_registration_path(group_id: group.id) if @host.blank?
+    return unless @sektion
+    return group_self_registration_path(group_id: @sektion.id) if @host.blank?
 
-    group_self_registration_url(host: @host, group_id: group.id)
+    group_self_registration_url(host: @host, group_id: @sektion.id)
   end
 end
