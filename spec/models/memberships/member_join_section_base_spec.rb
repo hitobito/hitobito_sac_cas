@@ -46,6 +46,17 @@ describe Memberships::MemberJoinSectionBase do
       expect(obj).to be_valid
     end
 
+    it 'is invalid and contains all validation and role validation errors' do
+      allow(obj).to receive(:prepare_roles) do |person|
+        # invalid role without group
+        Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
+                        person: person)
+      end
+
+      expect(obj).not_to be_valid
+      expect(errors).to eq ['Person muss Sac Mitglied sein', "#{person}: Group muss ausgefüllt werden"]
+    end
+
     describe 'existing membership in tree' do
       describe 'join section' do
         it 'is invalid if person is join section member' do

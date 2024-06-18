@@ -27,7 +27,7 @@ module Memberships
     end
 
     def valid?
-      super && roles_valid?
+      [super, roles_valid?].all?
     end
 
     def save
@@ -64,7 +64,7 @@ module Memberships
       end
     end
 
-    # build roles of correct type in correct subgroup of sektion
+    # prepare roles of correct type in correct subgroup of sektion
     # and with correct dates (convert_on/delete_on)
     def prepare_roles(_person)
       []
