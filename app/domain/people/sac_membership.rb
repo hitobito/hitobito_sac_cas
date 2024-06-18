@@ -13,7 +13,7 @@ class People::SacMembership
 
   def initialize(person)
     @person = person
-    @active_roles = MEMBERSHIP_ROLES.map(&:sti_name)
+    @roles = MEMBERSHIP_ROLES.map(&:sti_name)
     @active_or_pending_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
   end
 

@@ -142,7 +142,7 @@ describe Memberships::MemberJoinSectionBase do
     context 'single person' do
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
       let(:matterhorn_funktionaere) { groups(:matterhorn_funktionaere) }
-      before { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
+      let!(:bluemlisalp_mitglied) { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
 
       it 'creates single role for person' do
         allow(obj).to receive(:build_roles) do |person|
@@ -154,16 +154,19 @@ describe Memberships::MemberJoinSectionBase do
         end.to change { person.reload.roles.count }.by(1)
       end
 
-      it 'might create multiple roles roles for single person' do
+      it 'might process multiple roles for single person' do
+        bluemlisalp_mitglied.deleted_at = Time.zone.now
         allow(obj).to receive(:build_roles) do |person|
-          [Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
-                          person: person, group: matterhorn_mitglieder),
-          Fabricate.build(Group::SektionsFunktionaere::Andere.sti_name,
-                          person: person, group: matterhorn_funktionaere)]
+          [bluemlisalp_mitglied,
+           Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
+                           group: matterhorn_mitglieder,
+                           person: person)]
         end
-        expect do
-          expect(obj.save).to eq true
-        end.to change { person.reload.roles.count }.by(2)
+        expect(obj.save).to eq true
+        sac_membership = People::SacMembership.new(person)
+        person.reload
+        expect(sac_membership.active_in?(groups(:matterhorn))).to eq(true)
+        expect(sac_membership.active_in?(groups(:bluemlisalp))).to eq(false)
       end
     end
 
