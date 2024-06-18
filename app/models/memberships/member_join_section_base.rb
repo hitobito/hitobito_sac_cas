@@ -52,7 +52,7 @@ module Memberships
     end
 
     def roles
-      @roles ||= affected_people.flat_map { |p| build_roles(p) }
+      @roles ||= affected_people.flat_map { |p| prepare_roles(p) }
     end
 
     def roles_valid?
@@ -66,7 +66,7 @@ module Memberships
 
     # build roles of correct type in correct subgroup of sektion
     # and with correct dates (convert_on/delete_on)
-    def build_roles(_person)
+    def prepare_roles(_person)
       []
     end
 

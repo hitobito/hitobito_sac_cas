@@ -145,7 +145,7 @@ describe Memberships::MemberJoinSectionBase do
       let!(:bluemlisalp_mitglied) { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
 
       it 'creates single role for person' do
-        allow(obj).to receive(:build_roles) do |person|
+        allow(obj).to receive(:prepare_roles) do |person|
           Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
                           person: person, group: matterhorn_mitglieder)
         end
@@ -156,7 +156,7 @@ describe Memberships::MemberJoinSectionBase do
 
       it 'might process multiple roles for single person' do
         bluemlisalp_mitglied.deleted_at = Time.zone.now
-        allow(obj).to receive(:build_roles) do |person|
+        allow(obj).to receive(:prepare_roles) do |person|
           [bluemlisalp_mitglied,
            Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
                            group: matterhorn_mitglieder,
@@ -189,7 +189,7 @@ describe Memberships::MemberJoinSectionBase do
       end
 
       it 'creates roles for each member' do
-        allow(obj).to receive(:build_roles) do |person|
+        allow(obj).to receive(:prepare_roles) do |person|
           Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
                           person: person, group: matterhorn_mitglieder)
         end
