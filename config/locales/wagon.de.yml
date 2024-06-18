@@ -74,7 +74,7 @@ de:
           attributes:
             person:
               must_be_sac_member: muss Sac Mitglied sein
-              must_not_be_section_member: ist bereits Mitglied der Sektion oder
+              must_not_be_join_section_member: ist bereits Mitglied der Sektion oder
                 hat ein offenes Beitrittsgesuch
               must_be_family_main_person: muss Hauptperson der Familie sein
 

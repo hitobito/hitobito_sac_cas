@@ -25,16 +25,16 @@ describe Memberships::MemberJoinSectionBase do
 
     expect do
       described_class.new(Group::SacCas.new, :person, :date)
-    end.to raise_error('group is not supported')
+    end.to raise_error('must be section/ortsgruppe')
   end
 
   describe 'validations' do
     let(:person) { Fabricate(:person) }
-    let(:group) { groups(:bluemlisalp) }
+    let(:join_section) { groups(:bluemlisalp) }
     let(:errors) { obj.errors.full_messages }
     let(:date) { Date.new(2024, 6, 14) }
 
-    subject(:obj) { described_class.new(group, person, date) }
+    subject(:obj) { described_class.new(join_section, person, date) }
 
     it 'is invalid if person is not an sac member' do
       expect(obj).not_to be_valid
@@ -47,8 +47,8 @@ describe Memberships::MemberJoinSectionBase do
     end
 
     describe 'existing membership in tree' do
-      describe 'section' do
-        it 'is invalid if person is section member' do
+      describe 'join section' do
+        it 'is invalid if person is join section member' do
           create_role(:bluemlisalp_mitglieder, 'Mitglied')
           expect(obj).not_to be_valid
           expect(errors).to eq [
@@ -140,13 +140,14 @@ describe Memberships::MemberJoinSectionBase do
     end
 
     context 'single person' do
-      let(:funktionaere) { groups(:matterhorn_funktionaere) }
+      let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
+      let(:matterhorn_funktionaere) { groups(:matterhorn_funktionaere) }
       before { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
 
       it 'creates single role for person' do
         allow(obj).to receive(:build_roles) do |person|
-          Fabricate.build(Group::SektionsFunktionaere::Praesidium.sti_name, person: person,
-                                                                            group: funktionaere)
+          Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+                          person: person, group: matterhorn_mitglieder)
         end
         expect do
           expect(obj.save).to eq true
@@ -155,10 +156,10 @@ describe Memberships::MemberJoinSectionBase do
 
       it 'might create multiple roles roles for single person' do
         allow(obj).to receive(:build_roles) do |person|
-          [Fabricate.build(Group::SektionsFunktionaere::Praesidium.sti_name, person: person,
-                                                                             group: funktionaere),
-           Fabricate.build(Group::SektionsFunktionaere::Administration.sti_name, person: person,
-                                                                                 group: funktionaere)]
+          [Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+                          person: person, group: matterhorn_mitglieder),
+          Fabricate.build(Group::SektionsFunktionaere::Andere.sti_name,
+                          person: person, group: matterhorn_funktionaere)]
         end
         expect do
           expect(obj.save).to eq true
@@ -168,16 +169,16 @@ describe Memberships::MemberJoinSectionBase do
 
     context 'family' do
       let(:other) { Fabricate(:person) }
-      let(:funktionaere) { groups(:matterhorn_funktionaere) }
+      let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
 
-      def create_household(person, *others)
+      def create_sac_family(person, *others)
         others.each { |p| person.household.add(p) }
         person.household.save!
         person.reload
       end
 
       before do
-        create_household(person, other)
+        create_sac_family(person, other)
         person.update!(sac_family_main_person: true)
         create_role(:bluemlisalp_mitglieder, 'Mitglied', beitragskategorie: :family)
         create_role(:bluemlisalp_mitglieder, 'Mitglied', owner: other.reload,
@@ -186,8 +187,8 @@ describe Memberships::MemberJoinSectionBase do
 
       it 'creates roles for each member' do
         allow(obj).to receive(:build_roles) do |person|
-          Fabricate.build(Group::SektionsFunktionaere::Praesidium.sti_name, person: person,
-                                                                            group: funktionaere)
+          Fabricate.build(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+                          person: person, group: matterhorn_mitglieder)
         end
 
         expect do

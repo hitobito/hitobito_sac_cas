@@ -13,11 +13,22 @@ class People::SacMembership
 
   def initialize(person)
     @person = person
-    @roles = MEMBERSHIP_ROLES.map(&:sti_name)
+    @active_roles = MEMBERSHIP_ROLES.map(&:sti_name)
+    @active_or_pending_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
   end
 
   def active?
     roles.any?
+  end
+
+  def active_in?(sac_section)
+    @person.roles.exists?(group_id: sac_section.descendants,
+                          type: @roles)
+  end
+
+  def active_or_pending_in?(sac_section)
+    @person.roles.exists?(group_id: sac_section.descendants,
+                          type: @active_or_pending_roles)
   end
 
   def anytime?

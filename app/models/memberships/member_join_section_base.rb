@@ -13,14 +13,14 @@ module Memberships
     include ActiveModel::Validations
 
     validate :assert_person_is_sac_member
-    validate :assert_person_is_not_already_member_of_sektion
+    validate :assert_person_not_member_of_join_section
     validate :assert_family_main_person, if: :validate_family_main_person?
 
-    def initialize(group, person, join_date, **params)
-      raise 'group is not supported' unless supported?(group)
+    def initialize(join_section, person, join_date, **params)
+      @join_section = join_section
+      assert_sac_section_or_ortsgruppe!
 
       @person = person
-      @group = group
       @join_date = join_date
 
       super(**params)
@@ -71,15 +71,14 @@ module Memberships
     end
 
     def assert_person_is_sac_member
-      unless person.roles.exists?(type: Group::SektionsMitglieder::Mitglied.sti_name)
+      unless sac_membership.active?
         errors.add(:person, :must_be_sac_member)
       end
     end
 
-    def assert_person_is_not_already_member_of_sektion
-      if person.roles.exists?(group_id: group.descendants,
-                              type: SacCas::MITGLIED_HAUPTSEKTION_ROLES)
-        errors.add(:person, :must_not_be_section_member)
+    def assert_person_not_member_of_join_section
+      if sac_membership.active_or_pending_in?(join_section)
+        errors.add(:person, :must_not_be_join_section_member)
       end
     end
 
@@ -96,10 +95,16 @@ module Memberships
       false
     end
 
-    def supported?(group)
-      group.is_a?(Group::Sektion) || group.is_a?(Group::Ortsgruppe)
+    def assert_sac_section_or_ortsgruppe!
+      unless join_section.is_a?(Group::Sektion) || join_section.is_a?(Group::Ortsgruppe)
+        raise 'must be section/ortsgruppe'
+      end
     end
 
-    attr_reader :person, :group
+    def sac_membership
+      People::SacMembership.new(person)
+    end
+
+    attr_reader :person, :join_section
   end
 end
