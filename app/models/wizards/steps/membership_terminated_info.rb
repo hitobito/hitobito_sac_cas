@@ -10,4 +10,9 @@ class Wizards::Steps::MembershipTerminatedInfo < Wizards::Step
   def valid?
     false
   end
+
+  def termination_date
+    # TODO: Get termination date from membership role of the
+    Time.zone.now.to_date
+  end
 end
