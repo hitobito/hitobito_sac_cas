@@ -17,7 +17,7 @@ module SacCas::Beitragskategorie
     AGE_RANGE_MINOR_FAMILY_MEMBER = 6..17
     AGE_RANGE_YOUTH = AGE_RANGE_MINOR_FAMILY_MEMBER.begin...AGE_RANGE_ADULT.begin
 
-    def initialize(person, reference_date: Time.zone.today)
+    def initialize(person, reference_date: Time.zone.today.end_of_year)
       @person = person
       @reference_date = reference_date
     end
