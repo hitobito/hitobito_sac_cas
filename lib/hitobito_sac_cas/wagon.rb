@@ -20,7 +20,7 @@ module HitobitoSacCas
       #{config.root}/app/jobs
     ]
 
-    if config.view_component # somehow not available when running on ci
+    if Rails.env.development? && config.respond_to?(:view_component)
       config.view_component.preview_paths << "#{config.root}/spec/components/previews"
       config.view_component.preview_controller = 'WizardsPreviewsController'
     end

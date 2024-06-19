@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Wizards::Steps::ChooseSektionForm do
+describe Wizards::Steps::ChooseSektion do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
   subject(:step) { described_class.new(wizard) }
 

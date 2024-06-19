@@ -7,13 +7,13 @@
 
 class WizardsPreview < ViewComponent::Preview
 
-  def choose_sektion_form_step(wizards_preview_wizard: {})
-    wizard = build_wizard(Wizards::Steps::ChooseSektionForm, wizards_preview_wizard)
+  def choose_sektion_step(wizards_preview_wizard: {})
+    wizard = build_wizard(Wizards::Steps::ChooseSektion, wizards_preview_wizard)
     render_wrapped(wizard)
   end
 
-  def choose_sektion_form_step_with_alert(wizards_preview_wizard: {})
-    wizard = build_wizard(Wizards::Steps::ChooseSektionForm, wizards_preview_wizard)
+  def choose_sektion_step_with_alert(wizards_preview_wizard: {})
+    wizard = build_wizard(Wizards::Steps::ChooseSektion, wizards_preview_wizard)
     render_wrapped(wizard) do |view_ctx, step|
       view_ctx.content_tag(:p, step.group&.name, class: 'alert alert-info') if step.group
     end

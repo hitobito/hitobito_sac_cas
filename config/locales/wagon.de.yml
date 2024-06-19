@@ -45,7 +45,7 @@ de:
       self_registration/sektion/supplements:
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
 
-      wizards/steps/choose_sektion_form:
+      wizards/steps/choose_sektion:
         group_id: Sektion wählen
 
     errors:

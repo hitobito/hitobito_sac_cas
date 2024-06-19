@@ -7,7 +7,7 @@
 
 module Wizards
   module Steps
-    class ChooseSektionForm < Step
+    class ChooseSektion < Step
       attribute :group_id, :integer
       validates :group_id, presence: true
       validate :assert_group_type, if: :group
