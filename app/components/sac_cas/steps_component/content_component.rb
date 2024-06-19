@@ -9,9 +9,17 @@
 module SacCas::StepsComponent::ContentComponent
   extend ActiveSupport::Concern
 
+  def fields_for(&block)
+    @form.fields_for(@partial.split('/').last, model, &block)
+  end
+
+  def model
+    @form.object.step_at(index)
+  end
+
   def attr?(key)
     return false if key == :email && @partial =~ /main_person/
 
-    super(key)
+    super
   end
 end
