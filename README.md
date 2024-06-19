@@ -8,16 +8,16 @@ of SAC CAS.
 
 ```
     * Schweizer Alpen-Club SAC
-      * Geschäftsstelle
+      * SAC Geschäftsstelle
         * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]
         * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]
         * Administration: 2FA [:layer_and_below_full, :admin, :impersonation, :read_all_people]
         * Andere: 2FA [:layer_and_below_read, :read_all_people]
-      * Geschäftsleitung
+      * SAC Geschäftsleitung
         * Geschäftsführung: 2FA [:layer_and_below_read, :read_all_people]
         * Ressortleitung: 2FA [:layer_and_below_read, :read_all_people]
         * Andere: 2FA [:layer_and_below_read, :read_all_people]
-      * Zentralvorstand
+      * SAC Zentralvorstand
         * Präsidium: []
         * Mitglied: []
         * Andere: []
@@ -27,7 +27,7 @@ of SAC CAS.
         * Andere: []
       * Externe Kontakte
         * Kontakt: []
-      * Touren-Portal
+      * SAC Tourenportal
         * Abonnent: []
         * Neuanmeldung: []
         * Administration: []

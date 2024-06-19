@@ -24,8 +24,8 @@ describe Import::Huts::KeyDepositRow do
 
   let!(:person) { Fabricate(:person, id: 123456) }
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, foundation_year: 1980) }
-  let!(:funktionaere) { sektion.children.find { |child| child.type == 'Group::SektionsFunktionaere' } }
-  let!(:hut_comission) { Fabricate(Group::SektionsHuettenkommission.sti_name.to_sym, parent: funktionaere) }
+  let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
+  let!(:hut_comission) { Group::SektionsHuettenkommission.find_by(parent: funktionaere) }
   let!(:hut) { Fabricate(Group::SektionsHuette.sti_name.to_sym, navision_id: 3750, parent: hut_comission) }
   let(:contact_role_group) { Group::ExterneKontakte.create!(name: 'Navision Import',
                                                             parent_id: Group::SacCas.first!.id) }

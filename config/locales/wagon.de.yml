@@ -375,20 +375,20 @@ de:
         other: Externe Kontakte
 
       group/geschaeftsleitung:
-        one: Geschäftsleitung
-        other: Geschäftsleitung
+        one: SAC Geschäftsleitung
+        other: SAC Geschäftsleitung
 
       group/geschaeftsstelle:
-        one: Geschäftsstelle
-        other: Geschäftsstelle
+        one: SAC Geschäftsstelle
+        other: SAC Geschäftsstelle
 
       group/kommission:
         one: Kommission
         other: Kommission
 
       group/zentralvorstand:
-        one: Zentralvorstand
-        other: Zentralvorstand
+        one: SAC Zentralvorstand
+        other: SAC Zentralvorstand
 
       group/abonnenten:
         one: Abonnenten
@@ -399,8 +399,8 @@ de:
         other: AboMagazin
 
       group/abo_touren_portal:
-        one: Touren-Portal
-        other: Touren-Portal
+        one: SAC Tourenportal
+        other: SAC Tourenportal
 
       group/abo_basic_login:
         one: SAC/CAS Login

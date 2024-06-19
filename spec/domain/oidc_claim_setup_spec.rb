@@ -121,7 +121,7 @@ describe OidcClaimSetup do
     end
 
     it 'includes section_commission_member key when matching role exists' do
-      group = Fabricate(Group::SektionsKommission.sti_name, parent: groups(:bluemlisalp))
+      group = Group::SektionsKommission.find_or_create_by(parent: groups(:bluemlisalp_funktionaere), name: 'Foobar')
       create_role(group, 'Mitglied')
       expect(user_groups).to include 'section_commission_member'
     end

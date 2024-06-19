@@ -23,7 +23,11 @@ let(:importer) { described_class.new(row) }
   end
 
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
-  let(:funktionaere) { sektion.children.find { |child| child.type == 'Group::SektionsFunktionaere' } }
+  let(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
+
+  before do
+    Group::SektionsHuettenkommission.find_by(parent: funktionaere).really_destroy!
+  end
 
   it 'imports group' do
     expect { importer.import! }.
