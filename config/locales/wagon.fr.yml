@@ -1,86 +1,1002 @@
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 fr:
-  activerecord:
+  global:
+    phone_placeholder: ""
+    currency: ""
+    years: ""
+
+  errors:
+    messages:
+      assert_old_enough: ""
+      conflicting_family_membership: >
+  activemodel:
+    attributes:
+      people/neuanmeldungen/reject:
+        note: ""
+      self_inscription:
+        register_on: ""
+        register_on_options:
+          now: ""
+          jul: ""
+          oct: ""
+
+        register_as: ""
+        register_as_options:
+          extra: ""
+          replace: ""
+
+      self_registration/main_person/base:
+        gender: ""
+        number: ""
+        email: ""
+        address: ""
+      self_registration/abo_magazin:
+        issues_from: ""
+      self_registration/sektion/housemate:
+        email: ""
+        number: ""
+      self_registration/sektion/supplements:
+        adult_consent: ""
+
+    errors:
+      messages:
+        must_be_older_than_18: ""
+        youth_not_allowed_in_family: |
+      models:
+        household:
+          attributes:
+            base:
+              at_least_one_adult: ""
+              no_adult_member_with_email: ""
+              not_more_than_two_adults: ""
+              at_least_two_members: ""
+              removed_member_has_no_email: ""
+        household_member:
+          attributes:
+            base:
+              birthday_missing: ""
+              family_age_range_not_fulfilled: ""
+              in_other_household_present: ""
+              membership_in_other_section: ""
+              no_email: ""
+              planned_termination: ""
+        memberships/member_join_section_base:
+          attributes:
+            person:
+              must_be_sac_member: ""
+              must_not_be_join_section_member: ""
+              must_be_family_main_person: ""
 
     models:
+      people/neuanmeldungen/approve:
+        one: ''
+        many: ''
+        other: ''
+      people/neuanmeldungen/reject:
+        one: ''
+        many: ''
+        other: ''
+
+  activerecord:
+    attributes:
+      cost_center:
+        label: ""
+        event_kind_categories: ""
+        event_kinds: ""
+        courses: ""
+        updated_at: ""
+      cost_unit:
+        label: ""
+        event_kind_categories: ""
+        event_kinds: ""
+        courses: ""
+        updated_at: ""
+      event:
+        unconfirmed_count: ""
+      event/kind:
+        accommodation: ""
+        accommodations:
+          no_overnight: ""
+          hut: ""
+          pension: ""
+          pension_or_hut: ""
+          bivouac: ""
+        level_id: ""
+        kind_category_id: ""
+        cost_center_id: ""
+        cost_unit_id: ""
+        season: ""
+        seasons:
+          winter: ""
+          summer: ""
+        reserve_accommodation: ""
+        maximum_participants: ""
+        minimum_participants: ""
+        training_days: ""
+      event/course:
+        accommodation: ""
+        annual: ""
+        book_discount_code: ""
+        brief_description: ""
+        cost_center_id: ""
+        cost_unit_id: ""
+        level: ""
+        language: ""
+        languages:
+          de_fr: ""
+          de: ""
+          fr: ""
+          it: ""
+        link_leaders: ""
+        link_participants: ""
+        link_survey: ""
+        meals: ""
+        meals_options:
+          breakfast: ""
+          half_board: ""
+          lunch: ""
+          self_cooking: ""
+          full_board: ""
+        minimum_age: ""
+        participation_states:
+          unconfirmed: ""
+          applied: ""
+          assigned: ""
+          summoned: ""
+          anulled: ""
+        program: ""
+        reserve_accommodation: ""
+        season: ""
+        specialities: ""
+        similar_tours: ""
+        start_point_of_time: ""
+        start_point_of_times:
+          day: ""
+          evening: ""
+        states:
+          created: ""
+          application_open: ""
+          application_paused: ""
+          application_closed: ""
+          assignment_closed: ""
+          ready: ""
+          closed: ""
+          canceled: ""
+      event/kind_category:
+        cost_center_id: ""
+        cost_unit_id: ""
+      event/level:
+        label: ""
+        code: ""
+        description: ""
+        difficulty: ""
+        created_at: ""
+        updated_at: ""
+        deleted_at: ""
+      event/participation:
+        additional_information: ""
+        cancel_statement: ""
+        adult_consent: ""
+        terms_and_conditions: ""
+      external_training:
+        person: ""
+        event_kind: ""
+        event_kind_id: ""
+        name: ""
+        provider: ""
+        start_at: ""
+        finish_at: ""
+        training_days: ""
+        link: ""
+        other_people_ids: ""
+        remarks: ""
+        created_at: ""
+        updated_at: ""
+      person:
+        correspondence: ""
+        family_id: ""
+        sac_family_main_person: ""
+        correspondences:
+          digital: ""
+          print: ""
+        genders:
+          _nil: ""
+        membership_years: ""
+        membership_number: ""
+        navision_id: ""
+        salutations:
+          m: ""
+          w: ""
+          _nil: ""
+      group:
+        group_id: ""
+        navision_id: ""
+        sac_cas_self_registration_url: ""
+      group/sac_cas:
+        sac_newsletter_mailing_list_id: ""
+        sac_magazine_mailing_list_id: ""
+        sac_inside_mailing_list_id: ""
+        sac_tourenportal_mailing_list_id: ""
+        sac_magazin_mailing_list_id: ""
+        sac_huettenportal_mailing_list_id: ""
+
+        course_admin_email: ""
+      group/sektion:
+        foundation_year: ""
+        section_canton: ""
+        language: ""
+        languages:
+          DE: ""
+          FR: ""
+          IT: ""
+        mitglied_termination_by_section_only: ""
+      group/ortsgruppe:
+        foundation_year: ""
+        section_canton: ""
+        language: ""
+        languages:
+          DE: ""
+          FR: ""
+          IT: ""
+      role:
+        membership_years: ""
+        class:
+          kind:
+            neuanmeldung:
+              one: ''
+              many: ''
+              other: ''
+      qualification_kind:
+        tourenchef_may_edit: ""
+      qualification:
+        finish_at: ""
+      sac_membership_config:
+        valid_from: ""
+        sac_fee_adult: ""
+        sac_fee_family: ""
+        sac_fee_youth: ""
+        entry_fee_adult: ""
+        entry_fee_family: ""
+        entry_fee_youth: ""
+        hut_solidarity_fee_with_hut_adult: ""
+        hut_solidarity_fee_with_hut_family: ""
+        hut_solidarity_fee_with_hut_youth: ""
+        hut_solidarity_fee_without_hut_adult: ""
+        hut_solidarity_fee_without_hut_family: ""
+        hut_solidarity_fee_without_hut_youth: ""
+        magazine_fee_adult: ""
+        magazine_fee_family: ""
+        magazine_fee_youth: ""
+        service_fee: ""
+        magazine_postage_abroad: ""
+        reduction_amount: ""
+        reduction_required_membership_years: ""
+        sac_fee_article_number: ""
+        sac_entry_fee_article_number: ""
+        hut_solidarity_fee_article_number: ""
+        magazine_fee_article_number: ""
+        magazine_postage_abroad_article_number: ""
+        section_entry_fee_article_number: ""
+        section_fee_article_number: ""
+        section_bulletin_postage_abroad_article_number: ""
+        service_fee_article_number: ""
+        balancing_payment_article_number: ""
+        course_fee_article_number: ""
+        discount_date_1: ""
+        discount_percent_1: ""
+        discount_date_2: ""
+        discount_percent_2: ""
+        discount_date_3: ""
+        discount_percent_3: ""
+      sac_section_membership_config:
+        valid_from: ""
+        section_fee_adult: ""
+        section_fee_family: ""
+        section_fee_youth: ""
+        section_entry_fee_adult: ""
+        section_entry_fee_family: ""
+        section_entry_fee_youth: ""
+        bulletin_postage_abroad: ""
+        sac_fee_exemption_for_honorary_members: ""
+        section_fee_exemption_for_honorary_members: ""
+        sac_fee_exemption_for_benefited_members: ""
+        section_fee_exemption_for_benefited_members: ""
+        reduction_amount: ""
+        reduction_required_membership_years: ""
+        reduction_required_age: ""
+
+    errors:
+      messages:
+        already_has_mitglied_role: ""
+        already_has_neuanmeldung_role: ""
+        too_many_adults_in_family: ""
+        only_one_mitglied_role_allowed_at_a_time: ""
+        must_be_present_unless_deleted: ""
+        must_have_mitglied_role: ""
+        must_have_mitglied_role_in_group: ""
+        must_have_one_family_main_person_in_family: ""
+
+      models:
+        group/sektions_tourenkommission/tourenleiter:
+          requires_active_qualification: ""
+
+        people_manager:
+          in_different_household: >
+          managed_is_not_child: >
+          manager_is_not_adult: >
+        qualification:
+          attributes:
+            finish_at:
+              not_after_start: ""
+
+    models:
+      cost_center:
+        one: ''
+        many: ''
+        other: ''
+      cost_unit:
+        one: ''
+        many: ''
+        other: ''
+      event/level:
+        one: ''
+        many: ''
+        other: ''
+      external_training:
+        one: ''
+        many: ''
+        other: ''
+      sac_membership_config:
+        one: ''
+        many: ''
+        other: ''
+      sac_section_membership_config:
+        one: ''
+        many: ''
+        other: ''
 
       ### GROUPS
+      group/sac_cas:
+        one: ''
+        many: ''
+        other: ''
+
+      group/ehrenmitglieder:
+        one: ''
+        many: ''
+        other: ''
+
       group/externe_kontakte:
-        one: Contacts extérieurs
-        other: Contacts extérieurs
+        one: ''
+        many: ''
+        other: ''
+
+      group/geschaeftsleitung:
+        one: ''
+        many: ''
+        other: ''
 
       group/geschaeftsstelle:
-        one: Secrétariat administratif
-        other: Secrétariats administratifs
+        one: ''
+        many: ''
+        other: ''
+
+      group/kommission:
+        one: ''
+        many: ''
+        other: ''
+
+      group/zentralvorstand:
+        one: ''
+        many: ''
+        other: ''
+
+      group/abonnenten:
+        one: ''
+        many: ''
+        other: ''
+
+      group/abo_magazin:
+        one: ''
+        many: ''
+        other: ''
+
+      group/abo_touren_portal:
+        one: ''
+        many: ''
+        other: ''
+
+      group/abo_basic_login:
+        one: ''
+        many: ''
+        other: ''
 
       group/sektion:
-        one: Section
-        other: Sections
+        one: ''
+        many: ''
+        other: ''
 
       group/ortsgruppe:
-        one: Groupe local
-        other: Groupes locaux
+        one: ''
+        many: ''
+        other: ''
 
       group/sektions_mitglieder:
-        one: Membres
-        other: Membres
+        one: ''
+        many: ''
+        other: ''
 
       group/sektions_neuanmeldungen_nv:
-        one: Nouvelles inscriptions
-        other: Nouvelles inscriptions
+        one: ''
+        many: ''
+        other: ''
 
       group/sektions_neuanmeldungen_sektion:
-        one: Nouvelles inscriptions (pour validation)
-        other: Nouvelles inscriptions (pour validation)
-
-      group/sektions_externe_kontakte:
-        one: Contacts externes
-        other: Contacts externes
-
-      group/sektions_neu_mitglieder_zv:
-        one: Nouvelles inscriptions
-        other: Nouvelles inscriptions
-
-      group/sektions_neu_mitglieder_sektion:
-        one: Nouvelles inscriptions
-        other: Nouvelles inscriptions
+        one: ''
+        many: ''
+        other: ''
 
       group/sektions_funktionaere:
-        one: Fonctionnaires
-        other: Fonctionnaires
+        one: ''
+        many: ''
+        other: ''
 
       group/sektions_tourenkommission:
-        one: Tours et cours
-        other: Tours et cours
+        one: ''
+        many: ''
+        other: ''
 
-      group/huette:
-        one: Cabane
-        other: Cabanes
+      group/sektions_externe_kontakte:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sektions_kommission:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sektions_vorstand:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sektions_huettenkommission:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sektions_huette:
+        one: ''
+        many: ''
+        other: ''
+
+      ### ROLES
+      group/ehrenmitglieder/ehrenmitglied:
+        one: ""
+        description: ""
+      group/geschaeftsstelle/mitarbeiter:
+        one: ""
+        description: ""
+      group/geschaeftsstelle/mitarbeiter_lesend:
+        one: ""
+        description: ""
+      group/geschaeftsstelle/admin:
+        one: ""
+        description: ""
+      group/geschaeftsstelle/andere:
+        one: ""
+        description: ""
+      group/geschaeftsleitung/geschaeftsfuehrung:
+        one: ""
+        description: ""
+      group/geschaeftsleitung/ressortleitung:
+        one: ""
+        description: ""
+      group/geschaeftsleitung/andere:
+        one: ""
+        description: ""
+      group/kommission/praesidium:
+        one: ""
+        description: ""
+      group/kommission/mitglied:
+        one: ""
+        description: ""
+      group/kommission/andere:
+        one: ""
+        description: ""
+      group/zentralvorstand/praesidium:
+        one: ""
+        description: ""
+      group/zentralvorstand/mitglied:
+        one: ""
+        description: ""
+      group/zentralvorstand/andere:
+        one: ""
+        description: ""
+      group/externe_kontakte/kontakt:
+        one: ""
+        description: ""
+      group/abo_magazin/abonnent:
+        one: ""
+        description: ""
+      group/abo_magazin/neuanmeldung:
+        one: ""
+        description: ""
+      group/abo_magazin/autor:
+        one: ""
+        description: ""
+      group/abo_magazin/andere:
+        one: ""
+        description: ""
+      group/abo_touren_portal/abonnent:
+        one: ""
+        description: ""
+      group/abo_touren_portal/admin:
+        one: ""
+        description: ""
+      group/abo_touren_portal/neuanmeldung:
+        one: ""
+        description: ""
+      group/abo_touren_portal/autor:
+        one: ""
+        description: ""
+      group/abo_touren_portal/community:
+        one: ""
+        description: ""
+      group/abo_touren_portal/andere:
+        one: ""
+        description: ""
+      group/abo_basic_login/basic_login:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/administration:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/administration_read_only:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/praesidium:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/mitgliederverwaltung:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/finanzen:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/redaktion:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/andere:
+        one: ""
+        description: ""
+      group/sektions_mitglieder/mitglied:
+        one: ""
+        description: ""
+      group/sektions_mitglieder/mitglied_zusatzsektion:
+        one: ""
+        description: ""
+      group/sektions_mitglieder/ehrenmitglied:
+        one: ""
+        description: ""
+      group/sektions_mitglieder/beguenstigt:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_sektion/neuanmeldung:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_nv/neuanmeldung:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
+        one: ""
+        description: ""
+      group/sektions_kommission/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission/andere:
+        one: ""
+        description: ""
+      group/sektions_vorstand/praesidium:
+        one: ""
+        description: ""
+      group/sektions_vorstand/mitglied:
+        one: ""
+        description: ""
+      group/sektions_vorstand/andere:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_sommer:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_winter:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_klettern:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_senioren:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenleiter:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/jo_chef:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/js_coach:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/andere:
+        one: ""
+        description: ""
+      group/sektions_huettenkommission/huettenobmann:
+        one: ""
+        description: ""
+      group/sektions_huettenkommission/andere:
+        one: ""
+        description: ""
+      group/sektions_huette/huettenwart:
+        one: ""
+        description: ""
+      group/sektions_huette/huettenchef:
+        one: ""
+        description: ""
+      group/sektions_externe_kontakte/kontakt:
+        one: ""
+        description: ""
+      group/sektions_huette/huettenwartspartner:
+        one: ""
+      group/sektions_huette/schluesseldepot:
+        one: ""
+      group/sektions_huette/andere:
+        one: ""
+        description: ""
+
+  devise:
+    sessions:
+      form:
+        login_identity: ""
+
+  doorkeeper:
+    scopes:
+      user_groups: ""
+
+  dropdown/people_export:
+    recipients: ""
+
+  dropdown/group_edit:
+    sac_membership_configs: ""
+    sac_section_membership_configs: ""
+
+  event:
+    kinds:
+      push_down:
+        success: ""
+      actions_edit:
+        push_down_button: ""
+        push_down_button_confirm:
+          ""
+      kind_category_field:
+        category_overrides_link_title:
+          ""
+    kind_categories:
+      push_down:
+        success:
+          ""
+      actions_edit:
+        push_down_button: ""
+        push_down_button_confirm:
+          ""
+
+    participations:
+      edit:
+        title: ""
+      course_signup_aside:
+        summary_title: ""
+        summary_course_price: ""
+        summary_subsidy: ""
+        summary_total: ""
+        contact_title: ""
+        contact_text: |
+      states:
+        absent: ""
+        annulled: ""
+        applied: ""
+        assigned: ""
+        attended: ""
+        canceled: ""
+        rejected: ""
+        summoned: ""
+        unconfirmed: ""
+      step_wizard:
+        answers_title: ""
+        subsidy_title: ""
+        summary_title: ""
+      subsidy_step:
+        title: ""
+        subsidy_field: ""
+        subsidy_link_label: ""
+        subsidy_link_href: ""
+        general_info:
+          ""
+        detail_info_header: ""
+        detail_info_text:
+          ""
+      summary_step:
+        annulation_remarks: |
+        terms_and_conditions_text: ""
+        terms_and_conditions_link_label: ""
+        terms_and_conditions_link_href: ""
+        subscribe_newsletter: ""
+      summoned_notice: ""
+      actions_show_youth:
+        summon_button: ""
+
+      popover_participant_cancels:
+        cancel_info:
+          ""
+
+    participation_contact_datas:
+      fields:
+        overrides_person_data_info:
+          ""
+
+  events:
+    actions_show_sac_cas:
+      state_buttons:
+        created: ""
+        application_open: ""
+        application_paused: ""
+        application_closed: ""
+        assignment_closed: ""
+        ready: ""
+        closed: ""
+        canceled: ""
+    form_tabs:
+      communication: ""
+    general_fields:
+      kind_overrides_link_title:
+        ""
+
+  external_trainings:
+    form:
+      help_other_people: ""
+    create:
+      flash:
+        success_multiple: ""
+
+  events/courses/state:
+    flash:
+      success: ""
+
+  event/levels:
+    new:
+      title: ""
+
+  filter_navigation/people:
+    tour_guides_none: ""
+    tour_guides_active: ""
+    tour_guides_stalled: ""
+    tour_guides_inactive: ""
+    tour_guides_expired: ""
+
+  invoices:
+    sac_memberships:
+      title: ""
+      positions:
+        hut_solidarity_fee: ""
+        sac_entry_feed: ""
+        sac_fee: ""
+        sac_magazine_postage_abroad: ""
+        sac_magazine: ""
+        section_bulletin_postage_abroad: ""
+        section_entry_fee: ""
+        section_fee: ""
+      beitragskategorie:
+        adult: ""
+        family: ""
+        youth: ""
+
+  mitglieder_exports:
+    export_enqueued: ""
+
+  person:
+    history:
+      index_notice_sac_cas:
+        sections_info_html: ''
+
+  people:
+    actions_show_sac_cas:
+      create_membership_invoice: ""
+      create_membership_invoice_confirmation: |
+    membership:
+      verify:
+        member_details_sac_cas:
+          membership_number: ""
+          membership_years: ""
+          tour_guide: Chef·fe de courses en activité
+
+    membership_invoices:
+      success_notice: ""
+      alert_notice: ""
+
+    neuanmeldungen:
+      multiselect_actions:
+        accept: ""
+        reject: ""
+
+    roles:
+      roles_aside:
+        stammsektion: ""
+        set_stammsektion: ""
+
+    tabs:
+      history: ""
+
+    show_right_z_sac_cas:
+      section_sac_membership: ""
+      qr_code_hint: ""
+      download: Télécharger
+      download_pdf: La carte de membre PDF
+
+  people/neuanmeldungen/approves:
+    new:
+      text:
+        one: ''
+        many: ''
+        other: ''
+      submit: ""
+    create:
+      success:
+        one: ''
+        many: ""
+        other: ""
+
+  people/neuanmeldungen/rejects:
+    new:
+      note_placeholder: ""
+      text:
+        one: ''
+        many: ''
+        other: ''
+      submit: ""
+    create:
+      success:
+        one: ''
+        many: ""
+        other: ""
+
+  groups:
+    actions_show_sac_cas:
+      export_mitglieder: ""
+    sektion_primary: ""
+    sektion_secondary: ""
+
+    self_registration:
+      abo_issue:
+        issues_from_help: |
+      abo_infos:
+        annual_price_header: ""
+        delivery_country_header: ""
+        price_with_vat: ""
+        switzerland: ""
+        international: ""
+      adult_consent_field:
+        caption: ""
+      conditions_sac_cas:
+        newsletter: ""
+      create:
+        redirect_existing_email: ""
+      emailless_main_person:
+        newsletter: ""
+      fields:
+        notes: ""
+        promo_code: ""
+      household:
+        membership_info_box: >
+        next_as_single_link: ""
+        next_as_household_link: ""
+
+      supplements:
+        newsletter: ""
+        statutes_text: ""
+        sektion_statuten_text: ""
+        contribution_regulations_text: ""
+        data_protection_text: ""
+
+    self_inscription:
+      membership_role_exists: ""
+      form:
+        register_on_info:
+          jul: ""
+          oct: ""
+        register_as_info: ""
+        inscribe: ""
+      new:
+        role_exists: ""
+      confirm:
+        title: ""
+        information_text: >
+        submit_button: ""
+
+  groups/self_inscription:
+    new:
+      details: ""
+
+  groups/self_registration:
+    global:
+      main_email_title: ""
+      emailless_main_person_title: ""
+      neuanmeldung_main_person_title: ""
+      abo_issue_title: ""
+      abo_main_person_title: ""
+      single_or_household_title: ""
+      household_title: ""
+      main_title: ""
+      supplements_title: ""
+
+  roles:
+    beitragskategorie:
+      adult: ""
+      youth: ""
+      family: ""
+
+  roles/terminations:
+    global:
+      sac_cas/role/mitglied_common:
+        no_permission: ""
 
   self_registration:
+    fee_component:
+      title: ""
     infos_component:
-      title_questions: Questions concernant l’affiliation?
+      title_questions: "Questions concernant l’affiliation?"
       title_contact: Contact
       title_documents: Documents
-      additional_infos: Pour davantage d’informations, consultez la %{link}.
+      additional_infos: "Pour davantage d’informations, consultez la %{link}."
       address: |
         Club Alpin Suisse CAS
         Monbijoustrasse 61
         3000 Bern 14
         Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
         <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
-      link_faqs: https://www.sac-cas.ch/fr/meta/faq/membres/
+      link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       link_faqs_title: FAQ
-      link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_FR.pdf
+      link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_FR.pdf"
       link_statutes_title: Statuts
-      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/Reglement_des_cotisations_AD_2020_-_valable_des_1.1.2021.pdf
+      link_sektion_statuten_title: ""
+      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/Reglement_des_cotisations_AD_2020_-_valable_des_1.1.2021.pdf"
       link_contribution_regulations_title: Règlement des cotisations
-      link_data_protection: https://www.sac-cas.ch/fr/meta/protection-des-donnees/
+      link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
+
+  table_displays:
+    person:
+      antrag_fuer: ""
+      address_valid: ""
+      confirmed_at: ""
+      beitrittsdatum: ""
+
+  verify_membership:
+    title: ""
+    not_found: ""
+    status_valid: ""
+    status_invalid: ""
 
   passes:
     membership:
@@ -88,15 +1004,84 @@ fr:
       title: Carte membre
       member: Membre
       sac_partner: Partenaire CAS
-      sponsor_url: https://www.sac-cas.ch/fr/le-cas/nos-partenaires/
-      emergency_number: N° d'urgence
-      emergency_contact: Contact d'urgence
+      sponsor_url: "https://www.sac-cas.ch/fr/le-cas/nos-partenaires/"
+      emergency_number: "N° d'urgence"
+      emergency_contact: "Contact d'urgence"
 
-  people:
-    membership:
-      verify:
-        member_details_sac_cas:
-          tour_guide: Chef·fe de courses en activité
-    show_right_z_sac_cas:
-      download: Télécharger
-      download_pdf: La carte de membre PDF
+  mounted_attributes:
+    form_tabs:
+      group/sac_cas:
+        default: ""
+      group/sektion:
+        default: ""
+      group/ortsgruppe:
+        default: ""
+
+  sac_membership_configs:
+    form:
+      fees: ""
+      membership_adult: ""
+      membership_family: ""
+      membership_youth: ""
+      sac_fee: ""
+      entry_fee: ""
+      magazine_fee: ""
+      hut_solidarity_fee_without_hut: ""
+      hut_solidarity_fee_with_hut: ""
+      reductions: ""
+      discounts: ""
+      discount_date: ""
+      discount: ""
+      article_numbers: ""
+      valid_from: ""
+      service_fee: ""
+      magazine_postage_abroad: ""
+      reduction_amount: ""
+      reduction_required_membership_years: ""
+      discount_date_1: ""
+      discount_percent_1: ""
+      discount_date_2: ""
+      discount_percent_2: ""
+      discount_date_3: ""
+      discount_percent_3: ""
+    global:
+      link:
+        add: ""
+
+  sac_section_membership_configs:
+    form:
+      fees: ""
+      membership_adult: ""
+      membership_family: ""
+      membership_youth: ""
+      section_fee: ""
+      section_entry_fee: ""
+      bulletin_fee: ""
+      reductions: ""
+      valid_from: ""
+      bulletin_postage_abroad: ""
+      sac_fee_exemption_for_honorary_members: ""
+      section_fee_exemption_for_honorary_members: ""
+      sac_fee_exemption_for_benefited_members: ""
+      section_fee_exemption_for_benefited_members: ""
+      reduction_amount: ""
+      reduction_required_membership_years: ""
+      reduction_required_age: ""
+    global:
+      link:
+        add: ""
+
+  households:
+    edit:
+      title: ""
+      shared_address_info: ""
+    members_table_row:
+      unconfirmed_email_info: ""      
+
+  household_aside_component:
+    section_name: ""
+  household_aside_member_component:
+    main_person: ""
+    set_main_person: ""
+    unverified_email: ""
+    cannot_set_main_person: ""
