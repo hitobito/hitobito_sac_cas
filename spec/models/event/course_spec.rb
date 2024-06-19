@@ -263,12 +263,12 @@ describe Event::Course do
 
     it 'lists available states for state :assignment_closed' do
       expect(course).to receive(:state).and_return(:assignment_closed)
-      expect(course.available_states).to eq([:ready, :canceled])
+      expect(course.available_states).to eq([:ready, :application_closed, :canceled])
     end
 
     it 'lists available states for state :ready' do
       expect(course).to receive(:state).and_return(:ready)
-      expect(course.available_states).to eq([:closed, :canceled])
+      expect(course.available_states).to eq([:closed, :assignment_closed, :canceled])
     end
 
     it 'lists available states for state :canceled' do
