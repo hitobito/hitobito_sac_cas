@@ -20,10 +20,11 @@ module HitobitoSacCas
       #{config.root}/app/jobs
     ]
 
-    if Rails.env.development?
+    if config.view_component # somehow not available when running on ci
       config.view_component.preview_paths << "#{config.root}/spec/components/previews"
       config.view_component.preview_controller = 'WizardsPreviewsController'
     end
+
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         Export::BackupMitgliederScheduleJob,
