@@ -13,8 +13,8 @@ describe SacCas::Beitragskategorie::Calculator do
     described_class.new(person(age, household)).calculate
   end
 
-  def person(age, household = false)
-    birthday = Time.zone.today - age.years if age
+  def person(age, household = false, test_reference_date = Time.current)
+    birthday = test_reference_date - age.years if age
     household_key = 'household' if household
     Fabricate.build(:person, birthday: birthday, household_key: household_key)
   end
@@ -85,7 +85,7 @@ describe SacCas::Beitragskategorie::Calculator do
     end
 
     it 'respects reference_date' do
-      person = person(15, false)
+      person = person(15, false, Time.zone.today)
       expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
       expect(described_class.new(person,
                                  reference_date: 7.years.from_now - 1.day).calculate).to eq(:youth)
