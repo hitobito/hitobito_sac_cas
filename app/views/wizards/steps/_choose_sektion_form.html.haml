@@ -3,6 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- model = f.object.step_at(c.index)
-= f.fields_for(:choose_sektion_form, model) do |choose_sektion_form|
-  = choose_sektion_form.labeled_collection_select :group_id, model.groups, :id, :name, {prompt: true}, data: { action: 'change->autosubmit#save' }
+= c.fields_for do |form|
+  = form.labeled_collection_select :group_id, c.model.groups, :id, :name, {prompt: true}, data: { action: 'change->autosubmit#save' }
