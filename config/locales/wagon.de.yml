@@ -49,6 +49,8 @@ de:
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
+      wizards/steps/main_email:
+        email: Haupt-E-Mail
 
     errors:
       messages:

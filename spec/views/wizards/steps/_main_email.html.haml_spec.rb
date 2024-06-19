@@ -26,6 +26,6 @@ describe 'wizards/steps/_main_email.html.haml' do
   end
 
   it 'renders email field' do
-    expect(dom).to have_field 'Email'
+    expect(dom).to have_field 'Haupt-E-Mail'
   end
 end
