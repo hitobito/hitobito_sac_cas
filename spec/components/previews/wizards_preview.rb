@@ -19,6 +19,13 @@ class WizardsPreview < ViewComponent::Preview
     end
   end
 
+  def main_email_form_step(wizards_preview_wizard: {})
+    wizard = build_wizard(Wizards::Steps::MainEmail, wizards_preview_wizard)
+    render_wrapped(wizard) do |view_ctx, step|
+      view_ctx.content_tag(:p, step.email, class: 'alert alert-info') if step.email
+    end
+  end
+
   private
 
   def render_wrapped(wizard)
