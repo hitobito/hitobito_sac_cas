@@ -10,7 +10,7 @@ sac_newsletter:
   entry: root
 
 sac_magazine:
-  key: sac_magazin_mailing_list_id
+  key: sac_magazine_mailing_list_id
   value: <%= ActiveRecord::FixtureSet.identify(:sac_magazine) %>
   entry_type: Group
   entry: root
