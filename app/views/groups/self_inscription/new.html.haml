@@ -6,7 +6,13 @@
 - title render_self_registration_title(entry.group_for_title)
 
 
-- Wizards::Base.steps = [Wizards::Steps::ChooseSektionForm]
-- wizard = Wizards::Base.new(current_step: 0, current_ability: current_ability, **params.to_unsafe_h)
-= standard_form(wizard, url: group_self_registration_path, data: { turbo: 'false' }) do |f|
-  = render StepsComponent.new(partials: wizard.partials, step: 0, form: f)
+- if entry.neuanmeldung?
+  .details
+    %p= ti('details', beitragskategorie: entry.beitragskategorie_label, sektion: @group.parent)
+
+  = render "form", entry: entry
+- else
+  = action_button(t('groups.self_inscription.form.inscribe'),
+                    group_self_inscription_path,
+                    nil,
+                    method: :post)

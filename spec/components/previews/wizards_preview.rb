@@ -18,7 +18,7 @@ class WizardsPreview < ViewComponent::Preview
   def setup_wrapping_component(step_class, wizards_base)
     Wizards::Base.steps = [step_class]
     wizard = Wizards::Base.new(current_step: 0, current_ability: :current_ability, **wizards_base)
-    view_ctx = MyPreviewController.new.view_context
+    view_ctx = WizardsPreviewsController.new.view_context
     wizard.valid? if wizards_base.present?
     f = StandardFormBuilder.new(:wizard, wizard, view_ctx, {})
     render WrappingComponent.new do
