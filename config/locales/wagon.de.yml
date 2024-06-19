@@ -18,6 +18,8 @@ de:
 
   activemodel:
     attributes:
+      memberships/member_join_section_base:
+        join_date: Beitrittsdatum
       people/neuanmeldungen/reject:
         note: Bemerkung
       self_inscription:
@@ -1096,7 +1098,7 @@ de:
       shared_address_info: Alle Familienmitglieder teilen sich dieselbe Adresse.
     members_table_row:
       unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor
-        die Person aus der Familie entfernt werden kann.      
+        die Person aus der Familie entfernt werden kann.
 
   household_aside_component:
     section_name: Familie

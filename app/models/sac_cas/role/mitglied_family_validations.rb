@@ -26,17 +26,17 @@ module SacCas::Role::MitgliedFamilyValidations
   # Returns all family mitglieder including the current person.
   def family_mitglieder
     people = person.
-      household_people.
-      joins(:roles).
-      merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES,
-                       beitragskategorie: :family)).to_a
+             household_people.
+             joins(:roles).
+             merge(Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES,
+                              beitragskategorie: :family)).to_a
 
     people << person
   end
 
   def adult_family_mitglieder_count
     family_mitglieder.
-      select {|family_mitglied| AGE_RANGE_ADULT.cover?(family_mitglied.years) }.
+      select { |family_mitglied| AGE_RANGE_ADULT.cover?(family_mitglied.years) }.
       size
   end
 
