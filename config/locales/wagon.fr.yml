@@ -42,6 +42,9 @@ fr:
       self_registration/sektion/supplements:
         adult_consent: ""
 
+      wizards/steps/choose_sektion:
+        group_id: ""
+
     errors:
       messages:
         must_be_older_than_18: ""
@@ -68,7 +71,8 @@ fr:
           attributes:
             person:
               must_be_sac_member: ""
-              must_not_be_join_section_member: ""
+              must_not_be_join_section_member:
+                ""
               must_be_family_main_person: ""
 
     models:
@@ -219,10 +223,6 @@ fr:
       group/sac_cas:
         sac_newsletter_mailing_list_id: ""
         sac_magazine_mailing_list_id: ""
-        sac_inside_mailing_list_id: ""
-        sac_tourenportal_mailing_list_id: ""
-        sac_magazin_mailing_list_id: ""
-        sac_huettenportal_mailing_list_id: ""
 
         course_admin_email: ""
       group/sektion:
