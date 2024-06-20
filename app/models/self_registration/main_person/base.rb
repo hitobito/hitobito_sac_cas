@@ -77,7 +77,6 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
       group: primary_group,
       type: role_type,
       created_at: Time.zone.now,
-      delete_on: Time.zone.today.end_of_year
     )
   end
 

@@ -21,7 +21,6 @@ describe People::Neuanmeldungen::Approve do
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: Time.zone.now.beginning_of_year,
-      delete_on: Time.zone.today.end_of_year,
       person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true)
     )
   end
