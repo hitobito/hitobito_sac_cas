@@ -436,4 +436,30 @@ describe Role do
       end
     end
   end
+
+  context '#delete_on' do
+    subject(:role) do
+      person.roles.new(
+        type: role_type.name,
+        group: bluemlisalp_neuanmeldungen_nv,
+        created_at: Time.zone.today
+      )
+    end
+
+    context 'neuanmeldung role' do
+      let(:role_type) { Group::SektionsNeuanmeldungenNv::Neuanmeldung }
+
+      it 'is valid without delete_on' do
+        expect(role).to be_valid
+      end
+    end
+
+    context 'other role' do
+      let(:role_type) { Group::SektionsMitglieder::Mitglied }
+
+      it 'is invalid without delete_on' do
+        expect(role).not_to be_valid
+      end
+    end
+  end
 end
