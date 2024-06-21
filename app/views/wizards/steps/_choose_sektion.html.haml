@@ -4,4 +4,15 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for do |form|
-  = form.labeled_collection_select :group_id, c.model.groups, :id, :name, {prompt: true}, data: { action: 'change->autosubmit#save' }
+  - if c.model.wizard.backoffice? && !c.model.self_service?
+    .alert.alert-warning=t('.backoffice_no_self_service_info_text')
+
+  - if c.model.group
+    .row
+      .col-lg
+        = form.labeled_collection_select :group_id, c.model.groups, :id, :name, {prompt: true}, data: { action: 'forwarder#click' }
+      .col-md
+        = render(SelfRegistration::FeeComponent.new(group: c.model.wizard.sektion, birthdays: []))
+  - else
+    = form.labeled_collection_select :group_id, c.model.groups, :id, :name, {prompt: true}, data: { action: 'forwarder#click' }
+  = render 'shared/hidden_submit', label: 'Load Fees', formaction: nil
