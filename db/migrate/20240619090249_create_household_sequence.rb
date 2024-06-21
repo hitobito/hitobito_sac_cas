@@ -1,12 +1,10 @@
 class CreateHouseholdSequence < ActiveRecord::Migration[6.1]
   def up
-    max_household_key = execute("SELECT MAX(household_key::integer) FROM people")
-
-    start_value = max_household_key + 1
+    current_household_key = execute("SELECT MAX(household_key::integer) + 1 FROM people")
 
     execute <<-SQL
       CREATE SEQUENCE household_sequence
-      START WITH #{start_value}
+      START WITH #{current_household_key}
       INCREMENT BY 1
       NO MINVALUE
       NO MAXVALUE
