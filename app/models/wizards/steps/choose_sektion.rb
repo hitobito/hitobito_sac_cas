@@ -11,6 +11,7 @@ module Wizards
       attribute :group_id, :integer
       validates :group_id, presence: true
       validate :assert_group_type, if: :group
+      validate :assert_group_self_service, if: :group
 
       GROUP_TYPES = [Group::Sektion.sti_name, Group::Ortsgruppe.sti_name].freeze
 
@@ -24,11 +25,21 @@ module Wizards
         @group ||= Group.find(group_id) if group_id.present?
       end
 
+      def self_service?
+        @self_service ||= Group::SektionsNeuanmeldungenSektion.where(layer_group_id: group.id).none?
+      end
+
       private
 
       def assert_group_type
         if GROUP_TYPES.exclude?(group.type)
           errors.add(:group_id, :invalid)
+        end
+      end
+
+      def assert_group_self_service
+        unless self_service? || wizard.backoffice?
+          errors.add(:base, :requires_admin)
         end
       end
     end

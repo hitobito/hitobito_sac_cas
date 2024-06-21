@@ -14,7 +14,8 @@ Rails.application.routes.draw do
     # Define wagon routes here
 
     get '/people/:id/membership' => 'people/membership#show', as: 'membership'
-    put '/people/:id/sac_family_main_person' => 'people/sac_family_main_person#update', as: 'sac_family_main_person'
+    put '/people/:id/sac_family_main_person' => 'people/sac_family_main_person#update',
+        as: 'sac_family_main_person'
 
     get '/people/query_external_training' => 'person/query_external_training#index',
         as: :query_external_training
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
       post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
+
 
       resources :events, only: [] do
         scope module: 'event' do
@@ -37,8 +39,9 @@ Rails.application.routes.draw do
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
         resources :membership_invoices, only: [:create], module: :people
-
+        resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
         member do
+
           # Test route to check invoice positions for a person.
           # Remove once invoices are sent to abacus
           get 'membership_invoice_positions' => 'people/membership_invoice_positions#show'
