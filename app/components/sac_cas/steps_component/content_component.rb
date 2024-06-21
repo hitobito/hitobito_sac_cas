@@ -9,8 +9,12 @@
 module SacCas::StepsComponent::ContentComponent
   extend ActiveSupport::Concern
 
+  # Have not been able to render error messages and block in single fields_for call
   def fields_for(&block)
-    @form.fields_for(@partial.split('/').last, model, &block)
+    partial_name = @partial.split('/').last
+    @form.fields_for(partial_name, model) do |form|
+      form.error_messages
+    end + @form.fields_for(partial_name, model, &block)
   end
 
   def model

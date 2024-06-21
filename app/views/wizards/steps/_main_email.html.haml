@@ -3,7 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- model = f.object.step_at(c.index)
-= f.fields_for(model.step_name, model) do |ff|
-  = ff.error_messages
-  = ff.labeled_input_field :email
+= c.fields_for do |form|
+  = form.labeled_input_field :email
