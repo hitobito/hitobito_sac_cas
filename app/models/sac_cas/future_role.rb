@@ -41,16 +41,6 @@ module SacCas::FutureRole
     build_new_role.to_s(format)
   end
 
-  private
-
-  # This method is called by the `before_validation` callback. It is used to
-  # determine whether the beitragskategorie should be validated or not.
-  # Only Mitglied roles have a beitragskategorie. So we only validate the
-  # beitragskategorie if becomes_mitglied_role? is true.
-  def validate_beitragskategorie?
-    becomes_mitglied_role?
-  end
-
   def set_beitragskategorie
     # only Mitglied roles have a beitragskategorie
     return unless becomes_mitglied_role?
@@ -65,7 +55,17 @@ module SacCas::FutureRole
 
     # We need to calculate the beitragskategorie based on the convert_on date.
     self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator
-                             .new(person, reference_date: convert_on).calculate
+                               .new(person, reference_date: convert_on).calculate
+  end
+
+  private
+
+  # This method is called by the `before_validation` callback. It is used to
+  # determine whether the beitragskategorie should be validated or not.
+  # Only Mitglied roles have a beitragskategorie. So we only validate the
+  # beitragskategorie if becomes_mitglied_role? is true.
+  def validate_beitragskategorie?
+    becomes_mitglied_role?
   end
 
   def relevant_attrs

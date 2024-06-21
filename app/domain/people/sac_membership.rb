@@ -22,12 +22,12 @@ class People::SacMembership
   end
 
   def active_in?(sac_section)
-    @person.roles.exists?(group_id: sac_section.descendants,
+    @person.roles.exists?(group_id: sac_section.children,
                           type: @roles)
   end
 
   def active_or_pending_in?(sac_section)
-    @person.roles.exists?(group_id: sac_section.descendants,
+    @person.roles.exists?(group_id: sac_section.children,
                           type: @active_or_pending_roles)
   end
 

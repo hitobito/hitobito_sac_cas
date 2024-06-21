@@ -15,16 +15,17 @@ describe Memberships::SwitchStammsektion do
   end
 
   it 'initialization fails on invalid group' do
+    person = Fabricate(:person)
     expect do
-      described_class.new(Group::Sektion.new, :person, :join_date)
+      described_class.new(Group::Sektion.new, person, :join_date)
     end.not_to raise_error
 
     expect do
-      described_class.new(Group::Ortsgruppe.new, :person, :join_date)
+      described_class.new(Group::Ortsgruppe.new, person, :join_date)
     end.not_to raise_error
 
     expect do
-      described_class.new(Group::SacCas.new, :person, :join_date)
+      described_class.new(Group::SacCas.new, person, :join_date)
     end.to raise_error('must be section/ortsgruppe')
   end
 
@@ -66,8 +67,7 @@ describe Memberships::SwitchStammsektion do
           create_role(:bluemlisalp_mitglieder, 'Mitglied')
           expect(switch).not_to be_valid
           expect(errors).to eq [
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch',
-            "#{person}: Person ist bereits Mitglied (von 19.06.2024 bis 31.12.2024)."
+            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
           ]
         end
 
@@ -93,13 +93,9 @@ describe Memberships::SwitchStammsektion do
       end
 
       describe 'ortsgruppe' do
-        it 'is invalid if person is ortsgruppen member' do
-          create_role(:bluemlisalp_ortsgruppe_ausserberg_mitglieder, 'Mitglied')
-          expect(switch).not_to be_valid
-          expect(errors).to eq [
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch',
-            "#{person}: Person ist bereits Mitglied (von 19.06.2024 bis 31.12.2024)."
-          ]
+        it 'is valid if person is ortsgruppen member' do
+          create_role(:bluemlisalp_ortsgruppe_ausserberg_mitglieder, 'Mitglied', created_at: 1.year.ago)
+          expect(switch).to be_valid
         end
 
         it 'is invalid if person has requested membership' do
@@ -107,7 +103,6 @@ describe Memberships::SwitchStammsektion do
           expect(switch).not_to be_valid
           expect(errors).to eq [
             'Person muss Sac Mitglied sein',
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch',
             "#{person}: Person hat bereits eine Neuanmeldung (von 19.06.2024 bis 31.12.2024)."
           ]
         end
@@ -187,12 +182,18 @@ describe Memberships::SwitchStammsektion do
       before do
         create_sac_family(person, other)
         person.update!(sac_family_main_person: true)
-        @bluemlisalp_mitglied = create_role(:bluemlisalp_mitglieder, 'Mitglied', beitragskategorie: :family)
+        @bluemlisalp_mitglied = create_role(
+          :bluemlisalp_mitglieder,
+          'Mitglied',
+          beitragskategorie: :family,
+          created_at: 1.year.ago
+        )
         @bluemlisalp_mitglied_other = create_role(
           :bluemlisalp_mitglieder,
           'Mitglied',
           beitragskategorie: :family,
-          owner: other.reload
+          owner: other.reload,
+          created_at: 1.year.ago
         )
       end
 

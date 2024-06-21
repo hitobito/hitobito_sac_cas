@@ -80,20 +80,16 @@ describe Memberships::JoinZusatzsektion do
       end
 
       describe 'ortsgruppe' do
-        it 'is invalid if person is ortsgruppen member' do
+        it 'is valid if person is ortsgruppen member' do
           create_role(:bluemlisalp_ortsgruppe_ausserberg_mitglieder, 'Mitglied')
-          expect(join_sektion).not_to be_valid
-          expect(errors).to eq [
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
-          ]
+          expect(join_sektion).to be_valid
         end
 
         it 'is invalid if person has requested membership' do
           create_role(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, 'Neuanmeldung')
           expect(join_sektion).not_to be_valid
           expect(errors).to eq [
-            'Person muss Sac Mitglied sein',
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
+            'Person muss Sac Mitglied sein'
           ]
         end
       end

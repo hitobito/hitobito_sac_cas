@@ -8,40 +8,22 @@
 module Memberships
   class SwitchStammsektion < JoinBase
 
+    def initialize(...)
+      super
+      raise 'terminated membership' if sac_membership.roles.any?(&:terminated?)
+    end
+
     validate :assert_join_date
 
     private
 
-    def save_roles
-      Role.transaction do
-        terminate_then_create_roles_for(affected_people)
-      end
-    end
-
-    # Terminating and creating one by one works best with for existing validations
-    def terminate_then_create_roles_for(people)
-      people.map do |person|
-        terminate_existing_roles!(person)
-        roles.select { |r| r.person_id == person.id }.each(&:save!)
-      end
-    end
-
-    def terminate_existing_roles!(person)
-      scope = role_type.where(person_id: person.id)
-
-      if join_date.future?
-        scope.where(delete_on: nil)
-             .or(scope.where(delete_on: now.end_of_year..))
-             .update_all(delete_on: now.end_of_year) # rubocop:disable Rails/SkipsModelValidations
-
-      else
-        scope.update_all(deleted_at: now.yesterday.end_of_day) # rubocop:disable Rails/SkipsModelValidations
-
-      end
-    end
-
     def prepare_roles(person)
-      membership_group.roles.build(role_attrs.merge(person: person))
+      [
+        People::SacMembership.new(person).roles.each do |role|
+          role.attributes = precursor_role_attrs(role)
+        end,
+        membership_group.roles.build(role_attrs.merge(person: person))
+      ].flatten.compact
     end
 
     def role_attrs
@@ -49,6 +31,14 @@ module Memberships
         { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
       else
         { type: role_type, created_at: now, delete_on: now.end_of_year }
+      end
+    end
+
+    def precursor_role_attrs(role)
+      if join_date.future?
+        { delete_on: [role.delete_on, join_date - 1.day].compact.min }
+      else
+        { delete_on: nil, deleted_at: (join_date - 1.day).end_of_day }
       end
     end
 

@@ -38,6 +38,12 @@ module ::SacCas::RoleBeitragskategorie
     end
   end
 
+  def set_beitragskategorie
+    return if beitragskategorie?
+
+    self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
+  end
+
   private
 
   # This method is called by the `before_validation` callback. It is used to
@@ -46,12 +52,6 @@ module ::SacCas::RoleBeitragskategorie
   # on the target_type.
   def validate_beitragskategorie?
     true
-  end
-
-  def set_beitragskategorie
-    return if beitragskategorie?
-
-    self.beitragskategorie = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
   end
 
   def ensure_beitragskategorie
