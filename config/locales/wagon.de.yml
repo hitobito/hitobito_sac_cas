@@ -20,6 +20,8 @@ de:
     attributes:
       memberships/member_join_section_base:
         join_date: Beitrittsdatum
+      memberships/leave_zusatzsektion:
+        terminate_on: Beitrittsdatum
       people/neuanmeldungen/reject:
         note: Bemerkung
       self_inscription:
