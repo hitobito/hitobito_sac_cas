@@ -10,10 +10,10 @@ CustomContent.seed_once(:key,
   placeholders_required: 'participant-name',
   placeholders_optional: 'event-name, application-url, event-details' })
 
-  participation_rejected_id =
+participation_rejected_id =
   CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
 
-  CustomContent::Translation.seed_once(:custom_content_id, :locale,
+CustomContent::Translation.seed_once(:custom_content_id, :locale,
   { custom_content_id: participation_rejected_id,
     locale: 'de',
     label: 'Anlass: E-Mail Ablehnung',
@@ -22,16 +22,13 @@ CustomContent.seed_once(:key,
           "Sie wurden leider für den Kurs {event-name} abgelehnt.<br/><br/>" \
           "Siehe {application-url}<br/><br/>" \
           "Kursdetails:<br/>{event-details}<br/>" },
-
   { custom_content_id: participation_rejected_id,
     locale: 'fr',
     label: "Événement: E-Mail de refus" },
-
   { custom_content_id: participation_rejected_id,
     locale: 'en',
     label: 'Event: Rejection email' },
-
   { custom_content_id: participation_rejected_id,
     locale: 'it',
     label: "Evento: E-mail della notifica della rifiuto" }
-  )
+)
