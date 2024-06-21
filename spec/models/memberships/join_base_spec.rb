@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Memberships::MemberJoinSectionBase do
+describe Memberships::JoinBase do
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)

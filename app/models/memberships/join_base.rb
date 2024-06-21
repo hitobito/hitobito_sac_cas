@@ -7,7 +7,7 @@
 
 
 module Memberships
-  class MemberJoinSectionBase
+  class JoinBase
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations

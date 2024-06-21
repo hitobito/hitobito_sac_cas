@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships
-  class SwitchStammsektion < MemberJoinSectionBase
+  class SwitchStammsektion < JoinBase
 
     validate :assert_join_date
 

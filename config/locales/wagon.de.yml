@@ -18,7 +18,7 @@ de:
 
   activemodel:
     attributes:
-      memberships/member_join_section_base:
+      memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
         terminate_on: Beitrittsdatum
@@ -79,7 +79,7 @@ de:
               membership_in_other_section: "%{person_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."
               no_email: "%{person_name} hat keine bestätigte E-Mail Adresse."
               planned_termination: "%{person_name} hat einen Austritt geplant."
-        memberships/member_join_section_base:
+        memberships/join_base:
           attributes:
             person:
               must_be_sac_member: muss Sac Mitglied sein
