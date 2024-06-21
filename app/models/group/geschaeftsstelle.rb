@@ -7,6 +7,8 @@
 
 class Group::Geschaeftsstelle < ::Group
 
+  self.static_name = true
+
   ### ROLES
   class Mitarbeiter < ::Role
     self.permissions = [:layer_and_below_full, :read_all_people]

@@ -10,7 +10,7 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   included do
-    CORRESPONDENCES = ['digital', 'print']
+    CORRESPONDENCES = %w(digital print)
 
     Person::LANGUAGES.delete(:en)
 
@@ -74,8 +74,8 @@ module SacCas::Person
     sac_family.member?
   end
 
-  def adult?
-    birthday && years > SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+  def adult?(reference_date: Time.zone.today.end_of_year)
+    SacCas::Beitragskategorie::Calculator.new(self, reference_date: reference_date).adult?
   end
 
   def picture_profile_default
