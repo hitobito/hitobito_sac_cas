@@ -14,8 +14,8 @@ module Memberships
     validate :assert_terminate_on
 
     ROLE_TYPES = [
-      Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
       Group::SektionsMitglieder::MitgliedZusatzsektion,
+      Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
       Group::SektionsTourenkommission::Tourenleiter
     ].freeze
 
@@ -50,9 +50,10 @@ module Memberships
 
     def set_termination_date(role) # rubocop:disable Naming/AccessorMethodName
       if terminate_on.future?
-        Roles::Termination.terminate([role], terminate_on)
+        role.delete_on = [role.delete_on, terminate_on].compact.min
+        role.write_attribute(:terminated, true)
       else
-        role.deleted_at = now
+        role.deleted_at = now.yesterday.end_of_day
       end
     end
 
@@ -61,7 +62,7 @@ module Memberships
     end
 
     def bad_family?
-      role.beitragskategorie == 'family' && !person.sac_family_main_person
+      role.beitragskategorie&.family? && !person.sac_family_main_person
     end
 
     def assert_terminate_on
