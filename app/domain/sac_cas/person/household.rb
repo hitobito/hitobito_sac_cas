@@ -8,7 +8,7 @@
 module SacCas::Person::Household
   extend ActiveSupport::Concern
 
-  HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
+  HOUSEHOLD_KEY_SEQUENCE = 'household_sequence'
 
   delegate :adult?, :child?, to: :beitragskategorie_calculator
 
