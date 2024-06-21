@@ -50,7 +50,7 @@ describe Memberships::SwitchStammsektion do
     describe 'join_date' do
       def switch_on(join_date) = described_class.new(join_section, person, join_date)
 
-      it 'is valid on today and frist day of next year' do
+      it 'is valid on today and first day of next year' do
         create_role(:matterhorn_mitglieder, 'Mitglied')
         expect(switch_on(now.to_date)).to be_valid
         expect(switch_on(now.next_year.beginning_of_year.to_date)).to be_valid
@@ -196,7 +196,7 @@ describe Memberships::SwitchStammsektion do
         )
       end
 
-      it 'is invalid if switch is attemped with person that is not a sac_family_main_person' do
+      it 'is invalid if switch is attempted with person that is not a sac_family_main_person' do
         switch = described_class.new(group, other, now)
         expect(switch).not_to be_valid
         expect(switch.errors.full_messages).to include('Person muss Hauptperson der Familie sein')
