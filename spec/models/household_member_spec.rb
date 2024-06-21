@@ -51,8 +51,7 @@ describe HouseholdMember do
       household_member = HouseholdMember.new(other_household_person, household)
       expect(household_member.valid?).to eq false
       expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist.",
-                                                             "#{other_household_person.full_name} hat bereits eine Familienmitgliedschaft und kann daher nicht einem Familienhaushalt hinzugefügt werden.",
-                                                             "#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."])
+                                                             "#{other_household_person.full_name} hat bereits eine Familienmitgliedschaft und kann daher nicht einem Familienhaushalt hinzugefügt werden."])
     end
 
     it 'is invalid if member has sac membership in different section than reference person' do
@@ -68,6 +67,55 @@ describe HouseholdMember do
       household_member = HouseholdMember.new(other_household_person, household)
       expect(household_member.valid?).to eq false
       expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."])
+    end
+
+
+    it 'is invalid if no person has a membership' do
+      other_household_person = Fabricate(:person)
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: other_household_person,
+                group: groups(:abo_die_alpen))
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:abo_die_alpen))
+      household_member = HouseholdMember.new(other_household_person, household)
+      expect(household_member.valid?).to eq false
+      expect(household_member.errors[:base]).to include("Eine Person muss eine Mitgliedschaft in einer Sektion besitzen.")
+    end
+
+    context 'with additional membership' do
+      let(:other_household_person) { Fabricate(:person) }
+
+
+      it 'is valid if reference person has additional membership but person does not' do
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                  beitragskategorie: :adult,
+                  person: other_household_person,
+                  group: groups(:bluemlisalp_mitglieder))
+        Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                  beitragskategorie: :adult,
+                  person: person,
+                  group: groups(:abo_die_alpen))
+        household_member = HouseholdMember.new(other_household_person, household)
+        expect(household_member.valid?).to eq true
+        expect(household_member.errors[:base]).not_to include("#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion.")
+      end
+
+      it 'is valid if household person has additional membership but reference person does not' do
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                    beitragskategorie: :adult,
+                    person: person,
+                    group: groups(:bluemlisalp_mitglieder))
+          Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                    beitragskategorie: :adult,
+                    person: other_household_person,
+                    group: groups(:abo_die_alpen))
+          household_member = HouseholdMember.new(other_household_person, household)
+          expect(household_member.valid?).to eq true
+          expect(household_member.errors[:base]).not_to include("#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion.")
+      end
     end
 
     context 'on destroy' do
