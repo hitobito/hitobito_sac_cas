@@ -89,7 +89,11 @@ module SacCas::Person
   end
 
   def sac_tour_guide?
-    roles.where(type: SacCas::TOUR_GUIDE_ROLES).exists?
+    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES)
+  end
+
+  def sac_admin?
+    roles.exists?(type: SacCas::SAC_MITARBEITER_ROLES)
   end
 
   def active_sac_member?

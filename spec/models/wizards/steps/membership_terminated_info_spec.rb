@@ -17,8 +17,16 @@ describe Wizards::Steps::MembershipTerminatedInfo do
   end
 
   describe "#termination_date" do
-    let(:wizard) { Wizards::Base.new(current_step: 0) }
-    let(:role) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)) }
+    before do
+      stub_const("Wizard", Class.new(Wizards::Base))
+      Wizard.steps = [described_class]
+    end
+
+    let(:wizard) { Wizard.new(current_step: 0) }
+    let(:role) do
+      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+        group: groups(:bluemlisalp_mitglieder))
+    end
 
     before do
       allow(wizard).to receive(:person).and_return(role.person)

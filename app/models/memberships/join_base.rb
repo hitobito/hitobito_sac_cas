@@ -31,6 +31,8 @@ module Memberships
 
     def assert_person_is_sac_member
       unless sac_membership.active?
+        # TODO: raises a NoMethodError for append on errors when running from
+        # controller for admin without membership role (unsure why)
         errors.add(:person, :must_be_sac_member)
       end
     end

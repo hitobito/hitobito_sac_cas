@@ -23,6 +23,10 @@ module SacCas::Household
     @maintain_sac_family = maintain_sac_family
   end
 
+  def main_person
+    people.find(&:sac_family_main_person)
+  end
+
   def save(context: :update)
     return false unless valid?(context)
 

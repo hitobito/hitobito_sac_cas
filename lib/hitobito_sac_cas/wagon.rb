@@ -79,6 +79,7 @@ module HitobitoSacCas
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
       Ability.store.register TerminationReasonAbility
+      Ability.store.register Memberships::JoinZusatzsektionAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
