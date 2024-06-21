@@ -13,7 +13,6 @@ module Memberships
     def initialize(join_section, person, join_date, sac_family_membership: false, **params)
       super(join_section, person, join_date, **params)
       @sac_family_membership = sac_family_membership
-      @created_at = Time.zone.now
 
       raise 'missing neuanmeldungen subgroup' unless group_for_neuanmeldung
     end
@@ -29,7 +28,7 @@ module Memberships
         person: person,
         type: group_for_neuanmeldung.class.const_get('NeuanmeldungZusatzsektion'),
         beitragskategorie: derive_beitragskategorie,
-        created_at: created_at,
+        created_at: now,
         delete_on: nil
       )
     end
@@ -42,14 +41,12 @@ module Memberships
       end
     end
 
-    def sac_family_membership?
-      @sac_family_membership
-    end
-
     def validate_family_main_person?
       sac_family_membership?
     end
 
-    attr_reader :group, :created_at
+    def sac_family_membership?
+      @sac_family_membership
+    end
   end
 end

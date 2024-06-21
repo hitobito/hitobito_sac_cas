@@ -18,11 +18,11 @@ module Memberships
 
     def initialize(join_section, person, join_date, **params)
       @join_section = join_section
-      assert_sac_section_or_ortsgruppe!
-
       @person = person
       @join_date = join_date
+      @now = Time.zone.now
 
+      assert_sac_section_or_ortsgruppe!
       super(**params)
     end
 
@@ -36,6 +36,7 @@ module Memberships
 
     def save!
       raise 'cannot save invalid model' unless valid?
+
       save
     end
 
@@ -105,6 +106,6 @@ module Memberships
       People::SacMembership.new(person)
     end
 
-    attr_reader :person, :join_section
+    attr_reader :person, :join_section, :join_date, :now
   end
 end
