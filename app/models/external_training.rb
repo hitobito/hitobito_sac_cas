@@ -15,6 +15,8 @@ class ExternalTraining < ActiveRecord::Base
 
   validates_date :finish_at, on_or_after: :start_at, allow_blank: true
 
+  validates_date :finish_at, on_or_before: lambda { Date.current }
+
   scope :list, -> { order(created_at: :desc) }
 
   after_destroy :revoke_qualifications
@@ -22,8 +24,7 @@ class ExternalTraining < ActiveRecord::Base
   after_save :create_trainings_for_other_people
 
   def self.between(start_date, end_date)
-    where('start_at <= :end_date AND finish_at >= :start_date ',
-          start_date: start_date, end_date: end_date).distinct
+    where(start_at: ..end_date, finish_at: start_date..).distinct
   end
 
   def to_s

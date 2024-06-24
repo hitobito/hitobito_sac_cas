@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe ExternalTraining do
+  before { travel_to(today) }
   let(:today) { Date.new(2024, 3, 26) }
 
   describe 'validations' do
@@ -25,7 +26,7 @@ describe ExternalTraining do
     end
 
     it 'is valid when finish_at is after start_at' do
-      external_training = build(start_at: today, finish_at: today + 1.day)
+      external_training = build(start_at: 5.days.ago, finish_at: 2.days.ago)
       expect(external_training).to be_valid
     end
 
@@ -33,18 +34,35 @@ describe ExternalTraining do
       external_training = build(start_at: today, finish_at: today)
       expect(external_training).to be_valid
     end
+
+    it 'is invalid when finish_at is after today' do
+      external_training = build(start_at: today, finish_at: 10.days.from_now)
+      expect(external_training).to_not be_valid
+    end
+
+    it 'is valid when finish_at is today' do
+      external_training = build(start_at: 10.days.ago, finish_at: today)
+      expect(external_training).to be_valid
+    end
+
+    it 'is valid when finish_at is before today' do
+      external_training = build(start_at: 10.days.ago, finish_at: 5.days.ago)
+      expect(external_training).to be_valid
+    end
   end
 
   describe '.between' do
     it 'returns training within validity period' do
-      Fabricate(:external_training, start_at: today, finish_at: today + 1.day)
-      expect(ExternalTraining.between(today, today)).to have(1).item
-      expect(ExternalTraining.between(today, today + 1.day)).to have(1).item
-      expect(ExternalTraining.between(today - 1.day, today)).to have(1).item
-      expect(ExternalTraining.between(today - 2.days, today)).to have(1).item
-      expect(ExternalTraining.between(today - 2.days, today - 1.day)).to be_empty
-      expect(ExternalTraining.between(today + 1.days, today + 2.days)).to have(1).item
-      expect(ExternalTraining.between(today + 2.days, today + 2.days)).to be_empty
+      start_at = 5.days.ago.to_date
+      finish_at = start_at + 1.day
+      Fabricate(:external_training, start_at: start_at, finish_at: finish_at)
+      expect(ExternalTraining.between(start_at, start_at)).to have(1).item
+      expect(ExternalTraining.between(start_at, finish_at)).to have(1).item
+      expect(ExternalTraining.between(start_at - 1.day, start_at)).to have(1).item
+      expect(ExternalTraining.between(start_at - 2.days, start_at)).to have(1).item
+      expect(ExternalTraining.between(start_at - 2.days, start_at - 1.day)).to be_empty
+      expect(ExternalTraining.between(finish_at, finish_at + 1.day)).to have(1).item
+      expect(ExternalTraining.between(finish_at + 1.day, finish_at + 1.day)).to be_empty
     end
   end
 
