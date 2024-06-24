@@ -19,21 +19,35 @@ module Events::Courses::State
         assignment_closed: [:ready, :canceled],
         ready: [:closed, :canceled],
         canceled: [:application_open],
-        closed: [:ready]
-      }.freeze
+        closed: [:ready] }.freeze
 
     self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
 
     validate :assert_valid_state_change, if: :state_changed?
     before_create :set_default_state
-  end
+    after_commit :notify_rejected_participants, if: :assignment_closed?
 
-  def available_states(state = self.state)
-    SAC_COURSE_STATES[state.to_sym]
-  end
+    def available_states(state = self.state)
+      SAC_COURSE_STATES[state.to_sym]
+    end
 
-  def state_possible?(new_state)
-    available_states.any?(new_state.to_sym)
+    def assignment_closed?
+      state.to_sym == :assignment_closed
+    end
+
+    def state_possible?(new_state)
+      available_states.any?(new_state.to_sym)
+    end
+
+    def notify_rejected_participants
+      rejected_participants.each do |participation|
+        Event::ParticipationRejectionJob.new(participation).enqueue!
+      end
+    end
+
+    def rejected_participants
+      participations.where(state: 'rejected')
+    end
   end
 
   private
