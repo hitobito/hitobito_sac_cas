@@ -11,15 +11,15 @@ class Export::BackupMitgliederExportJob < BaseJob
 
   def initialize(group_id)
     super()
-    @group = Group.find(group_id)
+    @group_id = group_id
     @errors = []
   end
 
   def perform
     sftp.upload_file(csv, file_path)
   rescue => e
-    error(self, e, group: @group)
-    @errors << [@group.id, e]
+    error(self, e, group: group)
+    @errors << [@group_id, e]
   end
 
   def log_results
@@ -33,7 +33,7 @@ class Export::BackupMitgliederExportJob < BaseJob
   def csv
     @csv ||= begin
                user_id = nil
-               SacCas::Export::MitgliederExportJob.new(user_id, @group.id).data
+               SacCas::Export::MitgliederExportJob.new(user_id, @group_id).data
              end
   end
 
@@ -46,6 +46,10 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def file_path
-    "sektionen/#{@group.navision_id}/Adressen_#{@group.navision_id_padded}.csv"
+    "sektionen/#{group.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+  end
+
+  def group
+    @group ||= Group.find(@group_id)
   end
 end
