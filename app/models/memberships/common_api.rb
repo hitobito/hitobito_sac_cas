@@ -8,9 +8,7 @@
 module Memberships::CommonApi
 
   def valid?
-    super
-    validate_roles
-    errors.empty?
+    [super, validate_roles, errors.empty?].all?
   end
 
   def save
