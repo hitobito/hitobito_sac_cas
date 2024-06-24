@@ -31,7 +31,7 @@ describe :self_inscription, js: true do
     expect(page).to have_css('#flash .alert-success', text: 'Du bist bereits Mitglied dieser Sektion')
   end
 
-  it 'has standard behaviour ' do
+  it 'has standard behaviour' do
     geschaeftsstelle.update!(self_registration_role_type: Group::Geschaeftsstelle::Mitarbeiter)
     sign_in(mitglied)
     visit group_self_inscription_path(group_id: geschaeftsstelle)
