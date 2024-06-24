@@ -7,10 +7,12 @@
 
 
 module Memberships
-  class MemberJoinSectionBase
+  class JoinBase
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations
+
+    include CommonApi
 
     validate :assert_person_is_sac_member
     validate :assert_person_not_member_of_join_section
@@ -26,50 +28,7 @@ module Memberships
       super(**params)
     end
 
-    def valid?
-      [super, roles_valid?].all?
-    end
-
-    def save
-      valid? && save_roles.all?
-    end
-
-    def save!
-      raise 'cannot save invalid model' unless valid?
-
-      save
-    end
-
     private
-
-    def save_roles
-      Role.transaction do
-        roles.each(&:save!)
-      end
-    end
-
-    def affected_people
-      person.sac_family.member? ? person.sac_family.family_members : [person]
-    end
-
-    def roles
-      @roles ||= affected_people.flat_map { |p| prepare_roles(p) }
-    end
-
-    def roles_valid?
-      roles.each do |role|
-        role.validate
-        role.errors.full_messages.each do |msg|
-          errors.add(:base, "#{role.person}: #{msg}")
-        end
-      end
-    end
-
-    # prepare roles of correct type in correct subgroup of sektion
-    # and with correct dates (convert_on/delete_on)
-    def prepare_roles(_person)
-      []
-    end
 
     def assert_person_is_sac_member
       unless sac_membership.active?
@@ -78,7 +37,7 @@ module Memberships
     end
 
     def assert_person_not_member_of_join_section
-      if sac_membership.active_or_pending_in?(join_section)
+      if sac_membership.active_or_approvable_in?(join_section)
         errors.add(:person, :must_not_be_join_section_member)
       end
     end

@@ -14,21 +14,23 @@ class People::SacMembership
   def initialize(person)
     @person = person
     @roles = MEMBERSHIP_ROLES.map(&:sti_name)
-    @active_or_pending_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
+    @active_or_approvable_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
   end
 
   def active?
     roles.any?
   end
 
+  # checks for any active membership roles
   def active_in?(sac_section)
-    @person.roles.exists?(group_id: sac_section.descendants,
+    @person.roles.exists?(group_id: sac_section.children,
                           type: @roles)
   end
 
-  def active_or_pending_in?(sac_section)
-    @person.roles.exists?(group_id: sac_section.descendants,
-                          type: @active_or_pending_roles)
+  # checkes for active and also approvabable (neuanmeldung) roles
+  def active_or_approvable_in?(sac_section)
+    @person.roles.exists?(group_id: sac_section.children,
+                          type: @active_or_approvable_roles)
   end
 
   def anytime?
@@ -37,6 +39,11 @@ class People::SacMembership
 
   def roles
     @person.roles.select { |r| MEMBERSHIP_ROLES.include?(r.class) }
+  end
+
+  # There should be only one active `Mitglied` role at a time anyway
+  def role
+    roles.first
   end
 
   def billable?

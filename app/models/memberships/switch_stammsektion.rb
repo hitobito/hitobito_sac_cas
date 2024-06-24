@@ -6,50 +6,58 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships
-  class SwitchStammsektion < MemberJoinSectionBase
+  class SwitchStammsektion < JoinBase
+
+    def initialize(...)
+      super
+      raise 'terminated membership' if sac_membership.roles.any?(&:terminated?)
+    end
 
     validate :assert_join_date
 
     private
 
-    def save_roles
-      Role.transaction do
-        terminate_then_create_roles_for(affected_people)
-      end
-    end
-
-    # Terminating and creating one by one works best with for existing validations
-    def terminate_then_create_roles_for(people)
-      people.map do |person|
-        terminate_existing_roles!(person)
-        roles.select { |r| r.person_id == person.id }.each(&:save!)
-      end
-    end
-
-    def terminate_existing_roles!(person)
-      scope = role_type.where(person_id: person.id)
-
-      if join_date.future?
-        scope.where(delete_on: nil)
-             .or(scope.where(delete_on: now.end_of_year..))
-             .update_all(delete_on: now.end_of_year) # rubocop:disable Rails/SkipsModelValidations
-
-      else
-        scope.update_all(deleted_at: now.yesterday.end_of_day) # rubocop:disable Rails/SkipsModelValidations
-
-      end
-    end
-
     def prepare_roles(person)
-      membership_group.roles.build(role_attrs.merge(person: person))
+      old_role = existing_membership(person)
+
+      # In case we can't locate the old membership role, we calculate the beitragskategorie
+      # for the person as a fallback value.
+      beitragskategorie = old_role&.beitragskategorie ||
+        SacCas::Beitragskategorie::Calculator.new(person).calculate
+      new_role = new_membership(person, beitragskategorie)
+
+      [old_role, new_role].compact
     end
 
-    def role_attrs
-      if join_date.future?
-        { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
-      else
-        { type: role_type, created_at: now, delete_on: now.end_of_year }
+    def existing_membership(person)
+      People::SacMembership.new(person).role.tap do |role|
+        return unless role
+
+        attrs = if join_date.future?
+                  { delete_on: [role.delete_on, join_date - 1.day].compact.min }
+                else
+                  { delete_on: nil, deleted_at: (join_date - 1.day).end_of_day }
+                end
+
+        role.attributes = attrs
       end
+    end
+
+    def new_membership(person, beitragskategorie)
+      attrs = if join_date.future?
+                { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
+              else
+                { type: role_type, created_at: now, delete_on: now.end_of_year }
+              end
+      attrs[:person] = person
+
+      # `Role#set_beitragskategorie` gets called in a before_validation callback, but
+      # `Memberships::CommonApi#validate_roles` and `Memberships::CommonApi#save_roles`
+      # first save the roles with `validate: false` to make the role validations working which
+      # depend on persisted values. So we need to set the beitragskategorie here manually.
+      attrs[:beitragskategorie] = beitragskategorie
+
+      membership_group.roles.build(attrs)
     end
 
     def validate_family_main_person?

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships
-  class JoinZusatzsektion < MemberJoinSectionBase
+  class JoinZusatzsektion < JoinBase
 
     delegate :group_for_neuanmeldung, to: :join_section
 

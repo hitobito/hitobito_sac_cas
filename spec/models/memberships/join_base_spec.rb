@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Memberships::MemberJoinSectionBase do
+describe Memberships::JoinBase do
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
@@ -54,7 +54,8 @@ describe Memberships::MemberJoinSectionBase do
       end
 
       expect(obj).not_to be_valid
-      expect(errors).to eq ['Person muss Sac Mitglied sein', "#{person}: Group muss ausgefüllt werden"]
+      expect(errors).to eq ['Person muss Sac Mitglied sein',
+                            "#{person}: Group muss ausgefüllt werden"]
     end
 
     describe 'existing membership in tree' do
@@ -87,20 +88,16 @@ describe Memberships::MemberJoinSectionBase do
       end
 
       describe 'ortsgruppe' do
-        it 'is invalid if person is ortsgruppen member' do
+        it 'is valid if person is ortsgruppen member' do
           create_role(:bluemlisalp_ortsgruppe_ausserberg_mitglieder, 'Mitglied')
-          expect(obj).not_to be_valid
-          expect(errors).to eq [
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
-          ]
+          expect(obj).to be_valid
         end
 
         it 'is invalid if person has requested membership' do
           create_role(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, 'Neuanmeldung')
           expect(obj).not_to be_valid
           expect(errors).to eq [
-            'Person muss Sac Mitglied sein',
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
+            'Person muss Sac Mitglied sein'
           ]
         end
       end
@@ -146,7 +143,7 @@ describe Memberships::MemberJoinSectionBase do
       end
 
       it 'save! raises' do
-        expect { obj.save! }.to raise_error 'cannot save invalid model'
+        expect { obj.save! }.to raise_error(/cannot save invalid model/)
       end
     end
 
@@ -166,7 +163,11 @@ describe Memberships::MemberJoinSectionBase do
       end
 
       it 'might process multiple roles for single person' do
-        bluemlisalp_mitglied.deleted_at = Time.zone.now
+        bluemlisalp_mitglied.attributes = {
+          created_at: 1.year.ago,
+          deleted_at: Time.zone.yesterday.end_of_day,
+          delete_on: nil
+        }
         allow(obj).to receive(:prepare_roles) do |person|
           [bluemlisalp_mitglied,
            Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
