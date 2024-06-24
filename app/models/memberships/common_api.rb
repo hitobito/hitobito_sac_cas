@@ -35,7 +35,7 @@ module Memberships::CommonApi
     # new ones, otherwise the validations will check the old values as in the DB instead of the new values.
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction do
-      roles.select(&:persisted?).each { |role| role.save(validate: false) }
+      roles.select(&:persisted?).each { |role| role.save!(validate: false) }
       roles.each do |role|
         role.validate
         role.errors.full_messages.each do |msg|
@@ -57,7 +57,7 @@ module Memberships::CommonApi
     # As in #validate_roles, we must save existing roles first while ignoring validations.
     # See comments on #validate_roles for more details.
     Role.transaction do
-      roles.each { |role| role.save(validate: false) if role.persisted? }
+      roles.each { |role| role.save!(validate: false) if role.persisted? }
       roles.each(&:save!)
     end
   end
