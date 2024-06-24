@@ -18,28 +18,30 @@ module Memberships
     private
 
     def prepare_roles(person)
-      [
-        People::SacMembership.new(person).roles.each do |role|
-          role.attributes = precursor_role_attrs(role)
-        end,
-        membership_group.roles.build(role_attrs.merge(person: person))
-      ].flatten.compact
+      existing_memberships(person) + [new_membership(person)]
     end
 
-    def role_attrs
-      if join_date.future?
-        { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
-      else
-        { type: role_type, created_at: now, delete_on: now.end_of_year }
+    def existing_memberships(person)
+      People::SacMembership.new(person).roles.each do |role|
+        attrs = if join_date.future?
+                  { delete_on: [role.delete_on, join_date - 1.day].compact.min }
+                else
+                  { delete_on: nil, deleted_at: (join_date - 1.day).end_of_day }
+                end
+
+        role.attributes = attrs
       end
     end
 
-    def precursor_role_attrs(role)
-      if join_date.future?
-        { delete_on: [role.delete_on, join_date - 1.day].compact.min }
-      else
-        { delete_on: nil, deleted_at: (join_date - 1.day).end_of_day }
-      end
+    def new_membership(person)
+      attrs = if join_date.future?
+                { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
+              else
+                { type: role_type, created_at: now, delete_on: now.end_of_year }
+              end
+
+      membership_group = join_section.children.find_by(type: Group::SektionsMitglieder.sti_name)
+      membership_group.roles.build(attrs.merge(person: person))
     end
 
     def validate_family_main_person?
@@ -54,10 +56,6 @@ module Memberships
 
     def valid_dates
       [now.to_date, now.next_year.beginning_of_year.to_date]
-    end
-
-    def membership_group
-      @membership_group ||= join_section.children.find_by(type: Group::SektionsMitglieder.sti_name)
     end
 
     def role_type
