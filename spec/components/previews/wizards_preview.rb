@@ -28,6 +28,9 @@ class WizardsPreview < ViewComponent::Preview
 
   def membership_terminated_info(wizards_preview_wizard: {})
     wizard = build_wizard(Wizards::Steps::MembershipTerminatedInfo, wizards_preview_wizard)
+    def wizard.person
+      Group::SektionsMitglieder::Mitglied.first.person
+    end
     render_wrapped(wizard)
   end
 

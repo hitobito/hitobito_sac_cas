@@ -12,7 +12,7 @@ class Wizards::Steps::MembershipTerminatedInfo < Wizards::Step
   end
 
   def termination_date
-    # TODO: Get termination date from membership role of the
-    Time.zone.now.to_date
+    role = Group::SektionsMitglieder::Mitglied.find_by(person: wizard.person)
+    role.end_on
   end
 end

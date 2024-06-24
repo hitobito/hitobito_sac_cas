@@ -20,6 +20,7 @@ describe 'wizards/steps/_membership_terminated_info.html.haml' do
     )
   end
   let(:form) { StandardFormBuilder.new(:wizard, wizard, view, { builder: StandardFormBuilder }) }
+  let(:role) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)) }
 
   let(:dom) do
     render
@@ -28,10 +29,11 @@ describe 'wizards/steps/_membership_terminated_info.html.haml' do
 
   before do
     allow(Wizards::Base).to receive(:steps).and_return([step.class])
+    allow(wizard).to receive(:person).and_return(role.person)
     allow(view).to receive_messages(f: form, c: component)
   end
 
   it 'renders' do
-    expect(dom).to have_text('Deine Mitgliedschaft ist gekündigt per ')
+    expect(dom).to have_text("Deine Mitgliedschaft ist gekündigt per #{l(role.end_on)}")
   end
 end

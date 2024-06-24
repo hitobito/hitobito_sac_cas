@@ -15,10 +15,15 @@ describe Wizards::Steps::MembershipTerminatedInfo do
   end
 
   describe '#termination_date' do
-    # let(:wizard) { Wizards::Base.new(current_step: 0) }
+    let(:wizard) { Wizards::Base.new(current_step: 0) }
+    let(:role) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)) }
+
+    before do
+      allow(wizard).to receive(:person).and_return(role.person)
+    end
 
     it 'returns the termination date of the person' do
-      expect(subject.termination_date).not_to be_nil
+      expect(subject.termination_date).to eq(role.end_on)
     end
   end
 end
