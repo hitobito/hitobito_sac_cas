@@ -11,6 +11,14 @@ describe 'wizards/steps/_main_email.html.haml' do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
   let(:step) { Wizards::Steps::MainEmail.new(wizard) }
   let(:form) { StandardFormBuilder.new(:wizard, wizard, view, { builder: StandardFormBuilder }) }
+  let(:content_component) do
+    StepsComponent::ContentComponent.new(
+      partial: :main_email,
+      partial_iteration: double(:iter, index: 0),
+      step: step,
+      form: form
+    )
+  end
 
   let(:dom) do
     render
@@ -21,7 +29,7 @@ describe 'wizards/steps/_main_email.html.haml' do
     allow(Wizards::Base).to receive(:steps).and_return([step.class])
     allow(view).to receive_messages(
       f: form,
-      c: instance_double(StepsComponent::ContentComponent, index: 0)
+      c: content_component 
     )
   end
 
