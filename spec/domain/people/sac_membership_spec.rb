@@ -98,4 +98,64 @@ describe People::SacMembership do
       expect(membership).to be_anytime
     end
   end
+
+
+  describe '#active_in?' do
+    let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder) }
+
+    it 'only considers roles in same layer' do
+      person.roles.create!(
+        type: Group::SektionsMitglieder::Mitglied,
+        group: group,
+        created_at: Time.zone.now.beginning_of_year,
+        delete_on: Time.zone.today.end_of_year)
+      expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))).to eq false
+      expect(membership.active_in?(groups(:bluemlisalp))).to eq false
+      expect(membership.active_in?(groups(:matterhorn))).to eq false
+    end
+
+
+    it 'ignores future and past roles' do
+      person.roles.create!(
+        type: Group::SektionsMitglieder::Mitglied,
+        group: group,
+        created_at: Time.zone.now.beginning_of_year,
+        deleted_at: 1.day.ago)
+      person.roles.create!(
+        type: FutureRole.sti_name,
+        group: group,
+        convert_on: 1.month.from_now,
+        convert_to: Group::SektionsMitglieder::Mitglied.sti_name
+      )
+      expect(membership.active_in?(groups(:bluemlisalp))).to eq false
+      expect(membership.active_in?(groups(:matterhorn))).to eq false
+      expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq false
+    end
+  end
+
+  describe '#active_or_approvable_in?' do
+    let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder) }
+
+    it 'considers active membership' do
+      person.roles.create!(
+        type: Group::SektionsMitglieder::Mitglied,
+        group: group,
+        created_at: Time.zone.now.beginning_of_year,
+        delete_on: Time.zone.today.end_of_year)
+      expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
+    end
+
+    it 'considers approvable membership' do
+      person.roles.create!(
+        type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+        group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv),
+        created_at: Time.zone.now.beginning_of_year,
+        delete_on: Time.zone.today.end_of_year)
+      expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
+    end
+  end
+
 end

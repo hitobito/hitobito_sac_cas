@@ -37,7 +37,7 @@ module Memberships
     end
 
     def assert_person_not_member_of_join_section
-      if sac_membership.active_or_pending_in?(join_section)
+      if sac_membership.active_or_approvable_in?(join_section)
         errors.add(:person, :must_not_be_join_section_member)
       end
     end
