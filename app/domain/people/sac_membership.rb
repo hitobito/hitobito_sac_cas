@@ -41,6 +41,11 @@ class People::SacMembership
     @person.roles.select { |r| MEMBERSHIP_ROLES.include?(r.class) }
   end
 
+  # There should be only one active `Mitglied` role at a time anyway
+  def role
+    roles.first
+  end
+
   def billable?
     active? || @person.roles.any? { |r| r.is_a?(Invoices::SacMemberships::Member::NEW_ENTRY_ROLE) }
   end

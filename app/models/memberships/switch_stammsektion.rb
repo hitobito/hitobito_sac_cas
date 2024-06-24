@@ -18,11 +18,21 @@ module Memberships
     private
 
     def prepare_roles(person)
-      existing_memberships(person) + [new_membership(person)]
+      old_role = existing_membership(person)
+
+      # In case we can't locate the old membership role, we calculate the beitragskategorie
+      # for the person as a fallback value.
+      beitragskategorie = old_role&.beitragskategorie ||
+        SacCas::Beitragskategorie::Calculator.new(person).calculate
+      new_role = new_membership(person, beitragskategorie)
+
+      [old_role, new_role].compact
     end
 
-    def existing_memberships(person)
-      People::SacMembership.new(person).roles.each do |role|
+    def existing_membership(person)
+      People::SacMembership.new(person).role.tap do |role|
+        return unless role
+
         attrs = if join_date.future?
                   { delete_on: [role.delete_on, join_date - 1.day].compact.min }
                 else
@@ -33,15 +43,21 @@ module Memberships
       end
     end
 
-    def new_membership(person)
+    def new_membership(person, beitragskategorie)
       attrs = if join_date.future?
                 { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
               else
                 { type: role_type, created_at: now, delete_on: now.end_of_year }
               end
+      attrs[:person] = person
 
-      membership_group = join_section.children.find_by(type: Group::SektionsMitglieder.sti_name)
-      membership_group.roles.build(attrs.merge(person: person))
+      # `Role#set_beitragskategorie` gets called in a before_validation callback, but
+      # `Memberships::CommonApi#validate_roles` and `Memberships::CommonApi#save_roles`
+      # first save the roles with `validate: false` to make the role validations working which
+      # depend on persisted values. So we need to set the beitragskategorie here manually.
+      attrs[:beitragskategorie] = beitragskategorie
+
+      membership_group.roles.build(attrs)
     end
 
     def validate_family_main_person?
@@ -56,6 +72,10 @@ module Memberships
 
     def valid_dates
       [now.to_date, now.next_year.beginning_of_year.to_date]
+    end
+
+    def membership_group
+      @membership_group ||= join_section.children.find_by(type: Group::SektionsMitglieder.sti_name)
     end
 
     def role_type

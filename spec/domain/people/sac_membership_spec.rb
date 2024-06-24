@@ -108,7 +108,8 @@ describe People::SacMembership do
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
         created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year)
+        delete_on: Time.zone.today.end_of_year
+      )
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))).to eq false
       expect(membership.active_in?(groups(:bluemlisalp))).to eq false
@@ -121,7 +122,8 @@ describe People::SacMembership do
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
         created_at: Time.zone.now.beginning_of_year,
-        deleted_at: 1.day.ago)
+        deleted_at: 1.day.ago
+      )
       person.roles.create!(
         type: FutureRole.sti_name,
         group: group,
@@ -142,7 +144,8 @@ describe People::SacMembership do
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
         created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year)
+        delete_on: Time.zone.today.end_of_year
+      )
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end
@@ -152,7 +155,8 @@ describe People::SacMembership do
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
         group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv),
         created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year)
+        delete_on: Time.zone.today.end_of_year
+      )
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end

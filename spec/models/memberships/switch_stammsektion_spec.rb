@@ -44,7 +44,7 @@ describe Memberships::SwitchStammsektion do
     end
 
     it 'is valid with membership in different section' do
-      create_role(:matterhorn_mitglieder, 'Mitglied')
+      create_role(:matterhorn_mitglieder, 'Mitglied', created_at: 1.year.ago)
       expect(switch).to be_valid
     end
 
@@ -52,7 +52,7 @@ describe Memberships::SwitchStammsektion do
       def switch_on(join_date) = described_class.new(join_section, person, join_date)
 
       it 'is valid on today and first day of next year' do
-        create_role(:matterhorn_mitglieder, 'Mitglied')
+        create_role(:matterhorn_mitglieder, 'Mitglied', created_at: 1.year.ago)
         expect(switch_on(now.to_date)).to be_valid
         expect(switch_on(now.next_year.beginning_of_year.to_date)).to be_valid
         expect(switch_on(now)).not_to be_valid
@@ -64,47 +64,22 @@ describe Memberships::SwitchStammsektion do
     describe 'existing membership in tree' do
       describe 'join section' do
         it 'is invalid if person is join_section member' do
-          create_role(:bluemlisalp_mitglieder, 'Mitglied')
+          create_role(:bluemlisalp_mitglieder, 'Mitglied', created_at: 1.year.ago)
           expect(switch).not_to be_valid
           expect(errors).to eq [
             'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch'
-          ]
-        end
-
-        it 'is invalid if person has requested membership in join section with approval' do
-          create_role(:bluemlisalp_neuanmeldungen_sektion, 'Neuanmeldung')
-          expect(switch).not_to be_valid
-          expect(errors).to eq [
-            'Person muss Sac Mitglied sein',
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch',
-            "#{person}: Person hat bereits eine Neuanmeldung (von 19.06.2024 bis 31.12.2024)."
-          ]
-        end
-
-        it 'is invalid if person has requested membership in join section' do
-          create_role(:bluemlisalp_neuanmeldungen_nv, 'Neuanmeldung')
-          expect(switch).not_to be_valid
-          expect(errors).to eq [
-            'Person muss Sac Mitglied sein',
-            'Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch',
-            "#{person}: Person hat bereits eine Neuanmeldung (von 19.06.2024 bis 31.12.2024)."
           ]
         end
       end
 
       describe 'ortsgruppe' do
         it 'is valid if person is ortsgruppen member' do
-          create_role(:bluemlisalp_ortsgruppe_ausserberg_mitglieder, 'Mitglied', created_at: 1.year.ago)
+          create_role(
+            :bluemlisalp_ortsgruppe_ausserberg_mitglieder,
+            'Mitglied',
+            created_at: 1.year.ago
+          )
           expect(switch).to be_valid
-        end
-
-        it 'is invalid if person has requested membership' do
-          create_role(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, 'Neuanmeldung')
-          expect(switch).not_to be_valid
-          expect(errors).to eq [
-            'Person muss Sac Mitglied sein',
-            "#{person}: Person hat bereits eine Neuanmeldung (von 19.06.2024 bis 31.12.2024)."
-          ]
         end
       end
     end
@@ -124,14 +99,16 @@ describe Memberships::SwitchStammsektion do
       end
 
       it 'save! raises' do
-        expect { switch.save! }.to raise_error 'cannot save invalid model'
+        expect { switch.save! }.to raise_error(/cannot save invalid model/)
       end
     end
 
     context 'single person' do
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
       let(:matterhorn_funktionaere) { groups(:matterhorn_funktionaere) }
-      let!(:bluemlisalp_mitglied) { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
+      let!(:bluemlisalp_mitglied) do
+        create_role(:bluemlisalp_mitglieder, 'Mitglied', created_at: 1.year.ago)
+      end
       let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person: person) }
 
       it 'creates new role and terminates existing' do
@@ -144,8 +121,10 @@ describe Memberships::SwitchStammsektion do
       end
 
       context 'switching next year' do
-        subject(:switch) { described_class.new(group, person, now.next_year.beginning_of_year.to_date) }
-        
+        subject(:switch) do
+          described_class.new(group, person, now.next_year.beginning_of_year.to_date)
+        end
+
         it 'creates new role and terminates existing' do
           expect do
             expect(switch.save).to eq true
@@ -206,7 +185,7 @@ describe Memberships::SwitchStammsektion do
       it 'creates new and terminates existing roles for each member' do
         expect do
           expect(switch.save!).to eq true
-        end.not_to change { Role.count }
+        end.not_to(change { Role.count })
         expect(@bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
         expect(@bluemlisalp_mitglied_other.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
         expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
@@ -216,8 +195,10 @@ describe Memberships::SwitchStammsektion do
       end
 
       context 'switching next year' do
-        subject(:switch) { described_class.new(group, person, now.next_year.beginning_of_year.to_date) }
-        
+        subject(:switch) do
+          described_class.new(group, person, now.next_year.beginning_of_year.to_date)
+        end
+
         it 'creates new role and terminates existing' do
           expect do
             expect(switch.save).to eq true

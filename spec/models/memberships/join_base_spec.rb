@@ -54,7 +54,8 @@ describe Memberships::JoinBase do
       end
 
       expect(obj).not_to be_valid
-      expect(errors).to eq ['Person muss Sac Mitglied sein', "#{person}: Group muss ausgefüllt werden"]
+      expect(errors).to eq ['Person muss Sac Mitglied sein',
+                            "#{person}: Group muss ausgefüllt werden"]
     end
 
     describe 'existing membership in tree' do
@@ -142,7 +143,7 @@ describe Memberships::JoinBase do
       end
 
       it 'save! raises' do
-        expect { obj.save! }.to raise_error 'cannot save invalid model'
+        expect { obj.save! }.to raise_error(/cannot save invalid model/)
       end
     end
 

@@ -8,7 +8,9 @@
 module Memberships::CommonApi
 
   def valid?
-    [super, validate_roles, errors.empty?].all?
+    super
+    validate_roles
+    errors.empty?
   end
 
   def save
@@ -16,7 +18,7 @@ module Memberships::CommonApi
   end
 
   def save!
-    raise 'cannot save invalid model' unless valid?
+    raise "cannot save invalid model: \n#{errors.full_messages}" unless valid?
 
     save
   end
@@ -29,11 +31,16 @@ module Memberships::CommonApi
 
   def validate_roles
     # Validating roles is complicated because the validations check for other persisted roles.
-    # So if we have changes for already persisted roles, we need to save those first before validating
-    # new ones, otherwise the validations will check the old values as in the DB instead of the new values.
+    # So if we have changes for already persisted roles, we need to save those first before
+    # validating new ones, otherwise the validations will check the old values as in the DB
+    # instead of the new values.
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction do
-      roles.select(&:persisted?).each { |role| role.save!(validate: false) }
+      roles.each do |role|
+        role.save(validate: false)
+      rescue ActiveRecord::NotNullViolation
+        # ignore the error, the role will be invalid anyway
+      end
       roles.each do |role|
         role.validate
         role.errors.full_messages.each do |msg|
@@ -55,7 +62,7 @@ module Memberships::CommonApi
     # As in #validate_roles, we must save existing roles first while ignoring validations.
     # See comments on #validate_roles for more details.
     Role.transaction do
-      roles.each { |role| role.save!(validate: false) if role.persisted? }
+      roles.each { |role| role.save(validate: false) }
       roles.each(&:save!)
     end
   end

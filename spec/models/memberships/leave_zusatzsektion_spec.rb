@@ -23,7 +23,10 @@ describe Memberships::LeaveZusatzsektion do
 
     it 'raises if role is family and person is not main person' do
       expect do
-        role = Group::SektionsMitglieder::MitgliedZusatzsektion.new(beitragskategorie: 'family', person: Person.new)
+        role = Group::SektionsMitglieder::MitgliedZusatzsektion.new(
+          beitragskategorie: 'family',
+          person: Person.new
+        )
         described_class.new(role, :termination_date)
       end.to raise_error('not main family person')
     end
@@ -80,12 +83,12 @@ describe Memberships::LeaveZusatzsektion do
       end
 
       context 'with terminate_on at the end of year' do
-        let(:terminate_on) { now.end_of_year.to_date } 
+        let(:terminate_on) { now.end_of_year.to_date }
 
         it 'schedules role for deletion' do
           expect do
             expect(leave.save).to eq true
-          end.not_to change { person.roles.count }
+          end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
           expect(role.delete_on).to eq Date.new(2024, 12, 31)
         end
@@ -95,7 +98,7 @@ describe Memberships::LeaveZusatzsektion do
           role.save!
           expect do
             expect(leave.save).to eq true
-          end.not_to change { person.roles.count }
+          end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
           expect(role.delete_on).to eq 3.days.from_now.to_date
         end
@@ -117,7 +120,10 @@ describe Memberships::LeaveZusatzsektion do
       before do
         create_sac_family(person, other)
         person.update!(sac_family_main_person: true)
-        @bluemlisalp_mitglied = create_role(:bluemlisalp_mitglieder, 'Mitglied', beitragskategorie: :family)
+        @bluemlisalp_mitglied = create_role(
+          :bluemlisalp_mitglieder, 'Mitglied',
+          beitragskategorie: :family
+        )
         @bluemlisalp_mitglied_other = create_role(
           :bluemlisalp_mitglieder,
           'Mitglied',
@@ -125,8 +131,14 @@ describe Memberships::LeaveZusatzsektion do
           owner: other.reload
         )
 
-        @matterhorn_zusatz = create_role(:matterhorn_mitglieder, 'MitgliedZusatzsektion', owner: person)
-        @matterhorn_zusatz_other = create_role(:matterhorn_mitglieder, 'MitgliedZusatzsektion', owner: other)
+        @matterhorn_zusatz = create_role(
+          :matterhorn_mitglieder, 'MitgliedZusatzsektion',
+          owner: person
+        )
+        @matterhorn_zusatz_other = create_role(
+          :matterhorn_mitglieder, 'MitgliedZusatzsektion',
+          owner: other
+        )
       end
 
       it 'deletes existing roles' do
@@ -134,16 +146,18 @@ describe Memberships::LeaveZusatzsektion do
           expect(leave.save).to eq true
         end.to change { Role.count }.by(-2)
         expect { Role.find(@matterhorn_zusatz.id) }.to raise_error(ActiveRecord::RecordNotFound)
-        expect { Role.find(@matterhorn_zusatz_other.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect do
+          Role.find(@matterhorn_zusatz_other.id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       context 'with terminate_on at the end of year' do
-        let(:terminate_on) { now.end_of_year.to_date } 
+        let(:terminate_on) { now.end_of_year.to_date }
 
         it 'schedules role for deletion' do
           expect do
             expect(leave.save).to eq true
-          end.not_to change { person.roles.count }
+          end.not_to(change { person.roles.count })
           expect(@matterhorn_zusatz.reload).to be_terminated
           expect(@matterhorn_zusatz_other.delete_on).to eq Date.new(2024, 12, 31)
         end

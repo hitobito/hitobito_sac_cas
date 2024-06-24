@@ -136,7 +136,7 @@ describe Memberships::JoinZusatzsektion do
       end
 
       it 'save! raises' do
-        expect { join_sektion.save! }.to raise_error 'cannot save invalid model'
+        expect { join_sektion.save! }.to raise_error(/cannot save invalid model/)
       end
     end
 
