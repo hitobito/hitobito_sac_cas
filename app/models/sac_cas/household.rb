@@ -8,7 +8,7 @@
 module SacCas::Household
   extend ActiveSupport::Concern
 
-  HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
+  HOUSEHOLD_KEY_SEQUENCE = 'household_sequence'
 
   prepended do
     validate :assert_adult_member, on: :update
