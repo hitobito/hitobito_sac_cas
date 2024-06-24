@@ -15,6 +15,7 @@ module SacCas::Households::MemberValidator
     assert_family_age_range
     assert_no_conflicting_family_membership
     assert_no_membership_in_other_section
+    assert_someone_is_a_member
   end
 
   private
@@ -42,6 +43,12 @@ module SacCas::Households::MemberValidator
     if member_main_section && household_reference_person_main_section &&
       member_main_section != household_reference_person_main_section
       add_error(:membership_in_other_section)
+    end
+  end
+
+  def assert_someone_is_a_member
+    unless member_main_section || household_reference_person_main_section
+      add_error(:no_members)
     end
   end
 

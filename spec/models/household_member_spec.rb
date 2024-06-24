@@ -18,6 +18,10 @@ describe HouseholdMember do
 
   describe 'validations' do
     it 'is invalid if member has different household key than reference person' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:bluemlisalp_mitglieder))
       other_household_person = Fabricate(:person, household_key: 'OTHER_HOUSEHOLD_KEY')
       household_member = HouseholdMember.new(other_household_person, household)
       expect(household_member.valid?).to eq false
@@ -25,18 +29,30 @@ describe HouseholdMember do
     end
 
     it 'is invalid if birthday is blank' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:bluemlisalp_mitglieder))
       person.update_attribute(:birthday, nil)
       expect(household_member.valid?).to eq false
       expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat kein Geburtsdatum."])
     end
 
     it 'is invalid if birthday is below 6 years old' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:bluemlisalp_mitglieder))
       person.update_attribute(:birthday, Date.new(2019, 7, 20))
       expect(household_member.valid?).to eq false
       expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
     end
 
     it 'is invalid if birthday is between 17 and 22 years old' do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:bluemlisalp_mitglieder))
       person.update_attribute(:birthday, Date.new(2005, 7, 20))
       expect(household_member.valid?).to eq false
       expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
@@ -82,7 +98,7 @@ describe HouseholdMember do
                 group: groups(:abo_die_alpen))
       household_member = HouseholdMember.new(other_household_person, household)
       expect(household_member.valid?).to eq false
-      expect(household_member.errors[:base]).to include("Eine Person muss eine Mitgliedschaft in einer Sektion besitzen.")
+      expect(household_member.errors[:base]).to include("Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen.")
     end
 
     context 'with additional membership' do
@@ -122,7 +138,8 @@ describe HouseholdMember do
       it 'is invalid if member has no confirmed email' do
         person.update_attribute(:email, '')
         expect(household_member.valid?(:destroy)).to eq false
-        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse.",
+                                        "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
       end
 
       it 'is invalid if member has termination planned' do
