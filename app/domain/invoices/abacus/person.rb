@@ -63,7 +63,8 @@ module Invoices
       private
 
       def create_subject
-        data = client.create(:subject, subject_attrs)
+        # create abacus subject with id from hitobito
+        data = client.create(:subject, subject_attrs.merge(id: entity.id))
         entity.update_column(:abacus_subject_key, data[:id]) # rubocop:disable Rails/SkipsModelValidations
       end
 

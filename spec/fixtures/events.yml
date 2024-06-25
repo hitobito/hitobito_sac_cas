@@ -13,8 +13,6 @@ top_course:
   kind: ski_course
   number: 10
   language: de
-  priorization: true
-  requires_approval: true
   external_applications: true
 
 closed:
@@ -24,8 +22,6 @@ closed:
   state: application_closed
   number: 101
   language: de
-  priorization: true
-  requires_approval: true
   external_applications: true
   contact: admin
   location: On top

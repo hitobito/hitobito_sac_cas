@@ -13,5 +13,7 @@ class AddAbacusKeys < ActiveRecord::Migration[6.1]
     add_column :invoices, :sac_membership_year, :integer
     add_column :invoices, :event_participation_id, :integer
     add_index :invoices, :event_participation_id
+
+    Invoice.reset_column_information
   end
 end
