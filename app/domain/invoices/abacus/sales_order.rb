@@ -18,6 +18,7 @@ module Invoices
       }.with_indifferent_access.freeze
 
       def create(positions, additional_user_fields: {})
+        # create_sales_order_with_positions(positions, additional_user_fields: additional_user_fields)
         create_sales_order(additional_user_fields: additional_user_fields)
         create_sales_order_positions(positions)
         # does not work currently, abraxas is investigating
@@ -36,7 +37,16 @@ module Invoices
       def create_sales_order(additional_user_fields: {})
         attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
         data = client.create(:sales_order, attrs)
-        entity.abacus_sales_order_key = data.fetch(:sales_order_id)
+        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      def create_sales_order_with_positions(positions, additional_user_fields: {})
+        attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
+        attrs[:positions] = positions.map.with_index do |position, index|
+          sales_order_position_attrs(position, index + 1)
+        end
+        data = client.create(:sales_order, attrs)
+        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
       end
 
       def create_sales_order_positions(positions)
