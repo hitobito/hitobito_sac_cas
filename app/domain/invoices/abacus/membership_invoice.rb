@@ -46,13 +46,7 @@ module Invoices
       end
 
       def generate
-        return false unless abacus_person.transmit
-
-        I18n.with_locale(member.language) do
-          create_abacus_sales_order
-          invoice.save!
-        end
-        true
+        abacus_person.transmit && create_abacus_sales_order
       rescue => e
         @invoice&.destroy
         raise e
@@ -84,10 +78,13 @@ module Invoices
       private
 
       def create_abacus_sales_order
-        abacus_sales_order.create(
-          positions.map(&:to_abacus_invoice_position),
-          additional_user_fields: compose_additional_user_fields
-        )
+        I18n.with_locale(member.language) do
+          abacus_sales_order.create(
+            positions.map(&:to_abacus_invoice_position),
+            additional_user_fields: compose_additional_user_fields
+          )
+        end
+        true
       end
 
       def positions
