@@ -49,6 +49,7 @@ module HitobitoSacCas
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
+      Households::MembersValidator.prepend SacCas::Households::MembersValidator
       Invoice.prepend SacCas::Invoice
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
