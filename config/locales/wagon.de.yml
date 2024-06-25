@@ -1225,3 +1225,6 @@ de:
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}.
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
+      leave_zusatzsektion:
+        summary:
+          info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
