@@ -15,6 +15,7 @@ module SacCas::Household
     validate :assert_minimum_member_size, on: :update
     validate :assert_removed_member_email, on: :update
     validate :assert_adult_member_with_email, on: :update
+    validate :assert_someone_is_a_member, on: :update
   end
 
   def initialize(reference_person, maintain_sac_family: true)
@@ -23,6 +24,8 @@ module SacCas::Household
   end
 
   def save(context: :update)
+    return false unless valid?(context)
+
     Person.transaction do
       success = super do |_new_people, removed_people|
         clear_people_managers(removed_people)
@@ -111,6 +114,13 @@ module SacCas::Household
   def assert_adult_member_with_email
     if adults.none? { _1.email.present? }
       errors.add(:base, :no_adult_member_with_email)
+    end
+  end
+
+  def assert_someone_is_a_member
+    someone_is_member = members.any? { |member| member.person.active_sac_member? }
+    unless someone_is_member
+      errors.add(:members, :no_members)
     end
   end
 

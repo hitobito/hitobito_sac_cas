@@ -10,15 +10,15 @@ module SacCas::Households::MembersValidator
 
   def validate(household)
     super
-    assert_someone_is_a_member
+    # assert_someone_is_a_member
   end
 
   private
 
-  def assert_someone_is_a_member
-    someone_is_member = members.any? { |member| People::SacMembership.new(member.person).active? }
-    unless someone_is_member
-      @household.errors.add(:members, :no_members)
-    end
-  end
+  # def assert_someone_is_a_member
+  #   someone_is_member = members.any? { |member| member.person.active_sac_member? }
+  #   unless someone_is_member
+  #     @household.errors.add(:members, :no_members)
+  #   end
+  # end
 end

@@ -85,22 +85,6 @@ describe HouseholdMember do
       expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."])
     end
 
-
-    it 'is invalid if no person has a membership' do
-      other_household_person = Fabricate(:person)
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
-                beitragskategorie: :adult,
-                person: other_household_person,
-                group: groups(:abo_die_alpen))
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
-                beitragskategorie: :adult,
-                person: person,
-                group: groups(:abo_die_alpen))
-      household_member = HouseholdMember.new(other_household_person, household)
-      expect(household_member.valid?).to eq false
-      expect(household_member.errors[:base]).to include("Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen.")
-    end
-
     context 'with additional membership' do
       let(:other_household_person) { Fabricate(:person) }
 
@@ -138,8 +122,7 @@ describe HouseholdMember do
       it 'is invalid if member has no confirmed email' do
         person.update_attribute(:email, '')
         expect(household_member.valid?(:destroy)).to eq false
-        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse.",
-                                        "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
       end
 
       it 'is invalid if member has termination planned' do

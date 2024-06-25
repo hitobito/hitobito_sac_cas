@@ -8,16 +8,23 @@
 require 'spec_helper'
 
 describe Household do
+  def create_role(key, role, owner: person, **attrs)
+    group = key.is_a?(Group) ? key : groups(key)
+    role_type = group.class.const_get(role)
+    Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
+  end
 
-  let(:person) { Fabricate(:person, email: 'dad@hitobito.example.com', birthday: Date.new(2000, 1, 1)) }
-  let(:adult) { Fabricate(:person, birthday: Date.new(1999, 10, 5)) }
-  let(:child) { Fabricate(:person, birthday: Date.new(2012, 9, 23)) }
-  let(:second_child) { Fabricate(:person, birthday: Date.new(2014, 4, 13)) }
-  let(:second_adult) { Fabricate(:person, birthday: Date.new(1998, 11, 6)) }
+  let(:person) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', email: 'dad@hitobito.example.com', birthday: Date.new(2000, 1, 1)) }
+  let(:adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(1999, 10, 5)) }
+  let(:child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(2012, 9, 23)) }
+  let(:second_child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(2014, 4, 13)) }
+  let(:second_adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(1998, 11, 6)) }
 
   subject!(:household) { Household.new(person) }
 
-  before { travel_to(Date.new(2024, 5, 31)) }
+  before do
+    travel_to(Date.new(2024, 5, 31))
+  end
 
   def add_and_save(*members)
     members.each { |member| household.add(member) }
@@ -75,8 +82,37 @@ describe Household do
 
     it 'is invalid in destroy context with blank email' do
       person.email = nil
+
       expect(household.valid?(:destroy)).to eq false
-      expect(household.errors['members[0].base']).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
+      expect(household.errors['members[0].base']).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse.",
+                                                                  "#{person.full_name} hat einen Austritt geplant."])
+
+    end
+
+    it 'is invalid if no person has a relevant membership' do
+      new_person = Fabricate(:person)
+      other_household_person = Fabricate(:person)
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: other_household_person,
+                group: groups(:abo_die_alpen))
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+                beitragskategorie: :adult,
+                person: person,
+                group: groups(:abo_die_alpen))
+      household = Household.new(new_person)
+      household.add(other_household_person)
+      expect(household.valid?).to eq false
+      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+    end
+
+    it 'is invalid if no person has a membership at all' do
+      new_person = Fabricate(:person)
+      other_household_person = Fabricate(:person)
+      household = Household.new(new_person)
+      household.add(other_household_person)
+      expect(household.valid?).to eq false
+      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
     end
   end
 
