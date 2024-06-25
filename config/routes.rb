@@ -62,8 +62,8 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :cost_centers, except: [:show]
-    resources :cost_units, except: [:show]
+    resources :cost_centers
+    resources :cost_units
 
     resources :event_kinds, module: 'event', controller: 'kinds', only: [] do
       put :push_down, on: :member
