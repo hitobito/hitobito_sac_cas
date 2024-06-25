@@ -13,6 +13,10 @@ de:
     wizards/steps/choose_membership_title: Familienmitgliedschaft
     wizards/steps/choose_sektion_title: Sektion wählen
     wizards/steps/join_zusatzsektion/summary_title: Bestätigung
+    wizards/steps/termination_no_self_service_title: Mitgliederdienst kontaktieren
+    wizards/steps/termination_choose_date_title: Austrittsdatum
+    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
+    wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
 
   errors:
     messages:
