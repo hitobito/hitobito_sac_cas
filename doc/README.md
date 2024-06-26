@@ -18,9 +18,11 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 ## SAC Familie
 
-In Hitobito ist wird eine Familie als eine Kombination des Haushalt-Features (Core) und der Beitragskategorie auf den Mitglieder-Rollen (Stamm-/Zusatzsektion) definiert.
+In Hitobito ist eine Familie mit dem `Household` abgebildet. Alle Personen im `Household` haben auf ihrer `Mitglied` Rolle die Beitragskategorie `'family'`. 
 
-see [`People::SacFamily`](https://github.com/hitobito/hitobito_sac_cas/blob/master/app/domain/people/sac_family.rb)
+Wenn Personen dem `Household` hinzugefügt werden, werden ihre `Mitglied` Rollen per Vortag gelöscht und neue erstellt  mit Beitragskagetorie `'family'`.
+
+Beim Entfernen von Personen aus dem `Household` werden deren `Mitglied` sowie `MitgliedZusatzsektion` Rollen mit Beitragskategorie `'family'` per Vortag gelöscht und entsprechende neue Rollen erstellt mit Beitragskategorie dem Alter entsprechend `'adult'` oder `'youth'`.
 
 Personen werden zuerst zu einem Haushalt hinzugefügt und müssen danach das Beitragskategorie Feld auf ihrer Mitgliedsrolle angepasst bekommen.
 
