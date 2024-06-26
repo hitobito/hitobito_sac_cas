@@ -77,10 +77,16 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
       group: primary_group,
       type: role_type,
       created_at: Time.zone.now,
+      delete_on: (Time.zone.today.end_of_year unless neuanmeldung?)
     )
   end
 
   def future_role?
     respond_to?(:register_on_date) && register_on_date&.future?
+  end
+
+  def neuanmeldung?
+    primary_group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
+    primary_group.is_a?(Group::SektionsNeuanmeldungenNv)
   end
 end

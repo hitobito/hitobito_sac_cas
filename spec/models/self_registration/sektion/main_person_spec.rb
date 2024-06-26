@@ -80,6 +80,11 @@ describe SelfRegistration::Sektion::MainPerson do
       model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
       expect(role).to be_kind_of(Group::SektionsNeuanmeldungenSektion::Neuanmeldung)
     end
+
+    it 'builds role that does not expire' do
+      model.primary_group = groups(:bluemlisalp_neuanmeldungen_sektion)
+      expect(role.delete_on).to be_nil
+    end
   end
 
   describe 'supplements' do
@@ -109,6 +114,7 @@ describe SelfRegistration::Sektion::MainPerson do
       supplements.register_on = 'jul'
       travel_to(Time.zone.local(2023, 3, 12)) do
         expect(role).to be_kind_of(FutureRole)
+        expect(role.delete_on).to be_nil
       end
     end
 
