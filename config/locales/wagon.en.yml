@@ -15,8 +15,10 @@ en:
       conflicting_family_membership: >
   activemodel:
     attributes:
-      memberships/member_join_section_base:
+      memberships/join_base:
         join_date: ""
+      memberships/leave_zusatzsektion:
+        terminate_on: ""
       people/neuanmeldungen/reject:
         note: ""
       self_inscription:
@@ -71,7 +73,7 @@ en:
               membership_in_other_section: ""
               no_email: ""
               planned_termination: ""
-        memberships/member_join_section_base:
+        memberships/join_base:
           attributes:
             person:
               must_be_sac_member: ""
@@ -1054,3 +1056,8 @@ en:
     set_main_person: ""
     unverified_email: ""
     cannot_set_main_person: ""
+
+  wizards:
+    steps:
+      membership_terminated_info:
+        info: ""
