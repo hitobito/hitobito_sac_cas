@@ -7,6 +7,8 @@ module Wizards
   module Steps
     module LeaveZusatzsektion
       class Summary < Step
+        attribute :termination_reason, :string
+        validates :termination_reason, presence: true
       end
     end
   end

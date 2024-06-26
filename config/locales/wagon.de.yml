@@ -71,6 +71,9 @@ de:
       wizards/steps/termination_choose_date:
         terminate_on: 'Austrittsdatum'
 
+      wizards/steps/leave_zusatzsektion/summary:
+        termination_reason: 'Austrittsgrund'
+
     errors:
       messages:
         must_be_older_than_18: Person muss 18 Jahre oder älter sein.
@@ -1233,3 +1236,4 @@ de:
       leave_zusatzsektion:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
+          request_termination: "Austritt beantragen"
