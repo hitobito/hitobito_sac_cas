@@ -10,8 +10,8 @@ CustomContent.seed_once(:key,
   placeholders_required: 'participant-name',
   placeholders_optional: 'event-name, application-url, event-details' },
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
-  { key: Qualifications::ExpirationMailer::REMINDER_THIS_YEAR },
-  { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR }
+  { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
+  { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR }
 )
 
 participation_rejected_id =
@@ -42,14 +42,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     body: 'Liebe(r) Tourenleiter(in), deine TL-Anerkennung ist ab morgen sistiert. ' \
       'Du darfst keine Touren für deine Sektion mehr leiten. ' \
       'Bitte absolviere die nötigen Fortbildungstage, um wieder als aktive(r) Leiter(in) registriert sein zu können.' },
-  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_THIS_YEAR).id,
+  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR).id,
     locale: 'de',
     label: 'Qualifikation: Erinnerungsmail in 1 Jahr',
     subject: 'Erinnerung TL-Anerkennung',
     body: 'Liebe(r) Tourenleiter(in), per Ende Jahr läuft deine TL-Anerkennung ab. ' \
       'Du darfst keine Touren für deine Sektion mehr leiten. ' \
       'Absolviere bitte die nötigen Fortbildungstage, damit du per Ende Jahr nicht sistiert wirst.' },
-  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR).id,
+  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR).id,
     locale: 'de',
     label: 'Qualifikation: Erinnerungsmail in 2 Jahren',
     subject: 'Erinnerung TL-Anerkennung',
