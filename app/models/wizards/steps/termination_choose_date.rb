@@ -6,8 +6,15 @@
 module Wizards
   module Steps
     class TerminationChooseDate < Step
-      def valid?
-        false
+      TERMINATE_ON_OPTIONS = %w[now end_of_year].freeze
+      attribute :terminate_on, :string
+
+      validates :terminate_on, presence: true, inclusion: {in: TERMINATE_ON_OPTIONS}
+
+      def terminate_on_options
+        TERMINATE_ON_OPTIONS.map do |option|
+          [option, self.class.human_attribute_name(option)]
+        end
       end
     end
   end

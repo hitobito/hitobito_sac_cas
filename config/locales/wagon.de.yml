@@ -68,6 +68,9 @@ de:
       wizards/steps/main_email:
         email: Haupt-E-Mail
 
+      wizards/steps/termination_choose_date:
+        terminate_on: 'Austrittsdatum'
+
     errors:
       messages:
         must_be_older_than_18: Person muss 18 Jahre oder älter sein.
@@ -1225,6 +1228,8 @@ de:
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}.
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
+      termination_choose_date:
+        info_text: "Wann soll der Austritt stattfinden?"
       leave_zusatzsektion:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
