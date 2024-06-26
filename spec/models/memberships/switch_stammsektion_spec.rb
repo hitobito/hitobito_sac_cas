@@ -153,27 +153,28 @@ describe Memberships::SwitchStammsektion do
       let(:matterhorn_mitglied_other) { matterhorn_mitglieder.roles.find_by(person: other) }
 
       def create_sac_family(person, *others)
-        others.each { |p| person.household.add(p) }
-        person.household.save!
+        person.update_column(:sac_family_main_person, true)
+        household = Household.new(person)
+        others.each { |member| household.add(member) }
+        household.save!
         person.reload
+        others.each(&:reload)
       end
 
       before do
-        create_sac_family(person, other)
-        person.update!(sac_family_main_person: true)
         @bluemlisalp_mitglied = create_role(
           :bluemlisalp_mitglieder,
           'Mitglied',
-          beitragskategorie: :family,
           created_at: 1.year.ago
         )
         @bluemlisalp_mitglied_other = create_role(
           :bluemlisalp_mitglieder,
           'Mitglied',
-          beitragskategorie: :family,
           owner: other.reload,
           created_at: 1.year.ago
         )
+        create_sac_family(person, other)
+        Role.where(id: [@bluemlisalp_mitglied.id, @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
       end
 
       it 'is invalid if switch is attempted with person that is not a sac_family_main_person' do

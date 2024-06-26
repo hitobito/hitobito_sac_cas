@@ -187,17 +187,20 @@ describe Memberships::JoinBase do
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
 
       def create_sac_family(person, *others)
-        others.each { |p| person.household.add(p) }
-        person.household.save!
+        person.update!(sac_family_main_person: true)
+        household = Household.new(person)
+        others.each { |member| household.add(member) }
+        household.save!
         person.reload
+        others.each(&:reload)
       end
 
       before do
-        create_sac_family(person, other)
         person.update!(sac_family_main_person: true)
-        create_role(:bluemlisalp_mitglieder, 'Mitglied', beitragskategorie: :family)
-        create_role(:bluemlisalp_mitglieder, 'Mitglied', owner: other.reload,
-                                                         beitragskategorie: :family)
+        person_role = create_role(:bluemlisalp_mitglieder, 'Mitglied')
+        other_role = create_role(:bluemlisalp_mitglieder, 'Mitglied', owner: other.reload)
+        create_sac_family(person, other)
+        Role.where(id: [person_role.id, other_role.id]).update_all(beitragskategorie: :family)
       end
 
       it 'creates roles for each member' do

@@ -9,7 +9,7 @@ module SacCas::Households::MemberValidator
   extend ActiveSupport::Concern
 
   def validate(household_member)
-    super(household_member)
+    super
 
     assert_birthday
     assert_family_age_range
@@ -39,7 +39,8 @@ module SacCas::Households::MemberValidator
   end
 
   def assert_no_membership_in_other_section
-    if member_main_section != household_reference_person_main_section
+    if member_main_section && household_reference_person_main_section &&
+      member_main_section != household_reference_person_main_section
       add_error(:membership_in_other_section)
     end
   end
