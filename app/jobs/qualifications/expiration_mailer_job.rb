@@ -15,10 +15,14 @@ class Qualifications::ExpirationMailerJob < RecurringJob
     moments = [moments.first] unless end_of_year?
 
     moments.each do |moment|
-      Qualifications::Expiring.entries(send(moment)).each do |qualification|
+      expiring_qualifications(moment).each do |qualification|
         Qualifications::ExpirationMailer.reminder(moment, qualification.person).deliver_now
       end
     end
+  end
+
+  def expiring_qualifications(moment)
+    Qualifications::Expiring.entries(send(moment))
   end
 
   def end_of_year?
