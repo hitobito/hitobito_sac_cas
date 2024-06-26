@@ -89,7 +89,7 @@ describe Household do
 
     end
 
-    it 'is invalid if no person has a relevant membership' do
+    it 'is invalid if no household person has a membership role' do
       new_person = Fabricate(
         :person_with_role,
         group: groups(:abo_die_alpen),
