@@ -28,7 +28,7 @@ Personen werden zuerst zu einem Haushalt hinzugefügt und müssen danach das Bei
 
 ### Validierungen
 
-- Mindestens eine Person des neuen Haushalts benötigt eine Mitgliedschaftsrolle in einer Sektion, bevor sie zu einem Haushalt hinzugefügt werden kann.
+- Mindestens eine Person des Haushalts benötigt eine Mitgliedschaftsrolle in einer Sektion.
 - Die Personen dürfen noch keine Rolle mit Beitragskategorie Familie haben.
 
 ### Specs
