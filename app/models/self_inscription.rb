@@ -97,7 +97,7 @@ class SelfInscription
       # TODO: in a later ticket: what values should we set for the timestamps?
       # https://github.com/hitobito/hitobito_sac_cas/issues/178
       created_at: Time.current,
-      delete_on: today.end_of_year
+      delete_on: (today.end_of_year unless neuanmeldung?)
     ).tap(&:valid?)
   end
 

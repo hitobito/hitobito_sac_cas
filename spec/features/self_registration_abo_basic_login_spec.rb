@@ -57,6 +57,7 @@ describe :self_registration do
     expect do
       click_on 'Registrieren'
     end.to change { Person.count }.by(1)
+    expect(Person.last.roles.last.delete_on).not_to be_nil
   end
 
   it 'subscribes to mailinglist' do

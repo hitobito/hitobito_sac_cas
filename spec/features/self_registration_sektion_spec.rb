@@ -168,6 +168,7 @@ text: 'Es existiert bereits ein Login für diese E-Mail.'
       click_button 'Anmelden'
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
+      expect(person.roles.find {|r| r.type == self_registration_role.to_s  }.delete_on).to be_nil
       expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
     end
 

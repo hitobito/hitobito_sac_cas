@@ -117,6 +117,7 @@ describe SelfInscription do
           .and not_change { neuanmeldungen_future.count }
           .and not_change { neuanmeldungen_zusatzsektion.count }
           .and not_change { neuanmeldungen_zusatzsektion_future.count }
+        expect(model.person.roles.last.delete_on).to be_nil
       end
 
       it 'creates future role' do
