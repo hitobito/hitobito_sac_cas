@@ -9,11 +9,11 @@ module SacCas::StepsComponent::ContentComponent
   extend ActiveSupport::Concern
 
   # Have not been able to render error messages and block in single fields_for call
-  def fields_for(&)
+  def fields_for(next_text: nil, &)
     partial_name = @partial.split("/").last
     @form.fields_for(partial_name, model) do |form|
       form.error_messages
-    end + @form.fields_for(partial_name, model, &) + bottom_toolbar
+    end + @form.fields_for(partial_name, model, &) + bottom_toolbar(next_text: next_text)
   end
 
   def model
@@ -26,10 +26,10 @@ module SacCas::StepsComponent::ContentComponent
     super
   end
 
-  def bottom_toolbar
+  def bottom_toolbar(next_text: nil)
     content_tag(:div, class: "btn-toolbar allign-with-form") do
       buttons = [
-        next_button
+        next_button(next_text)
       ]
       buttons << back_link if index.positive?
       safe_join(buttons)
