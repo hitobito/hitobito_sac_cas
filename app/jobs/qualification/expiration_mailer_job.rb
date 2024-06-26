@@ -29,11 +29,11 @@ class Qualification::ExpirationMailerJob < RecurringJob
     Time.zone.today
   end
 
-  def next_year
+  def this_year
     1.year.from_now.all_year
   end
 
-  def next_two_years
+  def next_year
     2.years.from_now.all_year
   end
 

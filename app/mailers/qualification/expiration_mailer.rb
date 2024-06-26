@@ -6,15 +6,20 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Qualification::ExpirationMailer < ApplicationMailer
-  MOMENTS = %i[today next_year next_two_years]
+  MOMENTS = %i[today this_year next_year]
   REMINDER_TODAY = 'qualification_expiration_reminder_today'
+  REMINDER_THIS_YEAR = 'qualification_expiration_reminder_this_year'
   REMINDER_NEXT_YEAR = 'qualification_expiration_reminder_next_year'
-  REMINDER_NEXT_TWO_YEARS = 'qualification_expiration_reminder_next_two_years'
 
   def reminder(moment, person)
     return unless MOMENTS.include?(moment)
 
-    content_key = Qualification::ExpirationMailer.const_get(:"REMINDER_#{moment.upcase}")
-    compose(person, content_key)
+    compose(person, content_key(moment))
+  end
+
+  private
+
+  def content_key(moment)
+    self.class.const_get(:"REMINDER_#{moment.upcase}")
   end
 end
