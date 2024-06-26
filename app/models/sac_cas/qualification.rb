@@ -12,7 +12,7 @@ module SacCas::Qualification
     before_validation :set_finish_at, unless: :finish_at
 
     validate :assert_meaningful
-    validate :start_must_be_in_past, on: :create
+    validate :start_must_be_in_past, on: :qualifications_controller_create
   end
 
   private
