@@ -1208,6 +1208,9 @@ de:
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
 
+  sheet/memberships/leave_zusatzsektion:
+    title: Zusatzsektion verlassen
+
   wizards:
     steps:
       choose_sektion:
