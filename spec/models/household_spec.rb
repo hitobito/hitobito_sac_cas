@@ -90,16 +90,18 @@ describe Household do
     end
 
     it 'is invalid if no person has a relevant membership' do
-      new_person = Fabricate(:person)
-      other_household_person = Fabricate(:person)
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
-                beitragskategorie: :adult,
-                person: other_household_person,
-                group: groups(:abo_die_alpen))
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
-                beitragskategorie: :adult,
-                person: person,
-                group: groups(:abo_die_alpen))
+      new_person = Fabricate(
+        :person_with_role,
+        group: groups(:abo_die_alpen),
+        role: Group::AboMagazin::Abonnent.sti_name,
+        beitragskategorie: :adult
+      )
+      other_household_person = Fabricate(
+        :person_with_role,
+        group: groups(:abo_die_alpen),
+        role: Group::AboMagazin::Abonnent.sti_name,
+        beitragskategorie: :adult
+      )
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
