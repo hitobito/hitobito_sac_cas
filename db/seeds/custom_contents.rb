@@ -8,7 +8,11 @@
 CustomContent.seed_once(:key,
 { key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION, # 'event_participation_rejected`
   placeholders_required: 'participant-name',
-  placeholders_optional: 'event-name, application-url, event-details' })
+  placeholders_optional: 'event-name, application-url, event-details' },
+  { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
+  { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
+  { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR }
+)
 
 participation_rejected_id =
   CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
@@ -30,5 +34,25 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     label: 'Event: Rejection email' },
   { custom_content_id: participation_rejected_id,
     locale: 'it',
-    label: "Evento: E-mail della notifica della rifiuto" }
+    label: "Evento: E-mail della notifica della rifiuto" },
+  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
+    locale: 'de',
+    label: 'Qualifikation: Erinnerungsmail morgen',
+    subject: 'Erinnerung TL-Anerkennung',
+    body: 'Liebe(r) Tourenleiter(in), deine TL-Anerkennung ist ab morgen sistiert. ' \
+      'Du darfst keine Touren für deine Sektion mehr leiten. ' \
+      'Bitte absolviere die nötigen Fortbildungstage, um wieder als aktive(r) Leiter(in) registriert sein zu können.' },
+  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR).id,
+    locale: 'de',
+    label: 'Qualifikation: Erinnerungsmail in 1 Jahr',
+    subject: 'Erinnerung TL-Anerkennung',
+    body: 'Liebe(r) Tourenleiter(in), per Ende Jahr läuft deine TL-Anerkennung ab. ' \
+      'Du darfst keine Touren für deine Sektion mehr leiten. ' \
+      'Absolviere bitte die nötigen Fortbildungstage, damit du per Ende Jahr nicht sistiert wirst.' },
+  { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR).id,
+    locale: 'de',
+    label: 'Qualifikation: Erinnerungsmail in 2 Jahren',
+    subject: 'Erinnerung TL-Anerkennung',
+    body: 'Liebe(r) Tourenleiter(in), in 2 Jahren läuft deine TL-Anerkennung ab. ' \
+      'Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in).' }
 )
