@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Qualification::Expiring
+class Qualifications::Expiring
   class << self
     def entries(finish_at)
       Qualification.where(finish_at: finish_at).joins(latest_expirations_join).includes(:person)

@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Qualification::ExpirationMailerJob do
+describe Qualifications::ExpirationMailerJob do
   before do
     ActionMailer::Base.deliveries.clear
     load './db/seeds/custom_contents.rb'

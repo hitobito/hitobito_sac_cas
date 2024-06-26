@@ -5,18 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Qualification::ExpirationMailerJob < RecurringJob
+class Qualifications::ExpirationMailerJob < RecurringJob
   run_every 1.day
 
   private
 
   def perform_internal
-    moments = Qualification::ExpirationMailer::MOMENTS
+    moments = Qualifications::ExpirationMailer::MOMENTS
     moments = [moments.first] unless end_of_year?
 
     moments.each do |moment|
-      Qualification::Expiring.entries(send(moment)).each do |qualification|
-        Qualification::ExpirationMailer.reminder(moment, qualification.person).deliver_now
+      Qualifications::Expiring.entries(send(moment)).each do |qualification|
+        Qualifications::ExpirationMailer.reminder(moment, qualification.person).deliver_now
       end
     end
   end

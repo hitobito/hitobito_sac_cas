@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Qualification::ExpirationMailer < ApplicationMailer
-  MOMENTS = %i[today this_year next_year]
+class Qualifications::ExpirationMailer < ApplicationMailer
+  MOMENTS = %i[today this_year next_year].freeze
   REMINDER_TODAY = 'qualification_expiration_reminder_today'
   REMINDER_THIS_YEAR = 'qualification_expiration_reminder_this_year'
   REMINDER_NEXT_YEAR = 'qualification_expiration_reminder_next_year'
