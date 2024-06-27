@@ -59,7 +59,7 @@ module TableDisplays
     end
 
     def beitragskategorie
-      @person.roles.collect(&:beitragskategorie).sort.uniq.collect do |value|
+      @person.roles.collect(&:beitragskategorie).compact.sort.uniq.collect do |value|
         I18n.t(value, scope: 'roles.beitragskategorie')
       end.join(', ').presence
     end

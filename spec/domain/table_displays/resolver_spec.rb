@@ -37,6 +37,17 @@ describe TableDisplays::Resolver, type: :helper do
       person.roles.build(group_id: 1, beitragskategorie: :family)
       expect(resolver.to_s).to eq 'Einzel, Familie'
     end
+
+    it 'returns nil if no role has beitragskategorie' do
+      person.roles.build(group_id: 1, beitragskategorie: nil)
+      person.roles.build(group_id: 1, beitragskategorie: nil)
+    end
+
+    it 'returns beitragskategorie if some roles have blank beitragskategorie' do
+      person.roles.build(group_id: 1, beitragskategorie: nil)
+      person.roles.build(group_id: 1, beitragskategorie: :adult)
+      expect(resolver.to_s).to eq 'Einzel'
+    end
   end
 
   it_behaves_like 'resolver', attr: :beitrittsdatum, label: 'Beitritt per' do
