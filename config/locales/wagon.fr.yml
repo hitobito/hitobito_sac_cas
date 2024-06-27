@@ -437,29 +437,29 @@ fr:
         other: ''
 
       group/sektions_neuanmeldungen_nv:
-        one: ''
-        many: ''
-        other: ''
+        one: Nouvelles inscriptions
+        many: Nouvelles inscriptions
+        other: Nouvelles inscriptions
 
       group/sektions_neuanmeldungen_sektion:
-        one: ''
-        many: ''
-        other: ''
+        one: Nouvelles inscriptions (pour validation)
+        many: Nouvelles inscriptions (pour validation)
+        other: Nouvelles inscriptions (pour validation)
 
       group/sektions_funktionaere:
-        one: ''
-        many: ''
-        other: ''
+        one: Fonctionnaires
+        many: Fonctionnaires
+        other: Fonctionnaires
 
       group/sektions_tourenkommission:
-        one: ''
-        many: ''
-        other: ''
+        one: Tours et cours
+        many: Tours et cours
+        other: Tours et cours
 
       group/sektions_externe_kontakte:
-        one: ''
-        many: ''
-        other: ''
+        one: Contacts externes
+        many: Contacts externes
+        other: Contacts externes
 
       group/sektions_kommission:
         one: ''
