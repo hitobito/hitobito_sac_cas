@@ -57,7 +57,7 @@ module Wizards::Memberships
     end
 
     def sac_mitarbeiter?
-      false
+      @backoffice
     end
 
     private
