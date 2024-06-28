@@ -57,7 +57,7 @@ module SacCas::Role
   protected
 
   def preferred_primary?
-    SacCas::MITGLIED_HAUPTSEKTION_ROLES.include?(type.safe_constantize)
+    SacCas::HAUPTSEKTION_ROLES.include?(type.safe_constantize)
   end
 
   private

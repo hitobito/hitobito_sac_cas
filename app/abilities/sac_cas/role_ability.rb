@@ -35,10 +35,6 @@ module SacCas::RoleAbility
     SacCas::MITGLIED_ROLES.include?(role.class)
   end
 
-  def mitglied_hauptsektion_role?(role = subject)
-    SacCas::MITGLIED_HAUPTSEKTION_ROLES.include?(role.class)
-  end
-
   def mitglied_zusatzsektion_role?(role = subject)
     SacCas::MITGLIED_ZUSATZSEKTION_ROLES.include?(role.class)
   end

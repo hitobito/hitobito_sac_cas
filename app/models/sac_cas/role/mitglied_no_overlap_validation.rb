@@ -27,7 +27,7 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def assert_no_overlapping_primary_memberships
-    overlapping_roles(active_period, SacCas::MITGLIED_HAUPTSEKTION_ROLES).tap do |conflicting_roles|
+    overlapping_roles(active_period, SacCas::HAUPTSEKTION_ROLES).tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
     end
   end
