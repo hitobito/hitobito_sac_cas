@@ -1065,6 +1065,11 @@ de:
         success: 
           one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
           other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
+    leave_zusatzsektions:
+      create:
+        success:
+          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde gelöscht."
+          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden gelöscht."
 
   roles:
     beitragskategorie:

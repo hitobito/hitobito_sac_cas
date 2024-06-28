@@ -7,7 +7,7 @@
 
 module Memberships
   class LeaveZusatzsektionsController < Wizards::BaseController
-    before_action :wizard, :person, :group, :authorize
+    before_action :wizard, :person, :group, :role, :authorize
 
     helper_method :group, :person
     alias_method :entry, :wizard
@@ -21,6 +21,7 @@ module Memberships
     def wizard
       @wizard ||= model_class.new(
         person: person,
+        role: role,
         current_step: params[:step].to_i,
         backoffice: person.backoffice?,
         **model_params.to_unsafe_h
@@ -33,7 +34,7 @@ module Memberships
 
     def success_message
       roles_count = wizard.leave_operation.affected_people.count
-      t(".success", group_name: wizard.choose_sektion.group.to_s, count: roles_count)
+      t(".success", group_name: wizard.sektion, count: roles_count)
     end
 
     # NOTE: format: :html is required otherwise it is redirect as turbo_stream
@@ -43,6 +44,10 @@ module Memberships
 
     def person
       @person ||= Person.find(params[:person_id])
+    end
+
+    def role
+      @role ||= Role.find(params[:role_id])
     end
 
     def group

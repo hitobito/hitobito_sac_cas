@@ -4,5 +4,5 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 - @sheet = Sheet::Memberships::LeaveZusatzsektion.new(self, nil, group)
 
-= standard_form(wizard, url: group_person_leave_zusatzsektion_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f|
+= standard_form(wizard, url: group_person_role_leave_zusatzsektion_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f|
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f)

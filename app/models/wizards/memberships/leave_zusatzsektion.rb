@@ -15,12 +15,17 @@ module Wizards::Memberships
       Wizards::Steps::LeaveZusatzsektion::Summary
     ]
 
-    attr_reader :person, :sektion
+    attr_reader :person, :role
 
-    def initialize(current_step: 0, person: nil, sektion: nil, backoffice: false, **params)
+    # TODO: Rename to sektion_name
+    def sektion
+      role.group.parent.display_name
+    end
+
+    def initialize(current_step: 0, person: nil, role: nil, backoffice: false, **params)
       super(current_step: current_step, **params)
       @person = person
-      @sektion = sektion
+      @role = role
       @backoffice = backoffice
     end
 
@@ -34,7 +39,7 @@ module Wizards::Memberships
     end
 
     def leave_operation
-      @leave_operation ||= Memberships::LeaveZusatzsektion.new(sektion, terminate_on)
+      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on)
     end
 
     def backoffice?
@@ -42,7 +47,7 @@ module Wizards::Memberships
     end
 
     def terminate_on
-      (step(:termination_choose_date).terminate_on == "now") ? Date.current : Date.current.end_of_year
+      (step(:termination_choose_date).terminate_on == "now") ? Date.current.yesterday : Date.current.end_of_year
     end
 
     def mitglied_termination_by_section_only?
