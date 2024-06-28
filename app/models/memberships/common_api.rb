@@ -23,6 +23,10 @@ module Memberships::CommonApi
     save
   end
 
+  def affected_people
+    person.sac_family.member? ? person.sac_family.family_members : [person]
+  end
+
   def roles
     @roles ||= affected_people.flat_map { |p| prepare_roles(p) }
   end
@@ -68,10 +72,6 @@ module Memberships::CommonApi
       roles.each { |role| role.save(validate: false) }
       roles.each(&:save!)
     end
-  end
-
-  def affected_people
-    person.sac_family.member? ? person.sac_family.family_members : [person]
   end
 
 end

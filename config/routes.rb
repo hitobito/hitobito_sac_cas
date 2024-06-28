@@ -40,7 +40,9 @@ Rails.application.routes.draw do
         resources :external_trainings, except: [:edit, :show, :index]
         resources :membership_invoices, only: [:create], module: :people
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
-        resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
+        resources :roles, only: [] do
+          resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
+        end
         member do
 
           # Test route to check invoice positions for a person.
