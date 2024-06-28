@@ -67,7 +67,7 @@ module Memberships::CommonApi
   end
 
   def affected_people
-    person.sac_family.member? ? person.sac_family.family_members : [person]
+    person.sac_membership.family? ? person.household.people : [person]
   end
 
 end

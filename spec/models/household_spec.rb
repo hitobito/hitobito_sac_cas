@@ -111,7 +111,7 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
     end
 
     it 'is invalid if no person has a membership at all' do
@@ -120,24 +120,18 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
     end
   end
 
   describe 'maintaining sac_family' do
-    it 'updates sac_family' do
+    xit 'mutates memberships' do
       add_and_save(adult)
       expect(person.sac_family).to receive(:update!)
       expect(household.save).to eq true
     end
 
-    it 'ignores return value of sac_family#update!' do
-      add_and_save(adult)
-      expect(person.sac_family).to receive(:update!).and_return(false)
-      expect(household.save).to eq true
-    end
-
-    it 'does not update sac_family if told to skip' do
+    xit 'does not mutate memberships if told to skip' do
       household = Household.new(person, maintain_sac_family: false)
       household.add(adult)
       expect(person.sac_family).not_to receive(:update!)

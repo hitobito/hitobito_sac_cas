@@ -24,14 +24,16 @@ module SacCas::Household
   end
 
   def save(context: :update)
-    return false unless valid?(context)
-
     Person.transaction do
-      success = super do |_new_people, removed_people|
+      success = super do |new_people, removed_people|
         clear_people_managers(removed_people)
         create_missing_people_managers
+
+        if maintain_sac_family? # TODO: do we still need the `maintain_sac_family?`?!?
+          update_main_person!
+          mutate_memberships!(new_people, removed_people)
+        end
       end
-      reference_person.sac_family.update! if success && maintain_sac_family?
 
       success
     end
@@ -78,6 +80,29 @@ module SacCas::Household
     end
   end
 
+  def mutate_memberships!(new_people, removed_people)
+    new_people.each { |p| Memberships::Family.new(p.reload).join!(reference_person) }
+    removed_people.each { |p| Memberships::Family.new(p.reload).leave! }
+  end
+
+  # Sets one of the adults with confirmed email address as family main person unless
+  # ther is already exactly one.
+  def update_main_person!
+    return if people.count(&:sac_family_main_person) == 1
+
+    new_main_person =
+      people.find {|person| person.sac_family_main_person } ||
+      people.find {|person| person.adult? && person.confirmed_at? }
+
+    people.select(&:sac_family_main_person).each do |person|
+      next if person == new_main_person
+
+      person.update!(sac_family_main_person: false)
+    end
+
+    new_main_person&.update!(sac_family_main_person: true)
+  end
+
   def next_key
     Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s # rubocop:disable Rails/SkipsModelValidations
   end
@@ -118,7 +143,7 @@ module SacCas::Household
   end
 
   def assert_someone_is_a_member
-    someone_is_member = members.any? { |member| member.person.active_sac_member? }
+    someone_is_member = members.any? { |member| member.person.sac_membership_active? }
     unless someone_is_member
       errors.add(:members, :no_members)
     end
@@ -126,5 +151,9 @@ module SacCas::Household
 
   def adults
     @adults ||= people_by_agegroup(:adult)
+  end
+
+  def main_person
+    people.find(&:sac_family_main_person)
   end
 end

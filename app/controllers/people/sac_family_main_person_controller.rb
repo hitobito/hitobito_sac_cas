@@ -20,7 +20,7 @@ class People::SacFamilyMainPersonController < ApplicationController
   private
 
   def assert_person_family_member!
-    unless person.sac_family_member?
+    unless person.sac_membership.family?
       render plain: 'Person is not associated with any household',
              status: :unprocessable_entity
     end
