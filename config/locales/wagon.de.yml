@@ -34,7 +34,7 @@ de:
       memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
-        terminate_on: Beitrittsdatum
+        terminate_on: Austrittsdatum
       people/neuanmeldungen/reject:
         note: Bemerkung
       self_inscription:
