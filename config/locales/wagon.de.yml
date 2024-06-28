@@ -773,6 +773,10 @@ de:
         ready: Bereit zur Durchführung
         closed: Abschliessen
         canceled: Absagen
+      state_back_buttons:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+
     form_tabs:
       communication: Kommunikation
     general_fields:

@@ -31,6 +31,11 @@ module Events::Courses::State
       SAC_COURSE_STATES[state.to_sym]
     end
 
+    def state_comes_before?(state1, state2)
+      states = SAC_COURSE_STATES.keys
+      states.index(state1.to_sym) < states.index(state2.to_sym)
+    end
+
     def assignment_closed?
       state.to_sym == :assignment_closed
     end
