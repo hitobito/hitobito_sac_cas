@@ -8,7 +8,7 @@
 module Memberships
   class JoinZusatzsektionAbility < AbilityDsl::Base
     on(Wizards::Memberships::JoinZusatzsektion) do
-      permission(:admin).may(:manage).all
+      permission(:admin).may(:manage).active_member?
       permission(:any).may(:create).for_self_if_active_member
     end
 
@@ -21,7 +21,7 @@ module Memberships
     end
 
     def active_member?
-      People::SacMembership.new(user_context.user).active?
+      People::SacMembership.new(subject.person).active?
     end
   end
 end

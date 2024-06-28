@@ -30,8 +30,13 @@ describe Memberships::JoinZusatzsektionAbility do
       expect(ability).to be_able_to(:create, build_join(:mitglied))
     end
 
-    it "may create join for admin" do
-      expect(ability).to be_able_to(:create, build_join(:admin))
+    it "may not create join if membership is no longer active" do
+      roles(:mitglied).update(deleted_at: 1.day.ago)
+      expect(ability).not_to be_able_to(:create, build_join(:mitglied))
+    end
+
+    it "may not create join for admin as admin has no membership" do
+      expect(ability).not_to be_able_to(:create, build_join(:admin))
     end
   end
 

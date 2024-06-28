@@ -27,6 +27,10 @@ describe "joining zusatzsektion", js: true do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:mitglied) }
 
+    before do
+      roles(:mitglied_zweitsektion).destroy
+    end
+
     it "has dropdown on person show page" do
       expect(page).to have_link "Mitgliedschaft anpassen"
     end
@@ -47,7 +51,7 @@ describe "joining zusatzsektion", js: true do
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
       expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
-      click_on "Registrieren"
+      click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
     end
@@ -68,6 +72,7 @@ describe "joining zusatzsektion", js: true do
     let(:group) { groups(:bluemlisalp_mitglieder) }
 
     before do
+      roles(:familienmitglied_zweitsektion).destroy
       Group::SektionsNeuanmeldungenSektion.delete_all
       click_link "Mitgliedschaft anpassen"
       click_link "Zusatzsektion beantragen"
@@ -86,7 +91,7 @@ describe "joining zusatzsektion", js: true do
         expect(page).to have_css "li.active", text: "Bestätigung"
         expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
         expect do
-          click_on "Registrieren"
+          click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",
             text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
         end.to change { Role.count }.by(1)
@@ -101,7 +106,7 @@ describe "joining zusatzsektion", js: true do
         expect(page).to have_css "li.active", text: "Bestätigung"
         expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
         expect do
-          click_on "Registrieren"
+          click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",
             text: "Eure 3 Zusatzmitgliedschaften in SAC Matterhorn wurden erstellt."
         end.to change { Role.count }.by(3)

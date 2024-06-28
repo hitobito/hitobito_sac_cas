@@ -19,12 +19,21 @@ describe Memberships::JoinZusatzsektionsController do
      wizards_memberships_join_zusatzsektion: attrs}
   end
 
+  before do
+    Group::SektionsNeuanmeldungenSektion.delete_all
+    ids = %w[mitglied_zweitsektion familienmitglied_zweitsektion].map do |key|
+      ActiveRecord::FixtureSet.identify(key)
+    end
+    Role.where(id: ids).delete_all
+  end
+
   context "as normal user" do
     let(:person) { people(:mitglied) }
 
     it "POST#create creates single role and redirects" do
       expect do
         post :create, params: build_params(step: 1, choose_sektion: {group_id: matterhorn.id})
+        expect(response).to redirect_to person_path(person, format: :html)
       end.to change { Role.count }.by(1)
       expect(response).to redirect_to person_path(person, format: :html)
       expect(flash[:notice]).to eq "Deine Zusatzmitgliedschaft in <i>SAC " \
@@ -56,8 +65,8 @@ describe Memberships::JoinZusatzsektionsController do
         )
       end.to change { Role.count }.by(3)
       expect(response).to redirect_to person_path(person, format: :html)
-      expect(flash[:notice]).to eq "Deine Zusatzmitgliedschaft in <i>SAC " \
-                                   "Matterhorn</i> wurde erstellt."
+      expect(flash[:notice]).to eq "Eure 3 Zusatzmitgliedschaften in <i>SAC " \
+                                   "Matterhorn</i> wurden erstellt."
     end
   end
 end

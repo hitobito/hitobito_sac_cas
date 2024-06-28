@@ -7,7 +7,7 @@
 
 module Sheet::Memberships
   class JoinZusatzsektion < Sheet::Base
-    self.parent_sheet = Sheet::Group
+    self.parent_sheet = Sheet::Person
 
     def initialize(*args)
       super

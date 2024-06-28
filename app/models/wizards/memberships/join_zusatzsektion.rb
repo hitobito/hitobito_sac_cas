@@ -32,16 +32,17 @@ module Wizards::Memberships
       join_operation.save!
     end
 
-    def sektion
-      choose_sektion.group
+    def human_role_type
+      beitragskategorie = join_operation.roles.first.beitragskategorie
+      I18n.t("invoices.sac_memberships.beitragskategorie.#{beitragskategorie}")
     end
 
     def join_operation
       @join_operation ||=
         Memberships::JoinZusatzsektion.new(
-          sektion,
+          choose_sektion.group,
           person,
-          join_date,
+          Time.zone.today,
           sac_family_membership: family_membership?
         )
     end
@@ -51,11 +52,6 @@ module Wizards::Memberships
     end
 
     private
-
-    # TODO: where does this come from
-    def join_date
-      Time.zone.today
-    end
 
     def family_membership?
       choose_membership.register_as_family? if respond_to?(:choose_membership)
@@ -68,7 +64,6 @@ module Wizards::Memberships
         join_operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
-        join_operation.errors.copy!(self)
       end
     end
 

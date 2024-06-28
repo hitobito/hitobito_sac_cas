@@ -92,7 +92,7 @@ module SacCas::Person
     roles.exists?(type: SacCas::TOUR_GUIDE_ROLES)
   end
 
-  def sac_admin?
+  def backoffice?
     roles.exists?(type: SacCas::SAC_MITARBEITER_ROLES)
   end
 

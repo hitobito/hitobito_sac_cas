@@ -22,11 +22,11 @@ module Memberships::CommonApi
     save
   end
 
-  private
-
   def roles
     @roles ||= affected_people.flat_map { |p| prepare_roles(p) }
   end
+
+  private
 
   def validate_roles
     # Validating roles is complicated because the validations check for other persisted roles.

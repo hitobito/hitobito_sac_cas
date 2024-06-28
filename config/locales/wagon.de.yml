@@ -1185,8 +1185,8 @@ de:
       join_zusatzsektion:
         summary:
           info_text: 'Die Mitgliedschaft bei der Zusatzsektion wird als
-          {Einzelmitglied|Jugendmitglied|Familienmitglied} abgeschlossen und
-          ist per sofort gültig.'
+            %{beitragskategorie} abgeschlossen und ist per sofort gültig.'
+          next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}.
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."

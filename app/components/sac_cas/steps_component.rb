@@ -9,6 +9,8 @@ module SacCas::StepsComponent
   extend ActiveSupport::Concern
 
   prepended do
+    renders_one :aside
+
     haml_template <<~HAML
       %div{data: { controller: stimulus_controller} }
         = hidden_field_tag(:step, @step, data: stimulus_target('step'))
@@ -22,8 +24,17 @@ module SacCas::StepsComponent
             .col-md
               = render(SelfRegistration::FeeComponent.new(group: @form.object.group, birthdays: @form.object.birthdays))
               = render(SelfRegistration::InfosComponent.new)
+          - elsif aside?
+            .col-lg
+              = render(ContentComponent.with_collection(@partials, step: @step, form: @form))
+            .col-md
+              = aside
           - else
             .col= render(ContentComponent.with_collection(@partials, step: @step, form: @form))
     HAML
+  end
+
+  def model
+    @form.object
   end
 end
