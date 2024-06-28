@@ -13,7 +13,7 @@ module Wizards
 
       def terminate_on_options
         TERMINATE_ON_OPTIONS.map do |option|
-          [option, self.class.human_attribute_name(option)]
+          [option, self.class.human_attribute_name(option, year: Date.current.year)]
         end
       end
     end

@@ -70,6 +70,8 @@ de:
 
       wizards/steps/termination_choose_date:
         terminate_on: 'Austrittsdatum'
+        now: Sofort
+        end_of_year: "Auf 31.12.%{year}"
 
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason: 'Austrittsgrund'
