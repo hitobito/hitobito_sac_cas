@@ -8,9 +8,11 @@
 require 'spec_helper'
 
 describe Wizards::Steps::ChooseSektion do
-  let(:wizard) { Wizards::Base.new(current_step: 0) }
+  let(:wizard) do
+    instance_double(Wizards::Memberships::JoinZusatzsektion, person: people(:abonnent),
+                                                             backoffice?: false)
+  end
   subject(:step) { described_class.new(wizard) }
-  let(:group) { groups(:bluemlisalp) }
 
   describe 'validations' do
     it 'validates presence of group id' do
@@ -19,14 +21,33 @@ describe Wizards::Steps::ChooseSektion do
       expect(step.errors[:group_id]).to eq ['muss ausgefüllt werden']
     end
 
-    it 'validates type of group id' do
-      step.group_id = Group::SacCas.first.id
+    it 'validates group type' do
+      step.group_id = groups(:root).id
       expect(step).not_to be_valid
       expect(step.errors[:group_id]).to eq ['ist nicht gültig']
     end
 
+    context 'with existing memberships' do
+      before { allow(wizard).to receive(:person).and_return(people(:mitglied))}
+
+      it 'validates no mitgliedschaft in group exists' do
+        step.group_id = groups(:bluemlisalp).id
+        expect(step).not_to be_valid
+
+        expect(step.errors[:group_id]).to eq ['ist nicht gültig']
+      end
+
+      it 'validates no zusatzmitgliedschaft in group exists' do
+        step.group_id = groups(:matterhorn).id
+        expect(step).not_to be_valid
+        expect(step.errors[:group_id]).to eq ['ist nicht gültig']
+      end
+    end
+
     context 'self service' do
-      before { step.group_id = group.id }
+      before do
+        step.group_id = groups(:bluemlisalp).id
+      end
 
       it 'is invalid when triggered by normal user' do
         allow(wizard).to receive(:backoffice?).and_return(false)
@@ -43,7 +64,6 @@ describe Wizards::Steps::ChooseSektion do
       end
 
       it 'is valid when triggered by normal user but self service is allowed' do
-        allow(wizard).to receive(:backoffice?).and_return(false)
         Group::SektionsNeuanmeldungenSektion.destroy_all
         expect(step).not_to be_valid
       end

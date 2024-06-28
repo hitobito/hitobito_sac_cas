@@ -3,9 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-.row
-  .col-lg
-    %p=t('.info_text')
-  .col-md
-    = render(SelfRegistration::FeeComponent.new(group: c.model.wizard.sektion, birthdays: []))
+%p=t('.info_text', beitragskategorie: c.model.wizard.human_role_type)
 = c.bottom_toolbar

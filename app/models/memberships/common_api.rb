@@ -23,11 +23,11 @@ module Memberships::CommonApi
     save
   end
 
-  private
-
   def roles
     @roles ||= affected_people.flat_map { |p| prepare_roles(p) }
   end
+
+  private
 
   def validate_roles
     # Validating roles is complicated because the validations check for other persisted roles.
@@ -38,7 +38,11 @@ module Memberships::CommonApi
     Role.transaction do
       roles.each do |role|
         # ignore the error, the role will be invalid anyway
-        role.save(validate: false) rescue ActiveRecord::NotNullViolation
+
+        role.save(validate: false)
+      rescue
+        ActiveRecord::NotNullViolation
+
       end
       roles.each do |role|
         role.validate
