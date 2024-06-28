@@ -32,6 +32,7 @@ class SacPersonSeeder < PersonSeeder
 
   def person_attributes(role_type)
     attrs = super
+    attrs[:confirmed_at] = Time.current
     attrs.delete(:nickname)
     attrs
   end

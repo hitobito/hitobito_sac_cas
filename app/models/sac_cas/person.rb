@@ -27,7 +27,9 @@ module SacCas::Person
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
-    delegate :active?, :anytime?, :billable?, :roles, to: :sac_membership, prefix: true
+    delegate :active?, :anytime?, :billable?, :family?, :stammsektion_role,
+             to: :sac_membership, prefix: true
+    delegate :family_id, to: :sac_membership
 
     alias_attribute :membership_number, :id
     alias_attribute :navision_id, :id
@@ -63,21 +65,9 @@ module SacCas::Person
     encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
   end
 
-  def family_id
-    sac_family.id
-  end
-
   def salutation_label(key)
     prefix = "activerecord.attributes.person.salutations"
     I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
-  end
-
-  def sac_family
-    @sac_family ||= People::SacFamily.new(self)
-  end
-
-  def sac_family_member?
-    sac_family.member?
   end
 
   def adult?(reference_date: Time.zone.today.end_of_year)
@@ -95,12 +85,6 @@ module SacCas::Person
   def backoffice?
     roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES)
   end
-
-  def active_sac_member?
-    sac_membership.active?
-  end
-
-  private
 
   def sac_membership
     @sac_membership ||= People::SacMembership.new(self)

@@ -156,7 +156,8 @@ describe Memberships::SwitchStammsektion do
 
       def create_sac_family(person, *others)
         person.update_column(:sac_family_main_person, true)
-        household = Household.new(person)
+        # we set up roles manually, so disable `maintain_sac_family`
+        household = Household.new(person, maintain_sac_family: false)
         others.each { |member| household.add(member) }
         household.save!
         person.reload

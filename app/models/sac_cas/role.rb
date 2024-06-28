@@ -39,6 +39,11 @@ module SacCas::Role
           select(selects, select_with_membership_years(date))
         end
 
+      scope :family, -> {
+        where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
+      }
+
+
       belongs_to :termination_reason, optional: true
     end
   end

@@ -75,7 +75,7 @@ de:
         household:
           attributes:
             members: 
-              no_members: "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."
+              no_members: "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
               no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.

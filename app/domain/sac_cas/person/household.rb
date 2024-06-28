@@ -45,7 +45,7 @@ module SacCas::Person::Household
       super
 
       create_missing_people_managers
-      person.sac_family.update! if maintain_sac_family?
+      # person.sac_family.update! if maintain_sac_family? # obsolete, Person::Household will get removed
     end
   end
 

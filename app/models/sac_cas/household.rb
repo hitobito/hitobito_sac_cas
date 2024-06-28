@@ -13,8 +13,8 @@ module SacCas::Household
   prepended do
     validate :assert_adult_member, on: :update
     validate :assert_minimum_member_size, on: :update
-    validate :assert_removed_member_email, on: :update
-    validate :assert_adult_member_with_email, on: :update
+    validate :assert_removed_member_email_confirmed, on: :update
+    validate :assert_adult_member_with_confirmed_email, on: :update
     validate :assert_someone_is_a_member, on: :update
   end
 
@@ -23,21 +23,17 @@ module SacCas::Household
     @maintain_sac_family = maintain_sac_family
   end
 
-  def main_person
-    people.find(&:sac_family_main_person)
-  end
-
   def save(context: :update)
-    return false unless valid?(context)
-
     Person.transaction do
-      success = super do |_new_people, removed_people|
+      super do |new_people, removed_people|
         clear_people_managers(removed_people)
         create_missing_people_managers
-      end
-      reference_person.sac_family.update! if success && maintain_sac_family?
 
-      success
+        if maintain_sac_family?
+          update_main_person!
+          mutate_memberships!(new_people, removed_people)
+        end
+      end
     end
   end
 
@@ -47,6 +43,32 @@ module SacCas::Household
         clear_people_managers(people)
       end
     end
+  end
+
+  def reload
+    # `#reload` on the base class clears instance variables and re-initializes with
+    # the reference person. The `@maintain_sac_family` gets lost so we have to handle this here.
+    original_maintain_sac_family = @maintain_sac_family
+    super
+    @maintain_sac_family = original_maintain_sac_family
+    self
+  end
+
+  # Sets the reference_person as the main person of the family.
+  def set_family_main_person!(person = reference_person)
+    ActiveRecord::Base.transaction do
+      Person.where(id: people.map(&:id)).where(sac_family_main_person: true)
+            .update_all(sac_family_main_person: false)
+      person.update!(sac_family_main_person: true)
+    end
+  end
+
+  def main_person
+    people.find(&:sac_family_main_person)
+  end
+
+  def maintain_sac_family?
+    @maintain_sac_family
   end
 
   private
@@ -78,16 +100,33 @@ module SacCas::Household
     [:adult, :child].include?(age_category)
 
     people.select do |person|
-      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
+      SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")
+    end
+  end
+
+  def mutate_memberships!(new_people, removed_people)
+    new_people.each { |p| Memberships::FamilyMutation.new(p.reload).join!(reference_person) }
+    removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
+  end
+
+  # Sets one of the adults with confirmed email address as family main person unless
+  # ther is already exactly one.
+  def update_main_person!
+    return if people.count(&:sac_family_main_person) == 1
+
+    # take the first main person, or find the first adult with confirmed email
+    new_main_person = main_person || people.find { |person| person.adult? && person.confirmed_at? }
+
+    people.each do |person|
+      is_main_person = person == new_main_person
+      next if !(is_main_person ^ person.sac_family_main_person?)
+
+      person.update!(sac_family_main_person: is_main_person)
     end
   end
 
   def next_key
     Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s # rubocop:disable Rails/SkipsModelValidations
-  end
-
-  def maintain_sac_family?
-    @maintain_sac_family
   end
 
   def assert_adult_member
@@ -106,23 +145,20 @@ module SacCas::Household
     end
   end
 
-  def assert_removed_member_email
-    removed_people = Person.where(household_key: household_key)
-      .where.not(id: members.map { _1.person.id })
+  def assert_removed_member_email_confirmed
+    return if removed_people.all?(&:confirmed_at?)
 
-    if removed_people.any? { _1.email.blank? }
-      errors.add(:base, :removed_member_has_no_email)
-    end
+    errors.add(:base, :removed_member_has_no_email)
   end
 
-  def assert_adult_member_with_email
-    if adults.none? { _1.email.present? }
-      errors.add(:base, :no_adult_member_with_email)
-    end
+  def assert_adult_member_with_confirmed_email
+    return if adults.any? { _1.confirmed_at? }
+
+    errors.add(:base, :no_adult_member_with_email)
   end
 
   def assert_someone_is_a_member
-    someone_is_member = members.any? { |member| member.person.active_sac_member? }
+    someone_is_member = members.any? { |member| member.person.sac_membership_active? }
     unless someone_is_member
       errors.add(:members, :no_members)
     end

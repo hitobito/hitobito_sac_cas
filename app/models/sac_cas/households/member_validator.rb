@@ -13,7 +13,6 @@ module SacCas::Households::MemberValidator
 
     assert_birthday
     assert_family_age_range
-    assert_no_conflicting_family_membership
     assert_no_membership_in_other_section
   end
 
@@ -28,13 +27,6 @@ module SacCas::Households::MemberValidator
   def assert_family_age_range
     if person.birthday.present? && !SacCas::Beitragskategorie::Calculator.new(person).family_age?
       add_error(:family_age_range_not_fulfilled)
-    end
-  end
-
-  def assert_no_conflicting_family_membership
-    if person.household_key != household.household_key &&
-        person.roles.exists?(beitragskategorie: :family)
-      add_error(:conflicting_family_membership, :name)
     end
   end
 

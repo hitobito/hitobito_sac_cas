@@ -14,13 +14,13 @@ describe Household do
     Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
   end
 
-  let(:person) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", email: "dad@hitobito.example.com", birthday: Date.new(2000, 1, 1)) }
+  let(:person) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
   let(:adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
   let(:child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
   let(:second_child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
   let(:second_adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
 
-  subject!(:household) { Household.new(person) }
+  subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
   def sequence = Sequence.by_name(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
 
@@ -30,7 +30,7 @@ describe Household do
 
   def add_and_save(*members)
     members.each { |member| household.add(member) }
-    expect(household.save).to eq true
+    expect(household.save).to eq(true), household.errors.full_messages.join(", ")
   end
 
   def remove_and_save(*members)
@@ -79,7 +79,7 @@ describe Household do
     end
 
     it "is invalid if it contains no adult with confirmed email" do
-      adult.update_attribute(:email, "")
+      adult.update_attribute(:confirmed_at, nil)
       household = Household.new(adult)
       household.add(child)
       expect(household.valid?).to eq false
@@ -90,8 +90,7 @@ describe Household do
       person.email = nil
 
       expect(household.valid?(:destroy)).to eq false
-      expect(household.errors["members[0].base"]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse.",
-        "#{person.full_name} hat einen Austritt geplant."])
+      expect(household.errors["members[0].base"]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
     end
 
     it "is invalid if no household person has a membership role" do
@@ -124,23 +123,66 @@ describe Household do
   end
 
   describe "maintaining sac_family" do
-    it "updates sac_family" do
-      add_and_save(adult)
-      expect(person.sac_family).to receive(:update!)
-      expect(household.save).to eq true
+    context "when enabled" do
+      subject(:household) { Household.new(person, maintain_sac_family: true) }
+
+      it "mutates memberships" do
+        expect do
+          Household.new(person, maintain_sac_family: true).add(adult).save!
+        end
+          .to change { person.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
+          .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
+      end
+
+      it "calls Memberships::FamilyMutation#join! for added person" do
+        # prepare a family
+        household.add(child).save!
+        household.reload
+
+        expect(Memberships::FamilyMutation).to receive(:new).with(adult) do
+          instance_double(Memberships::FamilyMutation).tap { expect(_1).to receive(:join!).with(household.reference_person) }
+        end
+
+        household.add(adult).save!
+      end
+
+      it "calls Memberships::FamilyMutation#leave! for removed person" do
+        # prepare a family
+        household.add(child).add(second_adult).save!
+        household.reload
+
+        expect(Memberships::FamilyMutation).to receive(:new).with(second_adult) do
+          instance_double(Memberships::FamilyMutation).tap { expect(_1).to receive(:leave!) }
+        end
+
+        household.remove(second_adult).save!
+      end
     end
 
-    it "ignores return value of sac_family#update!" do
-      add_and_save(adult)
-      expect(person.sac_family).to receive(:update!).and_return(false)
-      expect(household.save).to eq true
-    end
+    context "when disabled" do
+      subject(:household) { Household.new(person, maintain_sac_family: false) }
 
-    it "does not update sac_family if told to skip" do
-      household = Household.new(person, maintain_sac_family: false)
-      household.add(adult)
-      expect(person.sac_family).not_to receive(:update!)
-      expect(household.save).to eq true
+      it "does not mutate memberships if told to skip" do
+        expect do
+          Household.new(person, maintain_sac_family: false).add(adult).save!
+        end
+          .to not_change { person.sac_membership.stammsektion_role.attributes }
+          .and not_change { adult.sac_membership.stammsektion_role.attributes }
+      end
+
+      it "does not call Memberships::Family" do
+        # prepare a family
+        household.add(child).add(second_adult).save!
+        household.reload
+
+        expect(Memberships::FamilyMutation).not_to receive(:new)
+
+        expect do
+          household.remove(second_adult).save!
+        end
+          .to not_change { second_adult.sac_membership.stammsektion_role.attributes }
+          .and not_change { second_adult.sac_membership.stammsektion_role.attributes }
+      end
     end
   end
 
@@ -216,6 +258,16 @@ describe Household do
         expect_any_instance_of(Person).to receive(:managers).and_raise("ouch")
         expect { household.destroy }.to raise_error("ouch").and(not_change { PeopleManager.count })
       end
+    end
+  end
+
+  describe "#reload" do
+    it "does not forget #maintain_sac_family value" do
+      household = Household.new(person, maintain_sac_family: false)
+      expect { household.reload }.not_to change { household.maintain_sac_family? }.from(false)
+
+      household = Household.new(person, maintain_sac_family: true)
+      expect { household.reload }.not_to change { household.maintain_sac_family? }.from(true)
     end
   end
 end
