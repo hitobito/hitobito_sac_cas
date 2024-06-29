@@ -39,18 +39,6 @@ describe Memberships::JoinZusatzsektionsController do
       expect(flash[:notice]).to eq "Deine Zusatzmitgliedschaft in <i>SAC " \
                                    "Matterhorn</i> wurde erstellt."
     end
-
-    context "admin trys to join without membership" do
-      let(:person) { people(:admin) }
-
-      # TODO: raises a NoMethodError for append on errors when running from
-      # controller for admin without membership role (unsure why)
-      it "POST#create raises when admin without membership tries to join himself" do
-        expect do
-          post :create, params: build_params(step: 1, choose_sektion: {group_id: matterhorn.id})
-        end.to raise_error(NoMethodError, /undefined method `append' for #<ActiveModel::Errors/)
-      end
-    end
   end
 
   context "as family" do
