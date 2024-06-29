@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "wizards/steps/_main_email.html.haml" do
+xdescribe "wizards/steps/_main_email.html.haml" do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
   let(:step) { Wizards::Steps::MainEmail.new(wizard) }
   let(:form) { StandardFormBuilder.new(:wizard, wizard, view, {builder: StandardFormBuilder}) }

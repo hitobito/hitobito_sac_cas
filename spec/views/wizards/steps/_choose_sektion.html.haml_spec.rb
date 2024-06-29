@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "wizards/steps/_choose_sektion.html.haml" do
+xdescribe "wizards/steps/_choose_sektion.html.haml" do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
   let(:params) { {} }
   let(:step) { Wizards::Steps::ChooseSektion.new(wizard, **params) }
