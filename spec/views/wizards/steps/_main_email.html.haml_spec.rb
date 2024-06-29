@@ -14,7 +14,7 @@ describe "wizards/steps/_main_email.html.haml" do
   let(:content_component) do
     StepsComponent::ContentComponent.new(
       partial: :main_email,
-      partial_iteration: double(:iter, index: 0),
+      partial_iteration: double(:iter, index: 0, last?: false),
       step: step,
       form: form
     )

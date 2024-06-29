@@ -14,7 +14,7 @@ describe "wizards/steps/_choose_sektion.html.haml" do
   let(:component) do
     StepsComponent::ContentComponent.new(
       partial: :choose_sektion,
-      partial_iteration: double(:iter, index: 0),
+      partial_iteration: double(:iter, index: 0, last?: false),
       step: step,
       form: form
     )
@@ -29,6 +29,8 @@ describe "wizards/steps/_choose_sektion.html.haml" do
 
   before do
     allow(Wizards::Base).to receive(:steps).and_return([step.class])
+    allow(wizard).to receive(:backoffice?).and_return(false)
+    allow(wizard).to receive(:person).and_return(Person.new)
     allow(view).to receive_messages(f: form, c: component)
   end
 
