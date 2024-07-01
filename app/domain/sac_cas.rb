@@ -53,6 +53,12 @@ module SacCas
     ::Group::Geschaeftsstelle::Admin
   ].freeze
 
+  SAC_SECTION_FUNCTIONARY_ROLES = [
+    ::Group::SektionsFunktionaere::Administration,
+    ::Group::SektionsFunktionaere::Praesidium,
+    ::Group::SektionsFunktionaere::Mitgliederverwaltung
+  ].freeze
+
   TOUR_GUIDE_ROLES = [
     ::Group::SektionsTourenkommission::Tourenleiter,
     ::Group::SektionsTourenkommission::TourenleiterOhneQualifikation
