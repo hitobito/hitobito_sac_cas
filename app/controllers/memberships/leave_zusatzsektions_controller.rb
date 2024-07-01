@@ -28,8 +28,6 @@ module Memberships
       )
     end
 
-    def backoffice?; end
-
     def model_class
       Wizards::Memberships::LeaveZusatzsektion
     end
