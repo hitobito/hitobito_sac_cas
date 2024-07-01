@@ -32,7 +32,7 @@ class People::SacMembership
   end
 
   def roles
-    @person.roles.select { |r| SacCas::MITGLIED_HAUPTSEKTION_ROLES.include?(r.class) }
+    @person.roles.select { |r| SacCas::MITGLIED_STAMMSEKTION_ROLES.include?(r.class) }
   end
 
   # There should be only one active `Mitglied` role at a time anyway
@@ -46,7 +46,7 @@ class People::SacMembership
 
   private
 
-  def stammsektion_mitglied_sti_names = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
+  def stammsektion_mitglied_sti_names = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
   def mitglied_and_neuanmeldung_sti_names = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
 
   def any_future_role?

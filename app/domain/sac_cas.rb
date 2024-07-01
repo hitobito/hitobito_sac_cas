@@ -9,8 +9,8 @@ module SacCas
 
   ### Membership roles
 
-  MITGLIED_HAUPTSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].freeze
-  NEUANMELDUNG_HAUPTSEKTION_ROLES = [
+  MITGLIED_STAMMSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].freeze
+  NEUANMELDUNG_STAMMSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   ].freeze
@@ -22,12 +22,12 @@ module SacCas
   ].freeze
 
   MITGLIED_ROLES = [
-    MITGLIED_HAUPTSEKTION_ROLES,
+    MITGLIED_STAMMSEKTION_ROLES,
     MITGLIED_ZUSATZSEKTION_ROLES
   ].flatten.freeze
 
   NEUANMELDUNG_ROLES = [
-    NEUANMELDUNG_HAUPTSEKTION_ROLES,
+    NEUANMELDUNG_STAMMSEKTION_ROLES,
     NEUANMELDUNG_ZUSATZSEKTION_ROLES
   ].flatten.freeze
 
@@ -36,9 +36,9 @@ module SacCas
     NEUANMELDUNG_ROLES
   ].flatten.freeze
 
-  HAUPTSEKTION_ROLES = [
-    MITGLIED_HAUPTSEKTION_ROLES,
-    NEUANMELDUNG_HAUPTSEKTION_ROLES
+  STAMMSEKTION_ROLES = [
+    MITGLIED_STAMMSEKTION_ROLES,
+    NEUANMELDUNG_STAMMSEKTION_ROLES
   ].flatten.freeze
 
   ZUSATZSEKTION_ROLES = [

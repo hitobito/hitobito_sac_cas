@@ -28,7 +28,7 @@ module SacCas::Role::MitgliedFamilyValidations
     people = person.
              household_people.
              joins(:roles).
-             merge(Role.where(type: SacCas::HAUPTSEKTION_ROLES,
+             merge(Role.where(type: SacCas::STAMMSEKTION_ROLES,
                               beitragskategorie: :family)).to_a
 
     people << person

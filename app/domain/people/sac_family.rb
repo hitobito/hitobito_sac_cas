@@ -167,7 +167,7 @@ class People::SacFamily
   #end
 
   def stammsektion_role_types
-    SacCas::HAUPTSEKTION_ROLES.map(&:sti_name)
+    SacCas::STAMMSEKTION_ROLES.map(&:sti_name)
   end
 
   def zusatzsektion_role_types
