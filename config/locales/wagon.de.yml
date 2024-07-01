@@ -1244,6 +1244,8 @@ de:
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
       leave_zusatzsektion:
+        ask_family_main_person:
+          info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
           next_button: "Austritt beantragen"

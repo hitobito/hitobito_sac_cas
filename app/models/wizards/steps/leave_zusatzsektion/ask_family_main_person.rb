@@ -10,6 +10,10 @@ module Wizards
         def valid?
           false
         end
+
+        def family_main_person_name
+          wizard.person.household.main_person.full_name
+        end
       end
     end
   end

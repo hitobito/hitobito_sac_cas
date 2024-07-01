@@ -12,8 +12,9 @@ describe "leave zusatzsektion", js: true do
     sign_in(person)
   end
 
+  let(:group) { groups(:bluemlisalp_mitglieder) }
+
   context "as normal user" do
-    let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:mitglied) }
     let(:role) { person.roles.second }
 
@@ -32,6 +33,42 @@ describe "leave zusatzsektion", js: true do
       end
         .to change { person.roles.count }.by(-1)
         .and change { role.reload.deleted_at }.from(nil)
+    end
+  end
+
+  context "as family main person" do
+    let(:person) { people(:familienmitglied) }
+    let(:role) { person.roles.second }
+
+    it "can execute wizard" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      expect(page).to have_title "Zusatzsektion verlassen"
+      choose "Sofort"
+      click_button "Weiter"
+      select "einfach so"
+      expect do
+        click_button "Austritt beantragen"
+        expect(page).to have_content "Eure 3 Zusatzmitgliedschaften in #{role.group.parent.name} wurden gelöscht."
+      end
+        .to change { Role.count }.by(-3)
+        .and change { role.reload.deleted_at }.from(nil)
+    end
+  end
+
+  context "as family regular person" do
+    let(:person) { people(:familienmitglied2) }
+    let(:role) { person.roles.second }
+
+    it "shows info about the main family person" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      expect(page).to have_title "Zusatzsektion verlassen"
+      expect(page).to have_content("Bitte wende dich an #{people(:familienmitglied)}")
     end
   end
 end

@@ -61,12 +61,11 @@ module Wizards::Memberships
     private
 
     def family_membership?
-      !person.household.empty?
+      role.beitragskategorie.family?
     end
 
     def family_main_person?
-      # TODO: Implement
-      false
+      person.sac_family_main_person
     end
 
     def leave_operation_valid?
