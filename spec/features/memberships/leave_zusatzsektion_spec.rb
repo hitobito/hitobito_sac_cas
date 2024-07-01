@@ -67,6 +67,7 @@ describe "leave zusatzsektion", js: true do
       expect(page).to have_title "Zusatzsektion verlassen"
       select "einfach so"
       expect do
+        expect(page).to have_content "Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt"
         click_button "Austritt beantragen"
         expect(page).to have_content "Eure 3 Zusatzmitgliedschaften in #{role.group.parent.name} wurden gelöscht."
       end
