@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .row
-  %p=t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion)
+  %p=t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion_name)
 = c.fields_for do |form|
   = form.labeled(:termination_reason) do
     = form.select :termination_reason, ['einfach so', 'weiss nicht'], {prompt: true}
