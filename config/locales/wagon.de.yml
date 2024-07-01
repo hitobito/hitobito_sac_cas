@@ -837,6 +837,10 @@ de:
           Hier kannst du deine Mitgliedschaften verwalten.
           Informationen zu den verschiedenen SAC Sektionen findest du unter
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
+    sac_remarks:
+      index:
+        national_office: Bemerkungen Geschäftsstelle
+        section: Bemerkungen Sektion %{section_number}
 
   people:
     actions_show_sac_cas:
@@ -869,6 +873,7 @@ de:
 
     tabs:
       history: Mitgliedschaften / Verlauf
+      remarks: Bemerkungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft
