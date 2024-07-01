@@ -211,7 +211,7 @@ describe :mitglied_no_overlap_validation do
       end
     end
 
-    # Hauptsektion Mitgliedschaften/Neuanmeldungen
+    # Stammsektion Mitgliedschaften/Neuanmeldungen
     it_behaves_like 'deny concurrent role in same layer',
                     existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
                     new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder]
@@ -262,7 +262,7 @@ describe :mitglied_no_overlap_validation do
                     existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
                     new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
 
-    # Hauptsektion + Zusatzsektion
+    # Stammsektion + Zusatzsektion
 
     it_behaves_like 'deny concurrent role in same layer',
                     existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],

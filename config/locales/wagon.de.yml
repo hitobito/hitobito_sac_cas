@@ -899,7 +899,7 @@ de:
   groups:
     actions_show_sac_cas:
       export_mitglieder: CSV Mitglieder
-    sektion_primary: Hauptsektion
+    sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
 
     self_registration:

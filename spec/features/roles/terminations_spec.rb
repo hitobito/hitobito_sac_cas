@@ -18,7 +18,7 @@ describe :roles_terminations, js: true do
   end
 
   it 'lists all affected roles' do
-    # when terminating the hauptsektion role, the affected roles include
+    # when terminating the stammsektion role, the affected roles include
     # all zusatzektion roles as well
     visit_dialog(roles(:mitglied))
 
@@ -37,7 +37,7 @@ describe :roles_terminations, js: true do
   end
 
   it 'mentions the affected people' do
-    # when terminating the hauptsektion role of a family member, the affected people
+    # when terminating the stammsektion role of a family member, the affected people
     # include all family members
     visit_dialog(roles(:familienmitglied))
 

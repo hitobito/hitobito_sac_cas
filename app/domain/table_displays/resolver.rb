@@ -67,7 +67,7 @@ module TableDisplays
     def antrag_fuer
       if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
         I18n.t('groups.sektion_secondary')
-      elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_HAUPTSEKTION_ROLES.include?(r.class) }
+      elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }
         I18n.t('groups.sektion_primary')
       end
     end
@@ -111,7 +111,7 @@ module TableDisplays
     end
 
     def membership_roles
-      Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES.collect(&:sti_name),
+      Role.where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.collect(&:sti_name),
                  person_id: @person.id)
     end
 

@@ -71,7 +71,7 @@ describe TableDisplays::Resolver, type: :helper do
   end
 
   it_behaves_like 'resolver', attr: :antrag_fuer, label: 'Antrag für' do
-    { Hauptsektion: [
+    { Stammsektion: [
         Group::SektionsNeuanmeldungenNv::Neuanmeldung,
         Group::SektionsNeuanmeldungenSektion::Neuanmeldung
       ],

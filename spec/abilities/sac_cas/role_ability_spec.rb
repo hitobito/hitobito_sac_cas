@@ -49,7 +49,7 @@ describe RoleAbility do
         expect(ability).not_to be_able_to(:terminate, role_zusatzsektion)
       end
 
-      it 'is permitted when having Hauptsektion with Sektion#mitglied_termination_by_section_only' do
+      it 'is permitted when having Stammsektion with Sektion#mitglied_termination_by_section_only' do
         set_termination_by_section_only(role_stammsektion, true)
         set_termination_by_section_only(role_zusatzsektion, false)
         expect(ability).to be_able_to(:terminate, role_zusatzsektion)

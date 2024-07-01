@@ -7,14 +7,8 @@
 
 class People::SacMembership
 
-  MEMBERSHIP_ROLES = [
-    Group::SektionsMitglieder::Mitglied
-  ].freeze
-
   def initialize(person)
     @person = person
-    @roles = MEMBERSHIP_ROLES.map(&:sti_name)
-    @active_or_approvable_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
   end
 
   def active?
@@ -24,13 +18,13 @@ class People::SacMembership
   # checks for any active membership roles
   def active_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: @roles)
+                          type: stammsektion_mitglied_sti_names)
   end
 
   # checkes for active and also approvabable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: @active_or_approvable_roles)
+                          type: mitglied_and_neuanmeldung_sti_names)
   end
 
   def anytime?
@@ -38,7 +32,7 @@ class People::SacMembership
   end
 
   def roles
-    @person.roles.select { |r| MEMBERSHIP_ROLES.include?(r.class) }
+    @person.roles.select { |r| SacCas::MITGLIED_STAMMSEKTION_ROLES.include?(r.class) }
   end
 
   # There should be only one active `Mitglied` role at a time anyway
@@ -52,11 +46,14 @@ class People::SacMembership
 
   private
 
+  def stammsektion_mitglied_sti_names = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+  def mitglied_and_neuanmeldung_sti_names = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
   def any_future_role?
-    @person.roles.future.where(convert_to: @roles).exists?
+    @person.roles.future.where(convert_to: stammsektion_mitglied_sti_names).exists?
   end
 
   def any_past_role?
-    @person.roles.deleted.where(type: @roles).exists?
+    @person.roles.deleted.where(type: stammsektion_mitglied_sti_names).exists?
   end
 end

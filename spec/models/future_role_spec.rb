@@ -33,15 +33,15 @@ describe FutureRole do
     let(:group) { TargetGroup.new }
 
     it 'returns true if convert_to is a SacCas::MITGLIED_ROLES' do
-      SacCas::MITGLIED_ROLES.each do |role_type|
+      SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.each do |role_type|
         role = FutureRole.new(convert_to: role_type.sti_name, group: group)
         expect(role.validate_target_type?).to eq(true),
                                               "was unexpectedly false for #{role_type.sti_name}"
       end
     end
 
-    it 'returns false if convert_to is not a SacCas::MITGLIED_ROLES' do
-      (Role.all_types - SacCas::MITGLIED_ROLES).each do |role_type|
+    it 'returns false if convert_to is not a SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES' do
+      (Role.all_types - SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES).each do |role_type|
         role = FutureRole.new(convert_to: role_type.sti_name, group: group)
         expect(role.validate_target_type?).to eq(false),
                                               "was unexpectedly true for #{role_type.sti_name}"
