@@ -52,5 +52,16 @@ describe QualificationsController do
 
       expect(qualification.finish_at).to eq(Date.new(2024, 3, 31))
     end
+
+    it 'is invalid when start_at is in the future' do
+      qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
+      travel_to Date.new(2024, 1, 1)
+
+      expect do
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+      end.not_to change { Qualification.count }
+
+      expect(response).not_to be_successful
+    end
   end
 end

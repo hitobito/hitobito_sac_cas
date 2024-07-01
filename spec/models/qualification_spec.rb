@@ -8,7 +8,6 @@
 require 'spec_helper'
 
 describe Qualification do
-
   it 'is invalid when finish_at is before start_at' do
     qualification = Fabricate.build(:qualification, start_at: 1.day.ago, finish_at: 1.month.ago)
 
@@ -23,4 +22,9 @@ describe Qualification do
     expect(qualification.errors.full_messages).to be_empty
   end
 
+  it 'is valid when start_at is in the future' do
+    qualification = Fabricate.build(:qualification, start_at: 1.day.from_now)
+
+    expect(qualification).to be_valid
+  end
 end
