@@ -17,8 +17,7 @@ module Wizards::Memberships
 
     attr_reader :person, :role
 
-    # TODO: Rename to sektion_name
-    def sektion
+    def sektion_name
       role.group.parent.display_name
     end
 

@@ -34,7 +34,7 @@ module Memberships
 
     def success_message
       roles_count = wizard.leave_operation.affected_people.count
-      t(".success", group_name: wizard.sektion, count: roles_count)
+      t(".success", group_name: wizard.sektion_name, count: roles_count)
     end
 
     # NOTE: format: :html is required otherwise it is redirect as turbo_stream
