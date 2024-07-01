@@ -1246,4 +1246,4 @@ de:
       leave_zusatzsektion:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
-          request_termination: "Austritt beantragen"
+          next_button: "Austritt beantragen"

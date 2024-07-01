@@ -5,6 +5,6 @@
 
 .row
   %p=t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion)
-= c.fields_for(next_text: t('.request_termination')) do |form|
+= c.fields_for do |form|
   = form.labeled(:termination_reason) do
     = form.select :termination_reason, ['einfach so', 'weiss nicht'], {prompt: true}
