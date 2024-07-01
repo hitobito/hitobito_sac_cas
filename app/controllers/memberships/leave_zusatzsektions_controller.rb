@@ -23,7 +23,7 @@ module Memberships
         person: person,
         role: role,
         current_step: params[:step].to_i,
-        backoffice: person.backoffice?,
+        backoffice: current_user.backoffice?,
         **model_params.to_unsafe_h
       )
     end

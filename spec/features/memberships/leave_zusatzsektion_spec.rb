@@ -8,17 +8,19 @@
 require "spec_helper"
 
 describe "leave zusatzsektion", js: true do
-  before do
-    sign_in(person)
-  end
-
+  let(:person) { people(:mitglied) }
+  let(:role) { person.roles.second }
+  let(:operator) { person }
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
-  context "as normal user" do
-    let(:person) { people(:mitglied) }
-    let(:role) { person.roles.second }
+  before do
+    sign_in(operator)
+  end
 
-    it "can execute wizard" do
+  context "as SAC Mitarbeiter" do
+    let(:operator) { people(:admin) }
+
+    it "can execute wizard with immediate termination" do
       visit history_group_person_path(group_id: group.id, id: person.id)
       within("#role_#{role.id}") do
         click_link "Austritt"
@@ -36,9 +38,26 @@ describe "leave zusatzsektion", js: true do
     end
   end
 
+  context "as normal user" do
+    it "can execute wizard and leave by end of year" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      expect(page).to have_title "Zusatzsektion verlassen"
+      select "einfach so"
+      expect do
+        click_button "Austritt beantragen"
+        expect(page).to have_content "Deine Zusatzmitgliedschaft in #{role.group.parent.name} wurde gelöscht."
+      end
+        .to not_change { person.roles.count }
+        .and change { role.reload.terminated }.to(true)
+      expect(role.delete_on).not_to be_nil
+    end
+  end
+
   context "as family main person" do
     let(:person) { people(:familienmitglied) }
-    let(:role) { person.roles.second }
 
     it "can execute wizard" do
       visit history_group_person_path(group_id: group.id, id: person.id)
@@ -46,21 +65,18 @@ describe "leave zusatzsektion", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "Zusatzsektion verlassen"
-      choose "Sofort"
-      click_button "Weiter"
       select "einfach so"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Eure 3 Zusatzmitgliedschaften in #{role.group.parent.name} wurden gelöscht."
       end
-        .to change { Role.count }.by(-3)
-        .and change { role.reload.deleted_at }.from(nil)
+        .to not_change { person.roles.count }
+        .and change { role.reload.terminated }.to(true)
     end
   end
 
   context "as family regular person" do
     let(:person) { people(:familienmitglied2) }
-    let(:role) { person.roles.second }
 
     it "shows info about the main family person" do
       visit history_group_person_path(group_id: group.id, id: person.id)
