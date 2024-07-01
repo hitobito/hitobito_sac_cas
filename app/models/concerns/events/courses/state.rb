@@ -16,8 +16,8 @@ module Events::Courses::State
         application_open: [:application_paused, :created, :canceled],
         application_paused: [:application_open],
         application_closed: [:assignment_closed, :canceled],
-        assignment_closed: [:ready, :canceled],
-        ready: [:closed, :canceled],
+        assignment_closed: [:ready, :application_closed, :canceled],
+        ready: [:closed, :assignment_closed, :canceled],
         canceled: [:application_open],
         closed: [:ready] }.freeze
 
@@ -29,6 +29,11 @@ module Events::Courses::State
 
     def available_states(state = self.state)
       SAC_COURSE_STATES[state.to_sym]
+    end
+
+    def state_comes_before?(state1, state2)
+      states = SAC_COURSE_STATES.keys
+      states.index(state1.to_sym) < states.index(state2.to_sym)
     end
 
     def assignment_closed?

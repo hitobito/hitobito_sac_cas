@@ -28,7 +28,17 @@ module Dropdown::Events::Courses
     def init_items
       course.available_states.each do |step|
         link = template.state_group_event_path(template.params[:group_id], course, { state: step })
-        add_item(template.t(".state_buttons.#{step}"), link, method: :put)
+        add_item(label_for_step(step), link, method: :put)
+      end
+    end
+
+    def label_for_step(step)
+      label_translation_default = t(".state_buttons.#{step}")
+      if course.state_comes_before?(step, course.state)
+        t(".state_back_buttons.#{step}",
+          default: label_translation_default)
+      else
+        label_translation_default
       end
     end
   end
