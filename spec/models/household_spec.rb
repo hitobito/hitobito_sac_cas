@@ -125,7 +125,8 @@ describe Household do
   end
 
   describe 'maintaining sac_family' do
-    xit 'mutates memberships' do
+    it 'mutates memberships' do
+      raise 'update spec'
       add_and_save(adult)
       expect(person.sac_family).to receive(:update!)
       expect(household.save).to eq true

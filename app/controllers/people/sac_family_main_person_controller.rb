@@ -13,7 +13,7 @@ class People::SacFamilyMainPersonController < ApplicationController
     authorize!(:set_sac_family_main_person, person)
     return if assert_already_main_family_person!
 
-    person.sac_family.set_family_main_person!
+    person.household.set_family_main_person!
     redirect_to person
   end
 

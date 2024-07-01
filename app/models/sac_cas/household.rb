@@ -47,6 +47,15 @@ module SacCas::Household
     end
   end
 
+  # Sets the reference_person as the main person of the family.
+  def set_family_main_person!
+    ActiveRecord::Base.transaction do
+      people.where(sac_family_main_person: true)
+             .update_all(sac_family_main_person: false)
+      reference_person.update!(sac_family_main_person: true)
+    end
+  end
+
   private
 
   def clear_people_managers(removed_people)

@@ -126,20 +126,20 @@ describe People::SacFamily do
 
   context '#member?' do
     it 'is never a family member if not in a household' do
-      expect(people(:mitglied).sac_family.member?).to eq(false)
+      expect(people(:mitglied).sac_membership.family?).to eq(false)
     end
 
     it 'is not a family member if in same household but other sektion' do
-      expect(household_other_sektion_member.sac_family.member?).to eq(false)
+      expect(household_other_sektion_member.sac_membership.family?).to eq(false)
     end
 
     it 'is not a family member if in same household but youth mitglied' do
-      expect(household_member_youth.sac_family.member?).to eq(false)
+      expect(household_member_youth.sac_membership.family?).to eq(false)
     end
 
     it 'is family member' do
       [adult, adult2, child].each do |p|
-        expect(p.sac_family.member?).to eq(true)
+        expect(p.sac_membership.family?).to eq(true)
       end
     end
   end

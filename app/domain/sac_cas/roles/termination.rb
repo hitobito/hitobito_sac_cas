@@ -14,7 +14,7 @@ module SacCas::Roles::Termination
 
     Role.transaction do
       self.class.terminate(affected_roles, terminate_on)
-      if role.person.sac_family.member?
+      if role.person.sac_membership.family?
         role.person.sac_family.update_terminated_roles
       end
       true
