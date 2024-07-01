@@ -9,6 +9,10 @@ module Wizards
       class Summary < Step
         attribute :termination_reason, :string
         validates :termination_reason, presence: true
+
+        def family_member_names
+          wizard.person.household.members.map { |m| m.person.full_name }.to_sentence
+        end
       end
     end
   end

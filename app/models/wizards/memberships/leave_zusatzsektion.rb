@@ -59,11 +59,11 @@ module Wizards::Memberships
       @backoffice
     end
 
-    private
-
     def family_membership?
       role.beitragskategorie.family?
     end
+
+    private
 
     def family_main_person?
       person.sac_family_main_person
