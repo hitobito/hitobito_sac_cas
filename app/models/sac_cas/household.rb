@@ -50,10 +50,14 @@ module SacCas::Household
   # Sets the reference_person as the main person of the family.
   def set_family_main_person!
     ActiveRecord::Base.transaction do
-      people.where(sac_family_main_person: true)
-             .update_all(sac_family_main_person: false)
+      Person.where(id: people.map(&:id)).where(sac_family_main_person: true)
+            .update_all(sac_family_main_person: false)
       reference_person.update!(sac_family_main_person: true)
     end
+  end
+
+  def main_person
+    people.find(&:sac_family_main_person)
   end
 
   private
@@ -160,9 +164,5 @@ module SacCas::Household
 
   def adults
     @adults ||= people_by_agegroup(:adult)
-  end
-
-  def main_person
-    people.find(&:sac_family_main_person)
   end
 end

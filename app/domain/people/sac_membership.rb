@@ -50,7 +50,7 @@ class People::SacMembership
   def family_id
     return unless family?
 
-    /\AF/ =~ household_key ? household_key : "F#{household_key}"
+    /\AF/ =~ @person.household_key ? @person.household_key : "F#{@person.household_key}"
   end
 
   private
