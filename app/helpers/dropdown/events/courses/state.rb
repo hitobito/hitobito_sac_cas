@@ -33,10 +33,10 @@ module Dropdown::Events::Courses
     end
 
     def label_for_step(step)
-      label_translation_default = template.t(".state_buttons.#{step}")
+      label_translation_default = t(".state_buttons.#{step}")
       if course.state_comes_before?(step, course.state)
-        template.t(".state_back_buttons.#{step}",
-                   default: label_translation_default)
+        t(".state_back_buttons.#{step}",
+          default: label_translation_default)
       else
         label_translation_default
       end
