@@ -3,10 +3,9 @@
 This hitobito wagon defines the organization hierarchy with groups and roles
 of SAC CAS.
 
-
 ## Organization Hierarchy
 
-```
+```txt
     * Schweizer Alpen-Club SAC
       * SAC Geschäftsstelle
         * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]

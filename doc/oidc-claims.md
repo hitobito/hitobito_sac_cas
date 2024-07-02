@@ -3,12 +3,15 @@
 In the SAC wagon, some additional attributes are added to the OIDC claims.
 
 ## Profile picture URL
+
 The `name` and `with_roles` scope additionally yield the profile picture URL of the user who just logged in. The profile picture URL is exposed in the Userinfo endpoint.
 
 ## layer_group_id in `with_roles` scope
+
 For easily determining the Sektion / Ortsgruppe / Nationalverband (used by third-party-applications for authorization), the `layer_group_id` of each role's group is exposed in the `with_roles` claims.
 
 ## New scope `user_groups`
+
 For "easily parsing" the presence or absence of certain role combinations by some third-party applications, a new scope `user_groups` was introduced.
 This scope adds a claim with the key `user_groups` to the userinfo endpoint. The contents of this claim is a JSON list of strings. Each string represents either directly an active role (e.g. `"Group::Geschaeftsstelle::Mitarbeiter#8"` for a role of type `Group::Geschaeftsstelle::Mitarbeiter` in the group with id 8), or a compounded / "calculated role" such as `"SAC_employee"` which, if present in the userinfo endpoint, stands for "the user has any active role in any `Geschaeftsstelle` group".
 
@@ -17,7 +20,9 @@ The name of this scope and claim is a compromise: These "calculated roles" are u
 ## Example payloads
 
 ### Userinfo endpoint with `email` scope
+
 Note: This payload is currently unmodified from hitobito core.
+
 ```json
 {
   "sub": "600000",
@@ -26,6 +31,7 @@ Note: This payload is currently unmodified from hitobito core.
 ```
 
 ### Userinfo endpoint with `name` scope
+
 ```json
 {
   "sub": "600000",
@@ -41,6 +47,7 @@ Note: This payload is currently unmodified from hitobito core.
 ```
 
 ### Userinfo endpoint with `openid`, `with_roles` and `email` Scope
+
 ```json
 {
   "sub": "600000",
@@ -78,6 +85,7 @@ Note: This payload is currently unmodified from hitobito core.
 ```
 
 ### Userinfo endpoint with `openid`, `with_roles` and `user_groups` Scope
+
 ```json
 {
   "sub": "600000",
