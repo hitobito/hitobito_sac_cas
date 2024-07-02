@@ -7,7 +7,7 @@
 
 module SacCas::PeopleHelper
   def format_person_sac_family_main_person(person)
-    main_person = person.sac_family.main_person
+    main_person = person.household.main_person
 
     if person == main_person
       f(true)

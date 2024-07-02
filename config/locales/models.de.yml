@@ -5,4 +5,4 @@ de:
           household:
             attributes:
               members: 
-                no_members: "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."
+                no_members: "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."

@@ -32,8 +32,7 @@ module SacCas::Households::MemberValidator
   end
 
   def assert_no_conflicting_family_membership
-    if person.household_key != household.household_key &&
-        person.roles.exists?(beitragskategorie: :family)
+    if person.household_key.present? && person.household_key != household.household_key
       add_error(:conflicting_family_membership, :name)
     end
   end

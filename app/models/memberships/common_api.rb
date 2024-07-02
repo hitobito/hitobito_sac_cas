@@ -37,8 +37,9 @@ module Memberships::CommonApi
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction do
       roles.each do |role|
+        role.save(validate: false)
+      rescue ActiveRecord::NotNullViolation
         # ignore the error, the role will be invalid anyway
-        role.save(validate: false) rescue ActiveRecord::NotNullViolation
       end
       roles.each do |role|
         role.validate
@@ -67,7 +68,7 @@ module Memberships::CommonApi
   end
 
   def affected_people
-    person.sac_family.member? ? person.sac_family.family_members : [person]
+    person.sac_membership.family? ? person.household.people : [person]
   end
 
 end

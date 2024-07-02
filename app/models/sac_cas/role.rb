@@ -39,6 +39,10 @@ module SacCas::Role
             ->(selects = 'roles.*', date = Time.zone.today) do
                select(selects, select_with_membership_years(date))
             end
+
+      scope :family, -> {
+        where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
+      }
     end
   end
 

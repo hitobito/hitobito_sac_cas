@@ -75,7 +75,7 @@ module SacCas
       end
 
       def show_toggle_link?(member)
-        SacCas::Beitragskategorie::Calculator.new(member).adult? && member.sac_family_member?
+        SacCas::Beitragskategorie::Calculator.new(member).adult? && member.sac_membership.family?
       end
 
       def can_set_main_person_and_confirmed?(member)
