@@ -9,7 +9,7 @@
       %dt.muted.float-start.text-end
         = t('.national_office')
       %dd.mb-2
-        = render 'remark', remark_attr: Person::SAC_REMARKS.first
+        = render 'remark', remark_attr: Person::SAC_REMARK_NATIONAL_OFFICE
   - if can?(:manage_section_remarks, @person)
     - Person::SAC_REMARKS[1..].each_with_index do |remark_attr, section_number|
       %dl.dl-horizontal.m-0.p-2.border-top

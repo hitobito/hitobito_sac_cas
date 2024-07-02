@@ -14,7 +14,7 @@ class Person::SacRemarksController < ApplicationController
   end
 
   def update
-    if @person.update permitted_params
+    if @person.update(permitted_params)
       respond_to do |format|
         format.html { render '_remark', layout: false, locals: { remark_attr: @remark_attr } }
       end
@@ -26,17 +26,21 @@ class Person::SacRemarksController < ApplicationController
   private
 
   def entry
-    @group ||= group
-    @person ||= person
-    @remark_attr ||= params[:id]
+    group
+    person
+    remark_attr
   end
 
   def group
-    Group.find params[:group_id]
+    @group ||= Group.find params[:group_id]
   end
 
   def person
-    Person.find params[:person_id]
+    @person ||= Person.find params[:person_id]
+  end
+
+  def remark_attr
+    @remark_attr ||= params[:id]
   end
 
   def permitted_params
@@ -44,7 +48,7 @@ class Person::SacRemarksController < ApplicationController
   end
 
   def authorize_action
-    if @remark_attr.eql? Person::SAC_REMARKS.first
+    if @remark_attr.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
       authorize! :manage_national_office_remark, @person
     else
       authorize! :manage_section_remarks, @person

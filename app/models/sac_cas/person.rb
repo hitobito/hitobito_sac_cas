@@ -12,8 +12,10 @@ module SacCas::Person
   included do
     CORRESPONDENCES = %w(digital print)
 
-    Person::SAC_REMARKS = %w(sac_remark_national_office sac_remark_section_1 sac_remark_section_2
-                             sac_remark_section_3 sac_remark_section_4 sac_remark_section_5)
+    Person::SAC_REMARK_NATIONAL_OFFICE = 'sac_remark_national_office'
+    Person::SAC_REMARKS = [Person::SAC_REMARK_NATIONAL_OFFICE] +
+                          %w(sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
+                             sac_remark_section_4 sac_remark_section_5)
     Person::INTERNAL_ATTRS << Person::SAC_REMARKS
     Person::LANGUAGES.delete(:en)
 
