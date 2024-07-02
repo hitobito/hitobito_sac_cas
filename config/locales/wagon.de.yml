@@ -1243,6 +1243,8 @@ de:
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
+      termination_no_self_service:
+        info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       leave_zusatzsektion:
         ask_family_main_person:
           info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."

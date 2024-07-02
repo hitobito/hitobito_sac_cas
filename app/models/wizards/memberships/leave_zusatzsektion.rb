@@ -50,8 +50,7 @@ module Wizards::Memberships
     end
 
     def mitglied_termination_by_section_only?
-      # TODO: Implement
-      false
+      role.layer_group.mitglied_termination_by_section_only
     end
 
     def sac_mitarbeiter?

@@ -54,6 +54,17 @@ describe "leave zusatzsektion", js: true do
         .and change { role.reload.terminated }.to(true)
       expect(role.delete_on).not_to be_nil
     end
+
+    context "when sektion has mitglied_termination_by_section_only=true" do
+      before do
+        role.layer_group.update!(mitglied_termination_by_section_only: true)
+      end
+
+      it "shows an info text" do
+        visit group_person_role_leave_zusatzsektion_path(group_id: group.id, person_id: person.id, role_id: role.id)
+        expect(page).to have_content("Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen.")
+      end
+    end
   end
 
   context "as family main person" do
