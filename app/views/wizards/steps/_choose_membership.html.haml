@@ -1,0 +1,13 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if c.model.sac_family_main_person?
+  = c.fields_for do |form|
+    = form.labeled(:register_as) do
+      - form.object.register_as_options.each do |key, label|
+        = form.inline_radio_button :register_as, key, label
+- else
+  %p=t('.not_main_family_person_info_text', name: c.model.main_person)
+  = c.bottom_toolbar
