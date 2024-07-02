@@ -109,4 +109,42 @@ describe PersonAbility do
       end
     end
   end
+
+  describe 'sac_remarks' do
+    let(:person) { people(:admin) }
+
+    context 'as member' do  
+      before { person.roles.destroy_all }
+
+      it 'is not permitted to manage remarks' do
+        expect(ability).not_to be_able_to(:show_remarks, person)
+        expect(ability).not_to be_able_to(:manage_national_office_remark, person)
+        expect(ability).not_to be_able_to(:manage_section_remarks, person)
+      end
+    end
+
+    context 'as employee' do  
+      it 'is permitted to manage geschaeftsstelle remark but not section' do
+        expect(ability).to be_able_to(:show_remarks, person)
+        expect(ability).to be_able_to(:manage_national_office_remark, person)
+        expect(ability).not_to be_able_to(:manage_section_remarks, person)
+      end
+    end
+
+    context 'as section functionary' do  
+      before do
+        person.roles.destroy_all
+        person.roles.create!(
+          group: groups(:matterhorn_funktionaere),
+          type: Group::SektionsFunktionaere::Administration.sti_name
+        )
+      end
+
+      it 'is permitted to manage section remarks but not geschaeftsstelle' do
+        expect(ability).to be_able_to(:show_remarks, person)
+        expect(ability).not_to be_able_to(:manage_national_office_remark, person)
+        expect(ability).to be_able_to(:manage_section_remarks, person)
+      end
+    end
+  end
 end
