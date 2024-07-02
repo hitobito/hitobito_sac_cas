@@ -15,7 +15,7 @@ module SacCas::Roles::Termination
     Role.transaction do
       self.class.terminate(affected_roles, terminate_on)
       if role.person.sac_membership.family?
-        role.person.sac_family.update_terminated_roles
+        People::SacFamily.new(role.person).update_terminated_roles
       end
       true
     end
@@ -28,7 +28,7 @@ module SacCas::Roles::Termination
   def affected_people
     return [] unless stammsektion_membership? && role.beitragskategorie&.family?
 
-    main_person.sac_family.family_members - [main_person]
+    main_person.household.people - [main_person]
   end
 
   private

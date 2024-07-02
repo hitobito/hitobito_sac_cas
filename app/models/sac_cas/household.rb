@@ -28,8 +28,8 @@ module SacCas::Household
       success = super do |new_people, removed_people|
         clear_people_managers(removed_people)
         create_missing_people_managers
-
-        if maintain_sac_family? # TODO: do we still need the `maintain_sac_family?`?!?
+        
+        if maintain_sac_family?
           update_main_person!
           mutate_memberships!(new_people, removed_people)
         end
@@ -104,7 +104,7 @@ module SacCas::Household
     return if people.count(&:sac_family_main_person) == 1
 
     new_main_person =
-      people.find {|person| person.sac_family_main_person } ||
+      people.find {|person| person.household.main_person } ||
       people.find {|person| person.adult? && person.confirmed_at? }
 
     people.select(&:sac_family_main_person).each do |person|

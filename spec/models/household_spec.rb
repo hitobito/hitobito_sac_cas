@@ -20,7 +20,7 @@ describe Household do
   let(:second_child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(2014, 4, 13)) }
   let(:second_adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: 'Mitglied', birthday: Date.new(1998, 11, 6)) }
 
-  subject!(:household) { Household.new(person) }
+  subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
   def sequence = Sequence.by_name(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
 

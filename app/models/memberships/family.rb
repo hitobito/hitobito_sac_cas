@@ -17,7 +17,12 @@ module Memberships
     # * Replace all zusatzsektion roles that have a corresponding role in the reference_zusatzsektion_roles.
     # * Create missing zusatzsektion roles from reference_zusatzsektion_roles.
     def join!(reference_person)
-      replace_role!(membership.stammsektion_role, reference_person.sac_membership.stammsektion_role)
+      if membership.stammsektion_role
+        replace_role!(membership.stammsektion_role, reference_person.sac_membership.stammsektion_role)
+      else
+        create_role!(person, reference_person.sac_membership.stammsektion_role)
+      end
+
       # TODO: handle future stammsektion role
 
       reference_person.sac_membership.zusatzsektion_roles.family.each do |role|
