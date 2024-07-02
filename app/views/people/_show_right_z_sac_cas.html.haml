@@ -11,13 +11,16 @@
     %h2
       = t('.section_sac_membership') 
       .float-end
-        = people_sac_membership_download_dropdown(entry)
+        - label = t('.download_pdf').split(' ').tap do |words|
+        - if words.length > 1
+          - words.insert(1, tag(:br))
+        - end.join(' ').html_safe
+        = action_button(label, membership_path(entry, format: :pdf), 
+        :download, classes: 'membership-download', target: '_blank')
 
-    %div
-      %dl.dl-horizontal
-      .d-flex.justify-content-center
-        .qr-code-wrapper
-          .inner
-            = people_sac_membership_qr_code(entry)
-            .hint
-              = t('.qr_code_hint')
+    .d-flex.justify-content-center.w-100
+      .qr-code-wrapper
+        .inner
+          = people_sac_membership_qr_code(entry)
+          .hint
+            = t('.qr_code_hint')

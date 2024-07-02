@@ -36,10 +36,6 @@ module SacCas::PeopleHelper
     end
   end
 
-  def people_sac_membership_download_dropdown(person)
-    Dropdown::People::SacMembership::Download.new(self, person).to_s
-  end
-
   private
 
   def people_sac_membership_qr_code_clickable(verification_qr_code, image)
