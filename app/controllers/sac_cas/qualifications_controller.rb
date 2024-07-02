@@ -16,18 +16,12 @@ module SacCas::QualificationsController
     end
   end
 
-  def create
-    assign_attributes
-
-    created = with_callbacks(:create, :save) do
-      entry.save context: :qualifications_controller_create
-    rescue Mysql2::Error => e
-      Airbrake.notify(e, parameters: params)
-      logger.error e.message
-      false
-    end
-
-    respond_with(entry, { success: created, location: group_person_path(@group, @person) })
+  def save_entry
+    entry.save context: :qualifications_controller
+  rescue Mysql2::Error => e
+    Airbrake.notify(e, parameters: params)
+    logger.error e.message
+    false
   end
 
   def permitted_attrs
