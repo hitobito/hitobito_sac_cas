@@ -129,6 +129,16 @@ de:
         courses: Kurse
         updated_at: Geändert
         created_at: Erstellt
+      course_compensation_category:
+        short_name: Kurzname
+        kind: Typ
+        kinds:
+          day: Tag
+          flat: Pauschale
+          budget: Budget
+        description: Beschreibung
+        name_leader: Bezeichnung Kursleitung
+        name_assistant_leader: Bezeichnung Klassenleitung
       event:
         unconfirmed_count: Unbestätigte
       event/kind:
