@@ -69,8 +69,6 @@ module Wizards::Memberships
 
     def leave_operation_valid?
       return true unless last_step?
-      # rubocop:disable Lint/UnreachableCode
-      return true
 
       leave_operation.valid?.tap do
         leave_operation.errors.full_messages.each do |msg|
@@ -78,7 +76,6 @@ module Wizards::Memberships
         end
         leave_operation.errors.copy!(self)
       end
-      # rubocop:enable Lint/UnreachableCode
     end
 
     def step_after(step_class_or_name)
