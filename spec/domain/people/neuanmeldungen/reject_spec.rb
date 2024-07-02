@@ -65,7 +65,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(neuanmeldung.person.login_status).to eq :login
     deleted_role = Group::SektionsMitglieder::Mitglied.new(group: group)
-    deleted_role.delete!
+    deleted_role.destroy!
     neuanmeldung.person.add_role(deleted_role)
 
     expect do
