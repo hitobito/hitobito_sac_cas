@@ -51,8 +51,7 @@ module Wizards::Memberships
     end
 
     def mitglied_termination_by_section_only?
-      # TODO: Implement
-      false
+      role.layer_group.mitglied_termination_by_section_only
     end
 
     def sac_mitarbeiter?
@@ -100,7 +99,7 @@ module Wizards::Memberships
       if membership_role&.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif mitglied_termination_by_section_only? && !sac_mitarbeiter?
-        Wizards::Steps::LeaveZusatzsektion::NoSelfService.step_name
+        Wizards::Steps::TerminationNoSelfService.step_name
       elsif family_membership? && !family_main_person?
         Wizards::Steps::LeaveZusatzsektion::AskFamilyMainPerson.step_name
       elsif sac_mitarbeiter?
