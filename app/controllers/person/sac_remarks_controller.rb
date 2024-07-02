@@ -6,18 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Person::SacRemarksController < ApplicationController
-  before_action :entry
+  before_action :group, except: :update
+  before_action :remark_attr, only: :index
   before_action :authorize_action, except: :index
   before_action :permitted_attrs, only: :index
 
   def index
-    authorize! :show_remarks, @person
+    authorize! :show_remarks, person
   end
 
   def update
-    if @person.update(permitted_params)
+    if person.update(allowed_attr)
       respond_to do |format|
-        format.html { render '_remark', layout: false, locals: { remark_attr: @remark_attr } }
+        format.html { render '_remark', layout: false, locals: { remark_attr: remark_attr } }
       end
     else
       render :edit
@@ -25,12 +26,6 @@ class Person::SacRemarksController < ApplicationController
   end
 
   private
-
-  def entry
-    group
-    person
-    remark_attr
-  end
 
   def group
     @group ||= Group.find params[:group_id]
@@ -45,21 +40,20 @@ class Person::SacRemarksController < ApplicationController
   end
 
   def permitted_attrs
-    @permitted_attrs = []
+    @permitted_attrs = can?(:manage_section_remarks, person) ? Person::SAC_SECTION_REMARKS : []
     @permitted_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
-                                                                   @person)
-    @permitted_attrs.concat(Person::SAC_REMARKS[1..]) if can?(:manage_section_remarks, @person)
+                                                                   person)
   end
 
-  def permitted_params
-    params.require(:person).permit @remark_attr
+  def allowed_attr
+    params.require(:person).permit remark_attr
   end
 
   def authorize_action
-    if @remark_attr.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
-      authorize! :manage_national_office_remark, @person
+    if remark_attr.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
+      authorize! :manage_national_office_remark, person
     else
-      authorize! :manage_section_remarks, @person
+      authorize! :manage_section_remarks, person
     end
   end
 end
