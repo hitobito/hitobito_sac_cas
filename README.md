@@ -10,3 +10,7 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
 - [Import](./doc/import.md)
 - [Naming](./doc/naming.md)
 - [OIDC](./doc/oidc-claims.md)
+
+## Getting started
+
+- [Developer](./doc/developer.md)
