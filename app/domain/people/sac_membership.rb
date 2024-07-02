@@ -24,7 +24,7 @@ class People::SacMembership
   # checkes for active and also approvabable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: mitglied_and_neuanmeldung_sti_names)
+                          type: stammsektion_sti_names)
   end
 
   def anytime?
@@ -47,7 +47,7 @@ class People::SacMembership
   private
 
   def stammsektion_mitglied_sti_names = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
-  def mitglied_and_neuanmeldung_sti_names = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+  def stammsektion_sti_names = SacCas::STAMMSEKTION_ROLES.map(&:sti_name)
 
   def any_future_role?
     @person.roles.future.where(convert_to: stammsektion_mitglied_sti_names).exists?
