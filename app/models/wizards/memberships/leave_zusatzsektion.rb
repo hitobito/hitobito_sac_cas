@@ -46,7 +46,11 @@ module Wizards::Memberships
     end
 
     def terminate_on
-      (step(:termination_choose_date)&.terminate_on == "now") ? Date.current.yesterday : Date.current.end_of_year
+      if step(:termination_choose_date)&.terminate_on == "now"
+        Date.current.yesterday
+      else
+        Date.current.end_of_year
+      end
     end
 
     def mitglied_termination_by_section_only?
