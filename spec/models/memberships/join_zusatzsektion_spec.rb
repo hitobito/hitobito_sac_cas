@@ -144,6 +144,14 @@ describe Memberships::JoinZusatzsektion do
       describe 'neuanmeldungen priority in sektion' do
         let!(:mitglied) { create_role(:bluemlisalp_mitglieder, 'Mitglied') }
 
+        # This is a regression spec. See https://github.com/hitobito/hitobito_sac_cas/pull/697
+        it 'works correctly in a transaction' do
+          ActiveRecord::Base.transaction do
+            expect(join_sektion).to be_valid
+            expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
+          end
+        end
+
         it 'prefers to create role in NeuanmeldungenSektion group' do
           expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
           expect(role.group).to eq groups(:matterhorn_neuanmeldungen_sektion)

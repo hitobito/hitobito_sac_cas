@@ -35,7 +35,7 @@ module Memberships::CommonApi
     # validating new ones, otherwise the validations will check the old values as in the DB
     # instead of the new values.
     # But this method should not save the roles, so we must roll back after checking the validity.
-    Role.transaction do
+    Role.transaction(requires_new: true) do
       roles.each do |role|
         # ignore the error, the role will be invalid anyway
         role.save(validate: false) rescue ActiveRecord::NotNullViolation
