@@ -59,6 +59,7 @@ module HitobitoSacCas
       SelfRegistration.prepend SacCas::SelfRegistration
       SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
+      Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
@@ -81,6 +82,7 @@ module HitobitoSacCas
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
+      Ability.store.register Memberships::LeaveZusatzsektionAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
