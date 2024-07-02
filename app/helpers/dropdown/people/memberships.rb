@@ -36,9 +36,13 @@ module Dropdown
     end
 
     def join_zusatzsektion?
-      current_ability.can?(:create,
-        Wizards::Memberships::JoinZusatzsektion.new(person: @person,
-          backoffice: current_user.backoffice?))
+      current_ability.can?(
+        :create,
+        Wizards::Memberships::JoinZusatzsektion.new(
+          person: @person,
+          backoffice: current_user.backoffice?
+        )
+      )
     end
 
     def t(key)
