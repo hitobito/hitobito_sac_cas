@@ -42,17 +42,41 @@ describe People::Neuanmeldungen::Reject do
     expect(neuanmeldung_familie.person.roles).to have(1).item
   end
 
-  it 'disables the Person login' do
+  it 'disables the Person login, if it has other roles' do
     neuanmeldung.person.update!(
       email: 'dummy@example.com',
       password: 'my-password1',
       password_confirmation: 'my-password1'
     )
     expect(neuanmeldung.person.login_status).to eq :login
+    additional_role = Group::SektionsMitglieder::Mitglied.new(group: group)
+    neuanmeldung.person.add_role(additional_role)
 
     expect do
       described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
     end.to change { neuanmeldung.person.reload.login_status }.to(:no_login)
+  end
+
+  it 'disables the Person login, if it has other deleted roles' do
+    neuanmeldung.person.update!(
+      email: 'dummy@example.com',
+      password: 'my-password1',
+      password_confirmation: 'my-password1'
+    )
+    expect(neuanmeldung.person.login_status).to eq :login
+    deleted_role = Group::SektionsMitglieder::Mitglied.new(group: group)
+    deleted_role.delete!
+    neuanmeldung.person.add_role(deleted_role)
+
+    expect do
+      described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
+    end.to change { neuanmeldung.person.reload.login_status }.to(:no_login)
+  end
+
+  it 'deletes the Person, if it has no other roles' do
+    expect do
+      described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
+    end.to change { neuanmeldung.person }.by(-1)
   end
 
   it 'adds a Person#note if a note was provided' do
