@@ -70,7 +70,6 @@ module Wizards::Memberships
 
     def leave_operation_valid?
       return true unless last_step?
-      return true
 
       leave_operation.valid?.tap do
         leave_operation.errors.full_messages.each do |msg|
