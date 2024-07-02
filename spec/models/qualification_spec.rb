@@ -27,4 +27,13 @@ describe Qualification do
 
     expect(qualification).to be_valid
   end
+
+  context 'with qualifications_controller validation context' do
+    it 'is invalid when start_at is in the future' do
+      qualification = Fabricate.build(:qualification, start_at: 1.day.from_now)
+
+      expect(qualification).to_not be_valid(:qualifications_controller)
+      expect(qualification.errors.full_messages[0]).to eq('Seit muss in der Vergangenheit liegen')
+    end
+  end
 end
