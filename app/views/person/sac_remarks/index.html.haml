@@ -4,13 +4,9 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .row
-  - @permitted_attrs.each_with_index do |remark_attr, section_number|
+  - @permitted_attrs.each do |remark_attr|
     %dl.dl-horizontal.m-0.p-2.border-top
       %dt.muted.float-start.text-end
-        - if remark_attr.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
-          = t('.national_office')
-        - else
-          - section_number += 1 if @permitted_attrs.exclude?(Person::SAC_REMARK_NATIONAL_OFFICE)
-          = t('.section', section_number: section_number)
+        = Person.human_attribute_name remark_attr
       %dd.mb-2
         = render 'remark', remark_attr: remark_attr

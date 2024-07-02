@@ -8,19 +8,19 @@
 require 'spec_helper'
 
 describe 'person sac remarks' do
-  let(:employee) { people(:mitglied) }
-  let(:group) { employee.groups.first }
+  let(:person) { people(:mitglied) }
+  let(:group) { person.groups.first }
 
   before do
-    employee.roles.create!(
+    person.roles.create!(
       group: groups(:geschaeftsstelle),
       type: Group::Geschaeftsstelle::Mitarbeiter.sti_name
     )
-    sign_in(employee)
+    sign_in(person)
   end
 
   it 'lists and updates sac remarks' do
-    visit group_person_sac_remarks_path(:de, group, employee)
+    visit group_person_sac_remarks_path(:de, group, person)
 
     within('#sac_remark_national_office') do
       click_link
@@ -29,6 +29,6 @@ describe 'person sac remarks' do
     end
 
     expect(page).to have_text('my remark')
-    expect(employee.reload.sac_remark_national_office).to eq('my remark')
+    expect(person.reload.sac_remark_national_office).to eq('my remark')
   end
 end
