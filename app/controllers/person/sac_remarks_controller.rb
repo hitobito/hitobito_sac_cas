@@ -46,7 +46,8 @@ class Person::SacRemarksController < ApplicationController
 
   def permitted_attrs
     @permitted_attrs = []
-    @permitted_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark, @person)
+    @permitted_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
+                                                                   @person)
     @permitted_attrs.concat(Person::SAC_REMARKS[1..]) if can?(:manage_section_remarks, @person)
   end
 

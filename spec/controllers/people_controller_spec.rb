@@ -8,7 +8,6 @@
 require 'spec_helper'
 
 describe PeopleController do
-
   render_views
 
   let(:body) { Capybara::Node::Simple.new(response.body) }
@@ -106,8 +105,17 @@ describe PeopleController do
                                   group: groups(:geschaeftsstelle))
         expect_household_key(person, visible: false)
       end
-
     end
+  end
 
+  context 'PUT#update' do
+    it 'cannot update sac remarks' do
+      expect do
+        put :update, params: { id: admin.id, group_id: admin.groups.first.id,
+                               person: { sac_remark_national_office: 'example',
+                                         sac_remark_section_1: 'example' }  }
+      end.not_to change { [admin.reload.sac_remark_national_office,
+                           admin.reload.sac_remark_section_1] }
+    end
   end
 end
