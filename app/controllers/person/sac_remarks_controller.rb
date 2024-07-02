@@ -8,6 +8,7 @@
 class Person::SacRemarksController < ApplicationController
   before_action :entry
   before_action :authorize_action, except: :index
+  before_action :permitted_attrs, only: :index
 
   def index
     authorize! :show_remarks, @person
@@ -41,6 +42,12 @@ class Person::SacRemarksController < ApplicationController
 
   def remark_attr
     @remark_attr ||= params[:id]
+  end
+
+  def permitted_attrs
+    @permitted_attrs = []
+    @permitted_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark, @person)
+    @permitted_attrs.concat(Person::SAC_REMARKS[1..]) if can?(:manage_section_remarks, @person)
   end
 
   def permitted_params
