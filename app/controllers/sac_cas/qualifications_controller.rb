@@ -16,6 +16,14 @@ module SacCas::QualificationsController
     end
   end
 
+  def save_entry
+    entry.save context: :qualifications_controller
+  rescue Mysql2::Error => e
+    Airbrake.notify(e, parameters: params)
+    logger.error e.message
+    false
+  end
+
   def permitted_attrs
     permitted = self.class.permitted_attrs.dup
 

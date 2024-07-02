@@ -12,6 +12,7 @@ module SacCas::Qualification
     before_validation :set_finish_at, unless: :finish_at
 
     validate :assert_meaningful
+    validate :start_must_be_in_past, on: :qualifications_controller
   end
 
   private
@@ -26,4 +27,7 @@ module SacCas::Qualification
     end
   end
 
+  def start_must_be_in_past
+    errors.add(:start_at, :must_be_in_past) if start_at&.future?
+  end
 end
