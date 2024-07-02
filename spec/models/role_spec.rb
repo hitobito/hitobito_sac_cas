@@ -462,4 +462,17 @@ describe Role do
       end
     end
   end
+
+  context '#termination_reason_text' do
+    let(:role) { roles(:mitglied) }
+
+    it 'returns nil if no termination_reason' do
+      expect(role.termination_reason_text).to be_nil
+    end
+
+    it 'returns termination_reason label' do
+      role.termination_reason = Fabricate(:termination_reason, text: 'Sonstiger Grund')
+      expect(role.termination_reason_text).to eq 'Sonstiger Grund'
+    end
+  end
 end

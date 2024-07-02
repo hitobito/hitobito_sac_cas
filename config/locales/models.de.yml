@@ -1,8 +1,0 @@
-de:
-  activemodel:
-    errors:
-        models:
-          household:
-            attributes:
-              members: 
-                no_members: "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."
