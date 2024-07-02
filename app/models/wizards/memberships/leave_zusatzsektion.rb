@@ -18,7 +18,7 @@ module Wizards::Memberships
     attr_reader :person, :role
 
     def sektion_name
-      role.group.parent.display_name
+      role.layer_group.display_name
     end
 
     def initialize(current_step: 0, person: nil, role: nil, backoffice: false, **params)
