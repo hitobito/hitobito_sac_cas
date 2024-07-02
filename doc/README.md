@@ -18,7 +18,7 @@ Die Beitragskategorie wird beim Erstellen einer **Mitglied** Rolle berechnet und
 
 ## SAC Familie
 
-In Hitobito ist eine Familie mit dem `Household` abgebildet. Alle Personen im `Household` haben auf ihrer `Mitglied` Rolle die Beitragskategorie `'family'`. 
+In Hitobito ist eine Familie mit dem `Household` abgebildet. Alle Personen im `Household` haben auf ihrer `Mitglied` Rolle die Beitragskategorie `'family'`.
 
 Wenn Personen dem `Household` hinzugefügt werden, werden ihre `Mitglied` Rollen per Vortag gelöscht und neue erstellt  mit Beitragskagetorie `'family'`.
 
@@ -32,6 +32,7 @@ Personen werden zuerst zu einem Haushalt hinzugefügt und müssen danach das Bei
 - Die Personen dürfen noch keine Rolle mit Beitragskategorie Familie haben.
 
 ### Specs
+
 Zum Einrichten der Testdaten, gibt es folgende Helfer:
 Die `familienmitglied` Fixtures people und roles sowie Fabricators wie person_with_role.
 Die Familie kann mit der Household Klasse erstellt werden.
@@ -45,10 +46,10 @@ Sobald die offene Mitgliederbeitragsrechnung bezahlt wurde, wird die Rolle der P
 
 ### Rollen
 
--   `Group::SektionsNeuanmeldungenSektion::Neuanmeldung` (Stammsektion)
--   `Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion`
--   `Group::SektionsNeuanmeldungenNv::Neuanmeldung` (Stammsektion)
--   `Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion`
+- `Group::SektionsNeuanmeldungenSektion::Neuanmeldung` (Stammsektion)
+- `Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion`
+- `Group::SektionsNeuanmeldungenNv::Neuanmeldung` (Stammsektion)
+- `Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion`
 
 ## Rollen
 
@@ -56,13 +57,13 @@ Sobald die offene Mitgliederbeitragsrechnung bezahlt wurde, wird die Rolle der P
 
 Als Mitgliederrollen zählen:
 
--   `Group::SektionsMitglieder::Mitglied` (Stammsektion)
--   `Group::SektionsMitglieder::MitgliedZusatzsektion`
+- `Group::SektionsMitglieder::Mitglied` (Stammsektion)
+- `Group::SektionsMitglieder::MitgliedZusatzsektion`
 
 #### Validierungen
 
--   Eine Person kann nur eine aktive Stammsektion Mitglieder-Rolle haben
--   Um eine Zusatzsektion Rolle zu haben muss eine aktive Stammsektion Rolle vorhanden sein
+- Eine Person kann nur eine aktive Stammsektion Mitglieder-Rolle haben
+- Um eine Zusatzsektion Rolle zu haben muss eine aktive Stammsektion Rolle vorhanden sein
 
 ### Austritt
 
