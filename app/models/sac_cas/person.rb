@@ -93,7 +93,7 @@ module SacCas::Person
   end
 
   def backoffice?
-    roles.exists?(type: SacCas::SAC_MITARBEITER_ROLES)
+    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES)
   end
 
   def active_sac_member?
