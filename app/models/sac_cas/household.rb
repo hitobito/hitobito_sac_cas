@@ -13,8 +13,8 @@ module SacCas::Household
   prepended do
     validate :assert_adult_member, on: :update
     validate :assert_minimum_member_size, on: :update
-    validate :assert_removed_member_email, on: :update
-    validate :assert_adult_member_with_email, on: :update
+    validate :assert_removed_member_email_confirmed, on: :update
+    validate :assert_adult_member_with_confirmed_email, on: :update
     validate :assert_someone_is_a_member, on: :update
   end
 
@@ -62,6 +62,10 @@ module SacCas::Household
 
   private
 
+  def removed_people
+    (members_was - members).map(&:person)
+  end
+
   def clear_people_managers(removed_people)
     removed_people.each do |person|
       person.manageds.clear
@@ -94,8 +98,8 @@ module SacCas::Household
   end
 
   def mutate_memberships!(new_people, removed_people)
-    new_people.each { |p| Memberships::Family.new(p.reload).join!(reference_person) }
-    removed_people.each { |p| Memberships::Family.new(p.reload).leave! }
+    new_people.each { |p| Memberships::FamilyMutation.new(p.reload).join!(reference_person) }
+    removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
   # Sets one of the adults with confirmed email address as family main person unless
@@ -140,19 +144,16 @@ module SacCas::Household
     end
   end
 
-  def assert_removed_member_email
-    removed_people = Person.where(household_key: household_key)
-                           .where.not(id: members.map { _1.person.id })
+  def assert_removed_member_email_confirmed
+    return if removed_people.all?(&:confirmed_at?)
 
-    if removed_people.any? { _1.email.blank? }
-      errors.add(:base, :removed_member_has_no_email)
-    end
+    errors.add(:base, :removed_member_has_no_email)
   end
 
-  def assert_adult_member_with_email
-    if adults.none? { _1.email.present? }
-      errors.add(:base, :no_adult_member_with_email)
-    end
+  def assert_adult_member_with_confirmed_email
+    return if adults.any? { _1.confirmed_at? }
+
+    errors.add(:base, :no_adult_member_with_email)
   end
 
   def assert_someone_is_a_member

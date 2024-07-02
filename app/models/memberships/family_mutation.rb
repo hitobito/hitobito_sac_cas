@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships
-  class Family
+  class FamilyMutation
     attr_reader :person
 
     def initialize(person)
