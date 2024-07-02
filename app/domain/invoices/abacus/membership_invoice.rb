@@ -57,7 +57,7 @@ module Invoices
           recipient: member.person,
           group: sac,
           title: I18n.t('invoices.sac_memberships.title', year: date.year),
-          total: positions.sum(&:invoice_amount),
+          total: positions.sum(&:amount),
           issued_at: date,
           sent_at: date,
           invoice_kind: INVOICE_KIND,
@@ -75,12 +75,29 @@ module Invoices
         end
       end
 
+      def abacus_person
+        @abacus_person ||= Abacus::Person.new(member.person, client: client)
+      end
+
+      def abacus_sales_order
+        @abacus_sales_order ||= Abacus::SalesOrder.new(invoice, client: client)
+      end
+
+      def create_abacus_sales_order_in_batch
+        I18n.with_locale(member.language) do
+          abacus_sales_order.create_request(
+            positions,
+            additional_user_fields: compose_additional_user_fields
+          )
+        end
+      end
+
       private
 
       def create_abacus_sales_order
         I18n.with_locale(member.language) do
           abacus_sales_order.create(
-            positions.map(&:to_abacus_invoice_position),
+            positions,
             additional_user_fields: compose_additional_user_fields
           )
         end
@@ -88,12 +105,17 @@ module Invoices
       end
 
       def positions
-        @positions ||= Invoices::SacMemberships::PositionGenerator.new(member).generate(role)
+        @positions ||=
+          Invoices::SacMemberships::PositionGenerator
+          .new(member)
+          .generate(role)
+          .map(&:to_abacus_invoice_position)
       end
 
       def compose_additional_user_fields
         fields = {}
-        fields[:user_field4] = config.service_fee.to_f if member.service_fee?(role)
+        # does not work currently, abraxas is investigating
+        # fields[:user_field4] = config.service_fee.to_f if member.service_fee?(role)
         compose_membership_card_user_fields(fields)
         fields
       end
@@ -119,13 +141,6 @@ module Invoices
         ].join(';')
       end
 
-      def abacus_person
-        @abacus_person ||= Abacus::Person.new(member.person, client: client)
-      end
-
-      def abacus_sales_order
-        @abacus_sales_order ||= Abacus::SalesOrder.new(invoice, client: client)
-      end
 
       def client
         @client ||= Abacus::Client.new

@@ -32,8 +32,22 @@ module Invoices
       def transmit
         return false unless valid?
 
-        entity.abacus_subject_key.present? ? update : create
+        subject = fetch_subject
+        subject ? update(subject) : create
         true
+      end
+
+      def fetch_subject
+        return if subject_id.zero?
+
+        client.get(:subject, subject_id, '$expand' => 'Addresses,Communications,Customers')
+      rescue RestClient::NotFound
+        nil
+      end
+
+      def validate
+        @errors[:town] = :blank if entity.town.blank?
+        @errors[:zip_code] = :blank if entity.zip_code.blank?
       end
 
       def create
@@ -43,28 +57,24 @@ module Invoices
         create_customer
       end
 
-      def update
-        subject = fetch_subject
+      def update(subject)
         update_subject(subject)
         update_address(subject[:addresses])
         update_communications(subject[:communications])
         update_customer(subject[:customers])
       end
 
-      def fetch_subject
-        client.get(:subject, subject_id, '$expand' => 'Addresses,Communications,Customers')
+      def create_subject_request
+        # create abacus subject with id from hitobito
+        client.create(:subject, subject_attrs.merge(id: entity.id))
       end
-
-      def validate
-        @errors[:town] = :blank if entity.town.blank?
-        @errors[:zip_code] = :blank if entity.zip_code.blank?
-      end
-
-      private
 
       def create_subject
-        # create abacus subject with id from hitobito
-        data = client.create(:subject, subject_attrs.merge(id: entity.id))
+        data = create_subject_request
+        assign_abacus_subject_key(data)
+      end
+
+      def assign_abacus_subject_key(data)
         entity.update_column(:abacus_subject_key, data[:id]) # rubocop:disable Rails/SkipsModelValidations
       end
 

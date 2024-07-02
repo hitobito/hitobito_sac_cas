@@ -19,18 +19,47 @@ module Invoices
       }.with_indifferent_access.freeze
 
       def create(positions, additional_user_fields: {})
-        # create_sales_order_with_positions(positions, additional_user_fields: additional_user_fields)
-        create_sales_order(additional_user_fields: additional_user_fields)
-        create_sales_order_positions(positions)
-        # does not work currently, abraxas is investigating
-        trigger_sales_order rescue nil # rubocop:disable Style/RescueModifier
+        create_sales_order_with_positions(positions, additional_user_fields: additional_user_fields)
+        # create_sales_order(additional_user_fields: additional_user_fields)
+        # create_sales_order_positions(positions)
+        trigger_sales_order
       rescue => e
         delete_sales_order
         raise e
       end
 
+      def create_request(positions, additional_user_fields: {})
+        attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
+        attrs[:positions] = positions.map.with_index do |position, index|
+          sales_order_position_attrs(position, index + 1)
+        end
+        client.create(:sales_order, attrs)
+      end
+
+      def trigger_sales_order
+        return unless entity.abacus_sales_order_key
+
+        path = "#{client.endpoint(:sales_order, abacus_id)}/" \
+               'ch.abacus.orde.TriggerSalesOrderNextStep'
+        client.request(:post, path, { type_of_printing: TYPE_OF_PRINTING })
+      end
+
       def fetch
+        return unless entity.abacus_sales_order_key
+
         client.get(:sales_order, abacus_id, '$expand' => 'Positions')
+      end
+
+      def delete_sales_order
+        return unless entity.abacus_sales_order_key
+
+        client.delete(:sales_order, abacus_id)
+      rescue
+        # ignore error
+      end
+
+      def assign_abacus_sales_order_key(data)
+        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
       end
 
       private
@@ -42,12 +71,8 @@ module Invoices
       end
 
       def create_sales_order_with_positions(positions, additional_user_fields: {})
-        attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
-        attrs[:positions] = positions.map.with_index do |position, index|
-          sales_order_position_attrs(position, index + 1)
-        end
-        data = client.create(:sales_order, attrs)
-        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
+        data = create_request(positions, additional_user_fields: additional_user_fields)
+        assign_abacus_sales_order_key(data)
       end
 
       def create_sales_order_positions(positions)
@@ -56,19 +81,6 @@ module Invoices
         end
       end
 
-      def trigger_sales_order
-        path = "#{client.endpoint(:sales_order, abacus_id)}/" \
-               'ch.abacus.orde.TriggerSalesOrderNextStep'
-        client.request(:post, path, { type_of_printing: TYPE_OF_PRINTING })
-      end
-
-      def delete_sales_order
-        return unless entity.abacus_sales_order_key
-
-        client.delete(:sales_order, abacus_id)
-      rescue
-        # ignore error
-      end
 
       def abacus_id
         { sales_order_id: entity.abacus_sales_order_key, sales_order_backlog_id: BACKLOG_ID }
@@ -97,8 +109,8 @@ module Invoices
 
       def sales_order_position_attrs(position, index) # rubocop:disable Metrics/MethodLength
         {
-          sales_order_id: entity.abacus_sales_order_key,
-          sales_order_backlog_id: BACKLOG_ID,
+          # sales_order_id: entity.abacus_sales_order_key,
+          # sales_order_backlog_id: BACKLOG_ID,
           position_number: index,
           type: TYPE,
           pricing: { price_after_finding: position.amount.to_f.round(2) },
