@@ -348,6 +348,10 @@ de:
           attributes:
             finish_at:
               not_after_start: "muss nach Seit liegen"
+        household:
+            attributes:
+              members: 
+                no_members: "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."
 
     models:
       cost_center:
@@ -368,6 +372,9 @@ de:
       sac_section_membership_config:
         one: Parameter für Mitgliedschaftsrechnungen
         other: Parameter für Mitgliedschaftsrechnungen
+      termination_reason:
+        one: Vordefinierter Austrittsgrund
+        other: Vordefinierte Austrittsgründe
 
       ### GROUPS
       group/sac_cas:
@@ -1015,6 +1022,10 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich.
 
   table_displays:
     person:

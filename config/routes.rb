@@ -62,6 +62,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :termination_reasons, except: [:show]
+
     resources :cost_centers
     resources :cost_units
 
