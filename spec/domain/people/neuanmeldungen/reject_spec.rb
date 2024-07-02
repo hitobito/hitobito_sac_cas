@@ -50,7 +50,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(neuanmeldung.person.login_status).to eq :login
     additional_role = Group::SektionsMitglieder::Mitglied.new(group: group)
-    neuanmeldung.person.add_role(additional_role)
+    neuanmeldung.person.roles << additional_role
 
     expect do
       described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
@@ -64,9 +64,9 @@ describe People::Neuanmeldungen::Reject do
       password_confirmation: 'my-password1'
     )
     expect(neuanmeldung.person.login_status).to eq :login
-    deleted_role = Group::SektionsMitglieder::Mitglied.new(group: group)
-    deleted_role.destroy!
-    neuanmeldung.person.add_role(deleted_role)
+
+    foreign_group = groups(:abo_die_alpen)
+    Group::AboMagazin::Abonnent.create(group: foreign_group, created_at: 1.year.ago, delete_on: 1.day.ago, person: neuanmeldung.person)
 
     expect do
       described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
@@ -74,9 +74,8 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it 'deletes the Person, if it has no other roles' do
-    expect do
-      described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
-    end.to change { neuanmeldung.person }.by(-1)
+    described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
+    expect(Person.find(neuanmeldung.person.id)).to be_nil
   end
 
   it 'adds a Person#note if a note was provided' do
