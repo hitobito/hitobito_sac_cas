@@ -68,10 +68,10 @@ module Wizards::Memberships
     end
 
     def step_after(step_class_or_name)
-      if step_class_or_name == :_start
+      case step_class_or_name
+      when :_start
         handle_start
-      elsif step_class_or_name == Wizards::Steps::MembershipTerminatedInfo ||
-          step_class_or_name == Wizards::Steps::MembershipTerminatedInfo.step_name
+      when Wizards::Steps::MembershipTerminatedInfo
         nil
       else
         super
