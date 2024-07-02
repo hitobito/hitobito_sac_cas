@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Person::SacRemarksController < ApplicationController
-  before_action :group, except: :update
+  before_action :group
   before_action :remark_attr, only: :index
   before_action :authorize_action, except: :index
   before_action :permitted_attrs, only: :index
