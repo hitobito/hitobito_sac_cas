@@ -97,12 +97,14 @@ en:
         event_kinds: ""
         courses: ""
         updated_at: ""
+        created_at: ""
       cost_unit:
         label: ""
         event_kind_categories: ""
         event_kinds: ""
         courses: ""
         updated_at: ""
+        created_at: ""
       event:
         unconfirmed_count: ""
       event/kind:

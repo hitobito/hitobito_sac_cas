@@ -99,12 +99,14 @@ fr:
         event_kinds: ""
         courses: ""
         updated_at: ""
+        created_at: ""
       cost_unit:
         label: ""
         event_kind_categories: ""
         event_kinds: ""
         courses: ""
         updated_at: ""
+        created_at: ""
       event:
         unconfirmed_count: ""
       event/kind:
@@ -280,15 +282,15 @@ fr:
         service_fee: ""
         magazine_postage_abroad: ""
         reduction_amount: ""
-        reduction_required_membership_years: ""
+        reduction_required_membership_years: Réduction à partir d'années d'affiliation
         sac_fee_article_number: ""
         sac_entry_fee_article_number: ""
         hut_solidarity_fee_article_number: ""
         magazine_fee_article_number: ""
         magazine_postage_abroad_article_number: ""
         section_entry_fee_article_number: ""
-        section_fee_article_number: ""
-        section_bulletin_postage_abroad_article_number: ""
+        section_fee_article_number: Cotisation à la section
+        section_bulletin_postage_abroad_article_number: Frais de port étranger Bulletin de la section
         service_fee_article_number: ""
         balancing_payment_article_number: ""
         course_fee_article_number: ""
@@ -306,14 +308,14 @@ fr:
         section_entry_fee_adult: ""
         section_entry_fee_family: ""
         section_entry_fee_youth: ""
-        bulletin_postage_abroad: ""
-        sac_fee_exemption_for_honorary_members: ""
-        section_fee_exemption_for_honorary_members: ""
-        sac_fee_exemption_for_benefited_members: ""
-        section_fee_exemption_for_benefited_members: ""
-        reduction_amount: ""
-        reduction_required_membership_years: ""
-        reduction_required_age: ""
+        bulletin_postage_abroad: Frais de port étranger Bulletin de la section
+        sac_fee_exemption_for_honorary_members: Réduction des frais de l'association centrale pour les membres d'honneur
+        section_fee_exemption_for_honorary_members: Réduction des frais de section pour les membres d'honneur
+        sac_fee_exemption_for_benefited_members: Remise des taxes de l'association centrale pour les bénéficiaires
+        section_fee_exemption_for_benefited_members: Réduction des frais de section pour les bénéficiaires
+        reduction_amount: Montant de la réduction Années de membre/Age
+        reduction_required_membership_years: Réduction à partir d'années d'affiliation
+        reduction_required_age: Réduction à partir de l'âge
 
     errors:
       messages:
@@ -1029,12 +1031,12 @@ fr:
 
   sac_membership_configs:
     form:
-      fees: ""
-      membership_adult: ""
-      membership_family: ""
-      membership_youth: ""
+      fees: Frais
+      membership_adult: "Adhésion individuelle "
+      membership_family: Adhésion de la famille
+      membership_youth: Adhésion des jeunes
       sac_fee: ""
-      entry_fee: ""
+      entry_fee: Frais d'entrée
       magazine_fee: ""
       hut_solidarity_fee_without_hut: ""
       hut_solidarity_fee_with_hut: ""
@@ -1047,7 +1049,7 @@ fr:
       service_fee: ""
       magazine_postage_abroad: ""
       reduction_amount: ""
-      reduction_required_membership_years: ""
+      reduction_required_membership_years: Réduction à partir d'années d'affiliation
       discount_date_1: ""
       discount_percent_1: ""
       discount_date_2: ""
@@ -1056,30 +1058,30 @@ fr:
       discount_percent_3: ""
     global:
       link:
-        add: ""
+        add: Nouveau
 
   sac_section_membership_configs:
     form:
-      fees: ""
-      membership_adult: ""
-      membership_family: ""
-      membership_youth: ""
-      section_fee: ""
-      section_entry_fee: ""
+      fees: Frais
+      membership_adult: "Adhésion individuelle "
+      membership_family: Adhésion de la famille
+      membership_youth: Adhésion des jeunes
+      section_fee: Cotisation à la section
+      section_entry_fee: Frais d'entrée
       bulletin_fee: ""
       reductions: ""
       valid_from: ""
-      bulletin_postage_abroad: ""
-      sac_fee_exemption_for_honorary_members: ""
-      section_fee_exemption_for_honorary_members: ""
-      sac_fee_exemption_for_benefited_members: ""
-      section_fee_exemption_for_benefited_members: ""
-      reduction_amount: ""
-      reduction_required_membership_years: ""
-      reduction_required_age: ""
+      bulletin_postage_abroad: Frais de port étranger Bulletin de la section
+      sac_fee_exemption_for_honorary_members: Réduction des frais de l'association centrale pour les membres d'honneur
+      section_fee_exemption_for_honorary_members: Réduction des frais de section pour les membres d'honneur
+      sac_fee_exemption_for_benefited_members: Remise des taxes de l'association centrale pour les bénéficiaires
+      section_fee_exemption_for_benefited_members: Réduction des frais de section pour les bénéficiaires
+      reduction_amount: Montant de la réduction Années de membre/Age
+      reduction_required_membership_years: Réduction à partir d'années d'affiliation
+      reduction_required_age: Réduction à partir de l'âge
     global:
       link:
-        add: ""
+        add: Nouveau
 
   households:
     edit:
