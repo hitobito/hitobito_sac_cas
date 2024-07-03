@@ -124,15 +124,15 @@ module Export::Tabular::People
     end
 
     def s_info_1
-      # momentan noch leer lassen
+      entry.sac_remark_section_1
     end
 
     def s_info_2
-      # momentan noch leer lassen
+      entry.sac_remark_section_2
     end
 
     def s_info_3
-      # momentan noch leer lassen
+      entry.sac_remark_section_3
     end
 
     def saldo
