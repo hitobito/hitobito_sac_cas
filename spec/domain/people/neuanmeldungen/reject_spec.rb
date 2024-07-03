@@ -13,7 +13,11 @@ describe People::Neuanmeldungen::Reject do
   let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldung) { create_role(:adult) }
-  let(:person) { neuanmeldung.person }
+  let(:person) do
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: neuanmeldung.person)
+
+    neuanmeldung.person
+  end
 
   def create_role(beitragskategorie)
     Fabricate(
@@ -51,8 +55,6 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(person.login_status).to eq :login
 
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
-
     subject = rejector()
 
     expect do
@@ -68,7 +70,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(person.login_status).to eq :login
 
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, deleted_at: 1.day.ago, person: person)
+    person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
     subject = rejector()
 
@@ -78,14 +80,14 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it 'deletes the Person, if it has no other roles' do
+    person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+
     subject = rejector()
     subject.call
     expect{ Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it 'adds a Person#note if a note was provided' do
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
-
     expect { rejector(note: 'my note').call }.
       to change { person.reload.notes.count }.by(1)
 
@@ -95,7 +97,6 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it 'adds a Person#note with author if an author was provided' do
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
     expect { rejector(note: 'my note', author: people(:mitglied)).call }.
       to change { person.reload.notes.count }.by(1)
 
