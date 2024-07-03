@@ -217,6 +217,12 @@ de:
         correspondence: Mitgliederausweis & Rechnungsstellung
         family_id: Familien ID
         sac_family_main_person: Rechnungen an (Familie)
+        sac_remark_national_office: Bemerkungen Geschäftsstelle
+        sac_remark_section_1: Bemerkungen Sektion 1
+        sac_remark_section_2: Bemerkungen Sektion 2
+        sac_remark_section_3: Bemerkungen Sektion 3
+        sac_remark_section_4: Bemerkungen Sektion 4
+        sac_remark_section_5: Bemerkungen Sektion 5
         correspondences:
           digital: Digital
           print: Physisch
@@ -869,6 +875,7 @@ de:
 
     tabs:
       history: Mitgliedschaften / Verlauf
+      remarks: Bemerkungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft

@@ -1,0 +1,12 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.row
+  - available_attrs.each do |remark_attr|
+    %dl.dl-horizontal.m-0.p-2.border-top
+      %dt.muted.float-start.text-end
+        = Person.human_attribute_name remark_attr
+      %dd.mb-2
+        = render 'remark', remark_attr_name: remark_attr
