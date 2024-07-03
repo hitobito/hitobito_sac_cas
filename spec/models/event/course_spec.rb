@@ -122,6 +122,51 @@ describe Event::Course do
     end
   end
 
+  describe '#maximum_age' do
+    subject(:course) { Fabricate(:sac_course) }
+
+    before { course.kind.update_columns(maximum_age: 60) }
+
+    it 'returns value from kind' do
+      expect(course.maximum_age).to eq 60
+    end
+
+    it 'does not fail when kind maximum_age is nil' do
+      course.kind.maximum_age = nil
+      expect(course.maximum_age).to be_nil
+    end
+  end
+
+  describe '#maximum_class_size' do
+    subject(:course) { Fabricate(:sac_course) }
+
+    before { course.kind.update_columns(maximum_class_size: 60) }
+
+    it 'returns value from kind' do
+      expect(course.maximum_class_size).to eq 60
+    end
+
+    it 'does not fail when kind maximum_class_size is nil' do
+      course.kind.maximum_class_size = nil
+      expect(course.maximum_class_size).to be_nil
+    end
+  end
+
+  describe '#maximum_class_size' do
+    subject(:course) { Fabricate(:sac_course) }
+
+    before { course.kind.update_columns(ideal_class_size: 60) }
+
+    it 'returns value from kind' do
+      expect(course.ideal_class_size).to eq 60
+    end
+
+    it 'does not fail when kind ideal_class_size is nil' do
+      course.kind.ideal_class_size = nil
+      expect(course.ideal_class_size).to be_nil
+    end
+  end
+
   describe 'application_closing_at dependent state transitions' do
     let(:course) { events(:closed) }
 
