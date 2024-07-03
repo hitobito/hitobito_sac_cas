@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Person::SacRemarksController < ApplicationController
+class People::SacRemarksController < ApplicationController
   helper_method :person, :group, :remark_attr_name, :available_attrs
   before_action :authorize_action, except: :index
 
@@ -60,6 +60,8 @@ class Person::SacRemarksController < ApplicationController
       authorize! :manage_national_office_remark, person
     elsif Person::SAC_SECTION_REMARKS.include?(remark_attr_name)
       authorize! :manage_section_remarks, person
+    else
+      raise CanCan::AccessDenied
     end
   end
 end

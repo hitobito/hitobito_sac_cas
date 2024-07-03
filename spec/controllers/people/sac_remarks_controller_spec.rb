@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Person::SacRemarksController do
+describe People::SacRemarksController do
   let(:person) { people(:mitglied) }
   let(:group_id) { person.groups.first.id }
 
@@ -173,7 +173,7 @@ describe Person::SacRemarksController do
         expect do
           put :update, params: { group_id: group_id, person_id: person.id, id: :first_name,
                                  person: { first_name: 'example' } }
-        end.to raise_error(CanCan::AuthorizationNotPerformed)
+        end.to raise_error(CanCan::AccessDenied)
       end
     end
   end
