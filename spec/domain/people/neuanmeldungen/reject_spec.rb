@@ -69,8 +69,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(person.login_status).to eq :login
 
-    foreign_group = groups(:abo_die_alpen)
-    Group::AboMagazin::Abonnent.create(group: foreign_group, created_at: 1.year.ago, delete_on: 1.day.ago, person: person)
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, delete_on: 1.day.ago, person: person)
 
     subject = rejector()
 
