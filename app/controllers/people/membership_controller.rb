@@ -13,7 +13,9 @@ class People::MembershipController < ApplicationController
 
     respond_to do |format|
       format.pdf do
-        send_data pdf.render, type: :pdf, disposition: 'inline', filename: pdf.filename
+        I18n.with_locale(person.language) do
+          send_data pdf.render, type: :pdf, disposition: 'inline', filename: pdf.filename
+        end
       end
     end
   end

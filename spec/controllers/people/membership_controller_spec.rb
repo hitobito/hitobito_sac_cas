@@ -8,6 +8,7 @@
 require 'spec_helper'
 
 describe People::MembershipController, type: :controller do
+  include PdfHelpers
 
   let(:member) do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
@@ -28,6 +29,18 @@ describe People::MembershipController, type: :controller do
       get :show, params: { id: member.id, format: 'pdf' }
 
       expect(response.status).to eq(200)
+    end
+
+    it 'is generating a membership pass in the users language' do
+      sign_in(member)
+      member.update!(language: 'fr')
+
+      get :show, params: { id: member.id, format: 'pdf', locale: 'de' }
+      expect(response.status).to eq(200)
+
+      pdf = response.body
+      subject = PDF::Inspector::Text.analyze(pdf)
+      expect(subject.strings).to include('Carte membre')
     end
 
     it 'is possible to download membership pass for writable person' do
