@@ -741,6 +741,10 @@ en:
         ready: ""
         closed: ""
         canceled: ""
+      state_back_buttons:
+        assignment_closed: ""
+        application_closed: ""
+
     form_tabs:
       communication: ""
     general_fields:
