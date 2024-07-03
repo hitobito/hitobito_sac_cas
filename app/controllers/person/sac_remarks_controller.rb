@@ -6,19 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Person::SacRemarksController < ApplicationController
-  before_action :group
-  before_action :remark_attr, only: :index
+  helper_method :person, :group, :remark_attr_name, :available_attrs
   before_action :authorize_action, except: :index
-  before_action :permitted_attrs, only: :index
 
   def index
     authorize! :show_remarks, person
   end
 
   def update
-    if person.update(allowed_attr)
+    if person.update(permitted_attr)
       respond_to do |format|
-        format.html { render '_remark', layout: false, locals: { remark_attr: remark_attr } }
+        format.html do
+          render '_remark', layout: false, locals: { remark_attr_name: remark_attr_name }
+        end
       end
     else
       render :edit
@@ -35,22 +35,32 @@ class Person::SacRemarksController < ApplicationController
     @person ||= Person.find params[:person_id]
   end
 
-  def remark_attr
-    @remark_attr ||= params[:id]
+  def remark_attr_name
+    return @remark_attr_name if @remark_attr_name.present?
+
+    if available_attrs.include?(params[:id])
+      @remark_attr_name = params[:id]
+    else
+      raise CanCan::AccessDenied
+    end
   end
 
-  def permitted_attrs
-    @permitted_attrs = can?(:manage_section_remarks, person) ? Person::SAC_SECTION_REMARKS : []
-    @permitted_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
+  def available_attrs
+    return @available_attrs if @available_attrs.present?
+
+    @available_attrs = []
+    @available_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
                                                                    person)
+    @available_attrs += Person::SAC_SECTION_REMARKS if can?(:manage_section_remarks, person)
+    @available_attrs
   end
 
-  def allowed_attr
-    params.require(:person).permit remark_attr
+  def permitted_attr
+    params.require(:person).permit remark_attr_name
   end
 
   def authorize_action
-    if remark_attr.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
+    if remark_attr_name.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
       authorize! :manage_national_office_remark, person
     else
       authorize! :manage_section_remarks, person

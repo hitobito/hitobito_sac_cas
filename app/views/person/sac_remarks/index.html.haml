@@ -4,9 +4,9 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .row
-  - @permitted_attrs.each do |remark_attr|
+  - available_attrs.each do |remark_attr|
     %dl.dl-horizontal.m-0.p-2.border-top
       %dt.muted.float-start.text-end
         = Person.human_attribute_name remark_attr
       %dd.mb-2
-        = render 'remark', remark_attr: remark_attr
+        = render 'remark', remark_attr_name: remark_attr

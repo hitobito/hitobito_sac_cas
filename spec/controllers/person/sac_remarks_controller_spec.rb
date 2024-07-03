@@ -112,6 +112,13 @@ describe Person::SacRemarksController do
                                  person: { sac_remark_national_office: 'example' }  }
         end.to raise_error(CanCan::AccessDenied)
       end
+
+      it 'cannot update attributes other than remarks' do
+        expect do
+          put :update, params: { group_id: group_id, person_id: person.id, id: :first_name,
+                                 person: { first_name: 'example' }  }
+        end.to raise_error(CanCan::AccessDenied)
+      end
     end
   end
 end
