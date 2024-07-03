@@ -36,18 +36,14 @@ class Person::SacRemarksController < ApplicationController
   end
 
   def remark_attr_name
-    return @remark_attr_name if @remark_attr_name.present?
-
-    if available_attrs.include?(params[:id])
-      @remark_attr_name = params[:id]
-    else
-      raise CanCan::AccessDenied
-    end
+    @remark_attr_name ||= params[:id]
   end
 
   def available_attrs
-    return @available_attrs if @available_attrs.present?
+    @available_attrs ||= fetch_available_attrs
+  end
 
+  def fetch_available_attrs
     @available_attrs = []
     @available_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
                                                                    person)
@@ -62,7 +58,7 @@ class Person::SacRemarksController < ApplicationController
   def authorize_action
     if remark_attr_name.eql?(Person::SAC_REMARK_NATIONAL_OFFICE)
       authorize! :manage_national_office_remark, person
-    else
+    elsif Person::SAC_SECTION_REMARKS.include?(remark_attr_name)
       authorize! :manage_section_remarks, person
     end
   end
