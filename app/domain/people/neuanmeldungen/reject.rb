@@ -26,7 +26,6 @@ module People
       def call
         applicable_roles.each do |role|
           Role.transaction do
-            # binding.pry
             if non_applicable_roles.any? { |r| r[:person_id] == role.person_id }
               role.destroy!(always_soft_destroy: true)
               role.person.update!(encrypted_password: nil)
