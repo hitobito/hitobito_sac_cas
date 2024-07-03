@@ -51,8 +51,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(person.login_status).to eq :login
 
-    additional_role = Group::SektionsMitglieder::Mitglied.new(group: group)
-    person.roles << additional_role
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
 
     subject = rejector()
 
@@ -69,7 +68,7 @@ describe People::Neuanmeldungen::Reject do
     )
     expect(person.login_status).to eq :login
 
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, delete_on: 1.day.ago, person: person)
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, deleted_at: 1.day.ago, person: person)
 
     subject = rejector()
 
@@ -81,10 +80,12 @@ describe People::Neuanmeldungen::Reject do
   it 'deletes the Person, if it has no other roles' do
     subject = rejector()
     subject.call
-    expect(Person.find(person.id)).to be_nil
+    expect{ Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it 'adds a Person#note if a note was provided' do
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
+
     expect { rejector(note: 'my note').call }.
       to change { person.reload.notes.count }.by(1)
 
@@ -94,6 +95,7 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it 'adds a Person#note with author if an author was provided' do
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: person)
     expect { rejector(note: 'my note', author: people(:mitglied)).call }.
       to change { person.reload.notes.count }.by(1)
 

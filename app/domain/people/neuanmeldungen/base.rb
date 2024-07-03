@@ -25,6 +25,10 @@ module People
       def applicable_roles
         group.roles.where(type: NEUANMELDUNGEN_ROLE.sti_name, person_id: people_ids)
       end
+
+      def non_applicable_roles
+        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLE.sti_name)
+      end
     end
   end
 end
