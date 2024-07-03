@@ -244,6 +244,7 @@ de:
       group/sac_cas:
         sac_newsletter_mailing_list_id: SAC Newsletter Abo ID
         sac_magazine_mailing_list_id: Die Alpen Abo ID
+        sac_fundraising_mailing_list_id: Spendenaufruf Abo ID
 
         course_admin_email: E-Mail Kursadministration
       group/sektion:
