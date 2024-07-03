@@ -8,12 +8,15 @@
 module Memberships
   class JoinZusatzsektionAbility < AbilityDsl::Base
     on(Wizards::Memberships::JoinZusatzsektion) do
-      permission(:admin).may(:manage).active_member?
-      permission(:any).may(:create).for_self_if_active_member
+      permission(:any).may(:create).for_self_if_active_member_or_backoffice
     end
 
-    def for_self_if_active_member
-      for_self? && active_member?
+    def for_self_if_active_member_or_backoffice
+      active_member? && (for_self? || backoffice?)
+    end
+
+    def backoffice?
+      user_context.user.backoffice?
     end
 
     def for_self?

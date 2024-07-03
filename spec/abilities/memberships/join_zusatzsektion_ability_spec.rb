@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Memberships::JoinZusatzsektionAbility do
   def build_role(type, group)
-    Fabricate.build(type.sti_name, group: groups(group)).tap do |r|
+    Fabricate(type.sti_name, group: groups(group)).tap do |r|
       r.person.roles = [r]
     end
   end
@@ -25,6 +25,23 @@ describe Memberships::JoinZusatzsektionAbility do
 
   context "as admin" do
     let(:role) { build_role(Group::Geschaeftsstelle::Admin, :geschaeftsstelle) }
+
+    it "may create join for mitglied" do
+      expect(ability).to be_able_to(:create, build_join(:mitglied))
+    end
+
+    it "may not create join if membership is no longer active" do
+      roles(:mitglied).update(deleted_at: 1.day.ago)
+      expect(ability).not_to be_able_to(:create, build_join(:mitglied))
+    end
+
+    it "may not create join for admin as admin has no membership" do
+      expect(ability).not_to be_able_to(:create, build_join(:admin))
+    end
+  end
+
+  context "as mitarbeiter" do
+    let(:role) { build_role(Group::Geschaeftsstelle::Mitarbeiter, :geschaeftsstelle) }
 
     it "may create join for mitglied" do
       expect(ability).to be_able_to(:create, build_join(:mitglied))
