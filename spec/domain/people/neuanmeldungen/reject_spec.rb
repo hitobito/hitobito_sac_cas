@@ -50,11 +50,14 @@ describe People::Neuanmeldungen::Reject do
       password_confirmation: 'my-password1'
     )
     expect(person.login_status).to eq :login
+
     additional_role = Group::SektionsMitglieder::Mitglied.new(group: group)
     person.roles << additional_role
 
+    subject = rejector()
+
     expect do
-      described_class.new(group: group, people_ids: [person.id]).call
+      subject.call
     end.to change { person.reload.login_status }.to(:no_login)
   end
 
@@ -69,13 +72,16 @@ describe People::Neuanmeldungen::Reject do
     foreign_group = groups(:abo_die_alpen)
     Group::AboMagazin::Abonnent.create(group: foreign_group, created_at: 1.year.ago, delete_on: 1.day.ago, person: person)
 
+    subject = rejector()
+
     expect do
-      described_class.new(group: group, people_ids: [person.id]).call
+      subject.call
     end.to change { person.reload.login_status }.to(:no_login)
   end
 
   it 'deletes the Person, if it has no other roles' do
-    described_class.new(group: group, people_ids: [person.id]).call
+    subject = rejector()
+    subject.call
     expect(Person.find(person.id)).to be_nil
   end
 
