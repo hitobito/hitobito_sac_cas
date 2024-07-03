@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -12,6 +12,11 @@ module SacCas::Person
   included do
     CORRESPONDENCES = %w(digital print)
 
+    Person::SAC_REMARK_NATIONAL_OFFICE = 'sac_remark_national_office'
+    Person::SAC_SECTION_REMARKS =  %w(sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
+                                      sac_remark_section_4 sac_remark_section_5)
+    Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
+    Person::INTERNAL_ATTRS << Person::SAC_REMARKS
     Person::LANGUAGES.delete(:en)
 
     devise_login_id_attrs << :membership_number
@@ -30,6 +35,8 @@ module SacCas::Person
 
     i18n_enum :correspondence, CORRESPONDENCES
     i18n_setter :correspondence, CORRESPONDENCES
+
+    validates(*Person::SAC_REMARKS, format: { with: /\A[^\n\r]*\z/ })
 
     before_save :set_digital_correspondence, if: :password_initialized?
 

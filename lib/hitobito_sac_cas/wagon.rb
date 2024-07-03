@@ -80,6 +80,7 @@ module HitobitoSacCas
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register TerminationReasonAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
@@ -122,9 +123,10 @@ module HitobitoSacCas
       Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
+      Sheet::Person.prepend SacCas::Sheet::Person
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w(cost_centers cost_units)
+      admin_item[:active_for] += %w(cost_centers cost_units termination_reasons)
 
       ## Controllers
       EventsController.prepend SacCas::EventsController

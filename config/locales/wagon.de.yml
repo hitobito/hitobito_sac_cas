@@ -64,6 +64,8 @@ de:
       models:
         household:
           attributes:
+            members: 
+              no_members: "Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
               no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.
@@ -217,6 +219,12 @@ de:
         correspondence: Mitgliederausweis & Rechnungsstellung
         family_id: Familien ID
         sac_family_main_person: Rechnungen an (Familie)
+        sac_remark_national_office: Bemerkungen Geschäftsstelle
+        sac_remark_section_1: Bemerkungen Sektion 1
+        sac_remark_section_2: Bemerkungen Sektion 2
+        sac_remark_section_3: Bemerkungen Sektion 3
+        sac_remark_section_4: Bemerkungen Sektion 4
+        sac_remark_section_5: Bemerkungen Sektion 5
         correspondences:
           digital: Digital
           print: Physisch
@@ -327,6 +335,7 @@ de:
         already_has_neuanmeldung_role: hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on}).
         too_many_adults_in_family: "In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen."
         only_one_mitglied_role_allowed_at_a_time: "hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit."
+        must_be_in_past: muss in der Vergangenheit liegen
         must_be_present_unless_deleted: "muss vorhanden sein, wenn nicht gelöscht."
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
@@ -368,6 +377,9 @@ de:
       sac_section_membership_config:
         one: Parameter für Mitgliedschaftsrechnungen
         other: Parameter für Mitgliedschaftsrechnungen
+      termination_reason:
+        one: Vordefinierter Austrittsgrund
+        other: Vordefinierte Austrittsgründe
 
       ### GROUPS
       group/sac_cas:
@@ -868,6 +880,7 @@ de:
 
     tabs:
       history: Mitgliedschaften / Verlauf
+      remarks: Bemerkungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft
@@ -1015,6 +1028,10 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich.
 
   table_displays:
     person:

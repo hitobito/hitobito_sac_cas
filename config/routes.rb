@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
         resources :membership_invoices, only: [:create], module: :people
+        resources :sac_remarks, only: %i[index edit update], module: :people
 
         member do
           # Test route to check invoice positions for a person.
@@ -61,6 +62,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :termination_reasons, except: [:show]
 
     resources :cost_centers
     resources :cost_units
