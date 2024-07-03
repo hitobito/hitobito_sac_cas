@@ -152,7 +152,8 @@ module SacCas::Event::Course
               :accommodation,
               presence: { unless: :weak_validation_state? }
 
-    delegate :level, to: :kind, allow_nil: true
+    delegate :level, :ideal_class_size, :maximum_class_size, :maximum_age,
+             to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
     before_save :adjust_state, if: :application_closing_at_changed?
