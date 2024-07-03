@@ -9,6 +9,6 @@
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
     = c.with_aside do
       .col-md
-        - if c.model.choose_sektion.group
+        - if wizard.step(:choose_sektion)&.group
           = render(SelfRegistration::FeeComponent.new(group: c.model.choose_sektion.group, birthdays: []))
         = render(SelfRegistration::InfosComponent.new)
