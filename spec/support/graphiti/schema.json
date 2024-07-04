@@ -1399,6 +1399,11 @@
           "readable": true,
           "description": null
         },
+        "sac_fundraising_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "has_youth_organization": {
           "type": "boolean",
           "readable": true,
