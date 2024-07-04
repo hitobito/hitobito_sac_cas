@@ -58,6 +58,8 @@ fr:
       models:
         household:
           attributes:
+            members: 
+              no_members: ""
             base:
               at_least_one_adult: ""
               no_adult_member_with_email: ""
@@ -212,6 +214,12 @@ fr:
         correspondence: ""
         family_id: ""
         sac_family_main_person: ""
+        sac_remark_national_office: ""
+        sac_remark_section_1: ""
+        sac_remark_section_2: ""
+        sac_remark_section_3: ""
+        sac_remark_section_4: ""
+        sac_remark_section_5: ""
         correspondences:
           digital: ""
           print: ""
@@ -367,6 +375,10 @@ fr:
         one: Paramètres pour les factures des membres
         many: Paramètres pour les factures des membres
         other: Paramètres pour les factures des membres
+      termination_reason:
+        one: ''
+        many: ''
+        other: ''
 
       ### GROUPS
       group/sac_cas:
@@ -810,7 +822,7 @@ fr:
 
   invoices:
     sac_memberships:
-      title: ""
+      title: "Facture d'adhésion %{year}"
       positions:
         hut_solidarity_fee: ""
         sac_entry_feed: ""
@@ -835,7 +847,7 @@ fr:
 
   people:
     actions_show_sac_cas:
-      create_membership_invoice: ""
+      create_membership_invoice: Créer une facture d'adhésion
       create_membership_invoice_confirmation: |
     membership:
       verify:
@@ -860,6 +872,7 @@ fr:
 
     tabs:
       history: ""
+      remarks: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
@@ -997,6 +1010,10 @@ fr:
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: ""
 
   table_displays:
     person:

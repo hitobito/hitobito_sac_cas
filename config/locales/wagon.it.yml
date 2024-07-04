@@ -58,6 +58,8 @@ it:
       models:
         household:
           attributes:
+            members: 
+              no_members: ""
             base:
               at_least_one_adult: ""
               no_adult_member_with_email: ""
@@ -212,6 +214,12 @@ it:
         correspondence: ""
         family_id: ""
         sac_family_main_person: ""
+        sac_remark_national_office: ""
+        sac_remark_section_1: ""
+        sac_remark_section_2: ""
+        sac_remark_section_3: ""
+        sac_remark_section_4: ""
+        sac_remark_section_5: ""
         correspondences:
           digital: ""
           print: ""
@@ -364,6 +372,10 @@ it:
         many: ''
         other: ''
       sac_section_membership_config:
+        one: ''
+        many: ''
+        other: ''
+      termination_reason:
         one: ''
         many: ''
         other: ''
@@ -860,6 +872,7 @@ it:
 
     tabs:
       history: ""
+      remarks: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
@@ -997,6 +1010,10 @@ it:
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: ""
 
   table_displays:
     person:
