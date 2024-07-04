@@ -320,6 +320,7 @@ en:
         already_has_neuanmeldung_role: ""
         too_many_adults_in_family: ""
         only_one_mitglied_role_allowed_at_a_time: ""
+        must_be_in_past: ""
         must_be_present_unless_deleted: ""
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""

@@ -323,6 +323,7 @@ fr:
         already_has_neuanmeldung_role: ""
         too_many_adults_in_family: ""
         only_one_mitglied_role_allowed_at_a_time: ""
+        must_be_in_past: ""
         must_be_present_unless_deleted: ""
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
@@ -359,13 +360,13 @@ fr:
         many: ''
         other: ''
       sac_membership_config:
-        one: ''
-        many: ''
-        other: ''
+        one: Paramètres pour les factures des membres
+        many: Paramètres pour les factures des membres
+        other: Paramètres pour les factures des membres
       sac_section_membership_config:
-        one: ''
-        many: ''
-        other: ''
+        one: Paramètres pour les factures des membres
+        many: Paramètres pour les factures des membres
+        other: Paramètres pour les factures des membres
 
       ### GROUPS
       group/sac_cas:
@@ -379,9 +380,9 @@ fr:
         other: ''
 
       group/externe_kontakte:
-        one: ''
-        many: ''
-        other: ''
+        one: Contacts externes
+        many: Contacts externes
+        other: Contacts externes
 
       group/geschaeftsleitung:
         one: ''
@@ -434,9 +435,9 @@ fr:
         other: ''
 
       group/sektions_mitglieder:
-        one: ''
-        many: ''
-        other: ''
+        one: Membres
+        many: Membres
+        other: Membres
 
       group/sektions_neuanmeldungen_nv:
         one: Nouvelles inscriptions
@@ -688,8 +689,8 @@ fr:
     recipients: ""
 
   dropdown/group_edit:
-    sac_membership_configs: ""
-    sac_section_membership_configs: ""
+    sac_membership_configs: Paramètres pour les factures des membres
+    sac_section_membership_configs: Paramètres pour les factures des membres
 
   event:
     kinds:
@@ -1040,7 +1041,7 @@ fr:
       magazine_fee: ""
       hut_solidarity_fee_without_hut: ""
       hut_solidarity_fee_with_hut: ""
-      reductions: ""
+      reductions: Réductions
       discounts: ""
       discount_date: ""
       discount: ""
@@ -1069,7 +1070,7 @@ fr:
       section_fee: Cotisation à la section
       section_entry_fee: Frais d'entrée
       bulletin_fee: ""
-      reductions: ""
+      reductions: Réductions
       valid_from: ""
       bulletin_postage_abroad: Frais de port étranger Bulletin de la section
       sac_fee_exemption_for_honorary_members: Réduction des frais de l'association centrale pour les membres d'honneur
