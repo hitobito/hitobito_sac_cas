@@ -7,11 +7,13 @@
 
 class AddRemarksToPeople < ActiveRecord::Migration[6.1]
   def change
-    add_column :people, :sac_remark_national_office, :string, limit: 255
-    add_column :people, :sac_remark_section_1, :string, limit: 255
-    add_column :people, :sac_remark_section_2, :string, limit: 255
-    add_column :people, :sac_remark_section_3, :string, limit: 255
-    add_column :people, :sac_remark_section_4, :string, limit: 255
-    add_column :people, :sac_remark_section_5, :string, limit: 255
+    change_table :people, bulk: true do |t|
+      t.column :sac_remark_national_office, :string, limit: 255
+      t.column :sac_remark_section_1, :string, limit: 255
+      t.column :sac_remark_section_2, :string, limit: 255
+      t.column :sac_remark_section_3, :string, limit: 255
+      t.column :sac_remark_section_4, :string, limit: 255
+      t.column :sac_remark_section_5, :string, limit: 255
+    end
   end
 end
