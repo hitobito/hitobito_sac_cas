@@ -5,20 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-ENV['RAILS_STRUCTURED_ADDRESSES'] = '1'
-ENV['RAILS_ADDRESS_MIGRATION'] = '0'
+ENV["RAILS_STRUCTURED_ADDRESSES"] = "1"
+ENV["RAILS_ADDRESS_MIGRATION"] = "0"
 
-load File.expand_path('../app_root.rb', __dir__)
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __dir__)
+load File.expand_path("../app_root.rb", __dir__)
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 
-require File.join(ENV.fetch('APP_ROOT', nil), 'spec', 'spec_helper.rb')
+require File.join(ENV.fetch("APP_ROOT", nil), "spec", "spec_helper.rb")
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[HitobitoSacCas::Wagon.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
+Dir[HitobitoSacCas::Wagon.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
-  config.fixture_path = File.expand_path('fixtures', __dir__)
+  config.fixture_path = File.expand_path("fixtures", __dir__)
 
   # disable 2FA for admins in test env since login is used in feature specs
   config.before do
@@ -26,4 +26,4 @@ RSpec.configure do |config|
   end
 end
 
-def ci? = ENV['CI'] == 'true'
+def ci? = ENV["CI"] == "true"

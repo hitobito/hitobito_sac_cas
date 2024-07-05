@@ -7,10 +7,9 @@
 
 module Memberships
   class SwitchStammsektion < JoinBase
-
     def initialize(...)
       super
-      raise 'terminated membership' if sac_membership.roles.any?(&:terminated?)
+      raise "terminated membership" if sac_membership.roles.any?(&:terminated?)
     end
 
     validate :assert_join_date
@@ -34,10 +33,10 @@ module Memberships
         return unless role
 
         attrs = if join_date.future?
-                  { delete_on: [role.delete_on, join_date - 1.day].compact.min }
-                else
-                  { delete_on: nil, deleted_at: (join_date - 1.day).end_of_day }
-                end
+          {delete_on: [role.delete_on, join_date - 1.day].compact.min}
+        else
+          {delete_on: nil, deleted_at: (join_date - 1.day).end_of_day}
+        end
 
         role.attributes = attrs
       end
@@ -45,10 +44,10 @@ module Memberships
 
     def new_membership(person, beitragskategorie)
       attrs = if join_date.future?
-                { convert_to: role_type, type: 'FutureRole', convert_on: join_date }
-              else
-                { type: role_type, created_at: now, delete_on: now.end_of_year }
-              end
+        {convert_to: role_type, type: "FutureRole", convert_on: join_date}
+      else
+        {type: role_type, created_at: now, delete_on: now.end_of_year}
+      end
       attrs[:person] = person
 
       # `Role#set_beitragskategorie` gets called in a before_validation callback, but

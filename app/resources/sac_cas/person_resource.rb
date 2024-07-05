@@ -16,7 +16,6 @@ module SacCas::PersonResource
 
     extra_attribute :membership_years, :integer, sortable: true, filterable: true do
       @object.membership_years if @object.sac_membership_anytime?
-
     end
     on_extra_attribute :membership_years do |scope|
       scope.with_membership_years

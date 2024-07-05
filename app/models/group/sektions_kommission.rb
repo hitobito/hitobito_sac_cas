@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsKommission < ::Group
-
   ### ROLES
   class Praesidium < ::Role
     self.permissions = []

@@ -40,7 +40,7 @@ module SacCas::Households::MemberValidator
 
   def assert_no_membership_in_other_section
     if member_main_section && household_reference_person_main_section &&
-      member_main_section != household_reference_person_main_section
+        member_main_section != household_reference_person_main_section
       add_error(:membership_in_other_section)
     end
   end
@@ -54,6 +54,6 @@ module SacCas::Households::MemberValidator
   end
 
   def add_error(key, name_key = :person_name)
-    @member.errors.add(:base, key, **{ name_key => person.full_name })
+    @member.errors.add(:base, key, **{name_key => person.full_name})
   end
 end

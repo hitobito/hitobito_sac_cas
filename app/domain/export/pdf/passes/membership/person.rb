@@ -7,8 +7,7 @@
 
 class Export::Pdf::Passes::Membership
   class Person < Export::Pdf::Section
-
-    alias person model
+    alias_method :person, :model
 
     ADDRESS_BOUNDING_BOX_WIDTH = 180
     ADDRESS_BOUNDING_BOX_HEIGHT = 500
@@ -29,15 +28,15 @@ class Export::Pdf::Passes::Membership
     def render
       bounding_box(ADDRESS_BOUNDING_BOX_POSITION, width: ADDRESS_BOUNDING_BOX_WIDTH) do
         pdf.text_box(person_address, size: ADDRESS_SIZE,
-                                     overflow: TEXT_OVERFLOW)
+          overflow: TEXT_OVERFLOW)
       end
 
       image(verify_qr_code, at: QR_CODE_POSITION, width: QR_CODE_WIDTH, height: QR_CODE_HEIGHT)
       bounding_box(MEMBER_TEXT_BOX_POSITION, width: MEMBER_TEXT_BOX_WIDTH,
-                                             height: MEMBER_TEXT_BOX_HEIGHT) do
+        height: MEMBER_TEXT_BOX_HEIGHT) do
         membertext = [person_name, person_membership_number].flatten.join("\n\n")
         pdf.text_box(membertext, size: MEMBER_TEXT_SIZE, style: MEMBER_TEXT_STYLE,
-                                 overflow: TEXT_OVERFLOW)
+          overflow: TEXT_OVERFLOW)
       end
     end
 
@@ -48,11 +47,11 @@ class Export::Pdf::Passes::Membership
     end
 
     def person_name
-      "#{person.person_name}"
+      person.person_name.to_s
     end
 
     def person_membership_number
-      "#{t('member')}: #{person.membership_number}"
+      "#{t("member")}: #{person.membership_number}"
     end
 
     def verify_qr_code

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -6,7 +7,7 @@
 # https://github.com/hitobito/hitobito
 
 class Event::LevelResource < ApplicationResource
-  self.type = 'event_levels'
+  self.type = "event_levels"
 
   with_options writable: false do
     attribute :label, :string

@@ -18,10 +18,10 @@ module SacCas::Event::ParticipationContactData
     end
 
     self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street, :housenumber,
-                          :postbox, :zip_code, :town, :country, :gender, :birthday, :phone_numbers]
+      :postbox, :zip_code, :town, :country, :gender, :birthday, :phone_numbers]
 
     self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :street,
-                                    :housenumber, :zip_code, :town, :country]
+      :housenumber, :zip_code, :town, :country]
   end
 
   private
@@ -35,8 +35,8 @@ module SacCas::Event::ParticipationContactData
       person.phone_numbers.first.valid?
 
       message = [
-        SelfRegistration::MainPerson::Base.human_attribute_name(:number), t('errors.messages.blank')
-      ].join(' ')
+        SelfRegistration::MainPerson::Base.human_attribute_name(:number), t("errors.messages.blank")
+      ].join(" ")
       errors.add(:base, message) if person.phone_numbers.first.number.blank?
     end
   end

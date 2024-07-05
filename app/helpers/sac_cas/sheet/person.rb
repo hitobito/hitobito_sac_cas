@@ -9,8 +9,8 @@ module SacCas::Sheet::Person
   extend ActiveSupport::Concern
 
   prepended do
-    self.tabs.insert(1, Sheet::Tab.new(
-      'people.tabs.remarks',
+    tabs.insert(1, Sheet::Tab.new(
+      "people.tabs.remarks",
       :group_person_sac_remarks_path,
       if: ->(view, _group, person) { view.can?(:show_remarks, person) }
     ))

@@ -17,7 +17,6 @@
 #  updated_at :datetime         not null
 
 class Event::Level < ActiveRecord::Base
-
   include Paranoia::Globalized
 
   translates :label, :description
@@ -26,6 +25,6 @@ class Event::Level < ActiveRecord::Base
   validates :label, presence: true
 
   def to_s
-    self.label
+    label
   end
 end

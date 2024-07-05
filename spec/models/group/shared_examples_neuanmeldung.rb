@@ -5,24 +5,24 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-shared_examples 'validates Neuanmeldung timestamps' do
-  it 'created_at is required' do
+shared_examples "validates Neuanmeldung timestamps" do
+  it "created_at is required" do
     role = described_class.new(person: people(:mitglied))
     role.validate
-    expect(role.errors[:created_at]).to include('muss ausgefüllt werden')
+    expect(role.errors[:created_at]).to include("muss ausgefüllt werden")
 
     role.created_at = Time.zone.now
     role.validate
     expect(role.errors[:created_at]).to be_empty
   end
 
-  it 'delete_on is not required' do
+  it "delete_on is not required" do
     role = described_class.new(person: people(:mitglied))
     role.validate
     expect(role.errors[:delete_on]).to be_empty
   end
 
-  it 'deleted_at is not required' do
+  it "deleted_at is not required" do
     role = described_class.new(person: people(:mitglied))
     role.validate
     expect(role.errors[:deleted_at]).to be_empty

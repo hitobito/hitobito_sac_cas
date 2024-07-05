@@ -8,18 +8,16 @@
 module Invoices
   module Abacus
     class InvoicePosition
-
       attr_accessor :name, :grouping, :amount, :count, :article_number,
-                    :other_creditor_id, :other_debitor_id, :other_debitor_amount,
-                    :details, :cost_center, :cost_unit
+        :other_creditor_id, :other_debitor_id, :other_debitor_amount,
+        :details, :cost_center, :cost_unit
 
       def initialize(attributes = {})
         @count = 1
         attributes.each do |k, v|
-          send("#{k}=", v)
+          send(:"#{k}=", v)
         end
       end
-
     end
   end
 end

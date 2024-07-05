@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-
 module Memberships
   class JoinBase
     include ActiveModel::Model
@@ -57,7 +56,7 @@ module Memberships
 
     def assert_sac_section_or_ortsgruppe!
       unless join_section.is_a?(Group::Sektion) || join_section.is_a?(Group::Ortsgruppe)
-        raise 'must be section/ortsgruppe'
+        raise "must be section/ortsgruppe"
       end
     end
 

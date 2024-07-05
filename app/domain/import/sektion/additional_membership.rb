@@ -29,9 +29,9 @@ module Import
       def build_role
         return Role.new unless person
 
-        person.roles.
-          where(group_id: @group&.id, type: TARGET_ROLE_TYPE.sti_name).
-          first_or_initialize.tap do |role|
+        person.roles
+          .where(group_id: @group&.id, type: TARGET_ROLE_TYPE.sti_name)
+          .first_or_initialize.tap do |role|
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
             created_at: joining_date,
@@ -49,7 +49,7 @@ module Import
         return "Person #{navision_id} existiert nicht" unless person
 
         role.errors.full_messages
-          .flatten.compact.join(', ').tap do |messages|
+          .flatten.compact.join(", ").tap do |messages|
             messages.prepend("#{self}: ") if messages.present?
           end
       end

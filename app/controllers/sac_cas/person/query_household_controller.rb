@@ -15,5 +15,4 @@ module SacCas::Person::QueryHouseholdController
   def authorize_action
     authorize!(:create_households, Person)
   end
-
 end

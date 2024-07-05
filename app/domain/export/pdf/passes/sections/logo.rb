@@ -18,16 +18,16 @@ class Export::Pdf::Passes::Sections::Logo < Export::Pdf::Section
 
   def logo_path
     logo_lang = if [:it, :de, :fr].include?(I18n.locale)
-                  I18n.locale
-                else
-                  :de
-                end
+      I18n.locale
+    else
+      :de
+    end
     logo = "membership_pass/sac_logo_cmyk_#{logo_lang}_pos.opti.jpg"
 
     image_path(logo)
   end
 
   def image_path(name)
-    Wagons.find_wagon(__FILE__).root.join('app', 'assets', 'images', name)
+    Wagons.find_wagon(__FILE__).root.join("app", "assets", "images", name)
   end
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -47,6 +48,5 @@ module SacCas::GroupResource
       @object.decorate.membership_self_registration_url
     end
     on_extra_attribute(:membership_self_registration_url) { |scope| scope.includes(:children) }
-
   end
 end

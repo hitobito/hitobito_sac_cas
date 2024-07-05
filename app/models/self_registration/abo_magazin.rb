@@ -13,17 +13,17 @@ class SelfRegistration
 
     attr_accessor :issues_from
 
-    def initialize(group:, params: )
-      super(group: group, params: params)
+    def initialize(group:, params:)
+      super
 
-      @today = Date.today
+      @today = Time.zone.today
       @issues_from = params.dig(:self_registration_abo_magazin, :issues_from)
     end
 
     def dummy_costs
       [
         OpenStruct.new(amount: 60, country: :switzerland),
-        OpenStruct.new(amount: 76, country: :international),
+        OpenStruct.new(amount: 76, country: :international)
       ]
     end
 
@@ -50,7 +50,9 @@ class SelfRegistration
     end
 
     def issues_from_date
-      Date.parse(issues_from.to_s) rescue nil
+      Date.parse(issues_from.to_s)
+    rescue
+      nil
     end
   end
 end

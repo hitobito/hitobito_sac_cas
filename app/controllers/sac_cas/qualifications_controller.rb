@@ -39,5 +39,4 @@ module SacCas::QualificationsController
   def param_qualification_kind
     QualificationKind.find_by(id: params.dig(:qualification, :qualification_kind_id))
   end
-
 end

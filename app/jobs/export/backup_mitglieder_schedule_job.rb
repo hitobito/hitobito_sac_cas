@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Export::BackupMitgliederScheduleJob < RecurringJob
-
   run_every 1.day
 
   ROLE_TYPES_TO_BACKUP = [Group::Sektion, Group::Ortsgruppe].freeze

@@ -12,4 +12,3 @@ module SacCas::AbilityConstraints
     user_context.user.roles.none? { |r| r.is_a?(Group::SektionsFunktionaere::Mitgliederverwaltung) }
   end
 end
-

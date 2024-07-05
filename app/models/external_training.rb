@@ -9,7 +9,7 @@ class ExternalTraining < ActiveRecord::Base
   validates_by_schema
 
   belongs_to :person
-  belongs_to :event_kind, class_name: 'Event::Kind'
+  belongs_to :event_kind, class_name: "Event::Kind"
 
   attr_accessor :other_people_ids
 
@@ -39,12 +39,12 @@ class ExternalTraining < ActiveRecord::Base
     finish_at
   end
 
-  alias kind event_kind
+  alias_method :kind, :event_kind
 
   private
 
   def qualifier
-    ExternalTrainings::Qualifier.new(person, self, 'participant')
+    ExternalTrainings::Qualifier.new(person, self, "participant")
   end
 
   def issue_qualifications
@@ -57,8 +57,7 @@ class ExternalTraining < ActiveRecord::Base
 
   def create_trainings_for_other_people
     Array(other_people_ids).each do |person_id|
-      ExternalTraining.create!(attributes.except('id', 'person_id').merge(person_id: person_id))
+      ExternalTraining.create!(attributes.except("id", "person_id").merge(person_id: person_id))
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::SubscriptionsController
-
   private
 
   def tabular_params(**)

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Role
-
   module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
       <<~SQL
@@ -18,7 +17,7 @@ module SacCas::Role
                   LEAST(
                     -- LEAST will return NULL if any of the arguments is NULL.
                     -- Any value that can be NULL must have a fallback value higher than date.
-                    '#{date.strftime('%Y-%m-%d')}',
+                    '#{date.strftime("%Y-%m-%d")}',
                     COALESCE(DATE(roles.deleted_at), '9999-12-31'),
                     COALESCE(DATE(roles.archived_at), '9999-12-31'),
                     COALESCE(roles.delete_on, '9999-12-31')
@@ -36,9 +35,9 @@ module SacCas::Role
 
     base.class_eval do
       scope :with_membership_years,
-            ->(selects = 'roles.*', date = Time.zone.today) do
-              select(selects, select_with_membership_years(date))
-            end
+        ->(selects = "roles.*", date = Time.zone.today) do
+          select(selects, select_with_membership_years(date))
+        end
 
       belongs_to :termination_reason, optional: true
     end
@@ -49,7 +48,7 @@ module SacCas::Role
   end
 
   def membership_years
-    read_attribute(:membership_years) or raise 'use Role scope :with_membership_years'
+    read_attribute(:membership_years) or raise "use Role scope :with_membership_years"
   end
 
   def start_on

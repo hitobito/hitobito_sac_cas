@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe :self_registration do
   let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abonnenten)) }
@@ -16,85 +16,85 @@ describe :self_registration do
   end
 
   def complete_main_person_form
-    choose 'Mann'
-    fill_in 'Vorname', with: 'Max'
-    fill_in 'Nachname', with: 'Muster'
-    fill_in 'Geburtstag', with: '01.01.1980'
-    fill_in 'self_registration_abo_basic_login_main_person_attributes_street', with: 'Musterplatz'
-    fill_in 'Telefon', with: '+41 79 123 45 56'
-    fill_in 'self_registration_abo_basic_login_main_person_attributes_zip_code', with: '8000'
-    fill_in 'self_registration_abo_basic_login_main_person_attributes_town', with: 'Zürich'
-    check 'Ich habe die Statuten gelesen und stimme diesen zu'
-    check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
+    choose "Mann"
+    fill_in "Vorname", with: "Max"
+    fill_in "Nachname", with: "Muster"
+    fill_in "Geburtstag", with: "01.01.1980"
+    fill_in "self_registration_abo_basic_login_main_person_attributes_street", with: "Musterplatz"
+    fill_in "Telefon", with: "+41 79 123 45 56"
+    fill_in "self_registration_abo_basic_login_main_person_attributes_zip_code", with: "8000"
+    fill_in "self_registration_abo_basic_login_main_person_attributes_town", with: "Zürich"
+    check "Ich habe die Statuten gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
   end
 
   def expect_active_step(step_name)
-    expect(page).
-      to have_css('.step-headers li.active', text: step_name),
-         "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+    expect(page)
+      .to have_css(".step-headers li.active", text: step_name),
+        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
-    within('.alert#error_explanation') do
+    within(".alert#error_explanation") do
       expect(page).to have_content(message)
     end
   end
 
-  it 'validates email address' do
-    allow(Truemail).to receive(:valid?).with('max.muster@hitobito.example.com').and_return(false)
+  it "validates email address" do
+    allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
-    expect_active_step('E-Mail')
-    expect_validation_error('E-Mail ist nicht gültig')
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
+    expect_active_step("E-Mail")
+    expect_validation_error("E-Mail ist nicht gültig")
   end
 
-  it 'creates person' do
+  it "creates person" do
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
     expect(Person.last.roles.last.delete_on).not_to be_nil
   end
 
-  it 'subscribes to mailinglist' do
+  it "subscribes to mailinglist" do
     visit group_self_registration_path(group_id: group)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
-    check 'Ich möchte einen Newsletter abonnieren'
+    check "Ich möchte einen Newsletter abonnieren"
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link('Abmelden')
+      expect(page).to have_link("Abmelden")
     end
   end
 
-  it 'opts out of mailinglist' do
+  it "opts out of mailinglist" do
     visit group_self_registration_path(group_id: group)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
-    uncheck 'Ich möchte einen Newsletter abonnieren'
+    uncheck "Ich möchte einen Newsletter abonnieren"
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link('Anmelden')
+      expect(page).to have_link("Anmelden")
     end
   end
 end

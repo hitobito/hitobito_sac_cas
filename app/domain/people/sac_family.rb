@@ -6,15 +6,14 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::SacFamily
-
-  delegate :household_key, to: '@person'
+  delegate :household_key, to: "@person"
 
   def initialize(person)
     @person = person
   end
 
-  #def create(stammsektion)
-  #end
+  # def create(stammsektion)
+  # end
 
   # trigger after:
   # - adding a new person to household
@@ -29,31 +28,31 @@ class People::SacFamily
 
   def update_terminated_roles
     terminated_roles = @person
-                       .roles
-                       .where(type: terminatable_member_role_types,
-                              terminated: true,
-                              beitragskategorie: :family)
+      .roles
+      .where(type: terminatable_member_role_types,
+        terminated: true,
+        beitragskategorie: :family)
 
     affected_family_roles = Role
-                            .where(type: terminatable_member_role_types,
-                                   group_id: terminated_roles.collect(&:group_id),
-                                   terminated: false,
-                                   beitragskategorie: :family,
-                                   person_id: family_members.collect(&:id))
+      .where(type: terminatable_member_role_types,
+        group_id: terminated_roles.collect(&:group_id),
+        terminated: false,
+        beitragskategorie: :family,
+        person_id: family_members.collect(&:id))
 
     delete_on = terminated_roles.first.delete_on
     Roles::Termination.terminate(affected_family_roles, delete_on)
   end
 
-  #def change_stammsektion
-  #end
+  # def change_stammsektion
+  # end
 
-  #def add_zusatzsektion
-  #end
+  # def add_zusatzsektion
+  # end
 
   # make sure all family members are approved at the same time
-  #def approve_neuanmeldungen
-  #end
+  # def approve_neuanmeldungen
+  # end
 
   def member?
     household_key.present? &&
@@ -63,21 +62,21 @@ class People::SacFamily
   def id
     return unless member?
 
-    /\AF/ =~ household_key ? household_key : "F#{household_key}"
+    household_key.start_with?("F") ? household_key : "F#{household_key}"
   end
 
   # Returns all people in the household that have a family membership.
   # The current @person does not have to be part of the family membership.
   def family_members
     family_stammsektion.people
-                       .distinct
-                       .joins(:roles)
-                       .where(roles: { type: stammsektion_role_types, beitragskategorie: :family },
-                              people: { household_key: @person.household_key })
+      .distinct
+      .joins(:roles)
+      .where(roles: {type: stammsektion_role_types, beitragskategorie: :family},
+        people: {household_key: @person.household_key})
   end
 
   def adult_family_members
-    family_members.select {|person| category_calculator(person).adult? }
+    family_members.select { |person| category_calculator(person).adult? }
   end
 
   def housemates
@@ -95,7 +94,7 @@ class People::SacFamily
   def set_family_main_person!
     ActiveRecord::Base.transaction do
       family_members.where(sac_family_main_person: true)
-                    .update_all(sac_family_main_person: false)
+        .update_all(sac_family_main_person: false)
       @person.update!(sac_family_main_person: true)
     end
   end
@@ -124,9 +123,9 @@ class People::SacFamily
   end
 
   def add_zusatzsektion_roles(new_family_member)
-    family_member_role_scope(type: zusatzsektion_role_types).
-      index_by(&:group_id).
-      each do |_, role|
+    family_member_role_scope(type: zusatzsektion_role_types)
+      .index_by(&:group_id)
+      .each do |_, role|
       add_role_for_person(new_family_member, role)
     end
   end
@@ -157,14 +156,14 @@ class People::SacFamily
     )
   end
 
-  #def update_children
-     #add all children to household
-     #add all mitglieder roles with Beitragskategorie family to children
-  #end
+  # def update_children
+  # add all children to household
+  # add all mitglieder roles with Beitragskategorie family to children
+  # end
 
-  #def update_adults
-     #is there adults in same household that are allowed to get mitglied family roles?
-  #end
+  # def update_adults
+  # is there adults in same household that are allowed to get mitglied family roles?
+  # end
 
   def stammsektion_role_types
     SacCas::STAMMSEKTION_ROLES.map(&:sti_name)
@@ -185,5 +184,4 @@ class People::SacFamily
   def category_calculator(person)
     SacCas::Beitragskategorie::Calculator.new(person)
   end
-
 end

@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SectionEntryFee < Base
-
         def gross_amount
           beitragskategorie_fee(section)
         end
@@ -17,7 +16,6 @@ module Invoices
         def creditor
           section
         end
-
       end
     end
   end

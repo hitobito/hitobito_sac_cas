@@ -25,7 +25,7 @@ module SacCas::Event::KindsController
   def push_down
     authorize!(:update, entry)
     entry.push_down_inherited_attributes!
-    redirect_to edit_event_kind_path(entry), flash: { notice: t('.success')}
+    redirect_to edit_event_kind_path(entry), flash: {notice: t(".success")}
   end
 
   private

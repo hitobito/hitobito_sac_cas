@@ -36,7 +36,7 @@ module SacCas
       end
 
       def family_main_person_toggle_link(member)
-        return '' unless show_toggle_link?(member)
+        return "" unless show_toggle_link?(member)
 
         icon_html(member)
       end
@@ -44,15 +44,15 @@ module SacCas
       def icon_html(member)
         clickable, title, = icon_details_based_on_status(member)
         icon = icon(:star, filled: clickable)
-        class_name = clickable ? 'text-primary' : 'text-muted'
+        class_name = clickable ? "text-primary" : "text-muted"
         link_or_span(member, icon, title, class_name)
       end
 
       def link_or_span(member, icon, title, class_name)
-        attrs = { title: title, alt: title, class: class_name }
+        attrs = {title: title, alt: title, class: class_name}
         if !member.sac_family_main_person? && can_set_main_person_and_confirmed?(member)
           link_to(icon, icon_path(member),
-                  attrs.merge(data: { method: :put, remote: true }))
+            attrs.merge(data: {method: :put, remote: true}))
         else
           content_tag(:span, icon, attrs)
         end
@@ -60,13 +60,13 @@ module SacCas
 
       def icon_details_based_on_status(member)
         if member.sac_family_main_person?
-          [true, t('.main_person')]
+          [true, t(".main_person")]
         elsif can_set_main_person_and_confirmed?(member)
-          [false, t('.set_main_person')]
+          [false, t(".set_main_person")]
         elsif cannot_set_main_person_but_confirmed?(member)
-          [false, t('.cannot_set_main_person')]
+          [false, t(".cannot_set_main_person")]
         else
-          [false, t('.unverified_email')]
+          [false, t(".unverified_email")]
         end
       end
 

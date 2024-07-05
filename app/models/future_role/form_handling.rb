@@ -5,14 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 module FutureRole::FormHandling
   extend ActiveSupport::Concern
 
   MAX_REGISTER_ON_KEYS = 2
 
   def register_on_keys
-    %w(now jul oct).reject do |key|
+    %w[now jul oct].reject do |key|
       date_from_key(key)&.past? || date_from_key(key)&.today?
     end.take(MAX_REGISTER_ON_KEYS)
   end
@@ -41,6 +40,6 @@ module FutureRole::FormHandling
   end
 
   def t(*keys)
-    I18n.t(keys.join('.'), scope: 'activemodel.attributes.self_inscription')
+    I18n.t(keys.join("."), scope: "activemodel.attributes.self_inscription")
   end
 end

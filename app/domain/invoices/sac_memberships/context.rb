@@ -8,7 +8,6 @@
 module Invoices
   module SacMemberships
     class Context
-
       attr_reader :date
 
       def initialize(date)
@@ -31,7 +30,6 @@ module Invoices
       def sac
         @sac ||= Group.root
       end
-
     end
   end
 end

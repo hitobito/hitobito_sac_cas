@@ -13,9 +13,9 @@ module SacCas::Role::MitgliedCommon
   include SacCas::Role::MitgliedNoOverlapValidation
   include SacCas::RoleBeitragskategorie
 
-  DEPENDANT_ROLE_TYPES = ['Group::SektionsMitglieder::Ehrenmitglied',
-                          'Group::SektionsMitglieder::Beguenstigt',
-                          'Group::SektionsTourenkommission::Tourenleiter'].freeze
+  DEPENDANT_ROLE_TYPES = ["Group::SektionsMitglieder::Ehrenmitglied",
+    "Group::SektionsMitglieder::Beguenstigt",
+    "Group::SektionsTourenkommission::Tourenleiter"].freeze
 
   included do
     self.permissions = []
@@ -38,7 +38,6 @@ module SacCas::Role::MitgliedCommon
   def dependant_roles
     person
       .roles.joins(:group)
-      .where(type: DEPENDANT_ROLE_TYPES, groups: { layer_group_id: group.layer_group_id })
+      .where(type: DEPENDANT_ROLE_TYPES, groups: {layer_group_id: group.layer_group_id})
   end
-
 end

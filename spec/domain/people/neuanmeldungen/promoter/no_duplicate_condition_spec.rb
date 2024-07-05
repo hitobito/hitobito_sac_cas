@@ -5,23 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Promoter::NoDuplicateCondition do
-  context '::satisfied?' do
+  context "::satisfied?" do
     let(:role) { roles(:mitglied) }
 
     subject { described_class.new(role) }
 
     before { Person.update_all(created_at: 1.day.ago) }
 
-    it 'is true if person has no duplicate' do
+    it "is true if person has no duplicate" do
       expect(role.person.person_duplicates).to be_empty
 
       expect(subject.satisfied?).to eq true
     end
 
-    it 'is false if person was created less than MINIMUM_PERSON_RECORD_AGE.ago' do
+    it "is false if person was created less than MINIMUM_PERSON_RECORD_AGE.ago" do
       timestamp = People::Neuanmeldungen::Promoter::
           NoDuplicateCondition::MINIMUM_PERSON_RECORD_AGE.ago + 1.minute
       role.person.update!(created_at: timestamp)
@@ -29,7 +29,7 @@ describe People::Neuanmeldungen::Promoter::NoDuplicateCondition do
       expect(subject.satisfied?).to eq false
     end
 
-    it 'is false if person has duplicate' do
+    it "is false if person has duplicate" do
       PersonDuplicate.create!(person_1: role.person, person_2: Fabricate(:person))
 
       expect(subject.satisfied?).to eq false

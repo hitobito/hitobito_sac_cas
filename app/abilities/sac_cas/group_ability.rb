@@ -10,10 +10,9 @@ module SacCas::GroupAbility
 
   prepended do
     on(Group) do
-      permission(:layer_and_below_read).
-        may(:export_mitglieder).
-        in_same_layer_or_below
+      permission(:layer_and_below_read)
+        .may(:export_mitglieder)
+        .in_same_layer_or_below
     end
   end
-
 end

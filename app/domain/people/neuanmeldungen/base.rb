@@ -17,7 +17,7 @@ module People
       APPROVED_NEUANMELDUNGEN_GROUP = Group::SektionsNeuanmeldungenNv
 
       def call
-        raise NotImplementedError, 'Implement this method in subclass'
+        raise NotImplementedError, "Implement this method in subclass"
       end
 
       private

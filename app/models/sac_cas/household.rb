@@ -8,7 +8,7 @@
 module SacCas::Household
   extend ActiveSupport::Concern
 
-  HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
+  HOUSEHOLD_KEY_SEQUENCE = "person.household_key"
 
   prepended do
     validate :assert_adult_member, on: :update
@@ -74,7 +74,7 @@ module SacCas::Household
     [:adult, :child].include?(age_category)
 
     people.select do |person|
-      SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")
+      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
     end
   end
 
@@ -104,7 +104,7 @@ module SacCas::Household
 
   def assert_removed_member_email
     removed_people = Person.where(household_key: household_key)
-                           .where.not(id: members.map { _1.person.id })
+      .where.not(id: members.map { _1.person.id })
 
     if removed_people.any? { _1.email.blank? }
       errors.add(:base, :removed_member_has_no_email)

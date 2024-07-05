@@ -9,7 +9,7 @@ module SacCas::PersonDecorator
   extend ActiveSupport::Concern
 
   def as_typeahead
-    { id: id, label: h.h(full_label_with_changed_suffix) }
+    {id: id, label: h.h(full_label_with_changed_suffix)}
   end
 
   def as_quicksearch
@@ -29,5 +29,4 @@ module SacCas::PersonDecorator
       label << " (#{suffix})"
     end
   end
-
 end

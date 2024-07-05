@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::SacFamily do
   let(:adult) { people(:familienmitglied) }
@@ -22,7 +22,7 @@ describe People::SacFamily do
   end
 
   let!(:household_member_youth) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 19.years)
+    person = Fabricate(:person, household_key: "4242", birthday: today - 19.years)
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:bluemlisalp_mitglieder),
       person: person,
@@ -34,7 +34,7 @@ describe People::SacFamily do
   end
 
   let!(:household_member_adult) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 42.years)
+    person = Fabricate(:person, household_key: "4242", birthday: today - 42.years)
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:bluemlisalp_mitglieder),
       person: person,
@@ -46,7 +46,7 @@ describe People::SacFamily do
   end
 
   let!(:household_other_sektion_member) do
-    person = Fabricate(:person, household_key: '4242', birthday: today - 88.years)
+    person = Fabricate(:person, household_key: "4242", birthday: today - 88.years)
     Group::SektionsMitglieder::Mitglied.create!(
       group: groups(:matterhorn_mitglieder),
       person: person,
@@ -57,21 +57,21 @@ describe People::SacFamily do
     person
   end
 
-  context '#family_members' do
-    it 'returns all family members' do
+  context "#family_members" do
+    it "returns all family members" do
       expect(adult.sac_family.family_members).to contain_exactly(adult, adult2, child)
     end
 
-    it 'returns all family members when called on non-family housemate' do
+    it "returns all family members when called on non-family housemate" do
       expect(household_member_adult.sac_family.family_members).to contain_exactly(adult, adult2, child)
     end
 
-    it 'returns all family members linked by neuanmeldung roles' do
+    it "returns all family members linked by neuanmeldung roles" do
       Group::SektionsMitglieder::Mitglied.where(group: groups(:bluemlisalp_mitglieder))
         .update_all(group_id: groups(:bluemlisalp_neuanmeldungen_sektion).id,
-                    created_at: 7.days.ago,
-                    delete_on: today + 20.days,
-                    type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name)
+          created_at: 7.days.ago,
+          delete_on: today + 20.days,
+          type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name)
 
       expect(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.count).to eq(6)
 
@@ -89,19 +89,19 @@ describe People::SacFamily do
     end
   end
 
-  context '#main_person' do
-    it 'finds person with family_main_person set' do
+  context "#main_person" do
+    it "finds person with family_main_person set" do
       expect(adult.sac_family_main_person).to be true # check assumption
 
       expect(child.sac_family.main_person).to eq adult
     end
   end
 
-  context '#adult_family_members' do
+  context "#adult_family_members" do
     it { expect(adult.sac_family.adult_family_members).to contain_exactly(adult, adult2) }
   end
 
-  context '#housemates' do
+  context "#housemates" do
     it do
       expect(adult.sac_family.housemates).to contain_exactly(
         adult,
@@ -114,7 +114,7 @@ describe People::SacFamily do
     end
   end
 
-  context '#non_family_housemates' do
+  context "#non_family_housemates" do
     it do
       expect(adult.sac_family.non_family_housemates).to contain_exactly(
         household_member_youth,
@@ -124,45 +124,46 @@ describe People::SacFamily do
     end
   end
 
-  context '#member?' do
-    it 'is never a family member if not in a household' do
+  context "#member?" do
+    it "is never a family member if not in a household" do
       expect(people(:mitglied).sac_family.member?).to eq(false)
     end
 
-    it 'is not a family member if in same household but other sektion' do
+    it "is not a family member if in same household but other sektion" do
       expect(household_other_sektion_member.sac_family.member?).to eq(false)
     end
 
-    it 'is not a family member if in same household but youth mitglied' do
+    it "is not a family member if in same household but youth mitglied" do
       expect(household_member_youth.sac_family.member?).to eq(false)
     end
 
-    it 'is family member' do
+    it "is family member" do
       [adult, adult2, child].each do |p|
         expect(p.sac_family.member?).to eq(true)
       end
     end
   end
 
-  context '#id' do
-    it 'returns prefixed household_key for family member' do
+  context "#id" do
+    it "returns prefixed household_key for family member" do
       expect(adult.family_id).to eq "F#{adult.household_key}"
     end
 
-    it 'does not prefix household_key if already prefixed' do
-      adult.household_key = 'F42'
-      expect(adult.family_id).to eq 'F42'
+    it "does not prefix household_key if already prefixed" do
+      adult.household_key = "F42"
+      expect(adult.family_id).to eq "F42"
     end
 
-    it 'returns nil for non family member' do
+    it "returns nil for non family member" do
       expect(household_member_youth.family_id).to be_nil
     end
   end
 
-  context '#update!' do
+  context "#update!" do
     before { freeze_time }
 
-    let!(:family_head) { Fabricate(:person, household_key: 'this-household', birthday: today - 40.years, sac_family_main_person: true) }
+    let!(:family_head) { Fabricate(:person, household_key: "this-household", birthday: today - 40.years, sac_family_main_person: true) }
+
     subject { described_class.new(family_head) }
 
     {
@@ -170,7 +171,7 @@ describe People::SacFamily do
       Group::SektionsNeuanmeldungenSektion::Neuanmeldung => :bluemlisalp_neuanmeldungen_sektion,
       Group::SektionsNeuanmeldungenNv::Neuanmeldung => :bluemlisalp_neuanmeldungen_nv
     }.each do |type, group|
-      context "#{type.sti_name}" do
+      context type.sti_name.to_s do
         let!(:role) do
           type.create!(
             group: groups(group),
@@ -180,34 +181,34 @@ describe People::SacFamily do
           )
         end
 
-        it 'adds role to non-family household members of family age' do
+        it "adds role to non-family household members of family age" do
           adult = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
           child = Fabricate(:person, household_key: family_head.household_key, birthday: today - 10.years)
 
-          expect { subject.update! }.
-            to change { Role.count }.by(2).
-            and change { type.count }.by(2).
-            and change { adult.roles.count }.by(1).
-            and change { child.roles.count }.by(1)
+          expect { subject.update! }
+            .to change { Role.count }.by(2)
+            .and change { type.count }.by(2)
+            .and change { adult.roles.count }.by(1)
+            .and change { child.roles.count }.by(1)
 
           specimen = adult.roles.last
           expect(specimen.attributes).to include(role.attributes.slice(
-            'type', 'group_id', 'delete_on'
+            "type", "group_id", "delete_on"
           ))
           expect(specimen.created_at).to eq Time.current
         end
 
-        it 'does not add role to youth household members' do
+        it "does not add role to youth household members" do
           person = Fabricate(:person, household_key: family_head.household_key, birthday: today - 19.years)
           expect { subject.update! }.not_to change { person.roles.count }
         end
 
-        it 'does not add role to person without birthday' do
+        it "does not add role to person without birthday" do
           person = Fabricate(:person, household_key: family_head.household_key, birthday: nil)
           expect { subject.update! }.not_to change { person.roles.count }
         end
 
-        it 'does not add role to adult if family already has 2 adults' do
+        it "does not add role to adult if family already has 2 adults" do
           second_family_adult = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
           role.dup.tap do |r|
             r.person = second_family_adult
@@ -218,13 +219,13 @@ describe People::SacFamily do
           expect { adult.sac_family.update! }.not_to change { person.roles.count }
         end
 
-        it 'adds roles even when initiated on non-family household member' do
+        it "adds roles even when initiated on non-family household member" do
           non_family_person = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
 
           expect { non_family_person.sac_family.update! }.to change { non_family_person.roles.count }.by(1)
           specimen = non_family_person.roles.last
           expect(specimen.attributes).to include(role.attributes.slice(
-            'type', 'group_id', 'delete_on'
+            "type", "group_id", "delete_on"
           ))
         end
       end
@@ -235,7 +236,7 @@ describe People::SacFamily do
       Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion => :matterhorn_neuanmeldungen_sektion,
       Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion => :matterhorn_neuanmeldungen_nv
     }.each do |type, group|
-      context "#{type.sti_name}" do
+      context type.sti_name.to_s do
         let!(:stammsektion_role) do
           Group::SektionsMitglieder::Mitglied.create!(
             group: groups(:bluemlisalp_mitglieder),
@@ -254,34 +255,34 @@ describe People::SacFamily do
           )
         end
 
-        it 'adds role to non-family household members of family age' do
+        it "adds role to non-family household members of family age" do
           adult = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
           child = Fabricate(:person, household_key: family_head.household_key, birthday: today - 10.years)
 
-          expect { subject.update! }.
-            to change { Role.count }.by(4). # including the stammsektion roles and zusatzsektion roles
-            and change { type.count }.by(2).
-            and change { adult.roles.count }.by(2). # 1 stammsektion and 1 zusatzsektion
-            and change { child.roles.count }.by(2) # 1 stammsektion and 1 zusatzsektion
+          expect { subject.update! }
+            .to change { Role.count }.by(4) # including the stammsektion roles and zusatzsektion roles
+            .and change { type.count }.by(2)
+            .and change { adult.roles.count }.by(2) # 1 stammsektion and 1 zusatzsektion
+            .and change { child.roles.count }.by(2) # 1 stammsektion and 1 zusatzsektion
 
           specimen = type.find_by(person_id: adult.id)
           expect(specimen.attributes).to include(role.attributes.slice(
-            'type', 'group_id', 'delete_on'
+            "type", "group_id", "delete_on"
           ))
           expect(specimen.created_at).to eq Time.current
         end
 
-        it 'does not add role to youth household members' do
+        it "does not add role to youth household members" do
           person = Fabricate(:person, household_key: family_head.household_key, birthday: today - 19.years)
           expect { subject.update! }.not_to change { person.roles.count }
         end
 
-        it 'does not add role to person without birthday' do
+        it "does not add role to person without birthday" do
           person = Fabricate(:person, household_key: family_head.household_key, birthday: nil)
           expect { subject.update! }.not_to change { person.roles.count }
         end
 
-        it 'does not add role to adult if family already has 2 adults' do
+        it "does not add role to adult if family already has 2 adults" do
           second_family_adult = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
           stammsektion_role.dup.tap do |r|
             r.person = second_family_adult
@@ -292,9 +293,9 @@ describe People::SacFamily do
           expect { adult.sac_family.update! }.not_to change { person.roles.count }
         end
 
-        it 'adds multiple zusatzsektion roles' do
-          other_sektion_mitglieder = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).
-            children.find_by(type: Group::SektionsMitglieder)
+        it "adds multiple zusatzsektion roles" do
+          other_sektion_mitglieder = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023)
+            .children.find_by(type: Group::SektionsMitglieder)
 
           Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
             group: other_sektion_mitglieder,
@@ -305,9 +306,9 @@ describe People::SacFamily do
 
           housemate = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
 
-          expect { subject.update! }.
-            to change { Role.count }.by(3). # including the stammsektion roles and 2 zusatzsektion roles
-            and change { housemate.roles.count }.by(3) # 1 stammsektion and 2 zusatzsektion
+          expect { subject.update! }
+            .to change { Role.count }.by(3) # including the stammsektion roles and 2 zusatzsektion roles
+            .and change { housemate.roles.count }.by(3) # 1 stammsektion and 2 zusatzsektion
 
           expect(housemate.roles.pluck(:group_id, :type)).to contain_exactly(
             [groups(:bluemlisalp_mitglieder).id, Group::SektionsMitglieder::Mitglied.sti_name],
@@ -316,18 +317,16 @@ describe People::SacFamily do
           )
         end
 
-        it 'adds roles even when initiated on non-family household member' do
+        it "adds roles even when initiated on non-family household member" do
           non_family_person = Fabricate(:person, household_key: family_head.household_key, birthday: today - 30.years)
 
           expect { non_family_person.sac_family.update! }.to change { non_family_person.roles.count }.by(2)
           specimen = non_family_person.roles.find_by(type: type.sti_name)
           expect(specimen.attributes).to include(role.attributes.slice(
-            'type', 'group_id', 'delete_on'
+            "type", "group_id", "delete_on"
           ))
         end
       end
     end
-
   end
-
 end

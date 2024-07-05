@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SacFee < Base
-
         self.group = :sac_fee
         self.section_payment_possible = true
 
@@ -25,7 +24,6 @@ module Invoices
           config.reduction_required_membership_years.to_i.positive? &&
             member.membership_years >= config.reduction_required_membership_years
         end
-
       end
     end
   end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Subscriber::FilterController
-
   # We use the core implementation but add an authorization check.
   def edit
     authorize_update!
@@ -25,5 +24,4 @@ module SacCas::Subscriber::FilterController
   def authorize_update!
     current_ability.authorize!(:update, mailing_list, :filter_chain)
   end
-
 end

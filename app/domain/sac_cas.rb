@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas
-
   ### Membership roles
 
   MITGLIED_STAMMSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].freeze
@@ -66,7 +65,7 @@ module SacCas
 
   ###
 
-  NEWSLETTER_MAILING_LIST_INTERNAL_KEY = 'sac_newsletter'
+  NEWSLETTER_MAILING_LIST_INTERNAL_KEY = "sac_newsletter"
 
   def main_phone_label
     Settings.phone_number.predefined_labels.find { |l| l =~ /Haupt/ }

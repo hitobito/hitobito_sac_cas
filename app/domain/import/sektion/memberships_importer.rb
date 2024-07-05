@@ -5,36 +5,35 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import
   module Sektion
     class MembershipsImporter < Import::PeopleImporter
-
       self.headers = {
-        navision_id: 'Mitgliedernummer',
-        household_key: 'Familien-Nr.',
-        group_navision_id: 'Sektion',
-        beitragskategorie: 'Kategorie',
-        member_type: 'Mitgliederart',
-        last_joining_date: 'Letztes Eintrittsdatum',
-        last_exit_date: 'Letztes Austrittsdatum',
-        joining_year: 'Eintrittsjahr',
-        ehrenmitglied: 'Ehrenmitglied Sektion',
-        beguenstigt: 'Begünstigter Sektion',
+        navision_id: "Mitgliedernummer",
+        household_key: "Familien-Nr.",
+        group_navision_id: "Sektion",
+        beitragskategorie: "Kategorie",
+        member_type: "Mitgliederart",
+        last_joining_date: "Letztes Eintrittsdatum",
+        last_exit_date: "Letztes Austrittsdatum",
+        joining_year: "Eintrittsjahr",
+        ehrenmitglied: "Ehrenmitglied Sektion",
+        beguenstigt: "Begünstigter Sektion"
       }.freeze
 
-      self.sheet_name = 'aktive_mitglieder'
+      self.sheet_name = "aktive_mitglieder"
 
-      self.class_attribute :target_role_type, default: Membership::TARGET_ROLE_TYPE
+      class_attribute :target_role_type, default: Membership::TARGET_ROLE_TYPE
 
       attr_reader :membership_groups, :missing_sections
 
       def initialize(path, skip_existing: false, output: $stdout)
         super
-        @membership_groups = ::Group::SektionsMitglieder.includes(:parent).
-                             select { |group| group.parent.navision_id.present? }.
-                             index_by { |group| group.parent.navision_id.to_i }
+        @membership_groups = ::Group::SektionsMitglieder.includes(:parent)
+          .select { |group| group.parent.navision_id.present? }
+          .index_by { |group| group.parent.navision_id.to_i }
         @missing_sections = Set.new
       end
 
@@ -42,7 +41,7 @@ module Import
 
       def people_ids_already_having_membership
         @people_ids_already_having_membership ||= Set.new(
-          ::Person.joins(:roles).where(roles: { type: target_role_type.sti_name }).pluck(:id)
+          ::Person.joins(:roles).where(roles: {type: target_role_type.sti_name}).pluck(:id)
         )
       end
 
@@ -88,7 +87,7 @@ module Import
           )
         end
 
-        output_list('Folgende Sektionen konnten nicht gefunden werden:', missing_sections.to_a)
+        output_list("Folgende Sektionen konnten nicht gefunden werden:", missing_sections.to_a)
       end
 
       def root_user

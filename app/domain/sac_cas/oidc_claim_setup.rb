@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::OidcClaimSetup
-
   extend ActiveSupport::Concern
 
   INFERRED_ROLE_LABLES = {
@@ -25,7 +24,7 @@ module SacCas::OidcClaimSetup
     tourenportal_community: [Group::AboTourenPortal::Community],
     tourenportal_administrator: [Group::AboTourenPortal::Admin],
     magazin_subscriber: Group::AboMagazin.roles,
-    section_tour_functionary: Group::SektionsTourenkommission.roles,
+    section_tour_functionary: Group::SektionsTourenkommission.roles
   }
 
   def run

@@ -5,16 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 module SacCas::StepsComponent::ContentComponent
   extend ActiveSupport::Concern
 
   # Have not been able to render error messages and block in single fields_for call
-  def fields_for(&block)
-    partial_name = @partial.split('/').last
+  def fields_for(&)
+    partial_name = @partial.split("/").last
     @form.fields_for(partial_name, model) do |form|
       form.error_messages
-    end + @form.fields_for(partial_name, model, &block)
+    end + @form.fields_for(partial_name, model, &)
   end
 
   def model

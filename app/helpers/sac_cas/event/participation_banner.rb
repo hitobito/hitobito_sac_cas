@@ -12,11 +12,11 @@ module SacCas::Event::ParticipationBanner
 
   def action_button_cancel_participation
     action_button(
-      t('event.participations.cancel_application.caption'),
+      t("event.participations.cancel_application.caption"),
       nil,
-      'times-circle',
-      data: { bs_toggle: 'popover', bs_content: render_cancel_popover, bs_placement: :bottom },
-      class: 'ms-2',
+      "times-circle",
+      data: {bs_toggle: "popover", bs_content: render_cancel_popover, bs_placement: :bottom},
+      class: "ms-2",
       in_button_group: true
     )
   end
@@ -27,12 +27,12 @@ module SacCas::Event::ParticipationBanner
   end
 
   def render_cancel_popover
-    @context.render('event/participations/popover_participant_cancels',
-                    entry: @user_participation).to_s
+    @context.render("event/participations/popover_participant_cancels",
+      entry: @user_participation).to_s
   end
 
   def status_text
-    t(@user_participation.state, scope: 'event.participations.states')
+    t(@user_participation.state, scope: "event.participations.states")
   end
 
   def status_class

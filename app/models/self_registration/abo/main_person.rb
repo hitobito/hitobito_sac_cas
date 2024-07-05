@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class SelfRegistration::Abo::MainPerson < SelfRegistration::AboBasicLogin::MainPerson
-
   MIN_YEARS = 18
 
   self.required_attrs = [

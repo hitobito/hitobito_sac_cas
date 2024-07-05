@@ -8,7 +8,7 @@
 module SacCas::Event::ApplicationMarketController
   extend ActiveSupport::Concern
 
-  SORT_EXPRESSION = 'event_participations.created_at ASC'.freeze
+  SORT_EXPRESSION = "event_participations.created_at ASC"
 
   def index
     @participants = load_participants.reorder(SORT_EXPRESSION)

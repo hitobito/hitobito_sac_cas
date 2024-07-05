@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Person::Filter::NeuanmeldungenList
-
   def initialize(layer_group, current_user)
     @layer_group = layer_group
     @current_user = current_user
@@ -14,12 +13,12 @@ class Person::Filter::NeuanmeldungenList
 
   def count
     Person::Filter::List.new(@layer_group,
-                             @current_user,
-                             filter_params).all_count
+      @current_user,
+      filter_params).all_count
   end
 
   def name
-    I18n.t('activerecord.attributes.role.class.kind.neuanmeldung.other')
+    I18n.t("activerecord.attributes.role.class.kind.neuanmeldung.other")
   end
 
   def filter_params
@@ -29,9 +28,8 @@ class Person::Filter::NeuanmeldungenList
     ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
     {
       name: name,
-      range: 'deep',
-      filters: { role: { role_type_ids: ids } }
+      range: "deep",
+      filters: {role: {role_type_ids: ids}}
     }
   end
-
 end

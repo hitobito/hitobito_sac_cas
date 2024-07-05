@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PeopleController do
   render_views
@@ -13,36 +13,35 @@ describe PeopleController do
   let(:body) { Capybara::Node::Simple.new(response.body) }
   let(:admin) { people(:admin) }
 
-  let(:people_table) { body.all('#main table tbody tr') }
-  let(:pagination_info) { body.find('.pagination-info').text.strip }
-  let(:members_filter) { body.find('.toolbar-pills > ul > li:nth-child(1)') }
-  let(:custom_filter) { body.find('.toolbar-pills > ul > li.dropdown') }
+  let(:people_table) { body.all("#main table tbody tr") }
+  let(:pagination_info) { body.find(".pagination-info").text.strip }
+  let(:members_filter) { body.find(".toolbar-pills > ul > li:nth-child(1)") }
+  let(:custom_filter) { body.find(".toolbar-pills > ul > li.dropdown") }
 
   before { sign_in(admin) }
 
-  context 'GET#index' do
-    it 'accepts filter params and lists neuanmeldungen' do
+  context "GET#index" do
+    it "accepts filter params and lists neuanmeldungen" do
       person1 = Fabricate(:person, birthday: Time.zone.today - 42.years)
       Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
-                group: groups(:bluemlisalp_neuanmeldungen_nv),
-                person: person1)
+        group: groups(:bluemlisalp_neuanmeldungen_nv),
+        person: person1)
       person2 = Fabricate(:person, birthday: Time.zone.today - 42.years)
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
-                group: groups(:bluemlisalp_neuanmeldungen_sektion),
-                person: person2)
-      roles = { role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id }
-      get :index, params: { group_id: groups(:root).id, filters: { role: roles }, range: 'deep' }
+        group: groups(:bluemlisalp_neuanmeldungen_sektion),
+        person: person2)
+      roles = {role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id}
+      get :index, params: {group_id: groups(:root).id, filters: {role: roles}, range: "deep"}
 
-      expect(members_filter.text).to eq 'Neuanmeldungen (1)'
-      expect(members_filter[:class]).not_to eq 'active'
+      expect(members_filter.text).to eq "Neuanmeldungen (1)"
+      expect(members_filter[:class]).not_to eq "active"
 
-      expect(pagination_info).to eq '1 Person angezeigt.'
+      expect(pagination_info).to eq "1 Person angezeigt."
       expect(people_table).to have(1).item
-
     end
 
-    context 'with format=csv and param recipients=true' do
-      it 'calls ... with ...' do
+    context "with format=csv and param recipients=true" do
+      it "calls ... with ..." do
         expect do
           get :index, params: {
             format: :csv,
@@ -55,40 +54,40 @@ describe PeopleController do
         job = Delayed::Job.last.payload_object
         expect(job).to be_a(Export::PeopleExportJob)
 
-        expect(Export::Tabular::People::SacRecipients).
-          to receive(:export)
+        expect(Export::Tabular::People::SacRecipients)
+          .to receive(:export)
         job.perform
       end
     end
   end
 
-  context 'GET#show' do
-    context 'household_key' do
+  context "GET#show" do
+    context "household_key" do
       def make_person(beitragskategorie, role_class: Group::SektionsMitglieder::Mitglied,
-                      group: groups(:bluemlisalp_mitglieder))
+        group: groups(:bluemlisalp_mitglieder))
         Fabricate(
           :person,
           birthday: Time.zone.today - 33.years,
-          household_key: 'household-42',
+          household_key: "household-42",
           sac_family_main_person: true
         ).tap do |person|
           Fabricate(role_class.to_s,
-                    group: group,
-                    person: person,
-                    beitragskategorie: beitragskategorie)
+            group: group,
+            person: person,
+            beitragskategorie: beitragskategorie)
         end
       end
 
       def expect_household_key(person, visible:)
         matcher = visible ? :have_selector : :have_no_selector
 
-        get :show, params: { id: person.id, group_id: groups(:root).id }
+        get :show, params: {id: person.id, group_id: groups(:root).id}
 
-        expect(body).to send(matcher, 'dt', text: 'Familien ID')
-        expect(body).to send(matcher, 'dd', text: person.household_key)
+        expect(body).to send(matcher, "dt", text: "Familien ID")
+        expect(body).to send(matcher, "dd", text: person.household_key)
       end
 
-      it 'is shown for person with any role having beitragskategorie=family' do
+      it "is shown for person with any role having beitragskategorie=family" do
         person = make_person(:family)
         expect_household_key(person, visible: true)
       end
@@ -100,22 +99,24 @@ describe PeopleController do
         end
       end
 
-      it 'is not shown for person with non-mitglied role' do
+      it "is not shown for person with non-mitglied role" do
         person = make_person(nil, role_class: Group::Geschaeftsstelle::Admin,
-                                  group: groups(:geschaeftsstelle))
+          group: groups(:geschaeftsstelle))
         expect_household_key(person, visible: false)
       end
     end
   end
 
-  context 'PUT#update' do
-    it 'cannot update sac remarks' do
+  context "PUT#update" do
+    it "cannot update sac remarks" do
       expect do
-        put :update, params: { id: admin.id, group_id: admin.groups.first.id,
-                               person: { sac_remark_national_office: 'example',
-                                         sac_remark_section_1: 'example' }  }
-      end.not_to change { [admin.reload.sac_remark_national_office,
-                           admin.reload.sac_remark_section_1] }
+        put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                              person: {sac_remark_national_office: "example",
+                                       sac_remark_section_1: "example"}}
+      end.not_to change {
+                   [admin.reload.sac_remark_national_office,
+                     admin.reload.sac_remark_section_1]
+                 }
     end
   end
 end

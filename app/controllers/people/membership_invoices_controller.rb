@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-
   def create
     authorize!(:update, person)
 
@@ -21,13 +20,13 @@ class People::MembershipInvoicesController < ApplicationController
       if invoicer.generate
         set_flash(:success, abacus_key: invoicer.invoice.abacus_sales_order_key)
       else
-        set_flash(:alert, message: invoicer.error_messages.join(', '))
+        set_flash(:alert, message: invoicer.error_messages.join(", "))
       end
     end
   end
 
   def set_flash(type, **args)
-    kind = type == :success ? :notice : :alert
+    kind = (type == :success) ? :notice : :alert
     flash[kind] = t("people.membership_invoices.#{type}_notice", **args) # rubocop:disable Rails/ActionControllerFlashBeforeRender
   end
 
@@ -37,7 +36,7 @@ class People::MembershipInvoicesController < ApplicationController
     set_flash(:alert, message: e.message)
     options = {}
     if e.respond_to?(:response)
-      options[:extra] = { response: e.response.body.force_encoding('UTF-8') }
+      options[:extra] = {response: e.response.body.force_encoding("UTF-8")}
     end
     Raven.capture_exception(e, options)
   end
@@ -58,11 +57,10 @@ class People::MembershipInvoicesController < ApplicationController
   end
 
   def person
-    @person ||= Person.with_membership_years('people.*', date).find(params[:person_id])
+    @person ||= Person.with_membership_years("people.*", date).find(params[:person_id])
   end
 
   def date
     @date ||= params[:date].present? ? Date.parse(params[:date]) : Time.zone.today
   end
-
 end

@@ -6,13 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 #
 module SacCas::FilterNavigation::People
-
   TOURENLEITER_FILTERS = {
-    tour_guides_active: { role: :active },
-    tour_guides_stalled: { qualification: :not_active_but_reactivateable },
-    tour_guides_inactive: { role: :inactive, qualification: :active },
-    tour_guides_none: { qualification: :none },
-    tour_guides_expired: { qualification: :only_expired },
+    tour_guides_active: {role: :active},
+    tour_guides_stalled: {qualification: :not_active_but_reactivateable},
+    tour_guides_inactive: {role: :inactive, qualification: :active},
+    tour_guides_none: {qualification: :none},
+    tour_guides_expired: {qualification: :only_expired}
   }.freeze
 
   def initialize(*args)
@@ -37,23 +36,27 @@ module SacCas::FilterNavigation::People
   end
 
   def add_tourenleiter_filter(name, role: nil, qualification: nil)
-    filters = { role: role_filter(role), qualification: quali_filter(qualification) }
+    filters = {role: role_filter(role), qualification: quali_filter(qualification)}
     dropdown.add_item(name, path(name: name, range: :deep, filters: filters.compact))
   end
 
   def quali_filter(validity)
-    {
-      qualification_kind_ids: qualification_kind_ids.join(Person::Filter::Base::ID_URL_SEPARATOR),
-      validity: validity,
-      match: :one
-    } if validity
+    if validity
+      {
+        qualification_kind_ids: qualification_kind_ids.join(Person::Filter::Base::ID_URL_SEPARATOR),
+        validity: validity,
+        match: :one
+      }
+    end
   end
 
   def role_filter(role_kind)
-    {
-      role_type_ids: Group::SektionsTourenkommission::Tourenleiter.id,
-      kind: role_kind
-    }.compact if role_kind
+    if role_kind
+      {
+        role_type_ids: Group::SektionsTourenkommission::Tourenleiter.id,
+        kind: role_kind
+      }.compact
+    end
   end
 
   def qualification_kind_ids

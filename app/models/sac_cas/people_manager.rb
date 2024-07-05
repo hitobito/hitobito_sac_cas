@@ -21,8 +21,8 @@ module SacCas::PeopleManager
       manager.household_key.nil? ||
       managed.household_key.nil?
 
-    errors.
-      add(:managed_id, :in_different_household, name: managed_name)
+    errors
+      .add(:managed_id, :in_different_household, name: managed_name)
   end
 
   def manager_is_adult
@@ -47,5 +47,4 @@ module SacCas::PeopleManager
   def manager_name
     manager.full_name
   end
-
 end

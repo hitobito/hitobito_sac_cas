@@ -21,7 +21,7 @@ module SacCas::HouseholdMember
 
   def assert_planned_termination
     if Group::SektionsMitglieder::Mitglied.where(person_id: person.id)
-                                          .where.not(delete_on: nil).exists?
+        .where.not(delete_on: nil).exists?
       errors.add(:base, :planned_termination, person_name: person.full_name)
     end
   end

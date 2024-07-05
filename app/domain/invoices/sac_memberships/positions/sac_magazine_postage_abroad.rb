@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SacMagazinePostageAbroad < Base
-
         self.section_payment_possible = true
 
         def active?
@@ -23,7 +22,6 @@ module Invoices
         def article_number
           config.magazine_postage_abroad_article_number
         end
-
       end
     end
   end

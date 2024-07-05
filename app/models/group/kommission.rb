@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Kommission < ::Group
-
   ### ROLES
   class Praesidium < ::Role
     self.permissions = []
@@ -23,5 +22,4 @@ class Group::Kommission < ::Group
   children Group::Kommission
 
   roles Praesidium, Mitglied, Andere
-
 end

@@ -13,7 +13,7 @@ class Roles::TerminateTourenleiterJob < RecurringJob
   def perform_internal
     Group::SektionsTourenkommission::Tourenleiter
       .left_joins(person: :qualifications)
-      .where(qualifications: { finish_at: [nil, [...Time.zone.today]] })
+      .where(qualifications: {finish_at: [nil, [...Time.zone.today]]})
       .update_all(deleted_at: Time.zone.yesterday.end_of_day)
   end
 

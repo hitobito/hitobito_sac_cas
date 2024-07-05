@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsExterneKontakte < ::Group
-
   self.static_name = true
 
   ### ROLES
@@ -15,5 +14,4 @@ class Group::SektionsExterneKontakte < ::Group
   end
 
   roles Kontakt
-
 end

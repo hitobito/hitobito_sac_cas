@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ParticipationMailer do
   let(:person) { people(:mitglied) }
@@ -19,13 +19,14 @@ describe Event::ParticipationMailer do
 
   subject { mail.parts.first.body }
 
-  describe '#rejection' do
+  describe "#rejection" do
     subject { mail.body }
+
     let(:mail) { Event::ParticipationMailer.reject(participation) }
 
-    it 'sends to email addresses of declined participant' do
-      expect(mail.to).to match_array(['e.hillary@hitobito.example.com'])
-      expect(mail.subject).to eq 'Kursablehnung'
+    it "sends to email addresses of declined participant" do
+      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
+      expect(mail.subject).to eq "Kursablehnung"
     end
 
     it { is_expected.to match(/Hallo Edmund Hillary/) }

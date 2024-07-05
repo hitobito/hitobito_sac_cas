@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SectionBulletinPostageAbroad < Base
-
         def active?
           abroad_postage? && section.bulletin_postage_abroad.to_i.positive?
         end
@@ -23,7 +22,6 @@ module Invoices
         def creditor
           section
         end
-
       end
     end
   end

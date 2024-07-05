@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-shared_examples 'requires a concurrently active mitglied role' do |zusatzsektion_type|
+shared_examples "requires a concurrently active mitglied role" do |zusatzsektion_type|
   it do
     person = Fabricate(:person)
     zusatz_role = Fabricate.build(
@@ -17,7 +17,7 @@ shared_examples 'requires a concurrently active mitglied role' do |zusatzsektion
     )
 
     expect(zusatz_role).not_to be_valid
-    expect(zusatz_role.errors[:person]).to eq ['muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion.']
+    expect(zusatz_role.errors[:person]).to eq ["muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."]
 
     mitglied_role = Fabricate(
       Group::SektionsMitglieder::Mitglied.name,

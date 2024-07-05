@@ -8,7 +8,7 @@
 module SacCas::Event::ParticipationDecorator
   extend ActiveSupport::Concern
 
-  def to_s(*args)
-    to_s_without_state(*args)
+  def to_s(*)
+    to_s_without_state(*)
   end
 end

@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'wizards/steps/_membership_terminated_info.html.haml' do
+describe "wizards/steps/_membership_terminated_info.html.haml" do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
   let(:params) { {} }
   let(:step) { Wizards::Steps::MembershipTerminatedInfo.new(wizard, **params) }
@@ -19,7 +19,7 @@ describe 'wizards/steps/_membership_terminated_info.html.haml' do
       form: form
     )
   end
-  let(:form) { StandardFormBuilder.new(:wizard, wizard, view, { builder: StandardFormBuilder }) }
+  let(:form) { StandardFormBuilder.new(:wizard, wizard, view, {builder: StandardFormBuilder}) }
   let(:role) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)) }
 
   let(:dom) do
@@ -33,7 +33,7 @@ describe 'wizards/steps/_membership_terminated_info.html.haml' do
     allow(view).to receive_messages(f: form, c: component)
   end
 
-  it 'renders' do
+  it "renders" do
     expect(dom).to have_text("Deine Mitgliedschaft ist gekündigt per #{l(role.end_on)}")
   end
 end

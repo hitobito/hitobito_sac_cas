@@ -5,20 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Promoter::VerifiedEmailCondition do
-  context '::satisfied?' do
+  context "::satisfied?" do
     let(:role) { roles(:mitglied) }
 
     subject { described_class.satisfied?(role) }
 
-    it 'is false when person is not confirmed' do
+    it "is false when person is not confirmed" do
       allow(role.person).to receive(:confirmed?).and_return(false)
       expect(subject).to eq false
     end
 
-    it 'is true when person is confirmed' do
+    it "is true when person is confirmed" do
       allow(role.person).to receive(:confirmed?).and_return(true)
       expect(subject).to eq true
     end

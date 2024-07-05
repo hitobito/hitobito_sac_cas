@@ -33,8 +33,8 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def assert_no_overlapping_memberships_per_layer
-    overlapping_roles(active_period, SacCas::MITGLIED_ROLES).
-      select { |role| role.layer_group == layer_group }.tap do |conflicting_roles|
+    overlapping_roles(active_period, SacCas::MITGLIED_ROLES)
+      .select { |role| role.layer_group == layer_group }.tap do |conflicting_roles|
       conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
     end
   end
@@ -42,20 +42,20 @@ module SacCas::Role::MitgliedNoOverlapValidation
   def overlapping_roles(period, role_types)
     return unless period.begin && period.end
 
-    Role.
-      where(type: role_types.map(&:sti_name)).
-      where(person_id: person_id).
-      where.not(id: id).
-      to_a.
-      select { |role| period.overlaps?(role.active_period) }
+    Role
+      .where(type: role_types.map(&:sti_name))
+      .where(person_id: person_id)
+      .where.not(id: id)
+      .to_a
+      .select { |role| period.overlaps?(role.active_period) }
   end
 
   def add_overlap_error(conflicting_role)
-    key = if conflicting_role.class.name =~ /Neuanmeldung/
-            :already_has_neuanmeldung_role
-          else
-            :already_has_mitglied_role
-          end
+    key = if /Neuanmeldung/.match?(conflicting_role.class.name)
+      :already_has_neuanmeldung_role
+    else
+      :already_has_mitglied_role
+    end
 
     start_on = format_date(conflicting_role.active_period.begin)
     end_on = format_date(conflicting_role.active_period.end)
@@ -70,5 +70,4 @@ module SacCas::Role::MitgliedNoOverlapValidation
   def format_date(date)
     I18n.l(date, format: :default) if date
   end
-
 end

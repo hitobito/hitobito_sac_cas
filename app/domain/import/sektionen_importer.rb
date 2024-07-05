@@ -5,37 +5,36 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import
   class SektionenImporter # rubocop:disable Metrics/ClassLength
-
     HEADERS = {
-      navision_id: 'Sektionscode',
-      description: 'Beschreibung',
-      parent_level_1: 'Level 1',
-      parent_level_2: 'Level 2',
-      parent_level_3: 'Level 3',
-      inactive: 'Inaktiv',
-      address_supplement: 'Adresszusatz',
-      address: 'Adresse',
-      town: 'Ort',
-      zip_code: 'PLZ',
-      section_canton: 'Kanton',
-      postfach: 'Postfach',
-      phone: 'Telefon',
-      email: 'E-Mail',
-      homepage: 'Homepage',
-      youth_homepage: 'Homepage Jugend',
-      zv_registrations: 'Mitgliederaufnahme durch GS',
-      locale: 'Sprachcode',
-      foundation_year: 'Gründungsjahr'
+      navision_id: "Sektionscode",
+      description: "Beschreibung",
+      parent_level_1: "Level 1",
+      parent_level_2: "Level 2",
+      parent_level_3: "Level 3",
+      inactive: "Inaktiv",
+      address_supplement: "Adresszusatz",
+      address: "Adresse",
+      town: "Ort",
+      zip_code: "PLZ",
+      section_canton: "Kanton",
+      postfach: "Postfach",
+      phone: "Telefon",
+      email: "E-Mail",
+      homepage: "Homepage",
+      youth_homepage: "Homepage Jugend",
+      zv_registrations: "Mitgliederaufnahme durch GS",
+      locale: "Sprachcode",
+      foundation_year: "Gründungsjahr"
     }
 
     attr_reader :output
 
     def initialize(path, output: $stdout)
-      raise 'Sektion Export excel file not found' unless path.exist?
+      raise "Sektion Export excel file not found" unless path.exist?
 
       @path = path
       @output = output
@@ -43,7 +42,7 @@ module Import
 
     def import! # rubocop:disable Metrics/MethodLength
       without_query_logging do
-        Import::XlsxReader.read(@path, 'Data', headers: HEADERS) do |row|
+        Import::XlsxReader.read(@path, "Data", headers: HEADERS) do |row|
           output.puts "Importing row #{row[:description]}"
           group = group_for(row)
           ignoring_archival do
@@ -53,18 +52,18 @@ module Import
           end
           output.puts "Finished importing #{group.name}"
         rescue ActiveRecord::ReadOnlyRecord
-          output.puts 'ERROR: Cannot modify archived group'
+          output.puts "ERROR: Cannot modify archived group"
           output.puts group.inspect
         end
         rebuild_group_hierachy
-        output.puts 'Done.'
+        output.puts "Done."
       end
     end
 
     private
 
     def rebuild_group_hierachy
-      output.puts 'Rebuilding group hierarchy...'
+      output.puts "Rebuilding group hierarchy..."
       ignoring_archival do
         without_group_create_default_children_callback do
           Group.update_all(lft: nil, rgt: nil)
@@ -99,7 +98,7 @@ module Import
       # TODO: handle case where root group does not exist yet?
       if root?(row)
         group = Group.root
-        group.navision_id = '1000'
+        group.navision_id = "1000"
         return group
       end
 
@@ -109,7 +108,7 @@ module Import
     def set_data(row, group) # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
       group.type = type(row)&.name
       group = group.becomes(type(row))
-      group.name = root?(row) ? 'SAC/CAS' : section_name(row)
+      group.name = root?(row) ? "SAC/CAS" : section_name(row)
       group.parent_id = parent_id(row)
       group.address_care_of = row[:address_supplement]
       group.street, group.housenumber = address(row)
@@ -162,7 +161,7 @@ module Import
     end
 
     def root?(row)
-      navision_id(row) == '1000'
+      navision_id(row) == "1000"
     end
 
     def navision_id(row)
@@ -193,7 +192,7 @@ module Import
 
     def archived_at(row)
       # TODO: fix the bug in the navision data export which marks the root group as inactive
-      !root?(row) && row[:inactive] == 'Ja' ? Date.today : nil
+      (!root?(row) && row[:inactive] == "Ja") ? Time.zone.today : nil
     end
 
     def address(row)
@@ -204,7 +203,7 @@ module Import
     end
 
     def zip_code_and_town(row)
-      [row[:zip_code].to_s, row[:town]].select(&:present?).join(' ')
+      [row[:zip_code].to_s, row[:town]].select(&:present?).join(" ")
     end
 
     def set_phone(row, group)
@@ -212,7 +211,7 @@ module Import
       return unless phone.present? && Phonelib.valid?(phone)
 
       group.phone_numbers.destroy_all
-      group.phone_numbers.build(number: phone, label: 'Andere')
+      group.phone_numbers.build(number: phone, label: "Andere")
     end
 
     def email(row)
@@ -224,18 +223,18 @@ module Import
 
     def set_homepage(row, group)
       homepage = row[:homepage]
-      return unless homepage.present?
+      return if homepage.blank?
 
       group.social_accounts.destroy_all
-      group.social_accounts.build(name: homepage, label: 'Homepage')
+      group.social_accounts.build(name: homepage, label: "Homepage")
     end
 
     def set_youth_homepage(row, group)
       homepage = row[:youth_homepage]
-      return unless homepage.present?
+      return if homepage.blank?
 
       group.social_accounts.destroy_all
-      group.social_accounts.build(name: homepage, label: 'Homepage Jugend')
+      group.social_accounts.build(name: homepage, label: "Homepage Jugend")
     end
 
     def update_subgroups(row, group) # rubocop:disable Metrics/MethodLength
@@ -263,19 +262,19 @@ module Import
     end
 
     def self_registration_title(row, group)
-      t(row, 'groups/self_registration.new.title', group_name: group.name)
+      t(row, "groups/self_registration.new.title", group_name: group.name)
     end
 
     def zv_registrations(row)
-      row[:zv_registrations].to_s == 'Ja'
+      row[:zv_registrations].to_s == "Ja"
     end
 
     def locale(row)
       {
-        'DES' => 'de',
-        'FRS' => 'fr',
-        'ITS' => 'it'
-      }.fetch(row[:locale].to_s, 'de')
+        "DES" => "de",
+        "FRS" => "fr",
+        "ITS" => "it"
+      }.fetch(row[:locale].to_s, "de")
     end
 
     def t(row, key, args)

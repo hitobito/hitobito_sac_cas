@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class HutSolidarityFee < Base
-
         self.group = :sac_fee
         self.section_payment_possible = true
 
@@ -18,7 +17,6 @@ module Invoices
         def fee_attr_prefix
           "hut_solidarity_fee_#{section.huts? ? :with : :without}_hut"
         end
-
       end
     end
   end

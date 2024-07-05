@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SacMagazine < Base
-
         self.group = :sac_fee
         self.section_payment_possible = true
 
@@ -22,7 +21,6 @@ module Invoices
         def fee_attr_prefix
           :magazine_fee
         end
-
       end
     end
   end

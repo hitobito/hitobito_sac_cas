@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Export::Tabular::People::WithSacAdditions
-
   def person_attributes
     [:membership_number, :family_id] + super
   end
-
 end

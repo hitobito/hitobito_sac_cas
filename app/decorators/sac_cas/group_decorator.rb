@@ -6,13 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::GroupDecorator
-
   def members_count
     return unless sektion_or_ortsgruppe?
 
-    object.children.flat_map(&:roles).select do |role|
+    object.children.flat_map(&:roles).count do |role|
       (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
-    end.size
+    end
   end
 
   def membership_admission_through_gs?
@@ -30,11 +29,11 @@ module SacCas::GroupDecorator
   def has_youth_organization?
     return unless sektion_or_ortsgruppe?
 
-    object.social_accounts.any? { |account| account.label == 'Homepage JO' }
+    object.social_accounts.any? { |account| account.label == "Homepage JO" }
   end
 
   # Sort roles alphabetically, but make "Andere" show up last.
   def role_types
-    klass.role_types.sort_by { |role| [role.name.demodulize.eql?('Andere') ? 1 : 0, role.label] }
+    klass.role_types.sort_by { |role| [role.name.demodulize.eql?("Andere") ? 1 : 0, role.label] }
   end
 end

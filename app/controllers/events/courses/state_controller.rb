@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Events::Courses::StateController < ApplicationController
-
   def update
     authorize!(:update, entry)
 
@@ -28,8 +27,8 @@ class Events::Courses::StateController < ApplicationController
   end
 
   def set_success_notice
-    flash.now[:notice] = t('events/courses/state.flash.success',
-                           state: entry.decorate.state_translated)
+    flash.now[:notice] = t("events/courses/state.flash.success",
+      state: entry.decorate.state_translated)
   end
 
   def set_failure_notice
@@ -37,7 +36,7 @@ class Events::Courses::StateController < ApplicationController
   end
 
   def error_messages
-    helpers.safe_join(entry.errors.full_messages, '<br/>'.html_safe)
+    helpers.safe_join(entry.errors.full_messages, "<br/>".html_safe)
   end
 
   def next_state
@@ -51,5 +50,4 @@ class Events::Courses::StateController < ApplicationController
   def entry
     @entry ||= Event::Course.find(params[:id])
   end
-
 end

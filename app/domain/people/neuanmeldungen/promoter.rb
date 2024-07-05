@@ -6,14 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::Neuanmeldungen::Promoter
-
   CONDITIONS = [
     NoDuplicateCondition,
     VerifiedEmailCondition,
     PaidInvoiceCondition
   ].freeze
 
-  ERROR_CATEGORY = 'neuanmeldungen'
+  ERROR_CATEGORY = "neuanmeldungen"
 
   def call
     candidate_roles.find_each { |role| promote(role) }
@@ -31,9 +30,9 @@ class People::Neuanmeldungen::Promoter
     # We do not handle FutureRoles here. They will be included once they are converted to regular
     # Neuanmeldung roles.
     Role.where(type: [
-                 Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
-                 Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name
-               ]).includes(:person)
+      Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
+      Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name
+    ]).includes(:person)
   end
 
   private
@@ -58,7 +57,7 @@ class People::Neuanmeldungen::Promoter
   end
 
   def target_role_class(role)
-    if role.class.sti_name.ends_with?('NeuanmeldungZusatzsektion')
+    if role.class.sti_name.ends_with?("NeuanmeldungZusatzsektion")
       Group::SektionsMitglieder::MitgliedZusatzsektion
     else
       Group::SektionsMitglieder::Mitglied
@@ -79,11 +78,10 @@ class People::Neuanmeldungen::Promoter
       error.message.presence || error.class.name,
       subject: role.person,
       payload: {
-        person: { id: role.person.id, name: role.person.full_name },
-        role: { id: role.id, type: role.class.name },
-        group: { id: role.group.id, path: role.group.hierarchy.map(&:name).join('/') }
+        person: {id: role.person.id, name: role.person.full_name},
+        role: {id: role.id, type: role.class.name},
+        group: {id: role.group.id, path: role.group.hierarchy.map(&:name).join("/")}
       }
     )
   end
-
 end

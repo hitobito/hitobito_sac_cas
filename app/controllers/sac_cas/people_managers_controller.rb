@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::PeopleManagersController
-
   def create
     super do
       household.valid? || raise(ActiveRecord::Rollback)
@@ -32,5 +31,4 @@ module SacCas::PeopleManagersController
     household_person, new_person = manager.household_key? ? [manager, managed] : [managed, manager]
     Person::Household.new(household_person, current_ability, new_person).tap(&:assign)
   end
-
 end

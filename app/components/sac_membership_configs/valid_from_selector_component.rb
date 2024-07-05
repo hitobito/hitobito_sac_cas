@@ -7,7 +7,6 @@
 
 module SacMembershipConfigs
   class ValidFromSelectorComponent < ApplicationComponent
-
     delegate :entry, to: :helpers
 
     def initialize(group, available_configs)
@@ -18,11 +17,11 @@ module SacMembershipConfigs
     private
 
     def item_class(config)
-      'active' if active?(config)
+      "active" if active?(config)
     end
 
     def new_item_class
-      'active' if entry.new_record?
+      "active" if entry.new_record?
     end
 
     def active?(config)
@@ -31,15 +30,14 @@ module SacMembershipConfigs
 
     def link_to_edit_config(config)
       link_to(config.valid_from,
-              polymorphic_path([@group, config], action: :edit),
-              class: 'page-link')
+        polymorphic_path([@group, config], action: :edit),
+        class: "page-link")
     end
 
     def link_new_config
-      link_to(t('sac_section_membership_configs.global.link.add'),
-              polymorphic_path([@group, entry.class], action: :new),
-              class: 'page-link')
+      link_to(t("sac_section_membership_configs.global.link.add"),
+        polymorphic_path([@group, entry.class], action: :new),
+        class: "page-link")
     end
-
   end
 end

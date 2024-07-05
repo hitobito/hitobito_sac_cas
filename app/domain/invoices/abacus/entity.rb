@@ -8,7 +8,6 @@
 module Invoices
   module Abacus
     class Entity
-
       attr_writer :client
 
       attr_reader :entity, :errors

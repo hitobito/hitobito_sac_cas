@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -46,16 +47,15 @@
 #  course_fee_article_number                      :string(255)      not null
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SacMembershipConfig do
+  let(:config) { sac_membership_configs(:"2024") }
 
-  let(:config) { sac_membership_configs(:'2024') }
-
-  it 'validates special discount date format' do
-    config.discount_date_1 = '1.1'
-    config.discount_date_2 = '10'
-    config.discount_date_3 = '10.9.'
+  it "validates special discount date format" do
+    config.discount_date_1 = "1.1"
+    config.discount_date_2 = "10"
+    config.discount_date_3 = "10.9."
 
     expect(config).not_to be_valid
 
@@ -66,15 +66,15 @@ describe SacMembershipConfig do
     expect(error_keys).not_to include(:discount_date_3)
   end
 
-  context '#discount_percent' do
-    it 'returns 0 with all empty fields' do
+  context "#discount_percent" do
+    it "returns 0 with all empty fields" do
       config.discount_date_1 = nil
       config.discount_date_2 = nil
       config.discount_date_3 = nil
       expect(config.discount_percent(Date.new(2024, 8, 1))).to eq(0)
     end
 
-    it 'returns percent of mid year dates' do
+    it "returns percent of mid year dates" do
       expect(config.discount_percent(Date.new(2024, 1, 1))).to eq(0)
       expect(config.discount_percent(Date.new(2024, 6, 10))).to eq(0)
       expect(config.discount_percent(Date.new(2024, 7, 1))).to eq(50)
@@ -82,5 +82,4 @@ describe SacMembershipConfig do
       expect(config.discount_percent(Date.new(2024, 12, 31))).to eq(100)
     end
   end
-
 end

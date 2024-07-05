@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 module HitobitoSacCas
   class Wagon < Rails::Engine
     include Wagons::Wagon
 
     # Set the required application version.
-    app_requirement '>= 0'
+    app_requirement ">= 0"
 
     # Add a load path for this specific wagon
     config.autoload_paths += %W[
@@ -22,7 +21,7 @@ module HitobitoSacCas
 
     if Rails.env.development? && config.respond_to?(:view_component)
       config.view_component.preview_paths << "#{config.root}/spec/components/previews"
-      config.view_component.preview_controller = 'WizardsPreviewsController'
+      config.view_component.preview_controller = "WizardsPreviewsController"
     end
 
     config.to_prepare do # rubocop:disable Metrics/BlockLength
@@ -32,7 +31,7 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Roles::TerminateTourenleiterJob
       ]
-      HitobitoLogEntry.categories += %w(neuanmeldungen)
+      HitobitoLogEntry.categories += %w[neuanmeldungen]
 
       # extend application classes here
       Event.prepend SacCas::Event
@@ -68,8 +67,7 @@ module HitobitoSacCas
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
-      admin[:active_for] << 'event_levels'
-
+      admin[:active_for] << "event_levels"
 
       ## Abilities
       Role::Types::Permissions << :read_all_people
@@ -99,10 +97,10 @@ module HitobitoSacCas
       ## Domain
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
-        'people.id' => SearchStrategies::SqlConditionBuilder::IdMatcher,
-        'people.birthday' => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
+        "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
+        "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       )
-      SearchStrategies::Sql::SEARCH_FIELDS['Person'][:attrs] << 'people.id'
+      SearchStrategies::Sql::SEARCH_FIELDS["Person"][:attrs] << "people.id"
 
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::Sql.prepend SacCas::SearchStrategies::Sql
@@ -126,7 +124,7 @@ module HitobitoSacCas
       Sheet::Person.prepend SacCas::Sheet::Person
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w(cost_centers cost_units termination_reasons)
+      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons]
 
       ## Controllers
       EventsController.prepend SacCas::EventsController
@@ -167,47 +165,43 @@ module HitobitoSacCas
         Export::Tabular::People::PeopleFull
       ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }
 
-
-
       TableDisplay.register_column(Person,
-                                   TableDisplays::ResolvingColumn,
-                                   [
-                                     :membership_years,
-                                     :beitragskategorie,
-                                     :antrag_fuer,
-                                     :antragsdatum,
-                                     :beitrittsdatum,
-                                     :confirmed_at,
-                                     :duplicate_exists,
-                                     :wiedereintritt,
-                                     :self_registration_reason,
-                                     :address_valid
-                                   ])
+        TableDisplays::ResolvingColumn,
+        [
+          :membership_years,
+          :beitragskategorie,
+          :antrag_fuer,
+          :antragsdatum,
+          :beitrittsdatum,
+          :confirmed_at,
+          :duplicate_exists,
+          :wiedereintritt,
+          :self_registration_reason,
+          :address_valid
+        ])
     end
 
-
-    initializer 'sac_cas.add_settings' do |_app|
-      Settings.add_source!(File.join(paths['config'].existent, 'settings.yml'))
-      Settings.add_source!(File.join(paths['config'].existent, 'settings.local.yml'))
+    initializer "sac_cas.add_settings" do |_app|
+      Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
+      Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
       Settings.reload!
     end
 
-    initializer 'sac_cas.add_inflections' do |_app|
+    initializer "sac_cas.add_inflections" do |_app|
       ActiveSupport::Inflector.inflections do |inflect|
-        inflect.irregular 'beitragskategorie', 'beitragskategorien'
+        inflect.irregular "beitragskategorie", "beitragskategorien"
       end
     end
 
-    initializer 'sac_cas.append_doorkeeper_scope' do |_app|
-      Doorkeeper.configuration.scopes.add 'user_groups'
+    initializer "sac_cas.append_doorkeeper_scope" do |_app|
+      Doorkeeper.configuration.scopes.add "user_groups"
     end
 
     private
 
     def seed_fixtures
-      fixtures = root.join('db', 'seeds')
-      ENV['NO_ENV'] ? [fixtures] : [fixtures, File.join(fixtures, Rails.env)]
+      fixtures = root.join("db", "seeds")
+      ENV["NO_ENV"] ? [fixtures] : [fixtures, File.join(fixtures, Rails.env)]
     end
-
   end
 end

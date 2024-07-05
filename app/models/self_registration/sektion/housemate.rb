@@ -14,7 +14,7 @@ class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
     :first_name, :last_name, :birthday
   ]
 
-  self.attrs = required_attrs + active_model_only_attrs +  [
+  self.attrs = required_attrs + active_model_only_attrs + [
     :gender, :email, :primary_group, :household_key
   ]
 
@@ -48,6 +48,6 @@ class SelfRegistration::Sektion::Housemate < SelfRegistration::MainPerson::Base
   end
 
   def too_many_adults_message
-    I18n.t('activerecord.errors.messages.too_many_adults_in_family', max_adults: MAX_ADULT_COUNT)
+    I18n.t("activerecord.errors.messages.too_many_adults_in_family", max_adults: MAX_ADULT_COUNT)
   end
 end

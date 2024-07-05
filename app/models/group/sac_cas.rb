@@ -6,18 +6,17 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SacCas < Group
-
   self.layer = true
   self.event_types = [Event::Course]
 
   children Group::Geschaeftsstelle,
-           Group::Geschaeftsleitung,
-           Group::Zentralvorstand,
-           Group::Kommission,
-           Group::Sektion,
-           Group::ExterneKontakte,
-           Group::Abonnenten,
-           Group::Ehrenmitglieder
+    Group::Geschaeftsleitung,
+    Group::Zentralvorstand,
+    Group::Kommission,
+    Group::Sektion,
+    Group::ExterneKontakte,
+    Group::Abonnenten,
+    Group::Ehrenmitglieder
 
   mounted_attr :course_admin_email, :string
   mounted_attr :sac_newsletter_mailing_list_id, :integer

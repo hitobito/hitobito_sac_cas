@@ -7,8 +7,7 @@
 
 class SearchStrategies::SqlConditionBuilder
   class BirthdayMatcher < Matcher
-
-    DATE_FORMAT = "%d.%m.%Y".freeze
+    DATE_FORMAT = "%d.%m.%Y"
 
     def applies?
       date_string.present?
@@ -18,7 +17,7 @@ class SearchStrategies::SqlConditionBuilder
 
     def column
       super.then do |c|
-        Arel::Nodes::NamedFunction.new('DATE_FORMAT', [c, date_format])
+        Arel::Nodes::NamedFunction.new("DATE_FORMAT", [c, date_format])
       end
     end
 
@@ -31,13 +30,12 @@ class SearchStrategies::SqlConditionBuilder
     end
 
     def date_string
-      numbers = @word.split('.').map(&:to_i)
+      numbers = @word.split(".").map(&:to_i)
       return unless numbers.all?(&:positive?)
 
       numbers.map do |number|
-        number < 10 ? "0#{number}" : number
-      end.join('.')
+        (number < 10) ? "0#{number}" : number
+      end.join(".")
     end
-
   end
 end

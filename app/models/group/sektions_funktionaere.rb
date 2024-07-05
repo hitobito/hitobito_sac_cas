@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsFunktionaere < ::Group
-
   self.static_name = true
 
   children Group::SektionsHuettenkommission, Group::SektionsTourenkommission,
-           Group::SektionsKommission, Group::SektionsVorstand
+    Group::SektionsKommission, Group::SektionsVorstand
 
   self.default_children = [
     Group::SektionsHuettenkommission,
@@ -56,5 +55,4 @@ class Group::SektionsFunktionaere < ::Group
 
   roles Praesidium, Mitgliederverwaltung, Administration,
     AdministrationReadOnly, Finanzen, Redaktion, Andere
-
 end

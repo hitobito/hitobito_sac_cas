@@ -9,7 +9,7 @@ module SacCas::Contactable
   def country_label
     return super if country.present?
 
-    Countries.label('CH')
+    Countries.label("CH")
   end
 
   def ignored_country?

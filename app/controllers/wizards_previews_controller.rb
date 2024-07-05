@@ -10,5 +10,6 @@ class WizardsPreviewsController < ApplicationController
   skip_authorization_check
   skip_forgery_protection
 
-  def current_user; end
+  def current_user
+  end
 end

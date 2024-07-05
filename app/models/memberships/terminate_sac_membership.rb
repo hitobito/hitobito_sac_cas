@@ -37,10 +37,10 @@ module Memberships
     attribute :data_retention_consent, :boolean
     attribute :termination_reason_id, :integer
 
-    validates :terminate_on, inclusion: { in: ->(_) { acceptable_termination_dates } }
+    validates :terminate_on, inclusion: {in: ->(_) { acceptable_termination_dates }}
     validates :termination_reason_id, presence: true
 
-    delegate :person, to: '@role'
+    delegate :person, to: "@role"
 
     def self.acceptable_termination_dates
       [Time.zone.yesterday, Time.zone.now.end_of_year.to_date]
@@ -126,20 +126,20 @@ module Memberships
     end
 
     def assert_sektions_mitglied
-      raise 'not a member' unless @role.is_a?(Group::SektionsMitglieder::Mitglied)
+      raise "not a member" unless @role.is_a?(Group::SektionsMitglieder::Mitglied)
     end
 
     def assert_not_already_terminated
-      raise 'already terminated' if @role.terminated?
+      raise "already terminated" if @role.terminated?
     end
 
     def assert_not_already_deleted
-      raise 'already deleted' if @role.deleted_at?
+      raise "already deleted" if @role.deleted_at?
     end
 
     def assert_main_person_if_family
       if @role.beitragskategorie&.family? && !@role.person.sac_family_main_person
-        raise 'not family main person'
+        raise "not family main person"
       end
     end
   end

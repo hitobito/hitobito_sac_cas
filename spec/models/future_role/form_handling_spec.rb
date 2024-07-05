@@ -5,36 +5,35 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe FutureRole::FormHandling do
-
-  shared_examples 'register_on_options' do
+  shared_examples "register_on_options" do
     let(:model) { described_class.new }
 
-    describe 'register_on_options' do
-      it 'includes now and jul on 31 of june' do
+    describe "register_on_options" do
+      it "includes now and jul on 31 of june" do
         travel_to(Time.zone.local(2024, 6, 30)) do
           expect(model.register_on_options).to eq [
-            ['now', 'sofort'],
-            ['jul', '01. Juli'],
+            ["now", "sofort"],
+            ["jul", "01. Juli"]
           ]
         end
       end
 
-      it 'includes now and oct on first of july' do
+      it "includes now and oct on first of july" do
         travel_to(Time.zone.local(2024, 7, 1)) do
           expect(model.register_on_options).to eq [
-            ['now', 'sofort'],
-            ['oct', '01. Oktober'],
+            ["now", "sofort"],
+            ["oct", "01. Oktober"]
           ]
         end
       end
 
-      it 'includes only now on first of oct' do
+      it "includes only now on first of oct" do
         travel_to(Time.zone.local(2024, 10, 1)) do
           expect(model.register_on_options).to eq [
-            ['now', 'sofort'],
+            ["now", "sofort"]
           ]
         end
       end
@@ -42,13 +41,13 @@ describe FutureRole::FormHandling do
   end
 
   describe SelfRegistration::Sektion::Supplements do
-    it_behaves_like 'register_on_options' do
+    it_behaves_like "register_on_options" do
       let(:model) { described_class.new({}, groups(:bluemlisalp_neuanmeldungen_sektion)) }
     end
   end
 
   describe SelfInscription do
-    it_behaves_like 'register_on_options' do
+    it_behaves_like "register_on_options" do
       let(:person) { Fabricate.build(:person, birthday: 40.years.ago) }
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
       let(:model) { described_class.new(person: person, group: group) }

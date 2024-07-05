@@ -15,7 +15,7 @@ module SacCas::EventsController
   private
 
   def preload_translated_associations
-    return unless  entry.type == 'Event::Course'
+    return unless entry.type == "Event::Course"
 
     @cost_centers = CostCenter.includes(:translations).list
     @cost_units = CostUnit.includes(:translations).list
