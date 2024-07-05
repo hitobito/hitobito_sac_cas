@@ -53,23 +53,23 @@ module SacCas::Roles::Termination
   end
 
   def stammsektion_membership?
-     role.is_a?(Group::SektionsMitglieder::Mitglied)
+    role.is_a?(Group::SektionsMitglieder::Mitglied)
   end
 
   # deprecated, moved here from `People::SacFamily`, will get removed with #680
   def update_terminated_roles(person)
     terminated_roles = person
-                         .roles
-                         .where(type: terminatable_mitglied_role_types,
-                                terminated: true,
-                                beitragskategorie: :family)
+                       .roles
+                       .where(type: terminatable_mitglied_role_types,
+                              terminated: true,
+                              beitragskategorie: :family)
 
     affected_family_roles = Role
-                              .where(type: terminatable_mitglied_role_types,
-                                     group_id: terminated_roles.collect(&:group_id),
-                                     terminated: false,
-                                     beitragskategorie: :family,
-                                     person_id: person.household.people.collect(&:id))
+                            .where(type: terminatable_mitglied_role_types,
+                                   group_id: terminated_roles.collect(&:group_id),
+                                   terminated: false,
+                                   beitragskategorie: :family,
+                                   person_id: person.household.people.collect(&:id))
 
     delete_on = terminated_roles.first.delete_on
     Roles::Termination.terminate(affected_family_roles, delete_on)
@@ -79,7 +79,7 @@ module SacCas::Roles::Termination
     def terminate(roles, delete_on)
       # use update_all to not trigger any validations while terminating
       Role.where(id: roles.map(&:id)).update_all(
-        delete_on: delete_on,
+        delete_on:,
         terminated: true,
         updated_at: Time.current
       )

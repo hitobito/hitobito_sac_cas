@@ -18,9 +18,9 @@ describe HouseholdMember do
   def create_mitglied_role(person, group: groups(:bluemlisalp_mitglieder), beitragskategorie: :adult)
     group = group.is_a?(Group) ? group : groups(group)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-      beitragskategorie: beitragskategorie,
-      person: person,
-      group: group)
+      beitragskategorie:,
+      person:,
+      group:)
   end
 
   describe "validations" do

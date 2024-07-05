@@ -96,8 +96,8 @@ module SacCas::Household
   # Find all people in the household that are in the given age category.
   # @param [Symbol] age_category One of :adult, :child
   def people_by_agegroup(age_category)
-    raise ArgumentError, "Invalid age category #{age_category}" unless
-    [:adult, :child].include?(age_category)
+    raise ArgumentError,
+          "Invalid age category #{age_category}" unless [:adult, :child].include?(age_category)
 
     people.select do |person|
       SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")

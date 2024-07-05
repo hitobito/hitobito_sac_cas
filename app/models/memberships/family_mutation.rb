@@ -21,7 +21,8 @@ module Memberships
     # Call this method after a person has been added to a household. The household_key must already
     # be set on the person. The method will:
     # * Replace stammsektion role with corresponding family role.
-    # * Replace all zusatzsektion roles that have a corresponding role in the reference_zusatzsektion_roles.
+    # * Replace all zusatzsektion roles that have a corresponding role in the
+    #   reference_zusatzsektion_roles.
     # * Create missing zusatzsektion roles from reference_zusatzsektion_roles.
     def join!(reference_person)
       raise_if_terminated(sac_membership.stammsektion_role,
@@ -37,7 +38,8 @@ module Memberships
     def leave!
       raise_if_terminated(sac_membership.stammsektion_role)
 
-      beitragskategorie = SacCas::Beitragskategorie::Calculator.new(person).calculate(for_sac_family: false)
+      beitragskategorie = SacCas::Beitragskategorie::Calculator.
+        new(person).calculate(for_sac_family: false)
       replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
       sac_membership.future_stammsektion_roles.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
@@ -78,8 +80,9 @@ module Memberships
 
     def new_role_created_at = Time.current.beginning_of_day
 
-    # Replace the role with the blueprint role in the same group. The new role is created with a created_at timestamp
-    # at the beginning of the current day, but not before the created_at timestamp of the blueprint role.
+    # Replace the role with the blueprint role in the same group. The new role is created with a
+    # created_at timestamp at the beginning of the current day, but not before the created_at
+    # timestamp of the blueprint role.
     # The old role is ended with a deleted_at timestamp at the end of the previous day.
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
       # terminate old role, skip validations as it might be a family membership which
@@ -91,8 +94,8 @@ module Memberships
                    blueprint_role, beitragskategorie:)
     end
 
-    # Create a new role in the same group as the blueprint role with a created_at timestamp at the beginning
-    # of the current day, but not before the created_at timestamp of the blueprint role.
+    # Create a new role in the same group as the blueprint role with a created_at timestamp at the
+    # beginning of the current day, but not before the created_at timestamp of the blueprint role.
     def create_role!(person, blueprint_role, beitragskategorie: nil)
       blueprint_role.class.create!(
         person:,

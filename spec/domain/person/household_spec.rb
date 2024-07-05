@@ -22,14 +22,14 @@ describe Person::Household do
       sac_family_main_person: true
     ))
 
-    Array.wrap(managers).each { |manager| PeopleManager.create!(manager: manager, managed: person) }
+    Array.wrap(managers).each { |manager| PeopleManager.create!(manager:, managed: person) }
 
     if beitragskategorie
       Fabricate(
         Group::SektionsMitglieder::Mitglied.name.to_sym,
-        person: person,
+        person:,
         group: groups(:bluemlisalp_mitglieder),
-        beitragskategorie: beitragskategorie
+        beitragskategorie:
       )
     end
 

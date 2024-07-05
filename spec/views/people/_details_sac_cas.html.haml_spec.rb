@@ -8,10 +8,10 @@ require "spec_helper"
 describe "people/_details_sac_cas.html.haml" do
   include FormatHelper
 
-  let(:dom) {
+  let(:dom) do
     render
     Capybara::Node::Simple.new(@rendered)
-  }
+  end
 
   before do
     allow(view).to receive_messages(current_user: person)
@@ -59,7 +59,7 @@ describe "people/_details_sac_cas.html.haml" do
         expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
         expect(view).to receive(:can?).with(:show, person.sac_family.main_person).and_return(true)
 
-        expect(value_node).to have_link(person.sac_family.main_person.to_s, href: person_path(person.sac_family.main_person))
+        expect(value_node).to have_link(person.household.main_person.to_s, href: person_path(person.sac_family.main_person))
       end
     end
   end

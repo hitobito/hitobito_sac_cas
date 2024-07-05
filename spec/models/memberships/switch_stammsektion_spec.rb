@@ -11,7 +11,7 @@ describe Memberships::SwitchStammsektion do
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
-    Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
+    Fabricate(role_type.sti_name, group:, person: owner, **attrs)
   end
 
   before { travel_to(now) }
@@ -111,7 +111,7 @@ describe Memberships::SwitchStammsektion do
       let!(:bluemlisalp_mitglied) do
         create_role(:bluemlisalp_mitglieder, "Mitglied", created_at: 1.year.ago)
       end
-      let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person: person) }
+      let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person:) }
 
       it "creates new role and terminates existing" do
         expect do
@@ -151,7 +151,7 @@ describe Memberships::SwitchStammsektion do
     context "family" do
       let(:other) { Fabricate(:person) }
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
-      let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person: person) }
+      let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person:) }
       let(:matterhorn_mitglied_other) { matterhorn_mitglieder.roles.find_by(person: other) }
 
       def create_sac_family(person, *others)
@@ -177,7 +177,8 @@ describe Memberships::SwitchStammsektion do
           created_at: 1.year.ago
         )
         create_sac_family(person, other)
-        Role.where(id: [@bluemlisalp_mitglied.id, @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
+        Role.where(id: [@bluemlisalp_mitglied.id,
+                        @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
       end
 
       it "is invalid if switch is attempted with person that is not a sac_family_main_person" do

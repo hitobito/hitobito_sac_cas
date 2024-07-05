@@ -109,7 +109,7 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
     end
 
     it "is invalid if no person has a membership at all" do
@@ -118,7 +118,7 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      expect(household.errors[:members]).to match_array(["Eine Person in der Familie muss eine Mitgliedschaft in einer Sektion besitzen."])
+      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
     end
   end
 
