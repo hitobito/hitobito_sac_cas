@@ -11,8 +11,8 @@ module ::SacCas::RoleBeitragskategorie
 
   included do
     i18n_enum :beitragskategorie,
-              ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
-              i18n_prefix: 'roles.beitragskategorie'
+      ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
+      i18n_prefix: "roles.beitragskategorie"
 
     attr_readonly :beitragskategorie
 
@@ -27,7 +27,7 @@ module ::SacCas::RoleBeitragskategorie
 
   def beitragskategorie
     value = read_attribute(:beitragskategorie)
-    value.inquiry if value
+    value&.inquiry
   end
 
   def to_s(format = :default)

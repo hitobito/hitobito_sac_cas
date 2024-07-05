@@ -6,11 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Abonnenten < ::Group
-
   self.static_name = true
 
   children Group::AboTourenPortal,
-           Group::AboMagazin,
-           Group::AboBasicLogin
-
+    Group::AboMagazin,
+    Group::AboBasicLogin
 end

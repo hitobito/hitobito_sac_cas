@@ -5,7 +5,6 @@
 
 module SacCas::SearchStrategies
   module Sql
-
     def query_people
       return Person.none.page(1) unless term_present?
 
@@ -21,6 +20,5 @@ module SacCas::SearchStrategies
     def ability
       Ability.new(@user)
     end
-
   end
 end

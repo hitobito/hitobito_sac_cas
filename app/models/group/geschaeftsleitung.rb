@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Geschaeftsleitung < ::Group
-
   self.static_name = true
 
   ### ROLES
@@ -26,5 +25,4 @@ class Group::Geschaeftsleitung < ::Group
   end
 
   roles Geschaeftsfuehrung, Ressortleitung, Andere
-
 end

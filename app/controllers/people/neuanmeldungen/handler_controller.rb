@@ -40,7 +40,7 @@ module People
       end
 
       def people_ids
-        ids.split(',').map(&:to_i)
+        ids.split(",").map(&:to_i)
       end
 
       def assign_attributes
@@ -64,10 +64,9 @@ module People
       end
 
       def success_notice
-        prefix = handler.to_partial_path.gsub(%r{/\w+\z}, '')
+        prefix = handler.to_partial_path.gsub(%r{/\w+\z}, "")
         t("#{prefix}.create.success", count: count)
       end
-
     end
   end
 end

@@ -11,26 +11,26 @@ class SelfInscription
   include FutureRole::FormHandling
 
   attr_accessor :person, :group
-  attribute :register_on, :string, default: 'now'
-  attribute :register_as, :string, default: 'replace'
+  attribute :register_on, :string, default: "now"
+  attribute :register_as, :string, default: "replace"
 
   delegate :beitragskategorie_label, to: :role
 
-  validates_presence_of :person, :group, :register_on, :register_as
-  validates :register_on, inclusion: { in: :register_on_keys, allow_blank: true }
-  validates :register_as, inclusion: { in: :register_as_keys, allow_blank: true }
+  validates :person, :group, :register_on, :register_as, presence: true
+  validates :register_on, inclusion: {in: :register_on_keys, allow_blank: true}
+  validates :register_as, inclusion: {in: :register_as_keys, allow_blank: true}
 
   def initialize(person:, group:, **opts)
     super
   end
 
   def group_for_title
-    role.class.name.ends_with?('::Neuanmeldung') ? @group.parent : @group
+    role.class.name.ends_with?("::Neuanmeldung") ? @group.parent : @group
   end
 
   def neuanmeldung?
     @group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
-    @group.is_a?(Group::SektionsNeuanmeldungenNv)
+      @group.is_a?(Group::SektionsNeuanmeldungenNv)
   end
 
   def register_as_options
@@ -42,7 +42,7 @@ class SelfInscription
   end
 
   def active_in_sektion?
-    sektion_membership_roles.joins(:group).where(groups: { parent_id: @group.parent_id }).exists?
+    sektion_membership_roles.joins(:group).where(groups: {parent_id: @group.parent_id}).exists?
   end
 
   def save!
@@ -54,7 +54,7 @@ class SelfInscription
   private
 
   def register_as_keys
-    active_member? ? %w(extra replace) : %w(replace)
+    active_member? ? %w[extra replace] : %w[replace]
   end
 
   def save_role
@@ -105,9 +105,9 @@ class SelfInscription
     return @group.self_registration_role_type.constantize unless neuanmeldung?
 
     case register_as
-      when /replace/ then @group.class.const_get('Neuanmeldung')
-      when /extra/ then @group.class.const_get('NeuanmeldungZusatzsektion')
-      else Role # won't be valid anyway but we need a role_type
+    when /replace/ then @group.class.const_get(:Neuanmeldung)
+    when /extra/ then @group.class.const_get(:NeuanmeldungZusatzsektion)
+    else Role # won't be valid anyway but we need a role_type
     end
   end
 end

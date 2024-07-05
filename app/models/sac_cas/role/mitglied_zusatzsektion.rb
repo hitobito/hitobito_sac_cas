@@ -25,7 +25,7 @@ module SacCas::Role::MitgliedZusatzsektion
 
     days_to_check = active_period.to_a
 
-    Group::SektionsMitglieder::Mitglied.with_deleted.where(person_id: person_id).each do |mitglied|
+    Group::SektionsMitglieder::Mitglied.with_deleted.where(person_id: person_id).find_each do |mitglied|
       days_to_check -= mitglied.active_period.to_a
     end
 

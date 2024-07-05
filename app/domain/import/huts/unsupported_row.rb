@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
   class UnsupportedRow
-
     def self.can_process?(row)
       true
     end
@@ -19,6 +18,5 @@ module Import::Huts
 
     def import!
     end
-
   end
 end

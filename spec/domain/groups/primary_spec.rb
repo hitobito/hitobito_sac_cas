@@ -18,7 +18,7 @@ describe Groups::Primary do
     described_class.new(person).identify
   end
 
-  it 'has expected ROLE_TYPES' do
+  it "has expected ROLE_TYPES" do
     expect(described_class::ROLE_TYPES).to eq [
       Group::SektionsMitglieder::Mitglied.sti_name,
       Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
@@ -26,16 +26,16 @@ describe Groups::Primary do
     ]
   end
 
-  it 'is nil when no roles exists' do
+  it "is nil when no roles exists" do
     expect(identify(Person.new)).to eq nil
   end
 
-  it 'is first group for person with single role' do
+  it "is first group for person with single role" do
     expect(identify(admin)).to eq geschaeftsstelle
     expect(identify(mitglied)).to eq mitglieder
   end
 
-  it 'favours older over newer' do
+  it "favours older over newer" do
     travel_to 1.day.from_now do
       Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: admin)
     end
@@ -46,7 +46,7 @@ describe Groups::Primary do
     expect(identify(admin)).to eq funktionaere
   end
 
-  it 'favours preferred_role over other'  do
+  it "favours preferred_role over other" do
     travel_to 1.day.from_now do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :adult)
     end
@@ -58,13 +58,13 @@ describe Groups::Primary do
     expect(identify(admin)).to eq mitglieder
   end
 
-  describe 'two preferred_roles' do
+  describe "two preferred_roles" do
     let!(:other) do
       Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
         .find_by(type: Group::SektionsMitglieder)
     end
 
-    it 'favours older over newer' do
+    it "favours older over newer" do
       Fabricate(
         Group::SektionsMitglieder::Mitglied.sti_name,
         group: other,

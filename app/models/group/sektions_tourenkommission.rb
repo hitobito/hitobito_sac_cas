@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsTourenkommission < Group
-
   self.static_name = true
 
   ### ROLES
@@ -16,8 +15,11 @@ class Group::SektionsTourenkommission < Group
   end
 
   class TourenchefSommer < Tourenchef; end
+
   class TourenchefWinter < Tourenchef; end
+
   class TourenchefKlettern < Tourenchef; end
+
   class TourenchefSenioren < Tourenchef; end
 
   class TourenleiterOhneQualifikation < ::Role
@@ -49,15 +51,13 @@ class Group::SektionsTourenkommission < Group
     self.permissions = []
   end
 
-
   roles TourenchefSommer,
-        TourenchefWinter,
-        TourenchefKlettern,
-        TourenchefSenioren,
-        Tourenleiter,
-        TourenleiterOhneQualifikation,
-        JoChef,
-        JsCoach,
-        Andere
-
+    TourenchefWinter,
+    TourenchefKlettern,
+    TourenchefSenioren,
+    Tourenleiter,
+    TourenleiterOhneQualifikation,
+    JoChef,
+    JsCoach,
+    Andere
 end

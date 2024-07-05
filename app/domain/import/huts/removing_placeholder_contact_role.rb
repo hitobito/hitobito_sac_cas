@@ -7,18 +7,16 @@
 
 module Import::Huts
   module RemovingPlaceholderContactRole
-
     def remove_placeholder_contact_role(person)
       Group::ExterneKontakte::Kontakt
         .where(person: person,
-               group: placeholder_contact_group)
+          group: placeholder_contact_group)
         .find_each(&:really_destroy!)
     end
 
     def placeholder_contact_group
-      @contact_role_group ||= Group::ExterneKontakte.find_by(name: 'Navision Import',
-                                                             parent_id: Group::SacCas.first!.id)
+      @contact_role_group ||= Group::ExterneKontakte.find_by(name: "Navision Import",
+        parent_id: Group::SacCas.first!.id)
     end
-
   end
 end

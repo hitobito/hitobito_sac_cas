@@ -6,25 +6,24 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class SacSectionMembershipConfigsController < CrudController
-
   include MembershipConfigurable
 
   self.nesting = Group
   self.permitted_attrs = [:valid_from,
-                          :section_fee_adult,
-                          :section_fee_family,
-                          :section_fee_youth,
-                          :section_entry_fee_adult,
-                          :section_entry_fee_family,
-                          :section_entry_fee_youth,
-                          :bulletin_postage_abroad,
-                          :sac_fee_exemption_for_honorary_members,
-                          :section_fee_exemption_for_honorary_members,
-                          :sac_fee_exemption_for_benefited_members,
-                          :section_fee_exemption_for_benefited_members,
-                          :reduction_amount,
-                          :reduction_required_membership_years,
-                          :reduction_required_age]
+    :section_fee_adult,
+    :section_fee_family,
+    :section_fee_youth,
+    :section_entry_fee_adult,
+    :section_entry_fee_family,
+    :section_entry_fee_youth,
+    :bulletin_postage_abroad,
+    :sac_fee_exemption_for_honorary_members,
+    :section_fee_exemption_for_honorary_members,
+    :sac_fee_exemption_for_benefited_members,
+    :section_fee_exemption_for_benefited_members,
+    :reduction_amount,
+    :reduction_required_membership_years,
+    :reduction_required_age]
 
   private
 

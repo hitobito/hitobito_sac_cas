@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 class SelfRegistration::Sektion::Supplements
   include ActiveModel::Model
   include ActiveModel::Attributes
@@ -16,7 +15,7 @@ class SelfRegistration::Sektion::Supplements
   AGREEMENTS = [
     :statutes,
     :contribution_regulations,
-    :data_protection,
+    :data_protection
   ].freeze
 
   DYNAMIC_AGREEMENTS = [
@@ -49,12 +48,12 @@ class SelfRegistration::Sektion::Supplements
   end
 
   def self.human_attribute_name(key, options = {})
-    links = Regexp.new((AGREEMENTS + %w(sektion_statuten)).join('|'))
+    links = Regexp.new((AGREEMENTS + %w[sektion_statuten]).join("|"))
     case key
-    when /self_registration_reason_id/ then Person.human_attribute_name(key.to_s.gsub(/_id/, ''))
+    when /self_registration_reason_id/ then Person.human_attribute_name(key.to_s.gsub("_id", ""))
     when /register_on/ then SelfInscription.human_attribute_name(key)
-    when links then I18n.t("link_#{key}_title", scope: 'self_registration.infos_component')
-    else super(key, options)
+    when links then I18n.t("link_#{key}_title", scope: "self_registration.infos_component")
+    else super
     end
   end
 
@@ -65,14 +64,14 @@ class SelfRegistration::Sektion::Supplements
   end
 
   def sektion_statuten_link_args
-    label = I18n.t('link_sektion_statuten_title', scope: 'self_registration.infos_component')
+    label = I18n.t("link_sektion_statuten_title", scope: "self_registration.infos_component")
     path = rails_blob_path(privacy_policy, disposition: :attachment, only_path: true)
     [label, path]
   end
 
   def link_translations(key)
     ["link_#{key}_title", "link_#{key}"].map do |str|
-      I18n.t(str, scope: 'self_registration.infos_component')
+      I18n.t(str, scope: "self_registration.infos_component")
     end
   end
 
@@ -87,7 +86,7 @@ class SelfRegistration::Sektion::Supplements
   private
 
   def set_default_false_if_required(key)
-    self.send("#{key}=", false) if send(key).blank? && send("requires_#{key}?")
+    send(:"#{key}=", false) if send(key).blank? && send(:"requires_#{key}?")
   end
 
   def first_self_registration_reason_id

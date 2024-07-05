@@ -7,7 +7,6 @@
 
 class People::Neuanmeldungen::Promoter
   class PaidInvoiceCondition < Condition
-
     def satisfied?
       paid_invoice?
     end
@@ -18,7 +17,5 @@ class People::Neuanmeldungen::Promoter
       # To be implemented in the future with a separate ticket
       true
     end
-
   end
-
 end

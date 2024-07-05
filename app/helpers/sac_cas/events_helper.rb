@@ -8,7 +8,7 @@
 module SacCas::EventsHelper
   def format_event_application_conditions(entry)
     if entry.application_conditions.present?
-      safe_auto_link(entry.application_conditions, html: { target: '_blank' })
+      safe_auto_link(entry.application_conditions, html: {target: "_blank"})
     end
   end
 

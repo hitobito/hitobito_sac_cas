@@ -8,13 +8,13 @@
 module SacCas::Person::Household
   extend ActiveSupport::Concern
 
-  HOUSEHOLD_KEY_SEQUENCE = 'person.household_key'
+  HOUSEHOLD_KEY_SEQUENCE = "person.household_key"
 
   delegate :adult?, :child?, to: :beitragskategorie_calculator
 
   module ClassMethods
     def next_key
-      "#{Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE)}"
+      Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s
     end
   end
 
@@ -53,10 +53,10 @@ module SacCas::Person::Household
     return true unless maintain_sac_family?
     return true unless Role.where(person_id: existing_people, beitragskategorie: :family).exists?
 
-    new_housemates_with_family_membership_role = Role.
-      where(person_id: new_people, beitragskategorie: :family).
-      map(&:person).
-      uniq
+    new_housemates_with_family_membership_role = Role
+      .where(person_id: new_people, beitragskategorie: :family)
+      .map(&:person)
+      .uniq
 
     new_housemates_with_family_membership_role.each do |other|
       person.errors.add(
@@ -67,7 +67,6 @@ module SacCas::Person::Household
     end
     new_housemates_with_family_membership_role.empty?
   end
-
 
   # Add people managers for all missing combinations of adults and children in the household.
   def create_missing_people_managers
@@ -90,7 +89,7 @@ module SacCas::Person::Household
       %i[adult child].include?(age_category)
 
     people.select do |person|
-      SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")
+      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
     end
   end
 

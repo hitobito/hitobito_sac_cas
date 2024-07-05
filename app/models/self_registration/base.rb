@@ -6,11 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class SelfRegistration::Base < SelfRegistration
-
   class_attribute :main_person_class, default: SelfRegistration::MainPerson::Base
 
   self.partials = [:main_email, :emailless_main_person]
-
 
   def main_person
     @main_person ||= build_person(@main_person_attributes, main_person_class)

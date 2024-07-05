@@ -12,7 +12,7 @@ class TerminationReasonsController < SimpleCrudController
     destroyed = entry.destroy or set_failure_notice
     respond_with(entry, success: destroyed, location: index_path)
   rescue ActiveRecord::InvalidForeignKey
-    flash[:alert] = t('.foreign_key_error')
+    flash[:alert] = t(".foreign_key_error")
     respond_with(entry, success: false, location: index_path)
   end
 

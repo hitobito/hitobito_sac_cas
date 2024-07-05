@@ -8,7 +8,6 @@
 module Invoices
   module SacMemberships
     class PositionGenerator
-
       SAC_POSITIONS = [
         Positions::SacFee,
         Positions::HutSolidarityFee,
@@ -45,7 +44,7 @@ module Invoices
 
       def membership_positions
         positions = build_positions(SAC_POSITIONS + SECTION_POSITIONS,
-                                    member.main_membership_role)
+          member.main_membership_role)
         member.additional_membership_roles.each do |role|
           positions.push(*build_positions(SECTION_POSITIONS, role))
         end
@@ -63,7 +62,6 @@ module Invoices
       def build_positions(classes, role)
         classes.map { |klass| klass.new(member, role) }.filter(&:active?)
       end
-
     end
   end
 end

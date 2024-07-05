@@ -5,11 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
-require 'spec_helper'
+require "spec_helper"
 
 describe :event_participation, js: true do
-
   subject { page }
 
   let(:person) { people(:mitglied) }
@@ -19,47 +17,47 @@ describe :event_participation, js: true do
   before do
     sign_in(person)
   end
+
   def complete_contact_data
-    choose 'Mann'
-    fill_in 'event_participation_contact_data_street', with: 'Musterplatz'
-    fill_in 'event_participation_contact_data_housenumber', with: '23'
-    fill_in 'Geburtstag', with: '01.01.1980'
-    fill_in 'Telefon', with: '+41 79 123 45 56'
-    fill_in 'event_participation_contact_data_zip_code', with: '8000'
-    fill_in 'event_participation_contact_data_town', with: 'Zürich'
+    choose "Mann"
+    fill_in "event_participation_contact_data_street", with: "Musterplatz"
+    fill_in "event_participation_contact_data_housenumber", with: "23"
+    fill_in "Geburtstag", with: "01.01.1980"
+    fill_in "Telefon", with: "+41 79 123 45 56"
+    fill_in "event_participation_contact_data_zip_code", with: "8000"
+    fill_in "event_participation_contact_data_town", with: "Zürich"
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
   end
 
-
-  it 'creates an event participation' do
+  it "creates an event participation" do
     # pending('Event participations are not implemented yet for SAC'); raise NotImplementedError
 
     visit group_event_path(group_id: group, id: event)
 
-    click_link('Anmelden')
+    click_link("Anmelden")
 
     complete_contact_data
-    first(:button, 'Weiter').click
+    first(:button, "Weiter").click
 
-    fill_in('Kommentar', with: 'Wichtige Bemerkungen über meine Teilnahme')
+    fill_in("Kommentar", with: "Wichtige Bemerkungen über meine Teilnahme")
 
     expect do
-      click_button('Anmelden')
+      click_button("Anmelden")
       expect(page).to have_text("Teilnahme von #{person.full_name} in #{event.name} wurde " \
                                 "erfolgreich erstellt. Bitte überprüfe die Kontaktdaten und " \
                                 "passe diese gegebenenfalls an.")
     end.to change { Event::Participation.count }.by(1)
 
-    is_expected.to have_text('Wichtige Bemerkungen über meine Teilnahme')
-    is_expected.to have_selector('dt', text: 'Anzahl Mitglieder-Jahre')
+    is_expected.to have_text("Wichtige Bemerkungen über meine Teilnahme")
+    is_expected.to have_selector("dt", text: "Anzahl Mitglieder-Jahre")
 
     participation = Event::Participation.find_by(event: event, person: person)
 
     expect(participation).to be_present
   end
 
-  describe 'canceling participation' do
+  describe "canceling participation" do
     let(:group) { groups(:root) }
     let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
     let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application) }
@@ -71,41 +69,40 @@ describe :event_participation, js: true do
       event.dates.first.update_columns(start_at: 2.days.from_now)
     end
 
-    context 'on event' do
-      it 'requires a reason when canceling' do
+    context "on event" do
+      it "requires a reason when canceling" do
         visit group_event_path(group_id: group, id: event)
-        click_button 'Abmelden'
-        within('.popover-body') { click_on 'Abmelden' }
-        expect( find_field('Begründung').native.attribute('validationMessage')).to match(/Please fill (out|in) this field./)
+        click_button "Abmelden"
+        within(".popover-body") { click_on "Abmelden" }
+        expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
       end
 
-      it 'can cancel with reason' do
+      it "can cancel with reason" do
         visit group_event_path(group_id: group, id: event)
-        click_button 'Abmelden'
-        fill_in 'Begründung', with: 'Krank'
-        within('.popover-body') { click_on 'Abmelden' }
-        expect(page).not_to have_button 'Abmelden'
-        expect(page).not_to have_css('.popover-body')
+        click_button "Abmelden"
+        fill_in "Begründung", with: "Krank"
+        within(".popover-body") { click_on "Abmelden" }
+        expect(page).not_to have_button "Abmelden"
+        expect(page).not_to have_css(".popover-body")
       end
     end
 
-    context 'on participation' do
-      it 'requires a reason when canceling' do
+    context "on participation" do
+      it "requires a reason when canceling" do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
-        click_button 'Abmelden'
-        within('.popover-body') { click_on 'Abmelden' }
-        expect( find_field('Begründung').native.attribute('validationMessage')).to match(/Please fill (out|in) this field./)
+        click_button "Abmelden"
+        within(".popover-body") { click_on "Abmelden" }
+        expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
       end
 
-      it 'can cancel with reason' do
+      it "can cancel with reason" do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
-        click_button 'Abmelden'
-        fill_in 'Begründung', with: 'Krank'
-        within('.popover-body') { click_on 'Abmelden' }
-        expect(page).not_to have_button 'Abmelden'
-        expect(page).not_to have_css('.popover-body')
+        click_button "Abmelden"
+        fill_in "Begründung", with: "Krank"
+        within(".popover-body") { click_on "Abmelden" }
+        expect(page).not_to have_button "Abmelden"
+        expect(page).not_to have_css(".popover-body")
       end
     end
   end
-
 end

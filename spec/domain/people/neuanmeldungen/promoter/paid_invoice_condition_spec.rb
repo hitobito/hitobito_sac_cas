@@ -5,17 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Promoter::PaidInvoiceCondition do
-  context '::satisfied?' do
+  context "::satisfied?" do
     let(:role) { roles(:mitglied) }
 
     subject { described_class.new(role) }
 
-    it 'is true' do
+    it "is true" do
       expect(subject.satisfied?).to eq true
     end
-
   end
 end

@@ -60,15 +60,15 @@ module TableDisplays
 
     def beitragskategorie
       @person.roles.collect(&:beitragskategorie).compact.sort.uniq.collect do |value|
-        I18n.t(value, scope: 'roles.beitragskategorie')
-      end.join(', ').presence
+        I18n.t(value, scope: "roles.beitragskategorie")
+      end.join(", ").presence
     end
 
     def antrag_fuer
       if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
-        I18n.t('groups.sektion_secondary')
+        I18n.t("groups.sektion_secondary")
       elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }
-        I18n.t('groups.sektion_primary')
+        I18n.t("groups.sektion_primary")
       end
     end
 
@@ -99,7 +99,7 @@ module TableDisplays
     end
 
     def taggings_for(name)
-      ActsAsTaggableOn::Tagging.joins(:tag).where(taggable: @person, tags: { name: name })
+      ActsAsTaggableOn::Tagging.joins(:tag).where(taggable: @person, tags: {name: name})
     end
 
     def active_member?
@@ -112,7 +112,7 @@ module TableDisplays
 
     def membership_roles
       Role.where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.collect(&:sti_name),
-                 person_id: @person.id)
+        person_id: @person.id)
     end
 
     def group_roles

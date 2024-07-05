@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe PromoteNeuanmeldungenJob do
-  it 'calls People::Neuanmeldungen::Promoter#call' do
+  it "calls People::Neuanmeldungen::Promoter#call" do
     expect(People::Neuanmeldungen::Promoter).to receive(:new).and_call_original
     expect_any_instance_of(People::Neuanmeldungen::Promoter).to receive(:call)
     subject.perform

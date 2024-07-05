@@ -5,22 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe MailingList do
-  context 'seeded data' do
+  context "seeded data" do
     def newsletter
       MailingList.find_by(internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY)
     end
 
-    it 'has newsletter mailing list' do
+    it "has newsletter mailing list" do
       expect(newsletter).not_to be_present
       MailingListSeeder.seed!
       expect(newsletter).to be_present
-
     end
 
-    it 'has newsletter mailing list subscription' do
+    it "has newsletter mailing list subscription" do
       MailingListSeeder.seed!
       expect(newsletter.subscriptions).to contain_exactly(
         have_attributes(

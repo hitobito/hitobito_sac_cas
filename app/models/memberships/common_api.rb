@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships::CommonApi
-
   def valid?
     super
     validate_roles
@@ -38,7 +37,10 @@ module Memberships::CommonApi
     Role.transaction(requires_new: true) do
       roles.each do |role|
         # ignore the error, the role will be invalid anyway
-        role.save(validate: false) rescue ActiveRecord::NotNullViolation
+
+        role.save(validate: false)
+      rescue
+        ActiveRecord::NotNullViolation
       end
       roles.each do |role|
         role.validate
@@ -69,5 +71,4 @@ module Memberships::CommonApi
   def affected_people
     person.sac_family.member? ? person.sac_family.family_members : [person]
   end
-
 end

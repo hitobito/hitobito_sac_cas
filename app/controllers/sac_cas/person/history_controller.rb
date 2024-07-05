@@ -10,8 +10,8 @@ module SacCas::Person::HistoryController
 
   def index
     @external_trainings = ExternalTraining.where(person_id: @person.id)
-                                          .includes(event_kind: :translations)
-                                          .list
+      .includes(event_kind: :translations)
+      .list
     super
   end
 
@@ -20,5 +20,4 @@ module SacCas::Person::HistoryController
   def roles_scope
     super.with_membership_years
   end
-
 end

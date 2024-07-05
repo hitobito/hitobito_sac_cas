@@ -14,7 +14,7 @@ module Dropdown
     def initialize(template, person)
       @template = template
       @person = person
-      super(template, t('download'), :'file-download')
+      super(template, t("download"), :"file-download")
       init_items
     end
 
@@ -22,7 +22,7 @@ module Dropdown
 
     def init_items
       link = @template.membership_path(@person, format: :pdf)
-      add_item(t('download_pdf'), link, method: :get)
+      add_item(t("download_pdf"), link, method: :get)
     end
 
     def t(key)

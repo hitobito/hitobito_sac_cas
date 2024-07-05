@@ -5,15 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::BackupMitgliederExportJob do
   subject(:job) { described_class.new(group.id).tap { _1.instance_variable_set(:@sftp, sftp) } }
+
   let(:group) { groups(:bluemlisalp) }
   let(:sftp) { double(:sftp) }
 
-  context 'logging' do
-    let(:notifications) { Hash.new {|h, k| h[k] = [] } }
+  context "logging" do
+    let(:notifications) { Hash.new { |h, k| h[k] = [] } }
 
     def subscribe
       callback = lambda do |name, started, finished, unique_id, payload|
@@ -31,11 +32,11 @@ describe Export::BackupMitgliederExportJob do
       end
     end
 
-    it 'logs any type of error raised and continues' do
+    it "logs any type of error raised and continues" do
       exporter = double
       allow(exporter).to receive(:call)
 
-      error = Sftp::ConnectionError.new('permission denied')
+      error = Sftp::ConnectionError.new("permission denied")
 
       expect(sftp).to receive(:upload_file).and_raise(error)
       expect(job).to receive(:error).with(job, error, group: group)
@@ -65,15 +66,15 @@ describe Export::BackupMitgliederExportJob do
         job_name: described_class.name,
         group_id: nil,
         finished_at: an_instance_of(ActiveSupport::TimeWithZone),
-        status: 'success',
-        payload: { errors: [[group.id, error]] },
+        status: "success",
+        payload: {errors: [[group.id, error]]},
         attempt: 0
       )
     end
   end
 
-  context 'perform' do
-    it 'tries to upload csv for group' do
+  context "perform" do
+    it "tries to upload csv for group" do
       csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
       file_path_expectation = "sektionen/1650/Adressen_00001650.csv"
 

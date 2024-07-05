@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
-require_relative 'people_managers_shared_examples'
+require "spec_helper"
+require_relative "people_managers_shared_examples"
 
 describe Person::ManagedsController do
-  it_behaves_like 'people_managers#create'
-  it_behaves_like 'people_managers#destroy'
+  it_behaves_like "people_managers#create"
+  it_behaves_like "people_managers#destroy"
 end

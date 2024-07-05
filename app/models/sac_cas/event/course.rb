@@ -75,14 +75,14 @@
 module SacCas::Event::Course
   extend ActiveSupport::Concern
 
-  LANGUAGES = %w(de_fr fr de it).freeze
-  MEALS = %w(breakfast half_board lunch self_cooking full_board).freeze
-  START_POINTS_OF_TIME = %w(day evening).freeze
+  LANGUAGES = %w[de_fr fr de it].freeze
+  MEALS = %w[breakfast half_board lunch self_cooking full_board].freeze
+  START_POINTS_OF_TIME = %w[day evening].freeze
 
-  WEAK_VALIDATION_STATES = %w(created canceled).freeze
-  APPLICATION_OPEN_STATES = %w(application_open application_paused).freeze
+  WEAK_VALIDATION_STATES = %w[created canceled].freeze
+  APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
 
-  I18N_KIND = 'activerecord.attributes.event/kind'
+  I18N_KIND = "activerecord.attributes.event/kind"
 
   INHERITED_ATTRIBUTES = [
     :application_conditions, :minimum_participants, :maximum_participants, :minimum_age, :season,
@@ -97,10 +97,10 @@ module SacCas::Event::Course
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :meals, MEALS, i18n_prefix: 'activerecord.attributes.event/course.meals_options'
+    i18n_enum :meals, MEALS, i18n_prefix: "activerecord.attributes.event/course.meals_options"
     i18n_enum :accommodation,
-              Event::Kind::ACCOMMODATIONS,
-              i18n_prefix: "#{I18N_KIND}.accommodations"
+      Event::Kind::ACCOMMODATIONS,
+      i18n_prefix: "#{I18N_KIND}.accommodations"
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
 
     self.used_attributes += [
@@ -133,27 +133,27 @@ module SacCas::Event::Course
       :hidden_contact_attrs
     ]
 
-    self.possible_participation_states = %w(unconfirmed applied rejected assigned summoned
-                                            attended absent canceled annulled)
-    self.active_participation_states = %w(assigned attended summoned)
-    self.countable_participation_states = %w(applied assigned attended absent summoned)
+    self.possible_participation_states = %w[unconfirmed applied rejected assigned summoned
+      attended absent canceled annulled]
+    self.active_participation_states = %w[assigned attended summoned]
+    self.countable_participation_states = %w[applied assigned attended absent summoned]
 
-    self.active_participation_states = %w(assigned summoned attended)
+    self.active_participation_states = %w[assigned summoned attended]
 
-    self.revoked_participation_states = %w(rejected canceled absent annulled)
+    self.revoked_participation_states = %w[rejected canceled absent annulled]
 
-    self.countable_participation_states = %w(unconfirmed applied assigned summoned attended absent)
+    self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
 
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
-    validates :number, presence: true, uniqueness: { if: :number }
+    validates :number, presence: true, uniqueness: {if: :number}
     validates :description, :application_opening_at, :application_closing_at, :contact_id,
-              :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
-              :accommodation,
-              presence: { unless: :weak_validation_state? }
+      :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
+      :accommodation,
+      presence: {unless: :weak_validation_state?}
 
     delegate :level, :ideal_class_size, :maximum_class_size, :maximum_age,
-             to: :kind, allow_nil: true
+      to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
     before_save :adjust_state, if: :application_closing_at_changed?
@@ -164,7 +164,7 @@ module SacCas::Event::Course
   end
 
   def default_participation_state(participation, for_someone_else = false)
-    return 'unconfirmed' if super == 'applied' && (places_available? && !automatic_assignment?)
+    return "unconfirmed" if super == "applied" && (places_available? && !automatic_assignment?)
 
     super
   end
@@ -177,11 +177,11 @@ module SacCas::Event::Course
 
   def adjust_state
     if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
-      self.state = 'application_closed'
+      self.state = "application_closed"
     end
 
-    if application_closed? && %w(today? future?).any? { application_closing_at.try(_1) }
-      self.state = 'application_open'
+    if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
+      self.state = "application_open"
     end
   end
 end

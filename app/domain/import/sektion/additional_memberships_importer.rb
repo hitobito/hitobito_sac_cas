@@ -5,20 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import
   module Sektion
     class AdditionalMembershipsImporter < MembershipsImporter
-
       self.headers = {
-        navision_id: 'Adressnummer',
-        group_navision_id: 'Sektion',
-        beitragskategorie: 'Bezeichnung Zusatzelement',
-        joining_date: 'Eintrittsdatum',
+        navision_id: "Adressnummer",
+        group_navision_id: "Sektion",
+        beitragskategorie: "Bezeichnung Zusatzelement",
+        joining_date: "Eintrittsdatum"
       }.freeze
 
-      self.sheet_name = 'Mapping Mitglied-Zusatzsektion'
+      self.sheet_name = "Mapping Mitglied-Zusatzsektion"
 
       self.target_role_type = AdditionalMembership::TARGET_ROLE_TYPE
 
@@ -36,11 +35,11 @@ module Import
 
       def print_summary
         membership_groups.each_value do |group|
-          active =  target_role_type.where(group_id: group.id).count
+          active = target_role_type.where(group_id: group.id).count
           output.puts "#{group.parent} hat #{active} Zusatzmitgliedschaften"
         end
 
-        output_list('Folgende Sektionen konnten nicht gefunden werden:', missing_sections.to_a)
+        output_list("Folgende Sektionen konnten nicht gefunden werden:", missing_sections.to_a)
       end
     end
   end

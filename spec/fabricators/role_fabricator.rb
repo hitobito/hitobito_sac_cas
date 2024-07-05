@@ -8,7 +8,7 @@
 # Mitglied roles in SAC are required to have a created_at/activate_on and a deleted_at/delete_on
 # We set these attributes here in the factory to a default value, so we don't have to do it all the time
 # in the specs.
-Role.all_types.select {|role| role < SacCas::Role::MitgliedCommon }.each do |role|
+Role.all_types.select { |role| role < SacCas::Role::MitgliedCommon }.each do |role|
   name = role.name.to_sym
   Fabrication.manager[name].append_or_update_attribute(:created_at, nil) { Time.current }
   Fabrication.manager[name].append_or_update_attribute(:delete_on, nil) { Time.zone.today.end_of_year.to_date }

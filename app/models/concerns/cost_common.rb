@@ -19,10 +19,10 @@ module CostCommon
     scope :list, -> { includes(:translations).order(:code) }
     scope :with_deleted, -> { unscope(where: :deleted_at) }
 
-    has_many :event_kind_categories, class_name: 'Event::KindCategory',
+    has_many :event_kind_categories, class_name: "Event::KindCategory",
       dependent: :restrict_with_error
 
-    has_many :event_kinds, class_name: 'Event::Kind',
+    has_many :event_kinds, class_name: "Event::Kind",
       dependent: :restrict_with_error
 
     validates_by_schema

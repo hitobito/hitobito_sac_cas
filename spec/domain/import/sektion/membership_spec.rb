@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Import::Sektion::Membership do
   let(:navision_id) { 123 }
@@ -13,11 +13,12 @@ describe Import::Sektion::Membership do
   let(:attrs) do
     {
       navision_id: navision_id,
-      beitragskategorie: 'EINZEL',
-      last_joining_date: '1.1.1960'
+      beitragskategorie: "EINZEL",
+      last_joining_date: "1.1.1960"
     }
   end
-  let(:contact_group) { Group::ExterneKontakte.new(parent: groups(:root), name: 'test_contacts') }
+  let(:contact_group) { Group::ExterneKontakte.new(parent: groups(:root), name: "test_contacts") }
+
   subject(:membership) do
     described_class.new(
       attrs,
@@ -32,8 +33,8 @@ describe Import::Sektion::Membership do
     Fabricate(:person, id: navision_id) # Person with same navision_id must exist in db
   end
 
-  describe 'validations' do
-    it 'is invalid without group' do
+  describe "validations" do
+    it "is invalid without group" do
       member = described_class.new(
         attrs.merge(birthday: 6.years.ago),
         group: nil,
@@ -44,49 +45,49 @@ describe Import::Sektion::Membership do
       expect(member.errors).to match(/Group muss ausgefüllt werden/)
     end
 
-    it 'is invalid with member_type Abonnent' do
-      attrs[:member_type] = 'Abonnent'
+    it "is invalid with member_type Abonnent" do
+      attrs[:member_type] = "Abonnent"
       expect(membership).not_to be_valid
       expect(membership.errors).to match(/Abonnent ist nicht gültig/)
     end
   end
 
-  describe 'roles' do
+  describe "roles" do
     subject(:role) { membership.role }
 
-    before { attrs.merge!(beitragskategorie: 'EINZEL', birthday: 10.years.ago) }
+    before { attrs.merge!(beitragskategorie: "EINZEL", birthday: 10.years.ago) }
 
-    it 'sets expected type and group' do
+    it "sets expected type and group" do
       expect(role.group).to eq group
-      expect(role.type).to eq 'Group::SektionsMitglieder::Mitglied'
+      expect(role.type).to eq "Group::SektionsMitglieder::Mitglied"
       expect(role).to be_valid
-      expect(role.beitragskategorie).to eq 'adult'
+      expect(role.beitragskategorie).to eq "adult"
     end
 
-    it 'reads only created_at' do
-      attrs[:last_joining_date] = '1.1.1960'
-      attrs[:last_exit_date] = '1.1.1990'
+    it "reads only created_at" do
+      attrs[:last_joining_date] = "1.1.1960"
+      attrs[:last_exit_date] = "1.1.1990"
       expect(role.created_at).to eq Time.zone.parse(attrs[:last_joining_date])
       expect(role.deleted_at).to be_nil
       expect(role).to be_valid
     end
 
-    it 'reads deleted_at only if member_type is Ausgetreten' do
-      attrs[:last_exit_date] = '1.1.1990'
-      attrs[:member_type] = 'Ausgetreten'
+    it "reads deleted_at only if member_type is Ausgetreten" do
+      attrs[:last_exit_date] = "1.1.1990"
+      attrs[:member_type] = "Ausgetreten"
       expect(role.deleted_at).to eq Time.zone.parse(attrs[:last_exit_date])
     end
 
-    it 'does not set deleted_at if member_type is Ausgetreten and timestamp cannot be parsed' do
-      attrs[:last_exit_date] = 'asdf'
-      attrs[:member_type] = 'Ausgetreten'
+    it "does not set deleted_at if member_type is Ausgetreten and timestamp cannot be parsed" do
+      attrs[:last_exit_date] = "asdf"
+      attrs[:member_type] = "Ausgetreten"
       expect(role.deleted_at).to be_nil
     end
 
     {
-      adult: 'EINZEL',
-      youth: 'JUGEND',
-      family: ['FAMILIE', 'FREI KIND', 'FREI FAM']
+      adult: "EINZEL",
+      youth: "JUGEND",
+      family: ["FAMILIE", "FREI KIND", "FREI FAM"]
     }.each do |kind, values|
       Array(values).each do |value|
         it "sets role beitragskategorie to #{kind} for #{value}" do
@@ -97,17 +98,17 @@ describe Import::Sektion::Membership do
     end
   end
 
-  describe '#import!' do
+  describe "#import!" do
     {
-      adult: 'EINZEL',
-      youth: 'JUGEND',
-      family: ['FAMILIE', 'FREI KIND', 'FREI FAM']
+      adult: "EINZEL",
+      youth: "JUGEND",
+      family: ["FAMILIE", "FREI KIND", "FREI FAM"]
     }.each do |kind, values|
       Array(values).each do |value|
         it "sets person.sac_family_main_person when raw beitragskategorie value is 'FAMILIE'" do
           attrs[:beitragskategorie] = value
           membership.import!
-          expect(membership.role.person.sac_family_main_person).to eq(value == 'FAMILIE')
+          expect(membership.role.person.sac_family_main_person).to eq(value == "FAMILIE")
         end
       end
     end

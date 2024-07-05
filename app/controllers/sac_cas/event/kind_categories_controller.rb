@@ -15,8 +15,8 @@ module SacCas::Event::KindCategoriesController
   def push_down
     authorize!(:update, entry)
     entry.push_down_inherited_attributes!
-    message = t('.success', cost_center: entry.cost_center, cost_unit: entry.cost_unit)
-    redirect_to edit_event_kind_category_path(entry), flash: { notice: message }
+    message = t(".success", cost_center: entry.cost_center, cost_unit: entry.cost_unit)
+    redirect_to edit_event_kind_category_path(entry), flash: {notice: message}
   end
 
   private
@@ -29,8 +29,8 @@ module SacCas::Event::KindCategoriesController
 
   def list_entries
     super.includes(:translations,
-                   cost_center: :translations,
-                   cost_unit: :translations,
-                   kinds: :translations)
+      cost_center: :translations,
+      cost_unit: :translations,
+      kinds: :translations)
   end
 end

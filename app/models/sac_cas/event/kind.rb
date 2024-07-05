@@ -45,14 +45,11 @@ module SacCas::Event::Kind
     belongs_to :cost_unit
     belongs_to :level
 
-    validates :cost_center_id, presence: true
-    validates :cost_unit_id, presence: true
-
     validates :kind_category, presence: true
     validates :short_name, presence: true
 
-    SEASONS = %w(winter summer).freeze
-    ACCOMMODATIONS = %w(no_overnight hut pension pension_or_hut bivouac).freeze
+    SEASONS = %w[winter summer].freeze
+    ACCOMMODATIONS = %w[no_overnight hut pension pension_or_hut bivouac].freeze
 
     i18n_enum :season, SEASONS
     i18n_enum :accommodation, ACCOMMODATIONS
@@ -70,9 +67,9 @@ module SacCas::Event::Kind
 
   def push_down_application_conditions!
     translations.each do |t|
-      columns = %w(general_information application_conditions locale created_at updated_at)
+      columns = %w[general_information application_conditions locale created_at updated_at]
       kind_attrs = t.attributes.slice(*columns).transform_keys! do |key|
-        key == 'general_information' ? 'description' : key
+        (key == "general_information") ? "description" : key
       end
       event_attrs = push_down_events.map { |e| kind_attrs.merge(event_id: e.id) }
       Event::Translation.upsert_all(event_attrs) if event_attrs.present?
@@ -80,6 +77,6 @@ module SacCas::Event::Kind
   end
 
   def push_down_events
-    events.where.not(state: %w(closed canceled))
+    events.where.not(state: %w[closed canceled])
   end
 end

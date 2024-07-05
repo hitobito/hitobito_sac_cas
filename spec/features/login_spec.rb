@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe :login, js: true do
-  let(:password) { 'cNb@X7fTdiU4sWCMNos3gJmQV_d9e9' }
+  let(:password) { "cNb@X7fTdiU4sWCMNos3gJmQV_d9e9" }
   let(:person) { people(:mitglied).tap { |p| p.update!(password: password) } }
 
   around do |example|
@@ -21,29 +21,29 @@ describe :login, js: true do
 
   before do
     visit new_person_session_path
-    expect(page).to have_field 'Haupt‑E‑Mail / Mitglied‑Nr'
-    expect(page).to have_field 'Passwort'
+    expect(page).to have_field "Haupt‑E‑Mail / Mitglied‑Nr"
+    expect(page).to have_field "Passwort"
   end
 
-  it 'has correct login field label' do
-    expect(page).to have_selector('label[for="person_login_identity"]', text: 'Haupt‑E‑Mail / Mitglied‑Nr')
+  it "has correct login field label" do
+    expect(page).to have_selector('label[for="person_login_identity"]', text: "Haupt‑E‑Mail / Mitglied‑Nr")
   end
 
-  it 'allows login with email' do
-    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.email
-    fill_in 'Passwort', with: password
-    click_button 'Anmelden'
+  it "allows login with email" do
+    fill_in "Haupt‑E‑Mail / Mitglied‑Nr", with: person.email
+    fill_in "Passwort", with: password
+    click_button "Anmelden"
 
-    expect(page).to have_link 'Abmelden'
-    expect(page).to have_selector('.content-header h1', text: person.full_name)
+    expect(page).to have_link "Abmelden"
+    expect(page).to have_selector(".content-header h1", text: person.full_name)
   end
 
-  it 'allows login with membership_number' do
-    fill_in 'Haupt‑E‑Mail / Mitglied‑Nr', with: person.membership_number
-    fill_in 'Passwort', with: password
-    click_button 'Anmelden'
+  it "allows login with membership_number" do
+    fill_in "Haupt‑E‑Mail / Mitglied‑Nr", with: person.membership_number
+    fill_in "Passwort", with: password
+    click_button "Anmelden"
 
-    expect(page).to have_link 'Abmelden'
-    expect(page).to have_selector('.content-header h1', text: person.full_name)
+    expect(page).to have_link "Abmelden"
+    expect(page).to have_selector(".content-header h1", text: person.full_name)
   end
 end

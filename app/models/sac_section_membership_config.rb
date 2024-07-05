@@ -29,7 +29,6 @@
 #
 
 class SacSectionMembershipConfig < ApplicationRecord
-
   class << self
     def active(date = Time.zone.today)
       where(valid_from: ..date.year).order(valid_from: :desc).first
@@ -41,7 +40,7 @@ class SacSectionMembershipConfig < ApplicationRecord
   belongs_to :group
 
   validates_by_schema
-  validates :valid_from, uniqueness: { scope: :group_id }
+  validates :valid_from, uniqueness: {scope: :group_id}
   validate :assert_sac_section_or_ortsgruppe
 
   scope :list, -> { order(:valid_from) }

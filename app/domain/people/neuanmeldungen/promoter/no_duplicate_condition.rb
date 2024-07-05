@@ -7,7 +7,6 @@
 
 class People::Neuanmeldungen::Promoter
   class NoDuplicateCondition < Condition
-
     MINIMUM_PERSON_RECORD_AGE = 30.minutes
 
     def satisfied?
@@ -17,7 +16,5 @@ class People::Neuanmeldungen::Promoter
 
       person.person_duplicates.empty?
     end
-
   end
-
 end

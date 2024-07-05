@@ -6,11 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Event::LevelsController < SimpleCrudController
-
   self.permitted_attrs = [:label, :code, :difficulty, :description]
 
   self.sort_mappings = {
-    label: 'event_level_translations.label'
+    label: "event_level_translations.label"
   }
 
   def self.model_class

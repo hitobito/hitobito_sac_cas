@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class SacRecipients < Export::Tabular::SacGroupPeopleBase
-
     def attributes
       [
         :id,
@@ -27,24 +26,23 @@ module Export::Tabular::People
     end
 
     def address_label
-      'Strasse'
+      "Strasse"
     end
 
     def id_label
-      'Navision-Nr.'
+      "Navision-Nr."
     end
 
     def last_name_label
-      'Name'
+      "Name"
     end
 
     def layer_navision_id_label
-      'Sektion'
+      "Sektion"
     end
 
     def email_label
-      'E-Mail'
+      "E-Mail"
     end
-
   end
 end

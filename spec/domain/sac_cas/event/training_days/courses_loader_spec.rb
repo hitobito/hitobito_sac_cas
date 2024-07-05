@@ -5,77 +5,78 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::TrainingDays::CoursesLoader do
   let(:role) { :participant }
   let(:admin) { people(:admin) }
   let(:ski_course) { event_kinds(:ski_course) }
   let(:ski_leader) { qualification_kinds(:ski_leader) }
-  let(:ski_pro) { event_kind_qualification_kinds(:ski_pro)  }
+  let(:ski_pro) { event_kind_qualification_kinds(:ski_pro) }
 
   let(:end_date) { 1.month.ago }
   let(:start_date) { ski_leader.validity.years.ago.to_date }
 
   subject(:courses) {
- described_class.new(admin.id, role, [ski_leader.id], start_date, end_date).load }
+    described_class.new(admin.id, role, [ski_leader.id], start_date, end_date).load
+  }
 
-  it 'is empty without course or external_trainings' do
+  it "is empty without course or external_trainings" do
     expect(courses).to be_empty
   end
 
-  it 'excludes courses from participation' do
+  it "excludes courses from participation" do
     create_course_participation(training_days: 1, start_at: start_date + 1.day, qualified: false)
     expect(courses).to be_empty
   end
 
-  it 'includes courses from participation' do
+  it "includes courses from participation" do
     create_course_participation(training_days: 1, start_at: start_date + 1.day, qualified: true)
     expect(courses).to have(1).item
   end
 
-  describe 'external trainings' do
-    it 'includes training inside of validity period' do
+  describe "external trainings" do
+    it "includes training inside of validity period" do
       create_external_training(start_date, end_date)
       expect(courses).to have(1).item
     end
 
-    it 'orders trainings by start_at descending' do
+    it "orders trainings by start_at descending" do
       first = create_external_training(start_date - 2.day, end_date)
       second = create_external_training(start_date, end_date)
       third = create_external_training(start_date + 1.day, end_date)
       expect(courses).to eq [third, second, first]
     end
 
-    it 'includes training starting outside but finishing inside validity period' do
+    it "includes training starting outside but finishing inside validity period" do
       create_external_training(start_date - 1.day, end_date)
       expect(courses).to have(1).item
     end
 
-    it 'includes training starting inside but finishing outside validity period' do
+    it "includes training starting inside but finishing outside validity period" do
       create_external_training(start_date, end_date + 1.day)
       expect(courses).to have(1).item
     end
 
-    it 'excludes training before of validity period' do
+    it "excludes training before of validity period" do
       create_external_training(start_date - 2.days, start_date - 1.day)
       expect(courses).to be_empty
     end
 
-    it 'excludes training after of validity period' do
+    it "excludes training after of validity period" do
       create_external_training(end_date + 1.day, end_date + 2.days)
       expect(courses).to be_empty
     end
 
-    describe 'qualification kind filtering' do
+    describe "qualification kind filtering" do
       before { create_external_training(start_date, end_date) }
 
-      it 'excludes training which qualifies' do
+      it "excludes training which qualifies" do
         ski_pro.update!(category: :qualification)
         expect(courses).to be_empty
       end
 
-      it 'excludes training which prolongs leader' do
+      it "excludes training which prolongs leader" do
         ski_pro.update!(role: :leader)
         expect(courses).to be_empty
       end
@@ -91,7 +92,7 @@ describe Event::TrainingDays::CoursesLoader do
     })
   end
 
-  def create_course_participation(kind: ski_course, qualified: , training_days: nil, start_at:)
+  def create_course_participation(qualified:, start_at:, kind: ski_course, training_days: nil)
     course = Fabricate.build(:course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at)
     course.save!

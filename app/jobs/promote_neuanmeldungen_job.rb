@@ -6,11 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class PromoteNeuanmeldungenJob < RecurringJob
-
   run_every 15.minutes
 
   def perform
     People::Neuanmeldungen::Promoter.new.call
   end
-
 end

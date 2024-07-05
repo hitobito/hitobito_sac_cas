@@ -7,11 +7,9 @@
 #  https://github.com/hitobito/hitobito_youth.
 
 module SacCas::PersonReadables
-
   def accessible_people
     return Person.only_public_data if can?(:read_all_people, user)
 
     super
   end
-
 end

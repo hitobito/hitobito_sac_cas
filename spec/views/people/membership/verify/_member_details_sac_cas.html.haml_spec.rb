@@ -3,27 +3,30 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
+describe "people/membership/verify/_member_details_sac_cas.html.haml" do
   include FormatHelper
 
-  let(:dom) { render; Capybara::Node::Simple.new(@rendered)  }
+  let(:dom) {
+    render
+    Capybara::Node::Simple.new(@rendered)
+  }
 
   before { allow(view).to receive_messages(person: person) }
 
-  context 'member' do
+  context "member" do
     let(:person) { people(:mitglied) }
 
-    it 'hides tour guide info' do
-      expect(dom).not_to have_text 'Aktive/r Tourenleiter/in'
+    it "hides tour guide info" do
+      expect(dom).not_to have_text "Aktive/r Tourenleiter/in"
     end
   end
 
-  context 'tour guide' do
+  context "tour guide" do
     let(:person) { people(:mitglied) }
 
-    it 'renders tour guide info for active tour guide' do
+    it "renders tour guide info for active tour guide" do
       person.qualifications.create!(
         qualification_kind: qualification_kinds(:ski_leader),
         start_at: 1.month.ago
@@ -33,7 +36,7 @@ describe 'people/membership/verify/_member_details_sac_cas.html.haml' do
         group: groups(:matterhorn_tourenkommission)
       )
 
-      expect(dom).to have_text 'Aktive/r Tourenleiter/in'
+      expect(dom).to have_text "Aktive/r Tourenleiter/in"
     end
   end
 end

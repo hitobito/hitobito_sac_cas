@@ -26,8 +26,8 @@ module Memberships
       @terminate_on = terminate_on
       @now = Time.zone.now
 
-      raise 'wrong type' if bad_role_type?
-      raise 'not main family person' if bad_family?
+      raise "wrong type" if bad_role_type?
+      raise "not main family person" if bad_family?
     end
 
     private
@@ -44,7 +44,7 @@ module Memberships
         .where(
           type: ROLE_TYPES,
           person: affected_people,
-          groups: { layer_group_id: group.layer_group_id }
+          groups: {layer_group_id: group.layer_group_id}
         )
     end
 
@@ -58,7 +58,7 @@ module Memberships
     end
 
     def bad_role_type?
-      role.type != 'Group::SektionsMitglieder::MitgliedZusatzsektion'
+      role.type != "Group::SektionsMitglieder::MitgliedZusatzsektion"
     end
 
     def bad_family?

@@ -5,25 +5,26 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Wizards::Steps::ChooseSektion do
   let(:wizard) { Wizards::Base.new(current_step: 0) }
+
   subject(:step) { described_class.new(wizard) }
 
-  describe 'validations' do
+  describe "validations" do
     let(:error) { steps.errors[:group] }
 
-    it 'validates presence of group id' do
+    it "validates presence of group id" do
       step.group_id = nil
       expect(step).not_to be_valid
-      expect(step.errors[:group_id]).to eq ['muss ausgefüllt werden']
+      expect(step.errors[:group_id]).to eq ["muss ausgefüllt werden"]
     end
 
-    it 'validates type of group id' do
+    it "validates type of group id" do
       step.group_id = Group::SacCas.first.id
       expect(step).not_to be_valid
-      expect(step.errors[:group_id]).to eq ['ist nicht gültig']
+      expect(step.errors[:group_id]).to eq ["ist nicht gültig"]
     end
   end
 end

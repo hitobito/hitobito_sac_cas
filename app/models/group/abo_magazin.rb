@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::AboMagazin < ::Group
-
   ### ROLES
   class Abonnent < ::Role
     self.permissions = []
@@ -30,5 +29,4 @@ class Group::AboMagazin < ::Group
   end
 
   roles Abonnent, Neuanmeldung, Autor, Andere
-
 end

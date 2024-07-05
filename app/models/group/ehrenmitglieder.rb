@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Ehrenmitglieder < ::Group
-
   ### ROLES
   class Ehrenmitglied < ::Role
     self.permissions = []

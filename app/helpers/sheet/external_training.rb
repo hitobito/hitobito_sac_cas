@@ -7,8 +7,6 @@
 
 module Sheet
   class ExternalTraining < Base
-
     self.parent_sheet = Sheet::Person
-
   end
 end

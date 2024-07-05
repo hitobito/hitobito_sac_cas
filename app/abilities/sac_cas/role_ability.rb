@@ -26,9 +26,9 @@ module SacCas::RoleAbility
   def has_termination_by_section_only_role
     return mitglied_termination_by_section_only? if mitglied_zusatzsektion_role?
 
-    subject.person.roles.
-      select { |r| mitglied_role?(r) }.
-      any? { |r| mitglied_termination_by_section_only?(r) }
+    subject.person.roles
+      .select { |r| mitglied_role?(r) }
+      .any? { |r| mitglied_termination_by_section_only?(r) }
   end
 
   def mitglied_role?(role = subject)
@@ -40,11 +40,11 @@ module SacCas::RoleAbility
   end
 
   def mitglied_termination_by_section_only?(role = subject)
-    role.
-      group.
-      ancestors.
-      reverse.
-      find { |g| [Group::Sektion, Group::Ortsgruppe].include?(g.class) }&.
-      mitglied_termination_by_section_only
+    role
+      .group
+      .ancestors
+      .reverse
+      .find { |g| [Group::Sektion, Group::Ortsgruppe].include?(g.class) }
+      &.mitglied_termination_by_section_only
   end
 end

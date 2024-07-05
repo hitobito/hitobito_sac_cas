@@ -15,7 +15,7 @@ module SacCas::Event::Participation
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
-    validates :adult_consent, :terms_and_conditions, acceptance: { if: :check_root_conditions }
+    validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
   end
 
   def subsidy_amount
@@ -29,7 +29,7 @@ module SacCas::Event::Participation
   end
 
   def participant_cancelable?
-    event.applications_cancelable? && event.state != 'annulled' &&
+    event.applications_cancelable? && event.state != "annulled" &&
       event.dates.map(&:start_at).min.future?
   end
 
@@ -43,7 +43,7 @@ module SacCas::Event::Participation
   private
 
   def update_previous_state
-    if %w(canceled annulled).include?(state)
+    if %w[canceled annulled].include?(state)
       self.previous_state = state_was
     end
   end

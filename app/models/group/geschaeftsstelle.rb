@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Geschaeftsstelle < ::Group
-
   self.static_name = true
 
   ### ROLES
@@ -31,5 +30,4 @@ class Group::Geschaeftsstelle < ::Group
   end
 
   roles Mitarbeiter, MitarbeiterLesend, Admin, Andere
-
 end

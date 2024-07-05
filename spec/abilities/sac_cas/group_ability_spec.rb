@@ -5,18 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe GroupAbility do
-
-  describe 'export_mitglieder' do
-    it 'as admin it is permitted' do
+  describe "export_mitglieder" do
+    it "as admin it is permitted" do
       expect(Ability.new(people(:admin))).to be_able_to(:export_mitglieder, groups(:bluemlisalp))
     end
 
-    it 'as mitglied it is denied' do
+    it "as mitglied it is denied" do
       expect(Ability.new(people(:mitglied))).not_to be_able_to(:export_mitglieder,
-                                                               groups(:bluemlisalp))
+        groups(:bluemlisalp))
     end
   end
 end

@@ -26,12 +26,12 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def save!
-    super(context: 'selfreg')
+    super(context: "selfreg")
     exclude_from_mailing_list if mailing_list && !newsletter
   end
 
   def valid?
-    super('selfreg') && person.valid?('selfreg')
+    super("selfreg") && person.valid?("selfreg")
   end
 
   private
@@ -41,9 +41,9 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
   end
 
   def assign_number(person)
-    return if attributes['number'].blank?
+    return if attributes["number"].blank?
 
-    person.phone_numbers.build(label: 'Mobil', number: attributes['number'])
+    person.phone_numbers.build(label: "Mobil", number: attributes["number"])
   end
 
   def assert_valid_phone_number
@@ -87,6 +87,6 @@ class SelfRegistration::MainPerson::Base < SelfRegistration::Person
 
   def neuanmeldung?
     primary_group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
-    primary_group.is_a?(Group::SektionsNeuanmeldungenNv)
+      primary_group.is_a?(Group::SektionsNeuanmeldungenNv)
   end
 end

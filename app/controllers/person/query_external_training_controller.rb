@@ -5,9 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 class Person::QueryExternalTrainingController < Person::QueryController
-
   private
 
   def scope
@@ -15,5 +13,4 @@ class Person::QueryExternalTrainingController < Person::QueryController
       .accessible_by(PersonWritables.new(current_user))
       .distinct.joins(roles: :group)
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Event::TrainingDays::CoursesLoader
-
   def load
     super + load_external_trainings
   end
@@ -14,13 +13,13 @@ module SacCas::Event::TrainingDays::CoursesLoader
   def load_external_trainings
     ExternalTraining.between(@start_date, @end_date)
       .where(person: @person_id)
-      .includes(event_kind: { event_kind_qualification_kinds: :qualification_kind })
+      .includes(event_kind: {event_kind_qualification_kinds: :qualification_kind})
       .where(event_kind_qualification_kinds: {
         qualification_kind_id: @qualification_kind_ids,
         category: :prolongation,
-        role: @role,
+        role: @role
       })
-      .order('start_at DESC')
+      .order("start_at DESC")
       .distinct
   end
 end

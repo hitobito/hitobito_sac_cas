@@ -8,7 +8,6 @@
 module Invoices
   module SacMemberships
     class Member
-
       MAIN_MEMBERSHIP_ROLE = Group::SektionsMitglieder::Mitglied
       ADDITIONAL_SECTION_ROLE = Group::SektionsMitglieder::MitgliedZusatzsektion
       NEW_ENTRY_ROLE = Group::SektionsNeuanmeldungenNv::Neuanmeldung

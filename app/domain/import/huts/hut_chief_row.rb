@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
   class HutChiefRow
-
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4006.0'
+      row[:verteilercode].to_s == "4006.0"
     end
 
     def initialize(row)
@@ -25,17 +24,17 @@ module Import::Huts
       unless group_id
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut chiefs belong to things other than huts
-        puts "Skipping hut chief for unknown hut #{navision_id(@row)}"
+        Rails.logger.debug { "Skipping hut chief for unknown hut #{navision_id(@row)}" }
         return
       end
       person.roles.where(
         type: Group::SektionsHuette::Huettenchef.name,
-        group_id: group_id,
+        group_id: group_id
       ).destroy_all
       person.roles.build(
         type: Group::SektionsHuette::Huettenchef.name,
         created_at: created_at(@row),
-        group_id: group_id,
+        group_id: group_id
       )
       person.save!
     end
@@ -54,15 +53,15 @@ module Import::Huts
     def group_id(row)
       # TODO handle nonexistent group
       Group::Sektion.find_by(navision_id: navision_id(row))
-                    .descendants
-                    .find { |child| child.type == 'Group::SektionsHuettenkommission' }
-                    .id
+        .descendants
+        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .id
     rescue NoMethodError
-      puts "Failed to find existing hut with navision id #{navision_id(row)}"
+      Rails.logger.debug { "Failed to find existing hut with navision id #{navision_id(row)}" }
     end
 
     def navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
 
     def first_name(row)
@@ -74,7 +73,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ''))
+      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ""))
     end
 
     def created_at(row)

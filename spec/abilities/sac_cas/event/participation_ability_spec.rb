@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::ParticipationAbility do
-
   def build(group, person: people(:admin), event: nil)
     event ||= Event::Course.new(groups: [groups(group)], id: -1, supports_applications: true)
     Event::Participation.new(event: event, person: person, application_id: -1)
@@ -22,51 +21,51 @@ describe Event::ParticipationAbility do
 
   subject(:ability) { Ability.new(role.person) }
 
-  context 'any' do
+  context "any" do
     let(:top_course) { events(:top_course) }
     let(:participation) { build(:bluemlisalp_funktionaere, event: top_course) }
-    let(:role) { build_role(:bluemlisalp_funktionaere, 'Andere') }
+    let(:role) { build_role(:bluemlisalp_funktionaere, "Andere") }
 
-    describe 'summon' do
-      it 'leader may summon' do
+    describe "summon" do
+      it "leader may summon" do
         build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
           .roles.create!(type: Event::Role::Leader.sti_name)
         expect(subject).to be_able_to(:summon, participation)
       end
 
-      it 'participant may not summon' do
+      it "participant may not summon" do
         build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
           .roles.create!(type: Event::Role::Participant.sti_name)
         expect(subject).not_to be_able_to(:summon, participation)
       end
     end
 
-    describe 'cancel'  do
-      it 'may not cancel others' do
+    describe "cancel" do
+      it "may not cancel others" do
         expect(subject).not_to be_able_to(:cancel, participation)
       end
 
-      it 'may cancel her own' do
+      it "may cancel her own" do
         participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
         expect(subject).to be_able_to(:cancel, participation)
       end
     end
 
-    describe 'destroy'  do
-      it 'may not destroy others' do
+    describe "destroy" do
+      it "may not destroy others" do
         expect(subject).not_to be_able_to(:destroy, participation)
       end
 
-      it 'may not destroy own' do
+      it "may not destroy own" do
         participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
         expect(subject).not_to be_able_to(:destroy, participation)
       end
     end
   end
 
-  context 'layer_and_below_full' do
-    context 'root' do
-      let(:role) { build_role(:geschaeftsstelle, 'Mitarbeiter') }
+  context "layer_and_below_full" do
+    context "root" do
+      let(:role) { build_role(:geschaeftsstelle, "Mitarbeiter") }
 
       [:summon, :cancel].each do |action|
         it "may #{action} for event in layer" do
@@ -79,8 +78,8 @@ describe Event::ParticipationAbility do
       end
     end
 
-    context 'sektion' do
-      let(:role) { build_role(:bluemlisalp_funktionaere, 'Administration') }
+    context "sektion" do
+      let(:role) { build_role(:bluemlisalp_funktionaere, "Administration") }
 
       [:summon, :cancel].each do |action|
         it "may #{action} for event in layer" do

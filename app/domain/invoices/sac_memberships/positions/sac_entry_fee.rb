@@ -9,13 +9,11 @@ module Invoices
   module SacMemberships
     module Positions
       class SacEntryFee < Base
-
         private
 
         def fee_attr_prefix
           :entry_fee
         end
-
       end
     end
   end

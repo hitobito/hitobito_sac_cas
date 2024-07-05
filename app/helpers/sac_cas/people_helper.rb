@@ -12,7 +12,7 @@ module SacCas::PeopleHelper
     if person == main_person
       f(true)
     elsif main_person.nil?
-      ti('.unknown')
+      ti(".unknown")
     elsif can?(:show, main_person)
       link_to(main_person.to_s, main_person)
     else
@@ -25,7 +25,7 @@ module SacCas::PeopleHelper
     qr_code = verification_qr_code.generate
     qr_code_png = qr_code.as_png(size: 220)
     qr_code_data = Base64.encode64(qr_code_png.to_blob)
-    default_options = { alt: 'QR Code', size: '220x220' }
+    default_options = {alt: "QR Code", size: "220x220"}
     options = default_options.merge(html_options)
     image = image_tag("data:image/png;base64,#{qr_code_data}", options)
 
@@ -44,7 +44,7 @@ module SacCas::PeopleHelper
 
   def people_sac_membership_qr_code_clickable(verification_qr_code, image)
     verify_url = verification_qr_code.verify_url
-    link_to(verify_url, target: '_blank', rel: 'noopener') do
+    link_to(verify_url, target: "_blank", rel: "noopener") do
       image
     end
   end

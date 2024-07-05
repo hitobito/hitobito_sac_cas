@@ -24,7 +24,7 @@ class Wizards::Steps::MainEmail < Wizards::Step
     return if email.blank?
 
     if Person.exists?(email: email)
-      errors.add(:email, I18n.t('activerecord.errors.models.person.attributes.email.taken'))
+      errors.add(:email, I18n.t("activerecord.errors.models.person.attributes.email.taken"))
     end
   end
 end

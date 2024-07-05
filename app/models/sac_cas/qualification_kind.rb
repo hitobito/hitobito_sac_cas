@@ -9,7 +9,6 @@ module SacCas::QualificationKind
   extend ActiveSupport::Concern
 
   def finish_at_manually_editable?
-    self.validity.nil?
+    validity.nil?
   end
-
 end

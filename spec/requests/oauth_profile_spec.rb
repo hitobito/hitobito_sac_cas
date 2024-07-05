@@ -5,31 +5,29 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
-RSpec.describe 'GET oauth/profile', type: :request do
+RSpec.describe "GET oauth/profile", type: :request do
   let(:application) { Fabricate(:application) }
-  let(:user)        { people(:mitglied) }
+  let(:user) { people(:mitglied) }
   let(:json) { JSON.parse(response.body) }
-  let(:token)  do
+  let(:token) do
     Fabricate(:access_token, application: application, scopes: "name #{scope}",
-                             resource_owner_id: user.id)
+      resource_owner_id: user.id)
   end
 
-
-
   def make_request(skip_checks: true)
-    get '/oauth/profile', headers: { Authorization: 'Bearer ' + token.token, 'X-Scope': scope }
+    get "/oauth/profile", headers: {Authorization: "Bearer " + token.token, "X-Scope": scope}
     return if skip_checks
 
     expect(response).to have_http_status(:ok)
-    expect(response.content_type).to eq('application/json; charset=utf-8')
+    expect(response.content_type).to eq("application/json; charset=utf-8")
   end
 
   context 'with scope "name" in request' do
     let(:scope) { :name }
 
-    it 'succeeds' do
+    it "succeeds" do
       make_request
       expect(json).to match({
         id: user.id,
@@ -52,9 +50,9 @@ RSpec.describe 'GET oauth/profile', type: :request do
   end
 
   context 'with scope "with_roles" in request' do
-    let(:scope) { 'with_roles' }
+    let(:scope) { "with_roles" }
 
-    it 'succeeds' do
+    it "succeeds" do
       make_request
       expect(json).to match({
         id: user.id,
@@ -82,17 +80,17 @@ RSpec.describe 'GET oauth/profile', type: :request do
         roles: [{
           group_id: user.roles.first.group_id,
           group_name: user.roles.first.group.name,
-          role: 'Group::SektionsMitglieder::Mitglied',
-          role_class: 'Group::SektionsMitglieder::Mitglied',
-          role_name: 'Mitglied (Stammsektion)',
+          role: "Group::SektionsMitglieder::Mitglied",
+          role_class: "Group::SektionsMitglieder::Mitglied",
+          role_name: "Mitglied (Stammsektion)",
           permissions: [],
           layer_group_id: user.roles.first.group.layer_group_id
         }, {
           group_id: user.roles.second.group_id,
           group_name: user.roles.second.group.name,
-          role: 'Group::SektionsMitglieder::MitgliedZusatzsektion',
-          role_class: 'Group::SektionsMitglieder::MitgliedZusatzsektion',
-          role_name: 'Mitglied (Zusatzsektion)',
+          role: "Group::SektionsMitglieder::MitgliedZusatzsektion",
+          role_class: "Group::SektionsMitglieder::MitgliedZusatzsektion",
+          role_name: "Mitglied (Zusatzsektion)",
           permissions: [],
           layer_group_id: user.roles.second.group.layer_group_id
         }]
@@ -101,18 +99,17 @@ RSpec.describe 'GET oauth/profile', type: :request do
   end
 
   context 'with scope "user_groups" in request' do
-    let(:scope) { 'user_groups' }
+    let(:scope) { "user_groups" }
 
-    it 'succeeds' do
+    it "succeeds" do
       make_request
-      expect(json['user_groups']).to include 'SAC_member'
+      expect(json["user_groups"]).to include "SAC_member"
     end
 
-    it 'is forbidden to be used without names scope on token' do
-      token.update!(scopes: 'user_groups')
+    it "is forbidden to be used without names scope on token" do
+      token.update!(scopes: "user_groups")
       make_request
       expect(response).to have_http_status(:forbidden)
     end
   end
-
 end

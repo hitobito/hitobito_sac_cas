@@ -5,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 module SacCas::Invoice
   extend ActiveSupport::Concern
 
-  INVOICE_KINDS = %w(membership course).freeze
+  INVOICE_KINDS = %w[membership course].freeze
 
   prepended do
     i18n_enum :invoice_kind, INVOICE_KINDS

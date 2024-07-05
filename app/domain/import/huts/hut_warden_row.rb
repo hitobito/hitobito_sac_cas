@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
   class HutWardenRow
-
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4005.0'
+      row[:verteilercode].to_s == "4005.0"
     end
 
     def initialize(row)
@@ -25,17 +24,17 @@ module Import::Huts
       unless group_id
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut wardens belong to things other than huts
-        puts "Skipping hut warden for unknown hut #{navision_id(@row)}"
+        Rails.logger.debug { "Skipping hut warden for unknown hut #{navision_id(@row)}" }
         return
       end
       person.roles.where(
         type: Group::SektionsHuette::Huettenwart.name,
-        group_id: group_id,
+        group_id: group_id
       ).destroy_all
       person.roles.build(
         type: Group::SektionsHuette::Huettenwart.name,
         created_at: created_at(@row),
-        group_id: group_id,
+        group_id: group_id
       )
       person.save!
     end
@@ -55,11 +54,11 @@ module Import::Huts
       # TODO handle nonexistent group
       Group.find_by(type: Group::SektionsHuette.name, navision_id: navision_id(row)).id
     rescue NoMethodError
-      puts "Failed to find existing hut with navision id #{navision_id(row)}"
+      Rails.logger.debug { "Failed to find existing hut with navision id #{navision_id(row)}" }
     end
 
     def navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
 
     def first_name(row)
@@ -71,7 +70,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ''))
+      Integer(row[:related_navision_id].to_s.sub(/^[0]*/, ""))
     end
 
     def created_at(row)

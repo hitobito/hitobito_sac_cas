@@ -10,7 +10,7 @@ module SacCas::HouseholdAsideComponent
 
   prepended do
     def section_name
-      t('.section_name')
+      t(".section_name")
     end
   end
 end

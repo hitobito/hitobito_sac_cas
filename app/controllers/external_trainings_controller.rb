@@ -9,14 +9,14 @@ class ExternalTrainingsController < CrudController
   self.nesting = Group, Person
 
   self.permitted_attrs = [:event_kind_id,
-                          :name,
-                          :provider,
-                          :start_at,
-                          :finish_at,
-                          :training_days,
-                          :link,
-                          :remarks,
-                          { other_people_ids: [] }]
+    :name,
+    :provider,
+    :start_at,
+    :finish_at,
+    :training_days,
+    :link,
+    :remarks,
+    {other_people_ids: []}]
 
   decorates :group, :person
 
@@ -74,7 +74,7 @@ class ExternalTrainingsController < CrudController
 
     names = [entry.person.to_s] + Person.where(id: entry.other_people_ids).map(&:to_s)
     I18n.t("external_trainings.create.flash.success_multiple",
-           model: full_entry_label,
-           names: names.to_sentence)
+      model: full_entry_label,
+      names: names.to_sentence)
   end
 end

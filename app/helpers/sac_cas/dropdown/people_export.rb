@@ -9,8 +9,8 @@ module SacCas::Dropdown::PeopleExport
   def tabular_links(format)
     super.tap do |item|
       item.sub_items << Dropdown::Item.new(translate(:recipients),
-                                           params.merge(format: format, recipients: true),
-                                           data: { checkable: true })
+        params.merge(format: format, recipients: true),
+        data: {checkable: true})
     end
   end
 end

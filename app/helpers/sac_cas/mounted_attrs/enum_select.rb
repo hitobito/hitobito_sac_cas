@@ -7,7 +7,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::MountedAttrs::EnumSelect
-
   private
 
   def option_label(option)

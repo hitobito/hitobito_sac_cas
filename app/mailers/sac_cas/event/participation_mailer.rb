@@ -8,7 +8,7 @@
 module SacCas::Event::ParticipationMailer
   extend ActiveSupport::Concern
 
-  CONTENT_REJECTED_PARTICIPATION = 'event_participation_rejected'
+  CONTENT_REJECTED_PARTICIPATION = "event_participation_rejected"
 
   def reject(participation)
     @participation = participation

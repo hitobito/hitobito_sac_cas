@@ -7,10 +7,9 @@
 
 module Export::Tabular::People
   class SacMitglieder < Export::Tabular::SacGroupPeopleBase
-
     def initialize(group)
       unless group.is_a?(Group::Sektion) || group.is_a?(Group::Ortsgruppe)
-        raise ArgumentError, 'Argument must be a Sektion or Ortsgruppe'
+        raise ArgumentError, "Argument must be a Sektion or Ortsgruppe"
       end
 
       @group = group
@@ -61,19 +60,18 @@ module Export::Tabular::People
     private
 
     def mitglieder
-      Person.
-        where(roles: {
-                group_id: non_layer_children_ids,
-                type: SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES
-              }).
-        joins(:roles).
-        includes(:phone_numbers, :roles_with_deleted, roles: :group).
-        distinct
+      Person
+        .where(roles: {
+          group_id: non_layer_children_ids,
+          type: SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES
+        })
+        .joins(:roles)
+        .includes(:phone_numbers, :roles_with_deleted, roles: :group)
+        .distinct
     end
 
     def non_layer_children_ids
       group.children.reject(&:layer?).map(&:id)
     end
-
   end
 end

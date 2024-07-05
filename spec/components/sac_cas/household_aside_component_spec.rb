@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe HouseholdAsideComponent, type: :component do
   let(:familienmitglied) { people(:familienmitglied) }
@@ -16,13 +16,13 @@ describe HouseholdAsideComponent, type: :component do
 
   subject(:component) { described_class.new(person: familienmitglied, group: group) }
 
-  it 'returns the humanized name of the Household model' do
+  it "returns the humanized name of the Household model" do
     stub_can(:show, true)
     stub_can(:create_households, true)
     stub_can(:set_sac_family_main_person, true)
 
     rendered_component = render_inline(component)
-    expect(rendered_component).to have_selector('h2', text: 'Familie')
+    expect(rendered_component).to have_selector("h2", text: "Familie")
   end
 
   private

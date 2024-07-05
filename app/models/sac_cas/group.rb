@@ -5,7 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 module SacCas::Group
   extend ActiveSupport::Concern
 
@@ -22,7 +21,7 @@ module SacCas::Group
   end
 
   def navision_id_padded
-    navision_id&.to_s&.rjust(8, '0')
+    navision_id&.to_s&.rjust(8, "0")
   end
 
   def sektion_or_ortsgruppe?

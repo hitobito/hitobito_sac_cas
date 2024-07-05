@@ -7,10 +7,8 @@
 
 class SearchStrategies::SqlConditionBuilder
   class IdMatcher < Matcher
-
     def applies?
       /^\d+$/.match(@word)
     end
-
   end
 end

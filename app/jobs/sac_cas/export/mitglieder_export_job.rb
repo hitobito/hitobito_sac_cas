@@ -6,23 +6,23 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
-  ENCODING = 'ISO-8859-1'
+  ENCODING = "ISO-8859-1"
 
   self.parameters = PARAMETERS + [:group_id]
 
-  def initialize(user_id, group_id, **options)
+  def initialize(user_id, group_id, **)
     @group_id = group_id
     filename = "Adressen_#{group.navision_id_padded}"
-    super(:csv, user_id, filename: filename, encoding: ENCODING, **options)
+    super(:csv, user_id, filename: filename, encoding: ENCODING, **)
   end
 
   def data
     tabular = Export::Tabular::People::SacMitglieder.new(group)
     [
       Export::Csv::Generator.new(tabular,
-                                 encoding: ENCODING,
-                                 utf8_bom: false,
-                                 col_sep: '$').call,
+        encoding: ENCODING,
+        utf8_bom: false,
+        col_sep: "$").call,
       summary_line(tabular)
     ].join
   end
@@ -36,14 +36,14 @@ class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
   def summary_line(tabular)
     navision_id = group.navision_id_padded
     count = tabular.list.size
-    date = I18n.l(Time.zone.now.to_date, format: '%d.%m.%Y')
-    time = Time.zone.now.strftime('%H:%M')
+    date = I18n.l(Time.zone.now.to_date, format: "%d.%m.%Y")
+    time = Time.zone.now.strftime("%H:%M")
     [
-      '* * * Dateiende * * *',
+      "* * * Dateiende * * *",
       navision_id,
       "Anzahl Datensätze: #{count}",
       date,
       time
-    ].join(' / ').encode(ENCODING)
+    ].join(" / ").encode(ENCODING)
   end
 end

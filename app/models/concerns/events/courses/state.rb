@@ -12,14 +12,14 @@ module Events::Courses::State
     # key: current state
     # value: possible next state
     SAC_COURSE_STATES =
-      { created: [:application_open],
-        application_open: [:application_paused, :created, :canceled],
-        application_paused: [:application_open],
-        application_closed: [:assignment_closed, :canceled],
-        assignment_closed: [:ready, :application_closed, :canceled],
-        ready: [:closed, :assignment_closed, :canceled],
-        canceled: [:application_open],
-        closed: [:ready] }.freeze
+      {created: [:application_open],
+       application_open: [:application_paused, :created, :canceled],
+       application_paused: [:application_open],
+       application_closed: [:assignment_closed, :canceled],
+       assignment_closed: [:ready, :application_closed, :canceled],
+       ready: [:closed, :assignment_closed, :canceled],
+       canceled: [:application_open],
+       closed: [:ready]}.freeze
 
     self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
 
@@ -51,7 +51,7 @@ module Events::Courses::State
     end
 
     def rejected_participants
-      participations.where(state: 'rejected')
+      participations.where(state: "rejected")
     end
   end
 

@@ -5,11 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::People::SacRecipients do
   let(:group) { groups(:bluemlisalp) }
   let(:list) { people(:mitglied, :familienmitglied, :abonnent) }
+
   subject(:tabular) { described_class.new(list, group) }
 
   its(:model_class) { is_expected.to eq Person }
@@ -17,20 +18,19 @@ describe Export::Tabular::People::SacRecipients do
 
   its(:attribute_labels) do
     is_expected.to eq(
-      id: 'Navision-Nr.',
-      salutation: 'Anrede',
-      first_name: 'Vorname',
-      last_name: 'Name',
-      adresszusatz: 'Adresszusatz',
-      address: 'Strasse',
-      postfach: 'Postfach',
-      zip_code: 'PLZ',
-      town: 'Ort',
-      country: 'Land',
-      layer_navision_id: 'Sektion',
-      anzahl: 'Anzahl',
-      email: 'E-Mail'
+      id: "Navision-Nr.",
+      salutation: "Anrede",
+      first_name: "Vorname",
+      last_name: "Name",
+      adresszusatz: "Adresszusatz",
+      address: "Strasse",
+      postfach: "Postfach",
+      zip_code: "PLZ",
+      town: "Ort",
+      country: "Land",
+      layer_navision_id: "Sektion",
+      anzahl: "Anzahl",
+      email: "E-Mail"
     )
   end
-
 end

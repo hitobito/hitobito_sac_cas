@@ -5,22 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SacCas::Event::ParticipationDecorator do
   let(:admin) { people(:admin) }
   let(:participation) { Fabricate.build(:event_participation, person: admin) }
+
   subject(:decorator) { participation.decorate }
 
-  describe '#to_s' do
-    it 'returns person name' do
-      expect(decorator.to_s).to eq 'Anna Admin'
+  describe "#to_s" do
+    it "returns person name" do
+      expect(decorator.to_s).to eq "Anna Admin"
     end
 
-    it 'returns person name even when in revoked state' do
-      allow(participation.event).to receive(:revoked_participation_states).and_return(%w(revoked))
-      participation.state = 'revoked'
-      expect(decorator.to_s).to eq 'Anna Admin'
+    it "returns person name even when in revoked state" do
+      allow(participation.event).to receive(:revoked_participation_states).and_return(%w[revoked])
+      participation.state = "revoked"
+      expect(decorator.to_s).to eq "Anna Admin"
     end
   end
 end

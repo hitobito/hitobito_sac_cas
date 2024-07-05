@@ -5,17 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe QualificationsController do
-
   before { sign_in(person) }
-  let(:params) { { group_id: person.primary_group.id, person_id: person.id } }
+
+  let(:params) { {group_id: person.primary_group.id, person_id: person.id} }
   let(:person) { people(:tourenchef) }
 
-  describe 'as tourenchef' do
-    context 'GET new' do
-      it 'only renders editable qualification kinds' do
+  describe "as tourenchef" do
+    context "GET new" do
+      it "only renders editable qualification kinds" do
         visible = Fabricate(:qualification_kind, tourenchef_may_edit: true)
         invisible = Fabricate(:qualification_kind, tourenchef_may_edit: false)
         get :new, params: params
@@ -26,14 +26,14 @@ describe QualificationsController do
     end
   end
 
-  context 'POST create' do
-    let(:qualification_params) { { qualification: { start_at: '01.03.2024', finish_at: '31.03.2024' } } }
+  context "POST create" do
+    let(:qualification_params) { {qualification: {start_at: "01.03.2024", finish_at: "31.03.2024"}} }
 
-    it 'ignores finish_at for qualification kinds with validity' do
+    it "ignores finish_at for qualification kinds with validity" do
       qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
       end.to change { Qualification.count }.by(1)
 
       qualification = person.qualifications.last
@@ -41,11 +41,11 @@ describe QualificationsController do
       expect(qualification.finish_at).to eq(qualification.start_at.end_of_year + 2.years)
     end
 
-    it 'allows finish_at for qualification kinds without validity' do
+    it "allows finish_at for qualification kinds without validity" do
       qualification_kind_id = Fabricate(:qualification_kind, validity: nil).id
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
       end.to change { Qualification.count }.by(1)
 
       qualification = person.qualifications.last
@@ -53,12 +53,12 @@ describe QualificationsController do
       expect(qualification.finish_at).to eq(Date.new(2024, 3, 31))
     end
 
-    it 'is invalid when start_at is in the future' do
+    it "is invalid when start_at is in the future" do
       qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
       travel_to Date.new(2024, 1, 1)
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: { qualification_kind_id: qualification_kind_id }))
+        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
       end.not_to change { Qualification.count }
 
       expect(response).not_to be_successful

@@ -7,7 +7,7 @@
 
 module ExternalTrainings
   class Qualifier < Event::Qualifier
-    ROLE = 'participant'.freeze
+    ROLE = "participant"
 
     private
 
@@ -39,7 +39,7 @@ module ExternalTrainings
     def destroy_later_qualifications
       @person.qualifications
         .where(qualification_kind: qualifying_and_prolonging_kinds)
-        .where('qualified_at > ?', @event.qualification_date)
+        .where("qualified_at > ?", @event.qualification_date)
         .destroy_all
     end
 

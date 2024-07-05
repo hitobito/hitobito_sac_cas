@@ -7,7 +7,6 @@
 
 module Export::Tabular
   class SacGroupPeopleBase < Export::Tabular::Base
-
     attr_reader :group
 
     def initialize(list, group)
@@ -29,5 +28,4 @@ module Export::Tabular
       @row_class ||= "#{self.class.name.to_s.singularize}Row".constantize
     end
   end
-
 end

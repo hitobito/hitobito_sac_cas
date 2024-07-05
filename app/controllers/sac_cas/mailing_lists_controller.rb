@@ -6,12 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::MailingListsController
-
   # Discard params for which the current_user has no update permission.
   # The form should not have these fields in the first place, but to be sure
   # we simply ignore them here.
   def permitted_params
     super.then { |p| p.select { |attr| can?(:update, entry, attr) } }
   end
-
 end

@@ -23,4 +23,3 @@
 class CostUnit < ApplicationRecord
   include CostCommon
 end
-

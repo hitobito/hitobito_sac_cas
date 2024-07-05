@@ -5,90 +5,92 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Memberships::TerminateSacMembership do
   let(:reason) { termination_reasons(:moved) }
   let(:person) { role.person }
   let(:role) { roles(:mitglied) }
 
-  let(:params) { { terminate_on: Time.zone.yesterday, termination_reason_id: reason.id } }
+  let(:params) { {terminate_on: Time.zone.yesterday, termination_reason_id: reason.id} }
+
   subject(:termination) { described_class.new(role, params.delete(:terminate_on), **params) }
 
-  describe 'exceptions' do
-    it 'raises when role is not a mitglied role' do
+  describe "exceptions" do
+    it "raises when role is not a mitglied role" do
       expect do
         described_class.new(roles(:mitglied_zweitsektion), Time.zone.yesterday)
-      end.to raise_error('not a member')
+      end.to raise_error("not a member")
     end
 
-    it 'raises when role is already terminated' do
+    it "raises when role is already terminated" do
       role.update_columns(terminated: true)
       expect do
         described_class.new(role, Time.zone.yesterday)
-      end.to raise_error('already terminated')
+      end.to raise_error("already terminated")
     end
 
-    it 'raises when role is already deleted' do
+    it "raises when role is already deleted" do
       role.update_columns(deleted_at: Time.zone.now)
       expect do
         described_class.new(role, Time.zone.yesterday)
-      end.to raise_error('already deleted')
+      end.to raise_error("already deleted")
     end
 
-    it 'raises if not main family person' do
+    it "raises if not main family person" do
       expect do
         described_class.new(roles(:familienmitglied2), Time.zone.yesterday)
-      end.to raise_error('not family main person')
+      end.to raise_error("not family main person")
     end
   end
 
-  describe 'validations' do
-    it 'is valid with defined params' do
+  describe "validations" do
+    it "is valid with defined params" do
       expect(termination).to be_valid
     end
 
-    it 'is not valid without termination_reason_id' do
+    it "is not valid without termination_reason_id" do
       params[:termination_reason_id] = nil
       expect(termination).not_to be_valid
       expect(termination).to have(1).error_on(:termination_reason_id)
     end
 
-    describe 'terminate_on' do
-      it 'accepts end of year' do
+    describe "terminate_on" do
+      it "accepts end of year" do
         params[:terminate_on] = Time.zone.now.end_of_year.to_date
         expect(termination).to be_valid
       end
 
-      it 'rejects tomorrow or today' do
+      it "rejects tomorrow or today" do
         params[:terminate_on] = Time.zone.tomorrow
         expect(termination).not_to be_valid
         expect(termination).to have(1).error_on(:terminate_on)
       end
     end
 
-    context 'family' do
+    context "family" do
       let(:role) { roles(:familienmitglied) }
 
-      it 'is valid with defined params' do
+      it "is valid with defined params" do
         expect(termination).to be_valid
       end
     end
   end
 
-  describe 'save' do
-    it 'terminates mitglied and zusatzsektion role' do
+  describe "save" do
+    it "terminates mitglied and zusatzsektion role" do
       expect do
         expect(termination.save!).to eq true
       end.to change { person.roles.count }.by(-2)
     end
 
-    context 'termination at the end of the year' do
+    context "termination at the end of the year" do
       let(:end_of_year) { Time.zone.now.end_of_year.to_date }
       let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
+
       before { params[:terminate_on] = end_of_year }
 
-      it 'does not adjust delete_on if already schedule to delete earlier' do
+      it "does not adjust delete_on if already schedule to delete earlier" do
         expect do
           expect(termination.save!).to eq true
         end.not_to(change { person.roles.count })
@@ -96,7 +98,7 @@ describe Memberships::TerminateSacMembership do
         expect(mitglied_zweitsektion.reload.delete_on).to eq Date.new(2015, 12, 31)
       end
 
-      it 'does adjust delete_on if not scheduled' do
+      it "does adjust delete_on if not scheduled" do
         Role.update_all(delete_on: nil)
         expect do
           expect(termination.save!).to eq true
@@ -106,17 +108,17 @@ describe Memberships::TerminateSacMembership do
       end
     end
 
-    describe 'person' do
+    describe "person" do
       let(:root) { groups(:root) }
       let(:mailing_list) { mailing_lists(:newsletter) }
 
-      it 'updates termination_reason' do
+      it "updates termination_reason" do
         expect do
           expect(termination.save!).to eq true
         end.to change { role.reload.termination_reason }.from(nil).to(reason)
       end
 
-      describe 'data_retention' do
+      describe "data_retention" do
         let(:abonnenten) { groups(:abonnenten) }
         let!(:basic) do
           Fabricate(:group, type: Group::AboBasicLogin.sti_name, parent: abonnenten)
@@ -125,7 +127,7 @@ describe Memberships::TerminateSacMembership do
 
         before { params[:data_retention_consent] = true }
 
-        it 'updates data_retention_consent flag and creates future basic login role' do
+        it "updates data_retention_consent flag and creates future basic login role" do
           expect do
             expect(termination.save!).to eq true
           end.to change { person.reload.data_retention_consent }.from(false).to(true)
@@ -133,7 +135,7 @@ describe Memberships::TerminateSacMembership do
           expect(basic_login.convert_on).to eq Time.zone.today
         end
 
-        it 'only updates consent when group is missing' do
+        it "only updates consent when group is missing" do
           basic.destroy
           expect do
             expect(termination.save!).to eq true
@@ -141,24 +143,24 @@ describe Memberships::TerminateSacMembership do
         end
       end
 
-      describe 'subscriptions' do
-        it 'destroys existing subscriptions' do
+      describe "subscriptions" do
+        it "destroys existing subscriptions" do
           Fabricate(:subscription, subscriber: person, mailing_list: mailing_list)
           expect do
             expect(termination.save!).to eq true
           end.to change { person.subscriptions.count }.by(-1)
         end
 
-        describe 'root group newsletter' do
+        describe "root group newsletter" do
           before { root.update!(sac_newsletter_mailing_list_id: mailing_list.id) }
 
-          it 'noops when param is not set' do
+          it "noops when param is not set" do
             expect do
               expect(termination.save!).to eq true
             end.not_to(change { person.subscriptions.count })
           end
 
-          it 'creates newsletter subscription' do
+          it "creates newsletter subscription" do
             params[:subscribe_newsletter] = true
             expect do
               expect(termination.save!).to eq true
@@ -166,16 +168,16 @@ describe Memberships::TerminateSacMembership do
           end
         end
 
-        describe 'root group fundraising' do
+        describe "root group fundraising" do
           before { root.update!(sac_fundraising_mailing_list_id: mailing_list.id) }
 
-          it 'noops when param is not set' do
+          it "noops when param is not set" do
             expect do
               expect(termination.save!).to eq true
             end.not_to(change { person.subscriptions.count })
           end
 
-          it 'creates newsletter subscription' do
+          it "creates newsletter subscription" do
             params[:subscribe_fundraising_list] = true
             expect do
               expect(termination.save!).to eq true
@@ -184,10 +186,10 @@ describe Memberships::TerminateSacMembership do
         end
       end
 
-      describe 'other relevant roles' do
+      describe "other relevant roles" do
         def create_tourenleiter
           Fabricate(:qualification, person: person,
-                                    qualification_kind: qualification_kinds(:ski_leader))
+            qualification_kind: qualification_kinds(:ski_leader))
           Fabricate(
             Group::SektionsTourenkommission::Tourenleiter.sti_name,
             person: person,
@@ -205,7 +207,7 @@ describe Memberships::TerminateSacMembership do
           )
         end
 
-        it 'has expected relevant roles' do
+        it "has expected relevant roles" do
           expect(described_class::RELEVANT_ROLES).to eq [
             Group::SektionsMitglieder::Mitglied,
             Group::SektionsMitglieder::MitgliedZusatzsektion,
@@ -225,14 +227,14 @@ describe Memberships::TerminateSacMembership do
           ]
         end
 
-        it 'terminates tourenleiter role' do
+        it "terminates tourenleiter role" do
           create_tourenleiter
           expect do
             expect(termination.save!).to eq true
           end.to change { person.roles.count }.by(-3)
         end
 
-        it 'terminates future tourenleiter role' do
+        it "terminates future tourenleiter role" do
           create_future_tourenleiter
           expect do
             expect(termination.save!).to eq true
@@ -241,17 +243,16 @@ describe Memberships::TerminateSacMembership do
       end
     end
 
-    context 'family' do
+    context "family" do
       let(:role) { roles(:familienmitglied) }
 
-      it 'terminates all family roles' do
+      it "terminates all family roles" do
         expect do
           expect(termination).to be_valid
           expect(termination.save!).to eq true
         end.to change { person.roles.count }.by(-2)
-                                            .and change { Role.count }.by(-6)
+          .and change { Role.count }.by(-6)
       end
     end
   end
-
 end

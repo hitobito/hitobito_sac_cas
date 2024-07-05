@@ -11,11 +11,11 @@ module Import
       attr_reader :row, :placeholder_contact_group, :current_ability
 
       BEITRAGSKATEGORIEN = {
-        'EINZEL' => :adult,
-        'JUGEND' => :youth,
-        'FAMILIE' => :family,
-        'FREI KIND' => :family,
-        'FREI FAM' => :family
+        "EINZEL" => :adult,
+        "JUGEND" => :youth,
+        "FAMILIE" => :family,
+        "FREI KIND" => :family,
+        "FREI FAM" => :family
       }.freeze
 
       TARGET_ROLE_TYPE = Group::SektionsMitglieder::Mitglied
@@ -106,16 +106,16 @@ module Import
       def remove_placeholder_contact_role
         Group::ExterneKontakte::Kontakt
           .where(person: person,
-                 group: placeholder_contact_group)
+            group: placeholder_contact_group)
           .find_each(&:really_destroy!)
       end
 
       def build_role
         return Role.new unless person
 
-        person.roles.
-          where(group_id: @group&.id, type: TARGET_ROLE_TYPE.sti_name).
-          first_or_initialize.tap do |role|
+        person.roles
+          .where(group_id: @group&.id, type: TARGET_ROLE_TYPE.sti_name)
+          .first_or_initialize.tap do |role|
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
             created_at: joining_date,
@@ -156,40 +156,40 @@ module Import
       end
 
       def navision_id
-        Integer(row[:navision_id].to_s.sub!(/^0*/, ''))
+        Integer(row[:navision_id].to_s.sub!(/^0*/, ""))
       end
 
       def quitted?
-        row[:member_type] == 'Ausgetreten'
+        row[:member_type] == "Ausgetreten"
       end
 
       def abo?
-        row[:member_type] == 'Abonnent'
+        row[:member_type] == "Abonnent"
       end
 
       def beguenstigt?
-        row[:beguenstigt] == 'Ja'
+        row[:beguenstigt] == "Ja"
       end
 
       def ehrenmitglied?
-        row[:ehrenmitglied] == 'Ja'
+        row[:ehrenmitglied] == "Ja"
       end
 
       def family_main_person?
-        row[:beitragskategorie] == 'FAMILIE'
+        row[:beitragskategorie] == "FAMILIE"
       end
 
       def build_error_messages
         return "Person #{navision_id} existiert nicht" unless person
 
         [role.errors.full_messages, member_type_error]
-          .flatten.compact.join(', ').tap do |messages|
+          .flatten.compact.join(", ").tap do |messages|
             messages.prepend("#{self}: ") if messages.present?
           end
       end
 
       def member_type_error
-        'Abonnent ist nicht gültig' if abo?
+        "Abonnent ist nicht gültig" if abo?
       end
     end
   end

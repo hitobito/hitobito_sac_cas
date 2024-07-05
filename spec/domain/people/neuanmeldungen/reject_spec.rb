@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Reject do
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
@@ -28,7 +28,7 @@ describe People::Neuanmeldungen::Reject do
     described_class.new(group: group, people_ids: people_ids, **opts)
   end
 
-  it 'deletes the Neuanmeldung roles' do
+  it "deletes the Neuanmeldung roles" do
     neuanmeldung_einzel = create_role(:adult)
     neuanmeldung_familie = create_role(:family)
     neuanmeldung_jugend = create_role(:youth)
@@ -42,11 +42,11 @@ describe People::Neuanmeldungen::Reject do
     expect(neuanmeldung_familie.person.roles).to have(1).item
   end
 
-  it 'disables the Person login' do
+  it "disables the Person login" do
     neuanmeldung.person.update!(
-      email: 'dummy@example.com',
-      password: 'my-password1',
-      password_confirmation: 'my-password1'
+      email: "dummy@example.com",
+      password: "my-password1",
+      password_confirmation: "my-password1"
     )
     expect(neuanmeldung.person.login_status).to eq :login
 
@@ -55,21 +55,21 @@ describe People::Neuanmeldungen::Reject do
     end.to change { neuanmeldung.person.reload.login_status }.to(:no_login)
   end
 
-  it 'adds a Person#note if a note was provided' do
-    expect { rejector(note: 'my note').call }.
-      to change { neuanmeldung.person.reload.notes.count }.by(1)
+  it "adds a Person#note if a note was provided" do
+    expect { rejector(note: "my note").call }
+      .to change { neuanmeldung.person.reload.notes.count }.by(1)
 
     note = neuanmeldung.person.notes.last
-    expect(note.text).to eq 'my note'
+    expect(note.text).to eq "my note"
     expect(note.author).to eq nil
   end
 
-  it 'adds a Person#note with author if an author was provided' do
-    expect { rejector(note: 'my note', author: people(:mitglied)).call }.
-      to change { neuanmeldung.person.reload.notes.count }.by(1)
+  it "adds a Person#note with author if an author was provided" do
+    expect { rejector(note: "my note", author: people(:mitglied)).call }
+      .to change { neuanmeldung.person.reload.notes.count }.by(1)
 
     note = neuanmeldung.person.notes.last
-    expect(note.text).to eq 'my note'
+    expect(note.text).to eq "my note"
     expect(note.author).to eq people(:mitglied)
   end
 end

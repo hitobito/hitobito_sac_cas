@@ -14,7 +14,6 @@ class ExternalTrainingAbility < AbilityDsl::Base
     permission(:layer_and_below_full).may(:create, :destroy)
       .in_same_layer_or_below_unless_sektions_mitgliederverwaltung
 
-
     permission(:group_full).may(:create, :destroy).in_same_group
     permission(:group_and_below_full).may(:create, :destroy).in_same_group_or_below
   end

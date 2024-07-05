@@ -7,7 +7,6 @@
 
 module Dropdown::Events::Courses
   class State < ::Dropdown::Base
-
     attr_reader :course, :template
 
     delegate :t, to: :template
@@ -15,7 +14,7 @@ module Dropdown::Events::Courses
     def initialize(template, course)
       @course = course
       @template = template
-      super(template, current_state_label, :'exchange-alt')
+      super(template, current_state_label, :"exchange-alt")
       init_items
     end
 
@@ -27,7 +26,7 @@ module Dropdown::Events::Courses
 
     def init_items
       course.available_states.each do |step|
-        link = template.state_group_event_path(template.params[:group_id], course, { state: step })
+        link = template.state_group_event_path(template.params[:group_id], course, {state: step})
         add_item(label_for_step(step), link, method: :put)
       end
     end

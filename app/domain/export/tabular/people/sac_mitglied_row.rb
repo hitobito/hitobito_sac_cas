@@ -7,11 +7,10 @@
 
 module Export::Tabular::People
   class SacMitgliedRow < Export::Tabular::Row
-
     BEITRAGSKATEGORIEN = {
-      adult: 'EINZEL',
-      youth: 'JUGEND',
-      family: 'FAMILIE'
+      adult: "EINZEL",
+      youth: "JUGEND",
+      family: "FAMILIE"
     }.stringify_keys.freeze
 
     attr_reader :group
@@ -45,7 +44,7 @@ module Export::Tabular::People
     # Begünstigt anhand Präsenz einer aktiven Rolle vom Typ Beguenstigt im exportierten Layer.
     # Mögliche Werte: Yes / No
     def begünstigt
-      role_in_layer?(Group::SektionsMitglieder::Beguenstigt) ? 'Yes' : 'No'
+      role_in_layer?(Group::SektionsMitglieder::Beguenstigt) ? "Yes" : "No"
     end
 
     # Beitragskategorie der Person in der exportierten Sektion / Ortsgruppe
@@ -65,18 +64,18 @@ module Export::Tabular::People
 
     # Geburtsdatum im Format dd.mm.yyyy
     def birthday
-      entry.birthday&.strftime('%d.%m.%Y')
+      entry.birthday&.strftime("%d.%m.%Y")
     end
 
     # Land als zwei-Buchstaben-Kürzel, z.B. DE, FR etc.; wenn Schweiz dann leer
     def country
-      entry.country unless entry.country == 'CH'
+      entry.country unless entry.country == "CH"
     end
 
     # Ehrenmitglied anhand Präsenz einer aktiven Rolle vom Typ Ehrenmitglied im exportierten Layer.
     # Mögliche Werte: Yes / No
     def ehrenmitglied
-      role_in_layer?(Group::SektionsMitglieder::Ehrenmitglied) ? 'Yes' : 'No'
+      role_in_layer?(Group::SektionsMitglieder::Ehrenmitglied) ? "Yes" : "No"
     end
 
     # Eintrittsjahr der allerersten Mitgliederrolle dieser Person,
@@ -90,9 +89,9 @@ module Export::Tabular::People
     # Mögliche Werte: Weiblich / Männlich / Andere
     def gender
       case entry.gender
-      when 'w' then 'Weiblich'
-      when 'm' then 'Männlich'
-      else 'Andere'
+      when "w" then "Weiblich"
+      when "m" then "Männlich"
+      else "Andere"
       end
     end
 
@@ -101,9 +100,9 @@ module Export::Tabular::People
     # (Englisch als Korrespondenzsprache wird für den SAC noch in separatem Ticket deaktiviert)
     def language
       case entry.language
-      when 'de' then 'D'
-      when 'fr' then 'F'
-      when 'it' then 'ITS'
+      when "de" then "D"
+      when "fr" then "F"
+      when "it" then "ITS"
       else entry.language.upcase
       end
     end
@@ -146,11 +145,11 @@ module Export::Tabular::People
     end
 
     def method_missing(method, *args)
-      method.to_s =~ /^phone_number_(\w+)$/ ? phone_number(::Regexp.last_match(1)) : super
+      (method.to_s =~ /^phone_number_(\w+)$/) ? phone_number(::Regexp.last_match(1)) : super
     end
 
     def respond_to_missing?(method, include_private = false)
-      method.to_s.start_with?('phone_number_') || super
+      method.to_s.start_with?("phone_number_") || super
     end
 
     private
@@ -164,6 +163,5 @@ module Export::Tabular::People
     def role_in_layer?(...)
       role_in_layer(...).present?
     end
-
   end
 end

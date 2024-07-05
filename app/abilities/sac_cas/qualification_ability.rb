@@ -9,10 +9,10 @@ module SacCas::QualificationAbility
   extend ActiveSupport::Concern
 
   TOURENCHEF_ROLE_TYPES = [Group::SektionsTourenkommission::Tourenchef,
-                           Group::SektionsTourenkommission::TourenchefSommer,
-                           Group::SektionsTourenkommission::TourenchefWinter,
-                           Group::SektionsTourenkommission::TourenchefKlettern,
-                           Group::SektionsTourenkommission::TourenchefSenioren]
+    Group::SektionsTourenkommission::TourenchefSommer,
+    Group::SektionsTourenkommission::TourenchefWinter,
+    Group::SektionsTourenkommission::TourenchefKlettern,
+    Group::SektionsTourenkommission::TourenchefSenioren]
 
   included do
     on(Qualification) do
@@ -37,12 +37,12 @@ module SacCas::QualificationAbility
     return unless can_show_person?
 
     contains_any?(tourenchef_layer_group_ids,
-                  subject.person.layer_group_ids)
+      subject.person.layer_group_ids)
   end
 
   def tourenchef_layer_group_ids
     user.roles.where(type: TOURENCHEF_ROLE_TYPES)
-        .includes(:group).collect { _1.group.layer_group_id }.uniq
+      .includes(:group).collect { _1.group.layer_group_id }.uniq
   end
 
   def can_show_person?

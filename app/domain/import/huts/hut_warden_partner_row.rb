@@ -5,14 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
   class HutWardenPartnerRow
     include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4008.0'
+      row[:verteilercode].to_s == "4008.0"
     end
 
     def initialize(row)
@@ -26,19 +26,19 @@ module Import::Huts
       unless huette
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut warden partners belong to things other than huts
-        puts "Skipping hut warden partner for unknown hut #{huette_navision_id(@row)}"
+        Rails.logger.debug { "Skipping hut warden partner for unknown hut #{huette_navision_id(@row)}" }
         return
       end
       person.roles.where(
         type: Group::SektionsHuette::Andere.name,
         label: role_label(@row),
-        group_id: huette.id,
+        group_id: huette.id
       ).destroy_all
       person.roles.build(
         type: Group::SektionsHuette::Andere.name,
         label: role_label(@row),
         created_at: created_at(@row),
-        group_id: huette.id,
+        group_id: huette.id
       )
       remove_placeholder_contact_role(person)
 
@@ -59,13 +59,13 @@ module Import::Huts
     def huette(row)
       # TODO handle nonexistent group
       @huette ||= Group.find_by(type: Group::SektionsHuette.name,
-                                navision_id: huette_navision_id(row))
+        navision_id: huette_navision_id(row))
     rescue NoMethodError
-      puts "Failed to find existing hut with navision id #{huette_navision_id(row)}"
+      Rails.logger.debug { "Failed to find existing hut with navision id #{huette_navision_id(row)}" }
     end
 
     def owner_navision_id(row)
-      row[:related_navision_id].to_s.sub(/^[0]*/, '')
+      row[:related_navision_id].to_s.sub(/^[0]*/, "")
     end
 
     def first_name(row)
@@ -77,7 +77,7 @@ module Import::Huts
     end
 
     def role_label(row)
-      t(row, 'activerecord.models.group/sektions_huette/huettenwartspartner.one')
+      t(row, "activerecord.models.group/sektions_huette/huettenwartspartner.one")
     end
 
     def t(row, key)
@@ -91,7 +91,7 @@ module Import::Huts
     end
 
     def huette_navision_id(row)
-      Integer(row[:contact_navision_id].to_s.sub(/^[0]*/, ''))
+      Integer(row[:contact_navision_id].to_s.sub(/^[0]*/, ""))
     end
 
     def created_at(row)
