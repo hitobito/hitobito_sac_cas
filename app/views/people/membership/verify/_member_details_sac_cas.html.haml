@@ -1,11 +1,9 @@
-- if person
-  #member-info.mb-2
-    %div
-      =t('.membership_number', membership_number: person.membership_number)
-    %div
-      - membership_years = Person.where(id: person.id).with_membership_years.first.membership_years
-      =t('.membership_years', membership_years: membership_years)
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
 
+- if person
   #sections.pt-2.border-top.mb-2
     - main_section_role = person.roles.find_by(type: Group::SektionsMitglieder::Mitglied.sti_name)
     - if main_section_role.present?
@@ -26,3 +24,6 @@
 
   #logo-reciprocate.pt-5.border-top.mb-2
     = image_pack_tag('logo_gegenrecht.svg', alt: 'gegenrecht logo')
+#sponsors
+  %a{href: localized_sac_sponsors_url, target: '_blank'}
+    = image_pack_tag('membership_verify_partner_ad.jpg', alt: 'sponsors')
