@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-= render_attrs(entry, :created_at)
+= render_attrs(entry, :created_at, :actual_days)
 - if entry.states?
   = render_attrs(entry, :state)
 - if @event.is_a?(Event::Course) && entry.state == 'canceled'

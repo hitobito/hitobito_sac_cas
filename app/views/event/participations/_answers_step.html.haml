@@ -9,6 +9,9 @@
 
 = f.labeled_text_area(:additional_information)
 
+- if @event.course? && can?(:edit_actual_days, entry)
+  = f.labeled_input_field(:actual_days, help: t(".total_duration_days_help", total_days: @event.total_duration_days))
+
 - if entry.application
   = render 'application_fields', f: f
 
