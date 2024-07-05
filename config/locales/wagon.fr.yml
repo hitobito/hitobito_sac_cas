@@ -278,25 +278,25 @@ fr:
         entry_fee_adult: ""
         entry_fee_family: ""
         entry_fee_youth: ""
-        hut_solidarity_fee_with_hut_adult: ""
-        hut_solidarity_fee_with_hut_family: ""
-        hut_solidarity_fee_with_hut_youth: ""
-        hut_solidarity_fee_without_hut_adult: ""
-        hut_solidarity_fee_without_hut_family: ""
-        hut_solidarity_fee_without_hut_youth: ""
+        hut_solidarity_fee_with_hut_adult: " fr test 2"
+        hut_solidarity_fee_with_hut_family: " fr test 2"
+        hut_solidarity_fee_with_hut_youth: " fr test 2"
+        hut_solidarity_fee_without_hut_adult: " fr test 2"
+        hut_solidarity_fee_without_hut_family: " fr test 2"
+        hut_solidarity_fee_without_hut_youth: " fr test 2"
         magazine_fee_adult: ""
         magazine_fee_family: ""
         magazine_fee_youth: ""
         service_fee: ""
-        magazine_postage_abroad: ""
+        magazine_postage_abroad: fr test 7
         reduction_amount: ""
         reduction_required_membership_years: Réduction à partir d'années d'affiliation
-        sac_fee_article_number: ""
-        sac_entry_fee_article_number: ""
-        hut_solidarity_fee_article_number: ""
+        sac_fee_article_number: fr test 1
+        sac_entry_fee_article_number: fr test 3
+        hut_solidarity_fee_article_number: fr test 2
         magazine_fee_article_number: ""
-        magazine_postage_abroad_article_number: ""
-        section_entry_fee_article_number: ""
+        magazine_postage_abroad_article_number: fr test 7
+        section_entry_fee_article_number: fr test 4
         section_fee_article_number: Cotisation à la section
         section_bulletin_postage_abroad_article_number: Frais de port étranger Bulletin de la section
         service_fee_article_number: ""
@@ -824,12 +824,12 @@ fr:
     sac_memberships:
       title: "Facture d'adhésion %{year}"
       positions:
-        hut_solidarity_fee: ""
-        sac_entry_feed: ""
+        hut_solidarity_fee: fr test 2
+        sac_entry_feed: fr test 3
         sac_fee: ""
         sac_magazine_postage_abroad: ""
-        sac_magazine: ""
-        section_bulletin_postage_abroad: ""
+        sac_magazine: fr test 6
+        section_bulletin_postage_abroad: "fr test 8 %{section}"
         section_entry_fee: ""
         section_fee: ""
       beitragskategorie:
@@ -1056,8 +1056,8 @@ fr:
       sac_fee: ""
       entry_fee: Frais d'entrée
       magazine_fee: ""
-      hut_solidarity_fee_without_hut: ""
-      hut_solidarity_fee_with_hut: ""
+      hut_solidarity_fee_without_hut: " fr test 2"
+      hut_solidarity_fee_with_hut: " fr test 2"
       reductions: Réductions
       discounts: ""
       discount_date: ""
@@ -1065,7 +1065,7 @@ fr:
       article_numbers: ""
       valid_from: ""
       service_fee: ""
-      magazine_postage_abroad: ""
+      magazine_postage_abroad: fr test 7
       reduction_amount: ""
       reduction_required_membership_years: Réduction à partir d'années d'affiliation
       discount_date_1: ""
