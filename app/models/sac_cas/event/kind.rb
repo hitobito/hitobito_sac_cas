@@ -45,6 +45,11 @@ module SacCas::Event::Kind
     belongs_to :cost_unit
     belongs_to :level
 
+    # NOTE: When running via rake spec:features presence validations (which
+    # probably come from validates_by_schema) are missing
+    validates :cost_center_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
+    validates :cost_unit_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
+
     validates :kind_category, presence: true
     validates :short_name, presence: true
 
