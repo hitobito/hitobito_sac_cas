@@ -39,7 +39,10 @@ module Memberships
 
       beitragskategorie = SacCas::Beitragskategorie::Calculator
         .new(person).calculate(for_sac_family: false)
-      replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
+
+      if sac_membership.stammsektion_role
+        replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
+      end
       sac_membership.future_stammsektion_roles.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
     end

@@ -233,5 +233,11 @@ describe Memberships::FamilyMutation do
       expect(new_future_role.convert_on).to eq original_future_stammsektion_role.convert_on
       expect(new_future_role.convert_to).to eq original_future_stammsektion_role.convert_to
     end
+
+    it "does not crash if the person has no stammsektion" do
+      Role.where(person_id: roles(:familienmitglied).id).delete_all
+      mutation = described_class.new(people(:familienmitglied))
+      expect { mutation.leave! }.not_to raise_error
+    end
   end
 end
