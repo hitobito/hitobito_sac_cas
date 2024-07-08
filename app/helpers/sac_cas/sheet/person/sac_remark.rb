@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Sheet::Person
-  class Remark < Sheet::Base
+  class SacRemark < Sheet::Base
     self.parent_sheet = Sheet::Person
   end
 end
