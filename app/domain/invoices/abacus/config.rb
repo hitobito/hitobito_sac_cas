@@ -8,12 +8,10 @@
 module Invoices
   module Abacus
     class Config
-
-      FILE_PATH = HitobitoSacCas::Wagon.root.join('config', 'abacus.yml')
-      KEYS = %w(host mandant username password).freeze
+      FILE_PATH = HitobitoSacCas::Wagon.root.join("config", "abacus.yml")
+      KEYS = %w[host mandant username password].freeze
 
       class << self
-
         def exist?
           config.present?
         end
@@ -35,11 +33,9 @@ module Invoices
         def load
           return nil unless File.exist?(FILE_PATH)
 
-          YAML.safe_load_file(FILE_PATH)&.fetch('abacus', nil)
+          YAML.safe_load_file(FILE_PATH)&.fetch("abacus", nil)
         end
-
       end
-
     end
   end
 end

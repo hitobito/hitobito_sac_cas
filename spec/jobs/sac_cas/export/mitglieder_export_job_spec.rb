@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SacCas::Export::MitgliederExportJob do
   let(:user) { people(:admin) }
@@ -13,11 +13,11 @@ describe SacCas::Export::MitgliederExportJob do
   subject(:job) { described_class.new(user.id, group.id) }
 
   let(:file) { job.send(:async_download_file) }
-  let(:contents) { file.generated_file.download.force_encoding('ISO-8859-1') }
-  let(:csv) { CSV.parse(contents.lines[0...-1].join, col_sep: '$') }
+  let(:contents) { file.generated_file.download.force_encoding("ISO-8859-1") }
+  let(:csv) { CSV.parse(contents.lines[0...-1].join, col_sep: "$") }
   let(:summary_line) { contents.lines.last }
 
-  it 'creates a CSV-Export' do
+  it "creates a CSV-Export" do
     freeze_time
     expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
 
@@ -31,32 +31,32 @@ describe SacCas::Export::MitgliederExportJob do
     )
 
     expect(summary_line).to eq(
-      ('* * * Dateiende * * * / ' \
+      "* * * Dateiende * * * / " \
       "#{group.navision_id_padded} / " \
       "Anzahl Datensätze: 4 / " \
-      "#{Time.zone.now.strftime('%d.%m.%Y')} / " \
-      "#{Time.zone.now.strftime('%H:%M')}").encode('ISO-8859-1')
+      "#{Time.zone.now.strftime("%d.%m.%Y")} / " \
+      "#{Time.zone.now.strftime("%H:%M")}".encode("ISO-8859-1")
     )
   end
 
-  describe 'string quotation' do
-    it 'has no quotation marks for single line strings' do
+  describe "string quotation" do
+    it "has no quotation marks for single line strings" do
       person = people(:mitglied)
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
       expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
-      expect(contents).to match /\$#{person.last_name}\$#{person.first_name}\$/
+      expect(contents).to match(/\$#{person.last_name}\$#{person.first_name}\$/)
     end
 
-    it 'has quotation marks for multiline strings' do
+    it "has quotation marks for multiline strings" do
       person = people(:mitglied)
       person.update!(first_name: "Hello\nWorld")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
       expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
-      expect(contents).to match /\$#{person.last_name}\$"#{person.first_name}"\$/
+      expect(contents).to match(/\$#{person.last_name}\$"#{person.first_name}"\$/)
     end
   end
 
-  it 'file name' do
+  it "file name" do
     job.perform
     expect(file.filename).to eq("Adressen_#{group.navision_id_padded}.csv")
   end

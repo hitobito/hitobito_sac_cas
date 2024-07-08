@@ -17,11 +17,11 @@ Fabricator(:sac_open_course, from: :sac_course) do
   location { Faker::Lorem.words.join }
   description { Faker::Lorem.words.join }
   number { sequence(:number, 1000) }
-  language { 'de' }
-  season { 'winter' }
-  start_point_of_time { 'day' }
-  application_opening_at  { Time.zone.yesterday }
-  application_closing_at  { Time.zone.tomorrow }
+  language { "de" }
+  season { "winter" }
+  start_point_of_time { "day" }
+  application_opening_at { Time.zone.yesterday }
+  application_closing_at { Time.zone.tomorrow }
   before_create do |event|
     event.dates.build(start_at: 1.week.from_now) if event.dates.empty?
   end

@@ -7,11 +7,11 @@
 
 class SelfRegistration::InfosComponent < ApplicationComponent
   def additional_infos
-    t('.additional_infos', link: build_link(:faqs)).html_safe
+    t(".additional_infos", link: build_link(:faqs)).html_safe
   end
 
   def document_links
-    %w(statutes contribution_regulations data_protection).map do |key|
+    %w[statutes contribution_regulations data_protection].map do |key|
       build_link(key)
     end
   end

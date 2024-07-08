@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
-require_relative '../shared_examples_mitglied_role_required'
-require_relative '../shared_examples_mitglied_dependant_destroy'
+require "spec_helper"
+require_relative "../shared_examples_mitglied_role_required"
+require_relative "../shared_examples_mitglied_dependant_destroy"
 
 describe Group::SektionsMitglieder::Beguenstigt do
-  it_behaves_like 'Mitglied role required'
-  it_behaves_like 'Mitglied dependant destroy'
+  it_behaves_like "Mitglied role required"
+  it_behaves_like "Mitglied dependant destroy"
 end

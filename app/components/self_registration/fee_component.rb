@@ -14,18 +14,18 @@ class SelfRegistration::FeeComponent < ApplicationComponent
   end
 
   def title
-    t('.title', group: @group.layer_group)
+    t(".title", group: @group.layer_group)
   end
 
   def annual_fee
-    'CHF 122 - jährlicher Beitrag'
+    "CHF 122 - jährlicher Beitrag"
   end
 
   def inscription_fee
-    'CHF  30 - einmalige Gebühr'
+    "CHF  30 - einmalige Gebühr"
   end
 
   def total
-    'CHF 152 - Total'
+    "CHF 152 - Total"
   end
 end

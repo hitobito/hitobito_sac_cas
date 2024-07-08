@@ -14,13 +14,13 @@ class Qualifications::Expiring
     private
 
     def latest_expiring_qualifications
-      Qualification.select('MAX(finish_at) as finish_at, person_id').group(:person_id).to_sql
+      Qualification.select("MAX(finish_at) as finish_at, person_id").group(:person_id).to_sql
     end
 
     def latest_expirations_join
       "INNER JOIN (#{latest_expiring_qualifications}) as l" \
-        ' ON l.person_id = qualifications.person_id' \
-        ' AND l.finish_at = qualifications.finish_at'
+        " ON l.person_id = qualifications.person_id" \
+        " AND l.finish_at = qualifications.finish_at"
     end
   end
 end

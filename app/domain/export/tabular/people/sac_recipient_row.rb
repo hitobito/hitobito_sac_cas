@@ -7,7 +7,6 @@
 
 module Export::Tabular::People
   class SacRecipientRow < Export::Tabular::Row
-
     attr_reader :group
 
     def initialize(entry, group, format = nil)
@@ -26,7 +25,7 @@ module Export::Tabular::People
     end
 
     def country
-      return if entry.country == 'CH'
+      return if entry.country == "CH"
 
       Country.new(entry.country).name
     end
@@ -46,6 +45,5 @@ module Export::Tabular::People
     def salutation
       nil
     end
-
   end
 end

@@ -25,19 +25,18 @@ module SacCas::Role::MitgliedFamilyValidations
 
   # Returns all family mitglieder including the current person.
   def family_mitglieder
-    people = person.
-             household_people.
-             joins(:roles).
-             merge(Role.where(type: SacCas::STAMMSEKTION_ROLES,
-                              beitragskategorie: :family)).to_a
+    people = person
+      .household_people
+      .joins(:roles)
+      .merge(Role.where(type: SacCas::STAMMSEKTION_ROLES,
+        beitragskategorie: :family)).to_a
 
     people << person
   end
 
   def adult_family_mitglieder_count
-    family_mitglieder.
-      select { |family_mitglied| AGE_RANGE_ADULT.cover?(family_mitglied.years) }.
-      size
+    family_mitglieder
+      .count { |family_mitglied| AGE_RANGE_ADULT.cover?(family_mitglied.years) }
   end
 
   # There can only be MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults with beitragskategory=family
@@ -57,9 +56,11 @@ module SacCas::Role::MitgliedFamilyValidations
     # We do not need to validate this if the current role has a beitragskategorie other than family.
     return unless beitragskategorie&.family?
 
+    # We skip if we are deleted or scheduled to delete as other members will probably be gone.
+    return if terminated?
+
     return if family_mitglieder.count(&:sac_family_main_person) == 1
 
     errors.add(:base, :must_have_one_family_main_person_in_family)
   end
-
 end

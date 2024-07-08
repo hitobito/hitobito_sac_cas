@@ -7,7 +7,6 @@
 
 module TableDisplays
   class ResolvingColumn < TableDisplays::Column
-
     def required_permission(attr)
       TableDisplays::Resolver::ATTRS.fetch(attr)
     end
@@ -31,6 +30,5 @@ module TableDisplays
     def sort_by(_attr)
       nil
     end
-
   end
 end

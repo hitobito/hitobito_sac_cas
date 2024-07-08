@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class SectionFee < Base
-
         def gross_amount
           return 0 if section_fee_exemption?
 
@@ -21,7 +20,6 @@ module Invoices
         def creditor
           section
         end
-
       end
     end
   end

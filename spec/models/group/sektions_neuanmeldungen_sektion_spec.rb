@@ -5,15 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
-require_relative 'shared_examples_neuanmeldung'
+require "spec_helper"
+require_relative "shared_examples_neuanmeldung"
 
 describe Group::SektionsNeuanmeldungenSektion do
   describe Group::SektionsNeuanmeldungenSektion::Neuanmeldung do
-    it_behaves_like 'validates Neuanmeldung timestamps'
-
-    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
     let(:person) { people(:admin) }
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+    it_behaves_like "validates Neuanmeldung timestamps"
+
     subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }
 
     it "#destroy hard destroys role even though it is old enough to archive" do
@@ -22,10 +23,10 @@ describe Group::SektionsNeuanmeldungenSektion do
     end
   end
 
-  describe 'self registration' do
+  describe "self registration" do
     let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
-    it 'self registration role type cannot be changed' do
+    it "self registration role type cannot be changed" do
       expect(neuanmeldungen_sektion.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name)
 
       neuanmeldungen_sektion.update!(self_registration_role_type: Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name)
@@ -33,7 +34,7 @@ describe Group::SektionsNeuanmeldungenSektion do
       expect(neuanmeldungen_sektion.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name)
     end
 
-    it 'self registration require adult consent is always enabled' do
+    it "self registration require adult consent is always enabled" do
       expect(neuanmeldungen_sektion.self_registration_require_adult_consent).to eq(true)
 
       neuanmeldungen_sektion.update!(self_registration_require_adult_consent: false)

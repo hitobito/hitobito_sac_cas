@@ -33,7 +33,7 @@ module SacCas::Groups::SelfInscriptionController
 
     if entry.save!
       send_notification_email
-      redirect_with_message(notice: t('.role_saved'))
+      redirect_with_message(notice: t(".role_saved"))
     else
       render :new, status: :unprocessable_entity
     end
@@ -56,7 +56,7 @@ module SacCas::Groups::SelfInscriptionController
 
   def redirect_to_person_if_sektion_member?
     if self_registration_active? && entry.active_in_sektion?
-      redirect_with_message(notice: t('.membership_role_exists'))
+      redirect_with_message(notice: t(".membership_role_exists"))
     end
   end
 end

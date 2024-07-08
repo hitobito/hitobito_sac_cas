@@ -5,10 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Person::Household do
-
   let(:user) { people(:root) }
 
   def build_household(person, other, **opts)
@@ -18,7 +17,7 @@ describe Person::Household do
   def create_person(age, beitragskategorie: :family, managers: [], **attrs)
     person = Fabricate(:person, **attrs.reverse_merge(
       birthday: age.years.ago,
-      town: 'Supertown',
+      town: "Supertown",
       primary_group: groups(:bluemlisalp_mitglieder),
       sac_family_main_person: true
     ))
@@ -37,28 +36,28 @@ describe Person::Household do
     person
   end
 
-  context '#next_key' do
-    it 'increments sequence and returns new key' do
+  context "#next_key" do
+    it "increments sequence and returns new key" do
       household = Person::Household.new(nil, nil, nil, nil)
 
       old_value = Sequence.current_value(Person::Household::HOUSEHOLD_KEY_SEQUENCE)
-      expect(household.send(:next_key)).to eq "#{old_value + 1}"
+      expect(household.send(:next_key)).to eq (old_value + 1).to_s
       expect(Sequence.current_value(Person::Household::HOUSEHOLD_KEY_SEQUENCE)).to eq old_value + 1
     end
   end
 
-  context '#assign' do
+  context "#assign" do
     let(:adult) { create_person(25) }
     let(:other_adult) { create_person(25) }
     let(:child) { create_person(10) }
     let(:other_child) { create_person(10) }
 
-    context 'basic functionality from core' do
-      it 'adds person to household' do
+    context "basic functionality from core" do
+      it "adds person to household" do
         p1 = create_person(25)
         p2 = create_person(25)
 
-        p1.town = 'Greattown'
+        p1.town = "Greattown"
 
         household = build_household(p1, p2).tap(&:assign)
 
@@ -70,14 +69,14 @@ describe Person::Household do
   end
 
   context "#valid?" do
-    it 'is false if existing person and new person both have family memberships' do
+    it "is false if existing person and new person both have family memberships" do
       p1 = create_person(25, beitragskategorie: :family)
       p2 = create_person(25, beitragskategorie: :family)
 
       expect(build_household(p1, p2)).not_to be_valid
     end
 
-    it 'is true if existing person has family membership and new person does not' do
+    it "is true if existing person has family membership and new person does not" do
       p1 = create_person(25, beitragskategorie: :family)
       p2 = create_person(25, beitragskategorie: :adult)
       expect(build_household(p1, p2)).to be_valid
@@ -87,7 +86,7 @@ describe Person::Household do
       expect(build_household(p3, p4)).to be_valid
     end
 
-    it 'is true if existing person does not have family membership and new person does' do
+    it "is true if existing person does not have family membership and new person does" do
       p1 = create_person(25, beitragskategorie: :adult)
       p2 = create_person(25, beitragskategorie: :family)
       expect(build_household(p1, p2)).to be_valid
@@ -97,7 +96,7 @@ describe Person::Household do
       expect(build_household(p3, p4)).to be_valid
     end
 
-    it 'is true if neither existing person nor new person have family memberships' do
+    it "is true if neither existing person nor new person have family memberships" do
       p1 = create_person(25, beitragskategorie: :adult)
       p2 = create_person(25, beitragskategorie: :adult)
       expect(build_household(p1, p2)).to be_valid
@@ -108,44 +107,44 @@ describe Person::Household do
     end
   end
 
-  context '#save' do
+  context "#save" do
     let(:adult) { create_person(25, beitragskategorie: nil) }
     let(:child) { create_person(10, beitragskategorie: nil) }
     let(:other_adult) { create_person(25, beitragskategorie: nil) }
     let(:other_child) { create_person(10, beitragskategorie: nil) }
 
-    context 'with adult person' do
-      it 'adds child to manageds' do
+    context "with adult person" do
+      it "adds child to manageds" do
         household = build_household(adult, child).tap(&:assign)
 
         expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
         expect(adult.manageds).to contain_exactly(child)
       end
 
-      it 'does not create PeopleManager for other adult' do
+      it "does not create PeopleManager for other adult" do
         household = build_household(adult, other_adult).tap(&:assign)
 
         expect { household.send(:save) }.not_to change { PeopleManager.count }
       end
     end
 
-    context 'with child person' do
-      it 'adds adult to managers' do
+    context "with child person" do
+      it "adds adult to managers" do
         household = build_household(child, adult).tap(&:assign)
 
         expect { household.send(:save) }.to change { PeopleManager.count }.by(1)
         expect(child.managers).to contain_exactly(adult)
       end
 
-      it 'does not create PeopleManager for other child' do
+      it "does not create PeopleManager for other child" do
         household = build_household(child, other_child).tap(&:assign)
 
         expect { household.send(:save) }.not_to change { PeopleManager.count }
       end
     end
 
-    context 'sac_family' do
-      it 'calls sac_family.update!' do
+    context "sac_family" do
+      it "calls sac_family.update!" do
         household = build_household(adult, child).tap(&:assign)
 
         expect(household).to be_maintain_sac_family
@@ -154,7 +153,7 @@ describe Person::Household do
         household.send(:save)
       end
 
-      it 'does not call sac_family.update! with maintain_sac_family=false' do
+      it "does not call sac_family.update! with maintain_sac_family=false" do
         household = build_household(adult, child, maintain_sac_family: false).tap(&:assign)
 
         expect(household).not_to be_maintain_sac_family
@@ -164,21 +163,21 @@ describe Person::Household do
       end
     end
 
-    it 'raises if new family member already has family membership' do
+    it "raises if new family member already has family membership" do
       p1 = create_person(25, beitragskategorie: :family)
       p2 = create_person(10, beitragskategorie: :family)
 
       household = build_household(p1, p2)
 
-      expect { household.send(:save) }.to raise_error('invalid')
+      expect { household.send(:save) }.to raise_error("invalid")
     end
   end
 
-  context '#remove' do
-    context 'basic functionality from core' do
-      it 'dissolves household of two' do
-        p1 = create_person(25, household_key: 'household-of-two')
-        p2 = create_person(25, household_key: 'household-of-two', sac_family_main_person: false)
+  context "#remove" do
+    context "basic functionality from core" do
+      it "dissolves household of two" do
+        p1 = create_person(25, household_key: "household-of-two")
+        p2 = create_person(25, household_key: "household-of-two", sac_family_main_person: false)
 
         build_household(p1, p2).send(:remove)
 
@@ -186,33 +185,32 @@ describe Person::Household do
         expect(p2.reload.household_key).to be_nil
       end
 
-      it 'removes person from household' do
-        p1 = create_person(25, household_key: 'household-of-many')
-        p2 = create_person(25, household_key: 'household-of-many', sac_family_main_person: false)
-        p3 = create_person(25, household_key: 'household-of-many', sac_family_main_person: false, beitragskategorie: :youth)
+      it "removes person from household" do
+        p1 = create_person(25, household_key: "household-of-many")
+        p2 = create_person(25, household_key: "household-of-many", sac_family_main_person: false)
+        p3 = create_person(25, household_key: "household-of-many", sac_family_main_person: false, beitragskategorie: :youth)
 
         build_household(p1, p2).send(:remove)
 
         expect(p1.reload.household_key).to be_nil
-        expect(p2.reload.household_key).to eq 'household-of-many'
-        expect(p3.reload.household_key).to eq 'household-of-many'
+        expect(p2.reload.household_key).to eq "household-of-many"
+        expect(p3.reload.household_key).to eq "household-of-many"
       end
     end
 
-    context 'people_managers' do
+    context "people_managers" do
       let!(:parent) { create_person(25) }
       let!(:child) { create_person(10, managers: parent) }
 
-      it 'get removed from manager' do
+      it "get removed from manager" do
         expect { build_household(parent, child).send(:remove) }.to change { PeopleManager.count }.by(-1)
         expect(parent.reload.manageds).to be_empty
       end
 
-      it 'get removed from managed' do
+      it "get removed from managed" do
         expect { build_household(child, parent).send(:remove) }.to change { PeopleManager.count }.by(-1)
         expect(child.reload.managers).to be_empty
       end
     end
   end
-
 end

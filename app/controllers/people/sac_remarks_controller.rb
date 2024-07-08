@@ -17,7 +17,7 @@ class People::SacRemarksController < ApplicationController
     if person.update(permitted_attr)
       respond_to do |format|
         format.html do
-          render '_remark', layout: false, locals: { remark_attr_name: remark_attr_name }
+          render "_remark", layout: false, locals: {remark_attr_name: remark_attr_name}
         end
       end
     else
@@ -46,7 +46,7 @@ class People::SacRemarksController < ApplicationController
   def fetch_available_attrs
     @available_attrs = []
     @available_attrs << Person::SAC_REMARK_NATIONAL_OFFICE if can?(:manage_national_office_remark,
-                                                                   person)
+      person)
     @available_attrs += Person::SAC_SECTION_REMARKS if can?(:manage_section_remarks, person)
     @available_attrs
   end

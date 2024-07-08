@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-Fabricator(:event_level, class_name: 'Event::Level') do
+Fabricator(:event_level, class_name: "Event::Level") do
   label { Faker::Lorem.words.join(" ") }
-  code  { Faker::Number.number }
-  difficulty  { Faker::Number.number }
+  code { Faker::Number.number }
+  difficulty { Faker::Number.number }
 end

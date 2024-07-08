@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Ability
-
   private
 
   def define_root_abilities
@@ -29,5 +28,4 @@ module SacCas::Ability
     }
     cannot [:update], Group, [:sac_newsletter_mailing_list_id]
   end
-
 end

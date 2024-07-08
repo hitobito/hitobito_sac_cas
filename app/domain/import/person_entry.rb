@@ -10,14 +10,14 @@ module Import
     attr_reader :row
 
     GENDERS = {
-      'Männlich' => 'm',
-      'Weiblich' => 'w'
+      "Männlich" => "m",
+      "Weiblich" => "w"
     }.freeze
 
     LANGUAGES = {
-      'DES' => 'de',
-      'FRS' => 'fr',
-      'ITS' => 'it'
+      "DES" => "de",
+      "FRS" => "fr",
+      "ITS" => "it"
     }.freeze
 
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
@@ -78,7 +78,7 @@ module Import
 
       person.birthday = parse_datetime(row.fetch(:birthday))
       person.gender = GENDERS[row.fetch(:gender).to_s]
-      person.language = LANGUAGES[row.fetch(:language)] || 'de'
+      person.language = LANGUAGES[row.fetch(:language)] || "de"
     end
 
     def build_phone_numbers(person)
@@ -89,9 +89,9 @@ module Import
       # reset phone numbers first since import might be run multiple times
       person.phone_numbers = []
 
-      person.phone_numbers.build(number: phone, label: 'Privat') if phone_valid?(phone)
-      person.phone_numbers.build(number: mobile, label: 'Mobil') if phone_valid?(mobile)
-      person.phone_numbers.build(number: direct, label: 'Direkt') if phone_valid?(direct)
+      person.phone_numbers.build(number: phone, label: "Privat") if phone_valid?(phone)
+      person.phone_numbers.build(number: mobile, label: "Mobil") if phone_valid?(mobile)
+      person.phone_numbers.build(number: direct, label: "Direkt") if phone_valid?(direct)
     end
 
     def build_role(person)
@@ -121,12 +121,12 @@ module Import
     end
 
     def navision_id
-      Integer(row.fetch(:navision_id).to_s.sub!(/^0*/, ''))
+      Integer(row.fetch(:navision_id).to_s.sub!(/^0*/, ""))
     end
 
     def build_error_messages
       [person.errors.full_messages, person.roles.first.errors.full_messages]
-        .flatten.compact.join(', ').tap do |messages|
+        .flatten.compact.join(", ").tap do |messages|
         messages.prepend("#{self}: ") if messages.present?
       end
     end

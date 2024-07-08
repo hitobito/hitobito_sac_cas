@@ -15,9 +15,9 @@ module Groups::WithNeuanmeldung
 
   def group_for_neuanmeldung
     @group_for_neuanmeldung ||= children_without_deleted
-                                .without_archived
-                                .where(type: ORDERED_NEUANMELDUNG_GROUPS)
-                                .min_by { |g| ORDERED_NEUANMELDUNG_GROUPS.index(g.type) }
+      .without_archived
+      .where(type: ORDERED_NEUANMELDUNG_GROUPS)
+      .min_by { |g| ORDERED_NEUANMELDUNG_GROUPS.index(g.type) }
   end
 
   def sac_cas_self_registration_url(host)

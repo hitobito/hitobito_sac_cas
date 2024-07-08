@@ -8,7 +8,7 @@
 module SacCas::PeopleController
   extend ActiveSupport::Concern
 
-  LOOKUP_PREFIX = 'people/neuanmeldungen'
+  LOOKUP_PREFIX = "people/neuanmeldungen"
 
   prepended do
     before_action :set_lookup_prefixes
@@ -27,7 +27,7 @@ module SacCas::PeopleController
   end
 
   def no_filter_active?
-    %w(filters filter_id).none? { |k| params[k].present? }
+    %w[filters filter_id].none? { |k| params[k].present? }
   end
 
   # If we are on the page of a Group::SektionsNeuanmeldungenNv, we want to
@@ -36,7 +36,7 @@ module SacCas::PeopleController
   # so we remove the lookup prefix here and add it again only if needed.
   def set_lookup_prefixes
     lookup_context.prefixes -= [LOOKUP_PREFIX]
-    lookup_context.prefixes.unshift('people/neuanmeldungen') if registrations_for_approval?
+    lookup_context.prefixes.unshift("people/neuanmeldungen") if registrations_for_approval?
   end
 
   def find_entry
@@ -58,5 +58,4 @@ module SacCas::PeopleController
   def tabular_params(**)
     super.merge(params.slice(:recipients).permit!)
   end
-
 end

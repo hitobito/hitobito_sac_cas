@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
   class HutRow
-
     def self.can_process?(row)
-      row[:verteilercode].to_s == '4000.0'
+      row[:verteilercode].to_s == "4000.0"
     end
 
     def initialize(row)
@@ -37,7 +36,7 @@ module Import::Huts
     end
 
     def navision_id(row)
-      row[:related_navision_id].to_s.sub(/^[0]*/, '')
+      row[:related_navision_id].to_s.sub(/^[0]*/, "")
     end
 
     def name(row)
@@ -46,15 +45,15 @@ module Import::Huts
 
     def parent_id(row)
       Group::Sektion.find_by(navision_id: owner_navision_id(row))
-                    .descendants
-                    .find { |child| child.type == 'Group::SektionsHuettenkommission' }
-                    .id
+        .descendants
+        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .id
     rescue
       raise "WARNING: No parent found for row #{row.inspect}"
     end
 
     def owner_navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, '')
+      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
   end
 end

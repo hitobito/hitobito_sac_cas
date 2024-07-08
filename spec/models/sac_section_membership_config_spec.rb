@@ -28,16 +28,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SacSectionMembershipConfig do
-
   let(:config) { sac_section_membership_configs(:bluemlisalp_2024) }
 
-  context 'group' do
+  context "group" do
     let(:new_config) { config.dup.tap { |c| c.valid_from = 2025 } }
 
-    it 'cannot belong to top layer' do
+    it "cannot belong to top layer" do
       new_config.group = groups(:root)
 
       expect(new_config).not_to be_valid
@@ -46,11 +45,11 @@ describe SacSectionMembershipConfig do
       expect(error_keys).to include(:group)
     end
 
-    it 'can belong to sektion' do
+    it "can belong to sektion" do
       expect(new_config).to be_valid
     end
 
-    it 'can belong to ortsgruppe' do
+    it "can belong to ortsgruppe" do
       new_config.group = groups(:bluemlisalp_ortsgruppe_ausserberg)
 
       expect(new_config).to be_valid

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3

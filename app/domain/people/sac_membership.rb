@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::SacMembership
-
   def initialize(person)
     @person = person
   end
@@ -18,13 +17,13 @@ class People::SacMembership
   # checks for any active membership roles
   def active_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: stammsektion_mitglied_sti_names)
+      type: stammsektion_mitglied_sti_names)
   end
 
   # checkes for active and also approvabable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: mitglied_and_neuanmeldung_sti_names)
+      type: mitglied_and_neuanmeldung_sti_names)
   end
 
   def anytime?
@@ -47,6 +46,7 @@ class People::SacMembership
   private
 
   def stammsektion_mitglied_sti_names = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+
   def mitglied_and_neuanmeldung_sti_names = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
 
   def any_future_role?

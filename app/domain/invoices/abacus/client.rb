@@ -10,9 +10,8 @@ module Invoices
     # See https://apihub.abacus.ch or doc/abacus.md for documentation
     # To debug requests, set `RestClient.log = 'stdout'`
     class Client
-
-      OPENID_CONFIG_PATH = '/.well-known/openid-configuration'
-      API_PATH = '/api/entity/v1/mandants/'
+      OPENID_CONFIG_PATH = "/.well-known/openid-configuration"
+      API_PATH = "/api/entity/v1/mandants/"
       RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS = 30
 
       def initialize
@@ -59,7 +58,7 @@ module Invoices
       def request_args(method, path, params = nil)
         args = [url(path)]
         args << encode_json(params) if params && method != :get
-        args << (params && method == :get ? headers.merge(params: params) : headers)
+        args << ((params && method == :get) ? headers.merge(params: params) : headers)
         args
       end
 
@@ -73,7 +72,7 @@ module Invoices
 
       def id_segment(id)
         if id.is_a?(Hash)
-          "(#{camelize_keys(id).map { |k, v| "#{k}=#{v}" }.join(',')})"
+          "(#{camelize_keys(id).map { |k, v| "#{k}=#{v}" }.join(",")})"
         elsif id
           "(Id=#{id})"
         end
@@ -86,9 +85,9 @@ module Invoices
       def token
         if @token_expires_at.nil? || @token_expires_at <= Time.zone.now
           response = request_token
-          @token = response['access_token']
+          @token = response["access_token"]
           @token_expires_at =
-            Time.zone.now + response['expires_in'].to_i - RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS
+            Time.zone.now + response["expires_in"].to_i - RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS
         end
 
         @token
@@ -97,9 +96,9 @@ module Invoices
       def request_token
         response = RestClient.post(
           token_endpoint,
-          { grant_type: 'client_credentials' },
-          { content_type: 'application/x-www-form-urlencoded',
-            authorization: "Basic #{auth_credentials}" }
+          {grant_type: "client_credentials"},
+          {content_type: "application/x-www-form-urlencoded",
+           authorization: "Basic #{auth_credentials}"}
         )
         JSON.parse(response.body)
       end
@@ -110,11 +109,11 @@ module Invoices
 
       def token_endpoint
         response = RestClient.get(config.host + OPENID_CONFIG_PATH)
-        JSON.parse(response.body)['token_endpoint']
+        JSON.parse(response.body)["token_endpoint"]
       end
 
       def response_error_message(exception)
-        JSON.parse(exception.response.body).dig('error', 'message')
+        JSON.parse(exception.response.body).dig("error", "message")
       rescue # do not fail if response is not JSON
         nil
       end
@@ -140,7 +139,6 @@ module Invoices
       def config
         Config
       end
-
     end
   end
 end

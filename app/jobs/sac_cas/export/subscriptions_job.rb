@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Export::SubscriptionsJob
-
   private
 
   def data
@@ -18,5 +17,4 @@ module SacCas::Export::SubscriptionsJob
   def recipients_data
     Export::Tabular::People::SacRecipients.export(@format, entries, mailing_list.group)
   end
-
 end

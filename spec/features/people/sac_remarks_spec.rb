@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'person sac remarks' do
+describe "person sac remarks" do
   let(:person) { people(:mitglied) }
   let(:group) { person.groups.first }
 
@@ -19,16 +19,16 @@ describe 'person sac remarks' do
     sign_in(person)
   end
 
-  it 'lists and updates sac remarks' do
+  it "lists and updates sac remarks" do
     visit group_person_sac_remarks_path(:de, group, person)
 
-    within('#sac_remark_national_office') do
+    within("#sac_remark_national_office") do
       click_link
-      fill_in 'person_sac_remark_national_office', with: 'my remark'
+      fill_in "person_sac_remark_national_office", with: "my remark"
       click_button
     end
 
-    expect(page).to have_text('my remark')
-    expect(person.reload.sac_remark_national_office).to eq('my remark')
+    expect(page).to have_text("my remark")
+    expect(person.reload.sac_remark_national_office).to eq("my remark")
   end
 end

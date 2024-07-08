@@ -5,11 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
-require_relative '../shared_examples_mitglied_dependant_destroy'
+require "spec_helper"
+require_relative "../shared_examples_mitglied_dependant_destroy"
 
 describe Group::SektionsTourenkommission::Tourenleiter do
-  it_behaves_like 'Mitglied dependant destroy' do
+  it_behaves_like "Mitglied dependant destroy" do
     let(:sektion) { groups(:bluemlisalp) }
     let(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
     let(:tourenkommission) { Group::SektionsTourenkommission.find_or_create_by(parent: funktionaere) }

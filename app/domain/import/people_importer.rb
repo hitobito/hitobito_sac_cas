@@ -5,34 +5,33 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import
   class PeopleImporter
-
     class_attribute :headers, default: {
-      navision_id: 'Mitgliedernummer',
-      person_type: 'Personentyp',
-      salutation: 'Anredecode',
-      name: 'Name',
-      first_name: 'Vorname',
-      last_name: 'Nachname',
-      address_supplement: 'Adresszusatz',
-      address: 'Adresse',
-      country: 'Länder-/Regionscode',
-      town: 'Ort',
-      zip_code: 'PLZ',
-      email: 'E-Mail',
-      postfach: 'Postfach',
-      phone: 'Telefon',
-      phone_direct: 'Telefon direkt',
-      phone_mobile: 'Mobiltelefon',
-      birthday: 'Geburtsdatum',
-      gender: 'Geschlecht',
-      language: 'Sprachcode'
+      navision_id: "Mitgliedernummer",
+      person_type: "Personentyp",
+      salutation: "Anredecode",
+      name: "Name",
+      first_name: "Vorname",
+      last_name: "Nachname",
+      address_supplement: "Adresszusatz",
+      address: "Adresse",
+      country: "Länder-/Regionscode",
+      town: "Ort",
+      zip_code: "PLZ",
+      email: "E-Mail",
+      postfach: "Postfach",
+      phone: "Telefon",
+      phone_direct: "Telefon direkt",
+      phone_mobile: "Mobiltelefon",
+      birthday: "Geburtsdatum",
+      gender: "Geschlecht",
+      language: "Sprachcode"
     }.freeze
 
-    class_attribute :sheet_name, default: 'conv'
+    class_attribute :sheet_name, default: "conv"
 
     attr_reader :path, :skip_existing, :output, :errors, :invalid_emails, :processed_rows_count
 
@@ -81,7 +80,7 @@ module Import
     end
 
     def existing_emails
-      @existing_emails ||= ::Person.pluck('DISTINCT(email)').compact.sort
+      @existing_emails ||= ::Person.pluck("DISTINCT(email)").compact.sort
     end
 
     def existing_people_ids
@@ -124,7 +123,7 @@ module Import
 
     def contact_role_group
       @contact_role_group ||= Group::ExterneKontakte.find_or_create_by!(
-        name: 'Navision Import',
+        name: "Navision Import",
         parent_id: Group::SacCas.first!.id
       )
     end

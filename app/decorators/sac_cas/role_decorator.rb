@@ -14,5 +14,4 @@ module SacCas::RoleDecorator
       layer_group_id: object.group.layer_group_id
     }
   end
-
 end

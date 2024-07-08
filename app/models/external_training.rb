@@ -9,11 +9,13 @@ class ExternalTraining < ActiveRecord::Base
   validates_by_schema
 
   belongs_to :person
-  belongs_to :event_kind, class_name: 'Event::Kind'
+  belongs_to :event_kind, class_name: "Event::Kind"
 
   attr_accessor :other_people_ids
 
   validates_date :finish_at, on_or_after: :start_at, allow_blank: true
+
+  validates_date :finish_at, on_or_before: lambda { Date.current }
 
   scope :list, -> { order(created_at: :desc) }
 
@@ -22,8 +24,7 @@ class ExternalTraining < ActiveRecord::Base
   after_save :create_trainings_for_other_people
 
   def self.between(start_date, end_date)
-    where('start_at <= :end_date AND finish_at >= :start_date ',
-          start_date: start_date, end_date: end_date).distinct
+    where(start_at: ..end_date, finish_at: start_date..).distinct
   end
 
   def to_s
@@ -38,12 +39,12 @@ class ExternalTraining < ActiveRecord::Base
     finish_at
   end
 
-  alias kind event_kind
+  alias_method :kind, :event_kind
 
   private
 
   def qualifier
-    ExternalTrainings::Qualifier.new(person, self, 'participant')
+    ExternalTrainings::Qualifier.new(person, self, "participant")
   end
 
   def issue_qualifications
@@ -56,8 +57,7 @@ class ExternalTraining < ActiveRecord::Base
 
   def create_trainings_for_other_people
     Array(other_people_ids).each do |person_id|
-      ExternalTraining.create!(attributes.except('id', 'person_id').merge(person_id: person_id))
+      ExternalTraining.create!(attributes.except("id", "person_id").merge(person_id: person_id))
     end
   end
-
 end

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsHuettenkommission < ::Group
-
   self.static_name = true
 
   children Group::SektionsHuette
@@ -23,5 +22,4 @@ class Group::SektionsHuettenkommission < ::Group
   end
 
   roles Huettenobmann, Andere
-
 end

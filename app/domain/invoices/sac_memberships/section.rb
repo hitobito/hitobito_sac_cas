@@ -8,7 +8,6 @@
 module Invoices
   module SacMemberships
     class Section
-
       attr_reader :group, :date
 
       delegate :id, :to_s, to: :group
@@ -21,7 +20,7 @@ module Invoices
 
       def reduction?(member) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
         if reduction_required_membership_years.to_i.positive? &&
-          reduction_required_age.to_i.positive?
+            reduction_required_age.to_i.positive?
           member.membership_years >= reduction_required_membership_years &&
             member.age >= reduction_required_age
         elsif reduction_required_membership_years.to_i.positive?
@@ -57,7 +56,6 @@ module Invoices
         @config ||= group.sac_section_membership_configs.active(date) ||
           raise("No sac section membership config for #{group} in #{date.year}")
       end
-
     end
   end
 end

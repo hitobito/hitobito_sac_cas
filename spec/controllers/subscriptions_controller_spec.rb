@@ -5,18 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe SubscriptionsController do
-
   let(:user) { people(:admin) }
   let(:mailing_list) { mailing_lists(:newsletter) }
 
   before { sign_in(user) }
 
-  context 'GET index' do
-    context 'with format=csv and param recipients=true' do
-      it 'calls ... with ...' do
+  context "GET index" do
+    context "with format=csv and param recipients=true" do
+      it "calls ... with ..." do
         expect do
           get :index, params: {
             format: :csv,
@@ -30,11 +29,10 @@ describe SubscriptionsController do
         job = Delayed::Job.last.payload_object
         expect(job).to be_a(Export::SubscriptionsJob)
 
-        expect(Export::Tabular::People::SacRecipients).
-          to receive(:export)
+        expect(Export::Tabular::People::SacRecipients)
+          .to receive(:export)
         job.perform
       end
     end
   end
-
 end

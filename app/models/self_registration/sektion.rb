@@ -1,5 +1,4 @@
 class SelfRegistration::Sektion < SelfRegistration::Base
-
   MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
 
   attr_accessor :housemates_attributes, :supplements_attributes
@@ -53,17 +52,17 @@ class SelfRegistration::Sektion < SelfRegistration::Base
   end
 
   def build_person(*args)
-    super(*args) do |attrs|
+    super do |attrs|
       attrs.merge(
         household_key: household_key,
-        supplements: supplements,
+        supplements: supplements
       )
     end
   end
 
   def build_housemates(adult_count = 1)
     @housemates_attributes.map do |attrs|
-      next if attrs[:_destroy] == '1'
+      next if attrs[:_destroy] == "1"
       next if too_young_for_household?
 
       build_person(attrs.merge(adult_count: adult_count), Housemate).tap do |mate|

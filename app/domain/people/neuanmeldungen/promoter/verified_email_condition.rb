@@ -7,11 +7,8 @@
 
 class People::Neuanmeldungen::Promoter
   class VerifiedEmailCondition < Condition
-
     def satisfied?
       person.confirmed?
     end
-
   end
-
 end

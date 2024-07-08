@@ -7,6 +7,5 @@
 
 module Sheet
   class Event::Level < Sheet::Admin
-
   end
 end

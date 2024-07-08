@@ -37,54 +37,54 @@
 #  index_event_kinds_on_level_id        (level_id)
 #
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Event::Kind do
-  describe '::validations' do
+  describe "::validations" do
     subject(:kind) { Fabricate.build(:sac_event_kind) }
 
-    it 'is valid as builded by fabricator' do
+    it "is valid as builded by fabricator" do
       expect(kind).to be_valid
       expect(kind.level).to eq event_levels(:ek)
     end
 
-    it 'validates presence of short_name' do
+    it "validates presence of short_name" do
       kind.short_name = nil
       expect(kind).not_to be_valid
-      expect(kind.errors[:short_name]).to eq ['muss ausgefüllt werden']
+      expect(kind.errors[:short_name]).to eq ["muss ausgefüllt werden"]
     end
 
-    it 'validates presence of category' do
+    it "validates presence of category" do
       kind.kind_category = nil
       expect(kind).not_to be_valid
-      expect(kind.errors[:kind_category]).to eq ['muss ausgefüllt werden']
+      expect(kind.errors[:kind_category]).to eq ["muss ausgefüllt werden"]
     end
 
-    it 'validates presence of cost_center' do
+    it "validates presence of cost_center" do
       kind.cost_center_id = nil
       expect(kind).not_to be_valid
-      expect(kind.errors[:cost_center_id]).to eq ['muss ausgefüllt werden']
+      expect(kind.errors[:cost_center_id]).to eq ["muss ausgefüllt werden"]
     end
 
-    it 'validates presence of cost_unit' do
+    it "validates presence of cost_unit" do
       kind.cost_unit_id = nil
       expect(kind).not_to be_valid
-      expect(kind.errors[:cost_unit_id]).to eq ['muss ausgefüllt werden']
+      expect(kind.errors[:cost_unit_id]).to eq ["muss ausgefüllt werden"]
     end
   end
 
-  describe '#push_down_inherited_attributes!' do
+  describe "#push_down_inherited_attributes!" do
     let(:course) { events(:closed) }
     let(:kind) { event_kinds(:ski_course) }
     let(:kind_attrs) {
       {
-        application_conditions: 'test',
+        application_conditions: "test",
         minimum_age: 1,
         minimum_participants: 2,
         maximum_participants: 3,
         training_days: 4,
-        season: 'winter',
-        accommodation: 'hut',
+        season: "winter",
+        accommodation: "hut",
         reserve_accommodation: false,
         cost_center_id: 1,
         cost_unit_id: 1
@@ -100,39 +100,39 @@ describe Event::Kind do
       course.reload.attributes.symbolize_keys.slice(*kind_attrs.keys)
     end
 
-    def with_locales(locales = %w(de fr))
+    def with_locales(locales = %w[de fr])
       locales.each { |l| I18n.with_locale(l) { yield(l) } }
     end
 
-    it 'updates course attributes' do
+    it "updates course attributes" do
       expect do
         kind.push_down_inherited_attributes!
       end.to change { read_course_attrs }.to(kind_attrs)
     end
 
-    it 'updates translated application_conditions column' do
+    it "updates translated application_conditions column" do
       with_locales do |l|
         kind.label = l
         kind.application_conditions = l
       end
       kind.save!
       expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
-      I18n.with_locale('de') { expect(course.application_conditions).to eq 'de' }
-      I18n.with_locale('fr') { expect(course.application_conditions).to eq 'fr' }
+      I18n.with_locale("de") { expect(course.application_conditions).to eq "de" }
+      I18n.with_locale("fr") { expect(course.application_conditions).to eq "fr" }
     end
 
-    it 'updates translated description with general_information column' do
+    it "updates translated description with general_information column" do
       with_locales do |l|
         kind.label = l
         kind.general_information = l
       end
       kind.save!
       expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
-      I18n.with_locale('de') { expect(course.description).to eq 'de' }
-      I18n.with_locale('fr') { expect(course.description).to eq 'fr' }
+      I18n.with_locale("de") { expect(course.description).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
     end
 
-    it 'overrides existing values with blanks' do
+    it "overrides existing values with blanks" do
       kind.update!(minimum_age: nil)
       course.update!(minimum_age: 12)
 
@@ -141,13 +141,13 @@ describe Event::Kind do
       end.to change { course.reload.minimum_age }.from(12).to(nil)
     end
 
-    it 'noops when course is not associated with kind' do
+    it "noops when course is not associated with kind" do
       course.update_columns(kind_id: -1)
-      expect { kind.push_down_inherited_attributes! }.not_to change  { read_course_attrs }
+      expect { kind.push_down_inherited_attributes! }.not_to change { read_course_attrs }
     end
 
-    describe 'ignored states' do
-      %w(closed canceled).each do |ignored|
+    describe "ignored states" do
+      %w[closed canceled].each do |ignored|
         before { course.update_columns(state: ignored) }
 
         it "noops for course in #{ignored} state" do
@@ -156,15 +156,15 @@ describe Event::Kind do
           end.not_to change { read_course_attrs }
         end
 
-        it 'updates translated application_conditions column' do
+        it "updates translated application_conditions column" do
           with_locales do |l|
             kind.label = l
             kind.application_conditions = l
           end
           kind.save!
           expect { kind.push_down_inherited_attributes! }.not_to change { course.translations.count }
-          I18n.with_locale('de') { expect(course.application_conditions).to be_blank }
-          I18n.with_locale('fr') { expect(course.application_conditions).to be_blank }
+          I18n.with_locale("de") { expect(course.application_conditions).to be_blank }
+          I18n.with_locale("fr") { expect(course.application_conditions).to be_blank }
         end
       end
     end

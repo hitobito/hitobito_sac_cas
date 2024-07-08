@@ -5,26 +5,25 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('lib', 'import', 'xlsx_reader.rb')
-require_relative 'huts/hut_row.rb'
-require_relative 'huts/hut_chief_row.rb'
-require_relative 'huts/hut_warden_row.rb'
-require_relative 'huts/hut_warden_partner_row.rb'
-require_relative 'huts/hut_chairman_row.rb'
-require_relative 'huts/key_deposit_row.rb'
-require_relative 'huts/unsupported_row.rb'
+require Rails.root.join("lib", "import", "xlsx_reader.rb")
+require_relative "huts/hut_row"
+require_relative "huts/hut_chief_row"
+require_relative "huts/hut_warden_row"
+require_relative "huts/hut_warden_partner_row"
+require_relative "huts/hut_chairman_row"
+require_relative "huts/key_deposit_row"
+require_relative "huts/unsupported_row"
 
 module Import
   class HutsImporter
-
     HEADERS = {
-      contact_navision_id: 'Kontaktnr.',
-      contact_name: 'Kontaktname',
-      verteilercode: 'Verteilercode',
-      related_navision_id: 'Beziehung',
-      related_last_name: 'Name',
-      related_first_name: 'Vorname',
-      created_at: 'Gültig von',
+      contact_navision_id: "Kontaktnr.",
+      contact_name: "Kontaktname",
+      verteilercode: "Verteilercode",
+      related_navision_id: "Beziehung",
+      related_last_name: "Name",
+      related_first_name: "Vorname",
+      created_at: "Gültig von"
     }
 
     IMPORTERS = [
@@ -34,18 +33,18 @@ module Import
       Import::Huts::HutWardenRow,
       Import::Huts::HutWardenPartnerRow,
       Import::Huts::HutChairmanRow,
-      Import::Huts::KeyDepositRow,
+      Import::Huts::KeyDepositRow
     ]
 
     def initialize(path)
-      raise 'Hütten Beziehungen Export excel file not found' unless path.exist?
+      raise "Hütten Beziehungen Export excel file not found" unless path.exist?
       @path = path
     end
 
     def import!
       without_query_logging do
         IMPORTERS.each do |importer|
-          Import::XlsxReader.read(@path, 'Beziehungen_Data', headers: HEADERS) do |row|
+          Import::XlsxReader.read(@path, "Beziehungen_Data", headers: HEADERS) do |row|
             importer.new(row).import! if importer.can_process?(row)
           end
         end
@@ -71,6 +70,5 @@ module Import
       yield
       Group.archival_validation = old_value
     end
-
   end
 end

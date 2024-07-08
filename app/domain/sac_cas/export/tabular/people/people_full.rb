@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Export::Tabular::People::PeopleFull
-
   def person_attributes
     super + [:membership_years]
   end
-
 end

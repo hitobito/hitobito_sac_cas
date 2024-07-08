@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsNeuanmeldungenNv < ::Group
-
   self.static_name = true
 
   ### ROLES

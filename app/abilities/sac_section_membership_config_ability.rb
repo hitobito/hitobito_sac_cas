@@ -6,11 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class SacSectionMembershipConfigAbility < AbilityDsl::Base
-
   include AbilityDsl::Constraints::Group
 
   on(SacSectionMembershipConfig) do
     permission(:layer_and_below_full).may(:manage).in_same_layer_or_below
   end
-
 end

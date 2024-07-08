@@ -8,11 +8,10 @@
 # This controller only exists for testing purposes until membership invoices
 # are sent to abacus. It may be removed then.
 class People::MembershipInvoicePositionsController < ApplicationController
-
   def show
     authorize!(:update, person)
 
-    render plain: csv, type: 'text/plain; charset=utf-8'
+    render plain: csv, type: "text/plain; charset=utf-8"
   end
 
   private
@@ -50,11 +49,10 @@ class People::MembershipInvoicePositionsController < ApplicationController
   end
 
   def person
-    Person.with_membership_years('people.*', date).find(params[:id])
+    Person.with_membership_years("people.*", date).find(params[:id])
   end
 
   def date
     @date ||= params[:date].present? ? Date.parse(params[:date]) : Time.zone.today
   end
-
 end

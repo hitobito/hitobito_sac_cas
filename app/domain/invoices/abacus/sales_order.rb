@@ -8,14 +8,13 @@
 module Invoices
   module Abacus
     class SalesOrder < Entity
-
-      SOURCE_SYSTEM = 'hitobito'
+      SOURCE_SYSTEM = "hitobito"
       BACKLOG_ID = 0
-      TYPE = 'Product'
-      TYPE_OF_PRINTING = 'AccToSequentialControl'
+      TYPE = "Product"
+      TYPE_OF_PRINTING = "AccToSequentialControl"
       INVOICE_KINDS = {
-        membership: 'R',
-        course: 'C'
+        membership: "R",
+        course: "C"
       }.with_indifferent_access.freeze
 
       def create(positions, additional_user_fields: {})
@@ -29,7 +28,7 @@ module Invoices
       end
 
       def fetch
-        client.get(:sales_order, abacus_id, '$expand' => 'Positions')
+        client.get(:sales_order, abacus_id, "$expand" => "Positions")
       end
 
       private
@@ -48,8 +47,8 @@ module Invoices
 
       def trigger_sales_order
         path = "#{client.endpoint(:sales_order, abacus_id)}/" \
-               'ch.abacus.orde.TriggerSalesOrderNextStep'
-        client.request(:post, path, { type_of_printing: TYPE_OF_PRINTING })
+               "ch.abacus.orde.TriggerSalesOrderNextStep"
+        client.request(:post, path, {type_of_printing: TYPE_OF_PRINTING})
       end
 
       def delete_sales_order
@@ -61,7 +60,7 @@ module Invoices
       end
 
       def abacus_id
-        { sales_order_id: entity.abacus_sales_order_key, sales_order_backlog_id: BACKLOG_ID }
+        {sales_order_id: entity.abacus_sales_order_key, sales_order_backlog_id: BACKLOG_ID}
       end
 
       def sales_order_attrs(additional_user_fields: {})
@@ -81,7 +80,7 @@ module Invoices
         {
           user_field1: entity.id.to_s,
           user_field2: SOURCE_SYSTEM,
-          user_field3: entity.recipient.correspondence == 'digital'
+          user_field3: entity.recipient.correspondence == "digital"
         }.merge(additional_user_fields)
       end
 
@@ -91,9 +90,9 @@ module Invoices
           sales_order_backlog_id: BACKLOG_ID,
           position_number: index,
           type: TYPE,
-          pricing: { price_after_finding: position.amount.to_f.round(2) },
-          quantity: { ordered: position.count, charged: position.count, delivered: position.count },
-          product: { description: position.name, product_number: position.article_number.to_s },
+          pricing: {price_after_finding: position.amount.to_f.round(2)},
+          quantity: {ordered: position.count, charged: position.count, delivered: position.count},
+          product: {description: position.name, product_number: position.article_number.to_s},
           accounts: position_accounts_fields(position),
           user_fields: position_user_fields(position)
         }
@@ -119,7 +118,6 @@ module Invoices
         fields[:user_field4] = position.details.to_s[0, 50] if position.details.present?
         fields
       end
-
     end
   end
 end

@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:cost_unit) do
-  code  { Faker::Lorem.characters(number: 10) }
+  code { Faker::Lorem.characters(number: 10) }
   label { Faker::Lorem.words.join(" ") }
 end
 
 Fabricator(:cost_center) do
-  code  { Faker::Lorem.characters(number: 10) }
+  code { Faker::Lorem.characters(number: 10) }
   label { Faker::Lorem.words.join(" ") }
 end

@@ -5,18 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::SubscriptionsJob do
   let(:user) { people(:admin) }
   let(:mailing_list) { mailing_lists(:newsletter) }
 
-  context 'with recipients param' do
+  context "with recipients param" do
     subject(:job) do
-      described_class.new(:csv, user.id, mailing_list.id, recipients: true, filename: 'dummy')
+      described_class.new(:csv, user.id, mailing_list.id, recipients: true, filename: "dummy")
     end
 
-    it 'uses SacRecipients tabular export' do
+    it "uses SacRecipients tabular export" do
       expect(Export::Tabular::People::SacRecipients).to receive(:export)
       job.perform
     end

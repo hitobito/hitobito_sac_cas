@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
-describe 'self_registration_abo_magazin', js: true do
+describe "self_registration_abo_magazin", js: true do
   let(:group) { groups(:abo_die_alpen) }
 
   before do
@@ -16,136 +16,136 @@ describe 'self_registration_abo_magazin', js: true do
   end
 
   def expect_active_step(step_name)
-    expect(page).
-      to have_css('.step-headers li.active', text: step_name),
-         "expected step '#{step_name}' to be active, but step '#{find('.step-headers li.active', wait: 0).text}' is active"
+    expect(page)
+      .to have_css(".step-headers li.active", text: step_name),
+        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
-    within('.alert#error_explanation') do
+    within(".alert#error_explanation") do
       expect(page).to have_content(message)
     end
   end
 
   def expect_shared_partial
-    expect(page).to have_text 'Preis pro Jahr'
+    expect(page).to have_text "Preis pro Jahr"
   end
 
   def complete_main_person_form
-    choose 'Mann'
-    fill_in 'Vorname', with: 'Max'
-    fill_in 'Nachname', with: 'Muster'
-    fill_in 'self_registration_abo_magazin_main_person_attributes_street', with: 'Musterplatz'
-    fill_in 'self_registration_abo_magazin_main_person_attributes_housenumber', with: '42'
-    fill_in 'Geburtstag', with: '01.01.1980'
-    fill_in 'Telefon', with: '+41 79 123 45 56'
-    fill_in 'self_registration_abo_magazin_main_person_attributes_zip_code', with: '8000'
-    fill_in 'self_registration_abo_magazin_main_person_attributes_town', with: 'Zürich'
-    check 'Ich habe die Statuten gelesen und stimme diesen zu'
-    check 'Ich habe die Datenschutzerklärung gelesen und stimme diesen zu'
+    choose "Mann"
+    fill_in "Vorname", with: "Max"
+    fill_in "Nachname", with: "Muster"
+    fill_in "self_registration_abo_magazin_main_person_attributes_street", with: "Musterplatz"
+    fill_in "self_registration_abo_magazin_main_person_attributes_housenumber", with: "42"
+    fill_in "Geburtstag", with: "01.01.1980"
+    fill_in "Telefon", with: "+41 79 123 45 56"
+    fill_in "self_registration_abo_magazin_main_person_attributes_zip_code", with: "8000"
+    fill_in "self_registration_abo_magazin_main_person_attributes_town", with: "Zürich"
+    check "Ich habe die Statuten gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
   end
 
-  it 'validates email address' do
-    allow(Truemail).to receive(:valid?).with('max.muster@hitobito.example.com').and_return(false)
+  it "validates email address" do
+    allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
-    expect_active_step('E-Mail')
-    expect_validation_error('E-Mail ist nicht gültig')
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
+    expect_active_step("E-Mail")
+    expect_validation_error("E-Mail ist nicht gültig")
   end
 
-  it 'creates person' do
+  it "creates person" do
     visit group_self_registration_path(group_id: group.id)
-    expect_active_step 'Haupt-E-Mail'
+    expect_active_step "Haupt-E-Mail"
     expect_shared_partial
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
 
-    expect_active_step 'Personendaten'
+    expect_active_step "Personendaten"
     expect_shared_partial
     complete_main_person_form
-    click_on 'Weiter'
+    click_on "Weiter"
 
-    expect_active_step 'Abo'
+    expect_active_step "Abo"
     expect_shared_partial
-    fill_in 'Ab Ausgabe', with: I18n.l(Date.tomorrow)
+    fill_in "Ab Ausgabe", with: I18n.l(Date.tomorrow)
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
   end
 
-  it 'renders date validation message', js: true do
+  it "renders date validation message", js: true do
     visit group_self_registration_path(group_id: group.id)
-    expect_active_step 'Haupt-E-Mail'
+    expect_active_step "Haupt-E-Mail"
     expect_shared_partial
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
 
-    expect_active_step 'Personendaten'
+    expect_active_step "Personendaten"
     expect_shared_partial
     complete_main_person_form
-    click_on 'Weiter'
+    click_on "Weiter"
 
-    expect_active_step 'Abo'
+    expect_active_step "Abo"
     expect_shared_partial
-    fill_in 'Ab Ausgabe', with: I18n.l(Date.yesterday)
+    fill_in "Ab Ausgabe", with: I18n.l(Date.yesterday)
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.not_to change { Person.count }
-    expect(page).to have_text "Ab Ausgabe muss #{I18n.l(Date.today)} oder danach sein"
+    expect(page).to have_text "Ab Ausgabe muss #{I18n.l(Time.zone.today)} oder danach sein"
   end
 
-  it 'subscribes to mailinglist' do
+  it "subscribes to mailinglist" do
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
-    check 'Ich möchte einen Newsletter abonnieren'
-    click_on 'Weiter'
+    check "Ich möchte einen Newsletter abonnieren"
+    click_on "Weiter"
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link('Abmelden')
+      expect(page).to have_link("Abmelden")
     end
   end
 
-  it 'opts out of mailinglist' do
+  it "opts out of mailinglist" do
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
-    uncheck 'Ich möchte einen Newsletter abonnieren'
-    click_on 'Weiter'
+    uncheck "Ich möchte einen Newsletter abonnieren"
+    click_on "Weiter"
 
     expect do
-      click_on 'Registrieren'
+      click_on "Registrieren"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
     within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link('Anmelden')
+      expect(page).to have_link("Anmelden")
     end
   end
 
-  it 'validates that person is old enough' do
+  it "validates that person is old enough" do
     visit group_self_registration_path(group_id: group.id)
-    fill_in 'E-Mail', with: 'max.muster@hitobito.example.com'
-    click_on 'Weiter'
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
     complete_main_person_form
-    fill_in 'Geburtstag', with: 17.years.ago.to_date
+    fill_in "Geburtstag", with: 17.years.ago.to_date
     expect do
-      click_on 'Weiter'
-      expect(page).to have_text 'Person muss 18 Jahre oder älter sein.'
+      click_on "Weiter"
+      expect(page).to have_text "Person muss 18 Jahre oder älter sein."
     end.not_to change { Person.count }
   end
 end

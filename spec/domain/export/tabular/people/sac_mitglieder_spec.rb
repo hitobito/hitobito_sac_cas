@@ -5,25 +5,26 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::Tabular::People::SacMitglieder do
   let(:group) { groups(:bluemlisalp) }
+
   subject(:tabular) { described_class.new(group) }
 
   its(:model_class) { is_expected.to eq Person }
   its(:row_class) { is_expected.to eq Export::Tabular::People::SacMitgliedRow }
 
-  it '#new with group other than Sektion or Ortsgruppe raises ArgumentError' do
-    expect { described_class.new(groups(:bluemlisalp_mitglieder)) }.
-      to raise_error(ArgumentError, 'Argument must be a Sektion or Ortsgruppe')
+  it "#new with group other than Sektion or Ortsgruppe raises ArgumentError" do
+    expect { described_class.new(groups(:bluemlisalp_mitglieder)) }
+      .to raise_error(ArgumentError, "Argument must be a Sektion or Ortsgruppe")
   end
 
-  it '#labels is nil' do
+  it "#labels is nil" do
     expect(tabular.labels).to be_nil
   end
 
-  it '#attributes' do
+  it "#attributes" do
     expect(tabular.attributes).to eq(
       [
         :id,
@@ -62,9 +63,9 @@ describe Export::Tabular::People::SacMitglieder do
     )
   end
 
-  describe '#list' do
-    context 'all mitglieder of the layer' do
-      it 'are included' do
+  describe "#list" do
+    context "all mitglieder of the layer" do
+      it "are included" do
         expect(tabular.list).to contain_exactly(
           roles(:mitglied).person,
           roles(:familienmitglied).person,
@@ -74,45 +75,44 @@ describe Export::Tabular::People::SacMitglieder do
       end
     end
 
-    context 'zusatzsektion mitglieder of the layer' do
-      it 'are included' do
+    context "zusatzsektion mitglieder of the layer" do
+      it "are included" do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-                  group: groups(:matterhorn_mitglieder), person: people(:abonnent))
+          group: groups(:matterhorn_mitglieder), person: people(:abonnent))
         Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
-                  group: groups(:bluemlisalp_mitglieder), person: people(:abonnent))
+          group: groups(:bluemlisalp_mitglieder), person: people(:abonnent))
 
         expect(tabular.list).to include people(:abonnent)
       end
     end
 
-    context 'mitglieder of descendent layer' do
-      it 'are not included' do
+    context "mitglieder of descendent layer" do
+      it "are not included" do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-                  group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-                  person: people(:abonnent))
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: people(:abonnent))
         expect(tabular.list).not_to include people(:abonnent)
       end
     end
 
-    context 'mitglieder of ancestor layer' do
+    context "mitglieder of ancestor layer" do
       let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
 
-      it 'are not included' do
+      it "are not included" do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-                  group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-                  person: people(:abonnent))
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: people(:abonnent))
         expect(tabular.list).to contain_exactly people(:abonnent)
       end
     end
 
-    context 'mitglieder of sibling layer' do
-      it 'are not included' do
+    context "mitglieder of sibling layer" do
+      it "are not included" do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-                  group: groups(:matterhorn_mitglieder),
-                  person: people(:abonnent))
+          group: groups(:matterhorn_mitglieder),
+          person: people(:abonnent))
         expect(tabular.list).not_to include people(:abonnent)
       end
     end
-
   end
 end

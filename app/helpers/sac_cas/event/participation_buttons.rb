@@ -12,7 +12,7 @@ module SacCas::Event::ParticipationButtons
     self.conditions = {
       cancel: [:unconfirmed, :applied, :assigned, :summoned, if: -> { cancelable? }],
       reject: [:unconfirmed, :applied],
-      summon: [:assigned, if: -> { @event.state == 'ready' }],
+      summon: [:assigned, if: -> { @event.state == "ready" }],
       absent: [:assigned, :summoned, :attended],
       attend: [:absent, if: -> { @event.closed? }],
       assign: [:unconfirmed, :applied, :absent, if: -> { !@event.closed? }]
@@ -21,19 +21,18 @@ module SacCas::Event::ParticipationButtons
 
   private
 
-
   def build_cancel_button
     return super unless her_own?
 
-    popover = render('event/participations/popover_participant_cancels', entry: @participation)
-    action_button(t('.cancel_button'),
-                  nil,
-                  :'times-circle',
-                  data: {
-                    bs_toggle: 'popover',
-                    bs_placement: :bottom,
-                    bs_content: popover.to_str
-                  })
+    popover = render("event/participations/popover_participant_cancels", entry: @participation)
+    action_button(t(".cancel_button"),
+      nil,
+      :"times-circle",
+      data: {
+        bs_toggle: "popover",
+        bs_placement: :bottom,
+        bs_content: popover.to_str
+      })
   end
 
   def cancelable?

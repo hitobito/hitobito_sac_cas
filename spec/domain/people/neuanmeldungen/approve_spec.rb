@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Approve do
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
@@ -33,7 +33,7 @@ describe People::Neuanmeldungen::Approve do
     expect(actual_role.beitragskategorie).to eq role.beitragskategorie
   end
 
-  it 'replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles' do
+  it "replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles" do
     neuanmeldungen = [:adult, :adult, :youth, :family].map { |cat| create_role(cat) }
 
     approver = described_class.new(
@@ -45,9 +45,9 @@ describe People::Neuanmeldungen::Approve do
       ]
     )
 
-    expect { approver.call }.
-      to change { neuanmeldung_role_class.count }.by(-3).
-      and change { neuanmeldung_approved_role_class.count }.by(3)
+    expect { approver.call }
+      .to change { neuanmeldung_role_class.count }.by(-3)
+      .and change { neuanmeldung_approved_role_class.count }.by(3)
 
     expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
@@ -56,7 +56,7 @@ describe People::Neuanmeldungen::Approve do
     expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
   end
 
-  it 'creates the SektionNeuanmeldungNv group if it does not exist' do
+  it "creates the SektionNeuanmeldungNv group if it does not exist" do
     neuanmeldungen_nv.destroy!
     neuanmeldung = create_role(:adult)
 

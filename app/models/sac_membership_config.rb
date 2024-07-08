@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -51,7 +52,6 @@
 #
 
 class SacMembershipConfig < ApplicationRecord
-
   class << self
     def active(date = Time.zone.today)
       where(valid_from: ..date.year).order(valid_from: :desc).first
@@ -63,11 +63,11 @@ class SacMembershipConfig < ApplicationRecord
   validates_by_schema
   # date format: 1.7., 1.10.
   validates :discount_date_1, :discount_date_2, :discount_date_3,
-            format: { with: /\A[0123]?\d\.[012]?\d\.\z/ },
-            allow_blank: true
+    format: {with: /\A[0123]?\d\.[012]?\d\.\z/},
+    allow_blank: true
   validates :discount_percent_1, :discount_percent_2, :discount_percent_3,
-            numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
-            allow_blank: true
+    numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 100},
+    allow_blank: true
 
   scope :list, -> { order(:valid_from) }
 
@@ -77,13 +77,12 @@ class SacMembershipConfig < ApplicationRecord
 
   def discount_percent(date)
     index = [3, 2, 1].find do |i|
-      discount_date = send("discount_date_#{i}")
+      discount_date = send(:"discount_date_#{i}")
       next nil if discount_date.blank?
 
       Date.parse("#{discount_date}#{date.year}") <= date
     end
 
-    index ? send("discount_percent_#{index}").to_i : 0
+    index ? send(:"discount_percent_#{index}").to_i : 0
   end
-
 end

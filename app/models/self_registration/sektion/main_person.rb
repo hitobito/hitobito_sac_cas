@@ -14,7 +14,7 @@ class SelfRegistration::Sektion::MainPerson < SelfRegistration::MainPerson::Base
   self.active_model_only_attrs += [:supplements, :household_emails]
 
   delegate :self_registration_reason_id, :register_on_date, :newsletter,
-           to: :supplements, allow_nil: true
+    to: :supplements, allow_nil: true
 
   public :role
 

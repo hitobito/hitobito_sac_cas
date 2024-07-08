@@ -7,7 +7,6 @@
 
 module SacCas::Beitragskategorie
   class Calculator
-
     CATEGORY_ADULT = :adult
     CATEGORY_YOUTH = :youth
     CATEGORY_FAMILY = :family
@@ -66,6 +65,5 @@ module SacCas::Beitragskategorie
 
       @person.household_key?
     end
-
   end
 end

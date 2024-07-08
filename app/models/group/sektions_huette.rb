@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsHuette < ::Group
-
   ### ROLES
   class Huettenwart < ::Role
     self.permissions = [:group_read]
@@ -23,5 +22,4 @@ class Group::SektionsHuette < ::Group
   roles Huettenwart,
     Huettenchef,
     Andere
-
 end

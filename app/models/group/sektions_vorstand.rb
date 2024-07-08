@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
@@ -7,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsVorstand < ::Group
-
   ### ROLES
   class Praesidium < ::Role
     self.permissions = []

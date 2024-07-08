@@ -7,7 +7,6 @@
 
 module People
   module Neuanmeldungen
-
     # Reject Neuanmeldungen
     #
     # In the given group for all People with the given people_ids:

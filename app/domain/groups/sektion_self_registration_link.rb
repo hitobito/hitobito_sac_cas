@@ -7,8 +7,8 @@
 
 class Groups::SektionSelfRegistrationLink
   delegate :group_self_registration_url,
-           :group_self_registration_path,
-           to: 'Rails.application.routes.url_helpers'
+    :group_self_registration_path,
+    to: "Rails.application.routes.url_helpers"
 
   def initialize(group, host)
     @sektion = group

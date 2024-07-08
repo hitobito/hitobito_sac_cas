@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'net/sftp'
+require "net/sftp"
 
 class Sftp
   ConnectionError = Class.new(StandardError)
@@ -17,7 +17,7 @@ class Sftp
   def upload_file(data, file_path)
     create_missing_directories(file_path)
 
-    handle = connection.open!(file_path, 'w')
+    handle = connection.open!(file_path, "w")
     connection.write!(handle, 0, data)
     connection.close(handle)
   end
@@ -48,10 +48,10 @@ class Sftp
 
   def options
     credentials = if @config.private_key.present?
-                    { key_data: [@config.private_key] }
-                  else
-                    { password: @config.password }
-                  end
+      {key_data: [@config.private_key]}
+    else
+      {password: @config.password}
+    end
     credentials.merge(non_interactive: true, port: @config.port).compact
   end
 end

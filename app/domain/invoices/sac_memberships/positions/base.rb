@@ -9,7 +9,6 @@ module Invoices
   module SacMemberships
     module Positions
       class Base
-
         class_attribute :group, :section_payment_possible
 
         attr_reader :member, :role, :context
@@ -47,7 +46,7 @@ module Invoices
         end
 
         def article_number
-          context.config.send("#{name}_article_number")
+          context.config.send(:"#{name}_article_number")
         end
 
         def section_pays?
@@ -81,7 +80,7 @@ module Invoices
             details: label_beitragskategorie,
             amount: invoice_amount,
             article_number: article_number,
-            other_creditor_id: creditor == section ? section.id : nil,
+            other_creditor_id: (creditor == section) ? section.id : nil,
             other_debitor_id: section_pays? ? section.id : nil,
             other_debitor_amount: section_pays? ? amount : nil
           )
@@ -110,7 +109,7 @@ module Invoices
         def beitragskategorie_fee(conf = config)
           return 0.0 unless paying_person?
 
-          conf.send("#{fee_attr_prefix}_#{beitragskategorie}")
+          conf.send(:"#{fee_attr_prefix}_#{beitragskategorie}")
         end
 
         def paying_person?
@@ -128,7 +127,6 @@ module Invoices
         def sac_fee_exemption?
           section.sac_fee_exemption?(member)
         end
-
       end
     end
   end

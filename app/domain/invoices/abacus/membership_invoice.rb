@@ -8,7 +8,6 @@
 module Invoices
   module Abacus
     class MembershipInvoice
-
       MEMBERSHIP_CARD_FIELD_INDEX = 11
       INVOICE_KIND = :membership
 
@@ -20,7 +19,6 @@ module Invoices
       delegate :date, :sac, :config, to: :context
 
       class << self
-
         # Primarly used for testing purposes.
         # member is an Invoices::SacMembership::Member object
         # Role retrieval will usually happen outside of this class.
@@ -62,7 +60,7 @@ module Invoices
         @invoice ||= Invoice.create!(
           recipient: member.person,
           group: sac,
-          title: I18n.t('invoices.sac_memberships.title', year: date.year),
+          title: I18n.t("invoices.sac_memberships.title", year: date.year),
           total: positions.sum(&:invoice_amount),
           issued_at: date,
           sent_at: date,
@@ -116,10 +114,10 @@ module Invoices
         # limit strings according to Abacus field length (120)
         [
           person.id,
-          person.last_name.to_s.delete(';')[0, 50],
-          person.first_name.to_s.delete(';')[0, 30],
+          person.last_name.to_s.delete(";")[0, 50],
+          person.first_name.to_s.delete(";")[0, 30],
           person.membership_verify_token
-        ].join(';')
+        ].join(";")
       end
 
       def abacus_person
@@ -133,7 +131,6 @@ module Invoices
       def client
         @client ||= Abacus::Client.new
       end
-
     end
   end
 end

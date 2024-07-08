@@ -5,23 +5,23 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SacCas < ::Group
-
+class Group::SacCas < Group
   self.layer = true
   self.event_types = [Event::Course]
 
   children Group::Geschaeftsstelle,
-           Group::Geschaeftsleitung,
-           Group::Zentralvorstand,
-           Group::Kommission,
-           Group::Sektion,
-           Group::ExterneKontakte,
-           Group::Abonnenten,
-           Group::Ehrenmitglieder
+    Group::Geschaeftsleitung,
+    Group::Zentralvorstand,
+    Group::Kommission,
+    Group::Sektion,
+    Group::ExterneKontakte,
+    Group::Abonnenten,
+    Group::Ehrenmitglieder
 
   mounted_attr :course_admin_email, :string
   mounted_attr :sac_newsletter_mailing_list_id, :integer
   mounted_attr :sac_magazine_mailing_list_id, :integer
+  mounted_attr :sac_fundraising_mailing_list_id, :integer
 
   validate :assert_valid_course_admin_email
   validate :assert_mounted_mailing_list_attrs
@@ -31,17 +31,23 @@ class Group::SacCas < ::Group
   private
 
   def assert_mounted_mailing_list_attrs
-    unless mailing_lists.where(id: sac_newsletter_mailing_list_id).exists?
-      errors.add(:sac_newsletter_mailing_list_id, :inclusion)
-    end
-    unless sac_magazine_mailing_list_id.nil? ||
-      mailing_lists.where(id: sac_magazine_mailing_list_id).exists?
-      errors.add(:sac_magazine_mailing_list_id, :inclusion)
+    assert_mounted_mailing_list_attr(:sac_newsletter_mailing_list_id)
+    assert_mounted_mailing_list_attr(:sac_magazine_mailing_list_id, allow_blank: true)
+    assert_mounted_mailing_list_attr(:sac_fundraising_mailing_list_id, allow_blank: true)
+  end
+
+  def assert_mounted_mailing_list_attr(key, allow_blank: false)
+    mailing_list_id = send(key)
+    return if mailing_list_id.blank? && allow_blank
+
+    unless mailing_lists.exists?(id: mailing_list_id)
+      errors.add(key, :inclusion)
     end
   end
 
   def assert_valid_course_admin_email
-    return unless course_admin_email.present?
+    return if course_admin_email.blank?
+
     unless Truemail.valid?(course_admin_email.to_s)
       errors.add(:course_admin_email, :invalid)
     end

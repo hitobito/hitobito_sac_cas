@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Dropdown::TableDisplays
-
   def render_item(_name, column, value, _label = render_label(column, value))
     super unless TableDisplays::Resolver.exclude?(value.to_sym, parent)
   end
-
 end

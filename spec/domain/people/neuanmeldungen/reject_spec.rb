@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require 'spec_helper'
+require "spec_helper"
 
 describe People::Neuanmeldungen::Reject do
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
@@ -33,7 +33,7 @@ describe People::Neuanmeldungen::Reject do
     described_class.new(group: group, people_ids: people_ids, **opts)
   end
 
-  it 'deletes the Neuanmeldung roles' do
+  it "deletes the Neuanmeldung roles" do
     neuanmeldung_einzel = create_role(:adult)
     neuanmeldung_familie = create_role(:family)
     neuanmeldung_jugend = create_role(:youth)

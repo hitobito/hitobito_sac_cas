@@ -8,7 +8,6 @@
 module Invoices
   module Abacus
     class Person < Entity
-
       SALUTATION_IDS = {
         mister: 1,
         miss: 2,
@@ -19,15 +18,15 @@ module Invoices
       }.freeze
 
       COMMUNICATION_TYPES = {
-        email: 'EMail',
-        phone: 'Phone',
-        phone2: 'Phone2',
-        fax: 'Fax',
-        mobile: 'Mobile',
-        www: 'WWW'
+        email: "EMail",
+        phone: "Phone",
+        phone2: "Phone2",
+        fax: "Fax",
+        mobile: "Mobile",
+        www: "WWW"
       }.freeze
 
-      COMMUNICATION_CATEGORY_PRIVATE = 'Private'
+      COMMUNICATION_CATEGORY_PRIVATE = "Private"
 
       def transmit
         return false unless valid?
@@ -52,7 +51,7 @@ module Invoices
       end
 
       def fetch_subject
-        client.get(:subject, subject_id, '$expand' => 'Addresses,Communications,Customers')
+        client.get(:subject, subject_id, "$expand" => "Addresses,Communications,Customers")
       end
 
       def validate
@@ -126,7 +125,7 @@ module Invoices
           name: entity.last_name.to_s[0, 100],
           first_name: entity.first_name.to_s[0, 50],
           language: entity.language,
-          salutation_id: SALUTATION_IDS.fetch(entity.gender == 'm' ? :mister : :miss)
+          salutation_id: SALUTATION_IDS.fetch((entity.gender == "m") ? :mister : :miss)
         }
       end
 
@@ -164,7 +163,6 @@ module Invoices
           subject_id: subject_id
         }
       end
-
     end
   end
 end

@@ -5,20 +5,20 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Export::PeopleExportJob do
   let(:user) { people(:root) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
-  let(:filename) { AsyncDownloadFile.create_name('people_export', user.id) }
+  let(:filename) { AsyncDownloadFile.create_name("people_export", user.id) }
   let(:file) { AsyncDownloadFile.from_filename(filename, :csv) }
   let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
-  it 'works when including attribute membership_years' do
+  it "works when including attribute membership_years" do
     job = Export::PeopleExportJob.new(
       :csv, user.id, group.id, {},
-                                full: true, filename: filename
+      full: true, filename: filename
     )
 
     job.perform
@@ -30,15 +30,14 @@ describe Export::PeopleExportJob do
     expect(csv.first["Anzahl Mitglieder-Jahre"]).to eq "1"
   end
 
-  context 'with recipients param' do
+  context "with recipients param" do
     subject do
-      Export::PeopleExportJob.new(:csv, user.id, group.id, {}, recipients: true, filename: 'dummy')
+      Export::PeopleExportJob.new(:csv, user.id, group.id, {}, recipients: true, filename: "dummy")
     end
 
-    it 'uses SacRecipients tabular export' do
+    it "uses SacRecipients tabular export" do
       expect(Export::Tabular::People::SacRecipients).to receive(:export)
       subject.perform
     end
   end
-
 end

@@ -31,16 +31,16 @@ class SelfRegistration::AboBasicLogin::MainPerson < SelfRegistration::MainPerson
   self.active_model_only_attrs += [:newsletter] + AGREEMENTS
 
   def self.human_attribute_name(key, options = {})
-    links = Regexp.new(AGREEMENTS.join('|'))
+    links = Regexp.new(AGREEMENTS.join("|"))
     case key
-    when links then I18n.t("link_#{key}_title", scope: 'self_registration.infos_component')
-    else super(key, options)
+    when links then I18n.t("link_#{key}_title", scope: "self_registration.infos_component")
+    else super
     end
   end
 
   def link_translations(key)
     ["link_#{key}_title", "link_#{key}"].map do |str|
-      I18n.t(str, scope: 'self_registration.infos_component')
+      I18n.t(str, scope: "self_registration.infos_component")
     end
   end
 end

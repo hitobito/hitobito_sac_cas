@@ -58,6 +58,8 @@ en:
       models:
         household:
           attributes:
+            members: 
+              no_members: ""
             base:
               at_least_one_adult: ""
               no_adult_member_with_email: ""
@@ -210,6 +212,12 @@ en:
         correspondence: ""
         family_id: ""
         sac_family_main_person: ""
+        sac_remark_national_office: ""
+        sac_remark_section_1: ""
+        sac_remark_section_2: ""
+        sac_remark_section_3: ""
+        sac_remark_section_4: ""
+        sac_remark_section_5: ""
         correspondences:
           digital: ""
           print: ""
@@ -320,6 +328,7 @@ en:
         already_has_neuanmeldung_role: ""
         too_many_adults_in_family: ""
         only_one_mitglied_role_allowed_at_a_time: ""
+        must_be_in_past: ""
         must_be_present_unless_deleted: ""
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
@@ -355,6 +364,9 @@ en:
         one: ''
         other: ''
       sac_section_membership_config:
+        one: ''
+        other: ''
+      termination_reason:
         one: ''
         other: ''
 
@@ -827,6 +839,7 @@ en:
 
     tabs:
       history: ""
+      remarks: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
@@ -961,6 +974,10 @@ en:
       link_contribution_regulations_title: Contribution regulations
       link_data_protection: "https://www.sac-cas.ch/en/meta/data-protection/"
       link_data_protection_title: Data protection
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: ""
 
   table_displays:
     person:

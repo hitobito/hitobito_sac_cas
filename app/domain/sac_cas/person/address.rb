@@ -14,7 +14,7 @@ module SacCas::Person::Address
   def address_with_multilanguage_country
     [
       @person.address.to_s.strip,
-      [@person.zip_code, @person.town].compact.join(' ').squish,
+      [@person.zip_code, @person.town].compact.join(" ").squish,
       Country.new(country).name
     ]
   end

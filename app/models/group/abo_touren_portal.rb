@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::AboTourenPortal < ::Group
-
   self.static_name = true
 
   ### ROLES
@@ -42,5 +41,4 @@ class Group::AboTourenPortal < ::Group
   end
 
   roles Abonnent, Neuanmeldung, Admin, Autor, Community, Andere
-
 end

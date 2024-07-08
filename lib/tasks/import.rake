@@ -6,44 +6,44 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 namespace :import do
-  desc 'Import sections from a navision export (tmp/xlsx/sektionen.xlsx)'
+  desc "Import sections from a navision export (tmp/xlsx/sektionen.xlsx)"
   task sektionen: [:environment] do
-    import_file_path = 'tmp/xlsx/sektionen.xlsx'
+    import_file_path = "tmp/xlsx/sektionen.xlsx"
     sektionen_excel = Rails.root.join(import_file_path)
     Import::SektionenImporter.new(sektionen_excel).import!
   end
 
-  desc 'Import huts from a navision export'
+  desc "Import huts from a navision export"
   task huts: [:environment] do
-    import_file_path = 'tmp/xlsx/huetten_beziehungen.xlsx'
+    import_file_path = "tmp/xlsx/huetten_beziehungen.xlsx"
     hut_relations_excel = Rails.root.join(import_file_path)
     Import::HutsImporter.new(hut_relations_excel).import!
   end
 
-  desc 'Import all people from a navision export xlsx' \
-         ' (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)'
+  desc "Import all people from a navision export xlsx" \
+         " (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)"
   task people: [:environment] do
     Import::PeopleImporter.new(
-      Pathname(ENV['FILE'].to_s),
-      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+      Pathname(ENV["FILE"].to_s),
+      skip_existing: !["1", "true"].include?(ENV["REIMPORT_ALL"].to_s.downcase)
     ).import!
   end
 
-  desc 'Import memberships from a navision export xlsx' \
-         ' (options: FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)'
+  desc "Import memberships from a navision export xlsx" \
+         " (options: FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)"
   task memberships: [:environment] do
     Import::Sektion::MembershipsImporter.new(
-      Pathname(ENV['FILE'].to_s),
-      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+      Pathname(ENV["FILE"].to_s),
+      skip_existing: !["1", "true"].include?(ENV["REIMPORT_ALL"].to_s.downcase)
     ).import!
   end
 
-  desc 'Import additional memberships from a navision export xlsx' \
-         ' (options: FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)'
+  desc "Import additional memberships from a navision export xlsx" \
+         " (options: FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)"
   task additonal_memberships: [:environment] do
     Import::Sektion::AdditionalMembershipsImporter.new(
-      Pathname(ENV['FILE'].to_s),
-      skip_existing: !['1', 'true'].include?(ENV['REIMPORT_ALL'].to_s.downcase)
+      Pathname(ENV["FILE"].to_s),
+      skip_existing: !["1", "true"].include?(ENV["REIMPORT_ALL"].to_s.downcase)
     ).import!
   end
 end

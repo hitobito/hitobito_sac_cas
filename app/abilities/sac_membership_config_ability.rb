@@ -6,10 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class SacMembershipConfigAbility < AbilityDsl::Base
-
   on(SacMembershipConfig) do
     class_side(:index).if_admin
     permission(:admin).may(:manage).all
   end
-
 end

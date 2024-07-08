@@ -40,7 +40,7 @@ module SacCas::Roles::Termination
 
   def terminatable_mitglied_role_types
     [Group::SektionsMitglieder::Mitglied,
-     Group::SektionsMitglieder::MitgliedZusatzsektion]
+      Group::SektionsMitglieder::MitgliedZusatzsektion]
       .collect(&:sti_name)
   end
 
@@ -50,12 +50,12 @@ module SacCas::Roles::Termination
   def dependent_roles
     return [] unless stammsektion_membership?
 
-    Group::SektionsMitglieder::MitgliedZusatzsektion.
-      where(person_id: role.person_id)
+    Group::SektionsMitglieder::MitgliedZusatzsektion
+      .where(person_id: role.person_id)
   end
 
   def stammsektion_membership?
-     role.is_a?(Group::SektionsMitglieder::Mitglied)
+    role.is_a?(Group::SektionsMitglieder::Mitglied)
   end
 
   class_methods do

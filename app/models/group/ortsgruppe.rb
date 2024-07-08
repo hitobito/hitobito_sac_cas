@@ -12,25 +12,25 @@ class Group::Ortsgruppe < Group
   self.event_types = [Event, Event::Course]
 
   children Group::SektionsFunktionaere,
-           Group::SektionsMitglieder,
-           Group::SektionsNeuanmeldungenSektion,
-           Group::SektionsNeuanmeldungenNv,
-           Group::SektionsExterneKontakte
+    Group::SektionsMitglieder,
+    Group::SektionsNeuanmeldungenSektion,
+    Group::SektionsNeuanmeldungenNv,
+    Group::SektionsExterneKontakte
 
   self.default_children = [
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsExterneKontakte,
+    Group::SektionsExterneKontakte
   ]
 
   validates :foundation_year,
-            numericality:
-            { greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2 }
+    numericality:
+    {greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2}
 
   mounted_attr :foundation_year, :integer
   mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
-  mounted_attr :language, :string, enum: %w(DE FR IT), default: 'DE', null: false
+  mounted_attr :language, :string, enum: %w[DE FR IT], default: "DE", null: false
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
 
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id

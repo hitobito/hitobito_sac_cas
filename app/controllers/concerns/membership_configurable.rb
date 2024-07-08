@@ -26,7 +26,7 @@ module MembershipConfigurable
   def build_entry
     if latest_config
       attrs = latest_config.attributes
-      attrs.delete('id')
+      attrs.delete("id")
       attrs[:valid_from] = latest_config.valid_from + 1
     else
       attrs = new_entry_values
@@ -69,5 +69,4 @@ module MembershipConfigurable
   def latest_config
     available_configs.last
   end
-
 end
