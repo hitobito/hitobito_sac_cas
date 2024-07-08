@@ -9,12 +9,21 @@ en:
     currency: ""
     years: ""
 
+    wizards/steps/membership_terminated_info_title: ""
+    wizards/steps/choose_membership_title: ""
+    wizards/steps/choose_sektion_title: ""
+    wizards/steps/join_zusatzsektion/summary_title: ""
+
   errors:
     messages:
       assert_old_enough: ""
       conflicting_family_membership: >
   activemodel:
     attributes:
+      wizards/steps/choose_membership:
+        register_as: ""
+        family: ""
+        myself: ""
       memberships/join_base:
         join_date: ""
       memberships/leave_zusatzsektion:
@@ -48,6 +57,7 @@ en:
 
       wizards/steps/choose_sektion:
         group_id: ""
+
       wizards/steps/main_email:
         email: ""
 
@@ -82,6 +92,9 @@ en:
               must_not_be_join_section_member:
                 ""
               must_be_family_main_person: ""
+
+        wizards/steps/choose_sektion:
+          requires_admin: ""
 
     models:
       people/neuanmeldungen/approve:
@@ -665,12 +678,17 @@ en:
     scopes:
       user_groups: ""
 
+  dropdown/people/memberships:
+    title: ""
+    join_zusatzsektion_link: ""
+
   dropdown/people_export:
     recipients: ""
 
   dropdown/group_edit:
     sac_membership_configs: ""
     sac_section_membership_configs: ""
+
 
   event:
     kinds:
@@ -940,6 +958,14 @@ en:
       main_title: ""
       supplements_title: ""
 
+
+  memberships:
+    join_zusatzsektions:
+      create:
+        success: 
+          one: ""
+          other: ""
+
   roles:
     beitragskategorie:
       adult: ""
@@ -1081,7 +1107,19 @@ en:
     unverified_email: ""
     cannot_set_main_person: ""
 
+  sheet/memberships/join_zusatzsektion:
+    title: ""
+
   wizards:
     steps:
+      choose_sektion:
+        no_self_service_info_text: ""
+        backoffice_no_self_service_info_text: ''
+      choose_membership:
+        not_main_family_person_info_text: >
+      join_zusatzsektion:
+        summary:
+          info_text: ''
+          next_button: ""
       membership_terminated_info:
         info: ""
