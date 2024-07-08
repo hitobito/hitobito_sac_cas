@@ -8,10 +8,10 @@ require "spec_helper"
 describe "people/_details_sac_cas.html.haml" do
   include FormatHelper
 
-  let(:dom) {
+  let(:dom) do
     render
     Capybara::Node::Simple.new(@rendered)
-  }
+  end
 
   before do
     allow(view).to receive_messages(current_user: person)
@@ -50,16 +50,16 @@ describe "people/_details_sac_cas.html.haml" do
       end
 
       it "renders main person name if person is not main person" do
-        expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
+        expect(person.household.main_person).to eq people(:familienmitglied) # check assumption
 
-        expect(value_node).to have_text(person.sac_family.main_person.to_s)
+        expect(value_node).to have_text(person.household.main_person.to_s)
       end
 
       it "renders link to main person if person is not main person" do
-        expect(person.sac_family.main_person).to eq people(:familienmitglied) # check assumption
-        expect(view).to receive(:can?).with(:show, person.sac_family.main_person).and_return(true)
+        expect(person.household.main_person).to eq people(:familienmitglied) # check assumption
+        expect(view).to receive(:can?).with(:show, person.household.main_person).and_return(true)
 
-        expect(value_node).to have_link(person.sac_family.main_person.to_s, href: person_path(person.sac_family.main_person))
+        expect(value_node).to have_link(person.household.main_person.to_s, href: person_path(person.household.main_person))
       end
     end
   end

@@ -9,7 +9,7 @@ module Memberships
   class SwitchStammsektion < JoinBase
     def initialize(...)
       super
-      raise "terminated membership" if sac_membership.roles.any?(&:terminated?)
+      raise "terminated membership" if sac_membership.stammsektion_role&.terminated?
     end
 
     validate :assert_join_date
@@ -29,8 +29,8 @@ module Memberships
     end
 
     def existing_membership(person)
-      People::SacMembership.new(person).role.tap do |role|
-        return unless role
+      People::SacMembership.new(person).stammsektion_role.tap do |role|
+        next unless role
 
         attrs = if join_date.future?
           {delete_on: [role.delete_on, join_date - 1.day].compact.min}
@@ -60,7 +60,7 @@ module Memberships
     end
 
     def validate_family_main_person?
-      person.sac_family_member?
+      person.sac_membership.family?
     end
 
     def assert_join_date

@@ -5,19 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('db', 'seeds', 'support', 'person_seeder')
+require Rails.root.join("db", "seeds", "support", "person_seeder")
 
 class SacPersonSeeder < PersonSeeder
-
   def amount(role_type)
     case role_type.name.demodulize
-    when 'Mitglied' then 42
-    when 'Neuanmeldung' then 3
-    when 'Beguenstigt' then 0
-    when 'Ehrenmitglied' then 0
-    when 'Tourenleiter' then 12
-    when 'Abonnent' then 42
-    when 'BasicLogin' then 42
+    when "Mitglied" then 42
+    when "Neuanmeldung" then 3
+    when "Beguenstigt" then 0
+    when "Ehrenmitglied" then 0
+    when "Tourenleiter" then 12
+    when "Abonnent" then 42
+    when "BasicLogin" then 42
     else 1
     end
   end
@@ -32,6 +31,7 @@ class SacPersonSeeder < PersonSeeder
 
   def person_attributes(role_type)
     attrs = super
+    attrs[:confirmed_at] = Time.current
     attrs.delete(:nickname)
     attrs
   end
@@ -45,11 +45,11 @@ class SacPersonSeeder < PersonSeeder
       family_members = [adult, second_adult, child]
 
       # skip if already in a household / family
-      return if family_members.any?(&:household_key)
+      next if family_members.any?(&:household_key)
 
       # make sure these people have no other roles
       family_members.each do |p|
-        p.roles.find_each {|r| r.really_destroy!}
+        p.roles.find_each { |r| r.really_destroy! }
       end
 
       seed_sektion_familie_mitglied_role(adult, m)
@@ -61,10 +61,10 @@ class SacPersonSeeder < PersonSeeder
 
   def seed_sektion_familie_mitglied_role(person, sektion)
     Group::SektionsMitglieder::Mitglied.seed(:person_id,
-                                             person: person,
-                                             group: sektion,
-                                             beitragskategorie: :family,
-                                             delete_on: 1.year.from_now.end_of_year)
+      person:,
+      group: sektion,
+      beitragskategorie: :family,
+      delete_on: 1.year.from_now.end_of_year)
   end
 
   def create_or_update_household(person, second_person)
@@ -75,8 +75,9 @@ class SacPersonSeeder < PersonSeeder
 
   def seed_sac_adult(family_main_person: false)
     adult_attrs = standard_attributes(Faker::Name.first_name,
-                                      Faker::Name.last_name)
-    adult_attrs = adult_attrs.merge({ birthday: 27.years.ago, sac_family_main_person: family_main_person })
+      Faker::Name.last_name)
+    adult_attrs = adult_attrs.merge({birthday: 27.years.ago,
+                                      sac_family_main_person: family_main_person})
     adult = Person.seed(:email, adult_attrs).first
     seed_accounts(adult, false)
     adult
@@ -84,11 +85,10 @@ class SacPersonSeeder < PersonSeeder
 
   def seed_sac_child
     child_attrs = standard_attributes(Faker::Name.first_name,
-                                      Faker::Name.last_name)
+      Faker::Name.last_name)
     child_attrs.delete(:email)
-    child_attrs = child_attrs.merge({ birthday: 10.years.ago })
-    child = Person.seed(:first_name, child_attrs).first
-    child
+    child_attrs = child_attrs.merge({birthday: 10.years.ago})
+    Person.seed(:first_name, child_attrs).first
   end
 
   # for mitglieder roles, from/to has to be set to be valid
@@ -96,7 +96,7 @@ class SacPersonSeeder < PersonSeeder
     update_role_dates(Group::SektionsMitglieder::Mitglied)
     Group::SektionsMitglieder::MitgliedZusatzsektion.all.find_each do |r|
       create_stammsektion_role(r)
-      stamm_role = r.person.roles.find_by(type: 'Group::SektionsMitglieder::Mitglied')
+      stamm_role = r.person.roles.find_by(type: "Group::SektionsMitglieder::Mitglied")
       r.update!(created_at: stamm_role.created_at, delete_on: stamm_role.delete_on)
     end
   end
@@ -105,13 +105,14 @@ class SacPersonSeeder < PersonSeeder
     return unless Group::SektionsMitglieder::Ehrenmitglied.count.zero?
 
     mitglied_role_types = [Group::SektionsMitglieder::Mitglied,
-                           Group::SektionsMitglieder::MitgliedZusatzsektion].each(&:sti_name)
-    mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id, :group_id).sample(21)
+      Group::SektionsMitglieder::MitgliedZusatzsektion].each(&:sti_name)
+    mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id,
+      :group_id).sample(21)
     mitglied_role_ids.each do |person_id, group_id|
       if rand(2) == 1
-        Group::SektionsMitglieder::Ehrenmitglied.create!(person_id: person_id, group_id: group_id)
+        Group::SektionsMitglieder::Ehrenmitglied.create!(person_id:, group_id:)
       else
-        Group::SektionsMitglieder::Beguenstigt.create!(person_id: person_id, group_id: group_id)
+        Group::SektionsMitglieder::Beguenstigt.create!(person_id:, group_id:)
       end
     end
   end
@@ -121,7 +122,7 @@ class SacPersonSeeder < PersonSeeder
   def create_stammsektion_role(zusatzsektion_role)
     # check if person has stammsektion already
     return if zusatzsektion_role.person.roles.any? do |r|
-      r.type == 'Group::SektionsMitglieder::Mitglied'
+      r.type == "Group::SektionsMitglieder::Mitglied"
     end
 
     # create stammsektion role in other sektion than zusatzsektion role
@@ -129,17 +130,18 @@ class SacPersonSeeder < PersonSeeder
     mitglieder_groups = Group::SektionsMitglieder.where.not(id: sektion.id)
     person = zusatzsektion_role.person
     Group::SektionsMitglieder::Mitglied.create!(
-      person: person,
+      person:,
       group: mitglieder_groups.sample,
       created_at: membership_from(person),
-      delete_on: Date.today.end_of_year)
+      delete_on: Date.today.end_of_year
+    )
   end
 
   def update_role_dates(role_class)
     role_class.find_each do |r|
       yield(r) if block_given?
       r.update!(created_at: membership_from(r.person),
-                delete_on: Date.today.end_of_year)
+        delete_on: Date.today.end_of_year)
     end
   end
 
