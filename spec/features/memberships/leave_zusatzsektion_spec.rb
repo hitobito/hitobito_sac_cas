@@ -37,8 +37,7 @@ describe "leave zusatzsektion", js: true do
       end
         .to change { person.roles.count }.by(-1)
         .and change { role.deleted_at }.from(nil)
-      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
-      # .and change { role.termination_reason }.from(nil).to(termination_reson)
+        .and change { role.termination_reason }.from(nil).to(termination_reason)
     end
   end
 
@@ -57,8 +56,7 @@ describe "leave zusatzsektion", js: true do
       end
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
-      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
-      # .and change { role.termination_reason }.from(nil).to(termination_reson)
+        .and change { role.termination_reason }.from(nil).to(termination_reason)
       expect(role.delete_on).not_to be_nil
     end
 
@@ -88,11 +86,11 @@ describe "leave zusatzsektion", js: true do
         expect(page).to have_content "Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt"
         click_button "Austritt beantragen"
         expect(page).to have_content "Eure 3 Zusatzmitgliedschaften in #{role.group.parent.name} wurden gelöscht."
+        role.reload
       end
         .to not_change { person.roles.count }
-        .and change { role.reload.terminated }.to(true)
-      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
-      #  .and change { role.termination_reason_text }.from(nil).to("einfach so")
+        .and change { role.terminated }.to(true)
+        .and change { role.termination_reason }.from(nil).to(termination_reason)
     end
   end
 
