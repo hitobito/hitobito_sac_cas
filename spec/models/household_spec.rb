@@ -157,6 +157,33 @@ describe Household do
 
         household.remove(second_adult).save!
       end
+
+      it "updates family main person flag" do
+        # prepare a family
+        household.add(child).add(second_adult).save!
+        household.reload
+
+        expect(household.main_person).to be_present
+        original_main_person = household.main_person
+
+        expect do
+          household.remove(original_main_person).save!
+        end
+          .to change { household.main_person }.from(original_main_person)
+      end
+
+      it "clears family main person flag from removed person" do
+        # prepare a family
+        household.add(child).add(second_adult).save!
+        household.reload
+
+        original_main_person = household.main_person
+
+        expect do
+          household.remove(original_main_person).save!
+        end
+          .to change { original_main_person.reload.sac_family_main_person }.from(true).to(false)
+      end
     end
 
     context "when disabled" do

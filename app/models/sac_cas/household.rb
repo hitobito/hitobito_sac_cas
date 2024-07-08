@@ -110,19 +110,14 @@ module SacCas::Household
   end
 
   # Sets one of the adults with confirmed email address as family main person unless
-  # ther is already exactly one.
+  # there is already exactly one.
   def update_main_person!
-    return if people.count(&:sac_family_main_person) == 1
-
-    # take the first main person, or find the first adult with confirmed email
-    new_main_person = main_person || people.find { |person| person.adult? && person.confirmed_at? }
-
-    people.each do |person|
-      is_main_person = person == new_main_person
-      next if !(is_main_person ^ person.sac_family_main_person?)
-
-      person.update!(sac_family_main_person: is_main_person)
-    end
+    # Take the first main person, or find the first adult with confirmed email
+    new_main_person = main_person || people.sort_by(&:years).
+      find { |person| person.adult? && person.confirmed_at? }
+    others = people - [new_main_person]
+    Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
+    Person.where(id: new_main_person).update_all(sac_family_main_person: true)
   end
 
   def next_key
