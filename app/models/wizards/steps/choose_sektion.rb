@@ -34,7 +34,7 @@ module Wizards
       private
 
       def membership_roles
-        wizard.person.roles.where(type: SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name))
+        wizard.person.roles.where(type: SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES)
       end
 
       def assert_group
