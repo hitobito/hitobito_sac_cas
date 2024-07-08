@@ -18,9 +18,9 @@ describe HouseholdMember do
   def create_mitglied_role(person, group: groups(:bluemlisalp_mitglieder), beitragskategorie: :adult)
     group = group.is_a?(Group) ? group : groups(group)
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-      beitragskategorie: beitragskategorie,
-      person: person,
-      group: group)
+      beitragskategorie:,
+      person:,
+      group:)
   end
 
   describe "validations" do
@@ -61,8 +61,7 @@ describe HouseholdMember do
         group: groups(:bluemlisalp_mitglieder))
       household_member = HouseholdMember.new(other_household_person, household)
       expect(household_member.valid?).to eq false
-      expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist.",
-        "#{other_household_person.full_name} hat bereits eine Familienmitgliedschaft und kann daher nicht einem Familienhaushalt hinzugefügt werden."])
+      expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist."])
     end
 
     it "is invalid if member has sac membership in different section than reference person" do
@@ -111,11 +110,14 @@ describe HouseholdMember do
       end
 
       it "is invalid if member has termination planned" do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+        role = Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
           beitragskategorie: :adult,
           person: person,
           delete_on: 1.year.from_now,
           group: groups(:matterhorn_mitglieder))
+        role.write_attribute(:terminated, true)
+        role.save!
+
         expect(household_member.valid?(:destroy)).to eq false
         expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat einen Austritt geplant."])
       end

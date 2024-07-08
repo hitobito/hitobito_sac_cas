@@ -121,7 +121,7 @@ describe Person do
     it "knows about sektion membership" do
       expect(person).to be_sac_membership_active
       expect(person).to be_sac_membership_anytime
-      expect(person.sac_membership_roles).to have(1).item
+      expect(person.sac_membership_stammsektion_role).to be_present
       expect(person.membership_number).to eq person.id
     end
   end

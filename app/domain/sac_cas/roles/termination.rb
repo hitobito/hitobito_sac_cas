@@ -14,8 +14,8 @@ module SacCas::Roles::Termination
 
     Role.transaction do
       self.class.terminate(affected_roles, terminate_on)
-      if role.person.sac_family.member?
-        role.person.sac_family.update_terminated_roles
+      if role.person.sac_membership.family?
+        update_terminated_roles(role.person)
       end
       true
     end
@@ -28,7 +28,7 @@ module SacCas::Roles::Termination
   def affected_people
     return [] unless stammsektion_membership? && role.beitragskategorie&.family?
 
-    main_person.sac_family.family_members - [main_person]
+    main_person.household.people - [main_person]
   end
 
   private
@@ -39,9 +39,7 @@ module SacCas::Roles::Termination
   end
 
   def terminatable_mitglied_role_types
-    [Group::SektionsMitglieder::Mitglied,
-      Group::SektionsMitglieder::MitgliedZusatzsektion]
-      .collect(&:sti_name)
+    SacCas::MITGLIED_ROLES.collect(&:sti_name)
   end
 
   # For a Group::SektionsMitglieder::Mitglied role, this returns all other
@@ -58,11 +56,30 @@ module SacCas::Roles::Termination
     role.is_a?(Group::SektionsMitglieder::Mitglied)
   end
 
+  # deprecated, moved here from `People::SacFamily`, will get removed with #680
+  def update_terminated_roles(person)
+    terminated_roles = person
+      .roles
+      .where(type: terminatable_mitglied_role_types,
+        terminated: true,
+        beitragskategorie: :family)
+
+    affected_family_roles = Role
+      .where(type: terminatable_mitglied_role_types,
+        group_id: terminated_roles.collect(&:group_id),
+        terminated: false,
+        beitragskategorie: :family,
+        person_id: person.household.people.collect(&:id))
+
+    delete_on = terminated_roles.first.delete_on
+    Roles::Termination.terminate(affected_family_roles, delete_on)
+  end
+
   class_methods do
     def terminate(roles, delete_on)
       # use update_all to not trigger any validations while terminating
       Role.where(id: roles.map(&:id)).update_all(
-        delete_on: delete_on,
+        delete_on:,
         terminated: true,
         updated_at: Time.current
       )

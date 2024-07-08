@@ -8,19 +8,19 @@
 class People::SacFamilyMainPersonController < ApplicationController
   def update
     authorize!(:update, person)
-    return if assert_person_family_member!
+    return if assert_person_household_member!
 
     authorize!(:set_sac_family_main_person, person)
     return if assert_already_main_family_person!
 
-    person.sac_family.set_family_main_person!
+    person.household.set_family_main_person!
     redirect_to person
   end
 
   private
 
-  def assert_person_family_member!
-    unless person.sac_family_member?
+  def assert_person_household_member!
+    unless person.household.exists?
       render plain: "Person is not associated with any household",
         status: :unprocessable_entity
     end

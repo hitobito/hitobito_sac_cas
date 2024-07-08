@@ -45,7 +45,8 @@ module SacCas::Person::Household
       super
 
       create_missing_people_managers
-      person.sac_family.update! if maintain_sac_family?
+      # obsolete, Person::Household will get removed
+      # person.sac_family.update! if maintain_sac_family?
     end
   end
 
@@ -53,10 +54,11 @@ module SacCas::Person::Household
     return true unless maintain_sac_family?
     return true unless Role.where(person_id: existing_people, beitragskategorie: :family).exists?
 
-    new_housemates_with_family_membership_role = Role
-      .where(person_id: new_people, beitragskategorie: :family)
-      .map(&:person)
-      .uniq
+    new_housemates_with_family_membership_role =
+      Role
+        .where(person_id: new_people, beitragskategorie: :family)
+        .map(&:person)
+        .uniq
 
     new_housemates_with_family_membership_role.each do |other|
       person.errors.add(
@@ -85,8 +87,10 @@ module SacCas::Person::Household
   # Find all people in the household that are in the given age category.
   # @param [Symbol] age_category One of :adult, :child
   def people_by_agegroup(age_category)
-    raise ArgumentError, "Invalid age category #{age_category}" unless
-      %i[adult child].include?(age_category)
+    unless %i[adult child].include?(age_category)
+      raise ArgumentError,
+        "Invalid age category #{age_category}"
+    end
 
     people.select do |person|
       SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")

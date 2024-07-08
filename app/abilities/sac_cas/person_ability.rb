@@ -37,7 +37,7 @@ module SacCas::PersonAbility
     end
 
     def if_person_is_adult_and_all_household_members_writable
-      return false if person.household_people.empty?
+      return false unless person.household.exists?
       return false unless person.adult?
 
       [person, *person.household_people].all? do |household_person|

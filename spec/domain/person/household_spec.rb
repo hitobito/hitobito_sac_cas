@@ -22,14 +22,14 @@ describe Person::Household do
       sac_family_main_person: true
     ))
 
-    Array.wrap(managers).each { |manager| PeopleManager.create!(manager: manager, managed: person) }
+    Array.wrap(managers).each { |manager| PeopleManager.create!(manager:, managed: person) }
 
     if beitragskategorie
       Fabricate(
         Group::SektionsMitglieder::Mitglied.name.to_sym,
-        person: person,
+        person:,
         group: groups(:bluemlisalp_mitglieder),
-        beitragskategorie: beitragskategorie
+        beitragskategorie:
       )
     end
 
@@ -140,26 +140,6 @@ describe Person::Household do
         household = build_household(child, other_child).tap(&:assign)
 
         expect { household.send(:save) }.not_to change { PeopleManager.count }
-      end
-    end
-
-    context "sac_family" do
-      it "calls sac_family.update!" do
-        household = build_household(adult, child).tap(&:assign)
-
-        expect(household).to be_maintain_sac_family
-        expect(adult.sac_family).to receive(:update!)
-
-        household.send(:save)
-      end
-
-      it "does not call sac_family.update! with maintain_sac_family=false" do
-        household = build_household(adult, child, maintain_sac_family: false).tap(&:assign)
-
-        expect(household).not_to be_maintain_sac_family
-        expect(adult.sac_family).not_to receive(:update!)
-
-        household.send(:save)
       end
     end
 
