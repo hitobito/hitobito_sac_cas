@@ -47,61 +47,61 @@ describe People::Neuanmeldungen::Reject do
     expect(neuanmeldung_familie.person.roles).to have(1).item
   end
 
-  it 'disables the Person login, if it has other roles' do
+  it "disables the Person login, if it has other roles" do
     person.update!(
-      email: 'dummy@example.com',
-      password: 'my-password1',
-      password_confirmation: 'my-password1'
+      email: "dummy@example.com",
+      password: "my-password1",
+      password_confirmation: "my-password1"
     )
     expect(person.login_status).to eq :login
 
-    subject = rejector()
+    subject = rejector
 
     expect do
       subject.call
     end.to change { person.reload.login_status }.to(:no_login)
   end
 
-  it 'disables the Person login, if it has other deleted roles' do
+  it "disables the Person login, if it has other deleted roles" do
     person.update!(
-      email: 'dummy@example.com',
-      password: 'my-password1',
-      password_confirmation: 'my-password1'
+      email: "dummy@example.com",
+      password: "my-password1",
+      password_confirmation: "my-password1"
     )
     expect(person.login_status).to eq :login
 
     person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector()
+    subject = rejector
 
     expect do
       subject.call
     end.to change { person.reload.login_status }.to(:no_login)
   end
 
-  it 'deletes the Person, if it has no other roles' do
+  it "deletes the Person, if it has no other roles" do
     person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector()
+    subject = rejector
     subject.call
     expect{ Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  it 'adds a Person#note if a note was provided' do
-    expect { rejector(note: 'my note').call }.
+  it "adds a Person#note if a note was provided" do
+    expect { rejector(note: "my note").call }.
       to change { person.reload.notes.count }.by(1)
 
     note = person.notes.last
-    expect(note.text).to eq 'my note'
+    expect(note.text).to eq "my note"
     expect(note.author).to eq nil
   end
 
-  it 'adds a Person#note with author if an author was provided' do
-    expect { rejector(note: 'my note', author: people(:mitglied)).call }.
+  it "adds a Person#note with author if an author was provided" do
+    expect { rejector(note: "my note", author: people(:mitglied)).call }.
       to change { person.reload.notes.count }.by(1)
 
     note = person.notes.last
-    expect(note.text).to eq 'my note'
+    expect(note.text).to eq "my note"
     expect(note.author).to eq people(:mitglied)
   end
 end
