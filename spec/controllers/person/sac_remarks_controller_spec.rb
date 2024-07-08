@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::SacRemarksController do
+describe Person::SacRemarksController do
   let(:person) { people(:mitglied) }
   let(:group_id) { person.groups.first.id }
 
