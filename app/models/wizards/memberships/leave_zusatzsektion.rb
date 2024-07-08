@@ -57,10 +57,6 @@ module Wizards::Memberships
       role.layer_group.mitglied_termination_by_section_only
     end
 
-    def sac_mitarbeiter?
-      @backoffice
-    end
-
     def family_membership?
       role.beitragskategorie.family?
     end
@@ -100,11 +96,11 @@ module Wizards::Memberships
       membership_role = Group::SektionsMitglieder::Mitglied.find_by(person: person)
       if membership_role&.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
-      elsif mitglied_termination_by_section_only? && !sac_mitarbeiter?
+      elsif mitglied_termination_by_section_only? && !backoffice?
         Wizards::Steps::TerminationNoSelfService.step_name
       elsif family_membership? && !family_main_person?
         Wizards::Steps::LeaveZusatzsektion::AskFamilyMainPerson.step_name
-      elsif sac_mitarbeiter?
+      elsif backoffice?
         Wizards::Steps::TerminationChooseDate.step_name
       else
         Wizards::Steps::LeaveZusatzsektion::Summary.step_name
