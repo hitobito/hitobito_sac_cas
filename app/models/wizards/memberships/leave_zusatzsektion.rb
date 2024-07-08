@@ -79,16 +79,11 @@ module Wizards::Memberships
     end
 
     def step_after(step_class_or_name)
-      name = step_class_or_name.is_a?(Class) ? step_class_or_name.step_name : step_class_or_name
-      case name
+      case step_class_or_name
       when :_start
         handle_start
-      when Wizards::Steps::MembershipTerminatedInfo.step_name,
-        Wizards::Steps::LeaveZusatzsektion::AskFamilyMainPerson.step_name,
-        Wizards::Steps::TerminationNoSelfService.step_name
-        nil
-      else
-        super
+      when Wizards::Steps::TerminationChooseDate
+        Wizards::Steps::LeaveZusatzsektion::Summary.step_name
       end
     end
 
