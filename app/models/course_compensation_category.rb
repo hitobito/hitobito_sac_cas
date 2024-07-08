@@ -7,9 +7,9 @@
 
 class CourseCompensationCategory < ApplicationRecord
   include I18nEnums
-  include Paranoia::Globalized
+  include CapitalizedDependentErrors
 
-  has_many :course_compensation_rate, dependent: :restrict_with_error
+  has_many :course_compensation_rates, dependent: :restrict_with_error
   translates :name_leader, :name_assistant_leader
 
   KINDS = %w(day flat budget)

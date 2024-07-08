@@ -139,6 +139,17 @@ de:
         description: Beschreibung
         name_leader: Bezeichnung Kursleitung
         name_assistant_leader: Bezeichnung Klassenleitung
+        course_compensation_rates: Vergütungsansätze
+        updated_at: Geändert
+        created_at: Erstellt
+      course_compensation_rate:
+        valid_from: Gültig ab
+        valid_to: Gültig bis
+        rate_leader: Ansatz Kursleitung
+        rate_ssistant_leader: Ansatz Klassenleitung
+        course_compensation_category: Vergütungskategorie
+        updated_at: Geändert
+        created_at: Erstellt
       event:
         unconfirmed_count: Unbestätigte
       event/kind:
@@ -368,6 +379,11 @@ de:
         must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
 
       models:
+        course_compensation_rate:
+          attributes:
+            course_compensation_category:
+              uniqueness_during_validity_period: In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren.
+
         group/sektions_tourenkommission/tourenleiter:
           requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
 
@@ -391,6 +407,12 @@ de:
       cost_unit:
         one: Kostenträger
         other: Kostenträger
+      course_compensation_category:
+        one: Vergütungskategorie
+        other: Vergütungskategorien
+      course_compensation_rate:
+        one: Vergütungsansatz
+        other: Vergütungsansätze
       event/level:
         one: Kursstufe
         other: Kursstufen
