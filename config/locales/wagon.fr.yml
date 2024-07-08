@@ -239,6 +239,7 @@ fr:
       group/sac_cas:
         sac_newsletter_mailing_list_id: ""
         sac_magazine_mailing_list_id: ""
+        sac_fundraising_mailing_list_id: ""
 
         course_admin_email: ""
       group/sektion:
