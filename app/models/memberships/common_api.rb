@@ -39,7 +39,8 @@ module Memberships::CommonApi
         # ignore the error, the role will be invalid anyway
 
         role.save(validate: false)
-      rescue ActiveRecord::NotNullViolation
+      rescue
+        ActiveRecord::NotNullViolation
       end
       roles.each do |role|
         role.validate
