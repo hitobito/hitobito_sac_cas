@@ -13,7 +13,7 @@ module SacCas::StepsComponent::ContentComponent
     partial_name = @partial.split("/").last
     @form.fields_for(partial_name, model) do |form|
       form.error_messages
-    end + @form.fields_for(partial_name, model, &)
+    end + @form.fields_for(partial_name, model, &) + bottom_toolbar
   end
 
   def model
@@ -24,5 +24,28 @@ module SacCas::StepsComponent::ContentComponent
     return false if key == :email && @partial =~ /main_person/
 
     super
+  end
+
+  def bottom_toolbar
+    content_tag(:div, class: "btn-toolbar allign-with-form") do
+      buttons = [
+        next_button
+      ]
+      buttons << back_link if index.positive?
+      safe_join(buttons)
+    end
+  end
+
+  private
+
+  # Adjust to comply with existing api
+  def past?
+    return super unless wizard?
+
+    index < @form.object.current_step
+  end
+
+  def wizard?
+    @form.object.is_a?(Wizards::Base)
   end
 end

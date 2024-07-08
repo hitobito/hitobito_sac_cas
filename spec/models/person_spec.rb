@@ -178,7 +178,10 @@ describe Person do
   end
 
   describe "#sac_tour_guide?" do
-    let(:member) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:matterhorn_mitglieder)).person }
+    let(:member) do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+        group: groups(:matterhorn_mitglieder)).person
+    end
     let(:tourenkommission) { groups(:matterhorn_tourenkommission) }
 
     before do
@@ -208,6 +211,20 @@ describe Person do
         role.destroy!
 
         expect(member.sac_tour_guide?).to eq(false)
+      end
+    end
+  end
+
+  describe "#backoffice?" do
+    let(:geschaeftsstelle) { groups(:geschaeftsstelle) }
+
+    [
+      Group::Geschaeftsstelle::Mitarbeiter,
+      Group::Geschaeftsstelle::Admin
+    ].each do |role_type|
+      it "#{role_type} is an backoffice" do
+        person = Fabricate(role_type.sti_name, group: geschaeftsstelle).person
+        expect(person).to be_backoffice
       end
     end
   end

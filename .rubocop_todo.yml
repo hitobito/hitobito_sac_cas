@@ -52,8 +52,10 @@ Rails/HelperInstanceVariable:
   Exclude:
     - 'app/helpers/dropdown/events/courses/state.rb'
     - 'app/helpers/dropdown/people/sac_membership/download.rb'
+    - 'app/helpers/dropdown/people/memberships.rb'
     - 'app/helpers/sac_cas/event/participation_banner.rb'
     - 'app/helpers/sac_cas/event/participation_buttons.rb'
+    - 'app/helpers/sheet/memberships/join_zusatzsektion.rb'
 
 # Offense count: 3
 # Configuration parameters: IgnoreScopes, Include.

@@ -47,7 +47,7 @@ module SacCas
 
   ### Various roles
 
-  SAC_MITARBEITER_ROLES = [
+  SAC_BACKOFFICE_ROLES = [
     ::Group::Geschaeftsstelle::Mitarbeiter,
     ::Group::Geschaeftsstelle::Admin
   ].freeze

@@ -9,6 +9,11 @@ de:
     currency: CHF
     years: Jahre
 
+    wizards/steps/membership_terminated_info_title: Mitgliedschaft gekündet
+    wizards/steps/choose_membership_title: Familienmitgliedschaft
+    wizards/steps/choose_sektion_title: Sektion wählen
+    wizards/steps/join_zusatzsektion/summary_title: Bestätigung
+
   errors:
     messages:
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
@@ -18,6 +23,10 @@ de:
 
   activemodel:
     attributes:
+      wizards/steps/choose_membership:
+        register_as: Für wen soll die Zusatzmitgliedschaft gelten?
+        family: für die ganze Familie
+        myself: für mich selbst
       memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
@@ -51,6 +60,7 @@ de:
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
+
       wizards/steps/main_email:
         email: Haupt-E-Mail
 
@@ -89,6 +99,11 @@ de:
                 ist bereits Mitglied der Sektion oder
                 hat ein offenes Beitrittsgesuch
               must_be_family_main_person: muss Hauptperson der Familie sein
+
+        wizards/steps/choose_sektion:
+          requires_admin: Wir bitten dich den gewünschten Sektionswechsel
+            telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
+            mit uns auf
 
     models:
       people/neuanmeldungen/approve:
@@ -676,12 +691,17 @@ de:
     scopes:
       user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
 
+  dropdown/people/memberships:
+    title: Mitgliedschaft anpassen
+    join_zusatzsektion_link: Zusatzsektion beantragen
+
   dropdown/people_export:
     recipients: Empfänger
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
+
 
   event:
     kinds:
@@ -995,6 +1015,14 @@ de:
       main_title: Familienmitglieder
       supplements_title: Zusatzdaten
 
+
+  memberships:
+    join_zusatzsektions:
+      create:
+        success: 
+          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
+          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
+
   roles:
     beitragskategorie:
       adult: Einzel
@@ -1136,8 +1164,29 @@ de:
     unverified_email: Die Email Adresse ist nicht bestätigt, die Person kann daher nicht zum Familienrechnungsempfänger gemacht werden.
     cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
 
+  sheet/memberships/join_zusatzsektion:
+    title: Zusatzsektion beitreten
+
   wizards:
     steps:
+      choose_sektion:
+        no_self_service_info_text: Wir bitten dich den gewünschten
+          Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu
+          bitte Kontakt mit uns auf
+        backoffice_no_self_service_info_text: 'Achtung: der Wechsel findet zu einer
+          Sektion statt, die die Mitgliederaufnahme selbständig vornehmen.
+          Allenfalls musst du diesen Wechsel vorgängig mit der Sektion abklären'
+      choose_membership:
+        not_main_family_person_info_text: >-
+          Du kannst als Einzelperson eine Zusatzmitgliedschaft abschliessen.
+          Falls die Zusatzmitgliedschaft für die ganze Familie gelten soll,
+          muss die Familienhauptperson diese abschliessen. Wende dich dafür an
+          %{name}.
+      join_zusatzsektion:
+        summary:
+          info_text: 'Die Mitgliedschaft bei der Zusatzsektion wird als
+            %{beitragskategorie} abgeschlossen und ist per sofort gültig.'
+          next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}.
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
