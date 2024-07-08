@@ -84,12 +84,12 @@ describe People::Neuanmeldungen::Reject do
 
     subject = rejector
     subject.call
-    expect{ Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    expect { Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it "adds a Person#note if a note was provided" do
-    expect { rejector(note: "my note").call }.
-      to change { person.reload.notes.count }.by(1)
+    expect { rejector(note: "my note").call }
+      .to change { person.reload.notes.count }.by(1)
 
     note = person.notes.last
     expect(note.text).to eq "my note"
@@ -97,8 +97,8 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it "adds a Person#note with author if an author was provided" do
-    expect { rejector(note: "my note", author: people(:mitglied)).call }.
-      to change { person.reload.notes.count }.by(1)
+    expect { rejector(note: "my note", author: people(:mitglied)).call }
+      .to change { person.reload.notes.count }.by(1)
 
     note = person.notes.last
     expect(note.text).to eq "my note"
