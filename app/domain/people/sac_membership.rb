@@ -21,13 +21,13 @@ class People::SacMembership
   # checks for any active membership roles
   def active_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: mitglied_types)
+      type: mitglied_types)
   end
 
   # checkes for active and also approvabable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: mitglied_and_neuanmeldung_types)
+      type: mitglied_and_neuanmeldung_types)
   end
 
   def anytime?
@@ -35,7 +35,11 @@ class People::SacMembership
   end
 
   def stammsektion_role
-    @person.roles.find_by(type: mitglied_stammsektion_types)
+    if @person.roles.is_a?(ActiveRecord::Relation)
+      @person.roles.find_by(type: mitglied_stammsektion_types)
+    else
+      @person.roles.find { |r| mitglied_stammsektion_types.include?(r.type) }
+    end
   end
 
   def future_stammsektion_roles
@@ -50,7 +54,7 @@ class People::SacMembership
   # If this changes in the future, future_zusatzsektion_roles must be handled in
   # `Memberships::FamilyMutation` as well.
   def future_zusatzsektion_roles
-    raise 'there is no such thing as future zusatzsektion roles'
+    raise "there is no such thing as future zusatzsektion roles"
   end
 
   def billable?
@@ -64,7 +68,7 @@ class People::SacMembership
   def family_id
     return unless family?
 
-    /\AF/ =~ @person.household_key ? @person.household_key : "F#{@person.household_key}"
+    @person.household_key.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
   end
 
   private

@@ -49,7 +49,7 @@ module SacCas
       end
 
       def link_or_span(member, icon, title, class_name)
-        attrs = { title: title, alt: title, class: class_name }
+        attrs = {title: title, alt: title, class: class_name}
         if !member.sac_family_main_person? && can_set_main_person_and_confirmed?(member)
           link_to(icon, icon_path(member),
             attrs.merge(data: {method: :put, remote: true}))

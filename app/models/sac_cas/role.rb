@@ -43,7 +43,6 @@ module SacCas::Role
         where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
       }
 
-
       belongs_to :termination_reason, optional: true
     end
   end

@@ -48,8 +48,8 @@ module SacCas::Roles::Termination
   def dependent_roles
     return [] unless stammsektion_membership?
 
-    Group::SektionsMitglieder::MitgliedZusatzsektion.
-      where(person_id: role.person_id)
+    Group::SektionsMitglieder::MitgliedZusatzsektion
+      .where(person_id: role.person_id)
   end
 
   def stammsektion_membership?
@@ -59,17 +59,17 @@ module SacCas::Roles::Termination
   # deprecated, moved here from `People::SacFamily`, will get removed with #680
   def update_terminated_roles(person)
     terminated_roles = person
-                       .roles
-                       .where(type: terminatable_mitglied_role_types,
-                              terminated: true,
-                              beitragskategorie: :family)
+      .roles
+      .where(type: terminatable_mitglied_role_types,
+        terminated: true,
+        beitragskategorie: :family)
 
     affected_family_roles = Role
-                            .where(type: terminatable_mitglied_role_types,
-                                   group_id: terminated_roles.collect(&:group_id),
-                                   terminated: false,
-                                   beitragskategorie: :family,
-                                   person_id: person.household.people.collect(&:id))
+      .where(type: terminatable_mitglied_role_types,
+        group_id: terminated_roles.collect(&:group_id),
+        terminated: false,
+        beitragskategorie: :family,
+        person_id: person.household.people.collect(&:id))
 
     delete_on = terminated_roles.first.delete_on
     Roles::Termination.terminate(affected_family_roles, delete_on)

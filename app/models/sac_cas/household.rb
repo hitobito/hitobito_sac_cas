@@ -58,7 +58,7 @@ module SacCas::Household
   def set_family_main_person!(person = reference_person)
     ActiveRecord::Base.transaction do
       Person.where(id: people.map(&:id)).where(sac_family_main_person: true)
-            .update_all(sac_family_main_person: false)
+        .update_all(sac_family_main_person: false)
       person.update!(sac_family_main_person: true)
     end
   end
@@ -96,11 +96,13 @@ module SacCas::Household
   # Find all people in the household that are in the given age category.
   # @param [Symbol] age_category One of :adult, :child
   def people_by_agegroup(age_category)
-    raise ArgumentError,
-          "Invalid age category #{age_category}" unless [:adult, :child].include?(age_category)
+    unless [:adult, :child].include?(age_category)
+      raise ArgumentError,
+        "Invalid age category #{age_category}"
+    end
 
     people.select do |person|
-      SacCas::Beitragskategorie::Calculator.new(person).send("#{age_category}?")
+      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
     end
   end
 
@@ -113,8 +115,8 @@ module SacCas::Household
   # there is already exactly one.
   def update_main_person!
     # Take the first main person, or find the first adult with confirmed email
-    new_main_person = main_person || people.sort_by(&:years).
-      find { |person| person.adult? && person.confirmed_at? }
+    new_main_person = main_person || people.sort_by(&:years)
+      .find { |person| person.adult? && person.confirmed_at? }
     others = people - [new_main_person]
     Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
     Person.where(id: new_main_person).update_all(sac_family_main_person: true)

@@ -168,7 +168,7 @@ describe Roles::Termination do
       let(:role) { roles(:familienmitglied) }
 
       it "return all other family members" do
-        expected_people = role.person.sac_family.family_members - [role.person]
+        expected_people = role.person.household.people - [role.person]
         expect(expected_people).to be_present
         expect(subject.affected_people).to match_array expected_people
       end

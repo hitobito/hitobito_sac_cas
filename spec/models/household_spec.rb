@@ -72,7 +72,7 @@ describe Household do
 
     it "is invalid if pending removed person does not have a confirmed email" do
       add_and_save(adult, child)
-      adult.update_attribute(:email, "")
+      adult.update_attribute(:confirmed_at, nil)
       household.remove(adult)
       expect(household.valid?).to eq false
       expect(household.errors[:base]).to match_array(["Die entfernte Person besitzt keine bestätigte E-Mail Adresse."])

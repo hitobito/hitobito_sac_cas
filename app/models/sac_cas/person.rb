@@ -8,9 +8,9 @@
 module SacCas::Person
   extend ActiveSupport::Concern
 
-  included do
-    CORRESPONDENCES = %w[digital print]
+  CORRESPONDENCES = %w[digital print]
 
+  included do
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
@@ -28,7 +28,7 @@ module SacCas::Person
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
     delegate :active?, :anytime?, :billable?, :family?, :stammsektion_role,
-             to: :sac_membership, prefix: true
+      to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 
     alias_attribute :membership_number, :id

@@ -111,10 +111,10 @@ describe HouseholdMember do
 
       it "is invalid if member has termination planned" do
         role = Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-                  beitragskategorie: :adult,
-                  person: person,
-                  delete_on: 1.year.from_now,
-                  group: groups(:matterhorn_mitglieder))
+          beitragskategorie: :adult,
+          person: person,
+          delete_on: 1.year.from_now,
+          group: groups(:matterhorn_mitglieder))
         role.write_attribute(:terminated, true)
         role.save!
 

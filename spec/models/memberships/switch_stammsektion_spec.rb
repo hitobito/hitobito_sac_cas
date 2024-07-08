@@ -178,7 +178,7 @@ describe Memberships::SwitchStammsektion do
         )
         create_sac_family(person, other)
         Role.where(id: [@bluemlisalp_mitglied.id,
-                        @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
+          @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
       end
 
       it "is invalid if switch is attempted with person that is not a sac_family_main_person" do
