@@ -13,15 +13,15 @@ describe Wizards::Steps::LeaveZusatzsektion::Summary do
   let(:wizard) { nil } # we don't need a wizard for the model specs
   let(:subject) { described_class.new(wizard, **params) }
 
-  context "without termination_reason" do
+  context "without termination_reason_id" do
     it "is invalid" do
       is_expected.not_to be_valid
-      expect(subject.errors[:termination_reason]).to include("muss ausgefüllt werden")
+      expect(subject.errors[:termination_reason_id]).to include("muss ausgefüllt werden")
     end
   end
 
   context "with termination_reason" do
-    let(:params) { {termination_reason: "Test Termination"} }
+    let(:params) { {termination_reason_id: termination_reasons(:moved).id} }
 
     it { is_expected.to be_valid }
   end

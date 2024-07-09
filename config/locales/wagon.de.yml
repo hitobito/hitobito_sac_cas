@@ -74,7 +74,7 @@ de:
         end_of_year: "Auf 31.12.%{year}"
 
       wizards/steps/leave_zusatzsektion/summary:
-        termination_reason: 'Austrittsgrund'
+        termination_reason_id: 'Austrittsgrund'
 
     errors:
       messages:

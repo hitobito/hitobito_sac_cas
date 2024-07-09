@@ -12,6 +12,7 @@ describe "leave zusatzsektion", js: true do
   let(:role) { person.roles.second }
   let(:operator) { person }
   let(:group) { groups(:bluemlisalp_mitglieder) }
+  let(:termination_reason) { termination_reasons(:moved) }
 
   before do
     sign_in(operator)
@@ -28,13 +29,16 @@ describe "leave zusatzsektion", js: true do
       expect(page).to have_title "Zusatzsektion verlassen"
       choose "Sofort"
       click_button "Weiter"
-      select "einfach so"
+      select termination_reason.text
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine Zusatzmitgliedschaft in #{role.group.parent.name} wurde gelöscht."
+        role.reload
       end
         .to change { person.roles.count }.by(-1)
-        .and change { role.reload.deleted_at }.from(nil)
+        .and change { role.deleted_at }.from(nil)
+      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
+      # .and change { role.termination_reason }.from(nil).to(termination_reson)
     end
   end
 
@@ -45,13 +49,16 @@ describe "leave zusatzsektion", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "Zusatzsektion verlassen"
-      select "einfach so"
+      select termination_reason.text
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine Zusatzmitgliedschaft in #{role.group.parent.name} wurde gelöscht."
+        role.reload
       end
         .to not_change { person.roles.count }
-        .and change { role.reload.terminated }.to(true)
+        .and change { role.terminated }.to(true)
+      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
+      # .and change { role.termination_reason }.from(nil).to(termination_reson)
       expect(role.delete_on).not_to be_nil
     end
 
@@ -76,7 +83,7 @@ describe "leave zusatzsektion", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "Zusatzsektion verlassen"
-      select "einfach so"
+      select termination_reason.text
       expect do
         expect(page).to have_content "Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt"
         click_button "Austritt beantragen"
@@ -84,6 +91,8 @@ describe "leave zusatzsektion", js: true do
       end
         .to not_change { person.roles.count }
         .and change { role.reload.terminated }.to(true)
+      # TODO: https://github.com/hitobito/hitobito_sac_cas/issues/718
+      #  .and change { role.termination_reason_text }.from(nil).to("einfach so")
     end
   end
 

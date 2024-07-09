@@ -7,11 +7,15 @@ module Wizards
   module Steps
     module LeaveZusatzsektion
       class Summary < Step
-        attribute :termination_reason, :string
-        validates :termination_reason, presence: true
+        attribute :termination_reason_id, :integer
+        validates :termination_reason_id, presence: true
 
         def family_member_names
           wizard.person.household.members.map { |m| m.person.full_name }.to_sentence
+        end
+
+        def termination_reason_options
+          TerminationReason.all.map { |r| [r.text, r.id] }
         end
       end
     end

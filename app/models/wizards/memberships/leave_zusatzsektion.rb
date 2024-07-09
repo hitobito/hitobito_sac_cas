@@ -38,6 +38,7 @@ module Wizards::Memberships
     end
 
     def leave_operation
+      # TODO: Add termination_reason_id https://github.com/hitobito/hitobito_sac_cas/issues/718
       @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on)
     end
 
