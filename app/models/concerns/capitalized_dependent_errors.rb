@@ -20,5 +20,4 @@ module CapitalizedDependentErrors
       end
     end
   end
-
 end

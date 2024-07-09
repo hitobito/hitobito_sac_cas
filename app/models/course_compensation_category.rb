@@ -12,11 +12,10 @@ class CourseCompensationCategory < ApplicationRecord
   has_many :course_compensation_rates, dependent: :restrict_with_error
   translates :name_leader, :name_assistant_leader
 
-  KINDS = %w(day flat budget)
+  KINDS = %w[day flat budget]
   i18n_enum :kind, KINDS
 
   def to_s
     "#{short_name} (#{kind_label})"
   end
-
 end
