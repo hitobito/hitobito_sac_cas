@@ -12,7 +12,10 @@ module People
 
       attr_accessor :group, :people_ids
 
-      NEUANMELDUNGEN_ROLE = Group::SektionsNeuanmeldungenSektion::Neuanmeldung
+      NEUANMELDUNGEN_ROLES = [
+        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name,
+        Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name
+      ].freeze
       APPROVED_NEUANMELDUNGEN_ROLE = Group::SektionsNeuanmeldungenNv::Neuanmeldung
       APPROVED_NEUANMELDUNGEN_GROUP = Group::SektionsNeuanmeldungenNv
 
@@ -23,11 +26,11 @@ module People
       private
 
       def applicable_roles
-        group.roles.where(type: NEUANMELDUNGEN_ROLE.sti_name, person_id: people_ids)
+        group.roles.where(type: NEUANMELDUNGEN_ROLES, person_id: people_ids)
       end
 
       def non_applicable_roles
-        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLE.sti_name)
+        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES)
       end
     end
   end

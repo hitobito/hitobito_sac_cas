@@ -15,7 +15,6 @@ describe People::Neuanmeldungen::Reject do
   let(:neuanmeldung) { create_role(:adult) }
   let(:person) do
     Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: neuanmeldung.person)
-
     neuanmeldung.person
   end
 
@@ -47,36 +46,25 @@ describe People::Neuanmeldungen::Reject do
     expect(neuanmeldung_familie.person.roles).to have(1).item
   end
 
-  it "disables the Person login, if it has other roles" do
-    person.update!(
-      email: "dummy@example.com",
-      password: "my-password1",
-      password_confirmation: "my-password1"
-    )
-    expect(person.login_status).to eq :login
-
+  it "deletes rejected Roles, if it has other roles" do
     subject = rejector
 
-    expect do
-      subject.call
-    end.to change { person.reload.login_status }.to(:no_login)
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung)
+
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), created_at: 1.year.ago, person: neuanmeldung.person)
+    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name, group: group, created_at: 1.month.ago, person: neuanmeldung.person)
+
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
   end
 
-  it "disables the Person login, if it has other deleted roles" do
-    person.update!(
-      email: "dummy@example.com",
-      password: "my-password1",
-      password_confirmation: "my-password1"
-    )
-    expect(person.login_status).to eq :login
-
+  it "deletes rejected Roles, if it has other deleted roles" do
     person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
     subject = rejector
-
-    expect do
-      subject.call
-    end.to change { person.reload.login_status }.to(:no_login)
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung)
   end
 
   it "deletes the Person, if it has no other roles" do

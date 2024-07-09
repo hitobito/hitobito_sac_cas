@@ -27,7 +27,6 @@ module People
           Role.transaction do
             if non_applicable_roles.any? { |r| r[:person_id] == role.person_id }
               role.destroy!(always_soft_destroy: true)
-              role.person.update!(encrypted_password: nil)
               add_note(role.person)
             else
               role.person.destroy!
