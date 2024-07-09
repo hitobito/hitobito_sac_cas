@@ -43,7 +43,7 @@ describe CourseCompensationCategory do
     it "is prevented if associated course_compensation_rates exist" do
       expect { course_compensation_category.destroy }.not_to change { CourseCompensationCategory.count }
       expect(course_compensation_category.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
-        "da abhängige #{CourseCompensationRate.model_name.human(count: 2)} existieren."
+        "da abhängige Vergütungsansätze existieren."
     end
 
     it "succeeds if no associated course_compensation_rates exists" do

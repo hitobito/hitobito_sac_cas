@@ -19,62 +19,48 @@ describe CourseCompensationRate do
         Fabricate(:course_compensation_rate, course_compensation_category: category,
           valid_from: 1.month.ago, valid_to: Time.zone.today)
       }
-      let(:new) {
-        Fabricate.build(:course_compensation_rate, course_compensation_category: category,
-          valid_from: valid_from, valid_to: valid_to)
+
+      subject(:rate) {
+        Fabricate.build(:course_compensation_rate, course_compensation_category: category)
       }
 
       context "with same category" do
-        context "with validity period inside present validity period" do
-          let(:valid_from) { 2.weeks.ago }
-          let(:valid_to) { 1.week.ago }
-
-          it do
-            expect(new.valid?).to eq(false)
-            expect(new.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
-          end
+        it "is invalid with validity period inside present validity period" do
+          rate.valid_from = 2.weeks.ago
+          rate.valid_to = 1.week.ago
+          expect(rate).to_not be_valid
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
         end
 
-        context "with validity end inside present validity period" do
-          let(:valid_from) { 2.months.ago }
-          let(:valid_to) { 2.weeks.ago }
-
-          it do
-            expect(new.valid?).to eq(false)
-            expect(new.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
-          end
+        it "is invalid with validity end inside present validity period" do
+          rate.valid_from = 2.months.ago
+          rate.valid_to = 2.weeks.ago
+          expect(rate).to_not be_valid
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
         end
 
-        context "with validity start inside present validity period" do
-          let(:valid_from) { 1.week.ago }
-          let(:valid_to) { 1.month.from_now }
-
-          it do
-            expect(new.valid?).to eq(false)
-            expect(new.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
-          end
+        it "is invalid with validity start inside present validity period" do
+          rate.valid_from = 1.week.ago
+          rate.valid_to = 1.month.from_now
+          expect(rate).to_not be_valid
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
         end
 
-        context "with validity period outside present validity period" do
-          let(:valid_from) { 1.week.from_now }
-          let(:valid_to) { 1.month.from_now }
-
-          it do
-            expect(new.valid?).to eq(true)
-          end
+        it "is valid with validity period outside present validity period" do
+          rate.valid_from = 1.week.from_now
+          rate.valid_to = 1.month.from_now
+          expect(rate).to be_valid
         end
       end
 
       context "with different category" do
-        let(:new) { Fabricate.build(:course_compensation_rate, valid_from: valid_from, valid_to: valid_to) }
+        subject(:rate) { Fabricate.build(:course_compensation_rate) }
 
-        context "with validity period inside present validity period" do
-          let(:valid_from) { 2.weeks.ago }
-          let(:valid_to) { 1.week.ago }
+        it "is valid with validity period inside present validity period" do
+          rate.valid_from = 2.weeks.ago
+          rate.valid_to = 1.week.ago
 
-          it do
-            expect(new.valid?).to eq(true)
-          end
+          expect(rate).to be_valid
         end
       end
     end
