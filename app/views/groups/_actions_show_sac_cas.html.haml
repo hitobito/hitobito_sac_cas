@@ -1,2 +1,2 @@
-- if can?(:export_mitglieder, entry) && (entry.is_a?(Group::Sektion) || entry.is_a?(Group::Ortsgruppe))
+- if can?(:export_mitglieder, entry) && can?(:manage_section_remarks, entry) && (entry.is_a?(Group::Sektion) || entry.is_a?(Group::Ortsgruppe))
   = action_button(t('.export_mitglieder'), group_mitglieder_exports_path(@group, format: :csv), :download, method: :post)
