@@ -12,7 +12,6 @@ class Wizards::Steps::MembershipTerminatedInfo < Wizards::Step
   end
 
   def termination_date
-    role = Group::SektionsMitglieder::Mitglied.find_by(person: wizard.person)
-    role.end_on
+    wizard.person.sac_membership.stammsektion_role.end_on
   end
 end

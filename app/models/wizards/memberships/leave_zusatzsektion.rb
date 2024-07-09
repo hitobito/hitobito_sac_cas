@@ -88,8 +88,7 @@ module Wizards::Memberships
     end
 
     def handle_start
-      membership_role = Group::SektionsMitglieder::Mitglied.find_by(person: person)
-      if membership_role&.terminated?
+      if person.sac_membership.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif mitglied_termination_by_section_only? && !backoffice?
         Wizards::Steps::TerminationNoSelfService.step_name
