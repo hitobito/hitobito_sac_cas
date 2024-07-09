@@ -60,7 +60,7 @@ describe "people/_show_right_z_sac_cas.html.haml" do
       expect(dom).not_to have_css "section.sac_membership"
     end
 
-    it 'does not render download button for inactive membership' do
+    it "does not render download button for inactive membership" do
       expect(dom).not_to have_link(nil, href: membership_path(person, format: :pdf))
     end
   end
