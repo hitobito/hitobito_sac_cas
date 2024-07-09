@@ -28,15 +28,15 @@ describe "people/_show_right_z_sac_cas.html.haml" do
     end
 
     it "renders membership info for active membership" do
-      expect(dom).to have_css "section.sac_membership"
-      expect(dom).to have_css "section.sac_membership .qr-code-wrapper"
+      expect(dom).to have_css "section.sac-membership"
+      expect(dom).to have_css "section.sac-membership .qr-code-wrapper"
     end
 
     it "renders membership info for past membership" do
       person.roles.destroy_all
 
-      expect(dom).to have_css "section.sac_membership"
-      expect(dom).to have_css "section.sac_membership .qr-code-wrapper"
+      expect(dom).to have_css "section.sac-membership"
+      expect(dom).to have_css "section.sac-membership .qr-code-wrapper"
     end
 
     it "renders membership info for future membership" do
@@ -48,8 +48,8 @@ describe "people/_show_right_z_sac_cas.html.haml" do
         convert_to: Group::SektionsMitglieder::Mitglied.sti_name
       )
 
-      expect(dom).to have_css "section.sac_membership"
-      expect(dom).to have_css "section.sac_membership .qr-code-wrapper"
+      expect(dom).to have_css "section.sac-membership"
+      expect(dom).to have_css "section.sac-membership .qr-code-wrapper"
     end
   end
 
@@ -57,10 +57,10 @@ describe "people/_show_right_z_sac_cas.html.haml" do
     let(:person) { people(:admin) }
 
     it "hides membership info" do
-      expect(dom).not_to have_css "section.sac_membership"
+      expect(dom).not_to have_css "section.sac-membership"
     end
 
-    it "does not render download button for active membership" do
+    it "does not render download button for inactive membership" do
       expect(dom).not_to have_link(nil, href: membership_path(person, format: :pdf))
     end
   end

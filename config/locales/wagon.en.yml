@@ -863,7 +863,6 @@ en:
     show_right_z_sac_cas:
       section_sac_membership: ""
       qr_code_hint: ""
-      download: ""
       download_pdf: ""
 
   people/neuanmeldungen/approves:
