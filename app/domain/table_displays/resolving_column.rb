@@ -20,7 +20,7 @@ module TableDisplays
     end
 
     def render(attr)
-      return if TableDisplays::Resolver.exclude?(attr.to_sym, template.parent)
+      return if TableDisplays::Resolver.new(template, table.entries.first, attr).exclude? attr
 
       super do |person|
         TableDisplays::Resolver.new(template, person, attr).to_s

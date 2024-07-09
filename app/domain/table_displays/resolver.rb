@@ -31,8 +31,16 @@ module TableDisplays
       ]
     }.freeze
 
-    def self.exclude?(attr, parent)
-      EXCLUSIVE.key?(attr) && EXCLUSIVE[attr].exclude?(parent.class)
+    def exclude?(attr)
+      if Person::SAC_REMARKS.include?(attr)
+        return @template.can?(if Person::SAC_REMARK_NATIONAL_OFFICE.eql?(attr)
+                                :manage_national_office_remark
+                              else
+                                :manage_section_remarks
+                              end, @person)
+      end
+
+      EXCLUSIVE[attr.to_sym]&.exclude?(@template.parent.class)
     end
 
     def initialize(template, person, attr)

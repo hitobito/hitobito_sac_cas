@@ -7,6 +7,6 @@
 
 module SacCas::Dropdown::TableDisplays
   def render_item(_name, column, value, _label = render_label(column, value))
-    super unless TableDisplays::Resolver.exclude?(value.to_sym, parent)
+    super unless TableDisplays::Resolver.new(template, table_display.person, value).exclude? value
   end
 end
