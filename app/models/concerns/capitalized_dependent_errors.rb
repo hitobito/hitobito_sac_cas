@@ -12,6 +12,8 @@ module CapitalizedDependentErrors
     super.tap { |errors| capitalize_dependent_records(errors) }
   end
 
+  private
+
   # NOTE ama - https://github.com/rails/rails/issues/21064
   def capitalize_dependent_records(errors)
     errors.each do |error|
