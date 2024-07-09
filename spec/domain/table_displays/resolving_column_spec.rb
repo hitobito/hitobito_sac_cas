@@ -53,4 +53,34 @@ describe TableDisplays::ResolvingColumn, type: :helper do
   } do
     let(:person) { people(:admin).tap { |p| allow(p).to receive(:membership_years).and_return(3) } }
   end
+
+  it_behaves_like "table display", {
+    column: :sac_remark_national_office,
+    header: "Bemerkungen Geschäftsstelle",
+    value: "Remark",
+    permission: :manage_national_office_remark
+  } do
+    let(:person) do
+      people(:admin).tap do |p|
+        allow(p).to receive(:sac_remark_national_office).and_return("Remark")
+      end
+    end
+  end
+
+  it_behaves_like "table display", {
+    column: :sac_remark_section_1,
+    header: "Bemerkungen Sektion 1",
+    value: "Remark",
+    permission: :manage_section_remarks
+  } do
+    let(:person) do
+      people(:admin).tap do |person|
+        person.roles.create!(
+          group: groups(:matterhorn_funktionaere),
+          type: Group::SektionsFunktionaere::Administration.sti_name
+        )
+        allow(person).to receive(:sac_remark_section_1).and_return("Remark")
+      end
+    end
+  end
 end

@@ -17,7 +17,13 @@ module TableDisplays
       duplicate_exists: :show,
       wiedereintritt: :show,
       self_registration_reason: :show_full,
-      address_valid: :show
+      address_valid: :show,
+      sac_remark_national_office: :manage_national_office_remark,
+      sac_remark_section_1: :manage_section_remarks,
+      sac_remark_section_2: :manage_section_remarks,
+      sac_remark_section_3: :manage_section_remarks,
+      sac_remark_section_4: :manage_section_remarks,
+      sac_remark_section_5: :manage_section_remarks
     }.freeze
 
     EXCLUSIVE = {
