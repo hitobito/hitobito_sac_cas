@@ -9,6 +9,8 @@ module CostCommon
   extend ActiveSupport::Concern
   included do
     include Globalized
+    include CapitalizedDependentErrors
+
     translates :label
 
     validates :label, presence: true
@@ -32,10 +34,6 @@ module CostCommon
     [code, label].join(" - ")
   end
 
-  def errors
-    super.tap { |errors| capitalize_dependent_records(errors) }
-  end
-
   def destroy
     return super if dependent_assocations_exist?
 
@@ -50,14 +48,5 @@ module CostCommon
 
   def soft_destroy
     update(deleted_at: Time.zone.now)
-  end
-
-  # NOTE ama - https://github.com/rails/rails/issues/21064
-  def capitalize_dependent_records(errors)
-    errors.each do |error|
-      if error.type == :"restrict_dependent_destroy.has_many"
-        error.options[:record].capitalize!
-      end
-    end
   end
 end
