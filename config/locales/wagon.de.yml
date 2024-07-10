@@ -164,6 +164,9 @@ de:
         created_at: Erstellt
       event:
         unconfirmed_count: Unbestätigte
+        maximum_age: Maximalalter
+        ideal_class_size: Ideale Klassengrösse
+        maximum_class_size: Maximale Klassengrösse
       event/kind:
         accommodation: Unterkunft
         accommodations:
@@ -183,6 +186,9 @@ de:
         reserve_accommodation: Unterkunft reservieren durch SAC
         maximum_participants: Maximale Teilnehmerzahl
         minimum_participants: Minimale Teilnehmerzahl
+        maximum_age: Maximalalter
+        ideal_class_size: Ideale Klassengrösse
+        maximum_class_size: Maximale Klassengrösse
         training_days: Ausbildungstage
       event/course:
         accommodation: Unterkunft
@@ -863,6 +869,7 @@ de:
         "Folgende Felder werden übernommen: Beschreibung,
         Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
         Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger"
+    maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
 
   external_trainings:
     form:
