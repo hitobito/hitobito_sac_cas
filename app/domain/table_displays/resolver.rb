@@ -26,7 +26,7 @@ module TableDisplays
       sac_remark_section_5: :manage_section_remarks
     }.freeze
 
-    EXCLUSIVE = {
+    EXCLUSIONS_BY_GROUP = {
       antrag_fuer: [
         Group::SektionsNeuanmeldungenSektion,
         Group::SektionsNeuanmeldungenNv
@@ -37,16 +37,18 @@ module TableDisplays
       ]
     }.freeze
 
-    def exclude?(attr)
-      if Person::SAC_REMARKS.include?(attr)
-        return @template.can?(if Person::SAC_REMARK_NATIONAL_OFFICE.eql?(attr)
-                                :manage_national_office_remark
-                              else
-                                :manage_section_remarks
-                              end, @person)
+    class << self
+      def exclude?(attr, template)
+        exclude_by_group?(attr, template) || excluded_remark?(attr, template)
       end
 
-      EXCLUSIVE[attr.to_sym]&.exclude?(@template.parent.class)
+      def exclude_by_group?(attr, template)
+        EXCLUSIONS_BY_GROUP[attr]&.exclude?(template.parent.class)
+      end
+
+      def excluded_remark?(attr, template)
+        template.cannot?(ATTRS.fetch(attr.to_sym), Person.new) if /sac_remark/.match?(attr)
+      end
     end
 
     def initialize(template, person, attr)
