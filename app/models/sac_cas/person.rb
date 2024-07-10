@@ -15,9 +15,11 @@ module SacCas::Person
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
     Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
+
     Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
     Person::LANGUAGES.delete(:en)
 
+    paper_trail_options[:skip] += Person::SAC_REMARKS
     devise_login_id_attrs << :membership_number
 
     Person.used_attributes.delete(:nickname)
