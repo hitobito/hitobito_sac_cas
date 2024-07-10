@@ -228,4 +228,19 @@ describe Person do
       end
     end
   end
+
+  it "does not track remark attrs", versioning: true do
+    person = people(:admin)
+    [
+      :sac_remark_section_1,
+      :sac_remark_section_2,
+      :sac_remark_section_3,
+      :sac_remark_section_4,
+      :sac_remark_section_5,
+      :sac_remark_national_office
+    ].each do |attr|
+      person.send(:"#{attr}=", attr)
+    end
+    expect { person.save! }.not_to change { person.versions.count }
+  end
 end

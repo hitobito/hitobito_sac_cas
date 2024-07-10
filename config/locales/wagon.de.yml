@@ -945,7 +945,7 @@ de:
 
     tabs:
       history: Mitgliedschaften / Verlauf
-      remarks: Bemerkungen
+      sac_remarks: Bemerkungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft

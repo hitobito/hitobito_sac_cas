@@ -10,7 +10,7 @@ module SacCas::Sheet::Person
 
   prepended do
     tabs.insert(1, Sheet::Tab.new(
-      "people.tabs.remarks",
+      "people.tabs.sac_remarks",
       :group_person_sac_remarks_path,
       if: ->(view, _group, person) { view.can?(:show_remarks, person) }
     ))
