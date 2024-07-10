@@ -9,7 +9,6 @@ require "spec_helper"
 
 describe "person sac remarks" do
   let(:person) { people(:mitglied) }
-  let(:group) { person.groups.first }
 
   before do
     person.roles.create!(
@@ -20,7 +19,7 @@ describe "person sac remarks" do
   end
 
   it "lists and updates sac remarks" do
-    visit group_person_sac_remarks_path(:de, group, person)
+    visit group_person_sac_remarks_path(group_id: person.groups.first.id, person_id: person.id)
 
     within("#sac_remark_national_office") do
       click_link

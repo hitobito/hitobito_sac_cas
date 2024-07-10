@@ -8,7 +8,7 @@
 class Person::SacRemarksController < ApplicationController
   helper_method :person, :group, :remark_attr_name, :available_attrs
   before_action :authorize_action, except: :index
-  before_action :group, only: :index
+  before_action :group
 
   def index
     authorize! :show_remarks, person
