@@ -896,7 +896,8 @@ it:
     show_right_z_sac_cas:
       section_sac_membership: ""
       qr_code_hint: ""
-      download_pdf: tbdScarica la tessera di socio
+      download: tbdScarica la tessera di socio
+      download_pdf: ""
 
   people/neuanmeldungen/approves:
     new:

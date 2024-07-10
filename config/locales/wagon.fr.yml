@@ -896,7 +896,8 @@ fr:
     show_right_z_sac_cas:
       section_sac_membership: ""
       qr_code_hint: ""
-      download_pdf: Télécharger la carte de membre PDF
+      download: Télécharger
+      download_pdf: La carte de membre PDF
 
   people/neuanmeldungen/approves:
     new:
