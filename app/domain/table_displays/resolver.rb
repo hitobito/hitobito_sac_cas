@@ -37,18 +37,8 @@ module TableDisplays
       ]
     }.freeze
 
-    class << self
-      def exclude?(attr, template)
-        exclude_by_group?(attr, template) || excluded_remark?(attr, template)
-      end
-
-      def exclude_by_group?(attr, template)
-        EXCLUSIONS_BY_GROUP[attr]&.exclude?(template.parent.class)
-      end
-
-      def excluded_remark?(attr, template)
-        template.cannot?(ATTRS.fetch(attr.to_sym), Person.new) if /sac_remark/.match?(attr)
-      end
+    def exclude?(attr)
+      excluded_remark?(attr) || exclude_by_group?
     end
 
     def initialize(template, person, attr)
@@ -69,6 +59,14 @@ module TableDisplays
     end
 
     private
+
+    def excluded_remark?(attr)
+      @template.cannot?(ATTRS.fetch(@attr), @person) if Person::SAC_REMARKS.include?(attr)
+    end
+
+    def exclude_by_group?
+      EXCLUSIONS_BY_GROUP[@attr]&.exclude?(@template.parent.class)
+    end
 
     def confirmed_at
       I18n.l(@person.confirmed_at.to_date) if @person.confirmed_at
