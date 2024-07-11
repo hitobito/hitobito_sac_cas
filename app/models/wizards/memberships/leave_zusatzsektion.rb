@@ -38,8 +38,7 @@ module Wizards::Memberships
     end
 
     def leave_operation
-      # TODO: Add termination_reason_id https://github.com/hitobito/hitobito_sac_cas/issues/718
-      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on)
+      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on, termination_reason_id: termination_reason_id)
     end
 
     def backoffice?
@@ -52,6 +51,10 @@ module Wizards::Memberships
       else
         Date.current.end_of_year
       end
+    end
+
+    def termination_reason_id
+      step(:summary)&.termination_reason_id
     end
 
     def mitglied_termination_by_section_only?
