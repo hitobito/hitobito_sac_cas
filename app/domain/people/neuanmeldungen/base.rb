@@ -36,7 +36,7 @@ module People
       end
 
       def non_applicable_roles
-        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
+        Role.with_inactive.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
       end
     end
   end

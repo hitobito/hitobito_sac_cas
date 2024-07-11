@@ -4,14 +4,19 @@ require "spec_helper"
 
 describe Invoices::SacMemberships::Member do
   let(:root) { Group.root }
+  # member expects preloaded roles (without them it would not respect the date in the default roles scope)
   let(:person) { people(:mitglied) }
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
 
-  subject { described_class.new(person, context) }
+  subject do
+    person_with_roles = context.people_with_membership_years.find(person.id)
+    described_class.new(person_with_roles, context)
+  end
 
   before do
-    Role.update_all(delete_on: date.end_of_year)
+    Role.update_all(end_on: date.end_of_year)
+    travel_to date - 1.month
   end
 
   context "main methods" do
@@ -19,7 +24,7 @@ describe Invoices::SacMemberships::Member do
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: "2022-08-01"
+        start_on: "2022-08-01"
       )
     end
 
@@ -39,22 +44,12 @@ describe Invoices::SacMemberships::Member do
     let(:person) { context.people_with_membership_years.find(people(:mitglied).id) }
 
     it "counts years correctly" do
-      roles(:mitglied).update_column(:created_at, "2015-01-01")
+      roles(:mitglied).update_column(:start_on, "2015-01-01")
       expect(subject.membership_years).to eq(8)
     end
 
     it "is off by one in first year" do
-      roles(:mitglied).update_column(:created_at, date)
-      expect(subject.membership_years).to eq(0)
-    end
-
-    it "counts years correctly in second year" do
-      roles(:mitglied).update_column(:created_at, "2023-01-01")
-      expect(subject.membership_years).to eq(0)
-    end
-
-    it "counts years correctly in third year" do
-      roles(:mitglied).update_column(:created_at, "2022-01-01")
+      roles(:mitglied).update_column(:start_on, date)
       expect(subject.membership_years).to eq(1)
     end
   end
@@ -71,9 +66,9 @@ describe Invoices::SacMemberships::Member do
         role = Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
           person: person,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          created_at: "2022-08-01",
+          start_on: "2022-08-01",
           beitragskategorie: :adult,
-          delete_on: "2023-12-31"
+          end_on: "2023-12-31"
         )
         expect(subject.paying_person?(role.beitragskategorie)).to be(true)
       end

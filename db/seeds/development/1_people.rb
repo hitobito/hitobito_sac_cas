@@ -36,8 +36,8 @@ end
 seeder = SacPersonSeeder.new
 
 seeder.seed_all_roles
-seeder.seed_families
 seeder.update_mitglieder_role_dates
+seeder.seed_families
 seeder.seed_some_ehrenmitglieder_beguenstigt_roles
 
 geschaeftsstelle = Group::Geschaeftsstelle.first

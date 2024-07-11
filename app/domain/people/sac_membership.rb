@@ -8,7 +8,7 @@
 class People::SacMembership
   def initialize(person, date: nil, in_memory: false)
     @person = person
-    @date = date
+    @date = date || Date.current
     @in_memory = in_memory
   end
 
@@ -53,7 +53,7 @@ class People::SacMembership
   end
 
   def future_stammsektion_roles
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types)
+    @person.roles.future.where(type: mitglied_stammsektion_types)
   end
 
   def neuanmeldung_stammsektion_role
@@ -129,14 +129,10 @@ class People::SacMembership
   end
 
   def active_roles
-    if @date
-      if in_memory?
-        @person.roles.select { |r| r.active_period.cover?(@date) }
-      else
-        @person.roles.active(@date)
-      end
+    if in_memory?
+      @person.roles.select { |r| r.active_period.cover?(@date) }
     else
-      @person.roles
+      @person.roles.active(@date)
     end
   end
 
@@ -154,11 +150,11 @@ class People::SacMembership
   end
 
   def any_future_role?
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types).exists?
+    @person.roles.future.where(type: mitglied_stammsektion_types).exists?
   end
 
   def any_past_role?
-    @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
+    @person.roles.ended.where(type: mitglied_stammsektion_types).exists?
   end
 
   def paying_person?(beitragskategorie)

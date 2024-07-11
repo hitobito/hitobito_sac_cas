@@ -20,6 +20,7 @@ module Groups
     def identify
       preferred_roles.first&.group || roles.first&.group
     end
+    alias_method :group, :identify
 
     # Whether the person has at least one preferred role in the primary group.
     def preferred_exists?

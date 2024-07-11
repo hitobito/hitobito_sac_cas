@@ -218,8 +218,8 @@ describe Wizards::Signup::SektionWizard do
         travel_to(Time.zone.local(2023, 3, 12)) do
           wizard.save!
         end
-        expect(max.roles.last).to be_kind_of(FutureRole)
-        expect(maxi.roles.last).to be_kind_of(FutureRole)
+        expect(max.roles.last.start_on).to eq Date.parse("2023-07-01")
+        expect(maxi.roles.last.start_on).to eq Date.parse("2023-07-01")
       end
     end
   end

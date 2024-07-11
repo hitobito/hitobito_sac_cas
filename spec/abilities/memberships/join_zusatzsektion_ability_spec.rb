@@ -31,7 +31,7 @@ describe Memberships::JoinZusatzsektionAbility do
     end
 
     it "may not create join if membership is no longer active" do
-      roles(:mitglied).update(deleted_at: 1.day.ago)
+      roles(:mitglied).update(end_on: 1.day.ago)
       expect(ability).not_to be_able_to(:create, build_join(:mitglied))
     end
 
@@ -48,7 +48,7 @@ describe Memberships::JoinZusatzsektionAbility do
     end
 
     it "may not create join if membership is no longer active" do
-      roles(:mitglied).update(deleted_at: 1.day.ago)
+      roles(:mitglied).update(end_on: 1.day.ago)
       expect(ability).not_to be_able_to(:create, build_join(:mitglied))
     end
 
@@ -69,7 +69,7 @@ describe Memberships::JoinZusatzsektionAbility do
     end
 
     it "may not create join for herself if membership is no longer active" do
-      roles(:mitglied).update_columns(deleted_at: Time.zone.now)
+      roles(:mitglied).update_columns(end_on: 1.day.ago)
       expect(ability).not_to be_able_to(:create, build_join(:mitglied))
     end
   end

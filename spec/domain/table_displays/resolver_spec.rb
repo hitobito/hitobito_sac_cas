@@ -51,10 +51,10 @@ describe TableDisplays::Resolver, type: :helper do
   end
 
   it_behaves_like "resolver", attr: :beitrittsdatum, label: "Beitritt per" do
-    it "returns convert_on of oldest role within parent group" do
-      person.roles.build(group_id: 1, convert_on: Time.zone.local(2024, 1, 11, 10))
-      person.roles.build(group_id: 2, convert_on: Time.zone.local(2023, 1, 10, 10))
-      person.roles.build(group_id: 1, convert_on: Time.zone.local(2024, 1, 10, 10))
+    it "returns start_on of oldest role within parent group" do
+      person.roles.build(group_id: 1, start_on: Time.zone.local(2024, 1, 11, 10))
+      person.roles.build(group_id: 2, start_on: Time.zone.local(2023, 1, 10, 10))
+      person.roles.build(group_id: 1, start_on: Time.zone.local(2024, 1, 10, 10))
 
       expect(resolver.to_s).to eq "10.01.2024"
     end
@@ -112,12 +112,12 @@ describe TableDisplays::Resolver, type: :helper do
     let(:person) { people(:mitglied) }
 
     it "returns nein if person has active and prior membership" do
-      person.roles.update_all(delete_on: "2020-12-31")
+      person.roles.update_all(end_on: 11.days.ago)
       person.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: groups(:matterhorn_mitglieder),
-        created_at: 10.days.ago,
-        deleted_at: 1.day.ago
+        start_on: 10.days.ago,
+        end_on: 1.day.from_now
       )
       expect(resolver.to_s).to eq "nein"
     end
@@ -127,8 +127,8 @@ describe TableDisplays::Resolver, type: :helper do
       person.reload.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: groups(:matterhorn_mitglieder),
-        created_at: 10.days.ago,
-        deleted_at: 1.day.ago
+        start_on: 10.days.ago,
+        end_on: 1.day.ago
       )
       expect(resolver.to_s).to eq "ja"
     end

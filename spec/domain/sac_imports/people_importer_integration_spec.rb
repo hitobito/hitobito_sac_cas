@@ -30,7 +30,7 @@ describe SacImports::PeopleImporter do
     people_navision_ids.each do |id|
       person = Person.find(id)
       expect(person).to be_present
-      expect(person.roles.with_deleted.first).to be_a(Group::ExterneKontakte::Kontakt)
+      expect(person.roles.with_inactive.first).to be_a(Group::ExterneKontakte::Kontakt)
     end
   end
 

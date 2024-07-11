@@ -49,7 +49,7 @@ describe :self_registration do
     expect_validation_error("E-Mail ist nicht gültig")
   end
 
-  it "creates person" do
+  it "1s person" do
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
@@ -58,7 +58,7 @@ describe :self_registration do
       click_on "Registrieren"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
-    expect(Person.last.roles.last.delete_on).not_to be_nil
+    expect(Person.last.roles.last.end_on).not_to be_nil
   end
 
   it "subscribes to mailinglist" do

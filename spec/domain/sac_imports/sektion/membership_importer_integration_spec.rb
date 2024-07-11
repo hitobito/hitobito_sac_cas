@@ -32,7 +32,7 @@
 #     people_navision_ids.each do |id|
 #       person = Person.find(id)
 #       expect(person).to be_present
-#       expect(person.roles.with_deleted.first).to be_a(Group::SektionsMitglieder::Mitglied)
+#       expect(person.roles.with_inactive.first).to be_a(Group::SektionsMitglieder::Mitglied)
 #     end
 #   end
 #
@@ -46,8 +46,8 @@
 #
 #     active_role = active.roles.first
 #
-#     expect(active_role.created_at).to eq(Time.zone.parse("1899-12-31"))
-#     expect(active_role.deleted_at).to be_nil
+#     expect(active_role.start_on).to eq(Date.parse("1899-12-31"))
+#     expect(active_role.end_on).to eq SacImports::Sektion::Membership::DEFAULT_END_ON
 #     expect(active_role.beitragskategorie).to eq("youth")
 #   end
 #
@@ -61,10 +61,10 @@
 #     expect(retired.household_key).to eq("F12345")
 #
 #     expect(retired.roles.without_deleted).to eq []
-#     retired_role = retired.roles.with_deleted.first
+#     retired_role = retired.roles.with_inactive.first
 #
-#     expect(retired_role.created_at).to eq(Time.zone.parse("1980-12-31"))
-#     expect(retired_role.deleted_at).to eq(Time.zone.parse("2010-1-1"))
+#     expect(retired_role.start_on).to eq(Time.zone.parse("1980-12-31"))
+#     expect(retired_role.end_on).to eq(Time.zone.parse("2010-1-1"))
 #     expect(retired_role.beitragskategorie).to eq("adult")
 #   end
 #
@@ -76,10 +76,10 @@
 #     expect(family.count).to eq 2
 #
 #     expect(family).to all have_attributes(
-#       address: "Seestrasse #{people_navision_ids.first}",
-#       zip_code: people_navision_ids.first[0..3],
-#       town: "Zürich"
-#     )
+#                             address: "Seestrasse #{people_navision_ids.first}",
+#                             zip_code: people_navision_ids.first[0..3],
+#                             town: "Zürich"
+#                           )
 #   end
 #
 #   it "imports beitragskategorie" do

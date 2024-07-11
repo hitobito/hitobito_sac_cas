@@ -44,8 +44,8 @@ describe Person do
   context "#membership_years" do
     let(:person) { Fabricate(:person, birthday: Date.parse("01-01-1985")) }
 
-    let(:created_at) { Time.zone.parse("01-01-2000 12:00:00") }
-    let(:end_at) { created_at + 1.years }
+    let(:start_on) { Time.zone.parse("01-01-2000 12:00:00") }
+    let(:end_on) { start_on + 1.years }
 
     def person_with_membership_years
       Person.with_membership_years.find(person.id)
@@ -56,7 +56,7 @@ describe Person do
         group: groups(:bluemlisalp_mitglieder),
         person: person,
         beitragskategorie: "adult",
-        **attrs.reverse_merge(created_at: created_at))
+        **attrs.reverse_merge(start_on: start_on))
     end
 
     it "raises error when not using scope :with_membership_years" do
@@ -70,59 +70,59 @@ describe Person do
     end
 
     it "includes membership_years of deleted roles" do
-      create_role(created_at: created_at, deleted_at: end_at)
+      create_role(start_on: start_on, end_on: end_on)
       expect(person_with_membership_years.membership_years).to eq 1
     end
 
     it "includes membership_years of archived roles" do
-      create_role(created_at: created_at, archived_at: end_at)
+      create_role(start_on: start_on, archived_at: end_on)
       expect(person_with_membership_years.membership_years).to eq 1
     end
 
     it "includes membership_years of role to be deleted" do
-      create_role(created_at: created_at, delete_on: end_at)
+      create_role(start_on: start_on, end_on: end_on)
       expect(person_with_membership_years.membership_years).to eq 1
     end
 
     it "with multiple membership roles returns the sum of role.membership_years" do
-      create_role(created_at: created_at, delete_on: created_at + 1.years)
-      create_role(created_at: created_at + 2.years, delete_on: created_at + 3.years)
+      create_role(start_on: start_on, end_on: start_on + 365.days)
+      create_role(start_on: start_on + 2.years, end_on: start_on + 2.years + 365.days)
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
     it "multiple roles, with duration of less than a year, add together to membership_years" do
-      create_role(created_at: Date.new(2000, 1, 1), delete_on: Date.new(2000, 7, 1))
-      create_role(created_at: Date.new(2000, 7, 2), delete_on: Date.new(2001, 1, 1))
-      create_role(created_at: Date.new(2001, 1, 2), delete_on: Date.new(2001, 7, 1))
-      create_role(created_at: Date.new(2001, 7, 2), delete_on: Date.new(2002, 1, 1))
-      create_role(created_at: Date.new(2002, 1, 2), delete_on: Date.new(2002, 7, 1))
+      create_role(start_on: Date.new(2000, 1, 1), end_on: Date.new(2000, 7, 1))
+      create_role(start_on: Date.new(2000, 7, 2), end_on: Date.new(2001, 1, 1))
+      create_role(start_on: Date.new(2001, 1, 2), end_on: Date.new(2001, 7, 1))
+      create_role(start_on: Date.new(2001, 7, 2), end_on: Date.new(2002, 1, 1))
+      create_role(start_on: Date.new(2002, 1, 2), end_on: Date.new(2002, 7, 1))
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
     it "calculates membership years correctly for leap year" do
-      create_role(created_at: Date.new(2020, 1, 1), delete_on: Date.new(2020, 12, 31))
+      create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2020, 12, 31))
       expect(person_with_membership_years.membership_years).to eq 1
     end
 
     it "calculates membership years correctly for leap year when passing reporting date" do
-      create_role(created_at: Date.new(2020, 1, 1), delete_on: Date.new(2023, 12, 31))
+      create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2023, 12, 31))
       expect(Person.with_membership_years("people.*", Date.new(2020, 12, 31)).find(person.id).membership_years).to eq(0)
       expect(Person.with_membership_years("people.*", Date.new(2021, 1, 1)).find(person.id).membership_years).to eq(1)
     end
 
     it "calculates membership years correctly for two years with one leap year" do
-      create_role(created_at: Date.new(2020, 1, 1), delete_on: Date.new(2021, 12, 31))
+      create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2021, 12, 31))
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
     it "calculates membership years correctly for two years with one leap year when passing reporting date" do
-      create_role(created_at: Date.new(2020, 1, 1), delete_on: Date.new(2023, 12, 31))
+      create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2023, 12, 31))
       expect(Person.with_membership_years("people.*", Date.new(2021, 12, 31)).find(person.id).membership_years).to eq(1)
       expect(Person.with_membership_years("people.*", Date.new(2022, 1, 1)).find(person.id).membership_years).to eq(2)
     end
 
     it "calculates membership years correctly for the next 20 years" do
-      role = create_role(delete_on: created_at + 363.days)
+      role = create_role(end_on: start_on + 363.days)
       expect(person_with_membership_years.membership_years).to eq 0
 
       (1..20).each do |x|
@@ -131,27 +131,27 @@ describe Person do
           {years_offset: x.years - 1.days, expected_years: x},
           {years_offset: x.years, expected_years: x}
         ].each do |test_case|
-          role.update(delete_on: role.created_at + test_case[:years_offset])
+          role.update(end_on: role.start_on + test_case[:years_offset])
           expect(person_with_membership_years.membership_years).to eq(test_case[:expected_years])
         end
       end
     end
 
     it "calculates membership years correctly when passing reporting date" do
-      create_role(delete_on: created_at + 5.years)
+      create_role(end_on: start_on + 5.years)
       expect(Person.with_membership_years("people.*", Date.new(2001, 12, 31)).find(person.id).membership_years).to eq(1)
       expect(Person.with_membership_years("people.*", Date.new(2002, 1, 1)).find(person.id).membership_years).to eq(2)
     end
 
     it "calculates membership years from roles starting and ending in overlapping years" do
-      role = create_role(delete_on: Date.new(2000, 0o7, 19))
-      role.update!(created_at: Date.new(2000, 0o4, 10))
+      role = create_role(end_on: Date.new(2000, 0o7, 19))
+      role.update!(start_on: Date.new(2000, 0o4, 10))
       expect(person_with_membership_years.membership_years).to eq 0
 
-      role.update(delete_on: Date.new(2001, 0o7, 19))
+      role.update(end_on: Date.new(2001, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(1)
 
-      role.update(delete_on: Date.new(2002, 0o7, 19))
+      role.update(end_on: Date.new(2002, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(2)
     end
   end
@@ -299,7 +299,7 @@ describe Person do
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation].each do |role_class|
       it "is not tour guide if inactive #{role_class} role" do
         role = role_class.create!(person: member, group: tourenkommission)
-        role.update_columns(created_at: 20.years.ago)
+        role.update_columns(start_on: 20.years.ago)
         role.destroy!
 
         expect(member.sac_tour_guide?).to eq(false)
@@ -395,8 +395,8 @@ describe Person do
           person.roles.create!(
             type: Group::SektionsMitglieder::Mitglied.sti_name,
             group: groups(:bluemlisalp_mitglieder),
-            delete_on: Time.zone.tomorrow,
-            created_at: Time.zone.now
+            end_on: Time.zone.tomorrow,
+            start_on: Time.zone.now
           )
         end
 

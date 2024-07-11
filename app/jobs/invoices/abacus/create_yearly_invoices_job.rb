@@ -52,7 +52,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     Person
       .where.not(abacus_subject_key: nil)
       .where.not(data_quality: :error)
-      .joins(:roles)
+      .joins(:roles_unscoped)
       .merge(Role.active(reference_date))
       .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
       .where.not(id: ExternalInvoice::SacMembership.where(year: @invoice_year).select(:person_id))
@@ -142,7 +142,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def load_people(ids)
-    context.people_with_membership_years.where(id: ids).order(:id).includes(:roles)
+    context.people_with_membership_years.where(id: ids).order(:id)
   end
 
   def create_invoices(people)

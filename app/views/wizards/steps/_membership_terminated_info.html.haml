@@ -4,4 +4,4 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .alert.alert-info
-  = t('.info', date: l(c.model.termination_date))
+  = t('.info', date: l(c.model.termination_date)) if c.model.termination_date

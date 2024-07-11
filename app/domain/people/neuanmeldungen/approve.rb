@@ -44,9 +44,8 @@ module People
         APPROVED_NEUANMELDUNGEN_ROLE.create!(
           group: approved_roles_group,
           person: role.person,
-          beitragskategorie: role.beitragskategorie,
-          created_at: role.created_at,
-          delete_on: role.delete_on
+          start_on: Date.current,
+          beitragskategorie: role.beitragskategorie
         )
         generate_invoice(role)
       end

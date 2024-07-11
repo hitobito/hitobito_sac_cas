@@ -28,9 +28,7 @@ module Memberships
         reference_person.sac_membership.stammsektion_role)
 
       join_stammsektion!(reference_person)
-      join_future_stammsektion!(reference_person)
       join_zusatzsektion!(reference_person)
-      # currently there is no such thing as future zusatzsektion roles, so we can stop here
     end
 
     # Replace all family membership roles with corresponding adult/youth roles
@@ -43,9 +41,8 @@ module Memberships
       if sac_membership.stammsektion_role
         replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
       end
-      sac_membership.future_stammsektion_roles.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
-      sac_membership.neuanmeldung_zusatzsektion_roles.family.each { delete_role!(_1) }
+      sac_membership.neuanmeldung_zusatzsektion_roles.family.each { end_role(_1) }
     end
 
     private
@@ -57,13 +54,6 @@ module Memberships
       else
         create_role!(person,
           reference_person.sac_membership.stammsektion_role)
-      end
-    end
-
-    def join_future_stammsektion!(reference_person)
-      sac_membership.future_stammsektion_roles.each(&:destroy!)
-      reference_person.sac_membership.future_stammsektion_roles.each do |role|
-        create_role!(person, role)
       end
     end
 
@@ -79,18 +69,20 @@ module Memberships
 
     def category_family = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
-    def replaced_role_deleted_at = Time.current.yesterday.end_of_day
+    def replaced_role_end_on = Date.current.yesterday
 
-    def new_role_created_at = Time.current.beginning_of_day
+    def new_role_start_on = Date.current
 
     # Replace the role with the blueprint role in the same group. The new role is created with a
     # created_at timestamp at the beginning of the current day, but not before the created_at
     # timestamp of the blueprint role.
     # The old role is ended with a deleted_at timestamp at the end of the previous day.
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
+      raise "cannot replace with future role" if blueprint_role.start_on.future?
+
       # terminate old role, skip validations as it might be a family membership which
       # is not valid anymore as the person just left the household
-      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
+      end_role(role)
 
       # create new role with beitragskategorie
       create_role!(role.person,
@@ -104,15 +96,17 @@ module Memberships
         person:,
         beitragskategorie:,
         group: blueprint_role.group,
-        created_at: new_role_created_at,
-        delete_on: blueprint_role.delete_on,
-        convert_on: blueprint_role.convert_on,
-        convert_to: blueprint_role.convert_to
+        start_on: new_role_start_on,
+        end_on: blueprint_role.end_on
       )
     end
 
-    def delete_role!(role)
-      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
+    def end_role(role)
+      if role.start_on >= Date.current
+        role.really_destroy!
+      else
+        Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
+      end
     end
 
     def find_zusatzsektion_role(layer_group_id)

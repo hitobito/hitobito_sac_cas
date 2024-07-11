@@ -11,7 +11,13 @@ describe Memberships::LeaveZusatzsektion do
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
-    Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
+    attrs.reverse_merge!(
+      group:,
+      person: owner,
+      start_on: 1.year.ago,
+      end_on: Date.current.end_of_year
+    )
+    Fabricate(role_type.sti_name, **attrs)
   end
 
   before { travel_to(now) }
@@ -102,7 +108,7 @@ describe Memberships::LeaveZusatzsektion do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
-          expect(role.delete_on).to eq Date.new(2024, 12, 31)
+          expect(role.end_on).to eq Date.new(2024, 12, 31)
         end
 
         it "does not reset delete_on to a later date" do
@@ -112,7 +118,7 @@ describe Memberships::LeaveZusatzsektion do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
-          expect(role.delete_on).to eq 3.days.from_now.to_date
+          expect(role.end_on).to eq 3.days.from_now.to_date
         end
       end
     end
@@ -149,14 +155,12 @@ describe Memberships::LeaveZusatzsektion do
         )
       end
 
-      it "deletes existing roles" do
+      it "ends role per yesterday" do
         expect do
           expect(leave.save).to eq true
         end.to change { Role.count }.by(-2)
-        expect { Role.find(@matterhorn_zusatz.id) }.to raise_error(ActiveRecord::RecordNotFound)
-        expect do
-          Role.find(@matterhorn_zusatz_other.id)
-        end.to raise_error(ActiveRecord::RecordNotFound)
+          .and change { @matterhorn_zusatz.reload.end_on }.to(now.to_date.yesterday)
+          .and change { @matterhorn_zusatz_other.reload.end_on }.to(now.to_date.yesterday)
       end
 
       context "with terminate_on at the end of year" do
@@ -167,7 +171,7 @@ describe Memberships::LeaveZusatzsektion do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })
           expect(@matterhorn_zusatz.reload).to be_terminated
-          expect(@matterhorn_zusatz_other.delete_on).to eq Date.new(2024, 12, 31)
+          expect(@matterhorn_zusatz_other.end_on).to eq Date.new(2024, 12, 31)
         end
       end
     end
