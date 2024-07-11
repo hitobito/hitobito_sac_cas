@@ -40,7 +40,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   end
 
   def member_ids
-    Person.joins(:roles)
+    Person.joins(:roles_unscoped)
       .where(roles: {type: [Group::SektionsMitglieder::Mitglied.sti_name, Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name]})
       .where.not(data_quality: :error)
       .distinct

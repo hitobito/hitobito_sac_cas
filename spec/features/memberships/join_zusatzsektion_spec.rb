@@ -87,6 +87,9 @@ describe "joining zusatzsektion", js: true do
       end
 
       it "can create roles for all members" do
+        # remove existing roles in group so we can test without conflicting roles
+        groups(:matterhorn_mitglieder).roles.delete_all
+
         choose "für die ganze Familie"
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Sektion wählen"

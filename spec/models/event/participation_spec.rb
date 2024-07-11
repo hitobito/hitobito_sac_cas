@@ -87,9 +87,9 @@ describe Event::Participation do
     end
 
     [
-      [:bluemlisalp_mitglieder, "Mitglied", true],
-      [:bluemlisalp_neuanmeldungen_nv, "Neuanmeldung", true],
-      [:bluemlisalp_neuanmeldungen_sektion, "Neuanmeldung", true]
+      [:bluemlisalp_mitglieder, "Mitglied"],
+      [:bluemlisalp_neuanmeldungen_nv, "Neuanmeldung"],
+      [:bluemlisalp_neuanmeldungen_sektion, "Neuanmeldung"]
     ].each do |group, role|
       it "is true if person has #{role} in #{group}" do
         build_role(group, role)

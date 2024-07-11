@@ -47,7 +47,7 @@ class Invoices::SacMemberships::MembershipManager
     end
 
     roles_for_update.each do |role|
-      role.update!(delete_on: [Date.new(year).end_of_year, role.delete_on].max)
+      role.update!(end_on: [Date.new(year).end_of_year, role.end_on].max)
     end
   end
 
@@ -72,11 +72,11 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def create_mitglied_role(person)
-    Group::SektionsMitglieder::Mitglied.create!(person: person, group: mitglieder_sektion, delete_on: Date.new(year).end_of_year, created_at: Time.zone.now)
+    Group::SektionsMitglieder::Mitglied.create!(person: person, group: mitglieder_sektion, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
   end
 
   def create_mitglied_zusatzsektion_role(person)
-    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person: person, group: mitglieder_sektion, delete_on: Date.new(year).end_of_year, created_at: Time.zone.now)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person: person, group: mitglieder_sektion, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
   end
 
   def mitglieder_sektion

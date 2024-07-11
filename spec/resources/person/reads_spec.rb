@@ -28,7 +28,7 @@ RSpec.describe PersonResource, type: :resource do
 
     context "membership_number" do
       it "is included if person has anytime membership" do
-        roles(:mitglied).destroy
+        roles(:mitglied).update!(end_on: 1.day.ago)
         render
         expect(attributes.keys).to include :membership_number
         expect(attributes[:membership_number]).to eq person.id

@@ -7,63 +7,65 @@
 
 shared_examples "Mitglied dependant destroy" do
   let(:person) { Fabricate(:person) }
+  let!(:mitglied_role) do
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group:, person:, start_on: 1.year.ago)
+  end
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
-  let(:role) { described_class.new(person: person, group: group) }
+  let!(:role) { described_class.new(person:, group:).tap(&:save!) }
 
-  it "gets soft deleted when Mitglied role gets soft deleted" do
-    freeze_time
-    mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, created_at: 1.year.ago)
+  context "with Mitglied role" do
+    it "gets ended if it is old enough" do
+      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago)
+      expect { mitglied_role.destroy(always_soft_destroy: true) }
+        .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
-    role.save!
-    expect(role).to be_valid
+      expect(role.reload.end_on).to eq(mitglied_role.end_on)
+    end
 
-    mitglied_role.destroy
+    it "gets hard deleted if it is not old enough" do
+      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago + 1.minute)
+      expect { mitglied_role.destroy(always_soft_destroy: true) }
+        .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
-    role.reload
-    expect(role).to be_paranoia_destroyed
-    expect(role.deleted_at).to eq(mitglied_role.deleted_at)
-    expect(role.person.primary_group_id).to be_nil
+      expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "gets hard deleted when Mitglied role is hard deleted" do
+      mitglied_role.destroy
+      expect(Role.with_inactive.where(id: role.id)).not_to exist
+
+      expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 
-  it "gets hard deleted when Mitglied role gets hard deleted" do
-    mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person)
+  context "with MitgliedZusatzsektion role" do
+    let!(:mitglied_role) do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person:, start_on: 1.year.ago)
+      Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group:, person:, start_on: 1.year.ago)
+    end
 
-    role.save!
-    expect(role).to be_valid
+    it "gets ended if it is old enough" do
+      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago)
+      expect { mitglied_role.destroy(always_soft_destroy: true) }
+        .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
-    mitglied_role.destroy
+      expect(role.reload.end_on).to eq(mitglied_role.end_on)
+    end
 
-    expect(Role.with_deleted.exists?(id: role.id)).to eq(false)
-    expect(role.person.primary_group_id).to be_nil
-  end
+    it "gets hard deleted if it is not old enough" do
+      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago + 1.minute)
+      mitglied_role.destroy
+      expect(Role.with_inactive.where(id: role.id)).not_to exist
 
-  it "gets soft deleted when MitgliedZusatzsektion role gets soft deleted" do
-    freeze_time
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, created_at: 1.year.ago)
-    mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, created_at: 1.year.ago)
+      expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
 
-    role.save!
-    expect(role).to be_valid
+    it "gets hard deleted when MitgliedZusatzsektion role is hard deleted" do
+      mitglied_role.destroy
+      expect(Role.with_inactive.where(id: role.id)).not_to exist
 
-    mitglied_role.destroy
-
-    role.reload
-    expect(role).to be_paranoia_destroyed
-    expect(role.deleted_at).to eq(mitglied_role.deleted_at)
-    expect(role.person.primary_group).to eq(other_group)
-  end
-
-  it "gets hard deleted when MitgliedZusatzsektion role gets hard deleted" do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
-    mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person)
-
-    role.save!
-    expect(role).to be_valid
-
-    mitglied_role.destroy
-
-    expect(Role.with_deleted.exists?(id: role.id)).to eq(false)
-    expect(role.person.primary_group).to eq(other_group)
+      expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
 end

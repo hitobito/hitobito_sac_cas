@@ -16,7 +16,7 @@ module SacCas::Role::ActiveMembershipValidations
   end
 
   def assert_has_active_membership_role
-    unless Role.exists?(type: MITGLIED_ROLES.map(&:sti_name),
+    unless Role.with_inactive.exists?(type: MITGLIED_ROLES.map(&:sti_name),
       person_id: person_id,
       group_id: group_id)
       errors.add(:person, :must_have_mitglied_role_in_group)

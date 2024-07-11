@@ -15,8 +15,6 @@ module SacCas::Role::MitgliedNoOverlapValidation
   private
 
   def assert_no_overlap
-    return unless start_on.present? && end_on.present? # we can't validate without a period
-
     case self
     when SacCas::Role::MitgliedStammsektion
       assert_no_overlapping_primary_memberships
@@ -40,11 +38,10 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def overlapping_roles(period, role_types)
-    return unless period.begin && period.end
-
-    Role
+    person
+      .roles
+      .with_inactive
       .where(type: role_types.map(&:sti_name))
-      .where(person_id: person_id)
       .where.not(id: id)
       .to_a
       .select { |role| period.overlaps?(role.active_period) }
@@ -57,10 +54,10 @@ module SacCas::Role::MitgliedNoOverlapValidation
       :already_has_mitglied_role
     end
 
-    start_on = format_date(conflicting_role.active_period.begin)
-    end_on = format_date(conflicting_role.active_period.end)
+    from = format_date(conflicting_role.start_on)
+    to = format_date(conflicting_role.end_on)
 
-    errors.add(:person, key, start_on: start_on, end_on: end_on)
+    errors.add(:person, key, start_on: from, end_on: to)
   end
 
   def role_sektion(role)

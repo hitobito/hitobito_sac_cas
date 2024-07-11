@@ -19,7 +19,7 @@ module SacImports
       }.freeze
 
       TARGET_ROLE_TYPE = Group::SektionsMitglieder::Mitglied
-      DEFAULT_DELETE_ON = Date.new(2024, 12, 31)
+      DEFAULT_END_ON = Date.new(2024, 12, 31)
       UNKNOWN_JOINING_DATE = Date.new(1900, 1, 1)
 
       def initialize(row, group:, placeholder_contact_group:, current_ability:)
@@ -112,9 +112,8 @@ module SacImports
           .first_or_initialize.tap do |role|
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
-            created_at: joining_date,
-            deleted_at: quitted? ? last_exit_date : nil,
-            delete_on: quitted? ? nil : DEFAULT_DELETE_ON
+            start_on: joining_date,
+            end_on: quitted? ? last_exit_date : DEFAULT_END_ON
           }
         end
       end

@@ -11,7 +11,8 @@ describe Memberships::JoinZusatzsektion do
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
-    Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
+    Fabricate(role_type.sti_name, group: group, person: owner,
+      start_on: 1.year.ago, end_on: Date.current.end_of_year, **attrs)
   end
 
   it "initialization fails if no neuanmeldungen subgroup exists" do
@@ -54,8 +55,9 @@ describe Memberships::JoinZusatzsektion do
         it "is invalid if person is already join section member" do
           create_role(:bluemlisalp_mitglieder, "Mitglied")
           expect(join_sektion).not_to be_valid
-          expect(errors).to eq [
-            "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
+          expect(errors).to match [
+            "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",
+            /Person ist bereits Mitglied/
           ]
         end
 
@@ -97,23 +99,27 @@ describe Memberships::JoinZusatzsektion do
     context "family main person" do
       it "is invalid when join_sektion validates and person is not main family person" do
         expect(join_sektion).to receive(:validate_family_main_person?).and_return(true)
-        create_role(:bluemlisalp_mitglieder, "Mitglied")
+        create_role(:bluemlisalp_mitglieder, "Mitglied").tap do |role|
+          Role.where(id: role.id).update_all(beitragskategorie: :family)
+        end
         expect(join_sektion).not_to be_valid
-        expect(errors).to eq [
+        expect(errors).to match [
           "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",
-          "Person muss Hauptperson der Familie sein"
+          "Person muss Hauptperson der Familie sein",
+          /Person ist bereits Mitglied/
         ]
       end
 
-      it "is valid when join_sektion validates and person is not main family person" do
+      it "is valid when join_sektion validates and person is main family person" do
         expect(join_sektion).to receive(:validate_family_main_person?).and_return(true)
         person.update!(sac_family_main_person: true)
         create_role(:bluemlisalp_mitglieder, "Mitglied").tap do |r|
           Role.where(id: r.id).update_all(beitragskategorie: :family)
         end
         expect(join_sektion).not_to be_valid
-        expect(errors).to eq [
-          "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
+        expect(errors).to match [
+          "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",
+          /Person ist bereits Mitglied/
         ]
       end
     end
@@ -203,11 +209,8 @@ describe Memberships::JoinZusatzsektion do
       end
 
       before do
-        person.update!(sac_family_main_person: true)
-        person_role = create_role(:bluemlisalp_mitglieder, "Mitglied")
-        other_role = create_role(:bluemlisalp_mitglieder, "Mitglied", owner: other.reload)
+        create_role(:bluemlisalp_mitglieder, "Mitglied", owner: person)
         create_sac_family(person, other)
-        Role.where(id: [person_role.id, other_role.id]).update_all(beitragskategorie: :family)
       end
 
       context "when sac_family_membership flag is not passed" do

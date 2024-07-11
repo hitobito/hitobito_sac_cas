@@ -30,8 +30,8 @@ describe People::SacMembership do
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
         person: person,
         group: neuanmeldungen_sektion,
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year)
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year)
     end
 
     it "is not active" do
@@ -48,8 +48,8 @@ describe People::SacMembership do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year)
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year)
     end
 
     it "is active" do
@@ -64,10 +64,10 @@ describe People::SacMembership do
   context "with future role" do
     before do
       person.roles.create!(
-        type: FutureRole.sti_name,
+        type: Group::SektionsMitglieder::Mitglied.sti_name,
         group: groups(:bluemlisalp_mitglieder),
-        convert_on: 1.month.from_now,
-        convert_to: Group::SektionsMitglieder::Mitglied.sti_name
+        start_on: 1.month.from_now,
+        end_on: Date.current.end_of_year
       )
     end
 
@@ -85,8 +85,8 @@ describe People::SacMembership do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: Time.zone.now.beginning_of_year,
-        deleted_at: 1.day.ago)
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: 1.day.ago)
     end
 
     it "is not active" do
@@ -105,8 +105,8 @@ describe People::SacMembership do
       person.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year
       )
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))).to eq false
@@ -118,14 +118,14 @@ describe People::SacMembership do
       person.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
-        created_at: Time.zone.now.beginning_of_year,
-        deleted_at: 1.day.ago
+        start_on: 1.year.ago,
+        end_on: 1.month.ago
       )
       person.roles.create!(
-        type: FutureRole.sti_name,
+        type: Group::SektionsMitglieder::Mitglied,
         group: group,
-        convert_on: 1.month.from_now,
-        convert_to: Group::SektionsMitglieder::Mitglied.sti_name
+        start_on: 1.month.from_now,
+        end_on: 1.year.from_now
       )
       expect(membership.active_in?(groups(:bluemlisalp))).to eq false
       expect(membership.active_in?(groups(:matterhorn))).to eq false
@@ -140,8 +140,8 @@ describe People::SacMembership do
       person.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: group,
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year
       )
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
@@ -151,8 +151,8 @@ describe People::SacMembership do
       person.roles.create!(
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung,
         group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year
       )
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false

@@ -32,8 +32,8 @@
 #     role = person.roles.first
 #     expect(role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
 #     expect(role.beitragskategorie).to eq("adult")
-#     expect(role.created_at).to eq(Time.zone.parse("01.01.1900"))
-#     expect(role.delete_on).to eq(Date.parse("2024-12-31"))
+#     expect(role.start_on).to eq(Date.parse("1900-01-01"))
+#     expect(role.end_on).to eq(Date.parse("2024-12-31"))
 #   end
 #
 #   it "ignores unknown person" do

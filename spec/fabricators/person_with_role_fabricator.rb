@@ -16,8 +16,8 @@ Fabricator(:person_with_role, from: :person_with_address_and_phone) do
       group:,
       person:,
       beitragskategorie:,
-      created_at: 1.year.ago,
-      delete_on: Date.current.end_of_year
+      start_on: 1.year.ago,
+      end_on: Date.current.end_of_year
     )
   end
 end

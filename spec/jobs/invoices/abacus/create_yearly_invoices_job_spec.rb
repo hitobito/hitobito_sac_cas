@@ -36,7 +36,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
 
   let(:unexpected_people) do
     people(:familienmitglied2).update!(abacus_subject_key: "125", data_quality: :error)
-    person_1 = create_person(role_created_at: Date.new(invoice_year, 8, 16), params: {abacus_subject_key: "126"})
+    person_1 = create_person(role_start_on: Date.new(invoice_year, 8, 16), params: {abacus_subject_key: "126"})
     person_2 = create_person(params: {abacus_subject_key: "127"})
     person_2.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year, state: :open)
 
@@ -65,10 +65,10 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     end
   end
 
-  def create_person(role_created_at: Date.new(invoice_year, 1, 1), params: {})
+  def create_person(role_start_on: Date.new(invoice_year, 1, 1), params: {})
     group = groups(:bluemlisalp_mitglieder)
     person = Fabricate.create(:person_with_address, **params)
-    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, created_at: role_created_at, group:, person:)
+    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, start_on: role_start_on, group:, person:)
     person
   end
 
