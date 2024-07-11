@@ -13,6 +13,10 @@ fr:
     wizards/steps/choose_membership_title: ""
     wizards/steps/choose_sektion_title: ""
     wizards/steps/join_zusatzsektion/summary_title: ""
+    wizards/steps/termination_no_self_service_title: ""
+    wizards/steps/termination_choose_date_title: ""
+    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: ""
+    wizards/steps/leave_zusatzsektion/summary_title: ""
 
   errors:
     messages:
@@ -60,6 +64,14 @@ fr:
 
       wizards/steps/main_email:
         email: ""
+
+      wizards/steps/termination_choose_date:
+        terminate_on: ''
+        now: ""
+        end_of_year: ""
+
+      wizards/steps/leave_zusatzsektion/summary:
+        termination_reason_id: ''
 
     errors:
       messages:
@@ -120,6 +132,27 @@ fr:
         event_kind_categories: ""
         event_kinds: ""
         courses: ""
+        updated_at: ""
+        created_at: ""
+      course_compensation_category:
+        short_name: ""
+        kind: ""
+        kinds:
+          day: ""
+          flat: ""
+          budget: ""
+        description: ""
+        name_leader: ""
+        name_assistant_leader: ""
+        course_compensation_rates: ""
+        updated_at: ""
+        created_at: ""
+      course_compensation_rate:
+        valid_from: ""
+        valid_to: ""
+        rate_leader: ""
+        rate_ssistant_leader: ""
+        course_compensation_category: ""
         updated_at: ""
         created_at: ""
       event:
@@ -352,6 +385,11 @@ fr:
         must_have_one_family_main_person_in_family: ""
 
       models:
+        course_compensation_rate:
+          attributes:
+            course_compensation_category:
+              uniqueness_during_validity_period: ""
+
         group/sektions_tourenkommission/tourenleiter:
           requires_active_qualification: ""
 
@@ -370,6 +408,14 @@ fr:
         many: ''
         other: ''
       cost_unit:
+        one: ''
+        many: ''
+        other: ''
+      course_compensation_category:
+        one: ''
+        many: ''
+        other: ''
+      course_compensation_rate:
         one: ''
         many: ''
         other: ''
@@ -896,8 +942,7 @@ fr:
     show_right_z_sac_cas:
       section_sac_membership: ""
       qr_code_hint: ""
-      download: Télécharger
-      download_pdf: La carte de membre PDF
+      download_pdf: ""
 
   people/neuanmeldungen/approves:
     new:
@@ -1000,6 +1045,12 @@ fr:
     join_zusatzsektions:
       create:
         success: 
+          one: ""
+          many: ""
+          other: ""
+    leave_zusatzsektions:
+      create:
+        success:
           one: ""
           many: ""
           other: ""
@@ -1147,6 +1198,9 @@ fr:
   sheet/memberships/join_zusatzsektion:
     title: ""
 
+  sheet/memberships/leave_zusatzsektion:
+    title: ""
+
   wizards:
     steps:
       choose_sektion:
@@ -1160,3 +1214,14 @@ fr:
           next_button: ""
       membership_terminated_info:
         info: ""
+      termination_choose_date:
+        info_text: ""
+      termination_no_self_service:
+        info_text: ""
+      leave_zusatzsektion:
+        ask_family_main_person:
+          info_text: ""
+        summary:
+          family_warning: ""
+          info_text: ""
+          next_button: ""
