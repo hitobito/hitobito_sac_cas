@@ -16,6 +16,7 @@ describe Export::PeopleExportJob do
   let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
   it "works when including attribute membership_years" do
+    travel_to Time.zone.local(2016, 8, 1)
     job = Export::PeopleExportJob.new(
       :csv, user.id, group.id, {},
       full: true, filename: filename

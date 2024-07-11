@@ -37,9 +37,9 @@ module SacCas::Role
 
     base.class_eval do
       scope :with_membership_years,
-        ->(selects = "roles.*", date = Time.zone.today) do
-          select(selects, select_with_membership_years(date))
-        end
+            ->(selects = "roles.*", date = Time.zone.today) do
+              select(selects, select_with_membership_years(date))
+            end
 
       scope :family, -> {
         where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
@@ -59,14 +59,6 @@ module SacCas::Role
 
   def membership_years
     read_attribute(:membership_years) or raise "use Role scope :with_membership_years"
-  end
-
-  def start_on
-    created_at&.to_date
-  end
-
-  def end_on
-    [deleted_at&.to_date, archived_at&.to_date, delete_on].compact.min
   end
 
   protected

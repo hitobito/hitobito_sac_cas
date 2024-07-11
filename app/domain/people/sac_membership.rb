@@ -21,13 +21,13 @@ class People::SacMembership
   # checks for any active membership roles
   def active_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-      type: mitglied_types)
+                          type: mitglied_types)
   end
 
   # checkes for active and also approvabable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-      type: mitglied_and_neuanmeldung_types)
+                          type: mitglied_and_neuanmeldung_types)
   end
 
   def anytime?
@@ -38,12 +38,12 @@ class People::SacMembership
     if @person.roles.is_a?(ActiveRecord::Relation)
       @person.roles.find_by(type: mitglied_stammsektion_types)
     else
-      @person.roles.find { |r| mitglied_stammsektion_types.include?(r.type) }
+      @person.roles.find { |r| mitglied_stammsektion_types.include?(r.type) && r.active? }
     end
   end
 
   def future_stammsektion_roles
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types)
+    @person.roles.future.where(type: mitglied_stammsektion_types)
   end
 
   def zusatzsektion_roles

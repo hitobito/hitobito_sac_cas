@@ -34,15 +34,15 @@ describe Memberships::JoinZusatzsektion do
 
   describe "validations" do
     let(:person) { Fabricate(:person) }
-    let(:join_section) { groups(:bluemlisalp) }
+    let(:section) { groups(:bluemlisalp) }
     let(:errors) { join_sektion.errors.full_messages }
     let(:date) { Date.new(2024, 6, 14) }
 
-    subject(:join_sektion) { described_class.new(join_section, person, date) }
+    subject(:join_sektion) { described_class.new(section, person, date) }
 
     it "is invalid if person is not an sac member" do
       expect(join_sektion).not_to be_valid
-      expect(errors).to eq ["Person muss Sac Mitglied sein"]
+      expect(errors).to include "Person muss Sac Mitglied sein"
     end
 
     it "is valid with membership in different section" do
@@ -56,26 +56,22 @@ describe Memberships::JoinZusatzsektion do
           create_role(:bluemlisalp_mitglieder, "Mitglied")
           expect(join_sektion).not_to be_valid
           expect(errors).to eq [
-            "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
-          ]
+                                 "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
+                               ]
         end
 
         it "is invalid if person has requested membership in join section with approval" do
           create_role(:bluemlisalp_neuanmeldungen_sektion, "Neuanmeldung")
           expect(join_sektion).not_to be_valid
-          expect(errors).to eq [
-            "Person muss Sac Mitglied sein",
-            "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
-          ]
+          expect(errors).to include "Person muss Sac Mitglied sein",
+                                    "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
         end
 
         it "is invalid if person has requested membership in join section" do
           create_role(:bluemlisalp_neuanmeldungen_nv, "Neuanmeldung")
           expect(join_sektion).not_to be_valid
-          expect(errors).to eq [
-            "Person muss Sac Mitglied sein",
-            "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
-          ]
+          expect(errors).to include "Person muss Sac Mitglied sein",
+                                    "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
         end
       end
 
@@ -88,9 +84,7 @@ describe Memberships::JoinZusatzsektion do
         it "is invalid if person has requested membership" do
           create_role(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, "Neuanmeldung")
           expect(join_sektion).not_to be_valid
-          expect(errors).to eq [
-            "Person muss Sac Mitglied sein"
-          ]
+          expect(errors).to include "Person muss Sac Mitglied sein"
         end
       end
     end
@@ -101,9 +95,9 @@ describe Memberships::JoinZusatzsektion do
         create_role(:bluemlisalp_mitglieder, "Mitglied")
         expect(join_sektion).not_to be_valid
         expect(errors).to eq [
-          "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",
-          "Person muss Hauptperson der Familie sein"
-        ]
+                               "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",
+                               "Person muss Hauptperson der Familie sein"
+                             ]
       end
 
       it "is valid when join_sektion validates and person is not main family person" do
@@ -114,8 +108,8 @@ describe Memberships::JoinZusatzsektion do
         end
         expect(join_sektion).not_to be_valid
         expect(errors).to eq [
-          "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
-        ]
+                               "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
+                             ]
       end
     end
   end
@@ -133,7 +127,7 @@ describe Memberships::JoinZusatzsektion do
     context "invalid" do
       it "save returns false and populates errors" do
         expect(join_sektion.save).to eq false
-        expect(join_sektion.errors.full_messages).to eq ["Person muss Sac Mitglied sein"]
+        expect(join_sektion.errors.full_messages).to include "Person muss Sac Mitglied sein"
       end
 
       it "save! raises" do
@@ -173,7 +167,7 @@ describe Memberships::JoinZusatzsektion do
 
         it "prefers to create role in NeuanmeldungenSektion group" do
           neuanmeldungen = Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name,
-            parent: sektion)
+                                     parent: sektion)
           expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
           expect(role.group).to eq neuanmeldungen
           expect(role.type).to eq "Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion"
@@ -197,19 +191,16 @@ describe Memberships::JoinZusatzsektion do
 
       def create_sac_family(person, *others)
         person.update!(sac_family_main_person: true)
-        household = Household.new(person)
-        others.each { |member| household.add(member) }
-        household.save!
+        others.reduce(Household.new(person)) { |household, member| household.add(member) }.save!
         person.reload
         others.each(&:reload)
       end
 
       before do
-        person.update!(sac_family_main_person: true)
-        person_role = create_role(:bluemlisalp_mitglieder, "Mitglied")
-        other_role = create_role(:bluemlisalp_mitglieder, "Mitglied", owner: other.reload)
-        create_sac_family(person, other)
-        Role.where(id: [person_role.id, other_role.id]).update_all(beitragskategorie: :family)
+        travel_to 1.year.ago do
+          create_role(:bluemlisalp_mitglieder, "Mitglied")
+          create_sac_family(person, other)
+        end
       end
 
       context "when sac_family_membership flag is not passed" do

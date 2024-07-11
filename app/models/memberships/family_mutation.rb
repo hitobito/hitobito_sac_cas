@@ -25,7 +25,7 @@ module Memberships
     # * Create missing zusatzsektion roles from reference_zusatzsektion_roles.
     def join!(reference_person)
       raise_if_terminated(sac_membership.stammsektion_role,
-        reference_person.sac_membership.stammsektion_role)
+                          reference_person.sac_membership.stammsektion_role)
 
       join_stammsektion!(reference_person)
       join_future_stammsektion!(reference_person)
@@ -38,7 +38,7 @@ module Memberships
       raise_if_terminated(sac_membership.stammsektion_role)
 
       beitragskategorie = SacCas::Beitragskategorie::Calculator
-        .new(person).calculate(for_sac_family: false)
+                            .new(person).calculate(for_sac_family: false)
 
       if sac_membership.stammsektion_role
         replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
@@ -53,14 +53,15 @@ module Memberships
     def join_stammsektion!(reference_person)
       if sac_membership.stammsektion_role
         replace_role!(sac_membership.stammsektion_role,
-          reference_person.sac_membership.stammsektion_role)
+                      reference_person.sac_membership.stammsektion_role)
       else
         create_role!(person,
-          reference_person.sac_membership.stammsektion_role)
+                     reference_person.sac_membership.stammsektion_role)
       end
     end
 
     def join_future_stammsektion!(reference_person)
+      binding.pry
       sac_membership.future_stammsektion_roles.each(&:destroy!)
       reference_person.sac_membership.future_stammsektion_roles.each do |role|
         create_role!(person, role)
@@ -79,9 +80,9 @@ module Memberships
 
     def category_family = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
-    def replaced_role_deleted_at = Time.current.yesterday.end_of_day
+    def replaced_role_end_on = Date.current.yesterday
 
-    def new_role_created_at = Time.current.beginning_of_day
+    def new_role_start_on = Date.current
 
     # Replace the role with the blueprint role in the same group. The new role is created with a
     # created_at timestamp at the beginning of the current day, but not before the created_at
@@ -90,11 +91,11 @@ module Memberships
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
       # terminate old role, skip validations as it might be a family membership which
       # is not valid anymore as the person just left the household
-      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
+      Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
 
       # create new role with beitragskategorie
       create_role!(role.person,
-        blueprint_role, beitragskategorie:)
+                   blueprint_role, beitragskategorie:)
     end
 
     # Create a new role in the same group as the blueprint role with a created_at timestamp at the
@@ -104,10 +105,8 @@ module Memberships
         person:,
         beitragskategorie:,
         group: blueprint_role.group,
-        created_at: new_role_created_at,
-        delete_on: blueprint_role.delete_on,
-        convert_on: blueprint_role.convert_on,
-        convert_to: blueprint_role.convert_to
+        start_on: new_role_start_on,
+        delete_on: blueprint_role.delete_on
       )
     end
 
@@ -116,7 +115,7 @@ module Memberships
     end
 
     def find_zusatzsektion_role(layer_group_id)
-      sac_membership.zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
+      sac_membership.zusatzsektion_roles.joins(:group).find_by(group: { layer_group_id: })
     end
 
     def raise_if_terminated(*roles)

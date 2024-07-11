@@ -14,14 +14,14 @@ module SacCas::Role::MitgliedCommon
   include SacCas::RoleBeitragskategorie
 
   DEPENDANT_ROLE_TYPES = ["Group::SektionsMitglieder::Ehrenmitglied",
-    "Group::SektionsMitglieder::Beguenstigt",
-    "Group::SektionsTourenUndKurse::Tourenleiter"].freeze
+                          "Group::SektionsMitglieder::Beguenstigt",
+                          "Group::SektionsTourenkommission::Tourenleiter"].freeze
 
   included do
     self.permissions = []
     self.basic_permissions_only = true
 
-    validates :created_at, presence: true
+    validates :start_on, presence: true
 
     after_destroy :soft_delete_dependant_roles
     after_real_destroy :hard_delete_dependant_roles

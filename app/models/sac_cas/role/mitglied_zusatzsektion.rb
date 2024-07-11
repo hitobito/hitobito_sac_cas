@@ -20,15 +20,28 @@ module SacCas::Role::MitgliedZusatzsektion
     # but have to import MitgliedZusatzsektion roles anyway.
     return if try(:skip_mitglied_during_validity_period_validation)
 
-    # to simplify, only validate if both dates are set (otherwise the role will be invalid anyway)
-    return unless start_on && end_on
+    # to simplify, only validate if start_on is set (otherwise the role will be invalid anyway)
+    return unless start_on
 
-    days_to_check = active_period.to_a
+    all_memberships = Group::SektionsMitglieder::Mitglied.with_inactive.where(person_id:)
 
-    Group::SektionsMitglieder::Mitglied.with_deleted.where(person_id:).find_each do |mitglied|
-      days_to_check -= mitglied.active_period.to_a
+    # Find open ended membership and check coverage (early return)
+    openended_membership = all_memberships.find { !_1.end_on? }
+    return if openended_membership.present? && openended_membership.start_on <= start_on
+
+    # If the end_on date is present, we can iterate over the active period and check all days.
+    # Otherwise we have to check the active period until the start of the open ended membership.
+    # Unless there is no open ended membership, in which case it can not be covered.
+    check_range = end_on.present? ? active_period : start_on...openended_membership&.start_on
+
+    if check_range.end.present?
+      uncovered_days = all_memberships.reduce(check_range.to_a) do |days, mitglied_role|
+        days.reject { |day| mitglied_role.active_period.cover?(day) }
+      end
+
+      return if uncovered_days.empty?
     end
 
-    errors.add(:person, :must_have_mitglied_role) if days_to_check.any?
+    errors.add(:person, :must_have_mitglied_role)
   end
 end

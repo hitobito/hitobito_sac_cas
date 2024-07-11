@@ -11,5 +11,5 @@
 Role.all_types.select { |role| role < SacCas::Role::MitgliedCommon }.each do |role|
   name = role.name.to_sym
   Fabrication.manager[name].append_or_update_attribute(:created_at, nil) { Time.current }
-  Fabrication.manager[name].append_or_update_attribute(:delete_on, nil) { Time.zone.today.end_of_year.to_date }
+  Fabrication.manager[name].append_or_update_attribute(:start_on, nil) { Date.current }
 end

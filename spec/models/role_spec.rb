@@ -18,8 +18,8 @@ describe Role do
       person.update!(birthday: Time.zone.today - 17.years)
 
       role = Fabricate(Group::SektionsMitglieder::Mitglied.name,
-        person: person,
-        group: bluemlisalp_mitglieder)
+                       person: person,
+                       group: bluemlisalp_mitglieder)
 
       expect(role.beitragskategorie).to eq("youth")
     end
@@ -27,8 +27,8 @@ describe Role do
     it "is not valid without person's birthdate" do
       person.update!(birthday: nil)
       role = Fabricate.build(Group::SektionsMitglieder::Mitglied.name,
-        person: person,
-        group: bluemlisalp_mitglieder)
+                             person: person,
+                             group: bluemlisalp_mitglieder)
 
       expect(role).not_to be_valid
     end
@@ -38,13 +38,13 @@ describe Role do
 
       neuanmeldung_nv =
         Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
-          person: person, group: bluemlisalp_neuanmeldungen_nv).tap(&:validate)
+                        person: person, group: bluemlisalp_neuanmeldungen_nv).tap(&:validate)
 
       expect(neuanmeldung_nv.beitragskategorie).to eq("youth")
 
       neuanmeldung_sektion = Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
-        person: person,
-        group: bluemlisalp_neuanmeldungen_sektion).tap(&:validate)
+                                       person: person,
+                                       group: bluemlisalp_neuanmeldungen_sektion).tap(&:validate)
 
       expect(neuanmeldung_sektion.beitragskategorie).to eq("youth")
     end
@@ -53,13 +53,13 @@ describe Role do
       person.update!(birthday: nil)
       neuanmeldung_nv =
         Fabricate.build(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
-          person: person, group: bluemlisalp_neuanmeldungen_nv)
+                        person: person, group: bluemlisalp_neuanmeldungen_nv)
 
       expect(neuanmeldung_nv).not_to be_valid
 
       neuanmeldung_sektion =
         Fabricate.build(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name,
-          person: person, group: bluemlisalp_neuanmeldungen_sektion)
+                        person: person, group: bluemlisalp_neuanmeldungen_sektion)
 
       expect(neuanmeldung_sektion).not_to be_valid
     end
@@ -82,14 +82,14 @@ describe Role do
       it "accepts person exceeding age restriction for #{role_type}" do
         person.birthday = 6.years.ago - 1.day
         role = Fabricate.build(role_type.name, person: person, group: groups(group),
-          beitragskategorie: :adult)
+                               beitragskategorie: :adult)
         expect(role).to be_valid
       end
 
       it "rejects person below age restriction for #{role_type}" do
         person.birthday = 5.years.ago
         role = Fabricate.build(role_type.name, person: person, group: groups(group),
-          beitragskategorie: :adult)
+                               beitragskategorie: :adult)
         expect(role).not_to be_valid
         expect(role.errors[:person])
           .to include("muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein")
@@ -99,8 +99,8 @@ describe Role do
     it "accepts person below age limit on other group" do
       person.birthday = 5.years.ago
       role = Fabricate.build(Group::Geschaeftsstelle::Admin.name,
-        person: person,
-        group: groups(:geschaeftsstelle))
+                             person: person,
+                             group: groups(:geschaeftsstelle))
       expect(role).to be_valid
     end
   end
@@ -117,11 +117,11 @@ describe Role do
 
         def build_role(age: 22, beitragskategorie: :family, household_key: "household42", family_main_person: false)
           person = Fabricate.build(:person,
-            birthday: age.years.ago,
-            household_key: household_key,
-            sac_family_main_person: family_main_person).tap(&:save!)
+                                   birthday: age.years.ago,
+                                   household_key: household_key,
+                                   sac_family_main_person: family_main_person).tap(&:save!)
           role = Fabricate.build(role_type.name, person: person, group: groups(group),
-            beitragskategorie: beitragskategorie)
+                                 beitragskategorie: beitragskategorie)
           person.primary_group = role.group
           role
         end
@@ -283,22 +283,22 @@ describe Role do
       it "does not change when creating normal role" do
         expect do
           Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere,
-            person: person)
+                    person: person)
         end.not_to(change { person.reload.primary_group })
       end
 
       it "does change when creating preferred role" do
         expect do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-            group: mitglieder,
-            person: person, beitragskategorie: :adult)
+                    group: mitglieder,
+                    person: person, beitragskategorie: :adult)
         end.to change { person.reload.primary_group }.from(primary).to(mitglieder)
       end
 
       it "does change back when destroying preferred role" do
         role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-          group: mitglieder,
-          person: person, beitragskategorie: :adult)
+                         group: mitglieder,
+                         person: person, beitragskategorie: :adult)
         expect do
           role.destroy
         end.to change { person.reload.primary_group }.from(mitglieder).to(primary)
@@ -311,20 +311,20 @@ describe Role do
       it "does not change when creating normal role" do
         expect do
           Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name,
-            group: funktionaere,
-            person: person)
+                    group: funktionaere,
+                    person: person)
         end.not_to(change { person.reload.primary_group })
       end
 
       xit "does not change when creating preferred role" do
         other = Fabricate(Group::Sektion.sti_name, parent: groups(:root),
-          foundation_year: 2023).children
-          .find_by(type: Group::SektionsMitglieder)
+                          foundation_year: 2023).children
+                                                .find_by(type: Group::SektionsMitglieder)
         expect do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-            group: other,
-            person: person,
-            beitragskategorie: :adult)
+                    group: other,
+                    person: person,
+                    beitragskategorie: :adult)
         end.not_to(change { person.reload.primary_group })
       end
     end
@@ -339,39 +339,6 @@ describe Role do
     it "returns created_at date" do
       role = Role.new(created_at: Time.zone.now)
       expect(role.start_on).to eq role.created_at.to_date
-    end
-  end
-
-  context "#end_on" do
-    it "returns nil if deleted_at and archived_at and delete_on are nil" do
-      role = Role.new(deleted_at: nil, archived_at: nil, delete_on: nil)
-      expect(role.end_on).to be_nil
-    end
-
-    it "returns deleted_at date" do
-      role = Role.new(deleted_at: Time.zone.now, archived_at: nil, delete_on: nil)
-      expect(role.end_on).to eq role.deleted_at.to_date
-    end
-
-    it "returns archived_at date" do
-      role = Role.new(archived_at: Time.zone.now, deleted_at: nil, delete_on: nil)
-      expect(role.end_on).to eq role.archived_at.to_date
-    end
-
-    it "returns delete_on date" do
-      role = Role.new(delete_on: Time.zone.now, archived_at: nil, deleted_at: nil)
-      expect(role.end_on).to eq role.delete_on.to_date
-    end
-
-    it "returns earliest date" do
-      role = Role.new(delete_on: Time.zone.today, archived_at: 1.day.ago, deleted_at: 2.days.ago)
-      expect(role.end_on).to eq role.deleted_at.to_date
-
-      role = Role.new(delete_on: Time.zone.today, archived_at: 2.days.ago, deleted_at: 1.day.ago)
-      expect(role.end_on).to eq role.archived_at.to_date
-
-      role = Role.new(delete_on: 2.days.ago, archived_at: 1.day.ago, deleted_at: Time.zone.now)
-      expect(role.end_on).to eq role.delete_on
     end
   end
 
@@ -390,9 +357,9 @@ describe Role do
 
     def create_role(**attrs)
       Fabricate(Group::SektionsMitglieder::Mitglied.name,
-        group: groups(:bluemlisalp_mitglieder),
-        person: person,
-        **attrs.reverse_merge(created_at: created_at))
+                group: groups(:bluemlisalp_mitglieder),
+                person: person,
+                **attrs.reverse_merge(created_at: created_at))
     end
 
     it "raises error when not using scope :with_membership_years" do

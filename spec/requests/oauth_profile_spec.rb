@@ -13,11 +13,11 @@ RSpec.describe "GET oauth/profile", type: :request do
   let(:json) { JSON.parse(response.body) }
   let(:token) do
     Fabricate(:access_token, application: application, scopes: "name #{scope}",
-      resource_owner_id: user.id)
+              resource_owner_id: user.id)
   end
 
   def make_request(skip_checks: true)
-    get "/oauth/profile", headers: {Authorization: "Bearer " + token.token, "X-Scope": scope}
+    get "/oauth/profile", headers: { Authorization: "Bearer " + token.token, "X-Scope": scope }
     return if skip_checks
 
     expect(response).to have_http_status(:ok)
@@ -30,22 +30,22 @@ RSpec.describe "GET oauth/profile", type: :request do
     it "succeeds" do
       make_request
       expect(json).to match({
-        id: user.id,
-        email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        nickname: user.nickname,
-        address: user.address,
-        address_care_of: user.address_care_of,
-        street: user.street,
-        postbox: user.postbox,
-        housenumber: user.housenumber,
-        zip_code: user.zip_code,
-        town: user.town,
-        country: user.country,
-        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
-        phone: nil
-      }.deep_stringify_keys)
+                              id: user.id,
+                              email: user.email,
+                              first_name: user.first_name,
+                              last_name: user.last_name,
+                              nickname: user.nickname,
+                              address: user.address,
+                              address_care_of: user.address_care_of,
+                              street: user.street,
+                              postbox: user.postbox,
+                              housenumber: user.housenumber,
+                              zip_code: user.zip_code,
+                              town: user.town,
+                              country: user.country,
+                              picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+                              phone: nil
+                            }.deep_stringify_keys)
     end
   end
 
@@ -53,48 +53,49 @@ RSpec.describe "GET oauth/profile", type: :request do
     let(:scope) { "with_roles" }
 
     it "succeeds" do
+      travel_to Time.zone.local(2016, 8, 1)
       make_request
       expect(json).to match({
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        nickname: user.nickname,
-        company_name: user.company_name,
-        company: user.company,
-        email: user.email,
-        address: user.address,
-        address_care_of: user.address_care_of,
-        street: user.street,
-        postbox: user.postbox,
-        housenumber: user.housenumber,
-        zip_code: user.zip_code,
-        town: user.town,
-        country: user.country,
-        gender: user.gender,
-        birthday: user.birthday.to_s.presence,
-        primary_group_id: user.primary_group_id,
-        language: user.language,
-        picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
-        phone: nil,
-        membership_years: 1,
-        roles: [{
-          group_id: user.roles.first.group_id,
-          group_name: user.roles.first.group.name,
-          role: "Group::SektionsMitglieder::Mitglied",
-          role_class: "Group::SektionsMitglieder::Mitglied",
-          role_name: "Mitglied (Stammsektion)",
-          permissions: [],
-          layer_group_id: user.roles.first.group.layer_group_id
-        }, {
-          group_id: user.roles.second.group_id,
-          group_name: user.roles.second.group.name,
-          role: "Group::SektionsMitglieder::MitgliedZusatzsektion",
-          role_class: "Group::SektionsMitglieder::MitgliedZusatzsektion",
-          role_name: "Mitglied (Zusatzsektion)",
-          permissions: [],
-          layer_group_id: user.roles.second.group.layer_group_id
-        }]
-      }.deep_stringify_keys)
+                              id: user.id,
+                              first_name: user.first_name,
+                              last_name: user.last_name,
+                              nickname: user.nickname,
+                              company_name: user.company_name,
+                              company: user.company,
+                              email: user.email,
+                              address: user.address,
+                              address_care_of: user.address_care_of,
+                              street: user.street,
+                              postbox: user.postbox,
+                              housenumber: user.housenumber,
+                              zip_code: user.zip_code,
+                              town: user.town,
+                              country: user.country,
+                              gender: user.gender,
+                              birthday: user.birthday.to_s.presence,
+                              primary_group_id: user.primary_group_id,
+                              language: user.language,
+                              picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+                              phone: nil,
+                              membership_years: 1,
+                              roles: [{
+                                        group_id: user.roles.first.group_id,
+                                        group_name: user.roles.first.group.name,
+                                        role: "Group::SektionsMitglieder::Mitglied",
+                                        role_class: "Group::SektionsMitglieder::Mitglied",
+                                        role_name: "Mitglied (Stammsektion)",
+                                        permissions: [],
+                                        layer_group_id: user.roles.first.group.layer_group_id
+                                      }, {
+                                        group_id: user.roles.second.group_id,
+                                        group_name: user.roles.second.group.name,
+                                        role: "Group::SektionsMitglieder::MitgliedZusatzsektion",
+                                        role_class: "Group::SektionsMitglieder::MitgliedZusatzsektion",
+                                        role_name: "Mitglied (Zusatzsektion)",
+                                        permissions: [],
+                                        layer_group_id: user.roles.second.group.layer_group_id
+                                      }]
+                            }.deep_stringify_keys)
     end
   end
 
