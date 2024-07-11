@@ -37,8 +37,8 @@ module TableDisplays
       ]
     }.freeze
 
-    def exclude?(attr)
-      excluded_remark?(attr) || exclude_by_group?
+    def exclude_attr?
+      excluded_remark? || exclude_by_group?
     end
 
     def initialize(template, person, attr)
@@ -60,8 +60,8 @@ module TableDisplays
 
     private
 
-    def excluded_remark?(attr)
-      @template.cannot?(ATTRS.fetch(@attr), @person) if Person::SAC_REMARKS.include?(attr)
+    def excluded_remark?
+      @template.cannot?(ATTRS.fetch(@attr), @person) if Person::SAC_REMARKS.include?(@attr.to_s)
     end
 
     def exclude_by_group?
