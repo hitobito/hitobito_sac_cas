@@ -5,9 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class People::SacRemarksController < ApplicationController
+class Person::SacRemarksController < ApplicationController
   helper_method :person, :group, :remark_attr_name, :available_attrs
   before_action :authorize_action, except: :index
+  before_action :group
 
   def index
     authorize! :show_remarks, person

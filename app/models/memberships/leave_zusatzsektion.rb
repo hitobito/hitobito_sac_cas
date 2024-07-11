@@ -8,6 +8,7 @@
 module Memberships
   class LeaveZusatzsektion
     include ActiveModel::Model
+    include ActiveModel::Attributes
     include ActiveModel::Validations
     include CommonApi
 
@@ -19,9 +20,14 @@ module Memberships
       Group::SektionsTourenkommission::Tourenleiter
     ].freeze
 
+    attribute :termination_reason_id, :integer
+
+    validates :termination_reason_id, presence: true
+
     delegate :person, :group, to: :role
 
-    def initialize(role, terminate_on)
+    def initialize(role, terminate_on, **params)
+      super(params)
       @role = role
       @terminate_on = terminate_on
       @now = Time.zone.now
@@ -49,6 +55,7 @@ module Memberships
     end
 
     def set_termination_date(role) # rubocop:disable Naming/AccessorMethodName
+      role.termination_reason_id = termination_reason_id
       if terminate_on.future?
         role.delete_on = [role.delete_on, terminate_on].compact.min
         role.write_attribute(:terminated, true)

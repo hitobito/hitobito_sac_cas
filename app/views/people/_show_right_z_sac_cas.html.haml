@@ -7,17 +7,16 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - if can?(:update, entry) && entry.sac_membership_anytime?
-  %section.sac_membership
-    %h2
+  %section.sac-membership.row
+    %h2.col-md-8
       = t('.section_sac_membership') 
-      .float-end
-        = people_sac_membership_download_dropdown(entry)
+    .col-sm-4.d-flex.justify-content-end
+      = action_button(t('.download_pdf'), membership_path(entry, format: :pdf), 
+        :download, class: 'membership-download', target: '_blank')
 
-    %div
-      %dl.dl-horizontal
-      .d-flex.justify-content-center
-        .qr-code-wrapper
-          .inner
-            = people_sac_membership_qr_code(entry)
-            .hint
-              = t('.qr_code_hint')
+    .d-flex.justify-content-center.w-100
+      .qr-code-wrapper
+        .inner
+          = people_sac_membership_qr_code(entry)
+          .hint
+            = t('.qr_code_hint')

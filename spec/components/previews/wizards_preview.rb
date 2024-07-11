@@ -38,6 +38,40 @@ class WizardsPreview < ViewComponent::Preview
     end
   end
 
+  def leave_zusatzsektion_wizard(current_step: 0, step: 0, next: nil,
+    person_id: Group::SektionsMitglieder::MitgliedZusatzsektion.first.person.id,
+    wizards_memberships_leave_zusatzsektion: {})
+    next_step = begin
+      Integer(binding.local_variable_get(:next))
+    rescue
+      nil
+    end
+
+    person = Person.find(person_id)
+    wizard = Wizards::Memberships::LeaveZusatzsektion.new(
+      current_step: step.to_i,
+      person: person,
+      role: person.roles.find_by!(type: "Group::SektionsMitglieder::MitgliedZusatzsektion"),
+      **wizards_memberships_leave_zusatzsektion
+    )
+
+    if wizard.valid? && step.to_i < next_step.to_i
+      wizard.move_on
+    end
+
+    render_wrapped(wizard) do |view_ctx|
+      view_ctx.content_tag(:div, class: "alert alert-info") do
+        content = [
+          view_ctx.content_tag(:p,
+            "Rendering as #{person} with sac_family:  #{person.sac_family_main_person}"),
+          view_ctx.link_to("Reset", "/rails/view_components/wizards/leave_zusatzsektion_wizard")
+
+        ]
+        safe_join(content)
+      end
+    end
+  end
+
   def choose_sektion_step(wizards_preview_wizard: {})
     wizard = build_wizard(Wizards::Steps::ChooseSektion, wizards_preview_wizard)
     def wizard.backoffice?

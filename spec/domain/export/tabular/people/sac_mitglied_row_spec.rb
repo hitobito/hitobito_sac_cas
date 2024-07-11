@@ -278,16 +278,20 @@ describe Export::Tabular::People::SacMitgliedRow do
     expect(row.postfach).to be_nil
   end
 
-  it "#s_info_1 returns nil for now" do
-    expect(row.s_info_1).to be_nil
-  end
+  describe "#s_info_1-3" do
+    it "returns nil for nil" do
+      expect(row.s_info_1).to be_nil
+      expect(row.s_info_2).to be_nil
+      expect(row.s_info_3).to be_nil
+    end
 
-  it "#s_info_2 returns nil for now" do
-    expect(row.s_info_2).to be_nil
-  end
+    it "returns the sac remark" do
+      person.update(sac_remark_section_1: "a", sac_remark_section_2: "b", sac_remark_section_3: "c")
 
-  it "#s_info_3 returns nil for now" do
-    expect(row.s_info_3).to be_nil
+      expect(row.s_info_1).to eq("a")
+      expect(row.s_info_2).to eq("b")
+      expect(row.s_info_3).to eq("c")
+    end
   end
 
   it "#saldo returns nil for now" do

@@ -28,9 +28,7 @@ module SacCas::StepsComponent::ContentComponent
 
   def bottom_toolbar
     content_tag(:div, class: "btn-toolbar allign-with-form") do
-      buttons = [
-        next_button
-      ]
+      buttons = [next_button]
       buttons << back_link if index.positive?
       safe_join(buttons)
     end

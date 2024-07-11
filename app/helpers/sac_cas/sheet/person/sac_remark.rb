@@ -6,13 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Sheet::Person
-  extend ActiveSupport::Concern
-
-  prepended do
-    tabs.insert(1, Sheet::Tab.new(
-      "people.tabs.sac_remarks",
-      :group_person_sac_remarks_path,
-      if: ->(view, _group, person) { view.can?(:show_remarks, person) }
-    ))
+  class SacRemark < Sheet::Base
+    self.parent_sheet = Sheet::Person
   end
 end

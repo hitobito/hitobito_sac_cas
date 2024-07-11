@@ -5,8 +5,15 @@
 
 ---
 moved:
-  termination_reason_id: <%= ActiveRecord::FixtureSet.identify(:reason) %>
+  termination_reason_id: <%= ActiveRecord::FixtureSet.identify(:moved) %>
   locale: de
-  text: Austrittsgrund
+  text: Umgezogen
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+deceased:
+  termination_reason_id: <%= ActiveRecord::FixtureSet.identify(:deceased) %>
+  locale: de
+  text: Verstorben
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

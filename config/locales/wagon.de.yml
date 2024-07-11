@@ -13,6 +13,10 @@ de:
     wizards/steps/choose_membership_title: Familienmitgliedschaft
     wizards/steps/choose_sektion_title: Sektion wählen
     wizards/steps/join_zusatzsektion/summary_title: Bestätigung
+    wizards/steps/termination_no_self_service_title: Mitgliederdienst kontaktieren
+    wizards/steps/termination_choose_date_title: Austrittsdatum
+    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
+    wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
 
   errors:
     messages:
@@ -30,7 +34,7 @@ de:
       memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
-        terminate_on: Beitrittsdatum
+        terminate_on: Austrittsdatum
       people/neuanmeldungen/reject:
         note: Bemerkung
       self_inscription:
@@ -63,6 +67,14 @@ de:
 
       wizards/steps/main_email:
         email: Haupt-E-Mail
+
+      wizards/steps/termination_choose_date:
+        terminate_on: 'Austrittsdatum'
+        now: Sofort
+        end_of_year: "Auf 31.12.%{year}"
+
+      wizards/steps/leave_zusatzsektion/summary:
+        termination_reason_id: 'Austrittsgrund'
 
     errors:
       messages:
@@ -933,13 +945,12 @@ de:
 
     tabs:
       history: Mitgliedschaften / Verlauf
-      remarks: Bemerkungen
+      sac_remarks: Bemerkungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft
       qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
-      download: Download
-      download_pdf: Mitgliederausweis PDF
+      download_pdf: Mitgliederausweis herunterladen
 
   people/neuanmeldungen/approves:
     new:
@@ -1054,6 +1065,11 @@ de:
         success: 
           one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
           other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
+    leave_zusatzsektions:
+      create:
+        success:
+          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde gelöscht."
+          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden gelöscht."
 
   roles:
     beitragskategorie:
@@ -1199,6 +1215,9 @@ de:
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
 
+  sheet/memberships/leave_zusatzsektion:
+    title: Zusatzsektion verlassen
+
   wizards:
     steps:
       choose_sektion:
@@ -1222,3 +1241,15 @@ de:
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}.
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
+      termination_choose_date:
+        info_text: "Wann soll der Austritt stattfinden?"
+      termination_no_self_service:
+        info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
+      leave_zusatzsektion:
+        ask_family_main_person:
+          info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
+        summary:
+          family_warning: "Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt.
+Davon betroffen sind: %{family_member_names}."
+          info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
+          next_button: "Austritt beantragen"

@@ -5,14 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::Sheet::Person
-  extend ActiveSupport::Concern
-
-  prepended do
-    tabs.insert(1, Sheet::Tab.new(
-      "people.tabs.sac_remarks",
-      :group_person_sac_remarks_path,
-      if: ->(view, _group, person) { view.can?(:show_remarks, person) }
-    ))
-  end
-end
+TerminationReason.seed_once(:id, id: 1, text: 'Kein Interesse mehr')
+TerminationReason.seed_once(:id, id: 2, text: 'Weggezogen')
+TerminationReason.seed_once(:id, id: 3, text: 'Verstorben')
