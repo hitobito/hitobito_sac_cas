@@ -5,5 +5,5 @@
 
 %turbo-frame{id: remark_attr_name}
   = form_for person, url: group_person_sac_remark_path(group, person, remark_attr_name), method: :put do |f|
-    = f.text_field remark_attr_name, class: 'form-control'
+    = f.text_field remark_attr_name, maxlength: 255, class: 'form-control'
     = f.submit t('global.button.save'), class: 'btn btn-primary btn-sm mt-2'
