@@ -13,6 +13,10 @@ describe People::Neuanmeldungen::Reject do
   let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldung) { create_role(:adult) }
+  let(:person) do
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: neuanmeldung.person)
+    neuanmeldung.person
+  end
 
   def create_role(beitragskategorie)
     Fabricate(
@@ -24,7 +28,7 @@ describe People::Neuanmeldungen::Reject do
     )
   end
 
-  def rejector(people_ids = [neuanmeldung.person.id], **opts)
+  def rejector(people_ids = [person.id], **opts)
     described_class.new(group: group, people_ids: people_ids, **opts)
   end
 
@@ -42,33 +46,49 @@ describe People::Neuanmeldungen::Reject do
     expect(neuanmeldung_familie.person.roles).to have(1).item
   end
 
-  it "disables the Person login" do
-    neuanmeldung.person.update!(
-      email: "dummy@example.com",
-      password: "my-password1",
-      password_confirmation: "my-password1"
-    )
-    expect(neuanmeldung.person.login_status).to eq :login
+  it "deletes rejected Roles, if it has other roles" do
+    subject = rejector
 
-    expect do
-      described_class.new(group: group, people_ids: [neuanmeldung.person.id]).call
-    end.to change { neuanmeldung.person.reload.login_status }.to(:no_login)
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung)
+
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), created_at: 1.year.ago, person: neuanmeldung.person)
+    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name, group: group, created_at: 1.month.ago, person: neuanmeldung.person)
+
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
+  end
+
+  it "deletes rejected Roles, if it has other deleted roles" do
+    person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
+
+    subject = rejector
+    subject.call
+    expect(person.reload.roles).not_to include(neuanmeldung)
+  end
+
+  it "deletes the Person, if it has no other roles" do
+    person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+
+    subject = rejector
+    subject.call
+    expect { Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   it "adds a Person#note if a note was provided" do
     expect { rejector(note: "my note").call }
-      .to change { neuanmeldung.person.reload.notes.count }.by(1)
+      .to change { person.reload.notes.count }.by(1)
 
-    note = neuanmeldung.person.notes.last
+    note = person.notes.last
     expect(note.text).to eq "my note"
     expect(note.author).to eq nil
   end
 
   it "adds a Person#note with author if an author was provided" do
     expect { rejector(note: "my note", author: people(:mitglied)).call }
-      .to change { neuanmeldung.person.reload.notes.count }.by(1)
+      .to change { person.reload.notes.count }.by(1)
 
-    note = neuanmeldung.person.notes.last
+    note = person.notes.last
     expect(note.text).to eq "my note"
     expect(note.author).to eq people(:mitglied)
   end
