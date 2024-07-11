@@ -131,7 +131,8 @@ class People::SacMembership
       if in_memory?
         @person.roles.select { |r| r.active_period.cover?(@date) }
       else
-        @person.roles.active(@date)
+        # unscope the default scope first with `with_inactive`, then get `active` for `@date`
+        @person.roles.with_inactive.active(@date)
       end
     else
       @person.roles
@@ -156,7 +157,7 @@ class People::SacMembership
   end
 
   def any_past_role?
-    @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
+    @person.roles.ended.where(type: mitglied_stammsektion_types).exists?
   end
 
   def paying_person?(beitragskategorie)

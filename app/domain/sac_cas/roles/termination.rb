@@ -71,15 +71,15 @@ module SacCas::Roles::Termination
         beitragskategorie: :family,
         person_id: person.household.people.collect(&:id))
 
-    delete_on = terminated_roles.first.delete_on
-    Roles::Termination.terminate(affected_family_roles, delete_on)
+    end_on = terminated_roles.first.end_on
+    Roles::Termination.terminate(affected_family_roles, end_on)
   end
 
   class_methods do
-    def terminate(roles, delete_on)
+    def terminate(roles, end_on)
       # use update_all to not trigger any validations while terminating
       Role.where(id: roles.map(&:id)).update_all(
-        delete_on:,
+        end_on:,
         terminated: true,
         updated_at: Time.current
       )

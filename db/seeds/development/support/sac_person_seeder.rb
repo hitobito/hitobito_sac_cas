@@ -26,7 +26,12 @@ class SacPersonSeeder < PersonSeeder
 
     person.update!(birthday: (6..72).to_a.sample.years.ago)
     cat = ::SacCas::Beitragskategorie::Calculator.new(person).calculate
-    super(person, group, role_type, **opts.merge(beitragskategorie: cat))
+    super(person, group, role_type, **opts.merge(
+      start_on: Date.current,
+      end_on: Date.current.end_of_year,
+      beitragskategorie: cat
+    )
+    )
   end
 
   def person_attributes(role_type)
@@ -65,7 +70,8 @@ class SacPersonSeeder < PersonSeeder
       person:,
       group: sektion,
       beitragskategorie: :family,
-      delete_on: 1.year.from_now.end_of_year)
+      start_on: Date.current,
+      end_on: 1.year.from_now.end_of_year)
   end
 
   def create_or_update_household(person, second_person)
@@ -100,7 +106,7 @@ class SacPersonSeeder < PersonSeeder
     Group::SektionsMitglieder::MitgliedZusatzsektion.all.find_each do |r|
       create_stammsektion_role(r)
       stamm_role = r.person.roles.find_by(type: "Group::SektionsMitglieder::Mitglied")
-      r.update!(created_at: stamm_role.created_at, delete_on: stamm_role.delete_on)
+      r.update!(start_on: stamm_role.start_on, end_on: stamm_role.end_on)
     end
   end
 
@@ -135,16 +141,16 @@ class SacPersonSeeder < PersonSeeder
     Group::SektionsMitglieder::Mitglied.create!(
       person:,
       group: mitglieder_groups.sample,
-      created_at: membership_from(person),
-      delete_on: Time.zone.today.end_of_year
+      start_on: membership_from(person),
+      end_on: Time.zone.today.end_of_year
     )
   end
 
   def update_role_dates(role_class)
     role_class.find_each do |r|
       yield(r) if block_given?
-      r.update!(created_at: membership_from(r.person),
-        delete_on: Time.zone.today.end_of_year)
+      r.update!(start_on: membership_from(r.person),
+        end_on: Time.zone.today.end_of_year)
     end
   end
 

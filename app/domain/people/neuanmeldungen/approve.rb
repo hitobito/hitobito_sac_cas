@@ -44,9 +44,7 @@ module People
         APPROVED_NEUANMELDUNGEN_ROLE.create!(
           group: approved_roles_group,
           person: role.person,
-          beitragskategorie: role.beitragskategorie,
-          created_at: role.created_at,
-          delete_on: role.delete_on
+          beitragskategorie: role.beitragskategorie
         )
       end
     end

@@ -9,7 +9,7 @@ require "spec_helper"
 require_relative "../shared_examples_mitglied"
 
 describe Group::SektionsMitglieder::Mitglied do
-  it_behaves_like "validates Mitglied timestamps"
+  it_behaves_like "validates Mitglied active period"
 
   context "household" do
     let(:familienmitglied) { roles(:familienmitglied) }

@@ -79,9 +79,9 @@ module Memberships
 
     def category_family = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
-    def replaced_role_deleted_at = Time.current.yesterday.end_of_day
+    def replaced_role_end_on = Date.current.yesterday
 
-    def new_role_created_at = Time.current.beginning_of_day
+    def new_role_start_on = Date.current
 
     # Replace the role with the blueprint role in the same group. The new role is created with a
     # created_at timestamp at the beginning of the current day, but not before the created_at
@@ -90,7 +90,7 @@ module Memberships
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
       # terminate old role, skip validations as it might be a family membership which
       # is not valid anymore as the person just left the household
-      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
+      Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
 
       # create new role with beitragskategorie
       create_role!(role.person,
@@ -104,15 +104,14 @@ module Memberships
         person:,
         beitragskategorie:,
         group: blueprint_role.group,
-        created_at: new_role_created_at,
-        delete_on: blueprint_role.delete_on,
-        convert_on: blueprint_role.convert_on,
-        convert_to: blueprint_role.convert_to
+        start_on: new_role_start_on,
+        end_on: blueprint_role.end_on,
+        delete_on: blueprint_role.delete_on
       )
     end
 
     def delete_role!(role)
-      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
+      Role.where(id: role.id).update_all(end_on: replaced_role_end_on, delete_on: nil)
     end
 
     def find_zusatzsektion_role(layer_group_id)

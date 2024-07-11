@@ -18,9 +18,8 @@ module SacCas::Role
                     -- LEAST will return NULL if any of the arguments is NULL.
                     -- Any value that can be NULL must have a fallback value higher than date.
                     '#{date.strftime("%Y-%m-%d")}',
-                    COALESCE(DATE(roles.deleted_at), '9999-12-31'),
                     COALESCE(DATE(roles.archived_at), '9999-12-31'),
-                    COALESCE(roles.delete_on, '9999-12-31')
+                    COALESCE(roles.end_on, '9999-12-31')
                   ),
                   DATE(roles.created_at)
                 )
@@ -45,15 +44,6 @@ module SacCas::Role
         where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
       }
 
-      scope :active, ->(date) {
-        with_deleted
-          .where(created_at: ..date.end_of_day)
-          .where("(delete_on IS NULL OR delete_on >= :date) AND " \
-                 "(deleted_at IS NULL OR deleted_at >= :datetime) AND " \
-                 "(archived_at IS NULL OR archived_at >= :datetime)",
-            date: date, datetime: date.beginning_of_day)
-      }
-
       belongs_to :termination_reason, optional: true
     end
   end
@@ -68,14 +58,6 @@ module SacCas::Role
 
   def membership_years
     read_attribute(:membership_years) or raise "use Role scope :with_membership_years"
-  end
-
-  def start_on
-    created_at&.to_date
-  end
-
-  def end_on
-    [deleted_at&.to_date, archived_at&.to_date, delete_on].compact.min
   end
 
   protected

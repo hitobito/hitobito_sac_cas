@@ -40,9 +40,8 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def overlapping_roles(period, role_types)
-    return unless period.begin && period.end
-
     Role
+      .with_inactive
       .where(type: role_types.map(&:sti_name))
       .where(person_id: person_id)
       .where.not(id: id)
@@ -57,10 +56,10 @@ module SacCas::Role::MitgliedNoOverlapValidation
       :already_has_mitglied_role
     end
 
-    start_on = format_date(conflicting_role.active_period.begin)
-    end_on = format_date(conflicting_role.active_period.end)
+    from = format_date(conflicting_role.start_on)
+    to = format_date(conflicting_role.end_on)
 
-    errors.add(:person, key, start_on: start_on, end_on: end_on)
+    errors.add(:person, key, start_on: from, end_on: to)
   end
 
   def role_sektion(role)

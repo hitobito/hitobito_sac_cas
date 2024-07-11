@@ -14,9 +14,6 @@ class Group::SektionsMitglieder < ::Group
 
     self.terminatable = true
 
-    validates :delete_on, presence: {message: :must_be_present_unless_deleted},
-      unless: :deleted_at?
-
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private
@@ -31,9 +28,6 @@ class Group::SektionsMitglieder < ::Group
     include SacCas::Role::MitgliedZusatzsektion
 
     self.terminatable = true
-
-    validates :delete_on, presence: {message: :must_be_present_unless_deleted},
-      unless: :deleted_at?
 
     # This is used by the import as we don't have the complete memberhip history of a person
     # but have to import MitgliedZusatzsektion roles anyway.

@@ -45,7 +45,6 @@ module HitobitoSacCas
       Event::Participatable.prepend SacCas::Event::Participatable
       ApplicationMailer.prepend SacCas::ApplicationMailer
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
-      FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
