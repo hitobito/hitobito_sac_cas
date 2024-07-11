@@ -38,7 +38,7 @@ describe "leave zusatzsektion", js: true do
         role.reload
       end
         .to change { person.roles.count }.by(-1)
-        .and change { role.deleted_at }.from(nil)
+        .and change { role.end_on }.to(Date.current.yesterday)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
         .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
     end
@@ -46,6 +46,8 @@ describe "leave zusatzsektion", js: true do
 
   context "as normal user" do
     it "can execute wizard and leave by end of year" do
+      role.person.sac_membership.stammsektion_role.update!(end_on: 10.years.from_now)
+      role.update!(end_on: 10.years.from_now)
       visit history_group_person_path(group_id: group.id, id: person.id)
       within("#role_#{role.id}") do
         click_link "Austritt"
@@ -60,8 +62,8 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
+        .and change { role.end_on }.to(Date.current.end_of_year)
         .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
-      expect(role.delete_on).not_to be_nil
     end
   end
 

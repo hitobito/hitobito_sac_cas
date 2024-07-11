@@ -64,7 +64,7 @@ describe Export::Tabular::People::WithSacAdditions do
   ].each do |tabular_class|
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { person }
+      let(:tabular_entry) { Person.with_membership_years.find(person.id) }
 
       it_behaves_like "has sac additions"
     end
@@ -76,7 +76,7 @@ describe Export::Tabular::People::WithSacAdditions do
   ].each do |tabular_class|
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { Fabricate(:event_participation, person: person) }
+      let(:tabular_entry) { Fabricate(:event_participation, person: Person.with_membership_years.find(person.id)) }
 
       it_behaves_like "has sac additions"
     end

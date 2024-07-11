@@ -53,7 +53,6 @@ module HitobitoSacCas
       Event::Participatable.prepend SacCas::Event::Participatable
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
       Event::Answer.include SacCas::Event::Answer
-      FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
@@ -108,6 +107,7 @@ module HitobitoSacCas
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
 
       ## Domain
+      People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,

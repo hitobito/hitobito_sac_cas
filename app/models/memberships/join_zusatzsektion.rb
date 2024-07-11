@@ -29,8 +29,7 @@ module Memberships
         person: person,
         type: group_for_neuanmeldung.class.const_get(:NeuanmeldungZusatzsektion),
         beitragskategorie: derive_beitragskategorie,
-        created_at: now,
-        delete_on: nil
+        start_on: now.to_date
       )
     end
 

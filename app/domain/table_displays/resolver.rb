@@ -88,8 +88,8 @@ module TableDisplays
     end
 
     def beitrittsdatum
-      convert_on = group_roles.collect(&:convert_on).min
-      I18n.l(convert_on) if convert_on
+      start_on = group_roles.collect(&:start_on).min
+      I18n.l(start_on) if start_on
     end
 
     def antragsdatum
@@ -122,7 +122,7 @@ module TableDisplays
     end
 
     def previous_member?
-      membership_roles.deleted.exists?
+      membership_roles.ended.exists?
     end
 
     def membership_roles

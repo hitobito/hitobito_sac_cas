@@ -98,7 +98,7 @@ describe SacImports::Roles::MembershipsImporter do
   context "with mocked csv rows" do
     let(:mitglied) { people(:mitglied) }
     let(:active_membership_role) { mitglied.roles.first }
-    let(:inactive_membership_role) { mitglied.roles.deleted.first }
+    let(:inactive_membership_role) { mitglied.roles.ended.first }
 
     let(:row) do
       {
@@ -292,7 +292,7 @@ describe SacImports::Roles::MembershipsImporter do
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(0)
-        expect(mitglied.roles.deleted.count).to eq(1)
+        expect(mitglied.roles.ended.count).to eq(1)
         expect(inactive_membership_role.beitragskategorie).to eq("family")
         expect(inactive_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
         expect(mitglied.sac_family_main_person).to eq(false)

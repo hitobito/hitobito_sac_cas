@@ -18,31 +18,32 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:magazine_list) { mailing_lists(:sac_magazine) }
 
   before do
+    travel_to date # TODO: this should not be necessary and might mask date related bugs
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
-    Role.update_all(delete_on: date + 3.months)
+    Role.update_all(end_on: date + 3.months)
 
     # individuelle zusatzmitgliedschaften
     Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
       person: people(:familienmitglied),
       group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
       beitragskategorie: :adult,
-      created_at: date,
-      delete_on: date + 3.months
+      start_on: date,
+      end_on: date + 3.months
     )
     Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
       person: people(:familienmitglied2),
       group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
       beitragskategorie: :adult,
-      created_at: date,
-      delete_on: date + 3.months
+      start_on: date,
+      end_on: date + 3.months
     )
     Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
       person: people(:familienmitglied_kind),
       group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
       beitragskategorie: :youth,
-      created_at: date,
-      delete_on: date + 3.months
+      start_on: date,
+      end_on: date + 3.months
     )
   end
 
@@ -252,7 +253,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied) }
 
       before do
-        Role.update_all(delete_on: date.end_of_year)
+        Role.update_all(end_on: date.end_of_year)
       end
 
       it "generates discounted positions" do
@@ -287,7 +288,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied) }
 
       before do
-        Role.update_all(delete_on: date.end_of_year)
+        Role.update_all(end_on: date.end_of_year)
       end
 
       it "generates discounted positions" do
@@ -350,7 +351,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::Ehrenmitglieder::Ehrenmitglied.create!(
         person: person,
         group: group,
-        created_at: "2022-08-01"
+        start_on: "2022-08-01"
       )
     end
 
@@ -388,7 +389,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         Group::SektionsMitglieder::Ehrenmitglied.create!(
           person: person,
           group: groups(:bluemlisalp_mitglieder),
-          created_at: "2022-08-01"
+          start_on: "2022-08-01"
         )
       end
 
@@ -429,7 +430,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: "2022-08-01"
+        start_on: "2022-08-01"
       )
     end
 
@@ -478,7 +479,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::SektionsMitglieder::Beguenstigt.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: "2022-08-01"
+        start_on: "2022-08-01"
       )
     end
 
@@ -570,7 +571,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   context "with sac reduction" do
     # 50 years of membership gives reduction on sac fees
     before do
-      roles(:mitglied).update!(created_at: date - 52.years)
+      roles(:mitglied).update!(start_on: date - 52.years)
     end
 
     it "generates positions" do
@@ -592,14 +593,14 @@ describe Invoices::SacMemberships::PositionGenerator do
   context "with section membership years reduction" do
     before do
       # 25 years of membership gives reduction on section fees
-      roles(:mitglied).update!(created_at: date - 30.years)
+      roles(:mitglied).update!(start_on: date - 30.years)
       person.update(birthday: "1955-03-23")
       context.fetch_section(main_section).reduction_required_age = 0
     end
 
     context "first year with reduction" do
       before do
-        roles(:mitglied).update!(created_at: Date.new(date.year - 25, 1, 1))
+        roles(:mitglied).update!(start_on: Date.new(date.year - 25, 1, 1))
       end
 
       it "generates positions with reduction" do
@@ -620,7 +621,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "first year with reduction, with end of year entry" do
       before do
-        roles(:mitglied).update!(created_at: Date.new(date.year - 25, 12, 31))
+        roles(:mitglied).update!(start_on: Date.new(date.year - 25, 12, 31))
       end
 
       it "generates positions without reduction" do
@@ -641,7 +642,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "last year without reduction" do
       before do
-        roles(:mitglied).update!(created_at: Date.new(date.year - 24, 1, 1))
+        roles(:mitglied).update!(start_on: 1.year.ago)
       end
 
       it "generates positions without reduction" do
@@ -664,7 +665,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:date) { Date.new(2023, 7, 1) }
 
       before do
-        Role.update_all(delete_on: date.end_of_year)
+        Role.update_all(end_on: date.end_of_year)
       end
 
       it "generates discounted positions" do
@@ -725,7 +726,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
           person: person,
           group: groups(:bluemlisalp_neuanmeldungen_nv),
-          created_at: date
+          start_on: date
         )
       end
 
@@ -759,7 +760,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         let(:date) { Date.new(2023, 8, 15) }
 
         before do
-          Role.update_all(delete_on: date.end_of_year)
+          Role.update_all(end_on: date.end_of_year)
         end
 
         it "generates discounted positions" do
@@ -844,16 +845,17 @@ describe Invoices::SacMemberships::PositionGenerator do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
     let(:beitragskategorie) { :adult }
 
-    before do
+    def create_neuanmeldung_zusatzsektion
       Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
         person: person,
         group: group,
         beitragskategorie: beitragskategorie,
-        created_at: date
+        start_on: date
       )
     end
 
     it "generates positions" do
+      create_neuanmeldung_zusatzsektion
       expect(positions.size).to eq(1)
 
       expect(positions[0].name).to eq("section_fee")
@@ -865,7 +867,10 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv) }
       let(:beitragskategorie) { :youth }
 
-      before { Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person, beitragskategorie: :youth).delete_all }
+      before do
+        Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person, beitragskategorie: :youth).delete_all
+        create_neuanmeldung_zusatzsektion
+      end
 
       it "generates positions" do
         expect(positions.size).to eq(1)
@@ -877,6 +882,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "living abroad" do
       before do
+        create_neuanmeldung_zusatzsektion
         person.update!(country: "DE")
         context.fetch_section(additional_section).bulletin_postage_abroad = 0
       end

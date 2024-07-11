@@ -53,12 +53,8 @@ module SacImports::Roles
       role = Group::SektionsMitglieder::Mitglied.new(group: membership_group,
         person: person,
         beitragskategorie: beitragskategorie,
-        created_at: row[:valid_from])
-      if Date.parse(row[:valid_until]).past?
-        role.deleted_at = row[:valid_until]
-      else
-        role.delete_on = row[:valid_until]
-      end
+        start_on: row[:valid_from],
+        end_on: row[:valid_until])
 
       save_role!(role, row)
     end
@@ -83,7 +79,7 @@ module SacImports::Roles
     end
 
     def set_family_main_person(person, role)
-      if !role.deleted? && role.beitragskategorie == "family"
+      if !role.ended? && role.beitragskategorie == "family"
         person.update_columns(sac_family_main_person: true)
       end
     end
@@ -94,7 +90,7 @@ module SacImports::Roles
 
     def delete_existing_membership_roles
       role_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
-      membership_roles = Role.with_deleted.where(type: role_types, person_id: @csv_source_person_ids)
+      membership_roles = Role.with_inactive.where(type: role_types, person_id: @csv_source_person_ids)
       membership_roles.delete_all
     end
   end

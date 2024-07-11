@@ -21,19 +21,18 @@ module SacCas::Role::MitgliedCommon
     self.permissions = []
     self.basic_permissions_only = true
 
-    validates :created_at, presence: true
+    validates :start_on, presence: true
 
     after_create :check_data_quality
-    after_destroy :soft_delete_dependant_roles, :check_data_quality
-    after_real_destroy :hard_delete_dependant_roles
+    after_destroy :destroy_dependant_roles, :check_data_quality
   end
 
-  def soft_delete_dependant_roles
-    dependant_roles.each { _1.destroy(always_soft_destroy: true) }
-  end
-
-  def hard_delete_dependant_roles
-    dependant_roles.with_deleted.each { _1.really_destroy! }
+  def destroy_dependant_roles
+    if destroyed?
+      dependant_roles.each { _1.really_destroy! }
+    else
+      dependant_roles.each { _1.destroy }
+    end
   end
 
   def dependant_roles

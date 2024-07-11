@@ -19,7 +19,7 @@ describe Group::SektionsNeuanmeldungenSektion do
 
     it "#destroy hard destroys role even though it is old enough to archive" do
       expect(role.send(:old_enough_to_archive?)).to eq true
-      expect { role.destroy }.to change { Role.with_deleted.count }.by(-1)
+      expect { role.destroy }.to change { Role.with_inactive.count }.by(-1)
     end
   end
 

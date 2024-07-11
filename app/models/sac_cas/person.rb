@@ -46,7 +46,6 @@ module SacCas::Person
     has_many :data_quality_issues, dependent: :destroy
     has_many :external_invoices, dependent: :destroy
     has_many :external_trainings, dependent: :destroy
-    has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
@@ -58,9 +57,9 @@ module SacCas::Person
 
     delegate :salutation_label, to: :class
 
-    scope :with_membership_years, lambda { |selects = "people.*", date = Time.zone.today|
+    scope :with_membership_years, lambda { |selects = "people.*", date = Date.current|
       subquery_sql = Group::SektionsMitglieder::Mitglied
-        .with_deleted
+        .with_inactive
         .with_membership_years("roles.person_id", date)
         .to_sql
 

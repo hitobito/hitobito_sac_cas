@@ -121,7 +121,8 @@ describe Wizards::Memberships::JoinZusatzsektion do
       before do
         @current_step = 2
         params["choose_sektion"] = {group_id: matterhorn.id}
-        roles(:familienmitglied_zweitsektion).destroy
+        # remove existing roles in group so we can create new ones without conflicts
+        groups(:matterhorn_mitglieder).roles.with_inactive.destroy_all
       end
 
       it "may create single role" do

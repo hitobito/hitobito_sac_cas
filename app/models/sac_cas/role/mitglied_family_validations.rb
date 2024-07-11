@@ -23,17 +23,11 @@ module SacCas::Role::MitgliedFamilyValidations
 
   private
 
-  # Returns all family mitglieder including the current person.
+  # Returns all family mitglieder from DB including the current person even if it is not persisted yet.
   def family_mitglieder
-    stammsektion_roles_scope = Role.where(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)).then do |scope|
-      from_future_role? ? scope.or(Role.where(convert_to: SacCas::STAMMSEKTION_ROLES.map(&:sti_name))) : scope
-    end.where(beitragskategorie: :family)
-    people = person
-      .household_people
-      .joins(:roles)
-      .merge(stammsektion_roles_scope).to_a
-
-    people << person
+    people = Household.new(person).people
+    people << person unless people.include?(person)
+    people
   end
 
   def adult_family_mitglieder_count
@@ -55,6 +49,10 @@ module SacCas::Role::MitgliedFamilyValidations
   end
 
   def assert_single_family_main_person
+    # We can only validate this if the person is persisted as we use Person#household_key to look up
+    # the other family members.
+    return unless person.persisted?
+
     # We do not need to validate this if the current role has a beitragskategorie other than family.
     return unless beitragskategorie&.family?
 
@@ -62,7 +60,6 @@ module SacCas::Role::MitgliedFamilyValidations
     return if terminated?
 
     return if family_mitglieder.count(&:sac_family_main_person) == 1
-
     errors.add(:base, :must_have_one_family_main_person_in_family)
   end
 end

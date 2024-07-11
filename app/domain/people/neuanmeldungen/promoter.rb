@@ -36,8 +36,6 @@ class People::Neuanmeldungen::Promoter
   end
 
   def candidate_roles
-    # We do not handle FutureRoles here. They will be included once they are converted to regular
-    # Neuanmeldung roles.
     Role.where(type: [
       Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
       Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name
@@ -61,8 +59,8 @@ class People::Neuanmeldungen::Promoter
       group: target_group(role),
       person: role.person,
       beitragskategorie: role.beitragskategorie,
-      created_at: Time.current,
-      delete_on: Date.current.end_of_year
+      start_on: Date.current,
+      end_on: Date.current.end_of_year
     )
   end
 
@@ -70,14 +68,14 @@ class People::Neuanmeldungen::Promoter
     now = Time.zone.today
 
     role.person.roles
-      .where(type: OBSOLETE_ROLES, created_at: now...)
-      .or(role.person.roles.where(type: NEUANMELDUNG_ROLES, created_at: ..now))
+      .where(type: OBSOLETE_ROLES).future
+      .or(role.person.roles.where(type: NEUANMELDUNG_ROLES))
       .find_each { |role| role.really_destroy! }
 
-    role.person.roles.where(created_at: ..now).find_each do |role|
+    role.person.roles.where(type: OBSOLETE_ROLES).find_each do |role|
       Roles::Termination.new(
         role:,
-        terminate_on: role.created_at.today? ? now : now.yesterday,
+        terminate_on: role.start_on&.today? ? now : now.yesterday,
         validate_terminate_on: false
       ).call
     end

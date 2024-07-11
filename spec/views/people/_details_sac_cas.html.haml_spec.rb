@@ -75,18 +75,18 @@ describe "people/_details_sac_cas.html.haml" do
     end
 
     it "renders membership info for past membership" do
-      person.roles.destroy_all
+      person.roles.update_all(end_on: 1.day.ago)
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"
     end
 
     it "renders membership info for future membership" do
       person.roles.destroy_all
-      person.roles.create!(
-        type: FutureRole.sti_name,
+      Group::SektionsMitglieder::Mitglied.create!(
+        person:,
         group: groups(:bluemlisalp_mitglieder),
-        convert_on: 1.month.from_now,
-        convert_to: Group::SektionsMitglieder::Mitglied.sti_name
+        start_on: 1.month.from_now,
+        end_on: 2.months.from_now
       )
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"

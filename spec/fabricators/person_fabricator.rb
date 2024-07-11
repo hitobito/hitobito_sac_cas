@@ -15,3 +15,5 @@ Fabrication.manager[:person].append_or_update_attribute(:street, nil) { "Ophoven
 Fabrication.manager[:person].append_or_update_attribute(:housenumber, nil) { "79a" }
 Fabrication.manager[:person].append_or_update_attribute(:zip_code, nil) { "2843" }
 Fabrication.manager[:person].append_or_update_attribute(:town, nil) { "Neu Carlscheid" }
+
+Fabrication.manager[:person].append_or_update_attribute(:data_retention_consent, nil) { true }

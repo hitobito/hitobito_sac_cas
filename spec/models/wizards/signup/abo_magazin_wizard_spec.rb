@@ -105,7 +105,7 @@ describe Wizards::Signup::AboMagazinWizard do
       expect { wizard.save! }.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
       expect(max.roles.last.type).to eq Group::AboMagazin::Abonnent.sti_name
-      expect(max.roles.last.delete_on).to eq Time.zone.now.end_of_year.to_date
+      expect(max.roles.last.end_on).to eq Time.zone.now.end_of_year.to_date
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 

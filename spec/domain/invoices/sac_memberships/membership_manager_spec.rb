@@ -26,16 +26,16 @@ describe Invoices::SacMemberships::MembershipManager do
   let(:familienmitglied_kind_person) { people(:familienmitglied_kind) }
 
   before do
-    Role.update_all(delete_on: Time.zone.today.end_of_year)
+    Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
   context "person has stammsektions role" do
     def updated_roles_count
-      role_dates_before = Role.all.map(&:delete_on)
+      role_dates_before = Role.all.map(&:end_on)
 
       subject.update_membership_status
 
-      role_dates_after = Role.all.map(&:delete_on)
+      role_dates_after = Role.all.map(&:end_on)
 
       # check how many dates have changed
       role_dates_after.zip(role_dates_before).count { |a, b| a != b } + (role_dates_after.size - role_dates_before.size).abs
@@ -44,25 +44,25 @@ describe Invoices::SacMemberships::MembershipManager do
     context "adult" do
       subject { described_class.new(mitglied_person, groups(:bluemlisalp_mitglieder), end_of_next_year.year) }
 
-      it "updates delete_on" do
+      it "updates end_on" do
         expect(updated_roles_count).to eq(2)
 
-        expect(mitglied.delete_on).to eq(end_of_next_year)
-        expect(mitglied_zweitsektion.reload.delete_on).to eq(end_of_next_year)
+        expect(mitglied.end_on).to eq(end_of_next_year)
+        expect(mitglied_zweitsektion.reload.end_on).to eq(end_of_next_year)
       end
 
-      it "doesn't update delete_on when role is terminated" do
+      it "doesn't update end_on when role is terminated" do
         mitglied_zweitsektion.update_column(:terminated, true)
         expect(updated_roles_count).to eq(1)
       end
 
-      it "doesn't update roles when delete_on is already in external invoice year" do
-        Role.update_all(delete_on: end_of_next_year)
+      it "doesn't update roles when end_on is already in external invoice year" do
+        Role.update_all(end_on: end_of_next_year)
         expect(updated_roles_count).to eq(0)
       end
 
-      it "doesn't update roles when delete_on is after external invoice year" do
-        Role.update_all(delete_on: end_of_next_year + 5.years)
+      it "doesn't update roles when end_on is after external invoice year" do
+        Role.update_all(end_on: end_of_next_year + 5.years)
         expect(updated_roles_count).to eq(0)
       end
     end
@@ -70,15 +70,15 @@ describe Invoices::SacMemberships::MembershipManager do
     context "family" do
       subject { described_class.new(familienmitglied_person, groups(:bluemlisalp_mitglieder), end_of_next_year.year) }
 
-      it "updates delete_on for all family member roles" do
+      it "updates end_on for all family member roles" do
         expect(updated_roles_count).to eq(6)
 
-        expect(familienmitglied.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied_zweitsektion.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied2.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied2_zweitsektion.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied_kind.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied_kind_zweitsektion.delete_on).to eq(end_of_next_year)
+        expect(familienmitglied.end_on).to eq(end_of_next_year)
+        expect(familienmitglied_zweitsektion.end_on).to eq(end_of_next_year)
+        expect(familienmitglied2.end_on).to eq(end_of_next_year)
+        expect(familienmitglied2_zweitsektion.end_on).to eq(end_of_next_year)
+        expect(familienmitglied_kind.end_on).to eq(end_of_next_year)
+        expect(familienmitglied_kind_zweitsektion.end_on).to eq(end_of_next_year)
       end
 
       it "only updates zusatzsektions role of family member when beitragskategorie is family" do
@@ -114,7 +114,7 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(new_member.confirmed_at).to be_within(2.seconds).of(Time.zone.now)
         expect(new_member.sac_membership.active?).to eq(true)
         expect(new_member.roles.count).to eq(1)
-        expect(new_member.sac_membership.stammsektion_role.delete_on).to eq(end_of_next_year)
+        expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
       end
     end
 
@@ -145,8 +145,8 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(familienmitglied2_person.sac_membership.active?).to eq(true)
         expect(familienmitglied_person.roles.count).to eq(1)
         expect(familienmitglied2_person.roles.count).to eq(1)
-        expect(familienmitglied_person.sac_membership.stammsektion_role.delete_on).to eq(end_of_next_year)
-        expect(familienmitglied2_person.sac_membership.stammsektion_role.delete_on).to eq(end_of_next_year)
+        expect(familienmitglied_person.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
+        expect(familienmitglied2_person.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
       end
 
       it "doesn't create role for family members when person is not family main person" do
@@ -160,7 +160,7 @@ describe Invoices::SacMemberships::MembershipManager do
   context "person has just a neuanmeldung zusatzsektion_roles role" do
     context "adult" do
       before do
-        mitglied_person.sac_membership.stammsektion_role.update(delete_on: end_of_next_year + 5.years)
+        mitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         mitglied_person.sac_membership.zusatzsektion_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
@@ -175,7 +175,7 @@ describe Invoices::SacMemberships::MembershipManager do
         subject.update_membership_status
 
         expect(mitglied_person.roles.count).to eq(2)
-        expect(mitglied_person.sac_membership.zusatzsektion_roles.first.delete_on).to eq(end_of_next_year)
+        expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
       end
     end
 
@@ -183,9 +183,9 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         familienmitglied_kind_person.destroy
 
-        familienmitglied_person.sac_membership.stammsektion_role.update(delete_on: end_of_next_year + 5.years)
+        familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied2_person.sac_membership.stammsektion_role.update(delete_on: end_of_next_year + 5.years)
+        familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
@@ -205,7 +205,7 @@ describe Invoices::SacMemberships::MembershipManager do
         subject.update_membership_status
 
         expect(familienmitglied2_person.roles.count).to eq(2)
-        expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.delete_on).to eq(end_of_next_year)
+        expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
       end
 
       it "doesn't create role for family members when person is not family main person" do

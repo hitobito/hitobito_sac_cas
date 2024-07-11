@@ -64,8 +64,8 @@ describe SacImports::FamilyImporter do
         group: groups(:bluemlisalp_mitglieder),
         person_id: person.id,
         beitragskategorie: "family",
-        created_at: Time.current,
-        delete_on: Time.current.end_of_year
+        start_on: Date.current,
+        end_on: Date.current.end_of_year
       )
       role.save!(context: :import)
     end

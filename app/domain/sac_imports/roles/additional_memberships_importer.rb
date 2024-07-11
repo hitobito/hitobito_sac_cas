@@ -46,12 +46,8 @@ module SacImports::Roles
       role = Group::SektionsMitglieder::MitgliedZusatzsektion.new(group: membership_group,
         person: person,
         beitragskategorie: beitragskategorie,
-        created_at: row[:valid_from])
-      if Date.parse(row[:valid_until]).past?
-        role.deleted_at = row[:valid_until]
-      else
-        role.delete_on = row[:valid_until]
-      end
+        start_on: row[:valid_from],
+        end_on: row[:valid_until])
 
       save_role!(role, row)
     end
