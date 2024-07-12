@@ -46,11 +46,25 @@ class Group::SektionsFunktionaere < ::Group
     self.basic_permissions_only = true
   end
 
+  class Huettenobmann < ::Role
+    self.permissions = [:group_and_below_read]
+    self.two_factor_authentication_enforced = true
+  end
+
+  class Leserecht < ::Role
+    self.permissions = [:group_and_below_read]
+  end
+
+  class Schreibrecht < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
   class Andere < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   roles Praesidium, Mitgliederverwaltung, Administration,
-    AdministrationReadOnly, Finanzen, Redaktion, Andere
+    AdministrationReadOnly, Finanzen, Redaktion, Huettenobmann,
+    Leserecht, Schreibrecht, Andere
 end
