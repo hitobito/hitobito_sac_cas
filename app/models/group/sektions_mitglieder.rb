@@ -45,5 +45,13 @@ class Group::SektionsMitglieder < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Mitglied, MitgliedZusatzsektion, Ehrenmitglied, Beguenstigt
+  class Leserecht < ::Role
+    self.permissions = [:group_and_below_read]
+  end
+
+  class Schreibrecht < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
+  roles Mitglied, MitgliedZusatzsektion, Ehrenmitglied, Beguenstigt, Leserecht, Schreibrecht
 end

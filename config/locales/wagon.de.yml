@@ -660,24 +660,48 @@ de:
       group/sektions_mitglieder/beguenstigt:
         one: Begünstigt
         description: Begünstigt
+      group/sektions_mitglieder/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_mitglieder/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
       group/sektions_neuanmeldungen_sektion/neuanmeldung:
         one: Neuanmeldung (Stammsektion)
         description: Neuanmeldung Mitgliedschaft (Stammesektion)
       group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
         one: Neuanmeldung (Zusatzsektion)
         description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
+      group/sektions_neuanmeldungen_sektion/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_neuanmeldungen_sektion/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
       group/sektions_neuanmeldungen_nv/neuanmeldung:
         one: Neuanmeldung (Stammsektion)
         description: Neuanmeldung Mitgliedschaft (Stammsektion)
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
         one: Neuanmeldung (Zusatzsektion)
         description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
+      group/sektions_neuanmeldungen_nv/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_neuanmeldungen_nv/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
       group/sektions_vorstand/praesidium:
         one: Präsidium
         description: Präsidium
       group/sektions_vorstand/mitglied:
         one: Mitglied
         description: Mitglied
+      group/sektions_vorstand/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_vorstand/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
       group/sektions_vorstand/andere:
         one: Andere
         description: Andere

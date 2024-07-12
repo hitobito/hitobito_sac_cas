@@ -15,9 +15,17 @@ class Group::SektionsVorstand < ::Group
     self.permissions = []
   end
 
+  class Leserecht < ::Role
+    self.permissions = [:group_and_below_read]
+  end
+
+  class Schreibrecht < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
   class Andere < ::Role
     self.permissions = []
   end
 
-  roles Praesidium, Mitglied, Andere
+  roles Praesidium, Mitglied, Leserecht, Schreibrecht, Andere
 end
