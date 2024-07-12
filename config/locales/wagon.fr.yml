@@ -937,7 +937,7 @@ fr:
 
     tabs:
       history: ""
-      remarks: ""
+      sac_remarks: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
