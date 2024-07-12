@@ -27,7 +27,7 @@ describe "FilterNavigation::People" do
   end
 
   shared_examples "having Tourenleiter filters" do
-    let(:tourenleiter_id) { Group::SektionsTourenkommission::Tourenleiter.id.to_s }
+    let(:tourenleiter_id) { Group::SektionsTourenUndKurse::Tourenleiter.id.to_s }
     let(:kind_ids) { QualificationKind.pluck(:id).map(&:to_s) }
 
     def parse_link_query(link)

@@ -54,7 +54,7 @@ module Import::Huts
       # TODO handle nonexistent group
       Group::Sektion.find_by(navision_id: navision_id(row))
         .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .find { |child| child.type == "Group::SektionsFunktionaere" }
         .id
     rescue NoMethodError
       Rails.logger.debug { "Failed to find existing hut with navision id #{navision_id(row)}" }

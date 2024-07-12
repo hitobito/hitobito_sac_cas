@@ -15,7 +15,7 @@ module SacCas::Role::MitgliedCommon
 
   DEPENDANT_ROLE_TYPES = ["Group::SektionsMitglieder::Ehrenmitglied",
     "Group::SektionsMitglieder::Beguenstigt",
-    "Group::SektionsTourenkommission::Tourenleiter"].freeze
+    "Group::SektionsTourenUndKurse::Tourenleiter"].freeze
 
   included do
     self.permissions = []

@@ -38,12 +38,12 @@ describe ExternalTrainingAbility do
   end
 
   context "with group_full" do
-    let(:role) { Fabricate(Group::SektionsTourenkommission::TourenchefSommer.name.to_sym, group: groups(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission)) }
+    let(:role) { Fabricate(Group::SektionsTourenkommission::TourenchefSommer.name.to_sym, group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse)) } # TODO
 
     context "in same group" do
       let(:person) {
-        Fabricate(Group::SektionsTourenkommission::Tourenleiter.name.to_sym,
-          group: groups(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission),
+        Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.name.to_sym,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse),
           person: Fabricate(:person, qualifications: [Fabricate(:qualification)])).person
       }
 

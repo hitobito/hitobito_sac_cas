@@ -8,13 +8,9 @@
 class Group::SektionsFunktionaere < ::Group
   self.static_name = true
 
-  children Group::SektionsHuettenkommission, Group::SektionsTourenkommission,
-    Group::SektionsKommission, Group::SektionsVorstand
+  children Group::SektionsVorstand
 
   self.default_children = [
-    Group::SektionsHuettenkommission,
-    Group::SektionsKommission,
-    Group::SektionsTourenkommission,
     Group::SektionsVorstand
   ]
 
