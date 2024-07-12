@@ -57,7 +57,7 @@ describe QualificationAbility do
 
         context "with tourenchef role in layer above" do
           let(:bluemlisalp_sektionsfunktionaere) { Group::SektionsFunktionaere.find_by(parent: groups(:bluemlisalp)) }
-          let(:bluemlisalp_tourenkommission) { Group::SektionsTourenkommission.find_or_create_by(parent: bluemlisalp_sektionsfunktionaere) }
+          let(:bluemlisalp_tourenkommission) { Group::SektionsTourenUndKurse.find_or_create_by(parent: bluemlisalp_sektionsfunktionaere) }
           let(:bluemlisalp_tourenchef) {
             Fabricate(Group::SektionsTourenkommission::TourenchefSommer.sti_name.to_sym,
               group: bluemlisalp_tourenkommission).person

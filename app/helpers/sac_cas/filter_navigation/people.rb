@@ -53,7 +53,7 @@ module SacCas::FilterNavigation::People
   def role_filter(role_kind)
     if role_kind
       {
-        role_type_ids: Group::SektionsTourenkommission::Tourenleiter.id,
+        role_type_ids: Group::SektionsTourenUndKurse::Tourenleiter.id,
         kind: role_kind
       }.compact
     end

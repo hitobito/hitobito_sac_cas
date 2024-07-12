@@ -200,9 +200,9 @@ describe Memberships::TerminateSacMembership do
           Fabricate(:qualification, person: person,
             qualification_kind: qualification_kinds(:ski_leader))
           Fabricate(
-            Group::SektionsTourenkommission::Tourenleiter.sti_name,
+            Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
             person: person,
-            group: groups(:matterhorn_tourenkommission)
+            group: groups(:matterhorn_touren_und_kurse)
           )
         end
 
@@ -211,8 +211,8 @@ describe Memberships::TerminateSacMembership do
           Fabricate(
             :future_role,
             person: person,
-            group: groups(:matterhorn_tourenkommission),
-            convert_to: Group::SektionsTourenkommission::Tourenleiter
+            group: groups(:matterhorn_touren_und_kurse),
+            convert_to: Group::SektionsTourenUndKurse::Tourenleiter
           )
         end
 
@@ -228,10 +228,9 @@ describe Memberships::TerminateSacMembership do
             Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
             Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
 
-            Group::SektionsTourenkommission::Tourenleiter,
-            Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
+            Group::SektionsTourenUndKurse::Tourenleiter,
+            Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
 
-            Group::SektionsExterneKontakte::Kontakt,
             Group::ExterneKontakte::Kontakt
           ]
         end

@@ -16,8 +16,8 @@ module Memberships
 
     ROLE_TYPES = [
       Group::SektionsMitglieder::MitgliedZusatzsektion,
-      Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
-      Group::SektionsTourenkommission::Tourenleiter
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+      Group::SektionsTourenUndKurse::Tourenleiter
     ].freeze
 
     attribute :termination_reason_id, :integer

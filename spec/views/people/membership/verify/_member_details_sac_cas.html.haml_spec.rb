@@ -32,8 +32,8 @@ describe "people/membership/verify/_member_details_sac_cas.html.haml" do
         start_at: 1.month.ago
       )
       person.roles.create!(
-        type: Group::SektionsTourenkommission::Tourenleiter.sti_name,
-        group: groups(:matterhorn_tourenkommission)
+        type: Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
+        group: groups(:matterhorn_touren_und_kurse)
       )
 
       expect(dom).to have_text "Aktive/r Tourenleiter/in"

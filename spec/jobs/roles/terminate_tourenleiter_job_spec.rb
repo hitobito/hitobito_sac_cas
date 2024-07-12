@@ -19,12 +19,12 @@ describe Roles::TerminateTourenleiterJob do
   end
 
   context "with role" do
-    let(:group) { groups(:matterhorn_tourenkommission) }
+    let(:group) { groups(:matterhorn_touren_und_kurse) }
     let(:qualification) { Fabricate(:qualification, qualification_kind: qualification_kinds(:ski_leader)) }
     let(:yesterday) { Time.zone.yesterday.end_of_day.to_s(:db) }
 
     let(:person) { qualification.person }
-    let!(:role) { Fabricate(Group::SektionsTourenkommission::Tourenleiter.sti_name, person: person, group: group) }
+    let!(:role) { Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.sti_name, person: person, group: group) }
 
     it "noops if qualification is active" do
       expect { job.perform }.to not_change { person.roles.count }

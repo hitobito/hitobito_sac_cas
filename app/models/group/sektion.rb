@@ -15,14 +15,12 @@ class Group::Sektion < Group
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenSektion,
     Group::SektionsNeuanmeldungenNv,
-    Group::SektionsExterneKontakte,
     Group::Ortsgruppe
 
   self.default_children = [
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
-    Group::SektionsNeuanmeldungenNv,
-    Group::SektionsExterneKontakte
+    Group::SektionsNeuanmeldungenNv
   ]
 
   mounted_attr :foundation_year, :integer

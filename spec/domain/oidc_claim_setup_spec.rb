@@ -164,7 +164,7 @@ describe OidcClaimSetup do
     end
 
     it "includes section_tour_functionary key when matching role exists" do
-      create_role(:bluemlisalp_ortsgruppe_ausserberg_tourenkommission, "JoChef")
+      create_role(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse, "JoChef")
       expect(user_groups).to include "section_tour_functionary"
     end
   end

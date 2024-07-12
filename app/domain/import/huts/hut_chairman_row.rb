@@ -29,11 +29,11 @@ module Import::Huts
         return
       end
       person.roles.where(
-        type: Group::SektionsHuettenkommission::Huettenobmann.name,
+        type: Group::SektionsFunktionaere::Huettenobmann.name,
         group_id: group_id
       ).find_each(&:really_destroy!)
       person.roles.build(
-        type: Group::SektionsHuettenkommission::Huettenobmann.name,
+        type: Group::SektionsFunktionaere::Huettenobmann.name,
         created_at: created_at(@row),
         group_id: group_id
       )
@@ -57,7 +57,7 @@ module Import::Huts
     def group_id(row)
       Group::Sektion.find_by(navision_id: navision_id(row))
         .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .find { |child| child.type == "Group::SektionsFunktionaere" }
         .id
     rescue NoMethodError
       Rails.logger.debug {

@@ -24,7 +24,7 @@ module SacCas::OidcClaimSetup
     tourenportal_community: [Group::AboTourenPortal::Community],
     tourenportal_administrator: [Group::AboTourenPortal::Admin],
     magazin_subscriber: Group::AboMagazin.roles,
-    section_tour_functionary: Group::SektionsTourenkommission.roles
+    section_tour_functionary: Group::SektionsTourenUndKurse.roles
   }
 
   def run

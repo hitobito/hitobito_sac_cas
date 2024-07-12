@@ -59,8 +59,8 @@ module SacCas
   ].freeze
 
   TOUR_GUIDE_ROLES = [
-    ::Group::SektionsTourenkommission::Tourenleiter,
-    ::Group::SektionsTourenkommission::TourenleiterOhneQualifikation
+    ::Group::SektionsTourenUndKurse::Tourenleiter,
+    ::Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
   ].freeze
 
   ###

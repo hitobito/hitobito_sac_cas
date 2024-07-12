@@ -409,6 +409,9 @@ de:
             course_compensation_category:
               uniqueness_during_validity_period: In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren.
 
+        group/sektions_touren_und_kurse/tourenleiter:
+          requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
+
         people_manager:
           in_different_household: >-
             %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
@@ -657,6 +660,12 @@ de:
       group/sektions_vorstand/andere:
         one: Andere
         description: Andere
+      group/sektions_touren_und_kurse/tourenleiter:
+        one: Tourenleiter*in (mit Qualifikation)
+        description: Tourenleiter*in (mit Qualifikation)
+      group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
+        one: Tourenleiter*in (ohne Qualifikation)
+        description: Tourenleiter*in (ohne Qualifikation)
 
   devise:
     sessions:

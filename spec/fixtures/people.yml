@@ -75,6 +75,6 @@ tourenchef:
   last_name: Paschke
   email: paschke-ida@hitobito.example.com
   gender: f
-  primary_group: bluemlisalp_ortsgruppe_ausserberg_tourenkommission
+  primary_group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de

@@ -62,7 +62,6 @@ describe Import::SektionenImporter do
 
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
       Group::SektionsMitglieder,
-      Group::SektionsExterneKontakte,
       Group::SektionsFunktionaere]
 
     expected_sub_group_count = expected_sub_groups.count + 1
@@ -79,7 +78,6 @@ describe Import::SektionenImporter do
     expected_sub_groups = [Group::SektionsNeuanmeldungenNv,
       Group::SektionsNeuanmeldungenSektion,
       Group::SektionsMitglieder,
-      Group::SektionsExterneKontakte,
       Group::SektionsFunktionaere]
 
     expected_sub_group_count = expected_sub_groups.count
@@ -99,8 +97,7 @@ describe Import::SektionenImporter do
     expected_sub_groups = [
       Group::SektionsFunktionaere,
       Group::SektionsMitglieder,
-      Group::SektionsNeuanmeldungenNv,
-      Group::SektionsExterneKontakte
+      Group::SektionsNeuanmeldungenNv
     ]
 
     expected_sub_group_count = expected_sub_groups.count
