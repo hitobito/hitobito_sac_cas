@@ -1250,6 +1250,8 @@ de:
     Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
+        warning_termination_by_section_only: "Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist.
+Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       leave_zusatzsektion:
