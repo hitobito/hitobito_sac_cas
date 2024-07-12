@@ -636,6 +636,15 @@ de:
       group/sektions_funktionaere/redaktion:
         one: Redaktion
         description: Redaktion
+      group/sektions_funktionaere/huettenobmann:
+        one: Hüttenobmann*frau
+        description: Hüttenobmann*frau
+      group/sektions_funktionaere/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_funktionaere/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
       group/sektions_funktionaere/andere:
         one: Andere
         description: Andere
