@@ -8,11 +8,8 @@
 module SacCas::QualificationAbility
   extend ActiveSupport::Concern
 
-  TOURENCHEF_ROLE_TYPES = [Group::SektionsTourenkommission::Tourenchef,
-    Group::SektionsTourenkommission::TourenchefSommer,
-    Group::SektionsTourenkommission::TourenchefWinter,
-    Group::SektionsTourenkommission::TourenchefKlettern,
-    Group::SektionsTourenkommission::TourenchefSenioren]
+  TOURENCHEF_ROLE_TYPES = [Group::SektionsTourenUndKurseSommer::Tourenchef,
+                           Group::SektionsTourenUndKurseWinter::Tourenchef]
 
   included do
     on(Qualification) do

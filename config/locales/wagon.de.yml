@@ -527,6 +527,18 @@ de:
         one: Vorstand
         other: Vorstand
 
+      group/sektions_touren_und_kurse:
+        one: Touren und Kurse
+        other: Touren und Kurse
+
+      group/sektions_touren_und_kurse_sommer:
+        one: Touren und Kurse Sommer
+        other: Touren und Kurse Sommer
+
+      group/sektions_touren_und_kurse_winter:
+        one: Touren und Kurse Winter
+        other: Touren und Kurse Winter
+
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
         one: Ehrenmitglied
@@ -666,6 +678,24 @@ de:
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
         one: Tourenleiter*in (ohne Qualifikation)
         description: Tourenleiter*in (ohne Qualifikation)
+      group/sektions_touren_und_kurse/jo_chef:
+        one: JO-Chef*in
+        description: JO-Chef*in
+      group/sektions_touren_und_kurse/js_coach:
+        one: J+S Coach
+        description: J+S Coach
+      group/sektions_touren_und_kurse/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_touren_und_kurse/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_touren_und_kurse_sommer/tourenchef:
+        one: Tourenchef*in
+        description: Tourenchef*in
+      group/sektions_touren_und_kurse_winter/tourenchef:
+        one: Tourenchef*in
+        description: Tourenchef*in
 
   devise:
     sessions:
