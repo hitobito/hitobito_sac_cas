@@ -409,9 +409,6 @@ de:
             course_compensation_category:
               uniqueness_during_validity_period: In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren.
 
-        group/sektions_tourenkommission/tourenleiter:
-          requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
-
         people_manager:
           in_different_household: >-
             %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
@@ -523,29 +520,9 @@ de:
         one: Sektionsfunktionäre
         other: Sektionsfunktionäre
 
-      group/sektions_tourenkommission:
-        one: Touren und Kurse
-        other: Touren und Kurse
-
-      group/sektions_externe_kontakte:
-        one: Externe Kontakte
-        other: Externe Kontakte
-
-      group/sektions_kommission:
-        one: Kommission
-        other: Kommission
-
       group/sektions_vorstand:
         one: Vorstand
         other: Vorstand
-
-      group/sektions_huettenkommission:
-        one: Hütten
-        other: Hütten
-
-      group/sektions_huette:
-        one: Hütte
-        other: Hütte
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -671,15 +648,6 @@ de:
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
         one: Neuanmeldung (Zusatzsektion)
         description: Neuanmeldung Mitgliedschaft (Zusatzsektion)
-      group/sektions_kommission/praesidium:
-        one: Präsidium
-        description: Präsidium
-      group/sektions_kommission/mitglied:
-        one: Mitglied
-        description: Mitglied
-      group/sektions_kommission/andere:
-        one: Andere
-        description: Andere
       group/sektions_vorstand/praesidium:
         one: Präsidium
         description: Präsidium
@@ -687,55 +655,6 @@ de:
         one: Mitglied
         description: Mitglied
       group/sektions_vorstand/andere:
-        one: Andere
-        description: Andere
-      group/sektions_tourenkommission/tourenchef_sommer:
-        one: Tourenchef*in Sommer
-        description: Tourenchef*in Sommer
-      group/sektions_tourenkommission/tourenchef_winter:
-        one: Tourenchef*in Winter
-        description: Tourenchef*in Winter
-      group/sektions_tourenkommission/tourenchef_klettern:
-        one: Tourenchef*in Klettern
-        description: Tourenchef*in Klettern
-      group/sektions_tourenkommission/tourenchef_senioren:
-        one: Tourenchef*in Senioren
-        description: Tourenchef*in Senioren
-      group/sektions_tourenkommission/tourenleiter:
-        one: Tourenleiter*in (mit Qualifikation)
-        description: Tourenleiter*in (mit Qualifikation)
-      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
-        one: Tourenleiter*in (ohne Qualifikation)
-        description: Tourenleiter*in (ohne Qualifikation)
-      group/sektions_tourenkommission/jo_chef:
-        one: JO-Chef*in
-        description: JO-Chef*in
-      group/sektions_tourenkommission/js_coach:
-        one: J+S Coach
-        description: J+S Coach
-      group/sektions_tourenkommission/andere:
-        one: Andere
-        description: Andere
-      group/sektions_huettenkommission/huettenobmann:
-        one: Hüttenobmann*frau
-        description: Hüttenobmann*frau
-      group/sektions_huettenkommission/andere:
-        one: Andere
-        description: Andere
-      group/sektions_huette/huettenwart:
-        one: Hüttenwart*in
-        description: Hüttenwart*in
-      group/sektions_huette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
-      group/sektions_externe_kontakte/kontakt:
-        one: Kontakt
-        description: Kontakt
-      group/sektions_huette/huettenwartspartner:
-        one: Hüttenwartspartner*in
-      group/sektions_huette/schluesseldepot:
-        one: Schlüsseldepot
-      group/sektions_huette/andere:
         one: Andere
         description: Andere
 
