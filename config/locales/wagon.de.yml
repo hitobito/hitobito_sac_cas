@@ -583,9 +583,36 @@ de:
       group/abo_magazin/abonnent:
         one: Abonnent
         description: Abonnent
+      group/abo_magazin/abonnent/abonnent_buchhand:
+        one: Abonnent Buchhand
+        description: Abonnent Buchhand
+      group/abo_magazin/abonnent/abonnent_css:
+        one: Abonnent CSS
+        description: Abonnent CSS
+      group/abo_magazin/abonnent/abonnent_fat:
+        one: Abonnent FAT
+        description: Abonnent FAT
+      group/abo_magazin/abonnent/abonnent_lav:
+        one: Abonnent LAV
+        description: Abonnent LAV
+      group/abo_magazin/abonnent/abonnent_gratis:
+        one: Abonnent Gratis
+        description: Abonnent Gratis
       group/abo_magazin/neuanmeldung:
         one: Neuanmeldung
         description: Neuanmeldung
+      group/abo_magazin/neuanmeldung/neuanmeldung_buchhand:
+        one: Neuanmeldung Buchhand
+        description: Neuanmeldung Buchhand
+      group/abo_magazin/neuanmeldung/neuanmeldung_css:
+        one: Neuanmeldung CSS
+        description: Neuanmeldung CSS
+      group/abo_magazin/neuanmeldung/neuanmeldung_fat:
+        one: Neuanmeldung FAT
+        description: Neuanmeldung FAT
+      group/abo_magazin/neuanmeldung/neuanmeldung_lav:
+        one: Neuanmeldung LAV
+        description: Neuanmeldung LAV
       group/abo_magazin/autor:
         one: Autor*in
         description: Autor*in
