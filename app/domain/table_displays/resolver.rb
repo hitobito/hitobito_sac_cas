@@ -65,7 +65,7 @@ module TableDisplays
     end
 
     def exclude_by_group?
-      EXCLUSIONS_BY_GROUP[@attr]&.exclude?(@template.parent.class)
+      EXCLUSIONS_BY_GROUP[@attr]&.exclude?(@group.class)
     end
 
     def confirmed_at

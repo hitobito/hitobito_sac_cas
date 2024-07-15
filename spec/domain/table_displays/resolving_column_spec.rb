@@ -23,6 +23,12 @@ describe TableDisplays::ResolvingColumn, type: :helper do
 
     subject(:node) { Capybara::Node::Simple.new(table.to_html) }
 
+    before do
+      allow(controller).to receive(:current_user).at_most(:once).and_return(person)
+      allow(table).to receive(:template).at_least(:once).and_return(view)
+      allow(view).to receive(:parent).at_least(:once).and_return(parent)
+    end
+
     it "requires #{permission} as permission" do
       expect(display.required_permission(column)).to eq permission
     end

@@ -177,20 +177,23 @@ describe TableDisplays::Resolver, type: :helper do
     end
 
     it "excludes 'sac_remark_national_office' for specific role" do
-      current_user = Person.new
-      expect(controller).to receive(:current_user).and_return(current_user)
+      expect(controller).to receive(:current_user).and_return(person)
+      expect(view).to receive(:parent).and_return(nil)
       expect(described_class.new(view, person, :sac_remark_national_office).exclude_attr?).to be_truthy
-      current_user.roles.build(type: Group::Geschaeftsstelle::Admin.sti_name)
+      person.roles.build(type: Group::Geschaeftsstelle::Admin.sti_name)
+      expect(view).to receive(:parent).and_return(person.roles.last)
       expect(described_class.new(view, person, :sac_remark_national_office).exclude_attr?).to be_falsy
     end
 
     it "excludes 'sac_remark_section_1' for specific role" do
-      current_user = Person.new
-      expect(controller).to receive(:current_user).and_return(current_user)
+      expect(controller).to receive(:current_user).and_return(person)
+      expect(view).to receive(:parent).and_return(nil)
       expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_truthy
-      current_user.roles.build(type: Group::Geschaeftsstelle::Admin.sti_name)
+      person.roles.build(type: Group::Geschaeftsstelle::Admin.sti_name)
+      expect(view).to receive(:parent).and_return(person.roles.last)
       expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_truthy
-      current_user.roles.build(type: ::Group::SektionsFunktionaere::Praesidium.sti_name)
+      person.roles.build(type: ::Group::SektionsFunktionaere::Praesidium.sti_name)
+      expect(view).to receive(:parent).and_return(person.roles.last)
       expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_falsy
     end
   end
