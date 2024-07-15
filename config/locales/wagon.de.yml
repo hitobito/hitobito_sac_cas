@@ -86,7 +86,7 @@ de:
       models:
         household:
           attributes:
-            members: 
+            members:
               no_members: "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
@@ -230,7 +230,6 @@ de:
         start_point_of_times:
           day: Tag
           evening: Abend
-        states:
           created: Entwurf
           application_open: Publiziert
           application_paused: Anmeldung pausiert
@@ -291,6 +290,7 @@ de:
           m: Mann
           w: Frau
           _nil: Andere
+        additional_information: Bemerkungen (z.B. Beruf)
       group:
         group_id: Gruppen-ID
         navision_id: NAV Sektions-ID
@@ -1069,7 +1069,7 @@ de:
   memberships:
     join_zusatzsektions:
       create:
-        success: 
+        success:
           one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
           other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
     leave_zusatzsektions:

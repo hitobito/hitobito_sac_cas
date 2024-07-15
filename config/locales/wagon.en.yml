@@ -80,7 +80,7 @@ en:
       models:
         household:
           attributes:
-            members: 
+            members:
               no_members: ""
             base:
               at_least_one_adult: ""
@@ -276,6 +276,7 @@ en:
           m: ""
           w: ""
           _nil: ""
+        additional_information: Remarks (e.g. profession)
       group:
         group_id: ""
         navision_id: ""
@@ -1005,7 +1006,7 @@ en:
   memberships:
     join_zusatzsektions:
       create:
-        success: 
+        success:
           one: ""
           other: ""
     leave_zusatzsektions:
