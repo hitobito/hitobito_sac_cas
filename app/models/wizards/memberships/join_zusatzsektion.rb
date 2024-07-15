@@ -10,7 +10,7 @@ module Wizards::Memberships
     self.steps = [
       Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::ChooseMembership,
-      Wizards::Steps::ChooseSektion,
+      Wizards::Steps::ChooseSektionUnrestricted,
       Wizards::Steps::JoinZusatzsektion::Summary
     ]
 
@@ -83,7 +83,7 @@ module Wizards::Memberships
       if membership_role&.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif person.household.empty?
-        Wizards::Steps::ChooseSektion.step_name
+        Wizards::Steps::ChooseSektionUnrestricted.step_name
       else
         Wizards::Steps::ChooseMembership.step_name
       end
