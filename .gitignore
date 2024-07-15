@@ -28,6 +28,7 @@ config/abacus.yml
 config/settings.local.yml
 
 # reports
+/coverage
 spec/coverage
 spec/reports
 brakeman-output.tabs
