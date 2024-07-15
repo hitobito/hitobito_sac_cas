@@ -67,5 +67,18 @@ RSpec.describe PersonResource, type: :resource do
         end
       end
     end
+
+    context "sac_remark_national_office" do
+      it "is not included" do
+        render
+        expect(attributes.keys).not_to include :sac_remark_national_office
+      end
+
+      it "can be requested" do
+        params[:extra_fields] = {people: "sac_remark_national_office"}
+        render
+        expect(attributes.keys).to include :sac_remark_national_office
+      end
+    end
   end
 end

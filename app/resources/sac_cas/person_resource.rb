@@ -22,7 +22,7 @@ module SacCas::PersonResource
         @object.membership_number if @object.sac_membership_anytime?
       end
       extra_attribute :sac_remark_national_office, :string, readable: :can_read_national_office_remark?
-  
+
       (1..5).each do |num|
         extra_attribute :"sac_remark_section_#{num}", :string, readable: :can_read_section_remarks?
       end
@@ -31,7 +31,7 @@ module SacCas::PersonResource
     def can_read_national_office_remark?(person)
       can?(:manage_national_office_remark, person)
     end
-    
+
     def can_read_section_remarks?(person)
       can?(:manage_section_remarks, person)
     end
