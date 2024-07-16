@@ -11,11 +11,13 @@ class Group::SektionsFunktionaere < ::Group
   children Group::SektionsVorstand,
            Group::SektionsTourenUndKurse,
            Group::SektionsClubhuetten,
-           Group::Sektionshuetten
+           Group::Sektionshuetten,
+           Group::SektionsKommissionen
 
   self.default_children = [
     Group::SektionsVorstand,
-    Group::SektionsTourenUndKurse
+    Group::SektionsTourenUndKurse,
+    Group::SektionsKommissionen
   ]
 
   ### ROLES
