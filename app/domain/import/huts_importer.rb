@@ -19,6 +19,7 @@ module Import
     HEADERS = {
       contact_navision_id: "Kontaktnr.",
       contact_name: "Kontaktname",
+      hut_category: "Hüttenkategorie",
       verteilercode: "Verteilercode",
       related_navision_id: "Beziehung",
       related_last_name: "Name",
@@ -27,7 +28,7 @@ module Import
     }
 
     IMPORTERS = [
-      Import::Huts::HutComissionRow,
+      Import::Huts::HutsRow,
       Import::Huts::HutRow,
       Import::Huts::HutChiefRow,
       Import::Huts::HutWardenRow,

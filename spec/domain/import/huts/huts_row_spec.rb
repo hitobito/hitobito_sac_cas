@@ -7,13 +7,14 @@
 
 require "spec_helper"
 
-describe Import::Huts::HutComissionRow do
+describe Import::Huts::HutsRowSpec do
   let(:importer) { described_class.new(row) }
 
   let(:row) do
     Import::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
       contact_navision_id: "00003750",
       contact_name: "Bluemlisalphuette",
+      hut_category: "SAC Clubhütte",
       verteilercode: "3001",
       related_navision_id: "123456",
       related_last_name: "Max",
@@ -26,14 +27,14 @@ describe Import::Huts::HutComissionRow do
   let(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
 
   before do
-    Group::SektionsHuettenkommission.find_by(parent: funktionaere).really_destroy!
+    Group::SektionsClubhuetten.find_by(parent: funktionaere).really_destroy!
   end
 
   it "imports group" do
     expect { importer.import! }
-      .to change { Group.count }.by(1)
+      .to change { Group.count }.by(2) # Will create SektionsClubhuetten with 1 SektionsClubhuette inside
 
-    group = Group::SektionsHuettenkommission.find_by(parent: funktionaere)
+    group = Group::SektionsClubhuetten.find_by(parent: funktionaere)
 
     expect(group).to be_present
     expect(group.name).to eq(group.class.label)
@@ -41,9 +42,9 @@ describe Import::Huts::HutComissionRow do
 
   it "does not import twice" do
     expect { importer.import! }
-      .to change { Group.count }.by(1)
+      .to change { Group.count }.by(2) # Will create SektionsClubhuetten with 1 SektionsClubhuette inside
 
-    group = Group::SektionsHuettenkommission.find_by(parent: funktionaere)
+    group = Group::SektionsClubhuetten.find_by(parent: funktionaere)
 
     expect(group).to be_present
     expect(group.name).to eq(group.class.label)

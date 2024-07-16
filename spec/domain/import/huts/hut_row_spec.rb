@@ -14,6 +14,7 @@ describe Import::Huts::HutRow do
     Import::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
       contact_navision_id: "00003750",
       contact_name: "Bluemlisalphuette",
+      hut_category: "SAC Clubhütte",
       verteilercode: "3001",
       related_navision_id: "123456",
       related_last_name: "Max",
@@ -24,13 +25,16 @@ describe Import::Huts::HutRow do
 
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
   let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-  let!(:hut_comission) { Group::SektionsHuettenkommission.find_by(parent: funktionaere) }
+
+  before do
+    Group::SektionsClubhuette.find_by(parent: funktionaere).really_destroy!
+  end
 
   it "imports group" do
     expect { importer.import! }
       .to change { Group.count }.by(1)
 
-    group = Group::SektionsHuette.find_by(parent: hut_comission)
+    group = sektion.descendants.find_by(navision_id: 3750)
 
     expect(group).to be_present
     expect(group.name).to eq("Max")
@@ -40,7 +44,7 @@ describe Import::Huts::HutRow do
     expect { importer.import! }
       .to change { Group.count }.by(1)
 
-    group = Group::SektionsHuette.find_by(parent: hut_comission)
+    group = sektion.descendants.find_by(navision_id: 3750)
 
     expect(group).to be_present
     expect(group.name).to eq("Max")

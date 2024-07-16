@@ -10,7 +10,7 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 module Import::Huts
   class HutRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000.0"
+      row[:verteilercode].to_s == "4000V" && self.hut_type(row).present?
     end
 
     def initialize(row)
@@ -25,18 +25,36 @@ module Import::Huts
 
     private
 
+    def self.hut_type(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuette
+      when "SAC Clubhütte"
+        Group::SektionsClubhuette
+      end
+    end
+
+    def self.parent_group_type(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuetten
+      when "SAC Clubhütte"
+        Group::SektionsClubhuetten
+      end
+    end
+
     def group_for(row)
       Group.find_or_initialize_by(navision_id: navision_id(row))
     end
 
     def set_data(row, group)
-      group.type = Group::SektionsHuette.name
+      group.type = self.hut_type(row).name
       group.name = name(row)
       group.parent_id = parent_id(row)
     end
 
     def navision_id(row)
-      row[:related_navision_id].to_s.sub(/^[0]*/, "")
+      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
 
     def name(row)
@@ -46,14 +64,14 @@ module Import::Huts
     def parent_id(row)
       Group::Sektion.find_by(navision_id: owner_navision_id(row))
         .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .find { |child| child.type == self.parent_group_type(row).name }
         .id
     rescue
       raise "WARNING: No parent found for row #{row.inspect}"
     end
 
     def owner_navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
+      row[:related_navision_id].to_s.sub(/^[0]*/, "")
     end
   end
 end
