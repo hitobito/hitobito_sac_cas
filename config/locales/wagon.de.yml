@@ -555,6 +555,22 @@ de:
         one: Sektionshütte
         other: Sektionshütten
 
+      group/sektions_kommissionen:
+        one: Kommissionen
+        other: Kommissionen
+
+      group/sektions_kommission_huetten:
+        one: Kommission Hütten
+        other: Kommissionen Hütten
+
+      group/sektions_kommission_touren:
+        one: Kommission Touren
+        other: Kommissionen Touren
+
+      group/sektions_kommission_umwelt_und_kultur:
+        one: Kommission Umwelt und Kultur
+        other: Kommissionen Umwelt und Kultur
+
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
         one: Ehrenmitglied
@@ -773,6 +789,39 @@ de:
         one: Hüttenwart*in
         description: Hüttenwart*in
       group/sektionshuette/andere:
+        one: Andere
+        description: Andere
+      group/sektions_kommissionen/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_kommissionen/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_kommission_huetten/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_kommission_huetten/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_kommission_huetten/andere:
+        one: Andere
+        description: Andere
+      group/sektions_kommission_touren/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_kommission_touren/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_kommission_touren/andere:
+        one: Andere
+        description: Andere
+      group/sektions_kommission_umwelt_und_kultur/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_kommission_umwelt_und_kultur/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_kommission_umwelt_und_kultur/andere:
         one: Andere
         description: Andere
 
