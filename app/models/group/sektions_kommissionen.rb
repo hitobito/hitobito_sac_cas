@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsKommissionen < ::Group
-
   self.static_name = true
 
   ### ROLES
@@ -19,8 +18,8 @@ class Group::SektionsKommissionen < ::Group
   end
 
   children Group::SektionsKommissionHuetten,
-           Group::SektionsKommissionTouren,
-           Group::SektionsKommissionUmweltUndKultur
+    Group::SektionsKommissionTouren,
+    Group::SektionsKommissionUmweltUndKultur
 
   roles Leserecht, Schreibrecht
 end

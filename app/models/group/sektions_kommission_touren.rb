@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsKommissionTouren < ::Group
-
   ### ROLES
   class Mitglied < ::Role
     self.permissions = [:group_read]
