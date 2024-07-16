@@ -11,7 +11,8 @@ CustomContent.seed_once(:key,
   placeholders_optional: 'event-name, application-url, event-details' },
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
   { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
-  { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR }
+  { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR },
+  { key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  }
 )
 
 participation_rejected_id =
@@ -54,5 +55,12 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     label: 'Qualifikation: Erinnerungsmail in 2 Jahren',
     subject: 'Erinnerung TL-Anerkennung',
     body: 'Liebe(r) Tourenleiter(in), in 2 Jahren läuft deine TL-Anerkennung ab. ' \
-      'Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in).' }
+      'Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in).' } ,
+  { custom_content_id: CustomContent.get(Memberships::LeaveZusatzsektionMailer::CONFIRMATION).id,
+    locale: 'de',
+    label: 'Mitgliedschaften: Bestätigung Austritt Zusatzsektion',
+    subject: 'Bestätigung Austritt Zusatzsektion',
+    body: 'Hallo {person-name},<br/><br/>' \
+    'Der Austritt aus {sektion-name} wurde per {terminate-on} vorgenommen.'
+  }
 )
