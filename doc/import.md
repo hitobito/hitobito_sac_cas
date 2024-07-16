@@ -4,25 +4,27 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
-## 1. - People Import
+## 1. import:people
 
 Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigend werden können.
 
-Importiert alle Navision Kontakte und legt diese Unter 'Top-Layer > Navision Import' ab.
+Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Import` ab.
 
-`rails import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+`rake import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
 
-## 2. - Import sektionen
+## 2. import:sektionen
 
 Diesen Import laufen lassen damit alle Sektionen vorhanden sind.
 
-`rails import:sektionen`
+`rake import:sektionen`
 
 file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
 
-## 3. Import huts
+- Importiert Sektionen/Ortsgruppen und erstellt deren Unterordnerstruktur
 
-`rails import:huts`
+## 3. import:huts
+
+`rake import:huts`
 
 file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
