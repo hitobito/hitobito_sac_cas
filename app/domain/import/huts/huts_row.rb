@@ -8,9 +8,9 @@
 require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module Import::Huts
-  class HutComissionRow
+  class HutsRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000.0"
+      row[:verteilercode].to_s == "4000V" && self.group_type(row).present?
     end
 
     def initialize(row)
@@ -23,12 +23,23 @@ module Import::Huts
       group.save!
     end
 
+    private
+
+    def self.group_type(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuetten
+      when "SAC Clubhütte"
+        Group::SektionsClubhuetten
+      end
+    end
+
     def group_for(row)
-      Group::SektionsHuettenkommission.find_or_initialize_by(parent_id: parent_id(row))
+      Group.find_or_initialize_by(parent_id: parent_id(row))
     end
 
     def set_data(row, group)
-      group.type = Group::SektionsHuettenkommission.name
+      group.type = self.group_type(row).name
       group.name = group.class.label
       group.parent_id = parent_id(row)
     end
@@ -43,7 +54,7 @@ module Import::Huts
     end
 
     def owner_navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
+      row[:related_navision_id].to_s.sub(/^[0]*/, "")
     end
   end
 end

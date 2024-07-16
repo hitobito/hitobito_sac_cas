@@ -49,7 +49,10 @@ module Invoices
       def huts?
         return @huts if defined?(@huts)
 
-        @huts = group.descendants.without_deleted.exists?(type: Group::SektionsHuette.sti_name)
+        @huts = group.descendants.without_deleted.exists?(type: [
+          Group::SektionsClubhuette.sti_name,
+          Group::Sektionshuette.sti_name
+        ])
       end
 
       def config

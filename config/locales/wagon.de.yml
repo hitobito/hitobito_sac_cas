@@ -539,6 +539,22 @@ de:
         one: Touren und Kurse Winter
         other: Touren und Kurse Winter
 
+      group/sektions_clubhuetten:
+        one: Clubhütten
+        other: Clubhütten
+
+      group/sektions_clubhuette:
+        one: Clubhuette
+        other: Clubhuetten
+
+      group/sektionshuetten:
+        one: Sektionshütten
+        other: Sektionshütten
+
+      group/sektionshuette:
+        one: Sektionshütte
+        other: Sektionshütten
+
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
         one: Ehrenmitglied
@@ -729,6 +745,37 @@ de:
       group/sektions_touren_und_kurse_winter/tourenchef:
         one: Tourenchef*in
         description: Tourenchef*in
+      group/sektions_clubhuetten/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_clubhuetten/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_clubhuette/huettenchef:
+        one: Hüttenchef*in
+        description: Hüttenchef*in
+      group/sektions_clubhuette/huettenwart:
+        one: Hüttenwart*in
+        description: Hüttenwart*in
+      group/sektions_clubhuette/andere:
+        one: Andere
+        description: Andere
+      group/sektionshuetten/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektionshuetten/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektionshuette/huettenchef:
+        one: Hüttenchef*in
+        description: Hüttenchef*in
+      group/sektionshuette/huettenwart:
+        one: Hüttenwart*in
+        description: Hüttenwart*in
+      group/sektionshuette/andere:
+        one: Andere
+        description: Andere
+
 
   devise:
     sessions:
