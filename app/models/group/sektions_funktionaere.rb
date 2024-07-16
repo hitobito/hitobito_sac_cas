@@ -22,12 +22,13 @@ class Group::SektionsFunktionaere < ::Group
 
   ### ROLES
   class Praesidium < ::Role
-    self.permissions = [:layer_and_below_read]
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Mitgliederverwaltung < ::Role
-    self.permissions = [:layer_and_below_full]
-    self.two_factor_authentication_enforced = true
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Administration < ::Role
@@ -51,8 +52,8 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   class Huettenobmann < ::Role
-    self.permissions = [:group_and_below_read]
-    self.two_factor_authentication_enforced = true
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Leserecht < ::Role
