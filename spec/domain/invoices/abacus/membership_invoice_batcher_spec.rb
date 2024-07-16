@@ -16,13 +16,10 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
   let(:mandant) { 1234 }
   let(:today) { Time.zone.today.strftime("%Y-%m-%d") }
   let(:dummy_invoice) do
-    Invoice.create!(
-      recipient: people.first,
+    ExternalInvoice::SacMembership.create!(
+      person: people.first,
       issued_at: today,
-      sent_at: today,
-      title: "MV Rechnung",
-      group: sac,
-      invoice_kind: :membership
+      sent_at: today
     )
   end
   let(:next_invoice_id) { dummy_invoice.id + 1 }
@@ -106,18 +103,17 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
 
     expect do
       subject.create_invoices(people)
-    end.to change { Invoice.count }.by(people.size)
+    end.to change { ExternalInvoice.count }.by(people.size)
 
-    invoice = Invoice.last
+    invoice = ExternalInvoice.last
     expect(invoice.abacus_sales_order_key).to eq(45)
-    expect(invoice.group).to eq(sac)
     expect(invoice.issued_at).to eq(date)
     expect(invoice.sent_at).to eq(date)
-    expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
+    expect(invoice.to_s).to eq("Mitgliedschaftsrechnung 2023")
     expect(invoice.total).to eq(267.0)
-    expect(invoice.invoice_kind).to eq("membership")
-    expect(invoice.sac_membership_year).to eq(2023)
-    expect(invoice.recipient).to eq(people.last)
+    expect(invoice.class).to eq(ExternalInvoice::SacMembership)
+    expect(invoice.year).to eq(2023)
+    expect(invoice.person).to eq(people.last)
   end
 
   def batch_body_people

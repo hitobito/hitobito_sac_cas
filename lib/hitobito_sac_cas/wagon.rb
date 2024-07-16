@@ -31,7 +31,7 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Roles::TerminateTourenleiterJob
       ]
-      HitobitoLogEntry.categories += %w[neuanmeldungen]
+      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen]
 
       # extend application classes here
       Event.prepend SacCas::Event
@@ -48,7 +48,6 @@ module HitobitoSacCas
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
-      Invoice.prepend SacCas::Invoice
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
@@ -76,6 +75,7 @@ module HitobitoSacCas
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
+      Ability.store.register ExternalInvoiceAbility
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility

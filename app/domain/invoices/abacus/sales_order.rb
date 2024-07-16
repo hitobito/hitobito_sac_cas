@@ -12,13 +12,13 @@ module Invoices
       BACKLOG_ID = 0
       TYPE = "Product"
       INVOICE_KINDS = {
-        membership: "R",
+        sac_membership: "R",
         course: "C"
       }.with_indifferent_access.freeze
 
       attr_reader :positions, :additional_user_fields
 
-      def initialize(invoice, positions, additional_user_fields = {})
+      def initialize(invoice, positions = [], additional_user_fields = {})
         super(invoice)
         @positions = positions
         @additional_user_fields = additional_user_fields
@@ -35,7 +35,11 @@ module Invoices
       end
 
       def assign_abacus_key(data)
-        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
+        entity.update!(abacus_sales_order_key: data.fetch(:sales_order_id), state: :open)
+      end
+
+      def set_cancelled
+        entity.update!(state: :cancelled)
       end
 
       def full_attrs
@@ -49,12 +53,12 @@ module Invoices
       def sales_order_attrs
         {
           # customer id is defined to be the same as subject id
-          customer_id: entity.recipient.abacus_subject_key,
+          customer_id: entity.person.abacus_subject_key,
           order_date: entity.issued_at,
           delivery_date: entity.sent_at,
           total_amount: entity.total.to_f,
-          document_code_invoice: INVOICE_KINDS[entity.invoice_kind],
-          language: entity.recipient.language,
+          document_code_invoice: INVOICE_KINDS.fetch(entity.type_key),
+          language: entity.person.language,
           user_fields: order_user_fields
         }
       end
@@ -63,7 +67,7 @@ module Invoices
         {
           user_field1: entity.id.to_s,
           user_field2: SOURCE_SYSTEM,
-          user_field3: entity.recipient.correspondence == "digital"
+          user_field3: entity.person.correspondence == "digital"
         }.merge(additional_user_fields)
       end
 

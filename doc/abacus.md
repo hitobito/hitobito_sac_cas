@@ -18,7 +18,7 @@ Persönliche Zugänge werden vom SAC erstellt. Für die 2FA wird zum Login die [
 
 Die Dokumentation findet sich auf dem [Abacus API Hub](https://apihub.abacus.ch/endpoints/2024).
 
-Unter `app/domain/invoices/abacus/client.rb` befindet sich der Client, welcher mit Abacus kommuniziert. Die konkreten Endpoints werden über die Klassen `SubjectInterface` und `SalesOrderInterface` implementiert.
+Unter `Invoices::Abacus::Client` befindet sich der Client, welcher mit Abacus kommuniziert. Die konkreten Endpoints werden über die Klassen `SubjectInterface` und `SalesOrderInterface` implementiert.
 
 Via `config/abacus.yml` werden die Zugangsdaten zur Konfiguration der Verbindung eingelesen. Siehe `config/abacus.example.yml` für die Struktur.
 Diese Datei wird beim Deployment über ein Secret angelegt. Zur Entwicklung kann die Datei lokal (im SAC Wagon) angelegt werden.
@@ -26,6 +26,32 @@ Diese Datei wird beim Deployment über ein Secret angelegt. Zur Entwicklung kann
 hitobito legt für jede Person, für welche eine Rechnung erstellt werden soll, ein entsprechendes `Subject` inklusive `Address`, `Communication` und `Customer` an.
 Die zugehörige ID wird in hitobito im Attribut `abacus_subject_key` gespeichert.
 
-Um eine Rechnung zu generieren, werden im Abacus entsprechende `SalesOrder` und zugehörige `SalesOrderPositions` angelegt. In hitobito wird dafür eine `Invoice` erstellt, allerdings ohne `InvoiceItems`, da die Datenstruktur zu fest abweicht und in hitobito nicht benötigt wird. Zum Abbilden von Positionen für Abacus Rechnungen existiert die Klasse `InvoicePosition`.
+Um eine Rechnung zu generieren, werden im Abacus entsprechende `SalesOrder` und zugehörige `SalesOrderPositions` angelegt. In hitobito wird dafür eine `ExternalInvoice` erstellt. Zum Abbilden von Positionen für Abacus Rechnungen existiert die Klasse `InvoicePosition`.
 
-Requests können entweder einzeln oder über einen [Batch Request](https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#_Toc31359017) abgesetzt werden. Batch Requests werden über `client.batch` initiiert, worauf die einzelnen Teilrequests in einem Block aufgezeichnet werden. Am Ende werden alle Teile in ein HTTP Multipart Body eingefügt und dieses an den Batch Endpoint geschicht. Die Antwort ist wiederum ein Multipart Body, dessen Teile der Reihenfolge des Requests entsprechen.
+Requests können entweder einzeln oder über einen [Batch Request](https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#_Toc31359017) abgesetzt werden. Batch Requests werden über `Invoices::Abacus::Client#batch` initiiert, worauf die einzelnen Teilrequests in einem Block aufgezeichnet werden. Am Ende werden alle Teile in ein HTTP Multipart Body eingefügt und dieses an den Batch Endpoint geschicht. Die Antwort ist wiederum ein Multipart Body, dessen Teile der Reihenfolge des Requests entsprechen.
+
+## Mitgliedschaftsrechnungen
+
+Mitgliedschaftsrechnungen werden vom SAC Wagon automatisch zusammengestellt.
+Diese werden entweder einzeln für ein Mitglied oder über das Jahresinkasso für alle Mitglieder erzeugt und an Abacus übermittelt.
+
+Die Konfiguration erfolgt primär über die beiden Models
+`SacMembershipConfig` für übergreifende Gebühren und Einstellungen sowie
+`SacSectionMembershipConfig` für Sektionsspezifische Gebühren und Parameter.
+
+Um die für die Verrechnung notwendigen Daten einer Person zusammen zu stellen,
+dient die Klasse `Invoices::SacMembership::Member`.
+Analog besteht für die SAC Sektionsdaten die Klass `Invoices::SacMembership::Section`.
+
+Die verschiedenen Positionen, welche auf einer Mitgliedsschaftrechnung erscheinen,
+sind in `Invoices::SacMembership::Positions` definiert.
+Über den `Invoices::SacMembership::PositionGenerator` werden je nach Rolle
+(Mitglied Stammsektion, Mitglied Zusatzsektion oder Neuanmeldung) die entsprechenden Positionen zusammengestellt.
+
+Das Erzeugen der Rechnung erfolgt über `Invoices::Abacus::MembershipInvoice`,
+welche eine `ExternalInvoice::SacMembership` erstellt und die für die Abacus-Schnittstelle notwendigen Daten
+in einem `Invoices::Abacus::SalesOrder` generiert.
+
+Die Orchestrierung der Rechnungserzeugung erfolgt für Einzelrechnungen über `Invoices::Abacus::MembershipInvoiceGenerator` bzw.
+für mehrere Rechnungen aufs Mal (Jahresinkasso) über `Invoices::Abacus::MembershipInvoiceBatcher`. Diese beiden Klassen
+senden die Daten via `Invoice::Abacus::SalesOrderInterface` an das Abacus API.

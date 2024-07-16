@@ -7,12 +7,15 @@
 
 module Invoices
   module Abacus
+    # This class is currently used for POC purposes.
+    # Parts may be re-used in production but the final process may be different.
     class MembershipInvoiceGenerator
-      attr_reader :person, :role, :date
+      attr_reader :person, :role, :date, :send_on
 
-      def initialize(person, date: nil, role: nil, client: nil)
+      def initialize(person, date: nil, role: nil, client: nil, send_on: nil)
         @person = person
         @date = date || Time.zone.today
+        @send_on = send_on || @date
         @role = role || current_role
         @client = client
       end
@@ -46,7 +49,7 @@ module Invoices
       end
 
       def membership_invoice
-        @membership_invoice ||= MembershipInvoice.new(member, role)
+        @membership_invoice ||= MembershipInvoice.new(member, role, send_on: send_on)
       end
 
       def subject

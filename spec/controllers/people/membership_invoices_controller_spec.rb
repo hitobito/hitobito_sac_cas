@@ -33,7 +33,7 @@ describe People::MembershipInvoicesController, type: :controller do
 
       expect do
         post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, date: "2015-03-01"}
-      end.to change { Invoice.count }.by(1)
+      end.to change { ExternalInvoice.count }.by(1)
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
       expect(flash[:alert]).to be_nil
@@ -51,7 +51,7 @@ describe People::MembershipInvoicesController, type: :controller do
 
       expect do
         post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, date: "2015-03-01"}
-      end.to change { Invoice.count }.by(1)
+      end.to change { ExternalInvoice.count }.by(1)
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
       expect(flash[:alert]).to eq("Die Rechnung konnte nicht an Abacus übermittelt werden. Fehlermeldung: Something went wrong")

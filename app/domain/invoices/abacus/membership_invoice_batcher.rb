@@ -7,6 +7,8 @@
 
 module Invoices
   module Abacus
+    # This class is currently used for POC purposes.
+    # Parts may be re-used in production but the final process may be different.
     # TODO: implement transmit people to handle updates
     # TODO: handle errors in parts. Map request parts to response parts (for subject assocs)?
     class MembershipInvoiceBatcher

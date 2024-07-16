@@ -11,13 +11,10 @@ describe Invoices::Abacus::SalesOrderInterface do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:root) }
   let(:invoice) do
-    Invoice.create!(
-      recipient: person,
+    ExternalInvoice::SacMembership.create!(
+      person: person,
       issued_at: today,
-      sent_at: today,
-      title: "MV Rechnung",
-      group: group,
-      invoice_kind: :membership
+      sent_at: today
     )
   end
   let(:host) { "https://abacus.example.com" }
@@ -70,6 +67,17 @@ describe Invoices::Abacus::SalesOrderInterface do
     expect(invoice.abacus_sales_order_key).to eq(19)
   end
 
+  it "cancel sales order in abacus" do
+    invoice.update!(abacus_sales_order_key: 19)
+    sales_order = Invoices::Abacus::SalesOrder.new(invoice)
+
+    stub_update_sales_order_request
+
+    interface.cancel(sales_order)
+
+    expect(invoice.state).to eq("cancelled")
+  end
+
   def stub_login_requests
     stub_request(:get, "#{host}/.well-known/openid-configuration")
       .to_return(status: 200, body: {token_endpoint: "#{host}/oauth/oauth2/v1/token"}.to_json)
@@ -114,6 +122,15 @@ describe Invoices::Abacus::SalesOrderInterface do
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
       .with(
         body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
+        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
+      )
+      .to_return(status: 200, body: "{}")
+  end
+
+  def stub_update_sales_order_request
+    stub_request(:patch, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)")
+      .with(
+        body: "{\"UserFields\":{\"UserField21\":true}}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(status: 200, body: "{}")

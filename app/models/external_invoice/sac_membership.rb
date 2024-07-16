@@ -5,8 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-InvoiceConfig.seed_once(
-  :group_id,
-  group_id: Group.root.id,
-  payment_slip: 'no_ps'
-)
+class ExternalInvoice::SacMembership < ExternalInvoice
+  # link is a Role object for an existing or new membership
+
+  def to_s
+    I18n.t("invoices.sac_memberships.title", year: year)
+  end
+end

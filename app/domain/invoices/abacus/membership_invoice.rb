@@ -9,39 +9,40 @@ module Invoices
   module Abacus
     class MembershipInvoice
       MEMBERSHIP_CARD_FIELD_INDEX = 11
-      INVOICE_KIND = :membership
 
       # member is an Invoices::SacMembership::Member object
       # role is a membership or new membership Role
-      attr_reader :member, :role
+      attr_reader :member, :role, :send_on
 
       delegate :context, to: :member
       delegate :date, :sac, :config, to: :context
 
-      def initialize(member, role)
+      def initialize(member, role, send_on: nil)
         @member = member
         @role = role
+        @send_on = send_on
       end
 
       def invoice # rubocop:disable Metrics/MethodLength
         @invoice ||=
           I18n.with_locale(member.language) do
-            Invoice.create!(
-              recipient: member.person,
-              group: sac,
-              title: I18n.t("invoices.sac_memberships.title", year: date.year),
+            ExternalInvoice::SacMembership.create!(
+              person: member.person,
+              year: date.year,
+              state: :draft,
               total: positions.sum(&:amount),
               issued_at: date,
-              sent_at: date,
-              invoice_kind: INVOICE_KIND,
-              sac_membership_year: date.year
+              sent_at: send_on || date,
+              link: role
             )
           end
       end
 
       def handle_abacus_exception(e)
-        # TODO: set invoice state to error
-        # @invoice&.update!(state: :error)
+        return unless @invoice
+
+        @invoice.update!(state: :error)
+        @invoice.hitobito_log_entries.create!(message: e.message, level: :error, category: "rechnungen")
       end
 
       def sales_order

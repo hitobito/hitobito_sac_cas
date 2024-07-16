@@ -35,6 +35,11 @@ module Invoices
         client.get(:sales_order, abacus_key, "$expand" => "Positions")
       end
 
+      def cancel(sales_order)
+        client.update(:sales_order, sales_order.abacus_key, {user_fields: {user_field21: true}})
+        sales_order.set_cancelled
+      end
+
       private
 
       def create_batch_request(sales_orders)

@@ -11,6 +11,7 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
   let(:sac) { Group.root }
   let(:date) { Date.new(2023, 1, 1) }
   let(:person_id) { people(:mitglied).id }
+  let(:role) { roles(:mitglied) }
   let(:person) { Person.with_membership_years("people.*", date).find_by(id: person_id) }
   let(:abacus_client) { instance_double(Invoices::Abacus::Client) }
 
@@ -98,24 +99,26 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
     expect do
       subject.generate
       expect(subject.errors).to eq({})
-    end.to change { Invoice.count }.by(1)
+    end.to change { ExternalInvoice.count }.by(1)
 
     expect(person.reload.abacus_subject_key).to eq(7)
 
-    invoice = Invoice.last
+    invoice = ExternalInvoice.last
     expect(invoice.abacus_sales_order_key).to eq(19)
-    expect(invoice.group).to eq(sac)
     expect(invoice.issued_at).to eq(date)
     expect(invoice.sent_at).to eq(date)
-    expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
+    expect(invoice.state).to eq("open")
+    expect(invoice.to_s).to eq("Mitgliedschaftsrechnung 2023")
     expect(invoice.total).to eq(183.0)
-    expect(invoice.invoice_kind).to eq("membership")
-    expect(invoice.sac_membership_year).to eq(2023)
-    expect(invoice.recipient).to eq(person)
+    expect(invoice.class).to eq(ExternalInvoice::SacMembership)
+    expect(invoice.year).to eq(2023)
+    expect(invoice.link).to eq(role)
+    expect(invoice.person).to eq(person)
   end
 
   context "for main family person" do
     let(:person_id) { people(:familienmitglied).id }
+    let(:role) { roles(:familienmitglied) }
 
     it "creates an invoice for family membership" do
       expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
@@ -190,25 +193,27 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect do
         subject.generate
         expect(subject.errors).to eq({})
-      end.to change { Invoice.count }.by(1)
+      end.to change { ExternalInvoice.count }.by(1)
 
       expect(person.reload.abacus_subject_key).to eq(7)
 
-      invoice = Invoice.last
+      invoice = ExternalInvoice.last
       expect(invoice.abacus_sales_order_key).to eq(19)
-      expect(invoice.group).to eq(sac)
       expect(invoice.issued_at).to eq(date)
       expect(invoice.sent_at).to eq(date)
-      expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
+      expect(invoice.state).to eq("open")
+      expect(invoice.to_s).to eq("Mitgliedschaftsrechnung 2023")
       expect(invoice.total).to eq(267.0)
-      expect(invoice.invoice_kind).to eq("membership")
-      expect(invoice.sac_membership_year).to eq(2023)
-      expect(invoice.recipient).to eq(person)
+      expect(invoice.class).to eq(ExternalInvoice::SacMembership)
+      expect(invoice.year).to eq(2023)
+      expect(invoice.link).to eq(role)
+      expect(invoice.person).to eq(person)
     end
   end
 
   context "for secondary family person" do
     let(:person_id) { people(:familienmitglied_kind).id }
+    let(:role) { roles(:familienmitglied_kind) }
 
     it "creates an invoice for family membership" do
       expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
@@ -278,34 +283,43 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect do
         subject.generate
         expect(subject.errors).to eq({})
-      end.to change { Invoice.count }.by(1)
+      end.to change { ExternalInvoice.count }.by(1)
 
       expect(person.reload.abacus_subject_key).to eq(7)
 
-      invoice = Invoice.last
+      invoice = ExternalInvoice.last
       expect(invoice.abacus_sales_order_key).to eq(19)
-      expect(invoice.group).to eq(sac)
       expect(invoice.issued_at).to eq(date)
       expect(invoice.sent_at).to eq(date)
-      expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
+      expect(invoice.state).to eq("open")
+      expect(invoice.to_s).to eq("Mitgliedschaftsrechnung 2023")
       expect(invoice.total).to eq(0.0)
-      expect(invoice.invoice_kind).to eq("membership")
-      expect(invoice.sac_membership_year).to eq(2023)
-      expect(invoice.recipient).to eq(person)
+      expect(invoice.class).to eq(ExternalInvoice::SacMembership)
+      expect(invoice.link).to eq(role)
+      expect(invoice.year).to eq(2023)
+      expect(invoice.person).to eq(person)
     end
   end
 
   it "handles failure in abacus request" do
+    ex = RestClient::Exception.new
+    expect(ex).to receive(:message).and_return("Something wrong")
     expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
     expect(abacus_client).to receive(:create).with(:address, Hash)
     expect(abacus_client).to receive(:create).with(:communication, Hash)
     expect(abacus_client).to receive(:create).with(:customer, Hash)
-    expect(abacus_client).to receive(:create).with(:sales_order, Hash).and_raise("Something wrong")
+    expect(abacus_client).to receive(:create).with(:sales_order, Hash).and_raise(ex)
 
     expect do
-      expect { subject.generate }.to raise_error("Something wrong")
-    end.to change { Invoice.count }.by(1)
+      expect { subject.generate }.to raise_error(RestClient::Exception)
+    end.to change { ExternalInvoice.count }.by(1)
 
     expect(person.reload.abacus_subject_key).to eq(7)
+
+    invoice = ExternalInvoice.last
+    expect(invoice.abacus_sales_order_key).to eq(nil)
+    expect(invoice.state).to eq("error")
+    expect(invoice.hitobito_log_entries.count).to eq(1)
+    expect(invoice.hitobito_log_entries.first.message).to eq("Something wrong")
   end
 end
