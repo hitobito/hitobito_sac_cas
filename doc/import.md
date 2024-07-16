@@ -6,7 +6,7 @@ oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 
 ## 1. import:people
 
-Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigend werden können.
+Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigned werden können.
 
 Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Import` ab.
 
@@ -14,7 +14,8 @@ Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Imp
 
 ## 2. import:sektionen
 
-Diesen Import laufen lassen damit alle Sektionen vorhanden sind.
+Mit diesem Import werden alle Sektionen und Ortsgruppen importiert. 
+Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
 
 `rake import:sektionen`
 
