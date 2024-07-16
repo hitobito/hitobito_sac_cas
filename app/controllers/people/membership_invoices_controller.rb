@@ -42,18 +42,7 @@ class People::MembershipInvoicesController < ApplicationController
   end
 
   def invoicer
-    @invoicer ||= begin
-      current_role = Invoices::Abacus::MembershipInvoice.current_role(member)
-      Invoices::Abacus::MembershipInvoice.new(member, current_role)
-    end
-  end
-
-  def member
-    @member ||= Invoices::SacMemberships::Member.new(person, context)
-  end
-
-  def context
-    @context ||= Invoices::SacMemberships::Context.new(date)
+    @invoicer ||= Invoices::Abacus::MembershipInvoiceGenerator.new(person, date: date)
   end
 
   def person

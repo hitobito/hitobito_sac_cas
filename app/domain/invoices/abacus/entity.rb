@@ -8,13 +8,18 @@
 module Invoices
   module Abacus
     class Entity
-      attr_writer :client
-
       attr_reader :entity, :errors
 
-      def initialize(entity, client: nil)
+      class << self
+        def wrap(entity)
+          return entity if entity.is_a?(self)
+
+          new(entity)
+        end
+      end
+
+      def initialize(entity)
         @entity = entity
-        @client = client
         @errors = {}
       end
 
@@ -29,8 +34,10 @@ module Invoices
         # implement in subclass
       end
 
-      def client
-        @client ||= ::Invoices::Abacus::Client.new
+      def error_messages
+        errors.map do |attr, key|
+          ActiveModel::Error.new(entity, attr, key).full_message
+        end
       end
     end
   end

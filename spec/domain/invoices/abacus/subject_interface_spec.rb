@@ -7,13 +7,13 @@
 
 require "spec_helper"
 
-describe Invoices::Abacus::Person do
+describe Invoices::Abacus::SubjectInterface do
   let(:person) { people(:mitglied) }
+  let(:subject) { Invoices::Abacus::Subject.new(person) }
   let(:host) { "https://abacus.example.com" }
   let(:mandant) { 1234 }
   let(:today) { Time.zone.today }
-
-  subject { described_class.new(person) }
+  let(:interface) { described_class.new }
 
   before do
     person.update!(
@@ -34,7 +34,7 @@ describe Invoices::Abacus::Person do
     stub_create_communication_request
     stub_create_customer_request
 
-    subject.transmit
+    interface.transmit(subject)
     expect(person.abacus_subject_key).to eq(person.id)
   end
 
@@ -42,7 +42,7 @@ describe Invoices::Abacus::Person do
     person.abacus_subject_key = person.id
     stub_get_subject_request
 
-    subject.transmit
+    interface.transmit(subject)
   end
 
   it "creates address and customer if missing in abacus" do
@@ -74,7 +74,7 @@ describe Invoices::Abacus::Person do
     stub_update_communication_request("ef83129d-470d-ef01-1ff3-001dd8b72ba4")
     stub_create_customer_request
 
-    subject.transmit
+    interface.transmit(subject)
   end
 
   def stub_login_requests

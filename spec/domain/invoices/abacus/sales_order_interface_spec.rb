@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Invoices::Abacus::SalesOrder do
+describe Invoices::Abacus::SalesOrderInterface do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:root) }
   let(:invoice) do
@@ -24,8 +24,8 @@ describe Invoices::Abacus::SalesOrder do
   let(:mandant) { 1234 }
   let(:today) { Time.zone.today }
   let(:today_string) { today.strftime("%Y-%m-%d") }
-
-  subject { described_class.new(invoice) }
+  let(:sales_order) { Invoices::Abacus::SalesOrder.new(invoice, positions, additional_user_fields) }
+  let(:interface) { described_class.new }
 
   before do
     person.abacus_subject_key = 7
@@ -60,17 +60,12 @@ describe Invoices::Abacus::SalesOrder do
         grouping: "Beitrag Zentralverband"
       )
     ]
+    sales_order = Invoices::Abacus::SalesOrder.new(invoice, positions)
 
     stub_create_sales_order_request
-    stub_create_position_request(positions.first, 1,
-      {UserField1: "Beitrag Zentralverband"})
-    stub_create_position_request(positions.second, 2,
-      {UserField1: "Sektionsbeitrag SAC Bluemlisalp", UserField2: groups(:bluemlisalp).id})
-    stub_create_position_request(positions.third, 3,
-      {UserField1: "Beitrag Zentralverband", UserField2: groups(:bluemlisalp).id, UserField3: 20.0})
     stub_trigger_sales_order_request
 
-    subject.create(positions)
+    interface.create(sales_order)
 
     expect(invoice.abacus_sales_order_key).to eq(19)
   end
@@ -95,7 +90,16 @@ describe Invoices::Abacus::SalesOrder do
       .with(
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"#{today_string}\"," \
               "\"TotalAmount\":0.0,\"DocumentCodeInvoice\":\"R\",\"Language\":\"de\",\"UserFields\":" \
-              "{\"UserField1\":\"#{invoice.id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}}",
+              "{\"UserField1\":\"#{invoice.id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
+              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":40.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"Product\":{\"Description\":\"Abo Die Alpen\",\"ProductNumber\":\"234\"},\"Accounts\":{}," \
+              "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\"}}," \
+              "{\"PositionNumber\":2,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":79.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"Product\":{\"Description\":\"Sektionsbeitrag\",\"ProductNumber\":\"236\"},\"Accounts\":{}," \
+              "\"UserFields\":{\"UserField1\":\"Sektionsbeitrag SAC Bluemlisalp\",\"UserField2\":#{groups(:bluemlisalp).id}}}," \
+              "{\"PositionNumber\":3,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":0.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"Product\":{\"Description\":\"Beitrag Zentralverband\",\"ProductNumber\":\"237\"},\"Accounts\":{}," \
+              "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\",\"UserField2\":#{groups(:bluemlisalp).id},\"UserField3\":20.0}}]}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(
@@ -110,25 +114,6 @@ describe Invoices::Abacus::SalesOrder do
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
       .with(
         body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{}")
-  end
-
-  def stub_create_position_request(item, index, userfields)
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrderPositions")
-      .with(
-        body: {
-          SalesOrderId: 19,
-          SalesOrderBacklogId: 0,
-          PositionNumber: index,
-          Type: "Product",
-          Pricing: {PriceAfterFinding: item.amount.to_f},
-          Quantity: {Ordered: 1, Charged: 1, Delivered: 1},
-          Product: {Description: item.name, ProductNumber: item.article_number.to_s},
-          Accounts: {},
-          UserFields: userfields
-        }.to_json,
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(status: 200, body: "{}")

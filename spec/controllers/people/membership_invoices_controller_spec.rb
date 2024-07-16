@@ -28,11 +28,6 @@ describe People::MembershipInvoicesController, type: :controller do
       expect(client).to receive(:create).with(:communication, Hash)
       expect(client).to receive(:create).with(:customer, Hash)
       expect(client).to receive(:create).with(:sales_order, Hash).and_return({sales_order_id: 19})
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
       expect(client).to receive(:endpoint).with(:sales_order, Hash)
       expect(client).to receive(:request).with(:post, String, Hash)
 
@@ -41,6 +36,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { Invoice.count }.by(1)
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
+      expect(flash[:alert]).to be_nil
       expect(flash[:notice]).to eq("Die Rechnung wurde erfolgreich an Abacus übermittelt. Auftrag-Nr. 19")
     end
 
@@ -51,14 +47,11 @@ describe People::MembershipInvoicesController, type: :controller do
       expect(client).to receive(:create).with(:address, Hash)
       expect(client).to receive(:create).with(:communication, Hash)
       expect(client).to receive(:create).with(:customer, Hash)
-      expect(client).to receive(:create).with(:sales_order, Hash).and_return({sales_order_id: 19})
-      expect(client).to receive(:create).with(:sales_order_position, Hash)
-      expect(client).to receive(:create).with(:sales_order_position, Hash).and_raise("Something went wrong")
-      expect(client).to receive(:delete).with(:sales_order, Hash)
+      expect(client).to receive(:create).with(:sales_order, Hash).and_raise("Something went wrong")
 
       expect do
         post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, date: "2015-03-01"}
-      end.not_to change { Invoice.count }
+      end.to change { Invoice.count }.by(1)
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
       expect(flash[:alert]).to eq("Die Rechnung konnte nicht an Abacus übermittelt werden. Fehlermeldung: Something went wrong")

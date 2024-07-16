@@ -12,7 +12,12 @@ module Invoices
     class Client
       OPENID_CONFIG_PATH = "/.well-known/openid-configuration"
       API_PATH = "/api/entity/v1/mandants/"
+      BATCH_PATH = "$batch"
       RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS = 30
+      BATCH_BOUNDARY = "batch-boundary"
+      BATCH_TIMEOUT = 300 # 5 minutes
+
+      include JsonCoder
 
       def initialize
         raise "#{Config::FILE_PATH} not found" unless config.exist?
@@ -38,13 +43,28 @@ module Invoices
         request(:delete, endpoint(type, id))
       end
 
+      def batch(&) # rubocop:disable Metrics/MethodLength
+        @batch_boundary = generate_batch_boundary
+        body = build_batch_body(&)
+        handle_bad_request do
+          response = RestClient::Request.execute(
+            method: :post,
+            url: url(BATCH_PATH),
+            payload: body,
+            headers: batch_headers,
+            read_timeout: BATCH_TIMEOUT
+          )
+          BatchResponse.new(response)
+        end
+      end
+
       def request(method, path, params = nil)
-        response = RestClient.send(method, *request_args(method, path, params))
-        decode_json(response.body)
-      rescue RestClient::BadRequest => e
-        msg = response_error_message(e)
-        e.message = msg if msg.present?
-        raise e
+        if in_batch?
+          @batch_body << batch_request(method, path, params)
+          nil
+        else
+          json_request(method, path, params)
+        end
       end
 
       def endpoint(type, id = nil)
@@ -53,13 +73,37 @@ module Invoices
         path
       end
 
+      def in_batch?
+        !@batch_body.nil?
+      end
+
       private
 
+      def json_request(method, path, params = nil)
+        handle_bad_request do
+          response = RestClient.send(method, *request_args(method, path, params))
+          decode_json(response.body)
+        end
+      end
+
       def request_args(method, path, params = nil)
-        args = [url(path)]
-        args << encode_json(params) if params && method != :get
-        args << ((params && method == :get) ? headers.merge(params: params) : headers)
-        args
+        [
+          url(request_path(method, path, params)),
+          request_body(method, params),
+          headers
+        ].compact
+      end
+
+      def request_body(method, params)
+        encode_json(params) if params && method != :get
+      end
+
+      def request_path(method, path, params)
+        if params && method == :get
+          "#{path}?#{RestClient::Utils.encode_query_string(params)}"
+        else
+          path
+        end
       end
 
       def headers
@@ -67,6 +111,42 @@ module Invoices
           authorization: "Bearer #{token}",
           content_type: :json,
           accept: :json
+        }
+      end
+
+      def generate_batch_boundary
+        "#{BATCH_BOUNDARY}-#{SecureRandom.uuid}"
+      end
+
+      def build_batch_body
+        raise "Nested batch requests are not allowed" if in_batch?
+
+        @batch_body = +""
+        yield
+        @batch_body << "--#{@batch_boundary}--\r\n"
+      ensure
+        @batch_body = nil
+      end
+
+      def batch_request(method, path, params = nil)
+        <<~HTTP
+          --#{@batch_boundary}\r
+          Content-Type: application/http\r
+          Content-Transfer-Encoding: binary\r
+          \r
+          #{method.to_s.upcase} #{request_path(method, path, params)} HTTP/1.1\r
+          Content-Type: application/json\r
+          Accept: application/json\r
+          \r
+          #{request_body(method, params)}\r
+        HTTP
+      end
+
+      def batch_headers
+        {
+          authorization: "Bearer #{token}",
+          content_type: "multipart/mixed;boundary=#{@batch_boundary}",
+          accept_charset: "UTF-8"
         }
       end
 
@@ -80,6 +160,18 @@ module Invoices
 
       def url(path)
         "#{config.host}#{API_PATH}#{config.mandant}/#{path}"
+      end
+
+      def handle_bad_request
+        yield
+      rescue RestClient::BadRequest => e
+        msg = response_error_message(e)
+        e.message = msg if msg.present?
+        raise e
+      end
+
+      def response_error_message(exception)
+        extract_json_error(exception.response.body)
       end
 
       def token
@@ -110,30 +202,6 @@ module Invoices
       def token_endpoint
         response = RestClient.get(config.host + OPENID_CONFIG_PATH)
         JSON.parse(response.body)["token_endpoint"]
-      end
-
-      def response_error_message(exception)
-        JSON.parse(exception.response.body).dig("error", "message")
-      rescue # do not fail if response is not JSON
-        nil
-      end
-
-      def encode_json(attrs)
-        camelize_keys(attrs).to_json
-      end
-
-      def decode_json(json)
-        return {} if json.blank?
-
-        underscore_keys(JSON.parse(json))
-      end
-
-      def camelize_keys(hash)
-        hash.deep_transform_keys { |key| key.to_s.camelize }
-      end
-
-      def underscore_keys(hash)
-        hash.deep_transform_keys { |key| key.underscore.to_sym }
       end
 
       def config

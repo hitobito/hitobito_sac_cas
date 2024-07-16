@@ -11,69 +11,42 @@ module Invoices
       SOURCE_SYSTEM = "hitobito"
       BACKLOG_ID = 0
       TYPE = "Product"
-      TYPE_OF_PRINTING = "AccToSequentialControl"
       INVOICE_KINDS = {
         membership: "R",
         course: "C"
       }.with_indifferent_access.freeze
 
-      def create(positions, additional_user_fields: {})
-        # create_sales_order_with_positions(positions, additional_user_fields: additional_user_fields)
-        create_sales_order(additional_user_fields: additional_user_fields)
-        create_sales_order_positions(positions)
-        # does not work currently, abraxas is investigating
-        trigger_sales_order rescue nil # rubocop:disable Style/RescueModifier
-      rescue => e
-        delete_sales_order
-        raise e
+      attr_reader :positions, :additional_user_fields
+
+      def initialize(invoice, positions, additional_user_fields = {})
+        super(invoice)
+        @positions = positions
+        @additional_user_fields = additional_user_fields
       end
 
-      def fetch
-        client.get(:sales_order, abacus_id, "$expand" => "Positions")
+      def abacus_key?
+        entity.abacus_sales_order_key?
       end
 
-      private
+      def abacus_key
+        return nil unless abacus_key?
 
-      def create_sales_order(additional_user_fields: {})
-        attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
-        data = client.create(:sales_order, attrs)
-        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
-      end
-
-      def create_sales_order_with_positions(positions, additional_user_fields: {})
-        attrs = sales_order_attrs(additional_user_fields: additional_user_fields)
-        attrs[:positions] = positions.map.with_index do |position, index|
-          sales_order_position_attrs(position, index + 1)
-        end
-        data = client.create(:sales_order, attrs)
-        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
-      end
-
-      def create_sales_order_positions(positions)
-        positions.each_with_index do |position, index|
-          client.create(:sales_order_position, sales_order_position_attrs(position, index + 1))
-        end
-      end
-
-      def trigger_sales_order
-        path = "#{client.endpoint(:sales_order, abacus_id)}/" \
-               "ch.abacus.orde.TriggerSalesOrderNextStep"
-        client.request(:post, path, {type_of_printing: TYPE_OF_PRINTING})
-      end
-
-      def delete_sales_order
-        return unless entity.abacus_sales_order_key
-
-        client.delete(:sales_order, abacus_id)
-      rescue
-        # ignore error
-      end
-
-      def abacus_id
         {sales_order_id: entity.abacus_sales_order_key, sales_order_backlog_id: BACKLOG_ID}
       end
 
-      def sales_order_attrs(additional_user_fields: {})
+      def assign_abacus_key(data)
+        entity.update_column(:abacus_sales_order_key, data.fetch(:sales_order_id)) # rubocop:disable Rails/SkipsModelValidations
+      end
+
+      def full_attrs
+        sales_order_attrs.merge(
+          positions: positions.map.with_index do |position, index|
+            sales_order_position_attrs(position, index + 1)
+          end
+        )
+      end
+
+      def sales_order_attrs
         {
           # customer id is defined to be the same as subject id
           customer_id: entity.recipient.abacus_subject_key,
@@ -82,11 +55,11 @@ module Invoices
           total_amount: entity.total.to_f,
           document_code_invoice: INVOICE_KINDS[entity.invoice_kind],
           language: entity.recipient.language,
-          user_fields: order_user_fields(additional_user_fields)
+          user_fields: order_user_fields
         }
       end
 
-      def order_user_fields(additional_user_fields)
+      def order_user_fields
         {
           user_field1: entity.id.to_s,
           user_field2: SOURCE_SYSTEM,
@@ -94,10 +67,11 @@ module Invoices
         }.merge(additional_user_fields)
       end
 
-      def sales_order_position_attrs(position, index) # rubocop:disable Metrics/MethodLength
+      def sales_order_position_attrs(position, index)
         {
-          sales_order_id: entity.abacus_sales_order_key,
-          sales_order_backlog_id: BACKLOG_ID,
+          # not required if positions are nested in sales order
+          # sales_order_id: entity.abacus_sales_order_key,
+          # sales_order_backlog_id: BACKLOG_ID,
           position_number: index,
           type: TYPE,
           pricing: {price_after_finding: position.amount.to_f.round(2)},
