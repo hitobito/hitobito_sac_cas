@@ -12,9 +12,10 @@ describe People::Neuanmeldungen::RejectsController do
 
   context "POST create" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+    let(:people_ids) { %i[abonnent mitglied tourenchef].map { |p| people(p).id } }
 
-    def send_request
-      post :create, params: {group_id: group.id, ids: "1,2,3", note: "foo"}
+    subject(:send_request) do
+      post :create, params: {group_id: group.id, ids: people_ids.join(","), note: "foo"}
     end
 
     it "calls People::Neuanmeldungen::Reject::call" do
@@ -22,7 +23,7 @@ describe People::Neuanmeldungen::RejectsController do
       expect(People::Neuanmeldungen::Reject).to receive(:new).and_return(rejector)
       expect(rejector).to receive(:attributes=).with({
         group: group,
-        people_ids: [1, 2, 3],
+        people_ids: people_ids,
         note: "foo",
         author: people(:admin)
       })
@@ -35,6 +36,16 @@ describe People::Neuanmeldungen::RejectsController do
       send_request
 
       expect(flash[:notice]).to eq("3 Anmeldungen wurden abgelehnt")
+    end
+
+    context "with family members" do
+      let(:people_ids) { %i[abonnent familienmitglied].map { |p| people(p).id } }
+
+      it "approves all 3 family members and sets the flash message" do
+        send_request
+
+        expect(flash[:notice]).to eq("4 Anmeldungen wurden abgelehnt")
+      end
     end
 
     it "redirects to the group people list" do
