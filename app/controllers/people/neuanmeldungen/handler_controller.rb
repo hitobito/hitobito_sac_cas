@@ -56,7 +56,7 @@ module People
       end
 
       def count
-        people_ids.count
+        @count ||= handler.applicable_people_ids.count
       end
 
       def handler

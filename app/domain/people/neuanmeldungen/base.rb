@@ -23,10 +23,14 @@ module People
         raise NotImplementedError, "Implement this method in subclass"
       end
 
+      def applicable_people_ids
+        Person.where(id: people_ids).flat_map { |person| person.household.people }.uniq.pluck(:id)
+      end
+
       private
 
       def applicable_roles
-        group.roles.where(type: NEUANMELDUNGEN_ROLES, person_id: people_ids)
+        group.roles.where(type: NEUANMELDUNGEN_ROLES, person_id: applicable_people_ids)
       end
 
       def non_applicable_roles
