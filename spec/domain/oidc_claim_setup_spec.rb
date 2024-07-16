@@ -122,13 +122,21 @@ describe OidcClaimSetup do
     end
 
     it "includes section_commission_member key when matching role exists" do
-      group = Group::SektionsKommission.find_or_create_by(parent: groups(:bluemlisalp_funktionaere), name: "Foobar")
+      kommissionen = Group::SektionsKommissionen.find_or_create_by(parent: groups(:bluemlisalp_funktionaere))
+      group = Group::SektionsKommissionTouren.find_or_create_by(parent: kommissionen, name: "Foobar")
       create_role(group, "Mitglied")
       expect(user_groups).to include "section_commission_member"
     end
 
     it "includes huts_functionary key when matching role exists" do
-      group = Fabricate(Group::SektionsHuettenkommission.sti_name, parent: groups(:bluemlisalp_funktionaere))
+      clubhuetten = Group::SektionsClubhuetten.find_or_create_by(parent: groups(:bluemlisalp_funktionaere))
+      group = Fabricate(Group::SektionsClubhuette.sti_name, parent: clubhuetten)
+      create_role(group, "Huettenwart")
+      expect(user_groups).to include "huts_functionary"
+    end
+
+    it "includes huts_functionary key when huettenobmann role exists" do
+      group = groups(:bluemlisalp_funktionaere)
       create_role(group, "Huettenobmann")
       expect(user_groups).to include "huts_functionary"
     end
@@ -165,6 +173,11 @@ describe OidcClaimSetup do
 
     it "includes section_tour_functionary key when matching role exists" do
       create_role(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse, "JoChef")
+      expect(user_groups).to include "section_tour_functionary"
+    end
+
+    it "includes section_tour_functionary key when tourenleiter role exists" do
+      create_role(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_sommer, "Tourenchef")
       expect(user_groups).to include "section_tour_functionary"
     end
   end
