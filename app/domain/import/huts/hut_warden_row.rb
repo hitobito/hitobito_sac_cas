@@ -10,7 +10,7 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 module Import::Huts
   class HutWardenRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4005.0" && self.role_type_for(row).present?
+      row[:verteilercode].to_s == "4005.0" && role_type_for(row).present?
     end
 
     def initialize(row)
@@ -20,7 +20,7 @@ module Import::Huts
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
-      role_type = self.role_type_for(@row)
+      role_type = role_type_for(@row)
       huette = huette(@row)
       unless huette
         # TODO fix bugs in data export, where not all huts are exported
@@ -40,12 +40,6 @@ module Import::Huts
       person.save!
     end
 
-    private
-
-    def person_for(row)
-      Person.find_or_initialize_by(id: owner_navision_id(row))
-    end
-
     def self.role_type_for(row)
       case row[:hut_category]
       when "SAC Sektionshütte"
@@ -53,6 +47,12 @@ module Import::Huts
       when "SAC Clubhütte"
         Group::SektionsClubhuette::Huettenwart
       end
+    end
+
+    private
+
+    def person_for(row)
+      Person.find_or_initialize_by(id: owner_navision_id(row))
     end
 
     def set_person_name(row, person)

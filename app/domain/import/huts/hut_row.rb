@@ -10,7 +10,7 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 module Import::Huts
   class HutRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000V" && self.hut_type(row).present?
+      row[:verteilercode].to_s == "4000V" && hut_type(row).present?
     end
 
     def initialize(row)
@@ -22,8 +22,6 @@ module Import::Huts
       set_data(@row, group)
       group.save!
     end
-
-    private
 
     def self.hut_type(row)
       case row[:hut_category]
@@ -43,12 +41,14 @@ module Import::Huts
       end
     end
 
+    private
+
     def group_for(row)
       Group.find_or_initialize_by(navision_id: navision_id(row))
     end
 
     def set_data(row, group)
-      group.type = self.hut_type(row).name
+      group.type = hut_type(row).name
       group.name = name(row)
       group.parent_id = parent_id(row)
     end
@@ -64,7 +64,7 @@ module Import::Huts
     def parent_id(row)
       Group::Sektion.find_by(navision_id: owner_navision_id(row))
         .descendants
-        .find { |child| child.type == self.parent_group_type(row).name }
+        .find { |child| child.type == parent_group_type(row).name }
         .id
     rescue
       raise "WARNING: No parent found for row #{row.inspect}"

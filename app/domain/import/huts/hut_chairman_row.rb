@@ -12,7 +12,8 @@ module Import::Huts
     include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4007.0"
+      row[:verteilercode].to_s == "4007.0" &&
+        ["SAC Clubhütte", "SAC Sektionshütte"].include?(row[:hut_category])
     end
 
     def initialize(row)

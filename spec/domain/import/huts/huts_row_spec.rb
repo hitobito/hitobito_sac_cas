@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Import::Huts::HutsRowSpec do
+describe Import::Huts::HutsRow do
   let(:importer) { described_class.new(row) }
 
   let(:row) do

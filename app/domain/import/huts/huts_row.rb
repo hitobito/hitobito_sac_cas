@@ -10,7 +10,7 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 module Import::Huts
   class HutsRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000V" && self.group_type(row).present?
+      row[:verteilercode].to_s == "4000V" && group_type(row).present?
     end
 
     def initialize(row)
@@ -23,8 +23,6 @@ module Import::Huts
       group.save!
     end
 
-    private
-
     def self.group_type(row)
       case row[:hut_category]
       when "SAC Sektionshütte"
@@ -34,12 +32,14 @@ module Import::Huts
       end
     end
 
+    private
+
     def group_for(row)
       Group.find_or_initialize_by(parent_id: parent_id(row))
     end
 
     def set_data(row, group)
-      group.type = self.group_type(row).name
+      group.type = group_type(row).name
       group.name = group.class.label
       group.parent_id = parent_id(row)
     end

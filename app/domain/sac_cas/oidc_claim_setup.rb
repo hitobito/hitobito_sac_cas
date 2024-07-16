@@ -34,7 +34,7 @@ module SacCas::OidcClaimSetup
       Group::SektionsTourenUndKurse::Tourenleiter,
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
       *Group::SektionsTourenUndKurse.child_types.map do |type|
-        type.const_get "Tourenchef" if type.const_defined? "Tourenchef"
+        type.const_get :Tourenchef if type.const_defined? :Tourenchef
       end
     ]
   }
