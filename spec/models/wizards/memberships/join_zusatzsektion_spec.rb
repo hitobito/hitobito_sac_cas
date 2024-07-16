@@ -56,8 +56,8 @@ describe Wizards::Memberships::JoinZusatzsektion do
         context "no self service and not backoffice" do
           let(:backoffice) { false }
 
-          it "is invalid if sektion does not support self service" do
-            expect(wizard).not_to be_valid
+          it "is still valid even if sektion does not support self service" do
+            expect(wizard).to be_valid
           end
         end
       end

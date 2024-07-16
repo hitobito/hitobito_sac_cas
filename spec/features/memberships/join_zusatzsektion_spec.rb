@@ -43,7 +43,6 @@ describe "joining zusatzsektion", js: true do
     end
 
     it "fills out form and redirects" do
-      Group::SektionsNeuanmeldungenSektion.delete_all
       click_link "Mitgliedschaft anpassen"
       click_link "Zusatzsektion beantragen"
       expect(page).to have_css "li.active", text: "Sektion wählen"
@@ -54,17 +53,6 @@ describe "joining zusatzsektion", js: true do
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
-    end
-
-    it "is stuck on choose sektion if self service is not supported" do
-      click_link "Mitgliedschaft anpassen"
-      click_link "Zusatzsektion beantragen"
-      select "SAC Matterhorn"
-      click_on "Weiter"
-      expect(page).to have_css ".alert-danger", text: "Wir bitten dich den gewünschten"
-      click_on "Weiter"
-      expect(page).to have_css "li.active", text: "Sektion wählen"
-      expect(page).to have_css ".alert-danger", text: "Wir bitten dich den gewünschten"
     end
   end
 
