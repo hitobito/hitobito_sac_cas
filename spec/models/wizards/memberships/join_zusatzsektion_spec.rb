@@ -143,9 +143,10 @@ describe Wizards::Memberships::JoinZusatzsektion do
 
   describe "#human_role_type" do
     let(:person) { people(:mitglied) }
+    let(:params) { {"choose_sektion" => {group_id: matterhorn.id}} }
 
     before do
-      params["choose_sektion"] = {group_id: matterhorn.id}
+      wizard.step_at(0) # trigger build_step_instances
     end
 
     it "is Einzelmitglied" do
@@ -164,9 +165,17 @@ describe Wizards::Memberships::JoinZusatzsektion do
         expect(wizard.human_role_type).to eq "Einzelmitglied"
       end
 
-      it "is Familienmitglied if register_as is set accordingly" do
-        params["choose_membership"] = {register_as: :family}
-        expect(wizard.human_role_type).to eq "Familienmitglied"
+      context "when register_as is set accordingly" do
+        let(:params) do
+          {
+            "choose_sektion" => {group_id: matterhorn.id},
+            "choose_membership" => {register_as: :family}
+          }
+        end
+
+        it "is Familienmitglied if register_as is set accordingly" do
+          expect(wizard.human_role_type).to eq "Familienmitglied"
+        end
       end
     end
   end
