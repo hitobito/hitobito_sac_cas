@@ -24,9 +24,12 @@
 #  link_participants                :string(255)
 #  link_survey                      :string(255)
 #  location                         :text(65535)
-#  maximum_participants             :integer
 #  minimum_participants             :integer
+#  maximum_participants             :integer
 #  minimum_age                      :integer
+#  maximum_age                      :integer
+#  ideal_class_size                 :integer
+#  maximum_class_size               :integer
 #  motto                            :string(255)
 #  name                             :string(255)
 #  notify_contact_on_participations :boolean          default(FALSE), not null

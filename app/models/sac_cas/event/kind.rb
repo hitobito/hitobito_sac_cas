@@ -17,6 +17,9 @@
 #  kurs_id_fiver          :string(255)
 #  maximum_participants   :integer
 #  minimum_age            :integer
+#  maximum_age            :integer
+#  ideal_class_size       :integer
+#  maximum_class_size     :integer
 #  minimum_participants   :integer
 #  reserve_accommodation  :boolean          default(TRUE), not null
 #  season                 :string(255)
@@ -53,6 +56,8 @@ module SacCas::Event::Kind
     validates :kind_category, presence: true
     validates :short_name, presence: true
 
+    validate :maximum_age_greater_than_minimum_age, if: -> { maximum_age.present? }
+
     SEASONS = %w[winter summer].freeze
     ACCOMMODATIONS = %w[no_overnight hut pension pension_or_hut bivouac].freeze
 
@@ -83,5 +88,11 @@ module SacCas::Event::Kind
 
   def push_down_events
     events.where.not(state: %w[closed canceled])
+  end
+
+  def maximum_age_greater_than_minimum_age
+    if maximum_age < (minimum_age || 0)
+      errors.add(:maximum_age, :greater_than_or_equal_to, count: minimum_age || 0)
+    end
   end
 end

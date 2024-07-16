@@ -28,9 +28,12 @@
 #  link_participants                :string(255)
 #  link_survey                      :string(255)
 #  location                         :text(65535)
+#  minimum_participants             :integer
 #  maximum_participants             :integer
 #  minimum_age                      :integer
-#  minimum_participants             :integer
+#  maximum_age                      :integer
+#  ideal_class_size                 :integer
+#  maximum_class_size               :integer
 #  motto                            :string(255)
 #  name                             :string(255)
 #  notify_contact_on_participations :boolean          default(FALSE), not null
@@ -85,8 +88,9 @@ module SacCas::Event::Course
   I18N_KIND = "activerecord.attributes.event/kind"
 
   INHERITED_ATTRIBUTES = [
-    :application_conditions, :minimum_participants, :maximum_participants, :minimum_age, :season,
-    :training_days, :reserve_accommodation, :accommodation, :cost_center_id, :cost_unit_id
+    :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
+    :maximum_age, :ideal_class_size, :maximum_class_size, :season, :training_days,
+    :reserve_accommodation, :accommodation, :cost_center_id, :cost_unit_id
   ]
 
   prepended do # rubocop:disable Metrics/BlockLength
@@ -117,6 +121,9 @@ module SacCas::Event::Course
       :season,
       :start_point_of_time,
       :minimum_age,
+      :maximum_age,
+      :ideal_class_size,
+      :maximum_class_size,
       :brief_description,
       :specialities,
       :similar_tours,
@@ -152,8 +159,7 @@ module SacCas::Event::Course
       :accommodation,
       presence: {unless: :weak_validation_state?}
 
-    delegate :level, :ideal_class_size, :maximum_class_size, :maximum_age,
-      to: :kind, allow_nil: true
+    delegate :level, to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
     before_save :adjust_state, if: :application_closing_at_changed?

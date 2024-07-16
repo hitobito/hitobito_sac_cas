@@ -71,6 +71,13 @@ describe Event::Kind do
       expect(kind).not_to be_valid
       expect(kind.errors[:cost_unit_id]).to eq ["muss ausgefüllt werden"]
     end
+
+    it "validates that maximum age is greater than minimum age" do
+      kind.minimum_age = 2
+      kind.maximum_age = 1
+      expect(kind).not_to be_valid
+      expect(kind.errors[:maximum_age]).to eq ["muss grösser oder gleich 2 sein"]
+    end
   end
 
   describe "#push_down_inherited_attributes!" do
@@ -80,6 +87,9 @@ describe Event::Kind do
       {
         application_conditions: "test",
         minimum_age: 1,
+        maximum_age: 2,
+        ideal_class_size: 1,
+        maximum_class_size: 2,
         minimum_participants: 2,
         maximum_participants: 3,
         training_days: 4,
