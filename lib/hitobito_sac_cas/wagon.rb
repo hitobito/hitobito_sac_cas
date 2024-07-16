@@ -180,7 +180,13 @@ module HitobitoSacCas
           :duplicate_exists,
           :wiedereintritt,
           :self_registration_reason,
-          :address_valid
+          :address_valid,
+          :sac_remark_national_office,
+          :sac_remark_section_1,
+          :sac_remark_section_2,
+          :sac_remark_section_3,
+          :sac_remark_section_4,
+          :sac_remark_section_5
         ])
     end
 

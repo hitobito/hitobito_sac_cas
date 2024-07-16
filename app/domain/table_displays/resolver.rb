@@ -17,10 +17,16 @@ module TableDisplays
       duplicate_exists: :show,
       wiedereintritt: :show,
       self_registration_reason: :show_full,
-      address_valid: :show
+      address_valid: :show,
+      sac_remark_national_office: :manage_national_office_remark,
+      sac_remark_section_1: :manage_section_remarks,
+      sac_remark_section_2: :manage_section_remarks,
+      sac_remark_section_3: :manage_section_remarks,
+      sac_remark_section_4: :manage_section_remarks,
+      sac_remark_section_5: :manage_section_remarks
     }.freeze
 
-    EXCLUSIVE = {
+    EXCLUSIONS_BY_GROUP = {
       antrag_fuer: [
         Group::SektionsNeuanmeldungenSektion,
         Group::SektionsNeuanmeldungenNv
@@ -31,8 +37,8 @@ module TableDisplays
       ]
     }.freeze
 
-    def self.exclude?(attr, parent)
-      EXCLUSIVE.key?(attr) && EXCLUSIVE[attr].exclude?(parent.class)
+    def exclude_attr?
+      excluded_remark? || exclude_by_group?
     end
 
     def initialize(template, person, attr)
@@ -53,6 +59,14 @@ module TableDisplays
     end
 
     private
+
+    def excluded_remark?
+      @template.cannot?(ATTRS.fetch(@attr), @person) if Person::SAC_REMARKS.include?(@attr.to_s)
+    end
+
+    def exclude_by_group?
+      EXCLUSIONS_BY_GROUP[@attr]&.exclude?(@group.class)
+    end
 
     def confirmed_at
       I18n.l(@person.confirmed_at.to_date) if @person.confirmed_at
