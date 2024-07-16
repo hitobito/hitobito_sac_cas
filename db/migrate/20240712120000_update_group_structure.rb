@@ -45,6 +45,26 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
         end
       end
     end
+    say_with_time("one-time creation of some commissions in all sections") do
+      Group.where(type: "Group::SektionsKommissionen").find_each do |group|
+        ["Group::SektionsKommissionTouren", "Group::SektionsKommissionUmweltUndKultur"].each do |group_type|
+          next if group.children.where(type: group_type).exists?
+          child = group_type.new(name: group_type.label)
+          child.parent = group
+          child.save!
+        end
+      end
+    end
+    say_with_time("one-time creation of some touren und kurse groups in all sections") do
+      Group.where(type: "Group::SektionsTourenUndKurse").find_each do |group|
+        ["Group::SektionsTourenUndKurseSommer", "Group::SektionsTourenUndKurseWinter"].each do |group_type|
+          next if group.children.where(type: group_type).exists?
+          child = group_type.new(name: group_type.label)
+          child.parent = group
+          child.save!
+        end
+      end
+    end
   end
 
   def hard_destroy_group(group)
