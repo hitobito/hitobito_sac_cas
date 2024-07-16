@@ -8,11 +8,11 @@
 class Group::SektionsVorstand < ::Group
   ### ROLES
   class Praesidium < ::Role
-    self.permissions = []
+    self.permissions = [:group_read]
   end
 
   class Mitglied < ::Role
-    self.permissions = []
+    self.permissions = [:group_read]
   end
 
   class Leserecht < ::Role
@@ -24,7 +24,7 @@ class Group::SektionsVorstand < ::Group
   end
 
   class Andere < ::Role
-    self.permissions = []
+    self.permissions = [:group_read]
   end
 
   roles Praesidium, Mitglied, Leserecht, Schreibrecht, Andere
