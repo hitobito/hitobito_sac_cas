@@ -29,11 +29,11 @@ file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
 
 file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
-## 4. Import Mitglieder Stammsektion
+## 4. import:memberships
 
 `rails import:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
 
-## 5. Import Mitglieder Zusatzsektion
+## 5. import:additional_memberships
 
 Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
 
