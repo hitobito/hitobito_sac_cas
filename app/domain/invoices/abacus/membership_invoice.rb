@@ -11,65 +11,56 @@ module Invoices
       MEMBERSHIP_CARD_FIELD_INDEX = 11
 
       # member is an Invoices::SacMembership::Member object
-      # role is a membership or new membership Role
-      attr_reader :member, :role, :send_on
+      attr_reader :member, :memberships, :new_entry, :discount
 
       delegate :context, to: :member
       delegate :date, :sac, :config, to: :context
 
-      def initialize(member, role, send_on: nil)
+      def initialize(member, memberships, new_entry: false, discount: nil)
         @member = member
-        @role = role
-        @send_on = send_on
-      end
-
-      def invoice # rubocop:disable Metrics/MethodLength
-        @invoice ||=
-          I18n.with_locale(member.language) do
-            ExternalInvoice::SacMembership.create!(
-              person: member.person,
-              year: date.year,
-              state: :draft,
-              total: positions.sum(&:amount),
-              issued_at: date,
-              sent_at: send_on || date,
-              link: role
-            )
-          end
-      end
-
-      def handle_abacus_exception(e)
-        return unless @invoice
-
-        @invoice.update!(state: :error)
-        @invoice.hitobito_log_entries.create!(message: e.message, level: :error, category: "rechnungen")
-      end
-
-      def sales_order
-        @sales_order ||= SalesOrder.new(invoice, positions, compose_additional_user_fields)
+        @memberships = memberships
+        @new_entry = new_entry
+        @discount = discount
       end
 
       def positions
         @positions ||=
           I18n.with_locale(member.language) do
             Invoices::SacMemberships::PositionGenerator
-              .new(member)
-              .generate(role)
+              .new(member, custom_discount: discount)
+              .generate(memberships, new_entry: new_entry)
               .map(&:to_abacus_invoice_position)
           end
       end
 
-      private
+      def total
+        positions.sum(&:amount)
+      end
 
-      def compose_additional_user_fields
+      def additional_user_fields
         fields = {}
-        fields[:user_field4] = config.service_fee.to_f if member.service_fee?(role)
+        fields[:user_field4] = config.service_fee.to_f if invoice?
         compose_membership_card_user_fields(fields)
         fields
       end
 
+      # Whether to create/send an invoice or not.
+      # No invoices are created for members that appear on another invoice,
+      # e.g. family members without additional memberships.
+      def invoice?
+        member.sac_family_main_person? ||
+          memberships.any? { |m| !m.beitragskategorie.family? }
+      end
+
+      def membership_cards?
+        !!main_membership &&
+          member.paying_person?(main_membership.beitragskategorie)
+      end
+
+      private
+
       def compose_membership_card_user_fields(fields)
-        return unless member.membership_cards?(role)
+        return unless membership_cards?
 
         index = MEMBERSHIP_CARD_FIELD_INDEX
         fields[:"user_field#{index}"] = membership_card_data(member.person)
@@ -77,6 +68,12 @@ module Invoices
           index += 1
           fields[:"user_field#{index}"] = membership_card_data(member)
         end
+      end
+
+      def main_membership
+        return @main_membership if defined?(@main_membership)
+
+        @main_membership = memberships.find(&:main)
       end
 
       def membership_card_data(person)

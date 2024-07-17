@@ -25,42 +25,45 @@ module Invoices
         Positions::SectionEntryFee
       ].freeze
 
-      attr_reader :member
+      attr_reader :member, :custom_discount
 
-      def initialize(member)
+      def initialize(member, custom_discount: nil)
         @member = member
+        @custom_discount = custom_discount
       end
 
-      def generate(role)
-        case role
-        when Member::MAIN_MEMBERSHIP_ROLE then membership_positions
-        when Member::NEW_ENTRY_ROLE then new_entry_positions(role)
-        when Member::NEW_ADDITIONAL_SECTION_ROLE then new_additional_section_positions(role)
-        else raise ArgumentError, "Invalid role type #{role.class} given"
-        end
+      def generate(memberships, new_entry: false)
+        main = memberships.find(&:main)
+
+        main_positions(main) +
+          additional_positions(memberships) +
+          new_entry_positions(main, new_entry)
       end
 
       private
 
-      def membership_positions
-        positions = build_positions(SAC_POSITIONS + SECTION_POSITIONS,
-          member.main_membership_role)
-        member.additional_membership_roles.each do |role|
-          positions.push(*build_positions(SECTION_POSITIONS, role))
+      def main_positions(main_membership)
+        return [] unless main_membership
+
+        build_positions(SAC_POSITIONS, main_membership)
+      end
+
+      def additional_positions(memberships)
+        memberships.flat_map do |membership|
+          build_positions(SECTION_POSITIONS, membership)
         end
-        positions
       end
 
-      def new_entry_positions(role)
-        build_positions(SAC_POSITIONS + SECTION_POSITIONS + NEW_ENTRY_POSITIONS, role)
+      def new_entry_positions(main_membership, new_entry)
+        return [] if !new_entry || !main_membership
+
+        build_positions(NEW_ENTRY_POSITIONS, main_membership)
       end
 
-      def new_additional_section_positions(role)
-        build_positions(SECTION_POSITIONS, role)
-      end
-
-      def build_positions(classes, role)
-        classes.map { |klass| klass.new(member, role) }.filter(&:active?)
+      def build_positions(classes, membership)
+        classes
+          .map { |klass| klass.new(member, membership, custom_discount: custom_discount) }
+          .filter(&:active?)
       end
     end
   end
