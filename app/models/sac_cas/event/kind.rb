@@ -44,6 +44,7 @@ module SacCas::Event::Kind
 
   prepended do
     include I18nEnums
+    has_and_belongs_to_many :course_compensation_categories, foreign_key: :event_kind_id, inverse_of: :course_compensation_category_id
     belongs_to :cost_center
     belongs_to :cost_unit
     belongs_to :level
