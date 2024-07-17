@@ -4,6 +4,16 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
+## Source Files
+
+Vom SAC werden uns folgende Exporte zur Verfügung gestellt:
+
+| #    | Export                     | Dateiname             | Attribute                                           |
+|------|----------------------------|-----------------------|-----------------------------------------------------|
+| NAV1 | Alle Kontakte aus Navision | Kontakte_{DATUM}.xlsx | Mitgliedernummer, Personen Attribute, Telefon, usw. |
+|      |                            |                       |                                                     |
+|      |                            |                       |                                                     |
+
 ## 1. import:people
 
 Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigned werden können.
@@ -11,6 +21,8 @@ Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorha
 Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Import` ab.
 
 `rake import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+
+Import Source File: NAV1
 
 ## 2. import:sektionen
 
