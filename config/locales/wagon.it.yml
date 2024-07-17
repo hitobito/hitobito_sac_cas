@@ -80,7 +80,7 @@ it:
       models:
         household:
           attributes:
-            members: 
+            members:
               no_members: ""
             base:
               at_least_one_adult: ""
@@ -278,6 +278,7 @@ it:
           m: ""
           w: ""
           _nil: ""
+        additional_information: Commenti (a.es. professione)
       group:
         group_id: ""
         navision_id: ""
@@ -1044,7 +1045,7 @@ it:
   memberships:
     join_zusatzsektions:
       create:
-        success: 
+        success:
           one: ""
           many: ""
           other: ""
