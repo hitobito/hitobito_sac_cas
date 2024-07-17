@@ -10,10 +10,10 @@ class MoveHuettenIntoSektionsfunktionaere < ActiveRecord::Migration[6.1]
     return unless connection.adapter_name =~ /mysql/i
 
     # Move each SektionsHuettenkommission group into its sibling SektionsFunktionaere
-    execute "UPDATE groups AS huetten SET parent_id=(SELECT funktionaere.id FROM (SELECT id, parent_id from groups WHERE type = 'Group::SektionsFunktionaere') funktionaere WHERE funktionaere.parent_id = huetten.parent_id LIMIT 1) WHERE type='Group::SektionsHuettenkommission'"
+    execute "UPDATE `groups` AS huetten SET parent_id=(SELECT funktionaere.id FROM (SELECT id, parent_id from `groups` WHERE type = 'Group::SektionsFunktionaere') funktionaere WHERE funktionaere.parent_id = huetten.parent_id LIMIT 1) WHERE type='Group::SektionsHuettenkommission'"
 
     # Rebuild the whole group hierarchy
-    execute "UPDATE groups SET lft=NULL, rgt=NULL"
+    execute "UPDATE `groups` SET lft=NULL, rgt=NULL"
     old_value = Group.archival_validation
     Group.archival_validation = false
     Group.rebuild!
