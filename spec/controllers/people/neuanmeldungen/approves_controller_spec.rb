@@ -12,15 +12,16 @@ describe People::Neuanmeldungen::ApprovesController do
 
   context "POST create" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+    let(:people_ids) { %i[abonnent mitglied tourenchef].map { |p| people(p).id } }
 
-    def send_request
-      post :create, params: {group_id: group.id, ids: "1,2,3"}
+    subject(:send_request) do
+      post :create, params: {group_id: group.id, ids: people_ids.join(",")}
     end
 
     it "calls People::Neuanmeldungen::Approve::call" do
       approver = People::Neuanmeldungen::Approve.new
       expect(People::Neuanmeldungen::Approve).to receive(:new).and_return(approver)
-      expect(approver).to receive(:attributes=).with({group: group, people_ids: [1, 2, 3]})
+      expect(approver).to receive(:attributes=).with({group: group, people_ids: people_ids})
       expect(approver).to receive(:call)
 
       send_request
@@ -30,6 +31,16 @@ describe People::Neuanmeldungen::ApprovesController do
       send_request
 
       expect(flash[:notice]).to eq("3 Anmeldungen wurden übernommen")
+    end
+
+    context "with family members" do
+      let(:people_ids) { %i[abonnent familienmitglied].map { |p| people(p).id } }
+
+      it "approves all 3 family members and sets the flash message" do
+        send_request
+
+        expect(flash[:notice]).to eq("4 Anmeldungen wurden übernommen")
+      end
     end
 
     it "redirects to the group people list" do

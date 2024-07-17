@@ -23,10 +23,16 @@ module People
         raise NotImplementedError, "Implement this method in subclass"
       end
 
+      def applicable_people
+        @applicable_people ||= Person.order_by_name.where(id: people_ids).flat_map do |person|
+          person.household.people
+        end.uniq
+      end
+
       private
 
       def applicable_roles
-        group.roles.where(type: NEUANMELDUNGEN_ROLES, person_id: people_ids)
+        group.roles.where(type: NEUANMELDUNGEN_ROLES, person: applicable_people)
       end
 
       def non_applicable_roles
