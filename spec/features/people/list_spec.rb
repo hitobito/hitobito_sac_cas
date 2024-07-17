@@ -51,4 +51,20 @@ describe "people list page", :js do
     click_link("Spalten")
     expect(page).to have_checked_field("Antrag für")
   end
+
+  it "allows showing the sac remarks column" do
+    person.roles.destroy_all
+    person.roles.create!(
+      group: groups(:matterhorn_funktionaere),
+      type: Group::SektionsFunktionaere::Administration.sti_name
+    )
+
+    visit group_people_path(group_id: person.groups.first.id)
+    click_link("Spalten")
+
+    within(".dropdown-menu") do
+      expect(page).not_to have_text("Bemerkungen Geschäftsstelle")
+      expect(page).to have_text("Bemerkungen Sektion 1")
+    end
+  end
 end
