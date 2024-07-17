@@ -4,37 +4,66 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
-## 1. - People Import
+## Source Files
 
-Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigend werden können.
+| #    | Export                                               |
+|------|------------------------------------------------------|
+| NAV1 | Alle Kontakte aus Navision                           |
+| NAV2 | Stammmitgliedschaften                                |
+| NAV3 | Zusatzmitgliedschaften                               |
+| NAV4 | Sektionsfunktionäre                                  |
+| NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
+| NAV6 | Sektionen und Ortsgruppen                            |
+| NAV7 | Abonenten Die Alpen                                  |
+| WSO21 | Basic Accounts und Password Hashes                  |
+| WSO22 | SAC Tourenportal Abonnenten                         |
 
-Importiert alle Navision Kontakte und legt diese Unter 'Top-Layer > Navision Import' ab.
+details siehe SAC Confluence/Jira
 
-`rails import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+## 1. import:people
 
-## 2. - Import sektionen
+Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigned werden können.
 
-Diesen Import laufen lassen damit alle Sektionen vorhanden sind.
+Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Import` ab.
 
-`rails import:sektionen`
+`rake import:people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+
+Import Source File: NAV1
+
+## 2. import:sektionen
+
+Mit diesem Import werden alle Sektionen und Ortsgruppen importiert. 
+Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
+
+`rake import:sektionen`
 
 file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
 
-## 3. Import huts
+- Importiert Sektionen/Ortsgruppen und erstellt deren Unterordnerstruktur
 
-`rails import:huts`
+Import Source File: NAV6
+
+## 3. import:huts
+
+`rake import:huts`
 
 file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
-## 4. Import Mitglieder Stammsektion
+Import Source File: NAV5
+
+## 4. import:memberships
 
 `rails import:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
 
-## 5. Import Mitglieder Zusatzsektion
+Import Source File: NAV2
+
+## 5. import:additional_memberships
 
 Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
 
 `rails import:additional_memberships FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)`
+
+Import Source File: NAV3
 
 ## Delete all Sektions
 
