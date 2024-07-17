@@ -8,7 +8,7 @@
 module People
   module Neuanmeldungen
     class HandlerController < ApplicationController
-      helper_method :group, :handler, :count, :ids
+      helper_method :group, :handler, :count, :ids, :applicable_people
 
       respond_to :js, only: [:new]
 
@@ -55,8 +55,12 @@ module People
         }
       end
 
+      def applicable_people
+        handler.applicable_people
+      end
+
       def count
-        @count ||= handler.applicable_people_ids.count
+        @count ||= handler.applicable_people.count
       end
 
       def handler

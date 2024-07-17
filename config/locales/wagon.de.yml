@@ -962,8 +962,8 @@ de:
   people/neuanmeldungen/approves:
     new:
       text:
-        one: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldung.
-        other: Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldungen.
+        one: 'Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldung:'
+        other: 'Bitte bestätigen Sie die Übernahme der ausgewählten Anmeldungen:'
       submit: "%{count} Übernehmen"
     create:
       success:
