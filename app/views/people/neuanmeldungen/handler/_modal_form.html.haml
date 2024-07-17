@@ -17,7 +17,7 @@
           = hidden_field_tag :ids, ids
           .row-fluid
             = ti('text', count: count)
-            %b= applicable_people.join(', ')
+            %b= handler.applicable_people.join(', ')
             = render partial: 'fields', locals: { form: form }
         .modal-footer
           = form.submit(ti('.submit', count: count), class: 'btn btn-sm btn-primary')

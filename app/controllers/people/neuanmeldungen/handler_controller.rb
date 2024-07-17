@@ -8,7 +8,7 @@
 module People
   module Neuanmeldungen
     class HandlerController < ApplicationController
-      helper_method :group, :handler, :count, :ids, :applicable_people
+      helper_method :group, :handler, :count, :ids
 
       respond_to :js, only: [:new]
 
@@ -53,10 +53,6 @@ module People
           people_ids: people_ids,
           **permitted_params.except(:group_id, :ids, :locale).to_h.symbolize_keys
         }
-      end
-
-      def applicable_people
-        handler.applicable_people
       end
 
       def count
