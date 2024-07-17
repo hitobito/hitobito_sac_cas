@@ -6,13 +6,19 @@ oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 
 ## Source Files
 
-Vom SAC werden uns folgende Exporte zur Verfügung gestellt:
+| #    | Export                                               |
+|------|------------------------------------------------------|
+| NAV1 | Alle Kontakte aus Navision                           |
+| NAV2 | Stammmitgliedschaften                                |
+| NAV3 | Zusatzmitgliedschaften                               |
+| NAV4 | Sektionsfunktionäre                                  |
+| NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
+| NAV6 | Sektionen und Ortsgruppen                            |
+| NAV7 | Abonenten Die Alpen                                  |
+| WSO21 | Basic Accounts und Password Hashes                  |
+| WSO22 | SAC Tourenportal Abonnenten                         |
 
-| #    | Export                     | Dateiname             | Attribute                                           |
-|------|----------------------------|-----------------------|-----------------------------------------------------|
-| NAV1 | Alle Kontakte aus Navision | Kontakte_{DATUM}.xlsx | Mitgliedernummer, Personen Attribute, Telefon, usw. |
-|      |                            |                       |                                                     |
-|      |                            |                       |                                                     |
+details siehe SAC Confluence/Jira
 
 ## 1. import:people
 
