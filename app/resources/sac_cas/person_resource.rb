@@ -21,19 +21,15 @@ module SacCas::PersonResource
       attribute :membership_number, :integer do
         @object.membership_number if @object.sac_membership_anytime?
       end
-      extra_attribute :sac_remark_national_office, :string, readable: :can_read_national_office_remark?
+      attribute :sac_remark_national_office, :string do
+         @object.sac_remark_national_office if can?(:manage_national_office_remark, @object)
+      end
 
       (1..5).each do |num|
-        extra_attribute :"sac_remark_section_#{num}", :string, readable: :can_read_section_remarks?
+        attribute :"sac_remark_section_#{num}", :string do
+          @object.send(:"sac_remark_section_#{num}") if can?(:manage_section_remarks, @object)
+        end
       end
-    end
-
-    def can_read_national_office_remark?(person)
-      can?(:manage_national_office_remark, person)
-    end
-
-    def can_read_section_remarks?(person)
-      can?(:manage_section_remarks, person)
     end
   end
 end

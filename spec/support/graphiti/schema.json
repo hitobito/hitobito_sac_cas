@@ -2193,42 +2193,48 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "sac_remark_national_office": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_1": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_2": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_3": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_4": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_5": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
         "membership_years": {
           "type": "integer",
           "readable": true,
-          "description": null
-        },
-        "sac_remark_national_office": {
-          "type": "string",
-          "readable": "guarded",
-          "description": null
-        },
-        "sac_remark_section_1": {
-          "type": "string",
-          "readable": "guarded",
-          "description": null
-        },
-        "sac_remark_section_2": {
-          "type": "string",
-          "readable": "guarded",
-          "description": null
-        },
-        "sac_remark_section_3": {
-          "type": "string",
-          "readable": "guarded",
-          "description": null
-        },
-        "sac_remark_section_4": {
-          "type": "string",
-          "readable": "guarded",
-          "description": null
-        },
-        "sac_remark_section_5": {
-          "type": "string",
-          "readable": "guarded",
           "description": null
         }
       },
