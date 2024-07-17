@@ -230,6 +230,7 @@ de:
         start_point_of_times:
           day: Tag
           evening: Abend
+        states:
           created: Entwurf
           application_open: Publiziert
           application_paused: Anmeldung pausiert
