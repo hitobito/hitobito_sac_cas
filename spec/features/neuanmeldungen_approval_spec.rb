@@ -108,7 +108,7 @@ describe "neuanmeldungen approval", js: true do
       within("#neuanmeldungen-handler.modal") do
         expect(page).to have_selector(".modal-title", text: "Anmeldung ablehnen")
         expect(page).to have_selector(".modal-body",
-          text: "Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldung.")
+          text: "Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldung: #{role1.person}")
         click_button("1 Ablehnen")
       end
 
@@ -132,8 +132,10 @@ describe "neuanmeldungen approval", js: true do
       expect(page).to have_selector("#neuanmeldungen-handler.modal")
       within("#neuanmeldungen-handler.modal") do
         expect(page).to have_selector(".modal-title", text: "Anmeldungen ablehnen")
-        expect(page).to have_selector(".modal-body",
-          text: "Bitte bestätigen Sie die Ablehnung der ausgewählten Anmeldungen.")
+        expect(page).to have_selector(".modal-body", text: "Bitte bestätigen Sie die Ablehnung" \
+          " der ausgewählten Anmeldungen: #{role1.person}, #{role2.person}")
+          .or have_selector(".modal-body", text: "Bitte bestätigen Sie die Ablehnung" \
+          " der ausgewählten Anmeldungen: #{role2.person}, #{role1.person}")
         click_button("2 Ablehnen")
       end
 
