@@ -167,19 +167,19 @@ class People::SacFamily
   #end
 
   def stammsektion_role_types
-    SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
+    SacCas::MITGLIED_HAUPTSEKTION_ROLES
   end
 
   def zusatzsektion_role_types
-    SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
+    SacCas::MITGLIED_ZUSATZSEKTION_ROLES
   end
 
   def all_member_and_neuanmeldung_role_types
-    (SacCas::MITGLIED_ROLES + SacCas::NEUANMELDUNG_ROLES).map(&:sti_name)
+    (SacCas::MITGLIED_ROLES + SacCas::NEUANMELDUNG_ROLES)
   end
 
   def terminatable_member_role_types
-    SacCas::MITGLIED_ROLES.select(&:terminatable).map(&:sti_name)
+    SacCas::MITGLIED_ROLES.select(&:terminatable)
   end
 
   def category_calculator(person)

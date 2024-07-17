@@ -111,7 +111,7 @@ module TableDisplays
     end
 
     def membership_roles
-      Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES.collect(&:sti_name),
+      Role.where(type: SacCas::MITGLIED_HAUPTSEKTION_ROLES,
                  person_id: @person.id)
     end
 

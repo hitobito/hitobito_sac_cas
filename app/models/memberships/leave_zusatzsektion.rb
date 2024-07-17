@@ -17,7 +17,7 @@ module Memberships
       Group::SektionsMitglieder::MitgliedZusatzsektion,
       Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
       Group::SektionsTourenkommission::Tourenleiter
-    ].freeze
+    ].map(&:sti_name)
 
     delegate :person, :group, to: :role
 

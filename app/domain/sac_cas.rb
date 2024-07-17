@@ -10,37 +10,37 @@ module SacCas
   SAC_MITARBEITER_ROLES = [
     ::Group::Geschaeftsstelle::Mitarbeiter,
     ::Group::Geschaeftsstelle::Admin
-  ].freeze
+  ].map(&:sti_name)
 
   MITGLIED_HAUPTSEKTION_ROLES = [
     ::Group::SektionsMitglieder::Mitglied,
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
-  ].freeze
+  ].map(&:sti_name)
 
   MITGLIED_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsMitglieder::MitgliedZusatzsektion,
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
-  ].freeze
+  ].map(&:sti_name)
 
   NEUANMELDUNG_HAUPTSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
-  ].freeze
+  ].map(&:sti_name)
 
   NEUANMELDUNG_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
-  ].freeze
+  ].map(&:sti_name)
 
   TOUR_GUIDE_ROLES = [
     ::Group::SektionsTourenkommission::Tourenleiter,
     ::Group::SektionsTourenkommission::TourenleiterOhneQualifikation
-  ].freeze
+  ].map(&:sti_name)
 
-  MITGLIED_ROLES = (MITGLIED_HAUPTSEKTION_ROLES + MITGLIED_ZUSATZSEKTION_ROLES).freeze
-  NEUANMELDUNG_ROLES = (NEUANMELDUNG_HAUPTSEKTION_ROLES + NEUANMELDUNG_ZUSATZSEKTION_ROLES).freeze
+  MITGLIED_ROLES = (MITGLIED_HAUPTSEKTION_ROLES + MITGLIED_ZUSATZSEKTION_ROLES)
+  NEUANMELDUNG_ROLES = (NEUANMELDUNG_HAUPTSEKTION_ROLES + NEUANMELDUNG_ZUSATZSEKTION_ROLES)
 
   NEWSLETTER_MAILING_LIST_INTERNAL_KEY = 'sac_newsletter'
 

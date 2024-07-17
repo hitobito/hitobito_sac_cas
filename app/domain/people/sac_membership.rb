@@ -13,8 +13,8 @@ class People::SacMembership
 
   def initialize(person)
     @person = person
-    @roles = MEMBERSHIP_ROLES.map(&:sti_name)
-    @active_or_approvable_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES.map(&:sti_name)
+    @roles = MEMBERSHIP_ROLES
+    @active_or_approvable_roles = SacCas::MITGLIED_HAUPTSEKTION_ROLES
   end
 
   def active?
@@ -24,7 +24,7 @@ class People::SacMembership
   # checks for any active membership roles
   def active_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
-                          type: @roles)
+                          type: @roles.map(&:sti_name))
   end
 
   # checkes for active and also approvabable (neuanmeldung) roles
