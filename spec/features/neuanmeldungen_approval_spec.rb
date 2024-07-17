@@ -80,9 +80,9 @@ describe "neuanmeldungen approval", js: true do
       within("#neuanmeldungen-handler.modal") do
         expect(page).to have_selector(".modal-title", text: "Anmeldungen übernehmen")
         expect(page).to have_selector(".modal-body", text: "Bitte bestätigen Sie die Übernahme" \
-          " der ausgewählten Anmeldungen: #{role1.person}, #{role2.person}")
+          " der ausgewählten Anmeldungen: #{role1.person} und #{role2.person}")
           .or have_selector(".modal-body", text: "Bitte bestätigen Sie die Übernahme" \
-          " der ausgewählten Anmeldungen: #{role2.person}, #{role1.person}")
+          " der ausgewählten Anmeldungen: #{role2.person} und #{role1.person}")
         click_button("2 Übernehmen")
       end
 
@@ -132,10 +132,11 @@ describe "neuanmeldungen approval", js: true do
       expect(page).to have_selector("#neuanmeldungen-handler.modal")
       within("#neuanmeldungen-handler.modal") do
         expect(page).to have_selector(".modal-title", text: "Anmeldungen ablehnen")
+        # Order is alphabetical, so we need to check both possibilities
         expect(page).to have_selector(".modal-body", text: "Bitte bestätigen Sie die Ablehnung" \
-          " der ausgewählten Anmeldungen: #{role1.person}, #{role2.person}")
+          " der ausgewählten Anmeldungen: #{role1.person} und #{role2.person}")
           .or have_selector(".modal-body", text: "Bitte bestätigen Sie die Ablehnung" \
-          " der ausgewählten Anmeldungen: #{role2.person}, #{role1.person}")
+          " der ausgewählten Anmeldungen: #{role2.person} und #{role1.person}")
         click_button("2 Ablehnen")
       end
 
