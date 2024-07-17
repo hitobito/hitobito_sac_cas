@@ -31,7 +31,7 @@ describe "event/kinds/_form.html.haml" do
     expect(dom).to have_select "Unterkunft"
     expect(dom).to have_select "Kostenstelle"
     expect(dom).to have_select "Kostenträger"
-    expect(dom).to have_select "Vergütungskategorien"
+    expect(dom).to have_text "Vergütungskategorien"
     expect(dom).to have_select "Saison"
     expect(dom).to have_field "Ausbildungstage"
     expect(dom).to have_field "Minimale Teilnehmerzahl"
