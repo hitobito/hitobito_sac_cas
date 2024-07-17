@@ -18,7 +18,7 @@ module Memberships
       Group::SektionsMitglieder::MitgliedZusatzsektion,
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
       Group::SektionsTourenUndKurse::Tourenleiter
-    ].freeze
+    ].map(&:sti_name)
 
     attribute :termination_reason_id, :integer
 

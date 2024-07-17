@@ -126,8 +126,8 @@ module TableDisplays
     end
 
     def membership_roles
-      Role.where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.collect(&:sti_name),
-        person_id: @person.id)
+      Role.where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES,
+                 person_id: @person.id)
     end
 
     def group_roles
