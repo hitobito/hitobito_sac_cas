@@ -151,6 +151,7 @@ module SacCas::Event::Course
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
 
+    has_and_belongs_to_many :course_compensation_categories
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: {if: :number}
