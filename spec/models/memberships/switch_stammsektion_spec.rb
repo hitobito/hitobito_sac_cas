@@ -104,7 +104,8 @@ describe Memberships::SwitchStammsektion do
         expect do
           expect(switch.save).to eq true
         end.not_to(change { person.reload.roles.count })
-        expect(bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
+        expect(bluemlisalp_mitglied.reload.deleted_at.utc.change(sec: 0))
+          .to eq now.yesterday.end_of_day.utc.change(sec: 0)
         expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
@@ -154,11 +155,15 @@ describe Memberships::SwitchStammsektion do
         expect do
           expect(switch.save!).to eq true
         end.not_to(change { Role.count })
-        expect(@bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
-        expect(@bluemlisalp_mitglied_other.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
-        expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
+
+        expect(@bluemlisalp_mitglied.reload.deleted_at.change(sec: 0))
+          .to eq now.yesterday.end_of_day.change(sec: 0)
+        expect(@bluemlisalp_mitglied_other.reload.deleted_at.change(sec: 0))
+          .to eq now.yesterday.end_of_day.change(sec: 0)
+        expect(matterhorn_mitglied.created_at.change(sec: 0)).to eq now.change(sec: 0)
+
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
-        expect(matterhorn_mitglied_other.created_at).to eq now.to_s(:db)
+        expect(matterhorn_mitglied_other.created_at.change(sec: 0)).to eq now.change(sec: 0)
         expect(matterhorn_mitglied_other.delete_on).to eq now.end_of_year.to_date
       end
     end

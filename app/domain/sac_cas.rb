@@ -8,17 +8,17 @@
 module SacCas
   ### Membership roles
 
-  MITGLIED_STAMMSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].freeze
+  MITGLIED_STAMMSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].map(&:sti_name)
   NEUANMELDUNG_STAMMSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
-  ].freeze
+  ].map(&:sti_name)
 
-  MITGLIED_ZUSATZSEKTION_ROLES = [::Group::SektionsMitglieder::MitgliedZusatzsektion].freeze
+  MITGLIED_ZUSATZSEKTION_ROLES = [::Group::SektionsMitglieder::MitgliedZusatzsektion].map(&:sti_name)
   NEUANMELDUNG_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
-  ].freeze
+  ].map(&:sti_name)
 
   MITGLIED_ROLES = [
     MITGLIED_STAMMSEKTION_ROLES,
@@ -50,18 +50,18 @@ module SacCas
   SAC_BACKOFFICE_ROLES = [
     ::Group::Geschaeftsstelle::Mitarbeiter,
     ::Group::Geschaeftsstelle::Admin
-  ].freeze
+  ].map(&:sti_name)
 
   SAC_SECTION_FUNCTIONARY_ROLES = [
     ::Group::SektionsFunktionaere::Administration,
     ::Group::SektionsFunktionaere::Praesidium,
     ::Group::SektionsFunktionaere::Mitgliederverwaltung
-  ].freeze
+  ].map(&:sti_name)
 
   TOUR_GUIDE_ROLES = [
     ::Group::SektionsTourenUndKurse::Tourenleiter,
     ::Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
-  ].freeze
+  ].map(&:sti_name)
 
   ###
 

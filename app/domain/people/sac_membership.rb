@@ -77,15 +77,15 @@ class People::SacMembership
 
   private
 
-  def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+  def mitglied_types = SacCas::MITGLIED_ROLES
 
-  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES
 
-  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
+  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES
 
-  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES
 
-  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
+  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES
 
   def any_future_role?
     @person.roles.future.where(convert_to: mitglied_stammsektion_types).exists?

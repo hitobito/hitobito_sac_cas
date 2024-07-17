@@ -43,7 +43,7 @@ module SacCas::Role::MitgliedNoOverlapValidation
     return unless period.begin && period.end
 
     Role
-      .where(type: role_types.map(&:sti_name))
+      .where(type: role_types)
       .where(person_id: person_id)
       .where.not(id: id)
       .to_a
