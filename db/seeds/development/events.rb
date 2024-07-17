@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require HitobitoSacCas::Wagon.root.join('db', 'seeds', 'development', 'support', 'sac_event_seeder')
+require HitobitoSacCas::Wagon.root.join("db", "seeds", "development", "support", "sac_event_seeder")
 
 srand(42)
 
