@@ -11,8 +11,9 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
   let(:additional_section) { groups(:matterhorn) }
-  let(:role) { member.main_membership_role }
-  let(:positions) { described_class.new(member).generate(role) }
+  let(:memberships) { member.active_memberships }
+  let(:new_entry) { false }
+  let(:positions) { described_class.new(member).generate(memberships, new_entry: new_entry) }
   let(:magazine_list) { mailing_lists(:sac_magazine) }
 
   before do
@@ -54,6 +55,44 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
+    end
+
+    context "with custom discount" do
+      let(:positions) { described_class.new(member, custom_discount: 50).generate(memberships, new_entry: new_entry) }
+
+      it "generates positions" do
+        expect(positions.size).to eq(5)
+
+        expect(positions[0].name).to eq("sac_fee")
+        expect(positions[0].group).to eq(:sac_fee)
+        expect(positions[0].amount).to eq(20.0)
+        expect(positions[0].creditor.to_s).to eq(sac.to_s)
+        expect(positions[0].article_number).to eq(config.sac_fee_article_number)
+
+        expect(positions[1].name).to eq("hut_solidarity_fee")
+        expect(positions[1].group).to eq(:sac_fee)
+        expect(positions[1].amount).to eq(10.0)
+        expect(positions[1].creditor.to_s).to eq(sac.to_s)
+        expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
+
+        expect(positions[2].name).to eq("sac_magazine")
+        expect(positions[2].group).to eq(:sac_fee)
+        expect(positions[2].amount).to eq(12.5)
+        expect(positions[2].creditor.to_s).to eq(sac.to_s)
+        expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
+
+        expect(positions[3].name).to eq("section_fee")
+        expect(positions[3].group).to eq(nil)
+        expect(positions[3].amount).to eq(21.0)
+        expect(positions[3].creditor.to_s).to eq(main_section.to_s)
+        expect(positions[3].article_number).to eq(config.section_fee_article_number)
+
+        expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].group).to eq(nil)
+        expect(positions[4].amount).to eq(28.0)
+        expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
+        expect(positions[4].article_number).to eq(config.section_fee_article_number)
+      end
     end
   end
 
@@ -559,11 +598,14 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "new entry" do
-    let(:role) { member.new_entry_role }
+    let(:memberships) { [member.membership_from_role(member.new_entry_role, main: true)] }
+    let(:new_entry) { true }
 
     context "without neuanmeldung" do
+      let(:memberships) { [] }
+
       it "generates no positions" do
-        expect { positions }.to raise_error(ArgumentError)
+        expect(positions.size).to eq(0)
       end
     end
 
@@ -604,79 +646,41 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
       end
     end
-
-    context "with ignored neuanmeldung sektion" do
-      before do
-        # this role is ignored
-        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.create!(
-          person: person,
-          group: groups(:bluemlisalp_neuanmeldungen_sektion),
-          created_at: date
-        )
-      end
-
-      it "generates no positions" do
-        expect { positions }.to raise_error(ArgumentError)
-      end
-    end
   end
 
   context "new additional section" do
-    let(:role) { member.new_additional_section_membership_role(groups(:bluemlisalp)) }
+    let(:memberships) { [member.membership_from_role(member.new_additional_section_membership_role(groups(:bluemlisalp)))] }
 
-    context "without neuanmeldung" do
-      it "generates no positions" do
-        expect { positions }.to raise_error(ArgumentError)
-      end
+    let(:person) { Fabricate(:person) }
+
+    before do
+      Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
+        person: person,
+        group: groups(:bluemlisalp_neuanmeldungen_nv),
+        created_at: date
+      )
     end
 
-    context "with neuanmeldung" do
-      let(:person) { Fabricate(:person) }
+    it "generates positions" do
+      expect(positions.size).to eq(1)
 
+      expect(positions[0].name).to eq("section_fee")
+      expect(positions[0].amount).to eq(42.0)
+    end
+
+    context "living abroad" do
       before do
-        Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
-          person: person,
-          group: groups(:bluemlisalp_neuanmeldungen_nv),
-          created_at: date
-        )
+        person.update!(country: "DE")
+        context.fetch_section(additional_section).bulletin_postage_abroad = 0
       end
 
       it "generates positions" do
-        expect(positions.size).to eq(1)
+        expect(positions.size).to eq(2)
 
         expect(positions[0].name).to eq("section_fee")
         expect(positions[0].amount).to eq(42.0)
-      end
-
-      context "living abroad" do
-        before do
-          person.update!(country: "DE")
-          context.fetch_section(additional_section).bulletin_postage_abroad = 0
-        end
-
-        it "generates positions" do
-          expect(positions.size).to eq(2)
-
-          expect(positions[0].name).to eq("section_fee")
-          expect(positions[0].amount).to eq(42.0)
-          expect(positions[1].name).to eq("section_bulletin_postage_abroad")
-          expect(positions[1].amount).to eq(13.0)
-        end
-      end
-    end
-
-    context "with ignored neuanmeldung sektion" do
-      before do
-        # this role is ignored
-        Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.create!(
-          person: person,
-          group: groups(:bluemlisalp_neuanmeldungen_sektion),
-          created_at: date
-        )
-      end
-
-      it "generates no positions" do
-        expect { positions }.to raise_error(ArgumentError)
+        expect(positions[1].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[1].amount).to eq(13.0)
       end
     end
   end

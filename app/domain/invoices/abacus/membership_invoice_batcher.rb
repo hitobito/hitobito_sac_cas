@@ -12,6 +12,9 @@ module Invoices
     # TODO: implement transmit people to handle updates
     # TODO: handle errors in parts. Map request parts to response parts (for subject assocs)?
     class MembershipInvoiceBatcher
+      PARALLEL_THREADS = 4
+      BATCH_SIZE = 25
+
       attr_reader :date
 
       def initialize(date, client: nil)
@@ -40,8 +43,8 @@ module Invoices
       def create_invoices(people)
         sales_orders = []
         ms = Benchmark.ms do
-          invoices = membership_invoices(people)
-          sales_orders = invoices.map(&:sales_order)
+          membership_invoices = membership_invoices(people)
+          sales_orders = create_sales_orders(membership_invoices)
         end
         Rails.logger.debug { "Creating invoices: #{ms}ms" }
         sales_order_interface.create_batch(sales_orders)
@@ -49,8 +52,8 @@ module Invoices
 
       # Test with batch size of 25, in 4 parallel threads
       def create_parallel_invoices(people)
-        slices = people.each_slice(25).to_a
-        Parallel.map(slices, in_threads: 4) do |slice|
+        slices = people.each_slice(BATCH_SIZE).to_a
+        Parallel.map(slices, in_threads: PARALLEL_THREADS) do |slice|
           ActiveRecord::Base.connection_pool.with_connection do
             create_invoices(slice)
           end
@@ -63,9 +66,30 @@ module Invoices
         people.filter_map do |person|
           member = Invoices::SacMemberships::Member.new(person, context)
           if member.main_membership_role
-            MembershipInvoice.new(member, member.main_membership_role)
+            invoice = MembershipInvoice.new(member, member.active_memberships)
+            invoice if invoice.invoice?
           end
         end
+      end
+
+      def create_sales_orders(membership_invoices)
+        membership_invoices.map do |mi|
+          invoice = create_invoice(mi)
+          SalesOrder.new(invoice, mi.positions, mi.additional_user_fields)
+        end
+      end
+
+      def create_invoice(membership_invoice) # rubocop:disable Metrics/MethodLength
+        ExternalInvoice::SacMembership.create!(
+          person: membership_invoice.member.person,
+          year: date.year,
+          state: :draft,
+          total: membership_invoice.total,
+          issued_at: date,
+          sent_at: date,
+          # also see comment in ExternalInvoice::SacMembership
+          link: membership_invoice.member.main_section
+        )
       end
 
       def context

@@ -27,16 +27,20 @@ class People::MembershipInvoicePositionsController < ApplicationController
 
   def positions
     @positions ||=
-      Invoices::SacMemberships::PositionGenerator.new(member).generate(current_role).map(&:to_h)
+      Invoices::SacMemberships::PositionGenerator
+        .new(member)
+        .generate(current_memberships, new_entry: @new_entry)
+        .map(&:to_h)
   end
 
-  def current_role
+  def current_memberships
     if member.new_entry_role
-      member.new_entry_role
+      @new_entry = true
+      [member.membership_from_role(member.new_entry_role, main: true)]
     elsif member.new_additional_section_membership_roles.present?
-      member.new_additional_section_membership_roles.first
+      [member.membership_from_role(member.new_additional_section_membership_roles.first)]
     else
-      member.main_membership_role
+      member.active_memberships
     end
   end
 

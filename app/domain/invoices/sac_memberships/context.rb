@@ -14,8 +14,8 @@ module Invoices
         @date = date
       end
 
-      def mid_year_discount
-        @mid_year_discount ||= (100 - config.discount_percent(date)) / 100.0
+      def mid_year_discount_factor
+        @mid_year_discount_factor ||= (100 - config.discount_percent(date)) / 100.0
       end
 
       def fetch_section(role)
@@ -29,6 +29,10 @@ module Invoices
 
       def sac
         @sac ||= Group.root
+      end
+
+      def sac_magazine_mailing_list
+        @sac_magazine_mailing_list ||= MailingList.find(sac.sac_magazine_mailing_list_id)
       end
     end
   end

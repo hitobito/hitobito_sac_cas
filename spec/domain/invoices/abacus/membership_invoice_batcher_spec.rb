@@ -87,23 +87,9 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
       )
 
-    stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-      .with(
-        body: batch_body_trigger_next_step,
-        headers: {
-          "Authorization" => "Bearer 42",
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-        }
-      )
-      .to_return(
-        status: 202,
-        body: "",
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-      )
-
     expect do
       subject.create_invoices(people)
-    end.to change { ExternalInvoice.count }.by(people.size)
+    end.to change { ExternalInvoice.count }.by(2)
 
     invoice = ExternalInvoice.last
     expect(invoice.abacus_sales_order_key).to eq(45)
@@ -333,25 +319,7 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"CustomerId":11,"OrderDate":"2023-01-01","DeliveryDate":"2023-01-01","TotalAmount":0.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 1}","UserField2":"hitobito","UserField3":true},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"CustomerId":12,"OrderDate":"2023-01-01","DeliveryDate":"2023-01-01","TotalAmount":0.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 2}","UserField2":"hitobito","UserField3":true},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":0.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"CustomerId":13,"OrderDate":"2023-01-01","DeliveryDate":"2023-01-01","TotalAmount":267.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 3}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{people[3].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{people[1].membership_verify_token}","UserField13":"600004;Norgay;Nima;#{people[2].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
+      {"CustomerId":13,"OrderDate":"2023-01-01","DeliveryDate":"2023-01-01","TotalAmount":267.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 1}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{people[3].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{people[1].membership_verify_token}","UserField13":"600004;Norgay;Nima;#{people[2].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end
@@ -375,68 +343,8 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SalesOrderId":43,"SalesOrderBacklogId":0}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      HTTP/1.1 201 Created\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"SalesOrderId":44,"SalesOrderBacklogId":0}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      HTTP/1.1 201 Created\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
       {"SalesOrderId":45,"SalesOrderBacklogId":0}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
-    HTTP
-  end
-
-  def batch_body_trigger_next_step
-    <<~HTTP
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders(SalesOrderId=42,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"TypeOfPrinting":"AccToSequentialControl"}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders(SalesOrderId=43,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"TypeOfPrinting":"AccToSequentialControl"}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders(SalesOrderId=44,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"TypeOfPrinting":"AccToSequentialControl"}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
-      Content-Type: application/http\r
-      Content-Transfer-Encoding: binary\r
-      \r
-      POST SalesOrders(SalesOrderId=45,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep HTTP/1.1\r
-      Content-Type: application/json\r
-      Accept: application/json\r
-      \r
-      {"TypeOfPrinting":"AccToSequentialControl"}\r
-      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end
 end

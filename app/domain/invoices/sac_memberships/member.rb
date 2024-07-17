@@ -7,6 +7,8 @@
 
 module Invoices
   module SacMemberships
+    Membership = Data.define(:section, :beitragskategorie, :main)
+
     class Member
       MAIN_MEMBERSHIP_ROLE = Group::SektionsMitglieder::Mitglied
       ADDITIONAL_SECTION_ROLE = Group::SektionsMitglieder::MitgliedZusatzsektion
@@ -14,10 +16,9 @@ module Invoices
       NEW_ADDITIONAL_SECTION_ROLE = Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
 
       attr_reader :person, :context
-      attr_writer :sac_magazine_mailing_list
 
       delegate :id, :to_s, :language, :sac_family_main_person?, to: :person
-      delegate :date, to: :context
+      delegate :date, :sac_magazine_mailing_list, to: :context
 
       # Person model
       def initialize(person, context)
@@ -34,8 +35,22 @@ module Invoices
         person.membership_years
       end
 
+      def membership_from_role(role, main: nil)
+        main = role == main_membership_role if main.nil?
+        Membership.new(role.layer_group, role.beitragskategorie, main)
+      end
+
+      def active_memberships
+        [membership_from_role(main_membership_role)] +
+          additional_membership_roles.map { |r| membership_from_role(r) }
+      end
+
       def main_membership_role
         @main_membership_role ||= active_roles_of_type(MAIN_MEMBERSHIP_ROLE).first
+      end
+
+      def main_section
+        main_membership_role&.layer_group
       end
 
       def additional_membership_roles
@@ -80,18 +95,8 @@ module Invoices
         @sac_magazine = sac_magazine_mailing_list.subscribed?(person)
       end
 
-      def paying_person?(role)
-        !role.beitragskategorie.family? || sac_family_main_person?
-      end
-
-      def service_fee?(role)
-        paying_person?(role) ||
-          additional_membership_roles.any? { |r| !r.beitragskategorie.family? }
-      end
-
-      def membership_cards?(role)
-        paying_person?(role) &&
-          (role == main_membership_role || role == new_entry_role)
+      def paying_person?(beitragskategorie)
+        !beitragskategorie.family? || sac_family_main_person?
       end
 
       def family_members
@@ -103,10 +108,6 @@ module Invoices
       end
 
       private
-
-      def sac_magazine_mailing_list
-        @sac_magazine_mailing_list ||= MailingList.find(Group.root.sac_magazine_mailing_list_id)
-      end
 
       def active_roles_of_type(type)
         active_roles.select { |r| r.is_a?(type) }

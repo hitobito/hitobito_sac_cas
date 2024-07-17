@@ -11,15 +11,16 @@ module Invoices
       class Base
         class_attribute :group, :section_payment_possible
 
-        attr_reader :member, :role, :context
+        attr_reader :member, :membership, :custom_discount, :context
         attr_writer :amount
 
-        delegate :date, :config, :mid_year_discount, :sac, to: :context
-        delegate :beitragskategorie, to: :role
+        delegate :date, :config, :mid_year_discount_factor, :sac, to: :context
+        delegate :beitragskategorie, to: :membership
 
-        def initialize(member, role)
+        def initialize(member, membership, custom_discount: nil)
           @member = member
-          @role = role
+          @membership = membership
+          @custom_discount = custom_discount # between 0 and 100
           @context = member.context
         end
 
@@ -34,7 +35,7 @@ module Invoices
         def amount
           return 0 if member.sac_honorary_member?
 
-          @amount ||= [gross_amount, 0].max * mid_year_discount
+          @amount ||= [gross_amount, 0].max * discount_factor
         end
 
         def gross_amount
@@ -99,7 +100,7 @@ module Invoices
         private
 
         def section
-          @section ||= context.fetch_section(role)
+          @section ||= context.fetch_section(membership.section)
         end
 
         def fee_attr_prefix
@@ -113,7 +114,7 @@ module Invoices
         end
 
         def paying_person?
-          member.paying_person?(role)
+          member.paying_person?(beitragskategorie)
         end
 
         def abroad_postage?
@@ -126,6 +127,14 @@ module Invoices
 
         def sac_fee_exemption?
           section.sac_fee_exemption?(member)
+        end
+
+        def discount_factor
+          if custom_discount
+            (100 - custom_discount) / 100.0
+          else
+            mid_year_discount_factor
+          end
         end
       end
     end
