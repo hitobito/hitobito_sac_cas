@@ -41,21 +41,29 @@ file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
 
 - Importiert Sektionen/Ortsgruppen und erstellt deren Unterordnerstruktur
 
+Import Source File: NAV6
+
 ## 3. import:huts
 
 `rake import:huts`
 
 file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
+Import Source File: NAV5
+
 ## 4. import:memberships
 
 `rails import:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
+
+Import Source File: NAV2
 
 ## 5. import:additional_memberships
 
 Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
 
 `rails import:additional_memberships FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)`
+
+Import Source File: NAV3
 
 ## Delete all Sektions
 
