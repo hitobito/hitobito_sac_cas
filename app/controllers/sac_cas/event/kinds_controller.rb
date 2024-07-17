@@ -21,7 +21,10 @@ module SacCas::Event::KindsController
       :training_days,
       :season,
       :reserve_accommodation,
-      :accommodation
+      :accommodation,
+      course_compensation_categories: {
+        course_compensation_category_ids: []
+      }
     ]
   end
 
@@ -38,5 +41,6 @@ module SacCas::Event::KindsController
     @cost_centers = CostCenter.list
     @cost_units = CostUnit.list
     @kind_categories = Event::KindCategory.list
+    @course_compensation_categories = CourseCompensationCategory.where(kind: [:day, :flat])
   end
 end

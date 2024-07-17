@@ -14,11 +14,10 @@ module SacCas::EventKindsHelper
 
     form.labeled(title) do
       content_tag(:div, class: "col-6") do
-        "gugus"
-        # select_tag("event_kind[course_compensation_categories][qualification_kind_ids]",
-        #  options_from_collection_for_select(options, :id, :to_s, selected.collect(&:id)),
-        #  multiple: true,
-        #  class: "form-select form-select-sm tom-select")
+        select_tag("event_kind[course_compensation_categories][course_compensation_category_ids]",
+          options_from_collection_for_select(options, :id, :to_s, selected.collect(&:id)),
+          multiple: true,
+          class: "form-select form-select-sm tom-select")
       end
     end
   end
