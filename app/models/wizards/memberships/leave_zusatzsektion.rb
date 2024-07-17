@@ -34,7 +34,7 @@ module Wizards::Memberships
 
     def save!
       super
-      leave_operation.save!
+      leave_operation.save!.tap { send_confirmation_mail }
     end
 
     def leave_operation
@@ -66,6 +66,14 @@ module Wizards::Memberships
     end
 
     private
+
+    def send_confirmation_mail
+      Memberships::LeaveZusatzsektionMailer.confirmation(
+        person,
+        sektion_name,
+        I18n.l(terminate_on)
+      ).deliver_later
+    end
 
     def family_main_person?
       person.sac_family_main_person
