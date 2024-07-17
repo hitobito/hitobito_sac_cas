@@ -22,9 +22,7 @@ module SacCas::Event::KindsController
       :season,
       :reserve_accommodation,
       :accommodation,
-      course_compensation_categories: {
-        course_compensation_category_ids: []
-      }
+      course_compensation_category_ids: []
     ]
   end
 
