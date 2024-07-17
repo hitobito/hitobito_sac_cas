@@ -22,7 +22,7 @@ module SacCas::PersonResource
         @object.membership_number if @object.sac_membership_anytime?
       end
       attribute :sac_remark_national_office, :string do
-         @object.sac_remark_national_office if can?(:manage_national_office_remark, @object)
+        @object.sac_remark_national_office if can?(:manage_national_office_remark, @object)
       end
 
       (1..5).each do |num|
