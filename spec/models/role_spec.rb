@@ -430,7 +430,7 @@ describe Role do
         create_role(delete_on: end_at)
         person.roles.update_all(type: role_type)
         role = person.roles.with_membership_years.first
-        expect(role.class).to eq role_type
+        expect(role.class.sti_name).to eq role_type
         expect(role.membership_years).to eq 0
       end
     end

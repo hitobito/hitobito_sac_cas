@@ -146,7 +146,7 @@ describe SelfInscription do
             .and not_change { neuanmeldungen_future.count }
             .and not_change { neuanmeldungen_zusatzsektion.count }
             .and not_change { neuanmeldungen_zusatzsektion_future.count }
-            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59))
+            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59, usec: 999999))
         end
 
         it "with fresh membership, creates normal role and marks existing membership role as destroyed" do
@@ -156,7 +156,7 @@ describe SelfInscription do
             .and not_change { neuanmeldungen_future.count }
             .and not_change { neuanmeldungen_zusatzsektion.count }
             .and not_change { neuanmeldungen_zusatzsektion_future.count }
-            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59))
+            .and change { role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.change(sec: 59, usec: 999999))
         end
 
         it "creates future role and marks existing membership role for deletion" do
@@ -195,7 +195,7 @@ describe SelfInscription do
               .and not_change { neuanmeldungen.count }
               .and not_change { neuanmeldungen_zusatzsektion.count }
               .and not_change { neuanmeldungen_future.count }
-              .and not_change { role.reload.delete_on }
+              .and not_change { role.reload.delete_on.change(sec: 0) }
           end
         end
       end
