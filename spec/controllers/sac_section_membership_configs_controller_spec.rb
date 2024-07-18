@@ -8,8 +8,8 @@
 require "spec_helper"
 
 describe SacSectionMembershipConfigsController do
-  let(:mitgliederverwaltung_sektion) do
-    Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+  let(:admin_sektion) do
+    Fabricate(Group::SektionsFunktionaere::Administration.sti_name.to_sym,
       group: groups(:bluemlisalp_funktionaere)).person
   end
   let(:latest_config) { sac_section_membership_configs(:bluemlisalp_2024) }
@@ -21,7 +21,7 @@ describe SacSectionMembershipConfigsController do
   end
   let(:sektion) { groups(:bluemlisalp) }
 
-  before { sign_in(mitgliederverwaltung_sektion) }
+  before { sign_in(admin_sektion) }
 
   context "GET index" do
     it "redirects to latest config edit" do
@@ -63,7 +63,7 @@ describe SacSectionMembershipConfigsController do
         .to redirect_to(edit_group_sac_section_membership_config_path(group_id: sektion.id, id: older_config.id))
     end
 
-    it "cannot be accessed by non mitglieder verwaltung" do
+    it "cannot be accessed by non admin" do
       sign_in(people(:mitglied))
 
       expect do
@@ -85,7 +85,7 @@ describe SacSectionMembershipConfigsController do
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "cannot be accessed by non mitglieder verwaltung" do
+    it "cannot be accessed by non admin" do
       sign_in(people(:mitglied))
 
       expect do
@@ -120,7 +120,7 @@ describe SacSectionMembershipConfigsController do
       expect(latest_config.valid_from).to eq(2024)
     end
 
-    it "cannot be accessed by non mitglieder verwaltung" do
+    it "cannot be accessed by non admin" do
       sign_in(people(:mitglied))
 
       expect do

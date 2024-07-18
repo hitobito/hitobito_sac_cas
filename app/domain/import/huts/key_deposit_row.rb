@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module Import::Huts
   class KeyDepositRow
     include RemovingPlaceholderContactRole
@@ -22,7 +20,7 @@ module Import::Huts
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
-      role_type = role_type_for(@row)
+      role_type = self.class.role_type_for(@row)
       huette = huette(@row)
       unless huette
         # TODO fix bugs in data export, where not all huts are exported
@@ -94,7 +92,8 @@ module Import::Huts
     end
 
     def role_label(row)
-      t(row, "activerecord.models.group/sektions_huette/schluesseldepot.one")
+      role_type = self.class.role_type_for(row)
+      t(row, "activerecord.models.#{role_type.model_name.i18n_key}.schluesseldepot")
     end
 
     def t(row, key)

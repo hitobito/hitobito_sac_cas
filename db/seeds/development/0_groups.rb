@@ -44,7 +44,7 @@ if root.address.blank?
 end
 
 Group::Geschaeftsstelle.seed(:name, :parent_id, {
-  name: '1 Geschäftsstelle',
+  name: 'SAC Geschäftsstelle',
   parent_id: root.id
 })
 
