@@ -294,7 +294,7 @@ describe People::SacFamily do
 
         it 'adds multiple zusatzsektion roles' do
           other_sektion_mitglieder = Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).
-            children.find_by(type: Group::SektionsMitglieder)
+            children.find_by(type: Group::SektionsMitglieder.sti_name)
 
           Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
             group: other_sektion_mitglieder,

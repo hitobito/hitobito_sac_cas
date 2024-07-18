@@ -30,12 +30,12 @@ class People::SacFamily
   def update_terminated_roles
     terminated_roles = @person
                        .roles
-                       .where(type: terminatable_member_role_types,
+                       .where(type: terminatable_member_role_types.map(&:sti_name),
                               terminated: true,
                               beitragskategorie: :family)
 
     affected_family_roles = Role
-                            .where(type: terminatable_member_role_types,
+                            .where(type: terminatable_member_role_types.map(&:sti_name),
                                    group_id: terminated_roles.collect(&:group_id),
                                    terminated: false,
                                    beitragskategorie: :family,
@@ -179,7 +179,7 @@ class People::SacFamily
   end
 
   def terminatable_member_role_types
-    SacCas::MITGLIED_ROLES.select(&:terminatable)
+    SacCas::MITGLIED_ROLES.map(&:constantize).select(&:terminatable)
   end
 
   def category_calculator(person)

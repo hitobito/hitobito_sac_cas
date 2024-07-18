@@ -53,10 +53,10 @@ class People::SacMembership
   private
 
   def any_future_role?
-    @person.roles.future.where(convert_to: @roles).exists?
+    @person.roles.future.where(convert_to: @roles.map(&:sti_name)).exists?
   end
 
   def any_past_role?
-    @person.roles.deleted.where(type: @roles).exists?
+    @person.roles.deleted.where(type: @roles.map(&:sti_name)).exists?
   end
 end
