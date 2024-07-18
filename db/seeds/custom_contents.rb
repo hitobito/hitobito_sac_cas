@@ -12,7 +12,8 @@ CustomContent.seed_once(:key,
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
   { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
   { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR },
-  { key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  }
+  { key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  },
+  { key: Memberships::TerminateSacMembershipMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  }
 )
 
 participation_rejected_id =
@@ -62,5 +63,12 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     subject: 'Bestätigung Austritt Zusatzsektion',
     body: 'Hallo {person-name},<br/><br/>' \
     'Der Austritt aus {sektion-name} wurde per {terminate-on} vorgenommen.'
+  },
+  { custom_content_id: CustomContent.get(Memberships::TerminateSacMembershipMailer::CONFIRMATION).id,
+    locale: 'de',
+    label: 'Bestätigung SAC Austritt',
+    subject: 'Der SAC Austritt wurde per {terminate-on} vorgenommen',
+    body: 'Hallo {person-name},<br/><br/>' \
+    'Der SAC Austritt wurde per {terminate-on} vorgenommen.'
   }
 )

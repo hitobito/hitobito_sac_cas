@@ -10,6 +10,7 @@ module Dropdown
     attr_reader :person, :template
 
     delegate :t, :current_ability, :current_user, :group_person_join_zusatzsektion_path,
+      :group_person_terminate_sac_membership_path,
       to: :template
 
     def initialize(template, person, group)
@@ -28,6 +29,7 @@ module Dropdown
 
     def init_items
       add_join_zusatzsektion_item if join_zusatzsektion?
+      add_sac_membership_termination if terminate_sac_membership?
     end
 
     def add_join_zusatzsektion_item
@@ -39,6 +41,21 @@ module Dropdown
       current_ability.can?(
         :create,
         Wizards::Memberships::JoinZusatzsektion.new(
+          person: @person,
+          backoffice: current_user.backoffice?
+        )
+      )
+    end
+
+    def add_sac_membership_termination
+      link = group_person_terminate_sac_membership_path(group_id: @group.id, person_id: @person.id)
+      add_item(translate(:sac_membership_termination_link), link, method: :get)
+    end
+
+    def terminate_sac_membership?
+      current_ability.can?(
+        :create,
+        Wizards::Memberships::TerminateSacMembershipWizard.new(
           person: @person,
           backoffice: current_user.backoffice?
         )

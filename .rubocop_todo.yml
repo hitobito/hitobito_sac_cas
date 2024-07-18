@@ -58,6 +58,7 @@ Rails/HelperInstanceVariable:
     - 'app/helpers/sac_cas/roles/terminate_role_link.rb'
     - 'app/helpers/sheet/memberships/join_zusatzsektion.rb'
     - 'app/helpers/sheet/memberships/leave_zusatzsektion.rb'
+    - 'app/helpers/sheet/memberships/terminate_sac_membership.rb'
 
 # Offense count: 3
 # Configuration parameters: IgnoreScopes, Include.

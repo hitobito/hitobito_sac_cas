@@ -17,6 +17,7 @@ de:
     wizards/steps/termination_choose_date_title: Austrittsdatum
     wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
     wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
+    wizards/steps/termination/summary_title: Bestätigung
 
   errors:
     messages:
@@ -75,6 +76,11 @@ de:
 
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: 'Austrittsgrund'
+      wizards/steps/termination/summary:
+        termination_reason_id: 'Austrittsgrund'
+        data_retention_consent: 'Meine Daten sollen nach dem Austritt erhalten blieben und ich kann für Spendenaufrufe kontaktiert werden'
+        subscribe_newsletter: 'Newsletter beibehalten'
+        subscribe_fundraising_list: 'Ich möchte weiterhin über Spendenaktionen informiert werden.'
 
     errors:
       messages:
@@ -745,6 +751,7 @@ de:
   dropdown/people/memberships:
     title: Mitgliedschaft anpassen
     join_zusatzsektion_link: Zusatzsektion beantragen
+    sac_membership_termination_link: SAC-Mitgliedschaft beenden
 
   dropdown/people_export:
     recipients: Empfänger
@@ -941,6 +948,12 @@ de:
     membership_invoices:
       success_notice: "Die Rechnung wurde erfolgreich an Abacus übermittelt. Auftrag-Nr. %{abacus_key}"
       alert_notice: "Die Rechnung konnte nicht an Abacus übermittelt werden. Fehlermeldung: %{message}"
+
+    terminate_sac_memberships:
+      create:
+        success: 
+          one: "Deine SAC-Mitgliedschaft wurde gekündet."
+          other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1227,6 +1240,9 @@ de:
   sheet/memberships/leave_zusatzsektion:
     title: Zusatzsektion verlassen
 
+  sheet/memberships/terminate_sac_membership:
+    title: SAC-Mitgliedschaft beenden
+
   wizards:
     steps:
       choose_sektion:
@@ -1256,11 +1272,25 @@ de:
 Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
-      leave_zusatzsektion:
-        ask_family_main_person:
+      ask_family_main_person:
           info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
+      leave_zusatzsektion:
         summary:
           family_warning: "Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt.
 Davon betroffen sind: %{family_member_names}."
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
+          next_button: "Austritt beantragen"
+      termination:
+        summary:
+          info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
+          termination_by_section_only: "Achtung: der Austritt findet bei einer Sektion statt, bei der die Austritsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
+          family_warning: "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}."
+          data_retention_info_title: "Aufbewahrung deiner Daten"
+          data_retention_info_text: "Nach deinem Austritt bewahren wir deine Daten noch sechs Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich die folgenden Konsequenzen:
+            Falls du später dem SAC wieder beitreten möchtest, musst du die Eintrittsgebühr erneut bezahlen und deine Anzahl Mitgliederjahre beginnen bei null.
+            Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht.
+            Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke verwenden, wie z B. für die SAC App).
+            Falls du dies nicht möchtest, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren."
+          newsletter_info_text: " Falls du den SAC Newsletter weiterhin erhalten möchtest, kannst du uns dies hier mitteilen:"
+          fundraiser_info_text: "Falls wir dich für Spendenaufrufe weiterhin kontaktieren dürfen, kannst du uns dies hier mitteilen:"
           next_button: "Austritt beantragen"

@@ -7,22 +7,21 @@
 
 require "spec_helper"
 
-describe Wizards::Memberships::LeaveZusatzsektion do
+describe Wizards::Memberships::TerminateSacMembershipWizard do
   let(:matterhorn) { groups(:matterhorn) }
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:backoffice) { false }
   let(:params) { {} }
-  let(:role) { person.roles.find_by!(type: "Group::SektionsMitglieder::MitgliedZusatzsektion") }
-  let(:primary_role) { person.roles.find_by!(type: "Group::SektionsMitglieder::Mitglied") }
+  let(:role) { person.roles.find_by!(type: "Group::SektionsMitglieder::Mitglied") }
   let(:person) { people(:mitglied) }
   let(:current_step) { 0 }
   let(:wizard) do
-    described_class.new(current_step:, backoffice:, person:, role:, **params)
+    described_class.new(current_step:, backoffice:, person:, **params)
   end
 
   context "with terminated primary role" do
     it "only has MembershipTerminatedInfo step" do
-      primary_role.update_column(:terminated, true)
+      role.update_column(:terminated, true)
       expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::MembershipTerminatedInfo)
       expect(wizard.step_at(1)).to be_nil
     end
@@ -30,13 +29,14 @@ describe Wizards::Memberships::LeaveZusatzsektion do
 
   def expect_backoffice_steps
     expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::TerminationChooseDate)
-    expect(wizard.step_at(1)).to be_kind_of(Wizards::Steps::LeaveZusatzsektion::Summary)
+    expect(wizard.step_at(1)).to be_kind_of(Wizards::Steps::Termination::Summary)
     expect(wizard.step_at(2)).to be_nil
   end
 
   context "If termination is by section only" do
     before do
-      allow(wizard.role.layer_group).to receive(:mitglied_termination_by_section_only).and_return(true)
+      allow(wizard).to receive(:role).and_return(role)
+      allow(role.layer_group).to receive(:mitglied_termination_by_section_only).and_return(true)
     end
 
     it "only has TerminationNoSelfService step" do
@@ -57,7 +57,7 @@ describe Wizards::Memberships::LeaveZusatzsektion do
     let(:person) { people(:familienmitglied) }
 
     it "only has the Summary step" do
-      expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::LeaveZusatzsektion::Summary)
+      expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::Termination::Summary)
       expect(wizard.step_at(1)).to be_nil
       expect(wizard).not_to be_valid
     end

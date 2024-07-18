@@ -5,13 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Wizards::Steps::MembershipTerminatedInfo < Wizards::Step
-  # Always return false to avoid save! on the wizard
-  def valid?
-    false
-  end
+class Sheet::Memberships::TerminateSacMembership < Sheet::Base
+  self.parent_sheet = Sheet::Person
 
-  def termination_date
-    wizard.person.sac_membership&.stammsektion_role&.end_on
+  def initialize(*args)
+    super
+    @title = I18n.t(".title", scope: self.class.to_s.underscore)
   end
 end

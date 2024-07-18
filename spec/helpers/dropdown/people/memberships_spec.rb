@@ -29,18 +29,21 @@ describe Dropdown::People::Memberships do
 
   def menu = subject.find(".btn-group > ul.dropdown-menu")
 
-  context "JoinZusatzsektion" do
-    it "is empty when person is not permitted" do
-      expect(ability).to receive(:can?).with(:create,
-        kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(false)
-      expect(dropdown.to_s).to be_blank
-    end
+  it "does not render any buttons when person is not permitted" do
+    expect(ability).to receive(:can?).with(:create,
+      kind_of(Wizards::Memberships::TerminateSacMembershipWizard)).and_return(false)
+    expect(ability).to receive(:can?).with(:create,
+      kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(false)
+    expect(dropdown.to_s).to be_blank
+  end
 
-    it "is contains links  when person is permitted" do
-      expect(ability).to receive(:can?).with(:create,
-        kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(true)
-      expect(dropdown.to_s).to be_present
-      expect(menu).to have_link "Zusatzsektion beantragen"
-    end
+  it "does render buttons when person is permitted" do
+    expect(ability).to receive(:can?).with(:create,
+      kind_of(Wizards::Memberships::TerminateSacMembershipWizard)).and_return(true)
+    expect(ability).to receive(:can?).with(:create,
+      kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(true)
+    expect(dropdown.to_s).to be_present
+    expect(menu).to have_link "Zusatzsektion beantragen"
+    expect(menu).to have_link "SAC-Mitgliedschaft beenden"
   end
 end
