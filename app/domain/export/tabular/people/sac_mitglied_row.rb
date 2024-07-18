@@ -43,7 +43,7 @@ module Export::Tabular::People
     # Begünstigt anhand Präsenz einer aktiven Rolle vom Typ Beguenstigt im exportierten Layer.
     # Mögliche Werte: Yes / No
     def begünstigt
-      role_in_layer?(Group::SektionsMitglieder::Beguenstigt) ? "Yes" : "No"
+      role_in_layer?(Group::SektionsMitglieder::Beguenstigt.sti_name) ? "Yes" : "No"
     end
 
     # Beitragskategorie der Person in der exportierten Sektion / Ortsgruppe
@@ -74,14 +74,14 @@ module Export::Tabular::People
     # Ehrenmitglied anhand Präsenz einer aktiven Rolle vom Typ Ehrenmitglied im exportierten Layer.
     # Mögliche Werte: Yes / No
     def ehrenmitglied
-      role_in_layer?(Group::SektionsMitglieder::Ehrenmitglied) ? "Yes" : "No"
+      role_in_layer?(Group::SektionsMitglieder::Ehrenmitglied.sti_name) ? "Yes" : "No"
     end
 
     # Eintrittsjahr der allerersten Mitgliederrolle dieser Person,
     # egal welche Sektion gerade exportiert wird
     def eintrittsjahr
       entry.roles_with_deleted.select do |role|
-        (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
+        (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class.sti_name)
       end.map(&:created_at).min&.year
     end
 
@@ -153,7 +153,7 @@ module Export::Tabular::People
 
     def role_in_layer(*role_classes)
       entry.roles.find do |role|
-        role.group.layer_group_id == group.id && role_classes.include?(role.class)
+        role.group.layer_group_id == group.id && role_classes.include?(role.class.sti_name)
       end
     end
 

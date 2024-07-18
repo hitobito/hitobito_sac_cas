@@ -15,7 +15,7 @@ describe Event::TrainingDays::CoursesLoader do
   let(:ski_pro) { event_kind_qualification_kinds(:ski_pro) }
 
   let(:end_date) { 1.month.ago }
-  let(:start_date) { ski_leader.validity.years.ago.to_date }
+  let(:start_date) { ski_leader.validity.years.ago }
 
   subject(:courses) {
     described_class.new(admin.id, role, [ski_leader.id], start_date, end_date).load

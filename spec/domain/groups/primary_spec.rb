@@ -61,7 +61,7 @@ describe Groups::Primary do
   describe "two preferred_roles" do
     let!(:other) do
       Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
-        .find_by(type: Group::SektionsMitglieder)
+        .find_by(type: Group::SektionsMitglieder.sti_name)
     end
 
     it "favours older over newer" do

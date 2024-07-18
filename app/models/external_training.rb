@@ -46,7 +46,8 @@ class ExternalTraining < ActiveRecord::Base
   after_save :create_trainings_for_other_people
 
   def self.between(start_date, end_date)
-    where(start_at: ..end_date, finish_at: start_date..).distinct
+    where('start_at <= :end_date AND finish_at >= :start_date ',
+          start_date: start_date.to_date, end_date: end_date.to_date).distinct
   end
 
   def to_s

@@ -7,7 +7,7 @@
 
 class SearchStrategies::SqlConditionBuilder
   class BirthdayMatcher < Matcher
-    DATE_FORMAT = "%d.%m.%Y"
+    DATE_FORMAT = "DD.MM.YYYY"
 
     def applies?
       date_string.present?
@@ -17,7 +17,7 @@ class SearchStrategies::SqlConditionBuilder
 
     def column
       super.then do |c|
-        Arel::Nodes::NamedFunction.new("DATE_FORMAT", [c, date_format])
+        Arel::Nodes::NamedFunction.new("TO_CHAR", [c, date_format])
       end
     end
 
