@@ -80,7 +80,7 @@ it:
       models:
         household:
           attributes:
-            members:
+            members: 
               no_members: ""
             base:
               at_least_one_adult: ""
@@ -157,6 +157,9 @@ it:
         created_at: ""
       event:
         unconfirmed_count: ""
+        maximum_age: ""
+        ideal_class_size: ""
+        maximum_class_size: ""
       event/kind:
         accommodation: ""
         accommodations:
@@ -176,6 +179,9 @@ it:
         reserve_accommodation: ""
         maximum_participants: ""
         minimum_participants: ""
+        maximum_age: ""
+        ideal_class_size: ""
+        maximum_class_size: ""
         training_days: ""
       event/course:
         accommodation: ""
@@ -278,7 +284,6 @@ it:
           m: ""
           w: ""
           _nil: ""
-        additional_information: Commenti (a.es. professione)
       group:
         group_id: ""
         navision_id: ""
@@ -863,6 +868,7 @@ it:
     general_fields:
       kind_overrides_link_title:
         ""
+    maximum_age_with_years: ""
 
   external_trainings:
     form:
@@ -1045,7 +1051,7 @@ it:
   memberships:
     join_zusatzsektions:
       create:
-        success:
+        success: 
           one: ""
           many: ""
           other: ""

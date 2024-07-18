@@ -80,7 +80,7 @@ fr:
       models:
         household:
           attributes:
-            members:
+            members: 
               no_members: ""
             base:
               at_least_one_adult: ""
@@ -157,6 +157,9 @@ fr:
         created_at: ""
       event:
         unconfirmed_count: ""
+        maximum_age: ""
+        ideal_class_size: ""
+        maximum_class_size: ""
       event/kind:
         accommodation: ""
         accommodations:
@@ -176,6 +179,9 @@ fr:
         reserve_accommodation: ""
         maximum_participants: ""
         minimum_participants: ""
+        maximum_age: ""
+        ideal_class_size: ""
+        maximum_class_size: ""
         training_days: ""
       event/course:
         accommodation: ""
@@ -278,7 +284,6 @@ fr:
           m: ""
           w: ""
           _nil: ""
-        additional_information: Commentaires (p.ex. profession)
       group:
         group_id: ""
         navision_id: ""
@@ -863,6 +868,7 @@ fr:
     general_fields:
       kind_overrides_link_title:
         ""
+    maximum_age_with_years: ""
 
   external_trainings:
     form:
@@ -1045,7 +1051,7 @@ fr:
   memberships:
     join_zusatzsektions:
       create:
-        success:
+        success: 
           one: ""
           many: ""
           other: ""
