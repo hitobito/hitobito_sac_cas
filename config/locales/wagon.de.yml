@@ -776,6 +776,8 @@ de:
       group/sektions_clubhuette/andere:
         one: Andere
         description: Andere
+        huettenwartspartner: Hüttenwartspartner*in
+        schluesseldepot: Schlüsseldepot
       group/sektionshuetten/leserecht:
         one: Leserecht
         description: Leserecht
@@ -791,6 +793,8 @@ de:
       group/sektionshuette/andere:
         one: Andere
         description: Andere
+        huettenwartspartner: Hüttenwartspartner*in
+        schluesseldepot: Schlüsseldepot
       group/sektions_kommissionen/leserecht:
         one: Leserecht
         description: Leserecht

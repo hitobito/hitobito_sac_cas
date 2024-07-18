@@ -19,8 +19,11 @@ describe People::MembershipController, type: :controller do
     person
   end
   let(:mitgliederverwaltung_sektion) do
-    Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+    person = Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
       group: groups(:bluemlisalp_funktionaere)).person
+    Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name.to_sym,
+      group: groups(:bluemlisalp_mitglieder), person: person)
+    person
   end
 
   context "GET show" do

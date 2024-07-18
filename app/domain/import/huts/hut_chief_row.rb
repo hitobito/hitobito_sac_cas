@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module Import::Huts
   class HutChiefRow
     def self.can_process?(row)
@@ -20,7 +18,7 @@ module Import::Huts
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
-      role_type = role_type_for(@row)
+      role_type = self.class.role_type_for(@row)
       huette = huette(@row)
       unless huette
         # TODO fix bugs in data export, where not all huts are exported

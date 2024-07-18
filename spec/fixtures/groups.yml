@@ -21,7 +21,6 @@ geschaeftsstelle:
   parent: root
   lft: 2
   rgt: 3
-  name: 1 Geschäftsstelle
   type: Group::Geschaeftsstelle
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
@@ -124,7 +123,7 @@ bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv:
 bluemlisalp_ortsgruppe_ausserberg_funktionaere:
   parent: bluemlisalp_ortsgruppe_ausserberg
   lft: 16
-  rgt: 22
+  rgt: 23
   type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
@@ -132,7 +131,7 @@ bluemlisalp_ortsgruppe_ausserberg_funktionaere:
 bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse:
   parent: bluemlisalp_ortsgruppe_ausserberg_funktionaere
   lft: 17
-  rgt: 21
+  rgt: 22
   type: Group::SektionsTourenUndKurse
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
@@ -141,6 +140,7 @@ bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_sommer:
   parent: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
   lft: 18
   rgt: 19
+  name: Touren und Kurse Sommer
   type: Group::SektionsTourenUndKurseSommer
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
@@ -149,6 +149,7 @@ bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_winter:
   parent: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
   lft: 20
   rgt: 21
+  name: Touren und Kurse Winter
   type: Group::SektionsTourenUndKurseWinter
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp_ortsgruppe_ausserberg) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK

@@ -26,7 +26,7 @@ describe Import::Huts::HutWardenPartnerRow do
   let!(:person) { Fabricate(:person, id: 123456) }
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, foundation_year: 1980) }
   let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-  let!(:huts) { Group::SektionsClubhuetten.find_by(parent: funktionaere) }
+  let!(:huts) { Fabricate(Group::SektionsClubhuetten.sti_name.to_sym, parent: funktionaere) }
   let!(:hut) { Fabricate(Group::SektionsClubhuette.sti_name.to_sym, navision_id: 3750, parent: huts) }
   let(:contact_role_group) {
     Group::ExterneKontakte.create!(name: "Navision Import",

@@ -50,15 +50,26 @@ describe QualificationAbility do
           expect(ability).to_not be_able_to(:create, qualification)
         end
 
-        it "is permitted to create for member in same layer as tourenchef role" do
-          qualification.person = ausserberg_mitglied
-          expect(ability).to be_able_to(:create, qualification)
+        context "without writing permission" do
+          it "is not permitted to create for member in same layer as tourenchef role" do
+            qualification.person = ausserberg_mitglied
+            expect(ability).not_to be_able_to(:create, qualification)
+          end
+        end
+
+        context "with writing permission on Mitglieder" do
+          let!(:writing_permission) { Group::SektionsMitglieder::Schreibrecht.create(person: person, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)) }
+
+          it "is permitted to create for member" do
+            qualification.person = ausserberg_mitglied
+            expect(ability).to be_able_to(:create, qualification)
+          end
         end
 
         context "with tourenchef role in layer above" do
           let(:bluemlisalp_sektionsfunktionaere) { Group::SektionsFunktionaere.find_by(parent: groups(:bluemlisalp)) }
           let(:bluemlisalp_touren_und_kurse) { Group::SektionsTourenUndKurse.find_or_create_by(parent: bluemlisalp_sektionsfunktionaere) }
-          let(:bluemlisalp_touren_und_kurse_sommer) { Group::SektionsTourenUndKurseSommer.find_or_create_by(parent: bluemlisalp_touren_und_kurse) }
+          let(:bluemlisalp_touren_und_kurse_sommer) { Group::SektionsTourenUndKurseSommer.find_or_create_by(parent: bluemlisalp_touren_und_kurse, name: Group::SektionsTourenUndKurseSommer.label) }
           let(:bluemlisalp_tourenchef) {
             Fabricate(Group::SektionsTourenUndKurseSommer::Tourenchef.sti_name.to_sym,
               group: bluemlisalp_touren_und_kurse_sommer).person

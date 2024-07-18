@@ -54,7 +54,7 @@ Note: This payload is currently unmodified from hitobito core.
   "roles": [
     {
       "group_id": 8,
-      "group_name": "1 Geschäftsstelle",
+      "group_name": "SAC Geschäftsstelle",
       "role": "Group::Geschaeftsstelle::Mitarbeiter",
       "role_class": "Group::Geschaeftsstelle::Mitarbeiter",
       "role_name": "Mitarbeiter*in (schreibend)",
@@ -92,7 +92,7 @@ Note: This payload is currently unmodified from hitobito core.
   "roles": [
     {
       "group_id": 8,
-      "group_name": "1 Geschäftsstelle",
+      "group_name": "SAC Geschäftsstelle",
       "role": "Group::Geschaeftsstelle::Mitarbeiter",
       "role_class": "Group::Geschaeftsstelle::Mitarbeiter",
       "role_name": "Mitarbeiter*in (schreibend)",
