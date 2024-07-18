@@ -80,9 +80,9 @@ module TableDisplays
     end
 
     def antrag_fuer
-      if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
+      if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:constantize).include?(r.class) }
         I18n.t("groups.sektion_secondary")
-      elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }
+      elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:constantize).include?(r.class) }
         I18n.t("groups.sektion_primary")
       end
     end

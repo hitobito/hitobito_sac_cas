@@ -12,24 +12,24 @@ describe SearchStrategies::SqlConditionBuilder do
       .search_conditions&.to_sql&.delete("`")
   end
 
-  it "builds query for single field" do
-    expect(build("test", %w[people.first_name])).to eq "people.first_name LIKE '%test%'"
+  it 'builds query for single field' do
+    expect(build('test', %w(people.first_name))).to eq "\"people\".\"first_name\" ILIKE '%test%'"
   end
 
-  it "builds query for multiple fields" do
-    conditions = build("test", %w[people.first_name people.last_name])
-    expect(conditions).to eq "(people.first_name LIKE '%test%' OR people.last_name LIKE '%test%')"
+  it 'builds query for multiple fields' do
+    conditions = build('test', %w(people.first_name people.last_name))
+    expect(conditions).to eq "(\"people\".\"first_name\" ILIKE '%test%' OR \"people\".\"last_name\" ILIKE '%test%')"
     expect(Person.where(conditions)).to be_empty
   end
 
   describe "birthday" do
     let(:person) { people(:admin) }
 
-    it "uses custom matcher for birthday" do
-      expect(build("1.10.2014", %w[people.birthday])).to eq "DATE_FORMAT(people.birthday, '%d.%m.%Y') LIKE '%01.10.2014%'"
-      expect(build("01.10.2014", %w[people.birthday])).to eq "DATE_FORMAT(people.birthday, '%d.%m.%Y') LIKE '%01.10.2014%'"
-      expect(build("01.10", %w[people.birthday])).to eq "DATE_FORMAT(people.birthday, '%d.%m.%Y') LIKE '%01.10%'"
-      expect(build("2014", %w[people.birthday])).to eq "DATE_FORMAT(people.birthday, '%d.%m.%Y') LIKE '%2014%'"
+    it 'uses custom matcher for birthday' do
+      expect(build('1.10.2014', %w(people.birthday))).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
+      expect(build('01.10.2014', %w(people.birthday))).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
+      expect(build('01.10', %w(people.birthday))).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10%'"
+      expect(build('2014', %w(people.birthday))).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%2014%'"
     end
 
     it "finds person by birthday" do
@@ -48,8 +48,8 @@ describe SearchStrategies::SqlConditionBuilder do
   describe "id" do
     let(:person) { people(:admin) }
 
-    it "matches id using like" do
-      expect(build(person.id.to_s, %w[people.id])).to eq "people.id LIKE '%#{person.id}%'"
+    it 'matches id using like' do
+      expect(build(person.id.to_s, %w(people.id))).to eq "id::text ILIKE '%#{person.id}%'"
     end
 
     it "ignores non digit only word" do
