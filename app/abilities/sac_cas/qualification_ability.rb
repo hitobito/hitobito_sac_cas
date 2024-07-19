@@ -11,7 +11,7 @@ module SacCas::QualificationAbility
   TOURENCHEF_ROLE_TYPES = [
     Group::SektionsTourenUndKurseSommer::Tourenchef,
     Group::SektionsTourenUndKurseWinter::Tourenchef
-  ]
+  ].map(&:sti_name)
 
   included do
     on(Qualification) do
