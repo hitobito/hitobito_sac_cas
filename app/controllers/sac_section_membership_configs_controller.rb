@@ -35,7 +35,7 @@ class SacSectionMembershipConfigsController < CrudController
   end
 
   def group
-    @group ||= Group.find_by(id: params[:group_id], type: model_class.group_types)
+    @group ||= Group.find_by(id: params[:group_id], type: model_class.group_types.map(&:sti_name))
   end
 
   def group_configs
