@@ -9,7 +9,7 @@ module Groups
   class Primary
     ROLE_TYPES = SacCas::MITGLIED_HAUPTSEKTION_ROLES
 
-    GROUP_TYPES = ROLE_TYPES.collect(&:deconstantize).freeze
+    GROUP_TYPES = ROLE_TYPES
 
     def initialize(person)
       @person = person
