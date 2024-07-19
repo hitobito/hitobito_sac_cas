@@ -3,8 +3,5 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if c.model.termination_date
-  .alert.alert-info
-    = t('.info', date: l(c.model.termination_date))
-- else
-  = "No Termination date"
+.alert.alert-info
+  = t('.info', date: l(c.model.termination_date))

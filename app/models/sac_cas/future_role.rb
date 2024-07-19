@@ -70,7 +70,7 @@ module SacCas::FutureRole
 
   # attributes to copy to new role
   def relevant_attrs
-    # remove attributes that don't exist in the database
+    # remove attributes that are in the model but not in the database to avoid errors
     super.merge(person: person).except("membership_years")
   end
 end

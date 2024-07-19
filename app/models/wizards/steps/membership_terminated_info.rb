@@ -12,6 +12,6 @@ class Wizards::Steps::MembershipTerminatedInfo < Wizards::Step
   end
 
   def termination_date
-    wizard.person.sac_membership&.stammsektion_role&.end_on
+    wizard.person.sac_membership.stammsektion_role.end_on
   end
 end
