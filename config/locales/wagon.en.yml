@@ -80,7 +80,7 @@ en:
       models:
         household:
           attributes:
-            members: 
+            members:
               no_members: ""
             base:
               at_least_one_adult: ""
@@ -282,6 +282,7 @@ en:
           m: ""
           w: ""
           _nil: ""
+        additional_information: ""
       group:
         group_id: ""
         navision_id: ""
@@ -1012,7 +1013,7 @@ en:
   memberships:
     join_zusatzsektions:
       create:
-        success: 
+        success:
           one: ""
           other: ""
     leave_zusatzsektions:
@@ -1183,6 +1184,7 @@ en:
         info: ""
       termination_choose_date:
         info_text: ""
+        warning_termination_by_section_only: ""
       termination_no_self_service:
         info_text: ""
       leave_zusatzsektion:
