@@ -7,13 +7,17 @@
 # Overrides settings from the main application
 application:
   name: SAC/CAS-Portal
-  languages:
+  languages: 
     de: Deutsch
     fr: Français
     it: Italiano
     en: English
   logo:
-    image: logo.svg
+    image: sac_logo_de.svg
+    multilanguage_image:
+      de: sac_logo_de.svg
+      fr: sac_logo_fr.svg
+      it: sac_logo_it.svg
     height: 85
     width: 200
 
