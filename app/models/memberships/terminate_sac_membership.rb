@@ -82,7 +82,7 @@ module Memberships
       role.termination_reason_id = termination_reason_id
 
       if terminate_on.future?
-        role.delete_on ||= [terminate_on, role.delete_on].compact.min
+        role.delete_on = [terminate_on, role.delete_on].compact.min
       else
         role.delete_on = nil
         role.deleted_at = terminate_on
