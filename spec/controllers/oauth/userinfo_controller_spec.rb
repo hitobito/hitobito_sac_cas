@@ -72,8 +72,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           primary_group_id: user.primary_group_id,
           language: user.language,
           phone: nil,
-          membership_years: 0,
-          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+          membership_years: "0.0",
+          picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
           roles: [
             {
               group_id: user.roles.first.group_id,

@@ -12,7 +12,7 @@ module SacCas::QualificationAbility
                            Group::SektionsTourenkommission::TourenchefSommer,
                            Group::SektionsTourenkommission::TourenchefWinter,
                            Group::SektionsTourenkommission::TourenchefKlettern,
-                           Group::SektionsTourenkommission::TourenchefSenioren]
+                           Group::SektionsTourenkommission::TourenchefSenioren].map(&:sti_name)
 
   included do
     on(Qualification) do

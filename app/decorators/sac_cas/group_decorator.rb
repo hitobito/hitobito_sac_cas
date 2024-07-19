@@ -11,7 +11,7 @@ module SacCas::GroupDecorator
     return unless sektion_or_ortsgruppe?
 
     object.children.flat_map(&:roles).select do |role|
-      (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
+      (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class.sti_name)
     end.size
   end
 
