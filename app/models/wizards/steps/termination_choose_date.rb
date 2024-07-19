@@ -5,7 +5,7 @@
 
 module Wizards
   module Steps
-    class TerminationChooseDate < Step
+    class TerminationChooseDate < Wizards::Step
       TERMINATE_ON_OPTIONS = %w[now end_of_year].freeze
       attribute :terminate_on, :string
 

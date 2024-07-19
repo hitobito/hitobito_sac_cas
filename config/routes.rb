@@ -39,6 +39,7 @@ Rails.application.routes.draw do
         resources :membership_invoices, only: [:create], module: :people
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
+        resource :terminate_sac_membership, only: [:show, :create], module: :people
         resources :roles, only: [] do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
         end

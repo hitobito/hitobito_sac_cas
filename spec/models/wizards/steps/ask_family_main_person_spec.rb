@@ -8,7 +8,7 @@
 
 require "spec_helper"
 
-describe Wizards::Steps::LeaveZusatzsektion::AskFamilyMainPerson do
+describe Wizards::Steps::AskFamilyMainPerson do
   let(:params) { {} }
   let(:wizard) { nil } # we don't need a wizard for the model specs
   let(:subject) { described_class.new(wizard, **params) }

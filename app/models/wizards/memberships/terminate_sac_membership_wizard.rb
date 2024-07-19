@@ -6,43 +6,58 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Wizards::Memberships
-  class LeaveZusatzsektion < Wizards::Base
+  class TerminateSacMembershipWizard < Wizards::Base
     self.steps = [
       Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::AskFamilyMainPerson,
       Wizards::Steps::TerminationNoSelfService,
       Wizards::Steps::TerminationChooseDate,
-      Wizards::Steps::LeaveZusatzsektion::Summary
+      Wizards::Steps::Termination::Summary
     ]
 
-    attr_reader :person, :role
+    attr_reader :person
 
-    def sektion_name
-      role.layer_group.display_name
-    end
-
-    def initialize(current_step: 0, person: nil, role: nil, backoffice: false, **params)
+    def initialize(current_step: 0, person: nil, backoffice: nil, **params)
       super(current_step: current_step, **params)
       @person = person
-      @role = role
       @backoffice = backoffice
     end
 
     def valid?
-      super && leave_operation_valid?
+      super && terminate_operation_valid?
     end
 
     def save!
-      super
-      leave_operation.save!.tap { send_confirmation_mail }
+      super && terminate_operation.save! && send_confirmation_mail
     end
 
-    def leave_operation
-      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on, termination_reason_id: termination_reason_id)
+    def terminate_operation
+      @terminate_operation ||=
+        Memberships::TerminateSacMembership.new(
+          role,
+          terminate_on,
+          subscribe_newsletter: step(:summary)&.subscribe_newsletter,
+          subscribe_fundraising_list: step(:summary)&.subscribe_fundraising_list,
+          data_retention_consent: step(:summary)&.data_retention_consent,
+          termination_reason_id: step(:summary)&.termination_reason_id
+        )
     end
 
-    def backoffice?
-      @backoffice
+    def terminate_operation_valid?
+      return true unless last_step?
+
+      terminate_operation.valid?.tap do
+        terminate_operation.errors.full_messages.each do |msg|
+          errors.add(:base, msg)
+        end
+        terminate_operation.errors.copy!(self)
+      end
+
+      errors.empty?
+    end
+
+    def sektion_name
+      role&.layer_group&.display_name
     end
 
     def terminate_on
@@ -53,8 +68,8 @@ module Wizards::Memberships
       end
     end
 
-    def termination_reason_id
-      step(:summary)&.termination_reason_id
+    def role
+      person&.sac_membership&.stammsektion_role
     end
 
     def mitglied_termination_by_section_only?
@@ -62,13 +77,17 @@ module Wizards::Memberships
     end
 
     def family_membership?
-      role.beitragskategorie.family?
+      person.sac_membership.family?
+    end
+
+    def backoffice?
+      @backoffice
     end
 
     private
 
     def send_confirmation_mail
-      Memberships::LeaveZusatzsektionMailer.confirmation(
+      Memberships::TerminateSacMembershipMailer.confirmation(
         person,
         sektion_name,
         I18n.l(terminate_on)
@@ -79,37 +98,28 @@ module Wizards::Memberships
       person.sac_family_main_person
     end
 
-    def leave_operation_valid?
-      return true unless last_step?
-
-      leave_operation.valid?.tap do
-        leave_operation.errors.full_messages.each do |msg|
-          errors.add(:base, msg)
-        end
-        leave_operation.errors.copy!(self)
-      end
-    end
-
     def step_after(step_class_or_name)
       case step_class_or_name
       when :_start
         handle_start
       when Wizards::Steps::TerminationChooseDate
-        Wizards::Steps::LeaveZusatzsektion::Summary.step_name
+        Wizards::Steps::Termination::Summary.step_name
+      when Wizards::Steps::Termination::Summary
+        nil
       end
     end
 
     def handle_start
-      if person.sac_membership.terminated?
+      if person&.sac_membership&.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
-      elsif mitglied_termination_by_section_only? && !backoffice?
-        Wizards::Steps::TerminationNoSelfService.step_name
       elsif family_membership? && !family_main_person?
         Wizards::Steps::AskFamilyMainPerson.step_name
+      elsif mitglied_termination_by_section_only? && !backoffice?
+        Wizards::Steps::TerminationNoSelfService.step_name
       elsif backoffice?
         Wizards::Steps::TerminationChooseDate.step_name
       else
-        Wizards::Steps::LeaveZusatzsektion::Summary.step_name
+        Wizards::Steps::Termination::Summary.step_name
       end
     end
   end

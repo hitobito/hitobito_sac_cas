@@ -17,33 +17,14 @@ describe :roles_terminations, js: true do
     expect(page).to have_selector("#role-termination.modal")
   end
 
-  it "lists all affected roles" do
+  it "lists affected role and mentions person" do
     # when terminating the stammsektion role, the affected roles include
     # all zusatzektion roles as well
-    visit_dialog(roles(:mitglied))
+    visit_dialog(roles(:abonnent_alpen))
 
     within(".modal-dialog") do
-      expect(page).to have_content "SAC Blüemlisalp / Mitglieder / Mitglied (Stammsektion) (Einzel)" # roles(:mitglied)
-      expect(page).to have_content "SAC Matterhorn / Mitglieder / Mitglied (Zusatzsektion) (Einzel)" # roles(:mitglied_zusatzsektion)
-    end
-  end
-
-  it "mentions the role person" do
-    visit_dialog(roles(:mitglied))
-
-    within(".modal-dialog") do
-      expect(page).to have_content(/Austritt.*#{roles(:mitglied).person.full_name}/)
-    end
-  end
-
-  it "mentions the affected people" do
-    # when terminating the stammsektion role of a family member, the affected people
-    # include all family members
-    visit_dialog(roles(:familienmitglied))
-
-    within(".modal-dialog") do
-      expect(page).to have_content(/sowie für.*#{people(:familienmitglied2).full_name}/)
-      expect(page).to have_content(/sowie für.*#{people(:familienmitglied_kind).full_name}/)
+      expect(page).to have_content "SAC/CAS / Die Alpen DE / Abonnent" # roles(:mitglied)
+      expect(page).to have_content(/Austritt.*#{roles(:abonnent_alpen).person.full_name}/)
     end
   end
 end

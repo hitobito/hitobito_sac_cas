@@ -68,7 +68,9 @@ module SacCas::FutureRole
     becomes_mitglied_role?
   end
 
+  # attributes to copy to new role
   def relevant_attrs
-    super.merge(person: person)
+    # remove attributes that are in the model but not in the database to avoid errors
+    super.merge(person: person).except("membership_years")
   end
 end

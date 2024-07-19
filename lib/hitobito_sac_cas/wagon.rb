@@ -4,7 +4,6 @@
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
-
 module HitobitoSacCas
   class Wagon < Rails::Engine
     include Wagons::Wagon
@@ -82,6 +81,7 @@ module HitobitoSacCas
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::LeaveZusatzsektionAbility
+      Ability.store.register Memberships::TerminateSacMembershipAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
