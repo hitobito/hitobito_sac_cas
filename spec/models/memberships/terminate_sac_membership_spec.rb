@@ -98,6 +98,15 @@ describe Memberships::TerminateSacMembership do
         expect(mitglied_zweitsektion.reload.delete_on).to eq Date.new(2015, 12, 31)
       end
 
+      it "does adjust delete_on if already scheduled to delete later" do
+        role.update!(delete_on: end_of_year + 1.day)
+        expect do
+          expect(termination.save!).to eq true
+        end
+          .to not_change { person.roles.count }
+          .and change { role.reload.delete_on }.to(end_of_year)
+      end
+
       it "does adjust delete_on if not scheduled" do
         Role.update_all(delete_on: nil)
         expect do
