@@ -73,7 +73,7 @@ class SelfRegistration::Sektion < SelfRegistration::Base
   end
 
   def household_key
-    @household_key ||= Household.new(Person.new).next_key if household?
+    @household_key ||= Household.new(Person.new).send(:next_key) if household?
   end
 
   def household_emails
