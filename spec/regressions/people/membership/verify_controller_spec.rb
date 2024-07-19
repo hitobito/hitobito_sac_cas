@@ -106,7 +106,7 @@ describe People::Membership::VerifyController, type: :controller do
         end
 
         # Go through locales, render page and check dom for logo
-        %i[fr it en].each do |locale|
+        %i[fr it en de].each do |locale| # de locale at the end to avoid flaky specs
           I18n.with_locale(locale) do
             get :show, params: {verify_token: "gits-nid", locale: locale}
             dom = Capybara::Node::Simple.new(response.body)
@@ -120,6 +120,48 @@ describe People::Membership::VerifyController, type: :controller do
             end
             logo_img_alt = dom.find("#logo img")[:alt]
             expect(logo_img_alt).to eq "SAC/CAS-Portal"
+          end
+        end
+      end
+
+      it "renders the sponsor logo in the locale language" do
+        original_view_context = controller.view_context
+        view_context = controller.view_context
+        # In order to stub a method on the view_context we need to make sure our copy is used.
+        allow(controller).to receive(:view_context).and_return(view_context)
+
+        logos = %i[de fr it].map { |locale| [locale, "membership_verify_partner_ad_#{locale.downcase}.jpg"] }.to_h
+        logos[:en] = logos[:de]
+
+        # Stub wagon_image_pack_tag to return logo or use original implementation for other images
+        allow(view_context).to receive(:wagon_image_pack_tag) do |name, **options|
+          if logos.value?(name)
+            view_context.content_tag(:img, nil, src: name, **options)
+          else
+            original_view_context.wagon_image_pack_tag(name, **options)
+          end
+        end
+
+        sponsor_links = {
+          de: "https://www.sac-cas.ch/de/der-sac/unsere-partner/",
+          fr: "https://www.sac-cas.ch/fr/le-cas/nos-partenaires/",
+          it: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
+        }
+
+        %i[fr it en de].each do |locale| # de locale at the end to avoid flaky specs
+          I18n.with_locale(locale) do
+            get :show, params: {verify_token: "gits-nid", locale: locale}
+            dom = Capybara::Node::Simple.new(response.body)
+
+            logo_img_src = dom.find("#sponsors img")[:src]
+            logo_img_url = dom.find("#sponsors a")[:href]
+            if locale == :en
+              expect(logo_img_src).to eq logos[:de]
+              expect(logo_img_url).to eq sponsor_links[:de]
+            else
+              expect(logo_img_src).to eq logos[locale]
+              expect(logo_img_url).to eq sponsor_links[locale]
+            end
           end
         end
       end

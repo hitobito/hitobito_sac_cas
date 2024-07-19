@@ -6,8 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module MembershipVerifyHelper
-  def localized_logo_path
-    "sac_logo_#{I18n.locale.downcase}.svg"
+  def file_locale = %i[de fr it].include?(I18n.locale) ? I18n.locale : :de
+
+  def localized_sponsor_logo_path
+    "membership_verify_partner_ad_#{file_locale.downcase}.jpg"
   end
 
   def localized_sac_sponsors_url
@@ -15,6 +17,6 @@ module MembershipVerifyHelper
       de: "https://www.sac-cas.ch/de/der-sac/unsere-partner/",
       fr: "https://www.sac-cas.ch/fr/le-cas/nos-partenaires/",
       it: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
-    }[I18n.locale]
+    }[file_locale]
   end
 end
