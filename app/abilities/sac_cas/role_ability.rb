@@ -32,11 +32,11 @@ module SacCas::RoleAbility
   end
 
   def mitglied_role?(role = subject)
-    SacCas::MITGLIED_ROLES.include?(role.class)
+    SacCas::MITGLIED_ROLES.include?(role.class.sti_name)
   end
 
   def mitglied_zusatzsektion_role?(role = subject)
-    SacCas::MITGLIED_ZUSATZSEKTION_ROLES.include?(role.class)
+    SacCas::MITGLIED_ZUSATZSEKTION_ROLES.include?(role.class.sti_name)
   end
 
   def mitglied_termination_by_section_only?(role = subject)
