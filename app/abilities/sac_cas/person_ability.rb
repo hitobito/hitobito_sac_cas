@@ -22,7 +22,7 @@ module SacCas::PersonAbility
     end
 
     def if_sac_mitarbeiter
-      SacCas::SAC_MITARBEITER_ROLES.any? { |r| role_type?(r) }
+      SacCas::SAC_MITARBEITER_ROLES.map(&:constantize).any? { |r| role_type?(r) }
     end
 
     def if_person_is_adult_and_all_household_members_writable
