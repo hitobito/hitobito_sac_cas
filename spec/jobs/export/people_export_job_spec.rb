@@ -27,7 +27,7 @@ describe Export::PeopleExportJob do
 
     expect(csv).to have(4).items
     expect(csv.first["﻿Mitglied-Nr"]).to eq "600001"
-    expect(csv.first["Anzahl Mitglieder-Jahre"]).to eq "1"
+    expect(csv.first["Anzahl Mitglieder-Jahre"]).to eq "1.0"
   end
 
   context "with recipients param" do
