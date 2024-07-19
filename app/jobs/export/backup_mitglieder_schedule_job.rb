@@ -8,7 +8,7 @@
 class Export::BackupMitgliederScheduleJob < RecurringJob
   run_every 1.day
 
-  ROLE_TYPES_TO_BACKUP = [Group::Sektion, Group::Ortsgruppe].freeze
+  ROLE_TYPES_TO_BACKUP = [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)
 
   def perform_internal
     relevant_groups.find_each do |group|
@@ -19,7 +19,7 @@ class Export::BackupMitgliederScheduleJob < RecurringJob
   private
 
   def relevant_groups
-    Group.where(type: ROLE_TYPES_TO_BACKUP.map(&:sti_name))
+    Group.where(type: ROLE_TYPES_TO_BACKUP)
   end
 
   def next_run

@@ -43,13 +43,13 @@ describe Roles::TerminateTourenleiterJob do
     it "terminates role if qualification expired yesterday" do
       qualification.update!(finish_at: Time.zone.yesterday)
       expect { job.perform }.to change { person.roles.count }.by(-1)
-      expect(Role.with_deleted.find_by(id: role.id).deleted_at).to eq yesterday
+      expect(Role.with_deleted.find_by(id: role.id).deleted_at.to_date).to eq Time.zone.yesterday
     end
 
     it "terminates role if qualification was removed" do
       qualification.destroy!
       expect { job.perform }.to change { person.roles.count }.by(-1)
-      expect(Role.with_deleted.find_by(id: role.id).deleted_at).to eq yesterday
+      expect(Role.with_deleted.find_by(id: role.id).deleted_at.to_date).to eq Time.zone.yesterday
     end
   end
 end
