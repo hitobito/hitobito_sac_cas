@@ -5,6 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# == Schema Information
+#
+# Table name: termination_reasons
+#
+#  id         :bigint           not null, primary key
+#  text       :text(65535)      not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class TerminationReason < ApplicationRecord
   validates_by_schema
 
