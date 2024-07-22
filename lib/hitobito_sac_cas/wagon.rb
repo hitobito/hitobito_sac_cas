@@ -78,6 +78,7 @@ module HitobitoSacCas
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::LeaveZusatzsektionAbility
