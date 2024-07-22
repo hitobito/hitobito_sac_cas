@@ -34,6 +34,9 @@ class CourseCompensationCategory < ApplicationRecord
 
   scope :list, -> { order(:short_name) }
 
+  validates :short_name, presence: true
+  validates :kind, presence: true
+
   def to_s
     "#{short_name} (#{kind_label})"
   end
