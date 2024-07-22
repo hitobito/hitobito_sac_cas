@@ -26,6 +26,8 @@ class CourseCompensationCategory < ApplicationRecord
   include I18nEnums
   include CapitalizedDependentErrors
 
+  validates_by_schema
+
   has_many :course_compensation_rates, dependent: :restrict_with_error
   translates :name_leader, :name_assistant_leader
 
@@ -33,9 +35,6 @@ class CourseCompensationCategory < ApplicationRecord
   i18n_enum :kind, KINDS
 
   scope :list, -> { order(:short_name) }
-
-  validates :short_name, presence: true
-  validates :kind, presence: true
 
   def to_s
     "#{short_name} (#{kind_label})"
