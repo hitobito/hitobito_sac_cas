@@ -149,8 +149,8 @@ en:
         valid_from: ""
         valid_to: ""
         rate_leader: ""
-        rate_ssistant_leader: ""
-        course_compensation_category: ""
+        rate_assistant_leader: ""
+        course_compensation_category_id: ""
         updated_at: ""
         created_at: ""
       event:

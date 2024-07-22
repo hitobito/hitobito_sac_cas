@@ -6,8 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class CourseCompensationRate < ApplicationRecord
+  validates_by_schema
   belongs_to :course_compensation_category
-  scope :list, -> { order(:valid_from) }
+  scope :list, -> { order(valid_from: :DESC) }
   validate :assert_category_uniqueness_during_validity_period
 
   def assert_category_uniqueness_during_validity_period
@@ -16,5 +17,9 @@ class CourseCompensationRate < ApplicationRecord
       valid_from: valid_from, valid_to: valid_to).any?
       errors.add(:course_compensation_category, :uniqueness_during_validity_period)
     end
+  end
+
+  def to_s
+    "#{valid_from} - #{valid_to} #{course_compensation_category}"
   end
 end

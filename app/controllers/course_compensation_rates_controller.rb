@@ -6,7 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class CourseCompensationRatesController < SimpleCrudController
-  self.permitted_attrs = []
+  self.permitted_attrs = [
+    :valid_from,
+    :valid_to,
+    :rate_leader,
+    :rate_assistant_leader,
+    :course_compensation_category_id
+  ]
 
   private
 
