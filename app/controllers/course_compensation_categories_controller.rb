@@ -7,4 +7,10 @@
 
 class CourseCompensationCategoriesController < SimpleCrudController
   self.permitted_attrs = []
+
+  private
+
+  def list_entries
+    super.list
+  end
 end
