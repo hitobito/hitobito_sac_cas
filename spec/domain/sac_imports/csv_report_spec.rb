@@ -8,15 +8,19 @@
 require "spec_helper"
 
 describe SacImports::CsvReport do
-  before do
-    freeze_time
-  end
-
-  let(:headers) { %i[membershp_number sac_family_number name stammsektion] }
-  let!(:csv_report) { described_class.new(:sektion_membership, headers) }
+  let(:headers) { %i[membership_number sac_family_number name stammsektion] }
+  let(:csv_report) { described_class.new(:sektion_membership, headers) }
   let(:report_file) { Rails.root.join("log", "sac_imports", "sektion_membership_#{Time.zone.now.strftime("%Y-%m-%d-%H:%M")}.csv") }
+  let(:csv_content) { CSV.read(report_file, col_sep: ";") }
 
   it "creates csv log with headers and appends rows" do
+    freeze_time
+    csv_report.add_row([1234, "F42", "John Doe", "SAC Bern"])
     expect(File.exist?(report_file)).to be_truthy
+    expect(csv_content.first).to eq(headers.map(&:to_s))
+    expect(csv_content.second).to eq(["1234", "F42", "John Doe", "SAC Bern"])
+
+    File.delete(report_file)
+    expect(File.exist?(report_file)).to be_falsey
   end
 end
