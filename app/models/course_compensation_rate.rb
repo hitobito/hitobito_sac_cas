@@ -7,7 +7,7 @@
 
 class CourseCompensationRate < ApplicationRecord
   belongs_to :course_compensation_category
-
+  scope :list, -> { order(:valid_from) }
   validate :assert_category_uniqueness_during_validity_period
 
   def assert_category_uniqueness_during_validity_period
