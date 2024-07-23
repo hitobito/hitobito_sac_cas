@@ -18,7 +18,7 @@ oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 | WSO21 | Basic Accounts und Password Hashes                  |
 | WSO22 | SAC Tourenportal Abonnenten                         |
 
-details siehe SAC Confluence/Jira
+details siehe SAC Jira HIT-490
 
 ## Hitobito SAC Import 1: import:people
 
