@@ -45,6 +45,8 @@ Import Source File: **NAV6**
 
 ## Hitobito SAC Import 3: import:huts
 
+Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. Ausserdem werden die Hüttenfunktionärs-Rollen gleich mitangelegt.
+
 `rake import:huts`
 
 file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
@@ -52,6 +54,8 @@ file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 Import Source File: **NAV5**
 
 ## Hitobito SAC Import 4: import:memberships
+
+Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen. 
 
 `rails import:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
 
