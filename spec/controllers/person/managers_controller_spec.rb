@@ -15,7 +15,7 @@ describe Person::ManagersController do
     it "responds with error" do
       sign_in(people(:admin))
 
-      post :create, params: {person_id: people(:mitglied), people_manager: { managed_id: people(:familienmitglied_kind)} }
+      post :create, params: {person_id: people(:mitglied), people_manager: {managed_id: people(:familienmitglied_kind)}}
 
       expect(response).to have_http_status(:unprocessable_entity)
       html = Capybara::Node::Simple.new(response.body)

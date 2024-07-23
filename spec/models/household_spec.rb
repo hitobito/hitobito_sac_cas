@@ -23,7 +23,7 @@ describe Household do
 
   subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
-  def sequence = Sequence.by_name(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+  def sequence = Sequence.by_name(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE)
 
   before do
     travel_to(Date.new(2024, 5, 31))
