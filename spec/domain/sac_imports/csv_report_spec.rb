@@ -15,7 +15,10 @@ describe SacImports::CsvReport do
 
   it "creates csv log with headers and appends rows" do
     freeze_time
-    csv_report.add_row([1234, "F42", "John Doe", "SAC Bern"])
+    csv_report.add_row({membership_number: 1234,
+                        sac_family_number: "F42",
+                        name: "John Doe",
+                        stammsektion: "SAC Bern"})
     expect(File.exist?(report_file)).to be_truthy
     expect(csv_content.first).to eq(headers.map(&:to_s))
     expect(csv_content.second).to eq(["1234", "F42", "John Doe", "SAC Bern"])

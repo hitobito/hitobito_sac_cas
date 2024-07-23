@@ -5,7 +5,8 @@ class SacImports::CsvReport
   def initialize(sac_import_name, headers)
     @timestamp = Time.zone.now.strftime("%Y-%m-%d-%H:%M")
     @sac_import_name = sac_import_name
-    csv_init(headers)
+    @headers = headers
+    csv_init
   end
 
   def add_row(row)
@@ -24,13 +25,14 @@ class SacImports::CsvReport
     log_dir
   end
 
-  def csv_init(headers)
+  def csv_init
     CSV.open(csv_file_path, "wb", col_sep: ";") do |csv|
-      csv << headers
+      csv << @headers
     end
   end
 
   def csv_append(row_content)
+    row_content = @headers.map { |header| row_content[header] }
     CSV.open(csv_file_path, "ab", col_sep: ";") do |csv|
       csv << row_content
     end
