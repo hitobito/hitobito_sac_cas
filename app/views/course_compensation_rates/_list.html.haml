@@ -5,9 +5,9 @@
 
 = crud_table do |t|
   - t.sortable_attrs :valid_from, :valid_to
-  - t.col(t.sort_header(CourseCompensationCategory.human_attribute_name(:short_name))) { |entry| entry.course_compensation_category.short_name }
-  - t.col(t.sort_header(CourseCompensationCategory.human_attribute_name(:kind))) { |entry| entry.course_compensation_category.kind_label }
-  - t.col(CourseCompensationCategory.human_attribute_name(:description)) { |entry| entry.course_compensation_category.description }
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:short_name)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.short_name }
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:kind)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.kind_label }
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:description)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.description }
   - t.col(CourseCompensationCategory.human_attribute_name(:name_leader)) { |entry| entry.course_compensation_category.name_leader }
   - t.col(CourseCompensationCategory.human_attribute_name(:name_assistant_leader)) { |entry| entry.course_compensation_category.name_assistant_leader }
   - t.sortable_attrs :rate_leader, :rate_assistant_leader
