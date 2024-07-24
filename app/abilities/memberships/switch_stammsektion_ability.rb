@@ -6,10 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Memberships
-  class JoinZusatzsektionAbility < AbilityDsl::Base
+  class SwitchStammsektionAbility < AbilityDsl::Base
     include Memberships::Constraints
 
-    on(Wizards::Memberships::JoinZusatzsektion) do
+    on(Wizards::Memberships::SwitchStammsektion) do
       permission(:any).may(:create).for_self_if_active_member_or_backoffice
     end
   end
