@@ -24,10 +24,9 @@ module Memberships
       Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
       Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
 
-      Group::SektionsTourenkommission::Tourenleiter,
-      Group::SektionsTourenkommission::TourenleiterOhneQualifikation,
+      Group::SektionsTourenUndKurse::Tourenleiter,
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
 
-      Group::SektionsExterneKontakte::Kontakt,
       Group::ExterneKontakte::Kontakt
     ].freeze
 

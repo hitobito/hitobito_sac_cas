@@ -8,24 +8,27 @@
 class Group::SektionsFunktionaere < ::Group
   self.static_name = true
 
-  children Group::SektionsHuettenkommission, Group::SektionsTourenkommission,
-    Group::SektionsKommission, Group::SektionsVorstand
+  children Group::SektionsVorstand,
+    Group::SektionsTourenUndKurse,
+    Group::SektionsClubhuetten,
+    Group::Sektionshuetten,
+    Group::SektionsKommissionen
 
   self.default_children = [
-    Group::SektionsHuettenkommission,
-    Group::SektionsKommission,
-    Group::SektionsTourenkommission,
-    Group::SektionsVorstand
+    Group::SektionsVorstand,
+    Group::SektionsTourenUndKurse,
+    Group::SektionsKommissionen
   ]
 
   ### ROLES
   class Praesidium < ::Role
-    self.permissions = [:layer_and_below_read]
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Mitgliederverwaltung < ::Role
-    self.permissions = [:layer_and_below_full]
-    self.two_factor_authentication_enforced = true
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Administration < ::Role
@@ -48,11 +51,25 @@ class Group::SektionsFunktionaere < ::Group
     self.basic_permissions_only = true
   end
 
+  class Huettenobmann < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Leserecht < ::Role
+    self.permissions = [:group_and_below_read]
+  end
+
+  class Schreibrecht < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
   class Andere < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   roles Praesidium, Mitgliederverwaltung, Administration,
-    AdministrationReadOnly, Finanzen, Redaktion, Andere
+    AdministrationReadOnly, Finanzen, Redaktion, Huettenobmann,
+    Leserecht, Schreibrecht, Andere
 end

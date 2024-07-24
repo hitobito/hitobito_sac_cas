@@ -12,13 +12,27 @@ seeder = GroupSeeder.new
 root = Group.roots.first
 srand(42)
 
-def seed_hut(sektion, name, navision_id)
+def seed_club_hut(sektion, name, navision_id)
   sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by(parent_id: sektion.id)
-  huettenkommission = Group::SektionsHuettenkommission.find_or_create_by(parent_id: sektions_funktionaere.id)
-  Group::SektionsHuette.seed(:name, :parent_id, {
+  kommissionen = Group::SektionsKommissionen.find_or_create_by(parent_id: sektions_funktionaere.id)
+  Group::SektionsKommissionHuetten.find_or_create_by(parent_id: kommissionen.id)
+  clubhuetten = Group::SektionsClubhuetten.find_or_create_by(parent_id: sektions_funktionaere.id)
+  Group::SektionsClubhuette.seed(:name, :parent_id, {
     name: name,
     navision_id: navision_id,
-    parent: huettenkommission
+    parent: clubhuetten
+  })
+end
+
+def seed_section_hut(sektion, name, navision_id)
+  sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by(parent_id: sektion.id)
+  kommissionen = Group::SektionsKommissionen.find_or_create_by(parent_id: sektions_funktionaere.id)
+  Group::SektionsKommissionHuetten.find_or_create_by(parent_id: kommissionen.id)
+  sektionshuetten = Group::Sektionshuetten.find_or_create_by(parent_id: sektions_funktionaere.id)
+  Group::Sektionshuette.seed(:name, :parent_id, {
+    name: name,
+    navision_id: navision_id,
+    parent: sektionshuetten
   })
 end
 
@@ -30,7 +44,7 @@ if root.address.blank?
 end
 
 Group::Geschaeftsstelle.seed(:name, :parent_id, {
-  name: '1 Geschäftsstelle',
+  name: 'SAC Geschäftsstelle',
   parent_id: root.id
 })
 
@@ -83,14 +97,14 @@ Group::SektionsNeuanmeldungenSektion.seed_once(
     self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
 )
 
-seed_hut(matterhorn, 'Matterhornbiwak', 99999942)
-seed_hut(uto, 'Domhütte', 81)
-seed_hut(uto, 'Spannorthütte', 255)
-seed_hut(uto, 'Täschhütte', 265)
-seed_hut(bluemlisalp, 'Blüemlisalphütte', 1650)
-seed_hut(bluemlisalp, 'Baltschiederklause', 25)
-seed_hut(bluemlisalp, 'Stockhornbiwak', 258)
-seed_hut(bluemlisalp, 'Ski- & Ferienhaus Obergestelen', 448786)
-seed_hut(bluemlisalp, 'Sunnhüsi', 448785)
+seed_section_hut(matterhorn, 'Matterhornbiwak', 99999942)
+seed_club_hut(uto, 'Domhütte', 81)
+seed_club_hut(uto, 'Spannorthütte', 255)
+seed_club_hut(uto, 'Täschhütte', 265)
+seed_club_hut(bluemlisalp, 'Blüemlisalphütte', 1650)
+seed_club_hut(bluemlisalp, 'Baltschiederklause', 25)
+seed_club_hut(bluemlisalp, 'Stockhornbiwak', 258)
+seed_section_hut(bluemlisalp, 'Ski- & Ferienhaus Obergestelen', 448786)
+seed_section_hut(bluemlisalp, 'Sunnhüsi', 448785)
 
 Group.rebuild!

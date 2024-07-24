@@ -39,6 +39,7 @@ Rails.application.routes.draw do
         resources :membership_invoices, only: [:create], module: :people
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
+        resource :switch_stammsektion, module: :memberships, only: [:show, :create]
         resource :terminate_sac_membership, only: [:show, :create], module: :people
         resources :roles, only: [] do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
@@ -69,6 +70,7 @@ Rails.application.routes.draw do
 
     resources :termination_reasons, except: [:show]
     resources :course_compensation_rates, except: [:show]
+    resources :course_compensation_categories, except: [:show]
 
     resources :cost_centers
     resources :cost_units

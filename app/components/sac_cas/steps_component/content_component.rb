@@ -16,6 +16,10 @@ module SacCas::StepsComponent::ContentComponent
     end + @form.fields_for(partial_name, model, &) + bottom_toolbar
   end
 
+  def form_error_messages
+    @form.error_messages
+  end
+
   def model
     @form.object.step_at(index)
   end
@@ -29,12 +33,20 @@ module SacCas::StepsComponent::ContentComponent
   def bottom_toolbar
     content_tag(:div, class: "btn-toolbar allign-with-form") do
       buttons = [next_button]
-      buttons << back_link if index.positive?
+      buttons << if index.positive?
+        back_link
+      else
+        cancel_link
+      end
       safe_join(buttons)
     end
   end
 
   private
+
+  def cancel_link
+    link_to(t("global.button.cancel"), person_path(@form.object.person), class: "link cancel mt-2 pt-1")
+  end
 
   # Adjust to comply with existing api
   def past?

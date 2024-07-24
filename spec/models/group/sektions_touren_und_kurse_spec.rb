@@ -7,10 +7,10 @@
 
 require "spec_helper"
 
-describe Group::SektionsTourenkommission do
-  let(:group) { Fabricate.build(Group::SektionsTourenkommission.sti_name) }
+describe Group::SektionsTourenUndKurse do
+  let(:group) { Fabricate.build(Group::SektionsTourenUndKurse.sti_name) }
 
-  describe Group::SektionsTourenkommission::Tourenleiter do
+  describe Group::SektionsTourenUndKurse::Tourenleiter do
     let(:person) { people(:tourenchef) }
     let(:kind) { qualification_kinds(:snowboard_leader) }
 

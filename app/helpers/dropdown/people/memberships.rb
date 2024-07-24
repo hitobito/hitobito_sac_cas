@@ -9,9 +9,14 @@ module Dropdown
   class People::Memberships < Base
     attr_reader :person, :template
 
+    WIZARDS = [
+      [Wizards::Memberships::JoinZusatzsektion, :group_person_join_zusatzsektion_path],
+      [Wizards::Memberships::SwitchStammsektion, :group_person_switch_stammsektion_path],
+      [Wizards::Memberships::TerminateSacMembershipWizard, :group_person_terminate_sac_membership_path]
+    ].freeze
+
     delegate :t, :current_ability, :current_user, :group_person_join_zusatzsektion_path,
-      :group_person_terminate_sac_membership_path,
-      to: :template
+      :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path, to: :template
 
     def initialize(template, person, group)
       @template = template
@@ -28,37 +33,21 @@ module Dropdown
     private
 
     def init_items
-      add_join_zusatzsektion_item if join_zusatzsektion?
-      add_sac_membership_termination if terminate_sac_membership?
+      WIZARDS.each do |wizard_class, path|
+        add_wizard(wizard_class, path) if current_ability.can?(:create, build(wizard_class))
+      end
     end
 
-    def add_join_zusatzsektion_item
-      link = group_person_join_zusatzsektion_path(group_id: @group.id, person_id: @person.id)
-      add_item(translate(:join_zusatzsektion_link), link, method: :get)
+    def add_wizard(wizard_class, path)
+      wizard_name = wizard_class.to_s.demodulize.to_s.underscore
+      target_url = send(path, group_id: @group.id, person_id: @person.id)
+      add_item(translate("#{wizard_name}_link"), target_url, method: :get)
     end
 
-    def join_zusatzsektion?
-      current_ability.can?(
-        :create,
-        Wizards::Memberships::JoinZusatzsektion.new(
-          person: @person,
-          backoffice: current_user.backoffice?
-        )
-      )
-    end
-
-    def add_sac_membership_termination
-      link = group_person_terminate_sac_membership_path(group_id: @group.id, person_id: @person.id)
-      add_item(translate(:sac_membership_termination_link), link, method: :get)
-    end
-
-    def terminate_sac_membership?
-      current_ability.can?(
-        :create,
-        Wizards::Memberships::TerminateSacMembershipWizard.new(
-          person: @person,
-          backoffice: current_user.backoffice?
-        )
+    def build(wizard_class)
+      wizard_class.new(
+        person: @person,
+        backoffice: current_user.backoffice?
       )
     end
 

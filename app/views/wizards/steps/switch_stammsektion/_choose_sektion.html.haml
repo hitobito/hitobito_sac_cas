@@ -1,0 +1,10 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if c.model.sac_membership_family?
+  .alert.alert-info
+    =t('.family_membership_info_text', family_names: c.model.family_names)
+
+= render 'wizards/steps/choose_sektion', c: c

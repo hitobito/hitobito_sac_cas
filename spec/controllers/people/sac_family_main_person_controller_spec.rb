@@ -22,8 +22,11 @@ describe People::SacFamilyMainPersonController, type: :controller do
   end
 
   let(:mitgliederverwaltung_sektion) do
-    Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+    person = Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
       group: groups(:bluemlisalp_funktionaere)).person
+    Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name.to_sym,
+      group: groups(:bluemlisalp_mitglieder), person: person)
+    person
   end
 
   describe "PUT #update" do
@@ -78,6 +81,23 @@ describe People::SacFamilyMainPersonController, type: :controller do
       it "only allows adults to become main persons" do
         expect do
           put :update, params: {id: child.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "when the user does not have a Schreibrecht role in the Mitglieder group" do
+      let(:mitgliederverwaltung_sektion) do
+        Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+          group: groups(:bluemlisalp_funktionaere)).person
+      end
+
+      before do
+        sign_in mitgliederverwaltung_sektion
+      end
+
+      it "denies access" do
+        expect do
+          put :update, params: {id: adult.id}
         end.to raise_error(CanCan::AccessDenied)
       end
     end

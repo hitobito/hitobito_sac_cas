@@ -17,6 +17,7 @@ fr:
     wizards/steps/termination_choose_date_title: ""
     wizards/steps/leave_zusatzsektion/ask_family_main_person_title: ""
     wizards/steps/leave_zusatzsektion/summary_title: ""
+    wizards/steps/termination/summary_title: ""
 
   errors:
     messages:
@@ -72,6 +73,11 @@ fr:
 
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: ''
+      wizards/steps/termination/summary:
+        termination_reason_id: ''
+        data_retention_consent: ''
+        subscribe_newsletter: ''
+        subscribe_fundraising_list: ''
 
     errors:
       messages:
@@ -397,9 +403,6 @@ fr:
             course_compensation_category_id:
               uniqueness_during_validity_period: ""
 
-        group/sektions_tourenkommission/tourenleiter:
-          requires_active_qualification: ""
-
         people_manager:
           in_different_household: >
           managed_is_not_child: >
@@ -533,7 +536,7 @@ fr:
         many: Fonctionnaires
         other: Fonctionnaires
 
-      group/sektions_tourenkommission:
+      group/sektions_touren_und_kurse:
         one: Tours et cours
         many: Tours et cours
         other: Tours et cours
@@ -705,33 +708,6 @@ fr:
       group/sektions_vorstand/andere:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenchef_sommer:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/tourenchef_winter:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/tourenchef_klettern:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/tourenchef_senioren:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/tourenleiter:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/jo_chef:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/js_coach:
-        one: ""
-        description: ""
-      group/sektions_tourenkommission/andere:
-        one: ""
-        description: ""
       group/sektions_huettenkommission/huettenobmann:
         one: ""
         description: ""
@@ -767,6 +743,7 @@ fr:
   dropdown/people/memberships:
     title: ""
     join_zusatzsektion_link: ""
+    sac_membership_termination_link: ""
 
   dropdown/people_export:
     recipients: ""
@@ -925,13 +902,21 @@ fr:
     membership:
       verify:
         member_details_sac_cas:
+          tour_guide: Chef·fe de courses en activité
+        below_name_sac_cas:
           membership_number: ""
           membership_years: ""
-          tour_guide: Chef·fe de courses en activité
 
     membership_invoices:
       success_notice: ""
       alert_notice: ""
+
+    terminate_sac_memberships:
+      create:
+        success: 
+          one: ""
+          many: ""
+          other: ""
 
     neuanmeldungen:
       multiselect_actions:
@@ -1209,6 +1194,9 @@ fr:
   sheet/memberships/leave_zusatzsektion:
     title: ""
 
+  sheet/memberships/terminate_sac_membership:
+    title: ""
+
   wizards:
     steps:
       choose_sektion:
@@ -1227,10 +1215,20 @@ fr:
         warning_termination_by_section_only: ""
       termination_no_self_service:
         info_text: ""
-      leave_zusatzsektion:
-        ask_family_main_person:
+      ask_family_main_person:
           info_text: ""
+      leave_zusatzsektion:
         summary:
           family_warning: ""
           info_text: ""
+          next_button: ""
+      termination:
+        summary:
+          info_text: ""
+          termination_by_section_only: ""
+          family_warning: ""
+          data_retention_info_title: ""
+          data_retention_info_text: ""
+          newsletter_info_text: ""
+          fundraiser_info_text: ""
           next_button: ""

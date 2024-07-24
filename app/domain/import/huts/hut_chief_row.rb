@@ -5,12 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module Import::Huts
   class HutChiefRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4006.0"
+      row[:verteilercode].to_s == "4006.0" && role_type_for(row).present?
     end
 
     def initialize(row)
@@ -20,23 +18,33 @@ module Import::Huts
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
       set_person_name(@row, person)
-      group_id = group_id(@row)
-      unless group_id
+      role_type = self.class.role_type_for(@row)
+      huette = huette(@row)
+      unless huette
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut chiefs belong to things other than huts
         Rails.logger.debug { "Skipping hut chief for unknown hut #{navision_id(@row)}" }
         return
       end
       person.roles.where(
-        type: Group::SektionsHuette::Huettenchef.name,
-        group_id: group_id
+        type: role_type.name,
+        group_id: huette.id
       ).destroy_all
       person.roles.build(
-        type: Group::SektionsHuette::Huettenchef.name,
+        type: role_type.name,
         created_at: created_at(@row),
-        group_id: group_id
+        group_id: huette.id
       )
       person.save!
+    end
+
+    def self.role_type_for(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuette::Huettenchef
+      when "SAC Clubhütte"
+        Group::SektionsClubhuette::Huettenchef
+      end
     end
 
     private
@@ -50,17 +58,14 @@ module Import::Huts
       person.last_name = last_name(row)
     end
 
-    def group_id(row)
+    def huette(row)
       # TODO handle nonexistent group
-      Group::Sektion.find_by(navision_id: navision_id(row))
-        .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
-        .id
+      @huette ||= Group.find_by(navision_id: huette_navision_id(row))
     rescue NoMethodError
-      Rails.logger.debug { "Failed to find existing hut with navision id #{navision_id(row)}" }
+      Rails.logger.debug { "Failed to find existing hut with navision id #{huette_navision_id(row)}" }
     end
 
-    def navision_id(row)
+    def huette_navision_id(row)
       row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
 

@@ -182,7 +182,7 @@ describe Person do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
         group: groups(:matterhorn_mitglieder)).person
     end
-    let(:tourenkommission) { groups(:matterhorn_tourenkommission) }
+    let(:tourenkommission) { groups(:matterhorn_touren_und_kurse) }
 
     before do
       member.qualifications.create!(
@@ -191,8 +191,8 @@ describe Person do
       )
     end
 
-    [Group::SektionsTourenkommission::Tourenleiter,
-      Group::SektionsTourenkommission::TourenleiterOhneQualifikation].each do |role_class|
+    [Group::SektionsTourenUndKurse::Tourenleiter,
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation].each do |role_class|
       it "is tour guide if active #{role_class} role" do
         role_class.create!(person: member, group: tourenkommission)
         expect(member.sac_tour_guide?).to eq(true)
@@ -203,8 +203,8 @@ describe Person do
       expect(member.sac_tour_guide?).to eq(false)
     end
 
-    [Group::SektionsTourenkommission::Tourenleiter,
-      Group::SektionsTourenkommission::TourenleiterOhneQualifikation].each do |role_class|
+    [Group::SektionsTourenUndKurse::Tourenleiter,
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation].each do |role_class|
       it "is not tour guide if inactive #{role_class} role" do
         role = role_class.create!(person: member, group: tourenkommission)
         role.update_columns(created_at: 20.years.ago)

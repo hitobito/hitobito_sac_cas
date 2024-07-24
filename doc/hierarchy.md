@@ -43,49 +43,77 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
     * Ortsgruppe
     * Global
       * Sektionsfunktionäre
-        * Präsidium: [:layer_and_below_read]
-        * Mitgliederverwaltung: 2FA [:layer_and_below_full]
+        * Präsidium: []
+        * Mitgliederverwaltung: []
         * Administration: 2FA [:layer_and_below_full]
         * Administration (nur lesend): 2FA [:layer_and_below_read]
         * Finanzen: []
         * Redaktion: []
+        * Hüttenobmann*frau: []
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
         * Andere: []
-      * Hütten
-        * Hüttenobmann*frau: 2FA [:group_and_below_read]
-        * Andere: [:group_read]
-      * Hütte
-        * Hüttenwart*in: [:group_read]
-        * Hüttenchef*in: [:group_read]
+      * Vorstand
+        * Präsidium: [:group_read]
+        * Mitglied: [:group_read]
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
         * Andere: [:group_read]
       * Touren und Kurse
-        * Tourenchef*in Sommer: 2FA [:group_full, :layer_and_below_read]
-        * Tourenchef*in Winter: 2FA [:group_full, :layer_and_below_read]
-        * Tourenchef*in Klettern: 2FA [:group_full, :layer_and_below_read]
-        * Tourenchef*in Senioren: 2FA [:group_full, :layer_and_below_read]
         * Tourenleiter*in (mit Qualifikation): []
         * Tourenleiter*in (ohne Qualifikation): []
         * JO-Chef*in: []
         * J+S Coach: []
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
+      * Touren und Kurse Sommer
+        * Tourenchef*in: [:group_read]
+      * Touren und Kurse Winter
+        * Tourenchef*in: [:group_read]
+      * Clubhütten
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
+      * Clubhuette
+        * Hüttenwart*in: []
+        * Hüttenchef*in: []
         * Andere: []
-      * Kommission
-        * Präsidium: []
-        * Mitglied: []
+      * Sektionshütten
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
+      * Sektionshütte
+        * Hüttenwart*in: []
+        * Hüttenchef*in: []
         * Andere: []
-      * Vorstand
-        * Präsidium: []
-        * Mitglied: []
-        * Andere: []
+      * Kommissionen
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
+      * Kommission Hütten
+        * Mitglied: [:group_read]
+        * Präsidium: [:group_read]
+        * Andere: [:group_read]
+      * Kommission Touren
+        * Mitglied: [:group_read]
+        * Präsidium: [:group_read]
+        * Andere: [:group_read]
+      * Kommission Umwelt und Kultur
+        * Mitglied: [:group_read]
+        * Präsidium: [:group_read]
+        * Andere: [:group_read]
       * Mitglieder
         * Mitglied (Stammsektion): []
         * Mitglied (Zusatzsektion): []
         * Ehrenmitglied: []
         * Begünstigt: []
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
       * Neuanmeldungen (zur Freigabe)
         * Neuanmeldung (Stammsektion): []
         * Neuanmeldung (Zusatzsektion): []
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
       * Neuanmeldungen
         * Neuanmeldung (Stammsektion): []
         * Neuanmeldung (Zusatzsektion): []
-      * Externe Kontakte
-        * Kontakt: []
+        * Leserecht: [:group_and_below_read]
+        * Schreibrecht: [:group_and_below_full]
 ```

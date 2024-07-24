@@ -5,6 +5,28 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# == Schema Information
+#
+# Table name: external_trainings
+#
+#  id            :bigint           not null, primary key
+#  finish_at     :date             not null
+#  link          :string(255)
+#  name          :string(255)      not null
+#  provider      :string(255)
+#  remarks       :string(255)
+#  start_at      :date             not null
+#  training_days :decimal(5, 1)    not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  event_kind_id :bigint           not null
+#  person_id     :bigint           not null
+#
+# Indexes
+#
+#  index_external_trainings_on_event_kind_id  (event_kind_id)
+#  index_external_trainings_on_person_id      (person_id)
+#
 class ExternalTraining < ActiveRecord::Base
   validates_by_schema
 

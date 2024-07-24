@@ -9,25 +9,29 @@
 #
 # Table name: sac_section_membership_configs
 #
-#  id                                              :bigint           not null, primary key
-#  valid_from                                      :integer          not null
-#  group_id                                        :bigint
-#  section_fee_adult                               :decimal(5, 2)    not null
-#  section_fee_family                              :decimal(5, 2)    not null
-#  section_fee_youth                               :decimal(5, 2)    not null
-#  section_entry_fee_adult                         :decimal(5, 2)    not null
-#  section_entry_fee_family                        :decimal(5, 2)    not null
-#  section_entry_fee_youth                         :decimal(5, 2)    not null
-#  bulletin_postage_abroad                         :decimal(5, 2)    not null
-#  sac_fee_exemption_for_honorary_members          :boolean          default(FALSE), not null
-#  section_fee_exemption_for_honorary_members      :boolean          default(FALSE), not null
-#  sac_fee_exemption_for_benefited_members         :boolean          default(FALSE), not null
-#  section_fee_exemption_for_benefited_members     :boolean          default(FALSE), not null
-#  reduction_amount                                :decimal(5, 2)    not null
-#  reduction_required_membership_years             :integer
-#  reduction_required_age                          :integer
+#  id                                          :bigint           not null, primary key
+#  bulletin_postage_abroad                     :decimal(5, 2)    not null
+#  reduction_amount                            :decimal(5, 2)    not null
+#  reduction_required_age                      :integer
+#  reduction_required_membership_years         :integer
+#  sac_fee_exemption_for_benefited_members     :boolean          default(FALSE), not null
+#  sac_fee_exemption_for_honorary_members      :boolean          default(FALSE), not null
+#  section_entry_fee_adult                     :decimal(5, 2)    not null
+#  section_entry_fee_family                    :decimal(5, 2)    not null
+#  section_entry_fee_youth                     :decimal(5, 2)    not null
+#  section_fee_adult                           :decimal(5, 2)    not null
+#  section_fee_exemption_for_benefited_members :boolean          default(FALSE), not null
+#  section_fee_exemption_for_honorary_members  :boolean          default(FALSE), not null
+#  section_fee_family                          :decimal(5, 2)    not null
+#  section_fee_youth                           :decimal(5, 2)    not null
+#  valid_from                                  :integer          not null
+#  group_id                                    :bigint           not null
 #
-
+# Indexes
+#
+#  index_sac_section_membership_configs_on_group_id                 (group_id)
+#  index_sac_section_membership_configs_on_group_id_and_valid_from  (group_id,valid_from) UNIQUE
+#
 class SacSectionMembershipConfig < ApplicationRecord
   class << self
     def active(date = Time.zone.today)

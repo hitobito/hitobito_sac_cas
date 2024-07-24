@@ -18,7 +18,15 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
     include SacCas::Role::MitgliedZusatzsektion
   end
 
-  roles Neuanmeldung, NeuanmeldungZusatzsektion
+  class Leserecht < ::Role
+    self.permissions = [:group_and_below_read]
+  end
+
+  class Schreibrecht < ::Role
+    self.permissions = [:group_and_below_full]
+  end
+
+  roles Neuanmeldung, NeuanmeldungZusatzsektion, Leserecht, Schreibrecht
 
   # make this read-only so nobody can disable self-registration on those groups
   def self_registration_role_type
