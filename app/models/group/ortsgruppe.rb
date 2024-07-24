@@ -14,14 +14,12 @@ class Group::Ortsgruppe < Group
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
     Group::SektionsNeuanmeldungenSektion,
-    Group::SektionsNeuanmeldungenNv,
-    Group::SektionsExterneKontakte
+    Group::SektionsNeuanmeldungenNv
 
   self.default_children = [
     Group::SektionsFunktionaere,
     Group::SektionsMitglieder,
-    Group::SektionsNeuanmeldungenNv,
-    Group::SektionsExterneKontakte
+    Group::SektionsNeuanmeldungenNv
   ]
 
   validates :foundation_year,

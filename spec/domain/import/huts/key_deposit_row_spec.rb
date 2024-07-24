@@ -14,6 +14,7 @@ describe Import::Huts::KeyDepositRow do
     Import::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
       contact_navision_id: "00003750",
       contact_name: "Bluemlisalphuette",
+      hut_category: "SAC Clubhütte",
       verteilercode: "4008",
       related_navision_id: "123456",
       related_last_name: "Muster",
@@ -25,8 +26,8 @@ describe Import::Huts::KeyDepositRow do
   let!(:person) { Fabricate(:person, id: 123456) }
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, foundation_year: 1980) }
   let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-  let!(:hut_comission) { Group::SektionsHuettenkommission.find_by(parent: funktionaere) }
-  let!(:hut) { Fabricate(Group::SektionsHuette.sti_name.to_sym, navision_id: 3750, parent: hut_comission) }
+  let!(:huts) { Fabricate(Group::SektionsClubhuetten.sti_name.to_sym, parent: funktionaere) }
+  let!(:hut) { Fabricate(Group::SektionsClubhuette.sti_name.to_sym, navision_id: 3750, parent: huts) }
   let(:contact_role_group) {
     Group::ExterneKontakte.create!(name: "Navision Import",
       parent_id: Group::SacCas.first!.id)
@@ -37,7 +38,7 @@ describe Import::Huts::KeyDepositRow do
       .to change { Role.count }.by(1)
 
     person = Person.find(123456)
-    role = Group::SektionsHuette::Andere.find_by(group: hut, person: person)
+    role = Group::SektionsClubhuette::Andere.find_by(group: hut, person: person)
 
     expect(role).to be_present
     expect(role.label).to eq("Schlüsseldepot")
@@ -48,7 +49,7 @@ describe Import::Huts::KeyDepositRow do
       .to change { Role.count }.by(1)
 
     person = Person.find(123456)
-    role = Group::SektionsHuette::Andere.find_by(group: hut, person: person)
+    role = Group::SektionsClubhuette::Andere.find_by(group: hut, person: person)
 
     expect(role).to be_present
     expect(role.label).to eq("Schlüsseldepot")
@@ -67,7 +68,7 @@ describe Import::Huts::KeyDepositRow do
     expect(person.roles.size).to eq(1)
     expect(Role.exists?(placeholder_contact_role.id)).to eq(false)
 
-    role = Group::SektionsHuette::Andere.find_by(group: hut, person: person)
+    role = Group::SektionsClubhuette::Andere.find_by(group: hut, person: person)
 
     expect(role).to be_present
     expect(role.label).to eq("Schlüsseldepot")

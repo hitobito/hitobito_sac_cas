@@ -7,24 +7,10 @@
 
 module Memberships
   class JoinZusatzsektionAbility < AbilityDsl::Base
+    include Memberships::Constraints
+
     on(Wizards::Memberships::JoinZusatzsektion) do
       permission(:any).may(:create).for_self_if_active_member_or_backoffice
-    end
-
-    def for_self_if_active_member_or_backoffice
-      active_member? && (for_self? || backoffice?)
-    end
-
-    def backoffice?
-      user_context.user.backoffice?
-    end
-
-    def for_self?
-      subject.person == user_context.user
-    end
-
-    def active_member?
-      People::SacMembership.new(subject.person).active?
     end
   end
 end

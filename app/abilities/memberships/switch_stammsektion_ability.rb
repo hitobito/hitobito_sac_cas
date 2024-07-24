@@ -5,13 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsExterneKontakte < ::Group
-  self.static_name = true
+module Memberships
+  class SwitchStammsektionAbility < AbilityDsl::Base
+    include Memberships::Constraints
 
-  ### ROLES
-  class Kontakt < ::Role
-    self.permissions = []
+    on(Wizards::Memberships::SwitchStammsektion) do
+      permission(:any).may(:create).for_self_if_active_member_or_backoffice
+    end
   end
-
-  roles Kontakt
 end

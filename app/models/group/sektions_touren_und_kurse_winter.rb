@@ -5,21 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsHuettenkommission < ::Group
-  self.static_name = true
-
-  children Group::SektionsHuette
-
+class Group::SektionsTourenUndKurseWinter < Group
   ### ROLES
-  class Huettenobmann < ::Role
-    self.permissions = [:group_and_below_read]
-    self.two_factor_authentication_enforced = true
-  end
 
-  class Andere < ::Role
+  class Tourenchef < ::Role
     self.permissions = [:group_read]
-    self.basic_permissions_only = true
   end
 
-  roles Huettenobmann, Andere
+  roles Tourenchef
 end

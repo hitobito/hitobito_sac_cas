@@ -8,11 +8,11 @@
 require "spec_helper"
 require_relative "../shared_examples_mitglied_dependant_destroy"
 
-describe Group::SektionsTourenkommission::Tourenleiter do
+describe Group::SektionsTourenUndKurse::Tourenleiter do
   it_behaves_like "Mitglied dependant destroy" do
     let(:sektion) { groups(:bluemlisalp) }
     let(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-    let(:tourenkommission) { Group::SektionsTourenkommission.find_or_create_by(parent: funktionaere) }
+    let(:tourenkommission) { Group::SektionsTourenUndKurse.find_or_create_by(parent: funktionaere) }
     let(:person) { Fabricate(:qualification).person }
     let(:role) { described_class.new(group: tourenkommission, person: person) }
   end

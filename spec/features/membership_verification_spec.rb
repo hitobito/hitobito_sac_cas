@@ -60,8 +60,8 @@ describe People::Membership::VerifyController do
           start_at: 1.month.ago
         )
         person.roles.create!(
-          type: Group::SektionsTourenkommission::Tourenleiter.sti_name,
-          group: groups(:matterhorn_tourenkommission)
+          type: Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
+          group: groups(:matterhorn_touren_und_kurse)
         )
 
         visit "/verify_membership/#{token}"

@@ -79,7 +79,7 @@ describe PersonAbility do
         end
       end
 
-      [Group::SektionsFunktionaere::Mitgliederverwaltung, Group::SektionsFunktionaere::Administration].each do |role_type|
+      [Group::SektionsFunktionaere::Administration].each do |role_type|
         context role_type do
           let(:person) { Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
 

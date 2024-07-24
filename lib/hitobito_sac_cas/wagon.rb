@@ -78,10 +78,12 @@ module HitobitoSacCas
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::LeaveZusatzsektionAbility
       Ability.store.register Memberships::TerminateSacMembershipAbility
+      Ability.store.register Memberships::SwitchStammsektionAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
@@ -128,7 +130,7 @@ module HitobitoSacCas
       Sheet::Person.prepend SacCas::Sheet::Person
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons]
+      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories]
 
       ## Controllers
       EventsController.prepend SacCas::EventsController

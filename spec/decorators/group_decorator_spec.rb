@@ -42,8 +42,8 @@ describe GroupDecorator do
 
       it "puts andere to the end of the list" do
         expected_role_list = ["Administration", "Administration (nur lesend)",
-          "Finanzen", "Mitgliederverwaltung",
-          "Präsidium", "Redaktion", "Andere"]
+          "Finanzen", "Hüttenobmann*frau", "Mitgliederverwaltung", "Präsidium",
+          "Redaktion", "Leserecht", "Schreibrecht", "Andere"]
         expect(decorator.role_types.map(&:label)).to eq(expected_role_list)
       end
     end

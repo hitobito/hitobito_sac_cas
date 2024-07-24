@@ -279,8 +279,8 @@ describe Invoices::SacMemberships::PositionGenerator do
     let(:funktionaere) { main_section.children.find { |child| child.type == "Group::SektionsFunktionaere" } }
 
     before do
-      kommission = Group::SektionsHuettenkommission.create!(parent: funktionaere, name: "Hüttenkommission")
-      Group::SektionsHuette.create!(parent: kommission, name: "Blüemlisalphütte")
+      huetten = Group::SektionsClubhuetten.create!(parent: funktionaere)
+      Group::SektionsClubhuette.create!(parent: huetten, name: "Blüemlisalphütte")
     end
 
     it "generates positions" do

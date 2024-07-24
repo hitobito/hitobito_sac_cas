@@ -6,19 +6,21 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 require Rails.root.join("lib", "import", "xlsx_reader.rb")
+require_relative "huts/hut_commission_row"
+require_relative "huts/huts_row"
 require_relative "huts/hut_row"
 require_relative "huts/hut_chief_row"
 require_relative "huts/hut_warden_row"
 require_relative "huts/hut_warden_partner_row"
 require_relative "huts/hut_chairman_row"
 require_relative "huts/key_deposit_row"
-require_relative "huts/unsupported_row"
 
 module Import
   class HutsImporter
     HEADERS = {
       contact_navision_id: "Kontaktnr.",
       contact_name: "Kontaktname",
+      hut_category: "Hüttenkategorie",
       verteilercode: "Verteilercode",
       related_navision_id: "Beziehung",
       related_last_name: "Name",
@@ -27,7 +29,8 @@ module Import
     }
 
     IMPORTERS = [
-      Import::Huts::HutComissionRow,
+      Import::Huts::HutCommissionRow,
+      Import::Huts::HutsRow,
       Import::Huts::HutRow,
       Import::Huts::HutChiefRow,
       Import::Huts::HutWardenRow,

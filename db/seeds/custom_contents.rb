@@ -12,8 +12,9 @@ CustomContent.seed_once(:key,
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
   { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
   { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR },
-  { key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  },
-  { key: Memberships::TerminateSacMembershipMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on'  }
+  { key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on' },
+  { key: Memberships::TerminateSacMembershipMailer::CONFIRMATION, placeholders_required: 'person-name, sektion-name, terminate-on' },
+  { key: Memberships::SwitchStammsektionMailer::CONFIRMATION, placeholders_required: 'person-name, group-name, switch-date' }
 )
 
 participation_rejected_id =
@@ -70,5 +71,12 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     subject: 'Der SAC Austritt wurde per {terminate-on} vorgenommen',
     body: 'Hallo {person-name},<br/><br/>' \
     'Der SAC Austritt wurde per {terminate-on} vorgenommen.'
+  },
+ { custom_content_id: CustomContent.get(Memberships::SwitchStammsektionMailer::CONFIRMATION).id,
+    locale: 'de',
+    label: 'Mitgliedschaften: Bestätigung Sektionswechsel',
+    subject: 'Bestätigung Sektionswechsel',
+    body: 'Hallo {person-name}<br/><br/>,' \
+    'Der Sektionswechsel zu {group-name} wurde per {switch-date} vorgenommen.'
   }
 )

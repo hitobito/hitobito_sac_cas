@@ -25,15 +25,13 @@ describe Import::Huts::HutChairmanRow do
   let!(:person) { Fabricate(:person, id: 123456) }
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 3750, foundation_year: 1980) }
   let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-  let!(:hut_comission) { Group::SektionsHuettenkommission.find_by(parent: funktionaere) }
-  let!(:hut) { Fabricate(Group::SektionsHuette.sti_name.to_sym, parent: hut_comission) }
   let(:contact_role_group) { Group::ExterneKontakte.create!(name: "Navision Import", parent_id: Group.root.id) }
 
   it "imports role" do
     expect { importer.import! }
       .to change { Role.count }.by(1)
 
-    role = Group::SektionsHuettenkommission::Huettenobmann.find_by(group: hut_comission, person: person)
+    role = Group::SektionsFunktionaere::Huettenobmann.find_by(group: funktionaere, person: person)
 
     expect(role).to be_present
   end
@@ -42,7 +40,7 @@ describe Import::Huts::HutChairmanRow do
     expect { importer.import! }
       .to change { Role.count }.by(1)
 
-    role = Group::SektionsHuettenkommission::Huettenobmann.find_by(group: hut_comission, person: person)
+    role = Group::SektionsFunktionaere::Huettenobmann.find_by(group: funktionaere, person: person)
 
     expect(role).to be_present
 
@@ -58,7 +56,7 @@ describe Import::Huts::HutChairmanRow do
     expect(person.roles.size).to eq(1)
     expect(Role.exists?(placeholder_contact_role.id)).to eq(false)
 
-    role = Group::SektionsHuettenkommission::Huettenobmann.find_by(group: hut_comission, person: person)
+    role = Group::SektionsFunktionaere::Huettenobmann.find_by(group: funktionaere, person: person)
 
     expect(role).to be_present
   end

@@ -5,21 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsKommission < ::Group
+class Group::SektionsKommissionUmweltUndKultur < ::Group
   ### ROLES
-  class Praesidium < ::Role
-    self.permissions = []
+  class Mitglied < ::Role
+    self.permissions = [:group_read]
   end
 
-  class Mitglied < ::Role
-    self.permissions = []
+  class Praesidium < ::Role
+    self.permissions = [:group_read]
   end
 
   class Andere < ::Role
-    self.permissions = []
+    self.permissions = [:group_read]
   end
 
-  children Group::SektionsKommission
-
-  roles Praesidium, Mitglied, Andere
+  roles Mitglied, Praesidium, Andere
 end

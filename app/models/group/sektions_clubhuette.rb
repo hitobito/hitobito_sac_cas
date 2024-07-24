@@ -5,18 +5,21 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SektionsHuette < ::Group
+class Group::SektionsClubhuette < ::Group
   ### ROLES
   class Huettenwart < ::Role
-    self.permissions = [:group_read]
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Huettenchef < ::Role
-    self.permissions = [:group_read]
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   class Andere < ::Role
-    self.permissions = [:group_read]
+    self.permissions = []
+    self.basic_permissions_only = true
   end
 
   roles Huettenwart,

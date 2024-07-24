@@ -21,16 +21,16 @@ describe SacSectionMembershipConfigAbility do
       expect(Ability.new(admin)).to be_able_to(:manage, config)
     end
 
-    it "is permitted as mitgliederverwaltung sektion" do
-      expect(Ability.new(mitgliederverwaltung_sektion)).to be_able_to(:manage, config)
+    it "is not permitted as mitgliederverwaltung sektion" do
+      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, config)
     end
 
-    it "is permitted as mitgliederverwaltung sektion on ortsgruppe" do
+    it "is not permitted as mitgliederverwaltung sektion on ortsgruppe" do
       ortsgruppen_config = config.dup
       ortsgruppen_config.group = groups(:bluemlisalp_ortsgruppe_ausserberg)
       ortsgruppen_config.save!
 
-      expect(Ability.new(mitgliederverwaltung_sektion)).to be_able_to(:manage, ortsgruppen_config)
+      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, ortsgruppen_config)
     end
 
     it "is not permitted for mitglied" do

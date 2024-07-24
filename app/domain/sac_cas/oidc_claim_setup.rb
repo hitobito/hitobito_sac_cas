@@ -8,7 +8,7 @@
 module SacCas::OidcClaimSetup
   extend ActiveSupport::Concern
 
-  INFERRED_ROLE_LABLES = {
+  INFERRED_ROLE_LABELS = {
     section_functionary: Group::SektionsFunktionaere.roles,
     section_president: [Group::SektionsFunktionaere::Praesidium],
     SAC_employee: Group::Geschaeftsstelle.roles,
@@ -18,13 +18,25 @@ module SacCas::OidcClaimSetup
     SAC_central_board_member: Group::Zentralvorstand.roles,
     SAC_commission_member: Group::Kommission.roles,
     SAC_tourenportal_subscriber: Group::AboTourenPortal.roles,
-    section_commission_member: Group::SektionsKommission.roles,
-    huts_functionary: Group::SektionsHuettenkommission.roles,
+    section_commission_member: Group::SektionsKommissionen.child_types.flat_map(&:role_types),
+    huts_functionary: [
+      *Group::SektionsClubhuette.roles,
+      *Group::Sektionshuette.roles,
+      Group::SektionsFunktionaere::Huettenobmann
+    ],
     tourenportal_author: [Group::AboTourenPortal::Autor],
     tourenportal_community: [Group::AboTourenPortal::Community],
     tourenportal_administrator: [Group::AboTourenPortal::Admin],
     magazin_subscriber: Group::AboMagazin.roles,
-    section_tour_functionary: Group::SektionsTourenkommission.roles
+    section_tour_functionary: [
+      Group::SektionsTourenUndKurse::JsCoach,
+      Group::SektionsTourenUndKurse::JoChef,
+      Group::SektionsTourenUndKurse::Tourenleiter,
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+      *Group::SektionsTourenUndKurse.child_types.map do |type|
+        type.const_get :Tourenchef if type.const_defined? :Tourenchef
+      end
+    ]
   }
 
   def run
@@ -56,7 +68,7 @@ module SacCas::OidcClaimSetup
   end
 
   def inferred_role_strings(owner)
-    INFERRED_ROLE_LABLES.select do |_, roles|
+    INFERRED_ROLE_LABELS.select do |_, roles|
       (owner.roles.map(&:class) & roles).any?
     end.keys.map(&:to_s)
   end
