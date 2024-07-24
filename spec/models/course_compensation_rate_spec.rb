@@ -47,9 +47,24 @@ describe CourseCompensationRate do
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
         end
 
+        it "is invalid with endless validity period that overlaps present validity period" do
+          present.update!(valid_to: nil)
+          rate.valid_from = 2.weeks.ago
+          rate.valid_to = nil
+          expect(rate).to_not be_valid
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+        end
+
         it "is valid with validity period outside present validity period" do
           rate.valid_from = 1.week.from_now
           rate.valid_to = 1.month.from_now
+          expect(rate).to be_valid
+        end
+
+        it "is valid with validity period outside present validity period, when present validity is endless" do
+          present.update!(valid_to: nil)
+          rate.valid_from = 3.month.ago
+          rate.valid_to = 1.month.ago
           expect(rate).to be_valid
         end
       end
