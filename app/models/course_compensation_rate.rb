@@ -34,7 +34,7 @@ class CourseCompensationRate < ApplicationRecord
     if scope
         .where.not(id: id)
         .where(
-          ":valid_from BETWEEN valid_from AND valid_to OR :valid_to BETWEEN valid_from AND valid_to OR (valid_to IS NULL AND valid_from NOT BETWEEN :valid_from AND :valid_to)",
+          ":valid_from BETWEEN valid_from AND valid_to OR :valid_to BETWEEN valid_from AND valid_to OR (valid_to IS NULL AND valid_from NOT BETWEEN :valid_from AND :valid_to) OR (:valid_to IS NULL AND :valid_from NOT BETWEEN valid_from AND valid_to)",
           valid_from: valid_from,
           valid_to: valid_to
         )
