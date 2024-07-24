@@ -17,8 +17,8 @@ class SacImports::CsvSourceFile
   AVAILABLE_SOURCES = SOURCE_HEADERS.keys.freeze
 
   def initialize(source_name)
-    assert_available_source(source_name)
     @source_name = source_name
+    assert_available_source
   end
 
   def rows
@@ -54,9 +54,9 @@ class SacImports::CsvSourceFile
     Rails.root.join("tmp", "sac_imports_src")
   end
 
-  def assert_available_source(source_name)
-    unless AVAILABLE_SOURCES.include?(source_name)
-      raise "Invalid source name: NAV42\navailable sources: #{AVAILABLE_SOURCES.map(&:to_s).join(', ')}"
+  def assert_available_source
+    unless AVAILABLE_SOURCES.include?(@source_name)
+      raise "Invalid source name: #{@source_name}\navailable sources: #{AVAILABLE_SOURCES.map(&:to_s).join(', ')}"
     end
   end
 end

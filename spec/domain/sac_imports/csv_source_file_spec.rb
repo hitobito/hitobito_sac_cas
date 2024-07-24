@@ -13,7 +13,7 @@ describe SacImports::CsvSourceFile do
   it "throws error if unavailable source file referenced" do
     @source_name = :NAV42
     expect do
-      source_file.rows
+      source_file
     end.to raise_error("Invalid source name: NAV42\navailable sources: #{SacImports::CsvSourceFile::AVAILABLE_SOURCES.map(&:to_s).join(', ')}")
 
   end
