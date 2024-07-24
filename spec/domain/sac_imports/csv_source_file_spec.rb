@@ -15,7 +15,6 @@ describe SacImports::CsvSourceFile do
     expect do
       source_file
     end.to raise_error("Invalid source name: NAV42\navailable sources: #{SacImports::CsvSourceFile::AVAILABLE_SOURCES.map(&:to_s).join(', ')}")
-
   end
 
   it "throws error if requested source file does not exist" do
@@ -42,7 +41,7 @@ describe SacImports::CsvSourceFile do
 
     rows = source_file.rows
     expect(rows.count).to eq(2)
-    expect(rows.first).to eq({ navision_id: "1000", household_key: nil, group_navision_id: "1500", navision_membership_years: "44" })
-    expect(rows.second).to eq({ navision_id: "600001", household_key: nil, group_navision_id: "1650", navision_membership_years: "9" })
+    expect(rows.first).to eq({ person_name: "Montana Andreas", navision_id: "1000", household_key: nil, group_navision_id: "1500", navision_membership_years: "44" })
+    expect(rows.second).to eq({ person_name: "Hillary Edmund", navision_id: "600001", household_key: nil, group_navision_id: "1650", navision_membership_years: "9" })
   end
 end

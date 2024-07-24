@@ -8,6 +8,7 @@ class SacImports::CsvSourceFile
         navision_id: "Mitgliedernummer",
         household_key: "Familien-Nr.",
         group_navision_id: "Sektion",
+        person_name: "Name",
         navision_membership_years: "Vereinsmitgliederjahre" },
       NAV3: {},
       WSO21: {},

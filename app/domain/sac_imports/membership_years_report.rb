@@ -7,23 +7,51 @@
 
 module SacImports
   class MembershipYearsReport
-    HEADERS = {
-      navision_id: "Mitgliedernummer",
-      household_key: "Familien-Nr.",
-      group_navision_id: "Sektion",
-      navision_membership_years: "Vereinsmitgliederjahre"
-    }.freeze
+    REPORT_HEADERS = [
+      :membership_number, :person_name,
+      :navision_membership_years, :hitobito_membership_years,
+      :diff, :errors
+    ].freeze
 
     def initialize(output: $stdout)
       @output = output
-      @source_file = SourceFile.new(:NAV2).path
+      @source_file = CsvSourceFile.new(:NAV2)
+      @csv_report = CsvReport.new(:membership_years_report, REPORT_HEADERS)
     end
 
     def create
-      without_query_logging do
-        Import::XlsxReader.read(@source_file, "aktive_mitglieder", headers: HEADERS) do |row|
-        end
+      data = @source_file.rows
+      hitobito_people = hitobito_people(data)
+      data.each do |row|
+        person = hitobito_people[row[:navision_id].to_i]
+        @csv_report.add_row(
+          { membership_number: row[:navision_id],
+            person_name: row[:person_name],
+            navision_membership_years: row[:navision_membership_years],
+            hitobito_membership_years: person&.membership_years,
+            diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
+            errors: errors_for(person)
+        })
       end
+    end
+
+    private
+
+    def hitobito_people(data)
+      people_ids = data.map { |row| row[:navision_id] }.compact
+      Person.with_membership_years.where(id: people_ids).index_by(&:id)
+    end
+
+    def membership_years_diff(navision_years, hitobito_years)
+      return nil if navision_years.blank? || hitobito_years.blank?
+
+      navision_years.to_i - hitobito_years
+    end
+
+    def errors_for(person)
+      [].tap do |errors|
+        errors << "Person not found in hitobito" unless person
+      end.join(", ").presence
     end
   end
 end
