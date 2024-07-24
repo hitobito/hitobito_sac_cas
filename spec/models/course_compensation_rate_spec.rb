@@ -71,7 +71,7 @@ describe CourseCompensationRate do
         it "is valid with validity period outside present validity period, when present validity is endless" do
           present.update!(valid_to: nil)
           rate.valid_from = 3.month.ago
-          rate.valid_to = 1.month.ago
+          rate.valid_to = 2.month.ago
           expect(rate).to be_valid
         end
       end
