@@ -8,7 +8,7 @@
 class CourseCompensationRate < ApplicationRecord
   validates_by_schema
   belongs_to :course_compensation_category
-  scope :list, -> { order(valid_from: :DESC) }
+  scope :list, -> { includes(:course_compensation_category).order(valid_from: :DESC) }
   validate :assert_category_uniqueness_during_validity_period
 
   def assert_category_uniqueness_during_validity_period
