@@ -9,12 +9,15 @@
 #
 # Table name: event_levels
 #
-#  id         :bigint           not null, primary key
-#  code       :integer          not null
-#  deleted_at :datetime
-#  difficulty :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id          :bigint           not null, primary key
+#  code        :integer          not null
+#  deleted_at  :datetime
+#  description :text(65535)
+#  difficulty  :integer          not null
+#  label       :string(255)      not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 
 class Event::Level < ActiveRecord::Base
   include Paranoia::Globalized
