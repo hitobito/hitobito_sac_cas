@@ -29,21 +29,59 @@ describe Dropdown::People::Memberships do
 
   def menu = subject.find(".btn-group > ul.dropdown-menu")
 
-  it "does not render any buttons when person is not permitted" do
+  def stub_can_create(wizard_class, value)
     expect(ability).to receive(:can?).with(:create,
-      kind_of(Wizards::Memberships::TerminateSacMembershipWizard)).and_return(false)
-    expect(ability).to receive(:can?).with(:create,
-      kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(false)
-    expect(dropdown.to_s).to be_blank
+      kind_of(wizard_class)).and_return(value)
   end
 
-  it "does render buttons when person is permitted" do
-    expect(ability).to receive(:can?).with(:create,
-      kind_of(Wizards::Memberships::TerminateSacMembershipWizard)).and_return(true)
-    expect(ability).to receive(:can?).with(:create,
-      kind_of(Wizards::Memberships::JoinZusatzsektion)).and_return(true)
-    expect(dropdown.to_s).to be_present
-    expect(menu).to have_link "Zusatzsektion beantragen"
-    expect(menu).to have_link "SAC-Mitgliedschaft beenden"
+  context "JoinZusatzsektion" do
+    before do
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+    end
+
+    it "is empty when person is not permitted" do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains links if person is permitted" do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, true)
+      expect(menu).to have_link "Zusatzsektion beantragen"
+    end
+  end
+
+  context "SwitchStammsektion" do
+    before do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+    end
+
+    it "is empty when person is not permitted" do
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains links if person is permitted" do
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, true)
+      expect(menu).to have_link "Sektionswechsel beantragen"
+    end
+  end
+
+  context "TerminateSacMembershipWizard" do
+    before do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+    end
+
+    it "is empty when person is not permitted" do
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains links if person is permitted" do
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
+      expect(menu).to have_link "SAC-Mitgliedschaft beenden"
+    end
   end
 end

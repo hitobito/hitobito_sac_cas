@@ -14,7 +14,20 @@ module Memberships
 
     validate :assert_join_date
 
+    def save
+      super.tap do |success|
+        update_primary_groups
+      end
+    end
+
     private
+
+    def update_primary_groups
+      affected_people.each do |person|
+        person.reload # Unsure why this reload is necessary
+        person.update!(primary_group: Groups::Primary.new(person).identify)
+      end
+    end
 
     def prepare_roles(person)
       old_role = existing_membership(person)

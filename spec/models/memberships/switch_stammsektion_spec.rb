@@ -120,6 +120,7 @@ describe Memberships::SwitchStammsektion do
         expect(bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
         expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
+        expect(person.primary_group).to eq matterhorn_mitglieder
       end
 
       context "switching next year" do

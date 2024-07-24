@@ -8,7 +8,6 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
-
     wizards/steps/membership_terminated_info_title: Mitgliedschaft gekündet
     wizards/steps/choose_membership_title: Familienmitgliedschaft
     wizards/steps/choose_sektion_title: Sektion wählen
@@ -18,6 +17,9 @@ de:
     wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
     wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
     wizards/steps/termination/summary_title: Bestätigung
+    wizards/steps/switch_stammsektion/summary_title: Bestätigung
+    wizards/steps/switch_stammsektion/choose_date_title: Datumwahl
+    wizards/steps/switch_stammsektion/choose_sektion_title: Sektion wählen
 
   errors:
     messages:
@@ -32,6 +34,10 @@ de:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
         family: für die ganze Familie
         myself: für mich selbst
+      wizards/steps/switch_stammsektion/choose_date:
+        switch_on: Startdatum
+        now: sofort
+        next_year: auf 1. Januar
       memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
@@ -842,7 +848,8 @@ de:
   dropdown/people/memberships:
     title: Mitgliedschaft anpassen
     join_zusatzsektion_link: Zusatzsektion beantragen
-    sac_membership_termination_link: SAC-Mitgliedschaft beenden
+    switch_stammsektion_link: Sektionswechsel beantragen
+    terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
 
   dropdown/people_export:
     recipients: Empfänger
@@ -1183,6 +1190,11 @@ de:
         success:
           one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde gelöscht."
           other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden gelöscht."
+    switch_stammsektions:
+      create:
+        success:
+          one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde per <i>%{switch_date}</i> vorgenommen."
+          other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurde per <i>%{switch_date}</i> vorgenommen."
 
   roles:
     beitragskategorie:
@@ -1331,6 +1343,9 @@ de:
   sheet/memberships/leave_zusatzsektion:
     title: Zusatzsektion verlassen
 
+  sheet/memberships/switch_stammsektion:
+    title: Stammsektion wechseln
+
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
 
@@ -1349,6 +1364,16 @@ de:
           Falls die Zusatzmitgliedschaft für die ganze Familie gelten soll,
           muss die Familienhauptperson diese abschliessen. Wende dich dafür an
           %{name}.
+      switch_stammsektion:
+        choose_sektion:
+          family_membership_info_text: >-
+            Achtung: Der Stammsektionsektionswechsel wird für die gesamte Familienmitgliedschaft
+            beantragt. Davon betroffen sind: %{family_names}
+        choose_date:
+          info_text: Wann soll der Sektionswechsel stattfinden?
+        summary:
+          info_text: 'Der Wechsel der Stammsektion wird per %{switch_on} vorgenommen.'
+          next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
           info_text: 'Die Mitgliedschaft bei der Zusatzsektion wird als
@@ -1364,7 +1389,7 @@ Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:
-          info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
+        info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
       leave_zusatzsektion:
         summary:
           family_warning: "Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt.
