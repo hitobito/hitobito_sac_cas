@@ -15,6 +15,7 @@ describe CourseCompensationRate do
   context "validations" do
     context "course compensation category uniqueness" do
       let!(:category) { Fabricate(:course_compensation_category) }
+      let!(:another_category) { Fabricate(:course_compensation_category) }
       let!(:present) {
         Fabricate(:course_compensation_rate, course_compensation_category: category,
           valid_from: 1.month.ago, valid_to: Time.zone.today)
@@ -29,21 +30,21 @@ describe CourseCompensationRate do
           rate.valid_from = 2.weeks.ago
           rate.valid_to = 1.week.ago
           expect(rate).to_not be_valid
-          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
         end
 
         it "is invalid with validity end inside present validity period" do
           rate.valid_from = 2.months.ago
           rate.valid_to = 2.weeks.ago
           expect(rate).to_not be_valid
-          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
         end
 
         it "is invalid with validity start inside present validity period" do
           rate.valid_from = 1.week.ago
           rate.valid_to = 1.month.from_now
           expect(rate).to_not be_valid
-          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie In der Validitätsperiode darf pro Vergütungskategorie nur ein Vergütungsansatz existieren."])
+          expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
         end
 
         it "is valid with validity period outside present validity period" do
@@ -53,12 +54,22 @@ describe CourseCompensationRate do
         end
       end
 
+      context "change validity period" do
+        it "is possible and validation doesn't trigger itself" do
+          present.valid_from = 2.weeks.ago
+          present.valid_to = Time.zone.today
+
+          expect(present).to be_valid
+        end
+      end
+
       context "with different category" do
         subject(:rate) { Fabricate.build(:course_compensation_rate) }
 
         it "is valid with validity period inside present validity period" do
           rate.valid_from = 2.weeks.ago
           rate.valid_to = 1.week.ago
+          rate.course_compensation_category = another_category
 
           expect(rate).to be_valid
         end
