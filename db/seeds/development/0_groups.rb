@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('db', 'seeds', 'support', 'group_seeder')
+require Rails.root.join("db", "seeds", "support", "group_seeder")
 
 seeder = GroupSeeder.new
 
@@ -49,52 +49,50 @@ Group::Geschaeftsstelle.seed(:name, :parent_id, {
 })
 
 Group::ExterneKontakte.seed(:name, :parent_id, {
-  name: '2 Externe Kontakte',
+  name: "2 Externe Kontakte",
   parent_id: root.id
 })
 
 Group::ExterneKontakte.seed(:name, :parent_id, {
-  name: 'Autoren',
-  parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
+  name: "Autoren",
+  parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
 Group::ExterneKontakte.seed(:name, :parent_id, {
-  name: 'Druckereien',
-  parent_id: Group::ExterneKontakte.find_by(name: '2 Externe Kontakte').id
+  name: "Druckereien",
+  parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
 matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
   :name, :parent_id,
-  { name: 'SAC Matterhorn',
-    foundation_year: 1899,
-    section_canton: 'VS',
-    parent_id: root.id
-  },
-  { name: 'SAC UTO',
-    navision_id: 5300,
-    foundation_year: 1863,
-    section_canton: 'ZH',
-    parent_id: root.id
-  },
-  { name: 'SAC Blüemlisalp',
-    navision_id: 1650,
-    foundation_year: 1874,
-    section_canton: 'BE',
-    parent_id: root.id
-  })
+  {name: "SAC Matterhorn",
+   foundation_year: 1899,
+   section_canton: "VS",
+   parent_id: root.id},
+  {name: "SAC UTO",
+   navision_id: 5300,
+   foundation_year: 1863,
+   section_canton: "ZH",
+   parent_id: root.id},
+  {name: "SAC Blüemlisalp",
+   navision_id: 1650,
+   foundation_year: 1874,
+   section_canton: "BE",
+   parent_id: root.id}
+)
 
 matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
 matterhorn_neuanmeldungen.update!(
-  custom_self_registration_title: 'Registrierung zu SAC Matterhorn',
+  custom_self_registration_title: "Registrierung zu SAC Matterhorn",
   self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung
 )
 
 Group::SektionsNeuanmeldungenSektion.seed_once(
   :type, :parent_id,
-  { type: Group::SektionsNeuanmeldungenSektion.sti_name,
-    parent_id: bluemlisalp.id,
-    custom_self_registration_title: 'Registrierung zu SAC Blüemlisalp',
-    self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
+  {type: Group::SektionsNeuanmeldungenSektion.sti_name,
+   parent_id: bluemlisalp.id,
+   custom_self_registration_title: "Registrierung zu SAC Blüemlisalp",
+   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung}
 )
 
 seed_section_hut(matterhorn, 'Matterhornbiwak', 99999942)

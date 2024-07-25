@@ -6,6 +6,7 @@
 = f.labeled_input_field :level_id
 = f.labeled_input_field :cost_center_id
 = f.labeled_input_field :cost_unit_id
+= labeled_compensation_categories_field(f, @course_compensation_categories, Event::Kind.human_attribute_name(:course_compensation_categories))
 = f.labeled_input_field :maximum_participants
 = f.labeled_input_field :minimum_participants
 = f.labeled_input_field :maximum_age

@@ -119,6 +119,7 @@ module HitobitoSacCas
       Event::KindResource.include SacCas::Event::KindResource
 
       ## Helpers
+      EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       PeopleHelper.prepend SacCas::PeopleHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People

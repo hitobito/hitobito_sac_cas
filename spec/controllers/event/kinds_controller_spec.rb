@@ -25,7 +25,8 @@ describe Event::KindsController do
       :training_days,
       :season,
       :reserve_accommodation,
-      :accommodation
+      :accommodation,
+      course_compensation_category_ids: []
     )
   end
 

@@ -5,6 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-TerminationReason.seed_once(:id, id: 1, text: 'Kein Interesse mehr')
-TerminationReason.seed_once(:id, id: 2, text: 'Weggezogen')
-TerminationReason.seed_once(:id, id: 3, text: 'Verstorben')
+TerminationReason.seed_once(:id, id: 1, text: "Kein Interesse mehr")
+TerminationReason.seed_once(:id, id: 2, text: "Weggezogen")
+TerminationReason.seed_once(:id, id: 3, text: "Verstorben")

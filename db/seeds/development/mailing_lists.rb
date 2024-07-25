@@ -1,5 +1,3 @@
-
-
 # frozen_string_literal: true
 
 #  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
@@ -7,11 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 root = Group.root
 
 magazine_list = MailingList.seed(:name, :group_id, {
-  name: 'Die Alpen (physisch)',
+  name: "Die Alpen (physisch)",
   group_id: root.id
 }).first
 

@@ -191,6 +191,7 @@ de:
         kind_category_id: Kurskategorie
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
+        course_compensation_categories: Vergütungskategorien
         season: Saison
         seasons:
           winter: Winter

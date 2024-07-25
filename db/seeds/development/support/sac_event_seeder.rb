@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join('db', 'seeds', 'support', 'event_seeder')
+require Rails.root.join("db", "seeds", "support", "event_seeder")
 
 class SacEventSeeder < EventSeeder
   def seed_sac_course(group_id)
@@ -14,7 +14,7 @@ class SacEventSeeder < EventSeeder
     event.cost_center = CostCenter.first
     event.cost_unit = CostUnit.first
     event.language = :de
-    event.season = Event::Kind::SEASONS.shuffle.first
+    event.season = Event::Kind::SEASONS.sample
     event.start_point_of_time = :day
     event.contact_id = fetch_contact_person.id
     event.save!
@@ -23,6 +23,6 @@ class SacEventSeeder < EventSeeder
   private
 
   def fetch_contact_person
-    Person.find_by(first_name: 'Linda', last_name: 'Donie')
+    Person.find_by(first_name: "Linda", last_name: "Donie")
   end
 end

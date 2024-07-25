@@ -5,29 +5,29 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require HitobitoSacCas::Wagon.root.join('db', 'seeds', 'development', 'support', 'sac_person_seeder')
+require HitobitoSacCas::Wagon.root.join("db", "seeds", "development", "support", "sac_person_seeder")
 
 puzzlers = [
-  'Carlo Beltrame',
-  'Matthias Viehweger',
-  'Micha Luedi',
-  'Nils Rauch',
-  'Oliver Dietschi',
-  'Olivier Brian',
-  'Pascal Simon',
-  'Pascal Zumkehr',
-  'Thomas Ellenberger',
-  'Tobias Stern',
-  'Tobias Hinderling'
+  "Carlo Beltrame",
+  "Matthias Viehweger",
+  "Micha Luedi",
+  "Nils Rauch",
+  "Oliver Dietschi",
+  "Olivier Brian",
+  "Pascal Simon",
+  "Pascal Zumkehr",
+  "Thomas Ellenberger",
+  "Tobias Stern",
+  "Tobias Hinderling"
 ]
 
 devs = {
-  'Stefan Sykes' => 'stefan.sykes@sac-cas.ch',
-  'Daniel Menet' => 'daniel.menet@sac-cas.ch',
-  'Nathalie König' => 'nathalie.koenig@sac-cas.ch',
-  'Reto Giger' => 'reto.giger@sac-cas.ch',
-  'Pascal Werndli' => 'pascal.werndli@sac-cas.ch',
-  'Marek Polacek' => 'marek.polacek@sac-cas.ch',
+  "Stefan Sykes" => "stefan.sykes@sac-cas.ch",
+  "Daniel Menet" => "daniel.menet@sac-cas.ch",
+  "Nathalie König" => "nathalie.koenig@sac-cas.ch",
+  "Reto Giger" => "reto.giger@sac-cas.ch",
+  "Pascal Werndli" => "pascal.werndli@sac-cas.ch",
+  "Marek Polacek" => "marek.polacek@sac-cas.ch"
 }
 puzzlers.each do |puz|
   devs[puz] = "#{puz.split.last.downcase}@puzzle.ch"

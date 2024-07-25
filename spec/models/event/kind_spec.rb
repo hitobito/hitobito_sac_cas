@@ -43,6 +43,8 @@ describe Event::Kind do
   describe "::validations" do
     subject(:kind) { Fabricate.build(:sac_event_kind) }
 
+    let!(:course_compensation_category_budget) { Fabricate(:course_compensation_category, kind: "budget") }
+
     it "is valid as builded by fabricator" do
       expect(kind).to be_valid
       expect(kind.level).to eq event_levels(:ek)
@@ -77,6 +79,12 @@ describe Event::Kind do
       kind.maximum_age = 1
       expect(kind).not_to be_valid
       expect(kind.errors[:maximum_age]).to eq ["muss grösser oder gleich 2 sein"]
+    end
+
+    it "validates that course compensation categories kinds are either flat or day" do
+      kind.course_compensation_category_ids = [course_compensation_category_budget.id]
+      expect(kind).not_to be_valid
+      expect(kind.errors[:course_compensation_category_ids]).to eq ["ist nicht gültig"]
     end
   end
 
