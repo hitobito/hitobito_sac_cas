@@ -8,7 +8,6 @@ en:
     phone_placeholder: ""
     currency: ""
     years: ""
-
     wizards/steps/membership_terminated_info_title: ""
     wizards/steps/choose_membership_title: ""
     wizards/steps/choose_sektion_title: ""
@@ -18,6 +17,9 @@ en:
     wizards/steps/leave_zusatzsektion/ask_family_main_person_title: ""
     wizards/steps/leave_zusatzsektion/summary_title: ""
     wizards/steps/termination/summary_title: ""
+    wizards/steps/switch_stammsektion/summary_title: ""
+    wizards/steps/switch_stammsektion/choose_date_title: ""
+    wizards/steps/switch_stammsektion/choose_sektion_title: ""
 
   errors:
     messages:
@@ -29,6 +31,10 @@ en:
         register_as: ""
         family: ""
         myself: ""
+      wizards/steps/switch_stammsektion/choose_date:
+        switch_on: ""
+        now: ""
+        next_year: ""
       memberships/join_base:
         join_date: ""
       memberships/leave_zusatzsektion:
@@ -155,8 +161,8 @@ en:
         valid_from: ""
         valid_to: ""
         rate_leader: ""
-        rate_assistant_leader: ""
-        course_compensation_category_id: ""
+        rate_ssistant_leader: ""
+        course_compensation_category: ""
         updated_at: ""
         created_at: ""
       event:
@@ -397,10 +403,10 @@ en:
       models:
         course_compensation_rate:
           attributes:
-            course_compensation_category_id:
+            course_compensation_category:
               uniqueness_during_validity_period: ""
 
-        group/sektions_tourenkommission/tourenleiter:
+        group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: ""
 
         people_manager:
@@ -510,27 +516,51 @@ en:
         one: ''
         other: ''
 
-      group/sektions_tourenkommission:
-        one: ''
-        other: ''
-
-      group/sektions_externe_kontakte:
-        one: ''
-        other: ''
-
-      group/sektions_kommission:
-        one: ''
-        other: ''
-
       group/sektions_vorstand:
         one: ''
         other: ''
 
-      group/sektions_huettenkommission:
+      group/sektions_touren_und_kurse:
         one: ''
         other: ''
 
-      group/sektions_huette:
+      group/sektions_touren_und_kurse_sommer:
+        one: ''
+        other: ''
+
+      group/sektions_touren_und_kurse_winter:
+        one: ''
+        other: ''
+
+      group/sektions_clubhuetten:
+        one: ''
+        other: ''
+
+      group/sektions_clubhuette:
+        one: ''
+        other: ''
+
+      group/sektionshuetten:
+        one: ''
+        other: ''
+
+      group/sektionshuette:
+        one: ''
+        other: ''
+
+      group/sektions_kommissionen:
+        one: ''
+        other: ''
+
+      group/sektions_kommission_huetten:
+        one: ''
+        other: ''
+
+      group/sektions_kommission_touren:
+        one: ''
+        other: ''
+
+      group/sektions_kommission_umwelt_und_kultur:
         one: ''
         other: ''
 
@@ -631,6 +661,15 @@ en:
       group/sektions_funktionaere/redaktion:
         one: ""
         description: ""
+      group/sektions_funktionaere/huettenobmann:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/leserecht:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/schreibrecht:
+        one: ""
+        description: ""
       group/sektions_funktionaere/andere:
         one: ""
         description: ""
@@ -646,10 +685,22 @@ en:
       group/sektions_mitglieder/beguenstigt:
         one: ""
         description: ""
+      group/sektions_mitglieder/leserecht:
+        one: ""
+        description: ""
+      group/sektions_mitglieder/schreibrecht:
+        one: ""
+        description: ""
       group/sektions_neuanmeldungen_sektion/neuanmeldung:
         one: ""
         description: ""
       group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_sektion/leserecht:
+        one: ""
+        description: ""
+      group/sektions_neuanmeldungen_sektion/schreibrecht:
         one: ""
         description: ""
       group/sektions_neuanmeldungen_nv/neuanmeldung:
@@ -658,13 +709,10 @@ en:
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
         one: ""
         description: ""
-      group/sektions_kommission/praesidium:
+      group/sektions_neuanmeldungen_nv/leserecht:
         one: ""
         description: ""
-      group/sektions_kommission/mitglied:
-        one: ""
-        description: ""
-      group/sektions_kommission/andere:
+      group/sektions_neuanmeldungen_nv/schreibrecht:
         one: ""
         description: ""
       group/sektions_vorstand/praesidium:
@@ -673,58 +721,107 @@ en:
       group/sektions_vorstand/mitglied:
         one: ""
         description: ""
+      group/sektions_vorstand/leserecht:
+        one: ""
+        description: ""
+      group/sektions_vorstand/schreibrecht:
+        one: ""
+        description: ""
       group/sektions_vorstand/andere:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenchef_sommer:
+      group/sektions_touren_und_kurse/tourenleiter:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenchef_winter:
+      group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenchef_klettern:
+      group/sektions_touren_und_kurse/jo_chef:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenchef_senioren:
+      group/sektions_touren_und_kurse/js_coach:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenleiter:
+      group/sektions_touren_und_kurse/leserecht:
         one: ""
         description: ""
-      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
+      group/sektions_touren_und_kurse/schreibrecht:
         one: ""
         description: ""
-      group/sektions_tourenkommission/jo_chef:
+      group/sektions_touren_und_kurse_sommer/tourenchef:
         one: ""
         description: ""
-      group/sektions_tourenkommission/js_coach:
+      group/sektions_touren_und_kurse_winter/tourenchef:
         one: ""
         description: ""
-      group/sektions_tourenkommission/andere:
+      group/sektions_clubhuetten/leserecht:
         one: ""
         description: ""
-      group/sektions_huettenkommission/huettenobmann:
+      group/sektions_clubhuetten/schreibrecht:
         one: ""
         description: ""
-      group/sektions_huettenkommission/andere:
+      group/sektions_clubhuette/huettenchef:
         one: ""
         description: ""
-      group/sektions_huette/huettenwart:
+      group/sektions_clubhuette/huettenwart:
         one: ""
         description: ""
-      group/sektions_huette/huettenchef:
+      group/sektions_clubhuette/andere:
         one: ""
         description: ""
-      group/sektions_externe_kontakte/kontakt:
+        huettenwartspartner: ""
+        schluesseldepot: ""
+      group/sektionshuetten/leserecht:
         one: ""
         description: ""
-      group/sektions_huette/huettenwartspartner:
-        one: ""
-      group/sektions_huette/schluesseldepot:
-        one: ""
-      group/sektions_huette/andere:
+      group/sektionshuetten/schreibrecht:
         one: ""
         description: ""
+      group/sektionshuette/huettenchef:
+        one: ""
+        description: ""
+      group/sektionshuette/huettenwart:
+        one: ""
+        description: ""
+      group/sektionshuette/andere:
+        one: ""
+        description: ""
+        huettenwartspartner: ""
+        schluesseldepot: ""
+      group/sektions_kommissionen/leserecht:
+        one: ""
+        description: ""
+      group/sektions_kommissionen/schreibrecht:
+        one: ""
+        description: ""
+      group/sektions_kommission_huetten/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission_huetten/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission_huetten/andere:
+        one: ""
+        description: ""
+      group/sektions_kommission_touren/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission_touren/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission_touren/andere:
+        one: ""
+        description: ""
+      group/sektions_kommission_umwelt_und_kultur/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission_umwelt_und_kultur/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission_umwelt_und_kultur/andere:
+        one: ""
+        description: ""
+
 
   devise:
     sessions:
@@ -738,7 +835,8 @@ en:
   dropdown/people/memberships:
     title: ""
     join_zusatzsektion_link: ""
-    sac_membership_termination_link: ""
+    switch_stammsektion_link: ""
+    terminate_sac_membership_wizard_link: ""
 
   dropdown/people_export:
     recipients: ""
@@ -1035,6 +1133,11 @@ en:
         success:
           one: ""
           other: ""
+    switch_stammsektions:
+      create:
+        success:
+          one: ""
+          other: ""
 
   roles:
     beitragskategorie:
@@ -1183,6 +1286,9 @@ en:
   sheet/memberships/leave_zusatzsektion:
     title: ""
 
+  sheet/memberships/switch_stammsektion:
+    title: ""
+
   sheet/memberships/terminate_sac_membership:
     title: ""
 
@@ -1193,6 +1299,14 @@ en:
         backoffice_no_self_service_info_text: ''
       choose_membership:
         not_main_family_person_info_text: >
+      switch_stammsektion:
+        choose_sektion:
+          family_membership_info_text: >
+        choose_date:
+          info_text: ""
+        summary:
+          info_text: ''
+          next_button: ""
       join_zusatzsektion:
         summary:
           info_text: ''
@@ -1205,7 +1319,7 @@ en:
       termination_no_self_service:
         info_text: ""
       ask_family_main_person:
-          info_text: ""
+        info_text: ""
       leave_zusatzsektion:
         summary:
           family_warning: ""
