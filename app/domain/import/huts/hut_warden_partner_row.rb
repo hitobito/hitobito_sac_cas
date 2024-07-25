@@ -10,7 +10,7 @@ module Import::Huts
     include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4008.0" && role_type_for(row).present?
+      row[:verteilercode] == 4008 && role_type_for(row).present?
     end
 
     def initialize(row)

@@ -8,7 +8,7 @@
 module Import::Huts
   class HutChiefRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4006.0" && role_type_for(row).present?
+      row[:verteilercode] == 4006 && role_type_for(row).present?
     end
 
     def initialize(row)
@@ -23,7 +23,7 @@ module Import::Huts
       unless huette
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut chiefs belong to things other than huts
-        Rails.logger.debug { "Skipping hut chief for unknown hut #{navision_id(@row)}" }
+        Rails.logger.debug { "Skipping hut chief for unknown hut #{huette_navision_id(@row)}" }
         return
       end
       person.roles.where(

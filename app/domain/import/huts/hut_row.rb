@@ -8,7 +8,8 @@
 module Import::Huts
   class HutRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000.0" && hut_type(row).present?
+      row[:verteilercode] == 4000 && hut_type(row).present? &&
+        row[:contact_navision_id] != "00001000"
     end
 
     def initialize(row)
@@ -60,7 +61,7 @@ module Import::Huts
     end
 
     def parent_id(row)
-      sektion = Group::Sektion.find_by(navision_id: owner_navision_id(row))
+      sektion = Group.find_by(navision_id: owner_navision_id(row))
       funktionaere = Group::SektionsFunktionaere.find_by(parent: sektion)
       self.class.parent_group_type(row).find_by(parent: funktionaere).id
     rescue

@@ -8,7 +8,7 @@
 module Import::Huts
   class HutWardenRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4005.0" && role_type_for(row).present?
+      row[:verteilercode] == 4005 && role_type_for(row).present?
     end
 
     def initialize(row)

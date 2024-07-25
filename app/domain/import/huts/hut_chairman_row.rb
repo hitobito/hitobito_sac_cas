@@ -10,7 +10,7 @@ module Import::Huts
     include RemovingPlaceholderContactRole
 
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4007.0" &&
+      row[:verteilercode] == 4007 &&
         ["SAC Clubhütte", "SAC Sektionshütte"].include?(row[:hut_category])
     end
 
@@ -54,7 +54,7 @@ module Import::Huts
     end
 
     def group_id(row)
-      Group::Sektion.find_by(navision_id: navision_id(row))
+      Group.find_by(navision_id: navision_id(row))
         .descendants
         .find { |child| child.type == "Group::SektionsFunktionaere" }
         .id

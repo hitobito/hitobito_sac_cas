@@ -8,7 +8,8 @@
 module Import::Huts
   class HutsRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000.0" && group_type(row).present?
+      row[:verteilercode] == 4000 && group_type(row).present? &&
+        row[:contact_navision_id] != "00001000"
     end
 
     def initialize(row)
@@ -43,7 +44,7 @@ module Import::Huts
     end
 
     def parent_id(row)
-      sektion = Group::Sektion.find_by(navision_id: owner_navision_id(row))
+      sektion = Group.find_by(navision_id: owner_navision_id(row))
       Group::SektionsFunktionaere.find_by(parent: sektion).id
     rescue
       raise "WARNING: No parent found for row #{row.inspect}"
