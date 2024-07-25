@@ -78,6 +78,7 @@ module HitobitoSacCas
       Ability.store.register ExternalTrainingAbility
       Ability.store.register SacMembershipConfigAbility
       Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register CourseCompensationRateAbility
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
@@ -129,7 +130,7 @@ module HitobitoSacCas
       Sheet::Person.prepend SacCas::Sheet::Person
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories]
+      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]
 
       ## Controllers
       EventsController.prepend SacCas::EventsController

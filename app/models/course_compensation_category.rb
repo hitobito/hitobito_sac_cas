@@ -34,7 +34,7 @@ class CourseCompensationCategory < ApplicationRecord
   KINDS = %w[day flat budget]
   i18n_enum :kind, KINDS
 
-  scope :list, -> { order(:short_name) }
+  scope :list, -> { includes([:translations]).order(:short_name) }
 
   def to_s
     "#{short_name} (#{kind_label})"

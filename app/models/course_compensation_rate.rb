@@ -24,15 +24,26 @@
 #
 
 class CourseCompensationRate < ApplicationRecord
+  validates_by_schema
   belongs_to :course_compensation_category
-
+  scope :list, -> { includes(course_compensation_category: [:translations]).order(valid_from: :DESC).order("course_compensation_categories.short_name ASC") }
   validate :assert_category_uniqueness_during_validity_period
 
   def assert_category_uniqueness_during_validity_period
     scope = CourseCompensationRate.where(course_compensation_category: course_compensation_category)
-    if scope.where(":valid_from BETWEEN valid_from AND valid_to OR :valid_to BETWEEN valid_from AND valid_to",
-      valid_from: valid_from, valid_to: valid_to).any?
-      errors.add(:course_compensation_category, :uniqueness_during_validity_period)
+    if scope
+        .where.not(id: id)
+        .where(
+          "(:valid_to IS NULL OR valid_from <= :valid_to) AND (valid_to IS NULL OR valid_to >= :valid_from)",
+          valid_from: valid_from,
+          valid_to: valid_to
+        )
+        .any?
+      errors.add(:course_compensation_category_id, :uniqueness_during_validity_period)
     end
+  end
+
+  def to_s
+    "#{valid_from} - #{valid_to} #{course_compensation_category}"
   end
 end

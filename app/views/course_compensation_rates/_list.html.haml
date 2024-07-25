@@ -1,0 +1,14 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club SAC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito
+
+= crud_table do |t|
+  - t.sortable_attrs :valid_from, :valid_to
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:short_name)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.short_name }
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:kind)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.kind_label }
+  - t.col("#{CourseCompensationCategory.human_attribute_name(:description)} #{CourseCompensationCategory.model_name.human}") { |entry| entry.course_compensation_category.description }
+  - t.col(CourseCompensationCategory.human_attribute_name(:name_leader)) { |entry| entry.course_compensation_category.name_leader }
+  - t.col(CourseCompensationCategory.human_attribute_name(:name_assistant_leader)) { |entry| entry.course_compensation_category.name_assistant_leader }
+  - t.sortable_attrs :rate_leader, :rate_assistant_leader
+  - add_table_actions(t)
