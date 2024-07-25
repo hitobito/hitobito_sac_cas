@@ -403,6 +403,9 @@ fr:
             course_compensation_category:
               uniqueness_during_validity_period: ""
 
+        group/sektions_tourenkommission/tourenleiter:
+          requires_active_qualification: ""
+
         people_manager:
           in_different_household: >
           managed_is_not_child: >
@@ -536,7 +539,7 @@ fr:
         many: Fonctionnaires
         other: Fonctionnaires
 
-      group/sektions_touren_und_kurse:
+      group/sektions_tourenkommission:
         one: Tours et cours
         many: Tours et cours
         other: Tours et cours
@@ -706,6 +709,33 @@ fr:
         one: ""
         description: ""
       group/sektions_vorstand/andere:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_sommer:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_winter:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_klettern:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenchef_senioren:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenleiter:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/tourenleiter_ohne_qualifikation:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/jo_chef:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/js_coach:
+        one: ""
+        description: ""
+      group/sektions_tourenkommission/andere:
         one: ""
         description: ""
       group/sektions_huettenkommission/huettenobmann:
