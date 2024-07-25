@@ -2,5 +2,7 @@
   = nav Event::Level.model_name.human(count: 2), event_levels_path, %w(event_levels)
 - if can?(:index, TerminationReason)
   = nav TerminationReason.model_name.human(count: 2), termination_reasons_path, %w(termination_reasons)
+- if can?(:index, CourseCompensationRate)
+  = nav CourseCompensationRate.model_name.human(count: 2), course_compensation_rates_path, %w(course_compensation_rates)
 - if can?(:index, CourseCompensationCategory)
   = nav CourseCompensationCategory.model_name.human(count: 2), course_compensation_categories_path, %w(course_compensation_categories)
