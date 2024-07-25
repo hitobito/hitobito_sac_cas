@@ -21,25 +21,29 @@ module SacImports
 
     def create
       data = @source_file.rows
-      hitobito_people = hitobito_people(data)
+      fetch_hitobito_people(data)
       data.each do |row|
-        person = hitobito_people[row[:navision_id].to_i]
-        @csv_report.add_row(
-          {membership_number: row[:navision_id],
-           person_name: row[:person_name],
-           navision_membership_years: row[:navision_membership_years],
-           hitobito_membership_years: person&.membership_years,
-           diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
-           errors: errors_for(person)}
-        )
+        process_row(row)
       end
     end
 
     private
 
-    def hitobito_people(data)
+    def process_row(row)
+      person = @hitobito_people[row[:navision_id].to_i]
+      @csv_report.add_row(
+        {membership_number: row[:navision_id],
+         person_name: row[:person_name],
+         navision_membership_years: row[:navision_membership_years],
+         hitobito_membership_years: person&.membership_years,
+         diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
+         errors: errors_for(person)}
+      )
+    end
+
+    def fetch_hitobito_people(data)
       people_ids = data.pluck(:navision_id).compact
-      Person.with_membership_years.where(id: people_ids).index_by(&:id)
+      @hitobito_people = Person.with_membership_years.where(id: people_ids).index_by(&:id)
     end
 
     def membership_years_diff(navision_years, hitobito_years)

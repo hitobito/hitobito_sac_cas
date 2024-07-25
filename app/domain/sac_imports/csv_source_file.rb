@@ -22,20 +22,23 @@ class SacImports::CsvSourceFile
   end
 
   def rows
-    headers = headers()
     data = []
     CSV.foreach(path, headers: true) do |row|
-      row = row.to_h
-      hash = {}
-      headers.keys.each do |header_key|
-        hash[header_key] = row[headers[header_key]]
-      end
-      data << hash
+      data << process_row(row)
     end
     data
   end
 
   private
+
+  def process_row(row)
+    row = row.to_h
+    hash = {}
+    headers.keys.each do |header_key|
+      hash[header_key] = row[headers[header_key]]
+    end
+    hash
+  end
 
   def path
     files = Dir.glob("#{source_dir}/#{@source_name}_*.csv")

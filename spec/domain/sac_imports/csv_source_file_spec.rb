@@ -21,7 +21,7 @@ describe SacImports::CsvSourceFile do
     @source_name = :NAV2
     expect(Dir)
       .to receive(:glob)
-      .with(Rails.root.join("tmp", "sac_imports_src", "NAV2_*.csv"))
+      .with(Rails.root.join("tmp", "sac_imports_src", "NAV2_*.csv").to_s)
       .and_return([])
 
     expect do
@@ -33,7 +33,7 @@ describe SacImports::CsvSourceFile do
     @source_name = :NAV2
     expect(Dir)
       .to receive(:glob)
-      .with(Rails.root.join("tmp", "sac_imports_src", "NAV2_*.csv"))
+      .with(Rails.root.join("tmp", "sac_imports_src", "NAV2_*.csv").to_s)
       .and_return([File.expand_path("../../../fixtures/files/sac_imports_src/NAV2_stammmitgliedschaften_2024-01-04.csv", __FILE__)])
     allow(Dir)
       .to receive(:glob)

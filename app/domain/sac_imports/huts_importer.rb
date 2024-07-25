@@ -27,7 +27,7 @@ module SacImports
     }
 
     IMPORTERS = [
-      SacImports::Huts::HutComissionRow,
+      SacImports::Huts::HutCommissionRow,
       SacImports::Huts::HutRow,
       SacImports::Huts::HutChiefRow,
       SacImports::Huts::HutWardenRow,

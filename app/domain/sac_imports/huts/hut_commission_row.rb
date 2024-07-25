@@ -8,7 +8,7 @@
 require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module SacImports::Huts
-  class HutComissionRow
+  class HutCommissionRow
     def self.can_process?(row)
       row[:verteilercode] == 4000 &&
         ["SAC Clubhütte", "SAC Sektionshütte"].include?(row[:hut_category]) &&

@@ -4,7 +4,7 @@
 oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 ```
 
-## Source Files
+## CSV Source Files
 
 | #    | Export                                               |
 |------|------------------------------------------------------|
@@ -20,7 +20,17 @@ oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 
 details siehe SAC Jira HIT-490
 
-## Hitobito SAC Import 1: import:people
+Siehe [SacImports::CsvSourceFile](../app/domain/sac_imports/csv_source_file.rb)
+
+## CSV Report
+
+Jeder Import erstellt einen CSV Report in RAILS_CORE_ROOT/log/sac_imports/. In diesem wird pro Import-Zeile eine Zeile im Report CSV erstellt.
+
+`$IMPORT_NAME_$TIMESTAMP.csv`, e.g. `1_people_2024-06-01-12:00.csv`
+
+Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
+
+## Hitobito SAC Import 1: sac_imports:1_people
 
 Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigned werden können.
 
@@ -30,7 +40,7 @@ Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Imp
 
 Import Source File: **NAV1**
 
-## Hitobito SAC Import 2: import:sektionen
+## Hitobito SAC Import 2: sac_imports:sektionen
 
 Mit diesem Import werden alle Sektionen und Ortsgruppen importiert. 
 Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
@@ -43,7 +53,7 @@ file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
 
 Import Source File: **NAV6**
 
-## Hitobito SAC Import 3: import:huts
+## Hitobito SAC Import 3: sac_imports:huts
 
 Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. Ausserdem werden die Hüttenfunktionärs-Rollen gleich mitangelegt.
 
@@ -53,7 +63,7 @@ file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
 Import Source File: **NAV5**
 
-## Hitobito SAC Import 4: import:memberships
+## Hitobito SAC Import 4: sac_imports:memberships
 
 Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen. 
 
@@ -61,7 +71,7 @@ Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen.
 
 Import Source File: **NAV2**
 
-## Hitobito SAC Import 5: import:additional_memberships
+## Hitobito SAC Import 5: sac_imports:additional_memberships
 
 Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
 
