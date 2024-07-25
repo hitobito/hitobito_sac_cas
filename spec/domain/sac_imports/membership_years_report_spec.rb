@@ -13,17 +13,17 @@ describe SacImports::MembershipYearsReport do
   let(:report_headers) { %w[membership_number person_name navision_membership_years hitobito_membership_years diff errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
- it "creates report for members in source file" do
-   travel_to DateTime.new(2024, 1, 23, 10, 42)
+  it "creates report for members in source file" do
+    travel_to DateTime.new(2024, 1, 23, 10, 42)
 
-   report.create
+    report.create
 
-   expect(File.exist?(report_file)).to be_truthy
-   expect(csv_report.first).to eq(report_headers)
-   expect(csv_report.second).to eq(["1000", "Montana Andreas", "44", nil, nil, "Person not found in hitobito"])
-   expect(csv_report.third).to eq(["600001", "Hillary Edmund", "9", "1", "8", nil])
+    expect(File.exist?(report_file)).to be_truthy
+    expect(csv_report.first).to eq(report_headers)
+    expect(csv_report.second).to eq(["1000", "Montana Andreas", "44", nil, nil, "Person not found in hitobito"])
+    expect(csv_report.third).to eq(["600001", "Hillary Edmund", "9", "1", "8", nil])
 
-   File.delete(report_file)
-   expect(File.exist?(report_file)).to be_falsey
- end
+    File.delete(report_file)
+    expect(File.exist?(report_file)).to be_falsey
+  end
 end

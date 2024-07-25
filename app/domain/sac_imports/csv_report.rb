@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class SacImports::CsvReport
-
   def initialize(sac_import_name, headers)
     @timestamp = Time.zone.now.strftime("%Y-%m-%d-%H:%M")
     @sac_import_name = sac_import_name
@@ -46,5 +45,4 @@ class SacImports::CsvReport
   def csv_file_path
     @csv_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.csv"
   end
-
 end

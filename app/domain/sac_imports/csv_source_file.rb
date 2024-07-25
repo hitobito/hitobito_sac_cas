@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 
 class SacImports::CsvSourceFile
-
   SOURCE_HEADERS =
-    { NAV1: {},
-      NAV2: {
-        navision_id: "Mitgliedernummer",
-        household_key: "Familien-Nr.",
-        group_navision_id: "Sektion",
-        person_name: "Name",
-        navision_membership_years: "Vereinsmitgliederjahre" },
-      NAV3: {},
-      WSO21: {},
-      WSO22: {}
-    }.freeze
+    {NAV1: {},
+     NAV2: {
+       navision_id: "Mitgliedernummer",
+       household_key: "Familien-Nr.",
+       group_navision_id: "Sektion",
+       person_name: "Name",
+       navision_membership_years: "Vereinsmitgliederjahre"
+     },
+     NAV3: {},
+     WSO21: {},
+     WSO22: {}}.freeze
 
   AVAILABLE_SOURCES = SOURCE_HEADERS.keys.freeze
 
@@ -32,7 +31,7 @@ class SacImports::CsvSourceFile
         hash[header_key] = row[headers[header_key]]
       end
       data << hash
-    end 
+    end
     data
   end
 
@@ -44,7 +43,7 @@ class SacImports::CsvSourceFile
       raise("No source file #{@source_name}_*.csv found in RAILS_CORE_ROOT/tmp/sac_imports_src/.")
     end
 
-    source_dir.join("#{files.first}")
+    source_dir.join(files.first)
   end
 
   def headers
@@ -57,7 +56,7 @@ class SacImports::CsvSourceFile
 
   def assert_available_source
     unless AVAILABLE_SOURCES.include?(@source_name)
-      raise "Invalid source name: #{@source_name}\navailable sources: #{AVAILABLE_SOURCES.map(&:to_s).join(', ')}"
+      raise "Invalid source name: #{@source_name}\navailable sources: #{AVAILABLE_SOURCES.map(&:to_s).join(", ")}"
     end
   end
 end

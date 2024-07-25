@@ -7,8 +7,7 @@
 
 require "spec_helper"
 
-<<<<<<<< HEAD:spec/domain/sac_imports/huts/huts_row_spec.rb
-describe Import::Huts::HutsRow do
+describe SacImports::Huts::HutComissionRow do
   let(:importer) { described_class.new(row) }
 
   let(:row) do
@@ -19,19 +18,6 @@ describe Import::Huts::HutsRow do
       verteilercode: "4000",
       related_navision_id: "00000036",
       related_last_name: "Bluemlisalphütte SAC",
-========
-describe SacImports::Huts::HutComissionRow do
-  let(:importer) { described_class.new(row) }
-
-  let(:row) do
-    SacImports::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
-      contact_navision_id: "00003750",
-      contact_name: "Bluemlisalphuette",
-      verteilercode: "3001",
-      related_navision_id: "123456",
-      related_last_name: "Max",
-      related_first_name: "Muster",
->>>>>>>> 64e5e4d2 (Introduce SacImports namespace):spec/domain/sac_imports/huts/hut_comission_row_spec.rb
       created_at: "06/10/2022"
     )
   end

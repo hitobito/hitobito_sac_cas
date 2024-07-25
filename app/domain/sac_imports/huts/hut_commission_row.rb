@@ -5,15 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-<<<<<<<< HEAD:app/domain/sac_imports/huts/hut_commission_row.rb
-module Import::Huts
-  class HutCommissionRow
-========
 require Rails.root.join("lib", "import", "xlsx_reader.rb")
 
 module SacImports::Huts
   class HutComissionRow
->>>>>>>> 64e5e4d2 (Introduce SacImports namespace):app/domain/sac_imports/huts/hut_comission_row.rb
     def self.can_process?(row)
       row[:verteilercode] == 4000 &&
         ["SAC Clubhütte", "SAC Sektionshütte"].include?(row[:hut_category]) &&

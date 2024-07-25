@@ -25,20 +25,20 @@ module SacImports
       data.each do |row|
         person = hitobito_people[row[:navision_id].to_i]
         @csv_report.add_row(
-          { membership_number: row[:navision_id],
-            person_name: row[:person_name],
-            navision_membership_years: row[:navision_membership_years],
-            hitobito_membership_years: person&.membership_years,
-            diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
-            errors: errors_for(person)
-        })
+          {membership_number: row[:navision_id],
+           person_name: row[:person_name],
+           navision_membership_years: row[:navision_membership_years],
+           hitobito_membership_years: person&.membership_years,
+           diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
+           errors: errors_for(person)}
+        )
       end
     end
 
     private
 
     def hitobito_people(data)
-      people_ids = data.map { |row| row[:navision_id] }.compact
+      people_ids = data.pluck(:navision_id).compact
       Person.with_membership_years.where(id: people_ids).index_by(&:id)
     end
 
