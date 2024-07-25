@@ -316,4 +316,21 @@ describe Event::Course do
       }.to change { Delayed::Job.where("handler LIKE ?", "%ParticipationRejectionJob%").count }.by(1)
     end
   end
+
+  describe "when state changes to ready" do
+    let(:course) { events(:assignment_closed) }
+
+    # set up participants who have been rejected
+    let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
+    let(:assigned_participation) { Fabricate(:event_participation, event: course, application: application, state: "assigned") }
+
+    it "queues job to notify rejected participants" do
+      course.dates.build(start_at: Time.zone.local(2025, 5, 11))
+      assigned_participation
+
+      expect {
+        course.update!(state: :ready)
+      }.to change { course.participations.all.first.state }.to eq "summoned"
+    end
+  end
 end
