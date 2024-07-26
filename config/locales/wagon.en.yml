@@ -161,8 +161,8 @@ en:
         valid_from: ""
         valid_to: ""
         rate_leader: ""
-        rate_ssistant_leader: ""
-        course_compensation_category: ""
+        rate_assistant_leader: ""
+        course_compensation_category_id: ""
         updated_at: ""
         created_at: ""
       event:
@@ -182,6 +182,7 @@ en:
         kind_category_id: ""
         cost_center_id: ""
         cost_unit_id: ""
+        course_compensation_categories: ""
         season: ""
         seasons:
           winter: ""
@@ -403,7 +404,7 @@ en:
       models:
         course_compensation_rate:
           attributes:
-            course_compensation_category:
+            course_compensation_category_id:
               uniqueness_during_validity_period: ""
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -1006,7 +1007,7 @@ en:
 
     terminate_sac_memberships:
       create:
-        success: 
+        success:
           one: ""
           other: ""
 
