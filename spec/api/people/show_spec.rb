@@ -27,11 +27,11 @@ RSpec.describe "people#show", type: :request do
     end
 
     context "as employee" do
-      it "can read national office remark but not section remarks" do
+      it "can read all remarks" do
         sign_in(person)
         make_request
         expect(d.sac_remark_national_office).to eq("Remark")
-        expect(d.sac_remark_section_1).to be_nil
+        expect(d.sac_remark_section_1).to eq("Remark")
       end
     end
 
