@@ -128,7 +128,7 @@ describe PersonAbility do
       it "is permitted to manage geschaeftsstelle remark but not section" do
         expect(ability).to be_able_to(:show_remarks, person)
         expect(ability).to be_able_to(:manage_national_office_remark, person)
-        expect(ability).not_to be_able_to(:manage_section_remarks, person)
+        expect(ability).to be_able_to(:manage_section_remarks, person)
       end
     end
 

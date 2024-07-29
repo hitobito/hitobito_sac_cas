@@ -79,10 +79,9 @@ describe Person::SacRemarksController do
         expect(response).to have_http_status(:success)
       end
 
-      it "cannot edit section remarks" do
-        expect do
-          get :edit, params: {group_id: group_id, person_id: person.id, id: :sac_remark_section_1}
-        end.to raise_error(CanCan::AccessDenied)
+      it "can edit section remarks" do
+        get :edit, params: {group_id: group_id, person_id: person.id, id: :sac_remark_section_1}
+        expect(response).to have_http_status(:success)
       end
     end
 
@@ -139,11 +138,11 @@ describe Person::SacRemarksController do
         end.to change { person.reload.sac_remark_national_office }.from(nil).to("example")
       end
 
-      it "cannot manage section remarks" do
+      it "can manage section remarks" do
         expect do
           put :update, params: {group_id: group_id, person_id: person.id, id: :sac_remark_section_1,
                                 person: {sac_remark_section_1: "example"}}
-        end.to raise_error(CanCan::AccessDenied)
+        end.to change { person.reload.sac_remark_section_1 }.from(nil).to("example")
       end
     end
 
