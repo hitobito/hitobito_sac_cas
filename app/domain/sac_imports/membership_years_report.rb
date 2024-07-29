@@ -16,7 +16,7 @@ module SacImports
     def initialize(output: $stdout)
       @output = output
       @source_file = CsvSourceFile.new(:NAV2)
-      @csv_report = CsvReport.new(:membership_years_report, REPORT_HEADERS)
+      @csv_report = CsvReport.new(:'6_membership_years_report', REPORT_HEADERS)
     end
 
     def create

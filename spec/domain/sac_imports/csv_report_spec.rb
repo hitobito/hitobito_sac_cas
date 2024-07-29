@@ -9,8 +9,8 @@ require "spec_helper"
 
 describe SacImports::CsvReport do
   let(:headers) { %i[membership_number sac_family_number name stammsektion] }
-  let(:csv_report) { described_class.new(:sektion_membership, headers) }
-  let(:report_file) { Rails.root.join("log", "sac_imports", "sektion_membership_#{Time.zone.now.strftime("%Y-%m-%d-%H:%M")}.csv") }
+  let(:csv_report) { described_class.new(:'4_import_memberships', headers) }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "4_import_memberships_#{Time.zone.now.strftime("%Y-%m-%d-%H:%M")}.csv") }
   let(:csv_content) { CSV.read(report_file, col_sep: ";") }
 
   it "creates csv log with headers and appends rows" do

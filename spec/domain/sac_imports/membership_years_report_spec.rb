@@ -10,7 +10,7 @@ require "spec_helper"
 describe SacImports::MembershipYearsReport do
   let(:nav2_csv_fixture) { File.expand_path("../../../fixtures/files/sac_imports_src/NAV2_stammmitgliedschaften_2024-01-04.csv", __FILE__) }
   let(:report) { described_class.new }
-  let(:report_file) { Rails.root.join("log", "sac_imports", "membership_years_report_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "6_membership_years_report_2024-01-23-11:42.csv") }
   let(:report_headers) { %w[membership_number person_name navision_membership_years hitobito_membership_years diff errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
