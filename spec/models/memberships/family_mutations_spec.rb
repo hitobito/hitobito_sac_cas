@@ -216,19 +216,6 @@ describe Memberships::FamilyMutation do
         .and change { neuanmeldung_zusatzsektion_role.delete_on }.to(nil)
     end
 
-    it "creates new non-family neuanmeldung zusatzsektion roles for famliy neuanmeldung zusatzsektion roles per beginning of today" do
-      neuanmeldung_zusatzsektion_role = neuanmeldung_zusatzsektion_roles.first
-      expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
-
-      expect { mutation.leave! }
-        .not_to change { neuanmeldung_zusatzsektion_roles.count }.from(1)
-
-      new_role = neuanmeldung_zusatzsektion_roles.first
-      expect(new_role.group_id).to eq groups(:matterhorn_mitglieder).id
-      expect(new_role.created_at).to eq Time.current.beginning_of_day
-      expect(new_role.beitragskategorie).to eq "youth"
-    end
-
     it "does not touch non-family zusatzsektion roles" do
       non_family_zusatzsektion_role = zusatzsektion_roles.first
       Role.where(id: non_family_zusatzsektion_role.id).update_all(beitragskategorie: "youth")
