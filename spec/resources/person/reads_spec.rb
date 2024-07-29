@@ -67,5 +67,14 @@ RSpec.describe PersonResource, type: :resource do
         end
       end
     end
+
+    context "sac_remarks" do
+      it "is included" do
+        render
+        Person::SAC_REMARKS.each do |remark|
+          expect(attributes.keys).to include remark.to_sym
+        end
+      end
+    end
   end
 end

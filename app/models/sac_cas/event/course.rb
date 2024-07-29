@@ -142,9 +142,6 @@ module SacCas::Event::Course
 
     self.possible_participation_states = %w[unconfirmed applied rejected assigned summoned
       attended absent canceled annulled]
-    self.active_participation_states = %w[assigned attended summoned]
-    self.countable_participation_states = %w[applied assigned attended absent summoned]
-
     self.active_participation_states = %w[assigned summoned attended]
 
     self.revoked_participation_states = %w[rejected canceled absent annulled]

@@ -22,7 +22,7 @@ module SacCas::PersonAbility
         .if_person_is_adult_and_all_household_members_writable
       permission(:any).may(:show_remarks).if_backoffice_or_functionary
       permission(:any).may(:manage_national_office_remark).if_backoffice
-      permission(:any).may(:manage_section_remarks).if_section_functionary
+      permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
     end
 
     def if_backoffice_or_functionary

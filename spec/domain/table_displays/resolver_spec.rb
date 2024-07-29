@@ -191,7 +191,7 @@ describe TableDisplays::Resolver, type: :helper do
       expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_truthy
       person.roles.build(type: Group::Geschaeftsstelle::Admin.sti_name)
       expect(view).to receive(:parent).and_return(person.roles.last)
-      expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_truthy
+      expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_falsy
       person.roles.build(type: ::Group::SektionsFunktionaere::Praesidium.sti_name)
       expect(view).to receive(:parent).and_return(person.roles.last)
       expect(described_class.new(view, person, :sac_remark_section_1).exclude_attr?).to be_falsy

@@ -2193,6 +2193,42 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "sac_remark_national_office": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_1": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_2": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_3": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_4": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sac_remark_section_5": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
@@ -2442,17 +2478,6 @@
         },
         "updated_at": {
           "type": "datetime",
-          "operators": [
-            "eq",
-            "not_eq",
-            "gt",
-            "gte",
-            "lt",
-            "lte"
-          ]
-        },
-        "membership_number": {
-          "type": "integer",
           "operators": [
             "eq",
             "not_eq",

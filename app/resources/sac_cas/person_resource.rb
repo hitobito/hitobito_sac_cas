@@ -9,16 +9,27 @@ module SacCas::PersonResource
   extend ActiveSupport::Concern
 
   included do
-    attribute :family_id, :string, writable: false, sortable: false, filterable: false
-    attribute :membership_number, :integer, writable: false, sortable: false, fiterable: false do
-      @object.membership_number if @object.sac_membership_anytime?
-    end
-
     extra_attribute :membership_years, :integer, sortable: true, filterable: true do
       @object.membership_years if @object.sac_membership_anytime?
     end
     on_extra_attribute :membership_years do |scope|
       scope.with_membership_years
+    end
+
+    with_options writable: false, sortable: false, filterable: false do
+      attribute :family_id, :string
+      attribute :membership_number, :integer do
+        @object.membership_number if @object.sac_membership_anytime?
+      end
+      attribute :sac_remark_national_office, :string do
+        @object.sac_remark_national_office if can?(:manage_national_office_remark, @object)
+      end
+
+      (1..5).each do |num|
+        attribute :"sac_remark_section_#{num}", :string do
+          @object.send(:"sac_remark_section_#{num}") if can?(:manage_section_remarks, @object)
+        end
+      end
     end
   end
 end
