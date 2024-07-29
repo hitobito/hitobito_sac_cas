@@ -18,6 +18,7 @@ describe Memberships::FamilyMutation do
 
   let(:stammsektion_class) { Group::SektionsMitglieder::Mitglied }
   let(:zusatzsektion_class) { Group::SektionsMitglieder::MitgliedZusatzsektion }
+  let(:neuanmeldung_zusatzsektion_class) { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion }
 
   def stammsektion_role = person.sac_membership.stammsektion_role
 
@@ -206,6 +207,7 @@ describe Memberships::FamilyMutation do
     end
 
     it "terminates family neuanmeldung zusatzsektion roles per end of yesterday" do
+      create_role!(neuanmeldung_zusatzsektion_class, groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
       neuanmeldung_zusatzsektion_role = neuanmeldung_zusatzsektion_roles.first
       expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
 
