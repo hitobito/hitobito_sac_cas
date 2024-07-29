@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Import::Huts
+module SacImports::Huts
   class HutsRow
     def self.can_process?(row)
       row[:verteilercode] == 4000 && group_type(row).present? &&

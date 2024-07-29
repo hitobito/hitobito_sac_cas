@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module SacImports::Huts
   class HutChairmanRow
     include RemovingPlaceholderContactRole
@@ -30,11 +28,11 @@ module SacImports::Huts
         return
       end
       person.roles.where(
-        type: Group::SektionsHuettenkommission::Huettenobmann.name,
+        type: Group::SektionsFunktionaere::Huettenobmann.name,
         group_id: group_id
       ).find_each(&:really_destroy!)
       person.roles.build(
-        type: Group::SektionsHuettenkommission::Huettenobmann.name,
+        type: Group::SektionsFunktionaere::Huettenobmann.name,
         created_at: created_at(@row),
         group_id: group_id
       )
@@ -58,7 +56,7 @@ module SacImports::Huts
     def group_id(row)
       Group.find_by(navision_id: navision_id(row))
         .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
+        .find { |child| child.type == "Group::SektionsFunktionaere" }
         .id
     rescue NoMethodError
       Rails.logger.debug {

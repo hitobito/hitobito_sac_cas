@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe SacImports::CsvSourceFile do
+  let(:nav2_csv_fixture) { File.expand_path("../../../fixtures/files/sac_imports_src/NAV2_stammmitgliedschaften_2024-01-04.csv", __FILE__) }
   let(:source_file) { described_class.new(@source_name) }
 
   it "throws error if unavailable source file referenced" do
@@ -34,7 +35,7 @@ describe SacImports::CsvSourceFile do
     expect(Dir)
       .to receive(:glob)
       .with(Rails.root.join("tmp", "sac_imports_src", "NAV2_*.csv").to_s)
-      .and_return([File.expand_path("../../../fixtures/files/sac_imports_src/NAV2_stammmitgliedschaften_2024-01-04.csv", __FILE__)])
+      .and_return([nav2_csv_fixture])
     allow(Dir)
       .to receive(:glob)
       .and_call_original

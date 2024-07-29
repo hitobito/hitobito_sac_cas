@@ -5,8 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module SacImports::Huts
   class HutCommissionRow
     def self.can_process?(row)

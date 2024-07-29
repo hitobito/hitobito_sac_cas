@@ -27,7 +27,7 @@ mitglied:
   housenumber: 79a
   zip_code: 2843
   town: Neu Carlscheid
-  country: Schweiz
+  country: CH
   email: e.hillary@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
   birthday: <%= Date.new(2000, 1,1) %>

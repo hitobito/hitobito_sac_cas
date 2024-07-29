@@ -5,12 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require Rails.root.join("lib", "import", "xlsx_reader.rb")
-
 module SacImports::Huts
   class HutRow
     def self.can_process?(row)
-      row[:verteilercode].to_s == "4000.0"
+      row[:verteilercode] == 4000 && hut_type(row).present? &&
+        row[:contact_navision_id] != "00001000"
     end
 
     def initialize(row)
@@ -23,14 +22,32 @@ module SacImports::Huts
       group.save!
     end
 
+    def self.hut_type(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuette
+      when "SAC Clubhütte"
+        Group::SektionsClubhuette
+      end
+    end
+
+    def self.parent_group_type(row)
+      case row[:hut_category]
+      when "SAC Sektionshütte"
+        Group::Sektionshuetten
+      when "SAC Clubhütte"
+        Group::SektionsClubhuetten
+      end
+    end
+
     private
 
     def group_for(row)
-      Group.find_or_initialize_by(navision_id: navision_id(row))
+      self.class.hut_type(row).find_or_initialize_by(navision_id: navision_id(row))
     end
 
     def set_data(row, group)
-      group.type = Group::SektionsHuette.name
+      group.type = self.class.hut_type(row).name
       group.name = name(row)
       group.parent_id = parent_id(row)
     end
@@ -44,12 +61,11 @@ module SacImports::Huts
     end
 
     def parent_id(row)
-      Group::Sektion.find_by(navision_id: owner_navision_id(row))
-        .descendants
-        .find { |child| child.type == "Group::SektionsHuettenkommission" }
-        .id
+      sektion = Group.find_by(navision_id: owner_navision_id(row))
+      funktionaere = Group::SektionsFunktionaere.find_by(parent: sektion)
+      self.class.parent_group_type(row).find_by(parent: funktionaere).id
     rescue
-      raise "WARNING: No parent found for row #{row.inspect}"
+      raise "WARNING: No parent found for row #{row.inspect}. Descendants: #{sektion.descendants.inspect}"
     end
 
     def owner_navision_id(row)
