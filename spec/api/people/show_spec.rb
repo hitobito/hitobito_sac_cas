@@ -10,18 +10,28 @@ require "spec_helper"
 RSpec.describe "people#show", type: :request do
   it_behaves_like "jsonapi authorized requests" do
     let(:token) { service_tokens(:permitted_root_layer_token).token }
-    let(:person) { people(:admin) }
+    let(:person) do
+      people(:admin).tap do |person|
+        person.update!(sac_remark_national_office: "Remark", sac_remark_section_1: "Remark")
+      end
+    end
 
     subject(:make_request) { jsonapi_get "/api/people/#{person.id}" }
 
-    before { person.update!(sac_remark_national_office: "Remark", sac_remark_section_1: "Remark") }
+    context "without correct authentication" do
+      it "cannot read any remarks" do
+        make_request
+        expect(d.sac_remark_national_office).to be_nil
+        expect(d.sac_remark_section_1).to be_nil
+      end
+    end
 
     context "as employee" do
       it "can read national office remark but not section remarks" do
         sign_in(person)
         make_request
         expect(d.sac_remark_national_office).to eq("Remark")
-        expect(d.sac_remark_section_1).to be_blank
+        expect(d.sac_remark_section_1).to be_nil
       end
     end
 
@@ -35,7 +45,7 @@ RSpec.describe "people#show", type: :request do
         sign_in(person)
 
         make_request
-        expect(d.sac_remark_national_office).to be_blank
+        expect(d.sac_remark_national_office).to be_nil
         expect(d.sac_remark_section_1).to eq("Remark")
       end
     end
