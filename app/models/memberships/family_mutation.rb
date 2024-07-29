@@ -45,6 +45,7 @@ module Memberships
       end
       sac_membership.future_stammsektion_roles.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
+      sac_membership.neuanmeldung_zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
     end
 
     private
