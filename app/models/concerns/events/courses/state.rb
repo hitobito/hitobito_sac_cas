@@ -26,7 +26,7 @@ module Events::Courses::State
     validate :assert_valid_state_change, if: :state_changed?
     before_create :set_default_state
     after_commit :notify_rejected_participants, if: :assignment_closed?
-    after_commit :summon_assigned_participants, if: :ready?
+    after_commit :summon_assigned_participants, if: :from_assignment_closed_to_ready?
 
     def available_states(state = self.state)
       SAC_COURSE_STATES[state.to_sym]
@@ -37,7 +37,13 @@ module Events::Courses::State
       states.index(state1.to_sym) < states.index(state2.to_sym)
     end
 
-    def ready? = state.to_sym == :ready
+    def assignment_closed?
+      state.to_sym == :assignment_closed
+    end
+
+    def from_assignment_closed_to_ready?
+      state.to_sym == :ready && previous_changes["state"].first.eql?("assignment_closed")
+    end
 
     def state_possible?(new_state)
       available_states.any?(new_state.to_sym)
@@ -54,7 +60,7 @@ module Events::Courses::State
     end
 
     def summon_assigned_participants
-      assigned_participants.each { |participant| participant.update!(state: :summoned) }
+      assigned_participants.update_all(state: :summoned)
     end
 
     def assigned_participants

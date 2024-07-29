@@ -324,13 +324,27 @@ describe Event::Course do
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
     let(:assigned_participation) { Fabricate(:event_participation, event: course, application: application, state: "assigned") }
 
-    it "queues job to notify rejected participants" do
-      course.dates.build(start_at: Time.zone.local(2025, 5, 11))
-      assigned_participation
+    context "from assignment_closed" do
+      it "updates assigned participants to summoned" do
+        course.dates.build(start_at: Time.zone.local(2025, 5, 11))
+        assigned_participation
 
-      expect {
-        course.update!(state: :ready)
-      }.to change { course.participations.all.first.state }.to eq "summoned"
+        expect do
+          course.update!(state: :ready)
+        end.to change { course.participations.all.first.state }.to eq "summoned"
+      end
+    end
+
+    context "from closed" do
+      it "does not update assigned participants to summoned" do
+        course.dates.build(start_at: Time.zone.local(2025, 5, 11))
+        course.update_attribute(:state, :closed)
+        assigned_participation
+
+        expect do
+          course.update!(state: :ready)
+        end.to_not change { course.participations.all.first.state }
+      end
     end
   end
 end
