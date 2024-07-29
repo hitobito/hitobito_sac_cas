@@ -15,7 +15,7 @@ top_course:
   language: de
   external_applications: true
 
-closed:
+closed: &closed
   groups: root
   type: Event::Course
   kind: ski_course
@@ -31,3 +31,8 @@ closed:
   start_point_of_time: day
   cost_center: tour
   cost_unit: ski
+
+assignment_closed:
+  <<: *closed
+  number: 102
+  state: assignment_closed
