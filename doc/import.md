@@ -79,6 +79,13 @@ Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine
 
 Import Source File: **NAV3**
 
+## Hitobito SAC Import 6: sac_imports:additional_memberships
+
+`rails sac_imports:membership_years_report`
+
+- Import Source File: **NAV2**
+- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/6_membership_years_report_2024-06-01-12:00.csv`
+
 ## Delete all Sektions
 
 ```ruby
