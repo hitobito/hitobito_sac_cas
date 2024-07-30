@@ -33,6 +33,8 @@ module SacCas::Role
   def self.prepended(base)
     base.extend(ClassMethods)
 
+    attr_writer :from_future_role
+
     base.class_eval do
       scope :with_membership_years,
         ->(selects = "roles.*", date = Time.zone.today) do
@@ -45,6 +47,10 @@ module SacCas::Role
 
       belongs_to :termination_reason, optional: true
     end
+  end
+
+  def from_future_role?
+    @from_future_role
   end
 
   def termination_reason_text
