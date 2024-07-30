@@ -21,11 +21,11 @@ module Wizards::Memberships
       role.layer_group.display_name
     end
 
-    def initialize(current_step: 0, person: nil, role: nil, backoffice: false, **params)
-      super(current_step: current_step, **params)
+    def initialize(person:, role:, current_step: 0, backoffice: false, **params)
       @person = person
       @role = role
       @backoffice = backoffice
+      super(current_step: current_step, **params)
     end
 
     def valid?
@@ -58,11 +58,11 @@ module Wizards::Memberships
     end
 
     def mitglied_termination_by_section_only?
-      role.layer_group.mitglied_termination_by_section_only
+      role.layer_group.try(:mitglied_termination_by_section_only)
     end
 
     def family_membership?
-      role.beitragskategorie.family?
+      role&.beitragskategorie&.family?
     end
 
     private
