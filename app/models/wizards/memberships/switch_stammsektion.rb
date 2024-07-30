@@ -18,9 +18,9 @@ module Wizards::Memberships
     attr_reader :person
 
     def initialize(current_step: 0, person: nil, backoffice: false, **params)
-      super(current_step: current_step, **params)
       @person = person
       @backoffice = backoffice
+      super(current_step: current_step, **params)
     end
 
     def valid?

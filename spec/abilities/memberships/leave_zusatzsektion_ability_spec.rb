@@ -17,8 +17,9 @@ describe Memberships::LeaveZusatzsektionAbility do
   let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:geschaeftsstelle) }
 
-  def build_leave(person)
-    Wizards::Memberships::LeaveZusatzsektion.new(current_step: 0, person: people(person))
+  def build_leave(key)
+    role = roles(key)
+    Wizards::Memberships::LeaveZusatzsektion.new(current_step: 0, person: role.person, role:)
   end
 
   subject(:ability) { Ability.new(role.person) }
