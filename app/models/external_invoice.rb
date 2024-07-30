@@ -42,7 +42,13 @@ class ExternalInvoice < ActiveRecord::Base
   validates_by_schema
   validates :state, inclusion: {in: STATES}
 
+  scope :list, -> { order(:created_at) }
+
   def type_key
     self.class.name.demodulize.underscore
   end
+
+  def title = to_s
+
+  def to_s = id
 end

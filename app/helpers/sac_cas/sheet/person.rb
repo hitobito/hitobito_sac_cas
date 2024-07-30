@@ -14,5 +14,15 @@ module SacCas::Sheet::Person
       :group_person_sac_remarks_path,
       if: ->(view, _group, person) { view.can?(:show_remarks, person) }
     ))
+
+    # Insert external invoices tab (for example abacus bills)
+    tabs.insert(3, Sheet::Tab.new(
+      "people.tabs.external_invoices",
+      :external_invoices_group_person_path,
+      if: ->(view, _group, person) { view.can?(:index_external_invoices, person) }
+    ))
+
+    # Remove regular invoices tab because we don't use it
+    tabs.delete_if { |tab| tab.label_key == "people.tabs.invoices" }
   end
 end

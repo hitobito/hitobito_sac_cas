@@ -45,6 +45,7 @@ Rails.application.routes.draw do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
         end
         member do
+          get 'external_invoices' => 'person/external_invoices#index'
           # Test route to check invoice positions for a person.
           # Remove once invoices are sent to abacus
           get 'membership_invoice_positions' => 'people/membership_invoice_positions#show'
