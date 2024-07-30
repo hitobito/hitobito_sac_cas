@@ -130,6 +130,7 @@ module HitobitoSacCas
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Person.prepend SacCas::Sheet::Person
+      StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
       admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]
