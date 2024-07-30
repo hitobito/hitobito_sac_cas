@@ -21,10 +21,6 @@ en:
     wizards/steps/switch_stammsektion/choose_date_title: ""
     wizards/steps/switch_stammsektion/choose_sektion_title: ""
 
-  settings:
-    email:
-      sender: Swiss Alpine Club SAC <noreply@%{mail_domain}>"
-
   errors:
     messages:
       assert_old_enough: ""
