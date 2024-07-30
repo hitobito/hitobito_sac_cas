@@ -23,6 +23,11 @@ mitglied:
   id: 600_001
   first_name: Edmund
   last_name: Hillary
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
+  country: CH
   email: e.hillary@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
   birthday: <%= Date.new(2000, 1,1) %>

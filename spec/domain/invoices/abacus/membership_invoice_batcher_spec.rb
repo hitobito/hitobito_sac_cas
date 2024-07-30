@@ -30,7 +30,7 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
     Role.update_all(delete_on: date.end_of_year)
-    Person.update_all(zip_code: 3600, town: "Thun")
+    Person.update_all(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
 
     Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
     allow(abacus_client).to receive(:token).and_return("42")
