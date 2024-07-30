@@ -20,6 +20,10 @@ de:
     wizards/steps/switch_stammsektion/summary_title: Bestätigung
     wizards/steps/switch_stammsektion/choose_date_title: Datumwahl
     wizards/steps/switch_stammsektion/choose_sektion_title: Sektion wählen
+    wizards/steps/signup/main_email_field_title: Haupt-E-Mail
+    wizards/steps/signup/person_fields_title: Personendaten
+    wizards/steps/signup/family_fields_title: Familienmitglieder
+    wizards/steps/signup/various_fields_title: Zusatzdaten
 
   settings:
     email:
@@ -34,6 +38,24 @@ de:
 
   activemodel:
     attributes:
+      wizards/steps/signup/main_email_field:
+        email: E-Mail
+      wizards/steps/signup/person_fields:
+        gender: Anrede
+        phone_number: Telefon
+        address: Strasse und Nr.
+      wizards/steps/signup/family_fields/member:
+        gender: Anrede
+        email: E-Mail (optional)
+        phone_number: Telefon (optional)
+      wizards/steps/signup/various_fields:
+        register_on: Eintrittsdatum per
+        self_registration_reason_id: Eintrittsgrund
+        adult_consent: Einverständniserklärung der Erziehungsberechtigten
+        contribution_regulations: Beitragsreglement
+        data_protection: Datenschutzerklärung
+        sektion_statuten: Sektionsstatuten
+        statutes: Statuten
       wizards/steps/choose_membership:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
         family: für die ganze Familie
@@ -1371,6 +1393,13 @@ de:
 
   wizards:
     steps:
+      signup:
+        various_fields:
+          newsletter: Ich möchte einen Newsletter abonnieren
+          statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+          sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
+          contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+          data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
       choose_sektion:
         no_self_service_info_text: Wir bitten dich den gewünschten
           Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu
