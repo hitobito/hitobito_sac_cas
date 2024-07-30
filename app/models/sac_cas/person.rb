@@ -43,6 +43,8 @@ module SacCas::Person
 
     before_save :set_digital_correspondence, if: :password_initialized?
 
+    delegate :salutation_label, to: :class
+
     scope :with_membership_years, lambda { |selects = "people.*", date = Time.zone.today|
       subquery_sql = Group::SektionsMitglieder::Mitglied
         .with_deleted
@@ -55,6 +57,13 @@ module SacCas::Person
     }
   end
 
+  module ClassMethods
+    def salutation_label(key)
+      prefix = "activerecord.attributes.person.salutations"
+      I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
+    end
+  end
+
   def membership_years
     read_attribute(:membership_years) or raise "use Person scope :with_membership_years"
   end
@@ -65,11 +74,6 @@ module SacCas::Person
 
   def password_initialized?
     encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
-  end
-
-  def salutation_label(key)
-    prefix = "activerecord.attributes.person.salutations"
-    I18n.t("#{prefix}.#{key.presence || I18nEnums::NIL_KEY}")
   end
 
   def adult?(reference_date: Time.zone.today.end_of_year)
