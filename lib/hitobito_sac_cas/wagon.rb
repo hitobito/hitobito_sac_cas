@@ -61,6 +61,7 @@ module HitobitoSacCas
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
+      Wizards::Steps::NewUserForm.support_company = false
 
       StepsComponent.prepend SacCas::StepsComponent
       StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent

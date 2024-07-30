@@ -1,0 +1,12 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+-#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+-#  or at https://github.com/hitobito/hitobito.
+
+= standard_form(wizard, url: group_register_new_user_path, data: { controller: 'forwarder', forwarder_delay_value: 150 }) do |f|
+  = f.honeypot(:verification)
+  = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
+    = c.with_aside do
+      = turbo_frame_tag(:aside, class: '.col-md') do
+        - if wizard.group
+          = render(SelfRegistration::FeeComponent.new(group: c.model.group, birthdays: c.model.birthdays))
+        = render(SelfRegistration::InfosComponent.new)
