@@ -1,0 +1,25 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.well
+  = simple_format(t('groups.self_registration.household.membership_info_box'))
+
+.btn-toolbar.top{class: "#{'d-none' if c.model.members.empty?}" }
+  = render 'wizards/steps/signup/family_buttons', c: c
+
+= c.nested_fields_for(:members, c.model.build_member) do |form|
+  = form.error_messages
+  = form.labeled_gender_inline_radio_buttons
+  = form.labeled_input_fields :first_name, :last_name
+  = form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
+  = form.labeled_input_field :email
+  = form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')
+
+  .col-xl-2.col-md-3.text-md-end.pe-3
+    = form.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
+
+%br
+  .btn-toolbar.bottom.housemates
+    = render 'wizards/steps/signup/family_buttons', c: c
