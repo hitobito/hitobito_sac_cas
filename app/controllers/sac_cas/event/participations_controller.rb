@@ -38,6 +38,14 @@ module SacCas::Event::ParticipationsController
 
   private
 
+  def permitted_attrs
+    permitted = self.class.permitted_attrs.dup
+
+    permitted << :actual_days if can?(:edit_actual_days, entry)
+
+    permitted
+  end
+
   def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @step = params[:step]
     return yield if @step.blank? || !event.course?
