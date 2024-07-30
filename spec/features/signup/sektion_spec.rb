@@ -426,7 +426,7 @@ describe "signup/sektion", js: true do
         fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
         choose "Frau"
         click_on "Weiter als Familienmitgliedschaft", match: :first
-        expect(page).to have_content "Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein"
+        expect(page).to have_content "Person muss 6 Jahre oder älter sein"
       end
     end
 

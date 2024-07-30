@@ -37,7 +37,7 @@ describe Wizards::Steps::Signup::VariousFields do
         :contribution_regulations,
         :data_protection
       ]
-      expect(fields.errors.full_messages).to eq [
+      expect(fields.errors.full_messages).to match_array [
         "Statuten muss akzeptiert werden",
         "Beitragsreglement muss akzeptiert werden",
         "Datenschutzerklärung muss akzeptiert werden"

@@ -7,13 +7,16 @@
 #
 module Wizards::Steps::Signup::PersonCommon
   extend ActiveSupport::Concern
-  include SacCas::Role::MitgliedMinimalAgeValidation
 
   PHONE_NUMBER_LABEL = "Mobil"
 
   included do
+    class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
     validate :assert_valid_phone_number
-    validates :first_name, :last_name, :birthday, presence: true
+    validate :assert_minimum_age
+    validates :birthday, presence: true
+
+    attr_reader :person # for :assert_old_enough validation
   end
 
   module ClassMethods
@@ -38,8 +41,9 @@ module Wizards::Steps::Signup::PersonCommon
     end
   end
 
-  # NOTE: MitgliedMinimalAgeValidation is normaly used on role and expects a person
-  def person
-    Person.new(birthday: birthday) if birthday
+  def assert_minimum_age
+    if minimum_age && birthday && Person.new(birthday: birthday).years < minimum_age
+      errors.add(:person, :too_young, minimum_years: minimum_age)
+    end
   end
 end

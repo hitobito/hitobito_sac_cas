@@ -10,6 +10,7 @@ module SacCas::StepsComponent
 
   prepended do
     renders_one :aside
+    renders_one :footer
 
     haml_template <<~HAML
       %div{data: { controller: stimulus_controller} }
@@ -29,6 +30,12 @@ module SacCas::StepsComponent
               = render(ContentComponent.with_collection(@partials, step: @step, form: @form))
             .col-md
               = aside
+          - elsif footer?
+            .col
+              = render(ContentComponent.with_collection(@partials, step: @step, form: @form))
+              .mt-5
+                .offset-md-1
+                  = footer
           - else
             .col= render(ContentComponent.with_collection(@partials, step: @step, form: @form))
     HAML

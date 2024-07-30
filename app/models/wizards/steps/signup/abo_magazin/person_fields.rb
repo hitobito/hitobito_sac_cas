@@ -5,9 +5,13 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Wizards::Steps::Signup
+module Wizards::Steps::Signup::AboMagazin
   class PersonFields < Wizards::Steps::NewUserForm
     include Wizards::Steps::Signup::PersonCommon
+    include Wizards::Steps::Signup::AgreementFields
+
+    self.partial = "wizards/steps/signup/abo_basic_login/person_fields"
+    self.minimum_age = 18
 
     attribute :gender, :string
     attribute :birthday, :date
@@ -24,12 +28,15 @@ module Wizards::Steps::Signup
     validates :street, :housenumber, :town, :zip_code,
       :country, :phone_number, presence: true
 
+    NON_ASSIGNABLE_ATTRS = Wizards::Steps::Signup::AgreementFields::AGREEMENTS + [:newsletter]
+
     def initialize(...)
       super
       self.country ||= Settings.addresses.imported_countries.to_a.first
     end
 
-    # is handled by later step
-    def requires_policy_acceptance? = false
+    def person_attributes
+      super.except(*NON_ASSIGNABLE_ATTRS)
+    end
   end
 end

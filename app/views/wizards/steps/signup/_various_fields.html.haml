@@ -4,27 +4,15 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for do |form|
-  = render 'shared/register_on_fields', f: form
+  = render "shared/register_on_fields", f: form
 
   = form.labeled(:self_registration_reason_id) do
     - form.object.self_registration_reason_options.each do |key, label|
       = form.inline_radio_button :self_registration_reason_id, key, label
       %br
 
-  = form.labeled(:others, '&nbsp;'.html_safe) do
-    = form.label(:newsletter, class: 'd-block mt-2') do
-      = form.check_box :newsletter
-      = t('.newsletter')
+  = render "wizards/steps/signup/agreement_fields", form: form
 
-    - if form.object.requires_adult_consent?
-      = form.label(:adult_consent, class: 'd-block mt-2') do
-        = form.check_box :adult_consent
-        = t('groups.self_registration.adult_consent_field.caption')
-
-    - %w(statutes contribution_regulations data_protection).each do |key|
-      = render 'groups/self_registration/agreement_link', f: form, key: key,
-          link: link_to(*form.object.link_translations(key), target: :_blank)
-
-    - if form.object.requires_sektion_statuten?
-      = render 'groups/self_registration/agreement_link', f: form, key: :sektion_statuten,
-          link: link_to(*form.object.sektion_statuten_link_args, target: :_blank)
+  - if form.object.requires_sektion_statuten?
+    = render 'groups/self_registration/agreement_link', f: form, key: :sektion_statuten,
+        link: link_to(*form.object.sektion_statuten_link_args, target: :_blank)

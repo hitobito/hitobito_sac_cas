@@ -1,0 +1,11 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Aformero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= form.labeled_gender_inline_radio_buttons
+= form.labeled_input_field :first_name
+= form.labeled_input_field :last_name
+= form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
+= render 'contactable/address_fields', f: form
+= form.labeled_input_field :phone_number

@@ -8,36 +8,26 @@
 module Wizards::Steps::Signup
   class VariousFields < Wizards::Step
     include FutureRole::FormHandling
-    include Rails.application.routes.url_helpers
-
-    AGREEMENTS = [
-      :statutes,
-      :contribution_regulations,
-      :data_protection
-    ].freeze
+    include AgreementFields
 
     DYNAMIC_AGREEMENTS = [
       :sektion_statuten,
       :adult_consent
     ].freeze
 
-    AGREEMENTS.each do |agreement|
-      attribute agreement, :boolean, default: false
-      validates agreement, acceptance: true
-    end
-
     DYNAMIC_AGREEMENTS.each do |agreement|
       attribute agreement, :boolean
       validates agreement, acceptance: true, if: :"requires_#{agreement}?"
     end
 
-    delegate :requires_adult_consent?, to: :wizard
-
-    attribute :newsletter, :boolean
-    attribute :register_on, :string, default: :now
+    attribute :contribution_regulations, :boolean, default: false
     attribute :self_registration_reason_id, :integer
+    attribute :register_on, :string, default: :now
 
+    validates :contribution_regulations, acceptance: true
     validates :register_on, presence: true
+
+    delegate :requires_adult_consent?, to: :wizard
 
     def self_registration_reason_options
       SelfRegistrationReason.order(:created_at).collect do |r|
@@ -49,12 +39,6 @@ module Wizards::Steps::Signup
       label = I18n.t("link_sektion_statuten_title", scope: "self_registration.infos_component")
       path = rails_blob_path(privacy_policy, disposition: :attachment, only_path: true)
       [label, path]
-    end
-
-    def link_translations(key)
-      ["link_#{key}_title", "link_#{key}"].map do |str|
-        I18n.t(str, scope: "self_registration.infos_component")
-      end
     end
 
     def requires_sektion_statuten?

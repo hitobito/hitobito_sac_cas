@@ -21,6 +21,7 @@ module Wizards::Steps::Signup
     attribute :phone_number, :string
     attribute :_destroy, :boolean
 
+    validates :first_name, :last_name, presence: true
     validate :assert_family_age, if: :birthday
     validate :assert_email_unique, if: :email
 
@@ -45,7 +46,7 @@ module Wizards::Steps::Signup
     end
 
     def assert_family_age
-      calculator = SacCas::Beitragskategorie::Calculator.new(person)
+      calculator = SacCas::Beitragskategorie::Calculator.new(Person.new(birthday: birthday))
       return if calculator.family_age? # everyting in order, no need to check further
       errors.add(:birthday, :youth_not_allowed_in_family) if calculator.youth?
     end

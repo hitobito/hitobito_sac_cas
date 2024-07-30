@@ -20,6 +20,12 @@ module SacCas::Wizards::RegisterNewUsersController
 
   def model_class
     case group
+    when Group::AboBasicLogin
+      Wizards::Signup::AboBasicLoginWizard
+    when Group::AboTourenPortal
+      Wizards::Signup::AboTourenPortalWizard
+    when Group::AboMagazin
+      Wizards::Signup::AboMagazinWizard
     when Group::SektionsNeuanmeldungenNv, Group::SektionsNeuanmeldungenSektion
       Wizards::Signup::SektionWizard
     else

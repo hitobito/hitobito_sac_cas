@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 #  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -77,7 +76,6 @@ describe Wizards::Signup::SektionWizard do
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
       expect(wizard.family_fields.members.first.errors.full_messages).to eq [
-        "Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein",
         "Geburtstag muss ausgefüllt werden"
       ]
     end

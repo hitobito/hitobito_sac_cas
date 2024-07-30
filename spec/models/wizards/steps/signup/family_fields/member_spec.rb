@@ -59,7 +59,7 @@ describe Wizards::Steps::Signup::FamilyFields::Member do
       it "validates user is old enough" do
         form.attributes = required_attrs.merge(birthday: 1.year.ago.to_date)
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Person muss ein Geburtsdatum haben und mindestens 6 Jahre alt sein"]
+        expect(form.errors.full_messages).to eq ["Person muss 6 Jahre oder älter sein"]
       end
 
       it "validates user is old enough" do
