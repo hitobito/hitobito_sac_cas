@@ -15,8 +15,7 @@ oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
 | NAV7 | Abonenten Die Alpen                                  |
-| WSO21 | Basic Accounts und Password Hashes                  |
-| WSO22 | SAC Tourenportal Abonnenten                         |
+| WSO21 | Datenexport aus WSO2                                |
 
 details siehe SAC Jira HIT-490
 
