@@ -15,10 +15,11 @@ module Wizards::Signup
     public :group
 
     delegate :email, to: :main_email_field
+    delegate :newsletter, to: :person_fields
 
     def save!
       super
-      exclude_from_mailing_list unless person_fields.newsletter
+      exclude_from_mailing_list unless newsletter
     end
 
     private

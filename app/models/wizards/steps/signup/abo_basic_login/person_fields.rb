@@ -6,28 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Wizards::Steps::Signup::AboBasicLogin
-  class PersonFields < Wizards::Steps::NewUserForm
-    include Wizards::Steps::Signup::PersonCommon
+  class PersonFields < Wizards::Steps::Signup::PersonFields
     include Wizards::Steps::Signup::AgreementFields
 
-    attribute :gender, :string
-    attribute :birthday, :date
-    attribute :address_care_of, :string
-    attribute :street, :string
-    attribute :housenumber, :string
-
-    attribute :postbox, :string
-    attribute :zip_code, :string
-    attribute :town, :string
-    attribute :country, :string
-    attribute :phone_number, :string
-
     NON_ASSIGNABLE_ATTRS = Wizards::Steps::Signup::AgreementFields::AGREEMENTS + [:newsletter]
+    self.partial = "wizards/steps/signup/person_fields"
 
-    def initialize(...)
-      super
-      self.country ||= Settings.addresses.imported_countries.to_a.first
-    end
+    def requires_adult_consent? = false
 
     def person_attributes
       super.except(*NON_ASSIGNABLE_ATTRS)

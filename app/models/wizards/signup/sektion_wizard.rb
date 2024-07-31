@@ -9,9 +9,9 @@ module Wizards::Signup
   class SektionWizard < Wizards::RegisterNewUserWizard
     self.steps = [
       Wizards::Steps::Signup::MainEmailField,
-      Wizards::Steps::Signup::PersonFields,
-      Wizards::Steps::Signup::FamilyFields,
-      Wizards::Steps::Signup::VariousFields
+      Wizards::Steps::Signup::Sektion::PersonFields,
+      Wizards::Steps::Signup::Sektion::FamilyFields,
+      Wizards::Steps::Signup::Sektion::VariousFields
     ]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
@@ -89,8 +89,8 @@ module Wizards::Signup
     end
 
     def step_after(step_name_or_class)
-      if step_name_or_class == Wizards::Steps::Signup::PersonFields && too_young_for_household?
-        Wizards::Steps::Signup::VariousFields.step_name
+      if step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
+        Wizards::Steps::Signup::Sektion::VariousFields.step_name
       else
         super
       end

@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Wizards::Steps::Signup
+module Wizards::Steps::Signup::Sektion
   class VariousFields < Wizards::Step
     include FutureRole::FormHandling
-    include AgreementFields
+    include Wizards::Steps::Signup::AgreementFields
 
     DYNAMIC_AGREEMENTS = [
       :sektion_statuten,

@@ -23,9 +23,12 @@ de:
     wizards/steps/signup/main_email_field_title: Haupt-E-Mail
     wizards/steps/signup/person_fields_title: Personendaten
     wizards/steps/signup/abo_basic_login/person_fields_title: Personendaten
+    wizards/steps/signup/abo_touren_portal_login/person_fields_title: Personendaten
+    wizards/steps/signup/abo_magazin/person_fields_title: Personendaten
     wizards/steps/signup/abo_magazin/issues_from_field_title: Abo
-    wizards/steps/signup/family_fields_title: Familienmitglieder
-    wizards/steps/signup/various_fields_title: Zusatzdaten
+    wizards/steps/signup/sektion/person_fields_title: Personendaten
+    wizards/steps/signup/sektion/family_fields_title: Familienmitglieder
+    wizards/steps/signup/sektion/various_fields_title: Zusatzdaten
 
   settings:
     email:
@@ -48,40 +51,19 @@ de:
         gender: Anrede
         phone_number: Telefon
         address: Strasse und Nr.
-      wizards/steps/signup/abo_basic_login/person_fields:
-        gender: Anrede
-        phone_number: Telefon
-        address: Strasse und Nr.
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
-        sektion_statuten: Sektionsstatuten
-        statutes: Statuten
-      wizards/steps/signup/abo_touren_portal/person_fields:
-        gender: Anrede
-        phone_number: Telefon
-        address: Strasse und Nr.
-        adult_consent: Einverständniserklärung der Erziehungsberechtigten
-        contribution_regulations: Beitragsreglement
-        data_protection: Datenschutzerklärung
-        sektion_statuten: Sektionsstatuten
-        statutes: Statuten
-      wizards/steps/signup/abo_magazin/person_fields:
-        gender: Anrede
-        phone_number: Telefon
-        address: Strasse und Nr.
-        adult_consent: Einverständniserklärung der Erziehungsberechtigten
-        contribution_regulations: Beitragsreglement
-        data_protection: Datenschutzerklärung
-        sektion_statuten: Sektionsstatuten
         statutes: Statuten
       wizards/steps/signup/abo_magazin/issues_from_field:
         issues_from: Ab Ausgabe
-      wizards/steps/signup/family_fields/member:
+        data_protection: Datenschutzerklärung
+        statutes: Statuten
+      wizards/steps/signup/sektion/family_fields/member:
         gender: Anrede
         email: E-Mail (optional)
         phone_number: Telefon (optional)
-      wizards/steps/signup/various_fields:
+      wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
         adult_consent: Einverständniserklärung der Erziehungsberechtigten

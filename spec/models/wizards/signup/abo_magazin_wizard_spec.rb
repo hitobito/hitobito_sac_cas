@@ -36,7 +36,9 @@ describe Wizards::Signup::AboMagazinWizard do
         zip_code: "8000",
         birthday: "1.1.2000",
         country: "CH",
-        phone_number: "+41 79 123 45 67",
+        phone_number: "+41 79 123 45 67"
+      },
+      issues_from_field: {
         statutes: true,
         data_protection: true
       }
@@ -66,13 +68,6 @@ describe Wizards::Signup::AboMagazinWizard do
         expect(wizard.person_fields.errors.full_messages).to eq ["Vorname muss ausgefüllt werden"]
       end
 
-      it "is invalid agreements are not checked" do
-        required_attrs[:person_fields][:statutes] = "0"
-        required_attrs[:person_fields][:data_protection] = "0"
-        expect(wizard).not_to be_valid
-        expect(wizard.person_fields.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
-      end
-
       it "is invalid if less than 18 years old" do
         required_attrs[:person_fields][:birthday] = 17.years.ago
         expect(wizard).not_to be_valid
@@ -85,9 +80,16 @@ describe Wizards::Signup::AboMagazinWizard do
 
       it "is invalid if before today" do
         travel_to(Time.zone.local(2024, 7, 31))
-        required_attrs[:issues_from_field] = {issues_from: Time.zone.yesterday}
+        required_attrs[:issues_from_field][:issues_from] = Time.zone.yesterday
         expect(wizard).not_to be_valid
         expect(wizard.issues_from_field.errors.full_messages).to eq ["Ab Ausgabe muss 31.07.2024 oder danach sein"]
+      end
+
+      it "is invalid agreements are not checked" do
+        required_attrs[:issues_from_field][:statutes] = "0"
+        required_attrs[:issues_from_field][:data_protection] = "0"
+        expect(wizard).not_to be_valid
+        expect(wizard.issues_from_field.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
       end
     end
   end
@@ -110,7 +112,7 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     it "creates newsletter exclusion for all" do
-      required_attrs[:person_fields][:newsletter] = "0"
+      required_attrs[:issues_from_field][:newsletter] = "0"
       wizard.save!
       expect(max.subscriptions).to have(1).item
     end

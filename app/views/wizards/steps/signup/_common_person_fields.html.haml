@@ -6,6 +6,10 @@
 = form.labeled_gender_inline_radio_buttons
 = form.labeled_input_field :first_name
 = form.labeled_input_field :last_name
-= form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
+- if form.object.wizard.respond_to?(:birthdays)
+  = form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
+  = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: :aside
+- else
+  = form.labeled_date_field :birthday
 = render 'contactable/address_fields', f: form
 = form.labeled_input_field :phone_number

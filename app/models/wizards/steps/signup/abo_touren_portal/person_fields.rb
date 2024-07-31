@@ -6,37 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Wizards::Steps::Signup::AboTourenPortal
-  class PersonFields < Wizards::Steps::NewUserForm
-    include Wizards::Steps::Signup::PersonCommon
-    include Wizards::Steps::Signup::AgreementFields
-
-    self.partial = "wizards/steps/signup/abo_basic_login/person_fields"
+  class PersonFields < Wizards::Steps::Signup::AboBasicLogin::PersonFields
     self.minimum_age = 18
-
-    attribute :gender, :string
-    attribute :birthday, :date
-    attribute :address_care_of, :string
-    attribute :street, :string
-    attribute :housenumber, :string
-
-    attribute :postbox, :string
-    attribute :zip_code, :string
-    attribute :town, :string
-    attribute :country, :string
-    attribute :phone_number, :string
+    self.partial = "wizards/steps/signup/person_fields"
 
     validates :street, :housenumber, :town, :zip_code,
       :country, :phone_number, presence: true
-
-    NON_ASSIGNABLE_ATTRS = Wizards::Steps::Signup::AgreementFields::AGREEMENTS + [:newsletter]
-
-    def initialize(...)
-      super
-      self.country ||= Settings.addresses.imported_countries.to_a.first
-    end
-
-    def person_attributes
-      super.except(*NON_ASSIGNABLE_ATTRS)
-    end
   end
 end

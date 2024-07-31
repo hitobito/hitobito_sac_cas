@@ -93,13 +93,13 @@ describe Wizards::Signup::SektionWizard do
     before { @current_step = 1 }
 
     it "third step defaults to family_fields" do
-      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::FamilyFields)
-      expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::VariousFields)
+      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
+      expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
     end
 
     it "skips family_fields when person is not old enough" do
       required_attrs[:person_fields][:birthday] = 20.years.ago.to_date
-      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::VariousFields)
+      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
       expect(wizard.step_at(3)).to be_nil
     end
   end

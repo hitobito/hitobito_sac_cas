@@ -4,5 +4,6 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for do |form|
-  = render 'wizards/steps/signup/common_person_fields', form: form
-  = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: :aside
+  = render "wizards/steps/signup/common_person_fields", form: form
+  - if form.object.respond_to?(:newsletter)
+    = render "wizards/steps/signup/agreement_fields", form: form

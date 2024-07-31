@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Wizards::Steps::Signup::VariousFields do
+describe Wizards::Steps::Signup::Sektion::VariousFields do
   let(:wizard) { Wizards::Signup::SektionWizard.new(group: group) }
   subject(:fields) { described_class.new(wizard) }
 

@@ -7,7 +7,7 @@
   = simple_format(t('groups.self_registration.household.membership_info_box'))
 
 .btn-toolbar.top{class: "#{'d-none' if c.model.members.empty?}" }
-  = render 'wizards/steps/signup/family_buttons', c: c
+  = render 'wizards/steps/signup/sektion/family_buttons', c: c
 
 = c.nested_fields_for(:members, c.model.build_member) do |form|
   = form.error_messages
@@ -22,4 +22,4 @@
 
 %br
   .btn-toolbar.bottom.housemates
-    = render 'wizards/steps/signup/family_buttons', c: c
+    = render 'wizards/steps/signup/sektion/family_buttons', c: c

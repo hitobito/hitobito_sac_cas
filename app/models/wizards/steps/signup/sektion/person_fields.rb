@@ -5,9 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Wizards::Steps::Signup::AboMagazin
+module Wizards::Steps::Signup::Sektion
   class PersonFields < Wizards::Steps::Signup::PersonFields
-    self.minimum_age = 18
     self.partial = "wizards/steps/signup/person_fields"
 
     validates :street, :housenumber, :town, :zip_code,

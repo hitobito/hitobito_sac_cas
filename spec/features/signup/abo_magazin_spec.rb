@@ -41,10 +41,20 @@ describe "self_registration_abo_magazin", js: true do
     fill_in "Telefon", with: "+41 79 123 45 56"
     fill_in "wizards_signup_abo_magazin_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_abo_magazin_wizard_person_fields_town", with: "Zürich"
-    check "Ich habe die Statuten gelesen und stimme diesen zu"
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
   end
 
+  def complete_last_page(date: Date.tomorrow, submit: true)
+    expect_active_step "Abo"
+    expect_shared_partial
+    fill_in "Ab Ausgabe", with: I18n.l(date)
+    check "Ich habe die Statuten gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    yield if block_given?
+    if submit
+      click_on "Registrieren"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
+    end
+  end
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_register_new_user_path(group_id: group.id)
@@ -66,17 +76,12 @@ describe "self_registration_abo_magazin", js: true do
     complete_main_person_form
     click_on "Weiter"
 
-    expect_active_step "Abo"
-    expect_shared_partial
-    fill_in "Ab Ausgabe", with: I18n.l(Date.tomorrow)
-
     expect do
-      click_on "Registrieren"
-      expect(page).to have_css "#error_explanation, #flash > .alert"
+      complete_last_page
     end.to change { Person.count }.by(1)
   end
 
-  it "renders date validation message", js: true do
+  it "renders date validation message" do
     visit group_register_new_user_path(group_id: group.id)
     expect_active_step "Haupt-E-Mail"
     expect_shared_partial
@@ -88,13 +93,8 @@ describe "self_registration_abo_magazin", js: true do
     complete_main_person_form
     click_on "Weiter"
 
-    expect_active_step "Abo"
-    expect_shared_partial
-    fill_in "Ab Ausgabe", with: I18n.l(Date.yesterday)
-
     expect do
-      click_on "Registrieren"
-      expect(page).to have_css "#error_explanation, #flash > .alert"
+      complete_last_page(date: Date.yesterday)
     end.not_to change { Person.count }
     expect(page).to have_text "Ab Ausgabe muss #{I18n.l(Time.zone.today)} oder danach sein"
   end
@@ -104,12 +104,12 @@ describe "self_registration_abo_magazin", js: true do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    check "Ich möchte einen Newsletter abonnieren"
     click_on "Weiter"
 
     expect do
-      click_on "Registrieren"
-      expect(page).to have_css "#error_explanation, #flash > .alert"
+      complete_last_page do
+        check "Ich möchte einen Newsletter abonnieren"
+      end
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
@@ -125,12 +125,12 @@ describe "self_registration_abo_magazin", js: true do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    uncheck "Ich möchte einen Newsletter abonnieren"
     click_on "Weiter"
 
     expect do
-      click_on "Registrieren"
-      expect(page).to have_css "#error_explanation, #flash > .alert"
+      complete_last_page do
+        uncheck "Ich möchte einen Newsletter abonnieren"
+      end
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
