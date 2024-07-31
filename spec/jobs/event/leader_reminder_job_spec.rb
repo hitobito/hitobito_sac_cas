@@ -40,6 +40,15 @@ describe Event::LeaderReminderJob do
       end
     end
 
+    context "with course languages that doesnt have customcontent" do
+      before { course.update!(language: "it") }
+
+      it "mails a reminder in the default language" do
+        expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.body.to_s).to include("Hallo")
+      end
+    end
+
     context "with course admin email" do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
 

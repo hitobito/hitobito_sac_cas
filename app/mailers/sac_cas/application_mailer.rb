@@ -24,7 +24,7 @@ module SacCas::ApplicationMailer
       I18n.with_locale(locale) do
         body, subject = content_subject_and_body(content, values, locale, locales)
 
-        if body.body.nil?
+        if body.blank?
           I18n.with_locale(I18n.default_locale) do
             body, subject = content_subject_and_body(content, values, locale, locales)
           end
