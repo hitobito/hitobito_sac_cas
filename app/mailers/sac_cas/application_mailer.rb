@@ -8,11 +8,11 @@
 module SacCas::ApplicationMailer
   private
 
-  def compose(recipients, content_key, locales = [])
+  def compose(recipients, content_key, headers = {}, locales = [])
     return if recipients.blank?
 
     values = values_for_placeholders(content_key)
-    custom_content_mail(recipients, content_key, values, {}, locales)
+    custom_content_mail(recipients, content_key, values, headers, locales)
   end
 
   def custom_content_mail(recipients, content_key, values, headers = {}, locales = [])

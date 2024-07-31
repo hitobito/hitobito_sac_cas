@@ -11,14 +11,11 @@ class Event::LeaderReminderMailer < ApplicationMailer
   REMINDER = "event_leader_reminder"
 
   def reminder(course)
-    return if course.contact.nil?
-
     @course = course
-    values = values_for_placeholders(REMINDER)
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
 
-    custom_content_mail(course.contact, REMINDER, values, headers, locales)
+    compose(course.contact, REMINDER, headers, locales)
   end
 
   private
