@@ -10,6 +10,8 @@ module SacCas::FutureRole
 
   prepended do
     include SacCas::RoleBeitragskategorie
+
+    attr_accessor :mark_as_coming_from_future_role
   end
 
   def start_on
@@ -24,6 +26,7 @@ module SacCas::FutureRole
     return super unless becomes_mitglied_role?
 
     super.tap do |role|
+      role.from_future_role = mark_as_coming_from_future_role
       role.created_at = convert_on
       role.delete_on = convert_on.end_of_year
     end

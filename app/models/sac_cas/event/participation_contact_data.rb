@@ -14,7 +14,7 @@ module SacCas::Event::ParticipationContactData
     delegate :subsidy_amount, :subsidizable?, to: :participation
 
     class << self
-      delegate :human_attribute_name, to: SelfRegistration::MainPerson::Base
+      delegate :human_attribute_name, to: Wizards::Steps::Signup::PersonFields
     end
 
     self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street, :housenumber,
@@ -35,7 +35,7 @@ module SacCas::Event::ParticipationContactData
       person.phone_numbers.first.valid?
 
       message = [
-        SelfRegistration::MainPerson::Base.human_attribute_name(:number), t("errors.messages.blank")
+        Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number), t("errors.messages.blank")
       ].join(" ")
       errors.add(:base, message) if person.phone_numbers.first.number.blank?
     end

@@ -1,0 +1,13 @@
+-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.btn-group
+  - if c.model.members.empty?
+    = c.next_button(t('.next_as_single_link'), class: 'next-as-single')
+    = c.next_button(t('.next_as_household_link'), class: 'next-as-family d-none')
+  - else
+    = c.next_button(t('.next_as_single_link'), class: 'next-as-single d-none')
+    = c.next_button(t('.next_as_household_link'), class: 'next-as-family')
+= c.back_link

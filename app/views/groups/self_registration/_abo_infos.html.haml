@@ -3,16 +3,15 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-.offset-md-1
-  %table.table
-    %thead
+%table.table
+  %thead
+    %tr
+      %th=t('.annual_price_header')
+      - if costs.first.country
+        %th=t('.delivery_country_header')
+  %tbody
+    - costs.each do |cost|
       %tr
-        %th=t('.annual_price_header')
-        - if entry.dummy_costs.first.country
-          %th=t('.delivery_country_header')
-    %tbody
-      - entry.dummy_costs.each do |cost|
-        %tr
-          %td=t('.price_with_vat', amount: format("%2.f", cost.amount))
-          - if cost.country
-            %td=t(".#{cost.country}")
+        %td=t('.price_with_vat', amount: format("%2.f", cost.amount))
+        - if cost.country
+          %td=t(".#{cost.country}")
