@@ -109,7 +109,7 @@ describe "signup/sektion", js: true do
 
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     expect_active_step("E-Mail")
@@ -123,7 +123,7 @@ describe "signup/sektion", js: true do
     it "redirects to login page" do
       person.update!(password: password, password_confirmation: password)
 
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       fill_in "Mail", with: person.email
       click_on "Weiter"
       expect(page).to have_css ".alert-success",
@@ -139,7 +139,7 @@ describe "signup/sektion", js: true do
 
   describe "main_person" do
     it "self registers and creates new person" do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       expect(page).to have_css("h2", text: "Fragen zur Mitgliedschaft?")
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
@@ -186,7 +186,7 @@ describe "signup/sektion", js: true do
         zip_code: 3007,
         numbers: ["36", "37", "38", "40", "41", "5a", "5b", "6A", "6B"]
       )
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       click_on "Weiter"
       fill_in "wizards_signup_sektion_wizard_person_fields_street", with: "Belp"
@@ -202,7 +202,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates required fields" do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       click_on "Weiter"
       click_on "Weiter", match: :first
@@ -220,7 +220,7 @@ describe "signup/sektion", js: true do
 
   describe "household" do
     before do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
       expect(page).to have_content "Indem du weitere Personen hinzufügst, wählst du eine"
     end
@@ -464,7 +464,7 @@ describe "signup/sektion", js: true do
     let(:twenty_years_ago) { format_date(20.years.ago) }
 
     it "skips household when person is too young" do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form do
         fill_in "Geburtstag", with: twenty_years_ago
       end
@@ -473,7 +473,7 @@ describe "signup/sektion", js: true do
     end
 
     it "clears household members when changing main person birthday too young" do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
       click_on "Eintrag hinzufügen"
@@ -502,7 +502,7 @@ describe "signup/sektion", js: true do
     let(:list) { Fabricate(:mailing_list, group: root) }
 
     before do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
     end
@@ -550,7 +550,7 @@ describe "signup/sektion", js: true do
   describe "with adult consent" do
     before do
       group.update!(self_registration_require_adult_consent: true)
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
     end
@@ -576,7 +576,7 @@ describe "signup/sektion", js: true do
         filename: "logo.png",
         content_type: "image/png").signed_id
       group.layer_group.update!(privacy_policy: image)
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
     end
@@ -603,7 +603,7 @@ describe "signup/sektion", js: true do
 
   describe "document links" do
     it "should open privacy policy in new tab" do
-      visit group_register_new_user_path(group_id: group)
+      visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
 
@@ -618,7 +618,7 @@ describe "signup/sektion", js: true do
       it "can go back and forth" do
         skip("Does not work on CI. Nobody knows why, so just skip it") if ci?
 
-        visit group_register_new_user_path(group_id: group)
+        visit group_self_registration_path(group_id: group)
         complete_main_person_form
         complete_household_form
         assert_step "Zusatzdaten"
@@ -651,7 +651,7 @@ describe "signup/sektion", js: true do
 
     context "for single person registration" do
       before do
-        visit group_register_new_user_path(group_id: group)
+        visit group_self_registration_path(group_id: group)
         complete_main_person_form
         click_on "Weiter als Einzelmitglied", match: :first
         assert_step "Zusatzdaten"
@@ -683,7 +683,7 @@ describe "signup/sektion", js: true do
 
     context "for youth person registration" do
       before do
-        visit group_register_new_user_path(group_id: group)
+        visit group_self_registration_path(group_id: group)
         complete_main_person_form do
           fill_in "Geburtstag", with: format_date(15.years.ago)
         end

@@ -63,13 +63,7 @@ describe FutureRole::FormHandling do
     end
   end
 
-  describe SelfRegistration::Sektion::Supplements do
-    it_behaves_like "register_on_options" do
-      let(:model) { described_class.new({}, groups(:bluemlisalp_neuanmeldungen_sektion)) }
-    end
-  end
-
-  describe Wizards::Steps::Signup::VariousFields do
+  describe Wizards::Steps::Signup::Sektion::VariousFields do
     it_behaves_like "register_on_options" do
       let(:model) { described_class.new(double(:wizard)) }
     end

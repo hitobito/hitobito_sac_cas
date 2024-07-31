@@ -16,9 +16,9 @@
   .mb-2
     = "#{Person.human_attribute_name(:birthday)}: #{l(entry.person.birthday)}"
     %br
-    = "#{SelfRegistration::MainPerson::Base.human_attribute_name(:number)}: #{entry.person.phone_numbers.first&.number}"
+    = "#{Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number)}: #{entry.person.phone_numbers.first&.number}"
     %br
-    = "#{SelfRegistration::MainPerson::Base.human_attribute_name(:email)}: #{entry.person.email}"
+    = "#{Wizards::Steps::Signup::PersonFields.human_attribute_name(:email)}: #{entry.person.email}"
 
 
 = section(t('event.participations.step_wizard.answers_title')) do

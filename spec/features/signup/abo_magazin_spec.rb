@@ -57,7 +57,7 @@ describe "self_registration_abo_magazin", js: true do
   end
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     expect_active_step("E-Mail")
@@ -65,7 +65,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "creates person" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     expect_active_step "Haupt-E-Mail"
     expect_shared_partial
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
@@ -82,7 +82,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "renders date validation message" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     expect_active_step "Haupt-E-Mail"
     expect_shared_partial
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
@@ -100,7 +100,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "subscribes to mailinglist" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
@@ -121,7 +121,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "opts out of mailinglist" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
@@ -142,7 +142,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "validates that person is old enough" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form

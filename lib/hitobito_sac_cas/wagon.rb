@@ -54,8 +54,6 @@ module HitobitoSacCas
       Person::Household.prepend SacCas::Person::Household
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
-      SelfRegistration.prepend SacCas::SelfRegistration
-      SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
@@ -143,7 +141,6 @@ module HitobitoSacCas
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
-      Wizards::RegisterNewUsersController.prepend SacCas::Wizards::RegisterNewUsersController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController

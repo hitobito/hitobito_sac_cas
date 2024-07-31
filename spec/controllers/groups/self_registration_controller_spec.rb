@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Wizards::RegisterNewUsersController do
+describe Groups::SelfRegistrationController do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
   def wizard_params(step: 0, **attrs)

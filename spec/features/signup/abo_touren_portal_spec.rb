@@ -43,7 +43,7 @@ describe "signup/abo_touren_portal_wizard" do
 
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     expect_active_step("E-Mail")
@@ -51,7 +51,7 @@ describe "signup/abo_touren_portal_wizard" do
   end
 
   it "creates person" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     expect(page).to have_text "Preis pro Jahr"
     click_on "Weiter"
@@ -64,7 +64,7 @@ describe "signup/abo_touren_portal_wizard" do
   end
 
   it "subscribes to mailinglist" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
@@ -84,7 +84,7 @@ describe "signup/abo_touren_portal_wizard" do
   end
 
   it "opts out of mailinglist" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
@@ -102,7 +102,7 @@ describe "signup/abo_touren_portal_wizard" do
   end
 
   it "validates that person is old enough" do
-    visit group_register_new_user_path(group_id: group.id)
+    visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
