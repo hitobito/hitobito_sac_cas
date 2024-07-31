@@ -5,14 +5,14 @@ class SacImports::CsvSourceFile
   SOURCE_HEADERS =
     {NAV1: {
        navision_id: "No_",
-       person_name: "Name",
+       navision_name: "Name",
        navision_membership_years: "Vereinsmitgliederjahre"
      },
      NAV2: {
        navision_id: "Mitgliedernummer",
        household_key: "Familien-Nr.",
        group_navision_id: "Sektion",
-       person_name: "Name",
+       navision_name: "Name",
        navision_membership_years: "Vereinsmitgliederjahre"
      },
      NAV3: {},

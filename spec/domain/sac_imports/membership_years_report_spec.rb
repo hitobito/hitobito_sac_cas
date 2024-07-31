@@ -9,7 +9,8 @@ require "spec_helper"
 
 describe SacImports::MembershipYearsReport do
   let(:nav1_csv_fixture) { File.expand_path("../../../fixtures/files/sac_imports_src/NAV1_Kontakte_NAV-20240726.csv", __FILE__) }
-  let(:report) { described_class.new }
+  let(:output) { double(puts: nil, print: nil) }
+  let(:report) { described_class.new(output: output) }
   let(:report_file) { Rails.root.join("log", "sac_imports", "6_membership_years_report_2024-01-23-11:42.csv") }
   let(:report_headers) { %w[navision_membership_number navision_name navision_membership_years hitobito_membership_years diff errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
@@ -21,7 +22,6 @@ describe SacImports::MembershipYearsReport do
       person: Fabricate(:person, id: 513549),
       created_at: "2000-1-1")
   end
-
   let!(:member2) do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
       group: bluemlisalp_mitglieder,
@@ -29,7 +29,19 @@ describe SacImports::MembershipYearsReport do
       created_at: "2010-1-1")
   end
 
+  before do
+    File.delete(report_file) if File.exist?(report_file)
+  end
+
   it "creates report for members in source file" do
+    expected_output = Array.new(9) { [/Reading row .* .../, " processed.\n"] }.flatten
+
+    expected_output.each do |output_line|
+      expect(output).to receive(:print).with(output_line)
+    end
+    expect(output).to receive(:puts).with("\n\n\nThank you for flying with SAC Imports.")
+    expect(output).to receive(:puts).with("Report written to #{report_file}")
+
     expect(Dir)
       .to receive(:glob)
       .with(Rails.root.join("tmp", "sac_imports_src", "NAV1_*.csv").to_s)

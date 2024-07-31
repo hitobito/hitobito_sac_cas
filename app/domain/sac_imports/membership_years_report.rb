@@ -25,20 +25,23 @@ module SacImports
       data.each do |row|
         process_row(row)
       end
+      @csv_report.finalize(output: @output)
     end
 
     private
 
     def process_row(row)
+      @output.print "Reading row #{row[:navision_name]} ..."
       person = @hitobito_people[row[:navision_id].to_i]
       @csv_report.add_row(
         {navision_membership_number: row[:navision_id],
-         navision_name: row[:person_name],
+         navision_name: row[:navision_name],
          navision_membership_years: row[:navision_membership_years],
          hitobito_membership_years: person&.membership_years,
          diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
          errors: errors_for(person)}
       )
+      @output.print " processed.\n"
     end
 
     def fetch_hitobito_people(data)
