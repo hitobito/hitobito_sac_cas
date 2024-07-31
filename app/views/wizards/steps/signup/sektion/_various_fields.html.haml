@@ -11,8 +11,4 @@
       = form.inline_radio_button :self_registration_reason_id, key, label
       %br
 
-  = render "wizards/steps/signup/agreement_fields", form: form
-
-  - if form.object.requires_sektion_statuten?
-    = render 'groups/self_registration/agreement_link', f: form, key: :sektion_statuten,
-        link: link_to(*form.object.sektion_statuten_link_args, target: :_blank)
+  = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?

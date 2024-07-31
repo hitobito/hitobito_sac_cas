@@ -8,27 +8,6 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
-    wizards/steps/membership_terminated_info_title: Mitgliedschaft gekündet
-    wizards/steps/choose_membership_title: Familienmitgliedschaft
-    wizards/steps/choose_sektion_title: Sektion wählen
-    wizards/steps/join_zusatzsektion/summary_title: Bestätigung
-    wizards/steps/termination_no_self_service_title: Mitgliederdienst kontaktieren
-    wizards/steps/termination_choose_date_title: Austrittsdatum
-    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
-    wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
-    wizards/steps/termination/summary_title: Bestätigung
-    wizards/steps/switch_stammsektion/summary_title: Bestätigung
-    wizards/steps/switch_stammsektion/choose_date_title: Datumwahl
-    wizards/steps/switch_stammsektion/choose_sektion_title: Sektion wählen
-    wizards/steps/signup/main_email_field_title: Haupt-E-Mail
-    wizards/steps/signup/person_fields_title: Personendaten
-    wizards/steps/signup/abo_basic_login/person_fields_title: Personendaten
-    wizards/steps/signup/abo_touren_portal_login/person_fields_title: Personendaten
-    wizards/steps/signup/abo_magazin/person_fields_title: Personendaten
-    wizards/steps/signup/abo_magazin/issues_from_field_title: Abo
-    wizards/steps/signup/sektion/person_fields_title: Personendaten
-    wizards/steps/signup/sektion/family_fields_title: Familienmitglieder
-    wizards/steps/signup/sektion/various_fields_title: Zusatzdaten
 
   settings:
     email:
@@ -96,19 +75,6 @@ de:
         register_as_options:
           extra: Zusatzsektion
           replace: Neue Stammsektion (ersetzt deine Bisherige)
-
-      self_registration/main_person/base:
-        gender: Anrede
-        number: Telefon
-        email: E-Mail
-        address: Strasse und Nr.
-      self_registration/abo_magazin:
-        issues_from: Ab Ausgabe
-      self_registration/sektion/housemate:
-        email: E-Mail (optional)
-        number: Telefon (optional)
-      self_registration/sektion/supplements:
-        adult_consent: Einverständniserklärung der Erziehungsberechtigten
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
@@ -1170,31 +1136,10 @@ de:
         price_with_vat: CHF %{amount} inkl. MwSt.
         switzerland: Schweiz
         international: Weltweit
-      adult_consent_field:
-        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
-      newsletter_field:
-        caption: Ich möchte einen Newsletter abonnieren
-      conditions_sac_cas:
-        newsletter: Ich möchte einen Newsletter abonnieren
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
-      emailless_main_person:
-        newsletter: Ich möchte einen Newsletter abonnieren
-      fields:
-        notes: Bemerkungen
-        promo_code: Promocode
-      household:
-        membership_info_box: >
-          Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
-          max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
-          Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
-          mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
-        next_as_single_link: Weiter als Einzelmitglied
-        next_as_household_link: Weiter als Familienmitgliedschaft
-
-      supplements:
-        newsletter: Ich möchte einen Newsletter abonnieren
+      agreement_link:
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
         sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
@@ -1410,7 +1355,44 @@ de:
 
   wizards:
     steps:
+      choose_sektion_title: Sektion wählen
+      summary_title: Bestätigung
+      choose_membership_title: Familienmitgliedschaft
+      membership_terminated_info_title: Mitgliedschaft gekündet
+      termination_no_self_service_title: Mitgliederdienst kontaktieren
+      termination_choose_date_title: Austrittsdatum
+      ask_family_main_person_title: Familienmitgliedschaft
+      choose_date_title: Datumwahl
+
       signup:
+        main_email_field_title: Haupt-E-Mail
+        person_fields_title: Personendaten
+        agreement_fields:
+          adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
+          newsletter_caption: Ich möchte einen Newsletter abonnieren
+        abo_magazin:
+          issues_from_field_title: Abo
+          issues_from_field:
+            issues_from_help: |
+              Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
+              Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
+              mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
+        sektion:
+          family_fields_title: Familienmitglieder
+          family_fields:
+            membership_info_box: >
+              Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
+              max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
+
+              Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
+              mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+          family_buttons:
+            next_as_single_link: Weiter als Einzelmitglied
+            next_as_household_link: Weiter als Familienmitgliedschaft
+
+          various_fields_title: Zusatzdaten
+
+
         various_fields:
           newsletter: Ich möchte einen Newsletter abonnieren
           statutes_text: Ich habe die %{link} gelesen und stimme diesen zu

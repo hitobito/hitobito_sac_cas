@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .well
-  = simple_format(t('groups.self_registration.household.membership_info_box'))
+  = simple_format(t('.membership_info_box'))
 
 .btn-toolbar.top{class: "#{'d-none' if c.model.members.empty?}" }
   = render 'wizards/steps/signup/sektion/family_buttons', c: c
