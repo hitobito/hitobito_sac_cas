@@ -17,16 +17,16 @@ describe SacImports::MembershipYearsReport do
   let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
   let!(:member) do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-              group: bluemlisalp_mitglieder,
-              person: Fabricate(:person, id: 513549),
-              created_at: '2000-1-1')
+      group: bluemlisalp_mitglieder,
+      person: Fabricate(:person, id: 513549),
+      created_at: "2000-1-1")
   end
 
   let!(:member2) do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-              group: bluemlisalp_mitglieder,
-              person: Fabricate(:person, id: 513550),
-              created_at: '2010-1-1')
+      group: bluemlisalp_mitglieder,
+      person: Fabricate(:person, id: 513550),
+      created_at: "2010-1-1")
   end
 
   it "creates report for members in source file" do
