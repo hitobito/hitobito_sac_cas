@@ -283,9 +283,21 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::SektionsClubhuette.create!(parent: huetten, name: "Blüemlisalphütte")
     end
 
-    it "generates positions" do
+    it "generates hut solidarity fee with hut" do
       expect(positions[1].name).to eq("hut_solidarity_fee")
       expect(positions[1].amount).to eq(10.0)
+    end
+
+    context "in ortsgruppe" do
+      before do
+        person.roles.where(group: groups(:bluemlisalp_mitglieder))
+          .update_all(group_id: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder).id)
+      end
+
+      it "generates hut solidarity fee with hut" do
+        expect(positions[1].name).to eq("hut_solidarity_fee")
+        expect(positions[1].amount).to eq(10.0)
+      end
     end
   end
 
