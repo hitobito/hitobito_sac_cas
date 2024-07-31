@@ -63,8 +63,6 @@ module HitobitoSacCas
       Contactable.prepend SacCas::Contactable
       Wizards::Steps::NewUserForm.support_company = false
 
-      StepsComponent.prepend SacCas::StepsComponent
-      StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
