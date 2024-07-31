@@ -43,7 +43,7 @@ module SacCas::ApplicationMailer
   end
 
   def join_contents(contents)
-    contents = contents.join("<br><br>--------------------<br><br>").gsub("\n", "<br>")
+    contents = contents.join("<br><br>--------------------<br><br>")
     "<div class=\"trix-content\">#{contents}</div>"
   end
 end
