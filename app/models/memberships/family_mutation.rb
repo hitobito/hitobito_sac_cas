@@ -45,6 +45,7 @@ module Memberships
       end
       sac_membership.future_stammsektion_roles.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
+      sac_membership.neuanmeldung_zusatzsektion_roles.family.each { delete_role!(_1) }
     end
 
     private
@@ -108,6 +109,10 @@ module Memberships
         convert_on: blueprint_role.convert_on,
         convert_to: blueprint_role.convert_to
       )
+    end
+
+    def delete_role!(role)
+      Role.where(id: role.id).update_all(deleted_at: replaced_role_deleted_at, delete_on: nil)
     end
 
     def find_zusatzsektion_role(layer_group_id)

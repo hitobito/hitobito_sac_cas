@@ -18,10 +18,13 @@ describe Memberships::FamilyMutation do
 
   let(:stammsektion_class) { Group::SektionsMitglieder::Mitglied }
   let(:zusatzsektion_class) { Group::SektionsMitglieder::MitgliedZusatzsektion }
+  let(:neuanmeldung_zusatzsektion_class) { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion }
 
   def stammsektion_role = person.sac_membership.stammsektion_role
 
   def zusatzsektion_roles = person.sac_membership.zusatzsektion_roles
+
+  def neuanmeldung_zusatzsektion_roles = person.sac_membership.neuanmeldung_zusatzsektion_roles
 
   def create_role!(role_class, group, beitragskategorie: "family", **opts)
     Fabricate(
@@ -201,6 +204,18 @@ describe Memberships::FamilyMutation do
       expect(new_role.group_id).to eq groups(:matterhorn_mitglieder).id
       expect(new_role.created_at).to eq Time.current.beginning_of_day
       expect(new_role.beitragskategorie).to eq "youth"
+    end
+
+    it "terminates family neuanmeldung zusatzsektion roles per end of yesterday" do
+      create_role!(neuanmeldung_zusatzsektion_class, groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
+      neuanmeldung_zusatzsektion_role = neuanmeldung_zusatzsektion_roles.first
+      expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
+
+      expect { mutation.leave! }
+        .to change {
+          neuanmeldung_zusatzsektion_role.reload.deleted_at
+        }.to(Time.zone.yesterday.end_of_day.floor)
+        .and change { neuanmeldung_zusatzsektion_role.delete_on }.to(nil)
     end
 
     it "does not touch non-family zusatzsektion roles" do

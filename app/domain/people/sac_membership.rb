@@ -50,6 +50,10 @@ class People::SacMembership
     @person.roles.where(type: mitglied_zusatzsektion_types)
   end
 
+  def neuanmeldung_zusatzsektion_roles
+    @person.roles.where(type: neuanmeldung_zusatzsektion_types)
+  end
+
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
   # If this changes in the future, future_zusatzsektion_roles must be handled in
   # `Memberships::FamilyMutation` as well.
@@ -80,6 +84,8 @@ class People::SacMembership
   def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
+  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def any_future_role?
     @person.roles.future.where(convert_to: mitglied_stammsektion_types).exists?
