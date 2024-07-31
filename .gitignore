@@ -33,3 +33,6 @@ spec/coverage
 spec/reports
 brakeman-output.tabs
 rubocop-results.xml
+
+# csv
+spec/fixtures/files/sac_imports_src/.~lock*
