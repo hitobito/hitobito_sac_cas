@@ -34,12 +34,12 @@ module SacCas::ApplicationMailer
   end
 
   def localized_content_for(locale, content_key)
-    I18n.locale = locale
+    I18n.locale = locale # `with_locale` doesn't work for CustomContent
     CustomContent.get(content_key)
   end
 
   def join_contents(contents)
-    contents = contents.join("\n\n--------------------\n\n").gsub("\n", "<br>")
+    contents = contents.join("<br><br>--------------------<br><br>").gsub("\n", "<br>")
     "<div class=\"trix-content\">#{contents}</div>"
   end
 end
