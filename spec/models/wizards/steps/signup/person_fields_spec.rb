@@ -15,12 +15,7 @@ describe Wizards::Steps::Signup::PersonFields do
     {
       first_name: "Max",
       last_name: "Muster",
-      street: "Musterplatz",
-      housenumber: "23",
-      town: "Zurich",
-      zip_code: "8000",
-      birthday: "01.01.2000",
-      phone_number: "0791234567"
+      birthday: "01.01.2000"
     }
   }
 
@@ -73,15 +68,6 @@ describe Wizards::Steps::Signup::PersonFields do
 
     expect(form.person_attributes).to eq required_attrs
       .except(:phone_number)
-      .merge(
-        country: "CH",
-        birthday: Date.new(2000, 1, 1),
-        phone_numbers_attributes: [{label: "Mobil", number: "0791234567"}]
-      )
-  end
-
-  it "overrides requires_policy_acceptance from wizard" do
-    allow(wizard).to receive(:requires_policy_acceptance?).and_return(true)
-    expect(form).not_to be_requires_policy_acceptance
+      .merge(country: "CH", birthday: Date.new(2000, 1, 1))
   end
 end

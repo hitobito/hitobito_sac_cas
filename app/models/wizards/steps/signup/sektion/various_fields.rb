@@ -30,7 +30,7 @@ module Wizards::Steps::Signup::Sektion
     delegate :requires_adult_consent?, to: :wizard
 
     def self_registration_reason_options
-      SelfRegistrationReason.order(:created_at).collect do |r|
+      SelfRegistrationReason.includes(:translations).order(:created_at).collect do |r|
         [r.id.to_s, r.text]
       end
     end

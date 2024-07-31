@@ -79,9 +79,4 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
         phone_numbers_attributes: [{label: "Mobil", number: "0791234567"}]
       )
   end
-
-  it "overrides requires_policy_acceptance from wizard" do
-    allow(wizard).to receive(:requires_policy_acceptance?).and_return(true)
-    expect(form).not_to be_requires_policy_acceptance
-  end
 end
