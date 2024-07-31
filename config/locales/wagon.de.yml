@@ -401,6 +401,20 @@ de:
         reduction_amount: Reduktionsbetrag Mitgliedsjahre/Alter
         reduction_required_membership_years: Reduktion ab Mitgliedsjahren
         reduction_required_age: Reduktion ab Altersjahren
+      external_invoice:
+        title: Titel
+        state: Status
+        abacus_sales_order_key: Abacus Nummer
+        total: Total
+        issued_at: Rechnungsdatum
+        created_at: Erstellt
+        updated_at: Aktualisiert            
+        states:
+          draft: Entwurf
+          open: Offen
+          payed: Bezahlt
+          cancelled: Storniert
+          error: Fehler
 
     errors:
       messages:
@@ -413,7 +427,7 @@ de:
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
         must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -1025,6 +1039,13 @@ de:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   person:
+    external_invoices:
+      list:
+        create_membership_invoice: Mitgliedschaftsrechnung erstellen
+        create_membership_invoice_confirmation: |
+          Dies generiert eine neue Mitgliedschaftsrechnung und sendet diese an Abacus. Diese Aktion kann bis zu einer Minute dauern.
+
+          Sind Sie sicher, dass sie fortfahren wollen?
     history:
       index_notice_sac_cas:
         sections_info_html: '
@@ -1033,13 +1054,6 @@ de:
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
 
   people:
-    actions_show_sac_cas:
-      create_membership_invoice: Mitgliedschaftsrechnung erstellen
-      create_membership_invoice_confirmation: |
-        Dies generiert eine neue Mitgliedschaftsrechnung und sendet diese an Abacus. Diese Aktion kann bis zu einer Minute dauern.
-
-        Sind Sie sicher, dass sie fortfahren wollen?
-
     membership:
       verify:
         member_details_sac_cas:
@@ -1071,6 +1085,7 @@ de:
     tabs:
       history: Mitgliedschaften / Verlauf
       sac_remarks: Bemerkungen
+      external_invoices: Rechnungen
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft

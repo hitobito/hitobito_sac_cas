@@ -13,15 +13,15 @@ class DeleteObsoleteRolesAndGroups < ActiveRecord::Migration[6.1]
     execute "DELETE FROM roles WHERE type='Group::SektionsFunktionaere::Kulturbeauftragte'"
 
     execute <<~SQL
-      DELETE groups FROM groups
-      INNER JOIN groups g1 ON groups.layer_group_id = g1.id AND g1.type = 'Group::SacCas'
-      AND groups.type = 'Group::ExterneKontakte'
+      DELETE `groups` FROM `groups`
+      INNER JOIN `groups` g1 ON `groups`.layer_group_id = g1.id AND g1.type = 'Group::SacCas'
+      AND `groups`.type = 'Group::ExterneKontakte'
     SQL
 
     execute <<~SQL
       DELETE roles FROM roles
-      LEFT JOIN groups ON roles.group_id = groups.id
-      WHERE groups.id IS NULL
+      LEFT JOIN `groups` ON roles.group_id = `groups`.id
+      WHERE `groups`.id IS NULL
     SQL
   end
 end

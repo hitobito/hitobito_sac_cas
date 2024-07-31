@@ -23,7 +23,7 @@ it:
 
   settings:
     email:
-      sender: Club Alpino Svizzero CAS <noreply@%{mail_domain}>
+      sender: ""
 
   errors:
     messages:

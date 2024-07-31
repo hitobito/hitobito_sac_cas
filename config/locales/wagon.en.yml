@@ -23,7 +23,7 @@ en:
 
   settings:
     email:
-      sender: Swiss Alpine Club SAC <noreply@%{mail_domain}>"
+      sender: ""
 
   errors:
     messages:

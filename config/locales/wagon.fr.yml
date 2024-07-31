@@ -23,7 +23,7 @@ fr:
 
   settings:
     email:
-      sender: Club Alpin Suisse CAS <noreply@%{mail_domain}>
+      sender: ""
 
   errors:
     messages:

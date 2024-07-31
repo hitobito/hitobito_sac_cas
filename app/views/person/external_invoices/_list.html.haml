@@ -1,0 +1,12 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if @person.sac_membership_billable? && can?(:create_membership_invoice, @person)
+  = action_button(t('.create_membership_invoice'),
+                  group_person_membership_invoices_path(@group, @person),
+                  :envelope,
+                  method: :post,
+                  data: { confirm: t('.create_membership_invoice_confirmation') })
+= render "table"

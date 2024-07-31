@@ -58,6 +58,7 @@ describe People::MembershipInvoicesController, type: :controller do
     end
 
     it "cannot send abacus if address is incomplete" do
+      people(:mitglied).update!(zip_code: nil, town: nil)
       post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, date: "2015-03-01"}
 
       expect(response).to redirect_to(group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
