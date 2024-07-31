@@ -21,6 +21,10 @@ en:
     wizards/steps/switch_stammsektion/choose_date_title: ""
     wizards/steps/switch_stammsektion/choose_sektion_title: ""
 
+  settings:
+    email:
+      sender: ""
+
   errors:
     messages:
       assert_old_enough: ""
