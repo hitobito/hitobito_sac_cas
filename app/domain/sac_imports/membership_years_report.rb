@@ -8,14 +8,14 @@
 module SacImports
   class MembershipYearsReport
     REPORT_HEADERS = [
-      :membership_number, :person_name,
+      :navision_membership_number, :navision_name,
       :navision_membership_years, :hitobito_membership_years,
       :diff, :errors
     ].freeze
 
     def initialize(output: $stdout)
       @output = output
-      @source_file = CsvSourceFile.new(:NAV2)
+      @source_file = CsvSourceFile.new(:NAV1)
       @csv_report = CsvReport.new(:"6_membership_years_report", REPORT_HEADERS)
     end
 
@@ -32,8 +32,8 @@ module SacImports
     def process_row(row)
       person = @hitobito_people[row[:navision_id].to_i]
       @csv_report.add_row(
-        {membership_number: row[:navision_id],
-         person_name: row[:person_name],
+        {navision_membership_number: row[:navision_id],
+         navision_name: row[:person_name],
          navision_membership_years: row[:navision_membership_years],
          hitobito_membership_years: person&.membership_years,
          diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
@@ -47,9 +47,9 @@ module SacImports
     end
 
     def membership_years_diff(navision_years, hitobito_years)
-      return nil if navision_years.blank? || hitobito_years.blank?
+      return nil if hitobito_years.blank?
 
-      navision_years.to_i - hitobito_years
+      (navision_years&.to_i || 0) - hitobito_years
     end
 
     def errors_for(person)
