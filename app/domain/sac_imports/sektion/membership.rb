@@ -49,8 +49,8 @@ module SacImports
 
       def import!
         role.transaction do
-          assign_household(row[:household_key])
           mark_family_main_person
+          assign_household(row[:household_key])
           # Use context :import to skip the `assert_adult_family_mitglieder_count`
           # and `assert_single_family_main_person` validations that must be ignored during import
           role.save!(context: :import)
