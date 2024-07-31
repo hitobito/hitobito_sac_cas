@@ -16,26 +16,30 @@ module SacCas::ApplicationMailer
   end
 
   def custom_content_mail(recipients, content_key, values, headers = {}, locales = [])
-    original_locale = I18n.locale
+    content = CustomContent.get(content_key)
     locales = [I18n.locale] if locales.empty?
     headers[:to] = use_mailing_emails(recipients)
 
     contents = locales.map do |locale|
-      content = localized_content_for(locale, content_key)
-      content = localized_content_for(I18n.default_locale, content_key) if content.body.body.nil?
-      headers[:subject] ||= content.subject_with_values(values) if locale == locales.first
+      I18n.with_locale(locale) do
+        body, subject = content_subject_and_body(content, values, locale, locales)
 
-      # TODO: make method public in core and remove .send
-      content.send(:replace_placeholders, content.body.to_plain_text, values)
+        if body.body.nil?
+          I18n.with_locale(I18n.default_locale) do
+            body, subject = content_subject_and_body(content, values, locale, locales)
+          end
+        end
+
+        headers[:subject] ||= subject
+        content.replace_placeholders(body.to_plain_text, values)
+      end
     end
 
-    I18n.locale = original_locale
     mail(headers) { |format| format.html { render plain: join_contents(contents) } }
   end
 
-  def localized_content_for(locale, content_key)
-    I18n.locale = locale # `with_locale` doesn't work for CustomContent
-    CustomContent.get(content_key)
+  def content_subject_and_body(content, values, locale, locales)
+    [content.body, (content.subject_with_values(values) if locale == locales.first)]
   end
 
   def join_contents(contents)
