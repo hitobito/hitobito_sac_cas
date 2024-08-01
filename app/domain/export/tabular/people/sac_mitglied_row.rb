@@ -21,8 +21,7 @@ module Export::Tabular::People
     end
 
     def adresszusatz
-      # Adresszusatz wird allenfalls in INVOICE: Strukturierte Adressen bei Rechnungen / ISO20022
-      # hitobito#2226 hinzugefügt, bis dahin eine leere Spalte in den Export schreiben
+      entry.address_care_of
     end
 
     # Immer den Wert 0 ausgeben.
@@ -118,9 +117,7 @@ module Export::Tabular::People
     end
 
     def postfach
-      # Postfach wird allenfalls in INVOICE: Strukturierte Adressen bei
-      # Rechnungen / ISO20022 hitobito#2226 hinzugefügt, bis dahin eine leere Spalte
-      # in den Export schreiben
+      entry.postbox
     end
 
     def s_info_1
@@ -136,7 +133,7 @@ module Export::Tabular::People
     end
 
     def saldo
-      # momentan noch leer lassen
+      "0"
     end
 
     # Used for empty cells.
