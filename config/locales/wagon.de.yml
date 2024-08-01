@@ -346,6 +346,9 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
+          permission:
+            description:
+              read_all_people: Lesen von allen Personen.
       qualification_kind:
         tourenchef_may_edit: Von Tourenchef bearbeitbar
       qualification:
