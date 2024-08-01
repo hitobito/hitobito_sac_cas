@@ -1,2 +1,7 @@
-- if can?(:export_mitglieder, entry) && can?(:manage_section_remarks, entry) && (entry.is_a?(Group::Sektion) || entry.is_a?(Group::Ortsgruppe))
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if can?(:export_mitglieder, entry) && can?(:manage_section_remarks, Person.new) && (entry.is_a?(Group::Sektion) || entry.is_a?(Group::Ortsgruppe))
   = action_button(t('.export_mitglieder'), group_mitglieder_exports_path(@group, format: :csv), :download, method: :post)
