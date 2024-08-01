@@ -12,6 +12,13 @@
   - t.col(t.sort_header(:title)) do |invoice|
     %strong= invoice.to_s
   - t.sortable_attrs(:state, :abacus_sales_order_key, :total, :issued_at, :created_at, :updated_at)
-  -# t.col(t.sort_header(:total)) { |i| i.decorate.total }
+  - t.col('') do |invoice|
+    - unless invoice.abacus_sales_order_key.blank? or invoice.state == 'cancelled' or invoice.state == 'error'
+      = action_button(t('.cancel_invoice'),
+                  cancel_external_invoices_group_person_group_person_path(@group, @person, invoice),
+                  :trash,
+                  class: 'btn-sm',
+                  method: :post,
+                  data: { confirm: t('.cancel_invoice_confirmation') })
 
 = paginate @external_invoices
