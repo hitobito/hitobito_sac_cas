@@ -23,7 +23,7 @@ fr:
 
   settings:
     email:
-      sender: ""
+      sender: "Club Alpin Suisse CAS <noreply@%{mail_domain}>"
 
   errors:
     messages:
@@ -395,6 +395,20 @@ fr:
         reduction_amount: Montant de la réduction Années de membre/Age
         reduction_required_membership_years: Réduction à partir d'années d'affiliation
         reduction_required_age: Réduction à partir de l'âge
+      external_invoice:
+        title: ""
+        state: ""
+        abacus_sales_order_key: ""
+        total: ""
+        issued_at: ""
+        created_at: ""
+        updated_at: ""            
+        states:
+          draft: ""
+          open: ""
+          payed: ""
+          cancelled: ""
+          error: ""
 
     errors:
       messages:
@@ -407,7 +421,7 @@ fr:
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
         must_have_one_family_main_person_in_family: ""
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -1030,14 +1044,15 @@ fr:
     export_enqueued: ""
 
   person:
+    external_invoices:
+      list:
+        create_membership_invoice: ""
+        create_membership_invoice_confirmation: |
     history:
       index_notice_sac_cas:
         sections_info_html: ''
 
   people:
-    actions_show_sac_cas:
-      create_membership_invoice: Créer une facture d'adhésion
-      create_membership_invoice_confirmation: |
     membership:
       verify:
         member_details_sac_cas:
@@ -1070,6 +1085,7 @@ fr:
     tabs:
       history: ""
       sac_remarks: ""
+      external_invoices: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""

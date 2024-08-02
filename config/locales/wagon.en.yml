@@ -23,7 +23,7 @@ en:
 
   settings:
     email:
-      sender: ""
+      sender: "Swiss Alpine Club SAC <noreply@%{mail_domain}>\""
 
   errors:
     messages:
@@ -392,6 +392,20 @@ en:
         reduction_amount: ""
         reduction_required_membership_years: ""
         reduction_required_age: ""
+      external_invoice:
+        title: ""
+        state: ""
+        abacus_sales_order_key: ""
+        total: ""
+        issued_at: ""
+        created_at: ""
+        updated_at: ""            
+        states:
+          draft: ""
+          open: ""
+          payed: ""
+          cancelled: ""
+          error: ""
 
     errors:
       messages:
@@ -404,7 +418,7 @@ en:
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
         must_have_one_family_main_person_in_family: ""
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -989,14 +1003,15 @@ en:
     export_enqueued: ""
 
   person:
+    external_invoices:
+      list:
+        create_membership_invoice: ""
+        create_membership_invoice_confirmation: |
     history:
       index_notice_sac_cas:
         sections_info_html: ''
 
   people:
-    actions_show_sac_cas:
-      create_membership_invoice: ""
-      create_membership_invoice_confirmation: |
     membership:
       verify:
         member_details_sac_cas:
@@ -1028,6 +1043,7 @@ en:
     tabs:
       history: ""
       sac_remarks: ""
+      external_invoices: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
