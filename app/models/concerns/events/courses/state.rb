@@ -60,6 +60,9 @@ module Events::Courses::State
     end
 
     def summon_assigned_participants
+      assigned_participants.each do |participation|
+        Event::ParticipationMailer.summon(participation).deliver_later
+      end
       assigned_participants.update_all(state: :summoned)
     end
 

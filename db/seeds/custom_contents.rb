@@ -9,6 +9,8 @@ CustomContent.seed_once(:key,
   {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION, # 'event_participation_rejected`
    placeholders_required: "participant-name",
    placeholders_optional: "event-name, application-url, event-details"},
+  {key: Event::ParticipationMailer::CONTENT_SUMMON,
+   placeholders_required: "recipient-name, event-details, event-name, event-number, application-url, person-url, event-link, book-discount-code"},
   {key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
    placeholders_required: "recipient-name, event-details, event-name, event-number, event-link"},
   {key: Event::LeaderReminderMailer::REMINDER_8_WEEKS,
@@ -24,6 +26,7 @@ CustomContent.seed_once(:key,
   {key: Memberships::SwitchStammsektionMailer::CONFIRMATION, placeholders_required: "person-name, group-name, switch-date"})
 
 participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
+summon_id = CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id
 leader_reminder_next_week_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id
 leader_reminder_8_weeks_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_8_WEEKS).id
 
@@ -45,6 +48,30 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id: participation_rejected_id,
    locale: "it",
    label: "Evento: E-mail della notifica della rifiuto"},
+  {custom_content_id: summon_id,
+   locale: "de",
+   label: "Kurs: E-Mail Aufgebot",
+   subject: "Kurs: E-Mail Aufgebot",
+   body: "Hallo {recipient-name},<br><br>" \
+     "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
+     "Kursdetails:<br><br>{event-details}<br><br>" \
+     "Weitere Informationen:<br>" \
+     "Anmeldung: {application-url}<br>" \
+     "Person: {person-url}<br>" \
+     "Event-Link: {event-link}<br>" \
+     "Book-Discount-Code: {book-discount-code}"},
+  {custom_content_id: summon_id,
+   locale: "fr",
+   label: "Événement: E-mail de convocation",
+   subject: "Convocation au cours",
+   body: "Bonjour {recipient-name},<br><br>" \
+     "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
+     "Détails du cours:<br><br>{event-details}<br><br>" \
+     "Informations supplémentaires:<br>" \
+     "Inscription: {application-url}<br>" \
+     "Personne: {person-url}<br>" \
+     "Lien de l'événement: {event-link}<br>" \
+     "Code de réduction pour le livre: {book-discount-code}"},
   {custom_content_id: leader_reminder_next_week_id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",
