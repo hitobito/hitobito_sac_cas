@@ -362,5 +362,14 @@ describe Event::Course do
         expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
       end
     end
+
+    context "from anything else" do
+      before { course.update!(state: "application_paused") }
+
+      it "doesnt send an email" do
+        expect { course.update!(state: :application_open) }
+          .not_to change(ActionMailer::Base.deliveries, :count)
+      end
+    end
   end
 end

@@ -71,7 +71,8 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     label: 'Kurs: E-Mail Kursveröffentlichung',
     subject: 'Kursveröffentlichung',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-link}, der 6 Wochen nach dem {six-weeks-before-start} stattfinded, wurde veröffentlicht." \
+          "Der Kurs {event-link}, der 6 Wochen nach dem {six-weeks-before-start} stattfinded, wurde veröffentlicht. " \
+          "Anmeldebeginn ist der {application-opening-at}.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
     locale: 'de',

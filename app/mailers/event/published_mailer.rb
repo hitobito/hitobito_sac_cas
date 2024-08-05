@@ -25,7 +25,7 @@ class Event::PublishedMailer < ApplicationMailer
   end
 
   def placeholder_application_opening_at
-    nil
+    l(@course.application_opening_at)
   end
 
   def placeholder_event_name
