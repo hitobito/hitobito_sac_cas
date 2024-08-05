@@ -1,0 +1,5 @@
+info_mail:
+  created_at: <%= 3.day.ago.midday.to_s(:db) %>
+  category: "mail"
+  level: "info"
+  message: "info_mail"
