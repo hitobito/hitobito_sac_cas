@@ -160,6 +160,7 @@ module SacCas::Event::Course
 
     attribute :waiting_list, default: false
     before_save :adjust_state, if: :application_closing_at_changed?
+    after_update :send_email_to_course_admin, if: :state_changed_from_draft_to_published?
   end
 
   def minimum_age
@@ -186,5 +187,13 @@ module SacCas::Event::Course
     if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
       self.state = "application_open"
     end
+  end
+
+  def state_changed_from_draft_to_published?
+    saved_change_to_attribute(:state) == ["created", "application_open"]
+  end
+
+  def send_email_to_course_admin
+    Event::PublishedMailer.notice(self).deliver_now
   end
 end

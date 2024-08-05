@@ -10,7 +10,7 @@ class Event::PublishedMailer < ApplicationMailer
 
   NOTICE = "event_published_notice"
 
-  def reminder(course)
+  def notice(course)
     @course = course
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")

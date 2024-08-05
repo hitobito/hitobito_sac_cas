@@ -347,4 +347,20 @@ describe Event::Course do
       end
     end
   end
+
+  describe "when state changes to application_open" do
+    subject(:course) { Fabricate(:sac_open_course, contact_id: people(:admin).id) }
+
+    before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+
+    context "from created" do
+      before { course.update!(state: "created") }
+
+      it "sends an email to the course admin" do
+        expect { course.update!(state: :application_open) }
+          .to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+      end
+    end
+  end
 end
