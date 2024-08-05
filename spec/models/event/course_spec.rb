@@ -357,8 +357,10 @@ describe Event::Course do
       before { course.update!(state: "created") }
 
       it "sends an email to the course admin" do
-        expect { course.update!(state: :application_open) }
-          .to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.to change(ActionMailer::Base.deliveries, :count).by(1)
         expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
       end
     end
@@ -367,8 +369,7 @@ describe Event::Course do
       before { course.update!(state: "application_paused") }
 
       it "doesnt send an email" do
-        expect { course.update!(state: :application_open) }
-          .not_to change(ActionMailer::Base.deliveries, :count)
+        expect { course.update!(state: :application_open) }.not_to change(Delayed::Job, :count)
       end
     end
   end

@@ -194,6 +194,6 @@ module SacCas::Event::Course
   end
 
   def send_email_to_course_admin
-    Event::PublishedMailer.notice(self).deliver_now
+    Event::PublishedJob.new(self).enqueue!
   end
 end
