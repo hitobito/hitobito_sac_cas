@@ -16,6 +16,10 @@ module SacCas::Event::Participation
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
+
+    validates :actual_days, numericality: {greater_than: 0, allow_blank: true}
+
+    validate :assert_actual_days_size
   end
 
   def subsidy_amount
@@ -41,6 +45,14 @@ module SacCas::Event::Participation
   end
 
   private
+
+  def assert_actual_days_size
+    return if actual_days.blank?
+
+    if actual_days > event.total_duration_days
+      errors.add(:actual_days, :longer_than_event_duration)
+    end
+  end
 
   def update_previous_state
     if %w[canceled annulled].include?(state)

@@ -14,7 +14,7 @@ describe Event::ParticipationsController do
   let(:group) { event.groups.first }
   let(:event) do
     Fabricate(:sac_open_course, groups: [groups(:root)], applications_cancelable: true).tap do |c|
-      c.dates.first.update_columns(start_at: 1.day.from_now)
+      c.dates.first.update_columns(start_at: 1.day.from_now, finish_at: 1.week.from_now)
     end
   end
   let(:params) { {group_id: group.id, event_id: event.id} }
@@ -353,6 +353,39 @@ describe Event::ParticipationsController do
       participation.reload
       expect(participation.state).to eq "assigned"
       expect(flash[:alert]).to eq ["ist nicht gültig"]
+    end
+  end
+
+  describe "PUT#update" do
+    let(:participation) { Fabricate(:event_participation, event: event) }
+    let(:participation_path) { group_event_participation_path(id: participation.id) }
+
+    it "allows to edit actual_days with participations_full in event" do
+      own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
+      Event::Role::Leader.create!(participation: own_participation)
+      patch :update,
+        params: {
+          group_id: group.id,
+          event_id: event.id,
+          id: participation.id,
+          event_participation: {actual_days: "2", person_id: participation.person.id}
+        }
+      expect(response).to redirect_to(participation_path)
+      participation.reload
+      expect(participation.actual_days).to eq(2)
+    end
+
+    it "does not allow to edit actual_days without participations_full in event" do
+      patch :update,
+        params: {
+          group_id: group.id,
+          event_id: event.id,
+          id: participation.id,
+          event_participation: {actual_days: 2}
+        }
+      expect(response).to redirect_to(participation_path)
+      participation.reload
+      expect(participation.actual_days).to be_nil
     end
   end
 end

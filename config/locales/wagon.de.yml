@@ -275,6 +275,7 @@ de:
         cancel_statement: Begründung
         adult_consent: Altersbestätigung
         terms_and_conditions: AGB
+        actual_days: Effektive Tage
       external_training:
         person: Person
         event_kind: Kursart
@@ -439,6 +440,11 @@ de:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
+
+        event/participation:
+          attributes:
+            actual_days:
+              longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
@@ -910,6 +916,8 @@ de:
           überschrieben.
 
     participations:
+      answers_step:
+        total_duration_days_help: "Geplante Kursdauer: %{total_days}"
       edit:
         title: Zusatzdaten
       course_signup_aside:
