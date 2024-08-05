@@ -8,14 +8,15 @@
 class Event::LeaderReminderMailer < ApplicationMailer
   include Rails.application.routes.url_helpers
 
-  REMINDER = "event_leader_reminder"
+  REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
+  REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
 
   def reminder(course)
     @course = course
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
 
-    compose(course.contact, REMINDER, headers, locales)
+    compose(course.contact, REMINDER_8_WEEKS, headers, locales)
   end
 
   private
