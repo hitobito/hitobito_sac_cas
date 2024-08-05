@@ -11,11 +11,16 @@ class Event::LeaderReminderJob < RecurringJob
   private
 
   def perform_internal
+    send_reminder(1.week.from_now, Event::LeaderReminderMailer::REMINDER_NEXT_WEEK)
+    send_reminder(8.weeks.from_now, Event::LeaderReminderMailer::REMINDER_8_WEEKS)
+  end
+
+  def send_reminder(start_at, content_key)
     Event::Course.joins(:dates)
-      .where(event_dates: {start_at: 8.weeks.from_now.all_day})
+      .where(event_dates: {start_at: start_at.all_day})
       .where.not(contact: nil)
       .uniq.each do |course|
-      Event::LeaderReminderMailer.reminder(course).deliver_now
+      Event::LeaderReminderMailer.reminder(course, content_key).deliver_now
     end
   end
 

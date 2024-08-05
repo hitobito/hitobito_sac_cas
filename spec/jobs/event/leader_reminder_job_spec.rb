@@ -59,6 +59,18 @@ describe Event::LeaderReminderJob do
     end
   end
 
+  context "course starts next week" do
+    let!(:course) do
+      Fabricate(:sac_open_course, contact_id: people(:admin).id, dates: [
+        Fabricate(:event_date, start_at: 1.week.from_now)
+      ])
+    end
+
+    it "mails a reminder" do
+      expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+    end
+  end
+
   context "without contact person" do
     let!(:course) do
       Fabricate(:sac_open_course, dates: [
@@ -71,7 +83,7 @@ describe Event::LeaderReminderJob do
     end
   end
 
-  context "course doesnt start in 8 weeks" do
+  context "course doesnt start next week or in 8 weeks" do
     subject(:course) do
       Fabricate(:sac_open_course, contact_id: people(:admin).id, dates: [
         Fabricate(:event_date, start_at: start_at)

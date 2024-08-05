@@ -11,12 +11,12 @@ class Event::LeaderReminderMailer < ApplicationMailer
   REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
   REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
 
-  def reminder(course)
+  def reminder(course, content_key)
     @course = course
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
 
-    compose(course.contact, REMINDER_8_WEEKS, headers, locales)
+    compose(course.contact, content_key, headers, locales)
   end
 
   private
