@@ -8,18 +8,6 @@ it:
     phone_placeholder: ""
     currency: ""
     years: ""
-    wizards/steps/membership_terminated_info_title: ""
-    wizards/steps/choose_membership_title: ""
-    wizards/steps/choose_sektion_title: ""
-    wizards/steps/join_zusatzsektion/summary_title: ""
-    wizards/steps/termination_no_self_service_title: ""
-    wizards/steps/termination_choose_date_title: ""
-    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: ""
-    wizards/steps/leave_zusatzsektion/summary_title: ""
-    wizards/steps/termination/summary_title: ""
-    wizards/steps/switch_stammsektion/summary_title: ""
-    wizards/steps/switch_stammsektion/choose_date_title: ""
-    wizards/steps/switch_stammsektion/choose_sektion_title: ""
 
   settings:
     email:
@@ -28,9 +16,37 @@ it:
   errors:
     messages:
       assert_old_enough: ""
+      too_young: ""
+      assert_old_enough_with_age: ""
       conflicting_family_membership: >
   activemodel:
     attributes:
+      wizards/steps/signup/main_email_field:
+        email: ""
+      wizards/steps/signup/person_fields:
+        gender: ""
+        phone_number: ""
+        address: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        statutes: ""
+      wizards/steps/signup/abo_magazin/issues_from_field:
+        issues_from: ""
+        data_protection: ""
+        statutes: ""
+      wizards/steps/signup/sektion/family_fields/member:
+        gender: ""
+        email: ""
+        phone_number: ""
+      wizards/steps/signup/sektion/various_fields:
+        register_on: ""
+        self_registration_reason_id: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        sektion_statuten: ""
+        statutes: ""
       wizards/steps/choose_membership:
         register_as: ""
         family: ""
@@ -56,19 +72,6 @@ it:
         register_as_options:
           extra: ""
           replace: ""
-
-      self_registration/main_person/base:
-        gender: ""
-        number: ""
-        email: ""
-        address: ""
-      self_registration/abo_magazin:
-        issues_from: ""
-      self_registration/sektion/housemate:
-        email: ""
-        number: ""
-      self_registration/sektion/supplements:
-        adult_consent: ""
 
       wizards/steps/choose_sektion:
         group_id: ""
@@ -337,6 +340,9 @@ it:
               one: ''
               many: ''
               other: ''
+          permission:
+            description:
+              read_all_people: ""
       qualification_kind:
         tourenchef_may_edit: ""
       qualification:
@@ -1134,24 +1140,10 @@ it:
         price_with_vat: ""
         switzerland: ""
         international: ""
-      adult_consent_field:
-        caption: ""
-      conditions_sac_cas:
-        newsletter: ""
       create:
         redirect_existing_email: ""
-      emailless_main_person:
-        newsletter: ""
-      fields:
-        notes: ""
-        promo_code: ""
-      household:
-        membership_info_box: >
-        next_as_single_link: ""
-        next_as_household_link: ""
 
-      supplements:
-        newsletter: ""
+      agreement_link:
         statutes_text: ""
         sektion_statuten_text: ""
         contribution_regulations_text: ""
@@ -1363,6 +1355,42 @@ it:
 
   wizards:
     steps:
+      choose_sektion_title: ""
+      summary_title: ""
+      choose_membership_title: ""
+      membership_terminated_info_title: ""
+      termination_no_self_service_title: ""
+      termination_choose_date_title: ""
+      ask_family_main_person_title: ""
+      choose_date_title: ""
+
+      signup:
+        main_email_field_title: ""
+        person_fields_title: ""
+        agreement_fields:
+          adult_consent_caption: ""
+          newsletter_caption: ""
+        abo_magazin:
+          issues_from_field_title: ""
+          issues_from_field:
+            issues_from_help: |
+        sektion:
+          family_fields_title: ""
+          family_fields:
+            membership_info_box: >
+          family_buttons:
+            next_as_single_link: ""
+            next_as_household_link: ""
+
+          various_fields_title: ""
+
+
+        various_fields:
+          newsletter: ""
+          statutes_text: ""
+          sektion_statuten_text: ""
+          contribution_regulations_text: ""
+          data_protection_text: ""
       choose_sektion:
         no_self_service_info_text: ""
         backoffice_no_self_service_info_text: ''
