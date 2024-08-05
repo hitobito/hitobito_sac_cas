@@ -38,7 +38,8 @@ class Event::LeaderReminderMailer < ApplicationMailer
   end
 
   def placeholder_event_link
-    link_to group_event_url(group_id: @course.group_ids.first, id: @course.id)
+    link_to "#{placeholder_event_name} (#{placeholder_event_number})",
+            group_event_url(group_id: @course.group_ids.first, id: @course.id)
   end
 
   # https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112

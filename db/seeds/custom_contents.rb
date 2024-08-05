@@ -48,23 +48,21 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     label: 'Kurs: E-Mail Kursvorbereitungen abschliessen',
     subject: 'Erinnerung Kursstart',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-link} finded nächste Woche statt." \
+          "Der Kurs {event-link} finded nächste Woche statt.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'de',
     label: 'Kurs: E-Mail Reminder Kursleitung',
     subject: 'Erinnerung Kursstart',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-name} mit Nummer {event-number} finded 6 Wochen nach dem {six-weeks-before-start} statt." \
-          "<br>Siehe {event-link} für mehr Info.<br><br>" \
+          "Der Kurs {event-link} finded 6 Wochen nach dem {six-weeks-before-start} statt.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'fr',
     label: 'Kurs: E-Mail Reminder Kursleitung',
     subject: 'Rappel de début de cours',
     body: "Bonjour {recipient-name},<br><br>" \
-        "Le cours {event-name} avec le numéro {event-number} aura lieu 6 semaines après le {six-weeks-before-start}." \
-        "<br>Veuillez consulter {event-link} pour plus d'informations.<br><br>" \
+        "Le cours {event-link} aura lieu 6 semaines après le {six-weeks-before-start}.<br><br>" \
         "Détails du cours:<br><br>{event-details}" },
   { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
     locale: 'de',
