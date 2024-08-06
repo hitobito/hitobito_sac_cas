@@ -363,6 +363,14 @@ describe Event::Course do
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
         expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
       end
+
+      it "doesnt send an email if the course has been deleted" do
+        expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+        course.destroy!
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.not_to change(ActionMailer::Base.deliveries, :count)
+      end
     end
 
     context "from anything else" do

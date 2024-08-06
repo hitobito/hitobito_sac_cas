@@ -14,6 +14,8 @@ class Event::PublishedJob < BaseJob
   end
 
   def perform
+    return unless course # may have been deleted again
+
     Event::PublishedMailer.notice(course).deliver_now
   end
 
