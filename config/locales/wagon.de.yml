@@ -136,6 +136,10 @@ de:
             telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
             mit uns auf
 
+        wizards/steps/signup/sektion/family_fields/member:
+          attributes:
+            email:
+              taken: ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person.
     models:
       people/neuanmeldungen/approve:
         one: Anmeldung übernehmen

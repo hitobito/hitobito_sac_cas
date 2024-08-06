@@ -51,7 +51,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
       it "must not be contained in family emails" do
         form.email = "test@example.com"
         expect(form).not_to be_valid
-        expect(form.errors[:email]).to eq ["ist bereits vergeben"]
+        expect(form.errors[:email]).to eq ["ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
       end
     end
 

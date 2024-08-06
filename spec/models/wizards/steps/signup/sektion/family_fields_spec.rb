@@ -80,7 +80,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [1, required_attrs.merge(email: "test@example.com", birthday: "1.10.2014")]
         ]
         expect(form).not_to be_valid
-        expect(form.members.second.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben"]
+        expect(form.members.second.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
       end
 
       it "is invalid if second member reuses first member email" do
@@ -89,7 +89,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [1, required_attrs.merge(email: "acceptable@example.com", birthday: "1.10.2014")]
         ]
         expect(form).not_to be_valid
-        expect(form.members.second.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben"]
+        expect(form.members.second.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
       end
     end
   end
