@@ -13,6 +13,8 @@ CustomContent.seed_once(:key,
     placeholders_required: 'recipient-name, event-details, event-name, event-number, event-link' },
   { key: Event::LeaderReminderMailer::REMINDER_8_WEEKS,
     placeholders_required: 'recipient-name, event-details, event-name, event-number, event-link, six-weeks-before-start' },
+  { key: Event::PublishedMailer::NOTICE,
+    placeholders_required: 'recipient-name, event-details, event-name, event-number, event-link, six-weeks-before-start, application-opening-at' },
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
   { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
   { key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR },
@@ -64,6 +66,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     body: "Bonjour {recipient-name},<br><br>" \
         "Le cours {event-link} aura lieu 6 semaines après le {six-weeks-before-start}.<br><br>" \
         "Détails du cours:<br><br>{event-details}" },
+  { custom_content_id: CustomContent.get(Event::PublishedMailer::NOTICE).id,
+    locale: 'de',
+    label: 'Kurs: E-Mail Kursveröffentlichung',
+    subject: 'Kursveröffentlichung',
+    body: "Hallo {recipient-name},<br><br>" \
+          "Der Kurs {event-link}, der 6 Wochen nach dem {six-weeks-before-start} stattfinded, wurde veröffentlicht. " \
+          "Anmeldebeginn ist der {application-opening-at}.<br><br>" \
+          "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
     locale: 'de',
     label: 'Qualifikation: Erinnerungsmail morgen',
