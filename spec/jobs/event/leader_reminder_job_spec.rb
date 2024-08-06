@@ -71,6 +71,28 @@ describe Event::LeaderReminderJob do
     end
   end
 
+  context "with a course starts next week and a course that starts in 8 weeks" do
+    let!(:course_in_one_week) do
+      Fabricate(:sac_open_course, contact_id: people(:admin).id, dates: [
+        Fabricate(:event_date, start_at: 1.week.from_now)
+      ])
+    end
+
+    let!(:course_in_eight_week) do
+      Fabricate(:sac_open_course, contact_id: people(:admin).id, dates: [
+        Fabricate(:event_date, start_at: 8.week.from_now)
+      ])
+    end
+
+    it "mails a reminder for both" do
+      expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
+
+      one_week_body, eight_weeks_body = ActionMailer::Base.deliveries.last(2).map { _1.body.to_s }
+      expect(one_week_body).to match(/findet nächste Woche/)
+      expect(eight_weeks_body).to match(/findet 6 Wochen/)
+    end
+  end
+
   context "without contact person" do
     let!(:course) do
       Fabricate(:sac_open_course, dates: [
