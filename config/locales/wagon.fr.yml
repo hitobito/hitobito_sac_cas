@@ -268,6 +268,7 @@ fr:
         cancel_statement: ""
         adult_consent: ""
         terms_and_conditions: ""
+        actual_days: ""
       external_training:
         person: ""
         event_kind: ""
@@ -433,6 +434,11 @@ fr:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: ""
+
+        event/participation:
+          attributes:
+            actual_days:
+              longer_than_event_duration: ""
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: ""
@@ -933,6 +939,8 @@ fr:
           ""
 
     participations:
+      answers_step:
+        total_duration_days_help: ""
       edit:
         title: ""
       course_signup_aside:
