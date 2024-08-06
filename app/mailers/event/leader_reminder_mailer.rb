@@ -8,14 +8,15 @@
 class Event::LeaderReminderMailer < ApplicationMailer
   include Rails.application.routes.url_helpers
 
-  REMINDER = "event_leader_reminder"
+  REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
+  REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
 
-  def reminder(course)
+  def reminder(course, content_key)
     @course = course
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
 
-    compose(course.contact, REMINDER, headers, locales)
+    compose(course.contact, content_key, headers, locales)
   end
 
   private
@@ -37,7 +38,8 @@ class Event::LeaderReminderMailer < ApplicationMailer
   end
 
   def placeholder_event_link
-    link_to group_event_url(group_id: @course.group_ids.first, id: @course.id)
+    link_to "#{placeholder_event_name} (#{placeholder_event_number})",
+      group_event_url(group_id: @course.group_ids.first, id: @course.id)
   end
 
   # https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112

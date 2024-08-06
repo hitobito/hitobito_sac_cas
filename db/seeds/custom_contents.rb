@@ -9,7 +9,9 @@ CustomContent.seed_once(:key,
 { key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION, # 'event_participation_rejected`
   placeholders_required: 'participant-name',
   placeholders_optional: 'event-name, application-url, event-details' },
-  { key: Event::LeaderReminderMailer::REMINDER,
+  { key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
+    placeholders_required: 'recipient-name, event-details, event-name, event-number, event-link' },
+  { key: Event::LeaderReminderMailer::REMINDER_8_WEEKS,
     placeholders_required: 'recipient-name, event-details, event-name, event-number, event-link, six-weeks-before-start' },
   { key: Qualifications::ExpirationMailer::REMINDER_TODAY },
   { key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR },
@@ -19,8 +21,9 @@ CustomContent.seed_once(:key,
   { key: Memberships::SwitchStammsektionMailer::CONFIRMATION, placeholders_required: 'person-name, group-name, switch-date' }
 )
 
-participation_rejected_id =
-  CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
+participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
+leader_reminder_next_week_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id
+leader_reminder_8_weeks_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_8_WEEKS).id
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
   { custom_content_id: participation_rejected_id,
@@ -40,21 +43,26 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
   { custom_content_id: participation_rejected_id,
     locale: 'it',
     label: "Evento: E-mail della notifica della rifiuto" },
-  { custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER).id,
+  { custom_content_id: leader_reminder_next_week_id,
+    locale: 'de',
+    label: 'Kurs: E-Mail Kursvorbereitungen abschliessen',
+    subject: 'Erinnerung Kursstart',
+    body: "Hallo {recipient-name},<br><br>" \
+          "Der Kurs {event-link} findet nächste Woche statt.<br><br>" \
+          "Kursdetails:<br><br>{event-details}" },
+  { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'de',
     label: 'Kurs: E-Mail Reminder Kursleitung',
     subject: 'Erinnerung Kursstart',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-name} mit Nummer {event-number} finded 6 Wochen nach dem {six-weeks-before-start} statt." \
-          "<br>Siehe {event-link} für mehr Info.<br><br>" \
+          "Der Kurs {event-link} findet 6 Wochen nach dem {six-weeks-before-start} statt.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
-  { custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER).id,
+  { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'fr',
     label: 'Kurs: E-Mail Reminder Kursleitung',
     subject: 'Rappel de début de cours',
     body: "Bonjour {recipient-name},<br><br>" \
-        "Le cours {event-name} avec le numéro {event-number} aura lieu 6 semaines après le {six-weeks-before-start}." \
-        "<br>Veuillez consulter {event-link} pour plus d'informations.<br><br>" \
+        "Le cours {event-link} aura lieu 6 semaines après le {six-weeks-before-start}.<br><br>" \
         "Détails du cours:<br><br>{event-details}" },
   { custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
     locale: 'de',
