@@ -48,14 +48,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     label: 'Kurs: E-Mail Kursvorbereitungen abschliessen',
     subject: 'Erinnerung Kursstart',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-link} finded nächste Woche statt.<br><br>" \
+          "Der Kurs {event-link} findet nächste Woche statt.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'de',
     label: 'Kurs: E-Mail Reminder Kursleitung',
     subject: 'Erinnerung Kursstart',
     body: "Hallo {recipient-name},<br><br>" \
-          "Der Kurs {event-link} finded 6 Wochen nach dem {six-weeks-before-start} statt.<br><br>" \
+          "Der Kurs {event-link} findet 6 Wochen nach dem {six-weeks-before-start} statt.<br><br>" \
           "Kursdetails:<br><br>{event-details}" },
   { custom_content_id: leader_reminder_8_weeks_id,
     locale: 'fr',
