@@ -44,7 +44,7 @@ if root.address.blank?
 end
 
 Group::Geschaeftsstelle.seed(:name, :parent_id, {
-  name: 'SAC Geschäftsstelle',
+  name: "SAC Geschäftsstelle",
   parent_id: root.id
 })
 
@@ -95,14 +95,14 @@ Group::SektionsNeuanmeldungenSektion.seed_once(
    self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung}
 )
 
-seed_section_hut(matterhorn, 'Matterhornbiwak', 99999942)
-seed_club_hut(uto, 'Domhütte', 81)
-seed_club_hut(uto, 'Spannorthütte', 255)
-seed_club_hut(uto, 'Täschhütte', 265)
-seed_club_hut(bluemlisalp, 'Blüemlisalphütte', 1650)
-seed_club_hut(bluemlisalp, 'Baltschiederklause', 25)
-seed_club_hut(bluemlisalp, 'Stockhornbiwak', 258)
-seed_section_hut(bluemlisalp, 'Ski- & Ferienhaus Obergestelen', 448786)
-seed_section_hut(bluemlisalp, 'Sunnhüsi', 448785)
+seed_section_hut(matterhorn, "Matterhornbiwak", 99999942)
+seed_club_hut(uto, "Domhütte", 81)
+seed_club_hut(uto, "Spannorthütte", 255)
+seed_club_hut(uto, "Täschhütte", 265)
+seed_club_hut(bluemlisalp, "Blüemlisalphütte", 1650)
+seed_club_hut(bluemlisalp, "Baltschiederklause", 25)
+seed_club_hut(bluemlisalp, "Stockhornbiwak", 258)
+seed_section_hut(bluemlisalp, "Ski- & Ferienhaus Obergestelen", 448786)
+seed_section_hut(bluemlisalp, "Sunnhüsi", 448785)
 
 Group.rebuild!

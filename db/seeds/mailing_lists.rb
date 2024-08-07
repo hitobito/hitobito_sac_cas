@@ -10,9 +10,9 @@ list = MailingList.seed_once(
   :internal_key,
   internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY,
   group_id: Group.root.id,
-  name: 'SAC/CAS Newsletter',
-  subscribable_for: 'configured',
-  subscribable_mode: 'opt_out'
+  name: "SAC/CAS Newsletter",
+  subscribable_for: "configured",
+  subscribable_mode: "opt_out"
 ).first || MailingList.find_by(internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY)
 
 subscription = Subscription.seed_once(
@@ -48,7 +48,7 @@ MountedAttribute.seed(
   :entry_type,
   :key,
   entry_id: Group.root.id,
-  entry_type: 'Group',
-  key: 'sac_newsletter_mailing_list_id',
+  entry_type: "Group",
+  key: "sac_newsletter_mailing_list_id",
   value: list.id.to_s
 )

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-Group::Sektion.all.each do |s|
+Group::Sektion.all.find_each do |s|
   SacSectionMembershipConfig.seed_once(:valid_from, :group_id,
     group_id: s.id,
     valid_from: "2024",
