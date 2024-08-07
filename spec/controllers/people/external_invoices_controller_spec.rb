@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Person::ExternalInvoicesController do
+describe People::ExternalInvoicesController do
   let(:person) { people(:mitglied) }
   let(:group_id) { person.groups.first.id }
 

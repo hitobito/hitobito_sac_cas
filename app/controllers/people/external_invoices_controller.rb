@@ -5,12 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Person::ExternalInvoicesController < ListController
+class People::ExternalInvoicesController < ListController
   def cancel
     authorize!(:cancel_external_invoice, invoice)
     invoice.state = "cancelled"
     invoice.save!
-    Person::CancelExternalInvoiceJob.new(invoice).enqueue!
+    People::CancelExternalInvoiceJob.new(invoice).enqueue!
     flash[:notice] = t(".flash", invoice: invoice.to_s, abacus_sales_order_key: invoice.abacus_sales_order_key)
     redirect_to external_invoices_group_person_path(group, person)
   end

@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Person::CancelExternalInvoiceJob < BaseJob
+class People::CancelExternalInvoiceJob < BaseJob
   self.parameters = [:external_invoice_id]
 
   def initialize(external_invoice)
@@ -32,7 +32,7 @@ class Person::CancelExternalInvoiceJob < BaseJob
   end
 
   def failure(job)
-    external_invoice&.update(state: "error")
+    external_invoice.update!(state: "error")
   end
 
   private

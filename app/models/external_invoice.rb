@@ -48,6 +48,10 @@ class ExternalInvoice < ActiveRecord::Base
     self.class.name.demodulize.underscore
   end
 
+  def cancellable?
+    abacus_sales_order_key.present? && state != "cancelled" && state != "error"
+  end
+
   def title = to_s
 
   def to_s = id
