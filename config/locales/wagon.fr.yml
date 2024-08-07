@@ -127,6 +127,10 @@ fr:
         wizards/steps/choose_sektion:
           requires_admin: ""
 
+        wizards/steps/signup/sektion/family_fields/member:
+          attributes:
+            email:
+              taken: ""
     models:
       people/neuanmeldungen/approve:
         one: ''
