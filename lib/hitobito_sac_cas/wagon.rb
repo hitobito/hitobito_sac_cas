@@ -28,6 +28,7 @@ module HitobitoSacCas
         Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Event::CloseApplicationsJob,
+        Event::LeaderReminderJob,
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen]
