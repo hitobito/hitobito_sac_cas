@@ -14,7 +14,9 @@ class Event::PublishedMailer < ApplicationMailer
     @course = course
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
+    event_leaders = course.participations.joins(:roles, :person)
+      .where(roles: {type: Event::Role::Leader.sti_name}).map(&:person)
 
-    compose(course.contact, NOTICE, headers, locales)
+    compose(event_leaders, NOTICE, headers, locales)
   end
 end
