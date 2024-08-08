@@ -14,7 +14,8 @@ module MembershipInvoicesHelper
   end
 
   def already_member_next_year?
-    in_next_year?(@person.sac_membership.stammsektion_role.delete_on)
+    delete_on_date = @person.sac_membership.stammsektion_role.delete_on
+    delete_on_date >= Date.new(Date.today.year + 1, 1, 1) && delete_on_date <= Date.new(Date.today.year + 1, 12, 31)
   end
 
   def currently_paying_zusatzsektionen
@@ -22,13 +23,6 @@ module MembershipInvoicesHelper
     memberships = member.additional_membership_roles + member.new_additional_section_membership_roles
       .select { |membership| member
       .paying_person?(membership.beitragskategorie) }
-      
     memberships.map(&:layer_group)
-  end
-
-  private
-
-  def in_next_year?(date)
-    date >= Date.new(Date.today.year + 1, 1, 1) && date <= Date.new(Date.today.year + 1, 12, 31)
   end
 end
