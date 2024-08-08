@@ -11,7 +11,7 @@ class People::ExternalInvoicesController < ListController
     invoice.state = "cancelled"
     invoice.save!
     People::CancelExternalInvoiceJob.new(invoice).enqueue!
-    flash[:notice] = t(".flash", invoice: invoice.to_s, abacus_sales_order_key: invoice.abacus_sales_order_key)
+    flash[:notice] = t(".flash", invoice: invoice.title, abacus_sales_order_key: invoice.abacus_sales_order_key)
     redirect_to external_invoices_group_person_path(group, person)
   end
 
