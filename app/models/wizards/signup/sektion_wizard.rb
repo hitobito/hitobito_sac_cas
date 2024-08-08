@@ -81,7 +81,7 @@ module Wizards::Signup
     def person_attributes = person_fields.person_attributes.merge(main_email_field.attributes)
 
     def household_key
-      @household_key ||= ::Person::Household.next_key if members.any?
+      @household_key ||= Household.new(Person.new).send(:next_key) if members.any?
     end
 
     def read_birthdays

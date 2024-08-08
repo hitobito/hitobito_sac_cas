@@ -68,9 +68,8 @@ class SacPersonSeeder < PersonSeeder
   end
 
   def create_or_update_household(person, second_person)
-    household = Person::Household.new(person, Ability.new(Person.root), second_person)
-    household.assign
-    household.persist!
+    person.household.add(second_person)
+    person.household.save!
   end
 
   def seed_sac_adult(family_main_person: false)

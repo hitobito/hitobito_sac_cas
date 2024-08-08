@@ -49,8 +49,8 @@ module SacImports
 
       def import!
         role.transaction do
-          assign_household(row[:household_key])
           mark_family_main_person
+          assign_household(row[:household_key])
           # Use context :import to skip the `assert_adult_family_mitglieder_count`
           # and `assert_single_family_main_person` validations that must be ignored during import
           role.save!(context: :import)
@@ -84,15 +84,9 @@ module SacImports
 
         if (other_person = ::Person.find_by(household_key: household_key))
           # Household key exists already, assign person to existing household
-          household = ::Person::Household.new(
-            person,
-            current_ability,
-            other_person,
-            current_ability.user,
-            maintain_sac_family: false
-          )
-          household.assign
-          household.persist!
+          household = Household.new(other_person, maintain_sac_family: false)
+          household.add(person)
+          household.save!
         else
           # Household key does not exist yet, save it on the person
           person.update!(household_key: household_key)
