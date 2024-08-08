@@ -92,6 +92,7 @@ module HitobitoSacCas
       PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
+      RoleAbility.include SacCas::VariousAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
