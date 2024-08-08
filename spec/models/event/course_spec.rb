@@ -360,7 +360,10 @@ describe Event::Course do
       end
 
       context "with course leaders" do
-        before { course.participations.first.roles.create!(type: Event::Role::Leader) }
+        before do
+          course.participations.first.roles.create!(type: Event::Role::Leader)
+          course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
+        end
 
         it "sends an email to the course admin and leader" do
           expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
@@ -368,7 +371,7 @@ describe Event::Course do
             Delayed::Job.last.payload_object.perform
           end.to change(ActionMailer::Base.deliveries, :count).by(1)
           expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
-          expect(ActionMailer::Base.deliveries.last.to).not_to include(people(:mitglied).email)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
           expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
         end
 
@@ -378,6 +381,20 @@ describe Event::Course do
           expect do
             Delayed::Job.last.payload_object.perform
           end.not_to change(ActionMailer::Base.deliveries, :count)
+        end
+      end
+
+      context "with course assistant leader" do
+        before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
+
+        it "sends an email to the course admin and assistant leader" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect do
+            Delayed::Job.last.payload_object.perform
+          end.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
+          expect(ActionMailer::Base.deliveries.last.to).not_to include(people(:mitglied).email)
+          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
         end
       end
 
