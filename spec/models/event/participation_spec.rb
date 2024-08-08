@@ -107,11 +107,16 @@ describe Event::Participation do
       it "has to be a positive number" do
         participation.actual_days = -1
         expect(participation).to_not be_valid
-        expect(participation.errors.full_messages).to match_array(["Effektive Tage muss grösser als 0 sein"])
+        expect(participation.errors.full_messages).to match_array(["Effektive Tage muss grösser oder gleich 0 sein"])
 
         participation.actual_days = event.total_duration_days + 1
         expect(participation).to_not be_valid
         expect(participation.errors.full_messages).to match_array(["Effektive Tage darf nicht länger als geplante Kursdauer sein."])
+      end
+
+      it "can be zero" do
+        participation.actual_days = 0
+        expect(participation).to be_valid
       end
     end
   end

@@ -17,7 +17,7 @@ module SacCas::Event::Participation
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
 
-    validates :actual_days, numericality: {greater_than: 0, allow_blank: true}
+    validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
 
     validate :assert_actual_days_size
   end
