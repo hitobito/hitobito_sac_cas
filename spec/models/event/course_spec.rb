@@ -383,7 +383,7 @@ describe Event::Course do
   end
 
   describe "when state changes to application_paused" do
-    subject(:course) { Fabricate(:sac_open_course, contact_id: people(:admin).id) }
+    subject(:course) { Fabricate(:sac_open_course) }
 
     context "with course admin" do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
@@ -408,11 +408,8 @@ describe Event::Course do
     context "without course admin" do
       before { course.groups.first.update!(course_admin_email: nil) }
 
-      it "doesnt send an email" do
-        expect { course.update!(state: :application_paused) }.to change(Delayed::Job, :count).by(1)
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.not_to change(ActionMailer::Base.deliveries, :count)
+      it "doesnt queue the job to send an email" do
+        expect { course.update!(state: :application_paused) }.not_to change(Delayed::Job, :count)
       end
     end
   end

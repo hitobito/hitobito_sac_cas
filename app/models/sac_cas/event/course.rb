@@ -203,6 +203,6 @@ module SacCas::Event::Course
   end
 
   def send_application_paused_email
-    Event::ApplicationPausedJob.new(self).enqueue!
+    Event::ApplicationPausedJob.new(self).enqueue! if groups.first.course_admin_email.present?
   end
 end
