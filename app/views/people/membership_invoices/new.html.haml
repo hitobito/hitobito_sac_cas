@@ -1,5 +1,5 @@
 %h1 Mitgliedschaftsrechnung erstellen
-- if invoice_possible?
+- if invoice_possible?(@member, @date)
   .alert.alert-info=t(".alert_info")
   
   = form_with(url: group_person_membership_invoices_path(@group, @person), method: :post, html: { id: "external-invoice-form" }) do |f|
@@ -17,7 +17,7 @@
     = f.label :send_date, t(".send_date"), class: 'control-label required'
     .input-group.w-150-px.mb-2
       %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:send_date, value: "", class: 'date col-2 form-control form-control-sm mb-0', minDate: Date.today.beginning_of_year, maxDate: (already_member_next_year? ? Date.today.end_of_year + 1.year : Date.today.end_of_year))
+      = f.text_field(:send_date, value: "", class: 'date col-2 form-control form-control-sm mb-0', minDate: Date.today.beginning_of_year, maxDate: (already_member_next_year?(@person) ? Date.today.end_of_year + 1.year : Date.today.end_of_year))
 
     .form-group.mb-2
       = f.label :discount, "#{t(".membership")}:", class: "mb-1"
@@ -35,7 +35,7 @@
             = radio_button_tag "new_entry", false, true, id: "new_entry_no", class: "ms-2 form-check-input"
             = label_tag "new_entry_no", t("global.no"), class: "ms-1 form-check-label"
 
-      - currently_paying_zusatzsektionen.each do |section|
+      - currently_paying_zusatzsektionen(@member).each do |section|
         .form-check
           = radio_button_tag "section_id", section.id, false, class: "form-check-input"
           = label_tag "section_#{section .id}", "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", class: "form-check-label"

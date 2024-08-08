@@ -6,12 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-
   before_action :validate_params, only: [:create]
 
   def create
     authorize!(:update, person)
-  
+
     generate_invoice
     redirect_to external_invoices_group_person_path(group, person)
   end
@@ -20,22 +19,25 @@ class People::MembershipInvoicesController < ApplicationController
     authorize!(:update, person)
 
     @group = group
+    @date = date
+    @person = person
     @context = context
+    @member = member
   end
 
   private
 
   def generate_invoice
     handle_exceptions do
-     ExternalInvoice::SacMembership.create!(
-      state: :draft,
-      year: Date.parse(params[:reference_date]).year,
-      issued_at: params[:invoice_date],
-      sent_at: params[:send_date],
-      person: person,
-      link: Group.find(params[:section_id]),
-     )
-     set_flash(:success)
+      ExternalInvoice::SacMembership.create!(
+        state: :draft,
+        year: Date.parse(params[:reference_date]).year,
+        issued_at: params[:invoice_date],
+        sent_at: params[:send_date],
+        person: person,
+        link: Group.find(params[:section_id])
+      )
+      set_flash(:success)
     end
   end
 
@@ -45,27 +47,27 @@ class People::MembershipInvoicesController < ApplicationController
 
     # is person already a member for next year?
     delete_on_date = person.sac_membership.stammsektion_role.delete_on
-    
+
     errors = date_fields.zip(date_field_names).map do |key, field_name|
       date = params[key]
 
-      if key == :send_date && delete_on_date.year > Date.today.year
-        valid_date_range = Date.today.year..Date.today.year
+      valid_date_range = if key == :send_date && delete_on_date.year > Time.zone.today.year
+        Time.zone.today.year..Time.zone.today.year
       else
-        valid_date_range = Date.today.year..Date.today.year + 1
+        Time.zone.today.year..Time.zone.today.year + 1
       end
 
       if date.blank?
-        "#{field_name} #{t('.new.presence')}"        
-      elsif !(Date.parse(date) rescue nil)&.then { |d| (valid_date_range).cover?(d.year) }
-        "#{field_name} #{t('.new.invalid_date')}"
+        "#{field_name} #{t(".new.presence")}"
+      elsif invalid_date?(date, valid_date_range)
+        "#{field_name} #{t(".new.invalid_date")}"
       end
     end
-  
+
     errors << t(".new.discount_invalid") unless [0, 50, 100].include?(params[:discount].to_i)
-  
+
     if errors.compact.any?
-      set_flash(:alert, message: errors.compact.join(', '))
+      set_flash(:alert, message: errors.compact.join(", "))
       redirect_to new_group_person_membership_invoice_path(group, person)
     end
   end
@@ -84,6 +86,17 @@ class People::MembershipInvoicesController < ApplicationController
       options[:extra] = {response: e.response.body.force_encoding("UTF-8")}
     end
     Raven.capture_exception(e, options)
+  end
+
+  def invalid_date?(date, valid_date_range)
+    parsed_date = parse_date(date)
+    parsed_date.nil? || !valid_date_range.cover?(parsed_date.year)
+  end
+
+  def parse_date(date)
+    Date.parse(date)
+  rescue ArgumentError, TypeError
+    nil
   end
 
   def member
