@@ -1141,6 +1141,9 @@ de:
         entry_fee: "Eintrittsgebühr"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
         discount: "Rabatt"
+        invalid_date: "kann nicht an diesem datum liegen"
+        presence: "muss vorhanden sein"
+        discount_invalid: "Der Rabatt muss entweder 0, 50 oder 100 sein"
 
     terminate_sac_memberships:
       create:

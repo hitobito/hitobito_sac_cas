@@ -6,34 +6,24 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
+
+  before_action :validate_params, only: [:create]
+
   def create
     authorize!(:update, person)
-
-    errors = validate_params(params[:reference_date], params[:invoice_date], params[:send_date])
-
-    if errors.any?
-      set_flash(:alert, message: "#{errors.join(', ')}")
-      redirect_to new_group_person_membership_invoice_path(group, person)
-    else
-      generate_invoice
-      redirect_to external_invoices_group_person_path(group, person)
-    end
+  
+    generate_invoice
+    redirect_to external_invoices_group_person_path(group, person)
   end
 
   def new
-    authorize!(:update, member)
+    authorize!(:update, person)
 
     @group = group
+    @context = context
   end
 
   private
-
-  def validate_params(reference_date, invoice_date, send_date)
-    [reference_date, invoice_date, send_date]
-      .zip(['Stichtag', 'Rechnungsdatum', 'Versanddatum'])
-      .map { |date, field| "#{field} muss vorhanden sein" if date.blank? }
-      .compact
-  end
 
   def generate_invoice
     handle_exceptions do
@@ -46,6 +36,37 @@ class People::MembershipInvoicesController < ApplicationController
       link: Group.find(params[:section_id]),
      )
      set_flash(:success)
+    end
+  end
+
+  def validate_params
+    date_fields = %i[reference_date invoice_date send_date]
+    date_field_names = [t(".new.reference_date"), t(".new.invoice_date"), t(".new.send_date")]
+
+    # is person already a member for next year?
+    delete_on_date = person.sac_membership.stammsektion_role.delete_on
+    
+    errors = date_fields.zip(date_field_names).map do |key, field_name|
+      date = params[key]
+
+      if key == :send_date && delete_on_date.year > Date.today.year
+        valid_date_range = Date.today.year..Date.today.year
+      else
+        valid_date_range = Date.today.year..Date.today.year + 1
+      end
+
+      if date.blank?
+        "#{field_name} #{t('.new.presence')}"        
+      elsif !(Date.parse(date) rescue nil)&.then { |d| (valid_date_range).cover?(d.year) }
+        "#{field_name} #{t('.new.invalid_date')}"
+      end
+    end
+  
+    errors << t(".new.discount_invalid") unless [0, 50, 100].include?(params[:discount].to_i)
+  
+    if errors.compact.any?
+      set_flash(:alert, message: errors.compact.join(', '))
+      redirect_to new_group_person_membership_invoice_path(group, person)
     end
   end
 
