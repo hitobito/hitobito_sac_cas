@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Sheet
-  class Person < Base
+  module People
     class ExternalInvoice < Base
       self.parent_sheet = Sheet::Person
     end

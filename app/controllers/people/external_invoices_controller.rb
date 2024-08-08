@@ -5,7 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Person::ExternalInvoicesController < ListController
+class People::ExternalInvoicesController < ListController
+  def cancel
+    authorize!(:cancel_external_invoice, invoice)
+    invoice.state = "cancelled"
+    invoice.save!
+    People::CancelExternalInvoiceJob.new(invoice).enqueue!
+    flash[:notice] = t(".flash", invoice: invoice.to_s, abacus_sales_order_key: invoice.abacus_sales_order_key)
+    redirect_to external_invoices_group_person_path(group, person)
+  end
+
   private
 
   def list_entries
@@ -22,6 +31,10 @@ class Person::ExternalInvoicesController < ListController
 
   def group
     @group ||= Group.find(params[:group_id])
+  end
+
+  def invoice
+    @invoice ||= ExternalInvoice.find(params[:invoice_id])
   end
 
   def authorize_class
