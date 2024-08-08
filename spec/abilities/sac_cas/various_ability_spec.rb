@@ -12,6 +12,15 @@ describe VariousAbility do
 
   let(:ability) { Ability.new(role.person.reload) }
 
+  context "as andere" do
+    let(:role) { Fabricate(Group::Geschaeftsstelle::Andere.name.to_sym, group: groups(:geschaeftsstelle)) }
+
+    it "may not view HitobitoLogEntry records" do
+      is_expected.not_to be_able_to(:index, HitobitoLogEntry)
+      is_expected.not_to be_able_to(:show, hitobito_log_entries(:info_mail))
+    end
+  end
+
   context "as mitarbeiter geschäftsstelle" do
     let(:role) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle)) }
 
