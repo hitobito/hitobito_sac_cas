@@ -361,7 +361,7 @@ describe Event::Course do
 
       context "with course leaders" do
         before { course.participations.first.roles.create!(type: Event::Role::Leader) }
-        
+
         it "sends an email to the course admin and leader" do
           expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
           expect do
@@ -381,7 +381,7 @@ describe Event::Course do
         end
       end
 
-      context "without course leaders" do        
+      context "without course leaders" do
         it "doesnt send an email" do
           expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
           expect do
