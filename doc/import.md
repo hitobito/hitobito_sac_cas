@@ -82,7 +82,7 @@ Import Source File: **NAV3**
 
 `rake sac_imports:6_membership_years_report`
 
-- Import Source File: **NAV2**
+- Import Source File: **NAV1**
 - CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/6_membership_years_report_2024-06-01-12:00.csv`
 
 ## 7: sac_imports:7_wso2_password_hashes

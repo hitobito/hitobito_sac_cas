@@ -17,6 +17,11 @@ class SacImports::CsvReport
     csv_append(row)
   end
 
+  def finalize(output: $stdout)
+    output.puts "\n\n\nThank you for flying with SAC Imports."
+    output.puts "Report written to #{csv_file_path}"
+  end
+
   private
 
   def log_dir

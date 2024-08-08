@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class SacImports::CsvSourceFile
+  NIL_VALUES = ["", "NULL", "null", "Null"].freeze
   SOURCE_HEADERS =
-    {NAV1: {},
+    {NAV1: {
+       navision_id: "No_",
+       navision_name: "Name",
+       navision_membership_years: "Vereinsmitgliederjahre"
+     },
      NAV2: {
        navision_id: "Mitgliedernummer",
        household_key: "Familien-Nr.",
        group_navision_id: "Sektion",
-       person_name: "Name",
+       navision_name: "Name",
        navision_membership_years: "Vereinsmitgliederjahre"
      },
      NAV3: {},
@@ -35,7 +40,10 @@ class SacImports::CsvSourceFile
     row = row.to_h
     hash = {}
     headers.keys.each do |header_key|
-      hash[header_key] = row[headers[header_key]]
+      value = row[headers[header_key]]
+      value = nil if NIL_VALUES.include?(value)
+
+      hash[header_key] = value
     end
     hash
   end
