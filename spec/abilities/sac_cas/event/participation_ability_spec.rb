@@ -61,6 +61,35 @@ describe Event::ParticipationAbility do
         expect(subject).not_to be_able_to(:destroy, participation)
       end
     end
+
+    describe "edit_actual_days" do
+      context "with participations_full event role" do
+        let(:own_participation) { build(:bluemlisalp_funktionaere, event: top_course, person: role.person) }
+
+        before do
+          Event::Role::Leader.create!(participation: own_participation)
+        end
+
+        it "may edit_actual_days others" do
+          expect(subject).to be_able_to(:edit_actual_days, participation)
+        end
+
+        it "may edit_actual_days own" do
+          expect(subject).to be_able_to(:edit_actual_days, own_participation)
+        end
+      end
+
+      context "without participations_full event role" do
+        it "may not edit_actual_days others" do
+          expect(subject).not_to be_able_to(:edit_actual_days, participation)
+        end
+
+        it "may not edit_actual_days own" do
+          participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
+          expect(subject).not_to be_able_to(:edit_actual_days, participation)
+        end
+      end
+    end
   end
 
   context "layer_and_below_full" do

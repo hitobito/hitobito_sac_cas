@@ -1,0 +1,23 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Aformero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= form.labeled(:others, '&nbsp;'.html_safe) do
+  = form.label(:newsletter, class: 'd-block mt-2') do
+    = form.check_box :newsletter
+    = t('.newsletter_caption')
+
+  - if form.object.requires_adult_consent?
+    = form.label(:adult_consent, class: 'd-block mt-2') do
+      = form.check_box :adult_consent
+      = t('.adult_consent_caption')
+
+  - %w(statutes contribution_regulations data_protection).each do |key|
+    - if form.object.attributes.key?(key)
+      = render 'groups/self_registration/agreement_link', f: form, key: key,
+          link: link_to(*form.object.link_translations(key), target: :_blank)
+
+  - if local_assigns[:sektion_statuten]
+    = render 'groups/self_registration/agreement_link', f: form, key: :sektion_statuten,
+        link: link_to(*form.object.sektion_statuten_link_args, target: :_blank)

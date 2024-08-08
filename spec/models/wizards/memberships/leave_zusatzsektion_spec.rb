@@ -34,9 +34,9 @@ describe Wizards::Memberships::LeaveZusatzsektion do
     expect(wizard.step_at(2)).to be_nil
   end
 
-  context "If termination is by section only" do
+  context "if termination is by section only" do
     before do
-      allow(wizard.role.layer_group).to receive(:mitglied_termination_by_section_only).and_return(true)
+      role.layer_group.update(mitglied_termination_by_section_only: true)
     end
 
     it "only has TerminationNoSelfService step" do

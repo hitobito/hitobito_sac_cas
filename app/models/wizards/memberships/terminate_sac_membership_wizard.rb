@@ -18,9 +18,9 @@ module Wizards::Memberships
     attr_reader :person
 
     def initialize(current_step: 0, person: nil, backoffice: nil, **params)
-      super(current_step: current_step, **params)
       @person = person
       @backoffice = backoffice
+      super(current_step: current_step, **params)
     end
 
     def valid?
@@ -73,7 +73,7 @@ module Wizards::Memberships
     end
 
     def mitglied_termination_by_section_only?
-      role.layer_group.mitglied_termination_by_section_only
+      role&.layer_group&.mitglied_termination_by_section_only
     end
 
     def family_membership?

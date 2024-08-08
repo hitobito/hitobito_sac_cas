@@ -16,8 +16,9 @@ describe Export::Tabular::People::SacMitgliedRow do
   # Fixture roles are valid during 2015, so setup current time accordingly
   before { travel_to "2015-07-01" }
 
-  it "#adresszusatz returns nil for now" do
-    expect(row.adresszusatz).to be_nil
+  it "#adresszusatz returns address_care_of" do
+    person.update!(address_care_of: "care for me")
+    expect(row.adresszusatz).to eq "care for me"
   end
 
   it "#anzahl_die_alpen returns 0" do
@@ -274,8 +275,9 @@ describe Export::Tabular::People::SacMitgliedRow do
     expect(row.phone_number_mobile).to eq mobile.number
   end
 
-  it "#postfach returns nil for now" do
-    expect(row.postfach).to be_nil
+  it "#postfach returns postbox for now" do
+    person.update!(postbox: "postbox 1234")
+    expect(row.postfach).to eq "postbox 1234"
   end
 
   describe "#s_info_1-3" do
@@ -294,8 +296,8 @@ describe Export::Tabular::People::SacMitgliedRow do
     end
   end
 
-  it "#saldo returns nil for now" do
-    expect(row.saldo).to be_nil
+  it "#saldo returns '0'" do
+    expect(row.saldo).to eq "0"
   end
 
   it "#empty returns nil" do

@@ -12,7 +12,7 @@
 = render 'contactable/address_fields', f: f
 - phone_number = entry.phone_numbers.first || PhoneNumber.new(label: 'Mobile', public: true)
 = f.fields_for(:phone_numbers, phone_number) do |ff|
-  = ff.labeled(:number, SelfRegistration::MainPerson::Base.human_attribute_name(:number)) do
+  = ff.labeled(:number, Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number)) do
     = ff.input_field(:number)
     = ff.hidden_field(:public)
     = ff.hidden_field(:translated_label)

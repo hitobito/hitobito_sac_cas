@@ -14,7 +14,7 @@ module SacCas::PersonAbility
       class_side(:create_households).if_backoffice
       permission(:read_all_people).may(:read_all_people, :show).everybody
       permission(:layer_and_below_full)
-        .may(:index_external_invoices, :create_membership_invoice)
+        .may(:index_external_invoices, :create_membership_invoice, :cancel_external_invoice)
         .if_backoffice
       permission(:any).may(:index_invoices).none
       permission(:any)

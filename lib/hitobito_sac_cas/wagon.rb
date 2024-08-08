@@ -28,6 +28,7 @@ module HitobitoSacCas
         Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Event::CloseApplicationsJob,
+        Event::LeaderReminderJob,
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen]
@@ -41,6 +42,7 @@ module HitobitoSacCas
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
+      ApplicationMailer.prepend SacCas::ApplicationMailer
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
@@ -53,16 +55,13 @@ module HitobitoSacCas
       Person::Household.prepend SacCas::Person::Household
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
-      SelfRegistration.prepend SacCas::SelfRegistration
-      SelfRegistration::MainPerson.prepend SacCas::SelfRegistration::MainPerson
       Roles::Termination.prepend SacCas::Roles::Termination
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
+      Wizards::Steps::NewUserForm.support_company = false
 
-      StepsComponent.prepend SacCas::StepsComponent
-      StepsComponent::ContentComponent.prepend SacCas::StepsComponent::ContentComponent
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
       admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
@@ -129,6 +128,7 @@ module HitobitoSacCas
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Person.prepend SacCas::Sheet::Person
+      StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
       admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]

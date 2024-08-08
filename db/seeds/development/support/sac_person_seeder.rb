@@ -133,7 +133,7 @@ class SacPersonSeeder < PersonSeeder
       person:,
       group: mitglieder_groups.sample,
       created_at: membership_from(person),
-      delete_on: Date.today.end_of_year
+      delete_on: Time.zone.today.end_of_year
     )
   end
 
@@ -141,7 +141,7 @@ class SacPersonSeeder < PersonSeeder
     role_class.find_each do |r|
       yield(r) if block_given?
       r.update!(created_at: membership_from(r.person),
-        delete_on: Date.today.end_of_year)
+        delete_on: Time.zone.today.end_of_year)
     end
   end
 

@@ -8,18 +8,6 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
-    wizards/steps/membership_terminated_info_title: Mitgliedschaft gekündet
-    wizards/steps/choose_membership_title: Familienmitgliedschaft
-    wizards/steps/choose_sektion_title: Sektion wählen
-    wizards/steps/join_zusatzsektion/summary_title: Bestätigung
-    wizards/steps/termination_no_self_service_title: Mitgliederdienst kontaktieren
-    wizards/steps/termination_choose_date_title: Austrittsdatum
-    wizards/steps/leave_zusatzsektion/ask_family_main_person_title: Familienmitgliedschaft
-    wizards/steps/leave_zusatzsektion/summary_title: Bestätigung
-    wizards/steps/termination/summary_title: Bestätigung
-    wizards/steps/switch_stammsektion/summary_title: Bestätigung
-    wizards/steps/switch_stammsektion/choose_date_title: Datumwahl
-    wizards/steps/switch_stammsektion/choose_sektion_title: Sektion wählen
 
   settings:
     email:
@@ -28,12 +16,40 @@ de:
   errors:
     messages:
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
+      too_young: muss %{minimum_years} Jahre oder älter sein
+      assert_old_enough_with_age: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
       conflicting_family_membership: >-
         %{name} hat bereits eine Familienmitgliedschaft und kann daher
         nicht einem Familienhaushalt hinzugefügt werden.
 
   activemodel:
     attributes:
+      wizards/steps/signup/main_email_field:
+        email: E-Mail
+      wizards/steps/signup/person_fields:
+        gender: Anrede
+        phone_number: Telefon
+        address: Strasse und Nr.
+        adult_consent: Einverständniserklärung der Erziehungsberechtigten
+        contribution_regulations: Beitragsreglement
+        data_protection: Datenschutzerklärung
+        statutes: Statuten
+      wizards/steps/signup/abo_magazin/issues_from_field:
+        issues_from: Ab Ausgabe
+        data_protection: Datenschutzerklärung
+        statutes: Statuten
+      wizards/steps/signup/sektion/family_fields/member:
+        gender: Anrede
+        email: E-Mail (optional)
+        phone_number: Telefon (optional)
+      wizards/steps/signup/sektion/various_fields:
+        register_on: Eintrittsdatum per
+        self_registration_reason_id: Eintrittsgrund
+        adult_consent: Einverständniserklärung der Erziehungsberechtigten
+        contribution_regulations: Beitragsreglement
+        data_protection: Datenschutzerklärung
+        sektion_statuten: Sektionsstatuten
+        statutes: Statuten
       wizards/steps/choose_membership:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
         family: für die ganze Familie
@@ -59,19 +75,6 @@ de:
         register_as_options:
           extra: Zusatzsektion
           replace: Neue Stammsektion (ersetzt deine Bisherige)
-
-      self_registration/main_person/base:
-        gender: Anrede
-        number: Telefon
-        email: E-Mail
-        address: Strasse und Nr.
-      self_registration/abo_magazin:
-        issues_from: Ab Ausgabe
-      self_registration/sektion/housemate:
-        email: E-Mail (optional)
-        number: Telefon (optional)
-      self_registration/sektion/supplements:
-        adult_consent: Einverständniserklärung der Erziehungsberechtigten
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
@@ -133,6 +136,10 @@ de:
             telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
             mit uns auf
 
+        wizards/steps/signup/sektion/family_fields/member:
+          attributes:
+            email:
+              taken: ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person.
     models:
       people/neuanmeldungen/approve:
         one: Anmeldung übernehmen
@@ -272,6 +279,7 @@ de:
         cancel_statement: Begründung
         adult_consent: Altersbestätigung
         terms_and_conditions: AGB
+        actual_days: Effektive Tage
       external_training:
         person: Person
         event_kind: Kursart
@@ -343,6 +351,9 @@ de:
             neuanmeldung:
               one: Neuanmeldung
               other: Neuanmeldungen
+          permission:
+            description:
+              read_all_people: Lesen von allen Personen.
       qualification_kind:
         tourenchef_may_edit: Von Tourenchef bearbeitbar
       qualification:
@@ -433,6 +444,11 @@ de:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
+
+        event/participation:
+          attributes:
+            actual_days:
+              longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
@@ -904,6 +920,8 @@ de:
           überschrieben.
 
     participations:
+      answers_step:
+        total_duration_days_help: "Geplante Kursdauer: %{total_days}"
       edit:
         title: Zusatzdaten
       course_signup_aside:
@@ -1039,13 +1057,6 @@ de:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 
   person:
-    external_invoices:
-      list:
-        create_membership_invoice: Mitgliedschaftsrechnung erstellen
-        create_membership_invoice_confirmation: |
-          Dies generiert eine neue Mitgliedschaftsrechnung und sendet diese an Abacus. Diese Aktion kann bis zu einer Minute dauern.
-
-          Sind Sie sicher, dass sie fortfahren wollen?
     history:
       index_notice_sac_cas:
         sections_info_html: '
@@ -1091,6 +1102,19 @@ de:
       section_sac_membership: SAC Mitgliedschaft
       qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
       download_pdf: Mitgliederausweis herunterladen
+      
+    external_invoices:
+      table:
+        cancel_invoice: Stornieren
+        cancel_invoice_confirmation: "Wollen Sie diese Rechnung wirklich stornieren? Diese Aktion kann nicht rückgängig gemacht werden."
+      cancel: 
+        flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
+      list:
+        create_membership_invoice: Mitgliedschaftsrechnung erstellen
+        create_membership_invoice_confirmation: |
+          Dies generiert eine neue Mitgliedschaftsrechnung und sendet diese an Abacus. Diese Aktion kann bis zu einer Minute dauern.
+
+          Sind Sie sicher, dass sie fortfahren wollen?
 
   people/neuanmeldungen/approves:
     new:
@@ -1133,29 +1157,10 @@ de:
         price_with_vat: CHF %{amount} inkl. MwSt.
         switzerland: Schweiz
         international: Weltweit
-      adult_consent_field:
-        caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
-      conditions_sac_cas:
-        newsletter: Ich möchte einen Newsletter abonnieren
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
-      emailless_main_person:
-        newsletter: Ich möchte einen Newsletter abonnieren
-      fields:
-        notes: Bemerkungen
-        promo_code: Promocode
-      household:
-        membership_info_box: >
-          Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
-          max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
-          Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
-          mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
-        next_as_single_link: Weiter als Einzelmitglied
-        next_as_household_link: Weiter als Familienmitgliedschaft
-
-      supplements:
-        newsletter: Ich möchte einen Newsletter abonnieren
+      agreement_link:
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
         sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
@@ -1371,6 +1376,50 @@ de:
 
   wizards:
     steps:
+      choose_sektion_title: Sektion wählen
+      summary_title: Bestätigung
+      choose_membership_title: Familienmitgliedschaft
+      membership_terminated_info_title: Mitgliedschaft gekündet
+      termination_no_self_service_title: Mitgliederdienst kontaktieren
+      termination_choose_date_title: Austrittsdatum
+      ask_family_main_person_title: Familienmitgliedschaft
+      choose_date_title: Datumwahl
+
+      signup:
+        main_email_field_title: Haupt-E-Mail
+        person_fields_title: Personendaten
+        agreement_fields:
+          adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
+          newsletter_caption: Ich möchte einen Newsletter abonnieren
+        abo_magazin:
+          issues_from_field_title: Abo
+          issues_from_field:
+            issues_from_help: |
+              Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
+              Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
+              mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
+        sektion:
+          family_fields_title: Familienmitglieder
+          family_fields:
+            membership_info_box: >
+              Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
+              max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
+
+              Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
+              mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+          family_buttons:
+            next_as_single_link: Weiter als Einzelmitglied
+            next_as_household_link: Weiter als Familienmitgliedschaft
+
+          various_fields_title: Zusatzdaten
+
+
+        various_fields:
+          newsletter: Ich möchte einen Newsletter abonnieren
+          statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+          sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
+          contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+          data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
       choose_sektion:
         no_self_service_info_text: Wir bitten dich den gewünschten
           Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu
@@ -1400,20 +1449,17 @@ de:
             %{beitragskategorie} abgeschlossen und ist per sofort gültig.'
           next_button: Kostenpflichtig bestellen
       membership_terminated_info:
-        info: "Deine Mitgliedschaft ist gekündigt per %{date}.
-    Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
+        info: "Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
-        warning_termination_by_section_only: "Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist.
-Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
+        warning_termination_by_section_only: "Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:
         info_text: "Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}."
       leave_zusatzsektion:
         summary:
-          family_warning: "Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt.
-Davon betroffen sind: %{family_member_names}."
+          family_warning: "Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}."
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
           next_button: "Austritt beantragen"
       termination:

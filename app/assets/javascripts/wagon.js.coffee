@@ -2,11 +2,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
+
+-#  Handles conditional buttons when adding people to household during signup
 document.addEventListener 'click', (e) ->
-  if e.target.dataset['association'] != 'housemates'
+  if e.target.dataset['association'] not in ['housemates', 'members']
     return
 
-  mates = document.querySelectorAll '.household .fields:not([style="display: none;"])'
+  mates = document.querySelectorAll '.step-content.active .fields:not([style="display: none;"])'
   top_toolbar = document.querySelector '.btn-toolbar.top'
 
   toggle = (selector, active) ->

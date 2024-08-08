@@ -79,4 +79,8 @@ module SacCas::Event
       :hidden_contact_attrs
     ]
   end
+
+  def total_duration_days
+    dates.sum { _1.duration.days }
+  end
 end
