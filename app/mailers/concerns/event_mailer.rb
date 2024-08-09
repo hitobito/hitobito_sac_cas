@@ -19,6 +19,10 @@ module EventMailer
     l(@course.application_opening_at)
   end
 
+  def placeholder_application_closing_at
+    l(@course.application_closing_at)
+  end
+
   def placeholder_six_weeks_before_start
     l((@course.dates.order(:start_at).first.start_at - 6.weeks).to_date)
   end
