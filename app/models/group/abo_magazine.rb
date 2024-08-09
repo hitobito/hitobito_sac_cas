@@ -25,4 +25,5 @@ class Group::AboMagazine < ::Group
   end
 
   children Group::AboMagazin
+  roles Autor, Andere, Uebersetzer
 end
