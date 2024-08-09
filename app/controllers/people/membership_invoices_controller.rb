@@ -6,22 +6,69 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
+  before_action :validate_params, only: [:create]
+
   def create
     authorize!(:update, person)
 
     generate_invoice
-    redirect_to group_person_path(params[:group_id], person.id)
+    redirect_to external_invoices_group_person_path(group, person)
+  end
+
+  def new
+    authorize!(:update, person)
+
+    @group = group
+    @date = date
+    @person = person
+    @context = context
+    @member = member
   end
 
   private
 
   def generate_invoice
     handle_exceptions do
-      if invoicer.generate
-        set_flash(:success, abacus_key: invoicer.invoice.abacus_sales_order_key)
+      ExternalInvoice::SacMembership.create!(
+        state: :draft,
+        year: Date.parse(params[:reference_date]).year,
+        issued_at: params[:invoice_date],
+        sent_at: params[:send_date],
+        person: person,
+        link: Group.find(params[:section_id])
+      )
+      set_flash(:success)
+    end
+  end
+
+  def validate_params
+    date_fields = %i[reference_date invoice_date send_date]
+    date_field_names = [t(".new.reference_date"), t(".new.invoice_date"), t(".new.send_date")]
+
+    # is person already a member for next year?
+    delete_on_date = person.sac_membership.stammsektion_role.delete_on
+
+    errors = date_fields.zip(date_field_names).map do |key, field_name|
+      date = params[key]
+
+      valid_date_range = if key == :send_date && delete_on_date.year > Time.zone.today.year
+        Time.zone.today.year..Time.zone.today.year
       else
-        set_flash(:alert, message: invoicer.error_messages.join(", "))
+        Time.zone.today.year..Time.zone.today.year + 1
       end
+
+      if date.blank?
+        "#{field_name} #{t(".new.presence")}"
+      elsif invalid_date?(date, valid_date_range)
+        "#{field_name} #{t(".new.invalid_date")}"
+      end
+    end
+
+    errors << t(".new.discount_invalid") unless [0, 50, 100].include?(params[:discount].to_i)
+
+    if errors.compact.any?
+      set_flash(:alert, message: errors.compact.join(", "))
+      redirect_to new_group_person_membership_invoice_path(group, person)
     end
   end
 
@@ -41,12 +88,31 @@ class People::MembershipInvoicesController < ApplicationController
     Raven.capture_exception(e, options)
   end
 
-  def invoicer
-    @invoicer ||= Invoices::Abacus::MembershipInvoiceGenerator.new(person, date: date)
+  def invalid_date?(date, valid_date_range)
+    parsed_date = parse_date(date)
+    parsed_date.nil? || !valid_date_range.cover?(parsed_date.year)
+  end
+
+  def parse_date(date)
+    Date.parse(date)
+  rescue ArgumentError, TypeError
+    nil
+  end
+
+  def member
+    @member ||= Invoices::SacMemberships::Member.new(person, context)
   end
 
   def person
     @person ||= Person.with_membership_years("people.*", date).find(params[:person_id])
+  end
+
+  def group
+    @group ||= Group.find(params[:group_id])
+  end
+
+  def context
+    @context ||= Invoices::SacMemberships::Context.new(date)
   end
 
   def date
