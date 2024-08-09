@@ -160,7 +160,8 @@ module SacCas::Event::Course
 
     attribute :waiting_list, default: false
     before_save :adjust_state, if: :application_closing_at_changed?
-    after_update :send_email_to_course_admin, if: :state_changed_from_draft_to_published?
+    after_update :send_application_published_email, if: :state_changed_from_draft_to_published?
+    after_update :send_application_paused_email, if: :state_changed_to_application_paused?
   end
 
   def minimum_age
@@ -193,7 +194,15 @@ module SacCas::Event::Course
     saved_change_to_attribute(:state) == ["created", "application_open"]
   end
 
-  def send_email_to_course_admin
+  def send_application_published_email
     Event::PublishedJob.new(self).enqueue!
+  end
+
+  def state_changed_to_application_paused?
+    saved_change_to_attribute(:state)&.second == "application_paused"
+  end
+
+  def send_application_paused_email
+    Event::ApplicationPausedJob.new(self).enqueue! if groups.first.course_admin_email.present?
   end
 end

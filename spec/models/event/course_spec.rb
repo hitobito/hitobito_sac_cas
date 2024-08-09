@@ -381,4 +381,36 @@ describe Event::Course do
       end
     end
   end
+
+  describe "when state changes to application_paused" do
+    subject(:course) { Fabricate(:sac_open_course) }
+
+    context "with course admin" do
+      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+
+      it "sends an email to the course admin" do
+        expect { course.update!(state: :application_paused) }.to change(Delayed::Job, :count).by(1)
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.to).to include("admin@example.com")
+      end
+
+      it "doesnt send an email if the course has been deleted" do
+        expect { course.update!(state: :application_paused) }.to change(Delayed::Job, :count).by(1)
+        course.destroy!
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.not_to change(ActionMailer::Base.deliveries, :count)
+      end
+    end
+
+    context "without course admin" do
+      before { course.groups.first.update!(course_admin_email: nil) }
+
+      it "doesnt queue the job to send an email" do
+        expect { course.update!(state: :application_paused) }.not_to change(Delayed::Job, :count)
+      end
+    end
+  end
 end
