@@ -11,11 +11,38 @@ class Group::AboMagazin < ::Group
     self.permissions = []
     self.basic_permissions_only = true
     self.terminatable = true
+
+    class AbonnentBuchhand < Abonnent
+    end
+
+    class AbonnentCSS < Abonnent
+    end
+
+    class AbonnentFAT < Abonnent
+    end
+
+    class AbonnentLAV < Abonnent
+    end
+
+    class AbonnentGratis < Abonnent
+    end
   end
 
   class Neuanmeldung < ::Role
     self.permissions = []
     self.basic_permissions_only = true
+
+    class NeuanmeldungBuchhand < Abonnent
+    end
+
+    class NeuanmeldungCSS < Abonnent
+    end
+
+    class NeuanmeldungFAT < Abonnent
+    end
+
+    class NeuanmeldungLAV < Abonnent
+    end
   end
 
   class Autor < ::Role
