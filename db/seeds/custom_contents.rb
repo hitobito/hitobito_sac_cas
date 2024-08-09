@@ -12,6 +12,15 @@ CustomContent.seed_once(:key,
   {key: Event::ParticipationMailer::CONTENT_SUMMON,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
+  {key: Event::ApplicationConfirmationMailer::APPLIED,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+  {key: Event::ApplicationConfirmationMailer::UNCONFIRMED,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+  {key: Event::ApplicationConfirmationMailer::ASSIGNED,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
   {key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link"},
@@ -81,6 +90,33 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
      "Personne: {person-url}<br>" \
      "Lien de l'événement: {event-link}<br>" \
      "Code de réduction pour le livre: {book-discount-code}"},
+  {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::APPLIED).id,
+   locale: "de",
+   label: "Kurs: E-Mail Unbestätigte Warteliste",
+   subject: "Auf Warteliste gesetzt",
+   body: "Hallo {recipient-name},<br><br>" \
+     "Du wurdest für den Kurs {event-link} auf die unbestätigte Warteliste gesetzt. " \
+     "Anmeldeschluss ist der {application-closing-at}. " \
+     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+  {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::UNCONFIRMED).id,
+   locale: "de",
+   label: "Kurs: E-Mail Unbestätigte Kursanmeldung",
+   subject: "Unbestätigte Kursanmeldung",
+   body: "Hallo {recipient-name},<br><br>" \
+     "Du wurdest für den Kurs {event-link} auf die unbestätigte Kursanmeldung gesetzt. " \
+     "Anmeldeschluss ist der {application-closing-at}. " \
+     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+  {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::ASSIGNED).id,
+   locale: "de",
+   label: "Kurs: E-Mail Bestätigte Kursanmeldung",
+   subject: "Kursanmeldung bestätigt",
+   body: "Hallo {recipient-name},<br><br>" \
+     "Deine Anmeldung für den Kurs {event-link} wurde bestätigt. " \
+     "Anmeldeschluss ist der {application-closing-at}. " \
+     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: leader_reminder_next_week_id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",
