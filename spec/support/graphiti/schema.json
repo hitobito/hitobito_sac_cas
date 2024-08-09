@@ -1238,6 +1238,263 @@
       ]
     },
     {
+      "name": "ExternalInvoiceResource",
+      "type": "external_invoices",
+      "graphql_entrypoint": "externalInvoices",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "abacus_sales_order_key": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "issued_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "link_type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "year": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "link_id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "person_id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "sent_at": {
+          "type": "date",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "total": {
+          "type": "float",
+          "readable": true,
+          "writable": true,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        },
+        "abacus_sales_order_key": {
+        },
+        "issued_at": {
+        },
+        "link_type": {
+        },
+        "year": {
+        },
+        "created_at": {
+        },
+        "updated_at": {
+        },
+        "link_id": {
+        },
+        "person_id": {
+        },
+        "sent_at": {
+        },
+        "state": {
+        },
+        "total": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "abacus_sales_order_key": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "issued_at": {
+          "type": "date",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "link_type": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "year": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "created_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "updated_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "link_id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "person_id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "sent_at": {
+          "type": "date",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "total": {
+          "type": "float",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "GroupResource",
       "type": "groups",
       "graphql_entrypoint": "groups",
@@ -3065,6 +3322,19 @@
         },
         "show": {
           "resource": "EventResource"
+        }
+      }
+    },
+    "/api/external_invoices": {
+      "actions": {
+        "index": {
+          "resource": "ExternalInvoiceResource"
+        },
+        "show": {
+          "resource": "ExternalInvoiceResource"
+        },
+        "update": {
+          "resource": "ExternalInvoiceResource"
         }
       }
     },

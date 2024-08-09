@@ -84,5 +84,10 @@ Rails.application.routes.draw do
     resources :event_kind_categories, module: 'event', controller: 'kind_categories', only: [] do
       put :push_down, on: :member
     end
+
+    scope path: ApplicationResource.endpoint_namespace, module: :json_api,
+        constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+      resources :external_invoices, only: [:index, :show, :update]
+    end
   end
 end
