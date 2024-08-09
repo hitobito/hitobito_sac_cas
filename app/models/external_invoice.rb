@@ -52,6 +52,10 @@ class ExternalInvoice < ActiveRecord::Base
     abacus_sales_order_key.present? && state != "cancelled" && state != "error"
   end
 
+  def group
+    person.groups.first
+  end
+
   def title = id
 
   def to_s = "#{title} #{person}"
