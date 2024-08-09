@@ -295,6 +295,45 @@ describe Event::ParticipationsController do
         end
       end
     end
+
+    context "participation confirmation email" do
+      let(:participation) { Event::Participation.last }
+
+      before { post :create, params: {group_id: group.id, event_id: event.id} }
+
+      it "sends an email" do
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(ActionMailer::Base.deliveries.last.subject).to eq("Unbestätigte Kursanmeldung")
+      end
+
+      it "doesnt send an email if the participation has been deleted before the job runs" do
+        participation.destroy!
+        expect do
+          Delayed::Job.last.payload_object.perform
+        end.not_to change(ActionMailer::Base.deliveries, :count)
+      end
+
+      context "with answers" do
+        before do
+          event.questions.create!([
+            {admin: true, question: "non example"},
+            {admin: true, question: "nil example"},
+            {admin: true, question: "yes example"}
+          ])
+          participation.answers.first.update! answer: "non"
+          participation.answers.last.update! answer: "yes"
+        end
+
+        it "shows missing information" do
+          Delayed::Job.last.payload_object.perform
+          mail = ActionMailer::Base.deliveries.last.body.raw_source
+          expect(mail).to include("non example", "nil example")
+          expect(mail).not_to include("yes example")
+        end
+      end
+    end
   end
 
   context "state changes" do
