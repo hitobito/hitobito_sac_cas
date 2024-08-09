@@ -71,6 +71,7 @@ describe "signup/abo_touren_portal_wizard" do
     check "Ich möchte einen Newsletter abonnieren"
     expect do
       click_on "Registrieren"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
@@ -91,6 +92,7 @@ describe "signup/abo_touren_portal_wizard" do
     uncheck "Ich möchte einen Newsletter abonnieren"
     expect do
       click_on "Registrieren"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
 
     sign_in(people(:admin))
