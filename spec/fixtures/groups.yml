@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 47
+  rgt: 48
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
