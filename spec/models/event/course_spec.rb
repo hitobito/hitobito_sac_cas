@@ -354,22 +354,57 @@ describe Event::Course do
     before { course.groups.first.update!(course_admin_email: "admin@example.com") }
 
     context "from created" do
-      before { course.update!(state: "created") }
-
-      it "sends an email to the course admin" do
-        expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+      before do
+        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+        course.update!(state: "created")
       end
 
-      it "doesnt send an email if the course has been deleted" do
-        expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
-        course.destroy!
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.not_to change(ActionMailer::Base.deliveries, :count)
+      context "with course leaders" do
+        before do
+          course.participations.first.roles.create!(type: Event::Role::Leader)
+          course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
+        end
+
+        it "sends an email to the course admin and leader" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect do
+            Delayed::Job.last.payload_object.perform
+          end.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
+          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+        end
+
+        it "doesnt send an email if the course has been deleted" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          course.destroy!
+          expect do
+            Delayed::Job.last.payload_object.perform
+          end.not_to change(ActionMailer::Base.deliveries, :count)
+        end
+      end
+
+      context "with course assistant leader" do
+        before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
+
+        it "sends an email to the course admin and assistant leader" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect do
+            Delayed::Job.last.payload_object.perform
+          end.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
+          expect(ActionMailer::Base.deliveries.last.to).not_to include(people(:mitglied).email)
+          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+        end
+      end
+
+      context "without course leaders" do
+        it "doesnt send an email" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect do
+            Delayed::Job.last.payload_object.perform
+          end.not_to change(ActionMailer::Base.deliveries, :count)
+        end
       end
     end
 
