@@ -128,7 +128,7 @@ describe Memberships::TerminateSacMembership do
       end
 
       describe "data_retention" do
-        let(:abonnenten) { groups(:abonnenten) }
+        let(:abonnenten) { groups(:abos) }
         let!(:basic) do
           Fabricate(:group, type: Group::AboBasicLogin.sti_name, parent: abonnenten)
         end
