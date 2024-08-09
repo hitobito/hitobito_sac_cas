@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe "signup/abo_touren_portal_wizard" do
-  let(:group) { Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten)) }
+  let(:group) { Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos)) }
 
   before do
     group.update!(self_registration_role_type: group.role_types.first)

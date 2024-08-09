@@ -116,7 +116,7 @@ describe OidcClaimSetup do
     end
 
     it "includes SAC_tourenportal_subscriber key when matching role exists" do
-      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
       create_role(group, "Autor")
       expect(user_groups).to include "SAC_tourenportal_subscriber"
     end
@@ -142,31 +142,37 @@ describe OidcClaimSetup do
     end
 
     it "includes tourenportal_author key when matching role exists" do
-      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
       create_role(group, "Autor")
       expect(user_groups).to include "tourenportal_author"
     end
 
     it "includes tourenportal_community key when matching role exists" do
-      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
       create_role(group, "Community")
       expect(user_groups).to include "tourenportal_community"
     end
 
     it "includes tourenportal_community key when matching role exists" do
-      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
       create_role(group, "Community")
       expect(user_groups).to include "tourenportal_community"
     end
 
     it "includes tourenportal_administrator key when matching role exists" do
-      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
       create_role(group, "Admin")
       expect(user_groups).to include "tourenportal_administrator"
     end
 
+    it "includes tourenportal_gratisabonnent key when matching role exists" do
+      group = Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
+      create_role(group, "Gratisabonnent")
+      expect(user_groups).to include "tourenportal_gratisabonnent"
+    end
+
     it "includes magazin_subscriber key when matching role exists" do
-      group = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abonnenten))
+      group = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine))
       create_role(group, "Andere")
       expect(user_groups).to include "magazin_subscriber"
     end

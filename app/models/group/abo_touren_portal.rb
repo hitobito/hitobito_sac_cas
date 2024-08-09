@@ -40,5 +40,10 @@ class Group::AboTourenPortal < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Abonnent, Neuanmeldung, Admin, Autor, Community, Andere
+  class Gratisabonnent < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  roles Abonnent, Neuanmeldung, Admin, Autor, Community, Andere, Gratisabonnent
 end

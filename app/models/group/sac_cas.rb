@@ -15,7 +15,7 @@ class Group::SacCas < Group
     Group::Kommission,
     Group::Sektion,
     Group::ExterneKontakte,
-    Group::Abonnenten,
+    Group::Abos,
     Group::Ehrenmitglieder
 
   mounted_attr :course_admin_email, :string
