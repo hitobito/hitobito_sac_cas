@@ -5,15 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::AboMagazin < ::Group
-  ### ROLES
-  class Abonnent < ::Role
-    self.permissions = []
-    self.basic_permissions_only = true
-    self.terminatable = true
-  end
+class Group::AboMagazine < ::Group
+  self.static_name = true
 
-  class Neuanmeldung < ::Role
+  ### ROLES
+  class Autor < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -23,5 +19,10 @@ class Group::AboMagazin < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Abonnent, Neuanmeldung, Autor, Andere
+  class Uebersetzer < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  children Group::AboMagazin
 end
