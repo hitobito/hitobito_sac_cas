@@ -95,12 +95,14 @@ module HitobitoSacCas
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       RoleAbility.include SacCas::VariousAbility
+      TokenAbility.prepend SacCas::TokenAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
       RoleDecorator.prepend SacCas::RoleDecorator
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
+      ServiceTokenDecorator.kinds += [:external_invoices]
 
       ## Domain
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
@@ -161,6 +163,7 @@ module HitobitoSacCas
       SubscriptionsController.prepend SacCas::SubscriptionsController
 
       People::Membership::VerifyController.include Localizable
+      ServiceTokensController.permitted_attrs += [:external_invoices]
 
       ## Jobs
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
