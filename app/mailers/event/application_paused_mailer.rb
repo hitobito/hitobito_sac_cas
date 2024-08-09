@@ -5,17 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Event::LeaderReminderMailer < ApplicationMailer
+class Event::ApplicationPausedMailer < ApplicationMailer
   include EventMailer
 
-  REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
-  REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
+  NOTICE = "event_application_paused_notice"
 
-  def reminder(course, content_key)
+  def notice(course)
     @course = course
-    headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
 
-    compose(course.contact, content_key, headers, locales)
+    compose(course.groups.first.course_admin_email, NOTICE, {}, locales)
   end
 end
