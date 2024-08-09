@@ -23,5 +23,5 @@ class Group::AboMagazin < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Abonnent, Neuanmeldung, Autor, Andere
+  roles Abonnent, Neuanmeldung, Andere
 end
