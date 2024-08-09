@@ -528,6 +528,10 @@ de:
         one: SAC Abos (ohne Newesletter)
         other: SAC Abos (ohne Newesletter)
 
+      group/abo_magazin:
+        one: AboMagazin
+        other: AboMagazin
+
       group/abo_magazine:
         one: SAC-Magazin
         other: SAC-Magazin
