@@ -535,6 +535,11 @@ it:
         many: ''
         other: ''
 
+      group/abo_magazin:
+        one: ''
+        many: ''
+        other: ''
+
       group/abo_magazine:
         one: ''
         many: ''
