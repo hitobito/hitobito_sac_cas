@@ -25,16 +25,16 @@ geschaeftsstelle:
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
-abonnenten:
+abos:
   parent: root
   lft: 4
   rgt: 7
-  type: Group::Abonnenten
+  type: Group::Abos
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
 
 abo_die_alpen:
-  parent: abonnenten
+  parent: abos
   lft: 5
   rgt: 6
   name: Die Alpen DE
