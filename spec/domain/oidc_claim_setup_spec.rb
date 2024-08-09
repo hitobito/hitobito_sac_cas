@@ -172,7 +172,7 @@ describe OidcClaimSetup do
     end
 
     it "includes magazin_subscriber key when matching role exists" do
-      group = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abos))
+      group = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine))
       create_role(group, "Andere")
       expect(user_groups).to include "magazin_subscriber"
     end
