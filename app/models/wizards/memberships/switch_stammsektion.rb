@@ -50,11 +50,7 @@ module Wizards::Memberships
     private
 
     def send_confirmation_mail
-      Memberships::SwitchStammsektionMailer.confirmation(
-        person,
-        choose_sektion.group,
-        I18n.t("activemodel.attributes.wizards/steps/switch_stammsektion.now")
-      ).deliver_later
+      Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group).deliver_later
     end
 
     def switch_operation_valid?
