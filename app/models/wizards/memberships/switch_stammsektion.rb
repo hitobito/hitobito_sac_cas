@@ -11,7 +11,6 @@ module Wizards::Memberships
       Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::AskFamilyMainPerson,
       Wizards::Steps::SwitchStammsektion::ChooseSektion,
-      Wizards::Steps::SwitchStammsektion::ChooseDate,
       Wizards::Steps::SwitchStammsektion::Summary
     ]
 
@@ -40,7 +39,7 @@ module Wizards::Memberships
         Memberships::SwitchStammsektion.new(
           choose_sektion.group,
           person,
-          choose_date.switch_date
+          Time.zone.today
         )
     end
 
@@ -54,7 +53,7 @@ module Wizards::Memberships
       Memberships::SwitchStammsektionMailer.confirmation(
         person,
         choose_sektion.group,
-        choose_date.switch_on_text
+        I18n.t("activemodel.attributes.wizards/steps/switch_stammsektion.now")
       ).deliver_later
     end
 

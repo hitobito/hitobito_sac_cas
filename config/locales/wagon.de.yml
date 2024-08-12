@@ -54,10 +54,8 @@ de:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
         family: für die ganze Familie
         myself: für mich selbst
-      wizards/steps/switch_stammsektion/choose_date:
-        switch_on: Startdatum
+      wizards/steps/switch_stammsektion:
         now: sofort
-        next_year: auf 1. Januar
       memberships/join_base:
         join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
@@ -1231,8 +1229,8 @@ de:
     switch_stammsektions:
       create:
         success:
-          one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde per <i>%{switch_date}</i> vorgenommen."
-          other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurde per <i>%{switch_date}</i> vorgenommen."
+          one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde vorgenommen."
+          other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurden vorgenommen."
 
   roles:
     beitragskategorie:
