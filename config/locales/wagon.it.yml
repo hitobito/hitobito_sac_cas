@@ -1062,10 +1062,6 @@ it:
     export_enqueued: ""
 
   person:
-    external_invoices:
-      list:
-        create_membership_invoice: ""
-        create_membership_invoice_confirmation: |
     history:
       index_notice_sac_cas:
         sections_info_html: ''
@@ -1109,7 +1105,16 @@ it:
       section_sac_membership: ""
       qr_code_hint: ""
       download_pdf: ""
-
+      
+    external_invoices:
+      table:
+        cancel_invoice: ""
+        cancel_invoice_confirmation: ""
+      cancel: 
+        flash: ""
+      list:
+        create_membership_invoice: ""
+        create_membership_invoice_confirmation: |
   people/neuanmeldungen/approves:
     new:
       text:
