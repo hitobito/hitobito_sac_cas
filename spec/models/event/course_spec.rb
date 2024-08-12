@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::Course do
+  include ActiveJob::TestHelper
+
   describe "::validations" do
     subject(:course) do
       course = Fabricate.build(:sac_course)
@@ -320,7 +322,7 @@ describe Event::Course do
   describe "when state changes to ready" do
     let(:course) { events(:assignment_closed) }
 
-    # set up participants who have been rejected
+    # set up participants who have been assigned
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
     let(:assigned_participation) { Fabricate(:event_participation, event: course, application: application, state: "assigned") }
 
@@ -329,9 +331,14 @@ describe Event::Course do
         course.dates.build(start_at: Time.zone.local(2025, 5, 11))
         assigned_participation
 
+        expected_participation = assigned_participation.dup
+        expected_participation.state = "assigned"
         expect do
           course.update!(state: :ready)
-        end.to change { course.participations.all.first.state }.to eq "summoned"
+          assigned_participation.reload
+        end.to change { course.participations.all.first.state }.to(eq("summoned"))
+          .and have_enqueued_job.on_queue("mailers").with("Event::ParticipationMailer",
+            "summon", "deliver_now", {args: [assigned_participation]})
       end
     end
 
