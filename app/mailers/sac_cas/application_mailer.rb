@@ -35,7 +35,9 @@ module SacCas::ApplicationMailer
       end
     end
 
-    mail(headers) { |format| format.html { render plain: join_contents(contents) } }
+    I18n.with_locale(locales.first) do
+      mail(headers) { |format| format.html { render plain: join_contents(contents) } }
+    end
   end
 
   def content_subject_and_body(content, values, locale, locales)
