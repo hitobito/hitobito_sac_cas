@@ -43,6 +43,7 @@ class ExternalInvoice::SacMembership < ExternalInvoice
 
   def handle_state_change_to_payed
     if state_changed_to_payed?
+      People::ExternalInvoicePayedJob.new(person, link, year).enqueue!
     end
   end
 
