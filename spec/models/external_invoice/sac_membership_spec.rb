@@ -8,19 +8,19 @@
 require "spec_helper"
 
 describe ExternalInvoice::SacMembership do
-  describe 'after_update callback' do
+  describe "after_update callback" do
     let(:external_invoice) { ExternalInvoice::SacMembership.create!(state: :draft, person: people(:mitglied)) }
 
-    context 'state changes to payed' do
-      it 'enques job' do
+    context "state changes to payed" do
+      it "enques job" do
         expect_enqueued_job do
           external_invoice.update!(state: :payed)
         end
       end
     end
 
-    context 'when the state does not change to payed' do
-      it 'does not queue the job' do
+    context "when the state does not change to payed" do
+      it "does not queue the job" do
         expect_no_enqueued_job do
           external_invoice.update(state: :draft)
           external_invoice.update(state: :open)
@@ -33,7 +33,7 @@ describe ExternalInvoice::SacMembership do
         yield
       end.not_to change { Delayed::Job.where('handler like "%ActionMailer::MailDeliveryJob%"').count }
     end
-  
+
     def expect_enqueued_job
       expect do
         yield

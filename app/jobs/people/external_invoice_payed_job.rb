@@ -1,5 +1,4 @@
 class People::ExternalInvoicePayedJob < BaseJob
-
   def initialize(person, link, year)
     @person = person
     @link = link
@@ -13,7 +12,7 @@ class People::ExternalInvoicePayedJob < BaseJob
     if link_to_stammsektion?
       update_role_dates
     elsif link_to_neuanmeldung_stammsektion?
-      @person.confirmed_at = Time.zone.now unless @person.confirmed_at.present?
+      @person.confirmed_at = Time.zone.now if @person.confirmed_at.blank?
       create_stammsektion_role(@person)
       create_family_stammsektion_role if family_main_person?
     elsif link_to_neuanmeldung_zusatzsektion?
@@ -82,4 +81,3 @@ class People::ExternalInvoicePayedJob < BaseJob
     @person.sac_family_main_person?
   end
 end
-
