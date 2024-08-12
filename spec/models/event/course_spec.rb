@@ -373,17 +373,21 @@ describe Event::Course do
         end
 
         it "sends an email to the course admin and leader" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(2)
+          expect do
+            Delayed::Job.second_to_last.payload_object.perform
+          end.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
+          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
           expect do
             Delayed::Job.last.payload_object.perform
           end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
           expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
           expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
         end
 
         it "doesnt send an email if the course has been deleted" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(2)
           course.destroy!
           expect do
             Delayed::Job.last.payload_object.perform
@@ -406,11 +410,8 @@ describe Event::Course do
       end
 
       context "without course leaders" do
-        it "doesnt send an email" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
-          expect do
-            Delayed::Job.last.payload_object.perform
-          end.not_to change(ActionMailer::Base.deliveries, :count)
+        it "doesnt queue a job to send an email" do
+          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(0)
         end
       end
     end

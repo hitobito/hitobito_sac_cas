@@ -6,20 +6,25 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::PublishedJob < BaseJob
-  self.parameters = [:course_id]
+  self.parameters = %i[course_id leader_id]
 
-  def initialize(course)
+  def initialize(course, leader)
     super()
     @course_id = course.id
+    @leader_id = leader.id
   end
 
   def perform
     return unless course # may have been deleted again
 
-    Event::PublishedMailer.notice(course).deliver_now
+    Event::PublishedMailer.notice(course, leader).deliver_now
   end
 
   def course
     @course ||= Event::Course.find_by(id: @course_id)
+  end
+
+  def leader
+    @leader ||= Person.find_by(id: @leader_id)
   end
 end
