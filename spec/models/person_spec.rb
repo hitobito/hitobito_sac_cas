@@ -250,4 +250,31 @@ describe Person do
     end
     expect { person.save! }.not_to change { person.versions.count }
   end
+
+  describe "#data_quality" do
+    it "is ok by default" do
+      person = people(:mitglied)
+      expect(person.data_quality).to eq("ok")
+      expect(person.data_quality_issues).to eq([])
+    end
+
+    it "is set with value and stored as int" do
+      person = Fabricate.build(:person, data_quality: "error")
+      expect(person.data_quality).to eq("error")
+      expect(person.data_quality_before_type_cast).to eq(3)
+    end
+
+    context "on destroy" do
+      let(:person) { people(:mitglied) }
+
+      it "is destroys the data quality issues too" do
+        expect do
+          person.data_quality_issues.create!(attr: "first_name", key: "", severity: "error")
+        end.to change(Person::DataQualityIssue, :count).by(1)
+        expect do
+          person.destroy!
+        end.to change(Person::DataQualityIssue, :count).by(-1)
+      end
+    end
+  end
 end

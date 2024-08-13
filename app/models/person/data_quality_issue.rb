@@ -24,4 +24,19 @@
 
 class Person::DataQualityIssue < ApplicationRecord
   belongs_to :person
+
+  enum severity: {info: 1, warning: 2, error: 3}
+
+  validate :person_attribute_exists
+  validates :attr, :key, :severity, presence: true
+
+  def severity=(value)
+    super(self.class.severities.keys.index(value.to_s)&.next)
+  end
+
+  private
+
+  def person_attribute_exists
+    errors.add(:attr, :invalid) unless Person.column_names.include?(attr)
+  end
 end
