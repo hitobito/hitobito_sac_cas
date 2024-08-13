@@ -413,7 +413,7 @@ fr:
         total: ""
         issued_at: ""
         created_at: ""
-        updated_at: ""
+        updated_at: ""            
         states:
           draft: ""
           open: ""
@@ -432,7 +432,7 @@ fr:
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
         must_have_one_family_main_person_in_family: ""
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -530,17 +530,12 @@ fr:
         many: ''
         other: ''
 
-      group/abos:
+      group/abonnenten:
         one: ''
         many: ''
         other: ''
 
       group/abo_magazin:
-        one: ''
-        many: ''
-        other: ''
-
-      group/abo_magazine:
         one: ''
         many: ''
         other: ''
@@ -691,19 +686,13 @@ fr:
       group/externe_kontakte/kontakt:
         one: ""
         description: ""
-      group/abo_magazine/autor:
-        one: ""
-        description: ""
-      group/abo_magazine/andere:
-        one: ""
-        description: ""
-      group/abo_magazine/uebersetzer:
-        one: ""
-        description: ""
       group/abo_magazin/abonnent:
         one: ""
         description: ""
       group/abo_magazin/neuanmeldung:
+        one: ""
+        description: ""
+      group/abo_magazin/autor:
         one: ""
         description: ""
       group/abo_magazin/andere:
@@ -725,9 +714,6 @@ fr:
         one: ""
         description: ""
       group/abo_touren_portal/andere:
-        one: ""
-        description: ""
-      group/abo_touren_portal/gratisabonnent:
         one: ""
         description: ""
       group/abo_basic_login/basic_login:
