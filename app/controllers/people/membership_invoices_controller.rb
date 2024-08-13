@@ -12,6 +12,7 @@ class People::MembershipInvoicesController < ApplicationController
     invoice_form.attributes = invoice_form_params
 
     if invoice_form.valid? && create_invoice
+      enqueue_membership_invoice_job
       redirect_to external_invoices_group_person_path(group, person), notice: t("people.membership_invoices.success_notice")
     else
       @group = group
@@ -33,17 +34,37 @@ class People::MembershipInvoicesController < ApplicationController
   end
 
   def create_invoice
-    ExternalInvoice::SacMembership.create(
+    external_invoice.assign_attributes(
       state: :draft,
       year: invoice_form.reference_date.year,
       issued_at: invoice_form.invoice_date,
       sent_at: invoice_form.send_date,
-      person: person,
       link: Group.find(invoice_form.section_id)
     )
+    external_invoice.save!
   end
 
-  def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
+  def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)
+
+  def enqueue_membership_invoice_job
+    membership_invoice = @external_invoice.build_membership_invoice(invoice_form.discount, invoice_form.new_entry, invoice_form.reference_date)
+
+    if membership_invoice.is_a?(Invoices::Abacus::MembershipInvoice)
+      CreateMembershipInvoiceJob.new(@external_invoice.id, invoice_form.discount, invoice_form.new_entry, invoice_form.reference_date).enqueue!
+    else
+      handle_invoice_generation_error(membership_invoice)
+    end
+  end
+
+  def handle_invoice_generation_error(membership_invoice)
+    external_invoice.update!(state: :error)
+    HitobitoLogEntry.create!(
+      message: membership_invoice,
+      level: :error,
+      category: "rechnungen",
+      subject: external_invoice
+    )
+  end
 
   def invoice_form = @invoice_form ||= People::Membership::InvoiceForm.new({}, person)
 

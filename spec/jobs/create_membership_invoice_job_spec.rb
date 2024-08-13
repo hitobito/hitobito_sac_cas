@@ -3,21 +3,27 @@
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito_sac_cas
 
 require "spec_helper"
 
-describe Invoices::Abacus::MembershipInvoiceGenerator do
+describe CreateMembershipInvoiceJob < BaseJob do
   let(:sac) { Group.root }
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
-  let(:role) { roles(:mitglied) }
   let(:section) { groups(:bluemlisalp) }
   let(:person) { people(:mitglied) }
   let(:person_with_years) { context.people_with_membership_years.find(person.id) }
   let(:abacus_client) { instance_double(Invoices::Abacus::Client) }
-
-  subject { described_class.new(person_with_years, date: date, client: abacus_client) }
+  let(:external_invoice_draft) {
+    Fabricate(:external_invoice, person: person,
+      link: section,
+      state: :draft,
+      issued_at: date,
+      sent_at: date,
+      year: date.year,
+      type: "ExternalInvoice::SacMembership")
+  }
 
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
@@ -26,103 +32,124 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
     person.update!(zip_code: 3600, town: "Thun")
   end
 
-  it "fails if person is invalid" do
-    person.update!(zip_code: nil, town: nil)
-    subject.generate
-    expect(subject.errors).to eq({town: :blank, zip_code: :blank})
-  end
+  context "mitglied" do
+    subject(:job) { CreateMembershipInvoiceJob.new(external_invoice_draft.id, date, 0, false) }
 
-  it "creates an invoice for membership" do
-    expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
-    expect(abacus_client).to receive(:create).with(:address, Hash)
-    expect(abacus_client).to receive(:create).with(:communication, Hash)
-    expect(abacus_client).to receive(:create).with(:customer, Hash)
-    data = {
-      customer_id: 7,
-      delivery_date: date,
-      document_code_invoice: "R",
-      language: "de",
-      order_date: date,
-      total_amount: 183.0,
-      user_fields: {
-        user_field1: String,
-        user_field2: "hitobito",
-        user_field3: true,
-        user_field4: 1.0,
-        user_field11: "600001;Hillary;Edmund;#{person.membership_verify_token}"
-      },
-      positions: [{accounts: {},
-                   position_number: 1,
-                   pricing: {price_after_finding: 40.0},
-                   product: {description: "Beitrag Zentralverband", product_number: "42"},
-                   quantity: {charged: 1, delivered: 1, ordered: 1},
-                   type: "Product",
-                   user_fields: {user_field1: "Beitrag Zentralverband",
-                                 user_field4: "Einzelmitglied"}},
-        {accounts: {},
-         position_number: 2,
-         pricing: {price_after_finding: 20.0},
-         product: {description: "Hütten Solidaritätsbeitrag", product_number: "44"},
-         quantity: {charged: 1, delivered: 1, ordered: 1},
-         type: "Product",
-         user_fields: {user_field1: "Beitrag Zentralverband",
-                       user_field4: "Einzelmitglied"}},
-        {accounts: {},
-         position_number: 3,
-         pricing: {price_after_finding: 25.0},
-         product: {description: "Alpengebühren", product_number: "45"},
-         quantity: {charged: 1, delivered: 1, ordered: 1},
-         type: "Product",
-         user_fields: {user_field1: "Beitrag Zentralverband",
-                       user_field4: "Einzelmitglied"}},
-        {accounts: {},
-         position_number: 4,
-         pricing: {price_after_finding: 42.0},
-         product: {description: "Beitrag SAC Blüemlisalp", product_number: "98"},
-         quantity: {charged: 1, delivered: 1, ordered: 1},
-         type: "Product",
-         user_fields: {user_field1: "Beitrag SAC Blüemlisalp",
-                       user_field2: groups(:bluemlisalp).id,
-                       user_field4: "Einzelmitglied"}},
-        {accounts: {},
-         position_number: 5,
-         pricing: {price_after_finding: 56.0},
-         product: {description: "Beitrag SAC Matterhorn", product_number: "98"},
-         quantity: {charged: 1, delivered: 1, ordered: 1},
-         type: "Product",
-         user_fields: {user_field1: "Beitrag SAC Matterhorn",
-                       user_field2: groups(:matterhorn).id,
-                       user_field4: "Einzelmitglied"}}]
-    }
-    expect(abacus_client).to receive(:create).with(:sales_order, data).and_return({sales_order_id: 19})
-    expect(abacus_client).to receive(:endpoint).with(:sales_order, Hash)
-    expect(abacus_client).to receive(:request).with(:post, String, Hash)
+    it "creates an invoice for membership" do
+      allow_any_instance_of(CreateMembershipInvoiceJob).to receive(:client).and_return(abacus_client)
+      expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
+      expect(abacus_client).to receive(:create).with(:address, Hash)
+      expect(abacus_client).to receive(:create).with(:communication, Hash)
+      expect(abacus_client).to receive(:create).with(:customer, Hash)
+      data = {
+        customer_id: 7,
+        delivery_date: date,
+        document_code_invoice: "R",
+        language: "de",
+        order_date: date,
+        total_amount: 183.0,
+        user_fields: {
+          user_field1: String,
+          user_field2: "hitobito",
+          user_field3: true,
+          user_field4: 1.0,
+          user_field11: "600001;Hillary;Edmund;#{person.membership_verify_token}"
+        },
+        positions: [{accounts: {},
+                     position_number: 1,
+                     pricing: {price_after_finding: 40.0},
+                     product: {description: "Beitrag Zentralverband", product_number: "42"},
+                     quantity: {charged: 1, delivered: 1, ordered: 1},
+                     type: "Product",
+                     user_fields: {user_field1: "Beitrag Zentralverband",
+                                   user_field4: "Einzelmitglied"}},
+          {accounts: {},
+           position_number: 2,
+           pricing: {price_after_finding: 20.0},
+           product: {description: "Hütten Solidaritätsbeitrag", product_number: "44"},
+           quantity: {charged: 1, delivered: 1, ordered: 1},
+           type: "Product",
+           user_fields: {user_field1: "Beitrag Zentralverband",
+                         user_field4: "Einzelmitglied"}},
+          {accounts: {},
+           position_number: 3,
+           pricing: {price_after_finding: 25.0},
+           product: {description: "Alpengebühren", product_number: "45"},
+           quantity: {charged: 1, delivered: 1, ordered: 1},
+           type: "Product",
+           user_fields: {user_field1: "Beitrag Zentralverband",
+                         user_field4: "Einzelmitglied"}},
+          {accounts: {},
+           position_number: 4,
+           pricing: {price_after_finding: 42.0},
+           product: {description: "Beitrag SAC Blüemlisalp", product_number: "98"},
+           quantity: {charged: 1, delivered: 1, ordered: 1},
+           type: "Product",
+           user_fields: {user_field1: "Beitrag SAC Blüemlisalp",
+                         user_field2: groups(:bluemlisalp).id,
+                         user_field4: "Einzelmitglied"}},
+          {accounts: {},
+           position_number: 5,
+           pricing: {price_after_finding: 56.0},
+           product: {description: "Beitrag SAC Matterhorn", product_number: "98"},
+           quantity: {charged: 1, delivered: 1, ordered: 1},
+           type: "Product",
+           user_fields: {user_field1: "Beitrag SAC Matterhorn",
+                         user_field2: groups(:matterhorn).id,
+                         user_field4: "Einzelmitglied"}}]
+      }
+      expect(abacus_client).to receive(:create).with(:sales_order, data).and_return({sales_order_id: 19})
+      expect(abacus_client).to receive(:endpoint).with(:sales_order, Hash)
+      expect(abacus_client).to receive(:request).with(:post, String, Hash)
 
-    expect do
-      subject.generate
-      expect(subject.errors).to eq({})
-    end.to change { ExternalInvoice.count }.by(1)
+      job.perform
 
-    expect(person.reload.abacus_subject_key).to eq(7)
+      expect(person.reload.abacus_subject_key).to eq(7)
 
-    invoice = ExternalInvoice.last
-    expect(invoice.abacus_sales_order_key).to eq(19)
-    expect(invoice.issued_at).to eq(date)
-    expect(invoice.sent_at).to eq(date)
-    expect(invoice.state).to eq("open")
-    expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
-    expect(invoice.total).to eq(183.0)
-    expect(invoice.class).to eq(ExternalInvoice::SacMembership)
-    expect(invoice.year).to eq(2023)
-    expect(invoice.link).to eq(section)
-    expect(invoice.person).to eq(person)
+      invoice = ExternalInvoice.last
+      expect(invoice.abacus_sales_order_key).to eq(19)
+      expect(invoice.issued_at).to eq(date)
+      expect(invoice.sent_at).to eq(date)
+      expect(invoice.state).to eq("open")
+      expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
+      expect(invoice.total).to eq(183.0)
+      expect(invoice.class).to eq(ExternalInvoice::SacMembership)
+      expect(invoice.year).to eq(2023)
+      expect(invoice.link).to eq(section)
+      expect(invoice.person).to eq(person)
+    end
+
+    it "handles failure in abacus request" do
+      external_invoice_draft.update!(abacus_sales_order_key: nil)
+      allow_any_instance_of(CreateMembershipInvoiceJob).to receive(:client).and_return(abacus_client)
+      ex = RestClient::Exception.new
+      expect(ex).to receive(:message).and_return("Something wrong")
+      expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
+      expect(abacus_client).to receive(:create).with(:address, Hash)
+      expect(abacus_client).to receive(:create).with(:communication, Hash)
+      expect(abacus_client).to receive(:create).with(:customer, Hash)
+      expect(abacus_client).to receive(:create).with(:sales_order, Hash).and_raise(ex)
+
+      expect { job.perform }.to raise_error(RestClient::Exception)
+
+      expect(person.reload.abacus_subject_key).to eq(7)
+
+      invoice = ExternalInvoice.last
+      expect(invoice.abacus_sales_order_key).to eq(nil)
+      expect(invoice.state).to eq("error")
+      expect(invoice.hitobito_log_entries.count).to eq(1)
+      expect(invoice.hitobito_log_entries.first.message).to eq("Something wrong")
+    end
   end
 
   context "for main family person" do
     let(:person) { people(:familienmitglied) }
-    let(:role) { roles(:familienmitglied) }
+
+    subject(:job) { CreateMembershipInvoiceJob.new(external_invoice_draft.id, date, 0, false) }
 
     it "creates an invoice for family membership" do
+      external_invoice_draft.update!(person: person)
+      allow_any_instance_of(CreateMembershipInvoiceJob).to receive(:client).and_return(abacus_client)
       expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
       expect(abacus_client).to receive(:create).with(:address, Hash)
       expect(abacus_client).to receive(:create).with(:communication, Hash)
@@ -192,10 +219,7 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect(abacus_client).to receive(:endpoint).with(:sales_order, Hash)
       expect(abacus_client).to receive(:request).with(:post, String, Hash)
 
-      expect do
-        subject.generate
-        expect(subject.errors).to eq({})
-      end.to change { ExternalInvoice.count }.by(1)
+      job.perform
 
       expect(person.reload.abacus_subject_key).to eq(7)
 
@@ -215,18 +239,21 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
 
   context "for secondary family person" do
     let(:person) { people(:familienmitglied_kind) }
-    let(:role) { roles(:familienmitglied_kind) }
+
+    subject(:job) { CreateMembershipInvoiceJob.new(external_invoice_draft.id, date, 0, false) }
 
     it "creates no invoice for family membership" do
+      external_invoice_draft.update!(person: person)
+      allow_any_instance_of(CreateMembershipInvoiceJob).to receive(:client).and_return(abacus_client)
       expect(abacus_client).not_to receive(:create)
 
-      expect do
-        expect(subject.generate).to eq(false)
-        expect(subject.errors).to eq({})
-      end.not_to change { ExternalInvoice.count }
+      job.perform
     end
 
     it "creates invoice for additional membership" do
+      external_invoice_draft.update!(person: person)
+      allow_any_instance_of(CreateMembershipInvoiceJob).to receive(:client).and_return(abacus_client)
+
       groups(:bluemlisalp_ortsgruppe_ausserberg).sac_section_membership_configs.create!(
         valid_from: 2023,
         section_fee_adult: 20,
@@ -281,10 +308,7 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect(abacus_client).to receive(:endpoint).with(:sales_order, Hash)
       expect(abacus_client).to receive(:request).with(:post, String, Hash)
 
-      expect do
-        subject.generate
-        expect(subject.errors).to eq({})
-      end.to change { ExternalInvoice.count }.by(1)
+      job.perform
 
       expect(person.reload.abacus_subject_key).to eq(7)
 
@@ -300,27 +324,5 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect(invoice.year).to eq(2023)
       expect(invoice.person).to eq(person)
     end
-  end
-
-  it "handles failure in abacus request" do
-    ex = RestClient::Exception.new
-    expect(ex).to receive(:message).and_return("Something wrong")
-    expect(abacus_client).to receive(:create).with(:subject, Hash).and_return({id: 7})
-    expect(abacus_client).to receive(:create).with(:address, Hash)
-    expect(abacus_client).to receive(:create).with(:communication, Hash)
-    expect(abacus_client).to receive(:create).with(:customer, Hash)
-    expect(abacus_client).to receive(:create).with(:sales_order, Hash).and_raise(ex)
-
-    expect do
-      expect { subject.generate }.to raise_error(RestClient::Exception)
-    end.to change { ExternalInvoice.count }.by(1)
-
-    expect(person.reload.abacus_subject_key).to eq(7)
-
-    invoice = ExternalInvoice.last
-    expect(invoice.abacus_sales_order_key).to eq(nil)
-    expect(invoice.state).to eq("error")
-    expect(invoice.hitobito_log_entries.count).to eq(1)
-    expect(invoice.hitobito_log_entries.first.message).to eq("Something wrong")
   end
 end

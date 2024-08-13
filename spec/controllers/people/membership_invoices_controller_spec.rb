@@ -34,6 +34,7 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         }
       end.to change { ExternalInvoice.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%CreateMembershipInvoiceJob%"').count }
 
       expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
       expect(flash[:alert]).to be_nil
@@ -55,7 +56,6 @@ describe People::MembershipInvoicesController, type: :controller do
             }
           }
         end.not_to change { ExternalInvoice.count }
-
         expect(response).to have_http_status(:unprocessable_entity)
       end
 

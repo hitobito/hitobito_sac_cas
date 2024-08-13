@@ -56,20 +56,20 @@ class People::SacMembership
     @person.roles.future.where(convert_to: mitglied_stammsektion_types)
   end
 
+  def neuanmeldung_stammsektion_role
+    active_roles_of_type(neuanmeldung_stammsektion_types).first
+  end
+
   def neuanmeldung_nv_stammsektion_roles
     active_roles_of_type(neuanmeldung_nv_stammsektion_types)
   end
 
-  def neuanmeldung_nv_zusatzsektion_roles
-    active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
-  end
-
-  def neuanmeldung_stammsektion_role
-    @person.roles.find_by(type: neuanmeldung_stammsektion_types)
-  end
-
   def neuanmeldung_zusatzsektion_roles
     active_roles_of_type(neuanmeldung_zusatzsektion_types)
+  end
+
+  def neuanmeldung_nv_zusatzsektion_roles
+    active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
