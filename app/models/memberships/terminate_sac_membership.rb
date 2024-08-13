@@ -109,7 +109,7 @@ module Memberships
     end
 
     def subscribe_to(mailing_list, person)
-      mailing_list&.subscriptions&.create!(subscriber: person)
+      mailing_list&.subscriptions&.find_or_create_by!(subscriber: person)
     end
 
     def basic_login_group
