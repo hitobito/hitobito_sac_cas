@@ -2,8 +2,7 @@
 - if invoice_possible?(@member, @date)
   .alert.alert-info=t(".alert_info")
   
-  = form_with(url: group_person_membership_invoices_path(@group, @person), method: :post, html: { id: "external-invoice-form" }) do |f|
-
+  = form_with(model: @invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post, html: { id: "external-invoice-form" }) do |f|
     = f.label :reference_date, t(".reference_date"), class: 'control-label required'
     .input-group.w-150-px.mb-2
       %span.input-group-text= icon(:'calendar-alt')
@@ -23,17 +22,18 @@
       = f.label :discount, "#{t(".membership")}:", class: "mb-1"
       - main_section = @person.sac_membership.stammsektion_role.layer_group
       .form-check.mb-1
-        = radio_button_tag "section_id", main_section.id, true, class: "form-check-input"
-        = label_tag "section_#{main_section.id}", t(".mv_yearly_invoice"), class: "form-check-label"
+        = f.radio_button :section_id, main_section.id, checked: true, class: "form-check-input"
+        = f.label :section_id, t(".mv_yearly_invoice"), value: main_section.id, class: "form-check-label"
 
-        .nested-radio-group.d-flex
-          = f.label :new_entry, "#{t(".entry_fee")}:"
-          %div
-            = radio_button_tag "new_entry", true, false, id: "new_entry_yes", class: "ms-2 form-check-input"
-            = label_tag "new_entry_yes", t("global.yes"), class: "ms-1 form-check-label"
-          .form-check
-            = radio_button_tag "new_entry", false, true, id: "new_entry_no", class: "ms-2 form-check-input"
-            = label_tag "new_entry_no", t("global.no"), class: "ms-1 form-check-label"
+      .nested-radio-group.d-flex
+        = f.label :new_entry, "#{t(".entry_fee")}:"
+        %div
+          = f.radio_button :new_entry, true, id: "new_entry_yes", class: "ms-2 form-check-input"
+          = f.label :new_entry_yes, t("global.yes"), class: "ms-1 form-check-label"
+        .form-check
+          = f.radio_button :new_entry, false, checked: true, id: "new_entry_no", class: "ms-2 form-check-input"
+          = f.label :new_entry_no, t("global.no"), class: "ms-1 form-check-label"
+
 
       - currently_paying_zusatzsektionen(@member).each do |section|
         .form-check
@@ -44,16 +44,17 @@
       .radio-group.d-flex
         = f.label :discount, "#{t(".discount")}:"
         %div
-          = radio_button_tag "discount", 0, true, id: "discount_no", class: "ms-2 form-check-input"
-          = label_tag "discount_no", t("global.no"), class: "ms-1 form-check-label"
-        
+          = f.radio_button :discount, 0, checked: true, id: "discount_no", class: "ms-2 form-check-input"
+          = f.label :discount_no, t("global.no"), class: "ms-1 form-check-label"
+
         %div
-          = radio_button_tag "discount", 50, false, id: "discount_50", class: "ms-2 form-check-input"
-          = label_tag "discount_50", "50%", class: "ms-1 form-check-label"
-        
+          = f.radio_button :discount, 50, id: "discount_50", class: "ms-2 form-check-input"
+          = f.label :discount_50, "50%", class: "ms-1 form-check-label"
+
         %div
-          = radio_button_tag "discount", 100, false, id: "discount_100", class: "ms-2 form-check-input"
-          = label_tag "discount_100", "100%", class: "ms-1 form-check-label"
+          = f.radio_button :discount, 100, id: "discount_100", class: "ms-2 form-check-input"
+          = f.label :discount_100, "100%", class: "ms-1 form-check-label"
+
 
     = submit_button(f, "Rechnung erstellen")
     = cancel_link(external_invoices_group_person_path(@group, @person))

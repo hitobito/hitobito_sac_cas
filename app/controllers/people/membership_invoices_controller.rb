@@ -6,18 +6,24 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-  before_action :validate_params, only: [:create]
-
   def create
     authorize!(:update, person)
 
-    generate_invoice
-    redirect_to external_invoices_group_person_path(group, person)
+    invoice_form.attributes = invoice_form_params
+
+    if invoice_form.valid?
+      generate_invoice
+      redirect_to external_invoices_group_person_path(group, person)
+    else
+      set_flash(:alert, message: invoice_form.errors.full_messages.join(", "))
+      redirect_to new_group_person_membership_invoice_path(group, person)
+    end
   end
 
   def new
     authorize!(:update, person)
 
+    @invoice_form = invoice_form
     @group = group
     @date = date
     @person = person
@@ -27,48 +33,25 @@ class People::MembershipInvoicesController < ApplicationController
 
   private
 
+  def invoice_form
+    @invoice_form ||= People::Membership::Invoice.new({}, person)
+  end
+
+  def invoice_form_params
+    params.require(:people_membership_invoice).permit(:reference_date, :invoice_date, :send_date, :section_id, :new_entry, :discount)
+  end
+
   def generate_invoice
     handle_exceptions do
       ExternalInvoice::SacMembership.create!(
         state: :draft,
-        year: Date.parse(params[:reference_date]).year,
-        issued_at: params[:invoice_date],
-        sent_at: params[:send_date],
+        year: Date.parse(@invoice_form.reference_date).year,
+        issued_at: @invoice_form.invoice_date,
+        sent_at: @invoice_form.send_date,
         person: person,
-        link: Group.find(params[:section_id])
+        link: Group.find(@invoice_form.section_id)
       )
       set_flash(:success)
-    end
-  end
-
-  def validate_params
-    date_fields = %i[reference_date invoice_date send_date]
-    date_field_names = [t(".new.reference_date"), t(".new.invoice_date"), t(".new.send_date")]
-
-    # is person already a member for next year?
-    delete_on_date = person.sac_membership.stammsektion_role.delete_on
-
-    errors = date_fields.zip(date_field_names).map do |key, field_name|
-      date = params[key]
-
-      valid_date_range = if key == :send_date && delete_on_date.year > Time.zone.today.year
-        Time.zone.today.year..Time.zone.today.year
-      else
-        Time.zone.today.year..Time.zone.today.year + 1
-      end
-
-      if date.blank?
-        "#{field_name} #{t(".new.presence")}"
-      elsif invalid_date?(date, valid_date_range)
-        "#{field_name} #{t(".new.invalid_date")}"
-      end
-    end
-
-    errors << t(".new.discount_invalid") unless [0, 50, 100].include?(params[:discount].to_i)
-
-    if errors.compact.any?
-      set_flash(:alert, message: errors.compact.join(", "))
-      redirect_to new_group_person_membership_invoice_path(group, person)
     end
   end
 
@@ -86,17 +69,6 @@ class People::MembershipInvoicesController < ApplicationController
       options[:extra] = {response: e.response.body.force_encoding("UTF-8")}
     end
     Raven.capture_exception(e, options)
-  end
-
-  def invalid_date?(date, valid_date_range)
-    parsed_date = parse_date(date)
-    parsed_date.nil? || !valid_date_range.cover?(parsed_date.year)
-  end
-
-  def parse_date(date)
-    Date.parse(date)
-  rescue ArgumentError, TypeError
-    nil
   end
 
   def member

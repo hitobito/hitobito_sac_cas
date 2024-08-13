@@ -24,7 +24,17 @@ describe People::MembershipInvoicesController, type: :controller do
       person.update!(zip_code: 3600, town: "Thun")
 
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, reference_date: Time.zone.today, invoice_date: Time.zone.today, send_date: Time.zone.today, section_id: groups(:bluemlisalp_mitglieder).id, discount: "0"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id, 
+          people_membership_invoice: {
+            reference_date: Time.zone.today, 
+            invoice_date: Time.zone.today, 
+            send_date: Time.zone.today, 
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "0"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(1)
 
       expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
@@ -37,45 +47,95 @@ describe People::MembershipInvoicesController, type: :controller do
 
       # no send date
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, reference_date: Time.zone.today, invoice_date: Time.zone.today, section_id: groups(:bluemlisalp_mitglieder).id, discount: "0"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id,
+          people_membership_invoice: {
+            reference_date: Time.zone.today,
+            invoice_date: Time.zone.today, 
+            send_date: "",
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "0"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Versanddatum muss vorhanden sein")
+      expect(flash[:alert]).to include("Send date muss ausgefüllt werden")
 
       # no reference date and no invoice date
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, send_date: Time.zone.today, section_id: groups(:bluemlisalp_mitglieder).id, discount: "0"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id,
+          people_membership_invoice: {
+            reference_date: "",
+            invoice_date: "",
+            send_date: Time.zone.today, 
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "0"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(0)
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Stichtag muss vorhanden sein, Rechnungsdatum muss vorhanden sein")
+      expect(flash[:alert]).to include("Reference date muss ausgefüllt werden, Invoice date muss ausgefüllt werden")
 
       # reference date in invalid year
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, reference_date: Time.zone.today.next_year(5), invoice_date: Time.zone.today, send_date: Time.zone.today, section_id: groups(:bluemlisalp_mitglieder).id, discount: "0"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id,
+          people_membership_invoice: {
+            reference_date: Time.zone.today.next_year(5),
+            invoice_date: Time.zone.today, 
+            send_date: Time.zone.today, 
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "0"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Stichtag kann nicht an diesem datum liegen")
+      expect(flash[:alert]).to include("Reference date muss zwischen 2024-01-01 und 2025-12-31 liegen")
 
       # set person stammsektion to be continued in next year
       person.sac_membership.stammsektion_role.update!(delete_on: Time.zone.today.next_year.end_of_year)
 
       # send date cant be next year
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, reference_date: Time.zone.today, invoice_date: Time.zone.today, send_date: Time.zone.today.next_year, section_id: groups(:bluemlisalp_mitglieder).id, discount: "0"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id,
+          people_membership_invoice: {
+            reference_date: Time.zone.today,
+            invoice_date: Time.zone.today, 
+            send_date: Time.zone.today.next_year, 
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "0"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Versanddatum kann nicht an diesem datum liegen")
+      expect(flash[:alert]).to include("Send date muss zwischen 2024-01-01 und 2024-12-31 liegen")
 
       # invalid discount
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp_mitglieder).id, person_id: person.id, reference_date: Time.zone.today, invoice_date: Time.zone.today, send_date: Time.zone.today, section_id: groups(:bluemlisalp_mitglieder).id, discount: "16"}
+        post :create, params: {
+          group_id: groups(:bluemlisalp_mitglieder).id, 
+          person_id: person.id,
+          people_membership_invoice: {
+            reference_date: Time.zone.today,
+            invoice_date: Time.zone.today, 
+            send_date: Time.zone.today, 
+            section_id: groups(:bluemlisalp_mitglieder).id, 
+            discount: "16"
+          }
+        }
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Der Rabatt muss entweder 0, 50 oder 100 sein")
+      expect(flash[:alert]).to include("Discount ist kein gültiger Wert")
     end
   end
 end
