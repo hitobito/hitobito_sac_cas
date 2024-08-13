@@ -27,7 +27,6 @@ module SacCas::OidcClaimSetup
     tourenportal_author: [Group::AboTourenPortal::Autor],
     tourenportal_community: [Group::AboTourenPortal::Community],
     tourenportal_administrator: [Group::AboTourenPortal::Admin],
-    tourenportal_gratisabonnent: [Group::AboTourenPortal::Gratisabonnent],
     magazin_subscriber: Group::AboMagazin.roles,
     section_tour_functionary: [
       Group::SektionsTourenUndKurse::JsCoach,
