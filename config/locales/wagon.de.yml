@@ -97,6 +97,7 @@ de:
         youth_not_allowed_in_family: |
           Jugendliche im Alter von 18 bis 21 Jahre können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
+        invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
 
       models:
         household:
@@ -147,9 +148,6 @@ de:
         one: Anmeldung ablehnen
         other: Anmeldungen ablehnen
 
-    errors:
-      messages:
-        invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
 
   activerecord:
     attributes:

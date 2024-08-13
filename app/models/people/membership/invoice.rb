@@ -17,7 +17,7 @@ class People::Membership::Invoice
   validate :invoice_date_within_range
   validate :send_date_within_range
 
-  validates :discount, inclusion: { in: ["0", "50", "100"] }
+  validates :discount, inclusion: {in: ["0", "50", "100"]}
 
   def initialize(attributes = {}, person = nil)
     super(attributes)
@@ -27,14 +27,16 @@ class People::Membership::Invoice
   private
 
   def reference_date_within_range
-    if reference_date.present? && !((Time.zone.today.beginning_of_year..Time.zone.today.next_year.end_of_year).cover?(Date.parse(reference_date)))
-      errors.add(:reference_date, :invalid_date_range, start_on: Time.zone.today.beginning_of_year, end_on: Time.zone.today.next_year.end_of_year)
-    end
+    date_within_range(reference_date, :reference_date)
   end
-  
+
   def invoice_date_within_range
-    if invoice_date.present? && !((Time.zone.today.beginning_of_year..Time.zone.today.next_year.end_of_year).cover?(Date.parse(invoice_date)))
-      errors.add(:invoice_date, :invalid_date_range, start_on: Time.zone.today.beginning_of_year, end_on: Time.zone.today.next_year.end_of_year)
+    date_within_range(invoice_date, :invoice_date)
+  end
+
+  def date_within_range(date, field)
+    if date.present? && !(date_today.beginning_of_year..date_today.next_year.end_of_year).cover?(Date.parse(date))
+      errors.add(field, :invalid_date_range, start_on: date_today.beginning_of_year, end_on: date_today.next_year.end_of_year)
     end
   end
 
@@ -42,15 +44,19 @@ class People::Membership::Invoice
     if @person && send_date.present?
       delete_on = @person.sac_membership.stammsektion_role.delete_on
 
-      if delete_on.year > Time.zone.today.year
-        valid_range = Time.zone.today.beginning_of_year..Time.zone.today.end_of_year
+      valid_range = if delete_on.year > date_today.year
+        date_today.all_year
       else
-        valid_range = Time.zone.today.beginning_of_year..Time.zone.today.next_year.end_of_year
+        date_today.beginning_of_year..date_today.next_year.end_of_year
       end
 
       unless valid_range.cover?(Date.parse(send_date))
         errors.add(:send_date, :invalid_date_range, start_on: valid_range.begin, end_on: valid_range.end)
       end
     end
+  end
+
+  def date_today
+    Time.zone.today
   end
 end
