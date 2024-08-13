@@ -16,19 +16,19 @@ describe Memberships::JoinZusatzsektion do
 
   it "initialization fails if no neuanmeldungen subgroup exists" do
     expect do
-      described_class.new(Group::Sektion.new, :person, :date)
+      described_class.new(Group::Sektion.new, :person)
     end.to raise_error("missing neuanmeldungen subgroup")
 
     expect do
-      described_class.new(Group::Ortsgruppe.new, :person, :date)
+      described_class.new(Group::Ortsgruppe.new, :person)
     end.to raise_error("missing neuanmeldungen subgroup")
 
     expect do
-      described_class.new(groups(:bluemlisalp), :person, :date)
+      described_class.new(groups(:bluemlisalp), :person)
     end.not_to raise_error
 
     expect do
-      described_class.new(groups(:bluemlisalp_ortsgruppe_ausserberg), :person, :date)
+      described_class.new(groups(:bluemlisalp_ortsgruppe_ausserberg), :person)
     end.not_to raise_error
   end
 
@@ -36,9 +36,8 @@ describe Memberships::JoinZusatzsektion do
     let(:person) { Fabricate(:person) }
     let(:join_section) { groups(:bluemlisalp) }
     let(:errors) { join_sektion.errors.full_messages }
-    let(:date) { Date.new(2024, 6, 14) }
 
-    subject(:join_sektion) { described_class.new(join_section, person, date) }
+    subject(:join_sektion) { described_class.new(join_section, person) }
 
     it "is invalid if person is not an sac member" do
       expect(join_sektion).not_to be_valid
@@ -124,11 +123,10 @@ describe Memberships::JoinZusatzsektion do
     let(:person) { Fabricate(:person) }
     let(:sektion) { groups(:matterhorn) }
     let(:errors) { join_sektion.errors.full_messages }
-    let(:date) { Date.new(2024, 6, 14) }
 
     let(:role) { (person.roles - [mitglied]).first }
 
-    subject(:join_sektion) { described_class.new(sektion, person, date) }
+    subject(:join_sektion) { described_class.new(sektion, person) }
 
     context "invalid" do
       it "save returns false and populates errors" do
@@ -223,7 +221,7 @@ describe Memberships::JoinZusatzsektion do
 
       context "without providing sac_family_membership flag is passed as true" do
         subject(:join_sektion) do
-          described_class.new(sektion, person, date, sac_family_membership: true)
+          described_class.new(sektion, person, sac_family_membership: true)
         end
 
         it "creates roles with family category for both people" do

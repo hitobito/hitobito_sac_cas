@@ -21,19 +21,19 @@ describe Memberships::SwitchStammsektion do
   it "initialization fails on invalid group" do
     person = Fabricate(:person)
     expect do
-      described_class.new(Group::Sektion.new, person, :join_date)
+      described_class.new(Group::Sektion.new, person)
     end.not_to raise_error
 
     expect do
-      described_class.new(Group::Ortsgruppe.new, person, :join_date)
+      described_class.new(Group::Ortsgruppe.new, person)
     end.not_to raise_error
 
     expect do
-      described_class.new(Group::SacCas.new, person, :join_date)
+      described_class.new(Group::SacCas.new, person)
     end.to raise_error("must be section/ortsgruppe")
   end
 
-  subject(:switch) { described_class.new(join_section, person, now.to_date) }
+  subject(:switch) { described_class.new(join_section, person) }
 
   describe "validations" do
     let(:person) { Fabricate(:person) }
@@ -48,17 +48,6 @@ describe Memberships::SwitchStammsektion do
     it "is valid with membership in different section" do
       create_role(:matterhorn_mitglieder, "Mitglied", created_at: 1.year.ago)
       expect(switch).to be_valid
-    end
-
-    describe "join_date" do
-      def switch_on(join_date) = described_class.new(join_section, person, join_date)
-
-      it "is valid today" do
-        create_role(:matterhorn_mitglieder, "Mitglied", created_at: 1.year.ago)
-        expect(switch_on(now.to_date)).to be_valid
-        expect(switch_on(now)).not_to be_valid
-        expect(switch_on(now.next_year.beginning_of_year.to_date)).not_to be_valid
-      end
     end
 
     describe "existing membership in tree" do
@@ -90,7 +79,7 @@ describe Memberships::SwitchStammsektion do
     let(:group) { groups(:matterhorn) }
     let(:errors) { switch.errors.full_messages }
 
-    subject(:switch) { described_class.new(group, person, now.to_date) }
+    subject(:switch) { described_class.new(group, person) }
 
     context "invalid" do
       it "save returns false and populates errors" do
@@ -156,7 +145,7 @@ describe Memberships::SwitchStammsektion do
       end
 
       it "is invalid if switch is attempted with person that is not a sac_family_main_person" do
-        switch = described_class.new(group, other, now)
+        switch = described_class.new(group, other)
         expect(switch).not_to be_valid
         expect(switch.errors.full_messages).to include("Person muss Hauptperson der Familie sein")
       end

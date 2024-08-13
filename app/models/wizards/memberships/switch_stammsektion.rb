@@ -35,12 +35,7 @@ module Wizards::Memberships
     end
 
     def switch_operation
-      @switch_operation ||=
-        Memberships::SwitchStammsektion.new(
-          choose_sektion.group,
-          person,
-          Time.zone.today
-        )
+      @switch_operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
     end
 
     def backoffice?

@@ -12,8 +12,6 @@ module Memberships
       raise "terminated membership" if sac_membership.stammsektion_role&.terminated?
     end
 
-    validate :assert_join_date
-
     def save
       super.tap do |success|
         update_primary_groups
@@ -65,10 +63,6 @@ module Memberships
 
     def validate_family_main_person?
       person.sac_membership.family?
-    end
-
-    def assert_join_date
-      errors.add(:join_date, :invalid) unless join_date == now.to_date
     end
 
     def membership_group

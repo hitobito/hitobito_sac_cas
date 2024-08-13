@@ -11,8 +11,8 @@ module Memberships
 
     attr_reader :person
 
-    def initialize(join_section, person, join_date, sac_family_membership: false, **params)
-      super(join_section, person, join_date, **params)
+    def initialize(join_section, person, sac_family_membership: false, **params)
+      super(join_section, person, **params)
       @sac_family_membership = sac_family_membership
 
       raise "missing neuanmeldungen subgroup" unless group_for_neuanmeldung
