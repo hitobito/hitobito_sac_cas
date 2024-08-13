@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Wizards::Signup::AboBasicLoginWizard do
   let(:group) do
-    Fabricate.build(Group::AboBasicLogin.sti_name, parent: groups(:abos)).tap do |group|
+    Fabricate.build(Group::AboBasicLogin.sti_name, parent: groups(:abonnenten)).tap do |group|
       group.self_registration_role_type = Group::AboBasicLogin::BasicLogin.sti_name
     end
   end

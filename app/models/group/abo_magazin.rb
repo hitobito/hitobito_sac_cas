@@ -18,10 +18,15 @@ class Group::AboMagazin < ::Group
     self.basic_permissions_only = true
   end
 
+  class Autor < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
   class Andere < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  roles Abonnent, Neuanmeldung, Andere
+  roles Abonnent, Neuanmeldung, Autor, Andere
 end

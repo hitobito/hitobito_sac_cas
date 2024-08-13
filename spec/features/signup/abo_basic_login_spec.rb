@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe :self_registration do
-  let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abos)) }
+  let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abonnenten)) }
 
   before do
     group.update!(self_registration_role_type: group.role_types.first)
