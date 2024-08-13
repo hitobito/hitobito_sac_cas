@@ -25,11 +25,10 @@ describe Wizards::Memberships::SwitchStammsektion do
   context "single person" do
     let(:person) { people(:mitglied) }
 
-    it "has three steps" do
+    it "has two steps" do
       expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::ChooseSektion)
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseSektion)
-      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseDate)
-      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::SwitchStammsektion::Summary)
+      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::SwitchStammsektion::Summary)
     end
 
     it "has only MembershipTerminatedInfo step if stammsektion_role is terminated" do
@@ -42,9 +41,8 @@ describe Wizards::Memberships::SwitchStammsektion do
       let(:backoffice) { true }
 
       before do
-        @current_step = 2
+        @current_step = 1
         params["choose_sektion"] = {group_id: matterhorn.id}
-        params["choose_date"] = {switch_on: :now}
         expect(wizard).to be_last_step
         roles(:mitglied_zweitsektion).destroy
       end
@@ -58,7 +56,7 @@ describe Wizards::Memberships::SwitchStammsektion do
 
         expect(email.subject).to eq("Bestätigung Sektionswechsel")
         expect(email.body).to match(/Hallo Edmund Hillary/)
-        expect(email.body).to match(/Sektionswechsel zu SAC Matterhorn wurde per sofort/)
+        expect(email.body).to match(/Sektionswechsel zu SAC Matterhorn wurde/)
       end
     end
   end
@@ -69,10 +67,9 @@ describe Wizards::Memberships::SwitchStammsektion do
     context "for main person" do
       let(:person) { people(:familienmitglied) }
 
-      it "has three steps" do
+      it "has two steps" do
         expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseSektion)
-        expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseDate)
-        expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::SwitchStammsektion::Summary)
+        expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::SwitchStammsektion::Summary)
       end
 
       it "has only MembershipTerminatedInfo step if stammsektion_role is terminated" do
@@ -102,9 +99,8 @@ describe Wizards::Memberships::SwitchStammsektion do
       let(:backoffice) { true }
 
       before do
-        @current_step = 2
+        @current_step = 1
         params["choose_sektion"] = {group_id: matterhorn.id}
-        params["choose_date"] = {switch_on: :now}
         expect(wizard).to be_last_step
         roles(:familienmitglied_zweitsektion).destroy
         roles(:familienmitglied2_zweitsektion).destroy
@@ -123,7 +119,7 @@ describe Wizards::Memberships::SwitchStammsektion do
 
           expect(email.subject).to eq("Bestätigung Sektionswechsel")
           expect(email.body).to match(/Hallo Tenzing Norgay/)
-          expect(email.body).to match(/Sektionswechsel zu SAC Matterhorn wurde per sofort/)
+          expect(email.body).to match(/Sektionswechsel zu SAC Matterhorn wurde/)
         end
       end
     end

@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 CustomContent.seed_once(:key,
-  {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION, # 'event_participation_rejected`
+  {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION,
    placeholders_required: "participant-name",
    placeholders_optional: "event-name, application-url, event-details"},
   {key: Event::ParticipationMailer::CONTENT_SUMMON,
@@ -23,7 +23,7 @@ CustomContent.seed_once(:key,
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
   {key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION, placeholders_required: "person-name, sektion-name, terminate-on"},
   {key: Memberships::TerminateSacMembershipMailer::CONFIRMATION, placeholders_required: "person-name, sektion-name, terminate-on"},
-  {key: Memberships::SwitchStammsektionMailer::CONFIRMATION, placeholders_required: "person-name, group-name, switch-date"})
+  {key: Memberships::SwitchStammsektionMailer::CONFIRMATION, placeholders_required: "person-name, group-name"})
 
 participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
 summon_id = CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id
@@ -144,5 +144,5 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: "de",
    label: "Mitgliedschaften: Bestätigung Sektionswechsel",
    subject: "Bestätigung Sektionswechsel",
-   body: "Hallo {person-name}<br/><br/>," \
-     "Der Sektionswechsel zu {group-name} wurde per {switch-date} vorgenommen."})
+   body: "Hallo {person-name},<br/><br/>" \
+     "Der Sektionswechsel zu {group-name} wurde vorgenommen."})

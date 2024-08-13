@@ -36,15 +36,11 @@ describe "switching stammsektion", js: true do
       expect(page).to have_css "li.active", text: "Sektion wählen"
       select "SAC Matterhorn"
       click_on "Weiter"
-      expect(page).to have_css "li.active", text: "Datumwahl"
-      expect(page).to have_css ".alert-info", text: "Wann soll der Sektionswechsel stattfinden?"
-      choose "sofort"
-      click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
       expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
-        text: "Dein Sektionswechsel zu SAC Matterhorn wurde per sofort vorgenommen."
+        text: "Dein Sektionswechsel zu SAC Matterhorn wurde vorgenommen."
     end
   end
 
@@ -65,16 +61,12 @@ describe "switching stammsektion", js: true do
         "Davon betroffen sind: Tenzing Norgay, Frieda Norgay und Nima Norgay"
       select "SAC Matterhorn"
       click_on "Weiter"
-      expect(page).to have_css "li.active", text: "Datumwahl"
-      expect(page).to have_css ".alert-info", text: "Wann soll der Sektionswechsel stattfinden?"
-      choose "auf 1. Januar"
-      click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
       expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
       expect do
         click_on "Kostenpflichtig bestellen"
-        expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurde per 01. Januar vorgenommen."
-      end.to change { Role.count }.by(3)
+        expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
+      end.to change { Delayed::Job.count }.by(1)
     end
   end
 end

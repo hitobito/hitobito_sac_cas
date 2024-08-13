@@ -32,9 +32,9 @@ describe Memberships::SwitchStammsektionsController do
     end
 
     it "sets flash message" do
-      post :create, params: wizard_params(step: 2, choose_sektion: {group_id: matterhorn.id}, choose_date: {switch_on: :now})
+      post :create, params: wizard_params(step: 1, choose_sektion: {group_id: matterhorn.id})
       expect(response).to redirect_to(person_path(person, format: :html))
-      expect(flash[:notice]).to eq "Dein Sektionswechsel zu <i>SAC Matterhorn</i> wurde per <i>sofort</i> vorgenommen."
+      expect(flash[:notice]).to eq "Dein Sektionswechsel zu <i>SAC Matterhorn</i> wurde vorgenommen."
     end
   end
 
@@ -45,9 +45,9 @@ describe Memberships::SwitchStammsektionsController do
       roles(:familienmitglied_zweitsektion).destroy
       roles(:familienmitglied2_zweitsektion).destroy
 
-      post :create, params: wizard_params(step: 2, choose_sektion: {group_id: matterhorn.id}, choose_date: {switch_on: :now})
+      post :create, params: wizard_params(step: 1, choose_sektion: {group_id: matterhorn.id})
       expect(response).to redirect_to(person_path(person, format: :html))
-      expect(flash[:notice]).to eq "Eure 3 Sektionswechsel zu <i>SAC Matterhorn</i> wurde per <i>sofort</i> vorgenommen."
+      expect(flash[:notice]).to eq "Eure 3 Sektionswechsel zu <i>SAC Matterhorn</i> wurden vorgenommen."
     end
   end
 end

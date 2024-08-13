@@ -5,18 +5,22 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Memberships
-  class SwitchStammsektionMailer < ApplicationMailer
-    CONFIRMATION = "memberships_switch_stammsektion_confirmation"
+class Memberships::SwitchStammsektionMailer < ApplicationMailer
+  CONFIRMATION = "memberships_switch_stammsektion_confirmation"
 
-    def confirmation(person, sektion, switch_on_text)
-      values = [
-        %W[person-name #{person}],
-        %W[group-name #{sektion}],
-        %W[switch-date #{switch_on_text}]
-      ].to_h
-      custom_headers = {cc: Group::Geschaeftsstelle.first.email}
-      custom_content_mail([person], CONFIRMATION, values, custom_headers)
-    end
+  def confirmation(person, section)
+    @person = person
+    @section = section
+    headers = {cc: Group::Geschaeftsstelle.first.email}
+
+    compose(person, CONFIRMATION, headers)
+  end
+
+  def placeholder_person_name
+    @person.to_s
+  end
+
+  def placeholder_group_name
+    @section.to_s
   end
 end

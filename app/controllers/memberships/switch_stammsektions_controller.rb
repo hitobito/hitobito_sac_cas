@@ -33,7 +33,7 @@ module Memberships
 
     def success_message
       roles_count = wizard.switch_operation.affected_people.count
-      t(".success", count: roles_count, group_name: wizard.choose_sektion.group.to_s, switch_date: wizard.choose_date.switch_on_text)
+      t(".success", count: roles_count, group_name: wizard.choose_sektion.group.to_s)
     end
 
     # NOTE: format: :html is required otherwise it is redirect as turbo_stream

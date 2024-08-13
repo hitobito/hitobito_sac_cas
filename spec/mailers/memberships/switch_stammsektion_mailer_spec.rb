@@ -10,8 +10,7 @@ require "spec_helper"
 describe Memberships::SwitchStammsektionMailer do
   let(:person) { people(:admin) }
   let(:group) { groups(:bluemlisalp) }
-  let(:switch_on) { "sofort" }
-  let(:mail) { described_class.confirmation(person, group, switch_on) }
+  let(:mail) { described_class.confirmation(person, group) }
 
   subject { mail.parts.first.body }
 
@@ -19,7 +18,7 @@ describe Memberships::SwitchStammsektionMailer do
     expect(mail.to).to match_array(["support@hitobito.example.com"])
     expect(mail.subject).to eq "Bestätigung Sektionswechsel"
     expect(mail.body).to match("Hallo Anna Admin")
-    expect(mail.body).to match("Der Sektionswechsel zu SAC Blüemlisalp wurde per sofort vorgenommen.")
+    expect(mail.body).to match("Der Sektionswechsel zu SAC Blüemlisalp wurde vorgenommen.")
   end
 
   it "sends confirmation email to geschaefsstelle if configured" do

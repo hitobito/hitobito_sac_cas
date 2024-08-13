@@ -53,13 +53,11 @@ describe Memberships::SwitchStammsektion do
     describe "join_date" do
       def switch_on(join_date) = described_class.new(join_section, person, join_date)
 
-      it "is valid on today and first day of next year" do
+      it "is valid today" do
         create_role(:matterhorn_mitglieder, "Mitglied", created_at: 1.year.ago)
         expect(switch_on(now.to_date)).to be_valid
-        expect(switch_on(now.next_year.beginning_of_year.to_date)).to be_valid
         expect(switch_on(now)).not_to be_valid
-        expect(switch_on(now.next_year.beginning_of_year)).not_to be_valid
-        expect(switch_on(now.next_year.beginning_of_year.to_date + 1.day)).not_to be_valid
+        expect(switch_on(now.next_year.beginning_of_year.to_date)).not_to be_valid
       end
     end
 
@@ -122,31 +120,6 @@ describe Memberships::SwitchStammsektion do
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
       end
-
-      context "switching next year" do
-        subject(:switch) do
-          described_class.new(group, person, now.next_year.beginning_of_year.to_date)
-        end
-
-        it "creates new role and terminates existing" do
-          expect do
-            expect(switch.save).to eq true
-          end.to change { person.reload.roles.count }.by(1)
-          expect(bluemlisalp_mitglied.reload.deleted_at).to be_nil
-          expect(bluemlisalp_mitglied.delete_on).to eq now.end_of_year.to_date
-          expect(matterhorn_mitglied.type).to eq "FutureRole"
-          expect(matterhorn_mitglied.convert_on).to eq now.next_year.beginning_of_year.to_date
-        end
-
-        it "does not prolong already terminated membership role" do
-          bluemlisalp_mitglied.update!(delete_on: 3.days.from_now)
-          expect do
-            expect(switch.save).to eq true
-          end.to change { person.reload.roles.count }.by(1)
-          expect(bluemlisalp_mitglied.reload.deleted_at).to be_nil
-          expect(bluemlisalp_mitglied.delete_on).to eq 3.days.from_now.to_date
-        end
-      end
     end
 
     context "family" do
@@ -198,38 +171,6 @@ describe Memberships::SwitchStammsektion do
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
         expect(matterhorn_mitglied_other.created_at).to eq now.to_s(:db)
         expect(matterhorn_mitglied_other.delete_on).to eq now.end_of_year.to_date
-      end
-
-      context "switching next year" do
-        subject(:switch) do
-          described_class.new(group, person, now.next_year.beginning_of_year.to_date)
-        end
-
-        it "creates new role and terminates existing" do
-          expect do
-            expect(switch.save).to eq true
-          end.to change { person.reload.roles.count }.by(1)
-          expect(@bluemlisalp_mitglied.reload.deleted_at).to be_nil
-          expect(@bluemlisalp_mitglied.delete_on).to eq now.end_of_year.to_date
-          expect(@bluemlisalp_mitglied_other.reload.deleted_at).to be_nil
-          expect(@bluemlisalp_mitglied_other.delete_on).to eq now.end_of_year.to_date
-          expect(matterhorn_mitglied.type).to eq "FutureRole"
-          expect(matterhorn_mitglied.convert_on).to eq now.next_year.beginning_of_year.to_date
-          expect(matterhorn_mitglied_other.type).to eq "FutureRole"
-          expect(matterhorn_mitglied_other.convert_on).to eq now.next_year.beginning_of_year.to_date
-        end
-
-        it "does not prolong already terminated membership role" do
-          @bluemlisalp_mitglied.update!(delete_on: 3.days.from_now)
-          @bluemlisalp_mitglied_other.update!(delete_on: 3.weeks.from_now)
-          expect do
-            expect(switch.save).to eq true
-          end.to change { person.reload.roles.count }.by(1)
-          expect(@bluemlisalp_mitglied.reload.deleted_at).to be_nil
-          expect(@bluemlisalp_mitglied.delete_on).to eq 3.days.from_now.to_date
-          expect(@bluemlisalp_mitglied_other.reload.deleted_at).to be_nil
-          expect(@bluemlisalp_mitglied_other.delete_on).to eq 3.weeks.from_now.to_date
-        end
       end
     end
   end
