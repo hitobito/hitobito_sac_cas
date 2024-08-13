@@ -19,7 +19,11 @@ module SacCas::Sheet::Person
     tabs.insert(3, Sheet::Tab.new(
       "people.tabs.external_invoices",
       :external_invoices_group_person_path,
-      if: ->(view, _group, person) { view.can?(:index_external_invoices, person) }
+      if: ->(view, group, person) do
+        return false unless person.roles.map(&:group_id).include?(group.id)
+
+        view.can?(:index_external_invoices, person)
+      end
     ))
 
     # Remove regular invoices tab because we don't use it
