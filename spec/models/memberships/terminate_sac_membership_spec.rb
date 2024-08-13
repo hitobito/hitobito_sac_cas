@@ -78,10 +78,11 @@ describe Memberships::TerminateSacMembership do
   end
 
   describe "save" do
-    it "terminates mitglied and zusatzsektion role" do
+    it "terminates mitglied and zusatzsektion role and resets primary group" do
       expect do
         expect(termination.save!).to eq true
       end.to change { person.roles.count }.by(-2)
+      expect(person.reload.primary_group).to be_nil
     end
 
     context "termination at the end of the year" do
@@ -174,6 +175,14 @@ describe Memberships::TerminateSacMembership do
             expect do
               expect(termination.save!).to eq true
             end.to change { mailing_list.subscriptions.count }.by(1)
+          end
+
+          it "does not fail on existing subscription" do
+            params[:subscribe_newsletter] = true
+            mailing_list.subscriptions.create!(subscriber: person)
+            expect do
+              expect(termination.save!).to eq true
+            end.not_to change { mailing_list.subscriptions.count }
           end
         end
 
