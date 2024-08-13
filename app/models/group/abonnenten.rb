@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::Abos < ::Group
+class Group::Abonnenten < ::Group
   self.static_name = true
 
   children Group::AboTourenPortal,
-    Group::AboMagazine,
+    Group::AboMagazin,
     Group::AboBasicLogin
 end

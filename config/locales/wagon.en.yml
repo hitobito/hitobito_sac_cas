@@ -410,7 +410,7 @@ en:
         total: ""
         issued_at: ""
         created_at: ""
-        updated_at: ""
+        updated_at: ""            
         states:
           draft: ""
           open: ""
@@ -429,7 +429,7 @@ en:
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
         must_have_one_family_main_person_in_family: ""
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -511,11 +511,11 @@ en:
         one: ''
         other: ''
 
-      group/abos:
+      group/abonnenten:
         one: ''
         other: ''
 
-      group/abo_magazine:
+      group/abo_magazin:
         one: ''
         other: ''
 
@@ -645,19 +645,13 @@ en:
       group/externe_kontakte/kontakt:
         one: ""
         description: ""
-      group/abo_magazine/autor:
-        one: ""
-        description: ""
-      group/abo_magazine/andere:
-        one: ""
-        description: ""
-      group/abo_magazine/uebersetzer:
-        one: ""
-        description: ""
       group/abo_magazin/abonnent:
         one: ""
         description: ""
       group/abo_magazin/neuanmeldung:
+        one: ""
+        description: ""
+      group/abo_magazin/autor:
         one: ""
         description: ""
       group/abo_magazin/andere:

@@ -419,7 +419,7 @@ de:
         total: Total
         issued_at: Rechnungsdatum
         created_at: Erstellt
-        updated_at: Aktualisiert
+        updated_at: Aktualisiert            
         states:
           draft: Entwurf
           open: Offen
@@ -438,7 +438,7 @@ de:
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
         must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
-
+          
       models:
         course_compensation_rate:
           attributes:
@@ -524,17 +524,17 @@ de:
         one: SAC Zentralvorstand
         other: SAC Zentralvorstand
 
-      group/abos:
-        one: SAC Abos (ohne Newesletter)
-        other: SAC Abos (ohne Newesletter)
+      group/abonnenten:
+        one: Abonnenten
+        other: Abonnenten
 
-      group/abo_magazine:
-        one: SAC-Magazin
-        other: SAC-Magazin
+      group/abo_magazin:
+        one: AboMagazin
+        other: AboMagazin
 
       group/abo_touren_portal:
-        one: SAC-Tourenportal
-        other: SAC-Tourenportal
+        one: SAC Tourenportal
+        other: SAC Tourenportal
 
       group/abo_basic_login:
         one: SAC/CAS Login
@@ -658,21 +658,15 @@ de:
       group/externe_kontakte/kontakt:
         one: Kontakt
         description: Kontakt
-      group/abo_magazine/autor:
-        one: Autor*in
-        description: Autor*in
-      group/abo_magazine/andere:
-        one: Andere
-        description: Andere
-      group/abo_magazine/uebersetzer:
-        one: Übersetzer*in
-        description: Übersetzer*in
       group/abo_magazin/abonnent:
         one: Abonnent
         description: Abonnent
       group/abo_magazin/neuanmeldung:
         one: Neuanmeldung
         description: Neuanmeldung
+      group/abo_magazin/autor:
+        one: Autor*in
+        description: Autor*in
       group/abo_magazin/andere:
         one: Andere
         description: Andere
@@ -1108,12 +1102,12 @@ de:
       section_sac_membership: SAC Mitgliedschaft
       qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
       download_pdf: Mitgliederausweis herunterladen
-
+      
     external_invoices:
       table:
         cancel_invoice: Stornieren
         cancel_invoice_confirmation: "Wollen Sie diese Rechnung wirklich stornieren? Diese Aktion kann nicht rückgängig gemacht werden."
-      cancel:
+      cancel: 
         flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
       list:
         create_membership_invoice: Mitgliedschaftsrechnung erstellen

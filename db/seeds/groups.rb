@@ -15,22 +15,19 @@ end
 
 Group::SacCas.seed_once(:parent_id, name: "SAC/CAS")
 
-Group::Abos.seed_once(:parent_id, parent_id: Group.root.id)
-abos = Group::Abos.find_by(parent_id: Group.root.id)
+Group::Abonnenten.seed_once(:parent_id, parent_id: Group.root.id)
+abonnenten = Group::Abonnenten.find_by(parent_id: Group.root.id)
 
-Group::AboMagazine.seed_once(:parent_id, parent_id: abos.id)
-magazine = Group::AboMagazine.find_by(parent_id: abos.id)
-
-seed_magazin_abo("Die Alpen DE", magazine)
-seed_magazin_abo("Les Alpes FR", magazine)
-seed_magazin_abo("Le Alpi IT", magazine)
+seed_magazin_abo("Die Alpen DE", abonnenten)
+seed_magazin_abo("Les Alpes FR", abonnenten)
+seed_magazin_abo("Le Alpi IT", abonnenten)
 
 Group::AboTourenPortal.seed_once(:parent_id) do |a|
-  a.parent_id = abos.id
+  a.parent_id = abonnenten.id
   a.self_registration_role_type = "Group::AboTourenPortal::Abonnent"
 end
 
 Group::AboBasicLogin.seed_once(:parent_id) do |a|
-  a.parent_id = abos.id
+  a.parent_id = abonnenten.id
   a.self_registration_role_type = "Group::AboBasicLogin::BasicLogin"
 end
