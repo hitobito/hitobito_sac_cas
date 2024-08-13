@@ -25,13 +25,13 @@ describe People::MembershipInvoicesController, type: :controller do
 
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
-          person_id: person.id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
+          person_id: person.id,
           people_membership_invoice: {
-            reference_date: Time.zone.today, 
-            invoice_date: Time.zone.today, 
-            send_date: Time.zone.today, 
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            reference_date: Time.zone.today,
+            invoice_date: Time.zone.today,
+            send_date: Time.zone.today,
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "0"
           }
         }
@@ -48,13 +48,13 @@ describe People::MembershipInvoicesController, type: :controller do
       # no send date
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice: {
             reference_date: Time.zone.today,
-            invoice_date: Time.zone.today, 
+            invoice_date: Time.zone.today,
             send_date: "",
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "0"
           }
         }
@@ -66,13 +66,13 @@ describe People::MembershipInvoicesController, type: :controller do
       # no reference date and no invoice date
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice: {
             reference_date: "",
             invoice_date: "",
-            send_date: Time.zone.today, 
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            send_date: Time.zone.today,
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "0"
           }
         }
@@ -83,13 +83,13 @@ describe People::MembershipInvoicesController, type: :controller do
       # reference date in invalid year
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice: {
             reference_date: Time.zone.today.next_year(5),
-            invoice_date: Time.zone.today, 
-            send_date: Time.zone.today, 
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            invoice_date: Time.zone.today,
+            send_date: Time.zone.today,
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "0"
           }
         }
@@ -104,13 +104,13 @@ describe People::MembershipInvoicesController, type: :controller do
       # send date cant be next year
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice: {
             reference_date: Time.zone.today,
-            invoice_date: Time.zone.today, 
-            send_date: Time.zone.today.next_year, 
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            invoice_date: Time.zone.today,
+            send_date: Time.zone.today.next_year,
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "0"
           }
         }
@@ -122,13 +122,13 @@ describe People::MembershipInvoicesController, type: :controller do
       # invalid discount
       expect do
         post :create, params: {
-          group_id: groups(:bluemlisalp_mitglieder).id, 
+          group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice: {
             reference_date: Time.zone.today,
-            invoice_date: Time.zone.today, 
-            send_date: Time.zone.today, 
-            section_id: groups(:bluemlisalp_mitglieder).id, 
+            invoice_date: Time.zone.today,
+            send_date: Time.zone.today,
+            section_id: groups(:bluemlisalp_mitglieder).id,
             discount: "16"
           }
         }
