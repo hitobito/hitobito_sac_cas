@@ -722,9 +722,6 @@ it:
       group/abo_touren_portal/andere:
         one: ""
         description: ""
-      group/abo_touren_portal/gratisabonnent:
-        one: ""
-        description: ""
       group/abo_basic_login/basic_login:
         one: ""
         description: ""
