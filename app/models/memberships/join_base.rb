@@ -17,10 +17,9 @@ module Memberships
     validate :assert_person_not_member_of_join_section
     validate :assert_family_main_person, if: :validate_family_main_person?
 
-    def initialize(join_section, person, join_date, **params)
+    def initialize(join_section, person, **params)
       @join_section = join_section
       @person = person
-      @join_date = join_date
       @now = Time.zone.now
 
       assert_sac_section_or_ortsgruppe!
@@ -64,6 +63,6 @@ module Memberships
       People::SacMembership.new(person)
     end
 
-    attr_reader :person, :join_section, :join_date, :now
+    attr_reader :person, :join_section, :now
   end
 end

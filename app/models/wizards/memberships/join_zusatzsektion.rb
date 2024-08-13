@@ -42,7 +42,6 @@ module Wizards::Memberships
         Memberships::JoinZusatzsektion.new(
           choose_sektion.group,
           person,
-          Time.zone.today,
           sac_family_membership: family_membership?
         )
     end

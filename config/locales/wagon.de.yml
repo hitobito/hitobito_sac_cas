@@ -56,8 +56,6 @@ de:
         myself: für mich selbst
       wizards/steps/switch_stammsektion:
         now: sofort
-      memberships/join_base:
-        join_date: Beitrittsdatum
       memberships/leave_zusatzsektion:
         terminate_on: Austrittsdatum
       people/neuanmeldungen/reject:

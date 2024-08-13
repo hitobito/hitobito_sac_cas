@@ -15,16 +15,11 @@ describe Memberships::JoinBase do
   end
 
   it "initialization fails on invalid group" do
-    expect do
-      described_class.new(Group::Sektion.new, :person, :date)
-    end.not_to raise_error
+    expect { described_class.new(Group::Sektion.new, :person) }.not_to raise_error
+    expect { described_class.new(Group::Ortsgruppe.new, :person) }.not_to raise_error
 
     expect do
-      described_class.new(Group::Ortsgruppe.new, :person, :date)
-    end.not_to raise_error
-
-    expect do
-      described_class.new(Group::SacCas.new, :person, :date)
+      described_class.new(Group::SacCas.new, :person)
     end.to raise_error("must be section/ortsgruppe")
   end
 
@@ -32,9 +27,8 @@ describe Memberships::JoinBase do
     let(:person) { Fabricate(:person) }
     let(:join_section) { groups(:bluemlisalp) }
     let(:errors) { obj.errors.full_messages }
-    let(:date) { Date.new(2024, 6, 14) }
 
-    subject(:obj) { described_class.new(join_section, person, date) }
+    subject(:obj) { described_class.new(join_section, person) }
 
     it "is invalid if person is not an sac member" do
       expect(obj).not_to be_valid
@@ -132,9 +126,8 @@ describe Memberships::JoinBase do
     let(:person) { Fabricate(:person) }
     let(:group) { groups(:matterhorn) }
     let(:errors) { obj.errors.full_messages }
-    let(:date) { Date.new(2024, 6, 14) }
 
-    subject(:obj) { described_class.new(group, person, date) }
+    subject(:obj) { described_class.new(group, person) }
 
     context "invalid" do
       it "save returns false and populates errors" do
