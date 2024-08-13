@@ -15,13 +15,8 @@ describe Memberships::JoinBase do
   end
 
   it "initialization fails on invalid group" do
-    expect do
-      described_class.new(Group::Sektion.new, :person)
-    end.not_to raise_error
-
-    expect do
-      described_class.new(Group::Ortsgruppe.new, :person)
-    end.not_to raise_error
+    expect { described_class.new(Group::Sektion.new, :person) }.not_to raise_error
+    expect { described_class.new(Group::Ortsgruppe.new, :person) }.not_to raise_error
 
     expect do
       described_class.new(Group::SacCas.new, :person)
