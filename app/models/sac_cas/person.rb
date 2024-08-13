@@ -9,6 +9,7 @@ module SacCas::Person
   extend ActiveSupport::Concern
 
   CORRESPONDENCES = %w[digital print]
+  DATA_QUALITIES = %w[ok info warning error]
 
   included do
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
@@ -28,8 +29,6 @@ module SacCas::Person
 
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
-
-    enum data_quality: {ok: 0, info: 1, warning: 2, error: 3}
     has_many :data_quality_issues, dependent: :destroy
 
     delegate :active?, :anytime?, :billable?, :family?, :stammsektion_role,
@@ -99,7 +98,11 @@ module SacCas::Person
     @sac_membership ||= People::SacMembership.new(self)
   end
 
+  def data_quality
+    DATA_QUALITIES[super] if super.present?
+  end
+
   def data_quality=(value)
-    super(self.class.data_qualities.keys.index(value.to_s))
+    super(value.is_a?(Integer) ? value : DATA_QUALITIES.index(value.to_s))
   end
 end
