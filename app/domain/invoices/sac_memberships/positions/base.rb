@@ -25,7 +25,7 @@ module Invoices
         end
 
         def active?
-          true
+          paying_person?
         end
 
         def creditor
@@ -115,10 +115,6 @@ module Invoices
 
         def paying_person?
           member.paying_person?(beitragskategorie)
-        end
-
-        def abroad_postage?
-          member.living_abroad? && paying_person?
         end
 
         def section_fee_exemption?

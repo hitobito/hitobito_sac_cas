@@ -32,6 +32,7 @@ module Invoices
         @custom_discount = custom_discount
       end
 
+      # new_entry ist nur bei Neueintritt SAC gesetzt, nicht bei Sektionseintritten
       def generate(memberships, new_entry: false)
         main = memberships.find(&:main)
 

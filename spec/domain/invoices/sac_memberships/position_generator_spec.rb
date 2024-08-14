@@ -20,6 +20,29 @@ describe Invoices::SacMemberships::PositionGenerator do
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
     Role.update_all(delete_on: date + 3.months)
+
+    # individuelle zusatzmitgliedschaften
+    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+      person: people(:familienmitglied),
+      group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      beitragskategorie: :adult,
+      created_at: date,
+      delete_on: date + 3.months
+    )
+    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+      person: people(:familienmitglied2),
+      group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      beitragskategorie: :adult,
+      created_at: date,
+      delete_on: date + 3.months
+    )
+    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+      person: people(:familienmitglied_kind),
+      group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      beitragskategorie: :youth,
+      created_at: date,
+      delete_on: date + 3.months
+    )
   end
 
   context "adult" do
@@ -101,7 +124,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied) }
 
       it "generates positions" do
-        expect(positions.size).to eq(5)
+        expect(positions.size).to eq(6)
 
         expect(positions[0].name).to eq("sac_fee")
         expect(positions[0].amount).to eq(50.0)
@@ -120,18 +143,10 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied2) }
 
       it "generates positions" do
-        expect(positions.size).to eq(5)
+        expect(positions.size).to eq(1)
 
-        expect(positions[0].name).to eq("sac_fee")
-        expect(positions[0].amount).to eq(0.0)
-        expect(positions[1].name).to eq("hut_solidarity_fee")
-        expect(positions[1].amount).to eq(0.0)
-        expect(positions[2].name).to eq("sac_magazine")
-        expect(positions[2].amount).to eq(0.0)
-        expect(positions[3].name).to eq("section_fee")
-        expect(positions[3].amount).to eq(0.0)
-        expect(positions[4].name).to eq("section_fee")
-        expect(positions[4].amount).to eq(0.0)
+        expect(positions[0].name).to eq("section_fee")
+        expect(positions[0].amount).to eq(40.0)
       end
     end
 
@@ -139,18 +154,10 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied_kind) }
 
       it "generates positions" do
-        expect(positions.size).to eq(5)
+        expect(positions.size).to eq(1)
 
-        expect(positions[0].name).to eq("sac_fee")
-        expect(positions[0].amount).to eq(0.0)
-        expect(positions[1].name).to eq("hut_solidarity_fee")
-        expect(positions[1].amount).to eq(0.0)
-        expect(positions[2].name).to eq("sac_magazine")
-        expect(positions[2].amount).to eq(0.0)
-        expect(positions[3].name).to eq("section_fee")
-        expect(positions[3].amount).to eq(0.0)
-        expect(positions[4].name).to eq("section_fee")
-        expect(positions[4].amount).to eq(0.0)
+        expect(positions[0].name).to eq("section_fee")
+        expect(positions[0].amount).to eq(20.0)
       end
     end
   end
@@ -165,7 +172,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied) }
 
       it "generates positions" do
-        expect(positions.size).to eq(7)
+        expect(positions.size).to eq(9)
 
         expect(positions[0].name).to eq("sac_fee")
         expect(positions[0].amount).to eq(50.0)
@@ -181,6 +188,10 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[5].amount).to eq(13.0)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].amount).to eq(88.0)
+        expect(positions[7].name).to eq("section_fee")
+        expect(positions[7].amount).to eq(40.0)
+        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[8].amount).to eq(10.0)
       end
 
       context "without subscription" do
@@ -189,7 +200,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         end
 
         it "generates positions" do
-          expect(positions.size).to eq(6)
+          expect(positions.size).to eq(8)
 
           expect(positions[0].name).to eq("sac_fee")
           expect(positions[0].amount).to eq(50.0)
@@ -203,6 +214,10 @@ describe Invoices::SacMemberships::PositionGenerator do
           expect(positions[4].amount).to eq(13.0)
           expect(positions[5].name).to eq("section_fee")
           expect(positions[5].amount).to eq(88.0)
+          expect(positions[6].name).to eq("section_fee")
+          expect(positions[6].amount).to eq(40.0)
+          expect(positions[7].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[7].amount).to eq(10.0)
         end
       end
     end
@@ -211,18 +226,12 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:person) { people(:familienmitglied_kind) }
 
       it "generates positions" do
-        expect(positions.size).to eq(5)
+        expect(positions.size).to eq(2)
 
-        expect(positions[0].name).to eq("sac_fee")
-        expect(positions[0].amount).to eq(0.0)
-        expect(positions[1].name).to eq("hut_solidarity_fee")
-        expect(positions[1].amount).to eq(0.0)
-        expect(positions[2].name).to eq("sac_magazine")
-        expect(positions[2].amount).to eq(0.0)
-        expect(positions[3].name).to eq("section_fee")
-        expect(positions[3].amount).to eq(0.0)
-        expect(positions[4].name).to eq("section_fee")
-        expect(positions[4].amount).to eq(0.0)
+        expect(positions[0].name).to eq("section_fee")
+        expect(positions[0].amount).to eq(20.0)
+        expect(positions[1].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[1].amount).to eq(10.0)
       end
     end
 
@@ -235,7 +244,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       end
 
       it "generates discounted positions" do
-        expect(positions.size).to eq(7)
+        expect(positions.size).to eq(9)
 
         expect(positions[0].name).to eq("sac_fee")
         expect(positions[0].amount).to eq(25.0)
@@ -251,6 +260,10 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[5].amount).to eq(6.5)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].amount).to eq(44.0)
+        expect(positions[7].name).to eq("section_fee")
+        expect(positions[7].amount).to eq(20.0)
+        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[8].amount).to eq(5.0)
       end
     end
 
@@ -263,7 +276,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       end
 
       it "generates discounted positions" do
-        expect(positions.size).to eq(7)
+        expect(positions.size).to eq(9)
 
         expect(positions[0].name).to eq("sac_fee")
         expect(positions[0].amount).to eq(0.0)
@@ -279,6 +292,10 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[5].amount).to eq(0.0)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].amount).to eq(0.0)
+        expect(positions[7].name).to eq("section_fee")
+        expect(positions[7].amount).to eq(0.0)
+        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[8].amount).to eq(0.0)
       end
     end
   end
@@ -726,15 +743,18 @@ describe Invoices::SacMemberships::PositionGenerator do
 
   context "new additional section" do
     let(:memberships) do
-      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.find { |r| r.layer_group.id == groups(:bluemlisalp).id })]
+      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.find { |r| r.layer_group.id == group.layer_group.id })]
     end
 
     let(:person) { Fabricate(:person) }
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+    let(:beitragskategorie) { :adult }
 
     before do
       Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
         person: person,
-        group: groups(:bluemlisalp_neuanmeldungen_nv),
+        group: group,
+        beitragskategorie: beitragskategorie,
         created_at: date
       )
     end
@@ -744,6 +764,21 @@ describe Invoices::SacMemberships::PositionGenerator do
 
       expect(positions[0].name).to eq("section_fee")
       expect(positions[0].amount).to eq(42.0)
+    end
+
+    context "for family child with individual youth zusatzmitgliedschaft" do
+      let(:person) { people(:familienmitglied_kind) }
+      let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv) }
+      let(:beitragskategorie) { :youth }
+
+      before { Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person, beitragskategorie: :youth).delete_all }
+
+      it "generates positions" do
+        expect(positions.size).to eq(1)
+
+        expect(positions[0].name).to eq("section_fee")
+        expect(positions[0].amount).to eq(20.0)
+      end
     end
 
     context "living abroad" do
