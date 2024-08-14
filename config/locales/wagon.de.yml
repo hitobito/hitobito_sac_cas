@@ -521,8 +521,8 @@ de:
         other: SAC Zentralvorstand
 
       group/abos:
-        one: SAC Abos (ohne Newesletter)
-        other: SAC Abos (ohne Newesletter)
+        one: SAC Abos (ohne Newsletter)
+        other: SAC Abos (ohne Newsletter)
 
       group/abo_magazin:
         one: AboMagazin
