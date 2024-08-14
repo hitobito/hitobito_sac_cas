@@ -85,8 +85,10 @@ module SacCas::Event::Kind
         (key == "general_information") ? "description" : key
       end
       event_attrs = push_down_events.map { |e| kind_attrs.merge(event_id: e.id) }
-      Event::Translation.upsert_all(event_attrs,
-                                    unique_by: [:event_id, :locale]) if event_attrs.present?
+      if event_attrs.present?
+        Event::Translation.upsert_all(event_attrs,
+          unique_by: [:event_id, :locale])
+      end
     end
   end
 
