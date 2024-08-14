@@ -87,6 +87,8 @@ module SacCas::Event::Course
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
+  LEADER_ROLES = [Event::Role::Leader, Event::Role::AssistantLeader].map(&:sti_name)
+
   INHERITED_ATTRIBUTES = [
     :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
     :maximum_age, :ideal_class_size, :maximum_class_size, :season, :training_days,
@@ -174,6 +176,11 @@ module SacCas::Event::Course
     super
   end
 
+  def leaders
+    Person.where(id: participations.joins(:roles)
+      .where(roles: {type: LEADER_ROLES}).pluck(:person_id))
+  end
+
   private
 
   def weak_validation_state?
@@ -195,7 +202,9 @@ module SacCas::Event::Course
   end
 
   def send_application_published_email
-    Event::PublishedJob.new(self).enqueue!
+    leaders.each do |leader|
+      Event::PublishedJob.new(self, leader).enqueue!
+    end
   end
 
   def state_changed_to_application_paused?

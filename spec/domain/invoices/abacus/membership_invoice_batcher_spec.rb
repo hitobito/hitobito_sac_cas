@@ -102,7 +102,7 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
     expect(invoice.abacus_sales_order_key).to eq(45)
     expect(invoice.issued_at).to eq(date)
     expect(invoice.sent_at).to eq(date)
-    expect(invoice.to_s).to eq("Mitgliedschaftsrechnung 2023")
+    expect(invoice.title).to eq("Mitgliedschaftsrechnung 2023")
     expect(invoice.total).to eq(267.0)
     expect(invoice.class).to eq(ExternalInvoice::SacMembership)
     expect(invoice.year).to eq(2023)

@@ -11,13 +11,18 @@ class Event::PublishedMailer < ApplicationMailer
   EVENT_LEADER_ROLES = [Event::Role::Leader, Event::Role::AssistantLeader].map(&:sti_name)
   NOTICE = "event_published_notice"
 
-  def notice(course)
+  def notice(course, leader)
     @course = course
+    @leader = leader
     headers = {bcc: course.groups.first.course_admin_email}
     locales = course.language.split("_")
-    event_leaders = Person.where(id: course.participations.joins(:roles)
-      .where(roles: {type: EVENT_LEADER_ROLES}).pluck(:person_id))
 
-    compose(event_leaders, NOTICE, headers, locales)
+    compose(leader, NOTICE, headers, locales)
+  end
+
+  private
+
+  def placeholder_recipient_name
+    @leader.greeting_name
   end
 end
