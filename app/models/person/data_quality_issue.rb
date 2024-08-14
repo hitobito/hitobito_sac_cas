@@ -29,10 +29,15 @@ class Person::DataQualityIssue < ApplicationRecord
 
   validate :person_attribute_exists
   validates :attr, :severity, presence: true
-  validates :key, uniqueness: { scope: %i[person_id attr] }, presence: true
+  validates :key, uniqueness: {scope: %i[person_id attr]}, presence: true
 
   def severity=(value)
     super(self.class.severities.keys.index(value.to_s)&.next)
+  end
+
+  def message
+    I18n.t("activemodel.errors.models.person.data_quality_issue.message",
+      attr: Person.human_attribute_name(attr), key: key)
   end
 
   private

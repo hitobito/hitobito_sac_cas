@@ -126,6 +126,9 @@ de:
                 ist bereits Mitglied der Sektion oder
                 hat ein offenes Beitrittsgesuch
               must_be_family_main_person: muss Hauptperson der Familie sein
+        person:
+          data_quality_issue:
+            message: '%{attr} %{key}'
 
         wizards/steps/choose_sektion:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel

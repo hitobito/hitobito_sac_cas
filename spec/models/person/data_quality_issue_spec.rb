@@ -45,5 +45,13 @@ describe Person::DataQualityIssue do
         expect(data_quality.errors[:severity]).to eq ["muss ausgefüllt werden"]
       end
     end
+
+    context "#message" do
+      it "shows an error message" do
+        data_quality = person.data_quality_issues
+          .new(attr: "zip_code", key: "ist leer", severity: "error")
+        expect(data_quality.message).to eq("PLZ ist leer")
+      end
+    end
   end
 end
