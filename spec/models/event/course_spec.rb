@@ -356,7 +356,7 @@ describe Event::Course do
   end
 
   describe "when state changes to application_open" do
-    subject(:course) { Fabricate(:sac_open_course, contact_id: people(:admin).id) }
+    let(:course) { Fabricate(:sac_open_course, contact_id: people(:admin).id) }
 
     before { course.groups.first.update!(course_admin_email: "admin@example.com") }
 
@@ -426,7 +426,7 @@ describe Event::Course do
   end
 
   describe "when state changes to application_paused" do
-    subject(:course) { Fabricate(:sac_open_course, language: "fr") }
+    let(:course) { Fabricate(:sac_open_course, language: "fr") }
 
     context "with course admin" do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
