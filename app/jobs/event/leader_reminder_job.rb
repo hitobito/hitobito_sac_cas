@@ -16,12 +16,15 @@ class Event::LeaderReminderJob < RecurringJob
   end
 
   def send_reminder(start_at, content_key)
-    Event::Course.joins(:dates)
-      .where(event_dates: {start_at: start_at.all_day})
-      .where.not(contact: nil)
-      .uniq.each do |course|
-      Event::LeaderReminderMailer.reminder(course, content_key).deliver_now
+    events_starting_at(start_at).each do |course|
+      course.leaders.each do |leader|
+        Event::LeaderReminderMailer.reminder(course, content_key, leader).deliver_now
+      end
     end
+  end
+
+  def events_starting_at(start_at)
+    Event::Course.joins(:dates).where(event_dates: {start_at: start_at.all_day}).uniq
   end
 
   def next_run
