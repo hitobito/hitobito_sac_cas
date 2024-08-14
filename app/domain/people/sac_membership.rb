@@ -6,8 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::SacMembership
-  def initialize(person)
+  def initialize(person, date = Time.zone.today)
     @person = person
+    @date = date
   end
 
   def active?
@@ -35,11 +36,11 @@ class People::SacMembership
   end
 
   def stammsektion_role
-    if @person.roles.is_a?(ActiveRecord::Relation)
-      @person.roles.find_by(type: mitglied_stammsektion_types)
-    else
-      @person.roles.find { |r| mitglied_stammsektion_types.include?(r.type) }
-    end
+    @stammsektion_role ||= active_roles_of_type(mitglied_stammsektion_types).first
+  end
+
+  def stammsektion
+    stammsektion_role&.layer_group
   end
 
   def future_stammsektion_roles
@@ -47,11 +48,19 @@ class People::SacMembership
   end
 
   def zusatzsektion_roles
-    @person.roles.where(type: mitglied_zusatzsektion_types)
+    active_roles_of_type(mitglied_zusatzsektion_types)
+  end
+
+  def neuanmeldung_nv_stammsektion_roles
+    active_roles_of_type(neuanmeldung_nv_stammsektion_types)
+  end
+
+  def neuanmeldung_nv_zusatzsektion_roles
+    active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
   def neuanmeldung_zusatzsektion_roles
-    @person.roles.where(type: neuanmeldung_zusatzsektion_types)
+    active_roles_of_type(neuanmeldung_zusatzsektion_types)
   end
 
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
@@ -61,8 +70,26 @@ class People::SacMembership
     raise "there is no such thing as future zusatzsektion roles"
   end
 
-  def billable?
-    active? || @person.roles.any? { |r| r.is_a?(Invoices::SacMemberships::Member::NEW_ENTRY_ROLE) }
+  def sac_ehrenmitglied?
+    return @sac_honorary_member if defined?(@sac_honorary_member)
+
+    @sac_honorary_member = active_roles_of_type(Group::Ehrenmitglieder::Ehrenmitglied.sti_name).present?
+  end
+
+  def sektion_ehrenmitglied?(sektion)
+    active_roles_of_type(Group::SektionsMitglieder::Ehrenmitglied.sti_name)
+      .any? { |r| r.layer_group.id == sektion.id }
+  end
+
+  def sektion_beguenstigt?(sektion)
+    active_roles_of_type(Group::SektionsMitglieder::Beguenstigt.sti_name)
+      .any? { |r| r.layer_group.id == sektion.id }
+  end
+
+  def invoice?
+    (stammsektion_role.present? || neuanmeldung_nv_stammsektion_roles.present?) &&
+      (@person.sac_family_main_person? ||
+      (zusatzsektion_roles + neuanmeldung_nv_zusatzsektion_roles).any? { |r| !r.beitragskategorie.family? })
   end
 
   def family?
@@ -85,7 +112,20 @@ class People::SacMembership
 
   def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
 
+  def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
+
   def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def active_roles
+    @person.roles.select { |r| r.active_period.cover?(@date) }
+  end
+
+  def active_roles_of_type(types)
+    types = Array(types)
+    active_roles.select { |r| types.include?(r.type) }
+  end
 
   def any_future_role?
     @person.roles.future.where(convert_to: mitglied_stammsektion_types).exists?

@@ -24,15 +24,15 @@ describe Invoices::SacMemberships::Member do
     end
 
     it { expect(subject.age).to eq(date.year - person.birthday.year) }
-    it { expect(subject.main_membership_role).to eq(roles(:mitglied)) }
-    it { expect(subject.additional_membership_roles).to eq([roles(:mitglied_zweitsektion)]) }
-    it { expect(subject.sac_honorary_member?).to be_falsey }
+    it { expect(subject.stammsektion_role).to eq(roles(:mitglied)) }
+    it { expect(subject.zusatzsektion_roles).to eq([roles(:mitglied_zweitsektion)]) }
+    it { expect(subject.sac_ehrenmitglied?).to be_falsey }
     it { expect(subject.sac_magazine?).to be_truthy }
     it { expect(subject.sac_family_main_person?).to be_falsey }
     it { expect(subject.living_abroad?).to be_falsey }
-    it { expect(subject.section_honorary_member?(groups(:bluemlisalp))).to be_truthy }
-    it { expect(subject.section_honorary_member?(groups(:matterhorn))).to be_falsey }
-    it { expect(subject.section_benefited_member?(groups(:bluemlisalp))).to be_falsey }
+    it { expect(subject.sektion_ehrenmitglied?(groups(:bluemlisalp))).to be_truthy }
+    it { expect(subject.sektion_ehrenmitglied?(groups(:matterhorn))).to be_falsey }
+    it { expect(subject.sektion_beguenstigt?(groups(:bluemlisalp))).to be_falsey }
   end
 
   context "#membership years" do
@@ -50,12 +50,12 @@ describe Invoices::SacMemberships::Member do
   end
 
   context "#paying_person?" do
-    it { expect(subject.paying_person?(subject.main_membership_role.beitragskategorie)).to be(true) }
+    it { expect(subject.paying_person?(subject.stammsektion_role.beitragskategorie)).to be(true) }
 
     context "for family member" do
       let(:person) { people(:familienmitglied2) }
 
-      it { expect(subject.paying_person?(subject.main_membership_role.beitragskategorie)).to be(false) }
+      it { expect(subject.paying_person?(subject.stammsektion_role.beitragskategorie)).to be(false) }
 
       it "is true for additional section" do
         role = Group::SektionsMitglieder::MitgliedZusatzsektion.create!(

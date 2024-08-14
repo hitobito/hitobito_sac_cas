@@ -29,7 +29,7 @@ module SacCas::Person
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
-    delegate :active?, :anytime?, :billable?, :family?, :stammsektion_role,
+    delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role,
       to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 

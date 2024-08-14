@@ -65,7 +65,7 @@ module Invoices
       def membership_invoices(people)
         people.filter_map do |person|
           member = Invoices::SacMemberships::Member.new(person, context)
-          if member.main_membership_role
+          if member.stammsektion_role
             invoice = MembershipInvoice.new(member, member.active_memberships)
             invoice if invoice.invoice?
           end
@@ -88,7 +88,7 @@ module Invoices
           issued_at: date,
           sent_at: date,
           # also see comment in ExternalInvoice::SacMembership
-          link: membership_invoice.member.main_section
+          link: membership_invoice.member.stammsektion
         )
       end
 
