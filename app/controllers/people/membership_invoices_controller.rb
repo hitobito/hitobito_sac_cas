@@ -46,7 +46,11 @@ class People::MembershipInvoicesController < ApplicationController
   end
 
   def person
-    @person ||= Person.with_membership_years("people.*", date).find(params[:person_id])
+    @person ||= context.people_with_membership_years.find(params[:person_id])
+  end
+
+  def context
+    @context ||= Invoices::SacMemberships::Context.new(date)
   end
 
   def date

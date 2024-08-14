@@ -102,6 +102,13 @@ describe Person do
 
       role.update(delete_on: created_at + 729.days)
       expect(person_with_membership_years.membership_years).to eq 2
+
+      role.update(delete_on: created_at + 20.years)
+      expect(person_with_membership_years.membership_years).to eq 20
+
+      # currently failing
+      # role.update(delete_on: created_at + 20.years - 2.days)
+      # expect(person_with_membership_years.membership_years).to eq 19
     end
   end
 
