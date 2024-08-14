@@ -7,23 +7,14 @@
 
 module SacImports::Huts
   class SacCasClubhuetteRow < HutRow
-    def self.can_process?(row)
-      row[:verteilercode] == 40000 && row[:contact_navision_id] == "00001000" && hut_type(row).present?
-    end
+    self.type = "SacCasClubhuette"
+    self.category = "SAC Clubhütte"
+    self.owned_by_geschaeftsstelle = true
 
-    def self.hut_type(row)
-      Group::SacCasClubhuette if row[:hut_category] == "SAC Clubhütte"
-    end
+    delegate :parent, to: :class
 
     def self.parent
-      @parent ||= Group::SacCasClubhuetten.first
-    end
-
-    def import!
-      self.class.parent.children.find_or_create_by!(navision_id: navision_id(@row)) do |g|
-        g.type = Group::SacCasClubhuette
-        g.name = @row[:related_last_name]
-      end
+      @parent ||= Group::SacCasClubhuetten.find_or_create_by(parent_id: Group.root.id)
     end
   end
 end

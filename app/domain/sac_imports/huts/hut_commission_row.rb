@@ -6,15 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class HutCommissionRow
-    def self.can_process?(row)
+  class HutCommissionRow < Row
+    def can_process?
       row[:verteilercode] == 4000 &&
         ["SAC Clubhütte", "SAC Sektionshütte"].include?(row[:hut_category]) &&
         row[:contact_navision_id] != "00001000"
-    end
-
-    def initialize(row)
-      @row = row
     end
 
     def import!

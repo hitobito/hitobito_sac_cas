@@ -6,15 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class SacCasPrivathuetteRow < HutRow
-    self.type = "SacCasPrivathuette"
-    self.category = "Privat"
-    self.owned_by_geschaeftsstelle = true
-
-    delegate :parent, to: :class
-
-    def self.parent
-      @parent ||= Group::SacCasPrivathuetten.find_or_create_by(parent_id: Group.root.id)
-    end
+  class SektionsClubhuetteRow < HutRow
+    self.type = "SektionsClubhuette"
+    self.category = "SAC Clubhütte"
+    self.owned_by_geschaeftsstelle = false
   end
 end
