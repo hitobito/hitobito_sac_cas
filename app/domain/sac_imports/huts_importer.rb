@@ -32,6 +32,8 @@ module SacImports
       SacImports::Huts::HutCommissionRow,
       SacImports::Huts::HutsRow,
       SacImports::Huts::HutRow,
+      SacImports::Huts::SacCasPrivathuetteRow,
+      SacImports::Huts::SacCasClubhuetteRow,
       SacImports::Huts::HutChiefRow,
       SacImports::Huts::HutWardenRow,
       SacImports::Huts::HutWardenPartnerRow,
@@ -46,11 +48,13 @@ module SacImports
 
     def import!
       without_query_logging do
+        import_sac_cas_hut_groups
         IMPORTERS.each do |importer|
-          Import::XlsxReader.read(@path, "Beziehungen_Data", headers: HEADERS) do |row|
+          rows.each do |row|
             importer.new(row).import! if importer.can_process?(row)
           end
         end
+
         ignoring_archival do
           Group.update_all(lft: nil, rgt: nil)
           Group.rebuild!(false)
@@ -59,6 +63,19 @@ module SacImports
     end
 
     private
+
+    def rows
+      @rows ||= [].tap do |rows|
+        Import::XlsxReader.read(@path, "Beziehungen_Data", headers: HEADERS) do |row|
+          rows << row
+        end
+      end
+    end
+
+    def import_sac_cas_hut_groups
+      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasClubhuetten)
+      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasPrivathuetten)
+    end
 
     def without_query_logging
       old_logger = ActiveRecord::Base.logger

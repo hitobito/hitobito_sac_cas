@@ -44,6 +44,8 @@ module SacImports::Huts
         Group::Sektionshuette::Huettenwart
       when "SAC Clubhütte"
         Group::SektionsClubhuette::Huettenwart
+      when "Privat"
+        Group::SacCasPrivathuette::Huettenwart
       end
     end
 

@@ -19,6 +19,12 @@ module SacImports::Huts
 
     def import! # rubocop:disable Metrics/MethodLength
       person = person_for(@row)
+      unless person
+        # TODO fix bugs in data export, where not all huts are exported
+        #   and some hut warden partners belong to things other than huts
+        Rails.logger.debug { "Skipping key deposit partner for unknown person #{owner_navision_id(@row)}" }
+        return
+      end
       set_person_name(@row, person)
       role_type = self.class.role_type_for(@row)
       huette = huette(@row)
@@ -50,6 +56,8 @@ module SacImports::Huts
         Group::Sektionshuette::Andere
       when "SAC Clubhütte"
         Group::SektionsClubhuette::Andere
+      when "Privat"
+        Group::SacCasPrivathuette::Andere
       end
     end
 
@@ -103,7 +111,7 @@ module SacImports::Huts
     end
 
     def locale(row)
-      sektion(row).language.downcase
+      sektion(row) ? sektion(row).language.downcase : :de
     end
 
     def sektion(row)
