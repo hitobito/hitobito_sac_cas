@@ -24,6 +24,15 @@ describe Person::DataQualityIssue do
       end
     end
 
+    context "#key" do
+      it "is unique with a [person_id, attr] scope" do
+        person.data_quality_issues.create!(attr: "zip_code", key: "-", severity: "info")
+        data_quality = person.data_quality_issues.new(attr: "zip_code", key: "-", severity: "error")
+        expect(data_quality.valid?).to eq false
+        expect(data_quality.errors[:key]).to eq ["ist bereits vergeben"]
+      end
+    end
+
     context "#severity" do
       it "is valid if it is in enum" do
         data_quality = person.data_quality_issues.new(attr: "zip_code", key: "-", severity: "info")

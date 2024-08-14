@@ -28,7 +28,8 @@ class Person::DataQualityIssue < ApplicationRecord
   enum severity: {info: 1, warning: 2, error: 3}
 
   validate :person_attribute_exists
-  validates :attr, :key, :severity, presence: true
+  validates :attr, :severity, presence: true
+  validates :key, uniqueness: { scope: %i[person_id attr] }, presence: true
 
   def severity=(value)
     super(self.class.severities.keys.index(value.to_s)&.next)
