@@ -10,7 +10,14 @@ require "spec_helper"
 describe Invoices::Abacus::MembershipInvoiceBatcher do
   let(:sac) { Group.root }
   let(:date) { Date.new(2023, 1, 1) }
-  let(:people) { Person.with_membership_years("people.*", date).joins(:roles).where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name}).order_by_name }
+  let(:context) { Invoices::SacMemberships::Context.new(date) }
+  let(:people) do
+    context
+      .people_with_membership_years
+      .where("people.id IN (#{Group::SektionsMitglieder::Mitglied.distinct.select(:person_id).to_sql})")
+      .includes(:roles)
+      .order_by_name
+  end
   let(:abacus_client) { Invoices::Abacus::Client.new }
   let(:host) { "https://abacus.example.com" }
   let(:mandant) { 1234 }

@@ -53,7 +53,7 @@ class People::MembershipInvoicePositionsController < ApplicationController
   end
 
   def person
-    Person.with_membership_years("people.*", date).find(params[:id])
+    context.people_with_membership_years.find(params[:id])
   end
 
   def date

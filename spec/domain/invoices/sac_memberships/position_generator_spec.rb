@@ -7,7 +7,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:person) { people(:mitglied) }
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
-  let(:member) { Invoices::SacMemberships::Member.new(Person.with_membership_years("people.*", date).find_by(id: person.id), context) }
+  let(:member) { Invoices::SacMemberships::Member.new(context.people_with_membership_years.find(person.id), context) }
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
   let(:additional_section) { groups(:matterhorn) }
@@ -19,7 +19,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
-    Role.update_all(delete_on: date.end_of_year)
+    Role.update_all(delete_on: date + 3.months)
   end
 
   context "adult" do
@@ -230,6 +230,10 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:date) { Date.new(2023, 8, 15) }
       let(:person) { people(:familienmitglied) }
 
+      before do
+        Role.update_all(delete_on: date.end_of_year)
+      end
+
       it "generates discounted positions" do
         expect(positions.size).to eq(7)
 
@@ -253,6 +257,10 @@ describe Invoices::SacMemberships::PositionGenerator do
     context "end of the year" do
       let(:date) { Date.new(2023, 11, 15) }
       let(:person) { people(:familienmitglied) }
+
+      before do
+        Role.update_all(delete_on: date.end_of_year)
+      end
 
       it "generates discounted positions" do
         expect(positions.size).to eq(7)
@@ -525,8 +533,9 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "with sac reduction" do
+    # 50 years of membership gives reduction on sac fees
     before do
-      roles(:mitglied).update!(created_at: 52.years.ago)
+      roles(:mitglied).update!(created_at: date - 52.years)
     end
 
     it "generates positions" do
@@ -547,34 +556,89 @@ describe Invoices::SacMemberships::PositionGenerator do
 
   context "with section membership years reduction" do
     before do
-      roles(:mitglied).update!(created_at: "1970-06-15")
+      # 25 years of membership gives reduction on section fees
+      roles(:mitglied).update!(created_at: date - 30.years)
       person.update(birthday: "1955-03-23")
       context.fetch_section(main_section).reduction_required_age = 0
     end
 
-    it "generates positions" do
-      expect(positions.size).to eq(5)
+    context "first year with reduction" do
+      before do
+        roles(:mitglied).update!(created_at: Date.new(date.year - 25, 1, 1))
+      end
 
-      expect(positions[0].name).to eq("sac_fee")
-      expect(positions[0].amount).to eq(30.0)
-      expect(positions[1].name).to eq("hut_solidarity_fee")
-      expect(positions[1].amount).to eq(20.0)
-      expect(positions[2].name).to eq("sac_magazine")
-      expect(positions[2].amount).to eq(25.0)
-      expect(positions[3].name).to eq("section_fee")
-      expect(positions[3].amount).to eq(32.0)
-      expect(positions[4].name).to eq("section_fee")
-      expect(positions[4].amount).to eq(41.0)
+      it "generates positions with reduction" do
+        expect(positions.size).to eq(5)
+
+        expect(positions[0].name).to eq("sac_fee")
+        expect(positions[0].amount).to eq(40.0)
+        expect(positions[1].name).to eq("hut_solidarity_fee")
+        expect(positions[1].amount).to eq(20.0)
+        expect(positions[2].name).to eq("sac_magazine")
+        expect(positions[2].amount).to eq(25.0)
+        expect(positions[3].name).to eq("section_fee")
+        expect(positions[3].amount).to eq(32.0)
+        expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].amount).to eq(56.0)
+      end
+    end
+
+    context "first year with reduction, with end of year entry" do
+      before do
+        roles(:mitglied).update!(created_at: Date.new(date.year - 25, 12, 31))
+      end
+
+      it "generates positions without reduction" do
+        expect(positions.size).to eq(5)
+
+        expect(positions[0].name).to eq("sac_fee")
+        expect(positions[0].amount).to eq(40.0)
+        expect(positions[1].name).to eq("hut_solidarity_fee")
+        expect(positions[1].amount).to eq(20.0)
+        expect(positions[2].name).to eq("sac_magazine")
+        expect(positions[2].amount).to eq(25.0)
+        expect(positions[3].name).to eq("section_fee")
+        expect(positions[3].amount).to eq(32.0)
+        expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].amount).to eq(56.0)
+      end
+    end
+
+    context "last year without reduction" do
+      before do
+        # because days are divided by 365, people with an entry date before january 9th
+        # will have 25 years already one year earlier
+        roles(:mitglied).update!(created_at: Date.new(date.year - 24, 1, 9))
+      end
+
+      it "generates positions without reduction" do
+        expect(positions.size).to eq(5)
+
+        expect(positions[0].name).to eq("sac_fee")
+        expect(positions[0].amount).to eq(40.0)
+        expect(positions[1].name).to eq("hut_solidarity_fee")
+        expect(positions[1].amount).to eq(20.0)
+        expect(positions[2].name).to eq("sac_magazine")
+        expect(positions[2].amount).to eq(25.0)
+        expect(positions[3].name).to eq("section_fee")
+        expect(positions[3].amount).to eq(42.0)
+        expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].amount).to eq(56.0)
+      end
     end
 
     context "middle of the year" do
       let(:date) { Date.new(2023, 7, 1) }
 
+      before do
+        Role.update_all(delete_on: date.end_of_year)
+      end
+
       it "generates discounted positions" do
         expect(positions.size).to eq(5)
 
         expect(positions[0].name).to eq("sac_fee")
-        expect(positions[0].amount).to eq(15.0)
+        expect(positions[0].amount).to eq(20.0)
         expect(positions[1].name).to eq("hut_solidarity_fee")
         expect(positions[1].amount).to eq(10.0)
         expect(positions[2].name).to eq("sac_magazine")

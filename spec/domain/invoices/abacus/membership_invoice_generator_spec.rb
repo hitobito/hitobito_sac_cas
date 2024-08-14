@@ -10,13 +10,14 @@ require "spec_helper"
 describe Invoices::Abacus::MembershipInvoiceGenerator do
   let(:sac) { Group.root }
   let(:date) { Date.new(2023, 1, 1) }
-  let(:person_id) { people(:mitglied).id }
+  let(:context) { Invoices::SacMemberships::Context.new(date) }
   let(:role) { roles(:mitglied) }
   let(:section) { groups(:bluemlisalp) }
-  let(:person) { Person.with_membership_years("people.*", date).find_by(id: person_id) }
+  let(:person) { people(:mitglied) }
+  let(:person_with_years) { context.people_with_membership_years.find(person.id) }
   let(:abacus_client) { instance_double(Invoices::Abacus::Client) }
 
-  subject { described_class.new(person, date: date, client: abacus_client) }
+  subject { described_class.new(person_with_years, date: date, client: abacus_client) }
 
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
@@ -118,7 +119,7 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
   end
 
   context "for main family person" do
-    let(:person_id) { people(:familienmitglied).id }
+    let(:person) { people(:familienmitglied) }
     let(:role) { roles(:familienmitglied) }
 
     it "creates an invoice for family membership" do
@@ -213,7 +214,7 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
   end
 
   context "for secondary family person" do
-    let(:person_id) { people(:familienmitglied_kind).id }
+    let(:person) { people(:familienmitglied_kind) }
     let(:role) { roles(:familienmitglied_kind) }
 
     it "creates no invoice for family membership" do

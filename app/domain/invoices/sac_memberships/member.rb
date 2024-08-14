@@ -31,8 +31,12 @@ module Invoices
       end
 
       def membership_years
-        # person must have been loaded with .with_membership_years(date)
-        person.membership_years
+        # person must have been loaded with .with_membership_years(Date.new(date.year - 1, 12, 31))
+        # so membership years correspond to the value that will be reached at the end of the reference year,
+        # even if roles are not yet prolonged until the end of this year.
+        # This value is off by one for the first year, but as it is only used for reductions that
+        # are granted after many years, it does not matter.
+        person.membership_years + 1
       end
 
       def membership_from_role(role, main: nil)
