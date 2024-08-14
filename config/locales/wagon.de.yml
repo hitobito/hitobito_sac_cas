@@ -24,6 +24,13 @@ de:
 
   activemodel:
     attributes:
+      people/membership/invoice:
+        reference_date: "Stichtag"
+        invoice_date: "Rechnungsdatum"
+        send_date: "Versanddatum"
+        discount: "Rabatt"
+        new_entry: "Eintrittsgebühr"
+        section_id: "Mitgliedschaft"
       wizards/steps/signup/main_email_field:
         email: E-Mail
       wizards/steps/signup/person_fields:
@@ -1135,14 +1142,9 @@ de:
       alert_notice: "Die Rechnung konnte nicht erstellt werden: %{message}"
       new:
         alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."
-        reference_date: "Stichtag"
-        invoice_date: "Rechnungsdatum"
-        send_date: "Versanddatum"
-        membership: "Mitgliedschaft"
+        alert_warning: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
         mv_yearly_invoice: "MV-Jahresrechnung"
-        entry_fee: "Eintrittsgebühr"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
-        discount: "Rabatt"
 
     terminate_sac_memberships:
       create:

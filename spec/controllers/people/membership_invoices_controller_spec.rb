@@ -61,7 +61,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Send date muss ausgefüllt werden")
+      expect(flash[:alert]).to include("Versanddatum muss ausgefüllt werden")
 
       # no reference date and no invoice date
       expect do
@@ -78,7 +78,7 @@ describe People::MembershipInvoicesController, type: :controller do
         }
       end.to change { ExternalInvoice.count }.by(0)
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Reference date muss ausgefüllt werden, Invoice date muss ausgefüllt werden")
+      expect(flash[:alert]).to include("Stichtag muss ausgefüllt werden, Rechnungsdatum muss ausgefüllt werden")
 
       # reference date in invalid year
       expect do
@@ -96,7 +96,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Reference date muss zwischen 2024-01-01 und 2025-12-31 liegen")
+      expect(flash[:alert]).to include("Stichtag muss zwischen 2024-01-01 und 2025-12-31 liegen")
 
       # set person stammsektion to be continued in next year
       person.sac_membership.stammsektion_role.update!(delete_on: Time.zone.today.next_year.end_of_year)
@@ -117,7 +117,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Send date muss zwischen 2024-01-01 und 2024-12-31 liegen")
+      expect(flash[:alert]).to include("Versanddatum muss zwischen 2024-01-01 und 2024-12-31 liegen")
 
       # invalid discount
       expect do
@@ -135,7 +135,7 @@ describe People::MembershipInvoicesController, type: :controller do
       end.to change { ExternalInvoice.count }.by(0)
 
       expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-      expect(flash[:alert]).to include("Discount ist kein gültiger Wert")
+      expect(flash[:alert]).to include("Rabatt ist kein gültiger Wert")
     end
   end
 end

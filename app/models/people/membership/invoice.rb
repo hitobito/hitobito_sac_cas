@@ -11,7 +11,7 @@ class People::Membership::Invoice
 
   attr_accessor :reference_date, :invoice_date, :send_date, :discount, :new_entry, :section_id
 
-  validates :reference_date, :invoice_date, :send_date, presence: true
+  validates :reference_date, :invoice_date, :send_date, :discount, presence: true
 
   validate :reference_date_within_range
   validate :invoice_date_within_range

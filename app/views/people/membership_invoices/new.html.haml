@@ -1,64 +1,35 @@
-%h1 Mitgliedschaftsrechnung erstellen
 - if invoice_possible?(@member, @date)
   .alert.alert-info=t(".alert_info")
   
-  = form_with(model: @invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post, html: { id: "external-invoice-form" }) do |f|
-    = f.label :reference_date, t(".reference_date"), class: 'control-label required'
-    .input-group.w-150-px.mb-2
-      %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:reference_date, value: "", class: 'date col-2 form-control form-control-sm mb-0', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
+  = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
+    %h1 Mitgliedschaftsrechnung erstellen
+    = f.labeled(:reference_date) do
+      = f.date_field(:reference_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
+    = f.labeled(:invoice_date) do
+      = f.date_field(:invoice_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
+    = f.labeled(:send_date) do
+      = f.date_field(:send_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (already_member_next_year?(@person) ? Date.today.end_of_year + 1.year : Date.today.end_of_year))
 
-    = f.label :invoice_date, t(".invoice_date"), class: 'control-label required'
-    .input-group.w-150-px.mb-2
-      %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:invoice_date, value: "", class: 'date col-2 form-control form-control-sm mb-0', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
-
-    = f.label :send_date, t(".send_date"), class: 'control-label required'
-    .input-group.w-150-px.mb-2
-      %span.input-group-text= icon(:'calendar-alt')
-      = f.text_field(:send_date, value: "", class: 'date col-2 form-control form-control-sm mb-0', minDate: Date.today.beginning_of_year, maxDate: (already_member_next_year?(@person) ? Date.today.end_of_year + 1.year : Date.today.end_of_year))
-
-    .form-group.mb-2
-      = f.label :discount, "#{t(".membership")}:", class: "mb-1"
+    = f.labeled(:section_id) do
       - main_section = @person.sac_membership.stammsektion_role.layer_group
-      .form-check.mb-1
-        = f.radio_button :section_id, main_section.id, checked: true, class: "form-check-input"
-        = f.label :section_id, t(".mv_yearly_invoice"), value: main_section.id, class: "form-check-label"
+      = f.inline_radio_button :section_id, main_section.id, t(".mv_yearly_invoice"), true, checked: true
 
-      .nested-radio-group.d-flex
-        = f.label :new_entry, "#{t(".entry_fee")}:"
-        %div
-          = f.radio_button :new_entry, true, id: "new_entry_yes", class: "ms-2 form-check-input"
-          = f.label :new_entry_yes, t("global.yes"), class: "ms-1 form-check-label"
-        .form-check
-          = f.radio_button :new_entry, false, checked: true, id: "new_entry_no", class: "ms-2 form-check-input"
-          = f.label :new_entry_no, t("global.no"), class: "ms-1 form-check-label"
-
-
+      .nested-radio-group
+        = f.labeled(:new_entry, class: "ms-3") do
+          = f.inline_radio_button :new_entry, true, t("global.yes"), true
+          = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
+      
       - currently_paying_zusatzsektionen(@member).each do |section|
-        .form-check
-          = radio_button_tag "section_id", section.id, false, class: "form-check-input"
-          = label_tag "section_#{section .id}", "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", class: "form-check-label"
+        = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", true, checked: false
 
-    .form-group.mb-2
-      .radio-group.d-flex
-        = f.label :discount, "#{t(".discount")}:"
-        %div
-          = f.radio_button :discount, 0, checked: true, id: "discount_no", class: "ms-2 form-check-input"
-          = f.label :discount_no, t("global.no"), class: "ms-1 form-check-label"
+    = f.labeled(:discount) do
+      = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
+      = f.inline_radio_button :discount, 50, "50%", true
+      = f.inline_radio_button :discount, 100, "100%", true
 
-        %div
-          = f.radio_button :discount, 50, id: "discount_50", class: "ms-2 form-check-input"
-          = f.label :discount_50, "50%", class: "ms-1 form-check-label"
-
-        %div
-          = f.radio_button :discount, 100, id: "discount_100", class: "ms-2 form-check-input"
-          = f.label :discount_100, "100%", class: "ms-1 form-check-label"
-
-
-    = submit_button(f, "Rechnung erstellen")
-    = cancel_link(external_invoices_group_person_path(@group, @person))
-
+    = f.indented do
+      = submit_button(f, "Rechnung erstellen")
+      = cancel_link(external_invoices_group_person_path(@group, @person))
 - else
-  .alert.alert-warning= "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
-  = link_to "Abbrechen", external_invoices_group_person_path(@group, @person), class: "btn btn-secondary"
+  .alert.alert-warning= t(".alert_warning")
+  = cancel_link(external_invoices_group_person_path(@group, @person))
