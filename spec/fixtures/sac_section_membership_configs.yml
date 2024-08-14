@@ -33,7 +33,7 @@
 
 bluemlisalp_2024:
   group: bluemlisalp
-  valid_from: '2024'
+  valid_from: "2024"
   section_fee_adult: 42
   section_fee_family: 84
   section_fee_youth: 21
@@ -51,7 +51,7 @@ bluemlisalp_2024:
 
 matterhorn_2024:
   group: matterhorn
-  valid_from: '2024'
+  valid_from: "2024"
   section_fee_adult: 56
   section_fee_family: 88
   section_fee_youth: 32
@@ -66,3 +66,21 @@ matterhorn_2024:
   reduction_amount: 15
   reduction_required_membership_years: 30
   reduction_required_age:
+
+ausserberg_2024:
+  group: bluemlisalp_ortsgruppe_ausserberg
+  valid_from: "2024"
+  section_fee_adult: 40
+  section_fee_family: 80
+  section_fee_youth: 20
+  section_entry_fee_adult: 10
+  section_entry_fee_family: 20
+  section_entry_fee_youth: 5
+  bulletin_postage_abroad: 10
+  sac_fee_exemption_for_honorary_members: true
+  section_fee_exemption_for_honorary_members: true
+  sac_fee_exemption_for_benefited_members: false
+  section_fee_exemption_for_benefited_members: true
+  reduction_amount: 10
+  reduction_required_membership_years: 25
+  reduction_required_age: 60

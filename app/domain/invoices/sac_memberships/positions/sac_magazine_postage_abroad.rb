@@ -12,7 +12,7 @@ module Invoices
         self.section_payment_possible = true
 
         def active?
-          abroad_postage? && member.sac_magazine?
+          member.living_abroad? && member.sac_magazine? && paying_person?
         end
 
         def gross_amount
