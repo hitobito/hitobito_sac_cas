@@ -33,7 +33,7 @@ class ExternalInvoice::SacMembership < ExternalInvoice
   # this is not definitively defined yet, it might become a Role object as well
   # depending on the requirements for updating roles once an invoice is payed.
 
-  def to_s
+  def title
     I18n.t("invoices.sac_memberships.title", year: year)
   end
 end
