@@ -425,7 +425,7 @@ describe Event::Course do
   end
 
   describe "when state changes to application_paused" do
-    subject(:course) { Fabricate(:sac_open_course) }
+    subject(:course) { Fabricate(:sac_open_course, language: "fr") }
 
     context "with course admin" do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
@@ -436,6 +436,7 @@ describe Event::Course do
           Delayed::Job.last.payload_object.perform
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
         expect(ActionMailer::Base.deliveries.last.to).to include("admin@example.com")
+        expect(ActionMailer::Base.deliveries.last[:from].value).to eq("Club Alpin Suisse CAS <noreply@localhost>")
       end
 
       it "doesnt send an email if the course has been deleted" do

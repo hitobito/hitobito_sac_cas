@@ -410,7 +410,7 @@ en:
         total: ""
         issued_at: ""
         created_at: ""
-        updated_at: ""            
+        updated_at: ""
         states:
           draft: ""
           open: ""
@@ -429,7 +429,7 @@ en:
         must_have_mitglied_role: ""
         must_have_mitglied_role_in_group: ""
         must_have_one_family_main_person_in_family: ""
-          
+
       models:
         course_compensation_rate:
           attributes:
@@ -511,11 +511,15 @@ en:
         one: ''
         other: ''
 
-      group/abonnenten:
+      group/abos:
         one: ''
         other: ''
 
       group/abo_magazin:
+        one: ''
+        other: ''
+
+      group/abo_magazine:
         one: ''
         other: ''
 
@@ -645,13 +649,19 @@ en:
       group/externe_kontakte/kontakt:
         one: ""
         description: ""
+      group/abo_magazine/autor:
+        one: ""
+        description: ""
+      group/abo_magazine/andere:
+        one: ""
+        description: ""
+      group/abo_magazine/uebersetzer:
+        one: ""
+        description: ""
       group/abo_magazin/abonnent:
         one: ""
         description: ""
       group/abo_magazin/neuanmeldung:
-        one: ""
-        description: ""
-      group/abo_magazin/autor:
         one: ""
         description: ""
       group/abo_magazin/andere:
@@ -673,6 +683,9 @@ en:
         one: ""
         description: ""
       group/abo_touren_portal/andere:
+        one: ""
+        description: ""
+      group/abo_touren_portal/gratisabonnent:
         one: ""
         description: ""
       group/abo_basic_login/basic_login:
@@ -1063,12 +1076,12 @@ en:
       section_sac_membership: ""
       qr_code_hint: ""
       download_pdf: ""
-      
+
     external_invoices:
       table:
         cancel_invoice: ""
         cancel_invoice_confirmation: ""
-      cancel: 
+      cancel:
         flash: ""
       list:
         create_membership_invoice: ""
