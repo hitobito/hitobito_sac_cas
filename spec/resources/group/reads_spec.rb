@@ -8,7 +8,7 @@
 
 require "spec_helper"
 
-describe GroupResource, type: :resource do
+describe GroupResource, :draper_with_helpers, type: :resource do
   include Rails.application.routes.url_helpers
 
   let(:person) { people(:admin) }
