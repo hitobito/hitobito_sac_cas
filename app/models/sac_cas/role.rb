@@ -9,22 +9,33 @@ module SacCas::Role
   module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
       <<~SQL
-        CASE
-          -- membership_years is only calculated for Mitglied roles
-          WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-          ELSE (
-            1 + (
-                  LEAST(
-                    -- LEAST will return NULL if any of the arguments is NULL.
-                    -- Any value that can be NULL must have a fallback value higher than date.
-                    '#{date.strftime("%Y-%m-%d")}',
-                    COALESCE(DATE(roles.deleted_at), '9999-12-31'),
-                    COALESCE(DATE(roles.archived_at), '9999-12-31'),
-                    COALESCE(roles.delete_on, '9999-12-31')
-                  ) - DATE(roles.created_at)
-                )
-            ) / 365.0
-        END AS membership_years
+          CASE
+           -- membership_years is only calculated for Mitglied roles
+           WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+           ELSE 
+               YEAR(
+                   LEAST(
+                       CURDATE(),
+                       COALESCE(roles.deleted_at, '9999-12-31'),
+                       COALESCE(roles.archived_at, '9999-12-31'),
+                       COALESCE(roles.delete_on, '9999-12-31')
+                   )
+               ) 
+               - YEAR(roles.created_at)
+               - CASE
+                   WHEN DATE_FORMAT(
+                           LEAST(
+                               CURDATE(),
+                               COALESCE(roles.deleted_at, '9999-12-31'),
+                               COALESCE(roles.archived_at, '9999-12-31'),
+                               COALESCE(roles.delete_on, '9999-12-31')
+                           ), 
+                           '%m-%d'
+                       ) < DATE_FORMAT(roles.created_at, '%m-%d')
+                   THEN 1 
+                   ELSE 0 
+                 END
+       END AS membership_years
       SQL
     end
   end

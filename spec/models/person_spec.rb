@@ -45,7 +45,7 @@ describe Person do
     let(:person) { Fabricate(:person, birthday: Date.parse("01-01-1985")) }
 
     let(:created_at) { Time.zone.parse("01-01-2000 12:00:00") }
-    let(:end_at) { created_at + 364.days }
+    let(:end_at) { created_at + 1.years }
 
     def person_with_membership_years
       Person.with_membership_years.find(person.id)
@@ -85,7 +85,7 @@ describe Person do
     end
 
     it "with multiple membership roles returns the sum of role.membership_years" do
-      create_role(created_at: created_at, delete_on: created_at + 365.days)
+      create_role(created_at: created_at, delete_on: created_at + 1.years)
       create_role(created_at: created_at + 2.years, delete_on: created_at + 2.years + 365.days)
       expect(person_with_membership_years.membership_years).to eq 2
     end
@@ -94,21 +94,55 @@ describe Person do
       role = create_role(delete_on: created_at + 363.days)
       expect(person_with_membership_years.membership_years).to eq 0
 
-      role.update(delete_on: created_at + 364.days)
+      role.update(delete_on: created_at + 1.years)
       expect(person_with_membership_years.membership_years).to eq 1
 
-      role.update(delete_on: created_at + 728.days)
+      role.update(delete_on: created_at + 2.years - 1.days)
       expect(person_with_membership_years.membership_years).to eq 1
 
-      role.update(delete_on: created_at + 729.days)
+      role.update(delete_on: created_at + 2.years)
       expect(person_with_membership_years.membership_years).to eq 2
 
-      role.update(delete_on: created_at + 20.years)
-      expect(person_with_membership_years.membership_years).to eq 20
+      role.update(delete_on: created_at + 3.years - 1.days)
+      expect(person_with_membership_years.membership_years).to eq 2
 
-      # currently failing
-      # role.update(delete_on: created_at + 20.years - 2.days)
-      # expect(person_with_membership_years.membership_years).to eq 19
+      role.update(delete_on: created_at + 3.years)
+      expect(person_with_membership_years.membership_years).to eq 3
+
+      role.update(delete_on: created_at + 4.years - 1.days)
+      expect(person_with_membership_years.membership_years).to eq 3
+
+      role.update(delete_on: created_at + 4.years)
+      expect(person_with_membership_years.membership_years).to eq 4
+
+      role.update(delete_on: created_at + 5.years - 1.days)
+      expect(person_with_membership_years.membership_years).to eq 4
+
+      role.update(delete_on: created_at + 5.years)
+      expect(person_with_membership_years.membership_years).to eq 5
+
+      role.update(delete_on: created_at + 20.years - 1.days)
+      expect(person_with_membership_years.membership_years).to eq 19
+
+      # 2000 was a leap year (role date is 31.12.2000 in this test case)
+      role.update(delete_on: created_at + 365.days)
+      expect(person_with_membership_years.membership_years).to eq 0
+
+      # 2000 was a leap year (role date is 01.01.2001 in this test case)
+      role.update(delete_on: created_at + 366.days)
+      expect(person_with_membership_years.membership_years).to eq 1
+
+      # 2004 was a leap year (role date is 31.12.2004 in this test case)
+      role.update(delete_on: created_at + 1826.days)
+      expect(person_with_membership_years.membership_years).to eq 4
+
+      # 2004 was a leap year (role date is 01.01.2005 in this test case)
+      role.update(delete_on: created_at + 1827.days)
+      expect(person_with_membership_years.membership_years).to eq 5
+
+      # check membership duration when role was created in the end of year and delete on is in less than one year
+      role.update(created_at: Date.new(2000, 12, 31), delete_on: Date.new(2001, 06, 06))
+      expect(person_with_membership_years.membership_years).to eq 0
     end
   end
 
