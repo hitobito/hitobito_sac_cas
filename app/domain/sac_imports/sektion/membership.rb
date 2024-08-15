@@ -80,7 +80,6 @@ module SacImports
 
       def assign_household(household_key)
         return if household_key.blank?
-        household_key = household_key.round(0)
         return if household_key == person.household_key # already assigned
 
         if (other_person = ::Person.find_by(household_key: household_key))

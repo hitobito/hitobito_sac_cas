@@ -157,8 +157,8 @@ describe Person::Household do
   context "#remove" do
     context "basic functionality from core" do
       it "dissolves household of two" do
-        p1 = create_person(25, household_key: 1234)
-        p2 = create_person(25, household_key: 1234, sac_family_main_person: false)
+        p1 = create_person(25, household_key: "1234")
+        p2 = create_person(25, household_key: "1234", sac_family_main_person: false)
 
         build_household(p1, p2).send(:remove)
 
@@ -167,15 +167,15 @@ describe Person::Household do
       end
 
       it "removes person from household" do
-        p1 = create_person(25, household_key: 3456)
-        p2 = create_person(25, household_key: 3456, sac_family_main_person: false)
-        p3 = create_person(25, household_key: 3456, sac_family_main_person: false, beitragskategorie: :youth)
+        p1 = create_person(25, household_key: "3456")
+        p2 = create_person(25, household_key: "3456", sac_family_main_person: false)
+        p3 = create_person(25, household_key: "3456", sac_family_main_person: false, beitragskategorie: :youth)
 
         build_household(p1, p2).send(:remove)
 
         expect(p1.reload.household_key).to be_nil
-        expect(p2.reload.household_key).to eq 3456
-        expect(p3.reload.household_key).to eq 3456
+        expect(p2.reload.household_key).to eq "3456"
+        expect(p3.reload.household_key).to eq "3456"
       end
     end
 
