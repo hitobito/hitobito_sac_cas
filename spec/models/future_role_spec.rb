@@ -42,7 +42,7 @@ describe FutureRole do
 
     it "returns false if convert_to is not a SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES" do
       (Role.all_types - SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES).each do |role_type|
-        role = FutureRole.new(convert_to: role_type, group: group)
+        role = FutureRole.new(convert_to: role_type.sti_name, group: group)
         expect(role.validate_target_type?).to eq(false),
           "was unexpectedly true for #{role_type}"
       end
