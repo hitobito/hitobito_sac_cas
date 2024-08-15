@@ -73,8 +73,8 @@ describe SacImports::Sektion::MembershipsImporter do
     importer.import!
     expect(importer.errors).to be_empty
 
-    family = Person.where(household_key: "F12345")
-    expect(family.count).to eq 2
+    family = Person.where(household_key: 12345)
+    expect(family.count).to eq 3
 
     expect(family).to all have_attributes(
       address: "Seestrasse #{people_navision_ids.first}",

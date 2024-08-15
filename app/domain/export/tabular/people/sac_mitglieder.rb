@@ -63,7 +63,7 @@ module Export::Tabular::People
       Person
         .where(roles: {
           group_id: non_layer_children_ids,
-          type: SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES
+          type: (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).map(&:sti_name)
         })
         .joins(:roles)
         .includes(:phone_numbers, :roles_with_deleted, roles: :group)

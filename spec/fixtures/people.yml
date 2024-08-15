@@ -41,7 +41,7 @@ familienmitglied:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
   language: de
-  household_key: '4242'
+  household_key: 4242
   sac_family_main_person: true
 
 familienmitglied2:
@@ -52,7 +52,7 @@ familienmitglied2:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
   language: de
-  household_key: '4242'
+  household_key: 4242
 
 familienmitglied_kind:
   id: 600_004
@@ -62,7 +62,7 @@ familienmitglied_kind:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 10.years.ago %>
   language: de
-  household_key: '4242'
+  household_key: 4242
 
 abonnent:
   id: 600_005
