@@ -23,6 +23,6 @@ class SacEventSeeder < EventSeeder
   private
 
   def fetch_contact_person
-    Person.find_by(first_name: "Linda", last_name: "Donie")
+    Person.last
   end
 end
