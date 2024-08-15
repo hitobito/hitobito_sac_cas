@@ -35,20 +35,20 @@ module Invoices
       def generate(memberships, new_entry: false)
         main = memberships.find(&:main)
 
-        main_positions(main) +
-          additional_positions(memberships) +
+        sac_positions(main) +
+          sektions_positions(memberships) +
           new_entry_positions(main, new_entry)
       end
 
       private
 
-      def main_positions(main_membership)
+      def sac_positions(main_membership)
         return [] unless main_membership
 
         build_positions(SAC_POSITIONS, main_membership)
       end
 
-      def additional_positions(memberships)
+      def sektions_positions(memberships)
         memberships.flat_map do |membership|
           build_positions(SECTION_POSITIONS, membership)
         end

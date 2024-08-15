@@ -33,7 +33,7 @@ module Invoices
         end
 
         def amount
-          return 0 if member.sac_honorary_member?
+          return 0 if member.sac_ehrenmitglied?
 
           @amount ||= [gross_amount, 0].max * discount_factor
         end

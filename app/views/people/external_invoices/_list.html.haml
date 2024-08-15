@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if @person.sac_membership_billable? && can?(:create_membership_invoice, @person)
+- if @person.sac_membership_invoice? && can?(:create_membership_invoice, @person)
   = action_button(t('.create_membership_invoice'),
                   group_person_membership_invoices_path(@group, @person),
                   :envelope,

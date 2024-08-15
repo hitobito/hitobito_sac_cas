@@ -674,7 +674,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "new entry" do
-    let(:memberships) { [member.membership_from_role(member.new_entry_role, main: true)] }
+    let(:memberships) { [member.membership_from_role(member.neuanmeldung_nv_stammsektion_roles.first, main: true)] }
     let(:new_entry) { true }
 
     context "without neuanmeldung" do
@@ -725,7 +725,9 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "new additional section" do
-    let(:memberships) { [member.membership_from_role(member.new_additional_section_membership_role(groups(:bluemlisalp)))] }
+    let(:memberships) do
+      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.find { |r| r.layer_group.id == groups(:bluemlisalp).id })]
+    end
 
     let(:person) { Fabricate(:person) }
 

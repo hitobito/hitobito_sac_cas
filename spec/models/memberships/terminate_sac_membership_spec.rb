@@ -92,6 +92,7 @@ describe Memberships::TerminateSacMembership do
       before { params[:terminate_on] = end_of_year }
 
       it "does not adjust delete_on if already schedule to delete earlier" do
+        Role.where(person: person).update_all(delete_on: "2015-12-31")
         expect do
           expect(termination.save!).to eq true
         end.not_to(change { person.roles.count })

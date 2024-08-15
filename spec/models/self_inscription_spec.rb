@@ -137,6 +137,11 @@ describe SelfInscription do
       let(:role) { roles(:mitglied) }
       let(:person) { role.person }
 
+      before do
+        Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person)
+          .update_all(delete_on: "2022-12-31")
+      end
+
       context "replacing existing sektion" do
         before { model.register_as = :replace }
 
@@ -176,6 +181,8 @@ describe SelfInscription do
           # make sure we have a valid primary membership for the whole validity of the new role
           Group::SektionsMitglieder::Mitglied.where(person: person)
             .update_all(delete_on: 1.year.from_now)
+          Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person)
+            .update_all(delete_on: "2022-12-31")
           model.register_as = :extra
         end
 
