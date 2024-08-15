@@ -9,13 +9,8 @@
 require "spec_helper"
 
 describe RoleDecorator, :draper_with_helpers do
-  let(:today) { Time.zone.local(2015, 11, 13) }
-
+  let(:today) { Time.zone.today }
   let(:decorator) { described_class.new(role) }
-
-  around do |example|
-    travel_to(today.midnight) { example.run }
-  end
 
   describe "#for_aside" do
     let(:decorated_name) { decorator.for_aside }
@@ -24,14 +19,14 @@ describe RoleDecorator, :draper_with_helpers do
       let(:role) { roles(:mitglied) }
 
       it "includes beitragskategorie" do
-        formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.2015)"
+        formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.#{today.year})"
 
         expect(decorated_name).to eq(formatted_name)
       end
 
       it "includes label and beitragskategorie" do
         role.label = "test"
-        formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.2015)"
+        formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.#{today.year})"
 
         expect(decorated_name).to eq(formatted_name)
       end
@@ -41,20 +36,19 @@ describe RoleDecorator, :draper_with_helpers do
       let(:neuanmeldungen) { groups(:bluemlisalp_neuanmeldungen_nv) }
       let(:role) do
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
-          created_at: Time.zone.local(2015, 1, 1),
-          delete_on: Time.zone.local(2015, 12, 31),
+          delete_on: today.end_of_year,
           group: neuanmeldungen)
       end
 
       it "includes beitragskategorie" do
-        formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.2015)"
+        formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.#{today.year})"
 
         expect(decorated_name).to eq(formatted_name)
       end
 
       it "includes label and beitragskategorie" do
         role.label = "test"
-        formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.2015)"
+        formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.#{today.year})"
 
         expect(decorated_name).to eq(formatted_name)
       end

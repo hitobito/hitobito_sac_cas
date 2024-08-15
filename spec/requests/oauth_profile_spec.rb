@@ -76,7 +76,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         language: user.language,
         picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
         phone: nil,
-        membership_years: 1,
+        membership_years: Date.current.year - 2015,
         roles: [{
           group_id: user.roles.first.group_id,
           group_name: user.roles.first.group.name,

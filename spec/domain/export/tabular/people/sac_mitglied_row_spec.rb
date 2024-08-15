@@ -13,9 +13,6 @@ describe Export::Tabular::People::SacMitgliedRow do
 
   subject(:row) { described_class.new(person.reload, group) }
 
-  # Fixture roles are valid during 2015, so setup current time accordingly
-  before { travel_to "2015-07-01" }
-
   it "#adresszusatz returns address_care_of" do
     person.update!(address_care_of: "care for me")
     expect(row.adresszusatz).to eq "care for me"
@@ -215,8 +212,8 @@ describe Export::Tabular::People::SacMitgliedRow do
     first_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
       group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
       person: person,
-      created_at: 5.years.ago,
-      deleted_at: 4.years.ago)
+      created_at: "2010-06-01",
+      deleted_at: "2013-10-31")
 
     expect(row.eintrittsjahr).to eq(first_role.created_at.year)
   end

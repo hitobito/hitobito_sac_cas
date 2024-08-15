@@ -23,7 +23,7 @@ describe People::Membership::VerifyController, type: :controller do
 
         expect(dom).to have_selector("#membership-verify #details #member-name", text: "Edmund Hillary")
         expect(dom).to have_selector("#membership-verify #details #member-info div", text: "Mitglied: 600001")
-        expect(dom).to have_selector("#membership-verify #details #member-info div", text: "Anzahl Mitgliedsjahre: 1")
+        expect(dom).to have_selector("#membership-verify #details #member-info div", text: "Anzahl Mitgliedsjahre: #{Date.current.year - 2015}")
 
         expect(dom).to have_selector("#membership-verify #details .alert-success", text: "Mitgliedschaft gültig")
         expect(dom).to have_selector("#membership-verify #details .alert-success span.fa-check")
