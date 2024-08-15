@@ -95,27 +95,33 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Kurs: E-Mail Unbestätigte Warteliste",
    subject: "Auf Warteliste gesetzt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-link} auf die unbestätigte Warteliste gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}. " \
-     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
+     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+     "Anmeldung: {application-url}<br>" \
+     "Person: {person-url}<br>" \
+     "Event-Link: {event-link}<br>" \
      "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::UNCONFIRMED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Kursanmeldung",
    subject: "Unbestätigte Kursanmeldung",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-link} auf die unbestätigte Kursanmeldung gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}. " \
-     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
+     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+     "Anmeldung: {application-url}<br>" \
+     "Person: {person-url}<br>" \
+     "Event-Link: {event-link}<br>" \
      "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::ASSIGNED).id,
    locale: "de",
    label: "Kurs: E-Mail Bestätigte Kursanmeldung",
    subject: "Kursanmeldung bestätigt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Deine Anmeldung für den Kurs {event-link} wurde bestätigt. " \
-     "Anmeldeschluss ist der {application-closing-at}. " \
-     "Siehe {application-url} und {person-url}<br/><br/>" \
+     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
+     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+     "Anmeldung: {application-url}<br>" \
+     "Person: {person-url}<br>" \
+     "Event-Link: {event-link}<br>" \
      "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: leader_reminder_next_week_id,
    locale: "de",
