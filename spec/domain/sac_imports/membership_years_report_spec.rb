@@ -56,9 +56,9 @@ describe SacImports::MembershipYearsReport do
     expect(csv_report.size).to eq(10)
     expect(csv_report.first).to eq(report_headers)
     expect(csv_report.second).to eq(["513544", "Müller Hans", "42", nil, nil, "Person not found in hitobito"])
-    expect(csv_report.third).to eq(["513546", "Meier Ursula", "3", "0", "3", nil])
-    expect(csv_report.fourth).to eq(["513549", "Schneider Peter", "24", "24", "0", nil])
-    expect(csv_report.fifth).to eq(["513550", "Weber Anna", nil, "14", "-14", nil])
+    expect(csv_report.third).to eq(["513546", "Meier Ursula", "3", "0.0", "3.0", nil])
+    expect(csv_report.fourth).to eq(["513549", "Schneider Peter", "24", "24.0", "0.0", nil])
+    expect(csv_report.fifth).to eq(["513550", "Weber Anna", nil, "14.0", "-14.0", nil])
 
     File.delete(report_file)
     expect(File.exist?(report_file)).to be_falsey
