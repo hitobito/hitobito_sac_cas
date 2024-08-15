@@ -163,19 +163,65 @@ class People::SacMembership
     !beitragskategorie.family? || @person.sac_family_main_person?
   end
 
+  def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+
+  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
+  def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def invoicable_types
+    mitglied_stammsektion_types +
+      mitglied_zusatzsektion_types +
+      neuanmeldung_nv_stammsektion_types +
+      neuanmeldung_nv_zusatzsektion_types
+  end
+
+  def paying_person?(beitragskategorie)
+    !beitragskategorie.family? || @person.sac_family_main_person?
+  end
+
   def mitglied_types = SacCas::MITGLIED_ROLES
 
   def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES
 
   def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES
 
-  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES
-
-  def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES
-
-  def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES
+  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
 
   def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES
+
+  def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def invoicable_types
+    mitglied_stammsektion_types +
+      mitglied_zusatzsektion_types +
+      neuanmeldung_nv_stammsektion_types +
+      neuanmeldung_nv_zusatzsektion_types
+  end
+
+  def paying_person?(beitragskategorie)
+    !beitragskategorie.family? || @person.sac_family_main_person?
+  end
+
+  def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+
+  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES
+
+  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES
 

@@ -37,7 +37,7 @@ describe Person do
     it "must be unique" do
       Person.create!(first_name: "John", membership_number: 123_123)
       expect { Person.create!(first_name: "John", membership_number: 123_123) }
-        .to raise_error(ActiveRecord::RecordNotUnique, /Duplicate entry/)
+        .to raise_error(ActiveRecord::RecordNotUnique, /duplicate key/)
     end
   end
 

@@ -11,7 +11,7 @@ module SacCas::Role
       <<~SQL
         CASE
           -- membership_years is only calculated for Mitglied roles
-          WHEN roles.type != "Group::SektionsMitglieder::Mitglied" THEN 0
+          WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
           ELSE (
             1 + (
                   LEAST(
@@ -80,7 +80,7 @@ module SacCas::Role
   protected
 
   def preferred_primary?
-    SacCas::STAMMSEKTION_ROLES.include?(type)
+    SacCas::STAMMSEKTION_ROLES.map(&:sti_name).include?(type)
   end
 
   private

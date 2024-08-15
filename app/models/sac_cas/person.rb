@@ -91,11 +91,11 @@ module SacCas::Person
   end
 
   def sac_tour_guide?
-    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES)
+    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES.map(&:sti_name))
   end
 
   def backoffice?
-    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES)
+    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
   end
 
   def sac_membership
