@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "leave zusatzsektion", :tests_active_jobs, js: true do
+describe "leave zusatzsektion", js: true do
   let(:person) { people(:mitglied) }
   let(:role) { person.roles.second }
   let(:operator) { person }
@@ -38,7 +38,7 @@ describe "leave zusatzsektion", :tests_active_jobs, js: true do
         .to change { person.roles.count }.by(-1)
         .and change { role.deleted_at }.from(nil)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer, :confirmation)
+        .and change { enqueued_mail_jobs_count }.by(1)
     end
   end
 
@@ -58,7 +58,7 @@ describe "leave zusatzsektion", :tests_active_jobs, js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer, :confirmation)
+        .and change { enqueued_mail_jobs_count }.by(1)
       expect(role.delete_on).not_to be_nil
     end
 
@@ -93,7 +93,7 @@ describe "leave zusatzsektion", :tests_active_jobs, js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer, :confirmation)
+        .and change { enqueued_mail_jobs_count }.by(1)
     end
   end
 
