@@ -51,12 +51,8 @@ it:
         register_as: ""
         family: ""
         myself: ""
-      wizards/steps/switch_stammsektion/choose_date:
-        switch_on: ""
+      wizards/steps/switch_stammsektion:
         now: ""
-        next_year: ""
-      memberships/join_base:
-        join_date: ""
       memberships/leave_zusatzsektion:
         terminate_on: ""
       people/neuanmeldungen/reject:
