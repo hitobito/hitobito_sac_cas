@@ -61,6 +61,17 @@ describe TableDisplays::ResolvingColumn, type: :helper do
   end
 
   it_behaves_like "table display", {
+    column: :data_quality,
+    header: "Datenqualität",
+    value: "", # is icon
+    permission: :show
+  } do
+    let(:person) do
+      people(:admin).tap { |p| allow(p).to receive(:data_quality).and_return("info") }
+    end
+  end
+
+  it_behaves_like "table display", {
     column: :sac_remark_national_office,
     header: "Bemerkungen Geschäftsstelle",
     value: "Remark",

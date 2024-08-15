@@ -18,6 +18,7 @@ module TableDisplays
       wiedereintritt: :show,
       self_registration_reason: :show_full,
       address_valid: :show,
+      data_quality: :show,
       sac_remark_national_office: :manage_national_office_remark,
       sac_remark_section_1: :manage_section_remarks,
       sac_remark_section_2: :manage_section_remarks,

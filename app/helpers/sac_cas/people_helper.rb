@@ -36,6 +36,10 @@ module SacCas::PeopleHelper
     end
   end
 
+  def format_person_data_quality(person)
+    format_data_quality_icons(person.data_quality)
+  end
+
   private
 
   def people_sac_membership_qr_code_clickable(verification_qr_code, image)
@@ -43,5 +47,15 @@ module SacCas::PeopleHelper
     link_to(verify_url, target: "_blank", rel: "noopener") do
       image
     end
+  end
+
+  def format_data_quality_icons(status)
+    icons = {
+      ok: "check-circle",
+      info: "info-circle",
+      warning: "exclamation-triangle",
+      error: "times-circle"
+    }
+    icon(icons[status.to_sym], title: I18n.t("people.data_quality.#{status}"))
   end
 end

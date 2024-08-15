@@ -192,6 +192,7 @@ module HitobitoSacCas
           :wiedereintritt,
           :self_registration_reason,
           :address_valid,
+          :data_quality,
           :sac_remark_national_office,
           :sac_remark_section_1,
           :sac_remark_section_2,

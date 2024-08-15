@@ -312,6 +312,7 @@ de:
         sac_remark_section_3: Bemerkungen Sektion 3
         sac_remark_section_4: Bemerkungen Sektion 4
         sac_remark_section_5: Bemerkungen Sektion 5
+        data_quality: Datenqualität
         correspondences:
           digital: Digital
           print: Physisch
@@ -1170,6 +1171,12 @@ de:
       history: Mitgliedschaften / Verlauf
       sac_remarks: Bemerkungen
       external_invoices: Rechnungen
+
+    data_quality:
+      ok: OK
+      info: Info
+      warning: Warnung
+      error: Fehler
 
     show_right_z_sac_cas:
       section_sac_membership: SAC Mitgliedschaft
