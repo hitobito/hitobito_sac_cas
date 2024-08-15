@@ -623,7 +623,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "last year without reduction" do
       before do
-        roles(:mitglied).update!(created_at: date.year - 24)
+        roles(:mitglied).update!(created_at: date - 24.years)
       end
 
       it "generates positions without reduction" do
