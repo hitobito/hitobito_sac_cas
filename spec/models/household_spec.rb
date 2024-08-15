@@ -22,8 +22,6 @@ describe Household do
 
   subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
-  def sequence = Sequence.by_name(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
-
   before do
     travel_to(Date.new(2024, 5, 31))
   end
@@ -39,13 +37,15 @@ describe Household do
   end
 
   it "uses sequence for household key" do
+    # Begin with counting sequence
+    Sequence.increment!(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+
     expect do
       household = adult.household
       household.add(child)
       household.save!
-    end.to change { sequence.current_value }.by(1)
-
-    expect(adult.reload.household_key).to eq sequence.current_value.to_s
+    end.to change { Sequence.current_value(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE) }.by(1)
+    expect(adult.reload.household_key).to eq Sequence.current_value(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE).to_s
   end
 
   describe "validations" do

@@ -72,9 +72,7 @@ class People::SacMembership
   def family_id
     return unless family?
 
-    @person.household_key
-    # TODO: Abklären ob und wie das verwendet wird
-    # @person.household_key.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
+    @person.household_key.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
   end
 
   private
