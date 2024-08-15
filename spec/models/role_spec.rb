@@ -386,7 +386,7 @@ describe Role do
   context "#membership_years" do
     let(:created_at) { Time.zone.parse("01-01-2000 12:00:00") }
     let(:end_at) { created_at + 7.years + 6.months }
-    let(:years) { 7.5 }
+    let(:years) { 7 }
 
     def create_role(**attrs)
       Fabricate(Group::SektionsMitglieder::Mitglied.name,

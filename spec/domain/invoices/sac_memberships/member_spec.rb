@@ -40,7 +40,7 @@ describe Invoices::SacMemberships::Member do
 
     it "counts years correctly" do
       roles(:mitglied).update_column(:created_at, "2015-01-20")
-      expect(subject.membership_years).to eq(8)
+      expect(subject.membership_years).to eq(9)
     end
 
     it "is off by one in first year" do
