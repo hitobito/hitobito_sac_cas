@@ -107,19 +107,16 @@ module SacCas::Household
   end
 
   def mutate_memberships!(new_people, removed_people)
-    new_people.each { |p| Memberships::FamilyMutation.new(p.reload).join!(reference_person) }
+    with_main, without_main = new_people.partition(&:sac_family_main_person)
+    (with_main + without_main).each { |p| Memberships::FamilyMutation.new(p.reload).join!(reference_person) }
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
-  # Sets one of the adults with confirmed email address as family main person unless
-  # there is already exactly one.
   def update_main_person!
-    # Take the first main person, or find the first adult with confirmed email
-    new_main_person = main_person || people.sort_by(&:years)
-      .find { |person| person.adult? && person.confirmed_at? }
+    new_main_person = main_person || people.select(&:adult?).max_by(&:years)
     others = people - [new_main_person]
     Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
-    Person.where(id: new_main_person).update_all(sac_family_main_person: true)
+    new_main_person.update_columns(sac_family_main_person: true)
   end
 
   def next_key
