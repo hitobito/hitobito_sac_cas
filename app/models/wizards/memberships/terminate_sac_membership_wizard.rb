@@ -73,7 +73,10 @@ module Wizards::Memberships
     end
 
     def mitglied_termination_by_section_only?
-      role&.layer_group&.mitglied_termination_by_section_only
+      role&.layer_group&.mitglied_termination_by_section_only ||
+        person.household.people
+          .flat_map { |person| person.sac_membership.zusatzsektion_roles }
+          .any? { |role| role.layer_group&.mitglied_termination_by_section_only }
     end
 
     def family_membership?
@@ -110,7 +113,7 @@ module Wizards::Memberships
     end
 
     def handle_start
-      if person&.sac_membership&.terminated?
+      if person.sac_membership.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif family_membership? && !family_main_person?
         Wizards::Steps::AskFamilyMainPerson.step_name
