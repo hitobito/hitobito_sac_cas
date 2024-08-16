@@ -92,7 +92,11 @@ class People::SacMembership
   def invoice?
     (stammsektion_role.present? || neuanmeldung_nv_stammsektion_roles.present?) &&
       (@person.sac_family_main_person? ||
-      (zusatzsektion_roles + neuanmeldung_nv_zusatzsektion_roles).any? { |r| !r.beitragskategorie.family? })
+      invoicable_roles.any? { |r| !r.beitragskategorie.family? })
+  end
+
+  def invoicable_roles
+    [stammsektion_role] + neuanmeldung_nv_stammsektion_roles + zusatzsektion_roles + neuanmeldung_nv_zusatzsektion_roles
   end
 
   def family?
