@@ -8,7 +8,7 @@
 class Qualifications::Expiring
   class << self
     def entries(finish_at)
-      Qualification.where(finish_at: finish_at).joins(latest_expirations_join).includes(:person)
+      Qualification.where(finish_at: finish_at).joins(latest_expirations_join)
     end
 
     private

@@ -974,6 +974,7 @@ de:
           überschrieben.
 
     participations:
+      missing_information: Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen. Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
       answers_step:
         total_duration_days_help: "Geplante Kursdauer: %{total_days} Tage"
       edit:

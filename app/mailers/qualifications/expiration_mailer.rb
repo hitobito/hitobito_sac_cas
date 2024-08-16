@@ -11,10 +11,10 @@ class Qualifications::ExpirationMailer < ApplicationMailer
   REMINDER_NEXT_YEAR = "qualification_expiration_reminder_next_year"
   REMINDER_YEAR_AFTER_NEXT_YEAR = "qualification_expiration_reminder_year_after_next_year"
 
-  def reminder(moment, person)
+  def reminder(moment, person_id)
     return unless MOMENTS.include?(moment)
 
-    compose(person, content_key(moment))
+    compose(Person.find(person_id), content_key(moment))
   end
 
   private

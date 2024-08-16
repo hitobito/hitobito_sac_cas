@@ -50,7 +50,8 @@ describe "switching stammsektion", js: true do
 
     before do
       roles(:familienmitglied_zweitsektion).destroy
-      roles(:familienmitglied_zweitsektion).destroy
+      roles(:familienmitglied2_zweitsektion).destroy
+      roles(:familienmitglied_kind_zweitsektion).destroy
     end
 
     it "can switch for all members" do

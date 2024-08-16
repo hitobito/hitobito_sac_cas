@@ -65,6 +65,8 @@ describe Groups::Primary do
     end
 
     it "favours older over newer" do
+      mitglied.roles.update_all(delete_on: "2015-12-31")
+
       Fabricate(
         Group::SektionsMitglieder::Mitglied.sti_name,
         group: other,

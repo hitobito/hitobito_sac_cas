@@ -34,11 +34,11 @@ class People::MembershipInvoicePositionsController < ApplicationController
   end
 
   def current_memberships
-    if member.new_entry_role
+    if member.neuanmeldung_nv_stammsektion_roles.present?
       @new_entry = true
-      [member.membership_from_role(member.new_entry_role, main: true)]
-    elsif member.new_additional_section_membership_roles.present?
-      [member.membership_from_role(member.new_additional_section_membership_roles.first)]
+      [member.membership_from_role(member.neuanmeldung_nv_stammsektion_roles.first, main: true)]
+    elsif member.neuanmeldung_nv_zusatzsektion_roles.present?
+      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.first)]
     else
       member.active_memberships
     end

@@ -45,6 +45,15 @@ module SacCas::Role
         where(beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY)
       }
 
+      scope :active, ->(date) {
+        with_deleted
+          .where(created_at: ..date.end_of_day)
+          .where("(delete_on IS NULL OR delete_on >= :date) AND " \
+                 "(deleted_at IS NULL OR deleted_at >= :datetime) AND " \
+                 "(archived_at IS NULL OR archived_at >= :datetime)",
+            date: date, datetime: date.beginning_of_day)
+      }
+
       belongs_to :termination_reason, optional: true
     end
   end

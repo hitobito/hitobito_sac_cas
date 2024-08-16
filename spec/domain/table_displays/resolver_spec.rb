@@ -112,6 +112,7 @@ describe TableDisplays::Resolver, type: :helper do
     let(:person) { people(:mitglied) }
 
     it "returns nein if person has active and prior membership" do
+      person.roles.update_all(delete_on: "2020-12-31")
       person.roles.create!(
         type: Group::SektionsMitglieder::Mitglied,
         group: groups(:matterhorn_mitglieder),

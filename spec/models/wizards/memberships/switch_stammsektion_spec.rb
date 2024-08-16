@@ -104,6 +104,7 @@ describe Wizards::Memberships::SwitchStammsektion do
         expect(wizard).to be_last_step
         roles(:familienmitglied_zweitsektion).destroy
         roles(:familienmitglied2_zweitsektion).destroy
+        roles(:familienmitglied_kind_zweitsektion).destroy
       end
 
       context "for main person" do

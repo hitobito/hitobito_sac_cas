@@ -103,6 +103,7 @@ describe Memberships::FamilyMutation do
       end
 
       it "handles future roles" do
+        reference_person.roles.update_all(delete_on: Date.current.end_of_year)
         reference_future_role = FutureRole.create!(
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
           person: reference_person,
@@ -228,6 +229,7 @@ describe Memberships::FamilyMutation do
     end
 
     it "handles future roles" do
+      person.roles.update_all(delete_on: Date.current.end_of_year)
       original_future_stammsektion_role = FutureRole.create!(
         group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
         person:,

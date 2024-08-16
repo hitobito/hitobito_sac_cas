@@ -34,16 +34,16 @@ module Invoices
 
       # Is the member exempt from fees of this section?
       def section_fee_exemption?(member)
-        member.sac_honorary_member? ||
-          (section_fee_exemption_for_honorary_members && member.section_honorary_member?(self)) ||
-          (section_fee_exemption_for_benefited_members && member.section_benefited_member?(self))
+        member.sac_ehrenmitglied? ||
+          (section_fee_exemption_for_honorary_members && member.sektion_ehrenmitglied?(self)) ||
+          (section_fee_exemption_for_benefited_members && member.sektion_beguenstigt?(self))
       end
 
       # Is the member exempt from fees of the sac zentralverband?
       def sac_fee_exemption?(member)
-        member.sac_honorary_member? ||
-          (sac_fee_exemption_for_honorary_members && member.section_honorary_member?(self)) ||
-          (sac_fee_exemption_for_benefited_members && member.section_benefited_member?(self))
+        member.sac_ehrenmitglied? ||
+          (sac_fee_exemption_for_honorary_members && member.sektion_ehrenmitglied?(self)) ||
+          (sac_fee_exemption_for_benefited_members && member.sektion_beguenstigt?(self))
       end
 
       def huts?
