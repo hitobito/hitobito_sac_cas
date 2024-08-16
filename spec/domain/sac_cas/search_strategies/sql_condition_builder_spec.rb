@@ -49,7 +49,7 @@ describe SearchStrategies::SqlConditionBuilder do
     let(:person) { people(:admin) }
 
     it "matches id using like" do
-      expect(build(person.id.to_s, %w[people.id])).to eq "id::text ILIKE '%#{person.id}%'"
+      expect(build(person.id.to_s, %w[people.id])).to eq "people.id::text ILIKE '%#{person.id}%'"
     end
 
     it "ignores non digit only word" do
