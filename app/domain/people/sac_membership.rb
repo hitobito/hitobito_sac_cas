@@ -88,15 +88,10 @@ class People::SacMembership
   # Für eine Person kann eine Mitgliedschaftsrechnung erzeugt werden, wenn
   # die Person eine Stammsektionsmitgliedschaft oder -anmeldung hat UND
   # (die Person die Familienhauptperson ist ODER mindestens eine
-  #  individuelle Zusatzektions Mitglied- oder Neuanmeldung-Rolle hat (Beitragskategorie != "family"))
+  #  individuelle Rolle hat (Beitragskategorie != "family"))
   def invoice?
     (stammsektion_role.present? || neuanmeldung_nv_stammsektion_roles.present?) &&
-      (@person.sac_family_main_person? ||
-      invoicable_roles.any? { |r| !r.beitragskategorie.family? })
-  end
-
-  def invoicable_roles
-    [stammsektion_role] + neuanmeldung_nv_stammsektion_roles + zusatzsektion_roles + neuanmeldung_nv_zusatzsektion_roles
+      (@person.sac_family_main_person? || individual_membership?)
   end
 
   def family?
@@ -111,19 +106,17 @@ class People::SacMembership
 
   private
 
-  def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+  def individual_membership?
+    if in_memory?
+      invoicable_roles.any? { |r| !r.beitragskategorie.family? }
+    else
+      invoicable_roles.where.not(beitragskategorie: :family).exists?
+    end
+  end
 
-  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
-
-  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
-
-  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
-
-  def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
-
-  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
-
-  def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+  def invoicable_roles
+    active_roles_of_type(invoicable_types)
+  end
 
   def active_roles
     if @date
@@ -156,5 +149,26 @@ class People::SacMembership
 
   def any_past_role?
     @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
+  end
+
+  def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+
+  def mitglied_stammsektion_types = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
+  def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def invoicable_types
+    mitglied_stammsektion_types +
+      mitglied_zusatzsektion_types +
+      neuanmeldung_nv_stammsektion_types +
+      neuanmeldung_nv_zusatzsektion_types
   end
 end
