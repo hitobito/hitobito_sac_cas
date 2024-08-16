@@ -16,7 +16,7 @@ module SacCas::Event::ParticipationsController
     permitted_attrs << :subsidy << :adult_consent << :terms_and_conditions << :newsletter
 
     around_create :proceed_wizard
-    after_create :subscribe_newsletter
+    after_create :subscribe_newsletter, :send_participation_confirmation_email
     before_cancel :assert_participant_cancelable?
   end
 
@@ -150,5 +150,20 @@ module SacCas::Event::ParticipationsController
     super.tap do |e|
       e.newsletter = true if subscribe_newsletter?
     end
+  end
+
+  def send_participation_confirmation_email
+    # Ignore Event::ParticipationDecorator
+    return unless entry.is_a?(Event::Participation)
+
+    content_key = if entry.state == "assigned"
+      Event::ApplicationConfirmationMailer::ASSIGNED
+    elsif entry.state == "unconfirmed"
+      Event::ApplicationConfirmationMailer::UNCONFIRMED
+    else
+      Event::ApplicationConfirmationMailer::APPLIED
+    end
+
+    Event::ApplicationConfirmationJob.new(entry, content_key).enqueue!
   end
 end
