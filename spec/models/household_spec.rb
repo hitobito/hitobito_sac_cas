@@ -13,12 +13,13 @@ describe Household do
     role_type = group.class.const_get(role)
     Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
   end
+  let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
 
-  let(:person) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
-  let(:adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
-  let(:child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
-  let(:second_child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
-  let(:second_adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
+  let(:person) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
+  let(:adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
+  let(:child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
+  let(:second_child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
+  let(:second_adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
 
   subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
@@ -132,6 +133,14 @@ describe Household do
         end
           .to change { person.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
           .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
+      end
+
+      it "makes oldest person main person" do
+        person.update!(birthday: 22.years.ago)
+        adult.update!(birthday: 24.years.ago)
+        expect do
+          household.add(adult).save!
+        end.to change { adult.sac_family_main_person }.from(false).to(true)
       end
 
       it "calls Memberships::FamilyMutation#join! for added person" do
