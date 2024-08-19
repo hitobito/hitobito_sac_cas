@@ -61,6 +61,7 @@ module HitobitoSacCas
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
       Wizards::Steps::NewUserForm.support_company = false
+      Wizards::RegisterNewUserWizard.delegate :email, to: :new_user_form
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
