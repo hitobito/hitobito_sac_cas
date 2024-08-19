@@ -45,7 +45,7 @@ describe Invoices::SacMemberships::Member do
 
     it "is off by one in first year" do
       roles(:mitglied).update_column(:created_at, date)
-      expect(subject.membership_years).to eq(1)
+      expect(subject.membership_years).to eq(2)
     end
   end
 

@@ -105,6 +105,18 @@ describe Person do
         end
       end
     end
+
+    it "calculates membership years from roles starting and ending in overlaping years" do
+      role = create_role(delete_on: created_at + 200.days)
+      role.update!(created_at: created_at + 100.days)
+      expect(person_with_membership_years.membership_years).to eq 0
+
+      role.update(delete_on: created_at + 565.days)
+      expect(person_with_membership_years.membership_years).to eq(1)
+
+      role.update(delete_on: created_at + 930.days)
+      expect(person_with_membership_years.membership_years).to eq(2)
+    end
   end
 
   describe "#salutation_label" do
