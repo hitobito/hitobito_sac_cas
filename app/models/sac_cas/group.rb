@@ -18,6 +18,13 @@ module SacCas::Group
     alias_method :group_id, :id
 
     attribute :navision_id, :integer
+
+    class << self
+      def order_by_type
+        joins("INNER JOIN group_type_orders ON group_type_orders.name = groups.type")
+          .order("group_type_orders.order_weight ASC")
+      end
+    end
   end
 
   def navision_id_padded

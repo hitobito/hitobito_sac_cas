@@ -105,7 +105,7 @@ class SacPersonSeeder < PersonSeeder
     return unless Group::SektionsMitglieder::Ehrenmitglied.count.zero?
 
     mitglied_role_types = [Group::SektionsMitglieder::Mitglied,
-      Group::SektionsMitglieder::MitgliedZusatzsektion].each(&:sti_name)
+      Group::SektionsMitglieder::MitgliedZusatzsektion].map(&:sti_name)
     mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id,
       :group_id).sample(21)
     mitglied_role_ids.each do |person_id, group_id|
