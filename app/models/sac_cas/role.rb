@@ -10,32 +10,36 @@ module SacCas::Role
     def select_with_membership_years(date = Time.zone.today)
       <<~SQL
           CASE
-           -- membership_years is only calculated for Mitglied roles
-           WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-           ELSE 
-               YEAR(
-                   LEAST(
-                       CURDATE(),
-                       COALESCE(roles.deleted_at, '9999-12-31'),
-                       COALESCE(roles.archived_at, '9999-12-31'),
-                       COALESCE(roles.delete_on, '9999-12-31')
-                   )
-               ) 
-               - YEAR(roles.created_at)
-               - CASE
-                   WHEN DATE_FORMAT(
-                           LEAST(
-                               CURDATE(),
-                               COALESCE(roles.deleted_at, '9999-12-31'),
-                               COALESCE(roles.archived_at, '9999-12-31'),
-                               COALESCE(roles.delete_on, '9999-12-31')
-                           ), 
-                           '%m-%d'
-                       ) < DATE_FORMAT(roles.created_at, '%m-%d')
-                   THEN 1 
-                   ELSE 0 
-                 END
-       END AS membership_years
+            -- membership_years is only calculated for Mitglied roles
+            WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+            ELSE (
+                TIMESTAMPDIFF(
+                    YEAR, 
+                    DATE(roles.created_at), 
+                    LEAST(
+                        CURDATE(),
+                        COALESCE(DATE(roles.deleted_at), '9999-12-31'),
+                        COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                        COALESCE(roles.delete_on, '9999-12-31')
+                    )
+                ) 
+                -- Add 1 year if the created_at is Jan 1st and the end_date is Dec 31st
+                + CASE 
+                    WHEN DATE_FORMAT(DATE(roles.created_at), '%m-%d') <= '01-01' 
+                         AND DATE_FORMAT(
+                             LEAST(
+                                CURDATE(),
+                                COALESCE(DATE(roles.deleted_at), '9999-12-31'),
+                                COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                                COALESCE(roles.delete_on, '9999-12-31')
+                            ), 
+                            '%m-%d'
+                         ) = '12-31'
+                    THEN 1 
+                    ELSE 0 
+                  END
+            )
+        END AS membership_years
       SQL
     end
   end

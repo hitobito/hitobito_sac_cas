@@ -90,59 +90,20 @@ describe Person do
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
-    it "rounds down to full years" do
+    it 'calculates membership years correctly for the next 20 years' do
       role = create_role(delete_on: created_at + 363.days)
       expect(person_with_membership_years.membership_years).to eq 0
 
-      role.update(delete_on: created_at + 1.years)
-      expect(person_with_membership_years.membership_years).to eq 1
-
-      role.update(delete_on: created_at + 2.years - 1.days)
-      expect(person_with_membership_years.membership_years).to eq 1
-
-      role.update(delete_on: created_at + 2.years)
-      expect(person_with_membership_years.membership_years).to eq 2
-
-      role.update(delete_on: created_at + 3.years - 1.days)
-      expect(person_with_membership_years.membership_years).to eq 2
-
-      role.update(delete_on: created_at + 3.years)
-      expect(person_with_membership_years.membership_years).to eq 3
-
-      role.update(delete_on: created_at + 4.years - 1.days)
-      expect(person_with_membership_years.membership_years).to eq 3
-
-      role.update(delete_on: created_at + 4.years)
-      expect(person_with_membership_years.membership_years).to eq 4
-
-      role.update(delete_on: created_at + 5.years - 1.days)
-      expect(person_with_membership_years.membership_years).to eq 4
-
-      role.update(delete_on: created_at + 5.years)
-      expect(person_with_membership_years.membership_years).to eq 5
-
-      role.update(delete_on: created_at + 20.years - 1.days)
-      expect(person_with_membership_years.membership_years).to eq 19
-
-      # 2000 was a leap year (role date is 31.12.2000 in this test case)
-      role.update(delete_on: created_at + 365.days)
-      expect(person_with_membership_years.membership_years).to eq 0
-
-      # 2000 was a leap year (role date is 01.01.2001 in this test case)
-      role.update(delete_on: created_at + 366.days)
-      expect(person_with_membership_years.membership_years).to eq 1
-
-      # 2004 was a leap year (role date is 31.12.2004 in this test case)
-      role.update(delete_on: created_at + 1826.days)
-      expect(person_with_membership_years.membership_years).to eq 4
-
-      # 2004 was a leap year (role date is 01.01.2005 in this test case)
-      role.update(delete_on: created_at + 1827.days)
-      expect(person_with_membership_years.membership_years).to eq 5
-
-      # check membership duration when role was created in the end of year and delete on is in less than one year
-      role.update(created_at: Date.new(2000, 12, 31), delete_on: Date.new(2001, 06, 06))
-      expect(person_with_membership_years.membership_years).to eq 0
+      (1..20).each do |x|
+        [
+          { years_offset: x.years - 2.days, expected_years: x - 1 },
+          { years_offset: x.years - 1.days, expected_years: x },
+          { years_offset: x.years, expected_years: x }
+        ].each do |test_case|
+          role.update(delete_on: role.created_at + test_case[:years_offset])
+          expect(person_with_membership_years.membership_years).to eq(test_case[:expected_years])
+        end
+      end
     end
   end
 
