@@ -76,17 +76,17 @@ it:
         email: ""
 
       wizards/steps/termination_choose_date:
-        terminate_on: ''
+        terminate_on: ""
         now: ""
         end_of_year: ""
 
       wizards/steps/leave_zusatzsektion/summary:
-        termination_reason_id: ''
+        termination_reason_id: ""
       wizards/steps/termination/summary:
-        termination_reason_id: ''
-        data_retention_consent: ''
-        subscribe_newsletter: ''
-        subscribe_fundraising_list: ''
+        termination_reason_id: ""
+        data_retention_consent: ""
+        subscribe_newsletter: ""
+        subscribe_fundraising_list: ""
 
     errors:
       messages:
@@ -119,6 +119,9 @@ it:
               must_not_be_join_section_member:
                 ""
               must_be_family_main_person: ""
+        person:
+          data_quality_issue:
+            message: ''
 
         wizards/steps/choose_sektion:
           requires_admin: ""
@@ -551,6 +554,26 @@ it:
         many: ''
         other: ''
 
+      group/sac_cas_clubhuetten:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sac_cas_clubhuette:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sac_cas_privathuetten:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sac_cas_privathuette:
+        one: ''
+        many: ''
+        other: ''
+
       group/sektion:
         one: ''
         many: ''
@@ -729,6 +752,34 @@ it:
       group/abo_basic_login/basic_login:
         one: ""
         description: ""
+      group/sac_cas_clubhuetten/schreibrecht:
+        one: ""
+        description: ""
+      group/sac_cas_clubhuette/huettenchef:
+        one: ""
+        description: ""
+      group/sac_cas_clubhuette/huettenwart:
+        one: ""
+        description: ""
+      group/sac_cas_clubhuette/andere:
+        one: ""
+        description: ""
+        huettenwartspartner: ""
+        schluesseldepot: ""
+      group/sac_cas_privathuetten/schreibrecht:
+        one: ""
+        description: ""
+      group/sac_cas_privathuette/huettenchef:
+        one: ""
+        description: ""
+      group/sac_cas_privathuette/huettenwart:
+        one: ""
+        description: ""
+      group/sac_cas_privathuette/andere:
+        one: ""
+        description: ""
+        huettenwartspartner: ""
+        schluesseldepot: ""
       group/sektions_funktionaere/administration:
         one: ""
         description: ""
@@ -908,7 +959,6 @@ it:
         one: ""
         description: ""
 
-
   devise:
     sessions:
       form:
@@ -930,7 +980,6 @@ it:
   dropdown/group_edit:
     sac_membership_configs: ""
     sac_section_membership_configs: ""
-
 
   event:
     kinds:
@@ -1128,9 +1177,9 @@ it:
   people/neuanmeldungen/approves:
     new:
       text:
-        one: ''
-        many: ''
-        other: ''
+        one: ""
+        many: ""
+        other: ""
       submit: ""
     create:
       success:
@@ -1142,9 +1191,9 @@ it:
     new:
       note_placeholder: ""
       text:
-        one: ''
-        many: ''
-        other: ''
+        one: ""
+        many: ""
+        other: ""
       submit: ""
     create:
       success:
@@ -1206,7 +1255,6 @@ it:
       household_title: ""
       main_title: ""
       supplements_title: ""
-
 
   memberships:
     join_zusatzsektions:
@@ -1411,7 +1459,6 @@ it:
 
           various_fields_title: ""
 
-
         various_fields:
           newsletter: ""
           statutes_text: ""
@@ -1420,7 +1467,8 @@ it:
           data_protection_text: ""
       choose_sektion:
         no_self_service_info_text: ""
-        backoffice_no_self_service_info_text: ''
+        backoffice_no_self_service_info_text:
+          ""
       choose_membership:
         not_main_family_person_info_text: >
       switch_stammsektion:
@@ -1429,11 +1477,11 @@ it:
         choose_date:
           info_text: ""
         summary:
-          info_text: ''
+          info_text: ""
           next_button: ""
       join_zusatzsektion:
         summary:
-          info_text: ''
+          info_text: ""
           next_button: ""
       membership_terminated_info:
         info: ""
@@ -1455,7 +1503,8 @@ it:
           termination_by_section_only: ""
           family_warning: ""
           data_retention_info_title: ""
-          data_retention_info_text: ""
+          data_retention_info_text:
+            ""
           newsletter_info_text: ""
           fundraiser_info_text: ""
           next_button: ""
