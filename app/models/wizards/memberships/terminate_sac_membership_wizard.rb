@@ -50,7 +50,6 @@ module Wizards::Memberships
         terminate_operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
-        terminate_operation.errors.copy!(self)
       end
 
       errors.empty?
