@@ -27,8 +27,8 @@ module TableDisplays
       end
     end
 
-    def sort_by(_attr)
-      nil
+    def sort_by(attr)
+      "people.data_quality" if attr == :data_quality
     end
   end
 end
