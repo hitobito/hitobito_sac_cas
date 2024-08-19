@@ -24,7 +24,7 @@ describe EventsController do
       let(:person) { people(:admin) }
 
       before do
-        top_course.update_columns(unconfirmed_count: 2)
+        top_course.update!(unconfirmed_count: 2)
         top_course.dates.first.update_columns(start_at: Time.zone.now)
       end
 
