@@ -86,7 +86,6 @@ module Wizards::Memberships
         leave_operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
-        leave_operation.errors.copy!(self)
       end
     end
 

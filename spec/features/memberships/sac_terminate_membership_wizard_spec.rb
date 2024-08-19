@@ -88,6 +88,21 @@ describe "terminate sac membership wizard", js: true do
       expect(role.delete_on).not_to be_nil
     end
 
+    it "role validation errors on wizard" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      role.update_columns(created_at: Time.zone.now.beginning_of_year + 3.months)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      expect(page).to have_title "SAC-Mitgliedschaft beenden"
+      select termination_reason.text
+      expect do
+        click_button "Austritt beantragen"
+        expect(page).to have_css ".alert-danger-alert", text: "Edmund Hillary: Person muss Mitglied sein während der ganzen " \
+          "Gültigkeitsdauer der Zusatzsektion."
+      end
+    end
+
     context "when sektion has mitglied_termination_by_section_only=true" do
       before do
         additional_section.update!(mitglied_termination_by_section_only: false)
