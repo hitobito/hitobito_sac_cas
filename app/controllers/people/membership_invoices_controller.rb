@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-
   helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen
 
   def create
@@ -91,10 +90,6 @@ class People::MembershipInvoicesController < ApplicationController
 
   def group
     @group ||= Group.find(params[:group_id])
-  end
-
-  def context
-    @context ||= Invoices::SacMemberships::Context.new(date)
   end
 
   def date

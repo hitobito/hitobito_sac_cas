@@ -25,7 +25,7 @@ describe People::MembershipInvoicesController, type: :controller do
         post :create, params: {
           group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
-          people_membership_invoice: {
+          people_membership_invoice_form: {
             reference_date: Time.zone.today,
             invoice_date: Time.zone.today,
             send_date: Time.zone.today,
@@ -46,7 +46,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: Time.zone.today,
               invoice_date: Time.zone.today,
               send_date: "",
@@ -55,7 +55,7 @@ describe People::MembershipInvoicesController, type: :controller do
             }
           }
         end.not_to change { ExternalInvoice.count }
-  
+
         expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
         expect(flash[:alert]).to include("Versanddatum muss ausgefüllt werden")
       end
@@ -65,7 +65,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: "",
               invoice_date: "",
               send_date: Time.zone.today,
@@ -83,7 +83,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: Time.zone.today.next_year(5),
               invoice_date: Time.zone.today,
               send_date: Time.zone.today,
@@ -92,7 +92,7 @@ describe People::MembershipInvoicesController, type: :controller do
             }
           }
         end.not_to change { ExternalInvoice.count }
-  
+
         expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
         expect(flash[:alert]).to include("Stichtag muss 31.12.2025 oder davor sein")
       end
@@ -102,7 +102,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: Time.zone.today.last_year,
               invoice_date: Time.zone.today,
               send_date: Time.zone.today,
@@ -111,7 +111,7 @@ describe People::MembershipInvoicesController, type: :controller do
             }
           }
         end.not_to change { ExternalInvoice.count }
-  
+
         expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
         expect(flash[:alert]).to include("Stichtag muss 01.01.2024 oder danach sein")
       end
@@ -124,7 +124,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: Time.zone.today,
               invoice_date: Time.zone.today,
               send_date: Time.zone.today.next_year,
@@ -143,7 +143,7 @@ describe People::MembershipInvoicesController, type: :controller do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
-            people_membership_invoice: {
+            people_membership_invoice_form: {
               reference_date: Time.zone.today,
               invoice_date: Time.zone.today,
               send_date: Time.zone.today,

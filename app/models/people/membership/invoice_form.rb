@@ -33,7 +33,7 @@ class People::Membership::InvoiceForm
   private
 
   def send_date_end_date
-    @person.sac_membership.stammsektion_role.delete_on.year > date_today.year ? date_today.end_of_year : date_today.next_year.end_of_year
+    (@person.sac_membership.stammsektion_role.delete_on.year > date_today.year) ? date_today.end_of_year : date_today.next_year.end_of_year
   end
 
   def date_today
