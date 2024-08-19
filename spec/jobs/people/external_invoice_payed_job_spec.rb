@@ -14,7 +14,7 @@ describe People::ExternalInvoicePayedJob < BaseJob do
 
   it "executes membership manager update membership status" do
     allow(ExternalInvoice::SacMembership::MembershipManager).to receive(:update_membership_status)
-    
+
     job.perform
   end
 end

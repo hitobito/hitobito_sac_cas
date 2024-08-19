@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class ExternalInvoice::SacMembership::MembershipManager
-
   attr_reader :person, :group, :year, :member
 
   def initialize(person, group, year)
