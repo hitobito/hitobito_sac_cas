@@ -67,4 +67,12 @@ describe "people list page", :js do
       expect(page).to have_text("Bemerkungen Sektion 1")
     end
   end
+
+  it "allows showing the data_quality column" do
+    visit group_people_path(group_id: group.id)
+    click_link("Spalten")
+    check("Datenqualität")
+    click_link("Spalten")
+    expect(page).to have_css('td[data-attribute-name="data_quality"]')
+  end
 end
