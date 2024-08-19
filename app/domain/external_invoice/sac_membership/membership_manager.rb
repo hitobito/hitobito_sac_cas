@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class ExternalInvoice::SacMembership::MembershipManager
+
+  attr_reader :person, :group, :year, :member
+
   def initialize(person, group, year)
     @person = person
     @group = group
@@ -18,14 +21,14 @@ class ExternalInvoice::SacMembership::MembershipManager
   def update_membership_status
     ActiveRecord::Base.transaction do
       if stammsektion?
-        extend_membership_duration(@person, @year)
+        extend_membership_duration(person, year)
       elsif neuanmeldung_stammsektion?
         set_confirmed_at
-        update_role_to_stammsektion_mitglied(@person)
-        @person.household_people.each { |family_member| update_role_to_stammsektion_mitglied(family_member) } if family_main_person?
+        update_role_to_stammsektion_mitglied(person)
+        update_family_roles_to_stammsektion_mitglied(person)
       elsif neuanmeldung_zusatzsektion?
-        update_roles_to_zusatzsektion_mitglied(@person)
-        @person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) } if family_main_person?
+        update_roles_to_zusatzsektion_mitglied(person)
+        update_family_roles_to_zusatzsektion_mitglied(person)
       end
     end
   end
@@ -40,7 +43,7 @@ class ExternalInvoice::SacMembership::MembershipManager
     if family_main_person?
       roles_for_update.concat(family_memberships.map(&:stammsektion_role))
       roles_for_update.concat(family_memberships.flat_map(&:zusatzsektion_roles)
-                      .select { |zusatzsektion| zusatzsektion.beitragskategorie == "family" })
+                      .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
     end
 
     roles_for_update.each do |role|
@@ -60,35 +63,47 @@ class ExternalInvoice::SacMembership::MembershipManager
     end
   end
 
+  def update_family_roles_to_stammsektion_mitglied(person)
+    person.household_people.each { |family_member| update_role_to_stammsektion_mitglied(family_member) } if family_main_person?
+  end
+
+  def update_family_roles_to_zusatzsektion_mitglied(person)
+    person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) } if family_main_person?
+  end
+
   def create_mitglied_role(person)
-    Group::SektionsMitglieder::Mitglied.create!(person: person, group: @group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first, delete_on: Date.new(@year).end_of_year, created_at: Time.zone.now)
+    Group::SektionsMitglieder::Mitglied.create!(person: person, group: mitglieder_sektion, delete_on: Date.new(year).end_of_year, created_at: Time.zone.now)
   end
 
   def create_mitglied_zusatzsektion_role(person)
-    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person: person, group: @group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first, delete_on: Date.new(@year).end_of_year, created_at: Time.zone.now)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person: person, group: mitglieder_sektion, delete_on: Date.new(year).end_of_year, created_at: Time.zone.now)
+  end
+
+  def mitglieder_sektion
+    group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
   end
 
   def stammsektion?
-    @person.sac_membership.active? && @person.sac_membership.stammsektion_role.layer_group == @group.layer_group
+    person.sac_membership.active? && person.sac_membership.stammsektion_role.layer_group == group.layer_group
   end
 
   def neuanmeldung_stammsektion?
-    @person.sac_membership.neuanmeldung_stammsektion_role&.layer_group == @group.layer_group
+    person.sac_membership.neuanmeldung_stammsektion_role&.layer_group == group.layer_group
   end
 
   def neuanmeldung_zusatzsektion?
-    @person.sac_membership.neuanmeldung_zusatzsektion_roles.first.layer_group == @group.layer_group
+    person.sac_membership.neuanmeldung_zusatzsektion_roles.first.layer_group == group.layer_group
   end
 
   def family_main_person?
-    @person.sac_family_main_person?
+    person.sac_family_main_person?
   end
 
   def family_memberships
-    @member.family_members.map(&:sac_membership)
+    member.family_members.map(&:sac_membership)
   end
 
   def set_confirmed_at
-    @person.confirmed_at = Time.zone.now if @person.confirmed_at.blank?
+    person.confirmed_at = Time.zone.now if person.confirmed_at.blank?
   end
 end

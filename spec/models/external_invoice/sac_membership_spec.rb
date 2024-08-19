@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe ExternalInvoice::SacMembership, :tests_active_jobs do
+describe ExternalInvoice::SacMembership do
   describe "after_update callback" do
     let(:external_invoice) { ExternalInvoice::SacMembership.create!(state: :draft, person: people(:mitglied), link: groups(:bluemlisalp_mitglieder)) }
 

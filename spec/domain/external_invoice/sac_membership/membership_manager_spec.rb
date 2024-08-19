@@ -86,7 +86,7 @@ describe ExternalInvoice::SacMembership::MembershipManager do
   context "link to self registration stammsektion role" do
     context "adult" do
       let(:new_member) do
-        person = Fabricate(:person, birthday: Time.zone.today - 19.years)
+        person = Fabricate(:person, birthday: Time.zone.today - 19.years, confirmed_at: nil)
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
           person: person,
           beitragskategorie: :adult,
@@ -99,6 +99,7 @@ describe ExternalInvoice::SacMembership::MembershipManager do
       it "creates stammsektion role" do
         subject.update_membership_status
 
+        expect(new_member.confirmed_at).to be_within(2.seconds).of(Time.zone.now)
         expect(new_member.sac_membership.active?).to eq(true)
         expect(new_member.roles.count).to eq(1)
         expect(new_member.sac_membership.stammsektion_role.delete_on).to eq(Date.new(date.year).end_of_year)
