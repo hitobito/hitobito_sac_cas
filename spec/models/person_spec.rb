@@ -90,15 +90,15 @@ describe Person do
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
-    it 'calculates membership years correctly for the next 20 years' do
+    it "calculates membership years correctly for the next 20 years" do
       role = create_role(delete_on: created_at + 363.days)
       expect(person_with_membership_years.membership_years).to eq 0
 
       (1..20).each do |x|
         [
-          { years_offset: x.years - 2.days, expected_years: x - 1 },
-          { years_offset: x.years - 1.days, expected_years: x },
-          { years_offset: x.years, expected_years: x }
+          {years_offset: x.years - 2.days, expected_years: x - 1},
+          {years_offset: x.years - 1.days, expected_years: x},
+          {years_offset: x.years, expected_years: x}
         ].each do |test_case|
           role.update(delete_on: role.created_at + test_case[:years_offset])
           expect(person_with_membership_years.membership_years).to eq(test_case[:expected_years])
