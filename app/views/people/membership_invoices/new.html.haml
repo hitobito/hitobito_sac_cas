@@ -2,13 +2,14 @@
   .alert.alert-info=t(".alert_info")
   
   = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
-    %h1 Mitgliedschaftsrechnung erstellen
+    %h1
+      = t(".form_title")
     = f.labeled(:reference_date) do
-      = f.date_field(:reference_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
+      = f.date_field(:reference_date, class: 'date col-6', minDate: date_range(:reference_date).min, maxDate: date_range(:reference_date_date).max)
     = f.labeled(:invoice_date) do
-      = f.date_field(:invoice_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (Date.today.end_of_year + 1.year))
+      = f.date_field(:invoice_date, class: 'date col-6', minDate: date_range(:invoice_date).min, maxDate: date_range(:invoice_date).max)
     = f.labeled(:send_date) do
-      = f.date_field(:send_date, class: 'date col-6', minDate: Date.today.beginning_of_year, maxDate: (already_member_next_year?(@person) ? Date.today.end_of_year + 1.year : Date.today.end_of_year))
+      = f.date_field(:send_date, class: 'date col-6', minDate: date_range(:send_date).min, maxDate: date_range(:send_date).max)
 
     = f.labeled(:section_id) do
       - main_section = @person.sac_membership.stammsektion_role.layer_group
@@ -28,7 +29,7 @@
       = f.inline_radio_button :discount, 100, "100%", true
 
     = f.indented do
-      = submit_button(f, "Rechnung erstellen")
+      = submit_button(f, t(".create_invoice"))
       = cancel_link(external_invoices_group_person_path(@group, @person))
 - else
   .alert.alert-warning= t(".alert_warning")
