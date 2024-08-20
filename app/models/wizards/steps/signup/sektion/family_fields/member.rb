@@ -39,7 +39,7 @@ module Wizards::Steps::Signup::Sektion
     private
 
     def assert_email_unique
-      if emails.include?(email)
+      if emails.include?(email) || Person.exists?(email: email)
         errors.add(:email, :taken)
       end
       emails.push(email)
