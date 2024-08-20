@@ -37,8 +37,8 @@ describe EventsController do
 
       it "sorts by unconfirmed" do
         get :index, params: params.merge(sort: :unconfirmed_count, sort_dir: :desc)
-        expect(dom).not_to have_css "tr:nth-of-type(1) .badge.bg-secondary", text: "2"
-        expect(dom).to have_css "tr:nth-of-type(2) .badge.bg-secondary"
+        expect(dom).to have_css "tr:nth-of-type(1) .badge.bg-secondary", text: "2"
+        expect(dom).not_to have_css "tr:nth-of-type(2) .badge.bg-secondary"
       end
     end
 
