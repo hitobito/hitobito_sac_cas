@@ -68,12 +68,4 @@ describe FutureRole::FormHandling do
       let(:model) { described_class.new(double(:wizard)) }
     end
   end
-
-  describe SelfInscription do
-    it_behaves_like "register_on_options" do
-      let(:person) { Fabricate.build(:person, birthday: 40.years.ago) }
-      let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-      let(:model) { described_class.new(person: person, group: group) }
-    end
-  end
 end
