@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-  helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen
+  helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen, :member
 
   def create
     authorize!(:create, external_invoice)
@@ -16,9 +16,7 @@ class People::MembershipInvoicesController < ApplicationController
     if invoice_form.valid? && create_invoice
       redirect_to external_invoices_group_person_path(group, person), notice: t("people.membership_invoices.success_notice")
     else
-      redirect_to new_group_person_membership_invoice_path(group, person),
-        alert: I18n.t("people.membership_invoices.alert_notice", message:
-          invoice_form.errors.full_messages.join(", "))
+      redirect_to new_group_person_membership_invoice_path(group, person), alert: t("people.membership_invoices.alert_notice", message: invoice_form.errors.full_messages.join(", "))
     end
   end
 
@@ -47,29 +45,26 @@ class People::MembershipInvoicesController < ApplicationController
     )
   end
 
-  def invoice_possible?(member, date)
-    memberships = member.active_memberships
-    memberships.present? && Invoices::Abacus::MembershipInvoice.new(member, memberships).invoice?
+  def invoice_possible?
+    Invoices::Abacus::MembershipInvoice.new(member, member.active_memberships).invoice? if member.active_memberships
   end
 
-  def date_range(attr)
-    if attr == :send_date
-      today.beginning_of_year..(already_member_next_year?(@person) ? today.next_year.end_of_year : today.end_of_year)
-    else
-      today.beginning_of_year..today.next_year.end_of_year
-    end
+  def date_range(attr = nil)
+    max_date = (attr == :send_date && !already_member_next_year?) ? today.end_of_year : today.next_year.end_of_year
+
+    {minDate: today.beginning_of_year, maxDate: max_date}
   end
 
-  def already_member_next_year?(person)
-    next_year = today.year + 1
+  def already_member_next_year?
+    next_year = today.next_year.year
     delete_on_date = person.sac_membership.stammsektion_role.delete_on
     delete_on_date >= Date.new(next_year, 1, 1) && delete_on_date <= Date.new(next_year, 12, 31)
   end
 
-  def currently_paying_zusatzsektionen(member)
-    memberships = member.additional_membership_roles + member.new_additional_section_membership_roles
-    paying_memberships = memberships.select { |membership| member.paying_person?(membership.beitragskategorie) }
-    paying_memberships.map(&:layer_group)
+  def currently_paying_zusatzsektionen
+    person.sac_membership.zusatzsektion_roles
+      .select { |membership| member.paying_person?(membership.beitragskategorie) }
+      .map(&:layer_group)
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
