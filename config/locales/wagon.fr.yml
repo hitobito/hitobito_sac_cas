@@ -64,17 +64,6 @@ fr:
         terminate_on: ""
       people/neuanmeldungen/reject:
         note: ""
-      self_inscription:
-        register_on: ""
-        register_on_options:
-          now: ""
-          jul: ""
-          oct: ""
-
-        register_as: ""
-        register_as_options:
-          extra: ""
-          replace: ""
 
       wizards/steps/choose_sektion:
         group_id: ""
@@ -1251,25 +1240,6 @@ fr:
         sektion_statuten_text: ""
         contribution_regulations_text: ""
         data_protection_text: ""
-
-    self_inscription:
-      membership_role_exists: ""
-      form:
-        register_on_info:
-          jul: ""
-          oct: ""
-        register_as_info: ""
-        inscribe: ""
-      new:
-        role_exists: ""
-      confirm:
-        title: ""
-        information_text: >
-        submit_button: ""
-
-  groups/self_inscription:
-    new:
-      details: ""
 
   groups/self_registration:
     global:

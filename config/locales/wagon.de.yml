@@ -67,17 +67,6 @@ de:
         terminate_on: Austrittsdatum
       people/neuanmeldungen/reject:
         note: Bemerkung
-      self_inscription:
-        register_on: Eintrittsdatum per
-        register_on_options:
-          now: sofort
-          jul: 01. Juli
-          oct: 01. Oktober
-
-        register_as: Eintritt als
-        register_as_options:
-          extra: Zusatzsektion
-          replace: Neue Stammsektion (ersetzt deine Bisherige)
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
@@ -1249,31 +1238,6 @@ de:
         sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
         data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
-
-    self_inscription:
-      membership_role_exists: Du bist bereits Mitglied dieser Sektion
-      form:
-        register_on_info:
-          jul: Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.
-          oct: Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.
-        register_as_info: "
-          Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
-          deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
-          Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
-          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich."
-        inscribe: Beitreten
-      new:
-        role_exists: Du bist bereits Mitglied dieser Sektion
-      confirm:
-        title: Beitritt bestätigen
-        information_text: >
-          Bitte bestätigen Sie den Beitritt in die Sektion %{sektion}.
-          Dieser Vorgang kann nicht rückgängig gemacht werden.
-        submit_button: Beitritt beantragen
-
-  groups/self_inscription:
-    new:
-      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
 
   groups/self_registration:
     global:
