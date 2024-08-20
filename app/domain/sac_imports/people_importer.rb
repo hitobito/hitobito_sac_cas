@@ -27,8 +27,18 @@ module SacImports
       @csv_report.finalize(output: @output)
     end
 
+    def target_group
+      @target_group ||= Group::ExterneKontakte.find_or_create_by!(
+        name: "Navision Import",
+        parent_id: Group::SacCas.first!.id
+      )
+    end
+
     def process_row(row)
-      @output.print("Reading row #{row[:navision_name]} ...")
+      @output.print("#{row[:navision_id]} (#{row[:navision_name]}):\n")
+      entry = PersonEntry.new(row, target_group)
+      @output.print("-> #{entry.errors.full_messages.join(", ")}\n")
+      # entry.import!
     end
   end
 end

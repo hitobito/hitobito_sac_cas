@@ -7,37 +7,25 @@
 
 module SacImports
   class PersonEntry
-    attr_reader :row
-
-    GENDERS = {
-      "Männlich" => "m",
-      "Weiblich" => "w"
-    }.freeze
-
-    LANGUAGES = {
-      "DES" => "de",
-      "FRS" => "fr",
-      "ITS" => "it"
-    }.freeze
-
+    GENDERS = {"0": "m", "1": "w"}.freeze
+    DEFAULT_LANGUAGE = "de"
+    LANGUAGES = {DES: "de", FRS: "fr", ITS: "it"}.freeze
+    DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    def initialize(row, group:, emails: [])
+    attr_reader :row, :group
+
+    def initialize(row, group)
       @row = row
       @group = group
-      @emails = emails
     end
 
     def person
-      @person ||= ::Person.find_or_initialize_by(id: navision_id).tap do |person|
+      @person ||= ::Person.new(id: navision_id).tap do |person|
         assign_attributes(person)
         build_phone_numbers(person)
         build_role(person)
       end
-    end
-
-    def email
-      @email ||= row.fetch(:email) if @emails.exclude?(row.fetch(:email))
     end
 
     def valid?
@@ -58,16 +46,56 @@ module SacImports
 
     private
 
+    def navision_id
+      @navision_id ||= Integer(row[:navision_id].to_s.sub!(/^0*/, ""))
+    end
+
+    def country
+      row[:country] || DEFAULT_COUNTRY
+    end
+
+    def gender
+      GENDERS[row[:gender]&.to_sym]
+    end
+
+    def language
+      LANGUAGES[row[:language]&.to_sym] || DEFAULT_LANGUAGE
+    end
+
+    def email
+      row[:email]
+    end
+
+    def parse_address
+      address = row[:address]
+      return if address.blank?
+
+      Address::Parser.new(address).parse
+    end
+
     def assign_attributes(person) # rubocop:disable Metrics/AbcSize
-      person.primary_group = @group
-      person.first_name = row.fetch(:first_name)
-      person.last_name = row.fetch(:last_name)
-      person.zip_code = row.fetch(:zip_code)
-      person.country = row.fetch(:country)
-      person.town = row.fetch(:town)
-      person.address_care_of = row.fetch(:address_supplement)
+      person.primary_group = group
+      person.first_name = row[:first_name]
+      person.last_name = row[:last_name]
+      person.address_care_of = row[:address_care_of]
+      person.postbox = row[:postbox]
+      person.address = row[:address]
+      person.street = row[:street]
+      person.housenumber = row[:housenumber]
+      person.country = country
+      person.town = row[:town]
+      person.zip_code = row[:zip_code]
+      person.birthday = row[:birthday]
+      person.gender = gender
+      person.language = language
+      person.sac_remark_section_1 = row[:sac_remark_section_1]
+      person.sac_remark_section_2 = row[:sac_remark_section_2]
+      person.sac_remark_section_3 = row[:sac_remark_section_3]
+      person.sac_remark_section_4 = row[:sac_remark_section_4]
+      person.sac_remark_section_5 = row[:sac_remark_section_5]
+      person.sac_remark_national_office = row[:sac_remark_national_office]
+
       person.street, person.housenumber = parse_address
-      person.postbox = row.fetch(:postfach)
 
       if email.present?
         person.email = email
@@ -75,53 +103,30 @@ module SacImports
         # Instead we set confirmed_at manually.
         person.confirmed_at = Time.zone.at(0)
       end
-
-      person.birthday = parse_datetime(row.fetch(:birthday))
-      person.gender = GENDERS[row.fetch(:gender).to_s]
-      person.language = LANGUAGES[row.fetch(:language)] || "de"
-    end
-
-    def build_phone_numbers(person)
-      phone = row.fetch(:phone)
-      mobile = row.fetch(:phone_mobile)
-      direct = row.fetch(:phone_direct)
-
-      # reset phone numbers first since import might be run multiple times
-      person.phone_numbers = []
-
-      person.phone_numbers.build(number: phone, label: "Privat") if phone_valid?(phone)
-      person.phone_numbers.build(number: mobile, label: "Mobil") if phone_valid?(mobile)
-      person.phone_numbers.build(number: direct, label: "Direkt") if phone_valid?(direct)
-    end
-
-    def build_role(person)
-      return if person.roles.exists?
-
-      person.roles.build(
-        group: @group,
-        type: TARGET_ROLE
-      )
-    end
-
-    def parse_address
-      address = row.fetch(:address)
-      return if address.blank?
-
-      Address::Parser.new(address).parse
     end
 
     def phone_valid?(number)
       number.present? && Phonelib.valid?(number)
     end
 
-    def parse_datetime(value, default: nil)
-      DateTime.parse(value.to_s)
-    rescue Date::Error
-      default
+    def build_phone_numbers(person)
+      # rubocop:disable Lint/SymbolConversion
+      phone_numbers = {
+        "Privat": row[:phone],
+        "Mobil": row[:phone_mobile],
+        "Arbeit": row[:phone_direct],
+        "Haupt-Telefon": row[:phone_private],
+        "Fax": row[:phone_fax]
+      }.freeze
+      # rubocop:enable Lint/SymbolConversion
+
+      phone_numbers.each do |label, number|
+        person.phone_numbers.build(number: number, label: label) if phone_valid?(number)
+      end
     end
 
-    def navision_id
-      Integer(row.fetch(:navision_id).to_s.sub!(/^0*/, ""))
+    def build_role(person)
+      person.roles.build(group: group, type: TARGET_ROLE)
     end
 
     def build_error_messages
