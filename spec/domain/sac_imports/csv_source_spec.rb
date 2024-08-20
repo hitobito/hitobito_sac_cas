@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::CsvSourceFile do
+describe SacImports::CsvSource do
   let(:nav2_csv_fixture) { File.expand_path("../../../fixtures/files/sac_imports_src/NAV2_stammmitgliedschaften_2024-01-04.csv", __FILE__) }
   let(:source_file) { described_class.new(@source_name) }
 

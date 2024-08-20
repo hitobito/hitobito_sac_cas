@@ -6,13 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 namespace :sac_imports do
-  desc "Import all people from a navision export xlsx" \
-         " (options: FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true)"
+  desc "Import people"
   task "1_people": [:environment] do
-    SacImports::PeopleImporter.new(
-      Pathname(ENV["FILE"].to_s),
-      skip_existing: !["1", "true"].include?(ENV["REIMPORT_ALL"].to_s.downcase)
-    ).import!
+    SacImports::PeopleImporter.new.create
   end
 
   desc "Import sections from a navision export (tmp/xlsx/sektionen.xlsx)"

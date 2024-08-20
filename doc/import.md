@@ -28,7 +28,7 @@ Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im 
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
-Siehe [SacImports::CsvSourceFile](../app/domain/sac_imports/csv_source_file.rb)
+Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
 
 ## Entwickler
 
@@ -51,7 +51,12 @@ Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
 Dieser Import soll immer zuerst ausgeführt werden, damit den Personen in den weiteren Schritten die Rollen zugeordnet werden können.
 
-Hinweise:
+
+#### Diskrepanzen:
+
+- `Street Name` und `Street No_`, sowie `Address` passen nicht immer zusammen, wobei `Street Name` und `Street No_` oft nicht ausgefüllt sind.
+
+#### Hinweise:
 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
 
