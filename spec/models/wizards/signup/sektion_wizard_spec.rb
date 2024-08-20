@@ -80,6 +80,32 @@ describe Wizards::Signup::SektionWizard do
       ]
     end
 
+    it "is invalid when on family_fields step and resuses main person email" do
+      @current_step = 2
+      required_attrs[:family_fields] = {
+        members_attributes: [
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com"}]
+        ]
+      }
+      expect(wizard).not_to be_valid
+      expect(wizard.errors).to be_empty
+      expect(wizard.family_fields).not_to be_valid
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+    end
+
+    it "is invalid when on family_fields step and uses existing email" do
+      @current_step = 2
+      required_attrs[:family_fields] = {
+        members_attributes: [
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com"}]
+        ]
+      }
+      expect(wizard).not_to be_valid
+      expect(wizard.errors).to be_empty
+      expect(wizard.family_fields).not_to be_valid
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+    end
+
     it "is invalid when on various_fields step and data_protection is blank" do
       @current_step = 3
       required_attrs[:various_fields] = {data_protection: nil}
