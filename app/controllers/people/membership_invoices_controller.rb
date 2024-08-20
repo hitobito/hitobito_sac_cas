@@ -13,10 +13,12 @@ class People::MembershipInvoicesController < ApplicationController
 
     invoice_form.attributes = invoice_form_params
 
-    if invoice_form.valid? && generate_invoice
+    if invoice_form.valid? && create_invoice
       redirect_to external_invoices_group_person_path(group, person), notice: t("people.membership_invoices.success_notice")
     else
-      redirect_to new_group_person_membership_invoice_path(group, person), alert: I18n.t("people.membership_invoices.alert_notice", message: invoice_form.errors.full_messages.join(", "))
+      redirect_to new_group_person_membership_invoice_path(group, person),
+        alert: I18n.t("people.membership_invoices.alert_notice", message:
+          invoice_form.errors.full_messages.join(", "))
     end
   end
 
@@ -30,17 +32,11 @@ class People::MembershipInvoicesController < ApplicationController
 
   private
 
-  def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
-
-  def invoice_form
-    @invoice_form ||= People::Membership::InvoiceForm.new({}, person)
-  end
-
   def invoice_form_params
     params.require(:people_membership_invoice_form).permit(:reference_date, :invoice_date, :send_date, :section_id, :new_entry, :discount)
   end
 
-  def generate_invoice
+  def create_invoice
     ExternalInvoice::SacMembership.create(
       state: :draft,
       year: @invoice_form.reference_date.year,
@@ -58,14 +54,14 @@ class People::MembershipInvoicesController < ApplicationController
 
   def date_range(attr)
     if attr == :send_date
-      Time.zone.today.beginning_of_year..(already_member_next_year?(@person) ? Time.zone.today.next_year.end_of_year : Time.zone.today.end_of_year)
+      today.beginning_of_year..(already_member_next_year?(@person) ? today.next_year.end_of_year : today.end_of_year)
     else
-      Time.zone.today.beginning_of_year..Time.zone.today.next_year.end_of_year
+      today.beginning_of_year..today.next_year.end_of_year
     end
   end
 
   def already_member_next_year?(person)
-    next_year = Time.zone.today.year + 1
+    next_year = today.year + 1
     delete_on_date = person.sac_membership.stammsektion_role.delete_on
     delete_on_date >= Date.new(next_year, 1, 1) && delete_on_date <= Date.new(next_year, 12, 31)
   end
@@ -76,23 +72,19 @@ class People::MembershipInvoicesController < ApplicationController
     paying_memberships.map(&:layer_group)
   end
 
-  def member
-    @member ||= Invoices::SacMemberships::Member.new(person, context)
-  end
+  def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
 
-  def person
-    @person ||= context.people_with_membership_years.find(params[:person_id])
-  end
+  def invoice_form = @invoice_form ||= People::Membership::InvoiceForm.new({}, person)
 
-  def context
-    @context ||= Invoices::SacMemberships::Context.new(date)
-  end
+  def member = @member ||= Invoices::SacMemberships::Member.new(person, context)
 
-  def group
-    @group ||= Group.find(params[:group_id])
-  end
+  def person = @person ||= context.people_with_membership_years.find(params[:person_id])
 
-  def date
-    @date ||= params[:date].present? ? Date.parse(params[:date]) : Time.zone.today
-  end
+  def context = @context ||= Invoices::SacMemberships::Context.new(date)
+
+  def group = @group ||= Group.find(params[:group_id])
+
+  def date = @date ||= params[:date].present? ? Date.parse(params[:date]) : today
+
+  def today = @today ||= Time.zone.today
 end
