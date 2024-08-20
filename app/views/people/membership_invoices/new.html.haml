@@ -4,11 +4,11 @@
   = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
     %h1= t(".form_title")
     = f.labeled(:reference_date) do
-      = f.date_field(:reference_date, date_range.merge(class: 'date col-6'))
+      = f.date_field(:reference_date, date_range)
     = f.labeled(:invoice_date) do
-      = f.date_field(:invoice_date, date_range.merge(class: 'date col-6'))
+      = f.date_field(:invoice_date, date_range)
     = f.labeled(:send_date) do
-      = f.date_field(:send_date, date_range(:send_date).merge(class: 'date col-6'))
+      = f.date_field(:send_date, date_range(:send_date))
 
     = f.labeled(:section_id) do
       - main_section = @person.sac_membership.stammsektion_role.layer_group

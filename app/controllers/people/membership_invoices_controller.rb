@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-  helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen, :member
+  helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen
 
   def create
     authorize!(:create, external_invoice)
@@ -25,7 +25,6 @@ class People::MembershipInvoicesController < ApplicationController
 
     @invoice_form = invoice_form
     @group = group
-    @member = member
   end
 
   private
@@ -37,16 +36,16 @@ class People::MembershipInvoicesController < ApplicationController
   def create_invoice
     ExternalInvoice::SacMembership.create(
       state: :draft,
-      year: @invoice_form.reference_date.year,
-      issued_at: @invoice_form.invoice_date,
-      sent_at: @invoice_form.send_date,
+      year: invoice_form.reference_date.year,
+      issued_at: invoice_form.invoice_date,
+      sent_at: invoice_form.send_date,
       person: person,
-      link: Group.find(@invoice_form.section_id)
+      link: Group.find(invoice_form.section_id)
     )
   end
 
   def invoice_possible?
-    Invoices::Abacus::MembershipInvoice.new(member, member.active_memberships).invoice? if member.active_memberships
+    person.sac_membership_invoice?
   end
 
   def date_range(attr = nil)
@@ -57,11 +56,11 @@ class People::MembershipInvoicesController < ApplicationController
 
   def already_member_next_year?
     next_year = today.next_year.year
-    delete_on_date = person.sac_membership.stammsektion_role.delete_on
-    delete_on_date >= Date.new(next_year, 1, 1) && delete_on_date <= Date.new(next_year, 12, 31)
+    person.sac_membership.stammsektion_role.delete_on&.year >= next_year
   end
 
   def currently_paying_zusatzsektionen
+    member = Invoices::SacMemberships::Member.new(person, context)
     person.sac_membership.zusatzsektion_roles
       .select { |membership| member.paying_person?(membership.beitragskategorie) }
       .map(&:layer_group)
@@ -70,8 +69,6 @@ class People::MembershipInvoicesController < ApplicationController
   def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
 
   def invoice_form = @invoice_form ||= People::Membership::InvoiceForm.new({}, person)
-
-  def member = @member ||= Invoices::SacMemberships::Member.new(person, context)
 
   def person = @person ||= context.people_with_membership_years.find(params[:person_id])
 

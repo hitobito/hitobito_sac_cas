@@ -9,12 +9,12 @@ require "spec_helper"
 
 describe People::MembershipInvoicesController, type: :controller do
   let(:person) { people(:mitglied) }
-  let(:client) { instance_double(Invoices::Abacus::Client) }
+  let(:today) { Time.zone.today }
 
   before { sign_in(people(:admin)) }
 
   before do
-    Role.update_all(delete_on: Time.zone.today.end_of_year)
+    Role.update_all(delete_on: today.end_of_year)
     SacMembershipConfig.update_all(valid_from: 2015)
     SacSectionMembershipConfig.update_all(valid_from: 2015)
   end
@@ -26,9 +26,9 @@ describe People::MembershipInvoicesController, type: :controller do
           group_id: groups(:bluemlisalp_mitglieder).id,
           person_id: person.id,
           people_membership_invoice_form: {
-            reference_date: Time.zone.today,
-            invoice_date: Time.zone.today,
-            send_date: Time.zone.today,
+            reference_date: today,
+            invoice_date: today,
+            send_date: today,
             section_id: groups(:bluemlisalp_mitglieder).id,
             discount: 0
           }
@@ -47,8 +47,8 @@ describe People::MembershipInvoicesController, type: :controller do
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
             people_membership_invoice_form: {
-              reference_date: Time.zone.today,
-              invoice_date: Time.zone.today,
+              reference_date: today,
+              invoice_date: today,
               send_date: "",
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 0
@@ -68,7 +68,7 @@ describe People::MembershipInvoicesController, type: :controller do
             people_membership_invoice_form: {
               reference_date: "",
               invoice_date: "",
-              send_date: Time.zone.today,
+              send_date: today,
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 0
             }
@@ -84,9 +84,9 @@ describe People::MembershipInvoicesController, type: :controller do
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
             people_membership_invoice_form: {
-              reference_date: Time.zone.today.next_year(5),
-              invoice_date: Time.zone.today,
-              send_date: Time.zone.today,
+              reference_date: today.next_year(5),
+              invoice_date: today,
+              send_date: today,
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 0
             }
@@ -103,9 +103,9 @@ describe People::MembershipInvoicesController, type: :controller do
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
             people_membership_invoice_form: {
-              reference_date: Time.zone.today.last_year,
-              invoice_date: Time.zone.today,
-              send_date: Time.zone.today,
+              reference_date: today.last_year,
+              invoice_date: today,
+              send_date: today,
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 0
             }
@@ -118,16 +118,16 @@ describe People::MembershipInvoicesController, type: :controller do
 
       it "doesnt create external invoice send date is next year" do
         # set person stammsektion to be continued in next year
-        person.sac_membership.stammsektion_role.update!(delete_on: Time.zone.today.next_year.end_of_year)
+        person.sac_membership.stammsektion_role.update!(delete_on: today.next_year.end_of_year)
 
         expect do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
             people_membership_invoice_form: {
-              reference_date: Time.zone.today,
-              invoice_date: Time.zone.today,
-              send_date: Time.zone.today.next_year,
+              reference_date: today,
+              invoice_date: today,
+              send_date: today.next_year,
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 0
             }
@@ -144,9 +144,9 @@ describe People::MembershipInvoicesController, type: :controller do
             group_id: groups(:bluemlisalp_mitglieder).id,
             person_id: person.id,
             people_membership_invoice_form: {
-              reference_date: Time.zone.today,
-              invoice_date: Time.zone.today,
-              send_date: Time.zone.today,
+              reference_date: today,
+              invoice_date: today,
+              send_date: today,
               section_id: groups(:bluemlisalp_mitglieder).id,
               discount: 16
             }
@@ -156,6 +156,31 @@ describe People::MembershipInvoicesController, type: :controller do
         expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
         expect(flash[:alert]).to include("Rabatt ist kein gültiger Wert")
       end
+    end
+  end
+
+  describe "currently_paying_zusatzsektionen" do
+    it 'returns all currently paying zusatzsektionen' do
+      allow(controller).to receive(:person).and_return(person)
+      expect(controller.send(:currently_paying_zusatzsektionen)).to eq([groups(:matterhorn)])
+    end
+
+    it 'returns no zuastzsektionen payed by family members' do
+      allow(controller).to receive(:person).and_return(people(:familienmitglied2))      
+      expect(controller.send(:currently_paying_zusatzsektionen)).to eq([])
+    end
+  end
+
+  describe "already_member_next_year?" do
+    it 'returns false if not member next year' do
+      allow(controller).to receive(:person).and_return(person)
+      expect(controller.send(:already_member_next_year?)).to eq(false)
+    end
+
+    it 'returns true if member next year' do
+      roles(:mitglied).update!(delete_on: today.next_year.end_of_year)
+      allow(controller).to receive(:person).and_return(person)
+      expect(controller.send(:already_member_next_year?)).to eq(true)
     end
   end
 end
