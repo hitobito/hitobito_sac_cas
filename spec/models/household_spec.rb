@@ -294,6 +294,17 @@ describe Household do
         expect_any_instance_of(Person).to receive(:managers).and_raise("ouch")
         expect { household.destroy }.to raise_error("ouch").and(not_change { PeopleManager.count })
       end
+
+      context "maintain_sac_family" do
+        subject!(:household) { Household.new(person, maintain_sac_family: true) }
+
+        it "succeeds with updating sac_family_main_person" do
+          add_and_save(child)
+          expect(person.reload).to be_sac_family_main_person
+          expect { household.destroy }.to change { PeopleManager.count }.by(-1)
+          expect(person.reload).not_to be_sac_family_main_person
+        end
+      end
     end
   end
 
