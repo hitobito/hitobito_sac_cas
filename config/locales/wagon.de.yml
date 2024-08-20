@@ -24,6 +24,13 @@ de:
 
   activemodel:
     attributes:
+      people/membership/invoice_form:
+        reference_date: "Stichtag"
+        invoice_date: "Rechnungsdatum"
+        send_date: "Versanddatum"
+        discount: "Rabatt"
+        new_entry: "Eintrittsgebühr"
+        section_id: "Mitgliedschaft"
       wizards/steps/signup/main_email_field:
         email: E-Mail
       wizards/steps/signup/person_fields:
@@ -97,6 +104,7 @@ de:
         youth_not_allowed_in_family: |
           Jugendliche im Alter von 18 bis 21 Jahre können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
+        invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
 
       models:
         household:
@@ -128,7 +136,7 @@ de:
               must_be_family_main_person: muss Hauptperson der Familie sein
         person:
           data_quality_issue:
-            message: '%{attr} %{key}'
+            message: "%{attr} %{key}"
 
         wizards/steps/choose_sektion:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel
@@ -1129,8 +1137,14 @@ de:
           membership_years: "Anzahl Mitgliedsjahre: %{membership_years}"
 
     membership_invoices:
-      success_notice: "Die Rechnung wurde erfolgreich an Abacus übermittelt. Auftrag-Nr. %{abacus_key}"
-      alert_notice: "Die Rechnung konnte nicht an Abacus übermittelt werden. Fehlermeldung: %{message}"
+      success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
+      new:
+        form_title: "Mitgliedschaftsrechnung erstellen"
+        alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."
+        alert_warning: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
+        create_invoice: "Rechnung erstellen"
+        mv_yearly_invoice: "MV-Jahresrechnung"
+        zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
 
     terminate_sac_memberships:
       create:

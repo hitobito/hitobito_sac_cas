@@ -5,8 +5,7 @@
 
 - if @person.sac_membership_invoice? && can?(:create_membership_invoice, @person)
   = action_button(t('.create_membership_invoice'),
-                  group_person_membership_invoices_path(@group, @person),
+                  new_group_person_membership_invoice_path(@group, @person),
                   :envelope,
-                  method: :post,
-                  data: { confirm: t('.create_membership_invoice_confirmation') })
+                  method: :get)
 = render "table"

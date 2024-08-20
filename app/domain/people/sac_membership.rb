@@ -36,20 +36,24 @@ class People::SacMembership
     stammsektion_role.present? || any_future_role? || any_past_role?
   end
 
-  def stammsektion_role
-    active_roles_of_type(mitglied_stammsektion_types).first
-  end
-
   def stammsektion
     stammsektion_role&.layer_group
   end
 
-  def future_stammsektion_roles
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types)
+  def stammsektion_role(currently_paying: false)
+    active_roles_of_type(mitglied_stammsektion_types).then do |roles|
+      currently_paying ? select_currently_paying(roles) : roles
+    end.first
   end
 
-  def zusatzsektion_roles
-    active_roles_of_type(mitglied_zusatzsektion_types)
+  def zusatzsektion_roles(currently_paying: false)
+    active_roles_of_type(mitglied_zusatzsektion_types).then do |roles|
+      currently_paying ? select_currently_paying(roles) : roles
+    end
+  end
+
+  def future_stammsektion_roles
+    @person.roles.future.where(convert_to: mitglied_stammsektion_types)
   end
 
   def neuanmeldung_nv_stammsektion_roles
@@ -149,6 +153,14 @@ class People::SacMembership
 
   def any_past_role?
     @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
+  end
+
+  def select_currently_paying(roles)
+    roles.select { |role| paying_person?(role.beitragskategorie) }
+  end
+
+  def paying_person?(beitragskategorie)
+    !beitragskategorie.family? || @person.sac_family_main_person?
   end
 
   def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
