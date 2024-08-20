@@ -43,19 +43,11 @@ class People::Membership::InvoiceForm
     @person.sac_membership.stammsektion_role.delete_on&.year&.>= next_year
   end
 
-  def min_date
-    date_range[:minDate]
-  end
+  def min_date = date_range[:minDate]
 
-  def max_date
-    date_range[:maxDate]
-  end
+  def max_date = date_range[:maxDate]
 
-  def max_send_date
-    date_range(:send_date)[:maxDate]
-  end
+  def max_send_date = date_range(:send_date)[:maxDate]
 
-  def date_today
-    Time.zone.today
-  end
+  def date_today = Time.zone.today
 end
