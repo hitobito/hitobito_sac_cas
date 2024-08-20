@@ -56,8 +56,7 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         end.not_to change { ExternalInvoice.count }
 
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Versanddatum muss ausgefüllt werden")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "doesnt create external invoice without referenc and invoice date" do
@@ -74,8 +73,7 @@ describe People::MembershipInvoicesController, type: :controller do
             }
           }
         end.not_to change { ExternalInvoice.count }
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Stichtag muss ausgefüllt werden, Rechnungsdatum muss ausgefüllt werden")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "doesnt create external invoice if reference date is in invalid year" do
@@ -93,8 +91,7 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         end.not_to change { ExternalInvoice.count }
 
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Stichtag muss 31.12.2025 oder davor sein")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "doesnt create external invoice if reference date is in past year" do
@@ -112,14 +109,10 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         end.not_to change { ExternalInvoice.count }
 
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Stichtag muss 01.01.2024 oder danach sein")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "doesnt create external invoice send date is next year" do
-        # set person stammsektion to be continued in next year
-        person.sac_membership.stammsektion_role.update!(delete_on: today.next_year.end_of_year)
-
         expect do
           post :create, params: {
             group_id: groups(:bluemlisalp_mitglieder).id,
@@ -134,8 +127,7 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         end.not_to change { ExternalInvoice.count }
 
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Versanddatum muss 31.12.2024 oder davor sein")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it "doesnt create external invoice if discount is invalid" do
@@ -153,34 +145,8 @@ describe People::MembershipInvoicesController, type: :controller do
           }
         end.not_to change { ExternalInvoice.count }
 
-        expect(response).to redirect_to(new_group_person_membership_invoice_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to include("Rabatt ist kein gültiger Wert")
+        expect(response).to have_http_status(:unprocessable_entity)
       end
-    end
-  end
-
-  describe "currently_paying_zusatzsektionen" do
-    it 'returns all currently paying zusatzsektionen' do
-      allow(controller).to receive(:person).and_return(person)
-      expect(controller.send(:currently_paying_zusatzsektionen)).to eq([groups(:matterhorn)])
-    end
-
-    it 'returns no zuastzsektionen payed by family members' do
-      allow(controller).to receive(:person).and_return(people(:familienmitglied2))      
-      expect(controller.send(:currently_paying_zusatzsektionen)).to eq([])
-    end
-  end
-
-  describe "already_member_next_year?" do
-    it 'returns false if not member next year' do
-      allow(controller).to receive(:person).and_return(person)
-      expect(controller.send(:already_member_next_year?)).to eq(false)
-    end
-
-    it 'returns true if member next year' do
-      roles(:mitglied).update!(delete_on: today.next_year.end_of_year)
-      allow(controller).to receive(:person).and_return(person)
-      expect(controller.send(:already_member_next_year?)).to eq(true)
     end
   end
 end

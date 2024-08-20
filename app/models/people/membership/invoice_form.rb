@@ -20,8 +20,8 @@ class People::Membership::InvoiceForm
 
   validates :reference_date, :invoice_date, :send_date, :discount, presence: true
 
-  validates_date :reference_date, :invoice_date, between: Time.zone.today.beginning_of_year..Time.zone.today.next_year.end_of_year
-  validates_date :send_date, between: [Time.zone.today.beginning_of_year, :send_date_end_date]
+  validates_date :reference_date, :invoice_date, between: [:min_date, :max_date], allow_blank: true
+  validates_date :send_date, between: [:min_date, :max_send_date], allow_blank: true
 
   validates :discount, inclusion: {in: DISCOUNTS}
 
@@ -30,10 +30,29 @@ class People::Membership::InvoiceForm
     @person = person
   end
 
+  def date_range(attr = nil)
+    max_date = (attr == :send_date && !already_member_next_year?) ? date_today.end_of_year : date_today.next_year.end_of_year
+
+    {minDate: date_today.beginning_of_year, maxDate: max_date}
+  end
+
   private
 
-  def send_date_end_date
-    (@person.sac_membership.stammsektion_role.delete_on.year > date_today.year) ? date_today.end_of_year : date_today.next_year.end_of_year
+  def already_member_next_year?
+    next_year = date_today.next_year.year
+    @person.sac_membership.stammsektion_role.delete_on&.year&.>= next_year
+  end
+
+  def min_date
+    date_range[:minDate]
+  end
+
+  def max_date
+    date_range[:maxDate]
+  end
+
+  def max_send_date
+    date_range(:send_date)[:maxDate]
   end
 
   def date_today

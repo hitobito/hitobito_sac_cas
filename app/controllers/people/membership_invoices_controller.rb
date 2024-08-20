@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
-  helper_method :invoice_possible?, :date_range, :currently_paying_zusatzsektionen
-
   def create
     authorize!(:create, external_invoice)
 
@@ -43,28 +41,6 @@ class People::MembershipInvoicesController < ApplicationController
       person: person,
       link: Group.find(invoice_form.section_id)
     )
-  end
-
-  def invoice_possible?
-    person.sac_membership_invoice?
-  end
-
-  def date_range(attr = nil)
-    max_date = (attr == :send_date && !already_member_next_year?) ? today.end_of_year : today.next_year.end_of_year
-
-    {minDate: today.beginning_of_year, maxDate: max_date}
-  end
-
-  def already_member_next_year?
-    next_year = today.next_year.year
-    person.sac_membership.stammsektion_role.delete_on&.year&.>= next_year
-  end
-
-  def currently_paying_zusatzsektionen
-    member = Invoices::SacMemberships::Member.new(person, context)
-    person.sac_membership.zusatzsektion_roles
-      .select { |membership| member.paying_person?(membership.beitragskategorie) }
-      .map(&:layer_group)
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice.new(person: person)
