@@ -20,21 +20,21 @@ class ExternalInvoice::SacMembership::MembershipManager
   def update_membership_status
     ActiveRecord::Base.transaction do
       if stammsektion?
-        extend_membership_duration(person, year)
+        extend_membership_duration
       elsif neuanmeldung_stammsektion?
         set_confirmed_at
         update_role_to_stammsektion_mitglied(person)
-        update_family_roles_to_stammsektion_mitglied(person)
+        update_family_roles_to_stammsektion_mitglied if family_main_person?
       elsif neuanmeldung_zusatzsektion?
         update_roles_to_zusatzsektion_mitglied(person)
-        update_family_roles_to_zusatzsektion_mitglied(person)
+        update_family_roles_to_zusatzsektion_mitglied if family_main_person?
       end
     end
   end
 
   private
 
-  def extend_membership_duration(person, year)
+  def extend_membership_duration
     roles_for_update = []
 
     roles_for_update << person.sac_membership.stammsektion_role
@@ -62,12 +62,12 @@ class ExternalInvoice::SacMembership::MembershipManager
     end
   end
 
-  def update_family_roles_to_stammsektion_mitglied(person)
-    person.household_people.each { |family_member| update_role_to_stammsektion_mitglied(family_member) } if family_main_person?
+  def update_family_roles_to_stammsektion_mitglied
+    person.household_people.each { |family_member| update_role_to_stammsektion_mitglied(family_member) }
   end
 
-  def update_family_roles_to_zusatzsektion_mitglied(person)
-    person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) } if family_main_person?
+  def update_family_roles_to_zusatzsektion_mitglied
+    person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) }
   end
 
   def create_mitglied_role(person)
@@ -79,7 +79,7 @@ class ExternalInvoice::SacMembership::MembershipManager
   end
 
   def mitglieder_sektion
-    group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
+    @mitglieder_sektion ||= group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
   end
 
   def stammsektion?
