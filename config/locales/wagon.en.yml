@@ -956,6 +956,7 @@ en:
           ""
 
     participations:
+      missing_information: ""
       answers_step:
         total_duration_days_help: ""
       edit:
