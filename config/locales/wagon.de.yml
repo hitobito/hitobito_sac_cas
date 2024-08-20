@@ -136,7 +136,7 @@ de:
               must_be_family_main_person: muss Hauptperson der Familie sein
         person:
           data_quality_issue:
-            message: '%{attr} %{key}'
+            message: "%{attr} %{key}"
 
         wizards/steps/choose_sektion:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel
@@ -154,7 +154,6 @@ de:
       people/neuanmeldungen/reject:
         one: Anmeldung ablehnen
         other: Anmeldungen ablehnen
-
 
   activerecord:
     attributes:
@@ -1139,7 +1138,6 @@ de:
 
     membership_invoices:
       success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
-      alert_notice: "Die Rechnung konnte nicht erstellt werden: %{message}"
       new:
         form_title: "Mitgliedschaftsrechnung erstellen"
         alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."

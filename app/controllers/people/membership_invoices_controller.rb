@@ -16,7 +16,8 @@ class People::MembershipInvoicesController < ApplicationController
     if invoice_form.valid? && create_invoice
       redirect_to external_invoices_group_person_path(group, person), notice: t("people.membership_invoices.success_notice")
     else
-      redirect_to new_group_person_membership_invoice_path(group, person), alert: t("people.membership_invoices.alert_notice", message: invoice_form.errors.full_messages.join(", "))
+      @group = group
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +57,7 @@ class People::MembershipInvoicesController < ApplicationController
 
   def already_member_next_year?
     next_year = today.next_year.year
-    person.sac_membership.stammsektion_role.delete_on&.year >= next_year
+    person.sac_membership.stammsektion_role.delete_on&.year&.>= next_year
   end
 
   def currently_paying_zusatzsektionen
