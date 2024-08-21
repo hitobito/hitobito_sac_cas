@@ -23,11 +23,10 @@ describe SacImports::Huts::SektionsClubhuetteRow do
   end
 
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 99993750, foundation_year: 1980, name: "foobar Sektion") }
-  let!(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
-  let!(:clubhuetten) { Fabricate(Group::SektionsClubhuetten.sti_name.to_sym, parent: funktionaere) }
 
   before do
-    Group::SektionsClubhuette.find_by(parent: clubhuetten)&.really_destroy!
+    sektion.children.find_by(type: Group::SektionsFunktionaere).update_columns(layer_group_id: sektion.id)
+    sektion.children.find_by(type: Group::SektionsFunktionaere).children.create!(type: Group::SektionsClubhuetten, layer_group_id: sektion.id)
   end
 
   it "imports group" do
