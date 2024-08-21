@@ -138,6 +138,10 @@ de:
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
+        data_quality_issue:
+          messages:
+            empty: ist leer
+            less_than_6_years_before_entry: liegt weniger als 6 Jahre vor dem SAC-Eintritt
 
         wizards/steps/choose_sektion:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel

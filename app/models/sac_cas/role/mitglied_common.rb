@@ -23,7 +23,8 @@ module SacCas::Role::MitgliedCommon
 
     validates :created_at, presence: true
 
-    after_destroy :soft_delete_dependant_roles
+    after_create :check_data_quality
+    after_destroy :soft_delete_dependant_roles, :check_data_quality
     after_real_destroy :hard_delete_dependant_roles
   end
 
@@ -39,5 +40,11 @@ module SacCas::Role::MitgliedCommon
     person
       .roles.joins(:group)
       .where(type: DEPENDANT_ROLE_TYPES, groups: {layer_group_id: group.layer_group_id})
+  end
+
+  private
+
+  def check_data_quality
+    People::DataQualityChecker.new(person)
   end
 end

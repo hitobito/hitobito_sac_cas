@@ -23,6 +23,8 @@
 #  index_person_data_quality_issues_on_person_and_attribute_and_key (key) UNIQUE
 
 class Person::DataQualityIssue < ApplicationRecord
+  VALID_ATTRIBUTES = Person.column_names + ["phone_numbers"]
+
   belongs_to :person
 
   enum severity: {info: 1, warning: 2, error: 3}
@@ -37,12 +39,15 @@ class Person::DataQualityIssue < ApplicationRecord
 
   def message
     I18n.t("activemodel.errors.models.person.data_quality_issue.message",
-      attr: Person.human_attribute_name(attr), key: key)
+      attr: Person.human_attribute_name(attr),
+      key: I18n.t(key,
+        default: key,
+        scope: "activemodel.errors.models.data_quality_issue.messages"))
   end
 
   private
 
   def person_attribute_exists
-    errors.add(:attr, :invalid) unless Person.column_names.include?(attr)
+    errors.add(:attr, :invalid) unless VALID_ATTRIBUTES.include?(attr)
   end
 end
