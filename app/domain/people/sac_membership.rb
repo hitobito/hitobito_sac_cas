@@ -64,6 +64,10 @@ class People::SacMembership
     active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
+  def neuanmeldung_stammsektion_role
+    @person.roles.find_by(type: neuanmeldung_stammsektion_types)
+  end
+
   def neuanmeldung_zusatzsektion_roles
     active_roles_of_type(neuanmeldung_zusatzsektion_types)
   end
@@ -170,6 +174,8 @@ class People::SacMembership
   def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
+  def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:sti_name)
 
   def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
 

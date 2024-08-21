@@ -33,7 +33,21 @@ class ExternalInvoice::SacMembership < ExternalInvoice
   # this is not definitively defined yet, it might become a Role object as well
   # depending on the requirements for updating roles once an invoice is payed.
 
+  after_update :handle_state_change_to_payed
+
   def title
     I18n.t("invoices.sac_memberships.title", year: year)
+  end
+
+  private
+
+  def handle_state_change_to_payed
+    if state_changed_to_payed?
+      People::ExternalInvoicePayedJob.new(person.id, link.id, year).enqueue!
+    end
+  end
+
+  def state_changed_to_payed?
+    saved_change_to_state? && state == "payed"
   end
 end
