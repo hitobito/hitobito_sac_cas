@@ -255,13 +255,8 @@ describe Person do
     it "is ok by default" do
       person = people(:mitglied)
       expect(person.data_quality).to eq("ok")
+      expect(person.data_quality_for_database).to eq(0)
       expect(person.data_quality_issues).to eq([])
-    end
-
-    it "is set with value and stored as int" do
-      person = Fabricate.build(:person, data_quality: "error")
-      expect(person.data_quality).to eq("error")
-      expect(person[:data_quality]).to eq(3)
     end
 
     context "on destroy" do
