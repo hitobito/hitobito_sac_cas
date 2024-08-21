@@ -17,10 +17,10 @@ describe "person show page" do
       .children.find_by(type: Group::SektionsMitglieder)
   end
 
+  before { sign_in(admin) }
+
   describe "roles" do
     describe "her own" do
-      before { sign_in(admin) }
-
       it "shows link to change main group" do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link "Hauptgruppe setzen"
@@ -42,11 +42,35 @@ describe "person show page" do
     end
 
     describe "others" do
-      before { sign_in(admin) }
-
       it "shows Hauptgruppe setzen link to " do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link "Hauptgruppe setzen"
+      end
+    end
+  end
+
+  describe "data quality" do
+    context "with data quality issues" do
+      before do
+        admin.update!(data_quality: "error")
+        admin.data_quality_issues.create!(attr: "email", key: "ist leer", severity: "warning")
+        admin.data_quality_issues.create!(attr: "street", key: "ist leer", severity: "error")
+      end
+
+      it "shows the data quality issues" do
+        visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
+        expect(page).to have_text("Datenqualität")
+        expect(page).to have_css("i[title='Fehler']")
+        expect(page).to have_text("Strasse ist leer")
+        expect(page).to have_css("i[title='Warnung']")
+        expect(page).to have_text("Haupt-E-Mail ist leer")
+      end
+    end
+
+    context "without data quality issues" do
+      it "doesnt show the data quality section" do
+        visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
+        expect(page).not_to have_text("Datenqualität")
       end
     end
   end
