@@ -11,10 +11,10 @@ module SacCas::Person
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
 
-  Person::SEARCHABLE_ATTRS << :id
-  include PgSearchable
-
   included do
+    Person::SEARCHABLE_ATTRS << :id
+    include PgSearchabl
+
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
