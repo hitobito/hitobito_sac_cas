@@ -7,6 +7,7 @@
 
 class People::ExternalInvoicePayedJob < BaseJob
   self.parameters = [:person_id, :group_id, :year]
+
   def initialize(person_id, group_id, year)
     super()
     @person_id = person_id
@@ -15,15 +16,16 @@ class People::ExternalInvoicePayedJob < BaseJob
   end
 
   def perform
-    if person && group
-      ExternalInvoice::SacMembership::MembershipManager.new(person, group, year)
-        .update_membership_status
-    end
+    membership_manager.update_membership_status if person && group
   end
 
   private
 
   attr_reader :year
+
+  def membership_manager
+    ExternalInvoice::SacMembership::MembershipManager.new(person, group, year)
+  end
 
   def person
     @person ||= Person.find_by(id: @person_id)
