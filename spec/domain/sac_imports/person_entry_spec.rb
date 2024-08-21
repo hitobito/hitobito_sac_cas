@@ -52,7 +52,7 @@ describe SacImports::PersonEntry do
     it "is invalid without group" do
       person = described_class.new(row.merge(birthday: 6.years.ago), nil)
       expect(person).not_to be_valid
-      expect(person.errors).to eq "Muster Max (123): Rollen ist nicht gültig, Group muss ausgefüllt werden"
+      expect(person.errors).to eq "Rollen ist nicht gültig, Group muss ausgefüllt werden"
     end
   end
 

@@ -40,10 +40,6 @@ module SacImports
       person.save!
     end
 
-    def to_s
-      "#{person.to_s(:list)} (#{navision_id})"
-    end
-
     private
 
     def navision_id
@@ -130,10 +126,7 @@ module SacImports
     end
 
     def build_error_messages
-      [person.errors.full_messages, person.roles.first.errors.full_messages]
-        .flatten.compact.join(", ").tap do |messages|
-        messages.prepend("#{self}: ") if messages.present?
-      end
+      [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact.join(", ")
     end
   end
 end

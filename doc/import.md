@@ -36,6 +36,7 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
   ```bash
   head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
   ```
+- `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
 
 ## CSV Report
 
@@ -51,6 +52,7 @@ Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
 Dieser Import soll immer zuerst ausgeführt werden, damit den Personen in den weiteren Schritten die Rollen zugeordnet werden können.
 
+You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sac_imports:1_people`
 
 #### Diskrepanzen:
 
