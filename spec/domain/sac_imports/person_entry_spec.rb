@@ -56,6 +56,25 @@ describe SacImports::PersonEntry do
     end
   end
 
+  describe "company attributes" do
+    subject(:person) { entry.person }
+
+    it "sets various attributes via through values" do
+      row[:first_name] = :first
+      row[:last_name] = :last
+      row[:gender] = "2"
+      row[:navision_name] = "Puzzle GmbH"
+      row[:language] = "DES"
+      expect(person.first_name).to be_nil
+      expect(person.last_name).to be_nil
+      expect(person.gender).to be_nil
+      expect(person.language).to eq "de"
+      expect(person.company).to eq true
+      expect(person.company_name).to eq "Puzzle GmbH"
+      expect(person).to be_valid
+    end
+  end
+
   describe "person attributes" do
     subject(:person) { entry.person }
 
@@ -79,6 +98,7 @@ describe SacImports::PersonEntry do
       expect(person.country).to eq "CH"
       expect(person.gender).to eq "m"
       expect(person.language).to eq "de"
+      expect(person.company).to eq false
       expect(person.birthday).to eq Date.new(2000, 1, 1)
       expect(person).to be_valid
     end

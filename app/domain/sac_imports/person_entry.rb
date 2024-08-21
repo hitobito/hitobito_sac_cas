@@ -8,6 +8,7 @@
 module SacImports
   class PersonEntry
     GENDERS = {"0": "m", "1": "w"}.freeze
+    COMPANY_GENDER = "2"
     DEFAULT_LANGUAGE = "de"
     LANGUAGES = {DES: "de", FRS: "fr", ITS: "it"}.freeze
     DEFAULT_COUNTRY = "CH"
@@ -62,6 +63,10 @@ module SacImports
       row[:email]
     end
 
+    def company?
+      @is_company ||= row[:gender] == COMPANY_GENDER
+    end
+
     def parse_address
       address = row[:address]
       return if address.blank?
@@ -71,8 +76,8 @@ module SacImports
 
     def assign_attributes(person) # rubocop:disable Metrics/AbcSize
       person.primary_group = group
-      person.first_name = row[:first_name]
-      person.last_name = row[:last_name]
+      person.first_name = row[:first_name] unless company?
+      person.last_name = row[:last_name] unless company?
       person.address_care_of = row[:address_care_of]
       person.postbox = row[:postbox]
       person.address = row[:address]
@@ -81,8 +86,8 @@ module SacImports
       person.country = country
       person.town = row[:town]
       person.zip_code = row[:zip_code]
-      person.birthday = row[:birthday]
-      person.gender = gender
+      person.birthday = row[:birthday] unless company?
+      person.gender = gender unless company?
       person.language = language
       person.sac_remark_section_1 = row[:sac_remark_section_1]
       person.sac_remark_section_2 = row[:sac_remark_section_2]
@@ -90,6 +95,8 @@ module SacImports
       person.sac_remark_section_4 = row[:sac_remark_section_4]
       person.sac_remark_section_5 = row[:sac_remark_section_5]
       person.sac_remark_national_office = row[:sac_remark_national_office]
+      person.company = company?
+      person.company_name = row[:navision_name] if company?
 
       person.street, person.housenumber = parse_address
 
