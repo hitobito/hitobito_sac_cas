@@ -111,6 +111,7 @@ de:
           attributes:
             members:
               no_members: "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."
+              household_address: "Die Adresse '%{address}' wird für alle Familienmitglieder übernommen."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
               no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.
@@ -934,6 +935,9 @@ de:
         one: Andere
         description: Andere
 
+  contactable:
+    address_fields:
+      updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
   devise:
     sessions:
       form:

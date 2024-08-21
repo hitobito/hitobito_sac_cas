@@ -8,14 +8,17 @@
 module SacCas::PeopleManagersController
   def create
     super do
+      household.add(new_person)
       household.valid? || raise(ActiveRecord::Rollback)
-      household.persist!
+      household.save!
     end
   end
 
   def destroy
     super do |entry|
-      Person::Household.new(entry.managed, current_ability).leave.persist!
+      household = entry.managed.household
+      household.remove(entry.managed)
+      household.save!
     end
   end
 
@@ -24,11 +27,14 @@ module SacCas::PeopleManagersController
   delegate :manager, :managed, to: :entry
 
   def household
-    @household ||= build_household
+    @household ||= household_person.household
   end
 
-  def build_household
-    household_person, new_person = manager.household_key? ? [manager, managed] : [managed, manager]
-    Person::Household.new(household_person, current_ability, new_person).tap(&:assign)
+  def household_person
+    @household_person ||= manager.household_key? ? manager : managed
+  end
+
+  def new_person
+    @new_person ||= manager.household_key? ? managed : manager
   end
 end
