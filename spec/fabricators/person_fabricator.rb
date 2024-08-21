@@ -9,4 +9,3 @@
 Fabrication.manager[:person].append_or_update_attribute(:birthday, nil) { 24.years.ago }
 # Nickname is not used, so set it nil
 Fabrication.manager[:person].append_or_update_attribute(:nickname, nil)
-Fabrication.manager[:person].append_or_update_attribute(:data_quality, "ok")
