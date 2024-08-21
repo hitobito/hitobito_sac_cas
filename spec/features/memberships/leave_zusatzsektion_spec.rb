@@ -16,6 +16,7 @@ describe "leave zusatzsektion", js: true do
 
   before do
     sign_in(operator)
+    ActiveJob::Base.queue_adapter = :test
   end
 
   context "as SAC Mitarbeiter" do
