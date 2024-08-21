@@ -40,15 +40,6 @@ module SacCas::PeopleHelper
     format_data_quality_icons(person.data_quality)
   end
 
-  private
-
-  def people_sac_membership_qr_code_clickable(verification_qr_code, image)
-    verify_url = verification_qr_code.verify_url
-    link_to(verify_url, target: "_blank", rel: "noopener") do
-      image
-    end
-  end
-
   def format_data_quality_icons(status)
     icons = {
       ok: "check-circle",
@@ -58,5 +49,14 @@ module SacCas::PeopleHelper
     }
     icon_name = icons[status.to_sym]
     icon(icon_name, title: I18n.t("people.data_quality.#{status}"))
+  end
+
+  private
+
+  def people_sac_membership_qr_code_clickable(verification_qr_code, image)
+    verify_url = verification_qr_code.verify_url
+    link_to(verify_url, target: "_blank", rel: "noopener") do
+      image
+    end
   end
 end
