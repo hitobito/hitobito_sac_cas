@@ -108,7 +108,7 @@ describe ExternalInvoice::SacMembership::MembershipManager do
 
     context "family" do
       before do
-        Role.destroy_all
+        Role.delete_all # avoid Group::SektionsMitglieder#destroy_household callback
         familienmitglied_kind_person.destroy
 
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
