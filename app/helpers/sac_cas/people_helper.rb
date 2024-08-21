@@ -56,6 +56,7 @@ module SacCas::PeopleHelper
       warning: "exclamation-triangle",
       error: "times-circle"
     }
-    icon(icons[status.to_sym], title: I18n.t("people.data_quality.#{status}"))
+    icon_name = icons[status.to_sym]
+    icon(icon_name, title: I18n.t("people.data_quality.#{status}"))
   end
 end
