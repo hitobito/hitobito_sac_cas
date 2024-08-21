@@ -16,7 +16,6 @@ describe SearchStrategies::PersonSearch do
 
       expect(result).to include(people(:admin))
     end
-
   end
 
   def search_class(term = nil, page = nil)
