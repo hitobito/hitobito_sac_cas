@@ -38,7 +38,7 @@ describe Person::DataQualityIssue do
       it "is invalid if it isnt in enum" do
         expect do
           data_quality.update!(severity: "not_a_severity")
-        end.to raise_error(ActiveRecord::RecordInvalid, /muss ausgefüllt werden/)
+        end.to raise_error(ArgumentError)
       end
     end
 
