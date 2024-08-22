@@ -8,37 +8,68 @@
 module SacCas::Role
   module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
+      date_str = date.to_s(:db)
       <<~SQL
-          CASE
-            -- membership_years is only calculated for Mitglied roles
-            WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-            ELSE (
-                TIMESTAMPDIFF(
-                    YEAR, 
-                    DATE(roles.created_at), 
-                    LEAST(
-                        CURDATE(),
-                        COALESCE(DATE(roles.deleted_at), '9999-12-31'),
-                        COALESCE(DATE(roles.archived_at), '9999-12-31'),
-                        COALESCE(roles.delete_on, '9999-12-31')
-                    )
-                ) 
-                -- Add 1 year if the created_at is Jan 1st and the end_date is Dec 31st
-                + CASE 
-                    WHEN DATE_FORMAT(DATE(roles.created_at), '%m-%d') <= '01-01' 
-                         AND DATE_FORMAT(
-                             LEAST(
-                                CURDATE(),
+              CASE
+                -- membership_years is only calculated for Mitglied roles
+                WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+                ELSE (
+                    TIMESTAMPDIFF(
+                        YEAR, 
+                        DATE(roles.created_at), 
+                        LEAST(
+                            DATE('#{date_str}'),
+                            -- add one day to include last day in calculation
+                            COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
+                            COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
+                            COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
+                        )
+                    ) 
+                + CASE
+                -- check if dates are the same, to not add fractional year
+                  WHEN (
+                      MONTH(LEAST(
+                          DATE('#{date_str}'),
+                          COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
+                      )) = MONTH(roles.created_at) AND
+                      DAY(LEAST(
+                          DATE('#{date_str}'),
+                          COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
+                      )) = DAY(roles.created_at)
+                  ) THEN 0
+                   ELSE
+                        (
+                      -- calculate the fractional year
+                      DATEDIFF(
+                        LEAST(
+                          DATE('#{date_str}'),
+                          COALESCE(DATE(roles.deleted_at), '9999-12-31'),
+                          COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                          COALESCE(roles.delete_on, '9999-12-31')
+                        ),
+                        DATE(
+                          ADDDATE(
+                            roles.created_at, 
+                            INTERVAL TIMESTAMPDIFF(
+                              YEAR, 
+                              DATE(roles.created_at), 
+                              LEAST(
+                                DATE('#{date_str}'),
                                 COALESCE(DATE(roles.deleted_at), '9999-12-31'),
                                 COALESCE(DATE(roles.archived_at), '9999-12-31'),
                                 COALESCE(roles.delete_on, '9999-12-31')
-                            ), 
-                            '%m-%d'
-                         ) = '12-31'
-                    THEN 1 
-                    ELSE 0 
-                  END
-            )
+                              )
+                            ) YEAR
+                          )
+                        )
+                      ) / 365.25 -- .25 to calculate for leap years
+                    )
+                      END
+          )
         END AS membership_years
       SQL
     end
