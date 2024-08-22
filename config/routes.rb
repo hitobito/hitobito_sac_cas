@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     resources :event_levels, module: 'event', controller: 'levels', except: [:show]
 
     resources :groups, only: [] do
-      post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
 
