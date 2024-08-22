@@ -29,7 +29,7 @@ module Invoices
       end
 
       def extract_json_error(body)
-        JSON.parse(body).dig("error", "message")
+        decode_json(body).dig(:error, :message)
       rescue # do not fail if response is not JSON
         nil
       end

@@ -69,7 +69,7 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
       )
       .to_return(
         status: 202,
-        body: "",
+        body: batch_subject_assocs_response,
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
       )
 
@@ -304,6 +304,120 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
       \r
       {"SubjectId":600002}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def batch_subject_assocs_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001,"Type":"EMail","Value":"e.hillary@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600003,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600003,"Type":"EMail","Value":"f.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600003}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Type":"EMail","Value":"t.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
 

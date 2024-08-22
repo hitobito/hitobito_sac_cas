@@ -86,27 +86,122 @@ describe Invoices::Abacus::SubjectInterface do
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
     end
 
-    it "transmits batch of non-exising people people to abacus" do
-      stub_fetch_batch_missing_request
-      stub_create_batch_subject_request
-      stub_create_batch_associations_request
+    it "transmits batch of non-exising people to abacus" do
+      stub_batch_request(fetch_batch_body, fetch_batch_missing_response)
+      stub_batch_request(create_batch_subjects_body, create_batch_subjects_response)
+      stub_batch_request(create_batch_associations_body, create_batch_associations_response)
 
-      interface.transmit_batch(subjects)
+      parts = interface.transmit_batch(subjects)
 
+      expect(parts.all?(&:success?)).to be(true)
       subjects.each do |subject|
         expect(subject.entity.abacus_subject_key).to eq(subject.entity.id)
       end
     end
 
     it "transmits batch of already existing people to abacus" do
-      stub_fetch_batch_existing_request
-      stub_update_batch_request
+      stub_batch_request(fetch_batch_body, fetch_batch_existing_response)
+      stub_batch_request(update_batch_body, update_batch_response)
 
-      interface.transmit_batch(subjects)
+      parts = interface.transmit_batch(subjects)
+
+      expect(parts.all?(&:success?)).to be(true)
+      expect(parts.size).to eq(4)
+      expect(parts[0].status).to eq(201)
+      expect(parts[0].request.context_object).to eq(subjects.second)
+      expect(parts[0].request.method).to eq(:post)
+      expect(parts[0].request.path).to eq("Addresses")
+
+      expect(parts[1].status).to eq(200)
+      expect(parts[1].request.context_object).to eq(subjects.second)
+      expect(parts[1].request.method).to eq(:patch)
+      expect(parts[1].request.path).to eq("Communications(Id=ef83129d)")
+
+      expect(parts[2].status).to eq(200)
+      expect(parts[2].request.context_object).to eq(subjects.third)
+      expect(parts[2].request.method).to eq(:patch)
+      expect(parts[2].request.path).to eq("Subjects(Id=600004)")
+
+      expect(parts[3].status).to eq(201)
+      expect(parts[3].request.context_object).to eq(subjects.third)
+      expect(parts[3].request.method).to eq(:post)
+      expect(parts[3].request.path).to eq("Customers")
 
       subjects.each do |subject|
         expect(subject.entity.abacus_subject_key).to eq(subject.entity.id)
       end
+    end
+
+    it "transmits batch of people to abacus, containing errors" do
+      stub_batch_request(fetch_batch_body, fetch_batch_various_response)
+      stub_batch_request(create_batch_subjects_partition_body, create_batch_subjects_partition_response)
+      stub_batch_request(create_batch_associations_partition_body, create_batch_associations_partition_response)
+      stub_batch_request(update_batch_partition_body, update_batch_partition_response)
+
+      parts = interface.transmit_batch(subjects)
+
+      expect(parts.size).to eq(7)
+      expect(parts[0].status).to eq(400)
+      expect(parts[0].request.context_object).to eq(subjects.first)
+      expect(parts[0].request.method).to eq(:post)
+      expect(parts[0].request.path).to eq("Subjects")
+      expect(parts[0].error).to eq("Invalid data given")
+
+      expect(parts[1].status).to eq(201)
+      expect(parts[1].request.context_object).to eq(subjects.third)
+      expect(parts[1].request.method).to eq(:post)
+      expect(parts[1].request.path).to eq("Subjects")
+      expect(parts[1].error).to be_nil
+      expect(parts[1].error_payload).to be_nil
+
+      expect(parts[2].status).to eq(201)
+      expect(parts[2].request.context_object).to eq(subjects.third)
+      expect(parts[2].request.method).to eq(:post)
+      expect(parts[2].request.path).to eq("Addresses")
+
+      expect(parts[3].status).to eq(400)
+      expect(parts[3].request.context_object).to eq(subjects.third)
+      expect(parts[3].request.method).to eq(:post)
+      expect(parts[3].request.path).to eq("Communications")
+      expect(parts[3].error).to eq("EMail is invalid")
+      expect(parts[3].error_payload).to eq(
+        message: "EMail is invalid",
+        status: 400,
+        request: {
+          method: :post,
+          path: "Communications",
+          params: {category: "Private", subject_id: 600004, type: "EMail", value: "n.norgay@hitobito.example.com"}
+        }
+      )
+
+      expect(parts[4].status).to eq(201)
+      expect(parts[4].request.context_object).to eq(subjects.third)
+      expect(parts[4].request.method).to eq(:post)
+      expect(parts[4].request.path).to eq("Customers")
+
+      expect(parts[5].status).to eq(400)
+      expect(parts[5].request.context_object).to eq(subjects.second)
+      expect(parts[5].request.method).to eq(:post)
+      expect(parts[5].request.path).to eq("Addresses")
+      expect(parts[5].error).to be_nil
+      expect(parts[5].error_payload).to eq(
+        response_body: "<html><body><h1>400 Bad Request</h1></body></html>\n",
+        status: 400,
+        request: {
+          method: :post,
+          path: "Addresses",
+          params: {city: "Thun", country_id: "CH", house_number: "", post_code: "3600", street: "", subject_id: 600002, valid_from: Date.current}
+        }
+      )
+
+      expect(parts[6].status).to eq(200)
+      expect(parts[6].request.context_object).to eq(subjects.second)
+      expect(parts[6].request.method).to eq(:patch)
+      expect(parts[6].request.path).to eq("Communications(Id=ef83129d)")
+
+      expect(subjects[0].entity.abacus_subject_key).to be_nil
+      expect(subjects[1].entity.abacus_subject_key).to eq(subjects[1].entity.id)
+      expect(subjects[2].entity.abacus_subject_key).to eq(subjects[2].entity.id)
     end
   end
 
@@ -126,71 +221,55 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def stub_create_subject_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/Subjects")
-      .with(
-        body: "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}")
+    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}"
+    response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_update_subject_request
-    stub_request(:patch, "#{host}/api/entity/v1/mandants/#{mandant}/Subjects(Id=#{person.id})")
-      .with(
-        body: "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}")
+    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    stub_simple_request(:patch, "Subjects(Id=#{person.id})", body, response)
   end
 
   def stub_create_address_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/Addresses")
-      .with(
-        body: "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{}")
+    body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
+    stub_simple_request(:post, "Addresses", body)
   end
 
   def stub_create_communication_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/Communications")
-      .with(
-        body: "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{}")
+    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
+    stub_simple_request(:post, "Communications", body)
   end
 
   def stub_update_communication_request(id)
-    stub_request(:patch, "#{host}/api/entity/v1/mandants/#{mandant}/Communications(Id=#{id})")
-      .with(
-        body: "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{}")
+    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
+    stub_simple_request(:patch, "Communications(Id=#{id})", body)
   end
 
   def stub_create_customer_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/Customers")
-      .with(
-        body: "{\"SubjectId\":#{person.id}}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: "{}")
+    body = "{\"SubjectId\":#{person.id}}"
+    stub_simple_request(:post, "Customers", body)
   end
 
   def stub_get_subject_request
-    stub_request(:get, "#{host}/api/entity/v1/mandants/#{mandant}/Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers")
+    path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
+    stub_simple_request(:get, path, nil, get_subject_response)
+  end
+
+  def stub_simple_request(method, path, request_body, response_body = "{}")
+    stub_request(method, "#{host}/api/entity/v1/mandants/#{mandant}/#{path}")
       .with(
+        body: request_body,
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
-      .to_return(status: 200, body: get_subject_response)
+      .to_return(status: 200, body: response_body)
   end
 
-  def stub_fetch_batch_missing_request
+  def stub_batch_request(request_body, response_body)
     stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
       .with(
-        body: fetch_batch_body,
+        body: request_body,
         headers: {
           "Authorization" => "Bearer eyJhbGciOi...",
           "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
@@ -198,71 +277,7 @@ describe Invoices::Abacus::SubjectInterface do
       )
       .to_return(
         status: 202,
-        body: fetch_batch_missing_response,
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-      )
-  end
-
-  def stub_fetch_batch_existing_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-      .with(
-        body: fetch_batch_body,
-        headers: {
-          "Authorization" => "Bearer eyJhbGciOi...",
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-        }
-      )
-      .to_return(
-        status: 202,
-        body: fetch_batch_existing_response,
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-      )
-  end
-
-  def stub_create_batch_subject_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-      .with(
-        body: create_batch_subjects_body,
-        headers: {
-          "Authorization" => "Bearer eyJhbGciOi...",
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-        }
-      )
-      .to_return(
-        status: 202,
-        body: create_batch_subjects_response,
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-      )
-  end
-
-  def stub_create_batch_associations_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-      .with(
-        body: create_batch_associations_body,
-        headers: {
-          "Authorization" => "Bearer eyJhbGciOi...",
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-        }
-      )
-      .to_return(
-        status: 202,
-        body: "",
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-      )
-  end
-
-  def stub_update_batch_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-      .with(
-        body: update_batch_body,
-        headers: {
-          "Authorization" => "Bearer eyJhbGciOi...",
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-        }
-      )
-      .to_return(
-        status: 202,
-        body: "",
+        body: response_body,
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
       )
   end
@@ -407,6 +422,40 @@ describe Invoices::Abacus::SubjectInterface do
     HTTP
   end
 
+  def fetch_batch_various_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 404 Not Found OK\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 200 OK\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
+       "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 404 Not Found\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
   def create_batch_subjects_body
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
@@ -460,6 +509,54 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"Name":"Norgay","FirstName":"Nima","Language":"de","SalutationId":2,"Id":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
+  def create_batch_subjects_partition_body
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Subjects HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"Name":"Hillary","FirstName":"Edmund","Language":"de","SalutationId":2,"Id":600001}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Subjects HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"Name":"Norgay","FirstName":"Nima","Language":"de","SalutationId":2,"Id":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def create_batch_subjects_partition_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 400 Bad Request\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"error":{"message":"Invalid data given"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -560,6 +657,159 @@ describe Invoices::Abacus::SubjectInterface do
     HTTP
   end
 
+  def create_batch_associations_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001,"Street":"Belpstrasse","HouseNumber":"37","PostCode":"3007","City":"Bern","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001,"Type":"EMail","Value":"e.hillary@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600001}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Type":"EMail","Value":"t.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+           --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
+  def create_batch_associations_partition_body
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Addresses HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Communications HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Customers HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def create_batch_associations_partition_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+          --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 400 Bad Request\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"Error":{"Message":"EMail is invalid"}}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600004}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
   def update_batch_body
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
@@ -599,6 +849,91 @@ describe Invoices::Abacus::SubjectInterface do
       \r
       {"SubjectId":600004}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def update_batch_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 200 OK\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 200 OK\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
+  def update_batch_partition_body
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST Addresses HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      PATCH Communications(Id=ef83129d) HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SubjectId":600002,"Type":"EMail","Value":"t.norgay@hitobito.example.com","Category":"Private"}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def update_batch_partition_response
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 400 Bad Request\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      <html><body><h1>400 Bad Request</h1></body></html>
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 200 OK\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
 end

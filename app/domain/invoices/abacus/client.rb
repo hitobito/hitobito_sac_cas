@@ -18,6 +18,9 @@ module Invoices
       BATCH_TIMEOUT = 300 # 5 minutes
 
       include JsonCoder
+      include ClientRequestMethods
+
+      attr_accessor :batch_context_object
 
       def initialize
         raise "#{Config::FILE_PATH} not found" unless config.exist?
@@ -44,25 +47,26 @@ module Invoices
       end
 
       def batch(&) # rubocop:disable Metrics/MethodLength
-        @batch_boundary = generate_batch_boundary
-        body = build_batch_body(&)
-        return if body.blank?
+        @batch_context_object = nil
+        request_parts = record_batch_request_parts(&)
+        return [] if request_parts.blank?
 
         handle_bad_request do
+          boundary = generate_batch_boundary
           response = RestClient::Request.execute(
             method: :post,
             url: url(BATCH_PATH),
-            payload: body,
-            headers: batch_headers,
+            payload: build_batch_body(request_parts, boundary),
+            headers: batch_headers(boundary),
             read_timeout: BATCH_TIMEOUT
           )
-          BatchResponse.new(response)
+          BatchResponse.new(response, request_parts).parts
         end
       end
 
       def request(method, path, params = nil)
         if in_batch?
-          @batch_body << batch_request(method, path, params)
+          @batch_request_parts << BatchRequestPart.new(method, path, params, batch_context_object)
           nil
         else
           json_request(method, path, params)
@@ -76,7 +80,7 @@ module Invoices
       end
 
       def in_batch?
-        !@batch_body.nil?
+        !@batch_request_parts.nil?
       end
 
       private
@@ -96,18 +100,6 @@ module Invoices
         ].compact
       end
 
-      def request_body(method, params)
-        encode_json(params) if params && method != :get
-      end
-
-      def request_path(method, path, params)
-        if params && method == :get
-          "#{path}?#{RestClient::Utils.encode_query_string(params)}"
-        else
-          path
-        end
-      end
-
       def headers
         {
           authorization: "Bearer #{token}",
@@ -120,35 +112,25 @@ module Invoices
         "#{BATCH_BOUNDARY}-#{SecureRandom.uuid}"
       end
 
-      def build_batch_body
+      def record_batch_request_parts
         raise "Nested batch requests are not allowed" if in_batch?
 
-        @batch_body = +""
+        @batch_request_parts = []
         yield
-        @batch_body << "--#{@batch_boundary}--\r\n" if @batch_body.present?
-        @batch_body
+        @batch_request_parts
       ensure
-        @batch_body = nil
+        @batch_request_parts = nil
       end
 
-      def batch_request(method, path, params = nil)
-        <<~HTTP
-          --#{@batch_boundary}\r
-          Content-Type: application/http\r
-          Content-Transfer-Encoding: binary\r
-          \r
-          #{method.to_s.upcase} #{request_path(method, path, params)} HTTP/1.1\r
-          Content-Type: application/json\r
-          Accept: application/json\r
-          \r
-          #{request_body(method, params)}\r
-        HTTP
+      def build_batch_body(request_parts, boundary)
+        boundary_line = "--#{boundary}\r\n"
+        "#{boundary_line}#{request_parts.map(&:body).join(boundary_line)}--#{boundary}--\r\n"
       end
 
-      def batch_headers
+      def batch_headers(boundary)
         {
           authorization: "Bearer #{token}",
-          content_type: "multipart/mixed;boundary=#{@batch_boundary}",
+          content_type: "multipart/mixed;boundary=#{boundary}",
           accept_charset: "UTF-8"
         }
       end
