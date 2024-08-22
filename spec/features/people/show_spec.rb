@@ -53,8 +53,8 @@ describe "person show page" do
     context "with data quality issues" do
       before do
         admin.update!(data_quality: "error")
-        admin.data_quality_issues.create!(attr: "email", key: "ist leer", severity: "warning")
-        admin.data_quality_issues.create!(attr: "street", key: "ist leer", severity: "error")
+        admin.data_quality_issues.create!(attr: "email", key: "empty", severity: "warning")
+        admin.data_quality_issues.create!(attr: "street", key: "empty", severity: "error")
       end
 
       it "shows the data quality issues" do

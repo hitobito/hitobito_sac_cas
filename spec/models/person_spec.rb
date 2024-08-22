@@ -252,19 +252,103 @@ describe Person do
   end
 
   describe "#data_quality" do
-    it "is ok by default" do
-      person = people(:mitglied)
-      expect(person.data_quality).to eq("ok")
-      expect(person.data_quality_for_database).to eq(0)
-      expect(person.data_quality_issues).to eq([])
+    let(:person) { people(:mitglied).tap { |p| p.roles.destroy_all } }
+
+    context "on create" do
+      it "is ok by default" do
+        expect(person.data_quality).to eq("ok")
+        expect(person.data_quality_for_database).to eq(0)
+        expect(person.data_quality_issues).to eq([])
+      end
+    end
+
+    context "on update" do
+      it "removes the data_quality_issue if the attribute is valid again" do
+        expect do
+          person.update!(first_name: nil)
+        end.to change(person.data_quality_issues, :count).by(1)
+        expect do
+          person.update!(first_name: "Puzzle")
+        end.to change(person.data_quality_issues, :count).by(-1)
+      end
+
+      it "doesnt validate attributes if another attribute that shouldnt be checked is updated" do
+        expect do
+          person.update!(first_name: nil)
+          person.data_quality_issues.destroy_all
+          person.update!(sac_remark_section_1: "ignored")
+        end.not_to change(person.data_quality_issues, :count)
+      end
+
+      describe "person" do
+        it "validates the first name" do
+          expect do
+            person.update!(company_name: nil, first_name: nil)
+          end.to change(person.data_quality_issues, :count).by(1)
+          expect(person.data_quality_issues.first.message).to eq("Vorname ist leer")
+          expect(person.data_quality).to eq("error")
+        end
+
+        it "validates the last name" do
+          expect do
+            person.update!(company_name: nil, last_name: nil)
+          end.to change(person.data_quality_issues, :count).by(1)
+          expect(person.data_quality_issues.first.message).to eq("Nachname ist leer")
+          expect(person.data_quality).to eq("error")
+        end
+      end
+
+      describe "member" do
+        before do
+          person.phone_numbers.create!(number: "+41791234567", label: "mobile")
+          person.roles.create!(
+            type: Group::SektionsMitglieder::Mitglied.sti_name,
+            group: groups(:bluemlisalp_mitglieder),
+            delete_on: Time.zone.tomorrow,
+            created_at: Time.zone.now
+          )
+        end
+
+        it "validates the birthday" do
+          expect do
+            person.update!(birthday: nil)
+          end.to change(person.data_quality_issues, :count).by(1)
+          expect(person.data_quality_issues.first.message).to eq("Geburtstag ist leer")
+          expect(person.data_quality).to eq("error")
+
+          expect do
+            person.update!(birthday: Time.zone.today)
+          end.not_to change(person.data_quality_issues, :count)
+          expect(person.data_quality_issues.first.message)
+            .to eq("Geburtstag liegt weniger als 6 Jahre vor dem SAC-Eintritt")
+          expect(person.data_quality).to eq("warning")
+        end
+
+        it "validates the street, zip_code, and town" do
+          expect do
+            person.update!(street: nil, zip_code: nil, town: nil)
+          end.to change(person.data_quality_issues, :count).by(3)
+          expect(person.data_quality_issues.map(&:message))
+            .to include("Strasse ist leer", "PLZ ist leer", "Ort ist leer")
+          expect(person.data_quality).to eq("error")
+        end
+
+        it "validates the email and phone_numbers" do
+          expect do
+            person.phone_numbers.destroy_all
+            person.update!(email: nil)
+          end.to change(person.data_quality_issues, :count).by(2)
+          expect(person.data_quality_issues.map(&:message))
+            .to include("Telefonnummern ist leer", "Haupt-E-Mail ist leer")
+          expect(person.data_quality).to eq("warning")
+        end
+      end
     end
 
     context "on destroy" do
-      let(:person) { people(:mitglied) }
-
       it "is destroys the data quality issues too" do
         expect do
-          person.data_quality_issues.create!(attr: "first_name", key: "-", severity: "error")
+          person.data_quality_issues.create!(attr: "first_name", key: "empty", severity: "error")
         end.to change(Person::DataQualityIssue, :count).by(1)
         expect do
           person.destroy!

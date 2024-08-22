@@ -46,6 +46,7 @@ module SacCas::Person
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
 
     before_save :set_digital_correspondence, if: :password_initialized?
+    after_save :check_data_quality
 
     delegate :salutation_label, to: :class
 
@@ -98,5 +99,13 @@ module SacCas::Person
 
   def sac_membership
     @sac_membership ||= People::SacMembership.new(self)
+  end
+
+  private
+
+  def check_data_quality
+    return if (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).empty?
+
+    People::DataQualityChecker.new(self).check_data_quality
   end
 end
