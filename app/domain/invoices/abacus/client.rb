@@ -46,6 +46,8 @@ module Invoices
       def batch(&) # rubocop:disable Metrics/MethodLength
         @batch_boundary = generate_batch_boundary
         body = build_batch_body(&)
+        return if body.blank?
+
         handle_bad_request do
           response = RestClient::Request.execute(
             method: :post,
@@ -123,7 +125,8 @@ module Invoices
 
         @batch_body = +""
         yield
-        @batch_body << "--#{@batch_boundary}--\r\n"
+        @batch_body << "--#{@batch_boundary}--\r\n" if @batch_body.present?
+        @batch_body
       ensure
         @batch_body = nil
       end
