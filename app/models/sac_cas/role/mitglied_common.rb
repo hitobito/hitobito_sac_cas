@@ -45,6 +45,6 @@ module SacCas::Role::MitgliedCommon
   private
 
   def check_data_quality
-    People::DataQualityChecker.new(person)
+    People::DataQualityChecker.new(person).check_data_quality
   end
 end

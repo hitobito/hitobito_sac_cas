@@ -6,53 +6,55 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::DataQualityChecker
-  ATTRIBUTES_TO_CHECK = %w[email street zip_code town first_name last_name
-    company_name phone_numbers birthday]
+  CHECKS_TO_PERFORM = [
+    [:company_name, :warning, check?: ->(p) { p.company? }],
+    [:first_name, :error, check?: ->(p) { !p.company? }],
+    [:last_name, :error, check?: ->(p) { !p.company? }],
+    [:street, :error, check?: ->(p) { p.sac_membership_invoice? }],
+    [:zip_code, :error, check?: ->(p) { p.sac_membership_invoice? }],
+    [:town, :error, check?: ->(p) { p.sac_membership_invoice? }],
+    [:email, :warning, check?: ->(p) { p.sac_membership_invoice? }],
+    [:phone_numbers, :warning, check?: ->(p) { p.sac_membership_invoice? }],
+    [:birthday, :error, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES) }],
+    [:birthday, :warning, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES) },
+                          invalid?: ->(p) { birthday_less_than_6_years_before_entry(p) },
+                          key: :less_than_6_years_before_entry]
+  ]
+  ATTRIBUTES_TO_CHECK = CHECKS_TO_PERFORM.map(&:first).map(&:to_s).uniq
 
   def initialize(person)
     @person = person
+  end
 
-    check_invoice_recipient if @person.sac_membership_invoice?
-    check_stammsektion if @person.roles.exists?(type: SacCas::STAMMSEKTION_ROLES)
+  def check_data_quality
+    CHECKS_TO_PERFORM.each do |attr, severity, checks|
+      next unless checks[:check?].call(@person)
 
-    if @person.company?
-      check("warning", "company_name", "empty", invalid: @person.company_name.blank?)
-    else
-      check("error", "first_name", "empty", invalid: @person.first_name.blank?)
-      check("error", "last_name", "empty", invalid: @person.last_name.blank?)
+      issue = {severity: severity, attr: attr, key: checks[:key] || :empty}
+      invalid = checks[:invalid?].nil? ? @person.send(attr).blank? : checks[:invalid?].call(@person)
+
+      create_or_destroy(issue, invalid)
     end
 
     highest_severity = @person.data_quality_issues.order(severity: :desc).first&.severity
-    @person.update!(data_quality: highest_severity || "ok")
+    @person.update!(data_quality: highest_severity || :ok)
+  end
+
+  def self.birthday_less_than_6_years_before_entry(person)
+    return if person.birthday.blank?
+
+    person.birthday > person.roles.find_by(type: SacCas::STAMMSEKTION_ROLES).created_at - 6.years
   end
 
   private
 
-  def check_invoice_recipient
-    check("error", "street", "empty", invalid: @person.street.blank?)
-    check("error", "zip_code", "empty", invalid: @person.zip_code.blank?)
-    check("error", "town", "empty", invalid: @person.town.blank?)
-    check("warning", "email", "empty", invalid: @person.email.blank?)
-    check("warning", "phone_numbers", "empty", invalid: @person.phone_numbers.blank?)
-  end
+  def create_or_destroy(issue, invalid)
+    return @person.data_quality_issues.find_by(issue)&.destroy! unless invalid
 
-  def check_stammsektion
-    join_date = @person.roles.find_by(type: SacCas::STAMMSEKTION_ROLES).created_at
-
-    check("error", "birthday", "empty", invalid: @person.birthday.blank?)
-    check("warning", "birthday", "less_than_6_years_before_entry",
-      invalid: @person.birthday.present? && (@person.birthday > join_date - 6.years))
-  end
-
-  def check(severity, attr, key, invalid: false)
-    if invalid
-      begin
-        @person.data_quality_issues.create!(severity: severity, attr: attr, key: key)
-      rescue
-        nil
-      end
-    else
-      @person.data_quality_issues.find_by(severity: severity, attr: attr, key: key)&.destroy!
+    begin
+      @person.data_quality_issues.create!(issue)
+    rescue
+      nil
     end
   end
 end
