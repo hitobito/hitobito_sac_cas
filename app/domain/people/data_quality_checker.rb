@@ -49,12 +49,10 @@ class People::DataQualityChecker
   private
 
   def create_or_destroy(issue, invalid)
-    return @person.data_quality_issues.find_by(issue)&.destroy! unless invalid
+    existing_issue = @person.data_quality_issues.find_by(issue)
 
-    begin
-      @person.data_quality_issues.create!(issue)
-    rescue
-      nil
-    end
+    return existing_issue&.destroy! unless invalid
+
+    @person.data_quality_issues.create!(issue) if existing_issue.nil?
   end
 end
