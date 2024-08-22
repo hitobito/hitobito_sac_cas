@@ -21,6 +21,13 @@ fr:
       conflicting_family_membership: >
   activemodel:
     attributes:
+      people/membership/invoice_form:
+        reference_date: ""
+        invoice_date: ""
+        send_date: ""
+        discount: ""
+        new_entry: ""
+        section_id: ""
       wizards/steps/signup/main_email_field:
         email: ""
       wizards/steps/signup/person_fields:
@@ -92,6 +99,8 @@ fr:
       messages:
         must_be_older_than_18: ""
         youth_not_allowed_in_family: |
+        invalid_date_range: ""
+
       models:
         household:
           attributes:
@@ -121,7 +130,7 @@ fr:
               must_be_family_main_person: ""
         person:
           data_quality_issue:
-            message: ''
+            message: ""
 
         wizards/steps/choose_sektion:
           requires_admin: ""
@@ -1137,7 +1146,13 @@ fr:
 
     membership_invoices:
       success_notice: ""
-      alert_notice: ""
+      new:
+        form_title: ""
+        alert_info: ""
+        alert_warning: ""
+        create_invoice: ""
+        mv_yearly_invoice: ""
+        zusatzsektion_eintrittsrechnung: ""
 
     terminate_sac_memberships:
       create:
