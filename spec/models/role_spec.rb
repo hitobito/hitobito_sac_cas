@@ -386,7 +386,7 @@ describe Role do
   context "#membership_years" do
     let(:created_at) { Time.zone.parse("01-01-2000 12:00:00") }
     let(:end_at) { created_at + 7.years + 6.months }
-    let(:years) { 7 }
+    let(:years) { 7.5 }
 
     def create_role(**attrs)
       Fabricate(Group::SektionsMitglieder::Mitglied.name,
@@ -407,10 +407,22 @@ describe Role do
         .to be_within(0.01).of(years)
     end
 
+    it "calculates value and includes last day for deleted_role" do
+      create_role(created_at: Date.new(2000, 1, 1), deleted_at: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
+    end
+
     it "calculates value for role with delete_on" do
       create_role(delete_on: end_at)
       expect(person.roles.with_membership_years.first.membership_years)
         .to be_within(0.01).of(years)
+    end
+
+    it "calculates value and includes last day for delete_on role" do
+      create_role(created_at: Date.new(2000, 1, 1), delete_on: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
     end
 
     it "calculates value for archived_role" do
@@ -419,10 +431,22 @@ describe Role do
         .to be_within(0.01).of(years)
     end
 
+    it "calculates value and includes last day for archived_role" do
+      create_role(created_at: Date.new(2000, 1, 1), archived_at: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
+    end
+
     it "calculates value up to now" do
       create_role(created_at: 1.year.ago, delete_on: 2.years.from_now)
       expect(person.roles.with_membership_years.first.membership_years)
-        .to be_within(0.01).of(1.0)
+        .to eq(1.0)
+    end
+
+    it "calculates value and does not include last day for date today" do
+      create_role(created_at: 1.year.ago + 1.days, delete_on: 2.years.from_now)
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(0.9993)
     end
 
     (SacCas::MITGLIED_ROLES - [Group::SektionsMitglieder::Mitglied]).each do |role_type|
