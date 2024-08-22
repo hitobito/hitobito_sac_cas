@@ -86,7 +86,15 @@ describe Person do
 
     it "with multiple membership roles returns the sum of role.membership_years" do
       create_role(created_at: created_at, delete_on: created_at + 1.years)
-      create_role(created_at: created_at + 2.years, delete_on: created_at + 2.years + 365.days)
+      create_role(created_at: created_at + 2.years, delete_on: created_at + 3.years)
+      expect(person_with_membership_years.membership_years).to eq 2
+    end
+
+    it "multiple roles, with duration of less than a year, add together to membership_years" do
+      create_role(created_at: Date.new(2000, 1, 1), delete_on: Date.new(2000, 7, 1))
+      create_role(created_at: Date.new(2000, 7, 2), delete_on: Date.new(2001, 1, 1))
+      create_role(created_at: Date.new(2001, 1, 2), delete_on: Date.new(2001, 7, 1))
+      create_role(created_at: Date.new(2001, 7, 2), delete_on: Date.new(2002, 1, 1))
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
@@ -107,14 +115,14 @@ describe Person do
     end
 
     it "calculates membership years from roles starting and ending in overlaping years" do
-      role = create_role(delete_on: created_at + 200.days)
-      role.update!(created_at: created_at + 100.days)
+      role = create_role(delete_on: Date.new(2000, 0o7, 19))
+      role.update!(created_at: Date.new(2000, 0o4, 10))
       expect(person_with_membership_years.membership_years).to eq 0
 
-      role.update(delete_on: created_at + 565.days)
+      role.update(delete_on: Date.new(2001, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(1)
 
-      role.update(delete_on: created_at + 930.days)
+      role.update(delete_on: Date.new(2002, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(2)
     end
   end
