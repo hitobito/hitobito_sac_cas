@@ -6,17 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class HutWardenPartnerRow < RoleRow
-    include RemovingPlaceholderContactRole
-
-    self.code = 4008
-    self.role = "Andere"
-    self.role_label = "huettenwartspartner"
-
-    def import!
-      super do
-        remove_placeholder_contact_role(person)
-      end
-    end
+  class SektionsClubhuetteRow < HutRow
+    self.type = "SektionsClubhuette"
+    self.category = "SAC Clubhütte"
+    self.owned_by_geschaeftsstelle = false
   end
 end

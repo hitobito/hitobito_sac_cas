@@ -14,6 +14,7 @@ describe SacImports::Huts::HutChairmanRow do
     SacImports::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
       contact_navision_id: "00003750",
       contact_name: "Bluemlisalphuette",
+      hut_category: "SAC Clubhütte",
       verteilercode: "4007.0",
       related_navision_id: "123456",
       related_last_name: "Muster",

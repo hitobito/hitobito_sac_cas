@@ -6,17 +6,15 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class HutWardenPartnerRow < RoleRow
-    include RemovingPlaceholderContactRole
+  class SacCasClubhuetteRow < HutRow
+    self.type = "SacCasClubhuette"
+    self.category = "SAC Clubhütte"
+    self.owned_by_geschaeftsstelle = true
 
-    self.code = 4008
-    self.role = "Andere"
-    self.role_label = "huettenwartspartner"
+    delegate :parent, to: :class
 
-    def import!
-      super do
-        remove_placeholder_contact_role(person)
-      end
+    def self.parent
+      @parent ||= Group::SacCasClubhuetten.find_or_create_by(parent_id: Group.root.id)
     end
   end
 end

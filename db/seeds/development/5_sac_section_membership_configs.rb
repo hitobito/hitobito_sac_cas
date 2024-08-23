@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 Group::Sektion.all.find_each do |s|
+  SacSectionMembershipConfig.reset_column_information
   SacSectionMembershipConfig.seed_once(:valid_from, :group_id,
     group_id: s.id,
     valid_from: "2024",
