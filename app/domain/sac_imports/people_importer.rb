@@ -45,7 +45,7 @@ module SacImports
           errors: entry.errors
         })
       end
-      entry.import!
+      # entry.import!
     end
   end
 end
