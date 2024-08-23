@@ -106,6 +106,7 @@ en:
           attributes:
             members:
               no_members: ""
+              household_address: ""
             base:
               at_least_one_adult: ""
               no_adult_member_with_email: ""
@@ -303,6 +304,7 @@ en:
         sac_remark_section_3: ""
         sac_remark_section_4: ""
         sac_remark_section_5: ""
+        data_quality: ""
         correspondences:
           digital: ""
           print: ""
@@ -922,6 +924,9 @@ en:
         one: ""
         description: ""
 
+  contactable:
+    address_fields:
+      updates_household_address: ""
   devise:
     sessions:
       form:
@@ -1128,6 +1133,12 @@ en:
       history: ""
       sac_remarks: ""
       external_invoices: ""
+
+    data_quality:
+      ok: ""
+      info: ""
+      warning: ""
+      error: ""
 
     show_right_z_sac_cas:
       section_sac_membership: ""
