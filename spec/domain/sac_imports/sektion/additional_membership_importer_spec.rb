@@ -7,9 +7,7 @@
 
 require "spec_helper"
 
-skip "Skipping until membership importer is implemented"
-
-describe SacImports::Sektion::AdditionalMembershipsImporter do
+pending SacImports::Sektion::AdditionalMembershipsImporter do
   let(:group) { groups(:bluemlisalp) }
   let(:membership_group) { groups(:bluemlisalp_mitglieder) }
 

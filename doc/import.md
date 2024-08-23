@@ -37,6 +37,7 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
   head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
   ```
 - `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
+- Das Encoding der Quelldaten muss UTF-8 sein. Bspw. führt UTF-8-with-BOM zu Fehlern!
 
 ## CSV Report
 
