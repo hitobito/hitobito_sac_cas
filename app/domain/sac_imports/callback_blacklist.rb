@@ -7,9 +7,9 @@
 
 module SacImports::CallbackBlacklist
   CALLBACKS_TO_SKIP = {
-    # ModelName: {
-    #   callback_type: [:callback_method_name1, :callback_method_name2]
-    # }
+    ModelName: {
+      callback_type: [:callback_method_name1, :callback_method_name2]
+    }
   }
 
   # ATTENTION: only use this method when called from a rake task in the import scripts

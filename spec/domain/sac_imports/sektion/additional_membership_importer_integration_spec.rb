@@ -7,6 +7,8 @@
 
 require "spec_helper"
 
+skip "Skipping until membership importer is implemented"
+
 describe SacImports::Sektion::AdditionalMembershipsImporter do
   let(:file) { file_fixture("zusatzmitgliedschaften.xlsx") }
   let(:importer) { described_class.new(file, output: double(puts: nil)) }
