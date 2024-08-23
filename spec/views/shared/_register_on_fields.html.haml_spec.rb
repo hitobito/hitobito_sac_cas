@@ -7,7 +7,7 @@ require "spec_helper"
 describe "shared/_register_on_fields.html.haml" do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:current_user) { people(:top_leader) }
-  let(:model) { SelfInscription.new(group: group, person: Person.new) }
+  let(:model) { Wizards::Steps::Signup::Sektion::VariousFields.new(nil) }
   let(:form_builder) { StandardFormBuilder.new(:group, model, view, {}) }
   let(:dom) { Capybara::Node::Simple.new(@rendered) }
 

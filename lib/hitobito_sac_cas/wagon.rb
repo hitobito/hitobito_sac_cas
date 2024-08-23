@@ -147,7 +147,6 @@ module HitobitoSacCas
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
-      Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
