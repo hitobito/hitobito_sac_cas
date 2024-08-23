@@ -5,7 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class ExternalInvoice::SacMembership::MembershipManager
+# Creates/extends sac memberships after membership invoice has been paid.
+class Invoices::SacMemberships::MembershipManager
   attr_reader :person, :group, :year, :member
 
   def initialize(person, group, year)

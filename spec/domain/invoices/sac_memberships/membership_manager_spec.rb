@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe ExternalInvoice::SacMembership::MembershipManager do
+describe Invoices::SacMemberships::MembershipManager do
   let(:end_of_next_year) { Time.zone.today.next_year.end_of_year }
   let(:mitglied) { roles(:mitglied) }
   let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }

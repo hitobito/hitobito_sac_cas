@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::CancelExternalInvoiceJob do
+describe Invoices::Abacus::CancelInvoiceJob do
   let(:invoice) { Fabricate(:external_invoice, person_id: people(:mitglied)) }
   let(:job) { described_class.new(invoice) }
 
