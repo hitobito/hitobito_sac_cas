@@ -61,9 +61,8 @@ describe SacImports::PersonEntry do
 
     it "sets various attributes via through values" do
       row[:first_name] = :first
-      row[:last_name] = :last
-      row[:gender] = "2"
-      row[:navision_name] = "Puzzle GmbH"
+      row[:last_name] = "Puzzle GmbH"
+      row[:person_type] = "2"
       row[:language] = "DES"
       expect(person.first_name).to be_nil
       expect(person.last_name).to be_nil
@@ -127,23 +126,15 @@ describe SacImports::PersonEntry do
 
     it "sets phone numbers" do
       row[:phone] = "079 12 123 10"
-      row[:phone_mobile] = "079 12 123 11"
-      row[:phone_direct] = "079 12 123 12"
-      expect(numbers).to have(3).items
-      expect(numbers[0][:label]).to eq "Privat"
-      expect(numbers[1][:label]).to eq "Mobil"
-      expect(numbers[2][:label]).to eq "Arbeit"
+      expect(numbers).to have(1).items
+      expect(numbers[0][:label]).to eq "Hauptnummer"
       expect(numbers[0][:number]).to eq "079 12 123 10"
-      expect(numbers[1][:number]).to eq "079 12 123 11"
-      expect(numbers[2][:number]).to eq "079 12 123 12"
       expect(numbers.collect(&:public).uniq).to eq [true]
     end
 
     it "ignores invalid phone numbers" do
       row[:phone] = "123"
-      row[:phone_mobile] = "079 12 34 560"
-      expect(numbers).to have(1).item
-      expect(numbers.first.number).to eq "079 12 34 560"
+      expect(numbers).to have(0).item
     end
   end
 

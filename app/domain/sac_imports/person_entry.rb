@@ -8,7 +8,7 @@
 module SacImports
   class PersonEntry
     GENDERS = {"0": "m", "1": "w"}.freeze
-    COMPANY_GENDER = "2"
+    PERSON_TYPES = {"1": "person", "2": "company"}.freeze
     DEFAULT_LANGUAGE = "de"
     LANGUAGES = {DES: "de", FRS: "fr", ITS: "it"}.freeze
     DEFAULT_COUNTRY = "CH"
@@ -44,7 +44,7 @@ module SacImports
     private
 
     def navision_id
-      @navision_id ||= Integer(row[:navision_id].to_s.sub!(/^0*/, ""))
+      @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""))
     end
 
     def country
@@ -55,8 +55,12 @@ module SacImports
       GENDERS[row[:gender]&.to_sym]
     end
 
+    def person_type
+      PERSON_TYPES[row[:person_type]&.to_sym] || "person"
+    end
+
     def language
-      LANGUAGES[row[:language]&.to_sym] || DEFAULT_LANGUAGE
+      LANGUAGES[row[:person_type]&.to_sym] || DEFAULT_LANGUAGE
     end
 
     def email
@@ -64,7 +68,7 @@ module SacImports
     end
 
     def company?
-      @is_company ||= row[:gender] == COMPANY_GENDER
+      @is_company ||= person_type == "company"
     end
 
     def parse_address
@@ -86,7 +90,7 @@ module SacImports
       person.country = country
       person.town = row[:town]
       person.zip_code = row[:zip_code]
-      person.birthday = row[:birthday] unless company?
+      person.birthday = row[:birthday]
       person.gender = gender unless company?
       person.language = language
       person.sac_remark_section_1 = row[:sac_remark_section_1]
@@ -96,7 +100,7 @@ module SacImports
       person.sac_remark_section_5 = row[:sac_remark_section_5]
       person.sac_remark_national_office = row[:sac_remark_national_office]
       person.company = company?
-      person.company_name = row[:navision_name] if company?
+      person.company_name = row[:last_name] if company?
 
       person.street, person.housenumber = parse_address
 
@@ -115,11 +119,7 @@ module SacImports
     def build_phone_numbers(person)
       # rubocop:disable Lint/SymbolConversion
       phone_numbers = {
-        "Privat": row[:phone],
-        "Mobil": row[:phone_mobile],
-        "Arbeit": row[:phone_direct],
-        "Haupt-Telefon": row[:phone_private],
-        "Fax": row[:phone_fax]
+        "Hauptnummer": row[:phone]
       }.freeze
       # rubocop:enable Lint/SymbolConversion
 

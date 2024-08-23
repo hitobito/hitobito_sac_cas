@@ -39,7 +39,7 @@ describe SacImports::MembershipYearsReport do
     expected_output.each do |output_line|
       expect(output).to receive(:print).with(output_line)
     end
-    expect(output).to receive(:puts).with("\n\n\nThank you for flying with SAC Imports.")
+    expect(output).to receive(:puts).with("Thank you for flying with SAC Imports.")
     expect(output).to receive(:puts).with("Report written to #{report_file}")
 
     expect(Dir)
@@ -55,10 +55,10 @@ describe SacImports::MembershipYearsReport do
 
     expect(csv_report.size).to eq(10)
     expect(csv_report.first).to eq(report_headers)
-    expect(csv_report.second).to eq(["513544", "Müller Hans", "42", nil, nil, "Person not found in hitobito"])
-    expect(csv_report.third).to eq(["513546", "Meier Ursula", "3", "0", "3", nil])
-    expect(csv_report.fourth).to eq(["513549", "Schneider Peter", "24", "24", "0", nil])
-    expect(csv_report.fifth).to eq(["513550", "Weber Anna", nil, "14", "-14", nil])
+    expect(csv_report.second).to eq(["513544", "Müller", "42", nil, nil, "Person not found in hitobito"])
+    expect(csv_report.third).to eq(["513546", "Meier", "3", "0", "3", nil])
+    expect(csv_report.fourth).to eq(["513549", "Schneider", "24", "24", "0", nil])
+    expect(csv_report.fifth).to eq(["513550", "Weber", nil, "14", "-14", nil])
 
     File.delete(report_file)
     expect(File.exist?(report_file)).to be_falsey
