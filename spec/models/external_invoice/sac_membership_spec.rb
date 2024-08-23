@@ -42,13 +42,13 @@ describe ExternalInvoice::SacMembership do
     def expect_no_enqueued_job
       expect do
         yield
-      end.not_to change { Delayed::Job.where('handler like "%People::ExternalInvoicePayedJob%"').count }
+      end.not_to change { Delayed::Job.where('handler like "%Invoices::SacMemberships::InvoicePayedJob%"').count }
     end
 
     def expect_enqueued_job
       expect do
         yield
-      end.to change { Delayed::Job.where('handler like "%People::ExternalInvoicePayedJob%"').count }
+      end.to change { Delayed::Job.where('handler like "%Invoices::SacMemberships::InvoicePayedJob%"').count }
     end
   end
 end

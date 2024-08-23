@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class People::CancelExternalInvoiceJob < BaseJob
+class Invoices::Abacus::CancelInvoiceJob < BaseJob
   self.parameters = [:external_invoice_id]
 
   def initialize(external_invoice)

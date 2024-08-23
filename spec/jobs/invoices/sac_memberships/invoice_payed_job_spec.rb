@@ -7,13 +7,13 @@
 
 require "spec_helper"
 
-describe People::ExternalInvoicePayedJob < BaseJob do
+describe Invoices::SacMemberships::InvoicePayedJob do
   let(:date) { Time.zone.today.next_year.end_of_year }
 
-  subject(:job) { People::ExternalInvoicePayedJob.new(people(:mitglied).id, groups(:bluemlisalp_mitglieder).id, date.year) }
+  subject(:job) { described_class.new(people(:mitglied).id, groups(:bluemlisalp_mitglieder).id, date.year) }
 
   it "executes membership manager update membership status" do
-    allow(ExternalInvoice::SacMembership::MembershipManager).to receive(:update_membership_status)
+    allow(Invoices::SacMemberships::MembershipManager).to receive(:update_membership_status)
 
     job.perform
   end
