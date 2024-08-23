@@ -132,6 +132,10 @@ fr:
         person:
           data_quality_issue:
             message: ""
+        data_quality_issue:
+          messages:
+            empty: ""
+            less_than_6_years_before_entry: ""
 
         wizards/steps/choose_sektion:
           requires_admin: ""
