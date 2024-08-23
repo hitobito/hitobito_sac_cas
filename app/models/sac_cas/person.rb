@@ -29,6 +29,8 @@ module SacCas::Person
 
     has_many :external_trainings
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
+
+    enum data_quality: {ok: 0, info: 1, warning: 2, error: 3}, _default: 0
     has_many :data_quality_issues, dependent: :destroy
 
     delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role,
@@ -44,6 +46,7 @@ module SacCas::Person
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
 
     before_save :set_digital_correspondence, if: :password_initialized?
+    after_save :check_data_quality
 
     delegate :salutation_label, to: :class
 
@@ -98,11 +101,11 @@ module SacCas::Person
     @sac_membership ||= People::SacMembership.new(self)
   end
 
-  def data_quality
-    DATA_QUALITIES[super] if super.present?
-  end
+  private
 
-  def data_quality=(value)
-    super(value.is_a?(Integer) ? value : DATA_QUALITIES.index(value.to_s))
+  def check_data_quality
+    return if (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).empty?
+
+    People::DataQualityChecker.new(self).check_data_quality
   end
 end

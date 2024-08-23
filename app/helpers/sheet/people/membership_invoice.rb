@@ -5,10 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require "spec_helper"
-require_relative "people_managers_shared_examples"
-
-describe Person::ManagedsController do
-  it_behaves_like "people_managers#create"
-  it_behaves_like "people_managers#destroy"
+module Sheet
+  module People
+    class MembershipInvoice < Base
+      self.parent_sheet = Sheet::Person
+    end
+  end
 end

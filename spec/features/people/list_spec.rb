@@ -67,4 +67,19 @@ describe "people list page", :js do
       expect(page).to have_text("Bemerkungen Sektion 1")
     end
   end
+
+  it "allows showing the data_quality column" do
+    group.people.first.update! data_quality: "info"
+    group.people.second.update! data_quality: "warning"
+    group.people.third.update! data_quality: "error"
+
+    visit group_people_path(group_id: group.id)
+    click_link("Spalten")
+    check("Datenqualität")
+
+    expect(page).to have_css("td[data-attribute-name=data_quality] .fas.fa-check-circle")
+    expect(page).to have_css("td[data-attribute-name=data_quality] .fas.fa-info-circle")
+    expect(page).to have_css("td[data-attribute-name=data_quality] .fas.fa-exclamation-triangle")
+    expect(page).to have_css("td[data-attribute-name=data_quality] .fas.fa-times-circle")
+  end
 end

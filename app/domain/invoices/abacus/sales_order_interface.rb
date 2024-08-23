@@ -24,9 +24,9 @@ module Invoices
       # creates a batch of sales orders, but without triggering the next step.
       # (this happens manually in abacus)
       def create_batch(sales_orders)
-        batch_response = create_batch_request(sales_orders)
-        assign_abacus_sales_order_keys(sales_orders, batch_response)
-        batch_response
+        parts = create_batch_request(sales_orders)
+        batch_assign_abacus_sales_order_keys(parts)
+        parts
       end
 
       def fetch(abacus_key)
@@ -45,6 +45,7 @@ module Invoices
       def create_batch_request(sales_orders)
         client.batch do
           sales_orders.each do |order|
+            client.batch_context_object = order
             create_request(order)
           end
         end
@@ -70,10 +71,9 @@ module Invoices
         # ignore error
       end
 
-      def assign_abacus_sales_order_keys(sales_orders, batch_response)
-        sales_orders.each_with_index do |order, index|
-          part = batch_response.parts[index]
-          order.assign_abacus_key(part.json) if part&.created?
+      def batch_assign_abacus_sales_order_keys(parts)
+        parts.each do |part|
+          part.context_object.assign_abacus_key(part.json) if part.created?
         end
       end
 

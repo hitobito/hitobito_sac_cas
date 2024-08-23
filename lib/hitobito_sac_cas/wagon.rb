@@ -25,10 +25,11 @@ module HitobitoSacCas
 
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
-        Export::BackupMitgliederScheduleJob,
-        PromoteNeuanmeldungenJob,
         Event::CloseApplicationsJob,
         Event::LeaderReminderJob,
+        Export::BackupMitgliederScheduleJob,
+        PromoteNeuanmeldungenJob,
+        Qualifications::ExpirationMailerJob,
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen]
@@ -52,7 +53,6 @@ module HitobitoSacCas
       Person.include SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
-      Person::Household.prepend SacCas::Person::Household
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
       Roles::Termination.prepend SacCas::Roles::Termination
@@ -61,6 +61,7 @@ module HitobitoSacCas
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
       Wizards::Steps::NewUserForm.support_company = false
+      Wizards::RegisterNewUserWizard.delegate :email, to: :new_user_form
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
@@ -89,16 +90,20 @@ module HitobitoSacCas
       GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
-      PeopleManagerAbility.prepend SacCas::PeopleManagerAbility
+      RoleAbility.prepend SacCas::RoleAbility
+      GroupAbility.prepend SacCas::GroupAbility
+      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       RoleAbility.include SacCas::VariousAbility
+      TokenAbility.prepend SacCas::TokenAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
       RoleDecorator.prepend SacCas::RoleDecorator
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
+      ServiceTokenDecorator.kinds += [:external_invoices]
 
       ## Domain
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
@@ -142,12 +147,10 @@ module HitobitoSacCas
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
-      Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
-      PeopleManagersController.prepend SacCas::PeopleManagersController
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Person::QueryController.prepend SacCas::Person::QueryController
       Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
@@ -159,6 +162,7 @@ module HitobitoSacCas
       SubscriptionsController.prepend SacCas::SubscriptionsController
 
       People::Membership::VerifyController.include Localizable
+      ServiceTokensController.permitted_attrs += [:external_invoices]
 
       ## Jobs
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
@@ -187,6 +191,7 @@ module HitobitoSacCas
           :wiedereintritt,
           :self_registration_reason,
           :address_valid,
+          :data_quality,
           :sac_remark_national_office,
           :sac_remark_section_1,
           :sac_remark_section_2,

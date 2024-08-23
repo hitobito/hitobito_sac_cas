@@ -8,12 +8,14 @@
 require "spec_helper"
 
 shared_examples "people_managers#create" do
+  include Households::SpecHelper
   before { sign_in(people(:admin)) }
 
   def create_person(**opts)
-    Fabricate(:person, primary_group: groups(:externe_kontakte), **opts).tap do |person|
+    Fabricate(:person, primary_group: groups(:bluemlisalp_mitglieder), **opts).tap do |person|
       # add a role to make the person findable
-      Group::ExterneKontakte::Kontakt.create!(person: person, group: groups(:externe_kontakte))
+      Group::SektionsMitglieder::Mitglied.create!(person: person, group: groups(:bluemlisalp_mitglieder),
+        created_at: 1.year.ago, delete_on: 2.years.from_now)
     end
   end
 
@@ -31,8 +33,9 @@ shared_examples "people_managers#create" do
     end
 
     it "adds manager to household" do
-      expect(manager.household_key).to be_nil
+      manager.update!(sac_family_main_person: true)
       managed.update!(household_key: "the-household")
+      expect(manager.household_key).to be_nil
 
       expect { post :create, params: params }
         .to change { PeopleManager.count }.by(1)
@@ -41,6 +44,7 @@ shared_examples "people_managers#create" do
     end
 
     it "adds managed to household" do
+      managed.update!(sac_family_main_person: true)
       manager.update!(household_key: "the-household")
       expect(managed.household_key).to be_nil
 
@@ -51,6 +55,7 @@ shared_examples "people_managers#create" do
     end
 
     it "creates new household" do
+      managed.update!(sac_family_main_person: true)
       expect(manager.household_key).to be_nil
       expect(managed.household_key).to be_nil
 
@@ -63,7 +68,7 @@ shared_examples "people_managers#create" do
     end
 
     it "does not persist if household is invalid" do
-      expect_any_instance_of(SacCas::Person::Household).to receive(:valid?).and_return(false)
+      expect_any_instance_of(Household).to receive(:valid?).and_return(false)
 
       expect { post :create, params: params }
         .to not_change { PeopleManager.count }
@@ -74,19 +79,24 @@ shared_examples "people_managers#create" do
 end
 
 shared_examples "people_managers#destroy" do
-  before { sign_in(people(:admin)) }
+  include Households::SpecHelper
+  before do
+    sign_in(people(:admin))
+    create_household(parent, parent2, child)
+  end
 
   def create_person(**opts)
-    Fabricate(:person, primary_group: groups(:externe_kontakte), **opts).tap do |person|
+    Fabricate(:person, primary_group: groups(:bluemlisalp_mitglieder), **opts).tap do |person|
       # add a role to make the person findable
-      Group::ExterneKontakte::Kontakt.create!(person: person, group: groups(:externe_kontakte))
+      Group::SektionsMitglieder::Mitglied.create!(person: person, group: groups(:bluemlisalp_mitglieder),
+        created_at: 1.year.ago, delete_on: 2.years.from_now)
     end
   end
 
-  let(:child) { create_person(birthday: 15.years.ago, household_key: "happy-family") }
-  let(:parent) { create_person(birthday: 25.years.ago, household_key: "happy-family") }
-  let(:parent2) { create_person(birthday: 25.years.ago, household_key: "happy-family") }
-  let(:entry) { PeopleManager.create!(manager_id: parent.id, managed_id: child.id) }
+  let(:parent) { create_person(birthday: 25.years.ago, sac_family_main_person: true) }
+  let(:child) { create_person(birthday: 15.years.ago) }
+  let(:parent2) { create_person(birthday: 25.years.ago) }
+  let(:entry) { PeopleManager.find_or_create_by(manager_id: parent.id, managed_id: child.id) }
 
   def params
     attr = (described_class.assoc == :people_managers) ? :managed_id : :manager_id

@@ -7,7 +7,7 @@
 
 Fabricator(:person_data_quality_issue, class_name: "Person::DataQualityIssue") do
   person
-  attr { Person.column_names.sample }
-  key { "ist leer" }
+  attr { People::DataQualityChecker::ATTRIBUTES_TO_CHECK.sample }
+  key { "empty" }
   severity { Person::DataQualityIssue.severities.key(rand(1..3)) }
 end

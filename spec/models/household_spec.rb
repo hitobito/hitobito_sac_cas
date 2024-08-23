@@ -13,16 +13,17 @@ describe Household do
     role_type = group.class.const_get(role)
     Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
   end
+  let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
 
-  let(:person) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
-  let(:adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
-  let(:child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
-  let(:second_child) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
-  let(:second_adult) { Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
+  let(:person) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
+  let(:adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
+  let(:child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
+  let(:second_child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
+  let(:second_adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
 
   subject!(:household) { Household.new(person, maintain_sac_family: false) }
 
-  def sequence = Sequence.by_name(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+  def sequence = Sequence.by_name(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE)
 
   before do
     travel_to(Date.new(2024, 5, 31))
@@ -132,6 +133,14 @@ describe Household do
         end
           .to change { person.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
           .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
+      end
+
+      it "makes oldest person main person" do
+        person.update!(birthday: 22.years.ago)
+        adult.update!(birthday: 24.years.ago)
+        expect do
+          household.add(adult).save!
+        end.to change { adult.sac_family_main_person }.from(false).to(true)
       end
 
       it "calls Memberships::FamilyMutation#join! for added person" do
@@ -284,6 +293,17 @@ describe Household do
         add_and_save(child)
         expect_any_instance_of(Person).to receive(:managers).and_raise("ouch")
         expect { household.destroy }.to raise_error("ouch").and(not_change { PeopleManager.count })
+      end
+
+      context "maintain_sac_family" do
+        subject!(:household) { Household.new(person, maintain_sac_family: true) }
+
+        it "succeeds with updating sac_family_main_person" do
+          add_and_save(child)
+          expect(person.reload).to be_sac_family_main_person
+          expect { household.destroy }.to change { PeopleManager.count }.by(-1)
+          expect(person.reload).not_to be_sac_family_main_person
+        end
       end
     end
   end

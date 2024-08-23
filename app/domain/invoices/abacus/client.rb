@@ -18,9 +18,11 @@ module Invoices
       BATCH_TIMEOUT = 300 # 5 minutes
 
       include JsonCoder
+      include ClientRequestMethods
 
       def initialize
         raise "#{Config::FILE_PATH} not found" unless config.exist?
+        @token_semaphore = Thread::Mutex.new
       end
 
       def list(type, params = {})
@@ -44,23 +46,26 @@ module Invoices
       end
 
       def batch(&) # rubocop:disable Metrics/MethodLength
-        @batch_boundary = generate_batch_boundary
-        body = build_batch_body(&)
+        self.batch_context_object = nil
+        request_parts = record_batch_request_parts(&)
+        return [] if request_parts.blank?
+
         handle_bad_request do
+          boundary = generate_batch_boundary
           response = RestClient::Request.execute(
             method: :post,
             url: url(BATCH_PATH),
-            payload: body,
-            headers: batch_headers,
+            payload: build_batch_body(request_parts, boundary),
+            headers: batch_headers(boundary),
             read_timeout: BATCH_TIMEOUT
           )
-          BatchResponse.new(response)
+          BatchResponse.new(response, request_parts).parts
         end
       end
 
       def request(method, path, params = nil)
         if in_batch?
-          @batch_body << batch_request(method, path, params)
+          thread_local_get(:batch_request_parts) << BatchRequestPart.new(method, path, params, batch_context_object)
           nil
         else
           json_request(method, path, params)
@@ -74,7 +79,15 @@ module Invoices
       end
 
       def in_batch?
-        !@batch_body.nil?
+        !thread_local_get(:batch_request_parts).nil?
+      end
+
+      def batch_context_object
+        thread_local_get(:batch_context_object)
+      end
+
+      def batch_context_object=(object)
+        thread_local_set(:batch_context_object, object)
       end
 
       private
@@ -94,18 +107,6 @@ module Invoices
         ].compact
       end
 
-      def request_body(method, params)
-        encode_json(params) if params && method != :get
-      end
-
-      def request_path(method, path, params)
-        if params && method == :get
-          "#{path}?#{RestClient::Utils.encode_query_string(params)}"
-        else
-          path
-        end
-      end
-
       def headers
         {
           authorization: "Bearer #{token}",
@@ -118,34 +119,25 @@ module Invoices
         "#{BATCH_BOUNDARY}-#{SecureRandom.uuid}"
       end
 
-      def build_batch_body
+      def record_batch_request_parts
         raise "Nested batch requests are not allowed" if in_batch?
 
-        @batch_body = +""
+        thread_local_set(:batch_request_parts, [])
         yield
-        @batch_body << "--#{@batch_boundary}--\r\n"
+        thread_local_get(:batch_request_parts)
       ensure
-        @batch_body = nil
+        thread_local_set(:batch_request_parts, nil)
       end
 
-      def batch_request(method, path, params = nil)
-        <<~HTTP
-          --#{@batch_boundary}\r
-          Content-Type: application/http\r
-          Content-Transfer-Encoding: binary\r
-          \r
-          #{method.to_s.upcase} #{request_path(method, path, params)} HTTP/1.1\r
-          Content-Type: application/json\r
-          Accept: application/json\r
-          \r
-          #{request_body(method, params)}\r
-        HTTP
+      def build_batch_body(request_parts, boundary)
+        boundary_line = "--#{boundary}\r\n"
+        "#{boundary_line}#{request_parts.map(&:body).join(boundary_line)}--#{boundary}--\r\n"
       end
 
-      def batch_headers
+      def batch_headers(boundary)
         {
           authorization: "Bearer #{token}",
-          content_type: "multipart/mixed;boundary=#{@batch_boundary}",
+          content_type: "multipart/mixed;boundary=#{boundary}",
           accept_charset: "UTF-8"
         }
       end
@@ -175,14 +167,17 @@ module Invoices
       end
 
       def token
-        if @token_expires_at.nil? || @token_expires_at <= Time.zone.now
-          response = request_token
-          @token = response["access_token"]
-          @token_expires_at =
-            Time.zone.now + response["expires_in"].to_i - RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS
-        end
-
+        @token_semaphore.synchronize { renew_expired_token }
         @token
+      end
+
+      def renew_expired_token
+        return if @token_expires_at.present? && @token_expires_at > Time.zone.now
+
+        response = request_token
+        @token = response["access_token"]
+        @token_expires_at =
+          Time.zone.now + response["expires_in"].to_i - RENEW_TOKEN_BEFORE_EXPIRATION_SECONDS
       end
 
       def request_token
@@ -206,6 +201,18 @@ module Invoices
 
       def config
         Config
+      end
+
+      def thread_local_get(key)
+        Thread.current[thread_local_key(key)]
+      end
+
+      def thread_local_set(key, object)
+        Thread.current[thread_local_key(key)] = object
+      end
+
+      def thread_local_key(key)
+        "abacus_client_#{object_id}_#{key}"
       end
     end
   end

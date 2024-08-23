@@ -27,22 +27,23 @@ class Person::DataQualityIssue < ApplicationRecord
 
   enum severity: {info: 1, warning: 2, error: 3}
 
-  validate :person_attribute_exists
+  validate :person_attribute_to_check
   validates :attr, :severity, presence: true
   validates :key, uniqueness: {scope: %i[person_id attr]}, presence: true
 
-  def severity=(value)
-    super(self.class.severities.keys.index(value.to_s)&.next)
-  end
-
   def message
     I18n.t("activemodel.errors.models.person.data_quality_issue.message",
-      attr: Person.human_attribute_name(attr), key: key)
+      attr: Person.human_attribute_name(attr),
+      key: I18n.t(key,
+        default: key,
+        scope: "activemodel.errors.models.data_quality_issue.messages"))
   end
 
   private
 
-  def person_attribute_exists
-    errors.add(:attr, :invalid) unless Person.column_names.include?(attr)
+  def person_attribute_to_check
+    return if People::DataQualityChecker::ATTRIBUTES_TO_CHECK.include?(attr)
+
+    errors.add(:attr, :invalid)
   end
 end

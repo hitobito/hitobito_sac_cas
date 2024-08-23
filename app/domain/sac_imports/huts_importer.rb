@@ -28,10 +28,14 @@ module SacImports
       created_at: "Gültig von"
     }
 
-    IMPORTERS = [
+    ROW_IMPORTERS = [
       SacImports::Huts::HutCommissionRow,
       SacImports::Huts::HutsRow,
       SacImports::Huts::HutRow,
+      SacImports::Huts::SacCasPrivathuetteRow,
+      SacImports::Huts::SacCasClubhuetteRow,
+      SacImports::Huts::SektionshuetteRow,
+      SacImports::Huts::SektionsClubhuetteRow,
       SacImports::Huts::HutChiefRow,
       SacImports::Huts::HutWardenRow,
       SacImports::Huts::HutWardenPartnerRow,
@@ -46,19 +50,43 @@ module SacImports
 
     def import!
       without_query_logging do
-        IMPORTERS.each do |importer|
-          Import::XlsxReader.read(@path, "Beziehungen_Data", headers: HEADERS) do |row|
-            importer.new(row).import! if importer.can_process?(row)
+        import_sac_cas_hut_groups
+        ROW_IMPORTERS.each do |importer_class|
+          rows.each do |row|
+            importer = importer_class.new(row)
+            importer.import! if importer.can_process?
           end
         end
+
         ignoring_archival do
           Group.update_all(lft: nil, rgt: nil)
           Group.rebuild!(false)
         end
       end
+      print_summary(Group)
+      print_summary(Role)
     end
 
     private
+
+    def print_summary(model_class)
+      model_class.where('type LIKE "%huette%"').group(:type).count.sort_by(&:second).each do |row|
+        p row
+      end
+    end
+
+    def rows
+      @rows ||= [].tap do |rows|
+        Import::XlsxReader.read(@path, "Beziehungen_Data", headers: HEADERS) do |row|
+          rows << row
+        end
+      end
+    end
+
+    def import_sac_cas_hut_groups
+      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasClubhuetten)
+      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasPrivathuetten)
+    end
 
     def without_query_logging
       old_logger = ActiveRecord::Base.logger

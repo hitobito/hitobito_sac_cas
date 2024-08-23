@@ -6,70 +6,35 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class HutRow
-    def self.can_process?(row)
-      row[:verteilercode] == 4000 && hut_type(row).present? &&
-        row[:contact_navision_id] != "00001000"
-    end
+  class HutRow < Row
+    class_attribute :type
+    class_attribute :category
+    class_attribute :owned_by_geschaeftsstelle
 
-    def initialize(row)
-      @row = row
+    GESCHAEFTSSTELLE_NAVISION_ID = "00001000"
+
+    def can_process?
+      row[:verteilercode] == 4000 && row[:hut_category] == category && right_owner?
     end
 
     def import!
-      group = group_for(@row)
-      set_data(@row, group)
-      group.save!
-    end
-
-    def self.hut_type(row)
-      case row[:hut_category]
-      when "SAC Sektionshütte"
-        Group::Sektionshuette
-      when "SAC Clubhütte"
-        Group::SektionsClubhuette
-      end
-    end
-
-    def self.parent_group_type(row)
-      case row[:hut_category]
-      when "SAC Sektionshütte"
-        Group::Sektionshuetten
-      when "SAC Clubhütte"
-        Group::SektionsClubhuetten
+      parent.children.find_or_create_by!(navision_id: related_navision_id) do |g|
+        g.type = parent.class.const_get(type)
+        g.name = @row[:related_last_name]
       end
     end
 
     private
 
-    def group_for(row)
-      self.class.hut_type(row).find_or_initialize_by(navision_id: navision_id(row))
+    def right_owner?
+      owned_by_geschaeftsstelle ? geschaeftsstelle? : !geschaeftsstelle?
     end
 
-    def set_data(row, group)
-      group.type = self.class.hut_type(row).name
-      group.name = name(row)
-      group.parent_id = parent_id(row)
+    def parent
+      layer_id = Group.find_by(navision_id: contact_navision_id).id
+      Group.const_get(type + "n").find_by(layer_group_id: layer_id)
     end
 
-    def navision_id(row)
-      row[:related_navision_id].to_s.sub(/^[0]*/, "")
-    end
-
-    def name(row)
-      row[:related_last_name]
-    end
-
-    def parent_id(row)
-      sektion = Group.find_by(navision_id: owner_navision_id(row))
-      funktionaere = Group::SektionsFunktionaere.find_by(parent: sektion)
-      self.class.parent_group_type(row).find_by(parent: funktionaere).id
-    rescue
-      raise "WARNING: No parent found for row #{row.inspect}. Descendants: #{sektion.descendants.inspect}"
-    end
-
-    def owner_navision_id(row)
-      row[:contact_navision_id].to_s.sub(/^[0]*/, "")
-    end
+    def geschaeftsstelle? = row[:contact_navision_id] == GESCHAEFTSSTELLE_NAVISION_ID
   end
 end

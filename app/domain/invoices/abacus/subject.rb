@@ -37,8 +37,12 @@ module Invoices
         entity.abacus_subject_key.to_i
       end
 
+      def subject_or_entity_id
+        (entity.abacus_subject_key || entity.id).to_i
+      end
+
       def assign_subject_key(data)
-        entity.update_column(:abacus_subject_key, data[:id]) # rubocop:disable Rails/SkipsModelValidations
+        entity.update_column(:abacus_subject_key, data[:id]) unless entity.abacus_subject_key?  # rubocop:disable Rails/SkipsModelValidations
       end
 
       def subject_attrs

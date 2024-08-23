@@ -6,23 +6,23 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Huts
-  class HutsRow
-    def self.can_process?(row)
-      row[:verteilercode] == 4000 && group_type(row).present? &&
+  class HutsRow < Row
+    def can_process?
+      row[:verteilercode] == 4000 && group_type.present? &&
         row[:contact_navision_id] != "00001000"
     end
 
-    def initialize(row)
-      @row = row
-    end
-
     def import!
-      group = group_for(@row)
-      set_data(@row, group)
+      group = group_type.find_or_initialize_by(parent_id: parent_id)
+      group.type = group_type.name
+      group.name = group_type.label
+      group.parent_id = parent_id
       group.save!
     end
 
-    def self.group_type(row)
+    private
+
+    def group_type
       case row[:hut_category]
       when "SAC Sektionshütte"
         Group::Sektionshuetten
@@ -31,26 +31,14 @@ module SacImports::Huts
       end
     end
 
-    private
-
-    def group_for(row)
-      self.class.group_type(row).find_or_initialize_by(parent_id: parent_id(row))
-    end
-
-    def set_data(row, group)
-      group.type = self.class.group_type(row).name
-      group.name = self.class.group_type(row).label
-      group.parent_id = parent_id(row)
-    end
-
-    def parent_id(row)
-      sektion = Group.find_by(navision_id: owner_navision_id(row))
+    def parent_id
+      sektion = Group.find_by(navision_id: owner_navision_id)
       Group::SektionsFunktionaere.find_by(parent: sektion).id
     rescue
       raise "WARNING: No parent found for row #{row.inspect}"
     end
 
-    def owner_navision_id(row)
+    def owner_navision_id
       row[:contact_navision_id].to_s.sub(/^[0]*/, "")
     end
   end

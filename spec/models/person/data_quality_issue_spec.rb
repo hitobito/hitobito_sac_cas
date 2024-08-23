@@ -10,7 +10,7 @@ require "spec_helper"
 describe Person::DataQualityIssue do
   let(:person) { people(:mitglied) }
   let(:data_quality) do
-    person.data_quality_issues.new(attr: "zip_code", key: "ist leer", severity: "warning")
+    person.data_quality_issues.new(attr: "zip_code", key: "empty", severity: "warning")
   end
 
   describe "validations" do
@@ -28,7 +28,7 @@ describe Person::DataQualityIssue do
 
     context "#key" do
       it "is invalid if it isnt unique within a [person_id, attr] scope" do
-        person.data_quality_issues.create!(attr: "zip_code", key: "ist leer", severity: "error")
+        person.data_quality_issues.create!(attr: "zip_code", key: "empty", severity: "error")
         expect(data_quality.valid?).to eq false
         expect(data_quality.errors[:key]).to eq ["ist bereits vergeben"]
       end
@@ -38,7 +38,7 @@ describe Person::DataQualityIssue do
       it "is invalid if it isnt in enum" do
         expect do
           data_quality.update!(severity: "not_a_severity")
-        end.to raise_error(ActiveRecord::RecordInvalid, /muss ausgefüllt werden/)
+        end.to raise_error(ArgumentError)
       end
     end
 

@@ -37,6 +37,7 @@ class SacPersonSeeder < PersonSeeder
   end
 
   def seed_families
+    PaperTrail.request.whodunnit = Person.root
     Group::SektionsMitglieder.find_each do |m|
       adult = seed_sac_adult(family_main_person: true)
       second_adult = seed_sac_adult
@@ -68,16 +69,18 @@ class SacPersonSeeder < PersonSeeder
   end
 
   def create_or_update_household(person, second_person)
-    household = Person::Household.new(person, Ability.new(Person.root), second_person)
-    household.assign
-    household.persist!
+    person.household.add(second_person)
+    person.household.save!
   end
 
   def seed_sac_adult(family_main_person: false)
     adult_attrs = standard_attributes(Faker::Name.first_name,
       Faker::Name.last_name)
-    adult_attrs = adult_attrs.merge({birthday: 27.years.ago,
-                                      sac_family_main_person: family_main_person})
+    adult_attrs = adult_attrs.merge(
+      birthday: 27.years.ago,
+      confirmed_at: Time.zone.now,
+      sac_family_main_person: family_main_person
+    )
     adult = Person.seed(:email, adult_attrs).first
     seed_accounts(adult, false)
     adult

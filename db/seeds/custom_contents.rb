@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-CustomContent.seed_once(:key,
+CustomContent.seed(:key,
   {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION,
    placeholders_required: "participant-name",
    placeholders_optional: "event-name, application-url, event-details"},

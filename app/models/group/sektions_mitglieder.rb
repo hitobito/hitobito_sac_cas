@@ -16,6 +16,15 @@ class Group::SektionsMitglieder < ::Group
 
     validates :delete_on, presence: {message: :must_be_present_unless_deleted},
       unless: :deleted_at?
+
+    after_destroy :destroy_household, if: -> { person.sac_family_main_person }
+
+    private
+
+    def destroy_household
+      person.update_columns(sac_family_main_person: false)
+      Household.new(person, maintain_sac_family: false).destroy
+    end
   end
 
   class MitgliedZusatzsektion < ::Role

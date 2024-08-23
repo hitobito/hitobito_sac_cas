@@ -13,6 +13,7 @@ describe "terminate sac membership wizard", js: true do
   let(:operator) { person }
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:termination_reason) { termination_reasons(:deceased) }
+  let(:additional_section) { groups(:matterhorn) }
 
   before do
     sign_in(operator)
@@ -21,7 +22,7 @@ describe "terminate sac membership wizard", js: true do
   context "as SAC Mitarbeiter" do
     let(:operator) { people(:admin) }
 
-    xit "can execute wizard with immediate deletion" do
+    it "can execute wizard with immediate deletion" do
       visit history_group_person_path(group_id: group.id, id: person.id)
       within("#role_#{role.id}") do
         click_link "Austritt"
@@ -37,12 +38,13 @@ describe "terminate sac membership wizard", js: true do
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
         role.reload
       end
-        .to change { person.roles.count }.by(-1)
+        .to change { person.roles.count }.by(-2)
         .and change { role.deleted_at }.from(nil)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
     end
 
     it "can execute wizard at end of year" do
+      role.update!(delete_on: Date.new(Date.current.year + 1, 12, 31))
       visit history_group_person_path(group_id: group.id, id: person.id)
       within("#role_#{role.id}") do
         click_link "Austritt"
@@ -60,8 +62,7 @@ describe "terminate sac membership wizard", js: true do
         role.reload
       end
         .to change { role.termination_reason }.from(nil).to(termination_reason)
-      # TODO: role delete_on should change to end of year?
-      # .and change { role.delete_on }.to(Date.new(Date.current.year, 12, 31))
+        .and change { role.delete_on }.to(Date.new(Date.current.year, 12, 31))
     end
   end
 
@@ -87,20 +88,64 @@ describe "terminate sac membership wizard", js: true do
       expect(role.delete_on).not_to be_nil
     end
 
+    it "role validation errors on wizard" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      role.update_columns(created_at: Time.zone.now.beginning_of_year + 3.months)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      expect(page).to have_title "SAC-Mitgliedschaft beenden"
+      select termination_reason.text
+      expect do
+        click_button "Austritt beantragen"
+        expect(page).to have_css ".alert-danger-alert", text: "Edmund Hillary: Person muss Mitglied sein während der ganzen " \
+          "Gültigkeitsdauer der Zusatzsektion."
+      end
+    end
+
     context "when sektion has mitglied_termination_by_section_only=true" do
       before do
+        additional_section.update!(mitglied_termination_by_section_only: false)
         role.layer_group.update!(mitglied_termination_by_section_only: true)
       end
 
+      after do
+        additional_section.update!(mitglied_termination_by_section_only: false)
+        role.layer_group.update!(mitglied_termination_by_section_only: false)
+      end
+
       it "shows an info text" do
-        visit group_person_role_leave_zusatzsektion_path(group_id: group.id, person_id: person.id, role_id: role.id)
-        expect(page).to have_content("Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen.")
+        visit history_group_person_path(group_id: group.id, id: person.id)
+        within("#role_#{role.id}") do |content|
+          expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+        end
+      end
+    end
+
+    context "when zusatzsektion has mitglied_termination_by_section_only=true" do
+      before do
+        role.layer_group.update!(mitglied_termination_by_section_only: false)
+        additional_section.update!(mitglied_termination_by_section_only: true)
+      end
+
+      after do
+        additional_section.update!(mitglied_termination_by_section_only: false)
+        role.layer_group.update!(mitglied_termination_by_section_only: false)
+      end
+
+      it "shows an info text" do
+        visit history_group_person_path(group_id: group.id, id: person.id)
+        within("#role_#{role.id}") do |content|
+          expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+        end
       end
     end
   end
 
   context "as family main person" do
     let(:person) { people(:familienmitglied) }
+    let(:additional_section) { groups(:matterhorn) }
+    let(:familymember) { people(:familienmitglied2) }
 
     it "can execute wizard" do
       visit history_group_person_path(group_id: group.id, id: person.id)
@@ -118,6 +163,33 @@ describe "terminate sac membership wizard", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
+    end
+
+    context "when additional section of familymember has mitglied_termination_by_section_only=true" do
+      let(:terminate_on) { Time.zone.now.yesterday.to_date }
+      let(:termination_reason) { termination_reasons(:moved) }
+
+      before do
+        # check that additional section
+        role.layer_group.update!(mitglied_termination_by_section_only: false)
+        additional_section.update!(mitglied_termination_by_section_only: true)
+        # leave additional section for the main person to check state for family member
+        additional_section.update_columns(deleted_at: Time.zone.now.yesterday)
+      end
+
+      after do
+        # restore the main person addtional section role to not affect other tests
+        additional_section.update_columns(deleted_at: nil)
+        role.layer_group.update!(mitglied_termination_by_section_only: false)
+        additional_section.update!(mitglied_termination_by_section_only: false)
+      end
+
+      it "shows an info text" do
+        visit history_group_person_path(group_id: group.id, id: person.id)
+        within("#role_#{role.id}") do |content|
+          expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+        end
+      end
     end
   end
 

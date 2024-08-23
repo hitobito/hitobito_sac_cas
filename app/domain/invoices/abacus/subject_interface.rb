@@ -21,12 +21,37 @@ module Invoices
         true
       end
 
+      def transmit_batch(subjects)
+        subjects.select!(&:valid?)
+
+        # Initial people imports to hitobito are run multiple times, but People always get the same Id.
+        # Each time, the database is cleared. Subjects persisted in Abacus, however, are not affected.
+        # Because we try to use the same Id in hitobito and in Abacus, we fetch by Person#id from Abacus
+        # if the abacus_subject_key is not set yet. If this Id already exists in Abacus, we assume it's
+        # the same person and set the abacus_subject_key accordingly.
+        parts = fetch_batch(subjects)
+        batch_assign_abacus_subject_keys(parts)
+        remotes = parts.map { |part| part.success? ? part.json : nil }
+        existing, missing = subjects.zip(remotes).partition(&:last)
+        create_batch(missing.map(&:first)) +
+          update_batch(existing)
+      end
+
       def fetch(subject_id)
         return if subject_id.zero?
 
         client.get(:subject, subject_id, "$expand" => "Addresses,Communications,Customers")
       rescue RestClient::NotFound
         nil
+      end
+
+      def fetch_batch(subjects)
+        client.batch do
+          subjects.each do |subject|
+            client.batch_context_object = subject
+            fetch(subject.subject_or_entity_id)
+          end
+        end
       end
 
       def create(subject)
@@ -38,9 +63,12 @@ module Invoices
       end
 
       def create_batch(subjects)
-        batch_response = create_batch_subjects(subjects)
-        assign_abacus_subject_keys(subjects, batch_response)
-        create_batch_subject_associations(subjects)
+        return [] if subjects.blank?
+
+        subject_parts = create_batch_subjects(subjects)
+        batch_assign_abacus_subject_keys(subject_parts)
+        assoc_parts = create_batch_subject_associations(subjects)
+        subject_parts + assoc_parts
       end
 
       def update(subject, remote)
@@ -50,31 +78,45 @@ module Invoices
         update_customer(subject, remote[:customers])
       end
 
+      def update_batch(subjects_with_remotes)
+        client.batch do
+          subjects_with_remotes.each do |subject, remote|
+            client.batch_context_object = subject
+            update(subject, remote)
+          end
+        end
+      end
+
       private
 
       def create_subject_request(subject)
-        # create abacus subject with id from hitobito if possible
+        # Create abacus subject with id from hitobito if possible.
+        # If the id is already taken, abacus will reassign another one,
+        # which is persisted in Person#abacus_subject_key.
         client.create(:subject, subject.subject_attrs.merge(id: subject.entity.id))
       end
 
       def create_batch_subjects(subjects)
         client.batch do
           subjects.each do |subject|
+            client.batch_context_object = subject
             create_subject_request(subject)
           end
         end
       end
 
-      def assign_abacus_subject_keys(subjects, batch_response)
-        subjects.each_with_index do |subject, index|
-          part = batch_response.parts[index]
-          subject.assign_subject_key(part.json) if part&.created?
+      def batch_assign_abacus_subject_keys(parts)
+        parts.each do |part|
+          part.context_object.assign_subject_key(part.json) if part.success?
         end
       end
 
       def create_batch_subject_associations(subjects)
         client.batch do
           subjects.each do |subject|
+            next if subject.subject_id.zero?
+
+            client.batch_context_object = subject
             create_address(subject)
             create_communications(subject)
             create_customer(subject)

@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     resources :event_levels, module: 'event', controller: 'levels', except: [:show]
 
     resources :groups, only: [] do
-      post 'self_inscription/confirm' => 'groups/self_inscription#confirm'
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
 
@@ -36,7 +35,7 @@ Rails.application.routes.draw do
 
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
-        resources :membership_invoices, only: [:create], module: :people
+        resources :membership_invoices, only: [:create, :new], module: :people
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
         resource :switch_stammsektion, module: :memberships, only: [:show, :create]
@@ -83,6 +82,11 @@ Rails.application.routes.draw do
 
     resources :event_kind_categories, module: 'event', controller: 'kind_categories', only: [] do
       put :push_down, on: :member
+    end
+
+    scope path: ApplicationResource.endpoint_namespace, module: :json_api,
+        constraints: { format: 'jsonapi' }, defaults: { format: 'jsonapi' } do
+      resources :external_invoices, only: [:index, :show, :update]
     end
   end
 end
