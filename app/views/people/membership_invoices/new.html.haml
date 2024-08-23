@@ -1,26 +1,31 @@
-- title t(".form_title")
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- title t(".title")
 - if @person.sac_membership_invoice?
   .alert.alert-info=t(".alert_info")
 
   = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
     = f.error_messages
     = f.labeled(:reference_date) do
-      = f.date_field(:reference_date, @invoice_form.date_range)
+      = f.date_field(:reference_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
     = f.labeled(:invoice_date) do
-      = f.date_field(:invoice_date, @invoice_form.date_range)
+      = f.date_field(:invoice_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
     = f.labeled(:send_date) do
-      = f.date_field(:send_date, @invoice_form.date_range(:send_date))
+      = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      - main_section = @person.sac_membership.stammsektion_role.layer_group
-      = f.inline_radio_button :section_id, main_section.id, t(".mv_yearly_invoice"), true, checked: true
+      - if @invoice_form.stammsektion
+        = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true
 
-      .nested-radio-group
-        = f.labeled(:new_entry, class: "ms-3") do
-          = f.inline_radio_button :new_entry, true, t("global.yes"), true
-          = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
+        .nested-radio-group
+          = f.labeled(:new_entry, class: "ms-3") do
+            = f.inline_radio_button :new_entry, true, t("global.yes"), true
+            = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
 
-      - @person.sac_membership.zusatzsektion_roles(currently_paying: true).map(&:layer_group).each do |section|
+      - @invoice_form.zusatzsektionen do |section|
         %div
           = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false
 

@@ -12,7 +12,7 @@ Um via Desktop Client auf Abacus zuzugreifen, muss erst der [Abaclient](https://
 
 Persönliche Zugänge werden vom SAC erstellt. Für die 2FA wird zum Login die [Abacus Access App](https://play.google.com/store/apps/details?id=ch.abacus.access&hl=de_CH) benötigt.
 
-Über die [SAC Abacus Platform](https://sac-cas.erp.abraxas-apps.ch) kann via *ERP* ein Link heruntergeladen werden, welcher den lokalen Abaclient mit den im Web eingegebenen Credentials startet.
+Über die [SAC Abacus Platform](https://sac-cas.erp.abraxas-apps.ch) kann via _ERP_ ein Link heruntergeladen werden, welcher den lokalen Abaclient mit den im Web eingegebenen Credentials startet.
 
 ## API
 
@@ -28,7 +28,7 @@ Die zugehörige ID wird in hitobito im Attribut `abacus_subject_key` gespeichert
 
 Um eine Rechnung zu generieren, werden im Abacus entsprechende `SalesOrder` und zugehörige `SalesOrderPositions` angelegt. In hitobito wird dafür eine `ExternalInvoice` erstellt. Zum Abbilden von Positionen für Abacus Rechnungen existiert die Klasse `InvoicePosition`.
 
-Requests können entweder einzeln oder über einen [Batch Request](https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#_Toc31359017) abgesetzt werden. Batch Requests werden über `Invoices::Abacus::Client#batch` initiiert, worauf die einzelnen Teilrequests in einem Block aufgezeichnet werden. Am Ende werden alle Teile in ein HTTP Multipart Body eingefügt und dieses an den Batch Endpoint geschicht. Die Antwort ist wiederum ein Multipart Body, dessen Teile der Reihenfolge des Requests entsprechen.
+Requests können entweder einzeln oder über einen [Batch Request](https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#_Toc31359017) abgesetzt werden. Batch Requests werden über `Invoices::Abacus::Client#batch` initiiert, worauf die einzelnen Teilrequests in einem Block aufgezeichnet werden. Am Ende werden alle Teile in ein HTTP Multipart Body eingefügt und dieses an den Batch Endpoint geschickt. Die Antwort ist wiederum ein Multipart Body, dessen Teile der Reihenfolge des Requests entsprechen.
 
 ## Mitgliedschaftsrechnungen
 

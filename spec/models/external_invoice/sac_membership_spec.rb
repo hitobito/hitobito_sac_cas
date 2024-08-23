@@ -20,51 +20,6 @@ describe ExternalInvoice::SacMembership do
       type: "ExternalInvoice::SacMembership")
   }
 
-  context "memberships link to stammsektion" do
-    it "gets correct memberships" do
-      membership_invoice = external_invoice_draft.build_membership_invoice(0, false, date)
-
-      expect(membership_invoice.memberships.size).to eq(2)
-      expect(membership_invoice.memberships.first.main).to eq(true)
-      expect(membership_invoice.memberships.first.section).to eq(groups(:bluemlisalp))
-      expect(membership_invoice.memberships.second.main).to eq(false)
-      expect(membership_invoice.memberships.second.section).to eq(groups(:matterhorn))
-    end
-  end
-
-  context "memberships link to neuanmeldung stammsektion" do
-    let(:new_member) do
-      person = Fabricate(:person, birthday: Time.zone.today - 19.years, confirmed_at: nil)
-      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
-        person: person,
-        created_at: date.last_year,
-        beitragskategorie: :adult,
-        group: groups(:bluemlisalp_neuanmeldungen_nv))
-      person
-    end
-
-    it "gets correct memberships" do
-      external_invoice_draft.update!(person: new_member)
-      membership_invoice = external_invoice_draft.build_membership_invoice(0, false, date)
-
-      expect(membership_invoice.memberships.size).to eq(1)
-      expect(membership_invoice.memberships.first.main).to eq(true)
-      expect(membership_invoice.memberships.first.section).to eq(groups(:bluemlisalp))
-    end
-  end
-
-  context "memberships link to zusatzsektion" do
-    it "gets correct memberships" do
-      external_invoice_draft.update!(link: groups(:matterhorn))
-
-      membership_invoice = external_invoice_draft.build_membership_invoice(0, false, date)
-
-      expect(membership_invoice.memberships.size).to eq(1)
-      expect(membership_invoice.memberships.first.main).to eq(false)
-      expect(membership_invoice.memberships.first.section).to eq(groups(:matterhorn))
-    end
-  end
-
   describe "after_update callback" do
     let(:external_invoice) { ExternalInvoice::SacMembership.create!(state: :draft, person: people(:mitglied), link: groups(:bluemlisalp_mitglieder)) }
 

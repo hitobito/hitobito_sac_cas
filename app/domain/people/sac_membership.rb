@@ -40,16 +40,16 @@ class People::SacMembership
     stammsektion_role&.layer_group
   end
 
-  def stammsektion_role(currently_paying: false)
-    active_roles_of_type(mitglied_stammsektion_types).then do |roles|
-      currently_paying ? select_currently_paying(roles) : roles
-    end.first
+  def stammsektion_role
+    active_roles_of_type(mitglied_stammsektion_types).first
   end
 
-  def zusatzsektion_roles(currently_paying: false)
-    active_roles_of_type(mitglied_zusatzsektion_types).then do |roles|
-      currently_paying ? select_currently_paying(roles) : roles
-    end
+  def zusatzsektion_roles
+    active_roles_of_type(mitglied_zusatzsektion_types)
+  end
+
+  def select_currently_paying(roles)
+    roles.compact.select { |role| paying_person?(role.beitragskategorie) }
   end
 
   def future_stammsektion_roles
@@ -157,10 +157,6 @@ class People::SacMembership
 
   def any_past_role?
     @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
-  end
-
-  def select_currently_paying(roles)
-    roles.select { |role| paying_person?(role.beitragskategorie) }
   end
 
   def paying_person?(beitragskategorie)

@@ -1150,7 +1150,7 @@ de:
       no_memberships: "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
       success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
       new:
-        form_title: "Mitgliedschaftsrechnung erstellen"
+        title: "Mitgliedschaftsrechnung erstellen"
         alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."
         alert_warning: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
         create_invoice: "Rechnung erstellen"
