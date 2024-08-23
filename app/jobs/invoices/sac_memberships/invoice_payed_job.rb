@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class People::ExternalInvoicePayedJob < BaseJob
+class Invoices::SacMemberships::InvoicePayedJob < BaseJob
   self.parameters = [:person_id, :group_id, :year]
 
   def initialize(person_id, group_id, year)
@@ -24,7 +24,7 @@ class People::ExternalInvoicePayedJob < BaseJob
   attr_reader :year
 
   def membership_manager
-    ExternalInvoice::SacMembership::MembershipManager.new(person, group, year)
+    Invoices::SacMemberships::MembershipManager.new(person, group, year)
   end
 
   def person
