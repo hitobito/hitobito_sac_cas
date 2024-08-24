@@ -35,8 +35,25 @@ class ExternalInvoice::SacMembership < ExternalInvoice
 
   after_update :handle_state_change_to_payed
 
+  ERROR_CATEGORY = "rechnungen"
+  NOT_POSSIBLE_KEY = "people.membership_invoices.no_invoice_possible"
+  NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
+
   def title
     I18n.t("invoices.sac_memberships.title", year: year)
+  end
+
+  def build_membership_invoice(discount, new_entry, reference_date)
+    @date = reference_date
+    membership_invoice = membership_invoice(discount, new_entry, reference_date)
+
+    if !membership_invoice.invoice?
+      I18n.t(".people.membership_invoices.no_invoice_possible")
+    elsif memberships.blank?
+      I18n.t(".people.membership_invoices.no_invoice_possible")
+    else
+      membership_invoice
+    end
   end
 
   private

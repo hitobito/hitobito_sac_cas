@@ -40,36 +40,36 @@ class People::SacMembership
     stammsektion_role&.layer_group
   end
 
-  def stammsektion_role(currently_paying: false)
-    active_roles_of_type(mitglied_stammsektion_types).then do |roles|
-      currently_paying ? select_currently_paying(roles) : roles
-    end.first
+  def stammsektion_role
+    active_roles_of_type(mitglied_stammsektion_types).first
   end
 
-  def zusatzsektion_roles(currently_paying: false)
-    active_roles_of_type(mitglied_zusatzsektion_types).then do |roles|
-      currently_paying ? select_currently_paying(roles) : roles
-    end
+  def zusatzsektion_roles
+    active_roles_of_type(mitglied_zusatzsektion_types)
+  end
+
+  def select_currently_paying(roles)
+    roles.compact.select { |role| paying_person?(role.beitragskategorie) }
   end
 
   def future_stammsektion_roles
     @person.roles.future.where(convert_to: mitglied_stammsektion_types)
   end
 
+  def neuanmeldung_stammsektion_role
+    active_roles_of_type(neuanmeldung_stammsektion_types).first
+  end
+
   def neuanmeldung_nv_stammsektion_roles
     active_roles_of_type(neuanmeldung_nv_stammsektion_types)
   end
 
-  def neuanmeldung_nv_zusatzsektion_roles
-    active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
-  end
-
-  def neuanmeldung_stammsektion_role
-    @person.roles.find_by(type: neuanmeldung_stammsektion_types)
-  end
-
   def neuanmeldung_zusatzsektion_roles
     active_roles_of_type(neuanmeldung_zusatzsektion_types)
+  end
+
+  def neuanmeldung_nv_zusatzsektion_roles
+    active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
@@ -157,10 +157,6 @@ class People::SacMembership
 
   def any_past_role?
     @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
-  end
-
-  def select_currently_paying(roles)
-    roles.select { |role| paying_person?(role.beitragskategorie) }
   end
 
   def paying_person?(beitragskategorie)
