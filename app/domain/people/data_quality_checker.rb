@@ -15,8 +15,8 @@ class People::DataQualityChecker
     [:town, :error, check?: ->(p) { p.sac_membership_invoice? }],
     [:email, :warning, check?: ->(p) { p.sac_membership_invoice? }],
     [:phone_numbers, :warning, check?: ->(p) { p.sac_membership_invoice? }],
-    [:birthday, :error, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES) }],
-    [:birthday, :warning, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES) },
+    [:birthday, :error, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)) }],
+    [:birthday, :warning, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)) },
                           invalid?: ->(p) { birthday_less_than_6_years_before_entry(p) },
                           key: :less_than_6_years_before_entry]
   ]
