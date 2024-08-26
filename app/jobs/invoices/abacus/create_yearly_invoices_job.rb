@@ -84,7 +84,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     end
   end
 
-  def create_external_invoice(membership_invoice) # rubocop:disable Metrics/MethodLength
+  def create_external_invoice(membership_invoice)
     ExternalInvoice::SacMembership.create!(
       person: membership_invoice.member.person,
       year: @invoice_year,
