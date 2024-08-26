@@ -52,8 +52,8 @@ describe "groups/_attrs_sac_cas.html.haml" do
   context "mitglieder" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
 
-    it "does not render sektions and nav sektions id fields" do
-      expect(dom).not_to have_css "dl dt", text: "Gruppen-ID"
+    it "does render sektions and nav sektions id fields" do
+      expect(dom).to have_css "dl dt", text: "Gruppen-ID"
       expect(dom).not_to have_css "dl dt", text: "NAV Sektions-ID"
     end
   end
