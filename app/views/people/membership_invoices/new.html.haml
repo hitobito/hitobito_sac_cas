@@ -17,13 +17,12 @@
       = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      - if @invoice_form.stammsektion
-        = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true
+      = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true
 
-        .nested-radio-group
-          = f.labeled(:new_entry, class: "ms-3") do
-            = f.inline_radio_button :new_entry, true, t("global.yes"), true
-            = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
+      .nested-radio-group
+        = f.labeled(:new_entry, class: "ms-3") do
+          = f.inline_radio_button :new_entry, true, t("global.yes"), true
+          = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
 
       - @invoice_form.zusatzsektionen do |section|
         %div
