@@ -43,7 +43,7 @@ class People::DataQualityChecker
   def self.birthday_less_than_6_years_before_entry(person)
     return if person.birthday.blank?
 
-    person.birthday > person.roles.find_by(type: SacCas::STAMMSEKTION_ROLES).created_at - 6.years
+    person.birthday > person.roles.find_by(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)).created_at - 6.years
   end
 
   private
