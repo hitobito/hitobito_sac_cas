@@ -93,6 +93,7 @@ module SacImports
       person.birthday = row[:birthday]
       person.gender = gender unless company?
       person.language = language
+      person.family_key = row[:family]
       person.sac_remark_section_1 = row[:sac_remark_section_1]
       person.sac_remark_section_2 = row[:sac_remark_section_2]
       person.sac_remark_section_3 = row[:sac_remark_section_3]
