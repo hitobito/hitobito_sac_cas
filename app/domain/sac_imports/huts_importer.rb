@@ -9,11 +9,6 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 require_relative "huts/hut_commission_row"
 require_relative "huts/huts_row"
 require_relative "huts/hut_row"
-require_relative "huts/hut_chief_row"
-require_relative "huts/hut_warden_row"
-require_relative "huts/hut_warden_partner_row"
-require_relative "huts/hut_chairman_row"
-require_relative "huts/key_deposit_row"
 
 module SacImports
   class HutsImporter
@@ -35,12 +30,7 @@ module SacImports
       SacImports::Huts::SacCasPrivathuetteRow,
       SacImports::Huts::SacCasClubhuetteRow,
       SacImports::Huts::SektionshuetteRow,
-      SacImports::Huts::SektionsClubhuetteRow,
-      SacImports::Huts::HutChiefRow,
-      SacImports::Huts::HutWardenRow,
-      SacImports::Huts::HutWardenPartnerRow,
-      SacImports::Huts::HutChairmanRow,
-      SacImports::Huts::KeyDepositRow
+      SacImports::Huts::SektionsClubhuetteRow
     ]
 
     def initialize(path)
