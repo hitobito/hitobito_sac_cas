@@ -66,9 +66,9 @@ module SacCas::Role
                             ) YEAR
                           )
                         )
-                      ) / 365.25 -- .25 to calculate for leap years
+                      ) / 365.25
                     )
-                      END
+              END
           )
         END AS membership_years
       SQL
