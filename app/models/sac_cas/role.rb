@@ -8,7 +8,7 @@
 module SacCas::Role
   module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
-      date_str = date.to_s(:db)
+      # because parameter passed in query is CET we make sure to convert all database dates from UTC to CET
       <<~SQL
               CASE
                 -- membership_years is only calculated for Mitglied roles
@@ -16,57 +16,62 @@ module SacCas::Role
                 ELSE (
                     TIMESTAMPDIFF(
                         YEAR, 
-                        DATE(roles.created_at), 
+                        DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")),
                         LEAST(
-                            DATE('#{date_str}'),
+                            DATE('#{date.strftime("%Y-%m-%d")}'),
                             -- add one day to include last day in calculation
-                            COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
-                            COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
-                            COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
+                            COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                            COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                            COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
                         )
                     ) 
                 + CASE
                 -- check if dates are the same, to not add fractional year
                   WHEN (
                       MONTH(LEAST(
-                          DATE('#{date_str}'),
-                          COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
-                      )) = MONTH(roles.created_at) AND
+                          DATE('#{date.strftime("%Y-%m-%d")}'),
+                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
+                      )) = MONTH(CONVERT_TZ(roles.created_at, "UTC", "CET")) AND
                       DAY(LEAST(
-                          DATE('#{date_str}'),
-                          COALESCE(DATE(roles.deleted_at) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(roles.archived_at) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(roles.delete_on) + INTERVAL 1 DAY, '9999-12-31')
-                      )) = DAY(roles.created_at)
+                          DATE('#{date.strftime("%Y-%m-%d")}'),
+                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+                          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
+                      )) = DAY(CONVERT_TZ(roles.created_at, "UTC", "CET"))
                   ) THEN 0
                    ELSE
                         (
                       -- calculate the fractional year
                       DATEDIFF(
                         LEAST(
-                          DATE('#{date_str}'),
-                          COALESCE(DATE(roles.deleted_at), '9999-12-31'),
-                          COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                          '#{date.strftime("%Y-%m-%d")}',
+                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
+                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
                           COALESCE(roles.delete_on, '9999-12-31')
                         ),
                         DATE(
                           ADDDATE(
-                            roles.created_at, 
+                            CONVERT_TZ(roles.created_at, "UTC", "CET"), 
                             INTERVAL TIMESTAMPDIFF(
                               YEAR, 
-                              DATE(roles.created_at), 
+                              DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")), 
                               LEAST(
-                                DATE('#{date_str}'),
-                                COALESCE(DATE(roles.deleted_at), '9999-12-31'),
-                                COALESCE(DATE(roles.archived_at), '9999-12-31'),
+                                '#{date.strftime("%Y-%m-%d")}',
+                                COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
+                                COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
                                 COALESCE(roles.delete_on, '9999-12-31')
                               )
                             ) YEAR
                           )
                         )
-                      ) / 365.25
+                      ) / CASE WHEN DAY(LAST_DAY(CONCAT(YEAR(LEAST(
+                          '#{date.strftime("%Y-%m-%d")}',
+                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
+                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
+                          COALESCE(roles.delete_on, '9999-12-31')
+                        )), '-02-01'))) = 29 THEN 366 ELSE 365 END
                     )
               END
           )

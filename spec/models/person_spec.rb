@@ -95,6 +95,7 @@ describe Person do
       create_role(created_at: Date.new(2000, 7, 2), delete_on: Date.new(2001, 1, 1))
       create_role(created_at: Date.new(2001, 1, 2), delete_on: Date.new(2001, 7, 1))
       create_role(created_at: Date.new(2001, 7, 2), delete_on: Date.new(2002, 1, 1))
+      create_role(created_at: Date.new(2002, 1, 2), delete_on: Date.new(2002, 7, 1))
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
@@ -106,7 +107,7 @@ describe Person do
     it "calculates membership years correctly for leap year when passing reporting date" do
       create_role(created_at: Date.new(2020, 1, 1), delete_on: Date.new(2023, 12, 31))
       expect(Person.with_membership_years("people.*", Date.new(2020, 12, 31)).find(person.id).membership_years).to eq(0)
-      expect(Person.with_membership_years("people.*", Date.new(2020, 1, 1)).find(person.id).membership_years).to eq(1)
+      expect(Person.with_membership_years("people.*", Date.new(2021, 1, 1)).find(person.id).membership_years).to eq(1)
     end
 
     it "calculates membership years correctly for two years with one leap year" do
@@ -137,12 +138,12 @@ describe Person do
     end
 
     it "calculates membership years correctly when passing reporting date" do
-      role = create_role(delete_on: created_at + 5.years)
+      create_role(delete_on: created_at + 5.years)
       expect(Person.with_membership_years("people.*", Date.new(2001, 12, 31)).find(person.id).membership_years).to eq(1)
       expect(Person.with_membership_years("people.*", Date.new(2002, 1, 1)).find(person.id).membership_years).to eq(2)
     end
 
-    it "calculates membership years from roles starting and ending in overlaping years" do
+    it "calculates membership years from roles starting and ending in overlapping years" do
       role = create_role(delete_on: Date.new(2000, 0o7, 19))
       role.update!(created_at: Date.new(2000, 0o4, 10))
       expect(person_with_membership_years.membership_years).to eq 0
