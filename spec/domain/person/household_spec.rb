@@ -195,4 +195,3 @@ describe Person::Household do
     end
   end
 end
-

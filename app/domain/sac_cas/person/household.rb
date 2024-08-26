@@ -113,4 +113,3 @@ module SacCas::Person::Household
     self.class.next_key
   end
 end
-
