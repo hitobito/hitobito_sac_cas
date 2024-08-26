@@ -1154,9 +1154,11 @@ it:
           membership_years: ""
 
     membership_invoices:
+      no_invoice_possible: ""
+      no_memberships: ""
       success_notice: ""
       new:
-        form_title: ""
+        title: ""
         alert_info: ""
         alert_warning: ""
         create_invoice: ""
