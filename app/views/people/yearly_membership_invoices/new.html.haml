@@ -1,0 +1,29 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- title t(".title")
+- if @running_yearly_membership_invoice_job.nil?
+  .alert.alert-info=t(".alert_info")
+  
+  = standard_form(@invoice_form, url: group_yearly_membership_invoices_path(@group), method: :post) do |f|
+    = f.error_messages
+  
+    = f.labeled(:invoice_year) do
+      = f.inline_radio_button :invoice_year, @invoice_form.min_year, @invoice_form.min_year.to_s, true, checked: true
+      = f.inline_radio_button :invoice_year, @invoice_form.max_year, @invoice_form.max_year.to_s, true
+  
+    = f.labeled(:invoice_date) do
+      = f.date_field(:invoice_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
+    = f.labeled(:send_date) do
+      = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
+    = f.labeled(:role_finish_date) do
+      = f.date_field(:role_finish_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
+  
+    = f.indented do
+      = submit_button(f, t(".create_invoice"), data: { confirm: t('.submit_confirmation') })
+      = cancel_link(group_path(@group))
+- else
+  .alert.alert-warning= t(".alert_warning")
+  = cancel_link(group_path(@group))

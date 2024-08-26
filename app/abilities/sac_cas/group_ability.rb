@@ -13,6 +13,13 @@ module SacCas::GroupAbility
       permission(:layer_and_below_read)
         .may(:export_mitglieder)
         .in_same_layer_or_below
+      permission(:layer_and_below_full)
+        .may(:create_yearly_membership_invoice)
+        .if_backoffice
     end
+  end
+
+  def if_backoffice
+    SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
   end
 end
