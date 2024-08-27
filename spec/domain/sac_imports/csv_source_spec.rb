@@ -15,7 +15,7 @@ describe SacImports::CsvSource do
     @source_name = :NAV42
     expect do
       source_file
-    end.to raise_error("Invalid source name: NAV42\navailable sources: #{SacImports::CsvSourceFile::AVAILABLE_SOURCES.map(&:to_s).join(", ")}")
+    end.to raise_error("Invalid source name: NAV42\nAvailable sources: #{SacImports::CsvSource::AVAILABLE_SOURCES.map(&:to_s).join(", ")}")
   end
 
   it "throws error if requested source file does not exist" do
@@ -27,7 +27,7 @@ describe SacImports::CsvSource do
 
     expect do
       source_file.rows
-    end.to raise_error("No source file NAV2_*.csv found in RAILS_CORE_ROOT/tmp/sac_imports_src/.")
+    end.to raise_error(/^No source file NAV2_\*\.csv found in.+$/)
   end
 
   it "converts csv content to hashes with key value pairs defined by header mapping" do
