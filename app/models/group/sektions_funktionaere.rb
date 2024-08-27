@@ -41,6 +41,11 @@ class Group::SektionsFunktionaere < ::Group
     self.two_factor_authentication_enforced = true
   end
 
+  class Kulturbeauftragter < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
   class Finanzen < ::Role
     self.permissions = []
     self.basic_permissions_only = true
@@ -64,6 +69,11 @@ class Group::SektionsFunktionaere < ::Group
     self.permissions = [:group_and_below_full]
   end
 
+  class Umweltbeauftragter < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
   class Andere < ::Role
     self.permissions = []
     self.basic_permissions_only = true
@@ -71,5 +81,5 @@ class Group::SektionsFunktionaere < ::Group
 
   roles Praesidium, Mitgliederverwaltung, Administration,
     AdministrationReadOnly, Finanzen, Redaktion, Huettenobmann,
-    Leserecht, Schreibrecht, Andere
+    Leserecht, Schreibrecht, Andere, Umweltbeauftragter, Kulturbeauftragter
 end
