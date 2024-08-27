@@ -171,9 +171,7 @@ describe People::Neuanmeldungen::Promoter do
 
   context "#promoteable?" do
     it "is true when all conditions are satisfied" do
-      People::Neuanmeldungen::Promoter::CONDITIONS.each do |condition|
-        expect(condition).to receive(:satisfied?).and_return(true)
-      end
+      expect(People::Neuanmeldungen::Promoter::CONDITIONS).to all receive(:satisfied?).and_return(true)
 
       expect(subject.promotable?(double)).to eq true
     end
@@ -242,9 +240,7 @@ describe People::Neuanmeldungen::Promoter do
 
       expect(subject).to receive(:promotable?).and_return(true).exactly(3).times
 
-      candidates.each do |candidate|
-        expect(candidate).to receive(:destroy!).and_raise
-      end
+      expect(candidates).to all receive(:destroy!).and_raise
 
       expect(subject).to receive(:promote).with(candidates[0]).and_call_original
       expect(subject).to receive(:promote).with(candidates[1]).and_call_original

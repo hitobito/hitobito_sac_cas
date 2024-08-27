@@ -117,7 +117,7 @@ describe :mitglied_no_overlap_validation do
     end
   end
 
-  context do # no overlapping memberships per layer
+  context "no overlapping memberships per layer" do
     let(:person) { Fabricate(:person) }
 
     def build_role(type, group_fixture_name)
