@@ -19,7 +19,8 @@ class Group::SektionsKommissionen < ::Group
 
   children Group::SektionsKommissionHuetten,
     Group::SektionsKommissionTouren,
-    Group::SektionsKommissionUmweltUndKultur
+    Group::SektionsKommissionUmweltUndKultur,
+    Group::SektionsKommission
 
   roles Leserecht, Schreibrecht
 end
