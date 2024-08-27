@@ -7,8 +7,12 @@
 
 module SacImports::CallbackBlacklist
   CALLBACKS_TO_SKIP = {
-    ModelName: {
-      callback_type: [:callback_method_name1, :callback_method_name2]
+    "Person" => {
+      after_save: [:check_data_quality]
+    },
+    "Role::MitgliedCommon" => {
+      after_create: [:check_data_quality],
+      after_destroy: [:check_data_quality]
     }
   }
 
