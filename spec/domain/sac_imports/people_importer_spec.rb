@@ -38,7 +38,7 @@ describe SacImports::PeopleImporter do
 
     expect(File.exist?(report_file)).to be_truthy
 
-    expect(csv_report.size).to eq(1)
+    expect(csv_report.size).to eq(2)
     expect(csv_report.first).to eq(report_headers)
 
     File.delete(report_file)
