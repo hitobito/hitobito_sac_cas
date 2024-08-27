@@ -783,6 +783,15 @@ de:
         description: Andere
         huettenwartspartner: Hüttenwartspartner*in
         schluesseldepot: Schlüsseldepot
+      group/sac_cas_verband/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sac_cas_verband/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sac_cas_verband/andere:
+        one: Andere
+        description: Andere
       group/sektions_funktionaere/administration:
         one: Administration
         description: Administration
