@@ -30,6 +30,16 @@ class Group::SektionsTourenUndKurse < Group
     end
   end
 
+  class KibeChef < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class FabeChef < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
   class JoChef < ::Role
     self.permissions = []
     self.basic_permissions_only = true
@@ -50,6 +60,8 @@ class Group::SektionsTourenUndKurse < Group
 
   roles Tourenleiter,
     TourenleiterOhneQualifikation,
+    KibeChef,
+    FabeChef,
     JoChef,
     JsCoach,
     Leserecht,

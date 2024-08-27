@@ -633,6 +633,10 @@ de:
         one: Kommissionen
         other: Kommissionen
 
+      group/sektions_kommission:
+        one: Kommission
+        other: Kommission
+
       group/sektions_kommission_huetten:
         one: Kommission Hütten
         other: Kommissionen Hütten
@@ -773,6 +777,12 @@ de:
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Mitgliederverwaltung
         description: Mitgliederverwaltung Sektion
+      group/sektions_funktionaere/kulturbeauftragter:
+        one: Kulturbeauftragte*r
+        description: Kulturbeauftragte*r
+      group/sektions_funktionaere/umweltbeauftragter:
+        one: Umweltbeauftragte*r
+        description: Umweltbeauftragte*r
       group/sektions_funktionaere/finanzen:
         one: Finanzen
         description: Finanzen
@@ -854,6 +864,12 @@ de:
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
         one: Tourenleiter*in (ohne Qualifikation)
         description: Tourenleiter*in (ohne Qualifikation)
+      group/sektions_touren_und_kurse/kibe_chef:
+        one: KiBe-Chef*in
+        description: KiBe-Chef*in
+      group/sektions_touren_und_kurse/fabe_chef:
+        one: FaBe-Chef*in
+        description: FaBe-Chef*in
       group/sektions_touren_und_kurse/jo_chef:
         one: JO-Chef*in
         description: JO-Chef*in
@@ -912,6 +928,21 @@ de:
       group/sektions_kommissionen/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
+      group/sektions_kommission/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_kommission/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_kommission/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sektions_kommission/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_kommission/andere:
+        one: Andere
+        description: Andere
       group/sektions_kommission_huetten/mitglied:
         one: Mitglied
         description: Mitglied
