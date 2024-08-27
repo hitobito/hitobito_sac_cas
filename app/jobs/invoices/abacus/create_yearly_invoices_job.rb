@@ -21,8 +21,13 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     @role_finish_date = role_finish_date
   end
 
+  def enqueue!(options = {})
+    assert_no_other_job_running!
+    super
+  end
+
   def perform
-    # abort_if_other_job_is_running
+    assert_no_other_job_running!
     # log start according to ticket
     extend_roles_for_invoicing
     # process_invoices
@@ -30,6 +35,15 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   private
+
+  def assert_no_other_job_running!
+    raise "There is already a job running" if other_job_running?
+  end
+
+  def other_job_running?
+    Delayed::Job.where("handler LIKE ?", "%Invoices::Abacus::CreateYearlyInvoicesJob%")
+      .where(failed_at: nil).exists?
+  end
 
   def extend_roles_for_invoicing
     return if @role_finish_date.nil?
