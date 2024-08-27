@@ -4,7 +4,14 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - title t(".title")
-- if @person.sac_membership_invoice?
+- if @person.data_quality == "error"
+  .alert.alert-danger=t(".alert_error")
+
+  - @person.data_quality_issues.where(severity: :error).each do |issue|
+    = issue.message
+  = cancel_link(external_invoices_group_person_path(@group, @person))
+
+- elsif @person.sac_membership_invoice?
   .alert.alert-info=t(".alert_info")
 
   = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
@@ -17,7 +24,7 @@
       = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true
+      = f.inline_radio_button :section_id, @invoice_form.stammsektion&.id, t(".mv_yearly_invoice"), true, checked: true
 
       .nested-radio-group
         = f.labeled(:new_entry, class: "ms-3") do
@@ -36,6 +43,7 @@
     = f.indented do
       = submit_button(f, t(".create_invoice"))
       = cancel_link(external_invoices_group_person_path(@group, @person))
+
 - else
   .alert.alert-warning= t(".alert_warning")
   = cancel_link(external_invoices_group_person_path(@group, @person))

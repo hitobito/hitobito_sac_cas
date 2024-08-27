@@ -1211,6 +1211,7 @@ de:
         title: "Mitgliedschaftsrechnung erstellen"
         alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."
         alert_warning: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
+        alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Mitgliedschaftsrechnung:"
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
