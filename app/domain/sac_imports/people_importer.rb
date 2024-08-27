@@ -38,14 +38,15 @@ module SacImports
       @output.print("#{row[:navision_id]} (#{row[:navision_name]}):")
       entry = PersonEntry.new(row, target_group)
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.errors}\n")
-      unless entry.valid?
+      if entry.valid?
+        entry.import!
+      else
         @csv_report.add_row({
           navision_membership_number: row[:navision_id],
           navision_name: row[:navision_name],
           errors: entry.errors
         })
       end
-      # entry.import!
     end
   end
 end
