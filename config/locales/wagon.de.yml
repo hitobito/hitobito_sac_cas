@@ -1206,6 +1206,7 @@ de:
     membership_invoices:
       no_invoice_possible: "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
       no_memberships: "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
+      data_quality_error: "Die gewünschte Person hat Datenqualitätsprobleme. Es wurde entsprechend keine Rechnung erstellt."
       success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
       new:
         title: "Mitgliedschaftsrechnung erstellen"
