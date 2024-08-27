@@ -19,7 +19,8 @@ class Group::SacCas < Group
     Group::Ehrenmitglieder,
     Group::SacCasPrivathuetten,
     Group::SacCasClubhuetten,
-    Group::SacCasKurskader
+    Group::SacCasKurskader,
+    Group::SacCasVerbaende
 
   mounted_attr :course_admin_email, :string
   mounted_attr :sac_newsletter_mailing_list_id, :integer

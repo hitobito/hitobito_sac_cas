@@ -577,6 +577,14 @@ de:
         one: Privathuette
         other: Privathuetten
 
+      group/sac_cas_verbaende:
+        one: Verbände & Organisationen
+        other: Verbände & Organisationen
+
+      group/sac_cas_verband:
+        one: Verband & Organisation
+        other: Verbände & Organisationen
+
       group/sektion:
         one: Sektion
         other: Sektionen
