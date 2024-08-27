@@ -132,6 +132,10 @@ describe "signup/sektion", js: true do
       expect(page).to have_field "Haupt‑E‑Mail / Mitglied‑Nr", with: person.email
       fill_in "Passwort", with: password
       click_on "Anmelden"
+      # In https://github.com/hitobito/hitobito_sac_cas/pull/860 we removed the
+      # customized SAC self-inscription. There was some logic in
+      # app/models/self_inscription.rb to find the correct group to get the
+      # title from.
       pending("The title currently doesn't get set correctly")
       expect(page).to have_css "h1", text: "Registrierung zu SAC Blüemlisalp"
       expect(page).to have_button "Beitreten"
