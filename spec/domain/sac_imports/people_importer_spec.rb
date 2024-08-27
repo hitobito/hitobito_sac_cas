@@ -20,7 +20,9 @@ describe SacImports::PeopleImporter do
   end
 
   it "creates report for members in source file" do
-    expected_output = Array.new(11) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
+    expected_output = Array.new(10) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
+    expected_output << "125109 ():"
+    expected_output << " ❌ Bitte geben Sie einen Namen ein\n"
 
     expected_output.each do |output_line|
       expect(output).to receive(:print).with(output_line)
