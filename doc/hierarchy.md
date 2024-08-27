@@ -23,22 +23,41 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
         * Andere: []
       * Externe Kontakte
         * Kontakt: []
-      * SAC Tourenportal
+      * SAC-Tourenportal
         * Abonnent: []
         * Neuanmeldung: []
         * Administration: []
         * Autor*in: []
         * Community: []
         * Andere: []
+        * Gratisabonnent: []
+      * SAC-Magazin
+        * Autor*in: []
+        * Andere: []
+        * Übersetzer*in: []
       * AboMagazin
         * Abonnent: []
         * Neuanmeldung: []
-        * Autor*in: []
         * Andere: []
       * SAC/CAS Login
         * Basis Konto: []
       * Ehrenmitglieder
         * Ehrenmitglied: []
+      * Privathütten
+        * Schreibrecht: [:group_and_below_full]
+      * Privathuette
+        * Hüttenwart*in: []
+        * Hüttenchef*in: []
+        * Andere: []
+      * Clubhütten
+        * Schreibrecht: [:group_and_below_full]
+      * Clubhuette
+        * Hüttenwart*in: []
+        * Hüttenchef*in: []
+        * Andere: []
+      * SAC Kurskader
+        * Kursleiter*in: []
+        * Klassenlehrer*in: []
     * Sektion
     * Ortsgruppe
     * Global
@@ -53,6 +72,8 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
         * Leserecht: [:group_and_below_read]
         * Schreibrecht: [:group_and_below_full]
         * Andere: []
+        * Umweltbeauftragte*r: []
+        * Kulturbeauftragte*r: []
       * Vorstand
         * Präsidium: [:group_read]
         * Mitglied: [:group_read]
@@ -62,6 +83,8 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
       * Touren und Kurse
         * Tourenleiter*in (mit Qualifikation): []
         * Tourenleiter*in (ohne Qualifikation): []
+        * KiBe-Chef*in: []
+        * FaBe-Chef*in: []
         * JO-Chef*in: []
         * J+S Coach: []
         * Leserecht: [:group_and_below_read]
@@ -99,6 +122,12 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
         * Mitglied: [:group_read]
         * Präsidium: [:group_read]
         * Andere: [:group_read]
+      * Kommission
+        * Leserecht: [:group_read]
+        * Schreibrecht: [:group_full]
+        * Mitglied: []
+        * Präsidium: []
+        * Andere: []
       * Mitglieder
         * Mitglied (Stammsektion): []
         * Mitglied (Zusatzsektion): []
@@ -116,4 +145,5 @@ The output of `rake app:hitobito:roles` will show you the roles hierarchy:
         * Neuanmeldung (Zusatzsektion): []
         * Leserecht: [:group_and_below_read]
         * Schreibrecht: [:group_and_below_full]
+
 ```

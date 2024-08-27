@@ -565,6 +565,10 @@ de:
         one: Clubhuette
         other: Clubhuetten
 
+      group/sac_cas_kurskader:
+        one: SAC Kurskader
+        other: SAC Kurskader
+
       group/sac_cas_privathuetten:
         one: Privathütten
         other: Privathütten
@@ -751,6 +755,12 @@ de:
         description: Andere
         huettenwartspartner: Hüttenwartspartner*in
         schluesseldepot: Schlüsseldepot
+      group/sac_cas_kurskader/kursleiter:
+        one: Kursleiter*in
+        description: Kursleiter*in
+      group/sac_cas_kurskader/klassenlehrer:
+        one: Klassenlehrer*in
+        description: Klassenlehrer*in
       group/sac_cas_privathuetten/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
