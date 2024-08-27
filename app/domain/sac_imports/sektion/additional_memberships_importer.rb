@@ -10,37 +10,37 @@ require Rails.root.join("lib", "import", "xlsx_reader.rb")
 module SacImports
   module Sektion
     class AdditionalMembershipsImporter < MembershipsImporter
-      self.headers = {
-        navision_id: "Adressnummer",
-        group_navision_id: "Sektion",
-        beitragskategorie: "Bezeichnung Zusatzelement",
-        joining_date: "Eintrittsdatum"
-      }.freeze
-
-      self.sheet_name = "Mapping Mitglied-Zusatzsektion"
-
-      self.target_role_type = AdditionalMembership::TARGET_ROLE_TYPE
-
-      private
-
-      def import_row(row)
-        membership = SacImports::Sektion::AdditionalMembership.new(
-          row,
-          group: membership_group(row),
-          current_ability: root_ability
-        )
-
-        import_membership(membership, row)
-      end
-
-      def print_summary
-        membership_groups.each_value do |group|
-          active = target_role_type.where(group_id: group.id).count
-          output.puts "#{group.parent} hat #{active} Zusatzmitgliedschaften"
-        end
-
-        output_list("Folgende Sektionen konnten nicht gefunden werden:", missing_sections.to_a)
-      end
+      # self.headers = {
+      #   navision_id: "Adressnummer",
+      #   group_navision_id: "Sektion",
+      #   beitragskategorie: "Bezeichnung Zusatzelement",
+      #   joining_date: "Eintrittsdatum"
+      # }.freeze
+      #
+      # self.sheet_name = "Mapping Mitglied-Zusatzsektion"
+      #
+      # self.target_role_type = AdditionalMembership::TARGET_ROLE_TYPE
+      #
+      # private
+      #
+      # def import_row(row)
+      #   membership = SacImports::Sektion::AdditionalMembership.new(
+      #     row,
+      #     group: membership_group(row),
+      #     current_ability: root_ability
+      #   )
+      #
+      #   import_membership(membership, row)
+      # end
+      #
+      # def print_summary
+      #   membership_groups.each_value do |group|
+      #     active = target_role_type.where(group_id: group.id).count
+      #     output.puts "#{group.parent} hat #{active} Zusatzmitgliedschaften"
+      #   end
+      #
+      #   output_list("Folgende Sektionen konnten nicht gefunden werden:", missing_sections.to_a)
+      # end
     end
   end
 end
