@@ -31,6 +31,22 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
   end
 
+  context "without required role" do
+    before { person.roles.first.destroy! }
+
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+    end
+  end
+
+  context "with terminated role" do
+    before { Roles::Termination.new(role: person.roles.first, terminate_on: 1.day.from_now).call }
+
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+    end
+  end
+
   context "with role#delete_on at date" do
     before { person.roles.first.update!(delete_on: date) }
 
@@ -41,14 +57,6 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   context "with role#delete_on after date" do
     before { person.roles.first.update!(delete_on: date + 1.week) }
-
-    it "doesnt extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
-    end
-  end
-
-  context "without required role" do
-    before { person.roles.first.destroy! }
 
     it "doesnt extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
