@@ -15,6 +15,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
   def initialize(invoice_year:, invoice_date:, send_date:, role_finish_date:)
     super()
+    raise ArgumentError, "invoice_year must be a positive integer" unless invoice_year.positive?
     @invoice_year = invoice_year
     @invoice_date = invoice_date
     @send_date = send_date
@@ -32,6 +33,17 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     extend_roles_for_invoicing
     # process_invoices
     # log finish according to ticket
+  end
+
+  def active_members
+    Person
+      .where.not(abacus_subject_key: nil)
+      .where.not(data_quality: :error)
+      .joins(:roles)
+      .merge(Role.active(Date.new(@invoice_year)))
+      .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
+      .left_outer_joins(:external_invoices)
+      .where("external_invoices.id IS NULL OR external_invoices.type != ? OR external_invoices.year != ?", ExternalInvoice::SacMembership.sti_name, @invoice_year)
   end
 
   private
@@ -63,11 +75,6 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       end
       # TODO: log progress according to ticket
     end
-  end
-
-  def active_members
-    # TODO: filter according to ticket
-    People.all
   end
 
   def load_people(ids)
