@@ -11,7 +11,9 @@ class People::MembershipInvoicesController < ApplicationController
     assign_attributes
 
     if invoice_form.valid? && external_invoice.valid? && external_invoice.save
-      if membership_invoice.invoice?
+      if person.data_quality == "error"
+        mark_with_error_and_redirect(ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY)
+      elsif membership_invoice.invoice?
         enqueue_job_and_redirect
       elsif membership_invoice.memberships.none?
         mark_with_error_and_redirect(ExternalInvoice::SacMembership::NO_MEMBERSHIPS_KEY)
