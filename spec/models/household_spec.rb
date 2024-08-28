@@ -135,12 +135,26 @@ describe Household do
           .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
       end
 
-      it "makes oldest person main person" do
+      it "makes reference person main person for new household" do
         person.update!(birthday: 22.years.ago)
         adult.update!(birthday: 24.years.ago)
         expect do
           household.add(adult).save!
-        end.to change { adult.sac_family_main_person }.from(false).to(true)
+        end.to change { person.sac_family_main_person }.from(false).to(true)
+      end
+
+      it "makes oldest person main person for existing household" do
+        household.add(child)
+        household.save!
+
+        person.update!(birthday: 22.years.ago)
+        adult.update!(birthday: 24.years.ago)
+        expect do
+          household.remove(person)
+          household.add(adult)
+          household.save!
+        end.to change { adult.sac_family_main_person }.from(false).to(true).and \
+          change { person.sac_family_main_person }.from(true).to(false)
       end
 
       it "calls Memberships::FamilyMutation#join! for added person" do
