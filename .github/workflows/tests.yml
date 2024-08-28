@@ -1,28 +1,30 @@
-name: 'Lint and test'
+name: "Lint and test"
 
 on:
   # The nightly build allows us to notice if changes to the core
   # break the wagon.
   schedule:
-    - cron:  '38 3 * * *'
+    - cron: "38 3 * * *"
   push:
+    branches:
+      - master # create pull request to run actions on other branches
     paths-ignore:
-      - 'doc/**'
-      - '**.md'
+      - "doc/**"
+      - "**.md"
   pull_request:
     paths-ignore:
-      - 'doc/**'
-      - '**.md'
+      - "doc/**"
+      - "**.md"
   workflow_dispatch: # Allow triggering manually
     inputs:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: "master"
       wagon_dependency_ref:
         description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
-        default: 'master'
+        default: "master"
 
 jobs:
   wagon_tests:
