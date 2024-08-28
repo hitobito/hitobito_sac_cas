@@ -1,4 +1,7 @@
-Fabricator(:person_with_role, from: :person) do
+# This fabricator is used to create a person with a role in a group.
+# It is supposed to create a complete person with all attributes set
+# and without data quality issues.
+Fabricator(:person_with_role, from: :person_with_address_and_phone) do
   transient :group
   transient :role
   transient :beitragskategorie
