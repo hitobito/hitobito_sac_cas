@@ -19,14 +19,17 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
   end
 
-  context "with multiple roles" do
+  context "with multiple people and roles" do
+    let!(:member) { people(:mitglied) }
     let!(:role) do
       person.roles.create!(group: person.groups.first, created_at: 2.days.ago, delete_on: 1.day.ago,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
     end
 
-    it "extends both roles" do
-      expect { extend_roles }.to change { person.roles.first.delete_on }.to(date)
+    it "extends roles" do
+      expect { extend_roles }
+        .to change { person.roles.first.delete_on }.to(date)
+        .and change { member.roles.first.delete_on }.to(date)
         .and change { role.reload.delete_on }.to(date)
     end
   end
