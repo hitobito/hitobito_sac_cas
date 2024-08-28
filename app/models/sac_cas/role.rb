@@ -53,24 +53,4 @@ module SacCas::Role
   def membership_years
     read_attribute(:membership_years) or raise "use Role scope :with_membership_years"
   end
-
-  protected
-
-  def preferred_primary?
-    SacCas::STAMMSEKTION_ROLES.include?(type.safe_constantize)
-  end
-
-  private
-
-  def set_first_primary_group
-    preferred_primary? ? set_preferred_primary! : super
-  end
-
-  def reset_primary_group
-    preferred_primary? ? set_preferred_primary! : super
-  end
-
-  def set_preferred_primary!
-    person.update!(primary_group: Groups::Primary.new(person).identify)
-  end
 end

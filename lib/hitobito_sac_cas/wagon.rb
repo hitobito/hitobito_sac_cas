@@ -105,6 +105,7 @@ module HitobitoSacCas
       ServiceTokenDecorator.kinds += [:external_invoices]
 
       ## Domain
+      People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
