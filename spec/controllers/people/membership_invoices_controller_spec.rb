@@ -32,7 +32,7 @@ describe People::MembershipInvoicesController do
       expect do
         post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
       end.to change { ExternalInvoice.count }.by(1)
-        .and change { Delayed::Job.where('handler like "%CreateInvoiceJob%"').count }
+        .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
 
       # todo validate job
       expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
