@@ -11,32 +11,25 @@ module Invoices::SacMemberships
       Group::Ehrenmitglieder::Ehrenmitglied,
       Group::SektionsMitglieder::Beguenstigt,
       Group::SektionsMitglieder::Ehrenmitglied
-    ]
+    ].map(&:sti_name)
 
     def initialize(date)
       @date = date
     end
 
     def extend_roles
-      Person.joins(:roles)
-        .where(roles: member_role_deleted_before_date)
-        .where.not(id: person_ids_with_invoice_in_year)
-        .where.not(data_quality: :error)
-        .find_each do |person|
-        person.roles.where(type: ROLES_TO_EXTEND).find_each do |role|
-          role.update_attribute(:delete_on, @date)
-        end
-      end
+      Role.where(type: ROLES_TO_EXTEND, terminated: false, delete_on: ..@date, person_id: person_ids)
+        .find_each { |role| role.update_attribute(:delete_on, @date) }
     end
 
     private
 
-    def person_ids_with_invoice_in_year
-      ExternalInvoice::SacMembership.where(year: @date.year).select(:person_id)
-    end
-
-    def member_role_deleted_before_date
-      {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, delete_on: ..@date}
+    def person_ids
+      Person.joins(:roles)
+        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, delete_on: ..@date})
+        .where.not(id: ExternalInvoice::SacMembership.where(year: @date.year).select(:person_id))
+        .where.not(data_quality: :error)
+        .select(:id)
     end
   end
 end
