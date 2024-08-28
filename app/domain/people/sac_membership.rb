@@ -53,7 +53,7 @@ class People::SacMembership
   end
 
   def future_stammsektion_roles
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types)
+    @person.roles.future.where(type: mitglied_stammsektion_types)
   end
 
   def neuanmeldung_stammsektion_role
@@ -153,7 +153,7 @@ class People::SacMembership
   end
 
   def any_future_role?
-    @person.roles.future.where(convert_to: mitglied_stammsektion_types).exists?
+    @person.roles.future.where(type: mitglied_stammsektion_types).exists?
   end
 
   def any_past_role?

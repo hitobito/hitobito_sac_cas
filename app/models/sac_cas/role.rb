@@ -21,7 +21,7 @@ module SacCas::Role
                     COALESCE(DATE(roles.archived_at), '9999-12-31'),
                     COALESCE(roles.end_on, '9999-12-31')
                   ),
-                  DATE(roles.created_at)
+                  DATE(roles.start_on)
                 )
             )/365
         END AS membership_years
@@ -31,8 +31,6 @@ module SacCas::Role
 
   def self.prepended(base)
     base.extend(ClassMethods)
-
-    attr_writer :from_future_role
 
     base.class_eval do
       scope :with_membership_years,
@@ -46,10 +44,6 @@ module SacCas::Role
 
       belongs_to :termination_reason, optional: true
     end
-  end
-
-  def from_future_role?
-    @from_future_role
   end
 
   def termination_reason_text

@@ -102,7 +102,7 @@ describe Memberships::LeaveZusatzsektion do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
-          expect(role.delete_on).to eq Date.new(2024, 12, 31)
+          expect(role.end_on).to eq Date.new(2024, 12, 31)
         end
 
         it "does not reset delete_on to a later date" do
@@ -112,7 +112,7 @@ describe Memberships::LeaveZusatzsektion do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })
           expect(role.reload).to be_terminated
-          expect(role.delete_on).to eq 3.days.from_now.to_date
+          expect(role.end_on).to eq 3.days.from_now.to_date
         end
       end
     end

@@ -68,11 +68,11 @@ describe Memberships::FamilyMutation do
 
       it "does not touch non-conflicting zusatzsektion roles" do
         non_conflicting_role = create_role!(zusatzsektion_class,
-                                            groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
+          groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
 
         expect { mutation.join!(reference_person) }
-          .to not_change { non_conflicting_role.reload.deleted_at }
-                .and(not_change { non_conflicting_role.beitragskategorie })
+          .to not_change { non_conflicting_role.reload.end_on }
+          .and(not_change { non_conflicting_role.beitragskategorie })
       end
 
       it "creates missing family zusatzsektion roles per today" do
@@ -88,9 +88,9 @@ describe Memberships::FamilyMutation do
 
       it "ignores einzel zusatzsektion roles of reference person" do
         create_role!(zusatzsektion_class,
-                     groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-                     person: reference_person,
-                     beitragskategorie: "adult")
+          groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: reference_person,
+          beitragskategorie: "adult")
 
         expect { mutation.join!(reference_person) }.
           # expected to create only one zusatzsektion role for matterhorn_mitglieder but not
@@ -102,22 +102,19 @@ describe Memberships::FamilyMutation do
 
       it "handles future roles" do
         reference_future_role = create_role!(stammsektion_class,
-                                             groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-                                             person: reference_person,
-                                             beitragskategorie: "family",
-                                             start_on: Date.current.next_year.beginning_of_year,
-                                             created_at: 1.day.ago
-        )
+          groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: reference_person,
+          beitragskategorie: "family",
+          start_on: Date.current.next_year.beginning_of_year,
+          created_at: 1.day.ago)
 
         expect { mutation.join!(reference_person) }
           .to change { person.sac_membership.future_stammsektion_roles.count }.from(0).to(1)
 
         new_future_role = person.sac_membership.future_stammsektion_roles.first
         expect(new_future_role.group_id).to eq groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder).id
-        expect(new_future_role.created_at).to eq Time.current.beginning_of_day
         expect(new_future_role.beitragskategorie).to eq "family"
-        expect(new_future_role.convert_on).to eq reference_future_role.convert_on
-        expect(new_future_role.convert_to).to eq reference_future_role.convert_to
+        expect(new_future_role.start_on).to eq reference_future_role.start_on
       end
 
       it "raises if person has terminated membership" do
@@ -161,11 +158,11 @@ describe Memberships::FamilyMutation do
   describe "#leave!" do
     let(:person) { people(:familienmitglied2) }
 
-    it "terminates existing family stammsektion role per end of yesterday" do
+    it "ends existing family stammsektion role per end of yesterday" do
       original_role = stammsektion_role
 
       expect { mutation.leave! }
-        .to change { original_role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.floor)
+        .to change { original_role.reload.end_on }.to(Date.current.yesterday)
     end
 
     it "creates new non-family stammsektion role per today" do
@@ -184,8 +181,8 @@ describe Memberships::FamilyMutation do
 
       expect { mutation.leave! }
         .to change {
-          family_zusatzsektion_role.reload.deleted_at
-        }.to(Time.zone.yesterday.end_of_day.floor)
+          family_zusatzsektion_role.reload.end_on
+        }.to(Date.current.yesterday)
     end
 
     it "creates new non-family zusatzsektion roles for famliy zusatzsektion roles per today" do
@@ -208,9 +205,9 @@ describe Memberships::FamilyMutation do
 
       expect { mutation.leave! }
         .to change {
-          neuanmeldung_zusatzsektion_role.reload.deleted_at
-        }.to(Time.zone.yesterday.end_of_day.floor)
-        .and change { neuanmeldung_zusatzsektion_role.delete_on }.to(nil)
+          neuanmeldung_zusatzsektion_role.reload.end_on
+        }.to(Date.current.yesterday)
+        .and change { neuanmeldung_zusatzsektion_role.end_on }.to(nil)
     end
 
     it "does not touch non-family zusatzsektion roles" do
@@ -218,30 +215,26 @@ describe Memberships::FamilyMutation do
       Role.where(id: non_family_zusatzsektion_role.id).update_all(beitragskategorie: "youth")
 
       expect { mutation.leave! }
-        .to not_change { non_family_zusatzsektion_role.reload.deleted_at }
-              .and(not_change { non_family_zusatzsektion_role.reload.beitragskategorie })
+        .to not_change { non_family_zusatzsektion_role.reload.end_on }
+        .and(not_change { non_family_zusatzsektion_role.reload.beitragskategorie })
     end
 
     xit "handles future roles" do
-      original_future_stammsektion_role = FutureRole.create!(
+      original_future_stammsektion_role = stammsektion_class.create!(
         group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
         person:,
         beitragskategorie: "family",
-        convert_on: Date.current.next_year.beginning_of_year,
-        convert_to: stammsektion_class.sti_name,
-        created_at: 1.day.ago
+        start_on: Date.current.next_year.beginning_of_year
       )
 
       expect { mutation.leave! }
         .to not_change { person.sac_membership.future_stammsektion_roles.count }.from(1)
-                                                                                .and(change { person.sac_membership.future_stammsektion_roles.first.id })
+        .and(change { person.sac_membership.future_stammsektion_roles.first.id })
 
       new_future_role = person.sac_membership.future_stammsektion_roles.first
       expect(new_future_role.group_id).to eq original_future_stammsektion_role.group_id
-      expect(new_future_role.created_at).to eq Time.current.beginning_of_day
       expect(new_future_role.beitragskategorie).to eq "youth"
-      expect(new_future_role.convert_on).to eq original_future_stammsektion_role.convert_on
-      expect(new_future_role.convert_to).to eq original_future_stammsektion_role.convert_to
+      expect(new_future_role.start_on).to eq original_future_stammsektion_role.start_on
     end
 
     it "does not crash if the person has no stammsektion" do

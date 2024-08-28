@@ -14,6 +14,8 @@ class Group::SektionsMitglieder < ::Group
 
     self.terminatable = true
 
+    validates :end_on, presence: true
+
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private
@@ -28,6 +30,8 @@ class Group::SektionsMitglieder < ::Group
     include SacCas::Role::MitgliedZusatzsektion
 
     self.terminatable = true
+
+    validates :end_on, presence: true
 
     # This is used by the import as we don't have the complete memberhip history of a person
     # but have to import MitgliedZusatzsektion roles anyway.

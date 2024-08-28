@@ -16,7 +16,7 @@ describe People::Neuanmeldungen::Promoter do
       **opts.reverse_merge(
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym,
         group: groups(:bluemlisalp_neuanmeldungen_nv),
-        created_at: Time.current.beginning_of_year
+        start_on: Time.current.beginning_of_year
       )
     )
   end
@@ -66,7 +66,7 @@ describe People::Neuanmeldungen::Promoter do
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
 
       mitglied_role = neuanmeldung_role.person.roles.last
-      expect(mitglied_role.created_at).to eq(Time.current)
+      expect(mitglied_role.start_on).to eq(Time.current)
       expect(mitglied_role.delete_on).to eq(Date.current.end_of_year)
     end
 
@@ -89,7 +89,7 @@ describe People::Neuanmeldungen::Promoter do
       mitglied_role = Fabricate(
         Group::SektionsMitglieder::Mitglied.name.to_sym,
         group: groups(:matterhorn_mitglieder),
-        created_at: Time.current,
+        start_on: Time.current,
         delete_on: Date.current.end_of_year
       )
       neuanmeldung_role = create_neuanmeldung_role(

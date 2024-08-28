@@ -30,8 +30,8 @@ describe Memberships::TerminateSacMembership do
       end.to raise_error("already terminated")
     end
 
-    it "raises when role is already deleted" do
-      role.update_columns(deleted_at: Time.zone.now)
+    it "raises when role is already ended" do
+      role.update_columns(end_on: Date.current.yesterday)
       expect do
         described_class.new(role, Time.zone.yesterday)
       end.to raise_error("already deleted")
@@ -92,30 +92,30 @@ describe Memberships::TerminateSacMembership do
       before { params[:terminate_on] = end_of_year }
 
       it "does not adjust delete_on if already schedule to delete earlier" do
-        Role.where(person: person).update_all(delete_on: "2015-12-31")
+        Role.where(person: person).update_all(end_on: "2015-12-31")
         expect do
           expect(termination.save!).to eq true
         end.not_to(change { person.roles.count })
-        expect(role.reload.delete_on).to eq Date.new(2015, 12, 31)
-        expect(mitglied_zweitsektion.reload.delete_on).to eq Date.new(2015, 12, 31)
+        expect(role.reload.end_on).to eq Date.new(2015, 12, 31)
+        expect(mitglied_zweitsektion.reload.end_on).to eq Date.new(2015, 12, 31)
       end
 
-      it "does adjust delete_on if already scheduled to delete later" do
-        role.update!(delete_on: end_of_year + 1.day)
+      it "does adjust end_on if already scheduled to end later" do
+        role.update!(end_on: end_of_year + 1.day)
         expect do
           expect(termination.save!).to eq true
         end
           .to not_change { person.roles.count }
-          .and change { role.reload.delete_on }.to(end_of_year)
+          .and change { role.reload.end_on }.to(end_of_year)
       end
 
-      it "does adjust delete_on if not scheduled" do
-        Role.update_all(delete_on: nil)
+      it "does adjust end_on if not scheduled" do
+        Role.update_all(end_on: nil)
         expect do
           expect(termination.save!).to eq true
         end.not_to(change { person.roles.count })
-        expect(role.reload.delete_on).to eq end_of_year
-        expect(mitglied_zweitsektion.reload.delete_on).to eq end_of_year
+        expect(role.reload.end_on).to eq end_of_year
+        expect(mitglied_zweitsektion.reload.end_on).to eq end_of_year
       end
     end
 
@@ -219,10 +219,10 @@ describe Memberships::TerminateSacMembership do
         ## NOTE should these validate??
         def create_future_tourenleiter
           Fabricate(
-            :future_role,
+            Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
             person: person,
             group: groups(:matterhorn_touren_und_kurse),
-            convert_to: Group::SektionsTourenUndKurse::Tourenleiter
+            start_on: Date.current.tomorrow
           )
         end
 

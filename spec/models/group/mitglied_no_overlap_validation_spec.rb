@@ -15,8 +15,8 @@ describe :mitglied_no_overlap_validation do
           Fabricate(
             mitglied_type.sti_name,
             group: group,
-            created_at: Time.zone.parse("2019-01-01"),
-            delete_on: Time.zone.parse("2019-12-31")
+            start_on: Time.zone.parse("2019-01-01"),
+            end_on: Time.zone.parse("2019-12-31")
           )
         end
 
@@ -25,13 +25,13 @@ describe :mitglied_no_overlap_validation do
             mitglied_type.sti_name,
             person: existing_role.person,
             group: existing_role.group,
-            created_at: existing_role.delete_on + 1.day,
-            delete_on: existing_role.delete_on + 2.days
+            start_on: existing_role.end_on + 1.day,
+            end_on: existing_role.end_on + 2.days
           )
 
           expect(new_role).to be_valid
 
-          new_role.delete_on = existing_role.created_at - 1.day
+          new_role.end_on = existing_role.start_on - 1.day
           new_role.created_at = existing_role.created_at - 2.days
 
           expect(new_role).to be_valid
@@ -43,7 +43,7 @@ describe :mitglied_no_overlap_validation do
             person: existing_role.person,
             group: existing_role.group,
             created_at: existing_role.created_at,
-            delete_on: existing_role.delete_on
+            end_on: existing_role.end_on
           )
 
           expect(new_role).not_to be_valid
@@ -56,7 +56,7 @@ describe :mitglied_no_overlap_validation do
             person: existing_role.person,
             group: other_sektion_group,
             created_at: existing_role.created_at,
-            delete_on: existing_role.delete_on
+            end_on: existing_role.end_on
           )
 
           expect(new_role).not_to be_valid
@@ -70,7 +70,7 @@ describe :mitglied_no_overlap_validation do
               person: existing_role.person,
               group: other_type_group,
               created_at: existing_role.created_at,
-              delete_on: existing_role.delete_on
+              end_on: existing_role.end_on
             )
 
             expect(new_role).not_to be_valid, "expected #{other_type.sti_name} to be invalid"
@@ -126,8 +126,8 @@ describe :mitglied_no_overlap_validation do
         person: person,
         group: groups(group_fixture_name),
         beitragskategorie: "adult",
-        created_at: Time.zone.parse("2019-01-01"),
-        delete_on: Time.zone.parse("2019-12-31")
+        start_on: Time.zone.parse("2019-01-01"),
+        end_on: Time.zone.parse("2019-12-31")
       )
     end
 
@@ -154,14 +154,14 @@ describe :mitglied_no_overlap_validation do
 
         it "allows disjoint active_period" do
           new_role.attributes = {
-            created_at: existing_role.delete_on + 1.day,
-            delete_on: existing_role.delete_on + 2.days
+            created_at: existing_role.end_on + 1.day,
+            end_on: existing_role.end_on + 2.days
           }
           expect_no_overlap_error(new_role)
 
           new_role.attributes = {
             created_at: existing_role.created_at - 2.days,
-            delete_on: existing_role.created_at - 1.day
+            end_on: existing_role.created_at - 1.day
           }
 
           expect_no_overlap_error(new_role)
@@ -170,7 +170,7 @@ describe :mitglied_no_overlap_validation do
         it "denies concurrent active_period" do
           new_role.attributes = {
             created_at: existing_role.created_at,
-            delete_on: existing_role.delete_on
+            end_on: existing_role.end_on
           }
 
           expect_overlap_error(new_role)
@@ -186,7 +186,7 @@ describe :mitglied_no_overlap_validation do
         it "allows concurrent active_period" do
           new_role.attributes = {
             created_at: existing_role.created_at,
-            delete_on: existing_role.delete_on
+            end_on: existing_role.end_on
           }
 
           expect_no_overlap_error(new_role)
@@ -202,7 +202,7 @@ describe :mitglied_no_overlap_validation do
         it "denies concurrent active_period" do
           new_role.attributes = {
             created_at: existing_role.created_at,
-            delete_on: existing_role.delete_on
+            end_on: existing_role.end_on
           }
 
           expect_overlap_error(new_role)

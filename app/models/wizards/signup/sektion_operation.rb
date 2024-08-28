@@ -46,16 +46,7 @@ module Wizards::Signup
     end
 
     def role
-      @role ||= (register_on.future? ? build_future_role : build_role)
-    end
-
-    def build_future_role
-      FutureRole.new(
-        person: person,
-        group: group,
-        convert_on: register_on,
-        convert_to: role_type
-      ).tap { |r| r.mark_as_coming_from_future_role = true }
+      @role ||= build_role
     end
 
     def build_role
@@ -63,8 +54,8 @@ module Wizards::Signup
         person: person,
         group: group,
         type: role_type,
-        created_at: Time.zone.now,
-        delete_on: (Time.zone.today.end_of_year unless neuanmeldung?)
+        start_on: register_on,
+        end_on: (register_on.end_of_year unless neuanmeldung?)
       )
     end
 

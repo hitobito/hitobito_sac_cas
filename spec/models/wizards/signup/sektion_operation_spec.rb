@@ -84,15 +84,14 @@ describe Wizards::Signup::SektionOperation do
       travel_to(Date.new(2024, 6, 1)) do
         expect { operation.save! }
           .to change { Person.count }.by(1)
-          .and change { FutureRole.count }.by(1)
+          .and change { Role.future.count }.by(1)
           .and not_change { Subscription.count }
       end
 
       max = Person.find_by(first_name: "Max")
       expect(max.roles.first.group).to eq group
-      expect(max.roles.first.type).to eq "FutureRole"
-      expect(max.roles.first.convert_to).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
-      expect(max.roles.first.convert_on).to eq Date.new(2024, 7, 1)
+      expect(max.roles.first.type).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
+      expect(max.roles.first.start_on).to eq Date.new(2024, 7, 1)
     end
   end
 

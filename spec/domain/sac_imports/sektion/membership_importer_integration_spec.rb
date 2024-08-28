@@ -33,7 +33,7 @@ describe SacImports::Sektion::MembershipsImporter do
     people_navision_ids.each do |id|
       person = Person.find(id)
       expect(person).to be_present
-      expect(person.roles.with_deleted.first).to be_a(Group::SektionsMitglieder::Mitglied)
+      expect(person.roles.with_inactive.first).to be_a(Group::SektionsMitglieder::Mitglied)
     end
   end
 
@@ -62,7 +62,7 @@ describe SacImports::Sektion::MembershipsImporter do
     expect(retired.household_key).to eq("F12345")
 
     expect(retired.roles.without_deleted).to eq []
-    retired_role = retired.roles.with_deleted.first
+    retired_role = retired.roles.with_inactive.first
 
     expect(retired_role.created_at).to eq(Time.zone.parse("1980-12-31"))
     expect(retired_role.deleted_at).to eq(Time.zone.parse("2010-1-1"))

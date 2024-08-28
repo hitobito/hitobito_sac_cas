@@ -11,7 +11,7 @@ describe Invoices::SacMemberships::Member do
   subject { described_class.new(person, context) }
 
   before do
-    Role.update_all(delete_on: date.end_of_year)
+    Role.update_all(end_on: date.end_of_year)
   end
 
   context "main methods" do

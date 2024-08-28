@@ -105,13 +105,12 @@ module Memberships
         beitragskategorie:,
         group: blueprint_role.group,
         start_on: new_role_start_on,
-        end_on: blueprint_role.end_on,
-        delete_on: blueprint_role.delete_on
+        end_on: blueprint_role.end_on
       )
     end
 
     def delete_role!(role)
-      Role.where(id: role.id).update_all(end_on: replaced_role_end_on, delete_on: nil)
+      Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
     end
 
     def find_zusatzsektion_role(layer_group_id)

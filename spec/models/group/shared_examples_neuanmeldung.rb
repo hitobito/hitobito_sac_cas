@@ -17,8 +17,8 @@ shared_examples "validates Neuanmeldung timestamps" do
   end
 
   it "delete_on is not required" do
-    role = described_class.new(person: people(:mitglied), delete_on: nil)
+    role = described_class.new(person: people(:mitglied), end_on: nil)
     role.validate
-    expect(role.errors[:delete_on]).to be_empty
+    expect(role.errors[:end_on]).to be_empty
   end
 end

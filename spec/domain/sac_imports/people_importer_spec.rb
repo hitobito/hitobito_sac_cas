@@ -149,7 +149,7 @@ describe SacImports::PeopleImporter do
       expect do
         2.times { importer.import! }
       end.to change { Person.count }.by(1)
-        .and change { Role.with_deleted.count }.by(1)
+        .and change { Role.with_inactive.count }.by(1)
         .and change { PhoneNumber.count }.by(1)
     end
   end

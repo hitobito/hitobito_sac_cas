@@ -65,15 +65,15 @@ describe Groups::Primary do
     end
 
     it "favours older over newer" do
-      mitglied.roles.update_all(delete_on: "2015-12-31")
+      mitglied.roles.update_all(end_on: "2015-12-31")
 
       Fabricate(
         Group::SektionsMitglieder::Mitglied.sti_name,
         group: other,
         person: admin,
         beitragskategorie: :adult,
-        created_at: roles(:mitglied).created_at + 1.year,
-        delete_on: roles(:mitglied).delete_on + 1.year
+        start_on: roles(:mitglied).start_on + 1.year,
+        end_on: roles(:mitglied).end_on + 1.year
       )
       expect(identify(mitglied)).to eq mitglieder
 
@@ -82,8 +82,8 @@ describe Groups::Primary do
         group: other,
         person: mitglied,
         beitragskategorie: :adult,
-        created_at: roles(:mitglied).created_at - 1.year,
-        delete_on: roles(:mitglied).delete_on - 1.year
+        start_on: roles(:mitglied).start_on - 1.year,
+        end_on: roles(:mitglied).end_on - 1.year
       )
       expect(identify(mitglied)).to eq other
     end

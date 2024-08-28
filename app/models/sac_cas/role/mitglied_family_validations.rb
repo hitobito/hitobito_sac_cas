@@ -25,9 +25,8 @@ module SacCas::Role::MitgliedFamilyValidations
 
   # Returns all family mitglieder including the current person.
   def family_mitglieder
-    stammsektion_roles_scope = Role.where(type: SacCas::STAMMSEKTION_ROLES).then do |scope|
-      from_future_role? ? scope.or(Role.where(convert_to: SacCas::STAMMSEKTION_ROLES)) : scope
-    end.where(beitragskategorie: :family)
+    stammsektion_roles_scope = Role.where(type: SacCas::STAMMSEKTION_ROLES)
+                                   .where(beitragskategorie: :family)
     people = person
       .household_people
       .joins(:roles)

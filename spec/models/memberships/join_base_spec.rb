@@ -157,9 +157,8 @@ describe Memberships::JoinBase do
 
       it "might process multiple roles for single person" do
         bluemlisalp_mitglied.attributes = {
-          created_at: 1.year.ago,
-          deleted_at: Time.zone.yesterday.end_of_day,
-          delete_on: nil
+          start_on: 1.year.ago,
+          end_on: Time.zone.yesterday.end_of_day
         }
         allow(obj).to receive(:prepare_roles) do |person|
           [bluemlisalp_mitglied,
