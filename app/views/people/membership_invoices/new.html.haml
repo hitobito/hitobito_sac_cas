@@ -5,14 +5,19 @@
 
 - title t(".title")
 - if @person.data_quality == "error"
-  .alert.alert-danger=t(".alert_error")
-
-  - @person.data_quality_issues.where(severity: :error).each do |issue|
-    = issue.message
+  .alert.alert-danger
+    = t(".alert_error")
+    %ul
+      - @person.data_quality_issues.where(severity: :error).each do |issue|
+        %li= issue.message
   = cancel_link(external_invoices_group_person_path(@group, @person))
 
-- elsif @person.sac_membership_invoice?
-  .alert.alert-info=t(".alert_info")
+- elsif !@person.sac_membership_invoice?
+  .alert.alert-warning= t(".alert_warning")
+  = cancel_link(external_invoices_group_person_path(@group, @person))
+
+- else
+  .alert.alert-info= t(".alert_info")
 
   = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
     = f.error_messages
@@ -43,7 +48,3 @@
     = f.indented do
       = submit_button(f, t(".create_invoice"))
       = cancel_link(external_invoices_group_person_path(@group, @person))
-
-- else
-  .alert.alert-warning= t(".alert_warning")
-  = cancel_link(external_invoices_group_person_path(@group, @person))
