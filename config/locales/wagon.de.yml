@@ -577,6 +577,14 @@ de:
         one: Privathuette
         other: Privathuetten
 
+      group/sac_cas_verbaende:
+        one: Verbände & Organisationen
+        other: Verbände & Organisationen
+
+      group/sac_cas_verband:
+        one: Verband & Organisation
+        other: Verbände & Organisationen
+
       group/sektion:
         one: Sektion
         other: Sektionen
@@ -775,6 +783,15 @@ de:
         description: Andere
         huettenwartspartner: Hüttenwartspartner*in
         schluesseldepot: Schlüsseldepot
+      group/sac_cas_verband/praesidium:
+        one: Präsidium
+        description: Präsidium
+      group/sac_cas_verband/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sac_cas_verband/andere:
+        one: Andere
+        description: Andere
       group/sektions_funktionaere/administration:
         one: Administration
         description: Administration
