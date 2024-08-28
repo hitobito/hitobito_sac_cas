@@ -18,8 +18,9 @@ module Invoices::SacMemberships
     end
 
     def extend_roles
-      Role.where(type: ROLES_TO_EXTEND, terminated: false, delete_on: ..@date, person_id: person_ids)
-        .find_each { |role| role.update_attribute(:delete_on, @date) }
+      role_ids = Role.where(type: ROLES_TO_EXTEND, terminated: false, delete_on: ..@date, person_id: person_ids).pluck(:id)
+
+      Role.where(id: role_ids).update_all(delete_on: @date) if role_ids.present?
     end
 
     private

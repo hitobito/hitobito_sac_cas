@@ -20,7 +20,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   end
 
   context "with multiple people and roles" do
-    let!(:member) { people(:mitglied) }
+    let!(:member) { people(:familienmitglied).tap { |p| p.roles.first.update!(delete_on: 1.year.ago) } }
     let!(:role) do
       person.roles.create!(group: person.groups.first, created_at: 2.days.ago, delete_on: 1.day.ago,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
@@ -31,6 +31,16 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         .to change { person.roles.first.delete_on }.to(date)
         .and change { member.roles.first.delete_on }.to(date)
         .and change { role.reload.delete_on }.to(date)
+    end
+
+    it "only makes 2 database queries" do
+      query_count = 0
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, details|
+        query_count += 1 unless details[:name] == "SCHEMA"
+      end
+
+      extend_roles
+      expect(query_count).to eq(2) # SELECT and UPDATE
     end
   end
 
