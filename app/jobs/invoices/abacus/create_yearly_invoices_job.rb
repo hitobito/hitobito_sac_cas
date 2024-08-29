@@ -29,10 +29,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def perform
-    # log start according to ticket
+    log_progress(0)
     extend_roles_for_invoicing
     process_invoices
-    # log finish according to ticket
+    log_progress(100)
   end
 
   def active_members
@@ -48,6 +48,14 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   private
+
+  def log_progress(percent)
+    HitobitoLogEntry.create!(
+      category: "stapelverarbeitung",
+      level: :info,
+      message: "MV-Jahresinkassolauf: Fortschritt #{percent}%"
+    )
+  end
 
   def assert_no_other_job_running!
     raise "There is already a job running" if other_job_running?
@@ -65,6 +73,9 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def process_invoices
+    current_logged_percent = 0
+    members_count = active_members.count
+    processed_members = 0
     active_members.in_batches(of: BATCH_SIZE) do |people|
       slices = people.pluck(:id).each_slice(SLICE_SIZE).to_a
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
@@ -74,7 +85,12 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
         end
         # TODO: rescue errors to gracefully terminate and clean up threads. see ticket
       end
-      # TODO: log progress according to ticket
+      processed_members += people.count # Can't use BATCH_SIZE since we would end up with more than 100%
+      progress_percent = processed_members * 100 / members_count
+      if progress_percent >= (current_logged_percent + 10)
+        current_logged_percent = progress_percent / 10 * 10
+        log_progress(current_logged_percent)
+      end
     end
   end
 

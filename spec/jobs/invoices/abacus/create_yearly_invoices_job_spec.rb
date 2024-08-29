@@ -134,8 +134,10 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     it "Creates the invoices and error logs" do
       expect { subject.perform }
         .to change(ExternalInvoice, :count).by(2)
-        .and change(HitobitoLogEntry, :count).by(1)
+        .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
+        .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
       expect(ExternalInvoice.last.state).to eq("error")
+      expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
     end
   end
 
