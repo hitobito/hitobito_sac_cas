@@ -63,10 +63,9 @@ describe People::Neuanmeldungen::Approve do
     people(:familienmitglied2).roles.destroy_all
     neuanmeldung = create_role(:family, person: people(:familienmitglied2))
 
-    expect{ described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
+    expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
       .to not_change { ExternalInvoice::SacMembership.count }
       .and not_change { Delayed::Job.where('handler like "%CreateInvoiceJob%"').count }
-
   end
 
   it "creates the SektionNeuanmeldungNv group if it does not exist" do

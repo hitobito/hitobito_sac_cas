@@ -96,7 +96,7 @@ module Wizards::Signup
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 
-    def can_receive_invoice? = !role.beitragskategorie&.family? || role.person.sac_family_main_person 
+    def can_receive_invoice? = !role.beitragskategorie&.family? || role.person.sac_family_main_person
 
     def invoice_date = @invoice_date ||= [Date.current, register_on.change(day: 15, month: register_on.month - 1)].max
   end
