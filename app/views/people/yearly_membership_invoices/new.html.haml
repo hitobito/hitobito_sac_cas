@@ -5,7 +5,7 @@
 
 - title t(".title")
 - if @running_yearly_membership_invoice_job.nil?
-  .alert.alert-info=t(".alert_info")
+  .alert.alert-info=t(".schedule_info_alert")
   
   = standard_form(@invoice_form, url: group_yearly_membership_invoices_path(@group), method: :post) do |f|
     = f.error_messages
@@ -25,5 +25,5 @@
       = submit_button(f, t(".create_invoice"), data: { confirm: t('.submit_confirmation') })
       = cancel_link(group_path(@group))
 - else
-  .alert.alert-warning= t(".alert_warning")
+  .alert.alert-warning= t(".job_already_scheduled_alert")
   = cancel_link(group_path(@group))

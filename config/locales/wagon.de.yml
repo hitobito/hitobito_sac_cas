@@ -1268,11 +1268,11 @@ de:
           Sind Sie sicher, dass sie fortfahren wollen?
 
     yearly_membership_invoices:
-      success_notice: "Der Jahresinkassolauf wurde erfolgreich gestartet."
+      job_scheduling_info: "Der Jahresinkassolauf wurde erfolgreich gestartet."
       new:
         title: "Start MV-Jahresinkassolauf"
-        alert_info: "Beim Absenden dieses Dialogs wird der Jahresinkassolauf für alle Mitglieder gestartet und die Daten an Abacus übermittelt. Der Jahresinkassolauf kann nicht abgebrochen werden und dauert mehrere Stunden. Die Mitgliedschaftsrollen werden hiermit verlängert."
-        alert_warning: "Es läuft bereits ein Jahresinkassolauf. Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden."
+        schedule_info_alert: "Beim Absenden dieses Dialogs wird der Jahresinkassolauf für alle Mitglieder gestartet und die Daten an Abacus übermittelt. Der Jahresinkassolauf kann nicht abgebrochen werden und dauert mehrere Stunden. Die Mitgliedschaftsrollen werden hiermit verlängert."
+        job_already_scheduled_alert: "Es läuft bereits ein Jahresinkassolauf. Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden."
         create_invoice: "Starten"
         submit_confirmation: "Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden."
 

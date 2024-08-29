@@ -46,7 +46,7 @@ class People::YearlyMembershipInvoicesController < ApplicationController
   end
 
   def success_redirect
-    redirect_to group_path(group), notice: t("people.yearly_membership_invoices.success_notice")
+    redirect_to group_path(group), notice: t("people.yearly_membership_invoices.job_scheduling_info")
   end
 
   def invoice_form_params
