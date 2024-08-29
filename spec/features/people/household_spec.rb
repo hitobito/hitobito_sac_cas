@@ -13,8 +13,8 @@ describe HouseholdsController, js: true do
   let(:household) { Household.new(person) }
 
   before do 
-    sign_in(person)
-    visit edit_group_person_household_path(groups(:top_group).id, person.id)
+    sign_in(people(:admin))
+    visit edit_group_person_household_path(group_id: groups(:bluemlisalp).id, person_id: person.id)
   end
 
   it "can add person to household with id" do
