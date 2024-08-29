@@ -111,5 +111,20 @@ describe Invoices::Abacus::CreateInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
       end
     end
+
+    context "data quality errors" do
+      let(:log_entry) { HitobitoLogEntry.last }
+
+      before { person.update!(data_quality: :error) }
+
+      it "creates log, updates invoice state to error" do
+        expect { job.perform }.to change { HitobitoLogEntry.count }.by(1)
+          .and change { external_invoice.reload.state }.to("error")
+        expect(log_entry.level).to eq("error")
+        expect(log_entry.category).to eq("rechnungen")
+        expect(log_entry.message).to match(/Datenqualitätsprobleme/)
+        expect(log_entry.subject).to eq(external_invoice)
+      end
+    end
   end
 end
