@@ -58,4 +58,20 @@ describe People::YearlyMembershipInvoicesController do
       expect(flash[:notice]).to eq("Der Jahresinkassolauf wurde erfolgreich gestartet.")
     end
   end
+
+  describe "GET new" do
+    render_views
+
+    let(:body) { Capybara::Node::Simple.new(response.body) }
+
+    it "does not show form but info flash if a job is already running" do
+      Invoices::Abacus::CreateYearlyInvoicesJob.new(**params[:people_yearly_membership_invoice_form]).enqueue!(run_at: 10.seconds.from_now)
+
+      get :new, params: {group_id: Group.root.id}
+
+      expect(body).to_not have_selector(".content form")
+      expect(body).to have_selector(".alert-warning", text: "Es läuft bereits ein Jahresinkassolauf. " \
+                                    "Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden.")
+    end
+  end
 end
