@@ -22,6 +22,7 @@ module Wizards::Signup
 
     def save!
       save_person_and_role
+      generate_invoice if no_approval_needed?
       exclude_from_mailing_list if mailing_list && !newsletter
     end
 
@@ -68,8 +69,18 @@ module Wizards::Signup
       )
     end
 
-    def role_type
-      group.self_registration_role_type
+    def generate_invoice
+      if can_receive_invoice?
+        invoice = ExternalInvoice::SacMembership.create!(
+          person: person,
+          state: :draft,
+          year: invoice_date.year,
+          issued_at: invoice_date,
+          sent_at: invoice_date,
+          link: role.layer_group
+        )
+        Invoices::Abacus::CreateInvoiceJob.new(invoice, invoice_date, new_entry: true).enqueue!
+      end
     end
 
     def neuanmeldung?
@@ -77,12 +88,16 @@ module Wizards::Signup
         group.is_a?(Group::SektionsNeuanmeldungenNv)
     end
 
-    def mailing_list
-      @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
-    end
+    def role_type = group.self_registration_role_type
 
-    def exclude_from_mailing_list
-      mailing_list.subscriptions.create!(subscriber: person, excluded: true)
-    end
+    def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
+
+    def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
+
+    def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
+
+    def can_receive_invoice? = !role.beitragskategorie&.family? || role.person.sac_family_main_person 
+
+    def invoice_date = @invoice_date ||= [Date.current, register_on.change(day: 15, month: register_on.month - 1)].max
   end
 end
