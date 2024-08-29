@@ -64,7 +64,7 @@ class People::Membership::InvoiceForm
   end
 
   def already_member_next_year?
-    person.sac_membership.stammsektion_role.delete_on&.year&.>= today.next_year.year
+    person.sac_membership.stammsektion_role&.delete_on&.year&.>= today.next_year.year
   end
 
   def today = Time.zone.today

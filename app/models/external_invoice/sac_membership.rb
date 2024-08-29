@@ -38,6 +38,7 @@ class ExternalInvoice::SacMembership < ExternalInvoice
   ERROR_CATEGORY = "rechnungen"
   NOT_POSSIBLE_KEY = "people.membership_invoices.no_invoice_possible"
   NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
+  DATA_QUALITY_ERROR_KEY = "people.membership_invoices.data_quality_error"
 
   def title
     I18n.t("invoices.sac_memberships.title", year: year)
@@ -47,9 +48,7 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     @date = reference_date
     membership_invoice = membership_invoice(discount, new_entry, reference_date)
 
-    if !membership_invoice.invoice?
-      I18n.t(".people.membership_invoices.no_invoice_possible")
-    elsif memberships.blank?
+    if !membership_invoice.invoice? || memberships.blank?
       I18n.t(".people.membership_invoices.no_invoice_possible")
     else
       membership_invoice

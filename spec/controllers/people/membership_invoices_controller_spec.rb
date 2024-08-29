@@ -84,5 +84,20 @@ describe People::MembershipInvoicesController do
           "oder diese sind bereits über andere Rechnungen abgedeckt."
       end
     end
+
+    context "data quality errors" do
+      before { person.update!(data_quality: :error) }
+
+      it "logs and marks invoice as error if person has data quality errors" do
+        expect { post :create, params: }
+          .to change { ExternalInvoice.count }.by(1)
+          .and change { HitobitoLogEntry.count }.by(1)
+          .and not_change { Delayed::Job.count }
+
+        expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
+        expect(flash[:alert]).to eq "Die gewünschte Person hat Datenqualitätsprobleme. " \
+          "Es wurde entsprechend keine Rechnung erstellt."
+      end
+    end
   end
 end

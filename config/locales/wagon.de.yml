@@ -1206,11 +1206,13 @@ de:
     membership_invoices:
       no_invoice_possible: "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
       no_memberships: "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
+      data_quality_error: "Die gewünschte Person hat Datenqualitätsprobleme. Es wurde entsprechend keine Rechnung erstellt."
       success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
       new:
         title: "Mitgliedschaftsrechnung erstellen"
         alert_info: "Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen."
         alert_warning: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet."
+        alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Mitgliedschaftsrechnung:"
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
