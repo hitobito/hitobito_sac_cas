@@ -28,7 +28,6 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def perform
-    assert_no_other_job_running!
     # log start according to ticket
     extend_roles_for_invoicing
     # process_invoices
