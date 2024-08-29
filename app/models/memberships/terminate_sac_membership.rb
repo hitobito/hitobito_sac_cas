@@ -105,11 +105,19 @@ module Memberships
         subscribe_to(newsletter, person) if subscribe_newsletter
         subscribe_to(fundraising, person) if subscribe_fundraising_list
         person.update(data_retention_consent: data_retention_consent)
+        cancel_open_membership_invoices(person)
       end
     end
 
     def subscribe_to(mailing_list, person)
       mailing_list&.subscriptions&.find_or_create_by!(subscriber: person)
+    end
+
+    def cancel_open_membership_invoices(person)
+      person.external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name).find_each do |invoice|
+        invoice.update!(state: "cancelled")
+        Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+      end
     end
 
     def basic_login_group

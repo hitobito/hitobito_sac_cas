@@ -205,6 +205,22 @@ describe Memberships::TerminateSacMembership do
         end
       end
 
+      describe "external invoices" do
+        it "cancels open membership invoices" do
+          invoice = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "open", year: 2022) # matching
+          other_status = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "payed", year: 2020) # other status
+          other_type = person.external_invoices.create!(type: ExternalInvoice.sti_name, state: "open", year: 2020) # other type
+
+          expect do
+            expect(termination.save!).to eq true
+          end.to change { Delayed::Job.count }.by(1)
+
+          expect(invoice.reload).to be_cancelled
+          expect(other_status.reload).to be_payed
+          expect(other_type.reload).to be_open
+        end
+      end
+
       describe "other relevant roles" do
         def create_tourenleiter
           Fabricate(:qualification, person: person,
