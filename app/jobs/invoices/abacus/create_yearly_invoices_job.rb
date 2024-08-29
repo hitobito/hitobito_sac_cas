@@ -135,7 +135,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def context
-    @context ||= Invoices::SacMemberships::Context.new(@invoice_date)
+    @context ||= Invoices::SacMemberships::Context.new(Date.new(@invoice_year))
   end
 
   def sales_order_interface
