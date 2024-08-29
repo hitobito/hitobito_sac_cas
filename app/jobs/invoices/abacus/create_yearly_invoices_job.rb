@@ -76,6 +76,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     current_logged_percent = 0
     members_count = active_members.count
     processed_members = 0
+    raise_exception = nil
     active_members.in_batches(of: BATCH_SIZE) do |people|
       slices = people.pluck(:id).each_slice(SLICE_SIZE).to_a
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
@@ -83,13 +84,21 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
         ActiveRecord::Base.connection_pool.with_connection do
           create_invoices(load_people(ids))
         end
-        # TODO: rescue errors to gracefully terminate and clean up threads. see ticket
+      # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
+      rescue Exception => e
+        Rails.logger.error "Error while creating invoices: #{e.response.body}"
+        raise_exception = e
+        raise Parallel::Break
       end
+      # rubocop:enable Lint/RescueException
       processed_members += people.count # Can't use BATCH_SIZE since we would end up with more than 100%
       progress_percent = processed_members * 100 / members_count
       if progress_percent >= (current_logged_percent + 10)
         current_logged_percent = progress_percent / 10 * 10
         log_progress(current_logged_percent)
+      end
+      if raise_exception
+        raise raise_exception
       end
     end
   end
@@ -110,7 +119,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       sales_orders.each do |so|
         so.entity.destroy
       end
-      raise Parallel::Break
+      raise e
     end
     log_error_parts(parts)
   end

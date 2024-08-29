@@ -118,26 +118,70 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           body: batch_response_sales_orders,
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
         )
-      stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
-        .with(
-          body: batch_body_sales_orders_2,
-          headers: {
-            "Authorization" => "Bearer 42",
-            "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-          }
-        ).to_return(
-          status: 500,
-          body: ""
-        )
     end
 
-    it "Creates the invoices and error logs" do
-      expect { subject.perform }
-        .to change(ExternalInvoice, :count).by(2)
-        .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
-        .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
-      expect(ExternalInvoice.last.state).to eq("error")
-      expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
+    context "when all calls work but contain some errors" do
+      before do
+        stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
+          .with(
+            body: batch_body_sales_orders_2,
+            headers: {
+              "Authorization" => "Bearer 42",
+              "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            }
+          ).to_return(
+            status: 202,
+            body: batch_response_sales_orders_with_error,
+            headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+          )
+      end
+
+      it "Creates the invoices and error logs" do
+        expect { subject.perform }
+          .to change(ExternalInvoice, :count).by(4)
+          .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
+          .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
+        expect(ExternalInvoice.last.state).to eq("error")
+        expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
+      end
+
+      context "when role_finish_date is set" do
+        let(:role_finish_date) { Date.new(invoice_year, 12, 31) }
+
+        it "Creates the invoices and error logs" do
+          expect { subject.perform }
+            .to change(ExternalInvoice, :count).by(4)
+            .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
+            .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
+          expect(ExternalInvoice.last.state).to eq("error")
+          expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
+        end
+      end
+    end
+
+    context "when a call fails" do
+      before do
+        stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
+          .with(
+            body: batch_body_sales_orders_2,
+            headers: {
+              "Authorization" => "Bearer 42",
+              "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            }
+          ).to_return(
+            status: 500,
+            body: ""
+          )
+      end
+
+      it "Creates the invoices and error logs" do
+        expect { subject.perform }
+          .to raise_error(RestClient::InternalServerError)
+          .and change(ExternalInvoice, :count).by(2)
+          .and change { HitobitoLogEntry.where(level: :info).count }.by(2)
+        expect(ExternalInvoice.last.state).to eq("open")
+        expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 50%")
+      end
     end
   end
 
@@ -190,6 +234,30 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
   end
 
   def batch_response_sales_orders
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SalesOrderId":42,"SalesOrderBacklogId":0}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      HTTP/1.1 201 Created\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"SalesOrderId":48,"SalesOrderBacklogId":0}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
+    HTTP
+  end
+
+  def batch_response_sales_orders_with_error
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
