@@ -13,7 +13,7 @@ describe "people invoices page" do
   before { sign_in(admin) }
 
   context "no issues" do
-    it "doesnt shows an alert" do
+    it "doesnt show an alert" do
       visit new_group_person_membership_invoice_path(group_id: admin.groups.first.id, person_id: admin.id)
       expect(page).not_to have_css(".alert-danger")
     end
@@ -25,6 +25,16 @@ describe "people invoices page" do
     it "shows an alert message" do
       visit new_group_person_membership_invoice_path(group_id: admin.groups.first.id, person_id: admin.id)
       expect(page).to have_css(".alert-danger", text: "Vorname ist leer")
+    end
+  end
+
+  context "on non main_family_person family member" do
+    let(:person) { people(:familienmitglied2) }
+
+    it "shows an alert message" do
+      visit new_group_person_membership_invoice_path(group_id: person.groups.first.id, person_id: person.id)
+      expect(page).to have_css(".alert-warning", text: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. " \
+                               "Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.")
     end
   end
 end
