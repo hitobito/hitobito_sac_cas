@@ -226,6 +226,47 @@ describe Person do
 
       expect(person.correspondence).to eq("print")
     end
+
+    it "does not set to digital if email is not verified" do
+      password = "verysafepasswordfortesting"
+      person = Fabricate(:person, correspondence: "print", confirmed_at: nil)
+      expect(person.correspondence).to eq("print")
+
+      person.password = person.password_confirmation = password
+      person.save!
+
+      expect(person.correspondence).to eq("print")
+    end
+
+    context "with wso2_legacy_password_hash" do
+      let(:salt) { "salt" }
+      let(:hash) { generate_wso2_legacy_password_hash(password, salt) }
+      let(:password) { "verysafepasswordfortesting" }
+
+      let(:person_template) {
+        {correspondence: "print",
+         wso2_legacy_password_hash: hash,
+         wso2_legacy_password_salt: salt}
+      }
+
+      it "does not set to digital if email is not verified" do
+        person = Fabricate(:person, person_template.merge(confirmed_at: nil))
+        expect(person.correspondence).to eq("print")
+
+        person.valid_password?(password)
+
+        expect(person.correspondence).to eq("print")
+      end
+
+      it "does set to digital if email is verified" do
+        person = Fabricate(:person, person_template)
+        expect(person.correspondence).to eq("print")
+
+        person.valid_password?(password)
+
+        expect(person.correspondence).to eq("digital")
+      end
+    end
   end
 
   describe "#sac_tour_guide?" do
@@ -426,6 +467,66 @@ describe Person do
 
     it "doesnt enqueue the job if data quality errors exist" do
       expect { person.update!(first_name: nil) }.not_to change(job, :count)
+    end
+  end
+
+  describe "#valid_password?" do
+    let(:person) { people(:mitglied) }
+    let(:salt) { "salt" }
+    let(:hash) { generate_wso2_legacy_password_hash(password, salt) }
+    let(:password) { "M" * 12 }
+
+    before do
+      person.update!(wso2_legacy_password_hash: hash, wso2_legacy_password_salt: salt)
+    end
+
+    it "returns true for valid password" do
+      expect(person.wso2_legacy_password_hash).to be_present
+      expect(person.valid_password?(password)).to be_truthy
+      person.reload
+      # After the password is set, the legacy password attributes are cleared
+      expect(person.wso2_legacy_password_hash).to be_nil
+      expect(person.wso2_legacy_password_salt).to be_nil
+      expect(person.encrypted_password).to be_present
+      expect(person.valid_password?(password)).to be_truthy
+    end
+
+    it "returns false for invalid password" do
+      expect(person.wso2_legacy_password_hash).to be_present
+
+      expect(person.valid_password?("invalid_password")).to be_falsey
+    end
+  end
+
+  describe "#password=" do
+    let(:person) { people(:mitglied) }
+    let(:salt) { "salt" }
+
+    context "with invalid password" do
+      let(:short_password) { "Z" * 8 }
+      let(:hash) { generate_wso2_legacy_password_hash(short_password, salt) }
+
+      it "does set password even if it is too short" do
+        person.update!(wso2_legacy_password_hash: hash, wso2_legacy_password_salt: salt)
+        expect {
+          person.valid_password?(short_password)
+        }.not_to raise_error
+      end
+    end
+
+    context "with valid password" do
+      let(:valid_password) { "Z" * 12 }
+      let(:hash) { generate_wso2_legacy_password_hash(valid_password, salt) }
+
+      it "does set the password if it is valid" do
+        person.update!(wso2_legacy_password_hash: hash, wso2_legacy_password_salt: salt)
+
+        expect {
+          person.valid_password?(valid_password)
+        }.to change { person.encrypted_password.present? }.from(false).to(true)
+          .and change { person.wso2_legacy_password_hash.present? }.from(true).to(false)
+          .and change { person.wso2_legacy_password_salt.present? }.from(true).to(false)
+      end
     end
   end
 end
