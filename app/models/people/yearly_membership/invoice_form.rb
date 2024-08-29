@@ -9,7 +9,7 @@ class People::YearlyMembership::InvoiceForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  attribute :invoice_year, :integer
+  attribute :invoice_year, :integer, default: -> { Time.zone.today.year }
   attribute :invoice_date, :date
   attribute :send_date, :date
   attribute :role_finish_date, :date
@@ -31,8 +31,6 @@ class People::YearlyMembership::InvoiceForm
   def max_date = today.next_year.end_of_year
 
   private
-
-  attr_reader :person
 
   def today = Time.zone.today
 end

@@ -11,7 +11,7 @@
     = f.error_messages
   
     = f.labeled(:invoice_year) do
-      = f.inline_radio_button :invoice_year, @invoice_form.min_year, @invoice_form.min_year.to_s, true, checked: true
+      = f.inline_radio_button :invoice_year, @invoice_form.min_year, @invoice_form.min_year.to_s, true
       = f.inline_radio_button :invoice_year, @invoice_form.max_year, @invoice_form.max_year.to_s, true
   
     = f.labeled(:invoice_date) do
