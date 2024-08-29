@@ -114,7 +114,7 @@ module SacCas::Household
   end
 
   def update_main_person!(new_household)
-    new_main_person = main_person || (new_household && reference_person) || oldest_person  # may be nil when destroying
+    new_main_person = main_person || (new_household && reference_person) || oldest_person # may be nil when destroying
     others = people - [new_main_person]
     Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
     new_main_person&.update_columns(sac_family_main_person: true)

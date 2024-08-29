@@ -153,8 +153,8 @@ describe Household do
           household.remove(person)
           household.add(adult)
           household.save!
-        end.to change { adult.sac_family_main_person }.from(false).to(true).and \
-          change { person.sac_family_main_person }.from(true).to(false)
+        end.to change { adult.sac_family_main_person }.from(false).to(true)
+          .and change { person.sac_family_main_person }.from(true).to(false)
       end
 
       it "calls Memberships::FamilyMutation#join! for added person" do
