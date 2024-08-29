@@ -77,6 +77,47 @@ describe Wizards::Signup::SektionOperation do
     expect(max.phone_numbers.first.number).to eq "+41 79 123 45 67"
   end
 
+  it "#save! doesnt create invoice when approval is needed" do
+    expect { operation.save! }
+      .to not_change { ExternalInvoice::SacMembership.count }
+      .and not_change { Delayed::Job.where('handler like "%CreateInvoiceJob%"').count }
+  end
+
+  context "no approval" do
+    subject(:operation) { described_class.new(person_attrs: person_attrs, group: groups(:bluemlisalp_neuanmeldungen_nv), register_on:, newsletter:) }
+
+    # destroy sektion neuanmeldung group to trigger no approval needed case
+    before { group.really_destroy! }
+
+    it "#save! creates invoice and starts job" do
+      expect { operation.save! }
+        .to change { ExternalInvoice::SacMembership.count }.by(1)
+        .and change { Delayed::Job.where('handler like "%CreateInvoiceJob%"').count }.by(1)
+
+      invoice = ExternalInvoice::SacMembership.last
+      expect(invoice.state).to eq("draft")
+      expect(invoice.person_id).to eq(Person.last.id)
+      expect(invoice.issued_at).to eq(register_on)
+      expect(invoice.sent_at).to eq(register_on)
+      expect(invoice.link_id).to eq(groups(:bluemlisalp_neuanmeldungen_nv).layer_group.id)
+      expect(invoice.year).to eq(register_on.year)
+    end
+
+    context "register on before 15th of month" do
+      let(:register_on) { Date.new(2025, 6, 9) }
+
+      it "#save! creates invoice with 15th of month before register_on" do
+        expect { operation.save! }
+          .to change { ExternalInvoice::SacMembership.count }.by(1)
+          .and change { Delayed::Job.where('handler like "%CreateInvoiceJob%"').count }.by(1)
+
+        invoice = ExternalInvoice::SacMembership.last
+        expect(invoice.issued_at).to eq(Date.new(2025, 5, 15))
+        expect(invoice.sent_at).to eq(Date.new(2025, 5, 15))
+      end
+    end
+  end
+
   context "with later start date" do
     let(:register_on) { Date.new(2024, 7, 1) }
 
