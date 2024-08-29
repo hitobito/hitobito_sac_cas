@@ -44,6 +44,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
       .left_outer_joins(:external_invoices)
       .where("external_invoices.id IS NULL OR external_invoices.type != ? OR external_invoices.year != ?", ExternalInvoice::SacMembership.sti_name, @invoice_year)
+      .distinct
   end
 
   private
