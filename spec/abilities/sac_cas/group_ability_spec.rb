@@ -18,4 +18,15 @@ describe GroupAbility do
         groups(:bluemlisalp))
     end
   end
+
+  describe "create_yearly_membership_invoice" do
+    it "as admin it is permitted" do
+      expect(Ability.new(people(:admin))).to be_able_to(:create_yearly_membership_invoice, groups(:bluemlisalp))
+    end
+
+    it "as mitglied it is denied" do
+      expect(Ability.new(people(:mitglied))).not_to be_able_to(:create_yearly_membership_invoice,
+        groups(:bluemlisalp))
+    end
+  end
 end
