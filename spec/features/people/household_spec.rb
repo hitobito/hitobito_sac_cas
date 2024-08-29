@@ -12,14 +12,14 @@ describe HouseholdsController, js: true do
   let(:mitglied) { people(:mitglied) }
   let(:household) { Household.new(person) }
 
-  before do 
+  before do
     sign_in(people(:admin))
     visit edit_group_person_household_path(group_id: groups(:bluemlisalp).id, person_id: person.id)
   end
 
   it "can add person to household with id" do
     fill_in "household_add-ts-control", with: "600001"
-    find("span.highlight", text: "Edmund").click
+    find("span.highlight", text: "600001").click
     expect do
       click_on "Speichern"
       expect(page).to have_text "Haushalt wurde erfolgreich aktualisiert."
@@ -28,7 +28,7 @@ describe HouseholdsController, js: true do
 
   it "can add person to household with birth year" do
     fill_in "household_add-ts-control", with: "2000"
-    find("span.highlight", text: "Edmund").click
+    find("span.highlight", text: "2000").click
     expect do
       click_on "Speichern"
       expect(page).to have_text "Haushalt wurde erfolgreich aktualisiert."
