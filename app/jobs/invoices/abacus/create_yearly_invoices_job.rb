@@ -32,6 +32,8 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   private
 
   def extend_roles_for_invoicing
+    return if @role_finish_date.nil?
+
     Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date).extend_roles
   end
 
