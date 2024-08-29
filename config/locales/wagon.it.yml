@@ -579,6 +579,11 @@ it:
         many: ''
         other: ''
 
+      group/sac_cas_kurskader:
+        one: ''
+        many: ''
+        other: ''
+
       group/sac_cas_privathuetten:
         one: ''
         many: ''
@@ -660,6 +665,11 @@ it:
         other: ''
 
       group/sektions_kommissionen:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sektions_kommission:
         one: ''
         many: ''
         other: ''
@@ -781,6 +791,12 @@ it:
         description: ""
         huettenwartspartner: ""
         schluesseldepot: ""
+      group/sac_cas_kurskader/kursleiter:
+        one: ""
+        description: ""
+      group/sac_cas_kurskader/klassenlehrer:
+        one: ""
+        description: ""
       group/sac_cas_privathuetten/schreibrecht:
         one: ""
         description: ""
@@ -805,6 +821,12 @@ it:
         one: ""
         description: ""
       group/sektions_funktionaere/mitgliederverwaltung:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/kulturbeauftragter:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/umweltbeauftragter:
         one: ""
         description: ""
       group/sektions_funktionaere/finanzen:
@@ -888,6 +910,12 @@ it:
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
         one: ""
         description: ""
+      group/sektions_touren_und_kurse/kibe_chef:
+        one: ""
+        description: ""
+      group/sektions_touren_und_kurse/fabe_chef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse/jo_chef:
         one: ""
         description: ""
@@ -944,6 +972,21 @@ it:
         one: ""
         description: ""
       group/sektions_kommissionen/schreibrecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/leserecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/schreibrecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission/andere:
         one: ""
         description: ""
       group/sektions_kommission_huetten/mitglied:

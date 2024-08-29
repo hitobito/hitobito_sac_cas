@@ -553,6 +553,10 @@ en:
         one: ''
         other: ''
 
+      group/sac_cas_kurskader:
+        one: ''
+        other: ''
+
       group/sac_cas_privathuetten:
         one: ''
         other: ''
@@ -618,6 +622,10 @@ en:
         other: ''
 
       group/sektions_kommissionen:
+        one: ''
+        other: ''
+
+      group/sektions_kommission:
         one: ''
         other: ''
 
@@ -735,6 +743,12 @@ en:
         description: ""
         huettenwartspartner: ""
         schluesseldepot: ""
+      group/sac_cas_kurskader/kursleiter:
+        one: ""
+        description: ""
+      group/sac_cas_kurskader/klassenlehrer:
+        one: ""
+        description: ""
       group/sac_cas_privathuetten/schreibrecht:
         one: ""
         description: ""
@@ -759,6 +773,12 @@ en:
         one: ""
         description: ""
       group/sektions_funktionaere/mitgliederverwaltung:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/kulturbeauftragter:
+        one: ""
+        description: ""
+      group/sektions_funktionaere/umweltbeauftragter:
         one: ""
         description: ""
       group/sektions_funktionaere/finanzen:
@@ -842,6 +862,12 @@ en:
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
         one: ""
         description: ""
+      group/sektions_touren_und_kurse/kibe_chef:
+        one: ""
+        description: ""
+      group/sektions_touren_und_kurse/fabe_chef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse/jo_chef:
         one: ""
         description: ""
@@ -898,6 +924,21 @@ en:
         one: ""
         description: ""
       group/sektions_kommissionen/schreibrecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/leserecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/schreibrecht:
+        one: ""
+        description: ""
+      group/sektions_kommission/praesidium:
+        one: ""
+        description: ""
+      group/sektions_kommission/mitglied:
+        one: ""
+        description: ""
+      group/sektions_kommission/andere:
         one: ""
         description: ""
       group/sektions_kommission_huetten/mitglied:
