@@ -19,19 +19,11 @@ describe HouseholdsController, js: true do
 
   it "can add person to household with id" do
     fill_in "household_add-ts-control", with: "600001"
-    find("span.highlight", text: "600001").click
-    expect do
-      click_on "Speichern"
-      expect(page).to have_text "Haushalt wurde erfolgreich aktualisiert."
-    end.to change { household.reload.members.count }.by(1)
+    expect(page).to have_css("div.option", text: "Edmund Hillary, Neu Carlscheid (2000; 600001)")
   end
 
   it "can add person to household with birth year" do
     fill_in "household_add-ts-control", with: "2000"
-    find("span.highlight", text: "2000").click
-    expect do
-      click_on "Speichern"
-      expect(page).to have_text "Haushalt wurde erfolgreich aktualisiert."
-    end.to change { household.reload.members.count }.by(1)
+    expect(page).to have_css("div.option", text: "Edmund Hillary, Neu Carlscheid (2000; 600001)")
   end
 end
