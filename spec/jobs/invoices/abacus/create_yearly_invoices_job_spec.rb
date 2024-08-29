@@ -135,6 +135,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       expect { subject.perform }
         .to change(ExternalInvoice, :count).by(2)
         .and change(HitobitoLogEntry, :count).by(1)
+      expect(ExternalInvoice.last.state).to eq("error")
     end
   end
 

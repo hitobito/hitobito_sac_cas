@@ -136,11 +136,12 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def create_log_entry(part)
+    part.context_object.entity.update!(state: :error)
     HitobitoLogEntry.create!(
       subject: part.context_object.entity,
       category: "rechnungen",
       level: :error,
-      message: "TODO",
+      message: "Mitgliedschaftsrechnung konnte nicht in Abacus erstellt werden",
       payload: part.error_payload
     )
   end
