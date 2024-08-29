@@ -13,7 +13,7 @@ end
 describe Invoices::Abacus::CreateYearlyInvoicesJob do
   let(:params) { {invoice_year:, invoice_date:, send_date:, role_finish_date:} }
   let(:invoice_year) { 2024 }
-  let(:invoice_date) { nil }
+  let(:invoice_date) { Date.new(2024, 12, 31) }
   let(:send_date) { nil }
   let(:role_finish_date) { nil }
   let(:subject) { described_class.new(**params) }
@@ -63,6 +63,25 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       it "returns the correct people" do
         expect(subject.active_members).to match_array(@expected_people)
       end
+    end
+  end
+
+  describe "#perform" do
+    let(:host) { "https://abacus.example.com" }
+    let(:mandant) { 1234 }
+
+    before do
+      Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
+    end
+
+    let!(:people) do
+      10.times do |i|
+        create_person(params: {abacus_subject_key: "12#{i}"})
+      end
+    end
+
+    it "works" do
+      expect { subject.perform }.not_to raise_error
     end
   end
 end

@@ -16,6 +16,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def initialize(invoice_year:, invoice_date:, send_date:, role_finish_date:)
     super()
     raise ArgumentError, "invoice_year must be a positive integer" unless invoice_year.positive?
+    raise ArgumentError, "invoice_date must be a Date instance" unless invoice_date.is_a?(Date)
     @invoice_year = invoice_year
     @invoice_date = invoice_date
     @send_date = send_date
@@ -30,7 +31,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def perform
     # log start according to ticket
     extend_roles_for_invoicing
-    # process_invoices
+    process_invoices
     # log finish according to ticket
   end
 
@@ -67,7 +68,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     active_members.in_batches(of: BATCH_SIZE) do |people|
       slices = people.pluck(:id).each_slice(SLICE_SIZE).to_a
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
-        # check_terminated
+        # TODO: Call check_terminated https://github.com/hitobito/hitobito/issues/2772
         ActiveRecord::Base.connection_pool.with_connection do
           create_invoices(load_people(ids))
         end
@@ -92,7 +93,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     people.filter_map do |person|
       member = Invoices::SacMemberships::Member.new(person, context)
       if member.stammsektion_role
-        invoice = MembershipInvoice.new(member, member.active_memberships)
+        invoice = Invoices::Abacus::MembershipInvoice.new(member, member.active_memberships)
         invoice if invoice.invoice?
       end
     end
@@ -101,7 +102,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def create_sales_orders(membership_invoices)
     membership_invoices.map do |mi|
       invoice = create_external_invoice(mi)
-      SalesOrder.new(invoice, mi.positions, mi.additional_user_fields)
+      Invoices::Abacus::SalesOrder.new(invoice, mi.positions, mi.additional_user_fields)
     end
   end
 
@@ -139,6 +140,6 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def sales_order_interface
-    @sales_order_interface ||= SalesOrderInterface.new
+    @sales_order_interface ||= Invoices::Abacus::SalesOrderInterface.new
   end
 end
