@@ -48,6 +48,21 @@ module People
           created_at: role.created_at,
           delete_on: role.delete_on
         )
+        generate_invoice(role)
+      end
+
+      def generate_invoice(role)
+        if !role.beitragskategorie&.family? || role.person.sac_family_main_person
+          invoice = ExternalInvoice::SacMembership.create!(
+            person: role.person,
+            state: :draft,
+            year: Date.current.year,
+            issued_at: Date.current,
+            sent_at: Date.current,
+            link: role.layer_group
+          )
+          Invoices::Abacus::CreateInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
+        end
       end
     end
   end
