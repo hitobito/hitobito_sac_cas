@@ -9,6 +9,7 @@ module SacCas::Person::QueryHouseholdController
   extend ActiveSupport::Concern
 
   prepended do
+    self.serializer = :as_typeahead
     self.search_columns = [:id, :birthday, :first_name, :last_name, :email]
   end
 
