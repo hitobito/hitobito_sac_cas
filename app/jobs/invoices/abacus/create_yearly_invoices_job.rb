@@ -85,7 +85,17 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def create_invoices(people)
     membership_invoices = membership_invoices(people)
     sales_orders = create_sales_orders(membership_invoices)
-    parts = sales_order_interface.create_batch(sales_orders)
+
+    parts = begin
+      sales_order_interface.create_batch(sales_orders)
+    rescue RestClient::ExceptionWithResponse => e
+      # Clear external invoices from the sales_orders object
+      Rails.logger.error "Error while creating sales orders: #{e.response.body}"
+      sales_orders.each do |so|
+        so.entity.destroy
+      end
+      raise Parallel::Break
+    end
     log_error_parts(parts)
   end
 

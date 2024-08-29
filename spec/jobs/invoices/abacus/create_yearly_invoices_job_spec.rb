@@ -28,14 +28,14 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     # People that should show up
     people(:mitglied).update!(abacus_subject_key: "123")
     people(:familienmitglied).update!(abacus_subject_key: "124")
-    # valid_person = create_person(params: {abacus_subject_key: "128"})
-    # valid_person.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year)
+    valid_person = create_person(params: {abacus_subject_key: "128", first_name: "Joe", last_name: "Doe"})
+    valid_person.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year)
     [
       [
         people(:mitglied),
-        people(:familienmitglied)
-        # valid_person,
-        # create_person(params: {abacus_subject_key: "129"})
+        people(:familienmitglied),
+        valid_person,
+        create_person(params: {abacus_subject_key: "129", first_name: "Jane", last_name: "Doe"})
       ],
       [
         people(:familienmitglied2),
@@ -100,9 +100,14 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       allow(Invoices::Abacus::SalesOrderInterface).to receive(:new).and_return(sales_order_interface)
       allow(abacus_client).to receive(:token).and_return("42")
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
+
+      stub_const("Invoices::Abacus::CreateYearlyInvoicesJob::BATCH_SIZE", 2)
+      stub_const("Invoices::Abacus::CreateYearlyInvoicesJob::SLICE_SIZE", 2)
+      stub_const("Invoices::Abacus::CreateYearlyInvoicesJob::PARALLEL_THREADS", 1)
+
       stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
         .with(
-          body: batch_body_sales_orders,
+          body: batch_body_sales_orders_1,
           headers: {
             "Authorization" => "Bearer 42",
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
@@ -113,16 +118,27 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           body: batch_response_sales_orders,
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
         )
+      stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
+        .with(
+          body: batch_body_sales_orders_2,
+          headers: {
+            "Authorization" => "Bearer 42",
+            "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+          }
+        ).to_return(
+          status: 500,
+          body: ""
+        )
     end
 
-    it "works" do
-      p next_invoice_id
+    it "Creates the invoices and error logs" do
       expect { subject.perform }
-        .to change { ExternalInvoice.count }.by(2)
+        .to change(ExternalInvoice, :count).by(2)
+        .and change(HitobitoLogEntry, :count).by(1)
     end
   end
 
-  def batch_body_sales_orders
+  def batch_body_sales_orders_1
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
@@ -141,7 +157,31 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"CustomerId":124,"OrderDate":"#{invoice_date}","DeliveryDate":"2025-01-02","TotalAmount":267.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"4","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{expected_people[1].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{people(:familienmitglied2).membership_verify_token}","UserField13":"600004;Norgay;Nima;#{people(:familienmitglied_kind).membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
+      {"CustomerId":124,"OrderDate":"#{invoice_date}","DeliveryDate":"2025-01-02","TotalAmount":267.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 1}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{expected_people[1].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{people(:familienmitglied2).membership_verify_token}","UserField13":"600004;Norgay;Nima;#{people(:familienmitglied_kind).membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
+    HTTP
+  end
+
+  def batch_body_sales_orders_2
+    <<~HTTP
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST SalesOrders HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"CustomerId":128,"OrderDate":"#{invoice_date}","DeliveryDate":"2025-01-02","TotalAmount":150.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 2}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"#{expected_people[2].id};Doe;Joe;#{expected_people[2].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":40.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":10.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Porto Die Alpen Zentralverband","ProductNumber":"99"},"Accounts":{},"UserFields":{"UserField1":"Porto Die Alpen Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":42.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":578575972,"UserField4":"Einzelmitglied"}},{"PositionNumber":6,"Type":"Product","Pricing":{"PriceAfterFinding":13.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Porto Bulletin SAC Blüemlisalp","ProductNumber":"46"},"Accounts":{},"UserFields":{"UserField1":"Porto Bulletin SAC Blüemlisalp","UserField2":578575972,"UserField4":"Einzelmitglied"}}]}\r
+      --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
+      Content-Type: application/http\r
+      Content-Transfer-Encoding: binary\r
+      \r
+      POST SalesOrders HTTP/1.1\r
+      Content-Type: application/json\r
+      Accept: application/json\r
+      \r
+      {"CustomerId":129,"OrderDate":"#{invoice_date}","DeliveryDate":"2025-01-02","TotalAmount":150.0,"DocumentCodeInvoice":"R","Language":"de","UserFields":{"UserField1":"#{next_invoice_id + 3}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"#{expected_people[3].id};Doe;Jane;#{expected_people[3].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":40.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":10.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Porto Die Alpen Zentralverband","ProductNumber":"99"},"Accounts":{},"UserFields":{"UserField1":"Porto Die Alpen Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":42.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag SAC Blüemlisalp","UserField2":578575972,"UserField4":"Einzelmitglied"}},{"PositionNumber":6,"Type":"Product","Pricing":{"PriceAfterFinding":13.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Porto Bulletin SAC Blüemlisalp","ProductNumber":"46"},"Accounts":{},"UserFields":{"UserField1":"Porto Bulletin SAC Blüemlisalp","UserField2":578575972,"UserField4":"Einzelmitglied"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end
@@ -161,11 +201,11 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
       \r
-      HTTP/1.1 201 Created\r
+      HTTP/1.1 400 Bad Request\r
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SalesOrderId":45,"SalesOrderBacklogId":0}\r
+      {"error":{"code":null,"message":"Ungültiger Eingabewert: '124'. (Auftragkopf - Kunden-Nr.)"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
