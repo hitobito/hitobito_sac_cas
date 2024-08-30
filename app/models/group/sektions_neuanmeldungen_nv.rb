@@ -10,12 +10,12 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   ### ROLES
   class Neuanmeldung < ::Role
-    include SacCas::Role::MitgliedStammsektion
+    include SacCas::Role::MitgliedCommon
     include SacCas::Role::HardDestroy
   end
 
   class NeuanmeldungZusatzsektion < ::Role
-    include SacCas::Role::MitgliedZusatzsektion
+    include SacCas::Role::MitgliedCommon
   end
 
   class Leserecht < ::Role

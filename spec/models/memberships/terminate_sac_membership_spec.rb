@@ -81,8 +81,48 @@ describe Memberships::TerminateSacMembership do
     it "terminates mitglied and zusatzsektion role and resets primary group" do
       expect do
         expect(termination.save!).to eq true
-      end.to change { person.roles.count }.by(-2)
+      end.to not_change { person.roles.with_inactive.count }
+        .and change { person.roles.count }.by(-2)
       expect(person.reload.primary_group).to be_nil
+    end
+
+    it "destroys future roles" do
+      future_stammsektion = role.dup.tap do |r|
+        r.assign_attributes(start_on: role.end_on + 1, end_on: role.end_on + 1.year)
+        r.save!
+      end
+      future_beguenstigt = future_stammsektion
+        .dup
+        .becomes(Group::SektionsMitglieder::Beguenstigt)
+        .tap do |r|
+        r.assign_attributes(type: Group::SektionsMitglieder::Beguenstigt.sti_name)
+        r.save!
+      end
+
+      termination.save!
+
+      expect(Role.with_inactive.where(id: future_stammsektion.id)).not_to exist
+      expect(Role.with_inactive.where(id: future_beguenstigt.id)).not_to exist
+    end
+
+    it "does not touch ended roles" do
+      ended_stammsektion = role.dup.tap do |r|
+        r.assign_attributes(end_on: role.start_on - 1, start_on: role.start_on - 1.year)
+        r.save!
+      end
+      ended_beguenstigt = ended_stammsektion
+        .dup
+        .becomes(Group::SektionsMitglieder::Beguenstigt)
+        .tap do |r|
+        r.assign_attributes(type: Group::SektionsMitglieder::Beguenstigt.sti_name)
+        r.save!
+      end
+
+      termination.save!
+
+      expect { ended_stammsektion.reload }
+        .to not_change { ended_stammsektion.end_on }
+        .and not_change { ended_beguenstigt.reload.end_on }
     end
 
     context "termination at the end of the year" do
@@ -142,8 +182,8 @@ describe Memberships::TerminateSacMembership do
           expect do
             expect(termination.save!).to eq true
           end.to change { person.reload.data_retention_consent }.from(false).to(true)
-          expect(basic_login).to be_a(FutureRole)
-          expect(basic_login.convert_on).to eq Time.zone.today
+          expect(basic_login).to be_a(Group::AboBasicLogin::BasicLogin)
+          expect(basic_login.start_on).to eq Date.current
         end
 
         it "only updates consent when group is missing" do
@@ -218,6 +258,8 @@ describe Memberships::TerminateSacMembership do
 
         ## NOTE should these validate??
         def create_future_tourenleiter
+          Fabricate(:qualification, person: person,
+            qualification_kind: qualification_kinds(:ski_leader))
           Fabricate(
             Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
             person: person,
@@ -249,14 +291,21 @@ describe Memberships::TerminateSacMembership do
           create_tourenleiter
           expect do
             expect(termination.save!).to eq true
-          end.to change { person.roles.count }.by(-3)
+          end
+            .to change { person.roles.count }.by(-3)
+            .and not_change { person.roles.with_inactive.count }
         end
 
-        it "terminates future tourenleiter role" do
+        it "deletes future tourenleiter role" do
+          # future role should get deleted, current roles schould get ended
           create_future_tourenleiter
           expect do
             expect(termination.save!).to eq true
-          end.to change { person.roles.count }.by(-3)
+          end
+            # counts current roles, should get ended. does not count future role
+            .to change { person.roles.count }.by(-2)
+            # counts all roles including future and ended. future role should get deleted
+            .and change { person.roles.with_inactive.count }.by(-1)
         end
       end
     end

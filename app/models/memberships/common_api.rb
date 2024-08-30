@@ -13,7 +13,7 @@ module Memberships::CommonApi
   end
 
   def save
-    valid? && save_roles.all?
+    valid? && save_roles
   end
 
   def save!
@@ -69,6 +69,7 @@ module Memberships::CommonApi
       roles.each { |role| role.save(validate: false) }
       roles.each(&:save!)
     end.tap { update_primary_groups }
+    true
   end
 
   def update_primary_groups

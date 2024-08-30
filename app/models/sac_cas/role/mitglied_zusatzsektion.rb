@@ -19,7 +19,7 @@ module SacCas::Role::MitgliedZusatzsektion
     # This is used by the import as we don't have the complete memberhip history of a person
     # but have to import MitgliedZusatzsektion roles anyway.
     return if try(:skip_mitglied_during_validity_period_validation)
-
+    
     # to simplify, only validate if start_on is set (otherwise the role will be invalid anyway)
     return unless start_on
 

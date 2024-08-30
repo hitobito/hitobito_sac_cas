@@ -8,10 +8,13 @@
 require "spec_helper"
 
 describe Memberships::JoinZusatzsektion do
-  def create_role(key, role, owner: person, **attrs)
+  def create_role(key, role, owner: person, beitragskategorie: nil, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
-    Fabricate(role_type.sti_name, group: group, person: owner, **attrs)
+    Fabricate(role_type.sti_name, group: group, person: owner, **attrs).tap do |r|
+      # allows us to set beitragskategorie to family even if we don't technically have a family
+      Role.where(id: r.id).update_all(beitragskategorie: beitragskategorie) if beitragskategorie
+    end
   end
 
   it "initialization fails if no neuanmeldungen subgroup exists" do
@@ -97,7 +100,7 @@ describe Memberships::JoinZusatzsektion do
     context "family main person" do
       it "is invalid when join_sektion validates and person is not main family person" do
         expect(join_sektion).to receive(:validate_family_main_person?).and_return(true)
-        create_role(:bluemlisalp_mitglieder, "Mitglied")
+        create_role(:bluemlisalp_mitglieder, "Mitglied", beitragskategorie: :family)
         expect(join_sektion).not_to be_valid
         expect(errors).to eq [
           "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch",

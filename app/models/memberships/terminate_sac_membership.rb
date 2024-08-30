@@ -31,9 +31,9 @@ module Memberships
     ].freeze
 
     attribute :terminate_on, :date
-    attribute :subscribe_newsletter, :boolean
-    attribute :subscribe_fundraising_list, :boolean
-    attribute :data_retention_consent, :boolean
+    attribute :subscribe_newsletter, :boolean, default: false
+    attribute :subscribe_fundraising_list, :boolean, default: false
+    attribute :data_retention_consent, :boolean, default: false
     attribute :termination_reason_id, :integer
 
     validates :terminate_on, inclusion: {in: ->(_) { acceptable_termination_dates }}
@@ -56,7 +56,7 @@ module Memberships
     end
 
     def save
-      valid? && save_roles.all? && save_people.all?
+      valid? && destroy_future_roles && save_roles && save_people
     end
 
     private
@@ -76,15 +76,16 @@ module Memberships
       person.roles.select { |role| types.include?(role.type) }
     end
 
-    def end_on
-      [terminate_on, role.end_on].compact.min
+    def membership_end_on
+      original_membership_end_on = person.sac_membership.stammsektion_role.end_on
+      [terminate_on, original_membership_end_on].compact.min
     end
 
     def apply_role_changes(role)
       role.write_attribute(:terminated, true)
       role.termination_reason_id = termination_reason_id
 
-      role.end_on = end_on
+      role.end_on = membership_end_on
     end
 
     def build_future_role(person)
@@ -93,17 +94,23 @@ module Memberships
       person.roles.build(
         group: basic_login_group,
         type: Group::AboBasicLogin::BasicLogin.sti_name,
-        start_on: end_on + 1.day
+        start_on: membership_end_on + 1.day
       )
     end
 
+    def destroy_future_roles
+      affected_people.map do |person|
+        person.roles.future.where(type: RELEVANT_ROLES).destroy_all
+      end
+    end
+
     def save_people
-      affected_people.each do |person|
+      affected_people.map do |person|
         person.subscriptions.destroy_all
         subscribe_to(newsletter, person) if subscribe_newsletter
         subscribe_to(fundraising, person) if subscribe_fundraising_list
         person.update(data_retention_consent: data_retention_consent)
-      end
+      end.all?
     end
 
     def subscribe_to(mailing_list, person)
