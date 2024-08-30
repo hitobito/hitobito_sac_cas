@@ -594,6 +594,16 @@ fr:
         many: ''
         other: ''
 
+      group/sac_cas_verbaende:
+        one: ''
+        many: ''
+        other: ''
+
+      group/sac_cas_verband:
+        one: ''
+        many: ''
+        other: ''
+
       group/sektion:
         one: ''
         many: ''
@@ -811,6 +821,15 @@ fr:
         description: ""
         huettenwartspartner: ""
         schluesseldepot: ""
+      group/sac_cas_verband/praesidium:
+        one: ""
+        description: ""
+      group/sac_cas_verband/mitglied:
+        one: ""
+        description: ""
+      group/sac_cas_verband/andere:
+        one: ""
+        description: ""
       group/sektions_funktionaere/administration:
         one: ""
         description: ""
