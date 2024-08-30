@@ -40,10 +40,10 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def overlapping_roles(period, role_types)
-    Role
+    person
+      .roles
       .with_inactive
       .where(type: role_types.map(&:sti_name))
-      .where(person_id: person_id)
       .where.not(id: id)
       .to_a
       .select { |role| period.overlaps?(role.active_period) }

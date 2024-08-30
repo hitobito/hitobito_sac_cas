@@ -44,6 +44,7 @@ module People
         APPROVED_NEUANMELDUNGEN_ROLE.create!(
           group: approved_roles_group,
           person: role.person,
+          start_on: Date.current,
           beitragskategorie: role.beitragskategorie
         )
       end

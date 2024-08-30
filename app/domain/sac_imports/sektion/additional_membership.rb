@@ -34,8 +34,8 @@ module SacImports
           .first_or_initialize.tap do |role|
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
-            created_at: joining_date,
-            delete_on: DEFAULT_END_ON,
+            start_on: joining_date,
+            end_on: DEFAULT_END_ON,
             skip_mitglied_during_validity_period_validation: true
           }
         end

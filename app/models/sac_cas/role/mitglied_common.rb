@@ -15,7 +15,7 @@ module SacCas::Role::MitgliedCommon
 
   DEPENDANT_ROLE_TYPES = ["Group::SektionsMitglieder::Ehrenmitglied",
     "Group::SektionsMitglieder::Beguenstigt",
-    "Group::SektionsTourenkommission::Tourenleiter"].freeze
+    "Group::SektionsTourenUndKurse::Tourenleiter"].freeze
 
   included do
     self.permissions = []
@@ -24,15 +24,15 @@ module SacCas::Role::MitgliedCommon
     validates :start_on, presence: true
 
     after_create :check_data_quality
-    after_destroy :hard_delete_dependant_roles, :check_data_quality
+    after_destroy :destroy_dependant_roles, :check_data_quality
   end
 
-  def soft_delete_dependant_roles
-    dependant_roles.each { _1.destroy(always_soft_destroy: true) }
-  end
-
-  def hard_delete_dependant_roles
-    dependant_roles.with_inactive.each { _1.really_destroy! }
+  def destroy_dependant_roles
+    if destroyed?
+      dependant_roles.each { _1.really_destroy! }
+    else
+      dependant_roles.each { _1.destroy(always_soft_destroy: true) }
+    end
   end
 
   def dependant_roles

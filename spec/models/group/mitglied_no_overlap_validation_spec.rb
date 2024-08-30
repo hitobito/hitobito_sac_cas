@@ -32,7 +32,7 @@ describe :mitglied_no_overlap_validation do
           expect(new_role).to be_valid
 
           new_role.end_on = existing_role.start_on - 1.day
-          new_role.created_at = existing_role.created_at - 2.days
+          new_role.start_on = existing_role.start_on - 2.days
 
           expect(new_role).to be_valid
         end
@@ -42,7 +42,7 @@ describe :mitglied_no_overlap_validation do
             mitglied_type.sti_name,
             person: existing_role.person,
             group: existing_role.group,
-            created_at: existing_role.created_at,
+            start_on: existing_role.start_on,
             end_on: existing_role.end_on
           )
 
@@ -55,7 +55,7 @@ describe :mitglied_no_overlap_validation do
             mitglied_type.sti_name,
             person: existing_role.person,
             group: other_sektion_group,
-            created_at: existing_role.created_at,
+            start_on: existing_role.start_on,
             end_on: existing_role.end_on
           )
 
@@ -69,7 +69,7 @@ describe :mitglied_no_overlap_validation do
               other_type.sti_name,
               person: existing_role.person,
               group: other_type_group,
-              created_at: existing_role.created_at,
+              start_on: existing_role.start_on,
               end_on: existing_role.end_on
             )
 
@@ -154,14 +154,14 @@ describe :mitglied_no_overlap_validation do
 
         it "allows disjoint active_period" do
           new_role.attributes = {
-            created_at: existing_role.end_on + 1.day,
+            start_on: existing_role.end_on + 1.day,
             end_on: existing_role.end_on + 2.days
           }
           expect_no_overlap_error(new_role)
 
           new_role.attributes = {
-            created_at: existing_role.created_at - 2.days,
-            end_on: existing_role.created_at - 1.day
+            start_on: existing_role.start_on - 2.days,
+            end_on: existing_role.start_on - 1.day
           }
 
           expect_no_overlap_error(new_role)
@@ -169,7 +169,7 @@ describe :mitglied_no_overlap_validation do
 
         it "denies concurrent active_period" do
           new_role.attributes = {
-            created_at: existing_role.created_at,
+            start_on: existing_role.start_on,
             end_on: existing_role.end_on
           }
 
@@ -185,7 +185,7 @@ describe :mitglied_no_overlap_validation do
 
         it "allows concurrent active_period" do
           new_role.attributes = {
-            created_at: existing_role.created_at,
+            start_on: existing_role.start_on,
             end_on: existing_role.end_on
           }
 
@@ -201,7 +201,7 @@ describe :mitglied_no_overlap_validation do
 
         it "denies concurrent active_period" do
           new_role.attributes = {
-            created_at: existing_role.created_at,
+            start_on: existing_role.start_on,
             end_on: existing_role.end_on
           }
 

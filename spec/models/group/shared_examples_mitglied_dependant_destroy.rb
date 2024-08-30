@@ -9,20 +9,20 @@ shared_examples "Mitglied dependant destroy" do
   let(:person) { Fabricate(:person) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
-  let(:role) { described_class.new(person: person, group: group) }
+  let(:role) { described_class.new(person: person, group: group, created_at: 1.week.ago, start_on: 1.week.ago) }
 
   it "gets soft deleted when Mitglied role gets soft deleted" do
     freeze_time
-    mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, created_at: 1.year.ago)
+    mitglied_role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, created_at: 1.week.ago, start_on: 1.week.ago)
 
     role.save!
     expect(role).to be_valid
 
     mitglied_role.destroy
 
-    role.reload
+    role = Role.with_inactive.find(role.id)
     expect(role).to be_paranoia_destroyed
-    expect(role.deleted_at).to eq(mitglied_role.deleted_at)
+    expect(role.end_on).to eq(mitglied_role.end_on)
     expect(role.person.primary_group_id).to be_nil
   end
 
@@ -40,13 +40,13 @@ shared_examples "Mitglied dependant destroy" do
 
   it "gets ended when MitgliedZusatzsektion role gets ended" do
     freeze_time
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, start_on: 1.year.ago)
-    mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, start_on: 1.year.ago)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, created_at: 1.year.ago, start_on: 1.year.ago)
+    mitglied_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, created_at: 1.year.ago, start_on: 1.year.ago)
 
     role.save!
     expect(role).to be_valid
 
-    expect { mitglied_role.destroy }.to change { Role.with_inactive.find(mitglied_role.id).end_on }.from(nil)
+    expect { mitglied_role.destroy }.to change { Role.with_inactive.find(mitglied_role.id).end_on }.to(Date.current.yesterday)
 
     role.reload
     expect(role.end_on).to eq(mitglied_role.end_on)

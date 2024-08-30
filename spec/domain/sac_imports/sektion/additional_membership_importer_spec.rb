@@ -46,7 +46,7 @@ describe SacImports::Sektion::AdditionalMembershipsImporter do
     expect(role).to be_a Group::SektionsMitglieder::MitgliedZusatzsektion
     expect(role.beitragskategorie).to eq "adult"
     expect(role.group).to eq groups(:bluemlisalp_mitglieder)
-    expect(role.created_at).to eq Time.zone.parse("1.1.1960")
+    expect(role.start_on).to eq Date.parse("1.1.1960")
   end
 
   it "creates roles for multiple people" do
@@ -70,7 +70,7 @@ describe SacImports::Sektion::AdditionalMembershipsImporter do
     person = Person.find(id)
     expect(person.roles).to have(1).items
     role = person.roles.first
-    expect(role.created_at).to eq Time.zone.parse("1.1.1970")
+    expect(role.start_on).to eq Date.parse("1.1.1970")
   end
 
   it "does not check for existing main membership" do
@@ -96,8 +96,8 @@ describe SacImports::Sektion::AdditionalMembershipsImporter do
       Group::SektionsMitglieder::Mitglied.sti_name,
       group: membership_group,
       person: person,
-      created_at: Time.current.beginning_of_year,
-      delete_on: Date.current.end_of_year
+      start_on: Time.current.beginning_of_year,
+      end_on: Date.current.end_of_year
     )
 
     expect(importer).to receive(:each_row).and_yield(attrs(navision_id: id))
@@ -122,7 +122,7 @@ describe SacImports::Sektion::AdditionalMembershipsImporter do
       expect do
         2.times { importer.import! }
       end.to change { Role.count }.by(1)
-        .and change { Role.with_deleted.count }.by(1)
+        .and change { Role.with_inactive.count }.by(1)
     end
   end
 end

@@ -180,7 +180,7 @@ describe Memberships::JoinBase do
 
       def create_sac_family(person, *others)
         person.update!(sac_family_main_person: true)
-        household = Household.new(person)
+        household = Household.new(person, maintain_sac_family: false)
         others.each { |member| household.add(member) }
         household.save!
         person.reload

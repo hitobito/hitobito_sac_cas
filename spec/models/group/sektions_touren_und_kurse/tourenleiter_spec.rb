@@ -14,6 +14,6 @@ describe Group::SektionsTourenUndKurse::Tourenleiter do
     let(:funktionaere) { Group::SektionsFunktionaere.find_by(parent: sektion) }
     let(:tourenkommission) { Group::SektionsTourenUndKurse.find_or_create_by(parent: funktionaere) }
     let(:person) { Fabricate(:qualification).person }
-    let(:role) { described_class.new(group: tourenkommission, person: person) }
+    let(:role) { described_class.new(group: tourenkommission, person: person, created_at: 1.year.ago) }
   end
 end

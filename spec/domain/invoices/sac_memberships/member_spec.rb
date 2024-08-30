@@ -19,7 +19,7 @@ describe Invoices::SacMemberships::Member do
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        created_at: "2022-08-01"
+        start_on: "2022-08-01"
       )
     end
 
@@ -39,12 +39,12 @@ describe Invoices::SacMemberships::Member do
     let(:person) { context.people_with_membership_years.find(people(:mitglied).id) }
 
     it "counts years correctly" do
-      roles(:mitglied).update_column(:created_at, "2015-01-20")
+      roles(:mitglied).update_column(:start_on, "2015-01-20")
       expect(subject.membership_years).to eq(8)
     end
 
     it "is off by one in first year" do
-      roles(:mitglied).update_column(:created_at, date)
+      roles(:mitglied).update_column(:start_on, date)
       expect(subject.membership_years).to eq(1)
     end
   end
@@ -61,9 +61,9 @@ describe Invoices::SacMemberships::Member do
         role = Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
           person: person,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          created_at: "2022-08-01",
+          start_on: "2022-08-01",
           beitragskategorie: :adult,
-          delete_on: "2023-12-31"
+          end_on: "2023-12-31"
         )
         expect(subject.paying_person?(role.beitragskategorie)).to be(true)
       end

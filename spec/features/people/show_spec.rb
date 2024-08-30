@@ -32,7 +32,7 @@ describe "person show page" do
           group: mitglieder,
           person: admin,
           beitragskategorie: :adult,
-          created_at: Date.new(2023, 2, 1),
+          start_on: Date.new(2023, 2, 1),
           delete_on: Date.new(2023, 12, 31)
         )
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)

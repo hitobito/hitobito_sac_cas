@@ -81,8 +81,8 @@ module Export::Tabular::People
     # egal welche Sektion gerade exportiert wird
     def eintrittsjahr
       entry.roles_with_deleted.select do |role|
-        (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
-      end.map(&:created_at).min&.year
+        SacCas::MITGLIED_ROLES.include?(role.class)
+      end.map(&:start_on).min&.year
     end
 
     # Mögliche Werte: Weiblich / Männlich / Andere
