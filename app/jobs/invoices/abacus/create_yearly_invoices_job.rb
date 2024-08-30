@@ -29,12 +29,13 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def error(job, exception)
-    HitobitoLogEntry.create!(
-      category: "stapelverarbeitung",
-      level: :error,
-      message: "Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. Es erfolgt ein weiterer Versuch.",
-      payload: exception.message
-    )
+    super
+    create_error_log_entry("Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. " \
+              "Es erfolgt ein weiterer Versuch.", exception.message)
+  end
+
+  def failure(job)
+    create_error_log_entry("MV-Jahresinkassolauf abgebrochen", nil)
   end
 
   def perform
@@ -63,6 +64,15 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       category: "stapelverarbeitung",
       level: :info,
       message: "MV-Jahresinkassolauf: Fortschritt #{percent}%"
+    )
+  end
+
+  def create_error_log_entry(message, payload)
+    HitobitoLogEntry.create!(
+      category: "stapelverarbeitung",
+      level: :error,
+      message: message,
+      payload: payload
     )
   end
 
