@@ -7,9 +7,9 @@
 
 class UsePersonIdAsMembershipNumber < ActiveRecord::Migration[6.1]
   def up
-    if ActiveRecord::Base.connection.class.to_s == 'ActiveRecord::ConnectionAdapters::Mysql2Adapter'
+    if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       execute <<-SQL
-        ALTER TABLE people AUTO_INCREMENT = #{MIN_GENERATED_MEMBERSHIP_NUMBER};
+        SELECT setval(pg_get_serial_sequence('people', 'id'), #{MIN_GENERATED_MEMBERSHIP_NUMBER}, false);
       SQL
     end
 

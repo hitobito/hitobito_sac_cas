@@ -426,11 +426,11 @@ describe Role do
     end
 
     (SacCas::MITGLIED_ROLES - [Group::SektionsMitglieder::Mitglied]).each do |role_type|
-      it "returns 0 for #{role_type.sti_name}" do
+      it "returns 0 for #{role_type}" do
         create_role(delete_on: end_at)
         person.roles.update_all(type: role_type.sti_name)
         role = person.roles.with_membership_years.first
-        expect(role.class).to eq role_type
+        expect(role.class.sti_name).to eq role_type.sti_name
         expect(role.membership_years).to eq 0
       end
     end

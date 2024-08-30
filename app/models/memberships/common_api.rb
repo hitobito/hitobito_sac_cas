@@ -41,9 +41,10 @@ module Memberships::CommonApi
     Role.transaction(requires_new: true) do
       roles.each do |role|
         role.validate # required to trigger before_validation callbacks
+        ActiveRecord::Base.connection.create_savepoint("before_role_save")
         role.save(validate: false)
-      rescue ActiveRecord::NotNullViolation
-        # ignore the error, the role will be invalid anyway
+      rescue ActiveRecord::NotNullViolation, PG::NotNullViolation
+        ActiveRecord::Base.connection.rollback_to_savepoint("before_role_save")
       end
       roles.each do |role|
         role.validate

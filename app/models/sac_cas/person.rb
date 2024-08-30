@@ -12,6 +12,9 @@ module SacCas::Person
   DATA_QUALITIES = %w[ok info warning error]
 
   included do
+    Person::SEARCHABLE_ATTRS << :id
+    include PgSearchable
+
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
@@ -91,11 +94,11 @@ module SacCas::Person
   end
 
   def sac_tour_guide?
-    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES)
+    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES.map(&:sti_name))
   end
 
   def backoffice?
-    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES)
+    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
   end
 
   def sac_membership

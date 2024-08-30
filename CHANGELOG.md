@@ -1,4 +1,4 @@
-## unreleased
+## Version 2.2
 
 * Die ID der nächsten Sektion, Ortsgruppe oder des Nationalverbands zu jeder Rolle wird jetzt als Claim im OIDC Userinfo Endpoint ausgegeben, wenn der with_roles Scope verwendet wird. (hitobito_sac_cas#389)
 * Via Profil kann neu ein Mitglied-Ausweis angezeigt werden. Dieser enthält einen QR-Code zur Überprüfung der Mitgliederschaft der Person. (hitobito_sac_cas#70)

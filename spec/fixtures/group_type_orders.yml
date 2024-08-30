@@ -1,0 +1,71 @@
+root:
+  name: Group::SacCas
+  order_weight: 1
+
+geschaeftsstelle:
+  name: Group::Geschaeftsstelle
+  order_weight: 2
+
+abos:
+  name: Group::Abos
+  order_weight: 3
+
+abo_magazine:
+  name: Group::AboMagazine
+  order_weight: 4
+
+abo_die_alpen:
+  name: Group::AboMagazin
+  order_weight: 5
+
+externe_kontakte:
+  name: Group::ExterneKontakte
+  order_weight: 6
+
+sektion:
+  name: Group::Sektion
+  order_weight: 7
+
+funktionaere:
+  name: Group::SektionsFunktionaere
+  order_weight: 8
+
+mitglieder:
+  name: Group::SektionsMitglieder
+  order_weight: 9
+
+neuanmeldungen_nv:
+  name: Group::SektionsNeuanmeldungenNv
+  order_weight: 10
+
+neuanmeldungen_sektion:
+  name: Group::SektionsNeuanmeldungenSektion
+  order_weight: 11
+
+ortsgruppe_ausserberg:
+  name: Group::Ortsgruppe
+  order_weight: 12
+
+ortsgruppe_ausserberg_mitglieder:
+  name: Group::SektionsMitglieder
+  order_weight: 13
+
+ortsgruppe_ausserberg_neuanmeldungen_nv:
+  name: Group::SektionsNeuanmeldungenNv
+  order_weight: 14
+
+ortsgruppe_ausserberg_funktionaere:
+  name: Group::SektionsFunktionaere
+  order_weight: 15
+
+ortsgruppe_ausserberg_touren_und_kurse:
+  name: Group::SektionsTourenUndKurse
+  order_weight: 16
+
+ortsgruppe_ausserberg_touren_und_kurse_sommer:
+  name: Group::SektionsTourenUndKurseSommer
+  order_weight: 17
+
+ortsgruppe_ausserberg_touren_und_kurse_winter:
+  name: Group::SektionsTourenUndKurseWinter
+  order_weight: 18
