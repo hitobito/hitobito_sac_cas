@@ -41,10 +41,6 @@ module SacCas::Role::MitgliedCommon
       .where(type: DEPENDANT_ROLE_TYPES, groups: {layer_group_id: group.layer_group_id})
   end
 
-  def active_period
-    [start_on, end_on].compact.min..end_on
-  end
-
   private
 
   def check_data_quality
