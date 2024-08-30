@@ -46,14 +46,14 @@ describe Memberships::SwitchStammsektion do
     end
 
     it "is valid with membership in different section" do
-      create_role(:matterhorn_mitglieder, "Mitglied", created_at: 1.year.ago)
+      create_role(:matterhorn_mitglieder, "Mitglied", start_on: 1.year.ago)
       expect(switch).to be_valid
     end
 
     describe "existing membership in tree" do
       describe "join section" do
         it "is invalid if person is join_section member" do
-          create_role(:bluemlisalp_mitglieder, "Mitglied", created_at: 1.year.ago)
+          create_role(:bluemlisalp_mitglieder, "Mitglied", start_on: 1.year.ago)
           expect(switch).not_to be_valid
           expect(errors).to eq [
             "Person ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch"
@@ -66,7 +66,7 @@ describe Memberships::SwitchStammsektion do
           create_role(
             :bluemlisalp_ortsgruppe_ausserberg_mitglieder,
             "Mitglied",
-            created_at: 1.year.ago
+            start_on: 1.year.ago
           )
           expect(switch).to be_valid
         end
@@ -96,7 +96,7 @@ describe Memberships::SwitchStammsektion do
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
       let(:matterhorn_funktionaere) { groups(:matterhorn_funktionaere) }
       let!(:bluemlisalp_mitglied) do
-        create_role(:bluemlisalp_mitglieder, "Mitglied", created_at: 1.year.ago)
+        create_role(:bluemlisalp_mitglieder, "Mitglied", start_on: 1.year.ago)
       end
       let(:matterhorn_mitglied) { matterhorn_mitglieder.roles.find_by(person:) }
 
@@ -104,9 +104,9 @@ describe Memberships::SwitchStammsektion do
         expect do
           expect(switch.save).to eq true
         end.not_to(change { person.reload.roles.count })
-        expect(bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
-        expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
-        expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
+        expect(bluemlisalp_mitglied.reload.end_on).to eq now.to_date.yesterday
+        expect(matterhorn_mitglied.start_on).to eq now.to_date
+        expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
       end
     end
@@ -131,13 +131,13 @@ describe Memberships::SwitchStammsektion do
         @bluemlisalp_mitglied = create_role(
           :bluemlisalp_mitglieder,
           "Mitglied",
-          created_at: 1.year.ago
+          start_on: 1.year.ago
         )
         @bluemlisalp_mitglied_other = create_role(
           :bluemlisalp_mitglieder,
           "Mitglied",
           owner: other.reload,
-          created_at: 1.year.ago
+          start_on: 1.year.ago
         )
         create_sac_family(person, other)
         Role.where(id: [@bluemlisalp_mitglied.id,
@@ -154,12 +154,12 @@ describe Memberships::SwitchStammsektion do
         expect do
           expect(switch.save!).to eq true
         end.not_to(change { Role.count })
-        expect(@bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
-        expect(@bluemlisalp_mitglied_other.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
-        expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
-        expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
-        expect(matterhorn_mitglied_other.created_at).to eq now.to_s(:db)
-        expect(matterhorn_mitglied_other.delete_on).to eq now.end_of_year.to_date
+        expect(@bluemlisalp_mitglied.reload.end_on).to eq now.yesterday.to_date
+        expect(@bluemlisalp_mitglied_other.reload.end_on).to eq now.yesterday.to_date
+        expect(matterhorn_mitglied.start_on).to eq now.to_date
+        expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
+        expect(matterhorn_mitglied_other.start_on).to eq now.to_date
+        expect(matterhorn_mitglied_other.end_on).to eq now.end_of_year.to_date
       end
     end
   end

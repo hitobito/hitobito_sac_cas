@@ -21,7 +21,7 @@ module Memberships
       # for the person as a fallback value.
       beitragskategorie = old_role&.beitragskategorie ||
         SacCas::Beitragskategorie::Calculator.new(person).calculate
-      new_role = new_membership(person, beitragskategorie, old_role.end_on_was)
+      new_role = new_membership(person, beitragskategorie, old_role&.end_on_was)
 
       [old_role, new_role].compact
     end
@@ -37,8 +37,8 @@ module Memberships
     def new_membership(person, beitragskategorie, end_on)
       membership_group.roles.build({
         type: role_type,
-        start_on: now,
-        end_on:,
+        start_on: now.to_date,
+        end_on: end_on || now.to_date.end_of_year,
         person:,
         # `Role#set_beitragskategorie` gets called in a before_validation callback, but
         # `Memberships::CommonApi#validate_roles` and `Memberships::CommonApi#save_roles`
