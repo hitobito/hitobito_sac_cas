@@ -93,6 +93,11 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     let(:abacus_client) { Invoices::Abacus::Client.new }
     let(:sales_order_interface) { Invoices::Abacus::SalesOrderInterface.new(abacus_client) }
     let(:expected_people) { mix_of_people[0] }
+    let(:perform_job) do
+      subject.enqueue!.tap do |job_instance|
+        Delayed::Worker.new.run(job_instance)
+      end
+    end
 
     before do
       expected_people
@@ -137,7 +142,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       end
 
       it "Creates the invoices and error logs" do
-        expect { subject.perform }
+        expect { perform_job }
           .to change(ExternalInvoice, :count).by(4)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
@@ -149,7 +154,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         let(:role_finish_date) { Date.new(invoice_year, 12, 31) }
 
         it "Creates the invoices and error logs" do
-          expect { subject.perform }
+          expect { perform_job }
             .to change(ExternalInvoice, :count).by(4)
             .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
             .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
@@ -175,12 +180,16 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       end
 
       it "Creates the invoices and error logs" do
-        expect { subject.perform }
-          .to raise_error(RestClient::InternalServerError)
-          .and change(ExternalInvoice, :count).by(2)
+        expect(HitobitoLogEntry.where(level: :error).count).to be_zero
+        expect { perform_job }
+          .to change(ExternalInvoice, :count).by(2)
+          .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :info).count }.by(2)
         expect(ExternalInvoice.last.state).to eq("open")
         expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 50%")
+        expect(HitobitoLogEntry.where(level: :error).last.message).to eq(
+          "Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. Es erfolgt ein weiterer Versuch."
+        )
       end
     end
   end

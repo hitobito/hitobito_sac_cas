@@ -28,6 +28,15 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     super
   end
 
+  def error(job, exception)
+    HitobitoLogEntry.create!(
+      category: "stapelverarbeitung",
+      level: :error,
+      message: "Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. Es erfolgt ein weiterer Versuch.",
+      payload: exception.message
+    )
+  end
+
   def perform
     log_progress(0)
     extend_roles_for_invoicing
@@ -86,7 +95,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
         end
       # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
       rescue Exception => e
-        Rails.logger.error "Error while creating invoices: #{e.response.body}"
+        Rails.logger.error "Error while creating invoices: #{e.message}"
         raise_exception = e
         raise Parallel::Break
       end
