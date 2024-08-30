@@ -83,7 +83,8 @@ describe "people/_details_sac_cas.html.haml" do
       Group::SektionsMitglieder::Mitglied.create!(
         person:,
         group: groups(:bluemlisalp_mitglieder),
-        start_on: 1.month.from_now
+        start_on: 1.month.from_now,
+        end_on: 2.months.from_now
       )
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"

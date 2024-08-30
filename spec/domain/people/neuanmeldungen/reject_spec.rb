@@ -60,7 +60,7 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it "deletes rejected Roles, if it has other deleted roles" do
-    person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
+    person.roles.each { |role| role.update!(end_on: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
     subject = rejector
     subject.call
