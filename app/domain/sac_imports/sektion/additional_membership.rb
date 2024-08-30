@@ -35,7 +35,7 @@ module SacImports
           role.attributes = {
             beitragskategorie: BEITRAGSKATEGORIEN[row[:beitragskategorie]],
             created_at: joining_date,
-            delete_on: DEFAULT_DELETE_ON,
+            delete_on: DEFAULT_END_ON,
             skip_mitglied_during_validity_period_validation: true
           }
         end

@@ -81,9 +81,9 @@ module SacImports
       def print_summary
         membership_groups.each_value do |group|
           active = target_role_type.where(group_id: group.id).count
-          deleted = target_role_type.where(group_id: group.id).deleted.count
+          ended = target_role_type.ended.where(group_id: group.id).count
           output.puts(
-            "#{group.parent} hat #{active} aktive, #{deleted} inaktive Hauptmitgliedschaften"
+            "#{group.parent} hat #{active} aktive, #{ended} inaktive Hauptmitgliedschaften"
           )
         end
 

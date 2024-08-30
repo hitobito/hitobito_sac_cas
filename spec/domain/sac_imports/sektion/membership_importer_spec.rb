@@ -47,14 +47,14 @@ describe SacImports::Sektion::MembershipsImporter do
     expect(role).to be_a Group::SektionsMitglieder::Mitglied
     expect(role.beitragskategorie).to eq "adult"
     expect(role.group).to eq groups(:bluemlisalp_mitglieder)
-    expect(role.created_at).to eq Time.zone.parse("1.1.1960")
+    expect(role.start_on).to eq Date.parse("1.1.1960")
   end
 
   it "sets correct delete_on" do
     expect(importer).to receive(:each_row).and_yield(attrs(last_exit_date: nil))
     expect { importer.import! }.to change { Role.count }.by(1)
 
-    expect(Role.last.delete_on).to eq SacImports::Sektion::Membership::DEFAULT_DELETE_ON
+    expect(Role.last.end_on).to eq SacImports::Sektion::Membership::DEFAULT_END_ON
   end
 
   it "sets correct deleted_at for terminated membership" do
@@ -62,9 +62,9 @@ describe SacImports::Sektion::MembershipsImporter do
       last_exit_date: "31.12.1980",
       member_type: "Ausgetreten"
     ))
-    expect { importer.import! }.to change { Role.only_deleted.count }.by(1)
+    expect { importer.import! }.to change { Role.ended.count }.by(1)
 
-    expect(Role.with_ended.last.end_on).to eq Time.zone.parse("31.12.1980")
+    expect(Role.ended.last.end_on).to eq Date.parse("31.12.1980")
   end
 
   it "creates roles for multiple people" do
@@ -88,7 +88,7 @@ describe SacImports::Sektion::MembershipsImporter do
     person = Person.find(id)
     expect(person.roles).to have(1).items
     role = person.roles.first
-    expect(role.created_at).to eq Time.zone.parse("1.1.1970")
+    expect(role.start_on).to eq Date.parse("1.1.1970")
   end
 
   it "creates ehrenmitglied role with Ja parameter" do
