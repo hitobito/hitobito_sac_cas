@@ -33,14 +33,14 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         .and change { role.reload.delete_on }.to(date)
     end
 
-    it "only makes 2 database queries" do
+    it "only makes 3 database queries" do
       query_count = 0
       ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, details|
-        query_count += 1 unless details[:name] == "SCHEMA"
+        query_count += 1
       end
 
       extend_roles
-      expect(query_count).to eq(2) # SELECT and UPDATE
+      expect(query_count).to eq(3) # SELECT in batches (2x) and UPDATE all (1x)
     end
   end
 
