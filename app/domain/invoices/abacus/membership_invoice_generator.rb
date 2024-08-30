@@ -66,6 +66,6 @@ class Invoices::Abacus::MembershipInvoiceGenerator
   def context = @context ||= Invoices::SacMemberships::Context.new(reference_date)
 
   def person = context.people_with_membership_years(includes: []).find(person_id).tap do |p|
-    ActiveRecord::Associations::Preloader.new.preload([p], :roles, Role.with_deleted)
+    ActiveRecord::Associations::Preloader.new.preload([p], :roles, Role.with_inactive)
   end
 end

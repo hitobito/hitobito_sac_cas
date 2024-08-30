@@ -36,7 +36,15 @@ module Invoices
       end
 
       def people_with_membership_years(includes: [:roles])
-        Person.with_membership_years("people.*", Date.new(date.year - 1, 12, 31)).includes(includes)
+        preload_roles = includes.delete(:roles)
+        Person
+          .with_membership_years("people.*", Date.new(date.year - 1, 12, 31))
+          .includes(includes)
+          .tap do |people|
+            next unless preload_roles
+
+            ActiveRecord::Associations::Preloader.new.preload(people, :roles, Role.with_inactive)
+          end
       end
     end
   end
