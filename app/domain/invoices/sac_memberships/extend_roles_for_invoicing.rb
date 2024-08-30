@@ -18,7 +18,7 @@ module Invoices::SacMemberships
     end
 
     def extend_roles
-      role_ids = Role.where(type: ROLES_TO_EXTEND, terminated: false, delete_on: ..@date, person_id: person_ids).pluck(:id)
+      role_ids = Role.where(type: ROLES_TO_EXTEND, terminated: false, delete_on: ...@date, person_id: person_ids).pluck(:id)
 
       Role.where(id: role_ids).update_all(delete_on: @date) if role_ids.present?
     end
@@ -27,7 +27,7 @@ module Invoices::SacMemberships
 
     def person_ids
       Person.joins(:roles)
-        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, delete_on: ..@date})
+        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, delete_on: ...@date})
         .where.not(id: ExternalInvoice::SacMembership.where(year: @date.year).select(:person_id))
         .where.not(data_quality: :error)
         .select(:id)
