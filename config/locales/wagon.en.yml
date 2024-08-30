@@ -1168,11 +1168,13 @@ en:
     membership_invoices:
       no_invoice_possible: ""
       no_memberships: ""
+      data_quality_error: ""
       success_notice: ""
       new:
         title: ""
         alert_info: ""
         alert_warning: ""
+        alert_error: ""
         create_invoice: ""
         mv_yearly_invoice: ""
         zusatzsektion_eintrittsrechnung: ""
