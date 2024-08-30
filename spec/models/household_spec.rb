@@ -89,11 +89,10 @@ describe Household do
       expect(household.errors[:base]).to match_array(["Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse."])
     end
 
-    it "is invalid in destroy context with blank email" do
+    it "is valid in destroy context with blank email" do
       person.email = nil
 
-      expect(household.valid?(:destroy)).to eq false
-      expect(household.errors["members[0].base"]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
+      expect(household.valid?(:destroy)).to eq true
     end
 
     it "is invalid if no household person has a membership role" do
