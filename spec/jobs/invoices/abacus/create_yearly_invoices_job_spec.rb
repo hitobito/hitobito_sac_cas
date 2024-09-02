@@ -147,7 +147,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         expect { Delayed::Worker.new.run(job_instance) }
           .to change(ExternalInvoice, :count).by(4)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
-          .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
+          .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
         expect(ExternalInvoice.last.state).to eq("error")
         expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
       end
@@ -159,7 +159,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           expect { Delayed::Worker.new.run(job_instance) }
             .to change(ExternalInvoice, :count).by(4)
             .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
-            .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
+            .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
           expect(ExternalInvoice.where(state: :draft).count).to be_zero
           expect(ExternalInvoice.last.state).to eq("error")
           expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
@@ -211,7 +211,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         # retry job to trigger failure
         expect { Delayed::Worker.new.run(job_instance) }
           .to not_change(ExternalInvoice, :count)
-          .and change { HitobitoLogEntry.where(level: :info).count }.by(2)
+          .and change { HitobitoLogEntry.where(level: :info).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(2)
         expect(HitobitoLogEntry.where(level: :error).last.message).to eq("MV-Jahresinkassolauf abgebrochen")
         expect(ExternalInvoice.where(state: :draft).count).to be_zero

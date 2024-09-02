@@ -94,13 +94,27 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date).extend_roles
   end
 
+  def start_progress
+    @current_logged_percent = 0
+    @members_count = active_members.count
+    @processed_members = 0
+  end
+
+  def update_progress(people_count)
+    @processed_members += people_count
+    @progress_percent = @processed_members * 100 / @members_count
+    if @progress_percent >= (@current_logged_percent + 10)
+      @current_logged_percent = @progress_percent / 10 * 10
+      log_progress(@current_logged_percent)
+    end
+  end
+
   def process_invoices
-    current_logged_percent = 0
-    members_count = active_members.count
-    processed_members = 0
     raise_exception = nil
+    start_progress
     active_members.in_batches(of: BATCH_SIZE) do |people|
-      slices = people.pluck(:id).each_slice(SLICE_SIZE).to_a
+      people_ids = people.pluck(:id)
+      slices = people_ids.each_slice(SLICE_SIZE).to_a
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
         # TODO: Call check_terminated https://github.com/hitobito/hitobito/issues/2772
         ActiveRecord::Base.connection_pool.with_connection do
@@ -112,15 +126,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
         raise Parallel::Break
       end
       # rubocop:enable Lint/RescueException
-      processed_members += people.count # Can't use BATCH_SIZE since we would end up with more than 100%
-      progress_percent = processed_members * 100 / members_count
-      if progress_percent >= (current_logged_percent + 10)
-        current_logged_percent = progress_percent / 10 * 10
-        log_progress(current_logged_percent)
-      end
       if raise_exception
         raise raise_exception
       end
+      update_progress(people_ids.size)
     end
   end
 
