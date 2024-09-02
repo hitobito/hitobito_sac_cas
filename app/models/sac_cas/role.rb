@@ -6,76 +6,56 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Role
-  module ClassMethods
+  module ClassMethods   
     def select_with_membership_years(date = Time.zone.today)
       # because parameter passed in query is CET we make sure to convert all database dates from UTC to CET
       <<~SQL
-              CASE
-                -- membership_years is only calculated for Mitglied roles
-                WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-                ELSE (
-                    TIMESTAMPDIFF(
-                        YEAR, 
-                        DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")),
-                        LEAST(
-                            DATE('#{date.strftime("%Y-%m-%d")}'),
-                            -- add one day to include last day in calculation
-                            COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                            COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                            COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
-                        )
-                    ) 
-                + CASE
-                -- check if dates are the same, to not add fractional year
-                  WHEN (
-                      MONTH(LEAST(
-                          DATE('#{date.strftime("%Y-%m-%d")}'),
-                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
-                      )) = MONTH(CONVERT_TZ(roles.created_at, "UTC", "CET")) AND
-                      DAY(LEAST(
-                          DATE('#{date.strftime("%Y-%m-%d")}'),
-                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-                          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
-                      )) = DAY(CONVERT_TZ(roles.created_at, "UTC", "CET"))
-                  ) THEN 0
-                   ELSE
-                        (
-                      -- calculate the fractional year
-                      DATEDIFF(
-                        LEAST(
-                          '#{date.strftime("%Y-%m-%d")}',
-                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
-                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
-                          COALESCE(roles.delete_on, '9999-12-31')
-                        ),
-                        DATE(
-                          ADDDATE(
-                            CONVERT_TZ(roles.created_at, "UTC", "CET"), 
-                            INTERVAL TIMESTAMPDIFF(
-                              YEAR, 
-                              DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")), 
-                              LEAST(
-                                '#{date.strftime("%Y-%m-%d")}',
-                                COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
-                                COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
-                                COALESCE(roles.delete_on, '9999-12-31')
-                              )
-                            ) YEAR
-                          )
-                        )
-                      ) / CASE WHEN DAY(LAST_DAY(CONCAT(YEAR(LEAST(
-                          '#{date.strftime("%Y-%m-%d")}',
-                          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")), '9999-12-31'),
-                          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")), '9999-12-31'),
-                          COALESCE(roles.delete_on, '9999-12-31')
-                        )), '-02-01'))) = 29 THEN 366 ELSE 365 END
+        CASE
+          -- membership_years is only calculated for Mitglied roles
+          WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+          ELSE (
+            TIMESTAMPDIFF(
+              YEAR, 
+              DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")),
+              #{calculate_least_date(date)}
+            ) 
+            + CASE
+              -- check if dates are the same, to not add fractional year
+              WHEN (
+                MONTH(#{calculate_least_date(date)}) = MONTH(CONVERT_TZ(roles.created_at, "UTC", "CET")) AND
+                DAY(#{calculate_least_date(date)}) = DAY(CONVERT_TZ(roles.created_at, "UTC", "CET"))
+              ) THEN 0
+              ELSE
+                (
+                  -- calculate the fractional year
+                  DATEDIFF(
+                    #{calculate_least_date(date)},
+                    DATE(
+                      ADDDATE(
+                        CONVERT_TZ(roles.created_at, "UTC", "CET"), 
+                        INTERVAL TIMESTAMPDIFF(
+                          YEAR, 
+                          DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")), 
+                          #{calculate_least_date(date)}
+                        ) YEAR
+                      )
                     )
-              END
+                  ) / CASE WHEN DAY(LAST_DAY(CONCAT(YEAR(#{calculate_least_date(date)}), '-02-01'))) = 29 THEN 366 ELSE 365 END
+                )
+            END
           )
         END AS membership_years
+      SQL
+    end
+
+    def calculate_least_date(date)
+      <<~SQL
+        LEAST(
+          DATE('#{date.strftime("%Y-%m-%d")}'),
+          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
+          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
+        )
       SQL
     end
   end
