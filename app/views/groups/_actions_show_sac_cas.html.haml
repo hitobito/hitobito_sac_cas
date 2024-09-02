@@ -5,3 +5,9 @@
 
 - if can?(:export_mitglieder, entry) && can?(:manage_section_remarks, Person.new) && (entry.is_a?(Group::Sektion) || entry.is_a?(Group::Ortsgruppe))
   = action_button(t('.export_mitglieder'), group_mitglieder_exports_path(@group, format: :csv), :download, method: :post)
+
+- if can?(:create_yearly_membership_invoice, entry) && entry.root?
+  = action_button(t('.create_yearly_membership_invoice'),
+                  new_group_yearly_membership_invoice_path(@group),
+                  :envelope,
+                  method: :get)

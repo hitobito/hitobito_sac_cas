@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :groups, only: [] do
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
+      resources :yearly_membership_invoices, only: [:create, :new], module: :people
 
       resources :events, only: [] do
         scope module: 'event' do
