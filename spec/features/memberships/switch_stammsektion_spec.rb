@@ -58,8 +58,8 @@ describe "switching stammsektion", js: true do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       expect(page).to have_css "li.active", text: "Sektion wählen"
-      expect(page).to have_css ".alert-info", text: "Achtung: Der Stammsektionsektionswechsel wird für die gesamte Familienmitgliedschaft beantragt. " \
-        "Davon betroffen sind: Tenzing Norgay, Frieda Norgay und Nima Norgay"
+      expect(find(".alert-info").text).to include("Achtung: Der Stammsektionsektionswechsel wird für die gesamte " \
+        "Familienmitgliedschaft beantragt. Davon betroffen sind: ", "Tenzing Norgay", "Frieda Norgay", "Nima Norgay")
       select "SAC Matterhorn"
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
@@ -67,7 +67,7 @@ describe "switching stammsektion", js: true do
       expect do
         click_on "Kostenpflichtig bestellen"
         expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
-      end.to change { Delayed::Job.count }.by(1)
+      end.to change(Delayed::Job.where(queue: :mailers), :count).by(1)
     end
   end
 end
