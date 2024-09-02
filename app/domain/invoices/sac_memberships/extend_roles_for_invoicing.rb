@@ -7,11 +7,11 @@
 
 module Invoices::SacMemberships
   class ExtendRolesForInvoicing
-    ROLES_TO_EXTEND = SacCas::MITGLIED_ROLES + [
+    ROLES_TO_EXTEND = (SacCas::MITGLIED_ROLES + [
       Group::Ehrenmitglieder::Ehrenmitglied,
       Group::SektionsMitglieder::Beguenstigt,
       Group::SektionsMitglieder::Ehrenmitglied
-    ].map(&:sti_name)
+    ]).map(&:sti_name)
 
     def initialize(date)
       @date = date
