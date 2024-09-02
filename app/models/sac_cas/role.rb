@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Role
-  module ClassMethods   
+  module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
@@ -38,7 +38,7 @@ module SacCas::Role
         END AS membership_years
       SQL
     end
-    
+
     def calculate_least_date(date)
       <<~SQL
         LEAST(
@@ -48,7 +48,7 @@ module SacCas::Role
           COALESCE(roles.delete_on::date + INTERVAL '1 day', '9999-12-31')
         )
       SQL
-    end    
+    end
   end
 
   def self.prepended(base)
