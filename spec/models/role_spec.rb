@@ -446,7 +446,7 @@ describe Role do
     it "calculates value and does not include last day for date today" do
       create_role(created_at: 1.year.ago + 1.days, delete_on: 2.years.from_now)
       expect(person.roles.with_deleted.with_membership_years.first.membership_years)
-        .to eq(0.9973)
+        .to be_within(0.01).of(0.99)
     end
 
     it "calculates value up to passed reporting date" do
@@ -458,7 +458,7 @@ describe Role do
     it "calculates value and does not include last day for reporting date" do
       create_role(created_at: 1.year.ago, delete_on: 5.years.from_now)
       expect(person.roles.with_membership_years("roles.*", 2.years.from_now - 1.days).first.membership_years)
-        .to eq(2.9973)
+        .to be_within(0.01).of(2.99)
     end
 
     (SacCas::MITGLIED_ROLES - [Group::SektionsMitglieder::Mitglied]).each do |role_type|

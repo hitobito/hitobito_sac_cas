@@ -11,31 +11,37 @@ module SacCas::Role
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
         CASE
-          -- membership_years is only calculated for Mitglied roles
+          -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles
           WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-          ELSE (
-            EXTRACT(YEAR FROM AGE(
-              #{calculate_least_date(date)},
-              roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET'
-            ))
-            + CASE
-              -- check if dates are the same, to not add fractional year
+          ELSE
+            EXTRACT(YEAR FROM AGE(#{calculate_least_date(date)}, (roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')::date))::int
+            +
+            CASE
+              -- Check if the month and day are the same to avoid adding fractional year
               WHEN (
-                DATE_PART('month', #{calculate_least_date(date)}) = DATE_PART('month', roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET') AND
-                DATE_PART('day', #{calculate_least_date(date)}) = DATE_PART('day', roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')
+                EXTRACT(MONTH FROM #{calculate_least_date(date)}) = EXTRACT(MONTH FROM roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET') AND
+                EXTRACT(DAY FROM #{calculate_least_date(date)}) = EXTRACT(DAY FROM roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')
               ) THEN 0
               ELSE
+                -- Calculate the fractional year
                 (
-                  -- calculate the fractional year
-                  (#{calculate_least_date(date)} - roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET' - 
-                  INTERVAL '1 year' * EXTRACT(YEAR FROM AGE(
-                    #{calculate_least_date(date)},
-                    roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET'
-                  ))) / CASE WHEN EXTRACT(DAY FROM DATE_TRUNC('year', #{calculate_least_date(date)}) + INTERVAL '1 year' - INTERVAL '1 day') = 29 THEN 366 ELSE 365 END
+                  EXTRACT(DAY FROM (#{calculate_least_date(date)}::date - 
+                    (roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET' 
+                    + (EXTRACT(YEAR FROM AGE(#{calculate_least_date(date)}, roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET'))::int || ' years')::interval)
+                  ))::numeric
                 )
+                /
+                (
+                  -- Determine if the current year is a leap year (366 days) or not (365 days)
+                  CASE 
+                    WHEN (DATE_TRUNC('year', #{calculate_least_date(date)}) + INTERVAL '1 year')::date 
+                      - DATE_TRUNC('year', #{calculate_least_date(date)})::date = 366
+                  THEN 366
+                  ELSE 365
+                  END
+                )::numeric
             END
-          )
-        END AS membership_years
+        END AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
       SQL
     end
 
@@ -43,9 +49,9 @@ module SacCas::Role
       <<~SQL
         LEAST(
           '#{date.strftime("%Y-%m-%d")}'::date,
-          COALESCE((roles.deleted_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')::date + INTERVAL '1 day', '9999-12-31'),
-          COALESCE((roles.archived_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')::date + INTERVAL '1 day', '9999-12-31'),
-          COALESCE(roles.delete_on::date + INTERVAL '1 day', '9999-12-31')
+          COALESCE(roles.deleted_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET' + INTERVAL '1 day', '9999-12-31'::date),
+          COALESCE(roles.archived_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET' + INTERVAL '1 day', '9999-12-31'::date),
+          COALESCE(roles.delete_on::date + INTERVAL '1 day', '9999-12-31'::date)
         )
       SQL
     end
