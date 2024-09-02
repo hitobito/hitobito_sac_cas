@@ -103,10 +103,9 @@ describe HouseholdMember do
     end
 
     context "on destroy" do
-      it "is invalid if member has no confirmed email" do
+      it "is valid if member has no confirmed email" do
         person.update_attribute(:email, "")
-        expect(household_member.valid?(:destroy)).to eq false
-        expect(household_member.errors[:base]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
+        expect(household_member.valid?(:destroy)).to eq true
       end
 
       it "is invalid if member has termination planned" do

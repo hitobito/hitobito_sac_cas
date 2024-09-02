@@ -9,14 +9,7 @@ module SacCas::HouseholdMember
   extend ActiveSupport::Concern
 
   prepended do
-    validate :assert_email, on: :destroy
     validate :assert_planned_termination, on: :destroy
-  end
-
-  def assert_email
-    if person.email.blank?
-      errors.add(:base, :no_email, person_name: person.full_name)
-    end
   end
 
   def assert_planned_termination
