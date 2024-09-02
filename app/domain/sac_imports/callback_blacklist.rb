@@ -8,11 +8,15 @@
 module SacImports::CallbackBlacklist
   CALLBACKS_TO_SKIP = {
     "Person" => {
-      after_save: [:check_data_quality]
+      after_save: [:check_data_quality],
+      after_save_commit: [:transmit_data_to_abacus]
     },
     "Role::MitgliedCommon" => {
       after_create: [:check_data_quality],
       after_destroy: [:check_data_quality]
+    },
+    "Group::SektionsMitglieder::Mitglied" => {
+      after_create_commit: [:transmit_data_to_abacus]
     }
   }
 
