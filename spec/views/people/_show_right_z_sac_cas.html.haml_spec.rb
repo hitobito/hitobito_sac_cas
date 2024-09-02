@@ -44,7 +44,8 @@ describe "people/_show_right_z_sac_cas.html.haml" do
       Group::SektionsMitglieder::Mitglied.create!(
         person:,
         group: groups(:bluemlisalp_mitglieder),
-        start_on: 1.month.from_now
+        start_on: 1.month.from_now,
+        end_on: 1.year.from_now
       )
 
       expect(dom).to have_css "section.sac-membership"

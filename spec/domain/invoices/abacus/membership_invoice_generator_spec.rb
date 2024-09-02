@@ -58,8 +58,8 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
     let(:person) {
       Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
         group: groups(:bluemlisalp_neuanmeldungen_nv),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year).person
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year).person
     }
 
     it "returns invoice single memberships" do

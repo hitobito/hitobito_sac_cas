@@ -176,7 +176,7 @@ describe "signup/sektion", js: true do
       click_button "Anmelden"
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
-      expect(person.roles.find { |r| r.type == self_registration_role.to_s }.delete_on).to be_nil
+      expect(person.roles.find { |r| r.type == self_registration_role.to_s }.end_on).to be_nil
       expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
     end
 
@@ -546,8 +546,8 @@ describe "signup/sektion", js: true do
           complete_last_page
           expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
             "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        end.to change { FutureRole.count }.by(1)
-        expect(FutureRole.first.convert_on).to eq Date.new(2023, 7, 1)
+        end.to change { Role.future.count }.by(1)
+        expect(Role.future.first.start_on).to eq Date.new(2023, 7, 1)
       end
     end
   end

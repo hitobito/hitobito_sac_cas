@@ -89,8 +89,8 @@ describe People::MembershipController, type: :controller do
           person: person,
           beitragskategorie: :adult,
           group: groups(:bluemlisalp_mitglieder),
-          created_at: 3.days.ago,
-          deleted_at: 1.days.ago)
+          start_on: 3.days.ago,
+          end_on: 1.days.ago)
         person
       end
 

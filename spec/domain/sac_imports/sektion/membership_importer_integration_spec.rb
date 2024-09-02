@@ -47,8 +47,8 @@ describe SacImports::Sektion::MembershipsImporter do
 
     active_role = active.roles.first
 
-    expect(active_role.created_at).to eq(Time.zone.parse("1899-12-31"))
-    expect(active_role.deleted_at).to be_nil
+    expect(active_role.start_on).to eq(Time.zone.parse("1899-12-31"))
+    expect(active_role.end_on).to be_nil
     expect(active_role.beitragskategorie).to eq("youth")
   end
 
@@ -64,8 +64,8 @@ describe SacImports::Sektion::MembershipsImporter do
     expect(retired.roles.without_deleted).to eq []
     retired_role = retired.roles.with_inactive.first
 
-    expect(retired_role.created_at).to eq(Time.zone.parse("1980-12-31"))
-    expect(retired_role.deleted_at).to eq(Time.zone.parse("2010-1-1"))
+    expect(retired_role.start_on).to eq(Time.zone.parse("1980-12-31"))
+    expect(retired_role.end_on).to eq(Time.zone.parse("2010-1-1"))
     expect(retired_role.beitragskategorie).to eq("adult")
   end
 

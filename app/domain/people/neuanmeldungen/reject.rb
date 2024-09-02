@@ -25,8 +25,8 @@ module People
         applicable_roles.each do |role|
           Role.transaction do
             if non_applicable_roles.any? { |r| r[:person_id] == role.person_id }
-              role.destroy!(always_soft_destroy: true)
               add_note(role.person)
+              role.really_destroy!
             else
               role.person.destroy!
             end

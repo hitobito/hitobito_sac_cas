@@ -36,7 +36,7 @@ describe RoleDecorator, :draper_with_helpers do
       let(:neuanmeldungen) { groups(:bluemlisalp_neuanmeldungen_nv) }
       let(:role) do
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
-          delete_on: today.end_of_year,
+          end_on: today.end_of_year,
           group: neuanmeldungen)
       end
 

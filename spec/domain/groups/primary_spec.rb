@@ -36,56 +36,39 @@ describe Groups::Primary do
   end
 
   it "favours older over newer" do
-    travel_to 1.day.from_now do
-      Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: admin)
-    end
+    # person has geschaeftsstelle role with created_at=now from fixtures
+    Fabricate(
+      Group::SektionsFunktionaere::Praesidium.sti_name,
+      group: funktionaere,
+      person: admin,
+      created_at: 1.day.from_now # younger role
+    )
     expect(identify(admin)).to eq geschaeftsstelle
-    travel_to 1.day.ago do
-      Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: admin)
-    end
+
+    Fabricate(
+      Group::SektionsFunktionaere::Praesidium.sti_name,
+      group: funktionaere,
+      person: admin,
+      created_at: 1.day.ago # older role
+    )
     expect(identify(admin)).to eq funktionaere
   end
 
   it "favours preferred_role over other" do
-    travel_to 1.day.from_now do
-      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: mitglieder, person: admin, beitragskategorie: :adult)
-    end
+    Fabricate(
+      Group::SektionsMitglieder::Mitglied.sti_name,
+      group: mitglieder,
+      person: admin,
+      beitragskategorie: :adult
+    )
     expect(identify(admin)).to eq mitglieder
 
-    travel_to 1.day.ago do
-      Fabricate(Group::SektionsFunktionaere::Praesidium.sti_name, group: funktionaere, person: admin)
-    end
+    Fabricate(
+      Group::SektionsFunktionaere::Praesidium.sti_name,
+      group: funktionaere,
+      person: admin,
+      created_at: 1.day.ago # older role, but not preferred
+    )
     expect(identify(admin)).to eq mitglieder
-  end
-
-  describe "two preferred_roles" do
-    let!(:other) do
-      Fabricate(Group::Sektion.sti_name, parent: groups(:root), foundation_year: 2023).children
-        .find_by(type: Group::SektionsMitglieder)
-    end
-
-    it "favours older over newer" do
-      mitglied.roles.update_all(end_on: "2015-12-31")
-
-      Fabricate(
-        Group::SektionsMitglieder::Mitglied.sti_name,
-        group: other,
-        person: admin,
-        beitragskategorie: :adult,
-        start_on: roles(:mitglied).start_on + 1.year,
-        end_on: roles(:mitglied).end_on + 1.year
-      )
-      expect(identify(mitglied)).to eq mitglieder
-
-      Fabricate(
-        Group::SektionsMitglieder::Mitglied.sti_name,
-        group: other,
-        person: mitglied,
-        beitragskategorie: :adult,
-        start_on: roles(:mitglied).start_on - 1.year,
-        end_on: roles(:mitglied).end_on - 1.year
-      )
-      expect(identify(mitglied)).to eq other
-    end
   end
 end

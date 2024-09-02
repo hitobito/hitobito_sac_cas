@@ -13,7 +13,7 @@ describe Invoices::Abacus::MembershipInvoice do
   subject { described_class.new(member, memberships) }
 
   before do
-    Role.update_all(delete_on: date.end_of_year)
+    Role.update_all(end_on: date.end_of_year)
   end
 
   context "#invoice?" do
@@ -28,9 +28,9 @@ describe Invoices::Abacus::MembershipInvoice do
         Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
           person: person,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          created_at: "2022-08-01",
+          start_on: "2022-08-01",
           beitragskategorie: :adult,
-          delete_on: "2023-12-31"
+          end_on: "2023-12-31"
         )
         expect(subject.invoice?).to be(true)
       end
@@ -45,7 +45,7 @@ describe Invoices::Abacus::MembershipInvoice do
         Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.create!(
           person: person,
           group: groups(:bluemlisalp_neuanmeldungen_nv),
-          created_at: "2022-08-01"
+          start_on: "2022-08-01"
         )
       end
       let(:memberships) { [member.membership_from_role(additional_role)] }
@@ -64,9 +64,9 @@ describe Invoices::Abacus::MembershipInvoice do
         Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
           person: person,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          created_at: "2022-08-01",
+          start_on: "2022-08-01",
           beitragskategorie: :adult,
-          delete_on: "2023-12-31"
+          end_on: "2023-12-31"
         )
         expect(subject.membership_cards?).to be(false)
       end
