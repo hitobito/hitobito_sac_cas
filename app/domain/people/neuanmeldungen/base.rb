@@ -13,8 +13,8 @@ module People
       attr_accessor :group, :people_ids
 
       NEUANMELDUNGEN_ROLES = [
-        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name,
-        Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name
+        Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
       ].freeze
       APPROVED_NEUANMELDUNGEN_ROLE = Group::SektionsNeuanmeldungenNv::Neuanmeldung
       APPROVED_NEUANMELDUNGEN_GROUP = Group::SektionsNeuanmeldungenNv
@@ -24,7 +24,7 @@ module People
       end
 
       def applicable_people
-        @applicable_people ||= Person.order_by_name.where(id: people_ids).flat_map do |person|
+        @applicable_people ||= Person.order_by_name.where(id: people_ids).select("*").flat_map do |person|
           person.household.people
         end.uniq
       end
@@ -32,11 +32,11 @@ module People
       private
 
       def applicable_roles
-        group.roles.where(type: NEUANMELDUNGEN_ROLES, person: applicable_people)
+        group.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)
       end
 
       def non_applicable_roles
-        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES)
+        Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
       end
     end
   end

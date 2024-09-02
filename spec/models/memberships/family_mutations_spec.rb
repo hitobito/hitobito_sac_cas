@@ -43,10 +43,9 @@ describe Memberships::FamilyMutation do
 
       it "terminates existing stammsektion role per end of yesterday" do
         original_role = stammsektion_role
-
-        expect { mutation.join!(reference_person) }
-          .to change { original_role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.floor)
-          .and change { original_role.delete_on }.to(nil)
+        mutation.join!(reference_person)
+        expect(original_role.reload.deleted_at.change(usec: 0)).to eq(Time.zone.yesterday.end_of_day.floor)
+        expect(original_role.delete_on).to eq(nil)
       end
 
       it "creates new family stammsektion role per beginning of today" do
@@ -62,10 +61,9 @@ describe Memberships::FamilyMutation do
 
       it "terminates existing conflicting zusatzsektion roles per end of yesterday" do
         conflicting_role = create_role!(zusatzsektion_class, groups(:matterhorn_mitglieder))
-
-        expect { mutation.join!(reference_person) }
-          .to change { conflicting_role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.floor)
-          .and change { conflicting_role.delete_on }.to(nil)
+        mutation.join!(reference_person)
+        expect(conflicting_role.reload.deleted_at.change(usec: 0)).to eq(Time.zone.yesterday.end_of_day.floor)
+        expect(conflicting_role.delete_on).to eq(nil)
       end
 
       it "does not touch non-conflicting zusatzsektion roles" do
@@ -167,10 +165,9 @@ describe Memberships::FamilyMutation do
 
     it "terminates existing family stammsektion role per end of yesterday" do
       original_role = stammsektion_role
-
-      expect { mutation.leave! }
-        .to change { original_role.reload.deleted_at }.to(Time.zone.yesterday.end_of_day.floor)
-        .and change { original_role.delete_on }.to(nil)
+      mutation.leave!
+      expect(original_role.reload.deleted_at.change(usec: 0)).to eq(Time.zone.yesterday.end_of_day.floor)
+      expect(original_role.delete_on).to eq(nil)
     end
 
     it "creates new non-family stammsektion role per beginning of today" do
@@ -186,12 +183,10 @@ describe Memberships::FamilyMutation do
     it "terminates family zusatzsektion roles per end of yesterday" do
       family_zusatzsektion_role = zusatzsektion_roles.first
       expect(family_zusatzsektion_role.beitragskategorie).to eq "family"
+      mutation.leave!
 
-      expect { mutation.leave! }
-        .to change {
-          family_zusatzsektion_role.reload.deleted_at
-        }.to(Time.zone.yesterday.end_of_day.floor)
-        .and change { family_zusatzsektion_role.delete_on }.to(nil)
+      expect(family_zusatzsektion_role.reload.deleted_at.change(usec: 0)).to eq(Time.zone.yesterday.end_of_day.floor)
+      expect(family_zusatzsektion_role.delete_on).to eq(nil)
     end
 
     it "creates new non-family zusatzsektion roles for famliy zusatzsektion roles per beginning of today" do
@@ -211,12 +206,10 @@ describe Memberships::FamilyMutation do
       create_role!(neuanmeldung_zusatzsektion_class, groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
       neuanmeldung_zusatzsektion_role = neuanmeldung_zusatzsektion_roles.first
       expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
+      mutation.leave!
 
-      expect { mutation.leave! }
-        .to change {
-          neuanmeldung_zusatzsektion_role.reload.deleted_at
-        }.to(Time.zone.yesterday.end_of_day.floor)
-        .and change { neuanmeldung_zusatzsektion_role.delete_on }.to(nil)
+      expect(neuanmeldung_zusatzsektion_role.reload.deleted_at.change(usec: 0)).to eq(Time.zone.yesterday.end_of_day.floor)
+      expect(neuanmeldung_zusatzsektion_role.delete_on).to eq(nil)
     end
 
     it "does not touch non-family zusatzsektion roles" do

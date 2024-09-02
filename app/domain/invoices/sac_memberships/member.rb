@@ -82,8 +82,8 @@ module Invoices
       def family_members
         person
           .household_people
-          .order_by_name
           .includes(:roles)
+          .order(Person.order_by_name_statement)
           .select { |p| sac_mitgliedschaft?(p) }
       end
 

@@ -31,6 +31,11 @@ de:
         discount: "Rabatt"
         new_entry: "Eintrittsgebühr"
         section_id: "Mitgliedschaft"
+      people/yearly_membership/invoice_form:
+        invoice_year: "Rechnungsjahr"
+        invoice_date: "Rechnungsdatum"
+        send_date: "Versanddatum"
+        role_finish_date: "Rollen verlängern bis"
       wizards/steps/signup/main_email_field:
         email: E-Mail
       wizards/steps/signup/person_fields:
@@ -1262,6 +1267,15 @@ de:
 
           Sind Sie sicher, dass sie fortfahren wollen?
 
+    yearly_membership_invoices:
+      job_scheduling_info: "Der Jahresinkassolauf wurde erfolgreich gestartet."
+      new:
+        title: "Start MV-Jahresinkassolauf"
+        schedule_info_alert: "Beim Absenden dieses Dialogs wird der Jahresinkassolauf für alle Mitglieder gestartet und die Daten an Abacus übermittelt. Der Jahresinkassolauf kann nicht abgebrochen werden und dauert mehrere Stunden. Die Mitgliedschaftsrollen werden hiermit verlängert."
+        job_already_scheduled_alert: "Es läuft bereits ein Jahresinkassolauf. Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden."
+        create_invoice: "Starten"
+        submit_confirmation: "Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden."
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1288,6 +1302,7 @@ de:
   groups:
     actions_show_sac_cas:
       export_mitglieder: CSV Mitglieder
+      create_yearly_membership_invoice: MV Jahresinkasso
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
 

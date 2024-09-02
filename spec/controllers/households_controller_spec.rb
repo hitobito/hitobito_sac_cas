@@ -9,20 +9,20 @@ require "spec_helper"
 
 describe HouseholdsController do
   let(:group) { groups(:geschaeftsstelle) }
-  let(:person) { people(:admin) }
+  let(:person) { people(:familienmitglied) }
   let(:params) { {group_id: group.id, person_id: person.id} }
 
-  before { sign_in(person) }
+  before { sign_in(people(:admin)) }
 
   describe "#destroy" do
     let(:household) { assigns(:entry) }
 
     it "does not destroy invalid entry" do
-      person.update_columns(household_key: 123, email: nil)
+      person.update_columns(birthday: nil)
       expect do
         delete :destroy, params: params
       end.not_to(change { person.reload.household_key })
-      expect(flash[:alert]).to eq ["Anna Admin hat keine bestätigte E-Mail Adresse."]
+      expect(flash[:alert]).to eq ["Tenzing Norgay hat kein Geburtsdatum."]
     end
   end
 end

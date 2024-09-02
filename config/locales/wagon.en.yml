@@ -565,6 +565,14 @@ en:
         one: ''
         other: ''
 
+      group/sac_cas_verbaende:
+        one: ''
+        other: ''
+
+      group/sac_cas_verband:
+        one: ''
+        other: ''
+
       group/sektion:
         one: ''
         other: ''
@@ -763,6 +771,15 @@ en:
         description: ""
         huettenwartspartner: ""
         schluesseldepot: ""
+      group/sac_cas_verband/praesidium:
+        one: ""
+        description: ""
+      group/sac_cas_verband/mitglied:
+        one: ""
+        description: ""
+      group/sac_cas_verband/andere:
+        one: ""
+        description: ""
       group/sektions_funktionaere/administration:
         one: ""
         description: ""
@@ -1151,11 +1168,13 @@ en:
     membership_invoices:
       no_invoice_possible: ""
       no_memberships: ""
+      data_quality_error: ""
       success_notice: ""
       new:
         title: ""
         alert_info: ""
         alert_warning: ""
+        alert_error: ""
         create_invoice: ""
         mv_yearly_invoice: ""
         zusatzsektion_eintrittsrechnung: ""

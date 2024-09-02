@@ -24,12 +24,18 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def perform
     # abort_if_other_job_is_running
     # log start according to ticket
-    # extend_roles_for_invoicing
+    extend_roles_for_invoicing
     # process_invoices
     # log finish according to ticket
   end
 
   private
+
+  def extend_roles_for_invoicing
+    return if @role_finish_date.nil?
+
+    Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date).extend_roles
+  end
 
   def process_invoices
     active_members.in_batches(of: BATCH_SIZE) do |people|

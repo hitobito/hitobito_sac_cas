@@ -18,7 +18,7 @@ module Memberships
       Group::SektionsMitglieder::MitgliedZusatzsektion,
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
       Group::SektionsTourenUndKurse::Tourenleiter
-    ].freeze
+    ]
 
     attribute :termination_reason_id, :integer
 
@@ -48,7 +48,7 @@ module Memberships
       Role
         .joins(:group)
         .where(
-          type: ROLE_TYPES,
+          type: ROLE_TYPES.map(&:sti_name),
           person: affected_people,
           groups: {layer_group_id: group.layer_group_id}
         )

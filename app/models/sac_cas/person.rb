@@ -12,6 +12,9 @@ module SacCas::Person
   DATA_QUALITIES = %w[ok info warning error]
 
   included do
+    Person::SEARCHABLE_ATTRS << :id
+    include PgSearchable
+
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
@@ -25,14 +28,6 @@ module SacCas::Person
 
     Person.used_attributes.delete(:nickname)
 
-    reflect_on_attachment(:picture).variant(:profile, resize_to_fill: [200, 200])
-
-    has_many :external_trainings
-    has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
-
-    enum data_quality: {ok: 0, info: 1, warning: 2, error: 3}, _default: 0
-    has_many :data_quality_issues, dependent: :destroy
-
     delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role,
       to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
@@ -42,6 +37,15 @@ module SacCas::Person
 
     i18n_enum :correspondence, CORRESPONDENCES
     i18n_setter :correspondence, CORRESPONDENCES
+
+    enum data_quality: {ok: 0, info: 1, warning: 2, error: 3}, _default: 0
+
+    reflect_on_attachment(:picture).variant(:profile, resize_to_fill: [200, 200])
+
+    has_many :data_quality_issues, dependent: :destroy
+    has_many :external_invoices, dependent: :destroy
+    has_many :external_trainings, dependent: :destroy
+    has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
 
@@ -90,11 +94,11 @@ module SacCas::Person
   end
 
   def sac_tour_guide?
-    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES)
+    roles.exists?(type: SacCas::TOUR_GUIDE_ROLES.map(&:sti_name))
   end
 
   def backoffice?
-    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES)
+    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
   end
 
   def sac_membership

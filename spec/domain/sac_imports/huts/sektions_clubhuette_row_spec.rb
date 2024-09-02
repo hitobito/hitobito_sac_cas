@@ -25,8 +25,8 @@ describe SacImports::Huts::SektionsClubhuetteRow do
   let!(:sektion) { Fabricate(Group::Sektion.sti_name.to_sym, navision_id: 99993750, foundation_year: 1980, name: "foobar Sektion") }
 
   before do
-    sektion.children.find_by(type: Group::SektionsFunktionaere).update_columns(layer_group_id: sektion.id)
-    sektion.children.find_by(type: Group::SektionsFunktionaere).children.create!(type: Group::SektionsClubhuetten, layer_group_id: sektion.id)
+    sektion.children.find_by(type: Group::SektionsFunktionaere.sti_name).update_columns(layer_group_id: sektion.id)
+    sektion.children.find_by(type: Group::SektionsFunktionaere.sti_name).children.create!(type: Group::SektionsClubhuetten, layer_group_id: sektion.id)
   end
 
   it "imports group" do

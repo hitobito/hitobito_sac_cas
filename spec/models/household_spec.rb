@@ -40,13 +40,15 @@ describe Household do
   end
 
   it "uses sequence for household key" do
+    # Begin with counting sequence
+    Sequence.increment!(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+
     expect do
       household = adult.household
       household.add(child)
       household.save!
-    end.to change { sequence.current_value }.by(1)
-
-    expect(adult.reload.household_key).to eq sequence.current_value.to_s
+    end.to change { Sequence.current_value(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE) }.by(1)
+    expect(adult.reload.household_key).to eq Sequence.current_value(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE).to_s
   end
 
   describe "validations" do
@@ -87,11 +89,10 @@ describe Household do
       expect(household.errors[:base]).to match_array(["Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse."])
     end
 
-    it "is invalid in destroy context with blank email" do
+    it "is valid in destroy context with blank email" do
       person.email = nil
 
-      expect(household.valid?(:destroy)).to eq false
-      expect(household.errors["members[0].base"]).to match_array(["#{person.full_name} hat keine bestätigte E-Mail Adresse."])
+      expect(household.valid?(:destroy)).to eq true
     end
 
     it "is invalid if no household person has a membership role" do
@@ -135,12 +136,26 @@ describe Household do
           .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
       end
 
-      it "makes oldest person main person" do
+      it "makes reference person main person for new household" do
         person.update!(birthday: 22.years.ago)
         adult.update!(birthday: 24.years.ago)
         expect do
           household.add(adult).save!
+        end.to change { person.sac_family_main_person }.from(false).to(true)
+      end
+
+      it "makes oldest person main person for existing household" do
+        household.add(child)
+        household.save!
+
+        person.update!(birthday: 22.years.ago)
+        adult.update!(birthday: 24.years.ago)
+        expect do
+          household.remove(person)
+          household.add(adult)
+          household.save!
         end.to change { adult.sac_family_main_person }.from(false).to(true)
+          .and change { person.sac_family_main_person }.from(true).to(false)
       end
 
       it "calls Memberships::FamilyMutation#join! for added person" do

@@ -39,12 +39,22 @@ describe Invoices::SacMemberships::Member do
     let(:person) { context.people_with_membership_years.find(people(:mitglied).id) }
 
     it "counts years correctly" do
-      roles(:mitglied).update_column(:created_at, "2015-01-20")
+      roles(:mitglied).update_column(:created_at, "2015-01-01")
       expect(subject.membership_years).to eq(8)
     end
 
     it "is off by one in first year" do
       roles(:mitglied).update_column(:created_at, date)
+      expect(subject.membership_years).to eq(0)
+    end
+
+    it "counts years correctly in second year" do
+      roles(:mitglied).update_column(:created_at, "2023-01-01")
+      expect(subject.membership_years).to eq(0)
+    end
+
+    it "counts years correctly in third year" do
+      roles(:mitglied).update_column(:created_at, "2022-01-01")
       expect(subject.membership_years).to eq(1)
     end
   end

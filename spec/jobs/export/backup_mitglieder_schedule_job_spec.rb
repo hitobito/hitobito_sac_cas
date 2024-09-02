@@ -10,7 +10,7 @@ require "spec_helper"
 describe Export::BackupMitgliederScheduleJob do
   subject(:job) { described_class.new }
 
-  let(:relevant_groups) { Group.where(type: [Group::Sektion, Group::Ortsgruppe]) }
+  let(:relevant_groups) { Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)) }
 
   context "rescheduling" do
     it "reschedules for tomorrow at 5 minutes past midnight" do

@@ -8,7 +8,7 @@
 module SacCas::Household
   extend ActiveSupport::Concern
 
-  HOUSEHOLD_KEY_SEQUENCE = "person.household_key"
+  HOUSEHOLD_KEY_SEQUENCE = "household_sequence"
 
   prepended do
     validate :assert_adult_member, on: :update
@@ -25,12 +25,13 @@ module SacCas::Household
 
   def save(context: :update)
     Person.transaction do
+      new_household = new_record? # remember value before persisting
       super do |new_people, removed_people|
         clear_people_managers(removed_people)
         create_missing_people_managers
 
         if maintain_sac_family?
-          update_main_person!
+          update_main_person!(new_household)
           mutate_memberships!(new_people, removed_people)
         end
       end
@@ -112,8 +113,8 @@ module SacCas::Household
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
-  def update_main_person!
-    new_main_person = main_person || people.select(&:adult?).max_by(&:years) # may be nil when destroying
+  def update_main_person!(new_household)
+    new_main_person = main_person || (new_household && reference_person) || oldest_person # may be nil when destroying
     others = people - [new_main_person]
     Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
     new_main_person&.update_columns(sac_family_main_person: true)
@@ -156,6 +157,10 @@ module SacCas::Household
     unless someone_is_member
       errors.add(:members, :no_members)
     end
+  end
+
+  def oldest_person
+    people.select(&:adult?).max_by(&:years)
   end
 
   def adults
