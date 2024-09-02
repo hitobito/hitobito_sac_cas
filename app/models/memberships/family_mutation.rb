@@ -79,18 +79,27 @@ module Memberships
 
     def category_family = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
-    def replaced_role_end_on = Date.current.yesterday
+    def replaced_role_end_on(role, blueprint_role)
+      [role.end_on, new_role_start_on(blueprint_role).yesterday].min
+    end
 
-    def new_role_start_on = Date.current
+    def new_role_start_on(blueprint_role) = [Date.current, blueprint_role.start_on].max
 
     # Replace the role with the blueprint role in the same group. The new role is created with a
-    # created_at timestamp at the beginning of the current day, but not before the created_at
-    # timestamp of the blueprint role.
-    # The old role is ended with a deleted_at timestamp at the end of the previous day.
+    # start_on=today, but not before the start_on of the blueprint role.
+    # The old role is ended with a end_on=yesterday. If the old role was not yet active yesterday, it
+    # is deleted instead.
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
-      # terminate old role, skip validations as it might be a family membership which
-      # is not valid anymore as the person just left the household
-      Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
+      replaced_role_end_on(role, blueprint_role).tap do |end_on|
+        if role.start_on > end_on
+          # start_on is after the intended end_on, so we cannot end it but have to delete it
+          role.really_destroy!
+        elsif role.active_period.cover?(end_on)
+          # terminate old role, skip validations as it might be a family membership which
+          # is not valid anymore as the person just left the household
+          Role.where(id: role.id).update_all(end_on: end_on)
+        end
+      end
 
       # create new role with beitragskategorie
       create_role!(role.person,
@@ -100,17 +109,23 @@ module Memberships
     # Create a new role in the same group as the blueprint role with a created_at timestamp at the
     # beginning of the current day, but not before the created_at timestamp of the blueprint role.
     def create_role!(person, blueprint_role, beitragskategorie: nil)
+      binding.pry
       blueprint_role.class.create!(
         person:,
         beitragskategorie:,
         group: blueprint_role.group,
-        start_on: new_role_start_on,
+        start_on: new_role_start_on(blueprint_role),
         end_on: blueprint_role.end_on
       )
     end
 
     def delete_role!(role)
-      Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
+      end_on = [role.end_on, Date.yesterday].min
+      if role.start_on > end_on
+        role.really_destroy!
+      else
+        Role.where(id: role.id).update_all(end_on: end_on)
+      end
     end
 
     def find_zusatzsektion_role(layer_group_id)

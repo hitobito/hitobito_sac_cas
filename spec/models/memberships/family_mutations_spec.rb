@@ -8,13 +8,26 @@
 require "spec_helper"
 
 describe Memberships::FamilyMutation do
-  let(:reference_person) { people(:familienmitglied) }
-  let(:household_key) { reference_person.household_key }
-  let!(:person) { Fabricate(:person, household_key:, birthday: 35.years.ago) }
-  subject(:mutation) { described_class.new(person) }
+  let(:person) { Fabricate(:person) }
+  let!(:membership) do
+    create_role!(
+      stammsektion_class,
+      groups(:bluemlisalp_mitglieder),
+      start_on: 2.years.ago,
+      end_on: Date.current.end_of_year
+    )
+  end
 
-  # move time to where the roles from the fixtures are valid (mid of 2015)
-  before { travel_to Time.zone.local(2015, 8, 1, 12) }
+  let(:other_person) { Fabricate(:person) }
+  let!(:other_membership) do
+    create_role!(
+      stammsektion_class,
+      groups(:matterhorn_mitglieder),
+      person: other_person,
+      start_on: 2.years.ago,
+      end_on: Date.current.end_of_year
+    )
+  end
 
   let(:stammsektion_class) { Group::SektionsMitglieder::Mitglied }
   let(:zusatzsektion_class) { Group::SektionsMitglieder::MitgliedZusatzsektion }
@@ -26,25 +39,29 @@ describe Memberships::FamilyMutation do
 
   def neuanmeldung_zusatzsektion_roles = person.sac_membership.neuanmeldung_zusatzsektion_roles
 
-  def create_role!(role_class, group, beitragskategorie: "family", **opts)
+  def create_role!(role_class, group, beitragskategorie: "adult", **opts)
     Fabricate(
       role_class.sti_name,
       group:,
-      beitragskategorie:,
-      start_on: Time.current.beginning_of_year,
-      end_on: Date.current.end_of_year,
-      **opts.reverse_merge(person:)
+      **opts.reverse_merge(
+        person:,
+        beitragskategorie:,
+        start_on: Time.current.beginning_of_year,
+        end_on: Date.current.end_of_year
+      )
     )
   end
 
   describe "#join!" do
     context "as a member" do
-      before { create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder)) }
-
       it "ends existing stammsektion role per end of yesterday" do
-        original_role = stammsektion_role
+        person = Fabricate(:person, household_key: "household")
+        original_role = create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder), person: person)
 
-        expect { mutation.join!(reference_person) }
+        other_person = Fabricate(:person, household_key: "household", sac_family_main_person: true)
+        other_role = create_role!(stammsektion_class, groups(:matterhorn_mitglieder), person: other_person)
+
+        expect { described_class.new(person).join!(other_person) }
           .to change { original_role.reload.end_on }.to(Date.yesterday)
       end
 
@@ -106,7 +123,7 @@ describe Memberships::FamilyMutation do
           person: reference_person,
           beitragskategorie: "family",
           start_on: Date.current.next_year.beginning_of_year,
-          created_at: 1.day.ago)
+          end_on: 2.years.from_now)
 
         expect { mutation.join!(reference_person) }
           .to change { person.sac_membership.future_stammsektion_roles.count }.from(0).to(1)
@@ -204,10 +221,7 @@ describe Memberships::FamilyMutation do
       expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
 
       expect { mutation.leave! }
-        .to change {
-          neuanmeldung_zusatzsektion_role.reload.end_on
-        }.to(Date.current.yesterday)
-        .and change { neuanmeldung_zusatzsektion_role.end_on }.to(nil)
+        .to change { neuanmeldung_zusatzsektion_role.reload.end_on }.to(Date.current.yesterday)
     end
 
     it "does not touch non-family zusatzsektion roles" do
