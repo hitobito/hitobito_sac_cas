@@ -8,56 +8,47 @@
 module SacCas::Role
   module ClassMethods   
     def select_with_membership_years(date = Time.zone.today)
-      # because parameter passed in query is CET we make sure to convert all database dates from UTC to CET
+      # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
         CASE
           -- membership_years is only calculated for Mitglied roles
           WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
           ELSE (
-            TIMESTAMPDIFF(
-              YEAR, 
-              DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")),
-              #{calculate_least_date(date)}
-            ) 
+            EXTRACT(YEAR FROM AGE(
+              #{calculate_least_date(date)},
+              roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET'
+            ))
             + CASE
               -- check if dates are the same, to not add fractional year
               WHEN (
-                MONTH(#{calculate_least_date(date)}) = MONTH(CONVERT_TZ(roles.created_at, "UTC", "CET")) AND
-                DAY(#{calculate_least_date(date)}) = DAY(CONVERT_TZ(roles.created_at, "UTC", "CET"))
+                DATE_PART('month', #{calculate_least_date(date)}) = DATE_PART('month', roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET') AND
+                DATE_PART('day', #{calculate_least_date(date)}) = DATE_PART('day', roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')
               ) THEN 0
               ELSE
                 (
                   -- calculate the fractional year
-                  DATEDIFF(
+                  (#{calculate_least_date(date)} - roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET' - 
+                  INTERVAL '1 year' * EXTRACT(YEAR FROM AGE(
                     #{calculate_least_date(date)},
-                    DATE(
-                      ADDDATE(
-                        CONVERT_TZ(roles.created_at, "UTC", "CET"), 
-                        INTERVAL TIMESTAMPDIFF(
-                          YEAR, 
-                          DATE(CONVERT_TZ(roles.created_at, "UTC", "CET")), 
-                          #{calculate_least_date(date)}
-                        ) YEAR
-                      )
-                    )
-                  ) / CASE WHEN DAY(LAST_DAY(CONCAT(YEAR(#{calculate_least_date(date)}), '-02-01'))) = 29 THEN 366 ELSE 365 END
+                    roles.created_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET'
+                  ))) / CASE WHEN EXTRACT(DAY FROM DATE_TRUNC('year', #{calculate_least_date(date)}) + INTERVAL '1 year' - INTERVAL '1 day') = 29 THEN 366 ELSE 365 END
                 )
             END
           )
         END AS membership_years
       SQL
     end
-
+    
     def calculate_least_date(date)
       <<~SQL
         LEAST(
-          DATE('#{date.strftime("%Y-%m-%d")}'),
-          COALESCE(DATE(CONVERT_TZ(roles.deleted_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-          COALESCE(DATE(CONVERT_TZ(roles.archived_at, "UTC", "CET")) + INTERVAL 1 DAY, '9999-12-31'),
-          COALESCE(roles.delete_on + INTERVAL 1 DAY, '9999-12-31')
+          '#{date.strftime("%Y-%m-%d")}'::date,
+          COALESCE((roles.deleted_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')::date + INTERVAL '1 day', '9999-12-31'),
+          COALESCE((roles.archived_at AT TIME ZONE 'UTC' AT TIME ZONE 'CET')::date + INTERVAL '1 day', '9999-12-31'),
+          COALESCE(roles.delete_on::date + INTERVAL '1 day', '9999-12-31')
         )
       SQL
-    end
+    end    
   end
 
   def self.prepended(base)
