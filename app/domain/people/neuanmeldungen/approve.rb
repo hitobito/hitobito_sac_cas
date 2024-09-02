@@ -52,7 +52,7 @@ module People
       end
 
       def generate_invoice(role)
-        return if role.beitragskategorie&.family? || !role.person.sac_family_main_person
+        return if role.beitragskategorie&.family? && !role.person.sac_family_main_person
 
         invoice = ExternalInvoice::SacMembership.create!(
           person: role.person,
