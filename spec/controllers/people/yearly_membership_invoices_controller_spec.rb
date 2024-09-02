@@ -28,7 +28,7 @@ describe People::YearlyMembershipInvoicesController do
     it "schedules job" do
       expect do
         post :create, params: params
-      end.to change { Delayed::Job.where('handler like "%CreateYearlyInvoicesJob%"').count }.by(1)
+      end.to change { Delayed::Job.where("handler like '%CreateYearlyInvoicesJob%'").count }.by(1)
 
       expect(response).to redirect_to(group_path(Group.root))
       expect(flash[:notice]).to eq("Der Jahresinkassolauf wurde erfolgreich gestartet.")
