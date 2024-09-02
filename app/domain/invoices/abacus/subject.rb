@@ -8,6 +8,9 @@
 module Invoices
   module Abacus
     class Subject < Entity
+      RELEVANT_ATTRIBUTES = %i[first_name last_name email language gender street
+        housenumber zip_code town country].freeze
+
       SALUTATION_IDS = {
         mister: 1,
         miss: 2,

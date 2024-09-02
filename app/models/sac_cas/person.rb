@@ -51,6 +51,7 @@ module SacCas::Person
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
+    after_save_commit :transmit_data_to_abacus
 
     delegate :salutation_label, to: :class
 
@@ -77,14 +78,6 @@ module SacCas::Person
     read_attribute(:membership_years) or raise "use Person scope :with_membership_years"
   end
 
-  def set_digital_correspondence
-    self.correspondence = "digital"
-  end
-
-  def password_initialized?
-    encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
-  end
-
   def adult?(reference_date: Time.zone.today.end_of_year)
     SacCas::Beitragskategorie::Calculator.new(self, reference_date: reference_date).adult?
   end
@@ -107,9 +100,23 @@ module SacCas::Person
 
   private
 
-  def check_data_quality
-    return if (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).empty?
+  def set_digital_correspondence
+    self.correspondence = "digital"
+  end
 
-    People::DataQualityChecker.new(self).check_data_quality
+  def password_initialized?
+    encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
+  end
+
+  def check_data_quality
+    People::DataQualityChecker.new(self).check_data_quality if
+      (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).any?
+  end
+
+  def transmit_data_to_abacus
+    Invoices::Abacus::TransmitPersonJob.new(self).enqueue! if
+      (Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES & saved_changes.keys).any? &&
+        sac_membership_invoice? &&
+        data_quality != "error"
   end
 end

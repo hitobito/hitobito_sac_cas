@@ -17,6 +17,7 @@ class Group::SektionsMitglieder < ::Group
     validates :delete_on, presence: {message: :must_be_present_unless_deleted},
       unless: :deleted_at?
 
+    after_create_commit :transmit_data_to_abacus
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private
@@ -24,6 +25,12 @@ class Group::SektionsMitglieder < ::Group
     def destroy_household
       person.update_columns(sac_family_main_person: false)
       Household.new(person, maintain_sac_family: false).destroy
+    end
+
+    def transmit_data_to_abacus
+      Invoices::Abacus::TransmitPersonJob.new(person).enqueue! if
+        person.abacus_subject_key.blank? &&
+          person.data_quality != "error"
     end
   end
 
