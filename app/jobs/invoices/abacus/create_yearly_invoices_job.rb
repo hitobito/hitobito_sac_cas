@@ -23,9 +23,8 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     @role_finish_date = role_finish_date
   end
 
-  def enqueue!(options = {})
+  def enqueue
     assert_no_other_job_running!
-    super
   end
 
   def error(job, exception)
@@ -50,7 +49,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       .where.not(abacus_subject_key: nil)
       .where.not(data_quality: :error)
       .joins(:roles)
-      .merge(Role.active(Date.new(@invoice_year)))
+      .merge(Role.active(reference_date))
       .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
       .left_outer_joins(:external_invoices)
       .where("external_invoices.id IS NULL OR external_invoices.type != ? OR external_invoices.year != ?", ExternalInvoice::SacMembership.sti_name, @invoice_year)
@@ -58,6 +57,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   private
+
+  def reference_date
+    @reference_date ||= Date.new(@invoice_year)
+  end
 
   def log_progress(percent)
     HitobitoLogEntry.create!(
@@ -81,7 +84,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def other_job_running?
-    Delayed::Job.where("handler LIKE ?", "%Invoices::Abacus::CreateYearlyInvoicesJob%")
+    Delayed::Job.where("handler LIKE ?", "%#{self.class.name}%")
       .where(failed_at: nil).exists?
   end
 
@@ -105,7 +108,6 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
         end
       # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
       rescue Exception => e
-        Rails.logger.error "Error while creating invoices: #{e.message}"
         raise_exception = e
         raise Parallel::Break
       end
@@ -132,15 +134,17 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
     parts = begin
       sales_order_interface.create_batch(sales_orders)
-    rescue RestClient::ExceptionWithResponse => e
-      # Clear external invoices from the sales_orders object
-      Rails.logger.error "Error while creating sales orders: #{e.response.body}"
-      sales_orders.each do |so|
-        so.entity.destroy
-      end
+    rescue RestClient::Exception => e
+      clear_external_invoices(sales_orders)
       raise e
     end
     log_error_parts(parts)
+  end
+
+  def clear_external_invoices(sales_orders)
+    sales_orders.each do |so|
+      so.entity.destroy
+    end
   end
 
   def membership_invoices(people)
@@ -191,7 +195,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def context
-    @context ||= Invoices::SacMemberships::Context.new(Date.new(@invoice_year))
+    @context ||= Invoices::SacMemberships::Context.new(reference_date)
   end
 
   def sales_order_interface
