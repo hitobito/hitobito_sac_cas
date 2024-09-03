@@ -18,7 +18,6 @@ namespace :sac_imports do
 
   desc "Import people"
   task "1_people": [:environment] do
-    truemail_with_regex
     SacImports::PeopleImporter.new.create
   end
 
