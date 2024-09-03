@@ -40,7 +40,6 @@ describe "person history page" do
 
     it "floors membership years" do
       visit history_group_person_path(group_id: mitglieder.id, id: mitglied.id)
-      binding.irb
       expect(page).to have_css("td:nth-child(5)", text: membership_years.floor.to_s)
       expect(page).not_to have_css("td:nth-child(5)", text: membership_years.to_s)
     end
