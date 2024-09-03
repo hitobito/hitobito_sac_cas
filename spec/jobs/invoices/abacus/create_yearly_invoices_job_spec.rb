@@ -39,10 +39,17 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     person_1 = create_person(role_created_at: Date.new(invoice_year, 8, 16), params: {abacus_subject_key: "126"})
     person_2 = create_person(params: {abacus_subject_key: "127"})
     person_2.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year, state: :open)
+
+    # reproduction case where the query returned people which had a different
+    # invoice additionally to the SacMembership invoice
+    person_3 = create_person(params: {abacus_subject_key: "301"})
+    person_3.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year, state: :open)
+    person_3.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year, state: :open)
     [
       people(:familienmitglied2),
       person_1,
-      person_2
+      person_2,
+      person_3
     ]
   end
 
