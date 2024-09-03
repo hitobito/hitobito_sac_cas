@@ -14,11 +14,16 @@ module SacCas::Export::PeopleExportJob
 
   def data
     return recipients_data if @options[:recipients]
+    return recipient_households_data if @options[:recipient_households]
 
     super
   end
 
   def recipients_data
     Export::Tabular::People::SacRecipients.export(@format, entries, group)
+  end
+
+  def recipient_households_data
+    Export::Tabular::People::SacRecipientHouseholds.export(@format, entries, group)
   end
 end

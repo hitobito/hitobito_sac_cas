@@ -56,6 +56,6 @@ module SacCas::PeopleController
   end
 
   def tabular_params(**)
-    super.merge(params.slice(:recipients).permit!)
+    super.merge(params.slice(:recipients, :recipient_households).permit!)
   end
 end
