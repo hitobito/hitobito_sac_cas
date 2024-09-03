@@ -11,13 +11,13 @@ class People::YearlyMembershipInvoicesController < ApplicationController
 
     @invoice_form = invoice_form
     @group = group
-    @running_yearly_membership_invoice_job = running_yearly_membership_invoice_job
+    @yearly_membership_invoice_job_running = yearly_membership_invoice_job_running?
   end
 
   def create
     authorize!(:create_yearly_membership_invoice, group)
 
-    return success_redirect if running_yearly_membership_invoice_job.present?
+    return success_redirect if yearly_membership_invoice_job_running?
 
     assign_attributes
 
@@ -53,8 +53,8 @@ class People::YearlyMembershipInvoicesController < ApplicationController
     params.require(:people_yearly_membership_invoice_form).permit(:invoice_year, :invoice_date, :send_date, :role_finish_date)
   end
 
-  def running_yearly_membership_invoice_job
-    @running_yearly_membership_invoice_job ||= Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateYearlyInvoicesJob%'").first
+  def yearly_membership_invoice_job_running?
+    Invoices::Abacus::CreateYearlyInvoicesJob.other_job_running?
   end
 
   def invoice_form = @invoice_form ||= People::YearlyMembership::InvoiceForm.new

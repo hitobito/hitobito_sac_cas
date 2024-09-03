@@ -4,7 +4,10 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - title t(".title")
-- if @running_yearly_membership_invoice_job.nil?
+- if @yearly_membership_invoice_job_running
+  .alert.alert-warning= t(".job_already_scheduled_alert")
+- else
+  = cancel_link(group_path(@group))
   .alert.alert-info=t(".schedule_info_alert")
   
   = standard_form(@invoice_form, url: group_yearly_membership_invoices_path(@group), method: :post) do |f|
@@ -24,6 +27,3 @@
     = f.indented do
       = submit_button(f, t(".create_invoice"), data: { confirm: t('.submit_confirmation') })
       = cancel_link(group_path(@group))
-- else
-  .alert.alert-warning= t(".job_already_scheduled_alert")
-  = cancel_link(group_path(@group))
