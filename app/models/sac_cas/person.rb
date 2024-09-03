@@ -109,14 +109,16 @@ module SacCas::Person
   end
 
   def check_data_quality
-    People::DataQualityChecker.new(self).check_data_quality if
-      (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).any?
+    return if (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).empty?
+
+    People::DataQualityChecker.new(self).check_data_quality
   end
 
   def transmit_data_to_abacus
-    Invoices::Abacus::TransmitPersonJob.new(self).enqueue! if
-      (Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES & saved_changes.keys).any? &&
-        sac_membership_invoice? &&
-        data_quality != "error"
+    return if (Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES & saved_changes.keys).empty? ||
+      data_quality == "error" ||
+      !sac_membership_invoice?
+
+    Invoices::Abacus::TransmitPersonJob.new(self).enqueue!
   end
 end
