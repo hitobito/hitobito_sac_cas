@@ -144,7 +144,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       end
 
       it "Creates the invoices and error logs" do
-        expect { Delayed::Worker.new.run(job_instance) }
+        expect { subject.perform }
           .to change(ExternalInvoice, :count).by(4)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
@@ -156,7 +156,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         let(:role_finish_date) { Date.new(invoice_year, 12, 31) }
 
         it "Creates the invoices and error logs" do
-          expect { Delayed::Worker.new.run(job_instance) }
+          expect { subject.perform }
             .to change(ExternalInvoice, :count).by(4)
             .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
             .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
