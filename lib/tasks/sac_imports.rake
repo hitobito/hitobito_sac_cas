@@ -16,14 +16,13 @@ namespace :sac_imports do
     additional_memberships: "tmp/xlsx/zusatzmitgliedschaften.xlsx"
   }
 
-  task override_truemail_configuration: [:environment] do
-    Truemail.configure do |config|
-      config.default_validation_type = :regex
-    end
+  def truemail_with_regex
+    Truemail.configuration.default_validation_type = :regex
   end
 
   desc "Import people"
-  task "1_people": [:override_truemail_configuration] do
+  task "1_people": [:environment] do
+    truemail_with_regex
     SacImports::PeopleImporter.new.create
   end
 
