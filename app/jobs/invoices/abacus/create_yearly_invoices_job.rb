@@ -112,6 +112,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def process_invoices
     raise_exception = nil
     start_progress
+    clear_spurious_draft_invoices!
     active_members.in_batches(of: BATCH_SIZE) do |people|
       people_ids = people.pluck(:id)
       slices = people_ids.each_slice(SLICE_SIZE).to_a
@@ -131,6 +132,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       end
       update_progress(people_ids.size)
     end
+  end
+
+  def clear_spurious_draft_invoices!
+    ExternalInvoice::SacMembership.where(state: :draft).destroy_all
   end
 
   def load_people(ids)

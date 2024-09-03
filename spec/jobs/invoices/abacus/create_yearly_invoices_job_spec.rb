@@ -156,6 +156,20 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
       end
 
+      context "when a spurious ExternalInvoice exists" do
+        let!(:spurious_invoice) do
+          expected_people.first.external_invoices.create!(
+            type: ExternalInvoice::SacMembership, state: :draft, year: invoice_year
+          )
+        end
+
+        it "clears this invoice" do
+          expect { subject.perform }
+            .to change { ExternalInvoice.where(state: :draft).count }.by(-1)
+            .and change { ExternalInvoice.exists?(spurious_invoice.id) }.from(true).to(false)
+        end
+      end
+
       context "when role_finish_date is set" do
         let(:role_finish_date) { Date.new(invoice_year, 12, 31) }
 
