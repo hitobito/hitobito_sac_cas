@@ -30,4 +30,36 @@ describe Group::SektionsMitglieder::Mitglied do
         .and not_change { Household.new(familienmitglied.person).empty? }
     end
   end
+
+  describe "#transmit_data_to_abacus" do
+    let(:person) do
+      people(:mitglied).tap do |person|
+        person.phone_numbers.create!(number: "+41791234567", label: "mobile")
+        person.roles.destroy_all
+      end
+    end
+
+    subject(:create_role) do
+      person.roles.create!(
+        type: Group::SektionsMitglieder::Mitglied.sti_name,
+        group: groups(:bluemlisalp_mitglieder),
+        delete_on: Time.zone.tomorrow,
+        created_at: Time.zone.now
+      )
+    end
+
+    it "enqueues the job" do
+      expect { create_role }.to change(Delayed::Job, :count).by(1)
+    end
+
+    it "doesnt enqueue the job if the abacus subject key is set" do
+      person.update!(abacus_subject_key: person.id)
+      expect { create_role }.not_to change(Delayed::Job, :count)
+    end
+
+    it "doesnt enqueue the job if data quality errors exist" do
+      person.update!(first_name: nil)
+      expect { create_role }.not_to change(Delayed::Job, :count)
+    end
+  end
 end

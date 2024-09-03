@@ -37,7 +37,7 @@ class People::DataQualityChecker
     end
 
     highest_severity = @person.data_quality_issues.order(severity: :desc).first&.severity
-    @person.update_attribute(:data_quality, highest_severity || :ok)
+    @person.update_column(:data_quality, highest_severity || :ok)
   end
 
   def self.birthday_less_than_6_years_before_entry(person)
