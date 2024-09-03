@@ -14,14 +14,13 @@ module Export::Tabular::People
       super(entry, format)
     end
 
-    def adresszusatz
-      # Adresszusatz wird allenfalls in INVOICE: Strukturierte Adressen bei Rechnungen / ISO20022
-      # hitobito#2226 hinzugefügt, bis dahin eine leere Spalte in den Export schreiben
+    def address
+      [entry.street, entry.housenumber].join(" ").strip
     end
 
-    # Immer den Wert 0 ausgeben.
+    # Immer den Wert 1 ausgeben
     def anzahl
-      0
+      1
     end
 
     def country
@@ -35,15 +34,12 @@ module Export::Tabular::People
       group.layer_group.navision_id
     end
 
-    def postfach
-      # Postfach wird allenfalls in INVOICE: Strukturierte Adressen bei
-      # Rechnungen / ISO20022 hitobito#2226 hinzugefügt, bis dahin eine leere Spalte
-      # in den Export schreiben
-    end
-
-    # Inhalt: leer lassen, müsste ein Legacy-Feld sein das nicht mehr wirklich verwendet wird
     def salutation
-      nil
+      return if entry.gender.nil?
+
+      I18n.with_locale(entry.language) do
+        I18n.t(entry.gender, scope: "activerecord.attributes.person.recipient_salutations")
+      end
     end
   end
 end

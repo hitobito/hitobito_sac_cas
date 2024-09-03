@@ -328,6 +328,9 @@ fr:
           m: Monsieur
           w: Madame
           _nil: ""
+        recipient_salutations:
+          m: Monsieur
+          w: Madame
         additional_information: ""
       group:
         group_id: ""

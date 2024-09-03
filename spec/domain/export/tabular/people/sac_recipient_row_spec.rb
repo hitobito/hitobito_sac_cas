@@ -30,12 +30,10 @@ describe Export::Tabular::People::SacRecipientRow do
   def value(key) = row.fetch(key)
 
   it("id") { expect(value(:id)).to eq 42 }
-  it("salutation") { expect(value(:salutation)).to be_nil }
   it("first_name") { expect(value(:first_name)).to eq "Hans" }
   it("last_name") { expect(value(:last_name)).to eq "Muster" }
-  it("adresszusatz") { expect(value(:adresszusatz)).to be_nil }
-  it("address") { expect(value(:address)).to eq "Musterstrasse 42" }
-  it("postfach") { expect(value(:postfach)).to be_nil }
+  it("address_care_of") { expect(value(:address_care_of)).to be_nil }
+  it("postbox") { expect(value(:postbox)).to be_nil }
   it("zip_code") { expect(value(:zip_code)).to eq "4242" }
   it("town") { expect(value(:town)).to eq "Musterhausen" }
   it("email") { expect(value(:email)).to eq "hans.muster@example.com" }
@@ -52,6 +50,35 @@ describe Export::Tabular::People::SacRecipientRow do
     it "returns nil for CH country" do
       person.country = "CH"
       expect(value(:country)).to be_nil
+    end
+  end
+
+  describe "#address" do
+    it "returns address of person" do
+      expect(value(:address)).to eq "Musterstrasse 42"
+      person.housenumber = nil
+      expect(value(:address)).to eq "Musterstrasse"
+      person.street = nil
+      expect(value(:address)).to eq ""
+    end
+  end
+
+  describe "#salutation" do
+    it "returns salutation based on Person#gender" do
+      expect(value(:salutation)).to be_nil
+      person.gender = "m"
+      expect(value(:salutation)).to eq("Herr")
+      person.gender = "w"
+      expect(value(:salutation)).to eq("Frau")
+    end
+
+    it "returns salutation based on Person#language" do
+      person.language = "fr"
+      expect(value(:salutation)).to be_nil
+      person.gender = "m"
+      expect(value(:salutation)).to eq("Monsieur")
+      person.gender = "w"
+      expect(value(:salutation)).to eq("Madame")
     end
   end
 end
