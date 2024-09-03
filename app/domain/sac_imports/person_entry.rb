@@ -22,7 +22,7 @@ module SacImports
     end
 
     def person
-      @person ||= ::Person.new(id: navision_id).tap do |person|
+      @person ||= ::Person.find_or_initialize(id: navision_id).tap do |person|
         assign_attributes(person)
         build_phone_numbers(person)
         build_role(person)
