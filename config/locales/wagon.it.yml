@@ -320,8 +320,8 @@ it:
         membership_number: ""
         navision_id: ""
         salutations:
-          m: ""
-          w: ""
+          m: Signor
+          w: Signora
           _nil: ""
         additional_information: ""
       group:

@@ -320,8 +320,8 @@ fr:
         membership_number: ""
         navision_id: ""
         salutations:
-          m: ""
-          w: ""
+          m: Monsieur
+          w: Madame
           _nil: ""
         additional_information: ""
       group:
