@@ -127,16 +127,17 @@ class People::SacMembership
   end
 
   def active_roles
-    if @date
-      if in_memory?
-        @person.roles.select { |r| r.active_period.cover?(@date) }
-      else
-        # unscope the default scope first with `with_inactive`, then get `active` for `@date`
-        @person.roles.with_inactive.active(@date)
-      end
-    else
-      @person.roles
-    end
+    @person.roles.active(@date || Date.current)
+    # if @date
+    #   if in_memory?
+    #     @person.roles.select { |r| r.active_period.cover?(@date) }
+    #   else
+    #     # unscope the default scope first with `with_inactive`, then get `active` for `@date`
+    #     @person.roles.with_inactive.active(@date)
+    #   end
+    # else
+    #   @person.roles
+    # end
   end
 
   def active_roles_of_type(types)
