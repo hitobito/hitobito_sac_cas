@@ -9,12 +9,13 @@ require "spec_helper"
 
 describe SacImports::PeopleImporter do
   let(:file) { file_fixture("sac_imports_src/NAV1_Kontakte_20240822_testdata.csv") }
-  let(:importer) { described_class.new }
+  let!(:importer) { described_class.new }
 
   let(:people_navision_ids) { %w[125099 125100 125101 125102 125103 125104 125105 125106 125107 125108] }
   let(:invalid_person_navision_id) { "125109" }
 
   before do
+    expect(Truemail.configuration.default_validation_type).to eq(:regex)
     Person.where(id: people_navision_ids).destroy_all
 
     # Mock the file loading behavior in CSVImporter
@@ -23,7 +24,7 @@ describe SacImports::PeopleImporter do
     importer.instance_variable_set(:@source_file, csv_source_instance)
   end
 
-  it "imports people and assigns member role" do
+  it "imports people and assigns role" do
     importer.create
 
     people_navision_ids.each do |id|

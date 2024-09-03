@@ -16,10 +16,6 @@ namespace :sac_imports do
     additional_memberships: "tmp/xlsx/zusatzmitgliedschaften.xlsx"
   }
 
-  def truemail_with_regex
-    Truemail.configuration.default_validation_type = :regex
-  end
-
   desc "Import people"
   task "1_people": [:environment] do
     truemail_with_regex

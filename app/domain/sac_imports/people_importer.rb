@@ -14,6 +14,7 @@ module SacImports
     ]
 
     def initialize(output: $stdout)
+      truemail_with_regex
       @output = output
       @source_file = CsvSource.new(:NAV1)
       @csv_report = CsvReport.new(:"1_people", REPORT_HEADERS)
@@ -25,6 +26,12 @@ module SacImports
         process_row(row)
       end
       @csv_report.finalize(output: @output)
+    end
+
+    private
+
+    def truemail_with_regex
+      Truemail.configuration.default_validation_type = :regex
     end
 
     def target_group
