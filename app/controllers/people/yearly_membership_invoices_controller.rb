@@ -54,7 +54,7 @@ class People::YearlyMembershipInvoicesController < ApplicationController
   end
 
   def yearly_membership_invoice_job_running?
-    Invoices::Abacus::CreateYearlyInvoicesJob.other_job_running?
+    Invoices::Abacus::CreateYearlyInvoicesJob.job_running?
   end
 
   def invoice_form = @invoice_form ||= People::YearlyMembership::InvoiceForm.new

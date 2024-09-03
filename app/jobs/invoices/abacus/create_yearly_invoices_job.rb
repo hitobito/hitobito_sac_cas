@@ -56,7 +56,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       .distinct
   end
 
-  def self.other_job_running?
+  def self.job_running?
     Delayed::Job.where("handler LIKE ?", "%#{name}%")
       .where(failed_at: nil).exists?
   end
@@ -85,7 +85,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def assert_no_other_job_running!
-    raise "There is already a job running" if self.class.other_job_running?
+    raise "There is already a job running" if self.class.job_running?
   end
 
   def extend_roles_for_invoicing
