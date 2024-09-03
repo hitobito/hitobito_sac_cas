@@ -13,9 +13,9 @@ describe "person history page" do
   let(:geschaeftsstelle) { groups(:geschaeftsstelle) }
   let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
 
-  describe "her own" do
-    before { sign_in(admin) }
+  before { sign_in(admin) }
 
+  describe "her own" do
     it "shows info header about sektionen" do
       visit history_group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
       expect(page).to have_text "Hier kannst du deine Mitgliedschaften verwalten. " \
@@ -26,14 +26,23 @@ describe "person history page" do
   end
 
   describe "others" do
-    before { sign_in(admin) }
-
     it "shows info header about sektionen" do
       visit history_group_person_path(group_id: mitglieder.id, id: mitglied.id)
       expect(page).to have_text "Hier kannst du deine Mitgliedschaften verwalten. " \
         "Informationen zu den verschiedenen SAC Sektionen findest du unter " \
         "https://www.sac-cas.ch/de/der-sac/sektionen"
       expect(page).to have_link "https://www.sac-cas.ch/de/der-sac/sektionen"
+    end
+  end
+
+  context "#membership_years" do
+    let(:membership_years) { Person.with_membership_years.find(mitglied.id).membership_years }
+
+    it "floors membership years" do
+      visit history_group_person_path(group_id: mitglieder.id, id: mitglied.id)
+      binding.irb
+      expect(page).to have_css("td:nth-child(5)", text: membership_years.floor.to_s)
+      expect(page).not_to have_css("td:nth-child(5)", text: membership_years.to_s)
     end
   end
 end
