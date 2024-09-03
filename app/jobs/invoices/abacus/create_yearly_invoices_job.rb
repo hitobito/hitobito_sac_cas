@@ -159,10 +159,8 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def membership_invoices(people)
     people.filter_map do |person|
       member = Invoices::SacMemberships::Member.new(person, context)
-      if member.stammsektion_role
-        invoice = Invoices::Abacus::MembershipInvoice.new(member, member.active_memberships)
-        invoice if invoice.invoice?
-      end
+      invoice = Invoices::Abacus::MembershipInvoice.new(member, member.active_memberships)
+      invoice if invoice.invoice?
     end
   end
 
