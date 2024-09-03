@@ -10,7 +10,13 @@ describe Invoices::Abacus::MembershipInvoice do
   let(:member) { Invoices::SacMemberships::Member.new(person, context) }
   let(:memberships) { member.active_memberships }
 
-  subject { described_class.new(member, memberships) }
+  subject do
+    # member expects preloaded roles (without them it would not respect the date in the default roles scope)
+    ActiveRecord::Associations::Preloader.new.preload([person], :roles, Role.active(context.date))
+    # our specs expect roles to be present, check this precondition after preloading
+    assert person.roles.present?
+    described_class.new(member, memberships)
+  end
 
   before do
     Role.update_all(end_on: date.end_of_year)

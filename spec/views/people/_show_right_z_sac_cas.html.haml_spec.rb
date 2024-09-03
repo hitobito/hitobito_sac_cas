@@ -33,7 +33,7 @@ describe "people/_show_right_z_sac_cas.html.haml" do
     end
 
     it "renders membership info for past membership" do
-      person.roles.destroy_all
+      person.roles.update_all(end_on: 1.day.ago)
 
       expect(dom).to have_css "section.sac-membership"
       expect(dom).to have_css "section.sac-membership .qr-code-wrapper"

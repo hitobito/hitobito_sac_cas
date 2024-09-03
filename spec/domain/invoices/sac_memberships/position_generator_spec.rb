@@ -7,7 +7,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:person) { people(:mitglied) }
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
-  let(:member) { Invoices::SacMemberships::Member.new(context.people_with_membership_years.find(person.id), context) }
+  let(:member) { Invoices::SacMemberships::Member.new(load_person(person.id), context) }
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
   let(:additional_section) { groups(:matterhorn) }
@@ -16,7 +16,14 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:positions) { described_class.new(member).generate(memberships, new_entry: new_entry) }
   let(:magazine_list) { mailing_lists(:sac_magazine) }
 
+  def load_person(id)
+    Person.with_membership_years("people.*", date).find(id).tap do |person|
+      ActiveRecord::Associations::Preloader.new.preload([person], :roles, Role.with_inactive)
+    end
+  end
+
   before do
+    travel_to date # TODO: this should not be necessary and might mask date related bugs
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
     Role.update_all(end_on: date + 3.months)
@@ -170,7 +177,6 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "family main" do
       let(:person) { people(:familienmitglied) }
-
       it "generates positions" do
         expect(positions.size).to eq(9)
 

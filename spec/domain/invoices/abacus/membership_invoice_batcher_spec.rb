@@ -14,9 +14,10 @@ describe Invoices::Abacus::MembershipInvoiceBatcher do
   let(:people) do
     context
       .people_with_membership_years
-      .where("people.id IN (#{Group::SektionsMitglieder::Mitglied.distinct.select(:person_id).to_sql})")
-      .includes(:roles)
-      .order_by_name
+      .where(id: Group::SektionsMitglieder::Mitglied.active(date).pluck(:person_id))
+      .order_by_name.tap do |people|
+      ActiveRecord::Associations::Preloader.new.preload(people, :roles, Role.active(date))
+    end
   end
   let(:abacus_client) { Invoices::Abacus::Client.new }
   let(:host) { "https://abacus.example.com" }

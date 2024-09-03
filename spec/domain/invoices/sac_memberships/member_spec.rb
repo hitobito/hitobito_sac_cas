@@ -8,7 +8,13 @@ describe Invoices::SacMemberships::Member do
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
 
-  subject { described_class.new(person, context) }
+  subject do
+    # member expects preloaded roles (without them it would not respect the date in the default roles scope)
+    ActiveRecord::Associations::Preloader.new.preload([person], :roles, Role.active(context.date))
+    # our specs expect roles to be present, check this precondition after preloading
+    assert person.roles.present?
+    described_class.new(person, context)
+  end
 
   before do
     Role.update_all(end_on: date.end_of_year)
@@ -16,6 +22,7 @@ describe Invoices::SacMemberships::Member do
 
   context "main methods" do
     before do
+      travel_to date # TODO: this should not be necessary and might mask date related bugs
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),

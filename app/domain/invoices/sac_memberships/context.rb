@@ -36,9 +36,10 @@ module Invoices
       end
 
       def people_with_membership_years(includes: [:roles])
-        preload_roles = includes.delete(:roles)
+        preload_roles = !!includes.delete(:roles)
+
         Person
-          .with_membership_years("people.*", Date.new(date.year - 1, 12, 31))
+          .with_membership_years("people.*", date.last_year.end_of_year)
           .includes(includes)
           .tap do |people|
             next unless preload_roles

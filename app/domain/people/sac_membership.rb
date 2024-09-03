@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::SacMembership
-  def initialize(person, date: nil, in_memory: false)
+  def initialize(person, date: Date.current, in_memory: false)
     @person = person
     @date = date
     @in_memory = in_memory
@@ -127,17 +127,11 @@ class People::SacMembership
   end
 
   def active_roles
-    @person.roles.active(@date || Date.current)
-    # if @date
-    #   if in_memory?
-    #     @person.roles.select { |r| r.active_period.cover?(@date) }
-    #   else
-    #     # unscope the default scope first with `with_inactive`, then get `active` for `@date`
-    #     @person.roles.with_inactive.active(@date)
-    #   end
-    # else
-    #   @person.roles
-    # end
+    if in_memory?
+      @person.roles.select { |r| r.active_period.cover?(@date) }
+    else
+      @person.roles.active(@date)
+    end
   end
 
   def active_roles_of_type(types)
@@ -149,9 +143,7 @@ class People::SacMembership
     end
   end
 
-  def in_memory?
-    @in_memory || !@person.roles.is_a?(ActiveRecord::Relation)
-  end
+  def in_memory? = !!@in_memory
 
   def any_future_role?
     @person.roles.future.where(type: mitglied_stammsektion_types).exists?

@@ -51,7 +51,9 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def load_people(ids)
-    context.people_with_membership_years.where(id: ids).order(:id).includes(:roles)
+    context.people_with_membership_years.where(id: ids).order(:id).tap do |people|
+      ActiveRecord::Associations::Preloader.new.preload(people, :roles, Role.active(invoice_date))
+    end
   end
 
   def create_invoices(people)

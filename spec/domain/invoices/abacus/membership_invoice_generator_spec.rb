@@ -29,20 +29,6 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect(invoice.memberships.map(&:section)).to match_array [bluemlisalp, matterhorn]
     end
 
-    it "includes zusatzsektion if destroyed" do
-      roles(:mitglied_zweitsektion).destroy
-      invoice = generator.build(new_entry: false, discount: nil)
-      expect(invoice.memberships).to have(2).items
-      expect(invoice.memberships.map(&:section)).to match_array [bluemlisalp, matterhorn]
-    end
-
-    it "excludes zusatzsektion if deleted" do
-      Role.where(id: roles(:mitglied_zweitsektion).id).delete_all
-      invoice = generator.build(new_entry: false, discount: nil)
-      expect(invoice.memberships).to have(1).items
-      expect(invoice.memberships.map(&:section)).to match_array [bluemlisalp]
-    end
-
     context "for zusatzsektion" do
       let(:section) { matterhorn }
 

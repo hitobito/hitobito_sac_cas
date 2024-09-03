@@ -73,7 +73,7 @@ describe "people/_details_sac_cas.html.haml" do
     end
 
     it "renders membership info for past membership" do
-      person.roles.destroy_all
+      person.roles.update_all(end_on: 1.day.ago)
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"
     end

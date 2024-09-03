@@ -66,8 +66,8 @@ describe People::Neuanmeldungen::Promoter do
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
 
       mitglied_role = neuanmeldung_role.person.roles.last
-      expect(mitglied_role.start_on).to eq(Time.current)
-      expect(mitglied_role.delete_on).to eq(Date.current.end_of_year)
+      expect(mitglied_role.start_on).to eq(Date.current)
+      expect(mitglied_role.end_on).to eq(Date.current.end_of_year)
     end
 
     it "creates a new Mitglied role when a Neuanmeldung is promoted" do
@@ -90,7 +90,7 @@ describe People::Neuanmeldungen::Promoter do
         Group::SektionsMitglieder::Mitglied.name.to_sym,
         group: groups(:matterhorn_mitglieder),
         start_on: Time.current,
-        delete_on: Date.current.end_of_year
+        end_on: Date.current.end_of_year
       )
       neuanmeldung_role = create_neuanmeldung_role(
         type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name,

@@ -64,15 +64,15 @@ describe SacImports::Sektion::Membership do
       expect(role.beitragskategorie).to eq "adult"
     end
 
-    it "reads only start_on" do
+    it "reads last_joining_date" do
       attrs[:last_joining_date] = "1.1.1960"
       attrs[:last_exit_date] = "1.1.1990"
       expect(role.start_on).to eq Date.parse(attrs[:last_joining_date])
-      expect(role.end_on).to be_nil
+      expect(role.end_on).to eq SacImports::Sektion::Membership::DEFAULT_END_ON
       expect(role).to be_valid
     end
 
-    it "reads end_on only if member_type is Ausgetreten" do
+    it "reads last_exit_date only if member_type is Ausgetreten" do
       attrs[:last_exit_date] = "1.1.1990"
       attrs[:member_type] = "Ausgetreten"
       expect(role.end_on).to eq Date.parse(attrs[:last_exit_date])

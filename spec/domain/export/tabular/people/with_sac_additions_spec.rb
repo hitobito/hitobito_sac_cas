@@ -10,8 +10,7 @@ require "spec_helper"
 describe Export::Tabular::People::WithSacAdditions do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:person) do
-    person = Fabricate(:person, household_key: "1234", birthday: 25.years.ago, primary_group: group, sac_family_main_person: true)
-    Person.with_membership_years.find(person.id)
+    Fabricate(:person, household_key: "1234", birthday: 25.years.ago, primary_group: group, sac_family_main_person: true)
   end
 
   shared_examples "has sac additions" do
@@ -64,7 +63,7 @@ describe Export::Tabular::People::WithSacAdditions do
   ].each do |tabular_class|
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { person }
+      let(:tabular_entry) { Person.with_membership_years.find(person.id) }
 
       it_behaves_like "has sac additions"
     end
@@ -76,7 +75,7 @@ describe Export::Tabular::People::WithSacAdditions do
   ].each do |tabular_class|
     describe tabular_class do
       let(:tabular_class) { tabular_class }
-      let(:tabular_entry) { Fabricate(:event_participation, person: person) }
+      let(:tabular_entry) { Fabricate(:event_participation, person: Person.with_membership_years.find(person.id)) }
 
       it_behaves_like "has sac additions"
     end

@@ -77,7 +77,7 @@ describe "neuanmeldungen approval", js: true do
       click_link("Übernehmen")
 
       expect(page).to have_selector("#neuanmeldungen-handler.modal")
-      binding.pry
+      
       within("#neuanmeldungen-handler.modal") do
         expect(page).to have_selector(".modal-title", text: "Anmeldungen übernehmen")
         # Order is alphabetical, so we need to check both possibilities

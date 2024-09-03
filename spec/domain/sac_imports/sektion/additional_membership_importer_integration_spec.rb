@@ -34,7 +34,7 @@ describe SacImports::Sektion::AdditionalMembershipsImporter do
     expect(role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
     expect(role.beitragskategorie).to eq("adult")
     expect(role.start_on).to eq(Date.parse("1900-01-01"))
-    expect(role.delete_on).to eq(Date.parse("2024-12-31"))
+    expect(role.end_on).to eq(Date.parse("2024-12-31"))
   end
 
   it "ignores unknown person" do

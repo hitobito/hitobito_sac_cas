@@ -47,8 +47,8 @@ describe SacImports::Sektion::MembershipsImporter do
 
     active_role = active.roles.first
 
-    expect(active_role.start_on).to eq(Time.zone.parse("1899-12-31"))
-    expect(active_role.end_on).to be_nil
+    expect(active_role.start_on).to eq(Date.parse("1899-12-31"))
+    expect(active_role.end_on).to eq SacImports::Sektion::Membership::DEFAULT_END_ON
     expect(active_role.beitragskategorie).to eq("youth")
   end
 
