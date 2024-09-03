@@ -140,14 +140,15 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def create_invoices(people)
     membership_invoices = membership_invoices(people)
     sales_orders = create_sales_orders(membership_invoices)
-
-    parts = begin
-      sales_order_interface.create_batch(sales_orders)
-    rescue RestClient::Exception => e
-      clear_external_invoices(sales_orders)
-      raise e
-    end
+    parts = submit_sales_orders(sales_orders)
     log_error_parts(parts)
+  end
+
+  def submit_sales_orders(sales_orders)
+    sales_order_interface.create_batch(sales_orders)
+  rescue RestClient::Exception => e
+    clear_external_invoices(sales_orders)
+    raise e
   end
 
   def clear_external_invoices(sales_orders)
