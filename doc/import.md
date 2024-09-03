@@ -19,12 +19,11 @@ Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im 
 |------|------------------------------------------------------|
 | NAV1 | Alle Kontakte (natürliche und juristische Personen)  |
 | NAV2 | Stammmitgliedschaften                                |
-| NAV3 | Zusatzmitgliedschaften                               |
 | NAV4 | Sektionsfunktionäre                                  |
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
 | NAV7 | Abonenten Die Alpen                                  |
-| WSO21 | Datenexport aus WSO2                                |
+| WSO2 | Datenexport aus WSO2                                |
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
@@ -37,7 +36,6 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
   head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
   ```
 - `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
-- Das Encoding der Quelldaten muss UTF-8 sein. Bspw. führt UTF-8-with-BOM zu Fehlern!
 
 ## CSV Report
 

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
 class SacImports::CsvSource
   NIL_VALUES = ["", "NULL", "null", "Null"].freeze
   SOURCE_HEADERS = {
@@ -53,7 +58,7 @@ class SacImports::CsvSource
 
   def rows
     data = []
-    CSV.foreach(path, headers: true) do |row|
+    CSV.foreach(path, headers: true, encoding: "bom|utf-8") do |row|
       data << process_row(row)
     end
     data
