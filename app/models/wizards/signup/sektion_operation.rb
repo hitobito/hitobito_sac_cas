@@ -97,7 +97,7 @@ module Wizards::Signup
 
     def exclude_from_mailing_list
       return true unless mailing_list && !newsletter
-      
+
       mailing_list.subscriptions.create!(subscriber: person, excluded: true)
     end
 
