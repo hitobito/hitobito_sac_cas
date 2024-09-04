@@ -54,9 +54,9 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
     member_ids.in_batches(of: BATCH_SIZE) do |people|
       people_ids = people.pluck(:id)
       slices = people_ids.each_slice(SLICE_SIZE).to_a
-      check_terminated
+      check_terminated!
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |slice|
-        check_terminated
+        check_terminated!
         ActiveRecord::Base.connection_pool.with_connection do
           transmit_slice(slice)
         end
