@@ -9,7 +9,7 @@ module Invoices
   module SacMemberships
     module Positions
       class SacFee < Base
-        self.group = :sac_fee
+        self.grouping = :sac_fee
         self.section_payment_possible = true
 
         def gross_amount
