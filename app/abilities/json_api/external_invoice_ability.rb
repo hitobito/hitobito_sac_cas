@@ -19,7 +19,7 @@ class JsonApi::ExternalInvoiceAbility
   attr_reader :user
 
   def allow_index
-    can :index, ExternalInvoice, {link_type: Group.sti_name}
+    can :index, ExternalInvoice
   end
 
   def backoffice?
