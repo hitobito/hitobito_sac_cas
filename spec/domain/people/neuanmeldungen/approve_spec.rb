@@ -15,13 +15,13 @@ describe People::Neuanmeldungen::Approve do
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldungen_nv) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
-  def create_role(beitragskategorie)
+  def create_role(beitragskategorie, person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true))
     Fabricate(
       neuanmeldung_role_class.sti_name,
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: Time.zone.now.beginning_of_year,
-      person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true)
+      person: person
     )
   end
 
@@ -48,12 +48,24 @@ describe People::Neuanmeldungen::Approve do
     expect { approver.call }
       .to change { neuanmeldung_role_class.count }.by(-3)
       .and change { neuanmeldung_approved_role_class.count }.by(3)
+      .and change { ExternalInvoice::SacMembership.count }.by(3)
+      .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(3)
 
     expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.fourth, neuanmeldung_approved_role_class, neuanmeldungen_nv)
 
     expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
+    expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
+  end
+
+  it "doesnt create invoice for person in family when not main person" do
+    people(:familienmitglied2).roles.destroy_all
+    neuanmeldung = create_role(:family, person: people(:familienmitglied2))
+
+    expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
+      .to not_change { ExternalInvoice::SacMembership.count }
+      .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
   end
 
   it "creates the SektionNeuanmeldungNv group if it does not exist" do
