@@ -12,7 +12,7 @@ describe PersonAbility do
   let(:mitglied) { people(:mitglied) }
   let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
 
-  subject(:ability) { Ability.new(person) }
+  subject(:ability) { Ability.new(person.reload) }
 
   describe "primary_group" do
     context "mitglied updating himself" do

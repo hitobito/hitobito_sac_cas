@@ -13,7 +13,7 @@ describe ExternalTrainingAbility do
 
   let(:external_training) { Fabricate(:external_training, person: person) }
 
-  subject(:ability) { Ability.new(role.person) }
+  subject(:ability) { Ability.new(role.person.reload) }
 
   context "with layer_and_below_full" do
     let(:role) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle)) }

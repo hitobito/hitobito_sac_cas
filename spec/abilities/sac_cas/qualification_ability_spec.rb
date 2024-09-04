@@ -146,7 +146,7 @@ describe QualificationAbility do
     end
 
     describe Group::SektionsFunktionaere::Administration do
-      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person }
+      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person.reload }
 
       it "is permitted to create and destroy" do
         expect(ability).to be_able_to(:create, qualification)
@@ -155,7 +155,7 @@ describe QualificationAbility do
     end
 
     describe Group::SektionsFunktionaere::Mitgliederverwaltung do
-      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Mitgliederverwaltung).person }
+      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Mitgliederverwaltung).person.reload }
 
       it "is not permitted to create and destroy" do
         expect(ability).not_to be_able_to(:create, qualification)
