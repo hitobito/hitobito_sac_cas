@@ -82,10 +82,13 @@ describe "signup/sektion", js: true do
     click_on "Weiter als Familienmitgliedschaft", match: :first
   end
 
-  def complete_last_page(with_adult_consent: true, submit: true)
+  def complete_last_page(with_adult_consent: true, with_newsletter: false, submit: true)
     assert_step "Zusatzdaten"
     expect(page).to have_button("Registrieren"), "expected to be on last page"
     if with_adult_consent
+      check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
+    end
+    if with_newsletter
       check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
     end
     check "Ich habe die Statuten gelesen und stimme diesen zu"
@@ -243,6 +246,43 @@ describe "signup/sektion", js: true do
         expect(find_field("E-Mail (optional)")[:class]).not_to match(/\bis-invalid\b/)
         expect(find_field("Telefon (optional)")[:class]).not_to match(/\bis-invalid\b/)
       end
+    end
+
+    it "can create several people in same household" do
+      click_on "Eintrag hinzufügen"
+
+      within "#members_fields .fields:nth-child(1)" do
+        fill_in "Vorname", with: "Maxine"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: "01.01.1981"
+        fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+        choose "Frau"
+      end
+      assert_aside("01.01.1980", "01.01.1981")
+      click_on "Eintrag hinzufügen"
+
+      within "#members_fields .fields:nth-child(2)" do
+        fill_in "Vorname", with: "Maxi"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: format_date(15.years.ago)
+        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        choose "Andere"
+      end
+
+      assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
+      click_button("Weiter als Familienmitgliedschaft", match: :first)
+
+      expect do
+        complete_last_page
+        expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
+      end.to change { Person.count }.by(3)
+        .and change { Role.count }.by(3)
+        .and change { ActionMailer::Base.deliveries.count }.by(1)
+
+      people = Person.where(last_name: "Muster")
+      expect(people).to have(3).items
+      expect(Person.where(household_key: people.first.household_key)).to have(3).items
     end
 
     it "can create several people in same household" do
@@ -638,13 +678,13 @@ describe "signup/sektion", js: true do
         click_on "Weiter", match: :first
         assert_step "Familienmitglieder"
 
-        click_on 'Zurück', match: :first
-        click_on 'Zurück', match: :first
-        assert_step 'Haupt-E-Mail'
-        click_on 'Weiter', match: :first
-        assert_step 'Personendaten'
-        click_on 'Weiter', match: :first
-        assert_step 'Familienmitglieder'
+        click_on "Zurück", match: :first
+        click_on "Zurück", match: :first
+        assert_step "Haupt-E-Mail"
+        click_on "Weiter", match: :first
+        assert_step "Personendaten"
+        click_on "Weiter", match: :first
+        assert_step "Familienmitglieder"
 
         click_on "Zurück", match: :first
         click_on "Weiter", match: :first
