@@ -407,10 +407,22 @@ describe Role do
         .to be_within(0.01).of(years)
     end
 
+    it "calculates value and includes last day for deleted_role" do
+      create_role(created_at: Date.new(2000, 1, 1), deleted_at: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
+    end
+
     it "calculates value for role with delete_on" do
       create_role(delete_on: end_at)
       expect(person.roles.with_membership_years.first.membership_years)
         .to be_within(0.01).of(years)
+    end
+
+    it "calculates value and includes last day for delete_on role" do
+      create_role(created_at: Date.new(2000, 1, 1), delete_on: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
     end
 
     it "calculates value for archived_role" do
@@ -419,10 +431,34 @@ describe Role do
         .to be_within(0.01).of(years)
     end
 
+    it "calculates value and includes last day for archived_role" do
+      create_role(created_at: Date.new(2000, 1, 1), archived_at: Date.new(2000, 12, 31))
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to eq(1.0)
+    end
+
     it "calculates value up to now" do
       create_role(created_at: 1.year.ago, delete_on: 2.years.from_now)
       expect(person.roles.with_membership_years.first.membership_years)
-        .to be_within(0.01).of(1.0)
+        .to eq(1.0)
+    end
+
+    it "calculates value and does not include last day for date today" do
+      create_role(created_at: 1.year.ago + 1.days, delete_on: 2.years.from_now)
+      expect(person.roles.with_deleted.with_membership_years.first.membership_years)
+        .to be_within(0.01).of(0.99)
+    end
+
+    it "calculates value up to passed reporting date" do
+      create_role(created_at: 1.year.ago, delete_on: 5.years.from_now)
+      expect(person.roles.with_membership_years("roles.*", 2.years.from_now).first.membership_years)
+        .to eq(3.0)
+    end
+
+    it "calculates value and does not include last day for reporting date" do
+      create_role(created_at: 1.year.ago, delete_on: 5.years.from_now)
+      expect(person.roles.with_membership_years("roles.*", 2.years.from_now - 1.days).first.membership_years)
+        .to be_within(0.01).of(2.99)
     end
 
     (SacCas::MITGLIED_ROLES - [Group::SektionsMitglieder::Mitglied]).each do |role_type|

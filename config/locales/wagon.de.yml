@@ -99,7 +99,7 @@ de:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
         termination_reason_id: "Austrittsgrund"
-        data_retention_consent: "Meine Daten sollen nach dem Austritt erhalten blieben und ich kann für Spendenaufrufe kontaktiert werden"
+        data_retention_consent: "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
         subscribe_newsletter: "Newsletter beibehalten"
         subscribe_fundraising_list: "Ich möchte weiterhin über Spendenaktionen informiert werden."
 

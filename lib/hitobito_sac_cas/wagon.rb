@@ -32,7 +32,7 @@ module HitobitoSacCas
         Qualifications::ExpirationMailerJob,
         Roles::TerminateTourenleiterJob
       ]
-      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen]
+      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
       # extend application classes here
       Event.prepend SacCas::Event
