@@ -14,21 +14,5 @@ permitted_root_layer_token:
   groups: true
   events: true
   invoices: true
-  external_invoices: true
-  event_participations: true
-  mailing_lists: true
-
-permitted_bluemlisalp_layer_token:
-  layer: bluemlisalp
-  name: PermittedBluemlisalpGroupToken
-  description: MyText
-  token: PermittedBluemlisalpGroupToken
-  last_access: 2018-11-01 11:11:11
-  permission: layer_and_below_full
-  people: true
-  groups: true
-  events: true
-  invoices: true
-  external_invoices: true
   event_participations: true
   mailing_lists: true

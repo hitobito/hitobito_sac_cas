@@ -15,63 +15,26 @@ describe TokenAbility do
 
   let(:ability) { TokenAbility.new(token) }
 
-  describe "index_external_invoices on Group" do
-    context :root do
-      let(:token) { service_tokens(:permitted_root_layer_token) }
-
-      it "can index invoices on root group" do
-        expect(ability).to be_able_to(:index_external_invoices, root)
-      end
-
-      it "can index invoices on bluemlisalp" do
-        expect(ability).to be_able_to(:index_external_invoices, bluemlisalp)
-      end
-    end
-
-    context :bluemlisalp do
-      let(:token) { service_tokens(:permitted_bluemlisalp_layer_token) }
-
-      it "cannot index invoices on root group" do
-        expect(ability).not_to be_able_to(:index_external_invoices, root)
-      end
-
-      it "can index invoices on bluemlisalp" do
-        expect(ability).to be_able_to(:index_external_invoices, bluemlisalp)
-      end
-    end
-  end
-
   describe "read and write on invoice" do
-    def create_invoice_for(group)
-      Fabricate(:external_invoice, link: group, person: people(:mitglied))
-    end
+    let!(:external_invoice) { Fabricate(:external_invoice, person: people(:mitglied)) }
 
-    context :root do
+    context "with token on root layer" do
       let(:token) { service_tokens(:permitted_root_layer_token) }
 
-      it "can read and update invoice on bluemlisalp group" do
-        invoice = create_invoice_for(root)
-        expect(ExternalInvoice.accessible_by(ability)).to eq [invoice]
-        expect(ability).to be_able_to(:read, invoice)
-        expect(ability).to be_able_to(:update, invoice)
+      it "can read and update invoice" do
+        expect(ExternalInvoice.accessible_by(ability)).to eq [external_invoice]
+        expect(ability).to be_able_to(:read, external_invoice)
+        expect(ability).to be_able_to(:update, external_invoice)
       end
     end
 
-    context :bluemlisalp do
-      let(:token) { service_tokens(:permitted_bluemlisalp_layer_token) }
+    context "with token on section layer" do
+      let(:token) { ServiceToken.create!(name: "bluemli", layer: bluemlisalp, invoices: true) }
 
-      it "cannot read or update invoice on root group" do
-        invoice = create_invoice_for(root)
+      it "cannot read or update invoice" do
         expect(ExternalInvoice.accessible_by(ability)).to be_empty
-        expect(ability).not_to be_able_to(:read, invoice)
-        expect(ability).not_to be_able_to(:update, invoice)
-      end
-
-      it "can read and update invoice on bluemlisalp group" do
-        invoice = create_invoice_for(bluemlisalp)
-        expect(ExternalInvoice.accessible_by(ability)).to eq [invoice]
-        expect(ability).to be_able_to(:read, invoice)
-        expect(ability).to be_able_to(:update, invoice)
+        expect(ability).not_to be_able_to(:read, external_invoice)
+        expect(ability).not_to be_able_to(:update, external_invoice)
       end
     end
   end
