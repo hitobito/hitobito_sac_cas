@@ -22,8 +22,9 @@ module Wizards::Signup
 
     def save!
       save_person_and_role
-      generate_invoice
-      exclude_from_mailing_list
+      generate_invoice if no_approval_needed? && can_receive_invoice?
+      exclude_from_mailing_list if mailing_list && !newsletter
+      true
     end
 
     private
@@ -70,8 +71,6 @@ module Wizards::Signup
     end
 
     def generate_invoice
-      return true unless no_approval_needed? && can_receive_invoice?
-
       invoice = ExternalInvoice::SacMembership.create!(
         person: person,
         state: :draft,
@@ -95,15 +94,11 @@ module Wizards::Signup
       end
     end
 
-    def exclude_from_mailing_list
-      return true unless mailing_list && !newsletter
-
-      mailing_list.subscriptions.create!(subscriber: person, excluded: true)
-    end
-
     def role_type = group.self_registration_role_type
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
+
+    def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 
