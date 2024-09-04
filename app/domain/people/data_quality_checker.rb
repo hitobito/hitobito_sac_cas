@@ -6,53 +6,79 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::DataQualityChecker
-  CHECKS_TO_PERFORM = [
-    [:company_name, :warning, check?: ->(p) { p.company? }],
-    [:first_name, :error, check?: ->(p) { !p.company? }],
-    [:last_name, :error, check?: ->(p) { !p.company? }],
-    [:street, :error, check?: ->(p) { p.sac_membership_invoice? }],
-    [:zip_code, :error, check?: ->(p) { p.sac_membership_invoice? }],
-    [:town, :error, check?: ->(p) { p.sac_membership_invoice? }],
-    [:email, :warning, check?: ->(p) { p.sac_membership_invoice? }],
-    [:phone_numbers, :warning, check?: ->(p) { p.sac_membership_invoice? }],
-    [:birthday, :error, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)) }],
-    [:birthday, :warning, check?: ->(p) { p.roles.exists?(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)) },
-                          invalid?: ->(p) { birthday_less_than_6_years_before_entry(p) },
-                          key: :less_than_6_years_before_entry]
-  ]
-  ATTRIBUTES_TO_CHECK = CHECKS_TO_PERFORM.map(&:first).map(&:to_s).uniq
+  ATTRIBUTES_TO_CHECK = %w[first_name last_name company_name street zip_code town email phone_numbers birthday].freeze
+
+  attr_reader :person
 
   def initialize(person)
     @person = person
   end
 
   def check_data_quality
-    CHECKS_TO_PERFORM.each do |attr, severity, checks|
-      next unless checks[:check?].call(@person)
+    check_blank(:company_name, person.company?, :warning)
+    check_blank(:first_name, !person.company?)
+    check_blank(:last_name, !person.company?)
+    check_blank(:street, membership_invoice?)
+    check_blank(:zip_code, membership_invoice?)
+    check_blank(:town, membership_invoice?)
+    check_blank(:email, membership_invoice?, :warning)
+    check_phone_numbers
+    check_birthday
 
-      issue = {severity: severity, attr: attr, key: checks[:key] || :empty}
-      invalid = checks[:invalid?].nil? ? @person.send(attr).blank? : checks[:invalid?].call(@person)
-
-      create_or_destroy(issue, invalid)
-    end
-
-    highest_severity = @person.data_quality_issues.order(severity: :desc).first&.severity
-    @person.update_column(:data_quality, highest_severity || :ok)
-  end
-
-  def self.birthday_less_than_6_years_before_entry(person)
-    return if person.birthday.blank?
-
-    person.birthday > person.roles.find_by(type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name)).created_at - 6.years
+    update_person_data_quality
   end
 
   private
 
-  def create_or_destroy(issue, invalid)
-    existing_issue = @person.data_quality_issues.find_by(issue)
+  def check_phone_numbers
+    invalid = membership_invoice? && !@person.phone_numbers.any?
+    create_or_destroy(invalid, attr: :phone_numbers, severity: :warning)
+  end
 
-    return existing_issue&.destroy! unless invalid
+  def check_birthday
+    stammsektion = sac_membership.stammsektion_role
 
-    @person.data_quality_issues.create!(issue) if existing_issue.nil?
+    check_blank(:birthday, stammsektion.present?)
+
+    invalid = stammsektion.present? && person.birthday && person.birthday > stammsektion.created_at - 6.years
+    create_or_destroy(invalid, attr: :birthday, severity: :warning, key: :less_than_6_years_before_entry)
+  end
+
+  def check_blank(attr, precondition, severity = :error)
+    invalid = precondition && @person.send(attr).blank?
+    create_or_destroy(invalid, attr: attr, severity: severity)
+  end
+
+  def create_or_destroy(invalid, attr:, key: :empty, severity: :error)
+    existing_issue = issues.find { |issue| issue.attr == attr.to_s && issue.key == key.to_s }
+
+    if !invalid
+      existing_issue&.destroy!
+    elsif existing_issue.nil?
+      issues.create!(attr: attr, key: key, severity: severity)
+    end
+  end
+
+  def update_person_data_quality
+    highest_severity = find_highest_severity
+    person.update_column(:data_quality, highest_severity) unless person.data_quality == highest_severity
+  end
+
+  def find_highest_severity
+    issues.reject(&:destroyed?).max_by { |i| Person::DataQualityIssue.severities[i.severity] }&.severity || "ok"
+  end
+
+  def sac_membership
+    @sac_membership ||= People::SacMembership.new(@person, in_memory: true)
+  end
+
+  def membership_invoice?
+    return @membership_invoice if defined?(@membership_invoice)
+
+    @membership_invoice = sac_membership.invoice?
+  end
+
+  def issues
+    person.data_quality_issues
   end
 end

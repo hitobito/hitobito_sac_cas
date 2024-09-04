@@ -296,13 +296,19 @@ describe Person do
   end
 
   describe "#data_quality" do
-    let(:person) { people(:mitglied).tap { |p| p.roles.destroy_all } }
+    let(:person) { people(:mitglied) }
+
+    before do
+      person.roles.destroy_all
+      People::DataQualityChecker.new(person).check_data_quality
+      person.reload
+    end
 
     context "on create" do
       it "is ok by default" do
+        expect(person.data_quality_issues).to eq([])
         expect(person.data_quality).to eq("ok")
         expect(person.data_quality_for_database).to eq(0)
-        expect(person.data_quality_issues).to eq([])
       end
     end
 
@@ -363,7 +369,7 @@ describe Person do
           expect do
             person.update!(birthday: Time.zone.today)
           end.not_to change(person.data_quality_issues, :count)
-          expect(person.data_quality_issues.first.message)
+          expect(person.reload.data_quality_issues.first.message)
             .to eq("Geburtstag liegt weniger als 6 Jahre vor dem SAC-Eintritt")
           expect(person.data_quality).to eq("warning")
         end

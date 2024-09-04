@@ -41,7 +41,7 @@ describe People::Neuanmeldungen::Promoter do
 
       expect { neuanmeldung_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
-      mitglied_role = neuanmeldung_role.person.roles.last
+      mitglied_role = neuanmeldung_role.person.reload.roles.last
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
     end
 
@@ -53,7 +53,7 @@ describe People::Neuanmeldungen::Promoter do
         expect { subject.promote(neuanmeldung_role) }
           .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
 
-        expect(neuanmeldung_role.person.roles.last.beitragskategorie).to eq(beitragskategorie)
+        expect(neuanmeldung_role.person.reload.roles.last.beitragskategorie).to eq(beitragskategorie)
       end
     end
 
@@ -65,7 +65,7 @@ describe People::Neuanmeldungen::Promoter do
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
 
-      mitglied_role = neuanmeldung_role.person.roles.last
+      mitglied_role = neuanmeldung_role.person.reload.roles.last
       expect(mitglied_role.created_at).to eq(Time.current)
       expect(mitglied_role.delete_on).to eq(Date.current.end_of_year)
     end
@@ -79,7 +79,7 @@ describe People::Neuanmeldungen::Promoter do
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
 
-      mitglied_role = neuanmeldung_role.person.roles.last
+      mitglied_role = neuanmeldung_role.person.reload.roles.last
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
     end
 
@@ -101,7 +101,7 @@ describe People::Neuanmeldungen::Promoter do
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::MitgliedZusatzsektion.count }.by(1)
 
-      zusatzsektion_role = neuanmeldung_role.person.roles.last
+      zusatzsektion_role = neuanmeldung_role.person.reload.roles.last
       expect(zusatzsektion_role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
     end
 

@@ -15,7 +15,7 @@ describe People::Neuanmeldungen::Reject do
   let(:neuanmeldung) { create_role(:adult) }
   let(:person) do
     Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: neuanmeldung.person)
-    neuanmeldung.person
+    neuanmeldung.person.reload
   end
 
   def create_role(beitragskategorie)
@@ -43,7 +43,7 @@ describe People::Neuanmeldungen::Reject do
 
     expect(neuanmeldung_einzel.person.roles).to be_empty
     expect(neuanmeldung_jugend.person.roles).to be_empty
-    expect(neuanmeldung_familie.person.roles).to have(1).item
+    expect(neuanmeldung_familie.person.reload.roles).to have(1).item
   end
 
   it "deletes rejected Roles, if it has other roles" do
