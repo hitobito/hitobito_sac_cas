@@ -28,6 +28,11 @@ fr:
         discount: ""
         new_entry: ""
         section_id: ""
+      people/yearly_membership/invoice_form:
+        invoice_year: ""
+        invoice_date: ""
+        send_date: ""
+        role_finish_date: ""
       wizards/steps/signup/main_email_field:
         email: ""
       wizards/steps/signup/person_fields:
@@ -1271,6 +1276,15 @@ fr:
       list:
         create_membership_invoice: ""
         create_membership_invoice_confirmation: |
+    yearly_membership_invoices:
+      job_scheduling_info: ""
+      new:
+        title: ""
+        schedule_info_alert: ""
+        job_already_scheduled_alert: ""
+        create_invoice: ""
+        submit_confirmation: ""
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1301,6 +1315,7 @@ fr:
   groups:
     actions_show_sac_cas:
       export_mitglieder: ""
+      create_yearly_membership_invoice: ""
     sektion_primary: ""
     sektion_secondary: ""
 
