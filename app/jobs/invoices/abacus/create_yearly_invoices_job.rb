@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
+  include GracefulTermination
+
   BATCH_SIZE = 500 # number of people loaded per query
   SLICE_SIZE = 25  # number of people/invoices transmitted per abacus batch request
   PARALLEL_THREADS = 4 # number of threads sending abacus requests
@@ -38,10 +40,12 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def perform
-    log_progress(0)
-    extend_roles_for_invoicing
-    process_invoices
-    log_progress(100) if @current_logged_percent < 100
+    handle_termination_signals do
+      log_progress(0)
+      extend_roles_for_invoicing
+      process_invoices
+      log_progress(100) if @current_logged_percent < 100
+    end
   end
 
   def active_members
@@ -116,7 +120,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       people_ids = people.pluck(:id)
       slices = people_ids.each_slice(SLICE_SIZE).to_a
       Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
-        # TODO: Call check_terminated https://github.com/hitobito/hitobito/issues/2772
+        check_terminated!
         ActiveRecord::Base.connection_pool.with_connection do
           create_invoices(load_people(ids))
         end
