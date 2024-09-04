@@ -638,14 +638,13 @@ describe "signup/sektion", js: true do
         click_on "Weiter", match: :first
         assert_step "Familienmitglieder"
 
-        # TODO: can not go to first page as it clears the housemates somehow. See #415
-        # click_on 'Zurück', match: :first
-        # click_on 'Zurück', match: :first
-        # assert_step 'Haupt-E-Mail'
-        # click_on 'Weiter', match: :first
-        # assert_step 'Personendaten'
-        # click_on 'Weiter', match: :first
-        # assert_step 'Familienmitglieder'
+        click_on 'Zurück', match: :first
+        click_on 'Zurück', match: :first
+        assert_step 'Haupt-E-Mail'
+        click_on 'Weiter', match: :first
+        assert_step 'Personendaten'
+        click_on 'Weiter', match: :first
+        assert_step 'Familienmitglieder'
 
         click_on "Zurück", match: :first
         click_on "Weiter", match: :first
