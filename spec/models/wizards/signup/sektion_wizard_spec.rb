@@ -203,6 +203,14 @@ describe Wizards::Signup::SektionWizard do
         expect(maxi.subscriptions).to have(1).items
       end
 
+      it "creates roles but no newsletter exclusions" do
+        freeze_time
+        required_attrs[:various_fields][:newsletter] = "1"
+        expect { wizard.save! }.to change { Role.count }.by(2)
+        expect(max.subscriptions).to be_empty
+        expect(maxi.subscriptions).to be_empty
+      end
+
       it "creates future roles if register_on is in the future" do
         required_attrs[:various_fields][:register_on] = "jul"
         travel_to(Time.zone.local(2023, 3, 12)) do
