@@ -31,7 +31,7 @@ describe "terminate sac membership wizard", js: true do
       click_button "Weiter"
       select termination_reason.text
       check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten blieben und ich kann für Spendenaufrufe kontaktiert werden"
+      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
       check "Ich möchte weiterhin über Spendenaktionen informiert werden."
       expect do
         click_button "Austritt beantragen"
@@ -54,7 +54,7 @@ describe "terminate sac membership wizard", js: true do
       click_button "Weiter"
       select termination_reason.text
       check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten blieben und ich kann für Spendenaufrufe kontaktiert werden"
+      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
       check "Ich möchte weiterhin über Spendenaktionen informiert werden."
       expect do
         click_button "Austritt beantragen"
@@ -75,7 +75,7 @@ describe "terminate sac membership wizard", js: true do
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
       select termination_reason.text
       check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten blieben und ich kann für Spendenaufrufe kontaktiert werden"
+      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
       check "Ich möchte weiterhin über Spendenaktionen informiert werden."
       expect do
         click_button "Austritt beantragen"

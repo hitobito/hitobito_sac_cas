@@ -400,4 +400,26 @@ describe Person do
       end
     end
   end
+
+  describe "#transmit_data_to_abacus" do
+    let(:person) { people(:mitglied).tap { |p| p.phone_numbers.create!(number: "+41791234567", label: "mobile") } }
+    let(:job) { Delayed::Job.where("handler like '%TransmitPersonJob%'") }
+
+    it "enqueues the job" do
+      expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
+    end
+
+    it "doesnt enqueue the job if an irrelevant attribute changed" do
+      expect { person.update!(company_name: "Abacus") }.not_to change(job, :count)
+    end
+
+    it "doesnt enqueue the job without an sac membership invoice" do
+      person.roles.destroy_all
+      expect { person.update!(first_name: "Abacus") }.not_to change(job, :count)
+    end
+
+    it "doesnt enqueue the job if data quality errors exist" do
+      expect { person.update!(first_name: nil) }.not_to change(job, :count)
+    end
+  end
 end
