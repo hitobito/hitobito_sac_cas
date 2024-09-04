@@ -41,7 +41,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     log_progress(0)
     extend_roles_for_invoicing
     process_invoices
-    log_progress(100)
+    log_progress(100) if @current_logged_percent < 100
   end
 
   def active_members

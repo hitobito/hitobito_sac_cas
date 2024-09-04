@@ -158,9 +158,13 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         expect { subject.perform }
           .to change(ExternalInvoice, :count).by(6)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
-          .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
+          .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
         expect(ExternalInvoice.where(state: :error).count).to eq 1
-        expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
+        expect(HitobitoLogEntry.where(category: :stapelverarbeitung, level: :info)).to contain_exactly(
+          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
+          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
+          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
+        )
       end
 
       context "when a spurious ExternalInvoice exists" do
@@ -184,10 +188,14 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           expect { subject.perform }
             .to change(ExternalInvoice, :count).by(6)
             .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
-            .and change { HitobitoLogEntry.where(level: :info).count }.by(4)
-          expect(ExternalInvoice.where(state: :draft).count).to be_zero
+            .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
           expect(ExternalInvoice.where(state: :error).count).to eq 1
-          expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 100%")
+          expect(HitobitoLogEntry.where(category: :stapelverarbeitung, level: :info)).to contain_exactly(
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
+          )
+          expect(ExternalInvoice.where(state: :draft).count).to be_zero
         end
       end
     end
