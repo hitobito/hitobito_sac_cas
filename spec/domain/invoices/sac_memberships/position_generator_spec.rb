@@ -50,31 +50,31 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions.size).to eq(5)
 
       expect(positions[0].name).to eq("sac_fee")
-      expect(positions[0].group).to eq(:sac_fee)
+      expect(positions[0].grouping).to eq(:sac_fee)
       expect(positions[0].amount).to eq(40.0)
       expect(positions[0].creditor.to_s).to eq(sac.to_s)
       expect(positions[0].article_number).to eq(config.sac_fee_article_number)
 
       expect(positions[1].name).to eq("hut_solidarity_fee")
-      expect(positions[1].group).to eq(:sac_fee)
+      expect(positions[1].grouping).to eq(:sac_fee)
       expect(positions[1].amount).to eq(20.0)
       expect(positions[1].creditor.to_s).to eq(sac.to_s)
       expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
 
       expect(positions[2].name).to eq("sac_magazine")
-      expect(positions[2].group).to eq(:sac_fee)
+      expect(positions[2].grouping).to eq(:sac_fee)
       expect(positions[2].amount).to eq(25.0)
       expect(positions[2].creditor.to_s).to eq(sac.to_s)
       expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
 
       expect(positions[3].name).to eq("section_fee")
-      expect(positions[3].group).to eq(nil)
+      expect(positions[3].grouping).to eq(nil)
       expect(positions[3].amount).to eq(42.0)
       expect(positions[3].creditor.to_s).to eq(main_section.to_s)
       expect(positions[3].article_number).to eq(config.section_fee_article_number)
 
       expect(positions[4].name).to eq("section_fee")
-      expect(positions[4].group).to eq(nil)
+      expect(positions[4].grouping).to eq(nil)
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
@@ -87,31 +87,31 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions.size).to eq(5)
 
         expect(positions[0].name).to eq("sac_fee")
-        expect(positions[0].group).to eq(:sac_fee)
+        expect(positions[0].grouping).to eq(:sac_fee)
         expect(positions[0].amount).to eq(20.0)
         expect(positions[0].creditor.to_s).to eq(sac.to_s)
         expect(positions[0].article_number).to eq(config.sac_fee_article_number)
 
         expect(positions[1].name).to eq("hut_solidarity_fee")
-        expect(positions[1].group).to eq(:sac_fee)
+        expect(positions[1].grouping).to eq(:sac_fee)
         expect(positions[1].amount).to eq(10.0)
         expect(positions[1].creditor.to_s).to eq(sac.to_s)
         expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
 
         expect(positions[2].name).to eq("sac_magazine")
-        expect(positions[2].group).to eq(:sac_fee)
+        expect(positions[2].grouping).to eq(:sac_fee)
         expect(positions[2].amount).to eq(12.5)
         expect(positions[2].creditor.to_s).to eq(sac.to_s)
         expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
 
         expect(positions[3].name).to eq("section_fee")
-        expect(positions[3].group).to eq(nil)
+        expect(positions[3].grouping).to eq(nil)
         expect(positions[3].amount).to eq(21.0)
         expect(positions[3].creditor.to_s).to eq(main_section.to_s)
         expect(positions[3].article_number).to eq(config.section_fee_article_number)
 
         expect(positions[4].name).to eq("section_fee")
-        expect(positions[4].group).to eq(nil)
+        expect(positions[4].grouping).to eq(nil)
         expect(positions[4].amount).to eq(28.0)
         expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
         expect(positions[4].article_number).to eq(config.section_fee_article_number)
@@ -133,9 +133,14 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[2].name).to eq("sac_magazine")
         expect(positions[2].amount).to eq(25.0)
         expect(positions[3].name).to eq("section_fee")
+        expect(positions[3].label).to eq("Beitrag SAC Blüemlisalp")
         expect(positions[3].amount).to eq(84.0)
         expect(positions[4].name).to eq("section_fee")
-        expect(positions[4].amount).to eq(88.0)
+        expect(positions[4].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
+        expect(positions[4].amount).to eq(40.0)
+        expect(positions[5].name).to eq("section_fee")
+        expect(positions[5].label).to eq("Beitrag SAC Matterhorn")
+        expect(positions[5].amount).to eq(88.0)
       end
     end
 
@@ -183,15 +188,18 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[3].name).to eq("sac_magazine_postage_abroad")
         expect(positions[3].amount).to eq(10.0)
         expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].label).to eq("Beitrag SAC Blüemlisalp")
         expect(positions[4].amount).to eq(84.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
         expect(positions[5].amount).to eq(13.0)
         expect(positions[6].name).to eq("section_fee")
-        expect(positions[6].amount).to eq(88.0)
-        expect(positions[7].name).to eq("section_fee")
-        expect(positions[7].amount).to eq(40.0)
-        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
-        expect(positions[8].amount).to eq(10.0)
+        expect(positions[6].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
+        expect(positions[6].amount).to eq(40.0)
+        expect(positions[7].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[7].amount).to eq(10.0)
+        expect(positions[8].name).to eq("section_fee")
+        expect(positions[8].label).to eq("Beitrag SAC Matterhorn")
+        expect(positions[8].amount).to eq(88.0)
       end
 
       context "without subscription" do
@@ -209,15 +217,18 @@ describe Invoices::SacMemberships::PositionGenerator do
           expect(positions[2].name).to eq("sac_magazine")
           expect(positions[2].amount).to eq(25.0)
           expect(positions[3].name).to eq("section_fee")
+          expect(positions[3].label).to eq("Beitrag SAC Blüemlisalp")
           expect(positions[3].amount).to eq(84.0)
           expect(positions[4].name).to eq("section_bulletin_postage_abroad")
           expect(positions[4].amount).to eq(13.0)
           expect(positions[5].name).to eq("section_fee")
-          expect(positions[5].amount).to eq(88.0)
-          expect(positions[6].name).to eq("section_fee")
-          expect(positions[6].amount).to eq(40.0)
-          expect(positions[7].name).to eq("section_bulletin_postage_abroad")
-          expect(positions[7].amount).to eq(10.0)
+          expect(positions[5].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
+          expect(positions[5].amount).to eq(40.0)
+          expect(positions[6].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[6].amount).to eq(10.0)
+          expect(positions[7].name).to eq("section_fee")
+          expect(positions[7].label).to eq("Beitrag SAC Matterhorn")
+          expect(positions[7].amount).to eq(88.0)
         end
       end
     end
@@ -255,15 +266,18 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[3].name).to eq("sac_magazine_postage_abroad")
         expect(positions[3].amount).to eq(5.0)
         expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].label).to eq("Beitrag SAC Blüemlisalp")
         expect(positions[4].amount).to eq(42.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
         expect(positions[5].amount).to eq(6.5)
         expect(positions[6].name).to eq("section_fee")
-        expect(positions[6].amount).to eq(44.0)
-        expect(positions[7].name).to eq("section_fee")
-        expect(positions[7].amount).to eq(20.0)
-        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
-        expect(positions[8].amount).to eq(5.0)
+        expect(positions[6].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
+        expect(positions[6].amount).to eq(20.0)
+        expect(positions[7].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[7].amount).to eq(5.0)
+        expect(positions[8].name).to eq("section_fee")
+        expect(positions[8].label).to eq("Beitrag SAC Matterhorn")
+        expect(positions[8].amount).to eq(44.0)
       end
     end
 
@@ -287,14 +301,17 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[3].name).to eq("sac_magazine_postage_abroad")
         expect(positions[3].amount).to eq(0.0)
         expect(positions[4].name).to eq("section_fee")
+        expect(positions[4].label).to eq("Beitrag SAC Blüemlisalp")
         expect(positions[4].amount).to eq(0.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
         expect(positions[5].amount).to eq(0.0)
         expect(positions[6].name).to eq("section_fee")
+        expect(positions[6].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
         expect(positions[6].amount).to eq(0.0)
-        expect(positions[7].name).to eq("section_fee")
+        expect(positions[7].name).to eq("section_bulletin_postage_abroad")
         expect(positions[7].amount).to eq(0.0)
-        expect(positions[8].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[8].name).to eq("section_fee")
+        expect(positions[8].label).to eq("Beitrag SAC Matterhorn")
         expect(positions[8].amount).to eq(0.0)
       end
     end
@@ -383,7 +400,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[0]).not_to be_section_pays
 
         expect(positions[1].name).to eq("hut_solidarity_fee")
-        expect(positions[1].group).to eq(:sac_fee)
+        expect(positions[1].grouping).to eq(:sac_fee)
         expect(positions[1].amount).to eq(0.0)
         expect(positions[1].creditor.to_s).to eq(sac.to_s)
         expect(positions[1]).not_to be_section_pays
@@ -419,35 +436,35 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions.size).to eq(5)
 
       expect(positions[0].name).to eq("sac_fee")
-      expect(positions[0].group).to eq(:sac_fee)
+      expect(positions[0].grouping).to eq(:sac_fee)
       expect(positions[0].amount).to eq(40.0)
       expect(positions[0].creditor.to_s).to eq(sac.to_s)
       expect(positions[0].article_number).to eq(config.sac_fee_article_number)
       expect(positions[0]).to be_section_pays
 
       expect(positions[1].name).to eq("hut_solidarity_fee")
-      expect(positions[1].group).to eq(:sac_fee)
+      expect(positions[1].grouping).to eq(:sac_fee)
       expect(positions[1].amount).to eq(20.0)
       expect(positions[1].creditor.to_s).to eq(sac.to_s)
       expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
       expect(positions[1]).to be_section_pays
 
       expect(positions[2].name).to eq("sac_magazine")
-      expect(positions[2].group).to eq(:sac_fee)
+      expect(positions[2].grouping).to eq(:sac_fee)
       expect(positions[2].amount).to eq(25.0)
       expect(positions[2].creditor.to_s).to eq(sac.to_s)
       expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
       expect(positions[2]).to be_section_pays
 
       expect(positions[3].name).to eq("section_fee")
-      expect(positions[3].group).to eq(nil)
+      expect(positions[3].grouping).to eq(nil)
       expect(positions[3].amount).to eq(0.0)
       expect(positions[3].creditor.to_s).to eq(main_section.to_s)
       expect(positions[3].article_number).to eq(config.section_fee_article_number)
       expect(positions[3]).not_to be_section_pays
 
       expect(positions[4].name).to eq("section_fee")
-      expect(positions[4].group).to eq(nil)
+      expect(positions[4].grouping).to eq(nil)
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
@@ -471,35 +488,35 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions.size).to eq(5)
 
       expect(positions[0].name).to eq("sac_fee")
-      expect(positions[0].group).to eq(:sac_fee)
+      expect(positions[0].grouping).to eq(:sac_fee)
       expect(positions[0].amount).to eq(40.0)
       expect(positions[0].creditor.to_s).to eq(sac.to_s)
       expect(positions[0].article_number).to eq(config.sac_fee_article_number)
       expect(positions[0]).not_to be_section_pays
 
       expect(positions[1].name).to eq("hut_solidarity_fee")
-      expect(positions[1].group).to eq(:sac_fee)
+      expect(positions[1].grouping).to eq(:sac_fee)
       expect(positions[1].amount).to eq(20.0)
       expect(positions[1].creditor.to_s).to eq(sac.to_s)
       expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
       expect(positions[1]).not_to be_section_pays
 
       expect(positions[2].name).to eq("sac_magazine")
-      expect(positions[2].group).to eq(:sac_fee)
+      expect(positions[2].grouping).to eq(:sac_fee)
       expect(positions[2].amount).to eq(25.0)
       expect(positions[2].creditor.to_s).to eq(sac.to_s)
       expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
       expect(positions[2]).not_to be_section_pays
 
       expect(positions[3].name).to eq("section_fee")
-      expect(positions[3].group).to eq(nil)
+      expect(positions[3].grouping).to eq(nil)
       expect(positions[3].amount).to eq(0.0)
       expect(positions[3].creditor.to_s).to eq(main_section.to_s)
       expect(positions[3].article_number).to eq(config.section_fee_article_number)
       expect(positions[3]).not_to be_section_pays
 
       expect(positions[4].name).to eq("section_fee")
-      expect(positions[4].group).to eq(nil)
+      expect(positions[4].grouping).to eq(nil)
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
@@ -513,35 +530,35 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions.size).to eq(5)
 
       expect(positions[0].name).to eq("sac_fee")
-      expect(positions[0].group).to eq(:sac_fee)
+      expect(positions[0].grouping).to eq(:sac_fee)
       expect(positions[0].amount).to eq(40.0)
       expect(positions[0].creditor.to_s).to eq(sac.to_s)
       expect(positions[0].article_number).to eq(config.sac_fee_article_number)
       expect(positions[0]).to be_section_pays
 
       expect(positions[1].name).to eq("hut_solidarity_fee")
-      expect(positions[1].group).to eq(:sac_fee)
+      expect(positions[1].grouping).to eq(:sac_fee)
       expect(positions[1].amount).to eq(20.0)
       expect(positions[1].creditor.to_s).to eq(sac.to_s)
       expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
       expect(positions[1]).to be_section_pays
 
       expect(positions[2].name).to eq("sac_magazine")
-      expect(positions[2].group).to eq(:sac_fee)
+      expect(positions[2].grouping).to eq(:sac_fee)
       expect(positions[2].amount).to eq(25.0)
       expect(positions[2].creditor.to_s).to eq(sac.to_s)
       expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
       expect(positions[2]).to be_section_pays
 
       expect(positions[3].name).to eq("section_fee")
-      expect(positions[3].group).to eq(nil)
+      expect(positions[3].grouping).to eq(nil)
       expect(positions[3].amount).to eq(42.0)
       expect(positions[3].creditor.to_s).to eq(main_section.to_s)
       expect(positions[3].article_number).to eq(config.section_fee_article_number)
       expect(positions[3]).not_to be_section_pays
 
       expect(positions[4].name).to eq("section_fee")
-      expect(positions[4].group).to eq(nil)
+      expect(positions[4].grouping).to eq(nil)
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
@@ -726,13 +743,13 @@ describe Invoices::SacMemberships::PositionGenerator do
 
         expect(positions[4].name).to eq("sac_entry_fee")
         expect(positions[4].amount).to eq(10.0)
-        expect(positions[4].group).to eq(nil)
+        expect(positions[4].grouping).to eq(nil)
         expect(positions[4].creditor.to_s).to eq(sac.to_s)
         expect(positions[4].article_number).to eq(config.sac_entry_fee_article_number)
 
         expect(positions[5].name).to eq("section_entry_fee")
         expect(positions[5].amount).to eq(10.0)
-        expect(positions[5].group).to eq(nil)
+        expect(positions[5].grouping).to eq(nil)
         expect(positions[5].creditor.to_s).to eq(main_section.to_s)
         expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
       end

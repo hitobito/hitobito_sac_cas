@@ -9,7 +9,7 @@ module Invoices
   module SacMemberships
     module Positions
       class SacMagazine < Base
-        self.group = :sac_fee
+        self.grouping = :sac_fee
         self.section_payment_possible = true
 
         def article_number
