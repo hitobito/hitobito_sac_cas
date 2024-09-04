@@ -1,25 +1,41 @@
-# SAC/CAS specific imports
+# Datenimport
 
-```txt
-oc rsync tmp/xlsx delayed-job-db8bb7688-c6nrn-debug:/app-src/tmp
-```
+Hitobito lösst verschiedene Systeme vom SAC/CAS ab. Um Datenfehler zu finden und vom SAC/CAS bereinigen zu lassen, soll
+beim Import ein Report erstellt werden, der auf Validierungsfehler hinweist. Durch Abhängigkeiten und verschiedenen
+Datenquellen, erfolgt der Import in mehreren Schritten. Schlussendlich sollen die Daten mittels des Imports ins
+Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht mehr benötigt.
 
-## CSV Source Files
+## Quelldaten
 
-| #    | Export                                               |
+Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgende Eigenschaften:
+
+- Encoding: UTF-8
+- Delimiter: ,
+- Header: erste Zeile
+
+Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
+
+| #    | Inhalt                                               |
 |------|------------------------------------------------------|
-| NAV1 | Alle Kontakte aus Navision                           |
+| NAV1 | Alle Kontakte (natürliche und juristische Personen)  |
 | NAV2 | Stammmitgliedschaften                                |
-| NAV3 | Zusatzmitgliedschaften                               |
 | NAV4 | Sektionsfunktionäre                                  |
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
 | NAV7 | Abonenten Die Alpen                                  |
-| WSO21 | Datenexport aus WSO2                                |
+| WSO2 | Datenexport aus WSO2                                |
 
-details siehe SAC Jira HIT-490
+Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
-Siehe [SacImports::CsvSourceFile](../app/domain/sac_imports/csv_source_file.rb)
+Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
+
+## Entwickler
+
+- Zufällige Zeilen aus einer .csv-Datei in eine neue .csv-Datei schreiben:
+  ```bash
+  head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
+  ```
+- `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
 
 ## CSV Report
 
@@ -29,19 +45,26 @@ Jeder Import erstellt einen CSV Report in RAILS_CORE_ROOT/log/sac_imports/. In d
 
 Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
-## 1: sac_imports:1_people
+## Importe
 
-Diesen Import immer als erstes laufen lassen damit alle Personen in der DB vorhanden sind und entsprechend in andere Gruppen via Rollen assigned werden können.
+### `NAV1`: sac_imports:1_people
 
-Importiert alle Navision Kontakte und legt diese Unter `Top-Layer > Navision Import` ab.
+Dieser Import soll immer zuerst ausgeführt werden, damit den Personen in den weiteren Schritten die Rollen zugeordnet werden können.
 
-`rake sac_imports:1_people FILE=tmp/xlsx/personen.xlsx REIMPORT_ALL=true`
+You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sac_imports:1_people`
 
-Import Source File: **NAV1**
+#### Diskrepanzen:
+
+- `Street Name` und `Street No_`, sowie `Address` passen nicht immer zusammen, wobei `Street Name` und `Street No_` oft nicht ausgefüllt sind.
+
+#### Hinweise:
+
+- Geschlecht `2` bedeutet es handelt sich um eine Firma.
+
 
 ## 2: sac_imports:2_sektionen
 
-Mit diesem Import werden alle Sektionen und Ortsgruppen importiert. 
+Mit diesem Import werden alle Sektionen und Ortsgruppen importiert.
 Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
 
 `rake sac_imports:2_sektionen`
@@ -64,7 +87,7 @@ Import Source File: **NAV5**
 
 ## 4: sac_imports:4_memberships
 
-Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen. 
+Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen.
 
 `rake sac_imports:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
 

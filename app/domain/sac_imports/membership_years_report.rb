@@ -8,14 +8,17 @@
 module SacImports
   class MembershipYearsReport
     REPORT_HEADERS = [
-      :navision_membership_number, :navision_name,
-      :navision_membership_years, :hitobito_membership_years,
-      :diff, :errors
+      :navision_membership_number,
+      :navision_name,
+      :navision_membership_years,
+      :hitobito_membership_years,
+      :diff,
+      :errors
     ].freeze
 
     def initialize(output: $stdout)
       @output = output
-      @source_file = CsvSourceFile.new(:NAV1)
+      @source_file = CsvSource.new(:NAV1)
       @csv_report = CsvReport.new(:"6_membership_years_report", REPORT_HEADERS)
     end
 
@@ -33,14 +36,14 @@ module SacImports
     def process_row(row)
       @output.print "Reading row #{row[:navision_name]} ..."
       person = @hitobito_people[row[:navision_id].to_i]
-      @csv_report.add_row(
-        {navision_membership_number: row[:navision_id],
-         navision_name: row[:navision_name],
-         navision_membership_years: row[:navision_membership_years],
-         hitobito_membership_years: person&.membership_years,
-         diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
-         errors: errors_for(person)}
-      )
+      @csv_report.add_row({
+        navision_membership_number: row[:navision_id],
+        navision_name: row[:navision_name],
+        navision_membership_years: row[:navision_membership_years],
+        hitobito_membership_years: person&.membership_years,
+        diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
+        errors: errors_for(person)
+      })
       @output.print " processed.\n"
     end
 

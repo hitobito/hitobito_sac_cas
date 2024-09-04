@@ -1,31 +1,24 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports
   class PersonEntry
-    attr_reader :row
-
-    GENDERS = {
-      "Männlich" => "m",
-      "Weiblich" => "w"
-    }.freeze
-
-    LANGUAGES = {
-      "DES" => "de",
-      "FRS" => "fr",
-      "ITS" => "it"
-    }.freeze
-
+    GENDERS = {"0": "m", "1": "w"}.freeze
+    PERSON_TYPES = {"1": "person", "2": "company"}.freeze
+    DEFAULT_LANGUAGE = "de"
+    LANGUAGES = {DES: "de", FRS: "fr", ITS: "it"}.freeze
+    DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    def initialize(row, group:, emails: [])
+    attr_reader :row, :group
+
+    def initialize(row, group)
       @row = row
       @group = group
-      @emails = emails
     end
 
     def person
@@ -34,10 +27,6 @@ module SacImports
         build_phone_numbers(person)
         build_role(person)
       end
-    end
-
-    def email
-      @email ||= row.fetch(:email) if @emails.exclude?(row.fetch(:email))
     end
 
     def valid?
@@ -52,22 +41,69 @@ module SacImports
       person.save!
     end
 
-    def to_s
-      "#{person.to_s(:list)} (#{navision_id})"
-    end
-
     private
 
+    def navision_id
+      @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""))
+    end
+
+    def country
+      row[:country] || DEFAULT_COUNTRY
+    end
+
+    def gender
+      GENDERS[row[:gender]&.to_sym]
+    end
+
+    def person_type
+      PERSON_TYPES[row[:person_type]&.to_sym] || "person"
+    end
+
+    def language
+      LANGUAGES[row[:person_type]&.to_sym] || DEFAULT_LANGUAGE
+    end
+
+    def email
+      row[:email]
+    end
+
+    def company?
+      @is_company ||= person_type == "company"
+    end
+
+    def parse_address
+      address = row[:address]
+      return if address.blank?
+
+      Address::Parser.new(address).parse
+    end
+
     def assign_attributes(person) # rubocop:disable Metrics/AbcSize
-      person.primary_group = @group
-      person.first_name = row.fetch(:first_name)
-      person.last_name = row.fetch(:last_name)
-      person.zip_code = row.fetch(:zip_code)
-      person.country = row.fetch(:country)
-      person.town = row.fetch(:town)
-      person.address_care_of = row.fetch(:address_supplement)
+      person.primary_group = group
+      person.first_name = row[:first_name] unless company?
+      person.last_name = row[:last_name] unless company?
+      person.address_care_of = row[:address_care_of]
+      person.postbox = row[:postbox]
+      person.address = row[:address]
+      person.street = row[:street]
+      person.housenumber = row[:housenumber]
+      person.country = country
+      person.town = row[:town]
+      person.zip_code = row[:zip_code]
+      person.birthday = row[:birthday]
+      person.gender = gender unless company?
+      person.language = language
+      person.family_key = row[:family]
+      person.sac_remark_section_1 = row[:sac_remark_section_1]
+      person.sac_remark_section_2 = row[:sac_remark_section_2]
+      person.sac_remark_section_3 = row[:sac_remark_section_3]
+      person.sac_remark_section_4 = row[:sac_remark_section_4]
+      person.sac_remark_section_5 = row[:sac_remark_section_5]
+      person.sac_remark_national_office = row[:sac_remark_national_office]
+      person.company = company?
+      person.company_name = row[:last_name] if company?
+
       person.street, person.housenumber = parse_address
-      person.postbox = row.fetch(:postfach)
 
       if email.present?
         person.email = email
@@ -75,60 +111,30 @@ module SacImports
         # Instead we set confirmed_at manually.
         person.confirmed_at = Time.zone.at(0)
       end
-
-      person.birthday = parse_datetime(row.fetch(:birthday))
-      person.gender = GENDERS[row.fetch(:gender).to_s]
-      person.language = LANGUAGES[row.fetch(:language)] || "de"
-    end
-
-    def build_phone_numbers(person)
-      phone = row.fetch(:phone)
-      mobile = row.fetch(:phone_mobile)
-      direct = row.fetch(:phone_direct)
-
-      # reset phone numbers first since import might be run multiple times
-      person.phone_numbers = []
-
-      person.phone_numbers.build(number: phone, label: "Privat") if phone_valid?(phone)
-      person.phone_numbers.build(number: mobile, label: "Mobil") if phone_valid?(mobile)
-      person.phone_numbers.build(number: direct, label: "Direkt") if phone_valid?(direct)
-    end
-
-    def build_role(person)
-      return if person.roles.exists?
-
-      person.roles.build(
-        group: @group,
-        type: TARGET_ROLE
-      )
-    end
-
-    def parse_address
-      address = row.fetch(:address)
-      return if address.blank?
-
-      Address::Parser.new(address).parse
     end
 
     def phone_valid?(number)
       number.present? && Phonelib.valid?(number)
     end
 
-    def parse_datetime(value, default: nil)
-      DateTime.parse(value.to_s)
-    rescue Date::Error
-      default
+    def build_phone_numbers(person)
+      # rubocop:disable Lint/SymbolConversion
+      phone_numbers = {
+        "Hauptnummer": row[:phone]
+      }.freeze
+      # rubocop:enable Lint/SymbolConversion
+
+      phone_numbers.each do |label, number|
+        person.phone_numbers.build(number: number, label: label) if phone_valid?(number)
+      end
     end
 
-    def navision_id
-      Integer(row.fetch(:navision_id).to_s.sub!(/^0*/, ""))
+    def build_role(person)
+      person.roles.build(group: group, type: TARGET_ROLE)
     end
 
     def build_error_messages
-      [person.errors.full_messages, person.roles.first.errors.full_messages]
-        .flatten.compact.join(", ").tap do |messages|
-        messages.prepend("#{self}: ") if messages.present?
-      end
+      [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact.join(", ")
     end
   end
 end

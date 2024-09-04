@@ -16,13 +16,9 @@ namespace :sac_imports do
     additional_memberships: "tmp/xlsx/zusatzmitgliedschaften.xlsx"
   }
 
-  desc "Import all people from a navision export xlsx" \
-         " (options: FILE=#{default_files[:people]} REIMPORT_ALL=true)"
+  desc "Import people"
   task "1_people": [:environment] do
-    SacImports::PeopleImporter.new(
-      read_file(:people),
-      skip_existing: skip_existing?
-    ).import!
+    SacImports::PeopleImporter.new.create
   end
 
   desc "Import sections from a navision export (tmp/xlsx/sektionen.xlsx)" \
