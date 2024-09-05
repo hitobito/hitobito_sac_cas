@@ -8,7 +8,7 @@
 class PromoteNeuanmeldungenJob < RecurringJob
   run_every 15.minutes
 
-  def perform
+  def perform_internal
     People::Neuanmeldungen::Promoter.new.call
   end
 end
