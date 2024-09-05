@@ -51,7 +51,7 @@ module SacCas::Person
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
-    after_save_commit :transmit_data_to_abacus
+    after_save_commit :transmit_data_to_abacus, :update_household_address
 
     delegate :salutation_label, to: :class
 
@@ -120,5 +120,11 @@ module SacCas::Person
       !sac_membership_invoice?
 
     Invoices::Abacus::TransmitPersonJob.new(self).enqueue!
+  end
+
+  def update_household_address
+    return if (Person::ADDRESS_ATTRS & saved_changes.keys).empty?
+
+    household_people.update_all(attributes.slice(*Person::ADDRESS_ATTRS))
   end
 end
