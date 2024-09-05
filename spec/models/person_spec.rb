@@ -428,4 +428,17 @@ describe Person do
       expect { person.update!(first_name: nil) }.not_to change(job, :count)
     end
   end
+
+  describe "address" do
+    let!(:person1) { people(:familienmitglied) }
+    let!(:person2) { people(:familienmitglied2) }
+
+    it "updates the address of all household members" do
+      person1.update!(street: "Street", housenumber: 123)
+      expect(person2.reload.address).to eq("Street 123")
+
+      person2.update!(street: "Other Street", housenumber: 456)
+      expect(person1.reload.address).to eq("Other Street 456")
+    end
+  end
 end
