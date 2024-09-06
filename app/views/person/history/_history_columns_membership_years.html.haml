@@ -1,1 +1,1 @@
-- t.attr :membership_years
+- t.attr(:membership_years) { |member| member.membership_years.floor.to_s }
