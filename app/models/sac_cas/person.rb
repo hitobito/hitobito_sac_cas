@@ -20,8 +20,7 @@ module SacCas::Person
       sac_remark_section_4 sac_remark_section_5]
     Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
 
-    Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym),
-      [:wso2_legacy_password_hash, :wso2_legacy_password_salt])
+    Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
     Person::LANGUAGES.delete(:en)
 
     paper_trail_options[:skip] += Person::SAC_REMARKS
@@ -53,7 +52,6 @@ module SacCas::Person
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
     after_save_commit :transmit_data_to_abacus
-    before_save :clear_legacy_password_attributes, if: :can_clear_legacy_password_attributes?
 
     delegate :salutation_label, to: :class
 
@@ -69,6 +67,8 @@ module SacCas::Person
     }
   end
 
+  include Wso2LegacyPassword
+
   module ClassMethods
     def salutation_label(key)
       prefix = "activerecord.attributes.person.salutations"
@@ -78,17 +78,6 @@ module SacCas::Person
 
   def membership_years
     read_attribute(:membership_years) or raise "use Person scope :with_membership_years"
-  end
-
-  def valid_password?(password)
-    return super if password?
-
-    if legacy_password_valid?(password)
-      update_to_devise_password!(password)
-      true
-    else
-      false
-    end
   end
 
   def adult?(reference_date: Time.zone.today.end_of_year)
@@ -119,30 +108,6 @@ module SacCas::Person
 
   def password_initialized?
     confirmed_at.present? && encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
-  end
-
-  def legacy_password_valid?(password)
-    return false if password.blank?
-    return false unless wso2_legacy_password_hash.present? && wso2_legacy_password_salt.present?
-    digest_input = "#{password}#{wso2_legacy_password_salt}"
-    Base64.encode64(Digest::SHA256.digest(digest_input)).strip == wso2_legacy_password_hash
-  end
-
-  def update_to_devise_password!(new_password)
-    # Avoid validation of password length:
-    update!(encrypted_password: Devise::Encryptor.digest(self.class, new_password))
-    clear_legacy_password_attributes
-  end
-
-  def clear_legacy_password_attributes
-    if can_clear_legacy_password_attributes?
-      self.wso2_legacy_password_hash = nil
-      self.wso2_legacy_password_salt = nil
-    end
-  end
-
-  def can_clear_legacy_password_attributes?
-    wso2_legacy_password_hash.present? && wso2_legacy_password_salt.present? && encrypted_password.present?
   end
 
   def check_data_quality
