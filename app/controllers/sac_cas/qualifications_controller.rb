@@ -18,7 +18,7 @@ module SacCas::QualificationsController
 
   def save_entry
     entry.save context: :qualifications_controller
-  rescue Mysql2::Error => e
+  rescue PG::Error => e
     Airbrake.notify(e, parameters: params)
     logger.error e.message
     false
