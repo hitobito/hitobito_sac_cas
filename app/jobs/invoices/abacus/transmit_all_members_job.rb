@@ -7,8 +7,8 @@
 #
 class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   BATCH_SIZE = 1000 # number of people loaded per query
-  SLICE_SIZE = 50  # number of people/invoices transmitted per abacus batch request
-  PARALLEL_THREADS = 4 # number of threads sending abacus requests
+  SLICE_SIZE = 25  # number of people/invoices transmitted per abacus batch request
+  PARALLEL_THREADS = 2 # number of threads sending abacus requests
   RELEVANT_ATTRIBUTES = Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES + %w[id abacus_subject_key].freeze
   self.max_run_time = 12.hours
 
@@ -43,6 +43,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
     Person.joins(:roles)
       .where(roles: {type: [Group::SektionsMitglieder::Mitglied.sti_name, Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name]})
       .where.not(data_quality: :error)
+      .distinct
       .order(:id)
       .select(:id)
   end
