@@ -9,8 +9,6 @@ require "spec_helper"
 
 describe HouseholdAsideMemberComponent, type: :component do
   let(:familienmitglied) { people(:familienmitglied) }
-  let(:familienmitglied2) { people(:familienmitglied2) }
-  let(:familienmitglied_kind) { people(:familienmitglied_kind) }
 
   subject(:component) { described_class.new(person: familienmitglied) }
 
@@ -55,6 +53,36 @@ describe HouseholdAsideMemberComponent, type: :component do
     expect(rendered_component).to have_selector("td a", text: "Nima Norgay") do |a|
       expect(a.ancestor("tr")).not_to have_selector('span[title="Familienrechnungsempfänger"]')
       expect(a.ancestor("tr")).not_to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
+    end
+  end
+
+  context "neunanmeldung" do
+    let(:familienmitglied2) { people(:familienmitglied2) }
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+
+    before do
+      roles(:familienmitglied).destroy!
+      roles(:familienmitglied2).destroy!
+      r1 = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: familienmitglied, group: group)
+      r2 = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: familienmitglied2, group: group)
+      key = Sequence.increment!(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+      Person.where(id: [familienmitglied.id, familienmitglied2.id]).update_all(household_key: key)
+      familienmitglied.update!(sac_family_main_person: true)
+      Role.where(id: [r1.id, r2.id]).update_all(beitragskategorie: :family)
+      familienmitglied.reload
+    end
+
+    it "renders people with main person link for neuanmeldung" do
+      stub_can(:show, true)
+      stub_can(:set_sac_family_main_person, true)
+      expect(familienmitglied.household).to have(2).members
+      rendered_component = render_inline(component)
+      expect(rendered_component).to have_selector("td", text: "Tenzing Norgay") do |a|
+        expect(a.ancestor("tr")).to have_selector('span[title="Familienrechnungsempfänger"]')
+      end
+      expect(rendered_component).to have_selector("td a", text: "Frieda Norgay") do |a|
+        expect(a.ancestor("tr")).to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
+      end
     end
   end
 
