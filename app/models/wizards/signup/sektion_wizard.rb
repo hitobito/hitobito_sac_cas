@@ -15,6 +15,7 @@ module Wizards::Signup
     ]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+    ADDRESS_KEYS = %i[address_care_of street housenumber postbox zip_code town country]
 
     delegate :email, to: :main_email_field
     delegate :person_attributes, :birthday, to: :person_fields
@@ -54,10 +55,9 @@ module Wizards::Signup
     end
 
     def people_attrs
-      members
-        .map(&:person_attributes)
-        .unshift(main_person_attributes)
-        .map { |attrs| attrs.merge(common_person_attrs) }
+      main_person_attrs = main_person_attributes.merge(common_person_attrs)
+      merge_attrs = main_person_attrs.slice(*ADDRESS_KEYS, *common_person_attrs.keys)
+      members.map { |member| member.person_attributes.merge(merge_attrs) }.unshift(main_person_attrs)
     end
 
     def main_person_attributes
@@ -67,11 +67,7 @@ module Wizards::Signup
     end
 
     def common_person_attrs
-      {
-        self_registration_reason_id:,
-        privacy_policy_accepted_at:,
-        household_key: household_key
-      }.compact_blank
+      {self_registration_reason_id:, privacy_policy_accepted_at:, household_key:}.compact_blank
     end
 
     def register_on = various_fields.register_on_date || Time.zone.today

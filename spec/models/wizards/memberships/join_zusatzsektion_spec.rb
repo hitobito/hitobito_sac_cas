@@ -14,7 +14,7 @@ describe Wizards::Memberships::JoinZusatzsektion do
   let(:params) { {} }
   let!(:person) do
     Fabricate(Group::Sektion::SektionsMitglieder::Mitglied.sti_name,
-      group: groups(:bluemlisalp_mitglieder)).person
+      group: groups(:bluemlisalp_mitglieder)).person.reload
   end
 
   let(:wizard) do

@@ -24,6 +24,7 @@ module Wizards::Signup
       save_person_and_role
       generate_invoice if no_approval_needed? && can_receive_invoice?
       exclude_from_mailing_list if mailing_list && !newsletter
+      true
     end
 
     private

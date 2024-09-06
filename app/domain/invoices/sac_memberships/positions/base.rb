@@ -9,7 +9,7 @@ module Invoices
   module SacMemberships
     module Positions
       class Base
-        class_attribute :group, :section_payment_possible
+        class_attribute :grouping, :section_payment_possible
 
         attr_reader :member, :membership, :custom_discount, :context
         attr_writer :amount
@@ -66,8 +66,8 @@ module Invoices
           I18n.t("invoices.sac_memberships.positions.#{name}", section: section.to_s)
         end
 
-        def label_group
-          group ? I18n.t("invoices.sac_memberships.positions.#{group}") : label
+        def label_grouping
+          grouping ? I18n.t("invoices.sac_memberships.positions.#{grouping}") : label
         end
 
         def label_beitragskategorie
@@ -77,7 +77,7 @@ module Invoices
         def to_abacus_invoice_position
           Invoices::Abacus::InvoicePosition.new(
             name: label,
-            grouping: label_group,
+            grouping: label_grouping,
             details: label_beitragskategorie,
             amount: invoice_amount,
             article_number: article_number,
@@ -90,7 +90,7 @@ module Invoices
         def to_h
           {
             name: name,
-            group: group,
+            grouping: grouping,
             amount: amount,
             article_number: article_number,
             creditor: creditor.to_s

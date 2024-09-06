@@ -19,7 +19,7 @@ describe Event::ParticipationAbility do
     Fabricate(types.fetch(role), group: group)
   end
 
-  subject(:ability) { Ability.new(role.person) }
+  subject(:ability) { Ability.new(role.person.reload) }
 
   context "any" do
     let(:top_course) { events(:top_course) }

@@ -26,7 +26,7 @@ describe People::Neuanmeldungen::Approve do
   end
 
   def expect_role(role, expected_role_class, expected_group)
-    expect(role.person.roles).to have(1).item
+    expect(role.person.reload.roles).to have(1).item
     actual_role = role.person.roles.first
     expect(actual_role).to be_a expected_role_class
     expect(actual_role.group).to eq expected_group

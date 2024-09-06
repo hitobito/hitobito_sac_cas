@@ -14,8 +14,14 @@ describe People::DataQualityCheckerJob do
   context "when performing job" do
     before { person.data_quality_issues.destroy_all }
 
-    it "checks the data quality of all persons" do
-      expect { job.perform }.to change(person.data_quality_issues, :count)
+    it "checks the data quality of all people" do
+      batch_selects = 4
+      issues_created = 9 # validation and insert
+      affected_people = 4 # update data_quality
+      expect do
+        expect_query_count { job.perform }.to eq(batch_selects + issues_created * 2 + affected_people)
+      end.to change { person.data_quality_issues.count }.by(1).and \
+        change { Person::DataQualityIssue.count }.by(issues_created)
     end
   end
 end

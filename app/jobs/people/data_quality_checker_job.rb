@@ -7,7 +7,7 @@
 
 class People::DataQualityCheckerJob < BaseJob
   def perform
-    Person.includes(:roles).find_each do |person|
+    Person.includes(:roles, :phone_numbers, :data_quality_issues).find_each(batch_size: 100) do |person|
       People::DataQualityChecker.new(person).check_data_quality
     end
   end

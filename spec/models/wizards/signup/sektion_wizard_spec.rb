@@ -152,7 +152,7 @@ describe Wizards::Signup::SektionWizard do
       expect(max.roles.last.beitragskategorie).to eq "youth"
     end
 
-    it "creates multiple people and sets household key" do
+    it "creates multiple people and sets household key and address" do
       required_attrs[:family_fields] = {
         members_attributes: [
           [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}],
@@ -168,6 +168,8 @@ describe Wizards::Signup::SektionWizard do
       expect(maxine.household_key).to eq(max.household_key)
       expect(maxi.roles.last.beitragskategorie).to eq "family"
       expect(maxine.roles.last.beitragskategorie).to eq "family"
+      expect(maxi.address).to eq(max.address)
+      expect(maxine.address).to eq(max.address)
     end
 
     context "various fields" do
@@ -201,6 +203,14 @@ describe Wizards::Signup::SektionWizard do
         wizard.save!
         expect(max.subscriptions).to have(1).item
         expect(maxi.subscriptions).to have(1).items
+      end
+
+      it "creates roles but no newsletter exclusions" do
+        freeze_time
+        required_attrs[:various_fields][:newsletter] = "1"
+        expect { wizard.save! }.to change { Role.count }.by(2)
+        expect(max.subscriptions).to be_empty
+        expect(maxi.subscriptions).to be_empty
       end
 
       it "creates future roles if register_on is in the future" do

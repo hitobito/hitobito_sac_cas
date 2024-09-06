@@ -46,7 +46,7 @@ module Invoices
 
       def active_memberships
         [membership_from_role(stammsektion_role)] +
-          zusatzsektion_roles.map { |r| membership_from_role(r) }
+          zusatzsektion_roles.map { |r| membership_from_role(r) }.sort_by { |m| m.section.to_s }
       end
 
       def stammsektion
