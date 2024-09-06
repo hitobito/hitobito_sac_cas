@@ -1,3 +1,7 @@
+## unreleased
+
+*  Beim Empfänger-Export auf der Personenliste sind auch die strukturierte Adresse und die Anrede enthalten (hitobito_sac_cas#688)
+
 ## Version 2.2
 
 * Die ID der nächsten Sektion, Ortsgruppe oder des Nationalverbands zu jeder Rolle wird jetzt als Claim im OIDC Userinfo Endpoint ausgegeben, wenn der with_roles Scope verwendet wird. (hitobito_sac_cas#389)
@@ -11,7 +15,3 @@
 * Beim Etikettendruck wird bei jeder Person das Land immer gedruckt. Falls bei einer Person kein Land abgespeichert ist, wird Schweiz gedruckt (hitobito_sac_cas#426)
 * Die Rollentypen werden nun alphabetisch sortiert im Auswahlmenü mit Ausnahme der Rolle "Andere" (hitobito_sac_cas#552)
 * Analoger Mitgliederausweis PDF im neuen Design (hitobito_sac_cas#530)
-
-## unreleased
-
-*  Beim Export sind auch die strukturierte Adresse und die Anrede enthalten
