@@ -78,7 +78,6 @@ de:
           now: sofort
           jul: 01. Juli
           oct: 01. Oktober
-
         register_as: Eintritt als
         register_as_options:
           extra: Zusatzsektion
@@ -86,15 +85,12 @@ de:
 
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
-
       wizards/steps/main_email:
         email: Haupt-E-Mail
-
       wizards/steps/termination_choose_date:
         terminate_on: "Austrittsdatum"
         now: Sofort
         end_of_year: "Auf 31.12.%{year}"
-
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
@@ -334,6 +330,9 @@ de:
           m: Mann
           w: Frau
           _nil: Andere
+        recipient_salutations:
+          m: Herr
+          w: Frau
         additional_information: Bemerkungen (z.B. Beruf)
       group:
         group_id: Gruppen-ID
@@ -343,7 +342,6 @@ de:
         sac_newsletter_mailing_list_id: SAC Newsletter Abo ID
         sac_magazine_mailing_list_id: Die Alpen Abo ID
         sac_fundraising_mailing_list_id: Spendenaufruf Abo ID
-
         course_admin_email: E-Mail Kursadministration
       group/sektion:
         foundation_year: Gründungsjahr
@@ -517,151 +515,114 @@ de:
       group/sac_cas:
         one: Schweizer Alpen-Club SAC
         other: Schweizer Alpen-Club SAC
-
       group/ehrenmitglieder:
         one: Ehrenmitglieder
         other: Ehrenmitglieder
-
       group/externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
-
       group/geschaeftsleitung:
         one: SAC Geschäftsleitung
         other: SAC Geschäftsleitung
-
       group/geschaeftsstelle:
         one: SAC Geschäftsstelle
         other: SAC Geschäftsstelle
-
       group/kommission:
         one: Kommission
         other: Kommission
-
       group/zentralvorstand:
         one: SAC Zentralvorstand
         other: SAC Zentralvorstand
-
       group/abos:
         one: SAC Abos (ohne Newsletter)
         other: SAC Abos (ohne Newsletter)
-
       group/abo_magazin:
         one: AboMagazin
         other: AboMagazin
-
       group/abo_magazine:
         one: SAC-Magazin
         other: SAC-Magazin
-
       group/abo_touren_portal:
         one: SAC-Tourenportal
         other: SAC-Tourenportal
-
       group/abo_basic_login:
         one: SAC/CAS Login
         other: SAC/CAS Login
-
       group/sac_cas_clubhuetten:
         one: Clubhütten
         other: Clubhütten
-
       group/sac_cas_clubhuette:
         one: Clubhuette
         other: Clubhuetten
-
       group/sac_cas_kurskader:
         one: SAC Kurskader
         other: SAC Kurskader
-
       group/sac_cas_privathuetten:
         one: Privathütten
         other: Privathütten
-
       group/sac_cas_privathuette:
         one: Privathuette
         other: Privathuetten
-
       group/sac_cas_verbaende:
         one: Verbände & Organisationen
         other: Verbände & Organisationen
-
       group/sac_cas_verband:
         one: Verband & Organisation
         other: Verbände & Organisationen
-
       group/sektion:
         one: Sektion
         other: Sektionen
-
       group/ortsgruppe:
         one: Ortsgruppe
         other: Ortsgruppen
-
       group/sektions_mitglieder:
         one: Mitglieder
         other: Mitglieder
-
       group/sektions_neuanmeldungen_nv:
         one: Neuanmeldungen
         other: Neuanmeldungen
-
       group/sektions_neuanmeldungen_sektion:
         one: Neuanmeldungen (zur Freigabe)
         other: Neuanmeldungen (zur Freigabe)
-
       group/sektions_funktionaere:
         one: Sektionsfunktionäre
         other: Sektionsfunktionäre
-
       group/sektions_vorstand:
         one: Vorstand
         other: Vorstand
-
       group/sektions_touren_und_kurse:
         one: Touren und Kurse
         other: Touren und Kurse
-
       group/sektions_touren_und_kurse_sommer:
         one: Touren und Kurse Sommer
         other: Touren und Kurse Sommer
-
       group/sektions_touren_und_kurse_winter:
         one: Touren und Kurse Winter
         other: Touren und Kurse Winter
-
       group/sektions_clubhuetten:
         one: Clubhütten
         other: Clubhütten
-
       group/sektions_clubhuette:
         one: Clubhuette
         other: Clubhuetten
-
       group/sektionshuetten:
         one: Sektionshütten
         other: Sektionshütten
-
       group/sektionshuette:
         one: Sektionshütte
         other: Sektionshütten
-
       group/sektions_kommissionen:
         one: Kommissionen
         other: Kommissionen
-
       group/sektions_kommission:
         one: Kommission
         other: Kommission
-
       group/sektions_kommission_huetten:
         one: Kommission Hütten
         other: Kommissionen Hütten
-
       group/sektions_kommission_touren:
         one: Kommission Touren
         other: Kommissionen Touren
-
       group/sektions_kommission_umwelt_und_kultur:
         one: Kommission Umwelt und Kultur
         other: Kommissionen Umwelt und Kultur
@@ -1524,13 +1485,10 @@ de:
 
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
-
   sheet/memberships/leave_zusatzsektion:
     title: Zusatzsektion verlassen
-
   sheet/memberships/switch_stammsektion:
     title: Stammsektion wechseln
-
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
 

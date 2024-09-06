@@ -8,21 +8,8 @@
 module Export::Tabular::People
   class SacRecipients < Export::Tabular::SacGroupPeopleBase
     def attributes
-      [
-        :id,
-        :salutation,
-        :first_name,
-        :last_name,
-        :adresszusatz,
-        :address,
-        :postfach,
-        :zip_code,
-        :town,
-        :country,
-        :layer_navision_id,
-        :anzahl,
-        :email
-      ]
+      %i[id salutation first_name last_name address_care_of address postbox
+        zip_code town country layer_navision_id anzahl email]
     end
 
     def address_label
