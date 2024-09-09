@@ -13,8 +13,6 @@ describe Wizards::Steps::ChooseMembership do
   subject(:step) { described_class.new(wizard) }
 
   describe "validations" do
-    let(:error) { steps.errors[:reigster_as] }
-
     it "validates presence of group id" do
       step.register_as = nil
       expect(step).not_to be_valid
