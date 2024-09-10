@@ -16,7 +16,7 @@ describe Devise::Hitobito::PasswordsController do
 
   describe "#update" do
     it "should remove legacy password hash and salt" do
-      user.update(wso2_legacy_password_hash: "old hash", wso2_legacy_password_salt: "old salt")
+      user.update!(wso2_legacy_password_hash: "old hash", wso2_legacy_password_salt: "old salt")
       token = user.generate_reset_password_token!
       put :update, params: {person: {reset_password_token: token, password: "new long password", password_confirmation: "new long password"}}
       user.reload

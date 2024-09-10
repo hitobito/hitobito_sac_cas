@@ -65,9 +65,9 @@ module SacCas::Person
         .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
         .group("people.id")
     }
-  end
 
-  include SacCas::People::Wso2LegacyPassword
+    include SacCas::People::Wso2LegacyPassword
+  end
 
   module ClassMethods
     def salutation_label(key)

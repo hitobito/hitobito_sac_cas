@@ -238,7 +238,7 @@ describe Person do
       expect(person.correspondence).to eq("print")
     end
 
-    context "with wso2_legacy_password_hash" do
+    context "with wso2 legacy password" do
       let(:salt) { "salt" }
       let(:hash) { generate_wso2_legacy_password_hash(password, salt) }
       let(:password) { "verysafepasswordfortesting" }
@@ -495,6 +495,8 @@ describe Person do
       expect(person.wso2_legacy_password_hash).to be_present
 
       expect(person.valid_password?("invalid_password")).to be_falsey
+      expect(person.wso2_legacy_password_hash).to be_present
+      expect(person.wso2_legacy_password_salt).to be_present
     end
   end
 

@@ -69,7 +69,7 @@ describe PersonDecorator do
     end
 
     it "does not use any color classes for non legacy wso2 login status" do
-      expect(login_status_icon).to eq '<i class="fas fa-user-check"></i>'
+      expect(login_status_icon).to eq '<i title="Kein Login" class="fas fa-user-slash"></i>'
     end
   end
 end
