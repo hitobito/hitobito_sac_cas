@@ -11,7 +11,7 @@ module SacCas::Person
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
 
-  included do
+  prepended do
     Person::SEARCHABLE_ATTRS << :id
     include PgSearchable
 
@@ -65,6 +65,8 @@ module SacCas::Person
         .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
         .group("people.id")
     }
+
+    include SacCas::People::Wso2LegacyPassword
   end
 
   module ClassMethods
@@ -98,6 +100,11 @@ module SacCas::Person
     @sac_membership ||= People::SacMembership.new(self)
   end
 
+  def login_status
+    return :wso2_legacy_password if wso2_legacy_password?
+    super
+  end
+
   private
 
   def set_digital_correspondence
@@ -105,7 +112,7 @@ module SacCas::Person
   end
 
   def password_initialized?
-    encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
+    confirmed_at.present? && encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
   end
 
   def check_data_quality

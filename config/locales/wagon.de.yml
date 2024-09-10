@@ -1193,6 +1193,8 @@ de:
       multiselect_actions:
         accept: Übernehmen
         reject: Ablehnen
+    login_status:
+      wso2_legacy_password: "Altes SAC Passwort (WSO2)"
 
     roles:
       roles_aside:
