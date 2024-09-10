@@ -75,7 +75,6 @@ it:
           now: ""
           jul: ""
           oct: ""
-
         register_as: ""
         register_as_options:
           extra: ""
@@ -83,15 +82,12 @@ it:
 
       wizards/steps/choose_sektion:
         group_id: ""
-
       wizards/steps/main_email:
         email: ""
-
       wizards/steps/termination_choose_date:
         terminate_on: ""
         now: ""
         end_of_year: ""
-
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: ""
       wizards/steps/termination/summary:
@@ -328,6 +324,9 @@ it:
           m: Signor
           w: Signora
           _nil: ""
+        recipient_salutations:
+          m: ""
+          w: ""
         additional_information: ""
       group:
         group_id: ""
@@ -337,7 +336,6 @@ it:
         sac_newsletter_mailing_list_id: ""
         sac_magazine_mailing_list_id: ""
         sac_fundraising_mailing_list_id: ""
-
         course_admin_email: ""
       group/sektion:
         foundation_year: ""
@@ -518,187 +516,150 @@ it:
         one: ''
         many: ''
         other: ''
-
       group/ehrenmitglieder:
         one: ''
         many: ''
         other: ''
-
       group/externe_kontakte:
         one: ''
         many: ''
         other: ''
-
       group/geschaeftsleitung:
         one: ''
         many: ''
         other: ''
-
       group/geschaeftsstelle:
         one: ''
         many: ''
         other: ''
-
       group/kommission:
         one: ''
         many: ''
         other: ''
-
       group/zentralvorstand:
         one: ''
         many: ''
         other: ''
-
       group/abos:
         one: ''
         many: ''
         other: ''
-
       group/abo_magazin:
         one: ''
         many: ''
         other: ''
-
       group/abo_magazine:
         one: ''
         many: ''
         other: ''
-
       group/abo_touren_portal:
         one: ''
         many: ''
         other: ''
-
       group/abo_basic_login:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_clubhuetten:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_clubhuette:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_kurskader:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_privathuetten:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_privathuette:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_verbaende:
         one: ''
         many: ''
         other: ''
-
       group/sac_cas_verband:
         one: ''
         many: ''
         other: ''
-
       group/sektion:
         one: ''
         many: ''
         other: ''
-
       group/ortsgruppe:
         one: ''
         many: ''
         other: ''
-
       group/sektions_mitglieder:
         one: ''
         many: ''
         other: ''
-
       group/sektions_neuanmeldungen_nv:
         one: ''
         many: ''
         other: ''
-
       group/sektions_neuanmeldungen_sektion:
         one: ''
         many: ''
         other: ''
-
       group/sektions_funktionaere:
         one: ''
         many: ''
         other: ''
-
       group/sektions_vorstand:
         one: ''
         many: ''
         other: ''
-
       group/sektions_touren_und_kurse:
         one: ''
         many: ''
         other: ''
-
       group/sektions_touren_und_kurse_sommer:
         one: ''
         many: ''
         other: ''
-
       group/sektions_touren_und_kurse_winter:
         one: ''
         many: ''
         other: ''
-
       group/sektions_clubhuetten:
         one: ''
         many: ''
         other: ''
-
       group/sektions_clubhuette:
         one: ''
         many: ''
         other: ''
-
       group/sektionshuetten:
         one: ''
         many: ''
         other: ''
-
       group/sektionshuette:
         one: ''
         many: ''
         other: ''
-
       group/sektions_kommissionen:
         one: ''
         many: ''
         other: ''
-
       group/sektions_kommission:
         one: ''
         many: ''
         other: ''
-
       group/sektions_kommission_huetten:
         one: ''
         many: ''
         other: ''
-
       group/sektions_kommission_touren:
         one: ''
         many: ''
         other: ''
-
       group/sektions_kommission_umwelt_und_kultur:
         one: ''
         many: ''
@@ -1530,13 +1491,10 @@ it:
 
   sheet/memberships/join_zusatzsektion:
     title: ""
-
   sheet/memberships/leave_zusatzsektion:
     title: ""
-
   sheet/memberships/switch_stammsektion:
     title: ""
-
   sheet/memberships/terminate_sac_membership:
     title: ""
 
