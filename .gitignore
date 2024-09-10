@@ -1,5 +1,5 @@
 .bundle/
-log/*.log
+log/*
 tmp/
 pkg/
 doc/rdoc
