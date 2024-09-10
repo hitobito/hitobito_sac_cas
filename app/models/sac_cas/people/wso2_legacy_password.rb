@@ -1,4 +1,4 @@
-module SacCas::Person::Wso2LegacyPassword
+module SacCas::People::Wso2LegacyPassword
   extend ActiveSupport::Concern
 
   included do
@@ -19,6 +19,11 @@ module SacCas::Person::Wso2LegacyPassword
   end
 
   private
+
+  def wso2_legacy_password?
+    wso2_legacy_password_hash.present? &&
+      wso2_legacy_password_salt.present?
+  end
 
   def legacy_password_valid?(password)
     return false if password.blank?

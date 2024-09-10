@@ -56,4 +56,20 @@ describe PersonDecorator do
       expect(label).to eq "Max Muster / Maxi, Zürich (2014; #{person.membership_number})"
     end
   end
+
+  describe "#login_status_icons" do
+    let(:login_status_icon) { person.decorate.login_status_icon }
+
+    it "uses active login icon with warning color for legacy wso2 password hash" do
+      person.encrypted_password = nil
+      person.wso2_legacy_password_hash = "123"
+      person.wso2_legacy_password_salt = "456"
+
+      expect(login_status_icon).to eq '<i title="Altes SAC Passwort (WSO2)" class="text-warning fas fa-user-check"></i>'
+    end
+
+    it "does not use any color classes for non legacy wso2 login status" do
+      expect(login_status_icon).to eq '<i class="fas fa-user-check"></i>'
+    end
+  end
 end

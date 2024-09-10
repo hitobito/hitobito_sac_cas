@@ -11,7 +11,7 @@ module SacCas::Person
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
 
-  included do
+  prepended do
     Person::SEARCHABLE_ATTRS << :id
     include PgSearchable
 
@@ -67,7 +67,7 @@ module SacCas::Person
     }
   end
 
-  include Wso2LegacyPassword
+  include SacCas::People::Wso2LegacyPassword
 
   module ClassMethods
     def salutation_label(key)
@@ -98,6 +98,11 @@ module SacCas::Person
 
   def sac_membership
     @sac_membership ||= People::SacMembership.new(self)
+  end
+
+  def login_status
+    return :wso2_legacy_password if wso2_legacy_password?
+    super
   end
 
   private

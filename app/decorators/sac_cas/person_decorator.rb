@@ -8,6 +8,10 @@
 module SacCas::PersonDecorator
   extend ActiveSupport::Concern
 
+  def login_status_icons
+    {wso2_legacy_password: "user-check"}.merge(super)
+  end
+
   def as_typeahead
     {id: id, label: h.h(full_label_with_changed_suffix)}
   end
@@ -19,6 +23,14 @@ module SacCas::PersonDecorator
   end
 
   private
+
+  def login_status_icon_options(login_status)
+    if login_status == :wso2_legacy_password
+      super.merge(class: "text-warning")
+    else
+      super
+    end
+  end
 
   def full_label_with_changed_suffix
     suffix = [model.birthday&.year, model.id].compact.join("; ")

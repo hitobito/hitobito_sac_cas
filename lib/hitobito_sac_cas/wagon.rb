@@ -50,7 +50,7 @@ module HitobitoSacCas
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
-      Person.include SacCas::Person
+      Person.prepend SacCas::Person
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
