@@ -52,6 +52,7 @@ describe "switching stammsektion", js: true do
       roles(:familienmitglied_zweitsektion).destroy
       roles(:familienmitglied2_zweitsektion).destroy
       roles(:familienmitglied_kind_zweitsektion).destroy
+      person.update_column(:data_quality, :ok)
     end
 
     it "can switch for all members" do
@@ -77,7 +78,7 @@ describe "switching stammsektion", js: true do
 
     before { person.update!(first_name: nil) }
 
-    it "can switch for all members" do
+    it "shows an alert info message" do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       expect(find(".alert-info").text).to include("kann wegen ungültigen Daten nicht durchgeführt werden")

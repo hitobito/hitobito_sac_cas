@@ -45,6 +45,7 @@ describe Memberships::SwitchStammsektionsController do
       roles(:familienmitglied_zweitsektion).destroy
       roles(:familienmitglied2_zweitsektion).destroy
       roles(:familienmitglied_kind_zweitsektion).destroy
+      person.update_column(:data_quality, :ok)
 
       post :create, params: wizard_params(step: 1, choose_sektion: {group_id: matterhorn.id})
       expect(response).to redirect_to(person_path(person, format: :html))
