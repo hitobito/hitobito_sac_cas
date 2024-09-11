@@ -275,7 +275,7 @@ describe "signup/sektion", js: true do
           "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
       end.to change { Person.count }.by(3)
         .and change { Role.count }.by(3)
-        .and change { ActionMailer::Base.deliveries.count }.by(1)
+        .and change { ActionMailer::Base.deliveries.count }.by(3)
 
       people = Person.where(last_name: "Muster")
       expect(people).to have(3).items
