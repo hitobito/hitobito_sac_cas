@@ -47,9 +47,6 @@ Rails.application.routes.draw do
         member do
           get 'external_invoices' => 'people/external_invoices#index'
           post 'external_invoices/:invoice_id/cancel' => 'people/external_invoices#cancel', as: 'cancel_external_invoices_group_people'
-          # Test route to check invoice positions for a person.
-          # Remove once invoices are sent to abacus
-          get 'membership_invoice_positions' => 'people/membership_invoice_positions#show'
         end
       end
       namespace :people do
