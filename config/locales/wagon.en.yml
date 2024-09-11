@@ -1155,6 +1155,8 @@ en:
       multiselect_actions:
         accept: ""
         reject: ""
+    login_status:
+      wso2_legacy_password: ""
 
     roles:
       roles_aside:

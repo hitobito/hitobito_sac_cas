@@ -325,8 +325,8 @@ it:
           w: Signora
           _nil: ""
         recipient_salutations:
-          m: ""
-          w: ""
+          m: Signor
+          w: Signora
         additional_information: ""
       group:
         group_id: ""
@@ -1206,6 +1206,8 @@ it:
       multiselect_actions:
         accept: ""
         reject: ""
+    login_status:
+      wso2_legacy_password: ""
 
     roles:
       roles_aside:
