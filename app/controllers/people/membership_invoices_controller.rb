@@ -6,31 +6,29 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
+  def new
+    authorize!(:update, external_invoice)
+
+    @invoice_form = invoice_form
+    @invoice_form.invoice_date = today
+    @invoice_form.send_date = today
+    @group = group
+  end
+
   def create
     authorize!(:create, external_invoice)
     assign_attributes
 
     if invoice_form.valid? && external_invoice.valid? && external_invoice.save
-      if person.data_quality == "error"
-        mark_with_error_and_redirect(ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY)
-      elsif membership_invoice.invoice?
+      if person.data_quality != "error"
         enqueue_job_and_redirect
-      elsif membership_invoice.memberships.none?
-        mark_with_error_and_redirect(ExternalInvoice::SacMembership::NO_MEMBERSHIPS_KEY)
       else
-        mark_with_error_and_redirect(ExternalInvoice::SacMembership::NOT_POSSIBLE_KEY)
+        mark_with_error_and_redirect(ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY)
       end
     else
       @group = group
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def new
-    authorize!(:update, external_invoice)
-
-    @invoice_form = invoice_form
-    @group = group
   end
 
   private
@@ -54,7 +52,8 @@ class People::MembershipInvoicesController < ApplicationController
       new_entry: invoice_form.new_entry
     ).enqueue!
 
-    redirect_to external_invoices_group_person_path(group, person), notice: t("people.membership_invoices.success_notice")
+    redirect_to external_invoices_group_person_path(group, person),
+      notice: t("people.membership_invoices.success_notice")
   end
 
   def mark_with_error_and_redirect(key)
@@ -68,14 +67,10 @@ class People::MembershipInvoicesController < ApplicationController
     redirect_to external_invoices_group_person_path(group, person), alert: t(key)
   end
 
-  def membership_invoice
-    @membership_invoice ||= Invoices::Abacus::MembershipInvoiceGenerator
-      .new(external_invoice.person_id, external_invoice.link, invoice_form.reference_date)
-      .build(new_entry: invoice_form.new_entry)
-  end
-
   def invoice_form_params
-    params.require(:people_membership_invoice_form).permit(:reference_date, :invoice_date, :send_date, :section_id, :new_entry, :discount)
+    params
+      .require(:people_membership_invoice_form)
+      .permit(:reference_date, :invoice_date, :send_date, :section_id, :new_entry, :discount)
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)
@@ -83,8 +78,6 @@ class People::MembershipInvoicesController < ApplicationController
   def invoice_form = @invoice_form ||= People::Membership::InvoiceForm.new(person)
 
   def person = @person ||= Person.find(params[:person_id])
-
-  def context = @context ||= Invoices::SacMemberships::Context.new(date, custom_discount: invoice_form.discount)
 
   def group = @group ||= Group.find(params[:group_id])
 

@@ -51,40 +51,6 @@ describe People::MembershipInvoicesController do
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
-    # NOTE - these error conditions are probably not possible as invoice_form
-    # validates section has a paying role but we stil include them for completeness
-    context "unprocessable invoice" do
-      before do
-        allow_any_instance_of(Invoices::Abacus::MembershipInvoice).to receive(:invoice?).and_return(false)
-      end
-
-      it "logs and marks invoice as error if invoice has no memberships" do
-        expect do
-          allow_any_instance_of(Invoices::Abacus::MembershipInvoice).to receive(:memberships).and_return([])
-          post :create, params:
-        end.to change { ExternalInvoice.count }.by(1)
-          .and change { HitobitoLogEntry.count }.by(1)
-          .and not_change { Delayed::Job.count }
-
-        expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to eq "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. " \
-          "Es wurde entsprechend keine Rechnung erstellt."
-      end
-
-      it "logs and marks invoice as error if invoice has memberships" do
-        expect do
-          allow_any_instance_of(Invoices::Abacus::MembershipInvoice).to receive(:memberships).and_return([:membership])
-          post :create, params:
-        end.to change { ExternalInvoice.count }.by(1)
-          .and change { HitobitoLogEntry.count }.by(1)
-          .and not_change { Delayed::Job.count }
-
-        expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to eq "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, " \
-          "oder diese sind bereits über andere Rechnungen abgedeckt."
-      end
-    end
-
     context "data quality errors" do
       before { person.update!(data_quality: :error) }
 
