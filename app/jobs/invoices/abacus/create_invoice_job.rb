@@ -81,7 +81,7 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
       .build(new_entry: new_entry, discount: discount)
   end
 
-  def external_invoice = @external_invoice ||= ExternalInvoice.find(external_invoice.id)
+  def external_invoice = @external_invoice ||= ExternalInvoice.find(external_invoice_id)
 
   def client = @client ||= Invoices::Abacus::Client.new
 
