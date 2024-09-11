@@ -28,15 +28,15 @@ de:
     attributes:
       people/membership/invoice_form:
         reference_date: "Stichtag"
-        invoice_date: "Rechnungsdatum"
-        send_date: "Versanddatum"
+        invoice_date: "Buchungsdatum"
+        send_date: "Versand- und Rechnungsdatum"
         discount: "Rabatt"
         new_entry: "Eintrittsgebühr"
         section_id: "Mitgliedschaft"
       people/yearly_membership/invoice_form:
         invoice_year: "Rechnungsjahr"
-        invoice_date: "Rechnungsdatum"
-        send_date: "Versanddatum"
+        invoice_date: "Buchungsdatum"
+        send_date: "Versand- und Rechnungsdatum"
         role_finish_date: "Rollen verlängern bis"
       wizards/steps/signup/main_email_field:
         email: E-Mail

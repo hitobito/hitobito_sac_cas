@@ -25,6 +25,16 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     @role_finish_date = role_finish_date
   end
 
+  def perform
+    handle_termination_signals do
+      log_progress(0)
+      clear_spurious_draft_invoices!
+      extend_roles_for_invoicing
+      process_invoices
+      log_progress(100) if @current_logged_percent < 100
+    end
+  end
+
   def enqueue
     assert_no_other_job_running!
   end
@@ -37,15 +47,6 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
   def failure(job)
     create_error_log_entry("MV-Jahresinkassolauf abgebrochen", nil)
-  end
-
-  def perform
-    handle_termination_signals do
-      log_progress(0)
-      extend_roles_for_invoicing
-      process_invoices
-      log_progress(100) if @current_logged_percent < 100
-    end
   end
 
   def active_members
@@ -66,83 +67,29 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
   private
 
-  def reference_date
-    @reference_date ||= Date.new(@invoice_year)
-  end
-
-  def log_progress(percent)
-    HitobitoLogEntry.create!(
-      category: "stapelverarbeitung",
-      level: :info,
-      message: "MV-Jahresinkassolauf: Fortschritt #{percent}%"
-    )
-  end
-
-  def create_error_log_entry(message, payload)
-    HitobitoLogEntry.create!(
-      category: "stapelverarbeitung",
-      level: :error,
-      message: message,
-      payload: payload
-    )
-  end
-
-  def assert_no_other_job_running!
-    raise "There is already a job running" if self.class.job_running?
-  end
-
-  def extend_roles_for_invoicing
-    return if @role_finish_date.nil?
-
-    Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date).extend_roles
-  end
-
-  def start_progress
-    @current_logged_percent = 0
-    @members_count = active_members.count
-    @processed_members = 0
-  end
-
-  def update_progress(people_count)
-    @processed_members += people_count
-    @progress_percent = @processed_members * 100 / @members_count
-    if @progress_percent >= (@current_logged_percent + 10)
-      @current_logged_percent = @progress_percent / 10 * 10
-      log_progress(@current_logged_percent)
-    end
-  end
-
   def process_invoices
-    raise_exception = nil
     start_progress
-    clear_spurious_draft_invoices!
     active_members.in_batches(of: BATCH_SIZE) do |people|
+      check_terminated!
       people_ids = people.pluck(:id)
-      slices = people_ids.each_slice(SLICE_SIZE).to_a
-      Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
-        check_terminated!
-        ActiveRecord::Base.connection_pool.with_connection do
-          create_invoices(load_people(ids))
-        end
-      # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-      rescue Exception => e
-        raise_exception = e
-        raise Parallel::Break
-      end
-      # rubocop:enable Lint/RescueException
-      if raise_exception
-        raise raise_exception
-      end
+      create_invoices_in_parallel(people_ids)
       update_progress(people_ids.size)
     end
   end
 
-  def clear_spurious_draft_invoices!
-    ExternalInvoice::SacMembership.where(state: :draft).destroy_all
-  end
-
-  def load_people(ids)
-    context.people_with_membership_years.where(id: ids).order(:id).includes(:roles)
+  def create_invoices_in_parallel(people_ids)
+    raise_exception = nil
+    slices = people_ids.each_slice(SLICE_SIZE).to_a
+    Parallel.map(slices, in_threads: PARALLEL_THREADS) do |ids|
+      check_terminated!
+      ActiveRecord::Base.connection_pool.with_connection do
+        create_invoices(load_people(ids))
+      end
+    rescue Exception => e # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
+      raise_exception = e
+      raise Parallel::Break
+    end
+    raise raise_exception if raise_exception
   end
 
   def create_invoices(people)
@@ -193,6 +140,57 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
     )
   end
 
+  def assert_no_other_job_running!
+    raise "There is already a job running" if self.class.job_running?
+  end
+
+  # clears invoice models from previously failed job runs
+  def clear_spurious_draft_invoices!
+    ExternalInvoice::SacMembership.where(state: :draft, year: @invoice_year).destroy_all
+  end
+
+  def extend_roles_for_invoicing
+    return if @role_finish_date.nil?
+
+    Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date).extend_roles
+  end
+
+  def start_progress
+    @current_logged_percent = 0
+    @members_count = active_members.count
+    @processed_members = 0
+  end
+
+  def update_progress(people_count)
+    @processed_members += people_count
+    @progress_percent = @processed_members * 100 / @members_count
+    if @progress_percent >= (@current_logged_percent + 10)
+      @current_logged_percent = @progress_percent / 10 * 10
+      log_progress(@current_logged_percent)
+    end
+  end
+
+  def load_people(ids)
+    context.people_with_membership_years.where(id: ids).order(:id).includes(:roles)
+  end
+
+  def log_progress(percent)
+    HitobitoLogEntry.create!(
+      category: "stapelverarbeitung",
+      level: :info,
+      message: "MV-Jahresinkassolauf: Fortschritt #{percent}%"
+    )
+  end
+
+  def create_error_log_entry(message, payload)
+    HitobitoLogEntry.create!(
+      category: "stapelverarbeitung",
+      level: :error,
+      message: message,
+      payload: payload
+    )
+  end
+
   def log_error_parts(parts)
     parts.reject(&:success?).each do |part|
       create_log_entry(part)
@@ -208,6 +206,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       message: "Mitgliedschaftsrechnung konnte nicht in Abacus erstellt werden",
       payload: part.error_payload
     )
+  end
+
+  def reference_date
+    @reference_date ||= Date.new(@invoice_year)
   end
 
   def context

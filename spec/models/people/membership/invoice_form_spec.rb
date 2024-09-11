@@ -51,19 +51,19 @@ describe People::Membership::InvoiceForm do
       it "is invalid when blank" do
         form.send_date = nil
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Versanddatum muss ausgefüllt werden"]
+        expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss ausgefüllt werden"]
       end
 
       it "is invalid when short of min date" do
         form.send_date = 1.year.ago.end_of_year
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Versanddatum muss 01.01.2024 oder danach sein"]
+        expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss 01.01.2024 oder danach sein"]
       end
 
       it "is invalid when exceeds max date" do
         form.send_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to match_array ["Versanddatum muss 31.12.2024 oder davor sein"]
+        expect(form.errors.full_messages).to match_array ["Versand- und Rechnungsdatum muss 31.12.2024 oder davor sein"]
       end
     end
 
@@ -71,19 +71,19 @@ describe People::Membership::InvoiceForm do
       it "is invalid when blank" do
         form.invoice_date = nil
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Rechnungsdatum muss ausgefüllt werden"]
+        expect(form.errors.full_messages).to eq ["Buchungsdatum muss ausgefüllt werden"]
       end
 
       it "is invalid when short of min date" do
         form.invoice_date = 1.year.ago.end_of_year
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Rechnungsdatum muss 01.01.2024 oder danach sein"]
+        expect(form.errors.full_messages).to eq ["Buchungsdatum muss 01.01.2024 oder danach sein"]
       end
 
       it "is invalid when exceeds max date" do
         form.invoice_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to match_array ["Rechnungsdatum muss 31.12.2025 oder davor sein"]
+        expect(form.errors.full_messages).to match_array ["Buchungsdatum muss 31.12.2025 oder davor sein"]
       end
     end
 
