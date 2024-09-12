@@ -1144,6 +1144,9 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      form:
+        has_account: Hast du bereits ein SAC-Login?
+        to_login_page: Anmelden
       abo_issue:
         issues_from_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
