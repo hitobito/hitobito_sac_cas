@@ -7,22 +7,8 @@
 
 module Wizards::Steps::Signup::Sektion
   class VariousFields < Wizards::Step
-    include Wizards::Steps::Signup::AgreementFields
-
-    DYNAMIC_AGREEMENTS = [
-      :sektion_statuten,
-      :adult_consent
-    ].freeze
-
-    DYNAMIC_AGREEMENTS.each do |agreement|
-      attribute agreement, :boolean
-      validates agreement, acceptance: true, if: :"requires_#{agreement}?"
-    end
-
     attribute :contribution_regulations, :boolean, default: false
     attribute :self_registration_reason_id, :integer
-
-    validates :contribution_regulations, acceptance: true
 
     delegate :requires_adult_consent?, to: :wizard
 
@@ -30,16 +16,6 @@ module Wizards::Steps::Signup::Sektion
       SelfRegistrationReason.includes(:translations).order(:created_at).collect do |r|
         [r.id.to_s, r.text]
       end
-    end
-
-    def sektion_statuten_link_args
-      label = I18n.t("link_sektion_statuten_title", scope: "self_registration.infos_component")
-      path = rails_blob_path(privacy_policy, disposition: :attachment, only_path: true)
-      [label, path]
-    end
-
-    def requires_sektion_statuten?
-      sektion_statuten.blank? && privacy_policy.attached?
     end
 
     def privacy_policy_accepted_at
