@@ -225,6 +225,49 @@ describe Wizards::Signup::SektionWizard do
         expect(max.subscriptions).to be_empty
         expect(maxi.subscriptions).to be_empty
       end
+
+      it "displays correct info for beitragskategorie in summary card" do
+        freeze_time
+        # these values have to be adjusted as soon as FeeComponent calculates the real values (#933)
+        expect(wizard.summary_fields.entry_fee_info).to eq(
+          {:title=>"TODO: Einzelmitgliedschaft", :attributes=>[{:value=>"Eintritt per: sofort", :class=>"mb-3"}, {:value=>"Sektion SAC Blüemlisalp", :class=>"h6 fw-bold"}, {:value=>"CHF 122 - jährlicher Beitrag"}, {:value=>"CHF  30 - einmalige Gebühr"}, {:value=>"CHF 152 - Total", :class=>"fw-bold"}]}
+        )
+      end
+
+      it "displays correct info for main person in summary card" do
+        expect(wizard.summary_fields.person_info(wizard.person_fields)).to eq({:title=>"Kontaktperson",
+        :attributes=>
+         [{:value=>"Max Muster", :class=>"fw-bold mb-3"},
+          {:label=>"zusätzliche Adresszeile:", :value=>"c/o Musterleute"},
+          {:label=>"Strasse und Nr.:", :value=>"Musterplatz 42"},
+          {:label=>"Postfach:", :value=>"Postfach 23"},
+          {:label=>"PLZ/Ort:", :value=>"8000 Zurich"},
+          {:label=>"County:", :value=>"CH", :class=>"mb-3"},
+          {:label=>"Geburtstag:", :value=>"01.01.2000"},
+          {:label=>"Telefon:", :value=>"+41 79 123 45 67"},
+          {:label=>"Haupt-E-Mail:", :value=>"max.muster@example.com"}]})
+      end
+
+      it "displays correct info for child family member in summary card" do
+        freeze_time
+        expect(wizard.summary_fields.family_info).to eq([
+          {:attributes=>[{:class=>"fw-bold mb-3", :value=>"Maxi Muster"}, {:label=>"Geburtstag:", :value=>"01.01.2012"}, {:label=>"Telefon:", :value=>nil}, {:label=>"Haupt-E-Mail:", :value=>nil}], :title=>"Kind"}
+        ])
+      end
+
+      it "displays correct info for adult family member in summary card" do
+        wizard.family_fields.members.first.birthday = "2000-01-01"
+        expect(wizard.summary_fields.family_info).to eq([
+          {:attributes=>[{:class=>"fw-bold mb-3", :value=>"Maxi Muster"}, {:label=>"Geburtstag:", :value=>"01.01.2000"}, {:label=>"Telefon:", :value=>nil}, {:label=>"Haupt-E-Mail:", :value=>nil}], :title=>"Erwachsene Person"}
+        ])
+      end
+
+      it "orders family member summary cards by birthday" do
+        # add second family member
+        required_attrs[:family_fields][:members_attributes] << [2, {first_name: "Larissa", last_name: "Muster", birthday: "1.1.2000"}]
+        expect(wizard.summary_fields.family_info.first[:attributes].second[:value]).to eq("01.01.2000")
+        expect(wizard.summary_fields.family_info.second[:attributes].second[:value]).to eq("01.01.2012")
+      end
     end
   end
 end
