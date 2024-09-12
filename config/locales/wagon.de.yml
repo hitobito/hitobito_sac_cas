@@ -1240,6 +1240,14 @@ de:
         family: Familienmitglied
         youth: Jugendmitglied
 
+  mailer:
+    footer:
+      address: |
+        Schweizer Alpen-Club SAC
+        Monbijoustrasse 61
+        3000 Bern 14
+        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
+
   memberships:
     join_zusatzsektions:
       create:

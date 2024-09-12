@@ -7,6 +7,7 @@
 
 class Event::ApplicationPausedMailer < ApplicationMailer
   include EventMailer
+  include MultiLanguageMailer
 
   NOTICE = "event_application_paused_notice"
 
@@ -14,6 +15,6 @@ class Event::ApplicationPausedMailer < ApplicationMailer
     @course = course
     locales = course.language.split("_")
 
-    compose(course.groups.first.course_admin_email, NOTICE, {}, locales)
+    compose_multi_language(course.groups.first.course_admin_email, NOTICE, locales)
   end
 end
