@@ -5,9 +5,9 @@
 
 en:
   global:
-    phone_placeholder: ""
-    currency: ""
-    years: ""
+    phone_placeholder: +41 77 123 45 67
+    currency: CHF
+    years: years
 
   settings:
     email:
@@ -15,1298 +15,1318 @@ en:
 
   errors:
     messages:
-      assert_old_enough: ""
-      too_young: ""
-      assert_old_enough_with_age: ""
-      conflicting_family_membership: >
+      assert_old_enough: "must have a date of birth and be at least %{minimum_years} years old"
+      too_young: "must be %{minimum_years} years or older"
+      assert_old_enough_with_age: "must have a date of birth and be at least %{minimum_years} years old"
+      conflicting_family_membership: >-
+        %{name} already has a family membership and therefore cannot be added to a family household.
   activemodel:
     attributes:
       people/membership/invoice_form:
-        reference_date: ""
-        invoice_date: ""
-        send_date: ""
-        discount: ""
-        new_entry: ""
-        section_id: ""
+        reference_date: "Deadline"
+        invoice_date: "Invoice date"
+        send_date: "Shipping date"
+        discount: "Discount"
+        new_entry: "Entrance fee"
+        section_id: "Membership"
       people/yearly_membership/invoice_form:
-        invoice_year: ""
-        invoice_date: ""
-        send_date: ""
-        role_finish_date: ""
+        invoice_year: "Financial year"
+        invoice_date: "Invoice date"
+        send_date: "Shipping date"
+        role_finish_date: "Extend rollers to"
       wizards/steps/signup/main_email_field:
-        email: ""
+        email: e-mail
       wizards/steps/signup/person_fields:
-        gender: ""
-        phone_number: ""
-        address: ""
-        adult_consent: ""
-        contribution_regulations: ""
-        data_protection: ""
-        statutes: ""
+        gender: Salutation
+        phone_number: Telephone
+        address: Street and no.
+        adult_consent: Declaration of consent by the parent or legal guardian
+        contribution_regulations: Contribution regulations
+        data_protection: Privacy policy
+        statutes: Statutes
       wizards/steps/signup/abo_magazin/issues_from_field:
-        issues_from: ""
-        data_protection: ""
-        statutes: ""
+        issues_from: From issue
+        data_protection: Privacy policy
+        statutes: Statutes
       wizards/steps/signup/sektion/family_fields/member:
-        gender: ""
-        email: ""
-        phone_number: ""
+        gender: Salutation
+        email: E-mail (optional)
+        phone_number: Telephone (optional)
       wizards/steps/signup/sektion/various_fields:
-        register_on: ""
-        self_registration_reason_id: ""
-        adult_consent: ""
-        contribution_regulations: ""
-        data_protection: ""
-        sektion_statuten: ""
-        statutes: ""
+        register_on: Entry date per
+        self_registration_reason_id: Reason for entry
+        adult_consent: Declaration of consent by the parent or legal guardian
+        contribution_regulations: Contribution regulations
+        data_protection: Privacy policy
+        sektion_statuten: Section statutes
+        statutes: Statutes
       wizards/steps/choose_membership:
-        register_as: ""
-        family: ""
-        myself: ""
+        register_as: "Who should the additional membership apply to?"
+        family: for the whole family
+        myself: for myself
       wizards/steps/switch_stammsektion:
-        now: ""
+        now: immediately
       memberships/leave_zusatzsektion:
-        terminate_on: ""
+        terminate_on: Leaving date
       people/neuanmeldungen/reject:
-        note: ""
+        note: Remark
       self_inscription:
-        register_on: ""
+        register_on: Entry date per
         register_on_options:
-          now: ""
-          jul: ""
-          oct: ""
-        register_as: ""
+          now: immediately
+          jul: July 01
+          oct: October 01
+        register_as: Entry as
         register_as_options:
-          extra: ""
-          replace: ""
+          extra: Additional section
+          replace: New master section (replaces your previous one)
 
       wizards/steps/choose_sektion:
-        group_id: ""
+        group_id: Select section
       wizards/steps/main_email:
-        email: ""
+        email: Main e-mail
       wizards/steps/termination_choose_date:
-        terminate_on: ""
-        now: ""
-        end_of_year: ""
+        terminate_on: "Leaving date"
+        now: Immediately
+        end_of_year: "On 31.12.%{year}"
       wizards/steps/leave_zusatzsektion/summary:
-        termination_reason_id: ""
+        termination_reason_id: "Reason for leaving"
       wizards/steps/termination/summary:
-        termination_reason_id: ""
-        data_retention_consent: ""
-        subscribe_newsletter: ""
-        subscribe_fundraising_list: ""
+        termination_reason_id: "Reason for leaving"
+        data_retention_consent: "My data should be retained after I leave and I can be contacted for donation appeals"
+        subscribe_newsletter: "Maintain newsletter"
+        subscribe_fundraising_list: "I would like to continue to be informed about fundraising campaigns."
 
     errors:
       messages:
-        must_be_older_than_18: ""
+        must_be_older_than_18: Person must be 18 years or older.
         youth_not_allowed_in_family: |
-        invalid_date_range: ""
+          Young people between the ages of 18 and 21 cannot be
+          be accepted in a family membership.
+        invalid_date_range: "must be between %{start_on} and %{end_on} "
 
       models:
         household:
           attributes:
             members:
-              no_members: ""
-              household_address: ""
+              no_members: "At least one person in the family must already be an SAC member."
+              household_address: "The address '%{address}' is adopted for all family members."
             base:
-              at_least_one_adult: ""
-              no_adult_member_with_email: ""
-              not_more_than_two_adults: ""
-              at_least_two_members: ""
-              removed_member_has_no_email: ""
+              at_least_one_adult: A family must contain at least 1 adult person.
+              no_adult_member_with_email: The household does not contain an adult with a confirmed e-mail address.
+              not_more_than_two_adults: A family may contain a maximum of 2 adults.
+              at_least_two_members: A family must contain at least 2 persons.
+              removed_member_has_no_email: The removed person does not have a confirmed e-mail address.
         household_member:
           attributes:
             base:
-              birthday_missing: ""
-              family_age_range_not_fulfilled: ""
-              in_other_household_present: ""
-              membership_in_other_section: ""
-              no_email: ""
-              planned_termination: ""
+              birthday_missing: "%{person_name} has no date of birth."
+              family_age_range_not_fulfilled: "%{person_name} cannot be added. Only persons aged 6-17 or 22 years and older are permitted."
+              in_other_household_present: "%{person_name} cannot be added as the person is already assigned to another family."
+              membership_in_other_section: "%{person_name} is already a member of another section."
+              no_email: "%{person_name} does not have a confirmed e-mail address."
+              planned_termination: "%{person_name} has planned to leave the company."
         memberships/join_base:
           attributes:
             person:
-              must_be_sac_member: ""
+              must_be_sac_member: must be a Sac member
               must_not_be_join_section_member:
-                ""
-              must_be_family_main_person: ""
+                is already a member of the section or has an open application for membership
+              must_be_family_main_person: must be the main person in the family
         person:
           data_quality_issue:
-            message: ""
+            message: "%{attr} %{key}"
         data_quality_issue:
           messages:
-            empty: ""
-            less_than_6_years_before_entry: ""
+            empty: is empty
+            less_than_6_years_before_entry: is less than 6 years before joining the SAC
 
         wizards/steps/choose_sektion:
-          requires_admin: ""
+          requires_admin: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
 
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
-              taken: ""
+              taken: is already taken. The e-mail must be unique per person.
     models:
       people/neuanmeldungen/approve:
-        one: ''
-        other: ''
+        one: Take over registration
+        other: Accept registrations
       people/neuanmeldungen/reject:
-        one: ''
-        other: ''
+        one: Decline registration
+        other: Reject applications
 
   activerecord:
     attributes:
       cost_center:
-        label: ""
-        event_kind_categories: ""
-        event_kinds: ""
-        courses: ""
-        updated_at: ""
-        created_at: ""
+        label: Designation
+        event_kind_categories: Course categories
+        event_kinds: Course types
+        courses: Courses
+        updated_at: Changed
+        created_at: Created
       cost_unit:
-        label: ""
-        event_kind_categories: ""
-        event_kinds: ""
-        courses: ""
-        updated_at: ""
-        created_at: ""
+        label: Designation
+        event_kind_categories: Course categories
+        event_kinds: Course types
+        courses: Courses
+        updated_at: Changed
+        created_at: Created
       course_compensation_category:
-        short_name: ""
-        kind: ""
+        short_name: Short name
+        kind: Type
         kinds:
-          day: ""
-          flat: ""
-          budget: ""
-        description: ""
-        name_leader: ""
-        name_assistant_leader: ""
-        course_compensation_rates: ""
-        updated_at: ""
-        created_at: ""
+          day: Day
+          flat: Flat rate
+          budget: Budget
+        description: Description
+        name_leader: Designation Course management
+        name_assistant_leader: Title Class leader
+        course_compensation_rates: Remuneration approaches
+        updated_at: Changed
+        created_at: Created
       course_compensation_rate:
-        valid_from: ""
-        valid_to: ""
-        rate_leader: ""
-        rate_assistant_leader: ""
-        course_compensation_category_id: ""
-        updated_at: ""
-        created_at: ""
+        valid_from: Valid from
+        valid_to: Valid until
+        rate_leader: Approach Course management
+        rate_assistant_leader: Class management approach
+        course_compensation_category_id: Remuneration category
+        updated_at: Changed
+        created_at: Created
       event:
-        unconfirmed_count: ""
-        maximum_age: ""
-        ideal_class_size: ""
-        maximum_class_size: ""
+        unconfirmed_count: Unconfirmed
+        maximum_age: Maximum age
+        ideal_class_size: Ideal class size
+        maximum_class_size: Maximum class size
       event/kind:
-        accommodation: ""
+        accommodation: Accommodation
         accommodations:
-          no_overnight: ""
-          hut: ""
-          pension: ""
-          pension_or_hut: ""
-          bivouac: ""
-        level_id: ""
-        kind_category_id: ""
-        cost_center_id: ""
-        cost_unit_id: ""
-        course_compensation_categories: ""
-        season: ""
+          no_overnight: without overnight stay
+          hut: Cabin
+          pension: Pension/mountain inn
+          pension_or_hut: Pension/mountain inn or hut
+          bivouac: Overnight stay outdoors/bivouac
+        level_id: Course level
+        kind_category_id: Course category
+        cost_center_id: Cost center
+        cost_unit_id: Cost unit
+        course_compensation_categories: Remuneration categories
+        season: Season
         seasons:
-          winter: ""
-          summer: ""
-        reserve_accommodation: ""
-        maximum_participants: ""
-        minimum_participants: ""
-        maximum_age: ""
-        ideal_class_size: ""
-        maximum_class_size: ""
-        training_days: ""
+          winter: Winter
+          summer: Summer
+        reserve_accommodation: Book accommodation through SAC
+        maximum_participants: Maximum number of participants
+        minimum_participants: Minimum number of participants
+        maximum_age: Maximum age
+        ideal_class_size: Ideal class size
+        maximum_class_size: Maximum class size
+        training_days: Training days
       event/course:
-        accommodation: ""
-        annual: ""
-        book_discount_code: ""
-        brief_description: ""
-        cost_center_id: ""
-        cost_unit_id: ""
-        level: ""
-        language: ""
+        accommodation: Accommodation
+        annual: Annually recurring
+        book_discount_code: Discount code book shipping
+        brief_description: Brief description
+        cost_center_id: Cost center
+        cost_unit_id: Cost unit
+        level: Course level
+        language: Language
         languages:
-          de_fr: ""
-          de: ""
-          fr: ""
-          it: ""
-        link_leaders: ""
-        link_participants: ""
-        link_survey: ""
-        meals: ""
+          de_fr: German/French
+          de: German
+          fr: French
+          it: Italian
+        link_leaders: Link course squad
+        link_participants: Link participants
+        link_survey: Link Survey
+        meals: Catering
         meals_options:
-          breakfast: ""
-          half_board: ""
-          lunch: ""
-          self_cooking: ""
-          full_board: ""
-        minimum_age: ""
+          breakfast: Breakfast
+          half_board: Half board
+          lunch: Lunch
+          self_cooking: Home-cooked meals
+          full_board: Full board
+        minimum_age: Minimum age
         participation_states:
-          unconfirmed: ""
-          applied: ""
-          assigned: ""
-          summoned: ""
-          anulled: ""
-        program: ""
-        reserve_accommodation: ""
-        season: ""
-        specialities: ""
-        similar_tours: ""
-        start_point_of_time: ""
+          unconfirmed: Unconfirmed
+          applied: Waiting list
+          assigned: Confirmed
+          summoned: Called up
+          anulled: Annulled
+        program: Program
+        reserve_accommodation: Book accommodation through SAC
+        season: Season
+        specialities: Special
+        similar_tours: Comparison tours
+        start_point_of_time: Course start
         start_point_of_times:
-          day: ""
-          evening: ""
+          day: Day
+          evening: Evening
         states:
-          created: ""
-          application_open: ""
-          application_paused: ""
-          application_closed: ""
-          assignment_closed: ""
-          ready: ""
-          closed: ""
-          canceled: ""
+          created: Draft
+          application_open: Published
+          application_paused: Registration paused
+          application_closed: Registration completed
+          assignment_closed: Allocation completed
+          ready: Ready for implementation
+          closed: Completed
+          canceled: Canceled
       event/kind_category:
-        cost_center_id: ""
-        cost_unit_id: ""
+        cost_center_id: Cost center
+        cost_unit_id: Cost unit
       event/level:
-        label: ""
-        code: ""
-        description: ""
-        difficulty: ""
-        created_at: ""
-        updated_at: ""
-        deleted_at: ""
+        label: Designation
+        code: Code
+        description: Description
+        difficulty: Level of difficulty
+        created_at: Created
+        updated_at: Changed
+        deleted_at: Deleted
       event/participation:
-        additional_information: ""
-        cancel_statement: ""
-        adult_consent: ""
-        terms_and_conditions: ""
-        actual_days: ""
+        additional_information: Comment
+        cancel_statement: Reason
+        adult_consent: Age confirmation
+        terms_and_conditions: GTC
+        actual_days: Effective days
       external_training:
-        person: ""
-        event_kind: ""
-        event_kind_id: ""
-        name: ""
-        provider: ""
-        start_at: ""
-        finish_at: ""
-        training_days: ""
-        link: ""
-        other_people_ids: ""
-        remarks: ""
-        created_at: ""
-        updated_at: ""
+        person: Person
+        event_kind: Course type
+        event_kind_id: Course type
+        name: Name
+        provider: Provider
+        start_at: Start date
+        finish_at: End date
+        training_days: Training days
+        link: Link
+        other_people_ids: Other people
+        remarks: Remark
+        created_at: Created
+        updated_at: Changed
       person:
-        correspondence: ""
-        family_id: ""
-        sac_family_main_person: ""
-        sac_remark_national_office: ""
-        sac_remark_section_1: ""
-        sac_remark_section_2: ""
-        sac_remark_section_3: ""
-        sac_remark_section_4: ""
-        sac_remark_section_5: ""
-        data_quality: ""
+        correspondence: Membership card & invoicing
+        family_id: Family ID
+        sac_family_main_person: Bills to (family)
+        sac_remark_national_office: Comments Office
+        sac_remark_section_1: Remarks Section 1
+        sac_remark_section_2: Remarks Section 2
+        sac_remark_section_3: Remarks Section 3
+        sac_remark_section_4: Remarks Section 4
+        sac_remark_section_5: Remarks Section 5
+        data_quality: Data quality
         correspondences:
-          digital: ""
-          print: ""
+          digital: Digital
+          print: Physical
         genders:
-          _nil: ""
-        membership_years: ""
-        membership_number: ""
-        navision_id: ""
+          _nil: other
+        membership_years: Number of member-years
+        membership_number: Member no.
+        navision_id: Navision no.
         salutations:
-          m: ""
-          w: ""
-          _nil: ""
+          m: Man
+          w: Woman
+          _nil: Other
         recipient_salutations:
-          m: ""
-          w: ""
-        additional_information: ""
+          m: Mr.
+          w: Woman
+        additional_information: Remarks (e.g. profession)
       group:
-        group_id: ""
-        navision_id: ""
-        sac_cas_self_registration_url: ""
+        group_id: Group ID
+        navision_id: NAV Section ID
+        sac_cas_self_registration_url: SAC self-registration
       group/sac_cas:
-        sac_newsletter_mailing_list_id: ""
-        sac_magazine_mailing_list_id: ""
-        sac_fundraising_mailing_list_id: ""
-        course_admin_email: ""
+        sac_newsletter_mailing_list_id: SAC Newsletter Subscription ID
+        sac_magazine_mailing_list_id: The Alps subscription ID
+        sac_fundraising_mailing_list_id: Appeal for donations Subscription ID
+        course_admin_email: E-mail course administration
       group/sektion:
-        foundation_year: ""
-        section_canton: ""
-        language: ""
+        foundation_year: Founding year
+        section_canton: Canton
+        language: Language
         languages:
-          DE: ""
-          FR: ""
-          IT: ""
-        mitglied_termination_by_section_only: ""
+          DE: German
+          FR: French
+          IT: Italiano
+        mitglied_termination_by_section_only: Resignation only through section
       group/ortsgruppe:
-        foundation_year: ""
-        section_canton: ""
-        language: ""
+        foundation_year: Founding year
+        section_canton: Canton
+        language: Language
         languages:
-          DE: ""
-          FR: ""
-          IT: ""
+          DE: German
+          FR: French
+          IT: Italiano
       role:
-        membership_years: ""
+        membership_years: Member years
         class:
           kind:
             neuanmeldung:
-              one: ''
-              other: ''
+              one: New registration
+              other: New registrations
           permission:
             description:
-              read_all_people: ""
+              read_all_people: Read by all persons.
       qualification_kind:
-        tourenchef_may_edit: ""
+        tourenchef_may_edit: Editable by tour manager
       qualification:
-        finish_at: ""
+        finish_at: Until
       sac_membership_config:
-        valid_from: ""
-        sac_fee_adult: ""
-        sac_fee_family: ""
-        sac_fee_youth: ""
-        entry_fee_adult: ""
-        entry_fee_family: ""
-        entry_fee_youth: ""
-        hut_solidarity_fee_with_hut_adult: ""
-        hut_solidarity_fee_with_hut_family: ""
-        hut_solidarity_fee_with_hut_youth: ""
-        hut_solidarity_fee_without_hut_adult: ""
-        hut_solidarity_fee_without_hut_family: ""
-        hut_solidarity_fee_without_hut_youth: ""
-        magazine_fee_adult: ""
-        magazine_fee_family: ""
-        magazine_fee_youth: ""
-        service_fee: ""
-        magazine_postage_abroad: ""
-        reduction_amount: ""
-        reduction_required_membership_years: ""
-        sac_fee_article_number: ""
-        sac_entry_fee_article_number: ""
-        hut_solidarity_fee_article_number: ""
-        magazine_fee_article_number: ""
-        magazine_postage_abroad_article_number: ""
-        section_entry_fee_article_number: ""
-        section_fee_article_number: ""
-        section_bulletin_postage_abroad_article_number: ""
-        service_fee_article_number: ""
-        balancing_payment_article_number: ""
-        course_fee_article_number: ""
-        discount_date_1: ""
-        discount_percent_1: ""
-        discount_date_2: ""
-        discount_percent_2: ""
-        discount_date_3: ""
-        discount_percent_3: ""
+        valid_from: Valid from year
+        sac_fee_adult: "Central association fee, individual membership"
+        sac_fee_family: "Central association fee, family membership"
+        sac_fee_youth: "Central association fee, youth membership"
+        entry_fee_adult: "Admission fee, single membership"
+        entry_fee_family: "Admission fee, family membership"
+        entry_fee_youth: "Admission fee, youth membership"
+        hut_solidarity_fee_with_hut_adult: "Hut solidarity contribution Section with huts, individual membership"
+        hut_solidarity_fee_with_hut_family: "Hut solidarity contribution Section with huts, family membership"
+        hut_solidarity_fee_with_hut_youth: "Hut solidarity contribution Section with huts, youth membership"
+        hut_solidarity_fee_without_hut_adult: "Hut solidarity contribution Section without huts, individual membership"
+        hut_solidarity_fee_without_hut_family: "Hut solidarity contribution Section without huts, family membership"
+        hut_solidarity_fee_without_hut_youth: "Hut solidarity contribution Section without huts, youth membership"
+        magazine_fee_adult: "SAC Magazine subscription fee, individual membership"
+        magazine_fee_family: "SAC Magazine subscription fee, family membership"
+        magazine_fee_youth: "SAC Magazine subscription fee, youth membership"
+        service_fee: Service fee
+        magazine_postage_abroad: Postage abroad SAC Magazine
+        reduction_amount: Reduction amount
+        reduction_required_membership_years: Reduction from years of membership
+        sac_fee_article_number: Central association contribution
+        sac_entry_fee_article_number: Central association entry fees
+        hut_solidarity_fee_article_number: Hut solidarity contribution
+        magazine_fee_article_number: Subscription fee SAC Magazine
+        magazine_postage_abroad_article_number: Postage abroad SAC Magazine
+        section_entry_fee_article_number: Section entry fees
+        section_fee_article_number: Section contribution
+        section_bulletin_postage_abroad_article_number: Postage abroad Section Bulletin
+        service_fee_article_number: Service fee
+        balancing_payment_article_number: Compensation payments
+        course_fee_article_number: Course fees
+        discount_date_1: Discount date 1
+        discount_percent_1: Discount percentage 1
+        discount_date_2: Discount date 2
+        discount_percent_2: Discount percentage 2
+        discount_date_3: Discount date 3
+        discount_percent_3: Discount percentage 3
       sac_section_membership_config:
-        valid_from: ""
-        section_fee_adult: ""
-        section_fee_family: ""
-        section_fee_youth: ""
-        section_entry_fee_adult: ""
-        section_entry_fee_family: ""
-        section_entry_fee_youth: ""
-        bulletin_postage_abroad: ""
-        sac_fee_exemption_for_honorary_members: ""
-        section_fee_exemption_for_honorary_members: ""
-        sac_fee_exemption_for_benefited_members: ""
-        section_fee_exemption_for_benefited_members: ""
-        reduction_amount: ""
-        reduction_required_membership_years: ""
-        reduction_required_age: ""
+        valid_from: Valid from year
+        section_fee_adult: "Section fee, individual membership"
+        section_fee_family: "Section fee, family membership"
+        section_fee_youth: "Section fee, youth membership"
+        section_entry_fee_adult: "Admission fee, single membership"
+        section_entry_fee_family: "Admission fee, family membership"
+        section_entry_fee_youth: "Admission fee, youth membership"
+        bulletin_postage_abroad: Postage abroad Section Bulletin
+        sac_fee_exemption_for_honorary_members: Central Association fee waiver for honorary members
+        section_fee_exemption_for_honorary_members: Section fee waiver for honorary members
+        sac_fee_exemption_for_benefited_members: Central association fee waiver for beneficiaries
+        section_fee_exemption_for_benefited_members: Section fee waiver for beneficiaries
+        reduction_amount: Reduction amount Membership years/age
+        reduction_required_membership_years: Reduction from years of membership
+        reduction_required_age: Reduction from years of age
       external_invoice:
-        title: ""
-        state: ""
-        abacus_sales_order_key: ""
-        total: ""
-        issued_at: ""
-        created_at: ""
-        updated_at: ""
+        title: Title
+        state: Status
+        abacus_sales_order_key: Abacus number
+        total: Total
+        issued_at: Invoice date
+        created_at: Created
+        updated_at: Updated
         states:
-          draft: ""
-          open: ""
-          payed: ""
-          cancelled: ""
-          error: ""
+          draft: Draft
+          open: Open
+          payed: Paid
+          cancelled: Canceled
+          error: Error
 
     errors:
       messages:
-        already_has_mitglied_role: ""
-        already_has_neuanmeldung_role: ""
-        too_many_adults_in_family: ""
-        only_one_mitglied_role_allowed_at_a_time: ""
-        must_be_in_past: ""
-        must_be_present_unless_deleted: ""
-        must_have_mitglied_role: ""
-        must_have_mitglied_role_in_group: ""
-        must_have_one_family_main_person_in_family: ""
+        already_has_mitglied_role: "is already a member (from %{start_on} to %{end_on})."
+        already_has_neuanmeldung_role: "already has one new registration (from %{start_on} to %{end_on})."
+        too_many_adults_in_family: "A family membership includes a maximum of %{max_adults} adults."
+        only_one_mitglied_role_allowed_at_a_time: "already has a membership with overlapping validity."
+        must_be_in_past: must be in the past
+        must_be_present_unless_deleted: "must be present if not deleted."
+        must_have_mitglied_role: "must be a member for the entire period of validity of the supplementary section."
+        must_have_mitglied_role_in_group: "must be a member of the selected group."
+        must_have_one_family_main_person_in_family: "An invoice recipient must be defined in a family membership."
 
       models:
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
-              uniqueness_during_validity_period: ""
+              uniqueness_during_validity_period: may only reference one remuneration approach per validity period.
 
         event/participation:
           attributes:
             actual_days:
-              longer_than_event_duration: ""
+              longer_than_event_duration: must not be longer than the planned course duration.
 
         group/sektions_touren_und_kurse/tourenleiter:
-          requires_active_qualification: ""
+          requires_active_qualification: person must have at least one active qualification.
 
         people_manager:
-          in_different_household: >
-          managed_is_not_child: >
-          manager_is_not_adult: >
+          in_different_household: >-
+            %{name} is assigned to another budget and therefore cannot be added to this budget.
+          managed_is_not_child: >-
+            %{name} is %{age} years old and therefore cannot be added as a child.
+          manager_is_not_adult: >-
+            %{name} is %{age} years old and therefore cannot be added as an administrator.
         qualification:
           attributes:
             finish_at:
-              not_after_start: ""
+              not_after_start: "must be to the side"
 
     models:
       cost_center:
-        one: ''
-        other: ''
+        one: Cost center
+        other: Cost centers
       cost_unit:
-        one: ''
-        other: ''
+        one: Cost unit
+        other: Cost unit
       course_compensation_category:
-        one: ''
-        other: ''
+        one: Remuneration category
+        other: Remuneration categories
       course_compensation_rate:
-        one: ''
-        other: ''
+        one: Remuneration approach
+        other: Remuneration approaches
       event/level:
-        one: ''
-        other: ''
+        one: Course level
+        other: Course levels
       external_training:
-        one: ''
-        other: ''
+        one: External training
+        other: External training
       sac_membership_config:
-        one: ''
-        other: ''
+        one: Parameters for membership invoices
+        other: Parameters for membership invoices
       sac_section_membership_config:
-        one: ''
-        other: ''
+        one: Parameters for membership invoices
+        other: Parameters for membership invoices
       termination_reason:
-        one: ''
-        other: ''
+        one: Predefined reason for leaving
+        other: Predefined reasons for leaving
 
       ### GROUPS
       group/sac_cas:
-        one: ''
-        other: ''
+        one: Swiss Alpine Club SAC
+        other: Swiss Alpine Club SAC
       group/ehrenmitglieder:
-        one: ''
-        other: ''
+        one: Honorary members
+        other: Honorary members
       group/externe_kontakte:
-        one: ''
-        other: ''
+        one: External contacts
+        other: External contacts
       group/geschaeftsleitung:
-        one: ''
-        other: ''
+        one: SAC Management
+        other: SAC Management
       group/geschaeftsstelle:
-        one: ''
-        other: ''
+        one: SAC office
+        other: SAC office
       group/kommission:
-        one: ''
-        other: ''
+        one: Commission
+        other: Commission
       group/zentralvorstand:
-        one: ''
-        other: ''
+        one: SAC Central Committee
+        other: SAC Central Committee
       group/abos:
-        one: ''
-        other: ''
+        one: SAC subscriptions (without newsletter)
+        other: SAC subscriptions (without newsletter)
       group/abo_magazin:
-        one: ''
-        other: ''
+        one: SubscriptionMagazine
+        other: SubscriptionMagazine
       group/abo_magazine:
-        one: ''
-        other: ''
+        one: SAC Magazine
+        other: SAC Magazine
       group/abo_touren_portal:
-        one: ''
-        other: ''
+        one: SAC tour portal
+        other: SAC tour portal
       group/abo_basic_login:
-        one: ''
-        other: ''
+        one: SAC/CAS Login
+        other: SAC/CAS Login
       group/sac_cas_clubhuetten:
-        one: ''
-        other: ''
+        one: Club huts
+        other: Club huts
       group/sac_cas_clubhuette:
-        one: ''
-        other: ''
+        one: Club hut
+        other: Clubhouses
       group/sac_cas_kurskader:
-        one: ''
-        other: ''
+        one: SAC course cadre
+        other: SAC course cadre
       group/sac_cas_privathuetten:
-        one: ''
-        other: ''
+        one: Private cabins
+        other: Private cabins
       group/sac_cas_privathuette:
-        one: ''
-        other: ''
+        one: Private hut
+        other: Private cabins
       group/sac_cas_verbaende:
-        one: ''
-        other: ''
+        one: Associations & Organizations
+        other: Associations & Organizations
       group/sac_cas_verband:
-        one: ''
-        other: ''
+        one: Association & Organization
+        other: Associations & Organizations
       group/sektion:
-        one: ''
-        other: ''
+        one: Section
+        other: Sections
       group/ortsgruppe:
-        one: ''
-        other: ''
+        one: Local group
+        other: Local groups
       group/sektions_mitglieder:
-        one: ''
-        other: ''
+        one: Members
+        other: Members
       group/sektions_neuanmeldungen_nv:
-        one: ''
-        other: ''
+        one: New registrations
+        other: New registrations
       group/sektions_neuanmeldungen_sektion:
-        one: ''
-        other: ''
+        one: New registrations (for release)
+        other: New registrations (for release)
       group/sektions_funktionaere:
-        one: ''
-        other: ''
+        one: Section functionaries
+        other: Section functionaries
       group/sektions_vorstand:
-        one: ''
-        other: ''
+        one: Management Board
+        other: Management Board
       group/sektions_touren_und_kurse:
-        one: ''
-        other: ''
+        one: Tours and courses
+        other: Tours and courses
       group/sektions_touren_und_kurse_sommer:
-        one: ''
-        other: ''
+        one: Summer tours and courses
+        other: Summer tours and courses
       group/sektions_touren_und_kurse_winter:
-        one: ''
-        other: ''
+        one: Winter tours and courses
+        other: Winter tours and courses
       group/sektions_clubhuetten:
-        one: ''
-        other: ''
+        one: Club huts
+        other: Club huts
       group/sektions_clubhuette:
-        one: ''
-        other: ''
+        one: Club hut
+        other: Clubhouses
       group/sektionshuetten:
-        one: ''
-        other: ''
+        one: Section huts
+        other: Section huts
       group/sektionshuette:
-        one: ''
-        other: ''
+        one: Section hut
+        other: Section huts
       group/sektions_kommissionen:
-        one: ''
-        other: ''
+        one: Commissions
+        other: Commissions
       group/sektions_kommission:
-        one: ''
-        other: ''
+        one: Commission
+        other: Commission
       group/sektions_kommission_huetten:
-        one: ''
-        other: ''
+        one: Commission cabins
+        other: Commissions cabins
       group/sektions_kommission_touren:
-        one: ''
-        other: ''
+        one: Commission tours
+        other: Commissions Tours
       group/sektions_kommission_umwelt_und_kultur:
-        one: ''
-        other: ''
+        one: Environment and Culture Commission
+        other: Environment and Culture Commissions
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
-        one: ""
-        description: ""
+        one: Honorary member
+        description: Honorary member
       group/geschaeftsstelle/mitarbeiter:
-        one: ""
-        description: ""
+        one: Employee (writing)
+        description: Employee (writing)
       group/geschaeftsstelle/mitarbeiter_lesend:
-        one: ""
-        description: ""
+        one: Employee (reading)
+        description: Employee (reading)
       group/geschaeftsstelle/admin:
-        one: ""
-        description: ""
+        one: Administration
+        description: Administration
       group/geschaeftsstelle/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/geschaeftsleitung/geschaeftsfuehrung:
-        one: ""
-        description: ""
+        one: Management
+        description: Management
       group/geschaeftsleitung/ressortleitung:
-        one: ""
-        description: ""
+        one: Head of department
+        description: Head of department
       group/geschaeftsleitung/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/kommission/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/kommission/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/kommission/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/zentralvorstand/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/zentralvorstand/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/zentralvorstand/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/externe_kontakte/kontakt:
-        one: ""
-        description: ""
+        one: Contact us
+        description: Contact us
       group/abo_magazine/autor:
-        one: ""
-        description: ""
+        one: Author
+        description: Author
       group/abo_magazine/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/abo_magazine/uebersetzer:
-        one: ""
-        description: ""
+        one: Translator
+        description: Translator
       group/abo_magazin/abonnent:
-        one: ""
-        description: ""
+        one: Subscriber
+        description: Subscriber
       group/abo_magazin/neuanmeldung:
-        one: ""
-        description: ""
+        one: New registration
+        description: New registration
       group/abo_magazin/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/abo_touren_portal/abonnent:
-        one: ""
-        description: ""
+        one: Subscriber
+        description: Subscriber
       group/abo_touren_portal/admin:
-        one: ""
-        description: ""
+        one: Administration
+        description: Administration
       group/abo_touren_portal/neuanmeldung:
-        one: ""
-        description: ""
+        one: New registration
+        description: New registration
       group/abo_touren_portal/autor:
-        one: ""
-        description: ""
+        one: Author
+        description: Author
       group/abo_touren_portal/community:
-        one: ""
-        description: ""
+        one: Community
+        description: Community
       group/abo_touren_portal/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/abo_touren_portal/gratisabonnent:
-        one: ""
-        description: ""
+        one: Free subscriber
+        description: Free subscriber
       group/abo_basic_login/basic_login:
-        one: ""
-        description: ""
+        one: Basic account
+        description: Basic account
       group/sac_cas_clubhuetten/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sac_cas_clubhuette/huettenchef:
-        one: ""
-        description: ""
+        one: Hut manager
+        description: Hut manager
       group/sac_cas_clubhuette/huettenwart:
-        one: ""
-        description: ""
+        one: Hut warden
+        description: Hut warden
       group/sac_cas_clubhuette/andere:
-        one: ""
-        description: ""
-        huettenwartspartner: ""
-        schluesseldepot: ""
+        one: Other
+        description: Other
+        huettenwartspartner: Hut warden partner
+        schluesseldepot: Key depot
       group/sac_cas_kurskader/kursleiter:
-        one: ""
-        description: ""
+        one: Instructor
+        description: Instructor
       group/sac_cas_kurskader/klassenlehrer:
-        one: ""
-        description: ""
+        one: Class teacher
+        description: Class teacher
       group/sac_cas_privathuetten/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sac_cas_privathuette/huettenchef:
-        one: ""
-        description: ""
+        one: Hut manager
+        description: Hut manager
       group/sac_cas_privathuette/huettenwart:
-        one: ""
-        description: ""
+        one: Hut warden
+        description: Hut warden
       group/sac_cas_privathuette/andere:
-        one: ""
-        description: ""
-        huettenwartspartner: ""
-        schluesseldepot: ""
+        one: Other
+        description: Other
+        huettenwartspartner: Hut warden partner
+        schluesseldepot: Key depot
       group/sac_cas_verband/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sac_cas_verband/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sac_cas_verband/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_funktionaere/administration:
-        one: ""
-        description: ""
+        one: Administration
+        description: Administration
       group/sektions_funktionaere/administration_read_only:
-        one: ""
-        description: ""
+        one: Administration (read only)
+        description: Administration (read only)
       group/sektions_funktionaere/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_funktionaere/mitgliederverwaltung:
-        one: ""
-        description: ""
+        one: Member administration
+        description: Section membership administration
       group/sektions_funktionaere/kulturbeauftragter:
-        one: ""
-        description: ""
+        one: Cultural Officer
+        description: Cultural Officer
       group/sektions_funktionaere/umweltbeauftragter:
-        one: ""
-        description: ""
+        one: Environmental Officer
+        description: Environmental Officer
       group/sektions_funktionaere/finanzen:
-        one: ""
-        description: ""
+        one: Finances
+        description: Finances
       group/sektions_funktionaere/redaktion:
-        one: ""
-        description: ""
+        one: Editorial office
+        description: Editorial office
       group/sektions_funktionaere/huettenobmann:
-        one: ""
-        description: ""
+        one: Hut warden
+        description: Hut warden
       group/sektions_funktionaere/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_funktionaere/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_funktionaere/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_mitglieder/mitglied:
-        one: ""
-        description: ""
+        one: Member (parent section)
+        description: Member (parent section)
       group/sektions_mitglieder/mitglied_zusatzsektion:
-        one: ""
-        description: ""
+        one: Member (additional section)
+        description: Member (additional section)
       group/sektions_mitglieder/ehrenmitglied:
-        one: ""
-        description: ""
+        one: Honorary member
+        description: Honorary member
       group/sektions_mitglieder/beguenstigt:
-        one: ""
-        description: ""
+        one: Beneficiary
+        description: Favored
       group/sektions_mitglieder/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_mitglieder/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_neuanmeldungen_sektion/neuanmeldung:
-        one: ""
-        description: ""
+        one: New registration (master section)
+        description: New membership application (tribal section)
       group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
-        one: ""
-        description: ""
+        one: New registration (additional section)
+        description: New membership application (additional section)
       group/sektions_neuanmeldungen_sektion/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_neuanmeldungen_sektion/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_neuanmeldungen_nv/neuanmeldung:
-        one: ""
-        description: ""
+        one: New registration (master section)
+        description: New membership application (parent section)
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
-        one: ""
-        description: ""
+        one: New registration (additional section)
+        description: New membership application (additional section)
       group/sektions_neuanmeldungen_nv/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_neuanmeldungen_nv/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_vorstand/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_vorstand/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sektions_vorstand/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_vorstand/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_vorstand/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_touren_und_kurse/tourenleiter:
-        one: ""
-        description: ""
+        one: Tour leader (with qualification)
+        description: Tour leader (with qualification)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: ""
-        description: ""
+        one: Tour leader (without qualification)
+        description: Tour leader (without qualification)
       group/sektions_touren_und_kurse/kibe_chef:
-        one: ""
-        description: ""
+        one: KiBe manager
+        description: KiBe manager
       group/sektions_touren_und_kurse/fabe_chef:
-        one: ""
-        description: ""
+        one: FaBe manager
+        description: Head of FaBe
       group/sektions_touren_und_kurse/jo_chef:
-        one: ""
-        description: ""
+        one: JO manager
+        description: JO manager
       group/sektions_touren_und_kurse/js_coach:
-        one: ""
-        description: ""
+        one: Y+S Coach
+        description: Y+S Coach
       group/sektions_touren_und_kurse/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_touren_und_kurse/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_touren_und_kurse_sommer/tourenchef:
-        one: ""
-        description: ""
+        one: Tour manager
+        description: Tour manager
       group/sektions_touren_und_kurse_winter/tourenchef:
-        one: ""
-        description: ""
+        one: Tour manager
+        description: Tour manager
       group/sektions_clubhuetten/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_clubhuetten/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_clubhuette/huettenchef:
-        one: ""
-        description: ""
+        one: Hut manager
+        description: Hut manager
       group/sektions_clubhuette/huettenwart:
-        one: ""
-        description: ""
+        one: Hut warden
+        description: Hut warden
       group/sektions_clubhuette/andere:
-        one: ""
-        description: ""
-        huettenwartspartner: ""
-        schluesseldepot: ""
+        one: Other
+        description: Other
+        huettenwartspartner: Hut warden partner
+        schluesseldepot: Key depot
       group/sektionshuetten/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektionshuetten/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektionshuette/huettenchef:
-        one: ""
-        description: ""
+        one: Hut manager
+        description: Hut manager
       group/sektionshuette/huettenwart:
-        one: ""
-        description: ""
+        one: Hut warden
+        description: Hut warden
       group/sektionshuette/andere:
-        one: ""
-        description: ""
-        huettenwartspartner: ""
-        schluesseldepot: ""
+        one: Other
+        description: Other
+        huettenwartspartner: Hut warden partner
+        schluesseldepot: Key depot
       group/sektions_kommissionen/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_kommissionen/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_kommission/leserecht:
-        one: ""
-        description: ""
+        one: Right to read
+        description: Right to read
       group/sektions_kommission/schreibrecht:
-        one: ""
-        description: ""
+        one: Writing right
+        description: Writing right
       group/sektions_kommission/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_kommission/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sektions_kommission/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_kommission_huetten/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sektions_kommission_huetten/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_kommission_huetten/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_kommission_touren/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sektions_kommission_touren/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_kommission_touren/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
       group/sektions_kommission_umwelt_und_kultur/mitglied:
-        one: ""
-        description: ""
+        one: member
+        description: member
       group/sektions_kommission_umwelt_und_kultur/praesidium:
-        one: ""
-        description: ""
+        one: Presidium
+        description: Presidium
       group/sektions_kommission_umwelt_und_kultur/andere:
-        one: ""
-        description: ""
+        one: Other
+        description: Other
 
   contactable:
     address_fields:
-      updates_household_address: ""
+      updates_household_address: Address is updated for all family members
   devise:
     sessions:
       form:
-        login_identity: ""
+        login_identity: Main e-mail / member no.
 
   doorkeeper:
     scopes:
-      user_groups: ""
+      user_groups: "Read your groups, roles and calculated fields."
 
   dropdown/people/memberships:
-    title: ""
-    join_zusatzsektion_link: ""
-    switch_stammsektion_link: ""
-    terminate_sac_membership_wizard_link: ""
+    title: Customize membership
+    join_zusatzsektion_link: Apply for additional section
+    switch_stammsektion_link: Request section change
+    terminate_sac_membership_wizard_link: Terminate SAC membership
 
   dropdown/people_export:
-    recipients: ""
+    recipients: Receiver
 
   dropdown/group_edit:
-    sac_membership_configs: ""
-    sac_section_membership_configs: ""
+    sac_membership_configs: Parameters for membership invoices
+    sac_section_membership_configs: Parameters for membership invoices
 
   event:
     kinds:
       push_down:
-        success: ""
+        success: The saved data was transferred to all active courses.
       actions_edit:
-        push_down_button: ""
+        push_down_button: Transfer data to courses
         push_down_button_confirm:
-          ""
+          "Do you really want to transfer the saved data to all active courses? This will overwrite the current values."
       kind_category_field:
         category_overrides_link_title:
-          ""
+          "The following fields are transferred: Cost center, Cost object"
     kind_categories:
       push_down:
         success:
-          ""
+          "Cost center (%{cost_center}) and cost object (%{cost_unit}) were transferred to all assigned course types."
       actions_edit:
-        push_down_button: ""
+        push_down_button: Transfer data to course types
         push_down_button_confirm:
-          ""
+          "Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten."
 
     participations:
-      missing_information: ""
+      missing_information: The following certificates are required for participation in this course. Please submit these if you have not already done so.
       answers_step:
-        total_duration_days_help: ""
+        total_duration_days_help: "Planned course duration: %{total_days} days"
       edit:
-        title: ""
+        title: Additional data
       course_signup_aside:
-        summary_title: ""
-        summary_course_price: ""
-        summary_subsidy: ""
-        summary_total: ""
-        contact_title: ""
+        summary_title: Cost overview
+        summary_course_price: Course costs
+        summary_subsidy: "- Subsidy"
+        summary_total: Total
+        contact_title: Questions about registration
         contact_text: |
+          You can reach us during our business hours
+          Mon to Fri 08:00 - 17:00.
       states:
-        absent: ""
-        annulled: ""
-        applied: ""
-        assigned: ""
-        attended: ""
-        canceled: ""
-        rejected: ""
-        summoned: ""
-        unconfirmed: ""
+        absent: No participation in this course.
+        annulled: This course has been canceled.
+        applied: You are on the waiting list for this course (non-binding). You can move up until the course is held.
+        assigned: Your registration for this course is confirmed.
+        attended: You have taken part in this course.
+        canceled: You have been deregistered from this course.
+        rejected: The admission criteria have not been met. We therefore unfortunately had to reject your application.
+        summoned: You are booked for this course.
+        unconfirmed: You are pre-registered for this course. Registration is not yet final and must be confirmed by the course administration.
       step_wizard:
-        answers_title: ""
-        subsidy_title: ""
-        summary_title: ""
+        answers_title: Additional data
+        subsidy_title: Subsidy contribution
+        summary_title: Summary
       subsidy_step:
-        title: ""
-        subsidy_field: ""
-        subsidy_link_label: ""
-        subsidy_link_href: ""
+        title: Apply for a subsidy
+        subsidy_field: "Apply for a subsidized price of CHF %{amount} "
+        subsidy_link_label: Subsidy application
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:
-          ""
-        detail_info_header: ""
+          "As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this."
+        detail_info_header: "What do I have to do to apply for a subsidy?"
         detail_info_text:
-          ""
+          "Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>."
       summary_step:
         annulation_remarks: |
-        terms_and_conditions_text: ""
-        terms_and_conditions_link_label: ""
-        terms_and_conditions_link_href: ""
-        subscribe_newsletter: ""
-      summoned_notice: ""
+          Cancellation insurance is recommended. The following cancellation costs would be borne by the customer if he/she cancels before the start of the course:
+
+          30 - 20 days: 50 % of the price
+          19 - 10 days: 75 % of the price
+          9 - 0 days: 100 % of the price
+        terms_and_conditions_text: "Yes, I agree to the terms and conditions of %{link} "
+        terms_and_conditions_link_label: GTC
+        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
+        subscribe_newsletter: "Yes, I would like to be informed about news from the Swiss Alpine Club SAC"
+      summoned_notice: "%{participant} was called up."
       actions_show_youth:
-        summon_button: ""
+        summon_button: Call up
 
       popover_participant_cancels:
         cancel_info:
-          ""
+          "Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration."
 
     participation_contact_datas:
       fields:
         overrides_person_data_info:
-          ""
+          Please note that the customizations you enter here will be transferred to your profile.
 
   events:
     actions_show_sac_cas:
       state_buttons:
-        created: ""
-        application_open: ""
-        application_paused: ""
-        application_closed: ""
-        assignment_closed: ""
-        ready: ""
-        closed: ""
-        canceled: ""
+        created: Back as draft
+        application_open: Publish
+        application_paused: Pause registration
+        application_closed: Complete registration
+        assignment_closed: Finalize allocation
+        ready: Ready for implementation
+        closed: Finalize
+        canceled: Cancellations
       state_back_buttons:
-        assignment_closed: ""
-        application_closed: ""
+        assignment_closed: Back to the allocation
+        application_closed: Back to the completed registration
 
     form_tabs:
-      communication: ""
+      communication: Communication
     general_fields:
       kind_overrides_link_title:
-        ""
-    maximum_age_with_years: ""
+        "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
+    maximum_age_with_years: "%{maximum_age} Years (vintage)"
 
   external_trainings:
     form:
-      help_other_people: ""
+      help_other_people: Additional persons for whom the external training is to be recorded.
     create:
       flash:
-        success_multiple: ""
+        success_multiple: "%{model} was successfully created for %{names}."
 
   events/courses/state:
     flash:
-      success: ""
+      success: "Status has been set to %{state}."
 
   event/levels:
     new:
-      title: ""
+      title: Create course level
 
   filter_navigation/people:
-    tour_guides_none: ""
-    tour_guides_active: ""
-    tour_guides_stalled: ""
-    tour_guides_inactive: ""
-    tour_guides_expired: ""
+    tour_guides_none: No tour leader
+    tour_guides_active: Active tour leaders
+    tour_guides_stalled: Suspended tour guides
+    tour_guides_inactive: Inactive tour leaders
+    tour_guides_expired: Expired tour leaders
 
   invoices:
     sac_memberships:
-      title: ""
+      title: "Membership invoice %{year}"
       positions:
-        hut_solidarity_fee: ""
-        sac_entry_feed: ""
-        sac_fee: ""
-        sac_magazine_postage_abroad: ""
-        sac_magazine: ""
-        section_bulletin_postage_abroad: ""
-        section_entry_fee: ""
-        section_fee: ""
+        hut_solidarity_fee: Cabins Solidarity contribution
+        sac_entry_feed: Entrance fee Central Association
+        sac_fee: Contribution Central Association
+        sac_magazine_postage_abroad: Postage The Alps Central Association
+        sac_magazine: Alpine fees
+        section_bulletin_postage_abroad: "Porto Bulletin %{section}"
+        section_entry_fee: "Entrance fee %{section}"
+        section_fee: "Contribution %{section}"
       beitragskategorie:
-        adult: ""
-        family: ""
-        youth: ""
+        adult: Individual member
+        family: Family member
+        youth: Youth member
 
   mitglieder_exports:
-    export_enqueued: ""
+    export_enqueued: "Export is started in the background and downloaded after completion."
 
   person:
     history:
       index_notice_sac_cas:
-        sections_info_html: ''
+        sections_info_html: ' You can manage your memberships here. You can find information on the various SAC sections at <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
 
   people:
     membership:
       verify:
         member_details_sac_cas:
-          tour_guide: ""
+          tour_guide: Active tour leader
         below_name_sac_cas:
-          membership_number: ""
-          membership_years: ""
+          membership_number: "Member: %{membership_number}"
+          membership_years: "Number of years of membership: %{membership_years}"
 
     membership_invoices:
-      no_invoice_possible: ""
-      no_memberships: ""
-      data_quality_error: ""
-      success_notice: ""
+      no_invoice_possible: "There are no membership fees for the desired person and section, or these are already covered by other invoices."
+      no_memberships: "There is no membership for the desired section on the selected date. Accordingly, no invoice has been issued."
+      data_quality_error: "The requested person has data quality problems. Accordingly, no invoice was created."
+      success_notice: "The desired invoice is generated and sent to Abacus"
       new:
-        title: ""
-        alert_info: ""
-        alert_warning: ""
-        alert_error: ""
-        create_invoice: ""
-        mv_yearly_invoice: ""
-        zusatzsektion_eintrittsrechnung: ""
+        title: "Create membership invoice"
+        alert_info: "Once this dialog has been confirmed, a membership invoice is created and sent to the member by e-mail or post. There is no check as to whether membership invoices already exist or what their status is. A new invoice is issued in each case. No role changes or extensions will be made."
+        alert_warning: "This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice."
+        alert_error: "The following data quality checks prevent the creation of a membership invoice:"
+        create_invoice: "Create invoice"
+        mv_yearly_invoice: "MV annual financial statements"
+        zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
 
     terminate_sac_memberships:
       create:
         success:
-          one: ""
-          other: ""
+          one: "Your SAC membership has been canceled."
+          other: "Your %{count} SAC memberships have been canceled."
 
     neuanmeldungen:
       multiselect_actions:
-        accept: ""
-        reject: ""
+        accept: Take over
+        reject: Reject
     login_status:
-      wso2_legacy_password: ""
+      wso2_legacy_password: "Old SAC password (WSO2)"
 
     roles:
       roles_aside:
-        stammsektion: ""
-        set_stammsektion: ""
+        stammsektion: Core section
+        set_stammsektion: Set trunk section
 
     tabs:
-      history: ""
-      sac_remarks: ""
-      external_invoices: ""
+      history: Memberships / History
+      sac_remarks: Remarks
+      external_invoices: Invoices
 
     data_quality:
-      ok: ""
-      info: ""
-      warning: ""
-      error: ""
+      ok: OK
+      info: Info
+      warning: Warning
+      error: Error
 
     show_right_z_sac_cas:
-      section_sac_membership: ""
-      qr_code_hint: ""
-      download_pdf: ""
+      section_sac_membership: SAC membership
+      qr_code_hint: Scan to verify membership
+      download_pdf: Download membership card
 
     external_invoices:
       table:
-        cancel_invoice: ""
-        cancel_invoice_confirmation: ""
+        cancel_invoice: Cancel
+        cancel_invoice_confirmation: "Do you really want to cancel this invoice? This action cannot be reversed."
       cancel:
-        flash: ""
+        flash: "The invoice %{invoice} (order no. %{abacus_sales_order_key}) is canceled"
       list:
-        create_membership_invoice: ""
+        create_membership_invoice: Create membership invoice
         create_membership_invoice_confirmation: |
+          This generates a new membership invoice and sends it to Abacus. This action can take up to one minute.
+
+          Are you sure you want to continue?
     yearly_membership_invoices:
-      job_scheduling_info: ""
+      job_scheduling_info: "The annual collection run was successfully launched."
       new:
-        title: ""
-        schedule_info_alert: ""
-        job_already_scheduled_alert: ""
-        create_invoice: ""
-        submit_confirmation: ""
+        title: "Start of MV annual collection run"
+        schedule_info_alert: "When this dialog is sent, the annual collection run is started for all members and the data is transmitted to Abacus. The annual collection run cannot be canceled and takes several hours. The membership roles are hereby extended."
+        job_already_scheduled_alert: "An annual collection run is already in progress. A new run can only be started once this run has been completed."
+        create_invoice: "Start"
+        submit_confirmation: "Do you really want to start the annual collection run for all members? This run cannot be canceled."
 
   people/neuanmeldungen/approves:
     new:
       text:
-        one: ""
-        other: ""
-      submit: ""
+        one: "Please confirm the transfer of the selected application:"
+        other: "Please confirm the transfer of the selected registrations:"
+      submit: "%{count} Take over"
     create:
       success:
-        one: ''
-        other: ""
+        one: Registration was taken over
+        other: "%{count} Registrations have been accepted"
 
   people/neuanmeldungen/rejects:
     new:
-      note_placeholder: ""
+      note_placeholder: optional
       text:
-        one: ""
-        other: ""
-      submit: ""
+        one: "Please confirm the rejection of the selected application:"
+        other: "Please confirm the rejection of the selected applications:"
+      submit: "%{count} Reject"
     create:
       success:
-        one: ''
-        other: ""
+        one: Application was rejected
+        other: "%{count} Applications were rejected"
 
   groups:
     actions_show_sac_cas:
-      export_mitglieder: ""
-      create_yearly_membership_invoice: ""
-    sektion_primary: ""
-    sektion_secondary: ""
+      export_mitglieder: CSV members
+      create_yearly_membership_invoice: MV Annual collection
+    sektion_primary: Core section
+    sektion_secondary: Additional section
 
     self_registration:
       abo_issue:
         issues_from_help: |
+          The subscription runs from the next possible issue.
+          If you would like the magazine to be delivered at a later date, please let us know
+          the issue from which we may begin delivery.
       abo_infos:
-        annual_price_header: ""
-        delivery_country_header: ""
-        price_with_vat: ""
-        switzerland: ""
-        international: ""
+        annual_price_header: Price per year
+        delivery_country_header: Country of dispatch
+        price_with_vat: "CHF %{amount} incl. VAT."
+        switzerland: Switzerland
+        international: Worldwide
       create:
-        redirect_existing_email: ""
+        redirect_existing_email: There is already a login for this e-mail. Log in here.
 
       agreement_link:
-        statutes_text: ""
-        sektion_statuten_text: ""
-        contribution_regulations_text: ""
-        data_protection_text: ""
+        statutes_text: "I have read and agree to the %{link} "
+        sektion_statuten_text: "I have read and agree to the %{link} "
+        contribution_regulations_text: "I have read the %{link} and agree with them"
+        data_protection_text: "I have read and agree to the %{link} "
 
     self_inscription:
-      membership_role_exists: ""
+      membership_role_exists: You are already a member of this section
       form:
         register_on_info:
-          jul: ""
-          oct: ""
-        register_as_info: ""
-        inscribe: ""
+          jul: "If you join on or after July 1, you will receive a 50% discount on the annual membership fee."
+          oct: The annual membership fee is waived for members joining on or after October 1.
+        register_as_info: " You can either join the SAC Blüemlisalp as an additional section or you can select it as your new parent section and thus leave your previous parent section. Note for families: Changing the parent section automatically applies to all family members. Joining an additional section, on the other hand, only applies to you."
+        inscribe: Join
       new:
-        role_exists: ""
+        role_exists: You are already a member of this section
       confirm:
-        title: ""
+        title: Confirm accession
         information_text: >
-        submit_button: ""
+          Please confirm that you wish to join the %{sektion} section. This process cannot be reversed.
+        submit_button: Apply to join
 
   groups/self_inscription:
     new:
-      details: ""
+      details: "You are joining with the contribution category %{beitragskategorie}."
 
   groups/self_registration:
     global:
-      main_email_title: ""
-      emailless_main_person_title: ""
-      neuanmeldung_main_person_title: ""
-      abo_issue_title: ""
-      abo_main_person_title: ""
-      single_or_household_title: ""
-      household_title: ""
-      main_title: ""
-      supplements_title: ""
+      main_email_title: Main e-mail
+      emailless_main_person_title: Personal data
+      neuanmeldung_main_person_title: Personal data
+      abo_issue_title: Subscription
+      abo_main_person_title: Personal data
+      single_or_household_title: Membership type
+      household_title: Family members
+      main_title: Family members
+      supplements_title: Additional data
 
   memberships:
     join_zusatzsektions:
       create:
         success:
-          one: ""
-          other: ""
+          one: "Your additional membership in <i>%{group_name}</i> has been created."
+          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been created."
     leave_zusatzsektions:
       create:
         success:
-          one: ""
-          other: ""
+          one: "Your additional membership in <i>%{group_name}</i> has been deleted."
+          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been deleted."
     switch_stammsektions:
       create:
         success:
-          one: ""
-          other: ""
+          one: "Your section change to <i>%{group_name}</i> has been made."
+          other: "Your %{count} section changes to <i>%{group_name}</i> were made."
 
   roles:
     beitragskategorie:
-      adult: ""
-      youth: ""
-      family: ""
+      adult: Single
+      youth: Youth
+      family: Family
 
   roles/terminations:
     global:
       sac_cas/role/mitglied_common:
-        no_permission: ""
+        no_permission: "To resign, you must contact the section's membership service"
 
   self_registration:
     fee_component:
-      title: ""
+      title: "Contributions in the section %{group}"
     infos_component:
       title_questions: "Questions about membership?"
       title_contact: Contact
@@ -1323,7 +1343,7 @@ en:
       link_faqs_title: FAQ
       link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Statuten-SAC_de.pdf"
       link_statutes_title: Statutes
-      link_sektion_statuten_title: ""
+      link_sektion_statuten_title: Section statutes
       link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_G%C3%BCltig_ab_1.1.2021.pdf"
       link_contribution_regulations_title: Contribution regulations
       link_data_protection: "https://www.sac-cas.ch/en/meta/data-protection/"
@@ -1331,195 +1351,203 @@ en:
 
   termination_reasons:
     destroy:
-      foreign_key_error: ""
+      foreign_key_error: "There are people who use this reason for leaving, so deletion is not possible."
 
   table_displays:
     person:
-      antrag_fuer: ""
-      address_valid: ""
-      confirmed_at: ""
-      beitrittsdatum: ""
+      antrag_fuer: Application for
+      address_valid: Address valid
+      confirmed_at: E-mail confirmed on
+      beitrittsdatum: Joining per
 
   verify_membership:
-    title: ""
-    not_found: ""
-    status_valid: ""
-    status_invalid: ""
+    title: Verification of SAC CAS membership
+    not_found: Invalid verification code
+    status_valid: Membership valid
+    status_invalid: Membership invalid
 
   passes:
     membership:
-      file_name_prefix: ""
-      title: ""
-      member: ""
-      sac_partner: ""
-      sponsor_url: ""
-      emergency_number: ""
-      emergency_contact: ""
+      file_name_prefix: SAC membership card
+      title: Membership card
+      member: member
+      sac_partner: SAC partner
+      sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
+      emergency_number: "Emergency number"
+      emergency_contact: "Emergency contact"
 
   mounted_attributes:
     form_tabs:
       group/sac_cas:
-        default: ""
+        default: SAC/CAS attributes
       group/sektion:
-        default: ""
+        default: Section attributes
       group/ortsgruppe:
-        default: ""
+        default: Local group attributes
 
   sac_membership_configs:
     form:
-      fees: ""
-      membership_adult: ""
-      membership_family: ""
-      membership_youth: ""
-      sac_fee: ""
-      entry_fee: ""
-      magazine_fee: ""
-      hut_solidarity_fee_without_hut: ""
-      hut_solidarity_fee_with_hut: ""
-      reductions: ""
-      discounts: ""
-      discount_date: ""
-      discount: ""
-      article_numbers: ""
-      valid_from: ""
-      service_fee: ""
-      magazine_postage_abroad: ""
-      reduction_amount: ""
-      reduction_required_membership_years: ""
-      discount_date_1: ""
-      discount_percent_1: ""
-      discount_date_2: ""
-      discount_percent_2: ""
-      discount_date_3: ""
-      discount_percent_3: ""
+      fees: Fees
+      membership_adult: Membership Individual
+      membership_family: Family membership
+      membership_youth: Youth membership
+      sac_fee: Central association contribution
+      entry_fee: Entrance fee
+      magazine_fee: Subscription fee SAC Magazine
+      hut_solidarity_fee_without_hut: Hut solidarity contribution without huts
+      hut_solidarity_fee_with_hut: Hut solidarity contribution with huts
+      reductions: Reductions
+      discounts: Discounts for admissions within the year
+      discount_date: From date
+      discount: Discount
+      article_numbers: Product numbers Abacus
+      valid_from: Valid from year
+      service_fee: Service fee
+      magazine_postage_abroad: Postage abroad SAC Magazine
+      reduction_amount: Reduction amount
+      reduction_required_membership_years: Reduction from years of membership
+      discount_date_1: Discount date 1
+      discount_percent_1: Discount percentage 1
+      discount_date_2: Discount date 2
+      discount_percent_2: Discount percentage 2
+      discount_date_3: Discount date 3
+      discount_percent_3: Discount percentage 3
     global:
       link:
-        add: ""
+        add: New
 
   sac_section_membership_configs:
     form:
-      fees: ""
-      membership_adult: ""
-      membership_family: ""
-      membership_youth: ""
-      section_fee: ""
-      section_entry_fee: ""
-      bulletin_fee: ""
-      reductions: ""
-      valid_from: ""
-      bulletin_postage_abroad: ""
-      sac_fee_exemption_for_honorary_members: ""
-      section_fee_exemption_for_honorary_members: ""
-      sac_fee_exemption_for_benefited_members: ""
-      section_fee_exemption_for_benefited_members: ""
-      reduction_amount: ""
-      reduction_required_membership_years: ""
-      reduction_required_age: ""
+      fees: Fees
+      membership_adult: Membership Individual
+      membership_family: Family membership
+      membership_youth: Youth membership
+      section_fee: Section contribution
+      section_entry_fee: Entrance fee
+      bulletin_fee: Subscription fee Section Bulletin
+      reductions: Reductions
+      valid_from: Valid from year
+      bulletin_postage_abroad: Postage abroad Section Bulletin
+      sac_fee_exemption_for_honorary_members: Central Association fee waiver for honorary members
+      section_fee_exemption_for_honorary_members: Section fee waiver for honorary members
+      sac_fee_exemption_for_benefited_members: Central association fee waiver for beneficiaries
+      section_fee_exemption_for_benefited_members: Section fee waiver for beneficiaries
+      reduction_amount: Reduction amount Membership years/age
+      reduction_required_membership_years: Reduction from years of membership
+      reduction_required_age: Reduction from years of age
     global:
       link:
-        add: ""
+        add: New
 
   households:
     edit:
-      title: ""
-      shared_address_info: ""
+      title: Manage family
+      shared_address_info: All family members share the same address.
     members_table_row:
-      unconfirmed_email_info: ""
+      unconfirmed_email_info: The e-mail address must be confirmed before the person can be removed from the family.
 
   household_aside_component:
-    section_name: ""
+    section_name: Family
   household_aside_member_component:
-    main_person: ""
-    set_main_person: ""
-    unverified_email: ""
-    cannot_set_main_person: ""
+    main_person: Family bill recipient
+    set_main_person: Become a family invoice recipient
+    unverified_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
+    cannot_set_main_person: Contact the office to change the family invoice recipient
 
   sheet/memberships/join_zusatzsektion:
-    title: ""
+    title: Join additional section
   sheet/memberships/leave_zusatzsektion:
-    title: ""
+    title: Exit additional section
   sheet/memberships/switch_stammsektion:
-    title: ""
+    title: Change trunk section
   sheet/memberships/terminate_sac_membership:
-    title: ""
+    title: Terminate SAC membership
 
   wizards:
     steps:
-      choose_sektion_title: ""
-      summary_title: ""
-      choose_membership_title: ""
-      membership_terminated_info_title: ""
-      termination_no_self_service_title: ""
-      termination_choose_date_title: ""
-      ask_family_main_person_title: ""
-      choose_date_title: ""
+      choose_sektion_title: Select section
+      summary_title: Confirmation
+      choose_membership_title: Family membership
+      membership_terminated_info_title: Membership terminated
+      termination_no_self_service_title: Contact member service
+      termination_choose_date_title: Leaving date
+      ask_family_main_person_title: Family membership
+      choose_date_title: Date selection
 
       signup:
-        main_email_field_title: ""
-        person_fields_title: ""
+        main_email_field_title: Main e-mail
+        person_fields_title: Personal data
         agreement_fields:
-          adult_consent_caption: ""
-          newsletter_caption: ""
+          adult_consent_caption: I confirm that I am at least 18 years old or have the consent of my legal guardian
+          newsletter_caption: I would like to subscribe to a newsletter
         abo_magazin:
-          issues_from_field_title: ""
+          issues_from_field_title: Subscription
           issues_from_field:
             issues_from_help: |
+              The subscription runs from the next possible issue.
+              If you would like the magazine to be delivered at a later date, please let us know
+              the issue from which we may begin delivery.
         sektion:
-          family_fields_title: ""
+          family_fields_title: Family members
           family_fields:
             membership_info_box: >
-          family_buttons:
-            next_as_single_link: ""
-            next_as_household_link: ""
+              By adding more people, you choose a family membership. This is possible for a maximum of 2 adults aged 23 and over and any number of children aged between 6 and 17.
 
-          various_fields_title: ""
+              Family membership is also available for couples without children. If you would like to set up a family membership with an existing member, please contact the SAC office.
+          family_buttons:
+            next_as_single_link: Continue as an individual member
+            next_as_household_link: Continue as family membership
+
+          various_fields_title: Additional data
 
         various_fields:
-          newsletter: ""
-          statutes_text: ""
-          sektion_statuten_text: ""
-          contribution_regulations_text: ""
-          data_protection_text: ""
+          newsletter: I would like to subscribe to a newsletter
+          statutes_text: "I have read and agree to the %{link} "
+          sektion_statuten_text: "I have read and agree to the %{link} "
+          contribution_regulations_text: "I have read the %{link} and agree with them"
+          data_protection_text: "I have read and agree to the %{link} "
       choose_sektion:
-        no_self_service_info_text: ""
+        no_self_service_info_text: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
         backoffice_no_self_service_info_text:
-          ""
+          "Please note: the change is to a section that accepts members independently. You may need to clarify this change with the section in advance"
       choose_membership:
-        not_main_family_person_info_text: >
+        not_main_family_person_info_text: >-
+          You can take out an additional membership as an individual. If the additional membership is to apply to the whole family, the main family member must take out the membership. To do this, please contact %{name}.
       switch_stammsektion:
         choose_sektion:
-          family_membership_info_text: >
+          family_membership_info_text: >-
+            Please note: The parent section change is requested for the entire family membership. The following are affected: %{family_names}
         choose_date:
-          info_text: ""
+          info_text: "When should the section change take place?"
         summary:
-          info_text: ""
-          next_button: ""
+          info_text: "The master section is changed via %{switch_on}."
+          next_button: Order for a fee
       join_zusatzsektion:
         summary:
-          info_text: ""
-          next_button: ""
+          info_text: "Membership of the additional section is concluded as %{beitragskategorie} and is valid immediately."
+          next_button: Order for a fee
       membership_terminated_info:
-        info: ""
+        info: "Your membership has been canceled via %{date}. If you would like to reactivate your membership, please visit the SAC website."
       termination_choose_date:
-        info_text: ""
-        warning_termination_by_section_only: ""
+        info_text: "When should the exit take place?"
+        warning_termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
       termination_no_self_service:
-        info_text: ""
+        info_text: "We ask you to apply for withdrawal by telephone or e-mail. Please contact us for this purpose."
       ask_family_main_person:
-        info_text: ""
+        info_text: "Withdrawal from the additional section can only be requested for the entire family membership and must be requested by the main person in your family membership. Please contact %{family_main_person}."
       leave_zusatzsektion:
         summary:
-          family_warning: ""
-          info_text: ""
-          next_button: ""
+          family_warning: "Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}."
+          info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
+          next_button: "Request resignation"
       termination:
         summary:
-          info_text: ""
-          termination_by_section_only: ""
-          family_warning: ""
-          data_retention_info_title: ""
+          info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
+          termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
+          family_warning: "Please note: the resignation is requested for the entire family membership. This affects: %{family_member_names}."
+          data_retention_info_title: "Storage of your data"
           data_retention_info_text:
-            ""
-          newsletter_info_text: ""
-          fundraiser_info_text: ""
-          next_button: ""
+            "After you leave, we will keep your data for six months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
+          newsletter_info_text: " If you would like to continue receiving the SAC Newsletter, you can let us know here:"
+          fundraiser_info_text: "If we may continue to contact you for donation appeals, you can let us know here:"
+          next_button: "Request resignation"
