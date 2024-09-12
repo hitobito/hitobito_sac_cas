@@ -41,8 +41,8 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def info_alert_text
-      wizard.group.is_a?(Group::SektionsNeuanmeldungenNv) ? 
-            I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_nv", name: wizard.group.layer_group.name) : 
+      wizard.group.is_a?(Group::SektionsNeuanmeldungenNv) ?
+            I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_nv", name: wizard.group.layer_group.name) :
             I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_sektion")
     end
 
@@ -66,10 +66,9 @@ module Wizards::Steps::Signup::Sektion
         ]
       }
     end
-    
 
     def family_info
-      family_summary = wizard.family_fields.members.sort_by(&:birthday).map do |member|
+      wizard.family_fields.members.sort_by(&:birthday).map do |member|
         {
           title: member.adult? ? "Erwachsene Person" : "Kind",
           attributes: [
@@ -80,26 +79,24 @@ module Wizards::Steps::Signup::Sektion
           ]
         }
       end
-      family_summary
-    end    
+    end
 
     def entry_fee_info
-      {title: "TODO: Einzelmitgliedschaft", 
+      {title: "TODO: Einzelmitgliedschaft",
        attributes:
         [
           {value: "Eintritt per: " + I18n.t("activemodel.attributes.self_inscription.register_on_options.#{wizard.various_fields.register_on}"), class: "mb-3"},
           {value: "Sektion #{wizard.group.layer_group.name}", class: "h6 fw-bold"},
           {value: fee_component.annual_fee},
           {value: fee_component.inscription_fee},
-          {value: fee_component.total, class: "fw-bold"},
-        ]
-      }
+          {value: fee_component.total, class: "fw-bold"}
+        ]}
     end
 
     def translated_label_name(attribute)
       # get zip_town translation from contactable fields
       return "#{I18n.t("contactable.fields.#{attribute}")}:" if I18n.exists?("contactable.fields.#{attribute}")
-      
+
       "#{wizard.person_fields.class.human_attribute_name(attribute)}:"
     end
 
