@@ -31,7 +31,7 @@ module SacCas::ApplicationMailer
         end
 
         headers[:subject] ||= subject
-        content.replace_placeholders(body.to_plain_text, values)
+        content.replace_placeholders(body.to_s, values)
       end
     end
 
@@ -45,7 +45,6 @@ module SacCas::ApplicationMailer
   end
 
   def join_contents(contents)
-    contents = contents.join("<br><br>--------------------<br><br>")
-    "<div class=\"trix-content\">#{contents}</div>"
+    contents.join("<br><br>--------------------<br><br>")
   end
 end

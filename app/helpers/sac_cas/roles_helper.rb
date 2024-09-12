@@ -7,6 +7,6 @@
 
 module SacCas::RolesHelper
   def format_role_membership_years(role)
-    f(role.membership_years) if role.is_a?(Group::SektionsMitglieder::Mitglied)
+    f(role.membership_years.floor) if role.is_a?(Group::SektionsMitglieder::Mitglied)
   end
 end

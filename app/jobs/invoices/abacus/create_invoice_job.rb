@@ -10,8 +10,8 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   attr_reader :external_invoice_id, :reference_date, :discount, :new_entry
 
-  def initialize(external_invoice_id, reference_date, discount: nil, new_entry: false)
-    @external_invoice_id = external_invoice_id
+  def initialize(external_invoice, reference_date, discount: nil, new_entry: false)
+    @external_invoice_id = external_invoice.id
     @reference_date = reference_date
     @discount = discount
     @new_entry = new_entry
@@ -81,7 +81,9 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
       .build(new_entry: new_entry, discount: discount)
   end
 
-  def external_invoice = @external_invoice ||= ExternalInvoice.find(external_invoice_id)
+  def external_invoice
+    @external_invoice ||= ExternalInvoice.find(@external_invoice_id)
+  end
 
   def client = @client ||= Invoices::Abacus::Client.new
 

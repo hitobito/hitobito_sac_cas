@@ -46,4 +46,31 @@ describe :login, js: true do
     expect(page).to have_link "Abmelden"
     expect(page).to have_selector(".content-header h1", text: person.full_name)
   end
+
+  describe "WSO2 legacy password" do
+    let(:legacy_password) { "new long test password" }
+    let(:salt) { "Salty Salt" }
+
+    before do
+      person.update!(
+        encrypted_password: nil,
+        wso2_legacy_password_hash: generate_wso2_legacy_password_hash(legacy_password, salt),
+        wso2_legacy_password_salt: salt
+      )
+    end
+
+    it "allows login with legacy password" do
+      expect(person.valid_password?(legacy_password)).to be_truthy
+      fill_in "Haupt‑E‑Mail / Mitglied‑Nr", with: person.email
+      fill_in "Passwort", with: legacy_password
+      click_button "Anmelden"
+
+      expect(page).to have_link "Abmelden"
+      expect(page).to have_selector(".content-header h1", text: person.full_name)
+
+      expect(person.reload.wso2_legacy_password_hash).to be_nil
+      expect(person.reload.wso2_legacy_password_salt).to be_nil
+      expect(person.reload.encrypted_password).to be_present
+    end
+  end
 end

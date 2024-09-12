@@ -30,7 +30,7 @@ describe Invoices::Abacus::CreateInvoiceJob do
   let(:discount) { nil }
   let(:new_entry) { false }
 
-  subject(:job) { described_class.new(external_invoice.id, reference_date, discount: discount, new_entry: new_entry) }
+  subject(:job) { described_class.new(external_invoice, reference_date, discount: discount, new_entry: new_entry) }
 
   before { allow(job).to receive(:client).and_return(client) }
 

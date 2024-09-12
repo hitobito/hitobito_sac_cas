@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::PeopleHelper
+  def format_person_membership_years(person)
+    f(person.membership_years.floor)
+  end
+
   def format_person_sac_family_main_person(person)
     main_person = person.household.main_person
 

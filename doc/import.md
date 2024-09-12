@@ -5,6 +5,17 @@ beim Import ein Report erstellt werden, der auf Validierungsfehler hinweist. Dur
 Datenquellen, erfolgt der Import in mehreren Schritten. Schlussendlich sollen die Daten mittels des Imports ins
 Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht mehr benötigt.
 
+## Ausführen der Imports auf Openshift
+
+1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
+2. In Openshift einloggen und in das gewünschte Projekt wechseln
+3. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist
+4. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
+5. Beten das alles gut geht
+6. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
+7. exit um die Shell zu verlassen
+8. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
+
 ## Quelldaten
 
 Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgende Eigenschaften:
