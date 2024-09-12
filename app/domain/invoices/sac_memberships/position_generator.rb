@@ -25,11 +25,10 @@ module Invoices
         Positions::SectionEntryFee
       ].freeze
 
-      attr_reader :member, :custom_discount
+      attr_reader :member
 
-      def initialize(member, custom_discount: nil)
+      def initialize(member)
         @member = member
-        @custom_discount = custom_discount
       end
 
       # new_entry ist nur bei Neueintritt SAC gesetzt, nicht bei Sektionseintritten
@@ -63,7 +62,7 @@ module Invoices
 
       def build_positions(classes, membership)
         classes
-          .map { |klass| klass.new(member, membership, custom_discount: custom_discount) }
+          .map { |klass| klass.new(member, membership) }
           .filter(&:active?)
       end
     end

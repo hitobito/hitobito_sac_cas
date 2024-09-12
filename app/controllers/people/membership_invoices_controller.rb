@@ -71,7 +71,7 @@ class People::MembershipInvoicesController < ApplicationController
   def membership_invoice
     @membership_invoice ||= Invoices::Abacus::MembershipInvoiceGenerator
       .new(external_invoice.person_id, external_invoice.link, invoice_form.reference_date)
-      .build(new_entry: invoice_form.new_entry, discount: invoice_form.discount)
+      .build(new_entry: invoice_form.new_entry)
   end
 
   def invoice_form_params
@@ -82,9 +82,9 @@ class People::MembershipInvoicesController < ApplicationController
 
   def invoice_form = @invoice_form ||= People::Membership::InvoiceForm.new(person)
 
-  def person = @person ||= context.people_with_membership_years.find(params[:person_id])
+  def person = @person ||= Person.find(params[:person_id])
 
-  def context = @context ||= Invoices::SacMemberships::Context.new(date)
+  def context = @context ||= Invoices::SacMemberships::Context.new(date, custom_discount: invoice_form.discount)
 
   def group = @group ||= Group.find(params[:group_id])
 
