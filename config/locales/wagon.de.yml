@@ -148,11 +148,12 @@ de:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel
             telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
             mit uns auf
-
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person.
+        wizards/steps/check_data_quality_errors:
+          data_quality_error: Die Aktion kann wegen ungültigen Daten nicht durchgeführt werden. Bitte nach dem Korrigieren der Daten die Aktion nochmals starten.
     models:
       people/neuanmeldungen/approve:
         one: Anmeldung übernehmen
