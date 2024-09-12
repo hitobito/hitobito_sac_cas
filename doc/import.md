@@ -30,6 +30,7 @@ Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im 
 |------|------------------------------------------------------|
 | NAV1 | Alle Kontakte (natürliche und juristische Personen)  |
 | NAV2 | Stammmitgliedschaften                                |
+| NAV3 | Qualifikationen                                      |
 | NAV4 | Sektionsfunktionäre                                  |
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
@@ -58,7 +59,7 @@ Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
 ## Importe
 
-### `NAV1`: sac_imports:1_people
+### 1: sac_imports:1_people
 
 Dieser Import soll immer zuerst ausgeführt werden, damit den Personen in den weiteren Schritten die Rollen zugeordnet werden können.
 
@@ -125,6 +126,13 @@ Import Source File: **NAV3**
 
 - Import Source File: **WSO21**
 - CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/7_wso2_password_hashes_2024-06-01-12:00.csv`
+
+## 8: sac_imports:8_qualifications
+
+`rake sac_imports:8_qualifications`
+
+- Import Source File: **NAV3**
+- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/8_qualifications_2024-06-01-12:00.csv`
 
 ## Delete all Sektions
 
