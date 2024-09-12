@@ -35,11 +35,11 @@ Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im 
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
 | NAV7 | Abonenten Die Alpen                                  |
-| WSO2 | Datenexport aus WSO2                                |
+| WSO21| Datenexport aus WSO21                                |
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
-Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source_file.rb)
+Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source.rb)
 
 ## Entwickler
 
