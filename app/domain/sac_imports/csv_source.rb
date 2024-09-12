@@ -82,7 +82,7 @@ class SacImports::CsvSource
     files = Dir.glob("#{source_dir}/#{@source_name}_*.csv")
     raise("No source file #{@source_name}_*.csv found in #{source_dir}.") if files.empty?
 
-    source_dir.join(files.first)
+    source_dir.join(files.last)
   end
 
   def headers
