@@ -51,7 +51,7 @@ module Wizards::Steps::Signup::Sektion
 
     def person_info(person)
       {
-        title:  I18n.t("wizards.steps.signup.sektion.summary_fields.contact_person"),
+        title: I18n.t("wizards.steps.signup.sektion.summary_fields.contact_person"),
         attributes: [
           {value: "#{person.first_name} #{person.last_name}", class: "fw-bold mb-3"},
           {label: translated_label_name(:address_care_of), value: person.address_care_of},
