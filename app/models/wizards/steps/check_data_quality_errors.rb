@@ -5,20 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Invoices
-  module SacMemberships
-    module Positions
-      class SacEntryFee < Base
-        private
+class Wizards::Steps::CheckDataQualityErrors < Wizards::Step
+  delegate :person, to: :wizard
+  validate :check_data_quality_errors
 
-        def fee_attr_prefix
-          :entry_fee
-        end
+  private
 
-        def discount_factor
-          1.0 # no discounts on entry fees
-        end
-      end
-    end
+  def check_data_quality_errors
+    return unless person.error? || person.household_people.exists?(data_quality: :error)
+
+    errors.add(:base, :data_quality_error)
   end
 end

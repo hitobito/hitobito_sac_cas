@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -52,6 +52,7 @@ describe "switching stammsektion", js: true do
       roles(:familienmitglied_zweitsektion).destroy
       roles(:familienmitglied2_zweitsektion).destroy
       roles(:familienmitglied_kind_zweitsektion).destroy
+      person.update_column(:data_quality, :ok)
     end
 
     it "can switch for all members" do
@@ -68,6 +69,20 @@ describe "switching stammsektion", js: true do
         click_on "Kostenpflichtig bestellen"
         expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
       end.to change(Delayed::Job.where(queue: :mailers), :count).by(1)
+    end
+  end
+
+  context "with data quality issues" do
+    let(:group) { groups(:bluemlisalp_mitglieder) }
+    let(:person) { people(:familienmitglied) }
+
+    before { person.update!(first_name: nil) }
+
+    it "shows an alert info message" do
+      click_link "Mitgliedschaft anpassen"
+      click_link "Sektionswechsel beantragen"
+      expect(find(".alert-info").text).to include("kann wegen ungültigen Daten nicht durchgeführt werden")
+      expect(page).to have_text("Vorname ist leer")
     end
   end
 end

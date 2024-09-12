@@ -1,0 +1,18 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.ml-4
+  .alert.alert-info
+    = t('activemodel.errors.models.wizards/steps/check_data_quality_errors.data_quality_error')
+  
+  - person.household.people.each do |person|
+    - issues = person.data_quality_issues.where(severity: :error)
+    - if issues.any?
+      %b= link_to(person.full_name, person_path(person), target: '_blank')
+      %ul
+        - issues.each do |issue|
+          %li.ml-3= issue.message
+  
+  = c.cancel_link_back_to_person
