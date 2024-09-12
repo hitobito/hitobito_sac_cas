@@ -61,10 +61,11 @@ de:
       wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: Sektionsstatuten
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
-        sektion_statuten: Sektionsstatuten
         statutes: Statuten
       wizards/steps/choose_membership:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
@@ -1565,6 +1566,10 @@ de:
             family_members: "Familienmitglieder"
             info_alert_neuanmeldungen_nv: "Dein verbindlicher Antrag wurde an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
             info_alert_neuanmeldungen_sektion: "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
+            contact_person: "Kontaktperson"
+            adult: "Erwachsene Person"
+            child: "Kind"
+            entry_per: "Eintritt per:"
 
         various_fields:
           newsletter: Ich möchte einen Newsletter abonnieren

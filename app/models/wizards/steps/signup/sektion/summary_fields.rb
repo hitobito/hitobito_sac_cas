@@ -22,7 +22,6 @@ module Wizards::Steps::Signup::Sektion
     attribute :contribution_regulations, :boolean, default: false
 
     validates :contribution_regulations, acceptance: true
-    validates :register_on, presence: true
 
     delegate :requires_adult_consent?, to: :wizard
 
@@ -52,7 +51,7 @@ module Wizards::Steps::Signup::Sektion
 
     def person_info(person)
       {
-        title: "Kontaktperson",
+        title:  I18n.t("wizards.steps.signup.sektion.summary_fields.contact_person"),
         attributes: [
           {value: "#{person.first_name} #{person.last_name}", class: "fw-bold mb-3"},
           {label: translated_label_name(:address_care_of), value: person.address_care_of},
@@ -70,7 +69,7 @@ module Wizards::Steps::Signup::Sektion
     def family_info
       wizard.family_fields.members.sort_by(&:birthday).map do |member|
         {
-          title: member.adult? ? "Erwachsene Person" : "Kind",
+          title: member.adult? ? I18n.t("wizards.steps.signup.sektion.summary_fields.adult") : I18n.t("wizards.steps.signup.sektion.summary_fields.child"),
           attributes: [
             {value: "#{member.first_name} #{member.last_name}", class: "fw-bold mb-3"},
             {label: translated_label_name(:birthday), value: member.birthday.strftime("%d.%m.%Y")},
@@ -85,7 +84,7 @@ module Wizards::Steps::Signup::Sektion
       {title: "TODO: Einzelmitgliedschaft",
        attributes:
         [
-          {value: "Eintritt per: " + I18n.t("activemodel.attributes.self_inscription.register_on_options.#{wizard.various_fields.register_on}"), class: "mb-3"},
+          {value: "#{I18n.t("wizards.steps.signup.sektion.summary_fields.entry_per")} " + I18n.t("activemodel.attributes.self_inscription.register_on_options.#{wizard.various_fields.register_on}"), class: "mb-3"},
           {value: "Sektion #{wizard.group.layer_group.name}", class: "h6 fw-bold"},
           {value: fee_component.annual_fee},
           {value: fee_component.inscription_fee},

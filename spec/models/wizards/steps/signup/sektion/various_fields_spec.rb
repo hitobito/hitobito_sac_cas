@@ -12,15 +12,6 @@ describe Wizards::Steps::Signup::Sektion::VariousFields do
   subject(:fields) { described_class.new(wizard) }
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
-  let(:fields) { described_class.new(wizard) }
-
-  let(:required_attrs) {
-    {
-      statutes: true,
-      contribution_regulations: true,
-      data_protection: true
-    }
-  }
 
   describe "validations" do
     let(:reason) { Fabricate(:self_registration_reason) }
