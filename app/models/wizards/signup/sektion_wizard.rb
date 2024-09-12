@@ -11,7 +11,8 @@ module Wizards::Signup
       Wizards::Steps::Signup::MainEmailField,
       Wizards::Steps::Signup::Sektion::PersonFields,
       Wizards::Steps::Signup::Sektion::FamilyFields,
-      Wizards::Steps::Signup::Sektion::VariousFields
+      Wizards::Steps::Signup::Sektion::VariousFields,
+      Wizards::Steps::Signup::Sektion::SummaryFields
     ]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
