@@ -16,6 +16,10 @@ module Invoices
         def creditor
           section
         end
+
+        def discount_factor
+          1.0 # no discounts on entry fees
+        end
       end
     end
   end

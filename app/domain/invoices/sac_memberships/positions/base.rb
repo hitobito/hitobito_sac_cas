@@ -11,16 +11,15 @@ module Invoices
       class Base
         class_attribute :grouping, :section_payment_possible
 
-        attr_reader :member, :membership, :custom_discount, :context
+        attr_reader :member, :membership, :context
         attr_writer :amount
 
-        delegate :date, :config, :mid_year_discount_factor, :sac, to: :context
+        delegate :date, :config, :discount_factor, :sac, to: :context
         delegate :beitragskategorie, to: :membership
 
-        def initialize(member, membership, custom_discount: nil)
+        def initialize(member, membership)
           @member = member
           @membership = membership
-          @custom_discount = custom_discount # between 0 and 100
           @context = member.context
         end
 
@@ -123,14 +122,6 @@ module Invoices
 
         def sac_fee_exemption?
           section.sac_fee_exemption?(member)
-        end
-
-        def discount_factor
-          if custom_discount
-            (100 - custom_discount) / 100.0
-          else
-            mid_year_discount_factor
-          end
         end
       end
     end

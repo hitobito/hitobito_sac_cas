@@ -6,7 +6,8 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:sac) { Group.root }
   let(:person) { people(:mitglied) }
   let(:date) { Date.new(2023, 1, 1) }
-  let(:context) { Invoices::SacMemberships::Context.new(date) }
+  let(:custom_discount) { nil }
+  let(:context) { Invoices::SacMemberships::Context.new(date, custom_discount: custom_discount) }
   let(:member) { Invoices::SacMemberships::Member.new(context.people_with_membership_years.find(person.id), context) }
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
@@ -81,7 +82,7 @@ describe Invoices::SacMemberships::PositionGenerator do
     end
 
     context "with custom discount" do
-      let(:positions) { described_class.new(member, custom_discount: 50).generate(memberships, new_entry: new_entry) }
+      let(:custom_discount) { 50 }
 
       it "generates positions" do
         expect(positions.size).to eq(5)
@@ -752,6 +753,84 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[5].grouping).to eq(nil)
         expect(positions[5].creditor.to_s).to eq(main_section.to_s)
         expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
+      end
+
+      context "middle of the year" do
+        let(:date) { Date.new(2023, 8, 15) }
+
+        before do
+          Role.update_all(delete_on: date.end_of_year)
+        end
+
+        it "generates discounted positions" do
+          expect(positions.size).to eq(6)
+
+          expect(positions[0].name).to eq("sac_fee")
+          expect(positions[0].amount).to eq(20.0)
+          expect(positions[1].name).to eq("hut_solidarity_fee")
+          expect(positions[1].amount).to eq(10.0)
+          expect(positions[2].name).to eq("sac_magazine")
+          expect(positions[2].amount).to eq(12.5)
+
+          expect(positions[3].name).to eq("section_fee")
+          expect(positions[3].amount).to eq(21.0)
+
+          expect(positions[4].name).to eq("sac_entry_fee")
+          expect(positions[4].amount).to eq(10.0)
+          expect(positions[4].grouping).to eq(nil)
+          expect(positions[4].creditor.to_s).to eq(sac.to_s)
+          expect(positions[4].article_number).to eq(config.sac_entry_fee_article_number)
+
+          expect(positions[5].name).to eq("section_entry_fee")
+          expect(positions[5].amount).to eq(10.0)
+          expect(positions[5].grouping).to eq(nil)
+          expect(positions[5].creditor.to_s).to eq(main_section.to_s)
+          expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
+        end
+      end
+
+      context "with custom discount" do
+        let(:custom_discount) { 75 }
+
+        it "generates positions" do
+          expect(positions.size).to eq(6)
+
+          expect(positions[0].name).to eq("sac_fee")
+          expect(positions[0].grouping).to eq(:sac_fee)
+          expect(positions[0].amount).to eq(10.0)
+          expect(positions[0].creditor.to_s).to eq(sac.to_s)
+          expect(positions[0].article_number).to eq(config.sac_fee_article_number)
+
+          expect(positions[1].name).to eq("hut_solidarity_fee")
+          expect(positions[1].grouping).to eq(:sac_fee)
+          expect(positions[1].amount).to eq(5.0)
+          expect(positions[1].creditor.to_s).to eq(sac.to_s)
+          expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
+
+          expect(positions[2].name).to eq("sac_magazine")
+          expect(positions[2].grouping).to eq(:sac_fee)
+          expect(positions[2].amount).to eq(6.25)
+          expect(positions[2].creditor.to_s).to eq(sac.to_s)
+          expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
+
+          expect(positions[3].name).to eq("section_fee")
+          expect(positions[3].grouping).to eq(nil)
+          expect(positions[3].amount).to eq(10.5)
+          expect(positions[3].creditor.to_s).to eq(main_section.to_s)
+          expect(positions[3].article_number).to eq(config.section_fee_article_number)
+
+          expect(positions[4].name).to eq("sac_entry_fee")
+          expect(positions[4].amount).to eq(10.0)
+          expect(positions[4].grouping).to eq(nil)
+          expect(positions[4].creditor.to_s).to eq(sac.to_s)
+          expect(positions[4].article_number).to eq(config.sac_entry_fee_article_number)
+
+          expect(positions[5].name).to eq("section_entry_fee")
+          expect(positions[5].amount).to eq(10.0)
+          expect(positions[5].grouping).to eq(nil)
+          expect(positions[5].creditor.to_s).to eq(main_section.to_s)
+          expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
+        end
       end
     end
   end

@@ -6,24 +6,24 @@
 #  https://github.com/hitobito/hitobito
 
 class Invoices::Abacus::MembershipInvoiceGenerator
-  def initialize(person_id, section, reference_date)
+  def initialize(person_id, section, reference_date, custom_discount: nil)
     @person_id = person_id
     @reference_date = reference_date
     @section = section
+    @custom_discount = custom_discount
   end
 
-  def build(new_entry:, discount:)
+  def build(new_entry: false)
     Invoices::Abacus::MembershipInvoice.new(
       member,
       memberships,
-      new_entry:,
-      discount:
+      new_entry:
     )
   end
 
   private
 
-  attr_reader :section, :person_id, :reference_date
+  attr_reader :section, :person_id, :reference_date, :custom_discount
 
   def memberships
     if stammsektion?
@@ -63,7 +63,7 @@ class Invoices::Abacus::MembershipInvoiceGenerator
 
   def member = @member ||= Invoices::SacMemberships::Member.new(person, context)
 
-  def context = @context ||= Invoices::SacMemberships::Context.new(reference_date)
+  def context = @context ||= Invoices::SacMemberships::Context.new(reference_date, custom_discount: custom_discount)
 
   def person = context.people_with_membership_years(includes: []).find(person_id).tap do |p|
     ActiveRecord::Associations::Preloader.new.preload([p], :roles, Role.with_deleted)
