@@ -318,9 +318,9 @@ describe Event::ParticipationsController do
       context "with answers" do
         before do
           event.questions.create!([
-            {admin: true, question: "non example"},
-            {admin: true, question: "nil example"},
-            {admin: true, question: "yes example"}
+            {admin: true, question: "non example", disclosure: :optional},
+            {admin: true, question: "nil example", disclosure: :optional},
+            {admin: true, question: "yes example", disclosure: :optional}
           ])
           participation.answers.first.update! answer: "non"
           participation.answers.last.update! answer: "yes"
