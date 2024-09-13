@@ -47,9 +47,9 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
     it("salutation") { expect(value(:salutation)).to be_nil }
     it("first_name") { expect(value(:first_name)).to eq "Hans" }
     it("last_name") { expect(value(:last_name)).to eq "Muster" }
-    it("adresszusatz") { expect(value(:adresszusatz)).to be_nil }
+    it("address_care_of") { expect(value(:address_care_of)).to be_nil }
     it("address") { expect(value(:address)).to eq "Musterstrasse 42" }
-    it("postfach") { expect(value(:postfach)).to be_nil }
+    it("postbox") { expect(value(:postbox)).to be_nil }
     it("zip_code") { expect(value(:zip_code)).to eq "4242" }
     it("town") { expect(value(:town)).to eq "Musterhausen" }
     it("email") { expect(value(:email)).to eq "hans.muster@example.com" }
@@ -70,9 +70,9 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
     it("salutation") { expect(value(:salutation)).to be_nil }
     it("first_name") { expect(value(:first_name)).to eq "Hans" }
     it("last_name") { expect(value(:last_name)).to eq "Muster" }
-    it("adresszusatz") { expect(value(:adresszusatz)).to be_nil }
+    it("address_care_of") { expect(value(:address_care_of)).to be_nil }
     it("address") { expect(value(:address)).to eq "Musterstrasse 42" }
-    it("postfach") { expect(value(:postfach)).to be_nil }
+    it("postbox") { expect(value(:postbox)).to be_nil }
     it("zip_code") { expect(value(:zip_code)).to eq "4242" }
     it("town") { expect(value(:town)).to eq "Musterhausen" }
     it("email") { expect(value(:email)).to eq "hans.muster@example.com" }
@@ -93,9 +93,9 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
     it("salutation") { expect(value(:salutation)).to be_nil }
     it("first_name") { expect(value(:first_name)).to eq "Familie" }
     it("last_name") { expect(value(:last_name)).to eq "Hans und Max Muster" }
-    it("adresszusatz") { expect(value(:adresszusatz)).to be_nil }
+    it("address_care_of") { expect(value(:address_care_of)).to be_nil }
     it("address") { expect(value(:address)).to eq "Musterstrasse 42" }
-    it("postfach") { expect(value(:postfach)).to be_nil }
+    it("postbox") { expect(value(:postbox)).to be_nil }
     it("zip_code") { expect(value(:zip_code)).to eq "4242" }
     it("town") { expect(value(:town)).to eq "Musterhausen" }
     it("email") { expect(value(:email)).to eq "hans.muster@example.com" }
