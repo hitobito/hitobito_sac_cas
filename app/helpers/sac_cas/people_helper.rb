@@ -7,7 +7,7 @@
 
 module SacCas::PeopleHelper
   def format_person_membership_years(person)
-    f(person.membership_years.floor)
+    f(person.membership_years.to_i)
   end
 
   def format_person_sac_family_main_person(person)
