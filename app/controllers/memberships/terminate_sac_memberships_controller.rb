@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module People
+module Memberships
   class TerminateSacMembershipsController < Wizards::BaseController
     before_action :wizard, :person, :group, :authorize
 
@@ -15,14 +15,14 @@ module People
     private
 
     def authorize
-      authorize!(:create, wizard)
+      authorize!(:terminate, wizard.role)
     end
 
     def wizard
       @wizard ||= model_class.new(
         person: person,
         current_step: params[:step].to_i,
-        backoffice: current_user.backoffice?,
+        backoffice: current_user != person,
         **model_params.to_unsafe_h
       )
     end

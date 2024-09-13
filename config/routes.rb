@@ -40,7 +40,7 @@ Rails.application.routes.draw do
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
         resource :switch_stammsektion, module: :memberships, only: [:show, :create]
-        resource :terminate_sac_membership, only: [:show, :create], module: :people
+        resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
         resources :roles, only: [] do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
         end

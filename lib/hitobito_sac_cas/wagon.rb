@@ -81,21 +81,16 @@ module HitobitoSacCas
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
-      Ability.store.register Memberships::LeaveZusatzsektionAbility
-      Ability.store.register Memberships::TerminateSacMembershipAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
-      RoleAbility.prepend SacCas::RoleAbility
-      GroupAbility.prepend SacCas::GroupAbility
-      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
-      RoleAbility.include SacCas::VariousAbility
       TokenAbility.prepend SacCas::TokenAbility
+      VariousAbility.include SacCas::VariousAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator

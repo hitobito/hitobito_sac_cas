@@ -15,7 +15,7 @@ module Memberships
     private
 
     def authorize
-      authorize!(:create, wizard)
+      authorize!(:terminate, wizard.role)
     end
 
     def wizard
@@ -23,7 +23,7 @@ module Memberships
         person: person,
         role: role,
         current_step: params[:step].to_i,
-        backoffice: current_user.backoffice?,
+        backoffice: current_user != person,
         **model_params.to_unsafe_h
       )
     end
@@ -47,7 +47,7 @@ module Memberships
     end
 
     def role
-      @role ||= Role.find(params[:role_id])
+      @role ||= person.roles.find(params[:role_id])
     end
 
     def group

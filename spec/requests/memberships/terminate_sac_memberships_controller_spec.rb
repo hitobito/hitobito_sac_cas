@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::TerminateSacMembershipsController do
+describe Memberships::TerminateSacMembershipsController do
   before { sign_in(operator) }
 
   let(:operator) { person }
@@ -76,10 +76,8 @@ describe People::TerminateSacMembershipsController do
         role.layer_group.update!(mitglied_termination_by_section_only: true)
       end
 
-      it "shows an info text" do
-        request
-        expect(response).to be_successful
-        expect(response.body).to include("Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen.")
+      it "returns not authorized" do
+        expect { request }.to raise_error(CanCan::AccessDenied)
       end
 
       context "as and admin" do
@@ -174,6 +172,64 @@ describe People::TerminateSacMembershipsController do
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
         expect(response).to redirect_to person_path(person, format: :html)
         expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+      end
+    end
+
+    context "as a section admin" do
+      let(:operator) do
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)).person.reload
+      end
+      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+
+      it "can choose immediate termination, destroy single role and redirects" do
+        expect do
+          request
+          role.reload
+        end
+          .to change(Role, :count).by(-2)
+          .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+        expect(response).to redirect_to person_path(person, format: :html)
+        expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+      end
+    end
+
+    context "as a section member editor" do
+      let(:operator) do
+        Group::SektionsMitglieder::Schreibrecht.create!(person: Fabricate(:person), group: groups(:bluemlisalp_mitglieder)).person.reload
+      end
+      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+
+      it "can choose immediate termination, destroy single role and redirects" do
+        expect do
+          request
+          role.reload
+        end
+          .to change(Role, :count).by(-2)
+          .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+        expect(response).to redirect_to person_path(person, format: :html)
+        expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+      end
+    end
+
+    context "as a section arbitrary group editor" do
+      let(:operator) do
+        Group::SektionsFunktionaere::Schreibrecht.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)).person.reload
+      end
+      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+
+      it "returns not authorized" do
+        expect { request }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as a section admin of another section" do
+      let(:operator) do
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:matterhorn_funktionaere)).person.reload
+      end
+      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+
+      it "returns not authorized" do
+        expect { request }.to raise_error(CanCan::AccessDenied)
       end
     end
 

@@ -1264,6 +1264,11 @@ de:
         success:
           one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde vorgenommen."
           other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurden vorgenommen."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: "Deine SAC-Mitgliedschaft wurde gekündet."
+          other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1317,12 +1322,6 @@ de:
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "Deine SAC-Mitgliedschaft wurde gekündet."
-          other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
 
     neuanmeldungen:
       multiselect_actions:
