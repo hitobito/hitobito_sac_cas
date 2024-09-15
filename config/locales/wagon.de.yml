@@ -54,8 +54,10 @@ de:
         statutes: Statuten
       wizards/steps/signup/sektion/family_fields/member:
         gender: Anrede
-        email: E-Mail (optional)
-        phone_number: Telefon (optional)
+        email: E-Mail
+        phone_number: Telefon
+        email_optional: E-Mail (optional)
+        phone_number_optional: Telefon (optional)
       wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
@@ -1538,6 +1540,9 @@ de:
         sektion:
           family_fields_title: Familienmitglieder
           family_fields:
+            email_taken: >
+              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt
+              werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >
               Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
               max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
