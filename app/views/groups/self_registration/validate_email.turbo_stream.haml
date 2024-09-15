@@ -1,0 +1,12 @@
+- if @exists
+  = turbo_stream.remove "#{params[:id]}-invalid-feedback"
+  = turbo_stream.after params[:id] do
+    %div.invalid-feedback{id: "#{params[:id]}-invalid-feedback"}
+      %span= I18n.t("wizards.steps.signup.sektion.family_fields.email_taken")
+    :javascript
+      document.querySelector("##{params[:id]}").classList.add("is-invalid")
+- else
+  = turbo_stream.after params[:id] do
+    :javascript
+      document.querySelectorAll("##{params[:id]} ~ *").forEach(function(e) { e.remove() })
+      document.querySelector("##{params[:id]}").classList.remove("is-invalid")

@@ -16,7 +16,7 @@
     = form.labeled_gender_inline_radio_buttons
     = form.labeled_input_fields :first_name, :last_name
     = form.labeled_date_field :birthday, data: {action: 'focusout->sac#toggleFields focusout->forwarder#click'}
-    = form.labeled_adult_required_field :email
+    = form.labeled_adult_required_field :email, data: {action: 'change->sac#validateEmail'}
     = form.labeled_adult_required_field :phone_number, placeholder: t('global.phone_placeholder')
 
   .col-xl-2.col-md-3.text-md-end.pe-3.mb-4

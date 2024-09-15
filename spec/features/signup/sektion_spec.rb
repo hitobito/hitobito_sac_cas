@@ -401,6 +401,22 @@ describe "signup/sektion", js: true do
       end
     end
 
+    it "validates emails dynamically for household input" do
+      click_on "Eintrag hinzufügen"
+      fill_in "E-Mail", with: "e.hillary@hitobito.example.com"
+      fill_in "Vorname", with: "Maxi"
+      field = find_field("E-Mail")
+      expect(page).to have_css(".is-invalid")
+      expect(page).to have_css "##{field[:id]}.is-invalid"
+      expect(page).to have_css ".invalid-feedback", text: "Die E-Mail Adresse ist bereits registriert " \
+        "und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, " \
+        "um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch"
+      fill_in "E-Mail", with: "eddy.hillary@hitobito.example.com"
+      fill_in "Vorname", with: "Maxi"
+      expect(page).not_to have_css ".invalid-feedback"
+      expect(find_field("E-Mail")[:class]).not_to match(/\bis-invalid\b/)
+    end
+
     it "validates emails within household on form submit" do
       click_on "Eintrag hinzufügen"
 

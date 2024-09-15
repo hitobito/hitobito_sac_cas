@@ -16,6 +16,10 @@ module SacCas::Groups::SelfRegistrationController
     redirect_to_login
   end
 
+  def validate_email
+    @exists = Person.exists?(email: params[:email])
+  end
+
   private
 
   def model_class
