@@ -26,7 +26,7 @@ module SacCas::Event::ParticipationMailer
   def compose_email(participation, content_key)
     @participation = participation
     @course = @participation.event
-    person = @participation.person
+    @person = @participation.person
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
@@ -35,7 +35,7 @@ module SacCas::Event::ParticipationMailer
     # Otherwise, decorators will not have access to all helper methods.
     view_context
 
-    compose_multilingual(person, content_key, locales)
+    compose_multilingual(@person, content_key, locales)
   end
 
   private
@@ -49,6 +49,6 @@ module SacCas::Event::ParticipationMailer
   end
 
   def placeholder_recipient_name
-    person.greeting_name
+    @person.greeting_name
   end
 end
