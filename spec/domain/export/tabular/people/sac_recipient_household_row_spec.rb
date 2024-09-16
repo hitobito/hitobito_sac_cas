@@ -38,7 +38,7 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
 
   def value(key) = row.fetch(key)
 
-  describe "person without household" do
+  describe "person without sac_family/household" do
     let(:people) do
       [person]
     end
@@ -58,7 +58,7 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
     end
   end
 
-  describe "person with household but other member not in export" do
+  describe "person with sac_family/household but other member not in export" do
     let(:people) do
       in_export = person.tap { _1.household_key = "42" }
       family_member
@@ -81,7 +81,7 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
     end
   end
 
-  describe "person with household and other member in export" do
+  describe "person with sac_family/household and other member in export" do
     let(:people) do
       in_export1 = person.tap { _1.household_key = "42" }
       in_export2 = Fabricate.build(:person, first_name: "Max", last_name: "Muster", household_key: "42")
