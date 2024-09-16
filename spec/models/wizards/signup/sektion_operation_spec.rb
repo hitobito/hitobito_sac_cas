@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Wizards::Signup::SektionOperation do
+  include ActiveJob::TestHelper
+
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:person_attrs) {
     {
@@ -106,10 +108,21 @@ describe Wizards::Signup::SektionOperation do
     end
 
     context "sektion requiring approval" do
-      it "does not create invoice" do
+      it "does not create invoice but enqueues confirmation email" do
         expect { operation.save! }
           .to not_change { ExternalInvoice::SacMembership.count }
           .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
+          .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
+
+        perform_enqueued_jobs
+        mail = ActionMailer::Base.deliveries.last
+        expect(mail.to).to eq(["max.muster@example.com"])
+        expect(mail.body.to_s).to include("Sektion: Neuanmeldungen (zur Freigabe)", "Vielen Dank")
+      end
+
+      it "does not enqueue confirmation email if not main person" do
+        allow_any_instance_of(Wizards::Signup::SektionOperation).to receive(:main_person?).and_return(false)
+        expect { operation.save! }.not_to have_enqueued_mail(Signup::SektionMailer)
       end
     end
 
@@ -119,10 +132,13 @@ describe Wizards::Signup::SektionOperation do
 
       before { groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy! }
 
-      it "does not create invoice and enqueues job" do
+      it "does not create invoice but enqueues job and confirmation email" do
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
+
+        perform_enqueued_jobs
         invoice = ExternalInvoice::SacMembership.last
         expect(invoice.state).to eq("draft")
         expect(invoice.person_id).to eq(Person.last.id)
@@ -130,6 +146,17 @@ describe Wizards::Signup::SektionOperation do
         expect(invoice.sent_at).to eq(Date.current)
         expect(invoice.link_id).to eq(group.layer_group.id)
         expect(invoice.year).to eq(Date.current.year)
+
+        mail = ActionMailer::Base.deliveries.last
+        expect(mail.to).to eq(["max.muster@example.com"])
+        expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
+        expect(mail.body.to_s).to include(
+          "Sektion: Neuanmeldungen",
+          "Geburtsdatum: 01.01.2000",
+          "Telefonnumer: +41 79 123 45 67",
+          "Strasse und Nr: Musterplatz 42",
+          "Viel Spass beim SAC!"
+        )
       end
 
       it "#save! creates invoice and starts job" do
