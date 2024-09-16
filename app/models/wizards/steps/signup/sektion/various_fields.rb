@@ -22,10 +22,8 @@ module Wizards::Steps::Signup::Sektion
 
     attribute :contribution_regulations, :boolean, default: false
     attribute :self_registration_reason_id, :integer
-    attribute :register_on, :string, default: :now
 
     validates :contribution_regulations, acceptance: true
-    validates :register_on, presence: true
 
     delegate :requires_adult_consent?, to: :wizard
 
