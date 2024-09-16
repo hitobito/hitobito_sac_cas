@@ -35,7 +35,7 @@ module Wizards::Memberships
 
     def human_role_type
       beitragskategorie = join_operation.roles.first.beitragskategorie
-      I18n.t("invoices.sac_memberships.beitragskategorie.#{beitragskategorie}")
+      I18n.t(beitragskategorie, scope: "invoices.sac_memberships.beitragskategorie")
     end
 
     def join_operation
