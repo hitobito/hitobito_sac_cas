@@ -26,7 +26,8 @@ module MultilingualMailer
     end
 
     I18n.with_locale(locales.first) do
-      mail(subject:) { |format| format.html { render html: body, layout: true } }
+      html = ActionController::Base.helpers.sanitize(body, tags: %w[a br div])
+      mail(subject:) { |format| format.html { render html:, layout: true } }
     end
   end
 
@@ -39,6 +40,6 @@ module MultilingualMailer
     end
 
     [subjects_and_bodies.map(&:first).compact_blank.uniq.join(" / "),
-      subjects_and_bodies.map(&:last).compact_blank.join(LANGUAGE_SEPARATOR).html_safe]
+      subjects_and_bodies.map(&:last).compact_blank.join(LANGUAGE_SEPARATOR)]
   end
 end
