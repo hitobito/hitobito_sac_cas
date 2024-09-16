@@ -21,7 +21,16 @@ module Wizards::Signup
 
     def save!
       save_person_and_role
-      generate_invoice if no_approval_needed? && can_receive_invoice?
+
+      if main_person?
+        if no_approval_needed?
+          generate_invoice
+          enqueue_confirmation_mail
+        else
+          enqueue_approval_pending_confirmation_mail
+        end
+      end
+
       exclude_from_mailing_list if mailing_list && !newsletter
       enqueue_duplicate_locator_job
       enqueue_notification_email
@@ -75,6 +84,14 @@ module Wizards::Signup
       Invoices::Abacus::CreateInvoiceJob.new(invoice, today, new_entry: true).enqueue!
     end
 
+    def enqueue_confirmation_mail
+      Signup::SektionMailer.confirmation(person, group).deliver_later
+    end
+
+    def enqueue_approval_pending_confirmation_mail
+      Signup::SektionMailer.approval_pending_confirmation(person, group).deliver_later
+    end
+
     def neuanmeldung?
       group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
         group.is_a?(Group::SektionsNeuanmeldungenNv)
@@ -90,7 +107,7 @@ module Wizards::Signup
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 
-    def can_receive_invoice? = !role.beitragskategorie&.family? || role.person.sac_family_main_person
+    def main_person? = !role.beitragskategorie&.family? || role.person.sac_family_main_person
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!

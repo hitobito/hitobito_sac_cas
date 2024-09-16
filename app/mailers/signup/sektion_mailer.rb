@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Signups::SektionMailer < ApplicationMailer
+class Signup::SektionMailer < ApplicationMailer
   CONFIRMATION = "sektion_signup_confirmation"
   APPROVAL_PENDING_CONFIRMATION = "sektion_signup_approval_pending_confirmation"
 
@@ -21,6 +21,7 @@ class Signups::SektionMailer < ApplicationMailer
 
   def send_mail(person, section, content_key)
     @person = person
+    @section = section
     headers = {bcc: [SacCas::MV_EMAIL, section.email].compact}
     locales = [person.language]
 
@@ -36,7 +37,7 @@ class Signups::SektionMailer < ApplicationMailer
   end
 
   def placeholder_birthday
-    @person.birthday
+    l(@person.birthday)
   end
 
   def placeholder_email
@@ -44,7 +45,7 @@ class Signups::SektionMailer < ApplicationMailer
   end
 
   def placeholder_phone_number
-    "TODO"
+    @person.phone_numbers.map(&:number).join(", ")
   end
 
   def placeholder_address_care_of
@@ -64,14 +65,15 @@ class Signups::SektionMailer < ApplicationMailer
   end
 
   def placeholder_section_name
-    "TODO"
+    @section.to_s
   end
 
   def placeholder_membership_category
-    "TODO"
+    t(@person.roles.first.beitragskategorie, scope: "roles.beitragskategorie")
   end
 
   def placeholder_invoice_details
+    # Blocked by https://github.com/hitobito/hitobito_sac_cas/issues/933
     "TODO"
   end
 

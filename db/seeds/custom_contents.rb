@@ -36,9 +36,9 @@ CustomContent.seed(:key,
   {key: Qualifications::ExpirationMailer::REMINDER_TODAY},
   {key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR},
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
-  {key: Signups::SektionMailer::CONFIRMATION,
+  {key: Signup::SektionMailer::CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
-  {key: Signups::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
+  {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
   {key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION,
    placeholders_required: "person-name, sektion-name, terminate-on"},
@@ -192,7 +192,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Erinnerung TL-Anerkennung",
    body: "Liebe(r) Tourenleiter(in), in 2 Jahren läuft deine TL-Anerkennung ab. " \
     "Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in)."},
-  {custom_content_id: CustomContent.get(Signups::SektionMailer::CONFIRMATION).id,
+  {custom_content_id: CustomContent.get(Signup::SektionMailer::CONFIRMATION).id,
    locale: "de",
    label: "SAC Eintritt: Bestellbestätigung ohne Freigabe",
    subject: "SAC Eintritt Bestellbestätigung",
@@ -202,27 +202,27 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Folgende Angaben haben wir von dir erhalten. Sollten diese nicht korrekt sein, kannst du " \
     "sie im <a href='{profile-url}'>SAC-Portal</a> selbstständig anpassen.<br><br>" \
     "<h2>Sektion und Mitgliedschaft</h2><br><br>" \
-    "Sektion: %{section-name}<br>" \
-    "Mitgliedschaftskategorie: %{membership-category}<br>" \
+    "Sektion: {section-name}<br>" \
+    "Mitgliedschaftskategorie: {membership-category}<br>" \
     "Eintritt per: sofort<br><br>" \
     "{invoice-details}<br><br>" \
     "<h2>Personendaten</h2><br><br>" \
     "Kontaktperson<br>" \
-    "Vorname: %{first-name}<br>" \
-    "Name: %{last-name}<br>" \
-    "Geburtsdatum: %{birthday}<br>" \
-    "E-Mail: %{email}<br>" \
-    "Telefonnumer: %{phone-number}<br>" \
-    "Adresszusatz: %{address-care-of}<br>" \
-    "Strasse und Nr: %{street-with-number}<br>" \
-    "Postfach: %{postbox}<br>" \
-    "PLZ: %{zip-code}<br><br>" \
+    "Vorname: {first-name}<br>" \
+    "Name: {last-name}<br>" \
+    "Geburtsdatum: {birthday}<br>" \
+    "E-Mail: {email}<br>" \
+    "Telefonnumer: {phone-number}<br>" \
+    "Adresszusatz: {address-care-of}<br>" \
+    "Strasse und Nr: {street-with-number}<br>" \
+    "Postfach: {postbox}<br>" \
+    "PLZ: {zip-code}<br><br>" \
     "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
     "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
     "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
     "Weitere Details zum digitalen Mitgliederausweis findest im <a href='{faq-url}'>FAQ</a>.<br><br>" \
     "Viel Spass beim SAC!"},
-  {custom_content_id: CustomContent.get(Signups::SektionMailer::APPROVAL_PENDING_CONFIRMATION).id,
+  {custom_content_id: CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).id,
    locale: "de",
    label: "SAC Eintritt: Bestellbestätigung mit Freigabe",
    subject: "SAC Eintritt Bestellbestätigung",
@@ -234,21 +234,21 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Folgende Angaben haben wir von dir erhalten. Sollten diese nicht korrekt sein, kannst du " \
     "sie im <a href='{profile-url}'>SAC-Portal</a> selbstständig anpassen.<br><br>" \
     "<h2>Sektion und Mitgliedschaft</h2><br><br>" \
-    "Sektion: %{section-name}<br>" \
-    "Mitgliedschaftskategorie: %{membership-category}<br>" \
+    "Sektion: {section-name}<br>" \
+    "Mitgliedschaftskategorie: {membership-category}<br>" \
     "Eintritt per: sofort<br><br>" \
     "{invoice-details}<br><br>" \
     "<h2>Personendaten</h2><br><br>" \
     "Kontaktperson<br>" \
-    "Vorname: %{first-name}<br>" \
-    "Name: %{last-name}<br>" \
-    "Geburtsdatum: %{birthday}<br>" \
-    "E-Mail: %{email}<br>" \
-    "Telefonnumer: %{phone-number}<br>" \
-    "Adresszusatz: %{address-care-of}<br>" \
-    "Strasse und Nr: %{street-with-number}<br>" \
-    "Postfach: %{postbox}<br>" \
-    "PLZ: %{zip-code}<br><br>" \
+    "Vorname: {first-name}<br>" \
+    "Name: {last-name}<br>" \
+    "Geburtsdatum: {birthday}<br>" \
+    "E-Mail: {email}<br>" \
+    "Telefonnumer: {phone-number}<br>" \
+    "Adresszusatz: {address-care-of}<br>" \
+    "Strasse und Nr: {street-with-number}<br>" \
+    "Postfach: {postbox}<br>" \
+    "PLZ: {zip-code}<br><br>" \
     "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
     "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
     "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
