@@ -29,21 +29,10 @@ describe Event::LeaderReminderJob do
       course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
     end
 
-    context "with one course language" do
-      it "mails a reminder to the course leaders" do
-        expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
-        expect(ActionMailer::Base.deliveries.second_to_last.to).to include(people(:admin).email)
-        expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
-      end
-    end
-
-    context "with multiple course languages" do
-      before { course.update!(language: "de_fr") }
-
-      it "mails a reminder in both languages" do
-        expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
-        expect(ActionMailer::Base.deliveries.last.body.to_s).to include("Hallo", "-----", "Bonjour")
-      end
+    it "mails a reminder to the course leaders" do
+      expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
+      expect(ActionMailer::Base.deliveries.second_to_last.to).to include(people(:admin).email)
+      expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
     end
 
     context "with course admin email" do

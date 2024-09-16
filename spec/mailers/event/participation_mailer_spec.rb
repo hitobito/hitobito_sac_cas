@@ -60,7 +60,7 @@ describe Event::ParticipationMailer do
       expect(mail.body).to include(event.book_discount_code.to_s)
     end
 
-    context "course langauge" do
+    context "course language" do
       subject { mail.body }
 
       before do
@@ -95,12 +95,19 @@ describe Event::ParticipationMailer do
         expect(mail.subject).to eq("Kurs: E-Mail Aufgebot / Convocation au cours")
         is_expected.to match(/Sie wurden für den Kurs Test Kurs \(Nummer: .*\) aufgeboten.<br><br>/)
         is_expected.to match(/Vous avez été convoqué\(e\) pour le cours Course test \(Numéro: .*\).<br><br>/)
-        is_expected.to include("Kursdetails")
-        is_expected.to include("Détails du cours")
-        is_expected.to include(MultiLanguageMailer::LANGUAGE_SEPARATOR)
+        is_expected.to include("Kursdetails", "Détails du cours")
+        is_expected.to include(MultilingualMailer::LANGUAGE_SEPARATOR)
         # placeholders are also translated
-        is_expected.to include("Test Kurs")
-        is_expected.to include("Course test")
+        is_expected.to include("Test Kurs", "Course test")
+      end
+    end
+
+    context "course languages that dont have custom content" do
+      before { event.update!(language: "it") }
+
+      it "sends in default language" do
+        expect(mail.subject).to eq("Kurs: E-Mail Aufgebot")
+        expect(mail.body).not_to include("<div id='content'></div>")
       end
     end
   end

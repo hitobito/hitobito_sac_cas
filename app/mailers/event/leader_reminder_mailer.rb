@@ -7,7 +7,7 @@
 
 class Event::LeaderReminderMailer < ApplicationMailer
   include EventMailer
-  include MultiLanguageMailer
+  include MultilingualMailer
 
   REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
   REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
@@ -18,7 +18,7 @@ class Event::LeaderReminderMailer < ApplicationMailer
     headers[:bcc] = course.groups.first.course_admin_email
     locales = course.language.split("_")
 
-    compose_multi_language(leader, content_key, locales)
+    compose_multilingual(leader, content_key, locales)
   end
 
   def placeholder_recipient_name
