@@ -1549,6 +1549,11 @@ de:
 
               Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
               mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+          various_fields:
+            entry_date: Eintrittsdatum per sofort
+            first_period_info: Bis 30. Juni ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+            second_period_info: Bei Eintritt zwischen dem 01. Juli und dem 30. September erhältst du 50% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+            third_period_info: Bei Eintritt ab dem 01. Oktober entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
           family_buttons:
             next_as_single_link: Weiter als Einzelmitglied
             next_as_household_link: Weiter als Familienmitgliedschaft
