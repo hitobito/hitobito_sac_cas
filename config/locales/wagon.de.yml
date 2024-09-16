@@ -987,7 +987,8 @@ de:
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
 
   dropdown/people_export:
-    recipients: Empfänger
+    recipients: Empfänger Einzelpersonen
+    recipient_households: Empfänger Familien
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen

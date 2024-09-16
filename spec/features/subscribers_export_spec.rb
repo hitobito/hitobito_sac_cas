@@ -21,7 +21,21 @@ describe "subscribers export", :js do
 
     click_link("Export")
     find_link("CSV").hover
-    click_link("Empfänger")
+    click_link("Empfänger Einzelpersonen")
+
+    expect(page).to have_selector(".info-bar .alert-info",
+      text: "Die Downloads werden vorbereitet, bitte warten.")
+  end
+
+  it "starts recipient households export" do
+    visit group_mailing_list_subscriptions_path(
+      group_id: mailing_list.group_id,
+      mailing_list_id: mailing_list.id
+    )
+
+    click_link("Export")
+    find_link("CSV").hover
+    click_link("Empfänger Familien")
 
     expect(page).to have_selector(".info-bar .alert-info",
       text: "Die Downloads werden vorbereitet, bitte warten.")
