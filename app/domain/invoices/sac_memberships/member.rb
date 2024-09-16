@@ -79,18 +79,8 @@ module Invoices
         !beitragskategorie.family? || sac_family_main_person?
       end
 
-      def family_members
-        person
-          .household_people
-          .includes(:roles)
-          .order(Person.order_by_name_statement)
-          .select { |p| sac_mitgliedschaft?(p) }
-      end
-
-      private
-
-      def sac_mitgliedschaft?(person)
-        People::SacMembership.new(person, date: date).active?
+      def household_people
+        person.household_people.select { |person| person.sac_membership_active? }
       end
     end
   end

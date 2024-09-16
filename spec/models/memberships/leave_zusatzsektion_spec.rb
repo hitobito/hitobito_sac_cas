@@ -86,8 +86,7 @@ describe Memberships::LeaveZusatzsektion do
       end
 
       it "deletes existing role when already schedule for deletion" do
-        Roles::Termination.terminate([role], 3.days.from_now.to_date)
-        role.save!
+        Roles::Termination.new(role: role, terminate_on: 3.days.from_now.to_date).call
         expect do
           expect(leave.save).to eq true
         end.to change { person.roles.count }.by(-1)
@@ -106,8 +105,7 @@ describe Memberships::LeaveZusatzsektion do
         end
 
         it "does not reset delete_on to a later date" do
-          Roles::Termination.terminate([role], 3.days.from_now.to_date)
-          role.save!
+          Roles::Termination.new(role: role, terminate_on: 3.days.from_now.to_date).call
           expect do
             expect(leave.save).to eq true
           end.not_to(change { person.roles.count })

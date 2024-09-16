@@ -54,7 +54,6 @@ module HitobitoSacCas
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
       Role.prepend SacCas::Role
-      Roles::Termination.prepend SacCas::Roles::Termination
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
