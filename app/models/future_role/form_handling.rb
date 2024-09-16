@@ -20,10 +20,6 @@ module FutureRole::FormHandling
     build_options(:register_on, register_on_keys)
   end
 
-  def register_on_date
-    date_from_key(register_on) if register_on_keys.include?(register_on)
-  end
-
   private
 
   def build_options(attr, list)

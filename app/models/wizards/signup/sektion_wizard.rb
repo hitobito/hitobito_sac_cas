@@ -70,7 +70,7 @@ module Wizards::Signup
       {self_registration_reason_id:, privacy_policy_accepted_at:, household_key:}.compact_blank
     end
 
-    def register_on = various_fields.register_on_date || Time.zone.today
+    def register_on = Time.zone.today
 
     def members = respond_to?(:family_fields) ? family_fields.members : []
 

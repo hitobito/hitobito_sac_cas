@@ -83,17 +83,5 @@ describe Wizards::Steps::Signup::Sektion::VariousFields do
         expect(fields.errors.full_messages).to eq ["Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"]
       end
     end
-
-    describe "register_on" do
-      it "defaults to now" do
-        expect(fields.register_on).to eq "now"
-      end
-
-      it "is invalid if blank" do
-        fields.register_on = nil
-        expect(fields).not_to be_valid
-        expect(fields).to have(1).error_on(:register_on)
-      end
-    end
   end
 end
