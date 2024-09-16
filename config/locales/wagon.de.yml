@@ -8,6 +8,8 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
+    links:
+      faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
 
   settings:
     email:
