@@ -11,9 +11,9 @@ class Memberships::SwitchStammsektionMailer < ApplicationMailer
   def confirmation(person, section)
     @person = person
     @section = section
-    headers = {cc: Group::Geschaeftsstelle.first.email}
+    headers[:cc] = Group::Geschaeftsstelle.first.email
 
-    compose(person, CONFIRMATION, headers)
+    compose(person, CONFIRMATION)
   end
 
   def placeholder_person_name

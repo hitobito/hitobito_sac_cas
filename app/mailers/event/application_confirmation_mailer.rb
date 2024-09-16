@@ -7,6 +7,7 @@
 
 class Event::ApplicationConfirmationMailer < ApplicationMailer
   include EventMailer
+  include MultilingualMailer
 
   APPLIED = "course_application_confirmation_applied"
   UNCONFIRMED = "course_application_confirmation_unconfirmed"
@@ -15,10 +16,10 @@ class Event::ApplicationConfirmationMailer < ApplicationMailer
   def confirmation(participation, content_key)
     @participation = participation
     @course = participation.event
-    headers = {bcc: @course.groups.first.course_admin_email}
+    headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
-    compose(@participation.person, content_key, headers, locales)
+    compose_multilingual(@participation.person, content_key, locales)
   end
 
   private

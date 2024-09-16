@@ -11,7 +11,7 @@ describe Memberships::TerminateSacMembershipMailer do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:bluemlisalp) }
   let(:switch_on) { "sofort" }
-  let(:mail) { described_class.confirmation(person, group, switch_on) }
+  let(:mail) { described_class.confirmation(person, group.display_name, switch_on) }
 
   subject { mail.parts.first.body }
 

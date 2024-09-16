@@ -1,0 +1,58 @@
+:css
+  body {
+    font-family: Hind, Frutiger, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    --padding: 20px;
+    --lightgray: #e0e0e0;
+  }
+
+  #content {
+    padding: var(--padding);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  tr {
+    border-top: 1px solid var(--lightgray);
+  }
+  tr:first-child {
+    border-top: none;
+  }
+
+  td {
+    padding: 5px var(--padding) 5px 0;
+  }
+
+  header {
+    display: flex;
+    padding: var(--padding);
+    border-bottom: 1px solid var(--lightgray);
+  }
+
+  header .logo {
+    display: block;
+    margin-left: auto;
+    width: 200px;
+    height: 85px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  footer {
+    background-color: var(--lightgray);
+    padding: var(--padding);
+  }
+
+  address {
+    font-style: normal;
+  }
+
+  address p {
+    margin: 0;
+  }
