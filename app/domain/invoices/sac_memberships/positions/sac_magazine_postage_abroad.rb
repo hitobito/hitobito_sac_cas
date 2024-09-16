@@ -11,8 +11,8 @@ module Invoices
       class SacMagazinePostageAbroad < Base
         self.section_payment_possible = true
 
-        def active?
-          member.living_abroad? && member.sac_magazine? && paying_person?
+        def active?(sac_magazine_checked: false)
+          member.living_abroad? && (member.sac_magazine? || sac_magazine_checked) && paying_person?
         end
 
         def gross_amount
