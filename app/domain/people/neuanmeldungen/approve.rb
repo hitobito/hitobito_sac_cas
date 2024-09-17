@@ -48,6 +48,7 @@ module People::Neuanmeldungen
         delete_on: role.delete_on
       )
       generate_invoice(role)
+      send_confirmation_mail(role.person)
     end
 
     def generate_invoice(role)
@@ -62,6 +63,12 @@ module People::Neuanmeldungen
         link: role.layer_group
       )
       Invoices::Abacus::CreateInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
+    end
+
+    def send_confirmation_mail(person)
+      return unless person.sac_family_main_person?
+
+      People::NeuanmeldungenMailer.approve(person, @group).deliver_later
     end
   end
 end

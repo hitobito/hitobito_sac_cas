@@ -41,7 +41,11 @@ CustomContent.seed(:key,
   {key: Memberships::TerminateSacMembershipMailer::CONFIRMATION,
    placeholders_required: "person-name, sektion-name, terminate-on"},
   {key: Memberships::SwitchStammsektionMailer::CONFIRMATION,
-   placeholders_required: "person-name, group-name"})
+   placeholders_required: "person-name, group-name"},
+  {key: People::NeuanmeldungenMailer::APPROVED,
+   placeholders_required: "first-name, sektion-name, profile-url"},
+  {key: People::NeuanmeldungenMailer::REJECTED,
+   placeholders_required: "first-name, sektion-name"})
 
 participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
 summon_id = CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id
@@ -201,4 +205,41 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Mitgliedschaften: Bestätigung Sektionswechsel",
    subject: "Bestätigung Sektionswechsel",
    body: "Hallo {person-name},<br><br>" \
-    "Der Sektionswechsel zu {group-name} wurde vorgenommen."})
+    "Der Sektionswechsel zu {group-name} wurde vorgenommen."},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::APPROVED).id,
+   locale: "de",
+   label: "SAC Eintritt: Antragsbestätigung",
+   subject: "SAC Eintritt Antragsbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für dein Interesse an einer Mitgliedschaft beim Schweizer Alpen-Club SAC.<br><br>" \
+    "Die {sektion-name} hat deinen Antrag geprüft und wir freuen uns dir mitzuteilen, dass dein Antrag angenommen " \
+    "wurde. Herzlich Willkommen beim Schweizer Alpen-Club SAC!<br><br>" \
+    "Du wirst in Kürze eine weitere E-Mail mit der Mitglieder-Rechnung erhalten. Sobald die Zahlung bei uns " \
+    "eingegangen ist, wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
+    "Den digitalen Mitgliederausweis findest du in deinem Profil im <a href='{profile-url}'>SAC-Portal</a>. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest du in den FAQ.<br><br>" \
+    "Viel Spass beim SAC!"},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
+   locale: "de",
+   label: "SAC Eintritt: Antragsablehnung",
+   subject: "SAC Eintritt Antragsablehnung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für dein Interesse an einer Mitgliedschaft beim Schweizer Alpen-Club SAC.<br><br>" \
+    "Die {sektion-name} hat deinen Antrag geprüft. Leider müssen wir dir mitteilen, " \
+    "dass die Sektion deinem Antrag auf Mitgliedschaft nicht entsprechen kann.<br><br>" \
+    "Jede Sektion hat ihre eigenen Aufnahmekriterien. " \
+    "Somit empfehlen wir dir, deinen Antrag an eine andere Sektion deiner Wahl zu stellen.<br><br>" \
+    "Vielen Dank für dein Verständnis.<br><br>" \
+    "Bergsportliche Grüsse"},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
+   locale: "fr",
+   label: "SAC Entry: Application Rejected",
+   subject: "SAC Entry Application Rejected",
+   body: "Bonjour {first-name},<br><br>" \
+    "Merci de votre intérêt à devenir membre du Club Alpin Suisse CAS.<br><br>" \
+    "La {sektion-name} a examiné votre candidature. Malheureusement, nous devons vous en informer, " \
+    "que la section ne peut pas accueillir votre demande d'adhésion.<br><br>" \
+    "Chaque section a ses propres critères d'admission." \
+    "Nous vous recommandons donc de déposer votre candidature dans une autre section de votre choix.<br><br>" \
+    "Merci de votre compréhension.<br><br>" \
+    "Salutations montagnardes"})
