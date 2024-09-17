@@ -79,4 +79,14 @@ describe Invoices::SacMemberships::Member do
       end
     end
   end
+
+  context "#household_people" do
+    let(:familienmitglied) { people(:familienmitglied) }
+    let(:familienmitglied2) { people(:familienmitglied2) }
+    let(:familienmitglied_kind) { people(:familienmitglied_kind) }
+
+    it "returns all active household people" do
+      expect(subject.household_people).to eq([familienmitglied, familienmitglied2, familienmitglied_kind])
+    end
+  end
 end
