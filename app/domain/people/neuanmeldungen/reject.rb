@@ -49,7 +49,7 @@ module People::Neuanmeldungen
     def send_rejection_mail(person)
       return unless person.sac_family_main_person?
 
-      People::NeuanmeldungenMailer.reject(person, @group).deliver_now
+      People::NeuanmeldungenMailer.reject(person, group.layer_group).deliver_later
     end
   end
 end

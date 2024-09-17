@@ -52,7 +52,10 @@ describe People::Neuanmeldungen::Approve do
       .and change { neuanmeldung_approved_role_class.count }.by(3)
       .and change { ExternalInvoice::SacMembership.count }.by(3)
       .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(3)
-      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).exactly(3).times
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).exactly(3).times.with do |person, group|
+        expect(approver.applicable_people).to include(person)
+        expect(group).to eq(approver.layer_group)
+      end
 
     expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
@@ -69,8 +72,7 @@ describe People::Neuanmeldungen::Approve do
     expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
       .to not_change { ExternalInvoice::SacMembership.count }
       .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
-    expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
-      .not_to have_enqueued_mail(People::NeuanmeldungenMailer, :approve)
+      .and not_have_enqueued_mail(People::NeuanmeldungenMailer)
   end
 
   it "creates the SektionNeuanmeldungNv group if it does not exist" do

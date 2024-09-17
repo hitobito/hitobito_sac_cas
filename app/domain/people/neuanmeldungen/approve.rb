@@ -68,7 +68,7 @@ module People::Neuanmeldungen
     def send_confirmation_mail(person)
       return unless person.sac_family_main_person?
 
-      People::NeuanmeldungenMailer.approve(person, @group).deliver_later
+      People::NeuanmeldungenMailer.approve(person, group.layer_group).deliver_later
     end
   end
 end

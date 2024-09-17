@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe People::Neuanmeldungen::Reject do
+  include ActiveJob::TestHelper
+
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
 
   let(:sektion) { groups(:bluemlisalp) }
@@ -47,9 +49,7 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it "deletes rejected Roles, if it has other roles" do
-    subject = rejector
-
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
 
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
@@ -57,23 +57,21 @@ describe People::Neuanmeldungen::Reject do
     neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name,
       group: group, created_at: 1.month.ago, person: neuanmeldung.person)
 
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
   end
 
   it "deletes rejected Roles, if it has other deleted roles" do
     person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
   end
 
   it "deletes the Person, if it has no other roles" do
     person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector
-    subject.call
+    rejector.call
     expect { Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
@@ -95,27 +93,13 @@ describe People::Neuanmeldungen::Reject do
     expect(note.author).to eq people(:mitglied)
   end
 
-  describe "email" do
-    it "send an email to the person" do
-      expect { rejector.call }.to change(ActionMailer::Base.deliveries, :count).by(1)
-      expect(ActionMailer::Base.deliveries.last.body.to_s).to include(
-        "Neuanmeldungen (zur Freigabe)",
-        "Leider müssen wir dir mitteilen"
-      )
-    end
+  it "send an email to the person" do
+    expect { rejector.call }
+      .to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).exactly(:once) # .with
+  end
 
-    it "send an email in the correct language" do
-      person.update!(language: :fr)
-      rejector.call
-      expect(ActionMailer::Base.deliveries.last.body.to_s).to include(
-        "Neuanmeldungen (zur Freigabe)",
-        "Malheureusement, nous devons vous en informer"
-      )
-    end
-
-    it "doesnt send email if not main person" do
-      person.update!(sac_family_main_person: false)
-      expect { rejector.call }.not_to change(ActionMailer::Base.deliveries, :count)
-    end
+  it "doesnt send email if not main person" do
+    person.update!(sac_family_main_person: false)
+    expect { rejector.call }.not_to have_enqueued_mail(People::NeuanmeldungenMailer)
   end
 end

@@ -212,7 +212,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "SAC Eintritt Antragsbestätigung",
    body: "Hallo {first-name},<br><br>" \
     "Vielen Dank für dein Interesse an einer Mitgliedschaft beim Schweizer Alpen-Club SAC.<br><br>" \
-    "Die {sektion-name} hat deinen Antrag geprüft und wir freuen uns dir mitzuteilen, dass dein Antrag angenommen " \
+    "Die {sektion-name} hat deinen Antrag geprüft und wir freuen uns, dir mitzuteilen, dass dein Antrag angenommen " \
     "wurde. Herzlich Willkommen beim Schweizer Alpen-Club SAC!<br><br>" \
     "Du wirst in Kürze eine weitere E-Mail mit der Mitglieder-Rechnung erhalten. Sobald die Zahlung bei uns " \
     "eingegangen ist, wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
@@ -233,8 +233,8 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Bergsportliche Grüsse"},
   {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
    locale: "fr",
-   label: "SAC Entry: Application Rejected",
-   subject: "SAC Entry Application Rejected",
+   label: "Entrée au SAC : demande rejetée",
+   subject: "Demande d'admission au SAC rejetée",
    body: "Bonjour {first-name},<br><br>" \
     "Merci de votre intérêt à devenir membre du Club Alpin Suisse CAS.<br><br>" \
     "La {sektion-name} a examiné votre candidature. Malheureusement, nous devons vous en informer, " \
