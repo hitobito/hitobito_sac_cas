@@ -16,6 +16,8 @@ class Memberships::SwitchStammsektionMailer < ApplicationMailer
     compose(person, CONFIRMATION)
   end
 
+  private
+
   def placeholder_person_name
     @person.to_s
   end

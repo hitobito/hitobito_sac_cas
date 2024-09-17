@@ -21,6 +21,8 @@ class Event::LeaderReminderMailer < ApplicationMailer
     compose_multilingual(leader, content_key, locales)
   end
 
+  private
+
   def placeholder_recipient_name
     @leader.greeting_name
   end

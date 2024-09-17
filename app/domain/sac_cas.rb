@@ -67,6 +67,7 @@ module SacCas
 
   ###
 
+  MV_EMAIL = "mv@sac-cas.ch"
   NEWSLETTER_MAILING_LIST_INTERNAL_KEY = "sac_newsletter"
 
   def main_phone_label
