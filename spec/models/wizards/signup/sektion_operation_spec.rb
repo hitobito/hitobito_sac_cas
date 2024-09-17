@@ -112,7 +112,8 @@ describe Wizards::Signup::SektionOperation do
         expect { operation.save! }
           .to not_change { ExternalInvoice::SacMembership.count }
           .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
-          .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
+          .and have_enqueued_mail(Signup::SektionMailer, :approval_pending_confirmation).exactly(:once)
+          .with(operation.send(:person), group.layer_group)
       end
 
       it "does not enqueue confirmation email if not main person" do
@@ -131,7 +132,8 @@ describe Wizards::Signup::SektionOperation do
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
-          .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
+          .and have_enqueued_mail(Signup::SektionMailer, :confirmation).exactly(:once)
+          .with(operation.send(:person), group.layer_group)
 
         invoice = ExternalInvoice::SacMembership.last
         expect(invoice.state).to eq("draft")

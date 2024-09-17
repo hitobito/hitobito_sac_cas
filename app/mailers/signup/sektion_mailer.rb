@@ -31,11 +31,11 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_first_name
-    @person.first_name.to_s
+    @person.first_name
   end
 
   def placeholder_last_name
-    @person.last_name.to_s
+    @person.last_name
   end
 
   def placeholder_birthday
@@ -43,27 +43,27 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_email
-    @person.email.to_s
+    @person.email
   end
 
   def placeholder_phone_number
-    @person.phone_numbers.first.to_s
+    @person.phone_numbers.first
   end
 
   def placeholder_address_care_of
-    @person.address_care_of.to_s
+    @person.address_care_of
   end
 
   def placeholder_street_with_number
-    @person.address.to_s
+    @person.address
   end
 
   def placeholder_postbox
-    @person.postbox.to_s
+    @person.postbox
   end
 
   def placeholder_zip_code
-    @person.zip_code.to_s
+    @person.zip_code
   end
 
   def placeholder_section_name
