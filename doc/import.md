@@ -99,9 +99,9 @@ Import Source File: **NAV5**
 
 ## 4: sac_imports:4_memberships
 
-Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen.
+Importiert alle Rollen.
 
-`rake sac_imports:memberships FILE=tmp/xlsx/mitglieder_aktive.xlsx REIMPORT_ALL=true)`
+`rake sac_imports:4_roles`
 
 Import Source File: **NAV2**
 
