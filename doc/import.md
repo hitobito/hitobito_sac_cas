@@ -22,6 +22,7 @@ Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgen
 
 - Encoding: UTF-8
 - Delimiter: ,
+- Zellen: umfasst mit "
 - Header: erste Zeile
 
 Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
@@ -31,7 +32,6 @@ Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im 
 | NAV1 | Alle Kontakte (natürliche und juristische Personen)  |
 | NAV2 | Stammmitgliedschaften                                |
 | NAV3 | Qualifikationen                                      |
-| NAV4 | Sektionsfunktionäre                                  |
 | NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
 | NAV6 | Sektionen und Ortsgruppen                            |
 | NAV7 | Abonenten Die Alpen                                  |
@@ -48,6 +48,7 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source.rb)
   head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
   ```
 - `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
+- In `/spec/fixtures/files/sac_imports_src/sac_imports_fixture.ods` werden die Fixtures verfasst und mit dem Skript `hitobito_sac_cas/spec/fixtures/files/sac_imports_src/export_sac_imports_fixture.sh` die jeweiligen Fixtures im CSV-Format erstellt. Es wird LibreOffice 7.2 oder neuer benötigt.
 
 ## CSV Report
 

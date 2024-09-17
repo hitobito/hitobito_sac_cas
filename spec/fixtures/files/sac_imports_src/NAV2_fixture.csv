@@ -1,0 +1,17 @@
+"Kontaktnummer","GültigAb","GültigBis","Layer","Gruppe_Lvl_1","Gruppe_Lvl_2","Gruppe_Lvl_3","Gruppe_Lvl_4","Rolle","Zusatzbeschrieb","Name","Anderes"
+"4200000","2014-10-06","2022-12-31","Sektion","CAS La Chaux-de-Fonds","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Jugend)",,"Hans Muster1",
+"4200000","2023-01-01","2024-12-31","Sektion","CAS La Chaux-de-Fonds","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster1",
+"4200001","2014-10-06","2018-06-06","Sektion","CAS La Chaux-de-Fonds","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster2",
+"4200001","2018-06-07","2023-12-31","Sektion","CAS La Chaux-de-Fonds","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Frei Fam)",,"Hans Muster2",
+"4200002","2014-10-06","2020-01-29","Sektion","SAC Winterthur","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster3",
+"4200003","2014-10-06","2015-07-16","Sektion","CAS Monte Rosa Sion","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster4",
+"4200004","2014-10-06","2017-10-09","Sektion","CAS Moléson","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster5",
+"4200004","2017-10-10","2022-12-31","Sektion","CAS Moléson","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Familie)",,"Hans Muster5",
+"4200004","2022-06-20","2023-12-31","Sektion","CAS Moléson","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster5",
+"4200005","2014-10-06","2016-10-11","Sektion","CAS Moléson","Mitglieder","NULL","NULL","Mitglied (Zusatzsektion) (Einzel)",,"Hans Muster6",
+"4200005","2019-08-05","2024-12-31","Sektion","CAS Jaman","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster6",
+"4200006","2014-10-06","2019-12-31","Sektion","SAC Monte Rosa Visp","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Familie)",,"Hans Muster7",
+"4200006","2018-08-13","2099-12-31","SAC/CAS","Verbände & Organisationen","Schweizer Bergführerverband (SBV)","NULL","NULL","Mitglied",,"Hans Muster7","SBVM"
+"4200007","2014-10-06","2024-12-31","Sektion","SAC Bernina","Mitglieder","NULL","NULL","Mitglied (Stammsektion) (Einzel)",,"Hans Muster8",
+"4200007","2017-02-09","2019-12-31","SAC/CAS","Verbände & Organisationen","Rettungsstationen","Samedan","NULL","Mitglied","Fachspezialist Hund LW","Hans Muster8","9012V"
+"4200007","2018-02-15","2019-12-31","SAC/CAS","Verbände & Organisationen","Rettungsstationen","Samedan","NULL","Mitglied","Retter I","Hans Muster8","9038V"
