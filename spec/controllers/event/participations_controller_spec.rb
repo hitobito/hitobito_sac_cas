@@ -324,6 +324,7 @@ describe Event::ParticipationsController do
           mail = last_email.body.raw_source
           expect(mail).to include("non example", "nil example")
           expect(mail).not_to include("yes example")
+          expect(mail).not_to include("&lt;")
         end
       end
     end

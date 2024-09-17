@@ -43,13 +43,13 @@ module EventMailer
   # See https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112
   def placeholder_event_details
     info = []
-    info << labeled(:dates) { @course.dates.map(&:to_s).join("<br>") }
+    info << labeled(:dates) { join_lines(@course.dates.map(&:to_s)) }
     info << labeled(:motto)
     info << labeled(:cost)
-    info << labeled(:description) { @course.description.gsub("\n", "<br>") }
-    info << labeled(:location) { @course.location.gsub("\n", "<br>") }
-    info << labeled(:contact) { "#{@course.contact}<br>#{@course.contact.email}" }
-    info.compact.join("<br><br>")
+    info << labeled(:description) { convert_newlines_to_breaks(@course.description) }
+    info << labeled(:location) { convert_newlines_to_breaks(@course.location) }
+    info << labeled(:contact) { escape_html(@course.contact) + br_tag + @course.contact.email }
+    join_lines(info.compact, br_tag * 2)
   end
 
   def labeled(key)
@@ -57,7 +57,7 @@ module EventMailer
     if value
       label = @course.class.human_attribute_name(key)
       formatted = block_given? ? yield : value
-      "#{label}:<br>#{formatted}"
+      escape_html("#{label}:") + br_tag + formatted
     end
   end
 end
