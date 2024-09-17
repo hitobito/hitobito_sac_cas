@@ -136,14 +136,18 @@ module SacImports
       return if person.sac_membership_active?
 
       if row[:role_basiskonto] == "1"
-        person.roles.build(group: @basic_login_group, type: Group::AboBasicLogin::BasicLogin)
+        assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name)
       end
       if row[:role_abonnent] == "1"
-        person.roles.build(group: @abo_group, type: Group::AboTourenPortal::Abonnent)
+        assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name)
       end
       if row[:role_gratisabonnent] == "1"
-        person.roles.build(group: @abo_group, type: Group::AboTourenPortal::Gratisabonnent)
+        assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name)
       end
+    end
+
+    def assign_role(person, group, type)
+      person.roles.where(group:, type:).first_or_initialize
     end
 
     def language
@@ -166,9 +170,7 @@ module SacImports
       existing_person = navision_id && Person.find_by_id(navision_id)
       return existing_person if existing_person.present?
 
-      # TODO: Try to find by email in @group
-
-      Person.new
+      Person.where(primary_group: @basic_login_group, email: row[:email]).first_or_initialize
     end
   end
 end

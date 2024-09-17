@@ -86,6 +86,15 @@ describe SacImports::Wso2PersonEntry do
             .to change { Person.count }.by(1)
             .and change { Role.count }.by(1)
         end
+
+        it "can import it twice" do
+          entry.import!
+          # Need to instantiate it freshly, since person is cashed
+          entry = described_class.new(row, basic_login_group, abo_group)
+          expect { entry.import! }
+            .to not_change { Person.count }
+            .and not_change { Role.count }
+        end
       end
 
       context "with garbage phone number" do
