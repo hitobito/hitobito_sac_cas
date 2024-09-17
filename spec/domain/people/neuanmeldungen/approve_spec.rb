@@ -52,10 +52,9 @@ describe People::Neuanmeldungen::Approve do
       .and change { neuanmeldung_approved_role_class.count }.by(3)
       .and change { ExternalInvoice::SacMembership.count }.by(3)
       .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(3)
-      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).exactly(3).times.with do |person, group|
-        expect(approver.applicable_people).to include(person)
-        expect(group).to eq(approver.layer_group)
-      end
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.first.person, sektion)
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.third.person, sektion)
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.fourth.person, sektion)
 
     expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
