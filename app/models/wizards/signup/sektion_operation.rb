@@ -9,10 +9,9 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person_attrs:, register_on:, newsletter:)
+    def initialize(group:, person_attrs:, newsletter:)
       @group = group
       @person_attrs = person_attrs
-      @register_on = register_on
       @newsletter = newsletter
     end
 
@@ -32,7 +31,7 @@ module Wizards::Signup
 
     private
 
-    attr_reader :group, :person_attrs, :register_on, :newsletter
+    attr_reader :group, :person_attrs, :newsletter
 
     def validate(model)
       model.valid?.tap do
@@ -51,16 +50,7 @@ module Wizards::Signup
     end
 
     def role
-      @role ||= (register_on.future? ? build_future_role : build_role)
-    end
-
-    def build_future_role
-      FutureRole.new(
-        person: person,
-        group: group,
-        convert_on: register_on,
-        convert_to: role_type
-      ).tap { |r| r.mark_as_coming_from_future_role = true }
+      @role ||= build_role
     end
 
     def build_role
@@ -92,7 +82,7 @@ module Wizards::Signup
 
     def invoice_date
       @invoice_date ||= begin
-        invoice_cutoff_date = (register_on - 1.month).change(day: 15)
+        invoice_cutoff_date = (Date.current - 1.month).change(day: 15)
         [Date.current, invoice_cutoff_date].max
       end
     end

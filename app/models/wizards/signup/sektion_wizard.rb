@@ -39,7 +39,7 @@ module Wizards::Signup
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|
-        SektionOperation.new(person_attrs:, group:, register_on:, newsletter:)
+        SektionOperation.new(person_attrs:, group:, newsletter:)
       end
     end
 
@@ -69,8 +69,6 @@ module Wizards::Signup
     def common_person_attrs
       {self_registration_reason_id:, privacy_policy_accepted_at:, household_key:}.compact_blank
     end
-
-    def register_on = Time.zone.today
 
     def members = respond_to?(:family_fields) ? family_fields.members : []
 

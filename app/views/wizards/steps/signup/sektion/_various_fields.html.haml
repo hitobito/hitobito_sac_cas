@@ -4,8 +4,8 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for do |form|
-  %span.align-with-form.h5.fw-bold= t('.entry_date')
-  .alert.alert-secondary.align-with-form.mt-2= entry_date_text
+  %span.align-with-form.h5.fw-bold= t('.immediate_entry_date')
+  .alert.alert-secondary.align-with-form.mt-2= form.object.current_date_entry_reductions
 
   = form.labeled(:self_registration_reason_id) do
     - form.object.self_registration_reason_options.each do |key, label|
