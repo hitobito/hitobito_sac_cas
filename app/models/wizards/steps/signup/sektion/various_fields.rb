@@ -46,7 +46,6 @@ module Wizards::Steps::Signup::Sektion
       Time.zone.now if sektion_statuten
     end
 
-
     def current_date_entry_reductions
       find_valid_reduction do |date_from, date_to, discount, index|
         I18n.t("period_info_#{index}", scope: "wizards.steps.signup.sektion.various_fields", date_to:, date_from:, discount:)
@@ -64,7 +63,7 @@ module Wizards::Steps::Signup::Sektion
       end
     end
 
-    def formatted_date(date_key, subtract_one_day: false)    
+    def formatted_date(date_key, subtract_one_day: false)
       date = date_from_string(SacMembershipConfig.last.public_send(date_key)) unless date_key.nil?
 
       return nil if date.nil?
@@ -84,7 +83,7 @@ module Wizards::Steps::Signup::Sektion
     def date_from_string(date_string)
       return nil if date_string.nil?
 
-      day, month = date_string.split('.').map(&:to_i)
+      day, month = date_string.split(".").map(&:to_i)
       Date.new(today.year, month, day)
     end
   end
