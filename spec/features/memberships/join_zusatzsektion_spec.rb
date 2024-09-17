@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -43,13 +43,26 @@ describe "joining zusatzsektion", js: true do
     end
 
     it "fills out form and redirects" do
-      click_link "Mitgliedschaft anpassen"
-      click_link "Zusatzsektion beantragen"
-      expect(page).to have_css "li.active", text: "Sektion wählen"
-      select "SAC Matterhorn"
-      click_on "Weiter"
-      expect(page).to have_css "li.active", text: "Bestätigung"
-      expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+      fill_out_form
+      expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Einzelmitglied beantragt."
+      click_on "Kostenpflichtig bestellen"
+      expect(page).to have_css "#flash .alert-success",
+        text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
+    end
+
+    it "can handle membership admission through gs" do
+      allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(true)
+      fill_out_form
+      expect(page).to have_content "Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe."
+      click_on "Kostenpflichtig bestellen"
+      expect(page).to have_css "#flash .alert-success",
+        text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
+    end
+
+    it "can apply as youth member" do
+      person.update!(birthday: 20.years.ago)
+      fill_out_form
+      expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Jugendmitglied beantragt."
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
@@ -101,5 +114,17 @@ describe "joining zusatzsektion", js: true do
         end.to change { Role.count }.by(3)
       end
     end
+  end
+
+  private
+
+  def fill_out_form
+    click_link "Mitgliedschaft anpassen"
+    click_link "Zusatzsektion beantragen"
+    expect(page).to have_css "li.active", text: "Sektion wählen"
+    select "SAC Matterhorn"
+    click_on "Weiter"
+    expect(page).to have_css "li.active", text: "Bestätigung"
+    expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
   end
 end
