@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe "leave zusatzsektion", js: true do
+  include ActiveJob::TestHelper
+
   let(:person) { people(:mitglied) }
   let(:role) { person.roles.second }
   let(:operator) { person }
@@ -38,7 +40,7 @@ describe "leave zusatzsektion", js: true do
         .to change { person.roles.count }.by(-1)
         .and change { role.deleted_at }.from(nil)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
     end
   end
 
@@ -58,7 +60,7 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
       expect(role.delete_on).not_to be_nil
     end
   end
@@ -82,7 +84,7 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
     end
   end
 

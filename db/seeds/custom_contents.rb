@@ -71,58 +71,58 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
    body: "Hallo {recipient-name},<br><br>" \
-     "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>" \
-     "Weitere Informationen:<br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Book-Discount-Code: {book-discount-code}"},
+    "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>" \
+    "Weitere Informationen:<br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Book-Discount-Code: {book-discount-code}"},
   {custom_content_id: summon_id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",
    body: "Bonjour {recipient-name},<br><br>" \
-     "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
-     "Détails du cours:<br><br>{event-details}<br><br>" \
-     "Informations supplémentaires:<br>" \
-     "Inscription: {application-url}<br>" \
-     "Personne: {person-url}<br>" \
-     "Lien de l'événement: {event-link}<br>" \
-     "Code de réduction pour le livre: {book-discount-code}"},
+    "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
+    "Détails du cours:<br><br>{event-details}<br><br>" \
+    "Informations supplémentaires:<br>" \
+    "Inscription: {application-url}<br>" \
+    "Personne: {person-url}<br>" \
+    "Lien de l'événement: {event-link}<br>" \
+    "Code de réduction pour le livre: {book-discount-code}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::APPLIED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Warteliste",
    subject: "Auf Warteliste gesetzt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::UNCONFIRMED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Kursanmeldung",
    subject: "Unbestätigte Kursanmeldung",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::ASSIGNED).id,
    locale: "de",
    label: "Kurs: E-Mail Bestätigte Kursanmeldung",
    subject: "Kursanmeldung bestätigt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: leader_reminder_next_week_id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",
@@ -201,4 +201,4 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Mitgliedschaften: Bestätigung Sektionswechsel",
    subject: "Bestätigung Sektionswechsel",
    body: "Hallo {person-name},<br><br>" \
-     "Der Sektionswechsel zu {group-name} wurde vorgenommen."})
+    "Der Sektionswechsel zu {group-name} wurde vorgenommen."})

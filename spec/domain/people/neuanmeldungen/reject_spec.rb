@@ -52,8 +52,10 @@ describe People::Neuanmeldungen::Reject do
     subject.call
     expect(person.reload.roles).not_to include(neuanmeldung)
 
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), created_at: 1.year.ago, person: neuanmeldung.person)
-    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name, group: group, created_at: 1.month.ago, person: neuanmeldung.person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      created_at: 1.year.ago, person: neuanmeldung.person)
+    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name,
+      group: group, created_at: 1.month.ago, person: neuanmeldung.person)
 
     subject.call
     expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
