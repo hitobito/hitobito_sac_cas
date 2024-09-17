@@ -11,6 +11,8 @@ module MultilingualMailer
   LANGUAGE_SEPARATOR = "<br><br>--------------------<br><br>"
   SANITIZE_TAG_WHITELIST = %w[a br div]
 
+  delegate :sanitize, to: "ActionController::Base.helpers"
+
   private
 
   def compose_multilingual(recipients, content_key, locales = [])
@@ -27,8 +29,9 @@ module MultilingualMailer
     end
 
     I18n.with_locale(locales.first) do
-      html = ActionController::Base.helpers.sanitize(body, tags: SANITIZE_TAG_WHITELIST)
-      mail(subject:) { |format| format.html { render html:, layout: true } }
+      mail(subject:) do |f|
+        f.html { render html: sanitize(body, tags: SANITIZE_TAG_WHITELIST), layout: true }
+      end
     end
   end
 
