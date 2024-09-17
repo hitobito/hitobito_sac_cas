@@ -38,11 +38,18 @@ class SacImports::CsvSource
       sac_remark_national_office: "Geschäftsstelle Bemerkung"
     },
     NAV2: {
-      navision_id: "Mitgliedernummer",
-      household_key: "Familien-Nr.",
-      group_navision_id: "Sektion",
-      navision_name: "Name",
-      navision_membership_years: "Vereinsmitgliederjahre"
+      navision_id: "Kontaktnummer",
+      valid_from: "GültigAb",
+      valid_until: "GültigBis",
+      layer: "Layer",
+      group_lvl_1: "Gruppe_Lvl_1",
+      group_lvl_2: "Gruppe_Lvl_2",
+      group_lvl_3: "Gruppe_Lvl_3",
+      group_lvl_4: "Gruppe_Lvl_4",
+      role: "Rolle",
+      zusatzbeschrieb: "Zusatzbeschrieb",
+      name: "Name",
+      other: "Anderes"
     }
     # NAV3: {},
     # WSO21: {},
