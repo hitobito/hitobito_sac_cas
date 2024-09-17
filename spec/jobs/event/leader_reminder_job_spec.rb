@@ -32,7 +32,7 @@ describe Event::LeaderReminderJob do
     it "mails a reminder to the course leaders" do
       expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
       expect(ActionMailer::Base.deliveries.second_to_last.to).to include(people(:admin).email)
-      expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
+      expect(last_email.to).to include(people(:mitglied).email)
     end
 
     context "with course admin email" do
@@ -40,7 +40,7 @@ describe Event::LeaderReminderJob do
 
       it "mails a bcc to the admin" do
         expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
-        expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+        expect(last_email.bcc).to include("admin@example.com")
       end
     end
 
@@ -58,7 +58,7 @@ describe Event::LeaderReminderJob do
         expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(3)
 
         expect(ActionMailer::Base.deliveries.third_to_last.body.to_s).to match(/findet nächste Woche/)
-        expect(ActionMailer::Base.deliveries.last.body.to_s).to match(/findet 6 Wochen/)
+        expect(last_email.body.to_s).to match(/findet 6 Wochen/)
       end
     end
   end

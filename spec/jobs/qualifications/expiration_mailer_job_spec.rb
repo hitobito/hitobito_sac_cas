@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Qualifications::ExpirationMailerJob do
+  include ActiveJob::TestHelper
+
   before do
     ActionMailer::Base.deliveries.clear
     load "./db/seeds/custom_contents.rb"
@@ -44,7 +46,7 @@ describe Qualifications::ExpirationMailerJob do
     it "mails a reminder" do
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:today, person.id).and_call_original
 
-      expect_enqueued_mail_jobs(count: 1) { job.perform }
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
     end
 
     it "does not mail a reminder if another valid qualification is still active" do
@@ -76,7 +78,7 @@ describe Qualifications::ExpirationMailerJob do
 
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year, person.id).and_call_original
 
-      expect_enqueued_mail_jobs(count: 1) { job.perform }
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
     end
   end
 
@@ -89,7 +91,7 @@ describe Qualifications::ExpirationMailerJob do
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:year_after_next_year, person.id).and_call_original
       travel_to "2000-12-31".to_date
 
-      expect_enqueued_mail_jobs(count: 1) { job.perform }
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
     end
   end
 
@@ -117,7 +119,7 @@ describe Qualifications::ExpirationMailerJob do
       )
       travel_to "2000-12-31".to_date
 
-      expect_enqueued_mail_jobs(count: 2) { job.perform }
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(2).times
     end
 
     it "does not care about qualifications expired long ago" do

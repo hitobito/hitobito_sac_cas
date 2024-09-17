@@ -89,7 +89,7 @@ describe Wizards::Signup::SektionOperation do
 
       it "does send email if person has an email" do
         expect { operation.save! }.to change { ActionMailer::Base.deliveries.count }.by(1)
-        expect(ActionMailer::Base.deliveries.last.body.to_s).to include("Bitte setze ein Passwort")
+        expect(last_email.body.to_s).to include("Bitte setze ein Passwort")
       end
     end
 

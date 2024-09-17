@@ -377,13 +377,13 @@ describe Event::Course do
           expect do
             Delayed::Job.second_to_last.payload_object.perform
           end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+          expect(last_email.to).to include(people(:admin).email)
+          expect(last_email.bcc).to include("admin@example.com")
           expect do
             Delayed::Job.last.payload_object.perform
           end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+          expect(last_email.to).to include(people(:mitglied).email)
+          expect(last_email.bcc).to include("admin@example.com")
         end
 
         it "doesnt send an email if the course has been deleted" do
@@ -403,9 +403,9 @@ describe Event::Course do
           expect do
             Delayed::Job.last.payload_object.perform
           end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
-          expect(ActionMailer::Base.deliveries.last.to).not_to include(people(:mitglied).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+          expect(last_email.to).to include(people(:admin).email)
+          expect(last_email.to).not_to include(people(:mitglied).email)
+          expect(last_email.bcc).to include("admin@example.com")
         end
       end
 
@@ -436,8 +436,8 @@ describe Event::Course do
         expect do
           Delayed::Job.last.payload_object.perform
         end.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.to).to include("admin@example.com")
-        expect(ActionMailer::Base.deliveries.last[:from].value).to eq("Club Alpin Suisse CAS <noreply@localhost>")
+        expect(last_email.to).to include("admin@example.com")
+        expect(last_email[:from].value).to eq("Club Alpin Suisse CAS <noreply@localhost>")
       end
 
       it "doesnt send an email if the course has been deleted" do
