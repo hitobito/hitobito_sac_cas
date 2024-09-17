@@ -24,7 +24,12 @@ module SacCas::Beitragskategorie
     def calculate(for_sac_family: true)
       return CATEGORY_FAMILY if for_sac_family && family_member?
 
-      (age in AGE_RANGE_YOUTH) ? CATEGORY_YOUTH : CATEGORY_ADULT
+      case age
+      when AGE_RANGE_ADULT
+        CATEGORY_ADULT
+      when AGE_RANGE_YOUTH
+        CATEGORY_YOUTH
+      end
     end
 
     def adult?
