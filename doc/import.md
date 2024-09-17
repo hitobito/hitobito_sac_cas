@@ -74,7 +74,6 @@ You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sa
 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
 
-
 ## 2: sac_imports:2_sektionen
 
 Mit diesem Import werden alle Sektionen und Ortsgruppen importiert.
