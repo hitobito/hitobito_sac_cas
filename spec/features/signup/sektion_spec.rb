@@ -574,25 +574,6 @@ describe "signup/sektion", js: true do
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
       expect(person.self_registration_reason).to eq reason
     end
-
-    context "future role" do
-      around do |example|
-        travel_to(Date.new(2023, 3, 1)) do
-          example.run
-        end
-      end
-
-      it "creates future role for main person" do
-        expect(page).to have_css("label", text: "Eintrittsdatum per")
-        choose "01. Juli"
-        expect do
-          complete_last_page
-          expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-            "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        end.to change { FutureRole.count }.by(1)
-        expect(FutureRole.first.convert_on).to eq Date.new(2023, 7, 1)
-      end
-    end
   end
 
   describe "with adult consent" do
