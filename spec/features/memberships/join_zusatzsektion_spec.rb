@@ -62,6 +62,7 @@ describe "joining zusatzsektion", js: true do
     before do
       roles(:familienmitglied_zweitsektion).destroy
       Group::SektionsNeuanmeldungenSektion.delete_all
+      person.update_column(:data_quality, :ok)
       click_link "Mitgliedschaft anpassen"
       click_link "Zusatzsektion beantragen"
       expect(page).to have_css "li.active", text: "Familienmitgliedschaft"

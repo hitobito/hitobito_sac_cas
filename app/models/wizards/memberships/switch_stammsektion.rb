@@ -10,6 +10,7 @@ module Wizards::Memberships
     self.steps = [
       Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::AskFamilyMainPerson,
+      Wizards::Steps::CheckDataQualityErrors,
       Wizards::Steps::SwitchStammsektion::ChooseSektion,
       Wizards::Steps::SwitchStammsektion::Summary
     ]
@@ -62,7 +63,9 @@ module Wizards::Memberships
       case step_class_or_name
       when :_start
         handle_start
-      when Wizards::Steps::MembershipTerminatedInfo, Wizards::Steps::AskFamilyMainPerson
+      when Wizards::Steps::MembershipTerminatedInfo,
+        Wizards::Steps::AskFamilyMainPerson,
+        Wizards::Steps::CheckDataQualityErrors
         nil
       else
         super
@@ -75,6 +78,8 @@ module Wizards::Memberships
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif person.sac_membership_family? && !(person.sac_family_main_person? || backoffice?)
         Wizards::Steps::AskFamilyMainPerson.step_name
+      elsif Wizards::Steps::CheckDataQualityErrors.new(self).invalid?
+        Wizards::Steps::CheckDataQualityErrors.step_name
       else
         Wizards::Steps::SwitchStammsektion::ChooseSektion.step_name
       end

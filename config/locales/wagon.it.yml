@@ -143,11 +143,12 @@ it:
 
         wizards/steps/choose_sektion:
           requires_admin: Vi chiediamo di richiedere la modifica della sezione desiderata per telefono o per e-mail*. Contattateci a questo scopo
-
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: è già occupato. L'e-mail deve essere unica per ogni persona.
+        wizards/steps/check_data_quality_errors:
+          data_quality_error: ""
     models:
       people/neuanmeldungen/approve:
         one: Acquisizione della registrazione
@@ -1008,9 +1009,12 @@ it:
         one: Altro
         description: Altro
 
+  # sort top level keys alphabetically from here on
+
   contactable:
     address_fields:
       updates_household_address: L'indirizzo è aggiornato per tutti i membri della famiglia
+
   devise:
     sessions:
       form:
@@ -1160,6 +1164,84 @@ it:
     tour_guides_inactive: Accompagnatori turistici inattivi
     tour_guides_expired: Accompagnatori turistici scaduti
 
+  groups:
+    actions_show_sac_cas:
+      export_mitglieder: Membri del CSV
+      create_yearly_membership_invoice: MV Raccolta annuale
+    sektion_primary: Sezione centrale
+    sektion_secondary: Sezione aggiuntiva
+
+    self_registration:
+      form:
+        has_account: ""
+        to_login_page: ""
+      abo_issue:
+        issues_from_help: |
+          L'abbonamento decorre dal numero successivo possibile.
+          Se si desidera che la rivista venga consegnata in un momento successivo, si prega di comunicarci
+          il numero a partire dal quale possiamo iniziare la consegna.
+      abo_infos:
+        annual_price_header: Prezzo per anno
+        delivery_country_header: Paese di spedizione
+        price_with_vat: "%{amount} CHF incl. IVA."
+        switzerland: Svizzera
+        international: In tutto il mondo
+      create:
+        redirect_existing_email: Esiste già un login per questa e-mail. Effettuare il login qui.
+
+      agreement_link:
+        statutes_text: "%{link} Ho letto e accetto il"
+        sektion_statuten_text: "%{link} Ho letto e accetto il"
+        contribution_regulations_text: "%{link} Ho letto e condivido il testo"
+        data_protection_text: "%{link} Ho letto e accetto il"
+
+    self_inscription:
+      membership_role_exists: Sei già membro di questa sezione
+      form:
+        register_on_info:
+          jul: Chi si iscrive a partire dal 1° luglio riceverà uno sconto del 50% sulla quota associativa annuale.
+          oct: "Per i soci che si iscrivono a partire dal 1° ottobre, la quota annuale non è dovuta."
+        register_as_info: " È possibile aderire al CAS Blüemlisalp come sezione aggiuntiva oppure selezionarlo come nuova sezione madre, abbandonando così la sezione madre precedente. Nota per le famiglie: la modifica della sezione madre si applica automaticamente a tutti i membri della famiglia. L'adesione a una sezione aggiuntiva, invece, vale solo per voi."
+        inscribe: Unirsi
+      new:
+        role_exists: Sei già membro di questa sezione
+      confirm:
+        title: Confermare l'adesione
+        information_text: >
+          %{sektion}Si prega di confermare che si desidera aderire alla sezione. Questa procedura non può essere annullata.
+        submit_button: Richiesta di adesione
+
+  groups/self_inscription:
+    new:
+      details: "%{beitragskategorie} Si sta aderendo alla categoria dei contributi."
+
+  groups/self_registration:
+    global:
+      main_email_title: E-mail principale
+      emailless_main_person_title: Dati personali
+      neuanmeldung_main_person_title: Dati personali
+      abo_issue_title: Abbonamento
+      abo_main_person_title: Dati personali
+      single_or_household_title: Tipo di appartenenza
+      household_title: Membri della famiglia
+      main_title: Membri della famiglia
+      supplements_title: Dati aggiuntivi
+
+  households:
+    edit:
+      title: Gestire la famiglia
+      shared_address_info: Tutti i membri della famiglia condividono lo stesso indirizzo.
+    members_table_row:
+      unconfirmed_email_info: L'indirizzo e-mail deve essere confermato prima che la persona possa essere rimossa dalla famiglia.
+
+  household_aside_component:
+    section_name: Famiglia
+  household_aside_member_component:
+    main_person: Destinatario della fattura per la famiglia
+    set_main_person: Diventare destinatari di una fattura familiare
+    unverified_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
+    cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
+
   invoices:
     sac_memberships:
       title: "Fattura associativa %{year}"
@@ -1177,8 +1259,47 @@ it:
         family: Membro della famiglia
         youth: Membro dei giovani
 
+  memberships:
+    join_zusatzsektions:
+      create:
+        success:
+          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata creata."
+          many: "%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create."
+          other: "%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create."
+    leave_zusatzsektions:
+      create:
+        success:
+          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata annullata."
+          many: "%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
+          other: "%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
+    switch_stammsektions:
+      create:
+        success:
+          one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
+          many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
+          other: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
+
   mitglieder_exports:
     export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
+
+  mounted_attributes:
+    form_tabs:
+      group/sac_cas:
+        default: Attributi SAC/CAS
+      group/sektion:
+        default: Attributi della sezione
+      group/ortsgruppe:
+        default: Attributi del gruppo locale
+
+  passes:
+    membership:
+      file_name_prefix: CAS-TesseraMembro
+      title: Tessera di Membro
+      member: Membro
+      sac_partner: Partner CAS
+      sponsor_url: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
+      emergency_number: "No. di emergenza"
+      emergency_contact: "Contatto di emergenza"
 
   person:
     history:
@@ -1291,86 +1412,6 @@ it:
         many: "%{count} Le domande sono state respinte"
         other: "%{count} Le domande sono state respinte"
 
-  groups:
-    actions_show_sac_cas:
-      export_mitglieder: Membri del CSV
-      create_yearly_membership_invoice: MV Raccolta annuale
-    sektion_primary: Sezione centrale
-    sektion_secondary: Sezione aggiuntiva
-
-    self_registration:
-      abo_issue:
-        issues_from_help: |
-          L'abbonamento decorre dal numero successivo possibile.
-          Se si desidera che la rivista venga consegnata in un momento successivo, si prega di comunicarci
-          il numero a partire dal quale possiamo iniziare la consegna.
-      abo_infos:
-        annual_price_header: Prezzo per anno
-        delivery_country_header: Paese di spedizione
-        price_with_vat: "%{amount} CHF incl. IVA."
-        switzerland: Svizzera
-        international: In tutto il mondo
-      create:
-        redirect_existing_email: Esiste già un login per questa e-mail. Effettuare il login qui.
-
-      agreement_link:
-        statutes_text: "%{link} Ho letto e accetto il"
-        sektion_statuten_text: "%{link} Ho letto e accetto il"
-        contribution_regulations_text: "%{link} Ho letto e condivido il testo"
-        data_protection_text: "%{link} Ho letto e accetto il"
-
-    self_inscription:
-      membership_role_exists: Sei già membro di questa sezione
-      form:
-        register_on_info:
-          jul: Chi si iscrive a partire dal 1° luglio riceverà uno sconto del 50% sulla quota associativa annuale.
-          oct: "Per i soci che si iscrivono a partire dal 1° ottobre, la quota annuale non è dovuta."
-        register_as_info: " È possibile aderire al CAS Blüemlisalp come sezione aggiuntiva oppure selezionarlo come nuova sezione madre, abbandonando così la sezione madre precedente. Nota per le famiglie: la modifica della sezione madre si applica automaticamente a tutti i membri della famiglia. L'adesione a una sezione aggiuntiva, invece, vale solo per voi."
-        inscribe: Unirsi
-      new:
-        role_exists: Sei già membro di questa sezione
-      confirm:
-        title: Confermare l'adesione
-        information_text: >
-          %{sektion}Si prega di confermare che si desidera aderire alla sezione. Questa procedura non può essere annullata.
-        submit_button: Richiesta di adesione
-
-  groups/self_inscription:
-    new:
-      details: "%{beitragskategorie} Si sta aderendo alla categoria dei contributi."
-
-  groups/self_registration:
-    global:
-      main_email_title: E-mail principale
-      emailless_main_person_title: Dati personali
-      neuanmeldung_main_person_title: Dati personali
-      abo_issue_title: Abbonamento
-      abo_main_person_title: Dati personali
-      single_or_household_title: Tipo di appartenenza
-      household_title: Membri della famiglia
-      main_title: Membri della famiglia
-      supplements_title: Dati aggiuntivi
-
-  memberships:
-    join_zusatzsektions:
-      create:
-        success:
-          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata creata."
-          many: "%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create."
-          other: "%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create."
-    leave_zusatzsektions:
-      create:
-        success:
-          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata annullata."
-          many: "%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
-          other: "%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
-    switch_stammsektions:
-      create:
-        success:
-          one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
-          many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
-          other: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
-
   roles:
     beitragskategorie:
       adult: Singolo
@@ -1381,66 +1422,6 @@ it:
     global:
       sac_cas/role/mitglied_common:
         no_permission: "Per dimettersi, è necessario contattare il servizio soci della sezione."
-
-  self_registration:
-    fee_component:
-      title: "Contributi nella sezione %{group}"
-    infos_component:
-      title_questions: "Hai domande sull’ adesione?"
-      title_contact: Contatto
-      title_documents: Documenti
-      additional_infos: "Trovi altre informazioni nelle %{link}."
-      address: |
-        Club Alpin Suisse CAS
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
-      link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
-      link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_IT.pdf"
-      link_statutes_title: Statuto
-      link_sektion_statuten_title: Statuto della sezione
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali_AD_2020_-_valido_dal_1_gennaio_2021_01.pdf"
-      link_contribution_regulations_title: Regolamento delle quote sociali
-      link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
-      link_data_protection_title: Protezione dei dati
-
-  termination_reasons:
-    destroy:
-      foreign_key_error: "Ci sono persone che usano questo motivo per andarsene, quindi la cancellazione non è possibile."
-
-  table_displays:
-    person:
-      antrag_fuer: Applicazione per
-      address_valid: Indirizzo valido
-      confirmed_at: E-mail confermata su
-      beitrittsdatum: Unirsi per
-
-  verify_membership:
-    title: Verifica dell'appartenenza al CAS
-    not_found: Codice di verifica non valido
-    status_valid: Iscrizione valida
-    status_invalid: Iscrizione non valida
-
-  passes:
-    membership:
-      file_name_prefix: CAS-TesseraMembro
-      title: Tessera di Membro
-      member: Membro
-      sac_partner: Partner CAS
-      sponsor_url: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
-      emergency_number: "No. di emergenza"
-      emergency_contact: "Contatto di emergenza"
-
-  mounted_attributes:
-    form_tabs:
-      group/sac_cas:
-        default: Attributi SAC/CAS
-      group/sektion:
-        default: Attributi della sezione
-      group/ortsgruppe:
-        default: Attributi del gruppo locale
 
   sac_membership_configs:
     form:
@@ -1496,20 +1477,29 @@ it:
       link:
         add: Nuovo
 
-  households:
-    edit:
-      title: Gestire la famiglia
-      shared_address_info: Tutti i membri della famiglia condividono lo stesso indirizzo.
-    members_table_row:
-      unconfirmed_email_info: L'indirizzo e-mail deve essere confermato prima che la persona possa essere rimossa dalla famiglia.
-
-  household_aside_component:
-    section_name: Famiglia
-  household_aside_member_component:
-    main_person: Destinatario della fattura per la famiglia
-    set_main_person: Diventare destinatari di una fattura familiare
-    unverified_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
-    cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
+  self_registration:
+    fee_component:
+      title: "Contributi nella sezione %{group}"
+    infos_component:
+      title_questions: "Hai domande sull’ adesione?"
+      title_contact: Contatto
+      title_documents: Documenti
+      additional_infos: "Trovi altre informazioni nelle %{link}."
+      address: |
+        Club Alpin Suisse CAS
+        Monbijoustrasse 61
+        3000 Bern 14
+        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
+        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
+      link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
+      link_faqs_title: FAQ
+      link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_IT.pdf"
+      link_statutes_title: Statuto
+      link_sektion_statuten_title: Statuto della sezione
+      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali_AD_2020_-_valido_dal_1_gennaio_2021_01.pdf"
+      link_contribution_regulations_title: Regolamento delle quote sociali
+      link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
+      link_data_protection_title: Protezione dei dati
 
   sheet/memberships/join_zusatzsektion:
     title: Unirsi a una sezione aggiuntiva
@@ -1519,6 +1509,23 @@ it:
     title: Cambiare la sezione del tronco
   sheet/memberships/terminate_sac_membership:
     title: Cessazione dell'appartenenza al SAC
+
+  table_displays:
+    person:
+      antrag_fuer: Applicazione per
+      address_valid: Indirizzo valido
+      confirmed_at: E-mail confermata su
+      beitrittsdatum: Unirsi per
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: "Ci sono persone che usano questo motivo per andarsene, quindi la cancellazione non è possibile."
+
+  verify_membership:
+    title: Verifica dell'appartenenza al CAS
+    not_found: Codice di verifica non valido
+    status_valid: Iscrizione valida
+    status_invalid: Iscrizione non valida
 
   wizards:
     steps:

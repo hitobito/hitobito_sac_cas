@@ -9,6 +9,7 @@ module Wizards::Memberships
   class JoinZusatzsektion < Wizards::Base
     self.steps = [
       Wizards::Steps::MembershipTerminatedInfo,
+      Wizards::Steps::CheckDataQualityErrors,
       Wizards::Steps::ChooseMembership,
       Wizards::Steps::ChooseSektionUnrestricted,
       Wizards::Steps::JoinZusatzsektion::Summary
@@ -70,7 +71,7 @@ module Wizards::Memberships
       case step_class_or_name
       when :_start
         handle_start
-      when Wizards::Steps::MembershipTerminatedInfo
+      when Wizards::Steps::MembershipTerminatedInfo, Wizards::Steps::CheckDataQualityErrors
         nil
       else
         super
@@ -83,6 +84,8 @@ module Wizards::Memberships
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif person.household.empty?
         Wizards::Steps::ChooseSektionUnrestricted.step_name
+      elsif Wizards::Steps::CheckDataQualityErrors.new(self).invalid?
+        Wizards::Steps::CheckDataQualityErrors.step_name
       else
         Wizards::Steps::ChooseMembership.step_name
       end

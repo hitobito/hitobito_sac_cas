@@ -8,6 +8,8 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
+    links:
+      faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
 
   settings:
     email:
@@ -148,11 +150,12 @@ de:
           requires_admin: Wir bitten dich den gewünschten Sektionswechsel
             telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
             mit uns auf
-
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person.
+        wizards/steps/check_data_quality_errors:
+          data_quality_error: Die Aktion kann wegen ungültigen Daten nicht durchgeführt werden. Bitte nach dem Korrigieren der Daten die Aktion nochmals starten.
     models:
       people/neuanmeldungen/approve:
         one: Anmeldung übernehmen
@@ -964,9 +967,12 @@ de:
         one: Andere
         description: Andere
 
+  # sort top level keys alphabetically from here on
+
   contactable:
     address_fields:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
+
   devise:
     sessions:
       form:
@@ -983,7 +989,8 @@ de:
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
 
   dropdown/people_export:
-    recipients: Empfänger
+    recipients: Empfänger Einzelpersonen
+    recipient_households: Empfänger Familien
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
@@ -1132,6 +1139,90 @@ de:
     tour_guides_inactive: Inaktive Tourenleiter
     tour_guides_expired: Abgelaufene Tourenleiter
 
+  groups:
+    actions_show_sac_cas:
+      export_mitglieder: CSV Mitglieder
+      create_yearly_membership_invoice: MV Jahresinkasso
+    sektion_primary: Stammsektion
+    sektion_secondary: Zusatzsektion
+
+    self_registration:
+      form:
+        has_account: Hast du bereits ein SAC-Login?
+        to_login_page: Anmelden
+      abo_issue:
+        issues_from_help: |
+          Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
+          Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
+          mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
+      abo_infos:
+        annual_price_header: Preis pro Jahr
+        delivery_country_header: Versandsland
+        price_with_vat: CHF %{amount} inkl. MwSt.
+        switzerland: Schweiz
+        international: Weltweit
+      create:
+        redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
+
+      agreement_link:
+        statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+        sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
+        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+        data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
+
+    self_inscription:
+      membership_role_exists: Du bist bereits Mitglied dieser Sektion
+      form:
+        register_on_info:
+          jul: Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.
+          oct: Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.
+        register_as_info: "
+          Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
+          deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
+          Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
+          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich."
+        inscribe: Beitreten
+      new:
+        role_exists: Du bist bereits Mitglied dieser Sektion
+      confirm:
+        title: Beitritt bestätigen
+        information_text: >
+          Bitte bestätigen Sie den Beitritt in die Sektion %{sektion}.
+          Dieser Vorgang kann nicht rückgängig gemacht werden.
+        submit_button: Beitritt beantragen
+
+  groups/self_inscription:
+    new:
+      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
+
+  groups/self_registration:
+    global:
+      main_email_title: Haupt-E-Mail
+      emailless_main_person_title: Personendaten
+      neuanmeldung_main_person_title: Personendaten
+      abo_issue_title: Abo
+      abo_main_person_title: Personendaten
+      single_or_household_title: Mitgliedschaftstyp
+      household_title: Familienmitglieder
+      main_title: Familienmitglieder
+      supplements_title: Zusatzdaten
+
+  households:
+    edit:
+      title: Familie verwalten
+      shared_address_info: Alle Familienmitglieder teilen sich dieselbe Adresse.
+    members_table_row:
+      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor
+        die Person aus der Familie entfernt werden kann.
+
+  household_aside_component:
+    section_name: Familie
+  household_aside_member_component:
+    main_person: Familienrechnungsempfänger
+    set_main_person: Zum Familienrechnungsempfänger machen
+    unverified_email: Die Email Adresse ist nicht bestätigt, die Person kann daher nicht zum Familienrechnungsempfänger gemacht werden.
+    cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
+
   invoices:
     sac_memberships:
       title: Mitgliedschaftsrechnung %{year}
@@ -1149,8 +1240,52 @@ de:
         family: Familienmitglied
         youth: Jugendmitglied
 
+  mailer:
+    footer:
+      address: |
+        Schweizer Alpen-Club SAC
+        Monbijoustrasse 61
+        3000 Bern 14
+        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
+
+  memberships:
+    join_zusatzsektions:
+      create:
+        success:
+          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
+          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
+    leave_zusatzsektions:
+      create:
+        success:
+          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde gelöscht."
+          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden gelöscht."
+    switch_stammsektions:
+      create:
+        success:
+          one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde vorgenommen."
+          other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurden vorgenommen."
+
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+
+  mounted_attributes:
+    form_tabs:
+      group/sac_cas:
+        default: SAC/CAS Attribute
+      group/sektion:
+        default: Sektions Attribute
+      group/ortsgruppe:
+        default: Ortsgruppen Attribute
+
+  passes:
+    membership:
+      file_name_prefix: SAC-Mitgliederausweis
+      title: Mitgliederausweis
+      member: Mitglied
+      sac_partner: SAC-Partner
+      sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
+      emergency_number: "Notfallnummer"
+      emergency_contact: "Notfallkontakt"
 
   person:
     history:
@@ -1262,88 +1397,6 @@ de:
         one: Anmeldung wurde abgelehnt
         other: "%{count} Anmeldungen wurden abgelehnt"
 
-  groups:
-    actions_show_sac_cas:
-      export_mitglieder: CSV Mitglieder
-      create_yearly_membership_invoice: MV Jahresinkasso
-    sektion_primary: Stammsektion
-    sektion_secondary: Zusatzsektion
-
-    self_registration:
-      abo_issue:
-        issues_from_help: |
-          Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
-          Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
-          mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
-      abo_infos:
-        annual_price_header: Preis pro Jahr
-        delivery_country_header: Versandsland
-        price_with_vat: CHF %{amount} inkl. MwSt.
-        switzerland: Schweiz
-        international: Weltweit
-      create:
-        redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
-
-      agreement_link:
-        statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
-        sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
-        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
-        data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
-
-    self_inscription:
-      membership_role_exists: Du bist bereits Mitglied dieser Sektion
-      form:
-        register_on_info:
-          jul: Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.
-          oct: Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.
-        register_as_info: "
-          Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
-          deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
-          Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
-          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich."
-        inscribe: Beitreten
-      new:
-        role_exists: Du bist bereits Mitglied dieser Sektion
-      confirm:
-        title: Beitritt bestätigen
-        information_text: >
-          Bitte bestätigen Sie den Beitritt in die Sektion %{sektion}.
-          Dieser Vorgang kann nicht rückgängig gemacht werden.
-        submit_button: Beitritt beantragen
-
-  groups/self_inscription:
-    new:
-      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
-
-  groups/self_registration:
-    global:
-      main_email_title: Haupt-E-Mail
-      emailless_main_person_title: Personendaten
-      neuanmeldung_main_person_title: Personendaten
-      abo_issue_title: Abo
-      abo_main_person_title: Personendaten
-      single_or_household_title: Mitgliedschaftstyp
-      household_title: Familienmitglieder
-      main_title: Familienmitglieder
-      supplements_title: Zusatzdaten
-
-  memberships:
-    join_zusatzsektions:
-      create:
-        success:
-          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde erstellt."
-          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden erstellt."
-    leave_zusatzsektions:
-      create:
-        success:
-          one: "Deine Zusatzmitgliedschaft in <i>%{group_name}</i> wurde gelöscht."
-          other: "Eure %{count} Zusatzmitgliedschaften in <i>%{group_name}</i> wurden gelöscht."
-    switch_stammsektions:
-      create:
-        success:
-          one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde vorgenommen."
-          other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurden vorgenommen."
-
   roles:
     beitragskategorie:
       adult: Einzel
@@ -1354,66 +1407,6 @@ de:
     global:
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
-
-  self_registration:
-    fee_component:
-      title: Beiträge in der Sektion %{group}
-    infos_component:
-      title_questions: Fragen zur Mitgliedschaft?
-      title_contact: Kontakt
-      title_documents: Dokumente
-      additional_infos: Mehr Informationen findest du unter den %{link}.
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
-      link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
-      link_faqs_title: FAQs
-      link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_DE.pdf
-      link_statutes_title: Statuten
-      link_sektion_statuten_title: Sektionsstatuten
-      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_Gültig_ab_1.1.2021.pdf
-      link_contribution_regulations_title: Beitragsreglement
-      link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
-      link_data_protection_title: Datenschutzerklärung
-
-  termination_reasons:
-    destroy:
-      foreign_key_error: Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich.
-
-  table_displays:
-    person:
-      antrag_fuer: Antrag für
-      address_valid: Adresse gültig
-      confirmed_at: E-Mail bestätigt am
-      beitrittsdatum: Beitritt per
-
-  verify_membership:
-    title: Verifizierung SAC CAS Mitgliedschaft
-    not_found: Ungültiger Verifikationscode
-    status_valid: Mitgliedschaft gültig
-    status_invalid: Mitgliedschaft ungültig
-
-  passes:
-    membership:
-      file_name_prefix: SAC-Mitgliederausweis
-      title: Mitgliederausweis
-      member: Mitglied
-      sac_partner: SAC-Partner
-      sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
-      emergency_number: "Notfallnummer"
-      emergency_contact: "Notfallkontakt"
-
-  mounted_attributes:
-    form_tabs:
-      group/sac_cas:
-        default: SAC/CAS Attribute
-      group/sektion:
-        default: Sektions Attribute
-      group/ortsgruppe:
-        default: Ortsgruppen Attribute
 
   sac_membership_configs:
     form:
@@ -1469,21 +1462,29 @@ de:
       link:
         add: Neu
 
-  households:
-    edit:
-      title: Familie verwalten
-      shared_address_info: Alle Familienmitglieder teilen sich dieselbe Adresse.
-    members_table_row:
-      unconfirmed_email_info: Die E-Mail Adresse muss bestätigt werden, bevor
-        die Person aus der Familie entfernt werden kann.
-
-  household_aside_component:
-    section_name: Familie
-  household_aside_member_component:
-    main_person: Familienrechnungsempfänger
-    set_main_person: Zum Familienrechnungsempfänger machen
-    unverified_email: Die Email Adresse ist nicht bestätigt, die Person kann daher nicht zum Familienrechnungsempfänger gemacht werden.
-    cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
+  self_registration:
+    fee_component:
+      title: Beiträge in der Sektion %{group}
+    infos_component:
+      title_questions: Fragen zur Mitgliedschaft?
+      title_contact: Kontakt
+      title_documents: Dokumente
+      additional_infos: Mehr Informationen findest du unter den %{link}.
+      address: |
+        Schweizer Alpen-Club SAC
+        Monbijoustrasse 61
+        3000 Bern 14
+        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
+        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
+      link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
+      link_faqs_title: FAQs
+      link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_DE.pdf
+      link_statutes_title: Statuten
+      link_sektion_statuten_title: Sektionsstatuten
+      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_Gültig_ab_1.1.2021.pdf
+      link_contribution_regulations_title: Beitragsreglement
+      link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
+      link_data_protection_title: Datenschutzerklärung
 
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
@@ -1493,6 +1494,23 @@ de:
     title: Stammsektion wechseln
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
+
+  table_displays:
+    person:
+      antrag_fuer: Antrag für
+      address_valid: Adresse gültig
+      confirmed_at: E-Mail bestätigt am
+      beitrittsdatum: Beitritt per
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich.
+
+  verify_membership:
+    title: Verifizierung SAC CAS Mitgliedschaft
+    not_found: Ungültiger Verifikationscode
+    status_valid: Mitgliedschaft gültig
+    status_invalid: Mitgliedschaft ungültig
 
   wizards:
     steps:

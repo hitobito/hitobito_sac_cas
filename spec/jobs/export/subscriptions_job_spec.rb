@@ -21,4 +21,15 @@ describe Export::SubscriptionsJob do
       job.perform
     end
   end
+
+  context "with recipient_households param" do
+    subject(:job) do
+      described_class.new(:csv, user.id, mailing_list.id, recipient_households: true, filename: "dummy")
+    end
+
+    it "uses SacRecipients tabular export" do
+      expect(Export::Tabular::People::SacRecipientHouseholds).to receive(:export)
+      job.perform
+    end
+  end
 end

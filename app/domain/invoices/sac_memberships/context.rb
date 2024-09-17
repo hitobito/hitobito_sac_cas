@@ -8,14 +8,11 @@
 module Invoices
   module SacMemberships
     class Context
-      attr_reader :date
+      attr_reader :date, :custom_discount
 
-      def initialize(date)
+      def initialize(date, custom_discount: nil)
         @date = date
-      end
-
-      def mid_year_discount_factor
-        @mid_year_discount_factor ||= (100 - config.discount_percent(date)) / 100.0
+        @custom_discount = custom_discount  # between 0 and 100
       end
 
       def fetch_section(role)
@@ -37,6 +34,19 @@ module Invoices
 
       def people_with_membership_years(includes: [:roles])
         Person.with_membership_years("people.*", Date.new(date.year - 1, 12, 31)).includes(includes)
+      end
+
+      def discount_factor
+        @discount_factor ||=
+          if custom_discount
+            (100 - custom_discount) / 100.0
+          else
+            mid_year_discount_factor
+          end
+      end
+
+      def mid_year_discount_factor
+        @mid_year_discount_factor ||= (100 - config.discount_percent(date)) / 100.0
       end
     end
   end

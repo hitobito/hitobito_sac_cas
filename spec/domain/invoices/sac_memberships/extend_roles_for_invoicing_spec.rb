@@ -34,13 +34,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
 
     it "only makes 3 database queries" do
-      query_count = 0
-      ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, details|
-        query_count += 1
-      end
-
-      extend_roles
-      expect(query_count).to eq(3) # SELECT in batches (2x) and UPDATE all (1x)
+      expect_query_count { extend_roles }.to eq(3) # SELECT in batches (2x) and UPDATE all (1x)
     end
   end
 

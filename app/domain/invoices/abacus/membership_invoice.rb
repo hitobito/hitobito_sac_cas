@@ -11,23 +11,22 @@ module Invoices
       MEMBERSHIP_CARD_FIELD_INDEX = 11
 
       # member is an Invoices::SacMembership::Member object
-      attr_reader :member, :memberships, :new_entry, :discount
+      attr_reader :member, :memberships, :new_entry
 
       delegate :context, to: :member
       delegate :date, :sac, :config, to: :context
 
-      def initialize(member, memberships, new_entry: false, discount: nil)
+      def initialize(member, memberships, new_entry: false)
         @member = member
         @memberships = memberships
         @new_entry = new_entry
-        @discount = discount
       end
 
       def positions
         @positions ||=
           I18n.with_locale(member.language) do
             Invoices::SacMemberships::PositionGenerator
-              .new(member, custom_discount: discount)
+              .new(member)
               .generate(memberships, new_entry: new_entry)
               .map(&:to_abacus_invoice_position)
           end

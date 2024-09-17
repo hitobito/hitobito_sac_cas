@@ -7,15 +7,15 @@
 
 class MarkFirstEventQuestionAsRequired < ActiveRecord::Migration[6.1]
   def up
-    execute <<~SQL
-      UPDATE event_questions
-      SET required = true
-      WHERE id IN (
-        SELECT event_question_id AS id
-          FROM event_question_translations q
-          WHERE q.event_question_id = event_questions.id
-          AND q.question = 'Notfallkontakt 1 - Name und Telefonnummer'
-      ) AND event_questions.event_id IS NULL
-    SQL
+    # execute <<~SQL
+    #   UPDATE event_questions
+    #   SET required = true
+    #   WHERE id IN (
+    #     SELECT event_question_id AS id
+    #       FROM event_question_translations q
+    #       WHERE q.event_question_id = event_questions.id
+    #       AND q.question = 'Notfallkontakt 1 - Name und Telefonnummer'
+    #   ) AND event_questions.event_id IS NULL
+    # SQL
   end
 end

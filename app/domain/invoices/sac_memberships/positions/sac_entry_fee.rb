@@ -14,6 +14,10 @@ module Invoices
         def fee_attr_prefix
           :entry_fee
         end
+
+        def discount_factor
+          1.0 # no discounts on entry fees
+        end
       end
     end
   end
