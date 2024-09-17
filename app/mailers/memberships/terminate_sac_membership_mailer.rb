@@ -5,18 +5,29 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Memberships
-  class TerminateSacMembershipMailer < ApplicationMailer
-    CONFIRMATION = "memberships_terminate_sac_membership_confirmation"
+class Memberships::TerminateSacMembershipMailer < ApplicationMailer
+  CONFIRMATION = "memberships_terminate_sac_membership_confirmation"
 
-    def confirmation(person, sektion_name, terminate_on)
-      values = [
-        %W[person-name #{person}],
-        %W[sektion-name #{sektion_name}],
-        %W[terminate-on #{terminate_on}]
-      ].to_h
-      custom_headers = {cc: Group::Geschaeftsstelle.first.email}
-      custom_content_mail([person], CONFIRMATION, values, custom_headers)
-    end
+  def confirmation(person, sektion_name, terminate_on)
+    @person = person
+    @sektion_name = sektion_name
+    @terminate_on = terminate_on
+    headers[:cc] = Group::Geschaeftsstelle.first.email
+
+    compose(person, CONFIRMATION)
+  end
+
+  private
+
+  def placeholder_person_name
+    @person.to_s
+  end
+
+  def placeholder_sektion_name
+    @sektion_name
+  end
+
+  def placeholder_terminate_on
+    @terminate_on
   end
 end

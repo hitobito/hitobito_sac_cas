@@ -1,0 +1,4 @@
+%header
+  = link_to 'https://www.sac-cas.ch', class: 'logo' do
+    - logo_path = Settings.application.logo.dig(:multilanguage_image, I18n.locale)
+    = wagon_image_pack_tag(logo_path, alt: 'SAC-CAS')

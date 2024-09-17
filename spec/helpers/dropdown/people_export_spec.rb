@@ -36,6 +36,6 @@ describe Dropdown::PeopleExport do
     is_expected.to have_content "Export"
 
     expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
-    expect(submenu_entries("CSV")).to match_array %w[Spaltenauswahl Adressliste Empfänger]
+    expect(submenu_entries("CSV")).to match_array ["Spaltenauswahl", "Adressliste", "Empfänger Einzelpersonen", "Empfänger Familien"]
   end
 end

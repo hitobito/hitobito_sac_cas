@@ -8,6 +8,8 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
+    links:
+      faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
 
   settings:
     email:
@@ -987,7 +989,8 @@ de:
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
 
   dropdown/people_export:
-    recipients: Empfänger
+    recipients: Empfänger Einzelpersonen
+    recipient_households: Empfänger Familien
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
@@ -1144,6 +1147,9 @@ de:
     sektion_secondary: Zusatzsektion
 
     self_registration:
+      form:
+        has_account: Hast du bereits ein SAC-Login?
+        to_login_page: Anmelden
       abo_issue:
         issues_from_help: |
           Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
@@ -1233,6 +1239,14 @@ de:
         adult: Einzelmitglied
         family: Familienmitglied
         youth: Jugendmitglied
+
+  mailer:
+    footer:
+      address: |
+        Schweizer Alpen-Club SAC
+        Monbijoustrasse 61
+        3000 Bern 14
+        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
 
   memberships:
     join_zusatzsektions:

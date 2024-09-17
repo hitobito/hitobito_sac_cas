@@ -143,11 +143,12 @@ en:
 
         wizards/steps/choose_sektion:
           requires_admin: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
-
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: is already taken. The e-mail must be unique per person.
+        wizards/steps/check_data_quality_errors:
+          data_quality_error: ""
     models:
       people/neuanmeldungen/approve:
         one: Take over registration
@@ -958,9 +959,12 @@ en:
         one: Other
         description: Other
 
+  # sort top level keys alphabetically from here on
+
   contactable:
     address_fields:
       updates_household_address: Address is updated for all family members
+
   devise:
     sessions:
       form:
@@ -1110,6 +1114,84 @@ en:
     tour_guides_inactive: Inactive tour leaders
     tour_guides_expired: Expired tour leaders
 
+  groups:
+    actions_show_sac_cas:
+      export_mitglieder: CSV members
+      create_yearly_membership_invoice: MV Annual collection
+    sektion_primary: Core section
+    sektion_secondary: Additional section
+
+    self_registration:
+      form:
+        has_account: ""
+        to_login_page: ""
+      abo_issue:
+        issues_from_help: |
+          The subscription runs from the next possible issue.
+          If you would like the magazine to be delivered at a later date, please let us know
+          the issue from which we may begin delivery.
+      abo_infos:
+        annual_price_header: Price per year
+        delivery_country_header: Country of dispatch
+        price_with_vat: "CHF %{amount} incl. VAT."
+        switzerland: Switzerland
+        international: Worldwide
+      create:
+        redirect_existing_email: There is already a login for this e-mail. Log in here.
+
+      agreement_link:
+        statutes_text: "I have read and agree to the %{link} "
+        sektion_statuten_text: "I have read and agree to the %{link} "
+        contribution_regulations_text: "I have read the %{link} and agree with them"
+        data_protection_text: "I have read and agree to the %{link} "
+
+    self_inscription:
+      membership_role_exists: You are already a member of this section
+      form:
+        register_on_info:
+          jul: "If you join on or after July 1, you will receive a 50% discount on the annual membership fee."
+          oct: The annual membership fee is waived for members joining on or after October 1.
+        register_as_info: " You can either join the SAC Blüemlisalp as an additional section or you can select it as your new parent section and thus leave your previous parent section. Note for families: Changing the parent section automatically applies to all family members. Joining an additional section, on the other hand, only applies to you."
+        inscribe: Join
+      new:
+        role_exists: You are already a member of this section
+      confirm:
+        title: Confirm accession
+        information_text: >
+          Please confirm that you wish to join the %{sektion} section. This process cannot be reversed.
+        submit_button: Apply to join
+
+  groups/self_inscription:
+    new:
+      details: "You are joining with the contribution category %{beitragskategorie}."
+
+  groups/self_registration:
+    global:
+      main_email_title: Main e-mail
+      emailless_main_person_title: Personal data
+      neuanmeldung_main_person_title: Personal data
+      abo_issue_title: Subscription
+      abo_main_person_title: Personal data
+      single_or_household_title: Membership type
+      household_title: Family members
+      main_title: Family members
+      supplements_title: Additional data
+
+  households:
+    edit:
+      title: Manage family
+      shared_address_info: All family members share the same address.
+    members_table_row:
+      unconfirmed_email_info: The e-mail address must be confirmed before the person can be removed from the family.
+
+  household_aside_component:
+    section_name: Family
+  household_aside_member_component:
+    main_person: Family bill recipient
+    set_main_person: Become a family invoice recipient
+    unverified_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
+    cannot_set_main_person: Contact the office to change the family invoice recipient
+
   invoices:
     sac_memberships:
       title: "Membership invoice %{year}"
@@ -1127,8 +1209,44 @@ en:
         family: Family member
         youth: Youth member
 
+  memberships:
+    join_zusatzsektions:
+      create:
+        success:
+          one: "Your additional membership in <i>%{group_name}</i> has been created."
+          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been created."
+    leave_zusatzsektions:
+      create:
+        success:
+          one: "Your additional membership in <i>%{group_name}</i> has been deleted."
+          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been deleted."
+    switch_stammsektions:
+      create:
+        success:
+          one: "Your section change to <i>%{group_name}</i> has been made."
+          other: "Your %{count} section changes to <i>%{group_name}</i> were made."
+
   mitglieder_exports:
     export_enqueued: "Export is started in the background and downloaded after completion."
+
+  mounted_attributes:
+    form_tabs:
+      group/sac_cas:
+        default: SAC/CAS attributes
+      group/sektion:
+        default: Section attributes
+      group/ortsgruppe:
+        default: Local group attributes
+
+  passes:
+    membership:
+      file_name_prefix: SAC membership card
+      title: Membership card
+      member: member
+      sac_partner: SAC partner
+      sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
+      emergency_number: "Emergency number"
+      emergency_contact: "Emergency contact"
 
   person:
     history:
@@ -1236,83 +1354,6 @@ en:
         one: Application was rejected
         other: "%{count} Applications were rejected"
 
-  groups:
-    actions_show_sac_cas:
-      export_mitglieder: CSV members
-      create_yearly_membership_invoice: MV Annual collection
-    sektion_primary: Core section
-    sektion_secondary: Additional section
-
-    self_registration:
-      abo_issue:
-        issues_from_help: |
-          The subscription runs from the next possible issue.
-          If you would like the magazine to be delivered at a later date, please let us know
-          the issue from which we may begin delivery.
-      abo_infos:
-        annual_price_header: Price per year
-        delivery_country_header: Country of dispatch
-        price_with_vat: "CHF %{amount} incl. VAT."
-        switzerland: Switzerland
-        international: Worldwide
-      create:
-        redirect_existing_email: There is already a login for this e-mail. Log in here.
-
-      agreement_link:
-        statutes_text: "I have read and agree to the %{link} "
-        sektion_statuten_text: "I have read and agree to the %{link} "
-        contribution_regulations_text: "I have read the %{link} and agree with them"
-        data_protection_text: "I have read and agree to the %{link} "
-
-    self_inscription:
-      membership_role_exists: You are already a member of this section
-      form:
-        register_on_info:
-          jul: "If you join on or after July 1, you will receive a 50% discount on the annual membership fee."
-          oct: The annual membership fee is waived for members joining on or after October 1.
-        register_as_info: " You can either join the SAC Blüemlisalp as an additional section or you can select it as your new parent section and thus leave your previous parent section. Note for families: Changing the parent section automatically applies to all family members. Joining an additional section, on the other hand, only applies to you."
-        inscribe: Join
-      new:
-        role_exists: You are already a member of this section
-      confirm:
-        title: Confirm accession
-        information_text: >
-          Please confirm that you wish to join the %{sektion} section. This process cannot be reversed.
-        submit_button: Apply to join
-
-  groups/self_inscription:
-    new:
-      details: "You are joining with the contribution category %{beitragskategorie}."
-
-  groups/self_registration:
-    global:
-      main_email_title: Main e-mail
-      emailless_main_person_title: Personal data
-      neuanmeldung_main_person_title: Personal data
-      abo_issue_title: Subscription
-      abo_main_person_title: Personal data
-      single_or_household_title: Membership type
-      household_title: Family members
-      main_title: Family members
-      supplements_title: Additional data
-
-  memberships:
-    join_zusatzsektions:
-      create:
-        success:
-          one: "Your additional membership in <i>%{group_name}</i> has been created."
-          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been created."
-    leave_zusatzsektions:
-      create:
-        success:
-          one: "Your additional membership in <i>%{group_name}</i> has been deleted."
-          other: "Your %{count} additional memberships in <i>%{group_name}</i> have been deleted."
-    switch_stammsektions:
-      create:
-        success:
-          one: "Your section change to <i>%{group_name}</i> has been made."
-          other: "Your %{count} section changes to <i>%{group_name}</i> were made."
-
   roles:
     beitragskategorie:
       adult: Single
@@ -1323,67 +1364,6 @@ en:
     global:
       sac_cas/role/mitglied_common:
         no_permission: "To resign, you must contact the section's membership service"
-
-  self_registration:
-    fee_component:
-      title: "Contributions in the section %{group}"
-    infos_component:
-      title_questions: "Questions about membership?"
-      title_contact: Contact
-      title_documents: Documents
-      additional_infos: "You can find more information in the %{link}."
-      address: |
-        Swiss Alpine Club SAC
-        Monbijoustrasse 61
-        P.O.Box
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
-      link_faqs: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
-      link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Statuten-SAC_de.pdf"
-      link_statutes_title: Statutes
-      link_sektion_statuten_title: Section statutes
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_G%C3%BCltig_ab_1.1.2021.pdf"
-      link_contribution_regulations_title: Contribution regulations
-      link_data_protection: "https://www.sac-cas.ch/en/meta/data-protection/"
-      link_data_protection_title: Data protection
-
-  termination_reasons:
-    destroy:
-      foreign_key_error: "There are people who use this reason for leaving, so deletion is not possible."
-
-  table_displays:
-    person:
-      antrag_fuer: Application for
-      address_valid: Address valid
-      confirmed_at: E-mail confirmed on
-      beitrittsdatum: Joining per
-
-  verify_membership:
-    title: Verification of SAC CAS membership
-    not_found: Invalid verification code
-    status_valid: Membership valid
-    status_invalid: Membership invalid
-
-  passes:
-    membership:
-      file_name_prefix: SAC membership card
-      title: Membership card
-      member: member
-      sac_partner: SAC partner
-      sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
-      emergency_number: "Emergency number"
-      emergency_contact: "Emergency contact"
-
-  mounted_attributes:
-    form_tabs:
-      group/sac_cas:
-        default: SAC/CAS attributes
-      group/sektion:
-        default: Section attributes
-      group/ortsgruppe:
-        default: Local group attributes
 
   sac_membership_configs:
     form:
@@ -1439,20 +1419,30 @@ en:
       link:
         add: New
 
-  households:
-    edit:
-      title: Manage family
-      shared_address_info: All family members share the same address.
-    members_table_row:
-      unconfirmed_email_info: The e-mail address must be confirmed before the person can be removed from the family.
-
-  household_aside_component:
-    section_name: Family
-  household_aside_member_component:
-    main_person: Family bill recipient
-    set_main_person: Become a family invoice recipient
-    unverified_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
-    cannot_set_main_person: Contact the office to change the family invoice recipient
+  self_registration:
+    fee_component:
+      title: "Contributions in the section %{group}"
+    infos_component:
+      title_questions: "Questions about membership?"
+      title_contact: Contact
+      title_documents: Documents
+      additional_infos: "You can find more information in the %{link}."
+      address: |
+        Swiss Alpine Club SAC
+        Monbijoustrasse 61
+        P.O.Box
+        3000 Bern 14
+        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
+        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
+      link_faqs: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
+      link_faqs_title: FAQ
+      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Statuten-SAC_de.pdf"
+      link_statutes_title: Statutes
+      link_sektion_statuten_title: Section statutes
+      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_G%C3%BCltig_ab_1.1.2021.pdf"
+      link_contribution_regulations_title: Contribution regulations
+      link_data_protection: "https://www.sac-cas.ch/en/meta/data-protection/"
+      link_data_protection_title: Data protection
 
   sheet/memberships/join_zusatzsektion:
     title: Join additional section
@@ -1462,6 +1452,23 @@ en:
     title: Change trunk section
   sheet/memberships/terminate_sac_membership:
     title: Terminate SAC membership
+
+  table_displays:
+    person:
+      antrag_fuer: Application for
+      address_valid: Address valid
+      confirmed_at: E-mail confirmed on
+      beitrittsdatum: Joining per
+
+  termination_reasons:
+    destroy:
+      foreign_key_error: "There are people who use this reason for leaving, so deletion is not possible."
+
+  verify_membership:
+    title: Verification of SAC CAS membership
+    not_found: Invalid verification code
+    status_valid: Membership valid
+    status_invalid: Membership invalid
 
   wizards:
     steps:

@@ -11,6 +11,9 @@ module SacCas::Dropdown::PeopleExport
       item.sub_items << Dropdown::Item.new(translate(:recipients),
         params.merge(format: format, recipients: true),
         data: {checkable: true})
+      item.sub_items << Dropdown::Item.new(translate(:recipient_households),
+        params.merge(format: format, recipient_households: true),
+        data: {checkable: true})
     end
   end
 end
