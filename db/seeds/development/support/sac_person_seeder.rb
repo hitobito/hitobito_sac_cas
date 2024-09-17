@@ -43,13 +43,13 @@ class SacPersonSeeder < PersonSeeder
       second_adult = seed_sac_adult
       child = seed_sac_child
 
-      family_members = [adult, second_adult, child]
+      household_people = [adult, second_adult, child]
 
       # skip if already in a household / family
-      next if family_members.any?(&:household_key)
+      next if household_people.any?(&:household_key)
 
       # make sure these people have no other roles
-      family_members.each do |p|
+      household_people.each do |p|
         p.roles.find_each { |r| r.really_destroy! }
       end
 

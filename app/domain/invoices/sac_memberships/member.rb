@@ -80,17 +80,13 @@ module Invoices
       end
 
       def family_members
-        person
-          .household_people
-          .includes(:roles)
-          .order(Person.order_by_name_statement)
-          .select { |p| sac_mitgliedschaft?(p) }
+        person.household_people.select { |p| sac_mitgliedschaft?(p) }
       end
 
       private
 
       def sac_mitgliedschaft?(person)
-        People::SacMembership.new(person, date: date).active?
+        People::SacMembership.new(person, date:).active?
       end
     end
   end
