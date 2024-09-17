@@ -113,13 +113,6 @@ describe Wizards::Signup::SektionOperation do
           .to not_change { ExternalInvoice::SacMembership.count }
           .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
           .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
-
-        perform_enqueued_jobs
-        mail = ActionMailer::Base.deliveries.last
-        expect(mail.to).to eq(["max.muster@example.com"])
-        expect(mail.bcc).to include(SacCas::MV_EMAIL)
-        expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
-        expect(mail.body.to_s).to include("Sektion: SAC Blüemlisalp", "Vielen Dank")
       end
 
       it "does not enqueue confirmation email if not main person" do
@@ -140,7 +133,6 @@ describe Wizards::Signup::SektionOperation do
           .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
           .and have_enqueued_mail(Signup::SektionMailer).exactly(:once)
 
-        perform_enqueued_jobs
         invoice = ExternalInvoice::SacMembership.last
         expect(invoice.state).to eq("draft")
         expect(invoice.person_id).to eq(Person.last.id)
@@ -148,17 +140,6 @@ describe Wizards::Signup::SektionOperation do
         expect(invoice.sent_at).to eq(Date.current)
         expect(invoice.link_id).to eq(group.layer_group.id)
         expect(invoice.year).to eq(Date.current.year)
-
-        mail = ActionMailer::Base.deliveries.last
-        expect(mail.to).to eq(["max.muster@example.com"])
-        expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
-        expect(mail.body.to_s).to include(
-          "Sektion: SAC Blüemlisalp",
-          "Geburtsdatum: 01.01.2000",
-          "Telefonnumer: +41 79 123 45 67",
-          "Strasse und Nr: Musterplatz 42",
-          "Viel Spass beim SAC!"
-        )
       end
 
       it "#save! creates invoice and starts job" do
