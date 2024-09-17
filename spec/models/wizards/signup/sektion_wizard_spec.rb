@@ -84,26 +84,26 @@ describe Wizards::Signup::SektionWizard do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
     it "is invalid when on family_fields step and uses existing email" do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
     it "is invalid when on various_fields step and data_protection is blank" do
@@ -155,8 +155,8 @@ describe Wizards::Signup::SektionWizard do
     it "creates multiple people and sets household key and address" do
       required_attrs[:family_fields] = {
         members_attributes: [
-          [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}],
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2002"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com", phone_number: "0791234567"}],
+          [1, {first_name: "Maxi", last_name: "Muster", birthday: 12.years.ago.beginning_of_year.to_s}]
         ]
       }
       expect(wizard).to be_valid

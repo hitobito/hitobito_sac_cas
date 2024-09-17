@@ -2,12 +2,15 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= standard_form(wizard, url: group_self_registration_path, data: { controller: :forwarder, forwarder_delay_value: 150 }) do |f|
+= standard_form(wizard, url: group_self_registration_path, data: { controller: "forwarder", forwarder_delay_value: 150 }) do |f|
   = f.honeypot(:verification)
+  = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: :aside
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
+
     - if wizard.respond_to?(:birthdays)
       = c.with_aside do
         = render "aside", c: , wizard:
+
     - if wizard.respond_to?(:costs)
       = c.with_footer do
         = render "abo_infos", costs: wizard.costs
