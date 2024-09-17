@@ -80,7 +80,13 @@ module Invoices
       end
 
       def household_people
-        person.household_people.select { |person| person.sac_membership_active? }
+        person.household_people.select { |p| sac_mitgliedschaft?(p) }
+      end
+
+      private
+
+      def sac_mitgliedschaft?(person)
+        People::SacMembership.new(person, date:).active?
       end
     end
   end
