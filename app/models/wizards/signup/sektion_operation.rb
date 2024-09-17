@@ -67,12 +67,12 @@ module Wizards::Signup
       invoice = ExternalInvoice::SacMembership.create!(
         person: person,
         state: :draft,
-        year: invoice_date.year,
-        issued_at: invoice_date,
-        sent_at: invoice_date,
+        year: today.year,
+        issued_at: today,
+        sent_at: today,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateInvoiceJob.new(invoice, invoice_date, new_entry: true).enqueue!
+      Invoices::Abacus::CreateInvoiceJob.new(invoice, today, new_entry: true).enqueue!
     end
 
     def neuanmeldung?
@@ -80,12 +80,7 @@ module Wizards::Signup
         group.is_a?(Group::SektionsNeuanmeldungenNv)
     end
 
-    def invoice_date
-      @invoice_date ||= begin
-        invoice_cutoff_date = (Date.current - 1.month).change(day: 15)
-        [Date.current, invoice_cutoff_date].max
-      end
-    end
+    def today = @today ||= Date.current
 
     def role_type = group.self_registration_role_type
 
