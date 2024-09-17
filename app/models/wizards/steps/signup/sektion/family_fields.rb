@@ -33,6 +33,10 @@ module Wizards::Steps::Signup::Sektion
       @members || []
     end
 
+    def contains_any_changes?
+      members.any?
+    end
+
     private
 
     def assert_adult_count

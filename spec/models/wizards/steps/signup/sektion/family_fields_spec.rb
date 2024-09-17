@@ -107,4 +107,17 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
       end
     end
   end
+
+  describe "#contains_any_changes?" do
+    it "is false when members are empty" do
+      expect(form.contains_any_changes?).to eq false
+    end
+
+    it "is true when members have been added" do
+      form.members_attributes = [
+        [0, required_attrs]
+      ]
+      expect(form.contains_any_changes?).to eq true
+    end
+  end
 end
