@@ -110,5 +110,20 @@ describe Event::ParticipationMailer do
         expect(mail.body).not_to include("<div id='content'></div>")
       end
     end
+
+    context "xss" do
+      subject { mail.body }
+
+      it "sanitizes html tags" do
+        event.update!(name: "Test<script>alert('XSS')</script>kurs")
+        is_expected.to include("Testalert('XSS')kurs")
+        is_expected.not_to include("<script>")
+      end
+
+      it "doesnt remove whitelisted tags" do
+        event.update!(name: "Test<br>kurs")
+        is_expected.to include("Test<br>kurs")
+      end
+    end
   end
 end
