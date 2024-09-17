@@ -9,11 +9,8 @@ namespace :sac_imports do
   def skip_existing? = ["1", "true"].exclude?(ENV["REIMPORT_ALL"].to_s.downcase)
 
   def default_files = {
-    people: "tmp/xlsx/personen.xlsx",
     sektionen: "tmp/xlsx/sektionen.xlsx",
-    huts: "tmp/xlsx/huetten_beziehungen.xlsx",
-    membership: "tmp/xlsx/mitglieder_aktive.xlsx",
-    additional_memberships: "tmp/xlsx/zusatzmitgliedschaften.xlsx"
+    huts: "tmp/xlsx/huetten_beziehungen.xlsx"
   }
 
   desc "Import people"
@@ -33,13 +30,9 @@ namespace :sac_imports do
     SacImports::HutsImporter.new(read_file(:huts)).import!
   end
 
-  desc "Import memberships from a navision export xlsx" \
-         " (options: FILE=#{default_files[:memberships]} REIMPORT_ALL=true)"
-  task "4_memberships": [:environment] do
-    SacImports::Sektion::MembershipsImporter.new(
-      read_file(:memberships),
-      skip_existing: skip_existing?
-    ).import!
+  desc "Import roles"
+  task "4_roles": [:environment] do
+    SacImports::Roles::Importer.new.create
   end
 
   desc "Import additional memberships from a navision export xlsx" \
