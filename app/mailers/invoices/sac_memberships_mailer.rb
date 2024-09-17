@@ -6,14 +6,15 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Invoices::SacMembershipsMailer < ApplicationMailer
+  include MultilingualMailer
+
   MEMBERSHIP_ACTIVATED = "invoices_sac_membership_activated"
 
   def confirmation(person)
     @person = person
-    headers = {}
     locales = [person.language]
 
-    compose(person, MEMBERSHIP_ACTIVATED, headers, locales)
+    compose_multilingual(person, MEMBERSHIP_ACTIVATED, locales)
   end
 
   private
