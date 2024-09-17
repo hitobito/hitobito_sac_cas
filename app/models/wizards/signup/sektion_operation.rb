@@ -85,11 +85,11 @@ module Wizards::Signup
     end
 
     def enqueue_confirmation_mail
-      Signup::SektionMailer.confirmation(person, group).deliver_later
+      Signup::SektionMailer.confirmation(person, group.layer_group).deliver_later
     end
 
     def enqueue_approval_pending_confirmation_mail
-      Signup::SektionMailer.approval_pending_confirmation(person, group).deliver_later
+      Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group).deliver_later
     end
 
     def neuanmeldung?

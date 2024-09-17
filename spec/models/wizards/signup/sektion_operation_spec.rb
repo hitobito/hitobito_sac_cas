@@ -117,7 +117,9 @@ describe Wizards::Signup::SektionOperation do
         perform_enqueued_jobs
         mail = ActionMailer::Base.deliveries.last
         expect(mail.to).to eq(["max.muster@example.com"])
-        expect(mail.body.to_s).to include("Sektion: Neuanmeldungen (zur Freigabe)", "Vielen Dank")
+        expect(mail.bcc).to include(SacCas::MV_EMAIL)
+        expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
+        expect(mail.body.to_s).to include("Sektion: SAC Blüemlisalp", "Vielen Dank")
       end
 
       it "does not enqueue confirmation email if not main person" do
@@ -151,7 +153,7 @@ describe Wizards::Signup::SektionOperation do
         expect(mail.to).to eq(["max.muster@example.com"])
         expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
         expect(mail.body.to_s).to include(
-          "Sektion: Neuanmeldungen",
+          "Sektion: SAC Blüemlisalp",
           "Geburtsdatum: 01.01.2000",
           "Telefonnumer: +41 79 123 45 67",
           "Strasse und Nr: Musterplatz 42",

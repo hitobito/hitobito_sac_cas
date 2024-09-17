@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Signup::SektionMailer < ApplicationMailer
+  include MultilingualMailer
+
   CONFIRMATION = "sektion_signup_confirmation"
   APPROVAL_PENDING_CONFIRMATION = "sektion_signup_approval_pending_confirmation"
 
@@ -22,10 +24,10 @@ class Signup::SektionMailer < ApplicationMailer
   def send_mail(person, section, content_key)
     @person = person
     @section = section
-    headers = {bcc: [SacCas::MV_EMAIL, section.email].compact}
+    headers[:bcc] = [SacCas::MV_EMAIL, section.email].compact_blank
     locales = [person.language]
 
-    compose(person, content_key, headers, locales)
+    compose_multilingual(person, content_key, locales)
   end
 
   def placeholder_first_name
@@ -45,7 +47,7 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_phone_number
-    @person.phone_numbers.map(&:number).join(", ")
+    @person.phone_numbers.first&.to_s
   end
 
   def placeholder_address_care_of
