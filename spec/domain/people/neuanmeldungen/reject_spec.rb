@@ -94,4 +94,28 @@ describe People::Neuanmeldungen::Reject do
     expect(note.text).to eq "my note"
     expect(note.author).to eq people(:mitglied)
   end
+
+  describe "email" do
+    it "send an email to the person" do
+      expect { rejector.call }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      expect(ActionMailer::Base.deliveries.last.body.to_s).to include(
+        "Neuanmeldungen (zur Freigabe)",
+        "Leider müssen wir dir mitteilen"
+      )
+    end
+
+    it "send an email in the correct language" do
+      person.update!(language: :fr)
+      rejector.call
+      expect(ActionMailer::Base.deliveries.last.body.to_s).to include(
+        "Neuanmeldungen (zur Freigabe)",
+        "Malheureusement, nous devons vous en informer"
+      )
+    end
+
+    it "doesnt send email if not main person" do
+      person.update!(sac_family_main_person: false)
+      expect { rejector.call }.not_to change(ActionMailer::Base.deliveries, :count)
+    end
+  end
 end
