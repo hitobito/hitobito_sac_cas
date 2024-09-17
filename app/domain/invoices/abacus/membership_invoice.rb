@@ -63,7 +63,7 @@ module Invoices
 
         index = MEMBERSHIP_CARD_FIELD_INDEX
         fields[:"user_field#{index}"] = membership_card_data(member.person)
-        member.household_people.each do |member|
+        member.family_members.each do |member|
           index += 1
           fields[:"user_field#{index}"] = membership_card_data(member)
         end

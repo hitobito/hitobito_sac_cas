@@ -100,7 +100,7 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def family_memberships
-    member.household_people.map(&:sac_membership)
+    member.family_members.map(&:sac_membership)
   end
 
   def set_confirmed_at

@@ -85,8 +85,23 @@ describe Invoices::SacMemberships::Member do
     let(:familienmitglied2) { people(:familienmitglied2) }
     let(:familienmitglied_kind) { people(:familienmitglied_kind) }
 
-    it "returns all active household people" do
-      expect(subject.household_people).to eq([familienmitglied, familienmitglied2, familienmitglied_kind])
+    subject { described_class.new(familienmitglied, context) }
+
+    context "year 2023" do
+      it "returns all active household people" do
+        expect(subject.family_members).to contain_exactly(familienmitglied2, familienmitglied_kind)
+      end
+    end
+
+    context "in the future" do
+      let(:date) { Date.new(Time.zone.today.year + 2, 1, 1) }
+
+      it "does not return all people" do
+        # update role delete_at to yesterday to simulate a future deletion / TODO delete_on change
+        familienmitglied2.roles.each { |role| role.update_column(:deleted_at, Date.yesterday) }
+        familienmitglied_kind.roles.each { |role| role.update_column(:deleted_at, Date.yesterday) }
+        expect(subject.family_members).not_to include(familienmitglied2, familienmitglied_kind)
+      end
     end
   end
 end

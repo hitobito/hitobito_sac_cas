@@ -79,7 +79,7 @@ module Invoices
         !beitragskategorie.family? || sac_family_main_person?
       end
 
-      def household_people
+      def family_members
         person.household_people.select { |p| sac_mitgliedschaft?(p) }
       end
 
