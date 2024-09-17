@@ -29,9 +29,8 @@ describe Wizards::Signup::SektionOperation do
   }
 
   let(:newsletter) { true }
-  let(:register_on) { Time.zone.today }
 
-  subject(:operation) { described_class.new(person_attrs: person_attrs, group:, register_on:, newsletter:) }
+  subject(:operation) { described_class.new(person_attrs: person_attrs, group:, newsletter:) }
 
   describe "validations" do
     it "is valid" do
@@ -133,27 +132,12 @@ describe Wizards::Signup::SektionOperation do
         expect(invoice.year).to eq(Date.current.year)
       end
 
-      context "register_on after 15th of month" do
-        let(:register_on) { Date.new(2024, 6, 20) }
-
-        it "#save! creates invoice and starts job" do
-          travel_to(Date.new(2024, 6, 1)) do
-            operation.save!
-            expect(invoice.issued_at).to eq(Date.current)
-            expect(invoice.sent_at).to eq(Date.current)
-            expect(invoice.year).to eq(Date.current.year)
-          end
-        end
-      end
-
-      context "register_on before 15th of month" do
-        let(:register_on) { Date.new(2025, 6, 9) }
-
-        it "#save! creates invoice with 15th of month before register_on" do
+      it "#save! creates invoice and starts job" do
+        travel_to(Date.new(2024, 6, 20)) do
           operation.save!
-          expect(invoice.issued_at).to eq(Date.new(2025, 5, 15))
-          expect(invoice.sent_at).to eq(Date.new(2025, 5, 15))
-          expect(invoice.year).to eq(2025)
+          expect(invoice.issued_at).to eq(Date.current)
+          expect(invoice.sent_at).to eq(Date.current)
+          expect(invoice.year).to eq(Date.current.year)
         end
       end
     end
@@ -170,25 +154,6 @@ describe Wizards::Signup::SektionOperation do
 
       expect(subscription).to be_excluded
       expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
-    end
-  end
-
-  context "with later start date" do
-    let(:register_on) { Date.new(2024, 7, 1) }
-
-    it "#save! future role" do
-      travel_to(Date.new(2024, 6, 1)) do
-        expect { operation.save! }
-          .to change { Person.count }.by(1)
-          .and change { FutureRole.count }.by(1)
-          .and not_change { Subscription.count }
-      end
-
-      max = Person.find_by(first_name: "Max")
-      expect(max.roles.first.group).to eq group
-      expect(max.roles.first.type).to eq "FutureRole"
-      expect(max.roles.first.convert_to).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
-      expect(max.roles.first.convert_on).to eq Date.new(2024, 7, 1)
     end
   end
 end

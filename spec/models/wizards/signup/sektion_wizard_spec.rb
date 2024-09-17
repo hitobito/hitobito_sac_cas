@@ -212,15 +212,6 @@ describe Wizards::Signup::SektionWizard do
         expect(max.subscriptions).to be_empty
         expect(maxi.subscriptions).to be_empty
       end
-
-      it "creates future roles if register_on is in the future" do
-        required_attrs[:various_fields][:register_on] = "jul"
-        travel_to(Time.zone.local(2023, 3, 12)) do
-          wizard.save!
-        end
-        expect(max.roles.last).to be_kind_of(FutureRole)
-        expect(maxi.roles.last).to be_kind_of(FutureRole)
-      end
     end
   end
 end
