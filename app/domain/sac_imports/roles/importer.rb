@@ -15,8 +15,11 @@ module SacImports::Roles
 
     def initialize(output: $stdout)
       @output = output
-      @source_file = CsvSource.new(:NAV2)
-      @csv_report = CsvReport.new(:"4_roles", REPORT_HEADERS)
+      @source_file = SacImports::CsvSource.new(:NAV2)
+      @csv_report = SacImports::CsvReport.new(:"4_roles", REPORT_HEADERS)
+    end
+
+    def parse_role(row)
     end
 
     def create

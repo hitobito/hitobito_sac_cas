@@ -17,10 +17,6 @@ module SacImports::Roles
       person.present? && person.valid?
     end
 
-    def person
-      @person ||= ::Person.find_by(id: navision_id)
-    end
-
     def errors
       @errors ||= build_error_messages
     end
@@ -31,6 +27,14 @@ module SacImports::Roles
 
     private
 
+    def person
+      @person ||= ::Person.find_by(id: navision_id)
+    end
+
+    def todo?
+      row.values.any? { |value| value.is_a?(String) && value.include?("TODO") }
+    end
+
     def navision_id
       @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""))
     end
@@ -39,6 +43,7 @@ module SacImports::Roles
       errors = []
 
       errors << "Person not found" if person.nil?
+      errors << "Skipping because row contains TODO" if todo?
       errors << [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact if person.present?
 
       errors.join(", ")
