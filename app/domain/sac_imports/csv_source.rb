@@ -10,14 +10,12 @@ class SacImports::CsvSource
   SOURCE_HEADERS = {
     NAV1: {
       navision_id: "No_",
-      navision_name: "Surname",
-      navision_membership_years: "Vereinsmitgliederjahre",
+      membership_years: "Vereinsmitgliederjahre",
       first_name: "First Name",
       last_name: "Surname",
       address_care_of: "Adresszusatz",
       postbox: "Postfach",
-      address: "Address",
-      street: "Street Name",
+      street_name: "Street Name",
       housenumber: "Street No_",
       country: "Country_Region Code",
       town: "City",
