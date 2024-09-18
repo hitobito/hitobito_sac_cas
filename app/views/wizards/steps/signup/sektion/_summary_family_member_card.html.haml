@@ -1,3 +1,8 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Aformero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
 .well.p-3.row.col-11.col-xxl-5.flex-flow-column.me-auto.ms-3.pb-5
   = content_tag :span, person.adult? ? t(".adult") : t(".child"), class: "mb-2 h3"
   = content_tag(:div, "#{person.first_name} #{person.last_name}", class: "mb-3 fw-bold mh-20-px")
