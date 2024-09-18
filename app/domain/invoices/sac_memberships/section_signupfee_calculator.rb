@@ -13,7 +13,6 @@ module Invoices
         Positions::SectionFee,
         Positions::HutSolidarityFee,
         Positions::SacMagazine,
-        Positions::SacMagazinePostageAbroad
       ].freeze
 
       NEW_ENTRY_POSITIONS = [
@@ -23,13 +22,10 @@ module Invoices
 
       delegate :discount_factor, to: :context
 
-      def initialize(section, beitragskategorie, date = Time.zone.today, sac_magazine: false, selected_country: "CH")
-        person = Person.new(sac_family_main_person: true, country: selected_country)
-        @context = Context.new(date)
-        @sac_magazine = sac_magazine
-        @member = Member.new(person, context)
+      def initialize(section, beitragskategorie, date = Time.zone.today)
         @section = section
         @beitragskategorie = beitragskategorie
+        @context = Context.new(date)
       end
 
       def annual_fee
@@ -50,18 +46,14 @@ module Invoices
 
       def build_positions(classes)
         classes.map { |klass| klass.new(member, membership) }
-               .filter { |instance| instance_active?(instance) }
-      end
-            
-      def instance_active?(instance)
-        if instance.is_a?(Positions::SacMagazinePostageAbroad)
-          instance.active?(sac_magazine_checked: sac_magazine)
-        else
-          instance.active?
-        end
+               .filter(&:active?)
       end
 
       def membership = @membership ||= Membership.new(section, beitragskategorie, nil)
+
+      def person = @person ||= Person.new(sac_family_main_person: true)
+
+      def member = @member ||= Member.new(person, context)
     end
   end
 end
