@@ -94,24 +94,13 @@ describe People::Neuanmeldungen::Reject do
   end
 
   describe "email" do
-    it "enqueues job" do
-      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
-    end
-
     it "send an email to the person" do
-      expect { rejector.call }.to change(ActionMailer::Base.deliveries, :count).by(1)
-      expect(last_email.body.to_s).to include("SAC Blüemlisalp", "Leider müssen wir dir mitteilen")
-    end
-
-    it "send an email in the correct language" do
-      person.update!(language: :fr)
-      rejector.call
-      expect(last_email.body.to_s).to include("SAC Blüemlisalp", "Malheureusement, nous devons vous en informer")
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
     end
 
     it "doesnt send email if not main person" do
       person.update!(sac_family_main_person: false)
-      expect { rejector.call }.not_to change(ActionMailer::Base.deliveries, :count)
+      expect { rejector.call }.not_to have_enqueued_mail(People::NeuanmeldungenMailer)
     end
   end
 end

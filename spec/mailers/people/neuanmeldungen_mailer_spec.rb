@@ -11,35 +11,38 @@ describe People::NeuanmeldungenMailer do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:bluemlisalp) }
 
-  subject { mail.parts.first.body }
-
-  describe "approve" do
-    let(:mail) { described_class.approve(person, group) }
+  context "#approve" do
+    let(:mail) { described_class.approve(person, group.layer_group) }
 
     it "sends confirmation email to person" do
-      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq "SAC Eintritt Antragsbestätigung"
+      expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
       expect(mail.bcc).to include "mv@sac-cas.ch"
-      expect(mail.body).to match("Hallo Edmund,")
-      expect(mail.body).to match("Die SAC Blüemlisalp hat deinen Antrag geprüft und wir freuen uns")
-      expect(mail.body).to include("<a href=\"http://test.host/groups/380959420/people/600001\">SAC-Portal</a>")
-    end
-
-    it "does consider person language when sending" do
-      person.update!(language: :fr)
-      expect(mail.body).to match("Bonjour Edmund,")
+      expect(mail.subject).to eq("SAC Eintritt Antragsbestätigung")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund,",
+        "Die SAC Blüemlisalp hat deinen Antrag geprüft und wir freuen uns",
+        "<a href=\"http://test.host/groups/380959420/people/600001\">SAC-Portal</a>"
+      )
     end
   end
 
-  describe "reject" do
-    let(:mail) { described_class.reject(person, group) }
+  context "#reject" do
+    let(:mail) { described_class.reject(person, group.layer_group) }
 
     it "sends confirmation email to person" do
-      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq "SAC Eintritt Antragsablehnung"
+      expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
       expect(mail.bcc).to include "mv@sac-cas.ch"
-      expect(mail.body).to match("Hallo Edmund,")
-      expect(mail.body).to match("Die SAC Blüemlisalp hat deinen Antrag geprüft. Leider müssen wir dir mitteilen")
+      expect(mail.subject).to eq("SAC Eintritt Antragsablehnung")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund,",
+        "Die SAC Blüemlisalp hat deinen Antrag geprüft. Leider müssen wir dir mitteilen"
+      )
+    end
+
+    it "considers person's language when sending" do
+      person.update!(language: :fr)
+      expect(mail.subject).to eq("Demande d'admission au SAC rejetée")
+      expect(mail.body.to_s).to include("Bonjour Edmund,")
     end
   end
 end
