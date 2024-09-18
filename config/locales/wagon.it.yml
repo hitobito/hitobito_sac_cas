@@ -8,6 +8,8 @@ it:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: anni
+    links:
+      faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
 
   settings:
     email:
@@ -1031,7 +1033,8 @@ it:
     terminate_sac_membership_wizard_link: Cessazione dell'appartenenza al SAC
 
   dropdown/people_export:
-    recipients: Ricevitore
+    recipients: ""
+    recipient_households: ""
 
   dropdown/group_edit:
     sac_membership_configs: Parametri per le fatture dei soci
@@ -1259,6 +1262,9 @@ it:
         family: Membro della famiglia
         youth: Membro dei giovani
 
+  mailer:
+    footer:
+      address: |
   memberships:
     join_zusatzsektions:
       create:
