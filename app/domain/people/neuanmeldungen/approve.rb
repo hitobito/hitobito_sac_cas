@@ -23,8 +23,8 @@ module People::Neuanmeldungen
           next unless create_approved_role?(role)
 
           create_approved_role(role)
-          generate_invoice(role) unless family_member?(role)
-          send_confirmation_mail(role.person) unless family_member?(role)
+          generate_invoice(role) if paying_person?(role)
+          send_confirmation_mail(role.person) if paying_person?(role)
         end
       end
     end

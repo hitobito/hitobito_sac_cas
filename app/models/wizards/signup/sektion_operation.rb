@@ -22,7 +22,7 @@ module Wizards::Signup
     def save!
       save_person_and_role
 
-      if main_person?
+      if paying_person?
         if no_approval_needed?
           generate_invoice
           enqueue_confirmation_mail
@@ -52,6 +52,10 @@ module Wizards::Signup
 
     def save_person_and_role
       person.save! && role.save!
+    end
+
+    def paying_person?
+      role.person.sac_membership.paying_person?(role.beitragskategorie)
     end
 
     def person
@@ -106,8 +110,6 @@ module Wizards::Signup
     def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
-
-    def main_person? = !role.beitragskategorie&.family? || role.person.sac_family_main_person
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!

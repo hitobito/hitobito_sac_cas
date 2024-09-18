@@ -28,11 +28,11 @@ module People::Neuanmeldungen
       end.uniq
     end
 
-    private
-
-    def family_member?(role)
-      role.beitragskategorie.family? && !role.person.sac_family_main_person?
+    def paying_person?(role)
+      role.person.sac_membership.paying_person?(role.beitragskategorie)
     end
+
+    private
 
     def applicable_roles
       group.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)
