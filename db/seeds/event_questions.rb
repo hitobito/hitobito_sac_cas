@@ -6,26 +6,23 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 # recreate default event questions
-data = [
-  {
-    de: "Notfallkontakt 1 - Name und Telefonnummer",
-    fr: "Contact d'urgence 1 - Nom et Numéro de téléphone",
-    it: "Contatto di emergenza 1 - Nome e numero di telefono"
-  },
-  {
-    de: "Notfallkontakt 2 - Name und Telefonnummer",
-    fr: "Contact d'urgence 2 - Nom et Numéro de téléphone",
-    it: "Contatto di emergenza 2 - Nome e numero di telefono"
-  }
-]
 
-unless Event::Question.where(question: data.pluck(:de)).count == 2
-  Event::Question.where(event_id: nil).destroy_all
+Event::Question.seed_global({
+  disclosure: :optional,
+  event_type: Event::Course.sti_name,
+  translation_attributes: [
+    { locale: :de, question: "Notfallkontakt 1 - Name und Telefonnummer" },
+    { locale: :fr, question: "Contact d'urgence 1 - Nom et Numéro de téléphone" },
+    { locale: :it, question: "Contatto di emergenza 1 - Nome e numero di telefono" }
+  ]
+})
 
-  data.each do |attrs|
-    eq = Event::Question.create!(question: attrs.delete(:de))
-    attrs.each do |key, question|
-      I18n.with_locale(key) { eq.update!(question: question) }
-    end
-  end
-end
+Event::Question.seed_global({
+  disclosure: :optional,
+  event_type: Event::Course.sti_name,
+  translation_attributes: [
+    { locale: :de, question: "Notfallkontakt 2 - Name und Telefonnummer" },
+    { locale: :fr, question: "Contact d'urgence 2 - Nom et Numéro de téléphone" },
+    { locale: :it, question: "Contatto di emergenza 2 - Nome e numero di telefono" }
+  ]
+})
