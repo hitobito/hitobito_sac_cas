@@ -84,7 +84,7 @@ describe "signup/sektion", js: true do
   end
 
   def complete_last_page(with_adult_consent: true, submit: true)
-    assert_step "Zusatzdaten"
+    assert_step "Zusammenfassung"
     expect(page).to have_button("Registrieren"), "expected to be on last page"
     if with_adult_consent
       check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
@@ -149,6 +149,7 @@ describe "signup/sektion", js: true do
       expect(page).to have_css("h2", text: "Fragen zur Mitgliedschaft?")
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -270,6 +271,7 @@ describe "signup/sektion", js: true do
 
       assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
       click_button("Weiter als Familienmitgliedschaft", match: :first)
+      click_button("Weiter", match: :first)
 
       expect do
         complete_last_page
@@ -341,6 +343,7 @@ describe "signup/sektion", js: true do
         end
       end
       click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
       expect(page).to have_button "Registrieren"
       expect(page).to have_no_selector "#error_explanation"
     end
@@ -373,6 +376,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside("01.01.1980", format_date(15.years.ago))
       click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -454,6 +458,7 @@ describe "signup/sektion", js: true do
         click_on "Entfernen"
       end
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
       expect(page).to have_button "Registrieren"
     end
 
@@ -536,6 +541,7 @@ describe "signup/sektion", js: true do
       click_on "Zurück", match: :first
       fill_in "Geburtstag", with: twenty_years_ago
       click_on "Weiter"
+      click_on "Weiter"
       assert_aside(twenty_years_ago)
       expect do
         complete_last_page
@@ -557,6 +563,7 @@ describe "signup/sektion", js: true do
 
     it "creates excluding subscription if newsletter is unchecked" do
       root.update!(sac_newsletter_mailing_list_id: list.id)
+      click_on "Weiter", match: :first
       uncheck "Ich möchte einen Newsletter abonnieren"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -569,6 +576,7 @@ describe "signup/sektion", js: true do
       reason = SelfRegistrationReason.create!(text: "soso")
       expect(page).to have_css("label", text: "Eintrittsgrund")
       choose "soso"
+      click_on "Weiter", match: :first
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
@@ -582,6 +590,7 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
     end
 
     it "cannot complete without accepting adult consent" do
@@ -608,6 +617,7 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
     end
 
     it "fails if section policy is not accepted" do
@@ -640,6 +650,51 @@ describe "signup/sektion", js: true do
       expect(page).to have_link("Beitragsreglement", target: "_blank")
       expect(page).to have_link("Datenschutzerklärung", target: "_blank")
     end
+  end
+
+  describe "summary page" do
+    before do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+    end
+
+    it "should display person and entry fee card" do
+      click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
+
+      expect(find_all(".well").count).to eq(2) 
+      expect(page).to have_css(".well", text: "Kontaktperson")
+      expect(page).to have_css(".well", text: "Sektion SAC Blüemlisalp")
+      expect(page).not_to have_css("h2", text: "Familienmitglieder")
+    end
+
+    it "should display summary card for each family member" do
+      click_on "Eintrag hinzufügen"
+      within "#members_fields .fields:nth-child(1)" do
+        fill_in "Vorname", with: "Maxine"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: "01.01.1981"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
+        choose "Frau"
+      end
+      click_on "Eintrag hinzufügen"
+      within "#members_fields .fields:nth-child(2)" do
+        fill_in "Vorname", with: "Larissa"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: format_date(15.years.ago)
+        fill_in "E-Mail (optional)", with: "larissa.muster@hitobito.example.com"
+        choose "Andere"
+      end
+      click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
+      assert_step "Zusammenfassung"
+
+      expect(find_all(".well").count).to eq(4) 
+      expect(page).to have_css(".well", text: "Erwachsene Person")
+      expect(page).to have_css(".well", text: "Kind")
+    end
+
   end
 
   describe "wizard stepping navigation" do
