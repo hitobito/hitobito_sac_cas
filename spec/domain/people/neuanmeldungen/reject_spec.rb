@@ -95,7 +95,7 @@ describe People::Neuanmeldungen::Reject do
 
   describe "email" do
     it "send an email to the person" do
-      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
     end
 
     it "doesnt send email if not main person" do
