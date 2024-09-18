@@ -50,7 +50,6 @@ module Wizards::Steps::Signup::Sektion
     private
 
     def privacy_policy
-      require 'pry'; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
       @privacy_policy ||= wizard.group.layer_group.privacy_policy
     end
   end

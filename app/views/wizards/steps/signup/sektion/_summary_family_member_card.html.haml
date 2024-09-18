@@ -3,4 +3,4 @@
   = content_tag(:div, "#{person.first_name} #{person.last_name}", class: "mb-3 fw-bold mh-20-px")
   = content_tag(:div, labeled(person.class.human_attribute_name(:birthday), person.birthday.strftime("%d.%m.%Y"), no_value_hide_label: true), class: "mh-20-px")
   = content_tag(:div, labeled(person.class.human_attribute_name(:phone_number), person.phone_number, no_value_hide_label: true), class: "mh-20-px")
-  = content_tag(:div, labeled(person.class.human_attribute_name(:email), wizard.email, no_value_hide_label: true), class: "mh-20-px")
+  = content_tag(:div, labeled(person.class.human_attribute_name(:email), person.email, no_value_hide_label: true), class: "mh-20-px")
