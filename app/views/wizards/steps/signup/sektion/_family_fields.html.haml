@@ -17,7 +17,7 @@
     = form.labeled_input_fields :first_name, :last_name
     = form.labeled_date_field :birthday, data: {action: 'focusout->sac--signup#toggleFields focusout->forwarder#click'}
     = form.labeled_adult_required_field :email, data: {action: 'change->sac--signup#validateEmail'} do
-      %div.invalid-feedback
+      .d-none.invalid-feedback{data: { 'sac--signup_target': :emailInfo}}
         %span= I18n.t("wizards.steps.signup.sektion.family_fields.email_taken")
     = form.labeled_adult_required_field :phone_number, placeholder: t('global.phone_placeholder')
 
