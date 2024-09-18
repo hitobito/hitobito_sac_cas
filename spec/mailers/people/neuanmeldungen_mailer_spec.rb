@@ -24,6 +24,13 @@ describe People::NeuanmeldungenMailer do
         "<a href=\"http://test.host/groups/380959420/people/600001\">SAC-Portal</a>"
       )
     end
+
+    it "considers person's language when sending" do
+      CustomContent.get(People::NeuanmeldungenMailer::APPROVED).update(locale: :fr, label: "lal", subject: "Acceptee", body: "Bonjour")
+      person.update!(language: :fr)
+      expect(mail.subject).to eq("Acceptee")
+      expect(mail.body.to_s).to include("Bonjour")
+    end
   end
 
   context "#reject" do

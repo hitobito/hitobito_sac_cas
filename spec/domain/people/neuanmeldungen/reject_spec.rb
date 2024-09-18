@@ -98,9 +98,18 @@ describe People::Neuanmeldungen::Reject do
       expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
     end
 
-    it "doesnt send email if not main person" do
-      person.update!(sac_family_main_person: false)
-      expect { rejector.call }.not_to have_enqueued_mail(People::NeuanmeldungenMailer)
+    context "family" do
+      let(:neuanmeldung) { create_role(:family) }
+
+      it "send an email to main person of family" do
+        person.update_columns(sac_family_main_person: true)
+        expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
+      end
+
+      it "does not send email to other family member" do
+        person.update_columns(sac_family_main_person: false)
+        expect { rejector.call }.not_to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
+      end
     end
   end
 end

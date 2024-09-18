@@ -30,6 +30,10 @@ module People::Neuanmeldungen
 
     private
 
+    def family_member?(role)
+      role.beitragskategorie.family? && !role.person.sac_family_main_person?
+    end
+
     def applicable_roles
       group.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)
     end

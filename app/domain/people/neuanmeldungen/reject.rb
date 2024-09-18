@@ -23,7 +23,7 @@ module People::Neuanmeldungen
     def call
       applicable_roles.each do |role|
         Role.transaction do
-          send_rejection_mail(role.person)
+          send_rejection_mail(role.person) unless family_member?(role)
           destroy_role_or_person(role, role.person)
         end
       end
@@ -47,8 +47,6 @@ module People::Neuanmeldungen
     end
 
     def send_rejection_mail(person)
-      return unless person.sac_family_main_person?
-
       People::NeuanmeldungenMailer.reject(person, group.layer_group).deliver_later
     end
   end
