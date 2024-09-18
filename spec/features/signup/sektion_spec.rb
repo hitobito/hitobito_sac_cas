@@ -421,6 +421,17 @@ describe "signup/sektion", js: true do
       expect(find_field("E-Mail")[:class]).not_to match(/\bis-invalid\b/)
     end
 
+    it "does not treat empty email as invalid" do
+      click_on "Eintrag hinzufügen"
+      fill_in "Geburtstag", with: "01.01.2000"
+
+      click_on "Weiter als Familienmitgliedschaft", match: :first
+      within "#members_fields .fields:nth-child(1)" do
+        expect(page).to have_content "E-Mail muss ausgefüllt werden"
+        expect(page).not_to have_content "Die E-Mail Adresse ist bereits registriert"
+      end
+    end
+
     it "validates emails within household on form submit" do
       click_on "Eintrag hinzufügen"
 
