@@ -49,7 +49,7 @@ describe Invoices::SacMemberships::SectionSignupfeeCalculator do
       end
     end
 
-    context "third period" do        
+    context "third period" do
       it "calculates signup fee on first day of period" do
         travel_to(Time.zone.local(2024, 10, 1)) do
           expect(subject.annual_fee.to_f).to eq(0)
@@ -80,7 +80,7 @@ describe Invoices::SacMemberships::SectionSignupfeeCalculator do
 
       it "calculates half discount on 1.10" do
         SacMembershipConfig.last.update!(discount_date_2: "2.10.")
-        
+
         travel_to(Time.zone.local(2024, 7, 1)) do
           expect(subject.annual_fee.to_f).to eq(63.5)
           expect(subject.entry_fee.to_f).to eq(20)
@@ -90,7 +90,7 @@ describe Invoices::SacMemberships::SectionSignupfeeCalculator do
 
       it "calculates no discount if after third period date" do
         SacMembershipConfig.last.update!(discount_date_3: "1.11.")
-        
+
         travel_to(Time.zone.local(2024, 12, 1)) do
           expect(subject.annual_fee.to_f).to eq(127)
           expect(subject.entry_fee.to_f).to eq(20)

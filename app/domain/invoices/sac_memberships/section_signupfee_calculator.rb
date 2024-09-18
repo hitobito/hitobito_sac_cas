@@ -12,7 +12,7 @@ module Invoices
         Positions::SacFee,
         Positions::SectionFee,
         Positions::HutSolidarityFee,
-        Positions::SacMagazine,
+        Positions::SacMagazine
       ].freeze
 
       NEW_ENTRY_POSITIONS = [
@@ -42,11 +42,11 @@ module Invoices
 
       private
 
-      attr_reader :member, :section, :beitragskategorie, :context, :sac_magazine
+      attr_reader :section, :beitragskategorie, :context, :sac_magazine
 
       def build_positions(classes)
         classes.map { |klass| klass.new(member, membership) }
-               .filter(&:active?)
+          .filter(&:active?)
       end
 
       def membership = @membership ||= Membership.new(section, beitragskategorie, nil)
