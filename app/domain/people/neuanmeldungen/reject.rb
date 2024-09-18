@@ -23,7 +23,7 @@ module People::Neuanmeldungen
     def call
       applicable_roles.each do |role|
         Role.transaction do
-          send_rejection_mail(role.person) if role.main_person?
+          send_rejection_mail(role.person) if paying_person?(role)
           destroy_role_or_person(role, role.person)
         end
       end

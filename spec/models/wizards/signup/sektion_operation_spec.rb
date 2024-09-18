@@ -117,7 +117,7 @@ describe Wizards::Signup::SektionOperation do
       end
 
       it "does not enqueue confirmation email if not main person" do
-        allow_any_instance_of(Wizards::Signup::SektionOperation).to receive(:main_person?).and_return(false)
+        allow_any_instance_of(Wizards::Signup::SektionOperation).to receive(:paying_person?).and_return(false)
         expect { operation.save! }.not_to have_enqueued_mail(Signup::SektionMailer)
       end
     end
