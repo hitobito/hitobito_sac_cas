@@ -114,6 +114,10 @@ class People::SacMembership
     @person.household_key.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
   end
 
+  def paying_person?(beitragskategorie)
+    !beitragskategorie.family? || @person.sac_family_main_person?
+  end
+
   private
 
   def individual_membership?
@@ -159,10 +163,6 @@ class People::SacMembership
 
   def any_past_role?
     @person.roles.deleted.where(type: mitglied_stammsektion_types).exists?
-  end
-
-  def paying_person?(beitragskategorie)
-    !beitragskategorie.family? || @person.sac_family_main_person?
   end
 
   def mitglied_types = SacCas::MITGLIED_ROLES.map(&:sti_name)

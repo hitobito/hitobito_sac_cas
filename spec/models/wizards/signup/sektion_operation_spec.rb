@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Wizards::Signup::SektionOperation do
+  include ActiveJob::TestHelper
+
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:person_attrs) {
     {
@@ -106,10 +108,17 @@ describe Wizards::Signup::SektionOperation do
     end
 
     context "sektion requiring approval" do
-      it "does not create invoice" do
+      it "does not create invoice but enqueues confirmation email" do
         expect { operation.save! }
           .to not_change { ExternalInvoice::SacMembership.count }
           .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
+          .and have_enqueued_mail(Signup::SektionMailer, :approval_pending_confirmation).exactly(:once)
+          .with(operation.send(:person), group.layer_group)
+      end
+
+      it "does not enqueue confirmation email if not main person" do
+        allow_any_instance_of(Wizards::Signup::SektionOperation).to receive(:paying_person?).and_return(false)
+        expect { operation.save! }.not_to have_enqueued_mail(Signup::SektionMailer)
       end
     end
 
@@ -119,10 +128,13 @@ describe Wizards::Signup::SektionOperation do
 
       before { groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy! }
 
-      it "does not create invoice and enqueues job" do
+      it "does not create invoice but enqueues job and confirmation email" do
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and have_enqueued_mail(Signup::SektionMailer, :confirmation).exactly(:once)
+          .with(operation.send(:person), group.layer_group)
+
         invoice = ExternalInvoice::SacMembership.last
         expect(invoice.state).to eq("draft")
         expect(invoice.person_id).to eq(Person.last.id)
