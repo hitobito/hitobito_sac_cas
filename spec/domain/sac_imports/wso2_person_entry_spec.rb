@@ -52,6 +52,14 @@ describe SacImports::Wso2PersonEntry do
           expect(entry).not_to be_valid
         end
       end
+
+      context "if the email case doesn't match" do
+        let(:email) { existing_person.email.upcase }
+
+        it "doesn't set an error" do
+          expect(entry).to be_valid
+        end
+      end
     end
 
     describe "#import!" do

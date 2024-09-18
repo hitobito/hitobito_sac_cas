@@ -20,10 +20,10 @@ module SacImports
     validate :person_must_exist_if_navision_id_is_present
 
     def existing_and_wso2_email_matches
-      if person.persisted? && row[:email] != person.email
+      if person.persisted? && email != person.email
         errors.add(:email, "#{row[:email]} does not match the current email")
       end
-      if !person.persisted? && Person.exists?(email: row[:email])
+      if !person.persisted? && Person.exists?(email: email)
         errors.add(:email, "#{row[:email]} already exists")
       end
     end
@@ -106,7 +106,7 @@ module SacImports
       assign_common_attributes(person)
 
       person.primary_group = @basic_login_group
-      person.email = row[:email]
+      person.email = email
 
       person.first_name = row[:first_name]
       person.last_name = row[:last_name]
@@ -162,6 +162,10 @@ module SacImports
       GENDERS[row[:gender]&.to_sym]
     end
 
+    def email
+      row[:email]&.downcase
+    end
+
     def navision_id
       @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""), exception: false)
     end
@@ -170,7 +174,7 @@ module SacImports
       existing_person = navision_id && Person.find_by_id(navision_id)
       return existing_person if existing_person.present?
 
-      Person.where(primary_group: @basic_login_group, email: row[:email]).first_or_initialize
+      Person.where(primary_group: @basic_login_group, email: email).first_or_initialize
     end
   end
 end
