@@ -24,7 +24,7 @@ module Invoices
 
       def initialize(section, beitragskategorie, date = Time.zone.today)
         @section = section
-        @beitragskategorie = beitragskategorie
+        @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie)
         @context = Context.new(date)
       end
 
