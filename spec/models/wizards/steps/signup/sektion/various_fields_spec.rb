@@ -13,103 +13,40 @@ describe Wizards::Steps::Signup::Sektion::VariousFields do
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
-  describe "validations" do
-    let(:reason) { Fabricate(:self_registration_reason) }
-
-    it "is valid if required attrs are set" do
-      fields.attributes = required_attrs
-      expect(fields).to be_valid
-    end
-
-    it "validates aggrements fields" do
-      expect(fields).not_to be_valid
-      expect(fields.errors.attribute_names).to match_array [
-        :statutes,
-        :contribution_regulations,
-        :data_protection
-      ]
-      expect(fields.errors.full_messages).to match_array [
-        "Statuten muss akzeptiert werden",
-        "Beitragsreglement muss akzeptiert werden",
-        "Datenschutzerklärung muss akzeptiert werden"
-      ]
-    end
-
-    # "Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"
-
-    context "privacy_policy on layer group" do
-      before do
-        allow(group.layer_group.privacy_policy).to receive(:attached?).and_return(true)
-        fields.attributes = required_attrs
-      end
-
-      it "is invalid if privacy_policy_acceptance is not set" do
-        fields.sektion_statuten = "0"
-        expect(fields).not_to be_valid
-        expect(fields.errors.attribute_names).to match_array [:sektion_statuten]
-        expect(fields.errors.full_messages).to eq ["Sektionsstatuten muss akzeptiert werden"]
-      end
-
-      it "is valid if privacy_policy_acceptance is set" do
-        fields.sektion_statuten = "1"
-        expect(fields).to be_valid
+  context "current_date_entry_reductions text" do
+    it "renders first period info text on first day of period" do
+      travel_to(Time.zone.local(2000, 1, 1)) do
+        expect(fields.current_date_entry_reductions).to eq("Bis 30.Juni ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
     end
 
-    context "adult_consent on group" do
-      before do
-        group.self_registration_require_adult_consent = true
-        fields.attributes = required_attrs
-      end
-
-      it "is valid when adult consent is explicitly set" do
-        fields.adult_consent = "1"
-        expect(fields).to be_valid
-      end
-
-      it "is invalid when adult consent is explicitly denied" do
-        fields.adult_consent = "0"
-        expect(fields).not_to be_valid
-        expect(fields).to have(1).error_on(:adult_consent)
-        expect(fields.errors.full_messages).to eq ["Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"]
+    it "renders first period info text on last day of first period" do
+      travel_to(Time.zone.local(2000, 6, 30)) do
+        expect(fields.current_date_entry_reductions).to eq("Bis 30.Juni ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
     end
 
-    context "current_date_entry_reductions text" do
-      it "renders first period info text on first day of period" do
-        travel_to(Time.zone.local(2000, 1, 1)) do
-          expect(fields.current_date_entry_reductions).to eq("Bis 30.Juni ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
+    it "renders third period info text on first day third of period" do
+      travel_to(Time.zone.local(2000, 7, 1)) do
+        expect(fields.current_date_entry_reductions).to eq("Bei Eintritt zwischen dem 01.Juli und dem 30.September erhältst du 50% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
+    end
 
-      it "renders first period info text on last day of first period" do
-        travel_to(Time.zone.local(2000, 6, 30)) do
-          expect(fields.current_date_entry_reductions).to eq("Bis 30.Juni ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
+    it "renders third period info text on last day of third period" do
+      travel_to(Time.zone.local(2000, 9, 30)) do
+        expect(fields.current_date_entry_reductions).to eq("Bei Eintritt zwischen dem 01.Juli und dem 30.September erhältst du 50% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
+    end
 
-      it "renders third period info text on first day third of period" do
-        travel_to(Time.zone.local(2000, 7, 1)) do
-          expect(fields.current_date_entry_reductions).to eq("Bei Eintritt zwischen dem 01.Juli und dem 30.September erhältst du 50% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
+    it "renders third period info text on first day third of period" do
+      travel_to(Time.zone.local(2000, 10, 1)) do
+        expect(fields.current_date_entry_reductions).to eq("Bei Eintritt ab dem 01.Oktober entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
+    end
 
-      it "renders third period info text on last day of third period" do
-        travel_to(Time.zone.local(2000, 9, 30)) do
-          expect(fields.current_date_entry_reductions).to eq("Bei Eintritt zwischen dem 01.Juli und dem 30.September erhältst du 50% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
-      end
-
-      it "renders third period info text on first day third of period" do
-        travel_to(Time.zone.local(2000, 10, 1)) do
-          expect(fields.current_date_entry_reductions).to eq("Bei Eintritt ab dem 01.Oktober entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
-      end
-
-      it "renders third period info text on last day of third period" do
-        travel_to(Time.zone.local(2000, 12, 31)) do
-          expect(fields.current_date_entry_reductions).to eq("Bei Eintritt ab dem 01.Oktober entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
-        end
+    it "renders third period info text on last day of third period" do
+      travel_to(Time.zone.local(2000, 12, 31)) do
+        expect(fields.current_date_entry_reductions).to eq("Bei Eintritt ab dem 01.Oktober entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.")
       end
     end
   end

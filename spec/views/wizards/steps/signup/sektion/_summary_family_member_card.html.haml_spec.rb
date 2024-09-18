@@ -37,15 +37,15 @@ describe "wizards/steps/signup/sektion/_summary_family_member_card.html.haml" do
     expect(dom).to have_css(".fw-bold", text: "Larissa Muster")
     expect(dom).to have_text "Geburtstag"
     expect(dom).to have_text "01.01.2000"
-    expect(dom).to have_text "Telefon (optional)"
+    expect(dom).to have_text "Telefon"
     expect(dom).to have_text "0791234567"
-    expect(dom).to have_text "E-Mail (optional)"
+    expect(dom).to have_text "E-Mail"
     expect(dom).to have_text "larissa.muster@hitobito.com"
   end
 
   it "does not render label when value is empty" do
     family.members.first.phone_number = ""
-    expect(dom).not_to have_text "Telefon (optional)"
+    expect(dom).not_to have_text "Telefon"
   end
 
   it "renders different title for children" do
