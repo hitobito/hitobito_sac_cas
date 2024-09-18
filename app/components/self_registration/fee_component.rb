@@ -22,7 +22,7 @@ class SelfRegistration::FeeComponent < ApplicationComponent
   end
 
   def inscription_fee
-    "CHF  30 - einmalige Gebühr"
+    "CHF 30 - einmalige Gebühr"
   end
 
   def total

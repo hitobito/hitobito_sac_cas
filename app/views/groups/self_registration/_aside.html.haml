@@ -3,6 +3,6 @@
 -#  or at https://github.com/hitobito/hitobito.
 
 = turbo_frame_tag(:aside, class: '.col-md') do
-  - if wizard.group
+  - if wizard.group && !wizard.last_step?
     = render(SelfRegistration::FeeComponent.new(group: c.model.group, birthdays: c.model.birthdays))
   = render(SelfRegistration::InfosComponent.new)
