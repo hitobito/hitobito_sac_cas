@@ -20,7 +20,11 @@ module People::Neuanmeldungen
       applicable_roles.each do |role|
         Role.transaction do
           role.destroy!
+          next unless create_approved_role?(role)
+
           create_approved_role(role)
+          generate_invoice(role) unless family_member?(role)
+          send_confirmation_mail(role.person) unless family_member?(role)
         end
       end
     end
@@ -35,11 +39,13 @@ module People::Neuanmeldungen
         APPROVED_NEUANMELDUNGEN_GROUP.create!(parent: group.parent)
     end
 
-    def create_approved_role(role)
-      return if approved_roles_group.roles
+    def create_approved_role?(role)
+      approved_roles_group.roles
         .where(type: APPROVED_NEUANMELDUNGEN_ROLE.sti_name, person_id: role.person_id)
-        .exists?
+        .none?
+    end
 
+    def create_approved_role(role)
       APPROVED_NEUANMELDUNGEN_ROLE.create!(
         group: approved_roles_group,
         person: role.person,
@@ -47,12 +53,9 @@ module People::Neuanmeldungen
         created_at: role.created_at,
         delete_on: role.delete_on
       )
-      generate_invoice(role)
     end
 
     def generate_invoice(role)
-      return if role.beitragskategorie&.family? && !role.person.sac_family_main_person
-
       invoice = ExternalInvoice::SacMembership.create!(
         person: role.person,
         state: :draft,
@@ -62,6 +65,10 @@ module People::Neuanmeldungen
         link: role.layer_group
       )
       Invoices::Abacus::CreateInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
+    end
+
+    def send_confirmation_mail(person)
+      People::NeuanmeldungenMailer.approve(person, group.layer_group).deliver_later
     end
   end
 end

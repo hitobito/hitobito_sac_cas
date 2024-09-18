@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -23,12 +23,8 @@ module People::Neuanmeldungen
     def call
       applicable_roles.each do |role|
         Role.transaction do
-          if non_applicable_roles.any? { |r| r[:person_id] == role.person_id }
-            role.destroy!(always_soft_destroy: true)
-            add_note(role.person)
-          else
-            role.person.destroy!
-          end
+          send_rejection_mail(role.person) unless family_member?(role)
+          destroy_role_or_person(role, role.person)
         end
       end
     end
@@ -39,6 +35,19 @@ module People::Neuanmeldungen
       return if note.blank?
 
       person.notes.create!(text: note, author: author || Person.new(id: 0))
+    end
+
+    def destroy_role_or_person(role, person)
+      if non_applicable_roles.any? { |r| r[:person_id] == person.id }
+        role.destroy!(always_soft_destroy: true)
+        add_note(person)
+      else
+        person.destroy!
+      end
+    end
+
+    def send_rejection_mail(person)
+      People::NeuanmeldungenMailer.reject(person, group.layer_group).deliver_later
     end
   end
 end
