@@ -662,7 +662,7 @@ describe "signup/sektion", js: true do
       click_on "Weiter als Einzelmitglied", match: :first
       click_on "Weiter", match: :first
 
-      expect(find_all(".well").count).to eq(2) 
+      expect(find_all(".well").count).to eq(2)
       expect(page).to have_css(".well", text: "Kontaktperson")
       expect(page).to have_css(".well", text: "Sektion SAC Blüemlisalp")
       expect(page).not_to have_css("h2", text: "Familienmitglieder")
@@ -690,11 +690,10 @@ describe "signup/sektion", js: true do
       click_on "Weiter", match: :first
       assert_step "Zusammenfassung"
 
-      expect(find_all(".well").count).to eq(4) 
+      expect(find_all(".well").count).to eq(4)
       expect(page).to have_css(".well", text: "Erwachsene Person")
       expect(page).to have_css(".well", text: "Kind")
     end
-
   end
 
   describe "wizard stepping navigation" do

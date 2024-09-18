@@ -13,17 +13,15 @@ describe "wizards/steps/signup/sektion/_summary_entry_fee_card.html.haml" do
     render
     Capybara::Node::Simple.new(@rendered)
   }
- 
 
   before do
     allow(view).to receive_messages(wizard: wizard)
   end
 
-
   it "renders summary card with all information" do
-    expect(dom).to have_css('.fw-bold.h6', text:  "Sektion SAC Blüemlisalp")
+    expect(dom).to have_css(".fw-bold.h6", text: "Sektion SAC Blüemlisalp")
     expect(dom).to have_text "CHF 122 - jährlicher Beitrag"
     expect(dom).to have_text "CHF 30 - einmalige Gebühr"
-    expect(dom).to have_css('.fw-bold', text:  "CHF 152 - Total")
+    expect(dom).to have_css(".fw-bold", text: "CHF 152 - Total")
   end
 end

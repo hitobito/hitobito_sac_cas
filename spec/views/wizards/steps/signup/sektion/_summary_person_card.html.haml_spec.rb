@@ -35,10 +35,9 @@ describe "wizards/steps/signup/sektion/_summary_person_card.html.haml" do
     wizard.main_email_field.email = "max.muster@hitobito.com"
   end
 
-
   it "renders summary card with all attributes" do
     expect(dom).to have_text "Kontaktperson"
-    expect(dom).to have_css('.fw-bold', text: "Max Muster")
+    expect(dom).to have_css(".fw-bold", text: "Max Muster")
     expect(dom).to have_text "zusätzliche Adresszeile"
     expect(dom).to have_text "2.Stock"
     expect(dom).to have_text "Strasse und Nr."
