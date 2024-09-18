@@ -1,7 +1,0 @@
-.well.p-3.row.col-11.col-xxl-5.flex-flow-column.ms-3.me-auto
-    = content_tag :span, title, class: "mb-2 h3"
-    - if attributes.present?
-        - attributes.each do |attr|
-            - if attr[:value].present?
-                %div{class: attr[:class], style: 'max-height: 20px'}
-                    = labeled(attr[:label], attr[:value])

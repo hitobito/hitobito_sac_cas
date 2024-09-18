@@ -7,18 +7,15 @@
   .align-with-form
     = content_tag(:h2, t(".my_membership"), class: "fw-bold")
     .row.justify-content-around
-      = render "wizards/steps/signup/sektion/summary_card", title: form.object.entry_fee_info[:title],
-                                                            attributes: form.object.entry_fee_info[:attributes]
-      = render "wizards/steps/signup/sektion/summary_card", title: form.object.person_info(wizard.person_fields)[:title],
-                                                            attributes: form.object.person_info(wizard.person_fields)[:attributes]
+      = render "wizards/steps/signup/sektion/summary_entry_fee_card"
+      = render "wizards/steps/signup/sektion/summary_person_card", person: wizard.person_fields
 
-    - if form.object.family_info.present?
+    - if wizard.family_fields.members.present?
       = content_tag(:h2, t(".family_members"), class: "fw-bold")
-
       .row.justify-content-around
-        - form.object.family_info.each do |family_member|
-          = render "wizards/steps/signup/sektion/summary_card", title: family_member[:title],
-                                                                attributes: family_member[:attributes]
+        - wizard.family_fields.members.sort_by(&:birthday).each do |family_member|
+          = render "wizards/steps/signup/sektion/summary_family_member_card", person: family_member
 
     = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?
+      
     = content_tag(:div, form.object.info_alert_text, class: "alert alert-info mt-3")

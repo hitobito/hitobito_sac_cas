@@ -45,63 +45,12 @@ module Wizards::Steps::Signup::Sektion
             I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_sektion")
     end
 
-    def fee_component
-      @fee_component ||= SelfRegistration::FeeComponent.new(group: wizard.group, birthdays: wizard.birthdays)
-    end
-
-    def person_info(person)
-      {
-        title: I18n.t("wizards.steps.signup.sektion.summary_fields.contact_person"),
-        attributes: [
-          {value: "#{person.first_name} #{person.last_name}", class: "fw-bold mb-3"},
-          {label: translated_label_name(:address_care_of), value: person.address_care_of},
-          {label: translated_label_name(:address), value: "#{person.street} #{person.housenumber}"},
-          {label: translated_label_name(:postbox), value: person.postbox},
-          {label: translated_label_name(:zip_town), value: "#{person.zip_code} #{person.town}"},
-          {label: translated_label_name(:county), value: person.country, class: "mb-3"},
-          {label: translated_label_name(:birthday), value: person.birthday.strftime("%d.%m.%Y")},
-          {label: translated_label_name(:phone_number), value: person.phone_number},
-          {label: translated_label_name(:email), value: wizard.email}
-        ]
-      }
-    end
-
-    def family_info
-      wizard.family_fields.members.sort_by(&:birthday).map do |member|
-        {
-          title: member.adult? ? I18n.t("wizards.steps.signup.sektion.summary_fields.adult") : I18n.t("wizards.steps.signup.sektion.summary_fields.child"),
-          attributes: [
-            {value: "#{member.first_name} #{member.last_name}", class: "fw-bold mb-3"},
-            {label: translated_label_name(:birthday), value: member.birthday.strftime("%d.%m.%Y")},
-            {label: translated_label_name(:phone_number), value: member.phone_number},
-            {label: translated_label_name(:email), value: member.email}
-          ]
-        }
-      end
-    end
-
-    def entry_fee_info
-      {title: "TODO: Einzelmitgliedschaft",
-       attributes:
-        [
-          {value: "#{I18n.t("wizards.steps.signup.sektion.summary_fields.entry_per")} " + I18n.t("activemodel.attributes.self_inscription.register_on_options.#{wizard.various_fields.register_on}"), class: "mb-3"},
-          {value: "Sektion #{wizard.group.layer_group.name}", class: "h6 fw-bold"},
-          {value: fee_component.annual_fee},
-          {value: fee_component.inscription_fee},
-          {value: fee_component.total, class: "fw-bold"}
-        ]}
-    end
-
-    def translated_label_name(attribute)
-      # get zip_town translation from contactable fields
-      return "#{I18n.t("contactable.fields.#{attribute}")}:" if I18n.exists?("contactable.fields.#{attribute}")
-
-      "#{wizard.person_fields.class.human_attribute_name(attribute)}:"
-    end
+    def fee_component = @fee_component ||= SelfRegistration::FeeComponent.new(group: wizard.group, birthdays: wizard.birthdays)
 
     private
 
     def privacy_policy
+      require 'pry'; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
       @privacy_policy ||= wizard.group.layer_group.privacy_policy
     end
   end
