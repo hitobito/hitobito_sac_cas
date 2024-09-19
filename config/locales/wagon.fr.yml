@@ -26,15 +26,15 @@ fr:
     attributes:
       people/membership/invoice_form:
         reference_date: "Date de référence"
-        invoice_date: "Date de la facture"
-        send_date: "Date d'envoi"
+        invoice_date: ""
+        send_date: ""
         discount: "Réduction"
         new_entry: "Droit d'entrée"
         section_id: "Adhésion"
       people/yearly_membership/invoice_form:
         invoice_year: "Exercice comptable"
-        invoice_date: "Date de la facture"
-        send_date: "Date d'envoi"
+        invoice_date: ""
+        send_date: ""
         role_finish_date: "Rallonger les rouleaux jusqu'à"
       wizards/steps/signup/main_email_field:
         email: Courrier électronique
@@ -52,8 +52,10 @@ fr:
         statutes: Statuts
       wizards/steps/signup/sektion/family_fields/member:
         gender: Titre de civilité
-        email: E-mail (facultatif)
-        phone_number: Téléphone (facultatif)
+        email: ""
+        phone_number: ""
+        email_optional: ""
+        phone_number_optional: ""
       wizards/steps/signup/sektion/various_fields:
         register_on: Date d'entrée au
         self_registration_reason_id: Motif d'entrée
@@ -1284,6 +1286,12 @@ fr:
           one: "Ton changement de section vers <i>%{group_name}</i> a été effectué."
           many: "Votre %{count} Changement de section à <i>%{group_name}</i> ont été effectués."
           other: "Votre %{count} Changement de section à <i>%{group_name}</i> ont été effectués."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: ""
+          many: ""
+          other: ""
 
   mitglieder_exports:
     export_enqueued: "Export est lancé en arrière-plan et téléchargé une fois terminé."
@@ -1334,13 +1342,6 @@ fr:
         create_invoice: "Créer une facture"
         mv_yearly_invoice: "Comptes annuels de l'AG"
         zusatzsektion_eintrittsrechnung: "Facture d'entrée de section supplémentaire Section"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "Ton affiliation au CAS a été résiliée."
-          many: "Vos adhésions au CAS %{count} ont été résiliées."
-          other: "Vos adhésions au CAS %{count} ont été résiliées."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1560,10 +1561,16 @@ fr:
         sektion:
           family_fields_title: Membres de la famille
           family_fields:
+            email_taken: >
             membership_info_box: >
               En ajoutant d'autres personnes, tu optes pour une adhésion familiale. Celle-ci est possible pour deux adultes au maximum, âgés de 23 ans ou plus, et un nombre illimité d'enfants âgés de 6 à 17 ans.
 
               L'adhésion familiale est également possible pour les couples sans enfants. Si tu souhaites créer une affiliation familiale avec un membre déjà existant, contacte le secrétariat du CAS.
+          various_fields:
+            immediate_entry_date: ""
+            period_info_1: ""
+            period_info_2: ""
+            period_info_3: ""
           family_buttons:
             next_as_single_link: Continuer en tant que membre individuel
             next_as_household_link: Continuer comme membre de la famille

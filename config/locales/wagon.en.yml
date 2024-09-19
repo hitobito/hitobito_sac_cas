@@ -26,15 +26,15 @@ en:
     attributes:
       people/membership/invoice_form:
         reference_date: "Deadline"
-        invoice_date: "Invoice date"
-        send_date: "Shipping date"
+        invoice_date: ""
+        send_date: ""
         discount: "Discount"
         new_entry: "Entrance fee"
         section_id: "Membership"
       people/yearly_membership/invoice_form:
         invoice_year: "Financial year"
-        invoice_date: "Invoice date"
-        send_date: "Shipping date"
+        invoice_date: ""
+        send_date: ""
         role_finish_date: "Extend rollers to"
       wizards/steps/signup/main_email_field:
         email: e-mail
@@ -52,8 +52,10 @@ en:
         statutes: Statutes
       wizards/steps/signup/sektion/family_fields/member:
         gender: Salutation
-        email: E-mail (optional)
-        phone_number: Telephone (optional)
+        email: ""
+        phone_number: ""
+        email_optional: ""
+        phone_number_optional: ""
       wizards/steps/signup/sektion/various_fields:
         register_on: Entry date per
         self_registration_reason_id: Reason for entry
@@ -1231,6 +1233,11 @@ en:
         success:
           one: "Your section change to <i>%{group_name}</i> has been made."
           other: "Your %{count} section changes to <i>%{group_name}</i> were made."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: ""
+          other: ""
 
   mitglieder_exports:
     export_enqueued: "Export is started in the background and downloaded after completion."
@@ -1281,12 +1288,6 @@ en:
         create_invoice: "Create invoice"
         mv_yearly_invoice: "MV annual financial statements"
         zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "Your SAC membership has been canceled."
-          other: "Your %{count} SAC memberships have been canceled."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1503,10 +1504,16 @@ en:
         sektion:
           family_fields_title: Family members
           family_fields:
+            email_taken: >
             membership_info_box: >
               By adding more people, you choose a family membership. This is possible for a maximum of 2 adults aged 23 and over and any number of children aged between 6 and 17.
 
               Family membership is also available for couples without children. If you would like to set up a family membership with an existing member, please contact the SAC office.
+          various_fields:
+            immediate_entry_date: ""
+            period_info_1: ""
+            period_info_2: ""
+            period_info_3: ""
           family_buttons:
             next_as_single_link: Continue as an individual member
             next_as_household_link: Continue as family membership

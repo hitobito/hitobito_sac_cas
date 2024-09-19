@@ -26,15 +26,15 @@ it:
     attributes:
       people/membership/invoice_form:
         reference_date: "Scadenza"
-        invoice_date: "Data della fattura"
-        send_date: "Data di spedizione"
+        invoice_date: ""
+        send_date: ""
         discount: "Sconto"
         new_entry: "Biglietto d'ingresso"
         section_id: "Soci"
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
-        invoice_date: "Data della fattura"
-        send_date: "Data di spedizione"
+        invoice_date: ""
+        send_date: ""
         role_finish_date: "Estendere i rulli per"
       wizards/steps/signup/main_email_field:
         email: e-mail
@@ -52,8 +52,10 @@ it:
         statutes: Statuti
       wizards/steps/signup/sektion/family_fields/member:
         gender: Saluto
-        email: E-mail (opzionale)
-        phone_number: Telefono (opzionale)
+        email: ""
+        phone_number: ""
+        email_optional: ""
+        phone_number_optional: ""
       wizards/steps/signup/sektion/various_fields:
         register_on: Data di iscrizione per
         self_registration_reason_id: Motivo dell'ingresso
@@ -1284,6 +1286,12 @@ it:
           one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
           many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
           other: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: ""
+          many: ""
+          other: ""
 
   mitglieder_exports:
     export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
@@ -1334,13 +1342,6 @@ it:
         create_invoice: "Creare la fattura"
         mv_yearly_invoice: "Bilancio annuale di MV"
         zusatzsektion_eintrittsrechnung: "Sezione aggiuntiva per la fattura Sezione"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "L'iscrizione al SAC è stata annullata."
-          many: "%{count} Le vostre iscrizioni al SAC sono state annullate."
-          other: "%{count} Le vostre iscrizioni al SAC sono state annullate."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1560,10 +1561,16 @@ it:
         sektion:
           family_fields_title: Membri della famiglia
           family_fields:
+            email_taken: >
             membership_info_box: >
               Se si aggiungono altre persone, si sceglie un abbonamento familiare. Questo è possibile per un massimo di 2 adulti di età pari o superiore a 23 anni e un numero qualsiasi di bambini di età compresa tra 6 e 17 anni.
 
               L'abbonamento familiare è disponibile anche per le coppie senza figli. Se desiderate creare un'associazione familiare con un membro esistente, contattate l'ufficio della SAC.
+          various_fields:
+            immediate_entry_date: ""
+            period_info_1: ""
+            period_info_2: ""
+            period_info_3: ""
           family_buttons:
             next_as_single_link: Continuare come membro individuale
             next_as_household_link: Continuare ad essere membri della famiglia
