@@ -236,7 +236,7 @@ describe Memberships::TerminateSacMembership do
             end.not_to(change { person.subscriptions.count })
           end
 
-          it "creates newsletter subscription" do
+          it "creates fundraising subscription" do
             params[:subscribe_fundraising_list] = true
             expect do
               expect(termination.save!).to eq true
