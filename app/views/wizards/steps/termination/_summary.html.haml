@@ -2,26 +2,27 @@
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
-- if current_user.backoffice? and c.model.mitglied_termination_by_section_only?
-  .alert.alert-info
-    = t('.termination_by_section_only')
-- if c.model.family_membership?
-  .alert.alert-warning
-    %p= t('.family_warning', family_member_names: c.model.family_member_names)
-    %p= t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion_name)
-= c.fields_for do |form|
-  = form.labeled(:termination_reason_id) do
-    = form.select :termination_reason_id, c.model.termination_reason_options, {prompt: true}
-  .alert.alert-info
-    %strong=t('.data_retention_info_title')
-    %p=t('.data_retention_info_text')
-    = form.labeled(:data_retention_consent) do
-      = form.check_box :data_retention_consent
-  %p
+
+- stimulus_ctrl = 'form-field-check-dependent'
+%div{data: { controller: stimulus_ctrl }}
+  - if current_user.backoffice? and c.model.mitglied_termination_by_section_only?
+    .alert.alert-info
+      = t('.termination_by_section_only')
+  - if c.model.family_membership?
+    .alert.alert-warning
+      %p= t('.family_warning', family_member_names: c.model.family_member_names)
+      %p= t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion_name)
+  = c.fields_for do |form|
+    = form.labeled(:termination_reason_id) do
+      = form.select :termination_reason_id, c.model.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
+    .alert.alert-info
+      %strong=t('.data_retention_info_title')
+      %p=t('.data_retention_info_text')
+      = form.labeled(:data_retention_consent) do
+        = form.check_box :data_retention_consent, {data: { "#{stimulus_ctrl}-target" => "checkbox" }}
     = t('.newsletter_info_text')
     = form.labeled(:subscribe_newsletter) do
-      = form.check_box :subscribe_newsletter, {prompt: true}
-  %p
+      = form.check_box :subscribe_newsletter, {prompt: true, data: { action: "#{stimulus_ctrl}#handleCheckbox", "dependent-checkbox" => true }}
     = t('.fundraiser_info_text')
-  = form.labeled(:subscribe_fundraising_list) do
-    = form.check_box :subscribe_fundraising_list, {prompt: true}
+    = form.labeled(:subscribe_fundraising_list) do
+      = form.check_box :subscribe_fundraising_list, {prompt: true, data: { action: "#{stimulus_ctrl}#handleCheckbox", "dependent-checkbox" => true }}
