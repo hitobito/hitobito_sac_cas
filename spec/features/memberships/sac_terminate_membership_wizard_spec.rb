@@ -66,6 +66,46 @@ describe "terminate sac membership wizard", js: true do
         .and change { role.terminated }.to(true)
         .and change { role.end_on }.to(Date.current.end_of_year)
     end
+
+    it "checks data_retention_consent when subscribe_newsletter is checked" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      choose "Sofort"
+      click_button "Weiter"
+      check "Newsletter beibehalten"
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
+      uncheck "Newsletter beibehalten"
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
+    end
+
+    it "checks data_retention_consent when sac spenden is checked" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      choose "Sofort"
+      click_button "Weiter"
+      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
+      uncheck "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
+    end
+
+    it "check newsletter and sac spenden uncheck one, doesnt uncheck data_retention_consent" do
+      visit history_group_person_path(group_id: group.id, id: person.id)
+      within("#role_#{role.id}") do
+        click_link "Austritt"
+      end
+      choose "Sofort"
+      click_button "Weiter"
+      check "Newsletter beibehalten"
+      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
+      uncheck "Newsletter beibehalten"
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
+    end
   end
 
   context "as normal user" do
