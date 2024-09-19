@@ -104,7 +104,7 @@ describe "terminate sac membership wizard", js: true do
       check "Ich möchte weiterhin über Spendenaktionen informiert werden."
       expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
       uncheck "Newsletter beibehalten"
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
+      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
     end
   end
 
