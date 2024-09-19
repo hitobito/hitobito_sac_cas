@@ -35,11 +35,11 @@ module People::Neuanmeldungen
     private
 
     def applicable_roles
-      group.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)
+      group.roles.with_inactive.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)
     end
 
     def non_applicable_roles
-      Role.with_deleted.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
+      Role.with_inactive.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
     end
   end
 end

@@ -29,8 +29,8 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
       expect(invoice.memberships.map(&:section)).to match_array [bluemlisalp, matterhorn]
     end
 
-    it "includes zusatzsektion if destroyed" do
-      roles(:mitglied_zweitsektion).destroy
+    it "includes zusatzsektion if ended" do
+      roles(:mitglied_zweitsektion).update!(end_on: now)
       invoice = generator.build
       expect(invoice.memberships).to have(2).items
       expect(invoice.memberships.map(&:section)).to match_array [bluemlisalp, matterhorn]
@@ -58,8 +58,8 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
     let(:person) {
       Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name,
         group: groups(:bluemlisalp_neuanmeldungen_nv),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year).person
+        start_on: Time.zone.now.beginning_of_year,
+        end_on: Time.zone.today.end_of_year).person
     }
 
     it "returns invoice single memberships" do

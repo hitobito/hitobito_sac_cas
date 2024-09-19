@@ -140,7 +140,7 @@ describe People::Membership::InvoiceForm do
     end
 
     context "with membership for next year" do
-      before { roles(:mitglied).update!(delete_on: 3.years.from_now) }
+      before { roles(:mitglied).update!(end_on: 3.years.from_now) }
 
       it "spans start of current to end of next year for all dates" do
         expect(form.min_date).to eq Date.new(2024, 1, 1)
@@ -176,8 +176,8 @@ describe People::Membership::InvoiceForm do
       Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name,
         person: person,
         group: groups(:matterhorn_neuanmeldungen_nv),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year).person
+        start_on: Date.current.beginning_of_year,
+        end_on: Date.current.end_of_year).person
       expect(form.zusatzsektionen).to eq [groups(:matterhorn)]
     end
 
@@ -186,8 +186,8 @@ describe People::Membership::InvoiceForm do
       Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.name,
         person: person,
         group: groups(:matterhorn_neuanmeldungen_sektion),
-        created_at: Time.zone.now.beginning_of_year,
-        delete_on: Time.zone.today.end_of_year).person
+        start_on: Date.current.beginning_of_year,
+        end_on: Date.current.end_of_year).person
       expect(form.zusatzsektionen).to be_empty
     end
   end

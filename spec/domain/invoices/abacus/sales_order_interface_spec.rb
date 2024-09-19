@@ -84,8 +84,9 @@ describe Invoices::Abacus::SalesOrderInterface do
     let(:members) do
       context
         .people_with_membership_years
-        .where("people.id IN (#{Group::SektionsMitglieder::Mitglied.distinct.select(:person_id).to_sql})")
-        .includes(:roles)
+        .where("people.id IN (#{
+          Group::SektionsMitglieder::Mitglied.with_inactive.distinct.select(:person_id).to_sql
+        })")
         .order_by_name
     end
     let(:dummy_invoice) do
@@ -100,7 +101,7 @@ describe Invoices::Abacus::SalesOrderInterface do
     before do
       SacMembershipConfig.update_all(valid_from: 2020)
       SacSectionMembershipConfig.update_all(valid_from: 2020)
-      Role.update_all(delete_on: date.end_of_year)
+      Role.update_all(end_on: date.end_of_year)
       Person.update_all(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
 
       allow(interface.send(:client)).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")

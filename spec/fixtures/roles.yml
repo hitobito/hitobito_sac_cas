@@ -13,75 +13,75 @@ mitglied:
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: adult
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 mitglied_zweitsektion:
   person_id: 600_001
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: adult
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied:
   person_id: 600_002
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied_zweitsektion:
   person_id: 600_002
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied2:
   person_id: 600_003
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied2_zweitsektion:
   person_id: 600_003
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied_kind:
   person_id: 600_004
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 familienmitglied_kind_zweitsektion:
   person_id: 600_004
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 abonnent_alpen:
   person_id: 600_005
   group: abo_die_alpen
   type: Group::AboMagazin::Abonnent
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31
 
 tourenchef_bluemlisalp_ortsgruppe_ausserberg:
   person_id: 600_006
   group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_sommer
   type: Group::SektionsTourenUndKurseSommer::Tourenchef
-  created_at: 2015-01-01 00:00:00
-  delete_on: <%= Time.zone.today.year %>-12-31
+  start_on: 2015-01-01
+  end_on: <%= Time.zone.today.year %>-12-31

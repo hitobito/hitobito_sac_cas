@@ -54,14 +54,22 @@ module Memberships
         )
     end
 
+    def end_on(role)
+      if terminate_on.future?
+        [role.end_on, terminate_on].compact.min
+      else
+        now.to_date.yesterday
+      end
+    end
+
     def set_termination_date(role) # rubocop:disable Naming/AccessorMethodName
       role.termination_reason_id = termination_reason_id
-      if terminate_on.future?
-        role.delete_on = [role.delete_on, terminate_on].compact.min
-        role.write_attribute(:terminated, true)
-      else
-        role.deleted_at = now.yesterday.end_of_day
-      end
+
+      role_end_on = end_on(role)
+      return role.mark_for_destruction if role_end_on < role.start_on
+
+      role.end_on = role_end_on
+      role.write_attribute(:terminated, true)
     end
 
     def bad_role_type?

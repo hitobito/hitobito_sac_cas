@@ -63,7 +63,7 @@
 #     ))
 #     expect { importer.import! }.to change { Role.only_deleted.count }.by(1)
 #
-#     expect(Role.with_deleted.last.deleted_at).to eq Time.zone.parse("31.12.1980")
+#     expect(Role.with_inactive.last.deleted_at).to eq Time.zone.parse("31.12.1980")
 #   end
 #
 #   it "creates roles for multiple people" do
@@ -213,7 +213,7 @@
 #       expect do
 #         2.times { importer.import! }
 #       end.to change { Role.count }.by(1)
-#         .and change { Role.with_deleted.count }.by(1)
+#         .and change { Role.with_inactive.count }.by(1)
 #     end
 #   end
 # end

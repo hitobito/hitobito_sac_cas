@@ -32,8 +32,10 @@ module Invoices
         @sac_magazine_mailing_list ||= MailingList.find(sac.sac_magazine_mailing_list_id)
       end
 
-      def people_with_membership_years(includes: [:roles])
-        Person.with_membership_years("people.*", Date.new(date.year - 1, 12, 31)).includes(includes)
+      def people_with_membership_years
+        Person
+          .with_membership_years("people.*", Date.new(date.year - 1, 12, 31))
+          .preload_roles_unscoped
       end
 
       def discount_factor

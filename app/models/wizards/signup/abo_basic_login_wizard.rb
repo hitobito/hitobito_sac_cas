@@ -26,7 +26,7 @@ module Wizards::Signup
 
     def build_person
       super do |_person, role|
-        role.delete_on = Time.zone.now.end_of_year.to_date
+        role.end_on = Date.current.end_of_year
       end
     end
 

@@ -10,7 +10,7 @@ require_relative "../shared_examples_mitglied"
 require_relative "../shared_examples_zusatzsektion"
 
 describe Group::SektionsMitglieder::MitgliedZusatzsektion do
-  it_behaves_like "validates Mitglied timestamps"
+  it_behaves_like "validates Mitglied active period"
 
   it_behaves_like "requires a concurrently active mitglied role", described_class
 end

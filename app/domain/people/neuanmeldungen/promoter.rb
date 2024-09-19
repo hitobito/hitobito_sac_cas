@@ -51,8 +51,8 @@ class People::Neuanmeldungen::Promoter
       group: target_group(role),
       person: role.person,
       beitragskategorie: role.beitragskategorie,
-      created_at: Time.current,
-      delete_on: Date.current.end_of_year
+      start_on: Date.current,
+      end_on: Date.current.end_of_year
     )
   end
 
