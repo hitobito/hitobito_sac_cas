@@ -21,7 +21,7 @@
         %span= I18n.t("wizards.steps.signup.sektion.family_fields.email_taken")
     = form.labeled_adult_required_field :phone_number, placeholder: t('global.phone_placeholder')
 
-  .col-xl-2.col-md-3.text-md-end.pe-3.mb-4
+  .col-xl-2.col-md-3.align-with-form.pe-3.mb-3
     = form.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
 
 %br

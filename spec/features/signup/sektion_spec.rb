@@ -69,7 +69,7 @@ describe "signup/sektion", js: true do
 
   def complete_household_form
     assert_step "Familienmitglieder"
-    click_on "Eintrag hinzufügen"
+    click_on "Weiteres Familienmitglied hinzufügen"
 
     within "#members_fields .fields:nth-child(1)" do
       fill_in "Vorname", with: "Maxine"
@@ -230,7 +230,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates household required fields" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       click_on "Weiter als Familienmitgliedschaft", match: :first
 
       expect(page).to have_selector("#error_explanation") # wait for the error message to appear
@@ -245,7 +245,7 @@ describe "signup/sektion", js: true do
     end
 
     it "can create several people in same household" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
@@ -256,7 +256,7 @@ describe "signup/sektion", js: true do
         choose "weiblich"
       end
       assert_aside("01.01.1980", "01.01.1981")
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
@@ -284,7 +284,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates we only can have one additional adult in household" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
@@ -296,7 +296,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside("01.01.1980", "01.01.1981")
 
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -315,7 +315,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates we can not add youth in household" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
@@ -332,7 +332,7 @@ describe "signup/sektion", js: true do
     it "can have many children in household" do
       anchor_date = 15.years.ago.to_date
       7.times.each do |i|
-        click_on "Eintrag hinzufügen"
+        click_on "Weiteres Familienmitglied hinzufügen"
         within "#members_fields .fields:nth-child(#{i + 1})" do
           fill_in "Vorname", with: "Kind #{i + 1}"
           fill_in "Nachname", with: "Muster"
@@ -346,7 +346,7 @@ describe "signup/sektion", js: true do
     end
 
     it "can add and remove housemate" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
@@ -358,7 +358,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside("01.01.1980", "01.01.1981")
 
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -386,7 +386,7 @@ describe "signup/sektion", js: true do
     end
 
     it "changes label of email and phone number" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(1)" do
         expect(page).to have_css("label", text: "E-Mail (optional)")
         expect(page).to have_css("label", text: "Telefon (optional)")
@@ -403,7 +403,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates emails dynamically for household input" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       fill_in "E-Mail", with: "e.hillary@hitobito.example.com"
       fill_in "Vorname", with: "Maxi"
       field = find_field("E-Mail")
@@ -419,7 +419,7 @@ describe "signup/sektion", js: true do
     end
 
     it "does not treat empty email as invalid" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       fill_in "Geburtsdatum", with: "01.01.2000"
 
       click_on "Weiter als Familienmitgliedschaft", match: :first
@@ -430,7 +430,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates emails within household on form submit" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
@@ -444,7 +444,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates phone_number of housemate" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
 
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
@@ -459,7 +459,7 @@ describe "signup/sektion", js: true do
     end
 
     it "can continue with incomplete removed housemate" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
       within "#members_fields .fields:nth-child(1)" do
@@ -475,7 +475,7 @@ describe "signup/sektion", js: true do
 
       it "validates birthday is valid" do
         skip("Sometimes does not work on CI. Nobody knows why, so just skip it") if ci?
-        click_on "Eintrag hinzufügen"
+        click_on "Weiteres Familienmitglied hinzufügen"
 
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -495,14 +495,14 @@ describe "signup/sektion", js: true do
       end
 
       it "has both button groups with housemate" do
-        click_on("Eintrag hinzufügen")
+        click_on("Weiteres Familienmitglied hinzufügen")
 
         expect(page).to have_selector(".btn-toolbar.bottom")
         expect(page).to have_selector(".btn-toolbar.top")
       end
 
       it "has both button groups with housemate when navigating back" do
-        click_on("Eintrag hinzufügen")
+        click_on("Weiteres Familienmitglied hinzufügen")
         fill_in "Vorname", with: "Max"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1980"
@@ -536,7 +536,7 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
@@ -654,7 +654,7 @@ describe "signup/sektion", js: true do
     end
 
     it "should display summary card for each family member" do
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(1)" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
@@ -663,7 +663,7 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
       end
-      click_on "Eintrag hinzufügen"
+      click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Larissa"
         fill_in "Nachname", with: "Muster"
