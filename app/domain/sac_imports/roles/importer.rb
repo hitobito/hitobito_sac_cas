@@ -10,20 +10,21 @@ module SacImports::Roles
     REPORT_HEADERS = [
       :navision_id,
       :navision_name,
-      :errors
-    ]
+      :group,
+      :layer,
+      :errors,
+      :warnings
+    ].freeze
 
     def initialize(output: $stdout)
       @output = output
       @source_file = SacImports::CsvSource.new(:NAV2)
       @csv_report = SacImports::CsvReport.new(:"4_roles", REPORT_HEADERS)
-    end
-
-    def parse_role(row)
+      @skipped_rows = []
     end
 
     def create
-      MembershipsImporter.new(@output, @source_file, @csv_report).create
+      MembershipsImporter.new(@output, @source_file, @csv_report, @skipped_rows).create
       @csv_report.finalize(output: @output)
     end
   end

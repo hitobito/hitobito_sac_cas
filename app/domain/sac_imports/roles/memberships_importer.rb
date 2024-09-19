@@ -7,10 +7,13 @@
 
 module SacImports::Roles
   class MembershipsImporter
-    def initialize(output, source_file, csv_report)
+    include Helper
+
+    def initialize(output, source_file, csv_report, skipped_rows)
       @output = output
       @source_file = source_file
       @csv_report = csv_report
+      @skipped_rows = skipped_rows
     end
 
     def create
@@ -21,17 +24,8 @@ module SacImports::Roles
     end
 
     def process_row(row)
-      @output.print("#{row[:navision_id]} (#{row[:name]}):")
-      entry = MembershipEntry.new(row)
-      @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.errors}\n")
-      if entry.valid?
-        entry.import!
-      else
-        @csv_report.add_row({
-          navision_id: row[:navision_id],
-          navision_name: row[:name],
-          errors: entry.errors
-        })
+      import!(row, "memberships") unless skipped_row?(row) do |row|
+        MembershipEntry.new(row)
       end
     end
   end

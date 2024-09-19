@@ -7,18 +7,20 @@
 
 module SacImports::Roles
   class MembershipEntry
-    attr_reader :row
-
     def initialize(row)
       @row = row
     end
 
-    def valid?
-      person.present? && person.valid?
-    end
-
     def errors
       @errors ||= build_error_messages
+    end
+
+    def valid?
+      errors.empty?
+    end
+
+    def skipped?
+      errors.present? && errors.include?("Skipping")
     end
 
     def import!
@@ -42,8 +44,8 @@ module SacImports::Roles
     def build_error_messages
       errors = []
 
-      errors << "Person not found" if person.nil?
-      errors << "Skipping because row contains TODO" if todo?
+      errors << "Skipping: Person not found" if person.nil?
+      errors << "Skipping: Row contains TODO" if todo?
       errors << [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact if person.present?
 
       errors.join(", ")
