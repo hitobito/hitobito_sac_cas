@@ -121,12 +121,12 @@ Import Source File: **NAV3**
 - Import Source File: **NAV1**
 - CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/6_membership_years_report_2024-06-01-12:00.csv`
 
-## 7: sac_imports:7_wso2_password_hashes
+## 7: sac_imports:7_wso2_people
 
-`rake sac_imports:7_wso2_password_hashes`
+`rake sac_imports:7_wso2_people`
 
 - Import Source File: **WSO21**
-- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/7_wso2_password_hashes_2024-06-01-12:00.csv`
+- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/7_wso2_people_2024-06-01-12:00.csv`
 
 ## 8: sac_imports:8_qualifications
 
