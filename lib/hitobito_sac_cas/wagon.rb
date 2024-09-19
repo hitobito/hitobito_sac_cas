@@ -107,8 +107,6 @@ module HitobitoSacCas
 
       Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
-      # SearchStrategies::Sql.prepend SacCas::SearchStrategies::Sql
-      # SearchStrategies::Sphinx.prepend SacCas::SearchStrategies::Sphinx
 
       ## Resources
       GroupResource.include SacCas::GroupResource

@@ -1,8 +1,7 @@
 
 class CreateHouseholdSequence < ActiveRecord::Migration[6.1]
   def up
-    highest_number = execute("SELECT MAX(REPLACE(household_key, 'F', '')::integer) FROM people
-where household_key LIKE 'F%';").getvalue(0, 0)
+    highest_number = execute("SELECT MAX(REPLACE(household_key, 'F', '')::integer) FROM people").getvalue(0, 0)
 
     current_household_key = (highest_number || 0) + 1
 
