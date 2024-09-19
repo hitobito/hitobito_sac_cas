@@ -45,8 +45,6 @@ module Wizards::Steps::Signup::Sektion
             I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_sektion")
     end
 
-    def fee_component = @fee_component ||= SelfRegistration::FeeComponent.new(group: wizard.group, birthdays: wizard.birthdays)
-
     private
 
     def privacy_policy

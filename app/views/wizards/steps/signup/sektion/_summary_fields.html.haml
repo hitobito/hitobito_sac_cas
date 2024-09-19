@@ -2,9 +2,8 @@
 -#  hitobito_sac_cas and licensed under the Aformero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
-
-= c.fields_for do |form|
-  .align-with-form
+.align-with-form
+  = c.fields_for do |form|
     = content_tag(:h2, t(".my_membership"), class: "fw-bold")
     .row.justify-content-around
       = render "wizards/steps/signup/sektion/summary_entry_fee_card"

@@ -23,6 +23,8 @@ module Wizards::Signup
     delegate :self_registration_reason_id, to: :various_fields
     delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
 
+    delegate :unknown?, :adult?, :youth?, :family?, to: :beitragskategorie, prefix: true
+
     public :group
 
     def save!
@@ -37,7 +39,26 @@ module Wizards::Signup
       read_birthdays
     end
 
+    def fee
+      fees_for(beitragskategorie)
+    end
+
+    def fees_for(beitragskategorie, reference_date = Time.zone.today)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie, reference_date)
+    end
+
     private
+
+    def beitragskategorie
+      value = if birthdays.none?
+        :unknown
+      elsif birthdays.many?
+        :family
+      else
+        Person.new(birthday: birthdays.first).youth? ? :youth : :adult
+      end
+      ActiveSupport::StringInquirer.new(value.to_s)
+    end
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|

@@ -51,6 +51,10 @@ module Wizards::Memberships
       @backoffice
     end
 
+    def fees_for(beitragskategorie, reference_date)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(choose_sektion.group, beitragskategorie, reference_date)
+    end
+
     private
 
     def family_membership?

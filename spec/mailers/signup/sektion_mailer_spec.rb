@@ -13,7 +13,7 @@ describe Signup::SektionMailer do
 
   context "sektion requiring approval" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
-    let(:mail) { described_class.approval_pending_confirmation(person, group.layer_group) }
+    let(:mail) { described_class.approval_pending_confirmation(person, group.layer_group, "adult") }
 
     it "sends confirmation email" do
       expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
@@ -22,6 +22,7 @@ describe Signup::SektionMailer do
       expect(body).to include("Sektion: SAC Blüemlisalp", "Hallo Edmund")
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(group_person_path(person.primary_group, person))
+      expect(body).to include("<td>CHF 127.00")
     end
 
     it "uses person language to localize message" do
@@ -33,7 +34,7 @@ describe Signup::SektionMailer do
 
   context "sektion not requiring approval" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
-    let(:mail) { described_class.confirmation(person, group.layer_group) }
+    let(:mail) { described_class.confirmation(person, group.layer_group, "family") }
 
     it "sends confirmation email" do
       expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
@@ -48,6 +49,7 @@ describe Signup::SektionMailer do
         "Strasse und Nr: Ophovenerstrasse 79a",
         "Viel Spass beim SAC!"
       )
+      expect(body).to include("<td>CHF 179.00")
     end
 
     it "uses person language to localize message" do

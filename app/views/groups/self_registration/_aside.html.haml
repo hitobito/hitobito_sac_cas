@@ -3,6 +3,13 @@
 -#  or at https://github.com/hitobito/hitobito.
 
 = turbo_frame_tag(:aside, class: '.col-md') do
-  - if wizard.group && !wizard.last_step?
-    = render(SelfRegistration::FeeComponent.new(group: c.model.group, birthdays: c.model.birthdays))
+  - if wizard.is_a?(Wizards::Signup::SektionWizard) && !wizard.last_step?
+    = render 'wizards/signup/section_fee_summary', active: wizard.beitragskategorie_unknown?,
+      adult: wizard.fees_for(:adult, Time.zone.now.beginning_of_year),
+      family: wizard.fees_for(:family, Time.zone.now.beginning_of_year),
+      youth: wizard.fees_for(:youth, Time.zone.now.beginning_of_year)
+
+    = render 'wizards/signup/section_fee_details', active: wizard.beitragskategorie_adult?, presenter: wizard.fees_for(:adult)
+    = render 'wizards/signup/section_fee_details', active: wizard.beitragskategorie_family?, presenter: wizard.fees_for(:family)
+    = render 'wizards/signup/section_fee_details', active: wizard.beitragskategorie_youth?, presenter: wizard.fees_for(:youth)
   = render(SelfRegistration::InfosComponent.new)
