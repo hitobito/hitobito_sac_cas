@@ -22,7 +22,7 @@ describe :event_participation, js: true do
     choose "Mann"
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "23"
-    fill_in "Geburtstag", with: "01.01.1980"
+    fill_in "Geburtsdatum", with: "01.01.1980"
     fill_in "Telefon", with: "+41 79 123 45 56"
     fill_in "event_participation_contact_data_zip_code", with: "8000"
     fill_in "event_participation_contact_data_town", with: "Zürich"

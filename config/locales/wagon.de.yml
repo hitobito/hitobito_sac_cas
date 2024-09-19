@@ -92,7 +92,7 @@ de:
       wizards/steps/choose_sektion:
         group_id: Sektion wählen
       wizards/steps/main_email:
-        email: Haupt-E-Mail
+        email: E-Mail
       wizards/steps/termination_choose_date:
         terminate_on: "Austrittsdatum"
         now: Sofort
@@ -340,6 +340,7 @@ de:
           print: Physisch
         genders:
           _nil: andere
+        birthday: Geburtsdatum
         membership_years: Anzahl Mitglieder-Jahre
         membership_number: Mitglied-Nr
         navision_id: Navision-Nr.
@@ -1215,7 +1216,7 @@ de:
 
   groups/self_registration:
     global:
-      main_email_title: Haupt-E-Mail
+      main_email_title: E-Mail
       emailless_main_person_title: Personendaten
       neuanmeldung_main_person_title: Personendaten
       abo_issue_title: Abo
@@ -1543,7 +1544,7 @@ de:
       choose_date_title: Datumwahl
 
       signup:
-        main_email_field_title: Haupt-E-Mail
+        main_email_field_title: E-Mail
         person_fields_title: Personendaten
         agreement_fields:
           adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe

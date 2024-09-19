@@ -35,7 +35,7 @@ describe "wizards/steps/signup/sektion/_summary_family_member_card.html.haml" do
   it "renders summary card with all attributes" do
     expect(dom).to have_text "Erwachsene Person"
     expect(dom).to have_css(".fw-bold", text: "Larissa Muster")
-    expect(dom).to have_text "Geburtstag"
+    expect(dom).to have_text "Geburtsdatum"
     expect(dom).to have_text "01.01.2000"
     expect(dom).to have_text "Telefon"
     expect(dom).to have_text "0791234567"

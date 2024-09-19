@@ -21,7 +21,7 @@ describe "signup/abo_touren_portal_wizard" do
     fill_in "Nachname", with: "Muster"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_street", with: "Musterplatz"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_housenumber", with: "42"
-    fill_in "Geburtstag", with: "01.01.1980"
+    fill_in "Geburtsdatum", with: "01.01.1980"
     fill_in "Telefon", with: "+41 79 123 45 56"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_town", with: "Zürich"
@@ -108,7 +108,7 @@ describe "signup/abo_touren_portal_wizard" do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    fill_in "Geburtstag", with: 17.years.ago.to_date
+    fill_in "Geburtsdatum", with: 17.years.ago.to_date
     expect do
       click_on "Registrieren"
       expect(page).to have_text "Person muss 18 Jahre oder älter sein"
