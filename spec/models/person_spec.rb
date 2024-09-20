@@ -433,6 +433,11 @@ describe Person do
             .to include("Telefonnummern ist leer", "Haupt-E-Mail ist leer")
           expect(person.data_quality).to eq("warning")
         end
+
+        it "runs data quality check for phone_numbers" do
+          expect { person.phone_numbers.destroy_all }
+            .to change(person.reload.data_quality_issues, :count)
+        end
       end
     end
 
