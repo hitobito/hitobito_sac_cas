@@ -43,6 +43,9 @@ sftp:
       <%= "{ #{ENV['RAILS_SFTP_CONFIG']} }" %>
     <% end %>
 
+oidc:
+  use_refresh_token: true
+
 people:
   people_managers:
     enabled: false
