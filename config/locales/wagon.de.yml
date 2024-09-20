@@ -42,7 +42,7 @@ de:
       wizards/steps/signup/main_email_field:
         email: E-Mail
       wizards/steps/signup/person_fields:
-        gender: Anrede
+        gender: Geschlecht
         phone_number: Telefon
         address: Strasse und Nr.
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
@@ -54,7 +54,7 @@ de:
         data_protection: Datenschutzerklärung
         statutes: Statuten
       wizards/steps/signup/sektion/family_fields/member:
-        gender: Anrede
+        gender: Geschlecht
         email: E-Mail
         phone_number: Telefon
         email_optional: E-Mail (optional)
@@ -339,15 +339,15 @@ de:
           digital: Digital
           print: Physisch
         genders:
-          _nil: andere
+          _nil: divers
         birthday: Geburtsdatum
         membership_years: Anzahl Mitglieder-Jahre
         membership_number: Mitglied-Nr
         navision_id: Navision-Nr.
         salutations:
-          m: Mann
-          w: Frau
-          _nil: Andere
+          m: männlich
+          w: weiblich
+          _nil: divers
         recipient_salutations:
           m: Herr
           w: Frau

@@ -159,7 +159,7 @@ describe Person do
   describe "#salutation_label" do
     subject(:person) { Fabricate.build(:person) }
 
-    ["m", "w", nil].zip(%w[Mann Frau Andere]).each do |value, label|
+    ["m", "w", nil].zip(%w[männlich weiblich divers]).each do |value, label|
       it "is #{label} for #{value}" do
         expect(person.salutation_label(value)).to eq label
       end

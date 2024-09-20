@@ -50,7 +50,7 @@ describe "signup/sektion", js: true do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     assert_step "Personendaten"
-    choose "Mann"
+    choose "männlich"
     fill_in "Vorname", with: "Max"
     fill_in "Nachname", with: "Muster"
     fill_in "wizards_signup_sektion_wizard_person_fields_street", with: "Musterplatz"
@@ -77,7 +77,7 @@ describe "signup/sektion", js: true do
       fill_in "Geburtsdatum", with: "01.01.1981"
       fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
       fill_in "Telefon", with: "0791234567"
-      choose "Frau"
+      choose "weiblich"
     end
     yield if block_given?
     click_on "Weiter als Familienmitgliedschaft", match: :first
@@ -253,7 +253,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
       end
       assert_aside("01.01.1980", "01.01.1981")
       click_on "Eintrag hinzufügen"
@@ -263,7 +263,7 @@ describe "signup/sektion", js: true do
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
         fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
-        choose "Andere"
+        choose "divers"
       end
 
       assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
@@ -292,7 +292,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
       end
       assert_aside("01.01.1980", "01.01.1981")
 
@@ -303,7 +303,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1978"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Andere"
+        choose "divers"
       end
       assert_aside("01.01.1980", "01.01.1981", "01.01.1978")
 
@@ -354,7 +354,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
       end
       assert_aside("01.01.1980", "01.01.1981")
 
@@ -364,7 +364,7 @@ describe "signup/sektion", js: true do
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
         fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
-        choose "Andere"
+        choose "divers"
       end
       assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
 
@@ -437,7 +437,7 @@ describe "signup/sektion", js: true do
       fill_in "Geburtsdatum", with: "01.01.1981"
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       fill_in "Telefon", with: "0791234567"
-      choose "Frau"
+      choose "weiblich"
       click_on "Weiter als Familienmitgliedschaft", match: :first
       expect(page).to have_content "E-Mail ist bereits vergeben"
       expect(page).to have_button "Weiter als Familienmitgliedschaft", match: :first
@@ -451,7 +451,7 @@ describe "signup/sektion", js: true do
       fill_in "Geburtsdatum", with: "01.01.1981"
       fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
       fill_in "Telefon", with: "123"
-      choose "Frau"
+      choose "weiblich"
       click_on "Weiter als Familienmitgliedschaft", match: :first
       within "#members_fields .fields:nth-child(1)" do
         expect(page).to have_content "Telefon ist nicht gültig"
@@ -482,7 +482,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: format_date(1.day.ago)
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
         click_on "Weiter als Familienmitgliedschaft", match: :first
         expect(page).to have_content "Person muss 6 Jahre oder älter sein"
       end
@@ -543,7 +543,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
       end
 
       click_on "Zurück", match: :first
@@ -661,7 +661,7 @@ describe "signup/sektion", js: true do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        choose "Frau"
+        choose "weiblich"
       end
       click_on "Eintrag hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
@@ -669,7 +669,7 @@ describe "signup/sektion", js: true do
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
         fill_in "E-Mail (optional)", with: "larissa.muster@hitobito.example.com"
-        choose "Andere"
+        choose "divers"
       end
       click_on "Weiter als Familienmitgliedschaft", match: :first
       click_on "Weiter", match: :first

@@ -16,7 +16,7 @@ describe "signup/abo_touren_portal_wizard" do
   end
 
   def complete_main_person_form
-    choose "Mann"
+    choose "männlich"
     fill_in "Vorname", with: "Max"
     fill_in "Nachname", with: "Muster"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_street", with: "Musterplatz"

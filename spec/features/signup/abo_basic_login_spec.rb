@@ -16,7 +16,7 @@ describe :self_registration do
   end
 
   def complete_main_person_form
-    choose "Mann"
+    choose "männlich"
     fill_in "Vorname", with: "Max"
     fill_in "Nachname", with: "Muster"
     fill_in "Geburtsdatum", with: "01.01.1980"

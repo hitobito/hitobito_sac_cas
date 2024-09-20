@@ -7,7 +7,7 @@ describe "Event Signup", :js do
   before { sign_in(admin) }
 
   def complete_contact_data
-    choose "Mann"
+    choose "männlich"
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "42"
     fill_in "Geburtsdatum", with: "01.01.1980"
