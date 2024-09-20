@@ -59,11 +59,12 @@ en:
       wizards/steps/signup/sektion/various_fields:
         register_on: Entry date per
         self_registration_reason_id: Reason for entry
-        adult_consent: Declaration of consent by the parent or legal guardian
-        contribution_regulations: Contribution regulations
-        data_protection: Privacy policy
-        sektion_statuten: Section statutes
-        statutes: Statutes
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        statutes: ""
       wizards/steps/choose_membership:
         register_as: "Who should the additional membership apply to?"
         family: for the whole family
@@ -1519,6 +1520,18 @@ en:
             next_as_household_link: Continue as family membership
 
           various_fields_title: Additional data
+          summary_fields_title: ""
+          summary_fields:
+            my_membership: ""
+            family_members: ""
+            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_sektion: ""
+            entry_per: ""
+          summary_person_card:
+            contact_person: ""
+          summary_family_member_card:
+            adult: ""
+            child: ""
 
         various_fields:
           newsletter: I would like to subscribe to a newsletter

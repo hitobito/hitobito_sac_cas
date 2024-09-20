@@ -59,11 +59,12 @@ it:
       wizards/steps/signup/sektion/various_fields:
         register_on: Data di iscrizione per
         self_registration_reason_id: Motivo dell'ingresso
-        adult_consent: Dichiarazione di consenso del tutore legale
-        contribution_regulations: Regolamenti sui contributi
-        data_protection: Informativa sulla privacy
-        sektion_statuten: Statuto della sezione
-        statutes: Statuti
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        statutes: ""
       wizards/steps/choose_membership:
         register_as: "A chi si applica l'iscrizione aggiuntiva?"
         family: per tutta la famiglia
@@ -1576,6 +1577,18 @@ it:
             next_as_household_link: Continuare ad essere membri della famiglia
 
           various_fields_title: Dati aggiuntivi
+          summary_fields_title: ""
+          summary_fields:
+            my_membership: ""
+            family_members: ""
+            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_sektion: ""
+            entry_per: ""
+          summary_person_card:
+            contact_person: ""
+          summary_family_member_card:
+            adult: ""
+            child: ""
 
         various_fields:
           newsletter: Vorrei iscrivermi alla newsletter

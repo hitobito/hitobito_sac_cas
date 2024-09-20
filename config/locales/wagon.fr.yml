@@ -59,11 +59,12 @@ fr:
       wizards/steps/signup/sektion/various_fields:
         register_on: Date d'entrée au
         self_registration_reason_id: Motif d'entrée
-        adult_consent: Consentement du tuteur légal
-        contribution_regulations: Règlement des cotisations
-        data_protection: Déclaration de confidentialité
-        sektion_statuten: Statuts de la section
-        statutes: Statuts
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        statutes: ""
       wizards/steps/choose_membership:
         register_as: "À qui s'applique l'affiliation complémentaire ?"
         family: pour toute la famille
@@ -1576,6 +1577,18 @@ fr:
             next_as_household_link: Continuer comme membre de la famille
 
           various_fields_title: Données supplémentaires
+          summary_fields_title: ""
+          summary_fields:
+            my_membership: ""
+            family_members: ""
+            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_sektion: ""
+            entry_per: ""
+          summary_person_card:
+            contact_person: ""
+          summary_family_member_card:
+            adult: ""
+            child: ""
 
         various_fields:
           newsletter: Je souhaite m'abonner à une newsletter
