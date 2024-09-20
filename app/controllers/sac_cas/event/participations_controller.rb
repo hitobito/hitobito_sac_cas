@@ -153,8 +153,8 @@ module SacCas::Event::ParticipationsController
   end
 
   def send_participation_confirmation_email
-    # Ignore Event::ParticipationDecorator
-    return unless entry.is_a?(Event::Participation)
+    # Ignore if participation is not yet persisted during wizard steps
+    return if entry.new_record?
 
     content_key = if entry.state == "assigned"
       Event::ApplicationConfirmationMailer::ASSIGNED
@@ -164,6 +164,6 @@ module SacCas::Event::ParticipationsController
       Event::ApplicationConfirmationMailer::APPLIED
     end
 
-    Event::ApplicationConfirmationJob.new(entry, content_key).enqueue!
+    Event::ApplicationConfirmationMailer.confirmation(entry, content_key).deliver_later
   end
 end
