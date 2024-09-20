@@ -42,9 +42,27 @@ describe "person show page" do
     end
 
     describe "others" do
-      it "shows Hauptgruppe setzen link to " do
+      it "shows Hauptgruppe setzen link to" do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link "Hauptgruppe setzen"
+      end
+    end
+
+    describe "wizard managed roles" do
+      let(:role) { roles(:mitglied) }
+
+      it "doesnt show delete button" do
+        visit group_person_path(group_id: role.group_id, id: role.person_id)
+        expect(page).not_to have_css("a[title=\"Löschen\"]")
+      end
+
+      describe "other roles" do
+        let(:role) { roles(:abonnent_alpen) }
+
+        it "shows delete button" do
+          visit group_person_path(group_id: role.group_id, id: role.person_id)
+          expect(page).to have_css("a[title=\"Löschen\"]")
+        end
       end
     end
   end

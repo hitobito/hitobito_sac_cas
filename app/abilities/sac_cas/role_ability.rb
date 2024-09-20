@@ -21,6 +21,12 @@ module SacCas::RoleAbility
     !has_termination_by_section_only_role
   end
 
+  def not_permission_giving
+    return false if wizard_managed_role?
+
+    super
+  end
+
   private
 
   def has_termination_by_section_only_role
@@ -46,5 +52,9 @@ module SacCas::RoleAbility
       .reverse
       .find { |g| [Group::Sektion, Group::Ortsgruppe].include?(g.class) }
       &.mitglied_termination_by_section_only
+  end
+
+  def wizard_managed_role?(role = subject)
+    SacCas::WIZARD_MANAGED_ROLES.include?(role.class)
   end
 end
