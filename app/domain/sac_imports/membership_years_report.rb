@@ -34,14 +34,14 @@ module SacImports
     private
 
     def process_row(row)
-      @output.print "Reading row #{row[:navision_name]} ..."
+      @output.print "Reading row #{row[:last_name]} ..."
       person = @hitobito_people[row[:navision_id].to_i]
       @csv_report.add_row({
         navision_membership_number: row[:navision_id],
-        navision_name: row[:navision_name],
-        navision_membership_years: row[:navision_membership_years],
+        navision_name: [row[:last_name], row[:first_name]].compact.join(" ").presence,
+        navision_membership_years: row[:membership_years],
         hitobito_membership_years: person&.membership_years,
-        diff: membership_years_diff(row[:navision_membership_years], person&.membership_years),
+        diff: membership_years_diff(row[:membership_years], person&.membership_years),
         errors: errors_for(person)
       })
       @output.print " processed.\n"
