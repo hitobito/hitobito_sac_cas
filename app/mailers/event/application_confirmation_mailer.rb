@@ -42,12 +42,10 @@ class Event::ApplicationConfirmationMailer < ApplicationMailer
 
   def placeholder_missing_information
     missing = [nil, "", "nein", "non", "no"]
-
-    # NOTE: - active record (6.1) does not to serialize where(answers: missing) correctly
-    missing_answers = Event::Answer.includes(:question).where(participation: @participation).select do |answer|
-      missing.include?(answer.answer)
-    end
-    missing_questions = missing_answers.map { |answer| ["<li>", answer.question.question].join }.join
+    missing_questions = Event::Question.admin.joins(:answers)
+      .where(answers: {participation: @participation, answer: missing})
+      .pluck(:question)
+      .map { |question| ["<li>", question, "</li>"] }.flatten.join
 
     return "" if missing_questions.blank?
 

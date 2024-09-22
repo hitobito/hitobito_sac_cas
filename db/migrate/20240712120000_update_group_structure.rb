@@ -7,8 +7,6 @@
 
 class UpdateGroupStructure < ActiveRecord::Migration[6.1]
   def up
-    return unless connection.adapter_name =~ /mysql/i
-
     outdated_group_ids = Group.where(type: ["Group::SektionsExterneKontakte", "Group::SektionsHuettenkommission", "Group::SektionsHuette", "Group::SektionsKommission", "Group::SektionsTourenkommission"]).pluck(:id)
     force_delete_role_types = ["Group::SektionsHuette::Huettenchef"]
 
@@ -27,11 +25,11 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
     end
 
     say_with_time("deleting any people filters referencing the outdated group types") do
-      PeopleFilter.where("filter_chain LIKE \"%Group::SektionsExterneKontakte%\"").
-        or(PeopleFilter.where("filter_chain LIKE \"%Group::SektionsHuettenkommission%\"")).
-        or(PeopleFilter.where("filter_chain LIKE \"%Group::SektionsHuette%\"")).
-        or(PeopleFilter.where("filter_chain LIKE \"%Group::SektionsKommission%\"")).
-        or(PeopleFilter.where("filter_chain LIKE \"%Group::SektionsTourenkommission%\"")).
+      PeopleFilter.where("filter_chain LIKE '%Group::SektionsExterneKontakte%'").
+        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuettenkommission%'")).
+        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuette%'")).
+        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsKommission%'")).
+        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsTourenkommission%'")).
         to_a.
         map(&:destroy!)
     end

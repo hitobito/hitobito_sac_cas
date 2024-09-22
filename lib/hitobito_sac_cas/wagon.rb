@@ -23,6 +23,12 @@ module HitobitoSacCas
       config.view_component.preview_controller = "WizardsPreviewsController"
     end
 
+    config.before_initialize do |_app|
+      Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
+      Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
+      Settings.reload!
+    end
+
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         Event::CloseApplicationsJob,
@@ -107,8 +113,6 @@ module HitobitoSacCas
 
       Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
-      # SearchStrategies::Sql.prepend SacCas::SearchStrategies::Sql
-      # SearchStrategies::Sphinx.prepend SacCas::SearchStrategies::Sphinx
 
       ## Resources
       GroupResource.include SacCas::GroupResource
@@ -190,12 +194,6 @@ module HitobitoSacCas
           :sac_remark_section_4,
           :sac_remark_section_5
         ])
-    end
-
-    initializer "sac_cas.add_settings" do |_app|
-      Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
-      Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
-      Settings.reload!
     end
 
     initializer "sac_cas.add_inflections" do |_app|

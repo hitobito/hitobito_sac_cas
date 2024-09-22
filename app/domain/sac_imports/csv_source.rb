@@ -41,9 +41,31 @@ class SacImports::CsvSource
       group_navision_id: "Sektion",
       navision_name: "Name",
       navision_membership_years: "Vereinsmitgliederjahre"
-    }
+    },
     # NAV3: {},
-    # WSO21: {},
+    WSO21: {
+      wso2_legacy_password_hash: "UM_USER_PASSWORD",
+      wso2_legacy_password_salt: "UM_SALT_VALUE",
+      navision_id: "ContactNo",
+      gender: "Anredecode",
+      first_name: "Vorname",
+      last_name: "FamilienName",
+      address_care_of: "Addresszusatz",
+      address: "Strasse",
+      postbox: "Postfach",
+      town: "Ort",
+      zip_code: "PLZ",
+      country: "Land",
+      phone: "TelefonMobil",
+      phone_business: "TelefonG",
+      language: "Korrespondenzsprache",
+      email: "Mail",
+      birthday: "Geburtsdatum",
+      email_verified: "Email verified",
+      role_basiskonto: "Basis Konto",
+      role_abonnent: "Abonnent",
+      role_gratisabonnent: "NAV_FSA2020FREE"
+    }
     # WSO22: {}
   }.freeze
 

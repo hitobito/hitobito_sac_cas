@@ -11,7 +11,8 @@ module Wizards::Signup
       Wizards::Steps::Signup::MainEmailField,
       Wizards::Steps::Signup::Sektion::PersonFields,
       Wizards::Steps::Signup::Sektion::FamilyFields,
-      Wizards::Steps::Signup::Sektion::VariousFields
+      Wizards::Steps::Signup::Sektion::VariousFields,
+      Wizards::Steps::Signup::Sektion::SummaryFields
     ]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
@@ -19,7 +20,8 @@ module Wizards::Signup
 
     delegate :email, to: :main_email_field
     delegate :person_attributes, :birthday, to: :person_fields
-    delegate :newsletter, :self_registration_reason_id, :privacy_policy_accepted_at, to: :various_fields
+    delegate :self_registration_reason_id, to: :various_fields
+    delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
 
     public :group
 

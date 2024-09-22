@@ -11,5 +11,3 @@
     - form.object.self_registration_reason_options.each do |key, label|
       = form.inline_radio_button :self_registration_reason_id, key, label
       %br
-
-  = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?

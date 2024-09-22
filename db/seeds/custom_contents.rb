@@ -40,6 +40,8 @@ CustomContent.seed(:key,
    placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
   {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
+  {key: Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED,
+   placeholders_required: "first-name, profile-url"},
   {key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION,
    placeholders_required: "person-name, sektion-name, terminate-on"},
   {key: Memberships::TerminateSacMembershipMailer::CONFIRMATION,
@@ -254,6 +256,16 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
     "Weitere Details zum digitalen Mitgliederausweis findest im <a href='{faq-url}'>FAQ</a>.<br><br>" \
     "Vielen Dank"},
+  {custom_content_id: CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).id,
+   locale: "de",
+   label: "SAC Eintritt: Mitgliedschaftsaktivierung",
+   subject: "SAC Eintritt Bestellbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für deine Zahlung, welche bei uns eingegangen ist. Deine Mitgliedschaft ist jetzt " \
+    "vollständig aktiviert und alle Dienste des Schweizer Alpen-Clubs SAC können genutzt werden.<br><br>" \
+    "Deinen digitalen Mitgliederausweis findest du in deinem Profil im <a href='{profile-url}'>SAC-Portal</a>. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest du in den FAQ.<br><br> " \
+    "Viel Spass beim SAC!"},
   {custom_content_id: CustomContent.get(Memberships::LeaveZusatzsektionMailer::CONFIRMATION).id,
    locale: "de",
    label: "Mitgliedschaften: Bestätigung Austritt Zusatzsektion",
