@@ -24,13 +24,13 @@ describe "people/_details_sac_cas.html.haml" do
 
     it "renders family_id" do
       expect(person.family_id).to be_present # check assumption
-      label_node = dom.find("dl dt", text: I18n.t("activerecord.attributes.person.family_id"))
+      label_node = dom.find("dl dt", text: "Familien ID")
       value_node = label_node.find("+dd")
       expect(value_node.text).to eq person.family_id
     end
 
     describe "sac_family_main_person" do
-      let(:label_node) { dom.find("dl dt", text: I18n.t("activerecord.attributes.person.sac_family_main_person")) }
+      let(:label_node) { dom.find("dl dt", text: "Rechnungen an (Familie)") }
 
       subject(:value_node) { label_node.find("+dd") }
 
@@ -68,6 +68,8 @@ describe "people/_details_sac_cas.html.haml" do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
     it "renders membership info for active membership" do
+      expect(dom).to have_css "dl dt", text: "Mitgliederausweis & Rechnungsstellung"
+      expect(dom).to have_css "dl dt", text: "E-Mail bestätigt"
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"
     end
