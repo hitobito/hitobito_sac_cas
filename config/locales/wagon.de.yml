@@ -315,6 +315,7 @@ de:
         updated_at: Geändert
       person:
         correspondence: Mitgliederausweis & Rechnungsstellung
+        confirmed_at: E-Mail bestätigt
         family_id: Familien ID
         sac_family_main_person: Rechnungen an (Familie)
         sac_remark_national_office: Bemerkungen Geschäftsstelle
