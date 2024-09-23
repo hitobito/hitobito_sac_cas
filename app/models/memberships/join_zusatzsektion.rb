@@ -9,7 +9,7 @@ module Memberships
   class JoinZusatzsektion < JoinBase
     delegate :group_for_neuanmeldung, to: :join_section
 
-    attr_reader :person
+    attr_reader :person, :join_section
 
     def initialize(join_section, person, sac_family_membership: false, **params)
       super(join_section, person, **params)
@@ -36,7 +36,7 @@ module Memberships
 
     def derive_beitragskategorie
       if sac_family_membership?
-        :family
+        SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
       else
         SacCas::Beitragskategorie::Calculator.new(person).calculate(for_sac_family: false)
       end
