@@ -7,11 +7,6 @@
   = form.check_box :newsletter
   = t('.newsletter_caption')
 
-- if form.object.requires_adult_consent?
-  = form.label(:adult_consent, class: 'd-block mt-2') do
-    = form.check_box :adult_consent
-    = t('.adult_consent_caption')
-
 - %w(statutes contribution_regulations data_protection).each do |key|
   - if form.object.attributes.key?(key)
     = render 'groups/self_registration/agreement_link', f: form, key: key,

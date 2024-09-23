@@ -83,12 +83,9 @@ describe "signup/sektion", js: true do
     click_on "Weiter als Familienmitgliedschaft", match: :first
   end
 
-  def complete_last_page(with_adult_consent: true, submit: true)
+  def complete_last_page(submit: true)
     assert_step "Zusammenfassung"
     expect(page).to have_button("Registrieren"), "expected to be on last page"
-    if with_adult_consent
-      check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
-    end
     check "Ich habe die Statuten gelesen und stimme diesen zu"
     check "Ich habe das Beitragsreglement gelesen und stimme diesen zu"
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
@@ -592,29 +589,6 @@ describe "signup/sektion", js: true do
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
       expect(person.self_registration_reason).to eq reason
-    end
-  end
-
-  describe "with adult consent" do
-    before do
-      group.update!(self_registration_require_adult_consent: true)
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
-      click_on "Weiter", match: :first
-    end
-
-    it "cannot complete without accepting adult consent" do
-      expect { complete_last_page(with_adult_consent: false) }.not_to change { Person.count }
-      expect(page).to have_text "Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"
-    end
-
-    it "can complete when accepting adult consent" do
-      expect do
-        complete_last_page(with_adult_consent: true)
-        expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-      end.to change { Person.count }.by(1)
     end
   end
 
