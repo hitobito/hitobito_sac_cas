@@ -128,5 +128,54 @@ describe PeopleController do
       end.to change { admin.phone_numbers.count }.by(1)
       expect(data_quality_checker).to have_received(:check_data_quality).once
     end
+
+    context "birthday" do
+      let(:member) { people(:mitglied) }
+
+      it "can update birthday on people without sac membership" do
+        expect do
+          put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                                person: {birthday: "01.01.2001"}}
+        end.to change { admin.reload.birthday }
+      end
+
+      context "sac member"
+
+      it "can update birthday as backoffice user" do
+        expect do
+          put :update, params: {id: member.id, group_id: member.groups.first.id,
+                                person: {birthday: "01.01.2001"}}
+        end.to change { member.reload.birthday }
+      end
+
+      it "cannot update birthday as non backoffice user" do
+        sign_in(member)
+
+        expect do
+          put :update, params: {id: member.id, group_id: member.groups.first.id,
+                                person: {birthday: "01.01.2001"}}
+        end.not_to change { member.reload.birthday }
+
+        expect(response.body).to include("Geburtstag darf nicht verändert werden")
+      end
+
+      it "cannot update birthday to last 6 years" do
+        expect do
+          put :update, params: {id: member.id, group_id: member.groups.first.id,
+                                person: {birthday: 5.years.ago}}
+        end.not_to change { member.reload.birthday }
+
+        expect(response.body).to include("Geburtstag muss vor dem 01.01.#{Date.current.year - 6} liegen.")
+      end
+
+      it "cannot update birthday to before 120 years ago" do
+        expect do
+          put :update, params: {id: member.id, group_id: member.groups.first.id,
+                                person: {birthday: 121.years.ago}}
+        end.not_to change { member.reload.birthday }
+
+        expect(response.body).to include("Geburtstag muss nach dem 31.12.#{Date.current.year - 120} liegen.")
+      end
+    end
   end
 end

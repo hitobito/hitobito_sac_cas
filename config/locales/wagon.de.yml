@@ -485,6 +485,10 @@ de:
             %{name} ist %{age} Jahre alt und kann daher nicht als Kind hinzugefügt werden.
           manager_is_not_adult: >-
             %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
+        person:
+          birthday:
+              must_be_before_year: muss vor dem 01.01.%{year} liegen.
+              must_be_after_year: muss nach dem 31.12.%{year} liegen.
         qualification:
           attributes:
             finish_at:
