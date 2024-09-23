@@ -9,5 +9,5 @@
 
   = form.labeled(:self_registration_reason_id) do
     - form.object.self_registration_reason_options.each do |key, label|
-      = form.inline_radio_button :self_registration_reason_id, key, label
+      = form.inline_radio_button :self_registration_reason_id, key, label, inline = false
       %br
