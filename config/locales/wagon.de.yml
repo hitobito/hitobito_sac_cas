@@ -120,10 +120,10 @@ de:
               household_address: "Die Adresse '%{address}' wird für alle Familienmitglieder übernommen."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
-              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.
+              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.
               not_more_than_two_adults: Eine Familie darf höchstens 2 erwachsene Personen enthalten.
               at_least_two_members: Eine Familie muss mindestens 2 Personen enthalten.
-              removed_member_has_no_email: Die entfernte Person besitzt keine bestätigte E-Mail Adresse.
+              removed_member_has_no_email: Die entfernte Person besitzt keine E-Mail Adresse.
         household_member:
           attributes:
             base:
