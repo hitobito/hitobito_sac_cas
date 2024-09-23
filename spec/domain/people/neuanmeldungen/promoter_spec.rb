@@ -30,16 +30,23 @@ describe People::Neuanmeldungen::Promoter do
         .to(not_change { Role.count })
     end
 
-    it "creates a new role when promotable? is true" do
+    it "creates a new role and deletes obsolete roles when promotable? is true" do
       neuanmeldung_role = create_neuanmeldung_role
+      obsolete_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Abonnent.sti_name
+      )
+      obsolete_role.save(validate: false)
 
       expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(-1)
         .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
+        .and change { neuanmeldung_role.person.roles.count }.by(-1)
 
       expect { neuanmeldung_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { obsolete_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
 
       mitglied_role = neuanmeldung_role.person.reload.roles.last
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
@@ -199,13 +206,7 @@ describe People::Neuanmeldungen::Promoter do
         type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name
       )
 
-      expect(subject.candidate_roles).to match_array(
-        [
-          neuanmeldung1,
-          neuanmeldung2,
-          neuanmeldung_zusatzsektion
-        ]
-      )
+      expect(subject.candidate_roles).to match_array([neuanmeldung1, neuanmeldung2, neuanmeldung_zusatzsektion])
     end
   end
 
