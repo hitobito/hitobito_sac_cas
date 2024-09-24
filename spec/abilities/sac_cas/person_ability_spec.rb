@@ -148,4 +148,26 @@ describe PersonAbility do
       end
     end
   end
+
+  describe "security" do
+    let(:person) { people(:mitglied) }
+
+    context "as employee" do
+      before do
+        role = person.roles.new(group_id: person.default_group_id,
+          type: Group::Geschaeftsstelle::Mitarbeiter.sti_name)
+        role.save(validate: false)
+      end
+
+      it "is permitted to show/edit security" do
+        expect(ability).to be_able_to(:security, person)
+      end
+    end
+
+    context "as member" do
+      it "is not permitted to show/edit security" do
+        expect(ability).not_to be_able_to(:security, person)
+      end
+    end
+  end
 end
