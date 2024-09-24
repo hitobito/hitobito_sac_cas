@@ -75,7 +75,11 @@ class People::Neuanmeldungen::Promoter
       .find_each { |role| role.really_destroy! }
 
     role.person.roles.where(created_at: ..now).find_each do |role|
-      Roles::Termination.new(role:, terminate_on: role.created_at.today? ? now : now.yesterday).call
+      Roles::Termination.new(
+        role:,
+        terminate_on: role.created_at.today? ? now : now.yesterday,
+        validate_terminate_on: false
+      ).call
     end
   end
 

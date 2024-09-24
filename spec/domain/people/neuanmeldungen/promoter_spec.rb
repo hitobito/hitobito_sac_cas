@@ -52,6 +52,40 @@ describe People::Neuanmeldungen::Promoter do
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
     end
 
+    it "terminates old roles created today" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Abonnent.sti_name,
+        created_at: Time.zone.today,
+        beitragskategorie: "adult"
+      )
+      old_role.save(validate: false)
+
+      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to change { old_role.reload.terminated }.to(true)
+        .and change { old_role.delete_on }.to(Time.zone.today)
+    end
+
+    it "terminates old roles created before today" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Abonnent.sti_name,
+        created_at: 1.week.ago,
+        beitragskategorie: "adult"
+      )
+      old_role.save(validate: false)
+
+      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to change { old_role.reload.terminated }.to(true)
+        .and change { old_role.delete_on }.to(Time.zone.yesterday)
+    end
+
     it "sets beitragskategorie from Neuanmeldung" do
       SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |beitragskategorie|
         neuanmeldung_role = create_neuanmeldung_role(beitragskategorie: beitragskategorie)
