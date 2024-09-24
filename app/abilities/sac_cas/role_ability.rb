@@ -21,6 +21,7 @@ module SacCas::RoleAbility
     !has_termination_by_section_only_role
   end
 
+  # core: general(:destroy).not_permission_giving
   def not_permission_giving
     return false if wizard_managed_role?
 
