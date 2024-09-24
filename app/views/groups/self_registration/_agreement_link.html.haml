@@ -3,6 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= f.label(key, class: 'd-block mt-2') do
+= f.label(key, class: 'd-block mt-2 required') do
   = f.check_box key
-  = t(".#{key}_text", link: link).html_safe
+  = t(".#{key}_text", link:).html_safe
