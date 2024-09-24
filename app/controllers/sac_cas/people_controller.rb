@@ -60,39 +60,8 @@ module SacCas::PeopleController
     super.merge(params.slice(:recipients, :recipient_households).permit!)
   end
 
-  # BIRTHDAY VALIDATION
-
   def check_birthday
-    return if !entry.sac_membership_active? || birthday_year == Person.find(entry.id).birthday.year
-
-    if current_user.backoffice?
-      validate_birthday_range
-    else
-      add_error(:readonly)
-    end
+    return unless entry.sac_membership_active? && entry.birthday_changed?
+    People::BirthdayValidator.new(entry, current_user).validate!
   end
-
-  def validate_birthday_range
-    max_year = current_year - 6
-    min_year = current_year - 120
-
-    if birthday_year >= max_year
-      add_error(:must_be_before_year, max_year)
-    elsif birthday_year < min_year
-      add_error(:must_be_after_year, min_year)
-    end
-  end
-
-  def add_error(error_type, year = nil)
-    if year
-      entry.errors.add(:birthday, I18n.t("activerecord.errors.models.person.birthday.#{error_type}", year: year))
-    else
-      entry.errors.add(:birthday, I18n.t("activerecord.errors.messages.#{error_type}"))
-    end
-    throw(:abort) # do not save record
-  end
-
-  def current_year = Time.current.year
-
-  def birthday_year = params[:person][:birthday].to_date.year
 end

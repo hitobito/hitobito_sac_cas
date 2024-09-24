@@ -139,8 +139,6 @@ describe PeopleController do
         end.to change { admin.reload.birthday }
       end
 
-      context "sac member"
-
       it "can update birthday as backoffice user" do
         expect do
           put :update, params: {id: member.id, group_id: member.groups.first.id,
