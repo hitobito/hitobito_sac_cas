@@ -1247,7 +1247,7 @@ fr:
   household_aside_member_component:
     main_person: Bénéficiaire du compte familial
     set_main_person: Devenir bénéficiaire de la facture familiale
-    unverified_email: "L'adresse e-mail n'est pas confirmée, la personne ne peut donc pas être désignée comme destinataire du compte familial."
+    missing_email: "L'adresse e-mail n'est pas confirmée, la personne ne peut donc pas être désignée comme destinataire du compte familial."
     cannot_set_main_person: Contacte le secrétariat pour modifier le bénéficiaire du compte familial.
 
   invoices:

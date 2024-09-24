@@ -1247,7 +1247,7 @@ it:
   household_aside_member_component:
     main_person: Destinatario della fattura per la famiglia
     set_main_person: Diventare destinatari di una fattura familiare
-    unverified_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
+    missing_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
     cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
 
   invoices:

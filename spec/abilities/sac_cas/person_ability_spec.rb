@@ -73,6 +73,12 @@ describe PersonAbility do
             expect(ability).to be_able_to(:set_sac_family_main_person, familienmitglied)
           end
 
+          it "is not permitted when person doesn't have an email" do
+            familienmitglied.update!(email: nil)
+
+            expect(ability).not_to be_able_to(:set_sac_family_main_person, familienmitglied)
+          end
+
           it "is not permitted when person is not an adult" do
             expect(ability).not_to be_able_to(:set_sac_family_main_person, child)
           end
@@ -85,6 +91,12 @@ describe PersonAbility do
 
           it "is permitted" do
             expect(ability).to be_able_to(:set_sac_family_main_person, familienmitglied)
+          end
+
+          it "is not permitted when person doesn't have an email" do
+            familienmitglied.update!(email: nil)
+
+            expect(ability).not_to be_able_to(:set_sac_family_main_person, familienmitglied)
           end
 
           it "is not permitted when person is not an adult" do

@@ -9,6 +9,8 @@ require "spec_helper"
 
 describe HouseholdAsideMemberComponent, type: :component do
   let(:familienmitglied) { people(:familienmitglied) }
+  let(:familienmitglied2) { people(:familienmitglied2) }
+  let(:familienmitglied_kind) { people(:familienmitglied_kind) }
 
   subject(:component) { described_class.new(person: familienmitglied) }
 
@@ -56,8 +58,36 @@ describe HouseholdAsideMemberComponent, type: :component do
     end
   end
 
+  it "renders correct icon for active family member" do
+    familienmitglied2.destroy!
+    familienmitglied_kind.destroy!
+    stub_can(:show, true)
+    stub_can(:set_sac_family_main_person, true)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_css('span.text-primary[title="Familienrechnungsempfänger"]')
+  end
+
+  it "renders correct icon for possible family member" do
+    familienmitglied2.destroy!
+    familienmitglied_kind.destroy!
+    stub_can(:show, true)
+    stub_can(:set_sac_family_main_person, true)
+    familienmitglied.update!(sac_family_main_person: false)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_css('a.text-muted[title="Zum Familienrechnungsempfänger machen"]')
+  end
+
+  it "renders correct icon for family member without email set" do
+    familienmitglied2.destroy!
+    familienmitglied_kind.destroy!
+    stub_can(:show, true)
+    stub_can(:set_sac_family_main_person, true)
+    familienmitglied.update!(email: nil, sac_family_main_person: false)
+    rendered_component = render_inline(component)
+    expect(rendered_component).to have_css('span.text-muted[title="Die Person hat keine E-Mail Adresse und kann daher nicht zum Familienrechnungsempfänger gemacht werden."]')
+  end
+
   context "neunanmeldung" do
-    let(:familienmitglied2) { people(:familienmitglied2) }
     let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
     before do
