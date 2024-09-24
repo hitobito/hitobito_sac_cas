@@ -43,4 +43,10 @@ module SacCas::GroupDecorator
       [special_role_types.fetch(role.name.demodulize, 0), role.label]
     end
   end
+
+  def possible_roles
+    super.select do |type|
+      SacCas::WIZARD_MANAGED_ROLES.exclude?(type)
+    end
+  end
 end

@@ -1,0 +1,8 @@
+- if @role.type.present? && SacCas::WIZARD_MANAGED_ROLES.include?(@role.type.constantize)
+  = render 'roles/label', f:
+  = field_set_tag Role.human_attribute_name(:dates) do
+    = f.labeled(:delete_on) do
+      = f.date_field(:delete_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.delete_on))
+  = render_extensions :fields, locals: {f:}
+- else
+  = render '../../../hitobito/app/views/roles/fields', f:  
