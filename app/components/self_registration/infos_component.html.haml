@@ -1,4 +1,4 @@
--#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2023-2024, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
@@ -13,8 +13,11 @@
     %address.card-text=simple_format(t('.address'))
 
   .card-body
+    %h2.card-title=t('.title_membership')
+    %p.card-text=link_to(t('.link_membership_title'), t('global.links.membership'), target: '_blank', rel: 'noopener')
+
+  .card-body
     %h2.card-title=t('.title_documents')
     %ul.list-unstyled.card-text
       - document_links.each do |link|
         %li=link
-
