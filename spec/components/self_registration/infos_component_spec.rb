@@ -57,8 +57,21 @@ describe SelfRegistration::InfosComponent, type: :component do
     end
   end
 
-  describe "documents" do
+  describe "membership" do
     subject(:body) { parts[2] }
+
+    it "renders title" do
+      expect(body).to have_css("h2.card-title", text: "Möchtest du SAC-Mitglied werden?")
+    end
+
+    it "renders link to membership signup" do
+      expect(body).to have_link "Jetzt Mitgliedschaft beantragen",
+        href: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
+    end
+  end
+
+  describe "documents" do
+    subject(:body) { parts[3] }
 
     it "renders title" do
       expect(body).to have_css("h2.card-title", text: "Dokumente")

@@ -10,6 +10,7 @@ de:
     years: Jahre
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
+      membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
   settings:
     email:
@@ -1471,6 +1472,7 @@ de:
     infos_component:
       title_questions: Fragen zur Mitgliedschaft?
       title_contact: Kontakt
+      title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
       additional_infos: Mehr Informationen findest du unter den %{link}.
       address: |
@@ -1488,6 +1490,7 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
+      link_membership_title: Jetzt Mitgliedschaft beantragen
 
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
