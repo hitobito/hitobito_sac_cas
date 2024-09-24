@@ -372,7 +372,8 @@ describe Event::Course do
         end
 
         it "sends an email to the course admin and leader" do
-          expect { course.update!(state: :application_open) }.to have_enqueued_mail(Event::PublishedMailer, :notice).exactly(2).times
+          expect { course.update!(state: :application_open) }
+            .to have_enqueued_mail(Event::PublishedMailer, :notice).exactly(2).times
         end
       end
 
@@ -380,13 +381,15 @@ describe Event::Course do
         before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
 
         it "sends an email to the course admin and assistant leader" do
-          expect { course.update!(state: :application_open) }.to have_enqueued_mail(Event::PublishedMailer, :notice).once
+          expect { course.update!(state: :application_open) }
+            .to have_enqueued_mail(Event::PublishedMailer, :notice).once
         end
       end
 
       context "without course leaders" do
         it "doesnt queue a job to send an email" do
-          expect { course.update!(state: :application_open) }.not_to have_enqueued_mail(Event::PublishedMailer, :notice)
+          expect { course.update!(state: :application_open) }
+            .not_to have_enqueued_mail(Event::PublishedMailer)
         end
       end
     end
@@ -395,7 +398,8 @@ describe Event::Course do
       before { course.update!(state: "application_paused") }
 
       it "doesnt send an email" do
-        expect { course.update!(state: :application_open) }.not_to have_enqueued_mail(Event::PublishedMailer, :notice)
+        expect { course.update!(state: :application_open) }
+          .not_to have_enqueued_mail(Event::PublishedMailer)
       end
     end
   end
@@ -407,7 +411,8 @@ describe Event::Course do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
 
       it "sends an email to the course admin" do
-        expect { course.update!(state: :application_paused) }.to have_enqueued_mail(Event::ApplicationPausedMailer, :notice).once
+        expect { course.update!(state: :application_paused) }
+          .to have_enqueued_mail(Event::ApplicationPausedMailer, :notice).once
       end
     end
 
@@ -415,7 +420,30 @@ describe Event::Course do
       before { course.groups.first.update!(course_admin_email: nil) }
 
       it "doesnt queue the job to send an email" do
-        expect { course.update!(state: :application_paused) }.not_to have_enqueued_mail(Event::ApplicationPausedMailer, :notice)
+        expect { course.update!(state: :application_paused) }
+          .not_to have_enqueued_mail(Event::ApplicationPausedMailer, :notice)
+      end
+    end
+  end
+
+  describe "when state changes to application_closed" do
+    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
+
+    context "with course admin" do
+      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+
+      it "sends an email to the course admin" do
+        expect { course.update!(state: :application_closed) }
+          .to have_enqueued_mail(Event::ApplicationClosedMailer, :notice).once
+      end
+    end
+
+    context "without course admin" do
+      before { course.groups.first.update!(course_admin_email: nil) }
+
+      it "doesnt queue the job to send an email" do
+        expect { course.update!(state: :application_closed) }
+          .not_to have_enqueued_mail(Event::ApplicationClosedMailer)
       end
     end
   end
