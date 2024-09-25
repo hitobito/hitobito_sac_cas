@@ -8,10 +8,7 @@
 module MultilingualMailer
   extend ActiveSupport::Concern
 
-  LANGUAGE_SEPARATOR = "<br><br>--------------------<br><br>"
-  SANITIZE_TAG_WHITELIST = %w[a br div]
-
-  delegate :sanitize, to: "ActionController::Base.helpers"
+  LANGUAGE_SEPARATOR = ("<br/>".html_safe * 2 + "--------------------" + "<br/>".html_safe * 2).freeze
 
   private
 
@@ -30,7 +27,7 @@ module MultilingualMailer
 
     I18n.with_locale(locales.first) do
       mail(subject:) do |f|
-        f.html { render html: sanitize(body, tags: SANITIZE_TAG_WHITELIST), layout: true }
+        f.html { render html: body, layout: true }
       end
     end
   end
@@ -43,7 +40,10 @@ module MultilingualMailer
       end
     end
 
-    [subjects_and_bodies.map(&:first).compact_blank.uniq.join(" / "),
-      subjects_and_bodies.map(&:last).compact_blank.join(LANGUAGE_SEPARATOR)]
+    subject_encoded = subjects_and_bodies.map(&:first).compact_blank.uniq.join(" / ")
+    subject = CGI.unescapeHTML(subject_encoded)
+    body = join_lines(subjects_and_bodies.map(&:last).compact_blank, LANGUAGE_SEPARATOR)
+
+    [subject, body]
   end
 end

@@ -99,6 +99,7 @@ describe Event::ParticipationMailer do
         is_expected.to include(MultilingualMailer::LANGUAGE_SEPARATOR)
         # placeholders are also translated
         is_expected.to include("Test Kurs", "Course test")
+        is_expected.not_to include("&lt;")
       end
     end
 
@@ -108,6 +109,51 @@ describe Event::ParticipationMailer do
       it "sends in default language" do
         expect(mail.subject).to eq("Kurs: E-Mail Aufgebot")
         expect(mail.body).not_to include("<div id='content'></div>")
+      end
+    end
+
+    context "xss" do
+      subject { mail.body }
+
+      it "does not include wrongly encoded tags" do
+        is_expected.not_to include("&lt;")
+      end
+
+      it "sanitizes html tags" do
+        event.update!(name: "Test<script>alert('XSS')</script>kurs")
+        is_expected.to include("Test&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;kurs")
+        is_expected.not_to include("<script>")
+      end
+
+      it "removes tags inside event" do
+        event.update!(name: "Test<br>kurs")
+        is_expected.to include("Test&lt;br&gt;kurs")
+      end
+
+      it "sanitizes html tags in event name" do
+        event.update!(name: "Event<script>alert('XSS')</script>Name")
+        is_expected.to include("Event&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;Name")
+        is_expected.not_to include("<script>")
+      end
+
+      it "sanitizes html tags in event description" do
+        event.update!(description: "Description<script>alert('XSS')</script>Text")
+        is_expected.to include("Description&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;Text")
+        is_expected.not_to include("<script>")
+      end
+
+      it "sanitizes html tags in event location" do
+        event.update!(location: "Location<script>alert('XSS')</script>Text")
+        is_expected.to include("Location&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;Text")
+        is_expected.not_to include("<script>")
+      end
+
+      it "sanitizes html tags in event contact" do
+        person = people(:mitglied)
+        person.first_name = "Contact<script>alert('XSS')</script>Text"
+        event.update!(contact: person)
+        is_expected.to include("Contact&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;Text")
+        is_expected.not_to include("<script>")
       end
     end
   end
