@@ -118,10 +118,10 @@ en:
               household_address: "The address '%{address}' is adopted for all family members."
             base:
               at_least_one_adult: A family must contain at least 1 adult person.
-              no_adult_member_with_email: The household does not contain an adult with a confirmed e-mail address.
+              no_adult_member_with_email: ""
               not_more_than_two_adults: A family may contain a maximum of 2 adults.
               at_least_two_members: A family must contain at least 2 persons.
-              removed_member_has_no_email: The removed person does not have a confirmed e-mail address.
+              removed_member_has_no_email: ""
         household_member:
           attributes:
             base:
@@ -310,6 +310,7 @@ en:
         updated_at: Changed
       person:
         correspondence: Membership card & invoicing
+        confirmed_at: ""
         family_id: Family ID
         sac_family_main_person: Bills to (family)
         sac_remark_national_office: Comments Office
@@ -1557,7 +1558,8 @@ en:
           next_button: Order for a fee
       join_zusatzsektion:
         summary:
-          info_text: "Membership of the additional section is concluded as %{beitragskategorie} and is valid immediately."
+          admission: ""
+          admission_through_gs: ""
           next_button: Order for a fee
       membership_terminated_info:
         info: "Your membership has been canceled via %{date}. If you would like to reactivate your membership, please visit the SAC website."

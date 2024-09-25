@@ -118,10 +118,10 @@ it:
               household_address: "%{address}L'indirizzo ' ' viene utilizzato per tutti i membri della famiglia."
             base:
               at_least_one_adult: Una famiglia deve contenere almeno 1 persona adulta.
-              no_adult_member_with_email: Il nucleo familiare non contiene un adulto con un indirizzo e-mail confermato.
+              no_adult_member_with_email: ""
               not_more_than_two_adults: Una famiglia può contenere al massimo 2 adulti.
               at_least_two_members: Una famiglia deve contenere almeno 2 persone.
-              removed_member_has_no_email: La persona rimossa non ha un indirizzo e-mail confermato.
+              removed_member_has_no_email: ""
         household_member:
           attributes:
             base:
@@ -312,6 +312,7 @@ it:
         updated_at: Modificato
       person:
         correspondence: Tessera associativa e fatturazione
+        confirmed_at: ""
         family_id: ID famiglia
         sac_family_main_person: Bollette a (famiglia)
         sac_remark_national_office: Ufficio Commenti
@@ -1614,7 +1615,8 @@ it:
           next_button: Ordine a pagamento
       join_zusatzsektion:
         summary:
-          info_text: "%{beitragskategorie} L'adesione alla sezione aggiuntiva si conclude e ha validità immediata."
+          admission: ""
+          admission_through_gs: ""
           next_button: Ordine a pagamento
       membership_terminated_info:
         info: "%{date}L'iscrizione è stata annullata tramite . Se desidera riattivare la sua iscrizione, visiti il sito web del SAC."

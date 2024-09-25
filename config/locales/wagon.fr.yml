@@ -118,10 +118,10 @@ fr:
               household_address: "L'adresse '%{address}' est reprise pour tous les membres de la famille."
             base:
               at_least_one_adult: Une famille doit comprendre au moins 1 personne adulte.
-              no_adult_member_with_email: Le ménage ne comprend pas d'adulte dont l'adresse électronique a été confirmée.
+              no_adult_member_with_email: ""
               not_more_than_two_adults: Une famille peut contenir au maximum 2 personnes adultes.
               at_least_two_members: Une famille doit contenir au moins 2 personnes.
-              removed_member_has_no_email: La personne supprimée ne possède pas d'adresse e-mail confirmée.
+              removed_member_has_no_email: ""
         household_member:
           attributes:
             base:
@@ -312,6 +312,7 @@ fr:
         updated_at: Modifié
       person:
         correspondence: Carte de membre & facturation
+        confirmed_at: ""
         family_id: ID de la famille
         sac_family_main_person: Factures à (famille)
         sac_remark_national_office: Remarques Secrétariat
@@ -1614,7 +1615,8 @@ fr:
           next_button: Commande payante
       join_zusatzsektion:
         summary:
-          info_text: "L'adhésion à la section complémentaire est conclue sous forme de %{beitragskategorie} et est valable immédiatement."
+          admission: ""
+          admission_through_gs: ""
           next_button: Commande payante
       membership_terminated_info:
         info: "Ton adhésion a été annulée par %{date}. Si tu souhaites réactiver ton adhésion, merci de consulter le site du CAS."
