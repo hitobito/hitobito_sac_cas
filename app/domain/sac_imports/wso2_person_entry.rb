@@ -124,7 +124,7 @@ module SacImports
       person.language = language
       person.phone_numbers.build(
         number: row[:phone],
-        label: "Mobil"
+        label: "Hauptnummer"
       )
       person.phone_numbers.build(
         number: row[:phone_business],
