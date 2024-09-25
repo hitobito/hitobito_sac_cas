@@ -116,7 +116,7 @@ module SacCas::Person
   end
 
   def check_data_quality
-    return if (People::DataQualityChecker::ATTRIBUTES_TO_CHECK & saved_changes.keys).empty?
+    return unless People::DataQualityChecker.attributes_to_check_changed?(self)
 
     People::DataQualityChecker.new(self).check_data_quality
   end

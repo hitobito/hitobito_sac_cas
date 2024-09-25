@@ -111,12 +111,22 @@ describe PeopleController do
     it "cannot update sac remarks" do
       expect do
         put :update, params: {id: admin.id, group_id: admin.groups.first.id,
-                              person: {sac_remark_national_office: "example",
-                                       sac_remark_section_1: "example"}}
-      end.not_to change {
-                   [admin.reload.sac_remark_national_office,
-                     admin.reload.sac_remark_section_1]
-                 }
+                              person: {sac_remark_national_office: "example", sac_remark_section_1: "example"}}
+      end.not_to change { [admin.reload.sac_remark_national_office, admin.reload.sac_remark_section_1] }
+    end
+
+    it "runs data quality check only once" do
+      data_quality_checker = instance_spy(People::DataQualityChecker)
+      allow(People::DataQualityChecker).to receive(:new).and_return(data_quality_checker)
+
+      expect do
+        put :update, params: {id: admin.id, group_id: admin.groups.first.id, person: {
+          first_name: nil, phone_numbers_attributes: {"0": {
+            number: "+41 77 123 45 66", translated_label: "Privat", public: "1"
+          }}
+        }}
+      end.to change { admin.phone_numbers.count }.by(1)
+      expect(data_quality_checker).to have_received(:check_data_quality).once
     end
   end
 end

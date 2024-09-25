@@ -59,6 +59,7 @@ module HitobitoSacCas
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
+      PhoneNumber.include SacCas::PhoneNumber
       Role.prepend SacCas::Role
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
