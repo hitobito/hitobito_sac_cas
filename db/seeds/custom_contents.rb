@@ -36,6 +36,9 @@ CustomContent.seed(:key,
   {key: Event::ApplicationClosedMailer::NOTICE,
    placeholders_required: "event-name",
    placeholders_optional: "event-number, event-link, event-details"},
+  {key: Event::SurveyMailer::SURVEY,
+   placeholders_required: "event-name, survey-link",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
   {key: Qualifications::ExpirationMailer::REMINDER_TODAY},
   {key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR},
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
@@ -183,6 +186,17 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Kursanmeldung abgeschlossen",
    body: "Lieber Kursadmin,<br><br>" \
     "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde abgeschlossen.<br><br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::SurveyMailer::SURVEY).id,
+   locale: "de",
+   label: "Kurs: E-Mail Umfrage",
+   subject: "Kursumfrage",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Wir hoffen, der Kurs {event-name} (Nummer: {event-number}) hat dir gut gefallen. Es würde uns sehr freuen, " \
+    "wenn du dir einen Moment Zeit nehmen könntest, um an unserer Umfrage teilzunehmen: {survey-link}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
