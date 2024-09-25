@@ -15,30 +15,15 @@ class Event::ApplicationConfirmationMailer < ApplicationMailer
 
   def confirmation(participation, content_key)
     @participation = participation
+    @person = participation.person
     @course = participation.event
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
-    compose_multilingual(@participation.person, content_key, locales)
+    compose_multilingual(@person, content_key, locales)
   end
 
   private
-
-  def placeholder_recipient_name
-    @participation.person.greeting_name
-  end
-
-  def placeholder_person_url
-    link_to(person_url(@participation.person))
-  end
-
-  def placeholder_application_url
-    link_to(group_event_participation_url(
-      group_id: @course.groups.first.id,
-      event_id: @course.id,
-      id: @participation.id
-    ))
-  end
 
   def placeholder_missing_information
     missing = [nil, "", "nein", "non", "no"]

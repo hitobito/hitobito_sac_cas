@@ -12,7 +12,19 @@ module EventMailer
   private
 
   def placeholder_recipient_name
-    @course.contact.greeting_name
+    @person.greeting_name
+  end
+
+  def placeholder_person_url
+    link_to(group_person_url(@course.group_ids.first, @person))
+  end
+
+  def placeholder_application_url
+    link_to(group_event_participation_url(
+      group_id: @course.group_ids.first,
+      event_id: @course.id,
+      id: @participation.id
+    ))
   end
 
   def placeholder_application_opening_at
