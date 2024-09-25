@@ -9,21 +9,14 @@ class Event::PublishedMailer < ApplicationMailer
   include EventMailer
   include MultilingualMailer
 
-  EVENT_LEADER_ROLES = [Event::Role::Leader, Event::Role::AssistantLeader].map(&:sti_name)
   NOTICE = "event_published_notice"
 
   def notice(course, leader)
     @course = course
-    @leader = leader
+    @person = leader
     headers[:bcc] = course.groups.first.course_admin_email
     locales = course.language.split("_")
 
     compose_multilingual(leader, NOTICE, locales)
-  end
-
-  private
-
-  def placeholder_recipient_name
-    @leader.greeting_name
   end
 end

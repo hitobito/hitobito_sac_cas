@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Event::ParticipationMailer
-  extend ActiveSupport::Concern
   include EventMailer
   include MultilingualMailer
 
@@ -25,8 +24,8 @@ module SacCas::Event::ParticipationMailer
 
   def compose_email(participation, content_key)
     @participation = participation
-    @course = @participation.event
-    @person = @participation.person
+    @course = participation.event
+    @person = participation.person
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
@@ -40,15 +39,7 @@ module SacCas::Event::ParticipationMailer
 
   private
 
-  def placeholder_person_url
-    link_to(group_person_url(@course.group_ids.first, @participation.person))
-  end
-
   def placeholder_book_discount_code
     @course.book_discount_code.to_s
-  end
-
-  def placeholder_recipient_name
-    @person.greeting_name
   end
 end
