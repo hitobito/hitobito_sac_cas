@@ -33,6 +33,9 @@ CustomContent.seed(:key,
   {key: Event::ApplicationPausedMailer::NOTICE,
    placeholders_required: "event-name",
    placeholders_optional: "event-number, event-link, event-details"},
+  {key: Event::ApplicationClosedMailer::NOTICE,
+   placeholders_required: "event-name",
+   placeholders_optional: "event-number, event-link, event-details"},
   {key: Qualifications::ExpirationMailer::REMINDER_TODAY},
   {key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR},
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
@@ -172,6 +175,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Kursanmeldung pausiert",
    body: "Lieber Kursadmin,<br><br>" \
     "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde pausiert.<br><br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ApplicationClosedMailer::NOTICE).id,
+   locale: "de",
+   label: "Kurs: E-Mail Anmeldung abgeschlossen",
+   subject: "Kursanmeldung abgeschlossen",
+   body: "Lieber Kursadmin,<br><br>" \
+    "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde abgeschlossen.<br><br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,

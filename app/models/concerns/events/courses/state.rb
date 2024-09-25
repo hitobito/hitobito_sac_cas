@@ -30,6 +30,7 @@ module Events::Courses::State
     before_save :adjust_state, if: :application_closing_at_changed?
     after_update :send_application_published_email, if: :state_changed_from_created_to_application_open?
     after_update :send_application_paused_email, if: :state_changed_to_application_paused?
+    after_update :send_application_closed_email, if: :state_changed_to_application_closed?
     after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
     after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
   end
@@ -65,6 +66,10 @@ module Events::Courses::State
 
   def state_changed_to_application_paused?
     saved_change_to_attribute(:state)&.second == "application_paused"
+  end
+
+  def state_changed_to_application_closed?
+    saved_change_to_attribute(:state)&.second == "application_closed"
   end
 
   def state_changed_from_assignment_closed_to_ready?
@@ -104,6 +109,10 @@ module Events::Courses::State
 
   def send_application_paused_email
     Event::ApplicationPausedMailer.notice(self).deliver_later if groups.first.course_admin_email.present?
+  end
+
+  def send_application_closed_email
+    Event::ApplicationClosedMailer.notice(self).deliver_later if groups.first.course_admin_email.present?
   end
 
   def adjust_state
