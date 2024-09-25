@@ -33,6 +33,7 @@ module Events::Courses::State
     after_update :send_application_closed_email, if: :state_changed_to_application_closed?
     after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
     after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
+    after_update :cancel_invoices, if: :state_changed_to_canceled?
   end
 
   def available_states(state = self.state)
@@ -80,6 +81,10 @@ module Events::Courses::State
     saved_change_to_attribute(:state) == ["created", "application_open"]
   end
 
+  def state_changed_to_canceled?
+    saved_change_to_attribute(:state)&.second == "canceled"
+  end
+
   def notify_rejected_participants
     rejected_participants.each do |participation|
       Event::ParticipationMailer.reject(participation).deliver_later
@@ -95,6 +100,16 @@ module Events::Courses::State
       Event::ParticipationMailer.summon(participation).deliver_later
     end
     assigned_participants.update_all(state: :summoned)
+  end
+
+  def cancel_invoices
+    course_invoices.each do |invoice|
+      Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+    end
+  end
+
+  def course_invoices
+    ExternalInvoice::Course.where(link: self)
   end
 
   def assigned_participants

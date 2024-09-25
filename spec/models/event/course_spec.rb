@@ -453,4 +453,20 @@ describe Event::Course do
       end
     end
   end
+
+  describe "when state changes to canceled" do
+    let(:course) { Fabricate(:sac_open_course, language: "de") }
+
+    before do
+      course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+      ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
+      ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course)
+    end
+
+    it "queues job to cancel invoices for all participants" do
+      expect do
+        course.update!(state: :canceled)
+      end.to change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(2)
+    end
+  end
 end
