@@ -21,6 +21,7 @@ describe SacImports::Wso2PeopleImporter do
     travel_to DateTime.new(2024, 1, 23, 10, 42)
     Group::AboBasicLogin.create!(parent: groups(:abos))
     Group::AboTourenPortal.create!(parent: groups(:abos))
+    Group::ExterneKontakte.create!(name: "Navision Import", parent: Group::SacCas.first!)
     allow(Rails.root)
       .to receive(:join)
       .and_call_original

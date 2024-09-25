@@ -39,9 +39,13 @@ module SacImports
       @abo_group ||= Group::AboTourenPortal.first!
     end
 
+    def navision_import_group
+      @navision_import_group ||= Group::ExterneKontakte.find_by!(name: "Navision Import")
+    end
+
     def process_row(row)
       @output.print("#{row[:navision_id]} (#{row[:email]}):")
-      entry = Wso2PersonEntry.new(row, basic_login_group, abo_group)
+      entry = Wso2PersonEntry.new(row, basic_login_group, abo_group, navision_import_group)
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!
