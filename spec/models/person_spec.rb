@@ -435,9 +435,17 @@ describe Person do
         end
 
         it "runs data quality check for phone_numbers" do
-          expect { person.phone_numbers.destroy_all }
-            .to change(person.reload.data_quality_issues, :count)
+          expect { delete_phone_number(person) }.to change(*phone_quality_issue_count(person)).by(1)
+          expect(person.data_quality_issues.first.message).to eq("Telefonnummern ist leer")
+          expect { add_phone_number(person) }.to change(*phone_quality_issue_count(person)).by(-1)
+          expect { delete_phone_number(person) }.to change(*phone_quality_issue_count(person)).by(1)
         end
+
+        def delete_phone_number(person) = person.phone_numbers.destroy_all
+
+        def phone_quality_issue_count(person) = [person.reload.data_quality_issues, :count]
+
+        def add_phone_number(person) = person.phone_numbers.create!(number: "+41791234567", label: "mobile")
       end
     end
 
