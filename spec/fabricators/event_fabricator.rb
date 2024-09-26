@@ -20,6 +20,8 @@ Fabricator(:sac_open_course, from: :sac_course) do
   language { "de" }
   season { "winter" }
   start_point_of_time { "day" }
+  price_member { 10 }
+  price_regular { 20 }
   application_opening_at { Time.zone.yesterday }
   application_closing_at { Time.zone.tomorrow }
   before_create do |event|
