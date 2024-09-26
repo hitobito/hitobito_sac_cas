@@ -17,6 +17,14 @@ class SacEventSeeder < EventSeeder
     event.season = Event::Kind::SEASONS.sample
     event.start_point_of_time = :day
     event.contact_id = fetch_contact_person.id
+
+    event.save!
+    event
+  end
+
+  def seed_sac_course_which_is_application_closed(group_id)
+    event = seed_sac_course(group_id)
+    event.update_column(:state, "assignment_closed")
     event.save!
   end
 

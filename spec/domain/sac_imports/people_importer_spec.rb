@@ -15,7 +15,7 @@ describe SacImports::PeopleImporter do
   let(:people_navision_ids) { %w[4200000 4200001 4200002 4200003 4200004 4200005 4200006 4200007 4200008 4200009] }
   let(:invalid_person_navision_id) { "4200010" }
 
-  let(:report_file) { Rails.root.join("log", "sac_imports", "1_people_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-1_people_2024-01-23-11:42.csv") }
   let(:report_headers) { %w[navision_membership_number navision_name errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 

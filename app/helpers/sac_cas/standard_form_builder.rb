@@ -8,7 +8,7 @@
 module SacCas::StandardFormBuilder
   def labeled_gender_inline_radio_buttons
     radios = (Person::GENDERS + [""]).map do |key|
-      inline_radio_button(:gender, key, Person.salutation_label(key))
+      inline_radio_button(:gender, key, Person.salutation_label(key), true, {checked: false})
     end
     labeled(:gender, safe_join(radios))
   end

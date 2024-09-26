@@ -26,7 +26,8 @@ describe People::NeuanmeldungenMailer do
     end
 
     it "considers person's language when sending" do
-      CustomContent.get(People::NeuanmeldungenMailer::APPROVED).update(locale: :fr, label: "lal", subject: "Acceptee", body: "Bonjour")
+      CustomContent.get(People::NeuanmeldungenMailer::APPROVED)
+        .update(locale: :fr, label: "lal", subject: "Acceptee", body: "Bonjour")
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body.to_s).to include("Bonjour")
@@ -47,9 +48,11 @@ describe People::NeuanmeldungenMailer do
     end
 
     it "considers person's language when sending" do
+      CustomContent.get(People::NeuanmeldungenMailer::REJECTED)
+        .update(locale: :fr, label: "lal", subject: "Rejetée", body: "Bonjour")
       person.update!(language: :fr)
-      expect(mail.subject).to eq("Demande d'admission au SAC rejetée")
-      expect(mail.body.to_s).to include("Bonjour Edmund,")
+      expect(mail.subject).to eq("Rejetée")
+      expect(mail.body.to_s).to include("Bonjour")
     end
   end
 end

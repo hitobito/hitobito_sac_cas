@@ -30,15 +30,21 @@ describe Event::Course do
       expect(course.errors[:number]).to eq ["ist bereits vergeben"]
     end
 
-    it "validates presence of location in state ready" do
-      allow(course).to receive(:state).and_return(:ready)
-      expect(course).not_to be_valid
-      expect(course.errors[:location]).to eq ["muss ausgefüllt werden"]
-    end
+    [:description, :application_opening_at, :application_closing_at, :contact_id,
+      :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
+      :price_member, :price_regular].each do |attribute|
+      describe "validates presence of #{attribute}" do
+        it "validates presence of #{attribute} in state ready" do
+          allow(course).to receive(:state).and_return(:ready)
+          expect(course).not_to be_valid
+          expect(course.errors[attribute]).to eq ["muss ausgefüllt werden"]
+        end
 
-    it "does not validate presence of location in state created" do
-      expect(course.state).to eq("created")
-      expect(course).to be_valid
+        it "does not validate presence of #{attribute} in state created" do
+          expect(course.state).to eq("created")
+          expect(course).to be_valid
+        end
+      end
     end
   end
 

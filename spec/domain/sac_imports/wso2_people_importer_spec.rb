@@ -9,10 +9,10 @@ require "spec_helper"
 
 describe SacImports::Wso2PeopleImporter do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
-  let(:report_file) { Rails.root.join("log", "sac_imports", "7_wso2_people_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "wso2-1_people_2024-01-23-11:42.csv") }
   let(:output) { $stdout } # double(puts: nil, print: nil) }
   let(:report) { described_class.new(output: output) }
-  let(:report_headers) { %w[navision_id first_name last_name errors] }
+  let(:report_headers) { %w[navision_id first_name last_name warnings errors] }
 
   let!(:existing_person_matching) { Fabricate(:person, id: 4200000, email: "example@example.com", correspondence: "print") }
   let!(:existing_person_mismatch) { Fabricate(:person, id: 4200003, email: "wrong@example.com") }
@@ -21,6 +21,7 @@ describe SacImports::Wso2PeopleImporter do
     travel_to DateTime.new(2024, 1, 23, 10, 42)
     Group::AboBasicLogin.create!(parent: groups(:abos))
     Group::AboTourenPortal.create!(parent: groups(:abos))
+    Group::ExterneKontakte.create!(name: "Navision Import", parent: Group::SacCas.first!)
     allow(Rails.root)
       .to receive(:join)
       .and_call_original
@@ -63,8 +64,10 @@ describe SacImports::Wso2PeopleImporter do
     expect(File.exist?(report_file)).to be_truthy
 
     csv_report = CSV.read(report_file, col_sep: ";")
-    expect(csv_report.size).to eq(6)
+    expect(csv_report.size).to eq(8)
     expect(csv_report.first).to eq(report_headers)
+    expect(csv_report.pluck(0)).to eq(["navision_id", nil, "4200001", "4200002", "4200003", nil, "4200004", "4200005"])
+    expect(csv_report.pluck(3)).to eq(["warnings", "Email not verified", nil, nil, nil, "Email not verified", nil, nil])
 
     File.delete(report_file)
     expect(File.exist?(report_file)).to be_falsey

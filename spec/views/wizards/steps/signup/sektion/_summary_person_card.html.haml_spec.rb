@@ -44,11 +44,11 @@ describe "wizards/steps/signup/sektion/_summary_person_card.html.haml" do
     expect(dom).to have_text "Musterplatz 23"
     expect(dom).to have_text "PLZ/Ort"
     expect(dom).to have_text "8000 Zurich"
-    expect(dom).to have_text "Geburtstag"
+    expect(dom).to have_text "Geburtsdatum"
     expect(dom).to have_text "01.01.2000"
     expect(dom).to have_text "Telefon"
     expect(dom).to have_text "0791234567"
-    expect(dom).to have_text "Haupt-E-Mail"
+    expect(dom).to have_text "E-Mail"
     expect(dom).to have_text "max.muster@hitobito.com"
   end
 

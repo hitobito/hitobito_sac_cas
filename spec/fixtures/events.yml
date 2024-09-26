@@ -31,6 +31,8 @@ closed: &closed
   start_point_of_time: day
   cost_center: tour
   cost_unit: ski
+  price_member: 10
+  price_regular: 20
 
 assignment_closed:
   <<: *closed

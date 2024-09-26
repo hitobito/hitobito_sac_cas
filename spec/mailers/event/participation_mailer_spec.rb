@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito_sac_cas.
 
 require "spec_helper"
 
@@ -25,18 +25,15 @@ describe Event::ParticipationMailer do
   subject { mail.parts.first.body }
 
   describe "#rejection" do
-    subject { mail.body }
-
     let(:mail) { Event::ParticipationMailer.reject(participation) }
 
     it "sends to email addresses of declined participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
       expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
       expect(mail.subject).to eq "Kursablehnung"
+      expect(mail.body.to_s).to include("Hallo Edmund,")
+      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs abgelehnt")
     end
-
-    it { is_expected.to match(/Hallo Edmund Hillary/) }
-    it { is_expected.to match(/Sie wurden leider für den Kurs Test Kurs abgelehnt/) }
   end
 
   describe "#summon" do
@@ -47,10 +44,9 @@ describe Event::ParticipationMailer do
     it "sends to email addresses of summoned participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
       expect(mail.subject).to eq "Kurs: E-Mail Aufgebot"
+      expect(mail.body.to_s).to include("Hallo Edmund,")
+      expect(mail.body.to_s).to include("Du wurdest für den Kurs Test Kurs (Nummer: #{event.number}) aufgeboten")
     end
-
-    it { is_expected.to match(/Hallo Edmund/) }
-    it { is_expected.to match(/Sie wurden für den Kurs Test Kurs .* aufgeboten/) }
 
     it "includes the parameters" do
       expect(mail.body).to include(event.to_s)
@@ -61,8 +57,6 @@ describe Event::ParticipationMailer do
     end
 
     context "course language" do
-      subject { mail.body }
-
       before do
         event.update!(language: "fr")
         I18n.with_locale(:fr) do
@@ -81,8 +75,6 @@ describe Event::ParticipationMailer do
     end
 
     context "multiple languages" do
-      subject { mail.body }
-
       before do
         event.update!(language: "de_fr")
         I18n.with_locale(:fr) do
@@ -93,7 +85,7 @@ describe Event::ParticipationMailer do
       it "sends in both languages" do
         expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
         expect(mail.subject).to eq("Kurs: E-Mail Aufgebot / Convocation au cours")
-        is_expected.to match(/Sie wurden für den Kurs Test Kurs \(Nummer: .*\) aufgeboten.<br><br>/)
+        is_expected.to match(/Du wurdest für den Kurs Test Kurs \(Nummer: .*\) aufgeboten.<br><br>/)
         is_expected.to match(/Vous avez été convoqué\(e\) pour le cours Course test \(Numéro: .*\).<br><br>/)
         is_expected.to include("Kursdetails", "Détails du cours")
         is_expected.to include(MultilingualMailer::LANGUAGE_SEPARATOR)
@@ -113,8 +105,6 @@ describe Event::ParticipationMailer do
     end
 
     context "xss" do
-      subject { mail.body }
-
       it "does not include wrongly encoded tags" do
         is_expected.not_to include("&lt;")
       end

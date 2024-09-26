@@ -77,7 +77,7 @@ describe Wizards::Signup::SektionWizard do
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
       expect(wizard.family_fields.members.first.errors.full_messages).to eq [
-        "Geburtstag muss ausgefüllt werden"
+        "Geburtsdatum muss ausgefüllt werden"
       ]
     end
 

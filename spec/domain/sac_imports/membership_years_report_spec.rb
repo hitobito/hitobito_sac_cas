@@ -33,7 +33,7 @@ describe SacImports::MembershipYearsReport do
       created_at: "2015-12-1")
   end
 
-  let(:report_file) { Rails.root.join("log", "sac_imports", "6_membership_years_report_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-2_membership_years_report_2024-01-23-11:42.csv") }
   let(:report_headers) { %w[navision_membership_number navision_name navision_membership_years hitobito_membership_years diff errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
