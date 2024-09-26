@@ -12,6 +12,7 @@ module SacCas::PeopleController
 
   prepended do
     before_action :set_lookup_prefixes
+    before_update :check_birthday
   end
 
   def list_filter_args
@@ -57,5 +58,11 @@ module SacCas::PeopleController
 
   def tabular_params(**)
     super.merge(params.slice(:recipients, :recipient_households).permit!)
+  end
+
+  def check_birthday
+    return unless entry.sac_membership_active? && entry.birthday_changed?
+
+    People::BirthdayValidator.new(entry, current_user).validate!
   end
 end

@@ -7,6 +7,15 @@ module Wizards
   module Steps
     module SwitchStammsektion
       class Summary < Step
+        def info_text
+          key = wizard.choose_sektion.group.decorate.membership_admission_through_gs? ?
+                "info_text_no_confirmation" :
+                "info_text"
+
+          I18n.t(key, scope: "wizards.steps.switch_stammsektion.summary",
+            sektion: wizard.choose_sektion.group.name,
+            beitragskategorie: I18n.t("roles.beitragskategorie.#{wizard.person.sac_membership.stammsektion_role.beitragskategorie}"))
+        end
       end
     end
   end

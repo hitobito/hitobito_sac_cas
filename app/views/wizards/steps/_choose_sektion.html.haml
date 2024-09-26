@@ -6,6 +6,6 @@
 = c.fields_for do |form|
   - if c.model.wizard.backoffice? && !c.model.self_service?
     .alert.alert-warning=t('.backoffice_no_self_service_info_text')
-  = form.labeled_collection_select :group_id, c.model.groups.order(:name), :id, :name, {prompt: true}, data: { action: 'forwarder#click' }
+  = form.labeled_collection_select :group_id, c.model.groups.order(:name), :id, :name, {prompt: true}, data: { action: 'forwarder#click' }, class: "form-select form-select-sm"
 
   = render 'shared/hidden_submit', label: 'Load Fees', formaction: nil
