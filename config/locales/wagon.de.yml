@@ -1559,6 +1559,7 @@ de:
         sektion:
           family_fields_title: Familienmitglieder
           family_fields:
+            add: Weiteres Familienmitglied hinzufügen
             email_taken: >
               Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt
               werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
