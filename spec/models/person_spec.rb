@@ -159,7 +159,7 @@ describe Person do
   describe "#salutation_label" do
     subject(:person) { Fabricate.build(:person) }
 
-    ["m", "w", nil].zip(%w[Mann Frau Andere]).each do |value, label|
+    ["m", "w", nil].zip(%w[männlich weiblich divers]).each do |value, label|
       it "is #{label} for #{value}" do
         expect(person.salutation_label(value)).to eq label
       end
@@ -404,14 +404,14 @@ describe Person do
           expect do
             person.update!(birthday: nil)
           end.to change(person.data_quality_issues, :count).by(1)
-          expect(person.data_quality_issues.first.message).to eq("Geburtstag ist leer")
+          expect(person.data_quality_issues.first.message).to eq("Geburtsdatum ist leer")
           expect(person.data_quality).to eq("error")
 
           expect do
             person.update!(birthday: Time.zone.today)
           end.not_to change(person.data_quality_issues, :count)
           expect(person.reload.data_quality_issues.first.message)
-            .to eq("Geburtstag liegt weniger als 6 Jahre vor dem SAC-Eintritt")
+            .to eq("Geburtsdatum liegt weniger als 6 Jahre vor dem SAC-Eintritt")
           expect(person.data_quality).to eq("warning")
         end
 
