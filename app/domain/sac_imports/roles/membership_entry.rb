@@ -7,12 +7,19 @@
 
 module SacImports::Roles
   class MembershipEntry
+    include EntryHelper
+
     def initialize(row)
       @row = row
+      @skipped = false
     end
 
     def errors
-      @errors ||= build_error_messages
+      build_error_messages
+    end
+
+    def warnings
+      build_warning_messages
     end
 
     def valid?
@@ -20,11 +27,12 @@ module SacImports::Roles
     end
 
     def skipped?
-      errors.present? && errors.include?("Skipping")
+      errors.present? && @skipped
     end
 
     def import!
-      person.save!
+      return if skipped?
+      "Importing..."
     end
 
     private
@@ -42,13 +50,19 @@ module SacImports::Roles
     end
 
     def build_error_messages
-      errors = []
+      errors ||= []
 
-      errors << "Skipping: Person not found" if person.nil?
-      errors << "Skipping: Row contains TODO" if todo?
+      errors << skip("Person not found") if person.nil?
+      errors << skip("Row contains TODO") if todo?
       errors << [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact if person.present?
 
       errors.join(", ")
+    end
+
+    def build_warning_messages
+      warnings ||= []
+
+      warnings.join(", ")
     end
   end
 end

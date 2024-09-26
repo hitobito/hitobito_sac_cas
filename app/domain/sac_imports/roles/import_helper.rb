@@ -1,6 +1,18 @@
-module SacImports::Roles::Helper
+module SacImports::Roles::ImportHelper
   def import!(row, layer)
     @output.print("#{row[:navision_id]} (#{row[:name]}) #{layer}:")
+
+    if skipped_row?(row)
+      @output.print(" ❌ Previously skipped\n")
+      @csv_report.add_row({
+        navision_id: row[:navision_id],
+        navision_name: row[:name],
+        group: [row[:group_lvl_1], row[:group_lvl_2], row[:group_lvl_3], row[:group_lvl_4]].compact.join(" > "),
+        layer: layer,
+        errors: "Previously skipped"
+      })
+      return
+    end
 
     entry = yield(row)
 
@@ -9,13 +21,14 @@ module SacImports::Roles::Helper
     if entry.valid?
       entry.import!
     else
-      entry.skipped?
+      skip_row(row) if entry.skipped?
       @csv_report.add_row({
         navision_id: row[:navision_id],
         navision_name: row[:name],
         group: [row[:group_lvl_1], row[:group_lvl_2], row[:group_lvl_3], row[:group_lvl_4]].compact.join(" > "),
         layer: layer,
-        errors: entry.errors
+        errors: entry.errors,
+        warnings: entry.warnings
       })
     end
   end

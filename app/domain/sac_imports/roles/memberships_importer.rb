@@ -7,7 +7,7 @@
 
 module SacImports::Roles
   class MembershipsImporter
-    include Helper
+    include ImportHelper
 
     def initialize(output, source_file, csv_report, skipped_rows)
       @output = output
