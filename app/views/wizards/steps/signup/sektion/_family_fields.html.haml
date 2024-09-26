@@ -8,16 +8,20 @@
 
 .btn-toolbar.top{class: "#{'d-none' if c.model.members.empty?}" }
   = render 'wizards/steps/signup/sektion/family_buttons', c: c
-
 = c.nested_fields_for(:members, c.model.build_member) do |form|
-  = form.error_messages
-  = form.labeled_gender_inline_radio_buttons
-  = form.labeled_input_fields :first_name, :last_name
-  = form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
-  = form.labeled_input_field :email
-  = form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')
+  %div{data: {controller: :'sac--signup',
+              'sac--signup_email_validation_path_value': email_check_path,
+              'sac--signup_adult_from_value': SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.first}}
+    = form.error_messages
+    = form.labeled_gender_inline_radio_buttons
+    = form.labeled_input_fields :first_name, :last_name
+    = form.labeled_date_field :birthday, data: {action: 'focusout->sac--signup#toggleFields focusout->forwarder#click'}
+    = form.labeled_adult_required_field :email, data: {action: 'change->sac--signup#validateEmail'} do
+      .d-none.invalid-feedback{data: { 'sac--signup_target': :emailInfo}}
+        %span= I18n.t("wizards.steps.signup.sektion.family_fields.email_taken")
+    = form.labeled_adult_required_field :phone_number, placeholder: t('global.phone_placeholder')
 
-  .col-xl-2.col-md-3.text-md-end.pe-3
+  .col-xl-2.col-md-3.text-md-end.pe-3.mb-4
     = form.link_to_remove(I18n.t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
 
 %br

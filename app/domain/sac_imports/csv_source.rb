@@ -10,14 +10,12 @@ class SacImports::CsvSource
   SOURCE_HEADERS = {
     NAV1: {
       navision_id: "No_",
-      navision_name: "Surname",
-      navision_membership_years: "Vereinsmitgliederjahre",
+      membership_years: "Vereinsmitgliederjahre",
       first_name: "First Name",
       last_name: "Surname",
       address_care_of: "Adresszusatz",
       postbox: "Postfach",
-      address: "Address",
-      street: "Street Name",
+      street_name: "Street Name",
       housenumber: "Street No_",
       country: "Country_Region Code",
       town: "City",
@@ -50,9 +48,31 @@ class SacImports::CsvSource
       zusatzbeschrieb: "Zusatzbeschrieb",
       name: "Name",
       other: "Anderes"
-    }
+    },
     # NAV3: {},
-    # WSO21: {},
+    WSO21: {
+      wso2_legacy_password_hash: "UM_USER_PASSWORD",
+      wso2_legacy_password_salt: "UM_SALT_VALUE",
+      navision_id: "ContactNo",
+      gender: "Anredecode",
+      first_name: "Vorname",
+      last_name: "FamilienName",
+      address_care_of: "Addresszusatz",
+      address: "Strasse",
+      postbox: "Postfach",
+      town: "Ort",
+      zip_code: "PLZ",
+      country: "Land",
+      phone: "TelefonMobil",
+      phone_business: "TelefonG",
+      language: "Korrespondenzsprache",
+      email: "Mail",
+      birthday: "Geburtsdatum",
+      email_verified: "Email verified",
+      role_basiskonto: "Basis Konto",
+      role_abonnent: "Abonnent",
+      role_gratisabonnent: "NAV_FSA2020FREE"
+    }
     # WSO22: {}
   }.freeze
 

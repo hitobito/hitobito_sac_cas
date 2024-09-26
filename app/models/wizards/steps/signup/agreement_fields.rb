@@ -15,7 +15,6 @@ module Wizards::Steps::Signup
     ].freeze
 
     included do
-      include FutureRole::FormHandling
       include Rails.application.routes.url_helpers
 
       AGREEMENTS.each do |agreement|

@@ -1,0 +1,21 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Aformero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= c.fields_for do |form|
+  .align-with-form
+    = content_tag(:h2, t(".my_membership"), class: "fw-bold")
+    .row.justify-content-around
+      = render "wizards/steps/signup/sektion/summary_entry_fee_card"
+      = render "wizards/steps/signup/sektion/summary_person_card", person: wizard.person_fields
+
+    - if wizard.respond_to?(:family_fields) && wizard.family_fields.members.present?
+      = content_tag(:h2, t(".family_members"), class: "fw-bold")
+      .row.justify-content-around
+        - wizard.family_fields.members.sort_by(&:birthday).each do |family_member|
+          = render "wizards/steps/signup/sektion/summary_family_member_card", person: family_member
+
+    = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?
+
+    = content_tag(:div, form.object.info_alert_text, class: "alert alert-info mt-3")

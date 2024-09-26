@@ -305,14 +305,7 @@ describe Event::ParticipationsController do
         expect do
           Delayed::Job.last.payload_object.perform
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        expect(ActionMailer::Base.deliveries.last.subject).to eq("Unbestätigte Kursanmeldung")
-      end
-
-      it "doesnt send an email if the participation has been deleted before the job runs" do
-        participation.destroy!
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.not_to change(ActionMailer::Base.deliveries, :count)
+        expect(last_email.subject).to eq("Unbestätigte Kursanmeldung")
       end
 
       context "with answers" do
@@ -328,9 +321,10 @@ describe Event::ParticipationsController do
 
         it "shows missing information" do
           Delayed::Job.last.payload_object.perform
-          mail = ActionMailer::Base.deliveries.last.body.raw_source
+          mail = last_email.body.raw_source
           expect(mail).to include("non example", "nil example")
           expect(mail).not_to include("yes example")
+          expect(mail).not_to include("&lt;")
         end
       end
     end

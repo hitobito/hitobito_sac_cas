@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
+module SacCas::PhoneNumber
+  extend ActiveSupport::Concern
+
+  included do
+    after_create :check_data_quality
+    after_destroy :check_data_quality
+  end
+
+  private
+
+  def check_data_quality
+    # prevent running the check twice
+    return if !contactable.is_a?(Person) || People::DataQualityChecker.attributes_to_check_changed?(contactable)
+
+    contactable.phone_numbers.reload
+    People::DataQualityChecker.new(contactable).check_data_quality
+  end
+end

@@ -11,7 +11,8 @@ module Wizards::Signup
       Wizards::Steps::Signup::MainEmailField,
       Wizards::Steps::Signup::Sektion::PersonFields,
       Wizards::Steps::Signup::Sektion::FamilyFields,
-      Wizards::Steps::Signup::Sektion::VariousFields
+      Wizards::Steps::Signup::Sektion::VariousFields,
+      Wizards::Steps::Signup::Sektion::SummaryFields
     ]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
@@ -19,7 +20,8 @@ module Wizards::Signup
 
     delegate :email, to: :main_email_field
     delegate :person_attributes, :birthday, to: :person_fields
-    delegate :newsletter, :self_registration_reason_id, :privacy_policy_accepted_at, to: :various_fields
+    delegate :self_registration_reason_id, to: :various_fields
+    delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
 
     public :group
 
@@ -39,7 +41,7 @@ module Wizards::Signup
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|
-        SektionOperation.new(person_attrs:, group:, register_on:, newsletter:)
+        SektionOperation.new(person_attrs:, group:, newsletter:)
       end
     end
 
@@ -69,8 +71,6 @@ module Wizards::Signup
     def common_person_attrs
       {self_registration_reason_id:, privacy_policy_accepted_at:, household_key:}.compact_blank
     end
-
-    def register_on = various_fields.register_on_date || Time.zone.today
 
     def members = respond_to?(:family_fields) ? family_fields.members : []
 

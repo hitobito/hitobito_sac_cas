@@ -8,7 +8,7 @@
 module MultilingualMailer
   extend ActiveSupport::Concern
 
-  LANGUAGE_SEPARATOR = "<br><br>--------------------<br><br>"
+  LANGUAGE_SEPARATOR = ("<br/>".html_safe * 2 + "--------------------" + "<br/>".html_safe * 2).freeze
 
   private
 
@@ -26,7 +26,9 @@ module MultilingualMailer
     end
 
     I18n.with_locale(locales.first) do
-      mail(subject:) { |format| format.html { render html: body, layout: true } }
+      mail(subject:) do |f|
+        f.html { render html: body, layout: true }
+      end
     end
   end
 
@@ -38,7 +40,10 @@ module MultilingualMailer
       end
     end
 
-    [subjects_and_bodies.map(&:first).compact_blank.uniq.join(" / "),
-      subjects_and_bodies.map(&:last).compact_blank.join(LANGUAGE_SEPARATOR).html_safe]
+    subject_encoded = subjects_and_bodies.map(&:first).compact_blank.uniq.join(" / ")
+    subject = CGI.unescapeHTML(subject_encoded)
+    body = join_lines(subjects_and_bodies.map(&:last).compact_blank, LANGUAGE_SEPARATOR)
+
+    [subject, body]
   end
 end

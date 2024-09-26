@@ -14,7 +14,7 @@ module Wizards::Steps::Signup::Sektion
     attr_reader :emails
 
     def build_member(attrs = {})
-      FamilyFields::Member.new(self, attrs)
+      FamilyFields::Member.new(attrs.compact_blank)
     end
 
     def valid?
@@ -33,6 +33,10 @@ module Wizards::Steps::Signup::Sektion
       @members || []
     end
 
+    def contains_any_changes?
+      members.any?
+    end
+
     private
 
     def assert_adult_count
@@ -43,8 +47,15 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def members_valid?
-      @emails = [wizard.email]
-      members.each(&:valid?)
+      emails = [wizard.email]
+      members.each do |member|
+        member.valid?
+        next if member.email.blank?
+
+        member.errors.add(:email, :taken) if emails.include?(member.email)
+        emails.push(member.email)
+      end
+
       members.none? { |m| m.errors.any? }
     end
   end

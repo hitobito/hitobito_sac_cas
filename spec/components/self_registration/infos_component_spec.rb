@@ -44,7 +44,7 @@ describe SelfRegistration::InfosComponent, type: :component do
         Monbijoustrasse 61
         3000 Bern 14
         Tel: +41 31 370 18 18
-        mv@sac-cas.ch
+        #{SacCas::MV_EMAIL}
       TEXT
     end
 
@@ -53,12 +53,25 @@ describe SelfRegistration::InfosComponent, type: :component do
     end
 
     it "does render email as link" do
-      expect(body).to have_link("mv@sac-cas.ch")
+      expect(body).to have_link(SacCas::MV_EMAIL)
+    end
+  end
+
+  describe "membership" do
+    subject(:body) { parts[2] }
+
+    it "renders title" do
+      expect(body).to have_css("h2.card-title", text: "Möchtest du SAC-Mitglied werden?")
+    end
+
+    it "renders link to membership signup" do
+      expect(body).to have_link "Jetzt Mitgliedschaft beantragen",
+        href: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
     end
   end
 
   describe "documents" do
-    subject(:body) { parts[2] }
+    subject(:body) { parts[3] }
 
     it "renders title" do
       expect(body).to have_css("h2.card-title", text: "Dokumente")

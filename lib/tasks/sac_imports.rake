@@ -49,6 +49,11 @@ namespace :sac_imports do
     SacImports::MembershipYearsReport.new.create
   end
 
+  desc "Import people from WSO2"
+  task "7_wso2_people": [:environment] do
+    SacImports::Wso2PeopleImporter.new.create
+  end
+
   def read_file(kind)
     Pathname(ENV["FILE"].presence || Rails.root.join(default_files.fetch(kind)))
   end

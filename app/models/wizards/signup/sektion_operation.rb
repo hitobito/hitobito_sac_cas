@@ -9,10 +9,9 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person_attrs:, register_on:, newsletter:)
+    def initialize(group:, person_attrs:, newsletter:)
       @group = group
       @person_attrs = person_attrs
-      @register_on = register_on
       @newsletter = newsletter
     end
 
@@ -22,7 +21,16 @@ module Wizards::Signup
 
     def save!
       save_person_and_role
-      generate_invoice if no_approval_needed? && can_receive_invoice?
+
+      if paying_person?
+        if no_approval_needed?
+          generate_invoice
+          enqueue_confirmation_mail
+        else
+          enqueue_approval_pending_confirmation_mail
+        end
+      end
+
       exclude_from_mailing_list if mailing_list && !newsletter
       enqueue_duplicate_locator_job
       enqueue_notification_email
@@ -32,7 +40,7 @@ module Wizards::Signup
 
     private
 
-    attr_reader :group, :person_attrs, :register_on, :newsletter
+    attr_reader :group, :person_attrs, :newsletter
 
     def validate(model)
       model.valid?.tap do
@@ -46,21 +54,16 @@ module Wizards::Signup
       person.save! && role.save!
     end
 
+    def paying_person?
+      role.person.sac_membership.paying_person?(role.beitragskategorie)
+    end
+
     def person
       @person ||= Person.new(person_attrs)
     end
 
     def role
-      @role ||= (register_on.future? ? build_future_role : build_role)
-    end
-
-    def build_future_role
-      FutureRole.new(
-        person: person,
-        group: group,
-        convert_on: register_on,
-        convert_to: role_type
-      ).tap { |r| r.mark_as_coming_from_future_role = true }
+      @role ||= build_role
     end
 
     def build_role
@@ -77,12 +80,20 @@ module Wizards::Signup
       invoice = ExternalInvoice::SacMembership.create!(
         person: person,
         state: :draft,
-        year: invoice_date.year,
-        issued_at: invoice_date,
-        sent_at: invoice_date,
+        year: today.year,
+        issued_at: today,
+        sent_at: today,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateInvoiceJob.new(invoice, invoice_date, new_entry: true).enqueue!
+      Invoices::Abacus::CreateInvoiceJob.new(invoice, today, new_entry: true).enqueue!
+    end
+
+    def enqueue_confirmation_mail
+      Signup::SektionMailer.confirmation(person, group.layer_group).deliver_later
+    end
+
+    def enqueue_approval_pending_confirmation_mail
+      Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group).deliver_later
     end
 
     def neuanmeldung?
@@ -90,12 +101,7 @@ module Wizards::Signup
         group.is_a?(Group::SektionsNeuanmeldungenNv)
     end
 
-    def invoice_date
-      @invoice_date ||= begin
-        invoice_cutoff_date = (register_on - 1.month).change(day: 15)
-        [Date.current, invoice_cutoff_date].max
-      end
-    end
+    def today = @today ||= Date.current
 
     def role_type = group.self_registration_role_type
 
@@ -104,8 +110,6 @@ module Wizards::Signup
     def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
-
-    def can_receive_invoice? = !role.beitragskategorie&.family? || role.person.sac_family_main_person
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!

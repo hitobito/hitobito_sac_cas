@@ -13,8 +13,8 @@ module SacCas::Household
   prepended do
     validate :assert_adult_member, on: :update
     validate :assert_minimum_member_size, on: :update
-    validate :assert_removed_member_email_confirmed, on: :update
-    validate :assert_adult_member_with_confirmed_email, on: :update
+    validate :assert_removed_member_email, on: :update
+    validate :assert_adult_member_with_email, on: :update
     validate :assert_someone_is_a_member, on: :update
   end
 
@@ -140,14 +140,14 @@ module SacCas::Household
     end
   end
 
-  def assert_removed_member_email_confirmed
-    return if removed_people.all?(&:confirmed_at?)
+  def assert_removed_member_email
+    return if removed_people.all?(&:email?)
 
     errors.add(:base, :removed_member_has_no_email)
   end
 
-  def assert_adult_member_with_confirmed_email
-    return if adults.any? { _1.confirmed_at? }
+  def assert_adult_member_with_email
+    return if adults.any? { _1.email? }
 
     errors.add(:base, :no_adult_member_with_email)
   end

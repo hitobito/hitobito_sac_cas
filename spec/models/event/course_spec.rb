@@ -312,10 +312,10 @@ describe Event::Course do
     let(:rejected_participation) { Fabricate(:event_participation, event: course, application: application, state: "rejected") }
 
     it "queues job to notify rejected participants" do
-      expect {
+      expect do
         rejected_participation
         course.update!(state: :assignment_closed)
-      }.to change { Delayed::Job.where("handler LIKE ?", "%ParticipationRejectionJob%").count }.by(1)
+      end.to have_enqueued_mail(Event::ParticipationMailer, :reject)
     end
   end
 
@@ -336,9 +336,8 @@ describe Event::Course do
         expect do
           course.update!(state: :ready)
           assigned_participation.reload
-        end.to change { course.participations.all.first.state }.to(eq("summoned"))
-          .and have_enqueued_job.on_queue("mailers").with("Event::ParticipationMailer",
-            "summon", "deliver_now", {args: [assigned_participation]})
+        end.to change { course.participations.first.state }.to(eq("summoned"))
+          .and have_enqueued_mail(Event::ParticipationMailer, :summon).once
       end
     end
 
@@ -350,7 +349,7 @@ describe Event::Course do
 
         expect do
           course.update!(state: :ready)
-        end.to_not change { course.participations.all.first.state }
+        end.to_not change { course.participations.first.state }
       end
     end
   end
@@ -373,25 +372,8 @@ describe Event::Course do
         end
 
         it "sends an email to the course admin and leader" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(2)
-          expect do
-            Delayed::Job.second_to_last.payload_object.perform
-          end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
-          expect do
-            Delayed::Job.last.payload_object.perform
-          end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:mitglied).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
-        end
-
-        it "doesnt send an email if the course has been deleted" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(2)
-          course.destroy!
-          expect do
-            Delayed::Job.last.payload_object.perform
-          end.not_to change(ActionMailer::Base.deliveries, :count)
+          expect { course.update!(state: :application_open) }
+            .to have_enqueued_mail(Event::PublishedMailer, :notice).exactly(2).times
         end
       end
 
@@ -399,19 +381,15 @@ describe Event::Course do
         before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
 
         it "sends an email to the course admin and assistant leader" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(1)
-          expect do
-            Delayed::Job.last.payload_object.perform
-          end.to change(ActionMailer::Base.deliveries, :count).by(1)
-          expect(ActionMailer::Base.deliveries.last.to).to include(people(:admin).email)
-          expect(ActionMailer::Base.deliveries.last.to).not_to include(people(:mitglied).email)
-          expect(ActionMailer::Base.deliveries.last.bcc).to include("admin@example.com")
+          expect { course.update!(state: :application_open) }
+            .to have_enqueued_mail(Event::PublishedMailer, :notice).once
         end
       end
 
       context "without course leaders" do
         it "doesnt queue a job to send an email" do
-          expect { course.update!(state: :application_open) }.to change(Delayed::Job, :count).by(0)
+          expect { course.update!(state: :application_open) }
+            .not_to have_enqueued_mail(Event::PublishedMailer)
         end
       end
     end
@@ -420,7 +398,8 @@ describe Event::Course do
       before { course.update!(state: "application_paused") }
 
       it "doesnt send an email" do
-        expect { course.update!(state: :application_open) }.not_to change(Delayed::Job, :count)
+        expect { course.update!(state: :application_open) }
+          .not_to have_enqueued_mail(Event::PublishedMailer)
       end
     end
   end
@@ -432,20 +411,8 @@ describe Event::Course do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
 
       it "sends an email to the course admin" do
-        expect { course.update!(state: :application_paused) }.to change(Delayed::Job, :count).by(1)
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.to).to include("admin@example.com")
-        expect(ActionMailer::Base.deliveries.last[:from].value).to eq("Club Alpin Suisse CAS <noreply@localhost>")
-      end
-
-      it "doesnt send an email if the course has been deleted" do
-        expect { course.update!(state: :application_paused) }.to change(Delayed::Job, :count).by(1)
-        course.destroy!
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { course.update!(state: :application_paused) }
+          .to have_enqueued_mail(Event::ApplicationPausedMailer, :notice).once
       end
     end
 
@@ -453,7 +420,30 @@ describe Event::Course do
       before { course.groups.first.update!(course_admin_email: nil) }
 
       it "doesnt queue the job to send an email" do
-        expect { course.update!(state: :application_paused) }.not_to change(Delayed::Job, :count)
+        expect { course.update!(state: :application_paused) }
+          .not_to have_enqueued_mail(Event::ApplicationPausedMailer, :notice)
+      end
+    end
+  end
+
+  describe "when state changes to application_closed" do
+    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
+
+    context "with course admin" do
+      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+
+      it "sends an email to the course admin" do
+        expect { course.update!(state: :application_closed) }
+          .to have_enqueued_mail(Event::ApplicationClosedMailer, :notice).once
+      end
+    end
+
+    context "without course admin" do
+      before { course.groups.first.update!(course_admin_email: nil) }
+
+      it "doesnt queue the job to send an email" do
+        expect { course.update!(state: :application_closed) }
+          .not_to have_enqueued_mail(Event::ApplicationClosedMailer)
       end
     end
   end

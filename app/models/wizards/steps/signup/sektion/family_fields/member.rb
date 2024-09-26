@@ -16,33 +16,33 @@ module Wizards::Steps::Signup::Sektion
     attribute :gender, :string
     attribute :first_name, :string
     attribute :last_name, :string
-    attribute :email, :string
     attribute :birthday, :date
+
+    attribute :email, :string
     attribute :phone_number, :string
+
     attribute :_destroy, :boolean
 
     validates :first_name, :last_name, presence: true
+    validates :email, presence: true, if: :adult?
+    validates :phone_number, presence: true, if: :adult?
     validate :assert_family_age, if: :birthday
     validate :assert_email_unique, if: :email
-
-    delegate :emails, to: "@family_fields"
-
-    def initialize(family_fields, attrs = {})
-      @family_fields = family_fields
-      super(attrs.compact_blank)
-    end
 
     def adult?
       Person.new(birthday: birthday).adult?
     end
 
+    def required_attrs
+      [:email_required, :phone_number_required]
+    end
+
     private
 
     def assert_email_unique
-      if emails.include?(email) || Person.exists?(email: email)
+      if Person.exists?(email: email)
         errors.add(:email, :taken)
       end
-      emails.push(email)
     end
 
     def assert_family_age

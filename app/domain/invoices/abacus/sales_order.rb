@@ -15,6 +15,10 @@ module Invoices
         sac_membership: "R",
         course: "C"
       }.with_indifferent_access.freeze
+      PROCESS_FLOW_NUMBERS = {
+        sac_membership: 1,
+        course: 2
+      }.with_indifferent_access.freeze
 
       attr_reader :positions, :additional_user_fields
 
@@ -54,11 +58,14 @@ module Invoices
         {
           # customer id is defined to be the same as subject id
           customer_id: entity.person.abacus_subject_key,
-          order_date: entity.issued_at,
+          order_date: entity.created_at.to_date,
           delivery_date: entity.sent_at,
+          invoice_date: entity.sent_at,
+          invoice_value_date: entity.issued_at,
           total_amount: entity.total.to_f,
-          document_code_invoice: INVOICE_KINDS.fetch(entity.type_key),
           language: entity.person.language,
+          document_code_invoice: INVOICE_KINDS.fetch(entity.type_key),
+          process_flow_number: PROCESS_FLOW_NUMBERS.fetch(entity.type_key),
           user_fields: order_user_fields
         }
       end

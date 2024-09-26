@@ -10,6 +10,7 @@ de:
     years: Jahre
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
+      membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
   settings:
     email:
@@ -28,15 +29,15 @@ de:
     attributes:
       people/membership/invoice_form:
         reference_date: "Stichtag"
-        invoice_date: "Rechnungsdatum"
-        send_date: "Versanddatum"
+        invoice_date: "Buchungsdatum"
+        send_date: "Versand- und Rechnungsdatum"
         discount: "Rabatt"
         new_entry: "Eintrittsgebühr"
         section_id: "Mitgliedschaft"
       people/yearly_membership/invoice_form:
         invoice_year: "Rechnungsjahr"
-        invoice_date: "Rechnungsdatum"
-        send_date: "Versanddatum"
+        invoice_date: "Buchungsdatum"
+        send_date: "Versand- und Rechnungsdatum"
         role_finish_date: "Rollen verlängern bis"
       wizards/steps/signup/main_email_field:
         email: E-Mail
@@ -54,15 +55,18 @@ de:
         statutes: Statuten
       wizards/steps/signup/sektion/family_fields/member:
         gender: Anrede
-        email: E-Mail (optional)
-        phone_number: Telefon (optional)
+        email: E-Mail
+        phone_number: Telefon
+        email_optional: E-Mail (optional)
+        phone_number_optional: Telefon (optional)
       wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: Sektionsstatuten
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
-        sektion_statuten: Sektionsstatuten
         statutes: Statuten
       wizards/steps/choose_membership:
         register_as: Für wen soll die Zusatzmitgliedschaft gelten?
@@ -117,10 +121,10 @@ de:
               household_address: "Die Adresse '%{address}' wird für alle Familienmitglieder übernommen."
             base:
               at_least_one_adult: Eine Familie muss mindestens 1 erwachsene Person enthalten.
-              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit bestätigter E-Mail Adresse.
+              no_adult_member_with_email: Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.
               not_more_than_two_adults: Eine Familie darf höchstens 2 erwachsene Personen enthalten.
               at_least_two_members: Eine Familie muss mindestens 2 Personen enthalten.
-              removed_member_has_no_email: Die entfernte Person besitzt keine bestätigte E-Mail Adresse.
+              removed_member_has_no_email: Die entfernte Person besitzt keine E-Mail Adresse.
         household_member:
           attributes:
             base:
@@ -312,6 +316,7 @@ de:
         updated_at: Geändert
       person:
         correspondence: Mitgliederausweis & Rechnungsstellung
+        confirmed_at: E-Mail bestätigt
         family_id: Familien ID
         sac_family_main_person: Rechnungen an (Familie)
         sac_remark_national_office: Bemerkungen Geschäftsstelle
@@ -1264,6 +1269,11 @@ de:
         success:
           one: "Dein Sektionswechsel zu <i>%{group_name}</i> wurde vorgenommen."
           other: "Eure %{count} Sektionswechsel zu <i>%{group_name}</i> wurden vorgenommen."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: "Deine SAC-Mitgliedschaft wurde gekündet."
+          other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1317,12 +1327,6 @@ de:
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "Deine SAC-Mitgliedschaft wurde gekündet."
-          other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1468,6 +1472,7 @@ de:
     infos_component:
       title_questions: Fragen zur Mitgliedschaft?
       title_contact: Kontakt
+      title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
       additional_infos: Mehr Informationen findest du unter den %{link}.
       address: |
@@ -1485,6 +1490,7 @@ de:
       link_contribution_regulations_title: Beitragsreglement
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
+      link_membership_title: Jetzt Mitgliedschaft beantragen
 
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten
@@ -1539,17 +1545,37 @@ de:
         sektion:
           family_fields_title: Familienmitglieder
           family_fields:
+            email_taken: >
+              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt
+              werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >
               Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
               max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
               Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
               mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+          various_fields:
+            immediate_entry_date: Eintrittsdatum per sofort
+            period_info_1: Bis %{date_to} ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+            period_info_2: Bei Eintritt zwischen dem %{date_from} und dem %{date_to} erhältst du %{discount}% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+            period_info_3: Bei Eintritt ab dem %{date_from} entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
           family_buttons:
             next_as_single_link: Weiter als Einzelmitglied
             next_as_household_link: Weiter als Familienmitgliedschaft
 
           various_fields_title: Zusatzdaten
+          summary_fields_title: Zusammenfassung
+          summary_fields:
+            my_membership: "Meine Mitgliedschaft"
+            family_members: "Familienmitglieder"
+            info_alert_neuanmeldungen_nv: "Dein verbindlicher Antrag wurde an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
+            info_alert_neuanmeldungen_sektion: "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
+            entry_per: "Eintritt per:"
+          summary_person_card:
+            contact_person: "Kontaktperson"
+          summary_family_member_card:
+            adult: "Erwachsene Person"
+            child: "Kind"
 
         various_fields:
           newsletter: Ich möchte einen Newsletter abonnieren
@@ -1583,8 +1609,8 @@ de:
           next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
-          info_text: "Die Mitgliedschaft bei der Zusatzsektion wird als
-            %{beitragskategorie} abgeschlossen und ist per sofort gültig."
+          admission: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+          admission_through_gs: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
           next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."

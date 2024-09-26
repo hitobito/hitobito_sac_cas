@@ -23,6 +23,12 @@ module HitobitoSacCas
       config.view_component.preview_controller = "WizardsPreviewsController"
     end
 
+    config.before_initialize do |_app|
+      Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
+      Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
+      Settings.reload!
+    end
+
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         Event::CloseApplicationsJob,
@@ -53,8 +59,8 @@ module HitobitoSacCas
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
+      PhoneNumber.include SacCas::PhoneNumber
       Role.prepend SacCas::Role
-      Roles::Termination.prepend SacCas::Roles::Termination
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
@@ -81,21 +87,16 @@ module HitobitoSacCas
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
-      Ability.store.register Memberships::LeaveZusatzsektionAbility
-      Ability.store.register Memberships::TerminateSacMembershipAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       AbilityDsl::Base.prepend SacCas::AbilityDsl::Base
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
-      RoleAbility.prepend SacCas::RoleAbility
-      GroupAbility.prepend SacCas::GroupAbility
-      Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
-      RoleAbility.include SacCas::VariousAbility
       TokenAbility.prepend SacCas::TokenAbility
+      VariousAbility.include SacCas::VariousAbility
 
       ## Decorators
       GroupDecorator.prepend SacCas::GroupDecorator
@@ -109,12 +110,9 @@ module HitobitoSacCas
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
         "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       )
-      # SearchStrategies::Sql::SEARCH_FIELDS['Person'][:attrs] << 'people.id'
-
       Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
-      # SearchStrategies::Sql.prepend SacCas::SearchStrategies::Sql
-      # SearchStrategies::Sphinx.prepend SacCas::SearchStrategies::Sphinx
+      SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
 
       ## Resources
       GroupResource.include SacCas::GroupResource
@@ -196,12 +194,6 @@ module HitobitoSacCas
           :sac_remark_section_4,
           :sac_remark_section_5
         ])
-    end
-
-    initializer "sac_cas.add_settings" do |_app|
-      Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
-      Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
-      Settings.reload!
     end
 
     initializer "sac_cas.add_inflections" do |_app|

@@ -75,19 +75,17 @@ describe "signup/sektion", js: true do
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
       fill_in "Geburtstag", with: "01.01.1981"
-      fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+      fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+      fill_in "Telefon", with: "0791234567"
       choose "Frau"
     end
     yield if block_given?
     click_on "Weiter als Familienmitgliedschaft", match: :first
   end
 
-  def complete_last_page(with_adult_consent: true, submit: true)
-    assert_step "Zusatzdaten"
+  def complete_last_page(submit: true)
+    assert_step "Zusammenfassung"
     expect(page).to have_button("Registrieren"), "expected to be on last page"
-    if with_adult_consent
-      check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
-    end
     check "Ich habe die Statuten gelesen und stimme diesen zu"
     check "Ich habe das Beitragsreglement gelesen und stimme diesen zu"
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
@@ -148,6 +146,7 @@ describe "signup/sektion", js: true do
       expect(page).to have_css("h2", text: "Fragen zur Mitgliedschaft?")
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -252,7 +251,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1981"
-        fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Frau"
       end
       assert_aside("01.01.1980", "01.01.1981")
@@ -268,6 +268,7 @@ describe "signup/sektion", js: true do
 
       assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
       click_button("Weiter als Familienmitgliedschaft", match: :first)
+      click_button("Weiter", match: :first)
 
       expect do
         complete_last_page
@@ -289,7 +290,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1981"
-        fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Frau"
       end
       assert_aside("01.01.1980", "01.01.1981")
@@ -299,7 +301,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1978"
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Andere"
       end
       assert_aside("01.01.1980", "01.01.1981", "01.01.1978")
@@ -337,6 +340,7 @@ describe "signup/sektion", js: true do
         end
       end
       click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
       expect(page).to have_button "Registrieren"
       expect(page).to have_no_selector "#error_explanation"
     end
@@ -348,7 +352,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1981"
-        fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Frau"
       end
       assert_aside("01.01.1980", "01.01.1981")
@@ -368,6 +373,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside("01.01.1980", format_date(15.years.ago))
       click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -379,16 +385,61 @@ describe "signup/sektion", js: true do
       expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
     end
 
-    it "validates emails within household" do
+    it "changes label of email and phone number" do
+      click_on "Eintrag hinzufügen"
+      within "#members_fields .fields:nth-child(1)" do
+        expect(page).to have_css("label", text: "E-Mail (optional)")
+        expect(page).to have_css("label", text: "Telefon (optional)")
+        fill_in "Geburtstag", with: "01.01.2000"
+        fill_in "Vorname", with: "any" # trigger change event
+        expect(page).to have_css("label", text: "E-Mail")
+        expect(page).not_to have_css("label", text: "E-Mail (optional)")
+        expect(page).not_to have_css("label", text: "Telefon (optional)")
+        fill_in "Geburtstag", with: "01.01.2014"
+        fill_in "Vorname", with: "any" # trigger change event
+        expect(page).to have_css("label", text: "E-Mail (optional)")
+        expect(page).to have_css("label", text: "Telefon (optional)")
+      end
+    end
+
+    it "validates emails dynamically for household input" do
+      click_on "Eintrag hinzufügen"
+      fill_in "E-Mail", with: "e.hillary@hitobito.example.com"
+      fill_in "Vorname", with: "Maxi"
+      field = find_field("E-Mail")
+      expect(page).to have_css(".is-invalid")
+      expect(page).to have_css "##{field[:id]}.is-invalid"
+      expect(page).to have_css ".invalid-feedback", text: "Die E-Mail Adresse ist bereits registriert " \
+        "und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, " \
+        "um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch"
+      fill_in "E-Mail", with: "eddy.hillary@hitobito.example.com"
+      fill_in "Vorname", with: "Maxi"
+      expect(page).not_to have_css ".invalid-feedback"
+      expect(find_field("E-Mail")[:class]).not_to match(/\bis-invalid\b/)
+    end
+
+    it "does not treat empty email as invalid" do
+      click_on "Eintrag hinzufügen"
+      fill_in "Geburtstag", with: "01.01.2000"
+
+      click_on "Weiter als Familienmitgliedschaft", match: :first
+      within "#members_fields .fields:nth-child(1)" do
+        expect(page).to have_content "E-Mail muss ausgefüllt werden"
+        expect(page).not_to have_content "Die E-Mail Adresse ist bereits registriert"
+      end
+    end
+
+    it "validates emails within household on form submit" do
       click_on "Eintrag hinzufügen"
 
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
       fill_in "Geburtstag", with: "01.01.1981"
-      fill_in "E-Mail (optional)", with: "max.muster@hitobito.example.com"
+      fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+      fill_in "Telefon", with: "0791234567"
       choose "Frau"
       click_on "Weiter als Familienmitgliedschaft", match: :first
-      expect(page).to have_content "E-Mail (optional) ist bereits vergeben"
+      expect(page).to have_content "E-Mail ist bereits vergeben"
       expect(page).to have_button "Weiter als Familienmitgliedschaft", match: :first
     end
 
@@ -398,12 +449,12 @@ describe "signup/sektion", js: true do
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
       fill_in "Geburtstag", with: "01.01.1981"
-      fill_in "E-Mail (optional)", with: "max.muster@hitobito.example.com"
-      fill_in "Telefon (optional)", with: "123"
+      fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+      fill_in "Telefon", with: "123"
       choose "Frau"
       click_on "Weiter als Familienmitgliedschaft", match: :first
       within "#members_fields .fields:nth-child(1)" do
-        expect(page).to have_content "Telefon (optional) ist nicht gültig"
+        expect(page).to have_content "Telefon ist nicht gültig"
       end
     end
 
@@ -415,6 +466,7 @@ describe "signup/sektion", js: true do
         click_on "Entfernen"
       end
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
       expect(page).to have_button "Registrieren"
     end
 
@@ -428,7 +480,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: format_date(1.day.ago)
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Frau"
         click_on "Weiter als Familienmitgliedschaft", match: :first
         expect(page).to have_content "Person muss 6 Jahre oder älter sein"
@@ -453,6 +506,8 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Max"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1980"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         within(".btn-toolbar.top") do
           click_on("Weiter als Familienmitgliedschaft")
         end
@@ -486,12 +541,14 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtstag", with: "01.01.1981"
-        fill_in "E-Mail (optional)", with: "maxine.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
         choose "Frau"
       end
 
       click_on "Zurück", match: :first
       fill_in "Geburtstag", with: twenty_years_ago
+      click_on "Weiter"
       click_on "Weiter"
       assert_aside(twenty_years_ago)
       expect do
@@ -514,6 +571,7 @@ describe "signup/sektion", js: true do
 
     it "creates excluding subscription if newsletter is unchecked" do
       root.update!(sac_newsletter_mailing_list_id: list.id)
+      click_on "Weiter", match: :first
       uncheck "Ich möchte einen Newsletter abonnieren"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -526,51 +584,11 @@ describe "signup/sektion", js: true do
       reason = SelfRegistrationReason.create!(text: "soso")
       expect(page).to have_css("label", text: "Eintrittsgrund")
       choose "soso"
+      click_on "Weiter", match: :first
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
       expect(person.self_registration_reason).to eq reason
-    end
-
-    context "future role" do
-      around do |example|
-        travel_to(Date.new(2023, 3, 1)) do
-          example.run
-        end
-      end
-
-      it "creates future role for main person" do
-        expect(page).to have_css("label", text: "Eintrittsdatum per")
-        choose "01. Juli"
-        expect do
-          complete_last_page
-          expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-            "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        end.to change { FutureRole.count }.by(1)
-        expect(FutureRole.first.convert_on).to eq Date.new(2023, 7, 1)
-      end
-    end
-  end
-
-  describe "with adult consent" do
-    before do
-      group.update!(self_registration_require_adult_consent: true)
-      visit group_self_registration_path(group_id: group)
-      complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
-    end
-
-    it "cannot complete without accepting adult consent" do
-      expect { complete_last_page(with_adult_consent: false) }.not_to change { Person.count }
-      expect(page).to have_text "Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"
-    end
-
-    it "can complete when accepting adult consent" do
-      expect do
-        complete_last_page(with_adult_consent: true)
-        expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-      end.to change { Person.count }.by(1)
     end
   end
 
@@ -584,6 +602,7 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
     end
 
     it "fails if section policy is not accepted" do
@@ -618,6 +637,50 @@ describe "signup/sektion", js: true do
     end
   end
 
+  describe "summary page" do
+    before do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+    end
+
+    it "should display person and entry fee card" do
+      click_on "Weiter als Einzelmitglied", match: :first
+      click_on "Weiter", match: :first
+
+      expect(find_all(".well").count).to eq(2)
+      expect(page).to have_css(".well", text: "Kontaktperson")
+      expect(page).to have_css(".well", text: "Sektion SAC Blüemlisalp")
+      expect(page).not_to have_css("h2", text: "Familienmitglieder")
+    end
+
+    it "should display summary card for each family member" do
+      click_on "Eintrag hinzufügen"
+      within "#members_fields .fields:nth-child(1)" do
+        fill_in "Vorname", with: "Maxine"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: "01.01.1981"
+        fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
+        fill_in "Telefon", with: "0791234567"
+        choose "Frau"
+      end
+      click_on "Eintrag hinzufügen"
+      within "#members_fields .fields:nth-child(2)" do
+        fill_in "Vorname", with: "Larissa"
+        fill_in "Nachname", with: "Muster"
+        fill_in "Geburtstag", with: format_date(15.years.ago)
+        fill_in "E-Mail (optional)", with: "larissa.muster@hitobito.example.com"
+        choose "Andere"
+      end
+      click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_on "Weiter", match: :first
+      assert_step "Zusammenfassung"
+
+      expect(find_all(".well").count).to eq(4)
+      expect(page).to have_css(".well", text: "Erwachsene Person")
+      expect(page).to have_css(".well", text: "Kind")
+    end
+  end
+
   describe "wizard stepping navigation" do
     context "for family registration" do
       it "can go back and forth" do
@@ -638,14 +701,13 @@ describe "signup/sektion", js: true do
         click_on "Weiter", match: :first
         assert_step "Familienmitglieder"
 
-        # TODO: can not go to first page as it clears the housemates somehow. See #415
-        # click_on 'Zurück', match: :first
-        # click_on 'Zurück', match: :first
-        # assert_step 'Haupt-E-Mail'
-        # click_on 'Weiter', match: :first
-        # assert_step 'Personendaten'
-        # click_on 'Weiter', match: :first
-        # assert_step 'Familienmitglieder'
+        click_on "Zurück", match: :first
+        click_on "Zurück", match: :first
+        assert_step "Haupt-E-Mail"
+        click_on "Weiter", match: :first
+        assert_step "Personendaten"
+        click_on "Weiter", match: :first
+        assert_step "Familienmitglieder"
 
         click_on "Zurück", match: :first
         click_on "Weiter", match: :first

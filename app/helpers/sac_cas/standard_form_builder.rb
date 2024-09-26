@@ -12,4 +12,24 @@ module SacCas::StandardFormBuilder
     end
     labeled(:gender, safe_join(radios))
   end
+
+  def labeled_adult_required_field(attr, options = {}, &)
+    content_tag(:div, class: "row mb-2") do
+      content = input_field(attr, options)
+      content += capture(&) if block_given?
+      build_adult_label(attr) + build_adult_label(attr, optional: true) +
+        content_tag(:div, content, class: "labeled col-md-9 col-lg-8 col-xl-8 mw-63ch")
+    end
+  end
+
+  private
+
+  def build_adult_label(attr, optional: false)
+    classes = "col-md-3 col-xl-2 pb-1 col-form-label text-md-end"
+    classes += " required" unless optional
+    classes += " d-none" if (!optional && !object.adult?) || (optional && object.adult?)
+    sac_target = optional ? "optionalLabel" : "requiredLabel"
+    label_text = optional ? captionize("#{attr}_optional", klass) : captionize(attr, klass)
+    label(attr, label_text, class: classes, data: {"sac--signup_target": sac_target})
+  end
 end

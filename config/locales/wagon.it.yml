@@ -8,6 +8,9 @@ it:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: anni
+    links:
+      faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
+      membership: ""
 
   settings:
     email:
@@ -24,15 +27,15 @@ it:
     attributes:
       people/membership/invoice_form:
         reference_date: "Scadenza"
-        invoice_date: "Data della fattura"
-        send_date: "Data di spedizione"
+        invoice_date: ""
+        send_date: ""
         discount: "Sconto"
         new_entry: "Biglietto d'ingresso"
         section_id: "Soci"
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
-        invoice_date: "Data della fattura"
-        send_date: "Data di spedizione"
+        invoice_date: ""
+        send_date: ""
         role_finish_date: "Estendere i rulli per"
       wizards/steps/signup/main_email_field:
         email: e-mail
@@ -50,16 +53,19 @@ it:
         statutes: Statuti
       wizards/steps/signup/sektion/family_fields/member:
         gender: Saluto
-        email: E-mail (opzionale)
-        phone_number: Telefono (opzionale)
+        email: ""
+        phone_number: ""
+        email_optional: ""
+        phone_number_optional: ""
       wizards/steps/signup/sektion/various_fields:
         register_on: Data di iscrizione per
         self_registration_reason_id: Motivo dell'ingresso
-        adult_consent: Dichiarazione di consenso del tutore legale
-        contribution_regulations: Regolamenti sui contributi
-        data_protection: Informativa sulla privacy
-        sektion_statuten: Statuto della sezione
-        statutes: Statuti
+      wizards/steps/signup/sektion/summary_fields:
+        sektion_statuten: ""
+        adult_consent: ""
+        contribution_regulations: ""
+        data_protection: ""
+        statutes: ""
       wizards/steps/choose_membership:
         register_as: "A chi si applica l'iscrizione aggiuntiva?"
         family: per tutta la famiglia
@@ -113,10 +119,10 @@ it:
               household_address: "%{address}L'indirizzo ' ' viene utilizzato per tutti i membri della famiglia."
             base:
               at_least_one_adult: Una famiglia deve contenere almeno 1 persona adulta.
-              no_adult_member_with_email: Il nucleo familiare non contiene un adulto con un indirizzo e-mail confermato.
+              no_adult_member_with_email: ""
               not_more_than_two_adults: Una famiglia può contenere al massimo 2 adulti.
               at_least_two_members: Una famiglia deve contenere almeno 2 persone.
-              removed_member_has_no_email: La persona rimossa non ha un indirizzo e-mail confermato.
+              removed_member_has_no_email: ""
         household_member:
           attributes:
             base:
@@ -307,6 +313,7 @@ it:
         updated_at: Modificato
       person:
         correspondence: Tessera associativa e fatturazione
+        confirmed_at: ""
         family_id: ID famiglia
         sac_family_main_person: Bollette a (famiglia)
         sac_remark_national_office: Ufficio Commenti
@@ -1031,7 +1038,8 @@ it:
     terminate_sac_membership_wizard_link: Cessazione dell'appartenenza al SAC
 
   dropdown/people_export:
-    recipients: Ricevitore
+    recipients: ""
+    recipient_households: ""
 
   dropdown/group_edit:
     sac_membership_configs: Parametri per le fatture dei soci
@@ -1259,6 +1267,9 @@ it:
         family: Membro della famiglia
         youth: Membro dei giovani
 
+  mailer:
+    footer:
+      address: |
   memberships:
     join_zusatzsektions:
       create:
@@ -1278,6 +1289,12 @@ it:
           one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
           many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
           other: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
+    terminate_sac_memberships:
+      create:
+        success:
+          one: ""
+          many: ""
+          other: ""
 
   mitglieder_exports:
     export_enqueued: "L'esportazione viene avviata in background e scaricata al termine."
@@ -1328,13 +1345,6 @@ it:
         create_invoice: "Creare la fattura"
         mv_yearly_invoice: "Bilancio annuale di MV"
         zusatzsektion_eintrittsrechnung: "Sezione aggiuntiva per la fattura Sezione"
-
-    terminate_sac_memberships:
-      create:
-        success:
-          one: "L'iscrizione al SAC è stata annullata."
-          many: "%{count} Le vostre iscrizioni al SAC sono state annullate."
-          other: "%{count} Le vostre iscrizioni al SAC sono state annullate."
 
     neuanmeldungen:
       multiselect_actions:
@@ -1483,6 +1493,7 @@ it:
     infos_component:
       title_questions: "Hai domande sull’ adesione?"
       title_contact: Contatto
+      title_membership: ""
       title_documents: Documenti
       additional_infos: "Trovi altre informazioni nelle %{link}."
       address: |
@@ -1500,6 +1511,7 @@ it:
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati
+      link_membership_title: ""
 
   sheet/memberships/join_zusatzsektion:
     title: Unirsi a una sezione aggiuntiva
@@ -1554,15 +1566,33 @@ it:
         sektion:
           family_fields_title: Membri della famiglia
           family_fields:
+            email_taken: >
             membership_info_box: >
               Se si aggiungono altre persone, si sceglie un abbonamento familiare. Questo è possibile per un massimo di 2 adulti di età pari o superiore a 23 anni e un numero qualsiasi di bambini di età compresa tra 6 e 17 anni.
 
               L'abbonamento familiare è disponibile anche per le coppie senza figli. Se desiderate creare un'associazione familiare con un membro esistente, contattate l'ufficio della SAC.
+          various_fields:
+            immediate_entry_date: ""
+            period_info_1: ""
+            period_info_2: ""
+            period_info_3: ""
           family_buttons:
             next_as_single_link: Continuare come membro individuale
             next_as_household_link: Continuare ad essere membri della famiglia
 
           various_fields_title: Dati aggiuntivi
+          summary_fields_title: ""
+          summary_fields:
+            my_membership: ""
+            family_members: ""
+            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_sektion: ""
+            entry_per: ""
+          summary_person_card:
+            contact_person: ""
+          summary_family_member_card:
+            adult: ""
+            child: ""
 
         various_fields:
           newsletter: Vorrei iscrivermi alla newsletter
@@ -1588,7 +1618,8 @@ it:
           next_button: Ordine a pagamento
       join_zusatzsektion:
         summary:
-          info_text: "%{beitragskategorie} L'adesione alla sezione aggiuntiva si conclude e ha validità immediata."
+          admission: ""
+          admission_through_gs: ""
           next_button: Ordine a pagamento
       membership_terminated_info:
         info: "%{date}L'iscrizione è stata annullata tramite . Se desidera riattivare la sua iscrizione, visiti il sito web del SAC."

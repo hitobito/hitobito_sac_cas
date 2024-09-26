@@ -33,15 +33,28 @@ CustomContent.seed(:key,
   {key: Event::ApplicationPausedMailer::NOTICE,
    placeholders_required: "event-name",
    placeholders_optional: "event-number, event-link, event-details"},
+  {key: Event::ApplicationClosedMailer::NOTICE,
+   placeholders_required: "event-name",
+   placeholders_optional: "event-number, event-link, event-details"},
   {key: Qualifications::ExpirationMailer::REMINDER_TODAY},
   {key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR},
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
+  {key: Signup::SektionMailer::CONFIRMATION,
+   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
+  {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
+   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
+  {key: Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED,
+   placeholders_required: "first-name, profile-url"},
   {key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION,
    placeholders_required: "person-name, sektion-name, terminate-on"},
   {key: Memberships::TerminateSacMembershipMailer::CONFIRMATION,
    placeholders_required: "person-name, sektion-name, terminate-on"},
   {key: Memberships::SwitchStammsektionMailer::CONFIRMATION,
-   placeholders_required: "person-name, group-name"})
+   placeholders_required: "person-name, group-name"},
+  {key: People::NeuanmeldungenMailer::APPROVED,
+   placeholders_required: "first-name, sektion-name, profile-url"},
+  {key: People::NeuanmeldungenMailer::REJECTED,
+   placeholders_required: "first-name, sektion-name"})
 
 participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
 summon_id = CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id
@@ -71,58 +84,58 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
    body: "Hallo {recipient-name},<br><br>" \
-     "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>" \
-     "Weitere Informationen:<br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Book-Discount-Code: {book-discount-code}"},
+    "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>" \
+    "Weitere Informationen:<br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Book-Discount-Code: {book-discount-code}"},
   {custom_content_id: summon_id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",
    body: "Bonjour {recipient-name},<br><br>" \
-     "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
-     "Détails du cours:<br><br>{event-details}<br><br>" \
-     "Informations supplémentaires:<br>" \
-     "Inscription: {application-url}<br>" \
-     "Personne: {person-url}<br>" \
-     "Lien de l'événement: {event-link}<br>" \
-     "Code de réduction pour le livre: {book-discount-code}"},
+    "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
+    "Détails du cours:<br><br>{event-details}<br><br>" \
+    "Informations supplémentaires:<br>" \
+    "Inscription: {application-url}<br>" \
+    "Personne: {person-url}<br>" \
+    "Lien de l'événement: {event-link}<br>" \
+    "Code de réduction pour le livre: {book-discount-code}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::APPLIED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Warteliste",
    subject: "Auf Warteliste gesetzt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::UNCONFIRMED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Kursanmeldung",
    subject: "Unbestätigte Kursanmeldung",
    body: "Hallo {recipient-name},<br><br>" \
-     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::ASSIGNED).id,
    locale: "de",
    label: "Kurs: E-Mail Bestätigte Kursanmeldung",
    subject: "Kursanmeldung bestätigt",
    body: "Hallo {recipient-name},<br><br>" \
-     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
-     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
-     "Anmeldung: {application-url}<br>" \
-     "Person: {person-url}<br>" \
-     "Event-Link: {event-link}<br>" \
-     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+    "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
+    "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
   {custom_content_id: leader_reminder_next_week_id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",
@@ -164,6 +177,14 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde pausiert.<br><br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ApplicationClosedMailer::NOTICE).id,
+   locale: "de",
+   label: "Kurs: E-Mail Anmeldung abgeschlossen",
+   subject: "Kursanmeldung abgeschlossen",
+   body: "Lieber Kursadmin,<br><br>" \
+    "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde abgeschlossen.<br><br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Qualifications::ExpirationMailer::REMINDER_TODAY).id,
    locale: "de",
    label: "Qualifikation: Erinnerungsmail morgen",
@@ -184,6 +205,78 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Erinnerung TL-Anerkennung",
    body: "Liebe(r) Tourenleiter(in), in 2 Jahren läuft deine TL-Anerkennung ab. " \
     "Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in)."},
+  {custom_content_id: CustomContent.get(Signup::SektionMailer::CONFIRMATION).id,
+   locale: "de",
+   label: "SAC Eintritt: Bestellbestätigung ohne Freigabe",
+   subject: "SAC Eintritt Bestellbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Wir freuen uns sehr, dass du dich für eine SAC-Mitgliedschaft entscheiden hast " \
+    "und nun Teil des grössten Bergsportverbands der Schweiz bist.<br><br>" \
+    "Folgende Angaben haben wir von dir erhalten. Sollten diese nicht korrekt sein, kannst du " \
+    "sie im <a href='{profile-url}'>SAC-Portal</a> selbstständig anpassen.<br><br>" \
+    "<h2>Sektion und Mitgliedschaft</h2><br><br>" \
+    "Sektion: {section-name}<br>" \
+    "Mitgliedschaftskategorie: {membership-category}<br>" \
+    "Eintritt per: sofort<br><br>" \
+    "{invoice-details}<br><br>" \
+    "<h2>Personendaten</h2><br><br>" \
+    "Kontaktperson<br>" \
+    "Vorname: {first-name}<br>" \
+    "Name: {last-name}<br>" \
+    "Geburtsdatum: {birthday}<br>" \
+    "E-Mail: {email}<br>" \
+    "Telefonnumer: {phone-number}<br>" \
+    "Adresszusatz: {address-care-of}<br>" \
+    "Strasse und Nr: {street-with-number}<br>" \
+    "Postfach: {postbox}<br>" \
+    "PLZ: {zip-code}<br><br>" \
+    "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
+    "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
+    "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest im <a href='{faq-url}'>FAQ</a>.<br><br>" \
+    "Viel Spass beim SAC!"},
+  {custom_content_id: CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).id,
+   locale: "de",
+   label: "SAC Eintritt: Bestellbestätigung mit Freigabe",
+   subject: "SAC Eintritt Bestellbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Wir freuen uns sehr, dass du dich für eine SAC-Mitgliedschaft interessierst " \
+    "und eine Mitgliedschaft beantragt hast.<br><br>" \
+    "Dein Antrag wurde an die Sektion {section-name} weitergeleitet. " \
+    "Über die Aufnahme neuer Mitglieder entscheidet die Sektion.<br><br>" \
+    "Folgende Angaben haben wir von dir erhalten. Sollten diese nicht korrekt sein, kannst du " \
+    "sie im <a href='{profile-url}'>SAC-Portal</a> selbstständig anpassen.<br><br>" \
+    "<h2>Sektion und Mitgliedschaft</h2><br><br>" \
+    "Sektion: {section-name}<br>" \
+    "Mitgliedschaftskategorie: {membership-category}<br>" \
+    "Eintritt per: sofort<br><br>" \
+    "{invoice-details}<br><br>" \
+    "<h2>Personendaten</h2><br><br>" \
+    "Kontaktperson<br>" \
+    "Vorname: {first-name}<br>" \
+    "Name: {last-name}<br>" \
+    "Geburtsdatum: {birthday}<br>" \
+    "E-Mail: {email}<br>" \
+    "Telefonnumer: {phone-number}<br>" \
+    "Adresszusatz: {address-care-of}<br>" \
+    "Strasse und Nr: {street-with-number}<br>" \
+    "Postfach: {postbox}<br>" \
+    "PLZ: {zip-code}<br><br>" \
+    "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
+    "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
+    "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest im <a href='{faq-url}'>FAQ</a>.<br><br>" \
+    "Vielen Dank"},
+  {custom_content_id: CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).id,
+   locale: "de",
+   label: "SAC Eintritt: Mitgliedschaftsaktivierung",
+   subject: "SAC Eintritt Bestellbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für deine Zahlung, welche bei uns eingegangen ist. Deine Mitgliedschaft ist jetzt " \
+    "vollständig aktiviert und alle Dienste des Schweizer Alpen-Clubs SAC können genutzt werden.<br><br>" \
+    "Deinen digitalen Mitgliederausweis findest du in deinem Profil im <a href='{profile-url}'>SAC-Portal</a>. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest du in den FAQ.<br><br> " \
+    "Viel Spass beim SAC!"},
   {custom_content_id: CustomContent.get(Memberships::LeaveZusatzsektionMailer::CONFIRMATION).id,
    locale: "de",
    label: "Mitgliedschaften: Bestätigung Austritt Zusatzsektion",
@@ -201,4 +294,41 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Mitgliedschaften: Bestätigung Sektionswechsel",
    subject: "Bestätigung Sektionswechsel",
    body: "Hallo {person-name},<br><br>" \
-     "Der Sektionswechsel zu {group-name} wurde vorgenommen."})
+    "Der Sektionswechsel zu {group-name} wurde vorgenommen."},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::APPROVED).id,
+   locale: "de",
+   label: "SAC Eintritt: Antragsbestätigung",
+   subject: "SAC Eintritt Antragsbestätigung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für dein Interesse an einer Mitgliedschaft beim Schweizer Alpen-Club SAC.<br><br>" \
+    "Die {sektion-name} hat deinen Antrag geprüft und wir freuen uns, dir mitzuteilen, dass dein Antrag angenommen " \
+    "wurde. Herzlich Willkommen beim Schweizer Alpen-Club SAC!<br><br>" \
+    "Du wirst in Kürze eine weitere E-Mail mit der Mitglieder-Rechnung erhalten. Sobald die Zahlung bei uns " \
+    "eingegangen ist, wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
+    "Den digitalen Mitgliederausweis findest du in deinem Profil im <a href='{profile-url}'>SAC-Portal</a>. " \
+    "Weitere Details zum digitalen Mitgliederausweis findest du in den FAQ.<br><br>" \
+    "Viel Spass beim SAC!"},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
+   locale: "de",
+   label: "SAC Eintritt: Antragsablehnung",
+   subject: "SAC Eintritt Antragsablehnung",
+   body: "Hallo {first-name},<br><br>" \
+    "Vielen Dank für dein Interesse an einer Mitgliedschaft beim Schweizer Alpen-Club SAC.<br><br>" \
+    "Die {sektion-name} hat deinen Antrag geprüft. Leider müssen wir dir mitteilen, " \
+    "dass die Sektion deinem Antrag auf Mitgliedschaft nicht entsprechen kann.<br><br>" \
+    "Jede Sektion hat ihre eigenen Aufnahmekriterien. " \
+    "Somit empfehlen wir dir, deinen Antrag an eine andere Sektion deiner Wahl zu stellen.<br><br>" \
+    "Vielen Dank für dein Verständnis.<br><br>" \
+    "Bergsportliche Grüsse"},
+  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
+   locale: "fr",
+   label: "Entrée au SAC : demande rejetée",
+   subject: "Demande d'admission au SAC rejetée",
+   body: "Bonjour {first-name},<br><br>" \
+    "Merci de votre intérêt à devenir membre du Club Alpin Suisse CAS.<br><br>" \
+    "La {sektion-name} a examiné votre candidature. Malheureusement, nous devons vous en informer, " \
+    "que la section ne peut pas accueillir votre demande d'adhésion.<br><br>" \
+    "Chaque section a ses propres critères d'admission." \
+    "Nous vous recommandons donc de déposer votre candidature dans une autre section de votre choix.<br><br>" \
+    "Merci de votre compréhension.<br><br>" \
+    "Salutations montagnardes"})

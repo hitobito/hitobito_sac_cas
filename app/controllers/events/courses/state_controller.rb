@@ -36,7 +36,7 @@ class Events::Courses::StateController < ApplicationController
   end
 
   def error_messages
-    helpers.safe_join(entry.errors.full_messages, "<br/>".html_safe)
+    helpers.safe_join(entry.errors.full_messages, "<br>".html_safe)
   end
 
   def next_state

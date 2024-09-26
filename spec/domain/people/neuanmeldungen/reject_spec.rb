@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe People::Neuanmeldungen::Reject do
+  include ActiveJob::TestHelper
+
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
 
   let(:sektion) { groups(:bluemlisalp) }
@@ -47,31 +49,29 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it "deletes rejected Roles, if it has other roles" do
-    subject = rejector
-
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
 
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), created_at: 1.year.ago, person: neuanmeldung.person)
-    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name, group: group, created_at: 1.month.ago, person: neuanmeldung.person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      created_at: 1.year.ago, person: neuanmeldung.person)
+    neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name,
+      group: group, created_at: 1.month.ago, person: neuanmeldung.person)
 
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
   end
 
   it "deletes rejected Roles, if it has other deleted roles" do
     person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector
-    subject.call
+    rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
   end
 
   it "deletes the Person, if it has no other roles" do
     person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
 
-    subject = rejector
-    subject.call
+    rejector.call
     expect { Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
@@ -91,5 +91,25 @@ describe People::Neuanmeldungen::Reject do
     note = person.notes.last
     expect(note.text).to eq "my note"
     expect(note.author).to eq people(:mitglied)
+  end
+
+  describe "email" do
+    it "send an email to the person" do
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
+    end
+
+    context "family" do
+      let(:neuanmeldung) { create_role(:family) }
+
+      it "send an email to main person of family" do
+        person.update_columns(sac_family_main_person: true)
+        expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
+      end
+
+      it "does not send email to other family member" do
+        person.update_columns(sac_family_main_person: false)
+        expect { rejector.call }.not_to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
+      end
+    end
   end
 end

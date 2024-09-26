@@ -28,6 +28,12 @@ class People::DataQualityChecker
     update_person_data_quality
   end
 
+  class << self
+    def attributes_to_check_changed?(person)
+      (person.saved_changes.keys & ATTRIBUTES_TO_CHECK).any?
+    end
+  end
+
   private
 
   def check_phone_numbers

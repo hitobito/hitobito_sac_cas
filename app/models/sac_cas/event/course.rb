@@ -83,7 +83,6 @@ module SacCas::Event::Course
   START_POINTS_OF_TIME = %w[day evening].freeze
 
   WEAK_VALIDATION_STATES = %w[created canceled].freeze
-  APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
@@ -161,9 +160,6 @@ module SacCas::Event::Course
     delegate :level, to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
-    before_save :adjust_state, if: :application_closing_at_changed?
-    after_update :send_application_published_email, if: :state_changed_from_draft_to_published?
-    after_update :send_application_paused_email, if: :state_changed_to_application_paused?
   end
 
   def minimum_age
@@ -185,33 +181,5 @@ module SacCas::Event::Course
 
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)
-  end
-
-  def adjust_state
-    if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
-      self.state = "application_closed"
-    end
-
-    if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
-      self.state = "application_open"
-    end
-  end
-
-  def state_changed_from_draft_to_published?
-    saved_change_to_attribute(:state) == ["created", "application_open"]
-  end
-
-  def send_application_published_email
-    leaders.each do |leader|
-      Event::PublishedJob.new(self, leader).enqueue!
-    end
-  end
-
-  def state_changed_to_application_paused?
-    saved_change_to_attribute(:state)&.second == "application_paused"
-  end
-
-  def send_application_paused_email
-    Event::ApplicationPausedJob.new(self).enqueue! if groups.first.course_admin_email.present?
   end
 end

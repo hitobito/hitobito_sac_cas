@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe "leave zusatzsektion", js: true do
+  include ActiveJob::TestHelper
+
   let(:person) { people(:mitglied) }
   let(:role) { person.roles.second }
   let(:operator) { person }
@@ -38,7 +40,7 @@ describe "leave zusatzsektion", js: true do
         .to change { person.roles.count }.by(-1)
         .and change { role.deleted_at }.from(nil)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
     end
   end
 
@@ -58,19 +60,8 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
       expect(role.delete_on).not_to be_nil
-    end
-
-    context "when sektion has mitglied_termination_by_section_only=true" do
-      before do
-        role.layer_group.update!(mitglied_termination_by_section_only: true)
-      end
-
-      it "shows an info text" do
-        visit group_person_role_leave_zusatzsektion_path(group_id: group.id, person_id: person.id, role_id: role.id)
-        expect(page).to have_content("Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen.")
-      end
     end
   end
 
@@ -93,7 +84,7 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { enqueued_mail_jobs_count }.by(1)
+        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
     end
   end
 

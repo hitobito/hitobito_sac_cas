@@ -35,7 +35,8 @@ describe Wizards::Signup::SektionWizard do
         country: "CH",
         phone_number: "+41 79 123 45 67"
       },
-      various_fields: {
+      various_fields: {},
+      summary_fields: {
         statutes: true,
         contribution_regulations: true,
         data_protection: true
@@ -84,34 +85,34 @@ describe Wizards::Signup::SektionWizard do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
     it "is invalid when on family_fields step and uses existing email" do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail (optional) ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
-    it "is invalid when on various_fields step and data_protection is blank" do
-      @current_step = 3
-      required_attrs[:various_fields] = {data_protection: nil}
+    it "is invalid when on summary_fields step and data_protection is blank" do
+      @current_step = 4
+      required_attrs[:summary_fields] = {data_protection: nil}
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
-      expect(wizard.various_fields).not_to be_valid
+      expect(wizard.summary_fields).not_to be_valid
     end
   end
 
@@ -121,12 +122,14 @@ describe Wizards::Signup::SektionWizard do
     it "third step defaults to family_fields" do
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
       expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
+      expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
     end
 
     it "skips family_fields when person is not old enough" do
       required_attrs[:person_fields][:birthday] = 20.years.ago.to_date
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
-      expect(wizard.step_at(3)).to be_nil
+      expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
+      expect(wizard.step_at(4)).to be_nil
     end
   end
 
@@ -155,8 +158,8 @@ describe Wizards::Signup::SektionWizard do
     it "creates multiple people and sets household key and address" do
       required_attrs[:family_fields] = {
         members_attributes: [
-          [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}],
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2002"}]
+          [0, {first_name: "Maxine", last_name: "Muster", birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com", phone_number: "0791234567"}],
+          [1, {first_name: "Maxi", last_name: "Muster", birthday: 12.years.ago.beginning_of_year.to_s}]
         ]
       }
       expect(wizard).to be_valid
@@ -188,10 +191,20 @@ describe Wizards::Signup::SektionWizard do
         expect(max.self_registration_reason).to eq reason
         expect(maxi.self_registration_reason).to eq reason
       end
+    end
+
+    context "summary fields" do
+      before do
+        required_attrs[:family_fields] = {
+          members_attributes: [
+            [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}]
+          ]
+        }
+      end
 
       it "sets privacy_policy_accepted_at on all" do
         freeze_time
-        required_attrs[:various_fields][:sektion_statuten] = "1"
+        required_attrs[:summary_fields][:sektion_statuten] = "1"
         wizard.save!
         expect(max.privacy_policy_accepted_at).to eq Time.zone.now
         expect(maxi.privacy_policy_accepted_at).to eq Time.zone.now
@@ -199,7 +212,7 @@ describe Wizards::Signup::SektionWizard do
 
       it "creates newsletter exclusion for all" do
         freeze_time
-        required_attrs[:various_fields][:newsletter] = "0"
+        required_attrs[:summary_fields][:newsletter] = "0"
         wizard.save!
         expect(max.subscriptions).to have(1).item
         expect(maxi.subscriptions).to have(1).items
@@ -207,19 +220,10 @@ describe Wizards::Signup::SektionWizard do
 
       it "creates roles but no newsletter exclusions" do
         freeze_time
-        required_attrs[:various_fields][:newsletter] = "1"
+        required_attrs[:summary_fields][:newsletter] = "1"
         expect { wizard.save! }.to change { Role.count }.by(2)
         expect(max.subscriptions).to be_empty
         expect(maxi.subscriptions).to be_empty
-      end
-
-      it "creates future roles if register_on is in the future" do
-        required_attrs[:various_fields][:register_on] = "jul"
-        travel_to(Time.zone.local(2023, 3, 12)) do
-          wizard.save!
-        end
-        expect(max.roles.last).to be_kind_of(FutureRole)
-        expect(maxi.roles.last).to be_kind_of(FutureRole)
       end
     end
   end

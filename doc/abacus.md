@@ -52,9 +52,9 @@ Das Erzeugen der Rechnung erfolgt über `Invoices::Abacus::MembershipInvoice`,
 welche eine `ExternalInvoice::SacMembership` erstellt und die für die Abacus-Schnittstelle notwendigen Daten
 in einem `Invoices::Abacus::SalesOrder` generiert.
 
-Die Orchestrierung der Rechnungserzeugung erfolgt für Einzelrechnungen über `Invoices::Abacus::MembershipInvoiceGenerator` bzw.
-für mehrere Rechnungen aufs Mal (Jahresinkasso) über `Invoices::Abacus::MembershipInvoiceBatcher`. Diese beiden Klassen
+Die Orchestrierung der Rechnungserzeugung erfolgt für Einzelrechnungen über den `Invoices::Abacus::CreateInvoiceJob` /  `Invoices::Abacus::MembershipInvoiceGenerator` bzw.
+für mehrere Rechnungen aufs Mal (Jahresinkasso) über den `Invoices::Abacus::CreateYearlyInvoicesJob`. Diese beiden Klassen
 senden die Daten via `Invoice::Abacus::SalesOrderInterface` an das Abacus API.
 
-Der Hintergrundsjob um Mitglieder zu Abakus zu übermitteln, findet sich in der Klasse `Invoices::Abacus::TransmitAllMembersJob`. Es wird eine Liste von Personen übermittelt welche eine Mitgliedschaft ohne Datenqualitätsprobleme haben, wobei jede Person einem `abacus_subject_key` zugeordnet ist. Dieser Schlüssel wird verwendet, um die Person in Abakus zu identifizieren und ggf. die Adresse zu aktualisieren. 
+Der Hintergrundsjob um Mitglieder zu Abacus zu übermitteln, findet sich in der Klasse `Invoices::Abacus::TransmitAllMembersJob`. Es wird eine Liste von Personen übermittelt welche eine Mitgliedschaft ohne Datenqualitätsprobleme haben, wobei jede Person einem `abacus_subject_key` zugeordnet ist. Dieser Schlüssel wird verwendet, um die Person in Abakus zu identifizieren und ggf. die Adresse zu aktualisieren.
 Der Job kann mit `rails runner "Invoices::Abacus::TransmitAllMembersJob.new.perform"` auf der Konsole aufgerufen werden.

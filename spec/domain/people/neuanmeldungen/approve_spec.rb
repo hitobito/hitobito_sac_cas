@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe People::Neuanmeldungen::Approve do
+  include ActiveJob::TestHelper
+
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
   let(:neuanmeldung_approved_role_class) { Group::SektionsNeuanmeldungenNv::Neuanmeldung }
 
@@ -50,6 +52,9 @@ describe People::Neuanmeldungen::Approve do
       .and change { neuanmeldung_approved_role_class.count }.by(3)
       .and change { ExternalInvoice::SacMembership.count }.by(3)
       .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(3)
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.first.person, sektion)
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.third.person, sektion)
+      .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.fourth.person, sektion)
 
     expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
     expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
@@ -59,13 +64,14 @@ describe People::Neuanmeldungen::Approve do
     expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
   end
 
-  it "doesnt create invoice for person in family when not main person" do
+  it "doesnt create invoice or send email for person in family when not main person" do
     people(:familienmitglied2).roles.destroy_all
     neuanmeldung = create_role(:family, person: people(:familienmitglied2))
 
     expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
       .to not_change { ExternalInvoice::SacMembership.count }
       .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
+      .and not_have_enqueued_mail(People::NeuanmeldungenMailer)
   end
 
   it "creates the SektionNeuanmeldungNv group if it does not exist" do
@@ -81,5 +87,37 @@ describe People::Neuanmeldungen::Approve do
     expect(actual_role.group).to be_a Group::SektionsNeuanmeldungenNv
     expect(actual_role.group.parent_id).to eq sektion.id
     expect(actual_role.group.id).not_to eq neuanmeldungen_nv.id
+  end
+
+  describe "email and invoice" do
+    let(:person) { neuanmeldung.person }
+    let(:neuanmeldung) { create_role(:adult) }
+    let(:approver) { described_class.new(group: neuanmeldungen_sektion, people_ids: [person.id]) }
+
+    it "send an email and invoice to person" do
+      expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
+        .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+        .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
+    end
+
+    context "family" do
+      let(:neuanmeldung) { create_role(:family) }
+
+      it "send an email to main person of family" do
+        person.update_columns(sac_family_main_person: true)
+        expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
+          .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
+      end
+
+      it "considers both family members but creates invoice and sends email only once" do
+        other = create_role(:family).person
+        Person.where(id: [person.id, other.id]).update_all(household_key: "test")
+        person.update_columns(sac_family_main_person: false)
+        expect { approver.call }.to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(2)
+          .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(other, sektion)
+      end
+    end
   end
 end
