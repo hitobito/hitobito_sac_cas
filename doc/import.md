@@ -27,16 +27,16 @@ Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgen
 
 Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
 
-| #    | Inhalt                                               | Art       |
-|------|------------------------------------------------------|-----------|
-| NAV1 | Alle Kontakte (natürliche und juristische Personen)  | via CSV   |
-| NAV2 | Rollen und Gruppen                                   | via CSV   |
-| NAV3 | Qualifikationen                                      | via CSV   |
-| NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     | via XLSX  |
-| NAV6 | Sektionen und Ortsgruppen                            | via CSV   |
-| NAV7 | Qualifikationsarten                                  | via Seeds |
-| NAV8 | Austrittsgründe                                      | via CSV   |
-| WSO21| Datenexport aus WSO21                                | via CSV   |
+| #     | Inhalt                                               | Art       |
+|-------|------------------------------------------------------|-----------|
+| NAV1  | Alle Kontakte (natürliche und juristische Personen)  | via CSV   |
+| NAV2  | Rollen und Gruppen                                   | via CSV   |
+| NAV3  | Qualifikationen                                      | via CSV   |
+| NAV5  | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     | via XLSX  |
+| NAV6  | Sektionen und Ortsgruppen                            | via CSV   |
+| NAV7  | Qualifikationsarten                                  | via Seeds |
+| NAV8  | Austrittsgründe                                      | via CSV   |
+| WSO21 | Datenexport aus WSO21                                | via CSV   |
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
@@ -62,23 +62,38 @@ Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
 ## Importe
 
-```mermaid
-flowchart LR
-    A[Start] --> B(NAV6)
-    B --> C(NAV1)
-    C --> D(WSO21)
-    D --> E(NAV2)
-    E --> F(NAV3)
-    F --> G(NAV5)
-    G --> H(NAV8)
-    H --> I[Ende 🎉]
+Beim Seeden werden folgende Daten importiert:
+
+- Qualifikationsarten: `hitobito_sac_cas/db/seeds/qualification_kinds.rb`
+
+Die Importe müssen in folgender Reihenfolge ausgeführt werden:
+
+```txt
+sac_imports:nav6-1_sac_section
+sac_imports:nav1-1_people
+sac_imports:nav1-2_membership_years_report
+sac_imports:wso2-1_people
+sac_imports:nav2-1_roles
+sac_imports:nav3-1_qualifications
+sac_imports:nav5-1_huts
+sac_imports:nav8-1_austrittsgruende
 ```
 
-### NAV1: `sac_imports:1_people`
+Importe können mit `bundle exec rails sac_imports:nav6-1_sac_section` ausgeführt werden.
+
+### `sac_imports:nav6-1_sac_section`
+
+#### Alle Sektionen löschen
+
+```ruby
+Group::Ortsgruppe.all.each { |o| o.children.each(&:really_destroy!) }
+Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
+Group::Sektion.all.find_each { |s| s.really_destroy! }
+```
+
+### `sac_imports:nav1-1_people`
 
 Dieser Import sollte nach NAV6 ausgeführt werden.
-
-You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sac_imports:1_people`
 
 #### Diskrepanzen:
 
@@ -88,69 +103,31 @@ You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sa
 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
 
-## NAV2: `sac_imports:2_roles`
+### `sac_imports:nav1-2_membership_years_report`
 
-Mit diesem Import werden alle Sektionen und Ortsgruppen importiert.
-Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
 
-`rake sac_imports:2_sektionen`
+You can run the import with: `bundle exec rails sac_imports:1_people`
 
-file: $CORE_ROOT/tmp/xlsx/sektionen.xlsx
+### `sac_imports:wso2-1_people`
 
-- Importiert Sektionen/Ortsgruppen und erstellt deren Unterordnerstruktur
-
-Import Source File: **NAV6**
-
-## 3: sac_imports:3_huts
-
-Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. Ausserdem werden die Hüttenfunktionärs-Rollen gleich mitangelegt.
-
-`rake sac_imports:huts`
-
-file: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
-
-Import Source File: **NAV5**
-
-## 4: sac_imports:4_memberships
+### `sac_imports:nav2-1_roles`
 
 Importiert alle Rollen.
 
-`rake sac_imports:4_roles`
+`rake sac_imports:nav2-1_roles`
 
-Import Source File: **NAV2**
+### `sac_imports:nav3-1_qualifications`
 
-## 5: sac_imports:5_additional_memberships
+### `sac_imports:nav5-1_huts`
 
-Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine Mitgliedschaft Zusatzsektion ist nur möglich falls bereits eine Mitglied Stammsektion Rolle vorhanden ist.
+Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. Ausserdem werden die Hüttenfunktionärs-Rollen gleich mitangelegt.
 
-`rake sac_imports:5_additional_memberships FILE=tmp/xlsx/zusatzmitgliedschaften.xlsx REIMPORT_ALL=true)`
+`rake sac_imports:nav5-1_huts`
 
-Import Source File: **NAV3**
+Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
-## NAV6: sac_imports:6_sac_sections
+### `sac_imports:nav8-1_austrittsgruende`
 
-`rake sac_imports:6_membership_years_report`
 
-- Import Source File: **NAV1**
-- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/6_membership_years_report_2024-06-01-12:00.csv`
-
-### Delete all Sektions
-
-```ruby
-Group::Ortsgruppe.all.each { |o| o.children.each(&:really_destroy!) }
-Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
-Group::Sektion.all.find_each { |s| s.really_destroy! }
-```
-
-## 7: sac_imports:7_wso2_people
-
-`rake sac_imports:7_wso2_people`
-
-- Import Source File: **WSO21**
-- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/7_wso2_people_2024-06-01-12:00.csv`
-
-## NAV8: via Seeds
-
-Der Import erfolgt via Seeds in `hitobito_sac_cas/db/seeds/qualification_kinds.rb`.
 
 
