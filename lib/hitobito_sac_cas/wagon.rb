@@ -33,6 +33,7 @@ module HitobitoSacCas
       JobManager.wagon_jobs += [
         Event::CloseApplicationsJob,
         Event::LeaderReminderJob,
+        Event::SurveyJob,
         Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Qualifications::ExpirationMailerJob,
