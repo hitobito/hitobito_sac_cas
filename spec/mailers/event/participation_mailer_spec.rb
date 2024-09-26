@@ -32,7 +32,7 @@ describe Event::ParticipationMailer do
       expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
       expect(mail.subject).to eq "Kursablehnung"
       expect(mail.body.to_s).to include("Hallo Edmund,")
-      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs (Nummer: #{event.number}) abgelehnt")
+      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs abgelehnt")
     end
   end
 

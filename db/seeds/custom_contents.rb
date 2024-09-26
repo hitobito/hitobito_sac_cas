@@ -65,7 +65,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    label: "Anlass: E-Mail Ablehnung",
    subject: "Kursablehnung",
    body: "Hallo {recipient-name},<br><br>" \
-    "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} abgelehnt.<br><br>" \
     "Anmeldung: {application-url}<br>" \
     "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
