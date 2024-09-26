@@ -11,6 +11,7 @@ module SacImports
       :navision_id,
       :first_name,
       :last_name,
+      :warnings,
       :errors
     ]
 
@@ -49,6 +50,14 @@ module SacImports
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!
+        if entry.warning
+          @csv_report.add_row({
+            navision_id: row[:navision_id],
+            first_name: row[:first_name],
+            last_name: row[:last_name],
+            warnings: entry.warning
+          })
+        end
       else
         @csv_report.add_row({
           navision_id: row[:navision_id],

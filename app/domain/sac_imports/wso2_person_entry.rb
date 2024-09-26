@@ -48,12 +48,14 @@ module SacImports
     end
 
     attr_reader :row
+    attr_reader :warning
 
     def initialize(row, basic_login_group, abo_group, navision_import_group)
       @row = row
       @basic_login_group = basic_login_group
       @abo_group = abo_group
       @navision_import_group = navision_import_group
+      @warning = nil
     end
 
     def person
@@ -107,6 +109,8 @@ module SacImports
       if row[:email_verified] == "1"
         person.confirmed_at = Time.zone.at(0)
         person.correspondence = "digital"
+      else
+        @warning = "Email not verified"
       end
     end
 
