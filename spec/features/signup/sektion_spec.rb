@@ -146,7 +146,7 @@ describe "signup/sektion", js: true do
       expect(page).to have_css("h2", text: "Fragen zur Mitgliedschaft?")
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -373,7 +373,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside("01.01.1980", format_date(15.years.ago))
       click_on "Weiter als Familienmitgliedschaft", match: :first
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -466,7 +466,7 @@ describe "signup/sektion", js: true do
         click_on "Entfernen"
       end
       click_on "Weiter als Einzelmitglied", match: :first
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
       expect(page).to have_button "Registrieren"
     end
 
@@ -571,7 +571,7 @@ describe "signup/sektion", js: true do
 
     it "creates excluding subscription if newsletter is unchecked" do
       root.update!(sac_newsletter_mailing_list_id: list.id)
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
       uncheck "Ich möchte einen Newsletter abonnieren"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -602,7 +602,7 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
       click_on "Weiter als Einzelmitglied", match: :first
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
     end
 
     it "fails if section policy is not accepted" do
@@ -645,7 +645,7 @@ describe "signup/sektion", js: true do
 
     it "should display person and entry fee card" do
       click_on "Weiter als Einzelmitglied", match: :first
-      click_on "Weiter", match: :first
+      click_button "Weiter", match: :first
 
       expect(find_all(".well").count).to eq(2)
       expect(page).to have_css(".well", text: "Kontaktperson")
@@ -727,22 +727,22 @@ describe "signup/sektion", js: true do
       it "can go back and forth" do
         click_on "Zurück", match: :first
         assert_step "Familienmitglieder"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Zusatzdaten"
         click_on "Zurück", match: :first
         click_on "Zurück", match: :first
         assert_step "Personendaten"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Familienmitglieder"
         click_on "Zurück", match: :first
         click_on "Zurück", match: :first
         assert_step "E-Mail"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Personendaten"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Familienmitglieder"
         click_on "Zurück", match: :first
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         click_on "Weiter als Einzelmitglied", match: :first
         assert_step "Zusatzdaten"
       end
