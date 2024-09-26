@@ -50,6 +50,7 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source.rb)
   ```
 - `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
 - In `/spec/fixtures/files/sac_imports_src/sac_imports_fixture.ods` werden die Fixtures verfasst und mit dem Skript `hitobito_sac_cas/spec/fixtures/files/sac_imports_src/export_sac_imports_fixture.sh` die jeweiligen Fixtures im CSV-Format erstellt. Es wird LibreOffice 7.2 oder neuer benötigt.
+- `sac_imports.rake` sucht in `hitobito/tmp/sac_imports_src` nach den CSV-Dateien die importiert werden sollen. Der Name der CSV-Datei muss mit der ID (Muster: `[ID]_*.csv`) beginnen: bspw. NAV1_people.csv
 
 ## CSV Report
 
