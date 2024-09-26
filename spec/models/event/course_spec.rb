@@ -32,8 +32,7 @@ describe Event::Course do
 
     [:description, :application_opening_at, :application_closing_at, :contact_id,
       :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
-      :price_member, :price_regular
-    ].each do |attribute|
+      :price_member, :price_regular].each do |attribute|
       describe "validates presence of #{attribute}" do
         it "validates presence of #{attribute} in state ready" do
           allow(course).to receive(:state).and_return(:ready)

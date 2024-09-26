@@ -11,7 +11,6 @@ module SacCas::Event::Participation
   DUMMY_SUBSIDY = 620
 
   prepended do
-
     enum price_category: {
       member: 0,
       regular: 1,
