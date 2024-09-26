@@ -154,7 +154,7 @@ module SacCas::Event::Course
     validates :number, presence: true, uniqueness: {if: :number}
     validates :description, :application_opening_at, :application_closing_at, :contact_id,
       :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
-      :accommodation,
+      :accommodation, :price_member, :price_regular,
       presence: {unless: :weak_validation_state?}
 
     delegate :level, to: :kind, allow_nil: true

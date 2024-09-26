@@ -283,6 +283,13 @@ de:
           ready: Bereit zur Durchführung
           closed: Abgeschlossen
           canceled: Abgesagt
+        price_member: "Mitgliederpreis"
+        price_regular: "Normalpreis"
+        price_subsidized: "Subventionierter Preis"
+        price_js_active_member: "J&S A-Mitgliederpreis"
+        price_js_active_regular: "J&S A-Normalpreis"
+        price_js_passive_member: "J&S P-Mitgliederpreis"
+        price_js_passive_regular: "J&S P-Normalpreis"
       event/kind_category:
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
@@ -300,6 +307,8 @@ de:
         adult_consent: Altersbestätigung
         terms_and_conditions: AGB
         actual_days: Effektive Tage
+        price: "Preis"
+        price_category: "Preiskategorie"
       external_training:
         person: Person
         event_kind: Kursart
