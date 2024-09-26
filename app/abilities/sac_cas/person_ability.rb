@@ -14,9 +14,9 @@ module SacCas::PersonAbility
       class_side(:create_households).if_backoffice
       permission(:read_all_people).may(:read_all_people, :show).everybody
       permission(:layer_and_below_full)
-        .may(:index_external_invoices, :create_membership_invoice, :cancel_external_invoice)
+        .may(:index_external_invoices, :create_membership_invoice, :cancel_external_invoice, :security)
         .if_backoffice
-      permission(:any).may(:index_invoices).none
+      permission(:any).may(:index_invoices, :security).none
       permission(:any)
         .may(:set_sac_family_main_person)
         .if_person_is_adult_and_all_household_members_writable

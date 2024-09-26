@@ -148,4 +148,45 @@ describe PersonAbility do
       end
     end
   end
+
+  describe "security" do
+    let(:person) { people(:mitglied) }
+
+    context "as employee" do
+      [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::Admin].each do |role_type|
+        context role_type do
+          let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
+
+          it "is permitted to show/edit security of other people" do
+            expect(ability).to be_able_to(:security, mitglied)
+          end
+
+          it "is permitted to show/edit security of yourself" do
+            expect(ability).to be_able_to(:security, person)
+          end
+        end
+      end
+    end
+
+    context "as member" do
+      it "is not permitted to show/edit security yourself" do
+        expect(ability).not_to be_able_to(:security, person)
+      end
+    end
+
+    context "as a group leader" do
+      let(:person) do
+        Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
+          group: groups(:bluemlisalp_funktionaere)).person
+      end
+
+      it "is not permitted to show/edit security of yourself" do
+        expect(ability).not_to be_able_to(:security, person)
+      end
+
+      it "is not permitted to show/edit security of other people" do
+        expect(ability).not_to be_able_to(:security, mitglied)
+      end
+    end
+  end
 end
