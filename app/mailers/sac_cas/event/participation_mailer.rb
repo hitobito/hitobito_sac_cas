@@ -9,15 +9,20 @@ module SacCas::Event::ParticipationMailer
   include EventMailer
   include MultilingualMailer
 
-  CONTENT_REJECTED_PARTICIPATION = "event_participation_rejected"
-  CONTENT_SUMMON = "event_participation_summon"
+  REJECT_APPLIED = "event_participation_reject_applied"
+  REJECT_REJECTED = "event_participation_reject_rejected"
+  SUMMON = "event_participation_summon"
 
-  def reject(participation)
-    compose_email(participation, CONTENT_REJECTED_PARTICIPATION)
+  def reject_applied(participation)
+    compose_email(participation, REJECT_APPLIED)
+  end
+
+  def reject_rejected(participation)
+    compose_email(participation, REJECT_REJECTED)
   end
 
   def summon(participation)
-    compose_email(participation, CONTENT_SUMMON)
+    compose_email(participation, SUMMON)
   end
 
   private
@@ -28,11 +33,6 @@ module SacCas::Event::ParticipationMailer
     @person = participation.person
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
-
-    # Assert the current mailer's view context is stored as Draper::ViewContext.
-    # This is done in the #view_context method overriden by Draper.
-    # Otherwise, decorators will not have access to all helper methods.
-    view_context
 
     compose_multilingual(@person, content_key, locales)
   end

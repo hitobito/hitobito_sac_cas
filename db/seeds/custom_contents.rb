@@ -6,10 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 CustomContent.seed(:key,
-  {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION,
+  {key: Event::ParticipationMailer::REJECT_APPLIED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, application-url, event-details"},
-  {key: Event::ParticipationMailer::CONTENT_SUMMON,
+   placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link"},
+  {key: Event::ParticipationMailer::REJECT_REJECTED,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, application-url"},
+  {key: Event::ParticipationMailer::SUMMON,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
   {key: Event::ApplicationConfirmationMailer::APPLIED,
@@ -63,15 +66,25 @@ CustomContent.seed(:key,
    placeholders_required: "first-name, sektion-name"})
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_APPLIED).id,
    locale: "de",
-   label: "Anlass: E-Mail Ablehnung",
+   label: "Kurs: E-Mail Keine Teilnahme 'Warteliste'",
    subject: "Kursablehnung",
    body: "Hallo {recipient-name},<br><br>" \
-    "Du wurdest leider für den Kurs {event-name} abgelehnt.<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_REJECTED).id,
+   locale: "de",
+   label: "Kurs: E-Mail Keine Teilnahme 'Abgelehnt'",
+   subject: "Kursablehnung",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
     "Anmeldung: {application-url}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMON).id,
    locale: "de",
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
@@ -82,7 +95,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Event-Link: {event-link}<br>" \
     "Book-Discount-Code: {book-discount-code}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMON).id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",

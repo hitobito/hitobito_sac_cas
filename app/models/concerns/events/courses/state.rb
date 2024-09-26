@@ -87,12 +87,12 @@ module Events::Courses::State
 
   def notify_rejected_participants
     rejected_participants.each do |participation|
-      Event::ParticipationMailer.reject(participation).deliver_later
+      Event::ParticipationMailer.send(:"reject_#{participation.state}", participation).deliver_later
     end
   end
 
   def rejected_participants
-    participations.where(state: :rejected)
+    participations.where(state: %i[applied rejected])
   end
 
   def summon_assigned_participants
