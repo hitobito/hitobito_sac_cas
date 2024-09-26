@@ -81,7 +81,7 @@ module Invoices
       end
 
       def family_members
-        person.household_people.select { |p| sac_mitgliedschaft?(p) }
+        person.household_people.select { |p| sac_mitgliedschaft?(p) }.sort_by(&:id)
       end
 
       private
