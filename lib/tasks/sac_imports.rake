@@ -26,13 +26,13 @@ namespace :sac_imports do
   end
 
   desc "Import people from WSO2"
-  task "wso2-1_people": [:environment] do
+  task "wso21-1_people": [:environment] do
     SacImports::Wso2PeopleImporter.new.create
   end
 
   desc "Imports memberships"
   task "nav2-1_roles": [:environment] do
-    raise "Not implemented"
+    SacImports::Roles::Importer.new.create
   end
 
   desc "Imports qualifications"

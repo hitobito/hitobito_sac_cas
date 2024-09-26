@@ -19,7 +19,7 @@ module SacImports
       # truemail_with_regex
       @output = output
       @source_file = CsvSource.new(:WSO21)
-      @csv_report = CsvReport.new(:"wso2-1_people", REPORT_HEADERS)
+      @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)
     end
 
     def create
