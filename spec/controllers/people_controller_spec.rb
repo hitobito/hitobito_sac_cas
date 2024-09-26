@@ -174,6 +174,20 @@ describe PeopleController do
 
         expect(response.body).to include("Geburtstag muss nach dem 31.12.#{Date.current.year - 120} liegen.")
       end
+
+      it "does not validate if birthday was not changed" do
+        member.update_attribute(:birthday, 121.years.ago) # invalid birthday
+
+        put :update, params: {id: member.id, group_id: member.groups.first.id,
+                              person: {first_name: "changed"}}
+
+        expect(response).to have_http_status(303)
+
+        member.reload
+
+        expect(member.first_name).to eq("changed")
+        expect(response.body).to_not include("Geburtstag muss nach dem 31.12.#{Date.current.year - 120} liegen.")
+      end
     end
   end
 end

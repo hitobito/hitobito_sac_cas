@@ -62,6 +62,7 @@ module SacCas::PeopleController
 
   def check_birthday
     return unless entry.sac_membership_active? && entry.birthday_changed?
+
     People::BirthdayValidator.new(entry, current_user).validate!
   end
 end
