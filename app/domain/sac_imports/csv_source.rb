@@ -43,7 +43,13 @@ class SacImports::CsvSource
       navision_name: "Name",
       navision_membership_years: "Vereinsmitgliederjahre"
     },
-    # NAV3: {},
+    NAV3: {
+      navision_id: "Kontaktnummer",
+      active: "Ist_aktiv",
+      start_at: "Gültig von",
+      finish_at: "Gültig bis",
+      qualification_kind: "Qualifikation"
+    },
     NAV6: {
       navision_id: "NAV Sektions-ID",
       level_1_id: "Level 1",
