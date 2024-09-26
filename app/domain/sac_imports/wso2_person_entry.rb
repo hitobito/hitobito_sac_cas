@@ -48,11 +48,14 @@ module SacImports
     end
 
     attr_reader :row
+    attr_reader :warning
 
-    def initialize(row, basic_login_group, abo_group)
+    def initialize(row, basic_login_group, abo_group, navision_import_group)
       @row = row
       @basic_login_group = basic_login_group
       @abo_group = abo_group
+      @navision_import_group = navision_import_group
+      @warning = nil
     end
 
     def person
@@ -84,10 +87,21 @@ module SacImports
 
     def import!
       raise ActiveRecord::RecordInvalid if !valid?
-      person.save!
+
+      person.transaction do
+        person.save!
+        remove_navision_import_role!
+        if !person.valid?
+          raise ActiveRecord::RecordInvalid
+        end
+      end
     end
 
     private
+
+    def remove_navision_import_role!
+      person.roles.where(group_id: @navision_import_group.id).find_each(&:really_destroy!)
+    end
 
     def assign_common_attributes(person)
       person.wso2_legacy_password_hash = row[:wso2_legacy_password_hash]
@@ -95,6 +109,8 @@ module SacImports
       if row[:email_verified] == "1"
         person.confirmed_at = Time.zone.at(0)
         person.correspondence = "digital"
+      else
+        @warning = "Email not verified"
       end
     end
 
@@ -124,7 +140,7 @@ module SacImports
       person.language = language
       person.phone_numbers.build(
         number: row[:phone],
-        label: "Mobil"
+        label: "Hauptnummer"
       )
       person.phone_numbers.build(
         number: row[:phone_business],

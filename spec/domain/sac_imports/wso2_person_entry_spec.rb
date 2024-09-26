@@ -12,6 +12,7 @@ describe SacImports::Wso2PersonEntry do
   let(:email) { "max.muster@example.com" }
   let(:basic_login_group) { Group::AboBasicLogin.create!(parent: groups(:abos)) }
   let(:abo_group) { Group::AboTourenPortal.create!(parent: groups(:abos)) }
+  let(:navision_import_group) { Group::ExterneKontakte.create!(name: "Navision Import", parent: Group::SacCas.first!) }
   let(:addition_fields) { {} }
   let(:row) do
     SacImports::CsvSource::SOURCE_HEADERS[:NAV1].keys.index_with { |_symbol| nil }.merge(
@@ -27,7 +28,7 @@ describe SacImports::Wso2PersonEntry do
     )
   end
 
-  subject(:entry) { described_class.new(row, basic_login_group, abo_group) }
+  subject(:entry) { described_class.new(row, basic_login_group, abo_group, navision_import_group) }
 
   before { travel_to(Time.zone.local(2024, 9, 12, 11, 11)) }
 
@@ -69,6 +70,18 @@ describe SacImports::Wso2PersonEntry do
           .to not_change { Person.count }
           .and change { existing_person.reload.wso2_legacy_password_hash }.from(nil).to("foo")
       end
+
+      context "When the person had a Navision ID role" do
+        let!(:existing_person) { Fabricate(:person, roles: [Group::ExterneKontakte::Kontakt.new(group: navision_import_group)]) }
+
+        it "does update the person" do
+          expect(entry).to be_valid
+          expect { entry.import! }
+            .to not_change { Person.count }
+            .and change { existing_person.reload.wso2_legacy_password_hash }.from(nil).to("foo")
+          expect(existing_person.roles.where(type: Group::ExterneKontakte::Kontakt.sti_name)).to eq([])
+        end
+      end
     end
   end
 
@@ -98,7 +111,7 @@ describe SacImports::Wso2PersonEntry do
         it "can import it twice" do
           entry.import!
           # Need to instantiate it freshly, since person is cashed
-          entry = described_class.new(row, basic_login_group, abo_group)
+          entry = described_class.new(row, basic_login_group, abo_group, navision_import_group)
           expect { entry.import! }
             .to not_change { Person.count }
             .and not_change { Role.count }
