@@ -10,6 +10,7 @@ fr:
     years: Années
     links:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
+      membership: ""
 
   settings:
     email:
@@ -1492,6 +1493,7 @@ fr:
     infos_component:
       title_questions: "Questions concernant l’affiliation?"
       title_contact: Contact
+      title_membership: ""
       title_documents: Documents
       additional_infos: "Pour davantage d’informations, consultez la %{link}."
       address: |
@@ -1509,6 +1511,7 @@ fr:
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
+      link_membership_title: ""
 
   sheet/memberships/join_zusatzsektion:
     title: Rejoindre la section complémentaire

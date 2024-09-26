@@ -10,6 +10,7 @@ it:
     years: anni
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
+      membership: ""
 
   settings:
     email:
@@ -1492,6 +1493,7 @@ it:
     infos_component:
       title_questions: "Hai domande sull’ adesione?"
       title_contact: Contatto
+      title_membership: ""
       title_documents: Documenti
       additional_infos: "Trovi altre informazioni nelle %{link}."
       address: |
@@ -1509,6 +1511,7 @@ it:
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati
+      link_membership_title: ""
 
   sheet/memberships/join_zusatzsektion:
     title: Unirsi a una sezione aggiuntiva
