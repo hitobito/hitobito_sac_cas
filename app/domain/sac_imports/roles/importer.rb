@@ -19,7 +19,7 @@ module SacImports::Roles
     def initialize(output: $stdout)
       @output = output
       @source_file = SacImports::CsvSource.new(:NAV2)
-      @csv_report = SacImports::CsvReport.new(:"4_roles", REPORT_HEADERS)
+      @csv_report = SacImports::CsvReport.new(:"nav2-1_roles", REPORT_HEADERS)
       @skipped_rows = []
     end
 
