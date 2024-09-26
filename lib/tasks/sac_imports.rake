@@ -18,21 +18,15 @@ namespace :sac_imports do
     SacImports::PeopleImporter.new.create
   end
 
-  desc "Import sections from a navision export (tmp/xlsx/sektionen.xlsx)" \
-         " (options: FILE=#{default_files[:sektionen]})"
-  task "2_sektionen": [:environment] do
-    SacImports::SektionenImporter.new(read_file(:sektionen)).import!
+  desc "Import roles"
+  task "2_roles": [:environment] do
+    SacImports::Roles::Importer.new.create
   end
 
   desc "Import huts from a navision export" \
          " (options: FILE=#{default_files[:huts]})"
   task "3_huts": [:environment] do
     SacImports::HutsImporter.new(read_file(:huts)).import!
-  end
-
-  desc "Import roles"
-  task "4_roles": [:environment] do
-    SacImports::Roles::Importer.new.create
   end
 
   desc "Import additional memberships from a navision export xlsx" \
