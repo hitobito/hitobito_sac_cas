@@ -42,6 +42,29 @@ describe "switching stammsektion", js: true do
       expect(page).to have_css "#flash .alert-success",
         text: "Dein Sektionswechsel zu SAC Matterhorn wurde vorgenommen."
     end
+
+    it "displays correct info text when group needs confirmation" do
+      allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(false)
+      click_link "Mitgliedschaft anpassen"
+      click_link "Sektionswechsel beantragen"
+      select "SAC Matterhorn"
+      click_on "Weiter"
+
+      expect(page).to have_text("Die Stammmitgliedschaft bei SAC Matterhorn wird als Einzel beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. " \
+        "Kläre bitte vorgängig die Mitgliederaufnahme mit SAC Matterhorn ab. Nimm die Fakturierung bitte nach nach dem Bestellen vor, " \
+        "sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültigt.")
+    end
+
+    it "displays correct info text when group doesnt need confirmation" do
+      click_link "Mitgliedschaft anpassen"
+      click_link "Sektionswechsel beantragen"
+      select "SAC Matterhorn"
+      click_on "Weiter"
+
+      expect(page).to have_text("Die Stammmitgliedschaft bei SAC Matterhorn wird als Einzel beantragt. Hiermit wird keine Rechnung ausgelöst. Nimm die Fakturierung " \
+        "bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist " \
+        "per sofort gültig.")
+    end
   end
 
   context "as family user" do

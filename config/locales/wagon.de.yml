@@ -1605,7 +1605,8 @@ de:
         choose_date:
           info_text: Wann soll der Sektionswechsel stattfinden?
         summary:
-          info_text: "Der Wechsel der Stammsektion wird per %{switch_on} vorgenommen."
+          info_text: Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Kläre bitte vorgängig die Mitgliederaufnahme mit %{sektion} ab. Nimm die Fakturierung bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültigt.
+          info_text_no_confirmation: Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt. Hiermit wird keine Rechnung ausgelöst. Nimm die Fakturierung bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültig.
           next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
