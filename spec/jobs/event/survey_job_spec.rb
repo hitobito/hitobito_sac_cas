@@ -31,7 +31,7 @@ describe Event::SurveyJob do
     before { course }
 
     it "sends an email to both participants" do
-      expect { job.perform }.to have_enqueued_mail(Event::SurveyMailer, :survey).exactly(2).times
+      expect { job.perform }.to have_enqueued_mail(Event::SurveyMailer, :survey).twice
     end
   end
 
@@ -56,6 +56,14 @@ describe Event::SurveyJob do
 
     it "doesnt send an email" do
       expect { job.perform }.not_to have_enqueued_mail(Event::SurveyMailer)
+    end
+  end
+
+  context "3 days ago but different time" do
+    before { course.dates.reload.first.update!(finish_at: 3.days.ago + 12.hours) }
+
+    it "sends an email to the participant" do
+      expect { job.perform }.to have_enqueued_mail(Event::SurveyMailer, :survey).twice
     end
   end
 end
