@@ -11,6 +11,9 @@ srand(42)
 
 seeder = SacEventSeeder.new
 
-10.times do
+8.times do
   seeder.seed_sac_course(Group.root.id)
+end
+2.times do
+  seeder.seed_sac_course_which_is_application_closed(Group.root.id)
 end

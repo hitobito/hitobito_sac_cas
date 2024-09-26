@@ -16,10 +16,10 @@ module SacCas::Event::Participation
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
-
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
-
     validate :assert_actual_days_size
+
+    after_update :send_application_canceled_email, if: :state_changed_to_canceled?
   end
 
   def subsidy_amount
@@ -58,5 +58,13 @@ module SacCas::Event::Participation
     if %w[canceled annulled].include?(state)
       self.previous_state = state_was
     end
+  end
+
+  def state_changed_to_canceled?
+    saved_change_to_attribute(:state)&.second == "canceled"
+  end
+
+  def send_application_canceled_email
+    Event::ParticipationCanceledMailer.confirmation(self).deliver_later
   end
 end
