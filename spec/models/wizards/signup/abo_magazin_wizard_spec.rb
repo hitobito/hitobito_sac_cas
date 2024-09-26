@@ -68,10 +68,9 @@ describe Wizards::Signup::AboMagazinWizard do
         expect(wizard.person_fields.errors.full_messages).to eq ["Vorname muss ausgefüllt werden"]
       end
 
-      it "is invalid if less than 18 years old" do
-        required_attrs[:person_fields][:birthday] = 17.years.ago
-        expect(wizard).not_to be_valid
-        expect(wizard.person_fields.errors.full_messages).to eq ["Person muss 18 Jahre oder älter sein"]
+      it "is valid if less than 18 years old" do
+        required_attrs[:person_fields][:birthday] = 100.years.from_now.to_date
+        expect(wizard).to be_valid
       end
     end
 

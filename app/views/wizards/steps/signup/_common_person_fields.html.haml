@@ -11,4 +11,4 @@
 - else
   = form.labeled_date_field :birthday
 = render 'contactable/address_fields', f: form
-= form.labeled_input_field :phone_number
+= form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')

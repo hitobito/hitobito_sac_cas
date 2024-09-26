@@ -7,10 +7,10 @@
 
 module Wizards::Steps::Signup::AboMagazin
   class PersonFields < Wizards::Steps::Signup::PersonFields
-    self.minimum_age = 18
+    self.minimum_age = nil
     self.partial = "wizards/steps/signup/person_fields"
 
     validates :street, :housenumber, :town, :zip_code,
-      :country, :phone_number, presence: true
+      :country, presence: true
   end
 end

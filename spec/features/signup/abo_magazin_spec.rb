@@ -141,15 +141,15 @@ describe "self_registration_abo_magazin", js: true do
     end
   end
 
-  it "validates that person is old enough" do
+  it "allows person that is very young" do
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    fill_in "Geburtsdatum", with: 17.years.ago.to_date
+    fill_in "Geburtsdatum", with: 100.years.from_now.to_date
     expect do
       click_on "Weiter"
-      expect(page).to have_text "Person muss 18 Jahre oder älter sein"
-    end.not_to change { Person.count }
+      expect_active_step "Abo"
+    end
   end
 end
