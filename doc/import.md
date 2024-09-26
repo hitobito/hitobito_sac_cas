@@ -106,7 +106,7 @@ Dieser Import sollte nach NAV6 ausgeführt werden.
 
 You can run the import with: `bundle exec rails sac_imports:1_people`
 
-### `sac_imports:wso2-1_people`
+### `sac_imports:wso21-1_people`
 
 ### `sac_imports:nav2-1_roles`
 
@@ -123,7 +123,3 @@ Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. A
 Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
 ### `sac_imports:nav8-1_austrittsgruende`
-
-
-
-
