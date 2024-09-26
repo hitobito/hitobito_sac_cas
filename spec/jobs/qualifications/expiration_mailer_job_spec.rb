@@ -119,7 +119,7 @@ describe Qualifications::ExpirationMailerJob do
       )
       travel_to "2000-12-31".to_date
 
-      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(2).times
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).twice
     end
 
     it "does not care about qualifications expired long ago" do
