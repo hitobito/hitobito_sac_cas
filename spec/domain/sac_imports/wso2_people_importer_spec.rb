@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe SacImports::Wso2PeopleImporter do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
-  let(:report_file) { Rails.root.join("log", "sac_imports", "7_wso2_people_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "wso2-1_people_2024-01-23-11:42.csv") }
   let(:output) { $stdout } # double(puts: nil, print: nil) }
   let(:report) { described_class.new(output: output) }
   let(:report_headers) { %w[navision_id first_name last_name warnings errors] }

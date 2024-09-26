@@ -8,57 +8,46 @@
 namespace :sac_imports do
   def skip_existing? = ["1", "true"].exclude?(ENV["REIMPORT_ALL"].to_s.downcase)
 
-  def default_files = {
-    people: "tmp/xlsx/personen.xlsx",
-    sektionen: "tmp/xlsx/sektionen.xlsx",
-    huts: "tmp/xlsx/huetten_beziehungen.xlsx",
-    membership: "tmp/xlsx/mitglieder_aktive.xlsx",
-    additional_memberships: "tmp/xlsx/zusatzmitgliedschaften.xlsx"
-  }
+  def default_files = {huts: "tmp/xlsx/huetten_beziehungen.xlsx"}
 
-  desc "Import people"
-  task "1_people": [:environment] do
+  desc "Imports SAC Sections"
+  task "nav6-1_sac_section": [:environment] do
+    raise "Not implemented"
+  end
+
+  desc "Imports people and companies from Navision"
+  task "nav1-1_people": [:environment] do
     SacImports::PeopleImporter.new.create
   end
 
-  desc "Import sections from a navision export (tmp/xlsx/sektionen.xlsx)" \
-         " (options: FILE=#{default_files[:sektionen]})"
-  task "2_sektionen": [:environment] do
-    SacImports::SektionenImporter.new(read_file(:sektionen)).import!
-  end
-
-  desc "Import huts from a navision export" \
-         " (options: FILE=#{default_files[:huts]})"
-  task "3_huts": [:environment] do
-    SacImports::HutsImporter.new(read_file(:huts)).import!
-  end
-
-  desc "Import memberships from a navision export xlsx" \
-         " (options: FILE=#{default_files[:memberships]} REIMPORT_ALL=true)"
-  task "4_memberships": [:environment] do
-    SacImports::Sektion::MembershipsImporter.new(
-      read_file(:memberships),
-      skip_existing: skip_existing?
-    ).import!
-  end
-
-  desc "Import additional memberships from a navision export xlsx" \
-         " (options: FILE=#{default_files[:additional_memberships]} REIMPORT_ALL=true)"
-  task "5_additonal_memberships": [:environment] do
-    SacImports::Sektion::AdditionalMembershipsImporter.new(
-      read_file(:additional_memberships),
-      skip_existing: !["1", "true"].include?(ENV["REIMPORT_ALL"].to_s.downcase)
-    ).import!
-  end
-
-  desc "Analyse imported and calculated membership years and create report"
-  task "6_membership_years_report": [:environment] do
+  desc "Analyzes imported and calculated membership years and creates report"
+  task "nav1-2_membership_years_report": [:environment] do
     SacImports::MembershipYearsReport.new.create
   end
 
   desc "Import people from WSO2"
-  task "7_wso2_people": [:environment] do
+  task "wso2-1_people": [:environment] do
     SacImports::Wso2PeopleImporter.new.create
+  end
+
+  desc "Imports memberships"
+  task "nav2-1_roles": [:environment] do
+    raise "Not implemented"
+  end
+
+  desc "Imports qualifications"
+  task "nav3-1_qualifications": [:environment] do
+    raise "Not implemented"
+  end
+
+  desc "Imports huts (options: FILE=#{default_files[:huts]})"
+  task "nav5-1_huts": [:environment] do
+    SacImports::HutsImporter.new(read_file(:huts)).import!
+  end
+
+  desc "Imports Austrittsgründe"
+  task "nav8-1_austrittsgruende": [:environment] do
+    raise "Not implemented"
   end
 
   def read_file(kind)

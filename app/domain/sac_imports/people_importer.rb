@@ -17,7 +17,7 @@ module SacImports
       truemail_with_regex
       @output = output
       @source_file = CsvSource.new(:NAV1)
-      @csv_report = CsvReport.new(:"1_people", REPORT_HEADERS)
+      @csv_report = CsvReport.new(:"nav1-1_people", REPORT_HEADERS)
     end
 
     def create
