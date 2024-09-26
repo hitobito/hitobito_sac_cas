@@ -24,8 +24,10 @@ module SacImports::Roles
     end
 
     def process_row(row)
-      import!(row, "memberships") unless skipped_row?(row) do |row|
-        MembershipEntry.new(row)
+      unless skipped_row?(row)
+        import!(row, "memberships") do |row|
+          MembershipEntry.new(row)
+        end
       end
     end
   end

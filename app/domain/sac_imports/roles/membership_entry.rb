@@ -34,11 +34,11 @@ module SacImports::Roles
     end
 
     def todo?
-      row.values.any? { |value| value.is_a?(String) && value.include?("TODO") }
+      @row.values.any? { |value| value.is_a?(String) && value.include?("TODO") }
     end
 
     def navision_id
-      @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""))
+      @navision_id ||= Integer(@row[:navision_id].to_s.sub(/^0*/, ""))
     end
 
     def build_error_messages
