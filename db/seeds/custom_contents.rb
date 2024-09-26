@@ -7,8 +7,8 @@
 
 CustomContent.seed(:key,
   {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION,
-   placeholders_required: "participant-name",
-   placeholders_optional: "event-name, application-url, event-details"},
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, application-url, event-details"},
   {key: Event::ParticipationMailer::CONTENT_SUMMON,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
@@ -59,53 +59,37 @@ CustomContent.seed(:key,
   {key: People::NeuanmeldungenMailer::REJECTED,
    placeholders_required: "first-name, sektion-name"})
 
-participation_rejected_id = CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id
-summon_id = CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id
-leader_reminder_next_week_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id
-leader_reminder_8_weeks_id = CustomContent.get(Event::LeaderReminderMailer::REMINDER_8_WEEKS).id
-
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
-  {custom_content_id: participation_rejected_id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id,
    locale: "de",
    label: "Anlass: E-Mail Ablehnung",
    subject: "Kursablehnung",
-   body: "Hallo {participant-name}<br><br>" \
-    "Sie wurden leider für den Kurs {event-name} abgelehnt.<br><br>" \
-    "Siehe {application-url}<br><br>" \
-    "Kursdetails:<br>{event-details}<br>"},
-  {custom_content_id: participation_rejected_id,
-   locale: "fr",
-   label: "Événement: E-Mail de refus"},
-  {custom_content_id: participation_rejected_id,
-   locale: "en",
-   label: "Event: Rejection email"},
-  {custom_content_id: participation_rejected_id,
-   locale: "it",
-   label: "Evento: E-mail della notifica della rifiuto"},
-  {custom_content_id: summon_id,
+   body: "Hallo {recipient-name},<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} abgelehnt.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
    locale: "de",
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
    body: "Hallo {recipient-name},<br><br>" \
-    "Sie wurden für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
-    "Kursdetails:<br><br>{event-details}<br><br>" \
-    "Weitere Informationen:<br>" \
+    "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) aufgeboten.<br><br>" \
     "Anmeldung: {application-url}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
-    "Book-Discount-Code: {book-discount-code}"},
-  {custom_content_id: summon_id,
+    "Book-Discount-Code: {book-discount-code}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",
    body: "Bonjour {recipient-name},<br><br>" \
     "Vous avez été convoqué(e) pour le cours {event-name} (Numéro: {event-number}).<br><br>" \
-    "Détails du cours:<br><br>{event-details}<br><br>" \
-    "Informations supplémentaires:<br>" \
     "Inscription: {application-url}<br>" \
     "Personne: {person-url}<br>" \
     "Lien de l'événement: {event-link}<br>" \
-    "Code de réduction pour le livre: {book-discount-code}"},
+    "Code de réduction pour le livre: {book-discount-code}<br>" \
+    "Détails du cours:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::ApplicationConfirmationMailer::APPLIED).id,
    locale: "de",
    label: "Kurs: E-Mail Unbestätigte Warteliste",
@@ -139,7 +123,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
-  {custom_content_id: leader_reminder_next_week_id,
+  {custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",
    subject: "Erinnerung Kursstart",
@@ -147,7 +131,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Der Kurs {event-name} (Nummer: {event-number}) findet nächste Woche statt.<br><br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: leader_reminder_8_weeks_id,
+  {custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER_8_WEEKS).id,
    locale: "de",
    label: "Kurs: E-Mail Reminder Kursleitung",
    subject: "Erinnerung Kursstart",
@@ -155,14 +139,6 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Der Kurs {event-name} (Nummer: {event-number}) findet 6 Wochen nach dem {six-weeks-before-start} statt.<br><br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: leader_reminder_8_weeks_id,
-   locale: "fr",
-   label: "Kurs: E-Mail Reminder Kursleitung",
-   subject: "Rappel de début de cours",
-   body: "Bonjour {recipient-name},<br><br>" \
-    "Le cours {event-name} (Nummer: {event-number}) aura lieu 6 semaines après le {six-weeks-before-start}.<br><br>" \
-    "Lien de l'événement: {event-link}<br>" \
-    "Détails du cours:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::PublishedMailer::NOTICE).id,
    locale: "de",
    label: "Kurs: E-Mail Kursveröffentlichung",
@@ -333,16 +309,4 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Jede Sektion hat ihre eigenen Aufnahmekriterien. " \
     "Somit empfehlen wir dir, deinen Antrag an eine andere Sektion deiner Wahl zu stellen.<br><br>" \
     "Vielen Dank für dein Verständnis.<br><br>" \
-    "Bergsportliche Grüsse"},
-  {custom_content_id: CustomContent.get(People::NeuanmeldungenMailer::REJECTED).id,
-   locale: "fr",
-   label: "Entrée au SAC : demande rejetée",
-   subject: "Demande d'admission au SAC rejetée",
-   body: "Bonjour {first-name},<br><br>" \
-    "Merci de votre intérêt à devenir membre du Club Alpin Suisse CAS.<br><br>" \
-    "La {sektion-name} a examiné votre candidature. Malheureusement, nous devons vous en informer, " \
-    "que la section ne peut pas accueillir votre demande d'adhésion.<br><br>" \
-    "Chaque section a ses propres critères d'admission." \
-    "Nous vous recommandons donc de déposer votre candidature dans une autre section de votre choix.<br><br>" \
-    "Merci de votre compréhension.<br><br>" \
-    "Salutations montagnardes"})
+    "Bergsportliche Grüsse"})

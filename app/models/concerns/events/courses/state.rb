@@ -87,7 +87,7 @@ module Events::Courses::State
   end
 
   def rejected_participants
-    participations.where(state: "rejected")
+    participations.where(state: :rejected)
   end
 
   def summon_assigned_participants
@@ -98,7 +98,7 @@ module Events::Courses::State
   end
 
   def assigned_participants
-    participations.where(state: "assigned")
+    participations.where(state: :assigned)
   end
 
   def send_application_published_email
