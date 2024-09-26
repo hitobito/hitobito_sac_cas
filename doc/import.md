@@ -8,34 +8,35 @@ Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht me
 ## Ausführen der Imports auf Openshift
 
 1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
-2. In Openshift einloggen und in das gewünschte Projekt wechseln
-3. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist
-4. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
-5. Beten das alles gut geht
-6. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
-7. exit um die Shell zu verlassen
-8. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
+1. In Openshift einloggen und in das gewünschte Projekt wechseln
+1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist
+1. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
+1. Beten das alles gut geht
+1. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
+1. exit um die Shell zu verlassen
+1. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
 
 ## Quelldaten
 
 Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgende Eigenschaften:
 
-- Encoding: UTF-8
-- Delimiter: ,
-- Zellen: umfasst mit "
-- Header: erste Zeile
+- **Encoding**: UTF-8
+- **Delimiter**: ,
+- **Zellen**: Zeichenketten umfasst mit "
+- **Header**: erste Zeile
 
 Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
 
-| #    | Inhalt                                               |
-|------|------------------------------------------------------|
-| NAV1 | Alle Kontakte (natürliche und juristische Personen)  |
-| NAV2 | Stammmitgliedschaften                                |
-| NAV3 | Qualifikationen                                      |
-| NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     |
-| NAV6 | Sektionen und Ortsgruppen                            |
-| NAV7 | Abonenten Die Alpen                                  |
-| WSO21| Datenexport aus WSO21                                |
+| #    | Inhalt                                               | Art       |
+|------|------------------------------------------------------|-----------|
+| NAV1 | Alle Kontakte (natürliche und juristische Personen)  | via CSV   |
+| NAV2 | Rollen und Gruppen                                   | via CSV   |
+| NAV3 | Qualifikationen                                      | via CSV   |
+| NAV5 | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     | via XLSX  |
+| NAV6 | Sektionen und Ortsgruppen                            | via CSV   |
+| NAV7 | Qualifikationsarten                                  | via Seeds |
+| NAV8 | Austrittsgründe                                      | via CSV   |
+| WSO21| Datenexport aus WSO21                                | via CSV   |
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
@@ -60,9 +61,21 @@ Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
 ## Importe
 
-### 1: sac_imports:1_people
+```mermaid
+flowchart LR
+    A[Start] --> B(NAV6)
+    B --> C(NAV1)
+    C --> D(WSO21)
+    D --> E(NAV2)
+    E --> F(NAV3)
+    F --> G(NAV5)
+    G --> H(NAV8)
+    H --> I[Ende 🎉]
+```
 
-Dieser Import soll immer zuerst ausgeführt werden, damit den Personen in den weiteren Schritten die Rollen zugeordnet werden können.
+### NAV1: `sac_imports:1_people`
+
+Dieser Import sollte nach NAV6 ausgeführt werden.
 
 You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sac_imports:1_people`
 
@@ -74,8 +87,7 @@ You can run the import with: `RAILS_SILENCE_ACTIVE_RECORD=1 bundle exec rails sa
 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
 
-
-## 2: sac_imports:2_sektionen
+## NAV2: `sac_imports:2_roles`
 
 Mit diesem Import werden alle Sektionen und Ortsgruppen importiert.
 Auf jeder Sektion/Ortsgruppe werden auch Attribute wie z.B. Kanton, Gründungsjahr usw. gesetzt
@@ -114,12 +126,20 @@ Sicherstellen das Import Mitglieder Stammsektion bereits ausgeführt wurde. Eine
 
 Import Source File: **NAV3**
 
-## 6: sac_imports:6_membership_years_report
+## NAV6: sac_imports:6_sac_sections
 
 `rake sac_imports:6_membership_years_report`
 
 - Import Source File: **NAV1**
 - CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/6_membership_years_report_2024-06-01-12:00.csv`
+
+### Delete all Sektions
+
+```ruby
+Group::Ortsgruppe.all.each { |o| o.children.each(&:really_destroy!) }
+Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
+Group::Sektion.all.find_each { |s| s.really_destroy! }
+```
 
 ## 7: sac_imports:7_wso2_people
 
@@ -128,17 +148,8 @@ Import Source File: **NAV3**
 - Import Source File: **WSO21**
 - CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/7_wso2_people_2024-06-01-12:00.csv`
 
-## 8: sac_imports:8_qualifications
+## NAV8: via Seeds
 
-`rake sac_imports:8_qualifications`
+Der Import erfolgt via Seeds in `hitobito_sac_cas/db/seeds/qualification_kinds.rb`.
 
-- Import Source File: **NAV3**
-- CSV Report Output: `RAILS_CORE_ROOT/log/sac_imports/8_qualifications_2024-06-01-12:00.csv`
 
-## Delete all Sektions
-
-```ruby
-Group::Ortsgruppe.all.each { |o| o.children.each(&:really_destroy!) }
-Group::Sektion.all.find_each { |s| s.children.each(&:really_destroy!) }
-Group::Sektion.all.find_each { |s| s.really_destroy! }
-```
