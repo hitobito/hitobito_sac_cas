@@ -10,27 +10,20 @@ require Rails.root.join("db", "seeds", "support", "event_seeder")
 class SacEventSeeder < EventSeeder
   def seed_sac_course(group_id)
     event = seed_event(group_id, :course)
-    event.reload
-    event.cost_center = CostCenter.first
-    event.cost_unit = CostUnit.first
-    event.language = :de
-    event.season = Event::Kind::SEASONS.sample
-    event.start_point_of_time = :day
-    event.contact_id = fetch_contact_person.id
-
-    event.save!
+    event.update!(
+      cost_center: CostCenter.first,
+      cost_unit: CostUnit.first,
+      language: :de,
+      season: Event::Kind::SEASONS.sample,
+      start_point_of_time: :day,
+      contact_id: Person.last.id,
+      price_member: 10,
+      price_regular: 20
+    )
     event
   end
 
-  def seed_sac_course_which_is_application_closed(group_id)
-    event = seed_sac_course(group_id)
-    event.update_column(:state, "assignment_closed")
-    event.save!
-  end
-
-  private
-
-  def fetch_contact_person
-    Person.last
+  def seed_sac_course_with_assignment_closed(group_id)
+    seed_sac_course(group_id).update_column(:state, :assignment_closed)
   end
 end
