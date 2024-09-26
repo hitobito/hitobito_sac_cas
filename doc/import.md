@@ -104,7 +104,6 @@ Dieser Import sollte nach NAV6 ausgeführt werden.
 
 ### `sac_imports:nav1-2_membership_years_report`
 
-
 You can run the import with: `bundle exec rails sac_imports:1_people`
 
 ### `sac_imports:wso2-1_people`
