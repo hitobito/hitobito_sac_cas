@@ -60,7 +60,10 @@ describe Event::SurveyJob do
   end
 
   context "3 days ago but different time" do
-    before { course.dates.reload.first.update!(finish_at: 3.days.ago + 12.hours) }
+    before do
+      travel_to Time.zone.local(2024, 10, 27, 2, 0, 0)
+      course.dates.reload.first.update!(finish_at: 3.days.ago + 1.hours)
+    end
 
     it "sends an email to the participant" do
       expect { job.perform }.to have_enqueued_mail(Event::SurveyMailer, :survey).twice
