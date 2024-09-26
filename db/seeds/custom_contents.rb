@@ -6,13 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 CustomContent.seed(:key,
-  {key: Event::ParticipationMailer::REJECT_APPLIED,
+  {key: Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link"},
-  {key: Event::ParticipationMailer::REJECT_REJECTED,
+  {key: Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url"},
-  {key: Event::ParticipationMailer::SUMMON,
+  {key: Event::ParticipationMailer::SUMMONED_PARTICIPATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
   {key: Event::ApplicationConfirmationMailer::APPLIED,
@@ -66,7 +66,7 @@ CustomContent.seed(:key,
    placeholders_required: "first-name, sektion-name"})
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_APPLIED).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION).id,
    locale: "de",
    label: "Kurs: E-Mail Keine Teilnahme 'Warteliste'",
    subject: "Kursablehnung",
@@ -76,7 +76,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_REJECTED).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION).id,
    locale: "de",
    label: "Kurs: E-Mail Keine Teilnahme 'Abgelehnt'",
    subject: "Kursablehnung",
@@ -84,7 +84,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
     "Anmeldung: {application-url}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMONED_PARTICIPATION).id,
    locale: "de",
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
@@ -95,7 +95,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Event-Link: {event-link}<br>" \
     "Book-Discount-Code: {book-discount-code}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMONED_PARTICIPATION).id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",

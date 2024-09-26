@@ -9,20 +9,20 @@ module SacCas::Event::ParticipationMailer
   include EventMailer
   include MultilingualMailer
 
-  REJECT_APPLIED = "event_participation_reject_applied"
-  REJECT_REJECTED = "event_participation_reject_rejected"
-  SUMMON = "event_participation_summon"
+  REJECT_APPLIED_PARTICIPATION = "event_participation_reject_applied"
+  REJECT_REJECTED_PARTICIPATION = "event_participation_reject_rejected"
+  SUMMONED_PARTICIPATION = "event_participation_summon"
 
   def reject_applied(participation)
-    compose_email(participation, REJECT_APPLIED)
+    compose_email(participation, REJECT_APPLIED_PARTICIPATION)
   end
 
   def reject_rejected(participation)
-    compose_email(participation, REJECT_REJECTED)
+    compose_email(participation, REJECT_REJECTED_PARTICIPATION)
   end
 
   def summon(participation)
-    compose_email(participation, SUMMON)
+    compose_email(participation, SUMMONED_PARTICIPATION)
   end
 
   private
