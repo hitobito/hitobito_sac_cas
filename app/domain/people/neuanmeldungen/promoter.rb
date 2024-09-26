@@ -12,6 +12,15 @@ class People::Neuanmeldungen::Promoter
     PaidInvoiceCondition
   ].freeze
 
+  NEUANMELDUNG_ROLES = SacCas::NEUANMELDUNG_ROLES.map(&:sti_name).freeze
+  OBSOLETE_ROLES = [
+    Group::AboTourenPortal::Abonnent,
+    Group::AboTourenPortal::Neuanmeldung,
+    Group::AboMagazin::Abonnent,
+    Group::AboMagazin::Neuanmeldung,
+    Group::AboBasicLogin::BasicLogin
+  ].map(&:sti_name).freeze
+
   ERROR_CATEGORY = "neuanmeldungen"
 
   def call
@@ -40,6 +49,7 @@ class People::Neuanmeldungen::Promoter
   def promote_role(role)
     Role.transaction do
       role.destroy!
+      terminate_and_destroy_obsolete_roles!(role)
       create_member_role!(role)
     end
   rescue => e
@@ -54,6 +64,23 @@ class People::Neuanmeldungen::Promoter
       created_at: Time.current,
       delete_on: Date.current.end_of_year
     )
+  end
+
+  def terminate_and_destroy_obsolete_roles!(role)
+    now = Time.zone.today
+
+    role.person.roles
+      .where(type: OBSOLETE_ROLES, created_at: now...)
+      .or(role.person.roles.where(type: NEUANMELDUNG_ROLES, created_at: ..now))
+      .find_each { |role| role.really_destroy! }
+
+    role.person.roles.where(created_at: ..now).find_each do |role|
+      Roles::Termination.new(
+        role:,
+        terminate_on: role.created_at.today? ? now : now.yesterday,
+        validate_terminate_on: false
+      ).call
+    end
   end
 
   def target_role_class(role)
