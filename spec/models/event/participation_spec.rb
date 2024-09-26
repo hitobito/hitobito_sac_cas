@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::Participation do
+  include ActiveJob::TestHelper
+
   describe "::callbacks" do
     subject(:participation) { Fabricate(:event_participation, event: events(:top_course)) }
 
@@ -118,6 +120,16 @@ describe Event::Participation do
         participation.actual_days = 0
         expect(participation).to be_valid
       end
+    end
+  end
+
+  describe "canceled" do
+    let(:event) { Fabricate(:sac_open_course) }
+    let(:participation) { event.participations.create!(person: people(:mitglied)) }
+
+    it "sends a confirmation email" do
+      expect { participation.update(state: :canceled, canceled_at: Time.zone.today) }
+        .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
     end
   end
 end

@@ -21,6 +21,9 @@ CustomContent.seed(:key,
   {key: Event::ApplicationConfirmationMailer::ASSIGNED,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+  {key: Event::ParticipationCanceledMailer::CONFIRMATION,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
   {key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link"},
@@ -119,6 +122,16 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    body: "Hallo {recipient-name},<br><br>" \
     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+  {custom_content_id: CustomContent.get(Event::ParticipationCanceledMailer::CONFIRMATION).id,
+   locale: "de",
+   label: "Kurs: E-Mail Abmeldung",
+   subject: "Kursabmeldung bestätigt",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Deine Abmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
     "Anmeldung: {application-url}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
