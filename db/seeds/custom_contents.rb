@@ -17,13 +17,13 @@ CustomContent.seed(:key,
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
   {key: Event::ApplicationConfirmationMailer::APPLIED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ApplicationConfirmationMailer::UNCONFIRMED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ApplicationConfirmationMailer::ASSIGNED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ParticipationCanceledMailer::CONFIRMATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
@@ -117,6 +117,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
@@ -128,6 +129,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
@@ -139,6 +141,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},

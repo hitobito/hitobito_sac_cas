@@ -363,7 +363,7 @@ describe Person do
         end.to change(person.data_quality_issues, :count).by(-1)
       end
 
-      it "doesnt validate attributes if another attribute that shouldnt be checked is updated" do
+      it "doesn't validate attributes if another attribute that shouldnt be checked is updated" do
         expect do
           person.update!(first_name: nil)
           person.data_quality_issues.destroy_all
@@ -469,16 +469,16 @@ describe Person do
       expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
     end
 
-    it "doesnt enqueue the job if an irrelevant attribute changed" do
+    it "doesn't enqueue the job if an irrelevant attribute changed" do
       expect { person.update!(company_name: "Abacus") }.not_to change(job, :count)
     end
 
-    it "doesnt enqueue the job without an sac membership invoice" do
+    it "doesn't enqueue the job without an sac membership invoice" do
       person.roles.destroy_all
       expect { person.update!(first_name: "Abacus") }.not_to change(job, :count)
     end
 
-    it "doesnt enqueue the job if data quality errors exist" do
+    it "doesn't enqueue the job if data quality errors exist" do
       expect { person.update!(first_name: nil) }.not_to change(job, :count)
     end
   end

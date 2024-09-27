@@ -388,7 +388,7 @@ describe Event::Course do
       end
 
       context "without course leaders" do
-        it "doesnt queue a job to send an email" do
+        it "doesn't queue a job to send an email" do
           expect { course.update!(state: :application_open) }
             .not_to have_enqueued_mail(Event::PublishedMailer)
         end
@@ -398,7 +398,7 @@ describe Event::Course do
     context "from anything else" do
       before { course.update!(state: :application_paused) }
 
-      it "doesnt send an email" do
+      it "doesn't send an email" do
         expect { course.update!(state: :application_open) }
           .not_to have_enqueued_mail(Event::PublishedMailer)
       end
@@ -420,7 +420,7 @@ describe Event::Course do
     context "without course admin" do
       before { course.groups.first.update!(course_admin_email: nil) }
 
-      it "doesnt queue the job to send an email" do
+      it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_paused) }
           .not_to have_enqueued_mail(Event::ApplicationPausedMailer, :notice)
       end
@@ -442,7 +442,7 @@ describe Event::Course do
     context "without course admin" do
       before { course.groups.first.update!(course_admin_email: nil) }
 
-      it "doesnt queue the job to send an email" do
+      it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_closed) }
           .not_to have_enqueued_mail(Event::ApplicationClosedMailer)
       end

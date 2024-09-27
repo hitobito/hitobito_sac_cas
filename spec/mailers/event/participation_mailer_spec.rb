@@ -104,7 +104,7 @@ describe Event::ParticipationMailer do
       end
     end
 
-    context "course languages that dont have custom content" do
+    context "course languages that don't have custom content" do
       before { event.update!(language: "it") }
 
       it "sends in default language" do

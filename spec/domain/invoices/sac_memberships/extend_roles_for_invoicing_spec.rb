@@ -41,7 +41,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "without required role" do
     before { person.roles.first.destroy! }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end
@@ -49,7 +49,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with terminated role" do
     before { Roles::Termination.new(role: person.roles.first, terminate_on: 1.day.from_now).call }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end
@@ -57,7 +57,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with role#delete_on at date" do
     before { person.roles.first.update!(delete_on: date) }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end
@@ -65,7 +65,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with role#delete_on after date" do
     before { person.roles.first.update!(delete_on: date + 1.week) }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end
@@ -73,7 +73,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with person#data_quality errors" do
     before { person.update!(data_quality: :error) }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end
@@ -81,7 +81,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with invoice the same year as the specified date" do
     before { ExternalInvoice::SacMembership.create!(person: person, year: date.year) }
 
-    it "doesnt extend the role" do
+    it "doesn't extend the role" do
       expect { extend_roles }.not_to change { person.roles.first.delete_on }
     end
   end

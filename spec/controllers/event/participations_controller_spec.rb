@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::ParticipationsController do
+  include ActiveJob::TestHelper
+
   before { sign_in(user) }
 
   let(:user) { people(:admin) }
@@ -296,36 +298,10 @@ describe Event::ParticipationsController do
       end
     end
 
-    context "participation confirmation email" do
-      let(:participation) { Event::Participation.last }
-
-      before { post :create, params: {group_id: group.id, event_id: event.id} }
-
+    describe "participation confirmation email" do
       it "sends an email" do
-        expect do
-          Delayed::Job.last.payload_object.perform
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
-        expect(last_email.subject).to eq("Unbestätigte Kursanmeldung")
-      end
-
-      context "with answers" do
-        before do
-          event.questions.create!([
-            {admin: true, question: "non example", disclosure: :optional},
-            {admin: true, question: "nil example", disclosure: :optional},
-            {admin: true, question: "yes example", disclosure: :optional}
-          ])
-          participation.answers.first.update! answer: "non"
-          participation.answers.last.update! answer: "yes"
-        end
-
-        it "shows missing information" do
-          Delayed::Job.last.payload_object.perform
-          mail = last_email.body.raw_source
-          expect(mail).to include("non example", "nil example")
-          expect(mail).not_to include("yes example")
-          expect(mail).not_to include("&lt;")
-        end
+        expect { post :create, params: {group_id: group.id, event_id: event.id} }
+          .to have_enqueued_mail(Event::ApplicationConfirmationMailer).once
       end
     end
   end

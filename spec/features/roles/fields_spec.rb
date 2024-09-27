@@ -16,7 +16,7 @@ describe "roles/_fields.html.haml" do
   context "wizard managed role" do
     let(:role) { roles(:mitglied) }
 
-    it "doesnt show 'Von' field" do
+    it "doesn't show 'Von' field" do
       expect(page).to have_text("Daten")
       expect(page).not_to have_field("Von")
     end

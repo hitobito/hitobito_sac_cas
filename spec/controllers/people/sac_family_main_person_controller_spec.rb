@@ -51,7 +51,7 @@ describe People::SacFamilyMainPersonController, type: :controller do
       end
     end
 
-    context "when the person doesnt have an email" do
+    context "when the person doesn't have an email" do
       before { adult.update!(email: nil) }
 
       it "raises access denied error" do
