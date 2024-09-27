@@ -11,6 +11,13 @@ module SacImports
 
     validates :person, presence: {message: "couldn't be found"}
     validates :qualification_kind_id, presence: {message: "couldn't be found"}
+    validate :nav3_active_matches_qualification_active
+
+    def nav3_active_matches_qualification_active
+      if qualification && row[:active] == "1" && !qualification.active?
+        errors.add(:base, "Marked as active but would be marked as inactive")
+      end
+    end
 
     attr_reader :row
 
@@ -27,7 +34,7 @@ module SacImports
     end
 
     def qualification
-      @qualification ||= person.qualifications.find_or_initialize_by(qualification_kind_id: qualification_kind_id) do |qualification|
+      @qualification ||= person&.qualifications&.find_or_initialize_by(qualification_kind_id: qualification_kind_id) do |qualification|
         qualification.start_at = row[:start_at]
         qualification.finish_at = row[:finish_at]
       end

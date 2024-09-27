@@ -43,7 +43,8 @@ describe SacImports::QualificationsImporter do
     expected_output << "4200010 (SAC Tourenleiter - Aspirant*in):" << " ❌ Person couldn't be found\n"
     expected_output << /\d+ \(.*\):/ << " ✅\n"
     expected_output << "4200001 (SAC Tourenleiter*in 1 Winter Senioren):" << " ❌ Qualification kind couldn't be found\n"
-    expected_output << Array.new(5) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
+    expected_output << Array.new(4) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
+    expected_output << "4200006 (SAC Tourenleiter*in 1 Winter):" << " ❌ Marked as active but would be marked as inactive\n"
     expected_output << "4200007 (Murmeltierdoktor*in):" << " ❌ Qualification kind couldn't be found\n"
     expected_output << Array.new(2) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200010 (SAC Tourenleiter*in Alpinwandern):" << " ❌ Person couldn't be found, Qualification kind couldn't be found\n"
@@ -58,8 +59,9 @@ describe SacImports::QualificationsImporter do
 
     travel_to DateTime.new(2024, 1, 23, 10, 42)
 
+    # We import 29 qualifications, but some of them have the same label on the same person
     expect { report.create }
-      .to change { Qualification.count }.by(23)
+      .to change { Qualification.count }.by(22)
 
     expect(Qualification.last.attributes).to include(
       "person_id" => 4200003,
@@ -70,7 +72,7 @@ describe SacImports::QualificationsImporter do
 
     expect(File.exist?(report_file)).to be_truthy
 
-    expect(csv_report.size).to eq(8)
+    expect(csv_report.size).to eq(9)
     expect(csv_report.first).to eq(report_headers)
 
     File.delete(report_file)
