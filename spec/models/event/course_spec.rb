@@ -315,13 +315,13 @@ describe Event::Course do
 
     # set up participants who have been rejected
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
-    let(:rejected_participation) { Fabricate(:event_participation, event: course, application: application, state: "rejected") }
+    let!(:applied_participation) { Fabricate(:event_participation, event: course, application:, state: :applied) }
+    let!(:rejected_participation) { Fabricate(:event_participation, event: course, application:, state: :rejected) }
 
-    it "queues job to notify rejected participants" do
-      expect do
-        rejected_participation
-        course.update!(state: :assignment_closed)
-      end.to have_enqueued_mail(Event::ParticipationMailer, :reject)
+    it "queues job to notify rejected and applied participants" do
+      expect { course.update!(state: :assignment_closed) }
+        .to have_enqueued_mail(Event::ParticipationMailer, :reject_applied).once
+        .and have_enqueued_mail(Event::ParticipationMailer, :reject_rejected).once
     end
   end
 
@@ -330,19 +330,16 @@ describe Event::Course do
 
     # set up participants who have been assigned
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
-    let(:assigned_participation) { Fabricate(:event_participation, event: course, application: application, state: "assigned") }
+    let!(:assigned_participation) { Fabricate(:event_participation, event: course, application:, state: :assigned) }
 
     context "from assignment_closed" do
       it "updates assigned participants to summoned" do
         course.dates.build(start_at: Time.zone.local(2025, 5, 11))
-        assigned_participation
 
         expected_participation = assigned_participation.dup
         expected_participation.state = "assigned"
-        expect do
-          course.update!(state: :ready)
-          assigned_participation.reload
-        end.to change { course.participations.first.state }.to(eq("summoned"))
+        expect { course.update!(state: :ready) }
+          .to change { course.participations.first.state }.to(eq("summoned"))
           .and have_enqueued_mail(Event::ParticipationMailer, :summon).once
       end
     end
@@ -351,11 +348,9 @@ describe Event::Course do
       it "does not update assigned participants to summoned" do
         course.dates.build(start_at: Time.zone.local(2025, 5, 11))
         course.update_attribute(:state, :closed)
-        assigned_participation
 
-        expect do
-          course.update!(state: :ready)
-        end.to_not change { course.participations.first.state }
+        expect { course.update!(state: :ready) }
+          .to_not change { course.participations.first.state }
       end
     end
   end
@@ -368,7 +363,7 @@ describe Event::Course do
     context "from created" do
       before do
         course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-        course.update!(state: "created")
+        course.update!(state: :created)
       end
 
       context "with course leaders" do
@@ -379,7 +374,7 @@ describe Event::Course do
 
         it "sends an email to the course admin and leader" do
           expect { course.update!(state: :application_open) }
-            .to have_enqueued_mail(Event::PublishedMailer, :notice).exactly(2).times
+            .to have_enqueued_mail(Event::PublishedMailer, :notice).twice
         end
       end
 
@@ -401,7 +396,7 @@ describe Event::Course do
     end
 
     context "from anything else" do
-      before { course.update!(state: "application_paused") }
+      before { course.update!(state: :application_paused) }
 
       it "doesnt send an email" do
         expect { course.update!(state: :application_open) }
@@ -451,6 +446,22 @@ describe Event::Course do
         expect { course.update!(state: :application_closed) }
           .not_to have_enqueued_mail(Event::ApplicationClosedMailer)
       end
+    end
+  end
+
+  describe "when state changes to canceled" do
+    let(:course) { Fabricate(:sac_open_course, language: "de") }
+
+    before do
+      course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+      ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
+      ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course)
+    end
+
+    it "queues job to cancel invoices for all participants" do
+      expect do
+        course.update!(state: :canceled)
+      end.to change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(2)
     end
   end
 end
