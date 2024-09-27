@@ -27,6 +27,10 @@ module EventMailer
     ))
   end
 
+  def placeholder_participation_price
+    sprintf("%.2f", @participation.price)
+  end
+
   def placeholder_application_opening_at
     l(@course.application_opening_at)
   end

@@ -51,7 +51,7 @@ describe "person show page" do
     describe "wizard managed roles" do
       let(:role) { roles(:mitglied) }
 
-      it "doesnt show delete button" do
+      it "doesn't show delete button" do
         visit group_person_path(group_id: role.group_id, id: role.person_id)
         expect(page).not_to have_css("a[title=\"Löschen\"]")
       end
@@ -86,7 +86,7 @@ describe "person show page" do
     end
 
     context "without data quality issues" do
-      it "doesnt show the data quality section" do
+      it "doesn't show the data quality section" do
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).not_to have_text("Datenqualität")
       end

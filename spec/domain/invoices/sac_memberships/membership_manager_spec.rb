@@ -49,17 +49,17 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(mitglied_zweitsektion.reload.delete_on).to eq(end_of_next_year)
       end
 
-      it "doesnt update delete_on when role is terminated" do
+      it "doesn't update delete_on when role is terminated" do
         mitglied_zweitsektion.update_column(:terminated, true)
         expect(updated_roles_count).to eq(1)
       end
 
-      it "doesnt update roles when delete_on is already in external invoice year" do
+      it "doesn't update roles when delete_on is already in external invoice year" do
         Role.update_all(delete_on: end_of_next_year)
         expect(updated_roles_count).to eq(0)
       end
 
-      it "doesnt update roles when delete_on is after external invoice year" do
+      it "doesn't update roles when delete_on is after external invoice year" do
         Role.update_all(delete_on: end_of_next_year + 5.years)
         expect(updated_roles_count).to eq(0)
       end
@@ -148,7 +148,7 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(familienmitglied2_person.sac_membership.stammsektion_role.delete_on).to eq(end_of_next_year)
       end
 
-      it "doesnt create role for family members when person is not family main person" do
+      it "doesn't create role for family members when person is not family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
 
         expect(familienmitglied2_person.sac_membership.active?).to eq(false)
@@ -207,7 +207,7 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.delete_on).to eq(end_of_next_year)
       end
 
-      it "doesnt create role for family members when person is not family main person" do
+      it "doesn't create role for family members when person is not family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
 
         subject.update_membership_status
