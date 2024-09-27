@@ -44,7 +44,7 @@ describe SacImports::QualificationsImporter do
     expected_output << /\d+ \(.*\):/ << " ✅\n"
     expected_output << "4200001 (SAC Tourenleiter*in 1 Winter Senioren):" << " ❌ Qualification kind couldn't be found\n"
     expected_output << Array.new(4) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
-    expected_output << "4200006 (SAC Tourenleiter*in 1 Winter):" << " ❌ Marked as active but would be marked as inactive\n"
+    expected_output << "4200006 (SAC Tourenleiter*in 1 Winter):" << " ❌ Active in NAV3 but would be inactive by hitobito\n"
     expected_output << "4200007 (Murmeltierdoktor*in):" << " ❌ Qualification kind couldn't be found\n"
     expected_output << Array.new(2) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200010 (SAC Tourenleiter*in Alpinwandern):" << " ❌ Person couldn't be found, Qualification kind couldn't be found\n"

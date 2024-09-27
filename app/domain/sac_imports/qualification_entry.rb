@@ -15,7 +15,10 @@ module SacImports
 
     def nav3_active_matches_qualification_active
       if qualification && row[:active] == "1" && !qualification.active?
-        errors.add(:base, "Marked as active but would be marked as inactive")
+        errors.add(:base, "Active in NAV3 but would be inactive by hitobito")
+      end
+      if qualification && row[:active] != "1" && qualification.active?
+        errors.add(:base, "Inactive in NAV3 but would be active by hitobio")
       end
     end
 
