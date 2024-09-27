@@ -10,14 +10,7 @@ require "spec_helper"
 describe SacImports::CsvSource do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
 
-  before do
-    allow(Rails.root)
-      .to receive(:join)
-      .with("tmp", "sac_imports_src")
-      .and_return(sac_imports_src)
-  end
-
-  let(:source_file) { described_class.new(@source_name) }
+  let(:source_file) { described_class.new(@source_name, source_dir: sac_imports_src) }
 
   it "throws error if unavailable source file referenced" do
     @source_name = :NAV42
