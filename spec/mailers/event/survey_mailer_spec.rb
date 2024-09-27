@@ -11,12 +11,11 @@ describe Event::SurveyMailer do
   let(:event) do
     Fabricate(:sac_open_course,
       link_survey: "https://example.com/survey",
-      dates: [Fabricate(:event_date, start_at: 1.week.ago, finish_at: 3.days.ago)],
-      participations: [participation])
+      dates: [Fabricate(:event_date, start_at: 1.week.ago, finish_at: 3.days.ago)])
   end
 
-  let(:participation) { Fabricate(:event_participation, person: people(:mitglied), state: :attended) }
-  let(:mail) { described_class.survey(event, participation) }
+  let(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied), state: :attended) }
+  let(:mail) { described_class.survey(participation) }
 
   before { event.groups.first.update!(course_admin_email: "admin@example.com") }
 

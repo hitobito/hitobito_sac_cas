@@ -11,12 +11,12 @@ class Event::SurveyMailer < ApplicationMailer
 
   SURVEY = "event_survey"
 
-  def survey(course, participation)
-    @course = course
+  def survey(participation)
     @participation = participation
+    @course = participation.event
     @person = participation.person
-    headers[:bcc] = course.groups.first.course_admin_email
-    locales = course.language.split("_")
+    headers[:bcc] = @course.groups.first.course_admin_email
+    locales = @course.language.split("_")
 
     compose_multilingual(@person, SURVEY, locales)
   end

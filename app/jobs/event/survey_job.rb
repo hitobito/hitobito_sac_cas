@@ -11,17 +11,16 @@ class Event::SurveyJob < RecurringJob
   private
 
   def perform_internal
-    courses_finished_3_days_ago.each do |course|
-      course.participations.where(state: :attended).find_each do |participation|
-        Event::SurveyMailer.survey(course, participation).deliver_later
-      end
+    participations_of_courses_finished_3_days_ago.each do |participation|
+      Event::SurveyMailer.survey(participation).deliver_later
     end
   end
 
-  def courses_finished_3_days_ago
-    Event::Course.joins(:dates, :participations)
+  def participations_of_courses_finished_3_days_ago
+    Event::Participation.joins(:event, event: :dates)
+      .where(state: :attended)
       .where(event_dates: {finish_at: 3.days.ago.all_day})
-      .where.not(link_survey: nil)
+      .where.not(event: {link_survey: nil})
       .distinct
   end
 
