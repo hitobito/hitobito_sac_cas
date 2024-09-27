@@ -27,6 +27,9 @@ CustomContent.seed(:key,
   {key: Event::ParticipationCanceledMailer::CONFIRMATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
+  {key: Event::ParticipantReminderMailer::REMINDER,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url, missing-information"},
   {key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link"},
@@ -149,6 +152,16 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+  {custom_content_id: CustomContent.get(Event::ParticipantReminderMailer::REMINDER).id,
+   locale: "de",
+   label: "Kurs: E-Mail Reminder TN Administrationsangaben",
+   subject: "Fehlende Administrationsangaben",
+   body: "Hallo {recipient-name},<br><br>" \
+    "{missing-information}<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",

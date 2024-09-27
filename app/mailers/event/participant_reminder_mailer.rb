@@ -5,21 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Event::ApplicationConfirmationMailer < ApplicationMailer
+class Event::ParticipantReminderMailer < ApplicationMailer
   include EventMailer
   include MultilingualMailer
 
-  APPLIED = "course_application_confirmation_applied"
-  UNCONFIRMED = "course_application_confirmation_unconfirmed"
-  ASSIGNED = "course_application_confirmation_assigned"
+  REMINDER = "event_participant_reminder"
 
-  def confirmation(participation, content_key)
+  def reminder(participation)
     @participation = participation
     @person = participation.person
     @course = participation.event
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
-    compose_multilingual(@person, content_key, locales)
+    compose_multilingual(@person, REMINDER, locales)
   end
 end
