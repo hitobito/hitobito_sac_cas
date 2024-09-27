@@ -12,12 +12,13 @@ class Event::LeaderReminderMailer < ApplicationMailer
   REMINDER_NEXT_WEEK = "event_leader_reminder_next_week"
   REMINDER_8_WEEKS = "event_leader_reminder_8_weeks"
 
-  def reminder(course, content_key, leader)
-    @course = course
-    @person = leader
-    headers[:bcc] = course.groups.first.course_admin_email
-    locales = course.language.split("_")
+  def reminder(participation, content_key)
+    @participation = participation
+    @course = participation.event
+    @person = participation.person
+    headers[:bcc] = @course.groups.first.course_admin_email
+    locales = @course.language.split("_")
 
-    compose_multilingual(leader, content_key, locales)
+    compose_multilingual(@person, content_key, locales)
   end
 end
