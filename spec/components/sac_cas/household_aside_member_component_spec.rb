@@ -58,33 +58,31 @@ describe HouseholdAsideMemberComponent, type: :component do
     end
   end
 
-  it "renders correct icon for active family member" do
-    familienmitglied2.destroy!
-    familienmitglied_kind.destroy!
-    stub_can(:show, true)
-    stub_can(:set_sac_family_main_person, true)
-    rendered_component = render_inline(component)
-    expect(rendered_component).to have_css('span.text-primary[title="Familienrechnungsempfänger"]')
+  shared_examples "renders correct icon" do |css_selector, title|
+    it "renders correct icon" do
+      familienmitglied2.destroy!
+      familienmitglied_kind.destroy!
+      stub_can(:show, true)
+      stub_can(:set_sac_family_main_person, true)
+      rendered_component = render_inline(component)
+      expect(rendered_component).to have_css("#{css_selector}[title=\"#{title}\"]")
+    end
   end
 
-  it "renders correct icon for possible family member" do
-    familienmitglied2.destroy!
-    familienmitglied_kind.destroy!
-    stub_can(:show, true)
-    stub_can(:set_sac_family_main_person, true)
-    familienmitglied.update!(sac_family_main_person: false)
-    rendered_component = render_inline(component)
-    expect(rendered_component).to have_css('a.text-muted[title="Zum Familienrechnungsempfänger machen"]')
-  end
+  context "when rendering icons" do
+    it_behaves_like "renders correct icon", "span.text-primary", "Familienrechnungsempfänger"
 
-  it "renders correct icon for family member without email set" do
-    familienmitglied2.destroy!
-    familienmitglied_kind.destroy!
-    stub_can(:show, true)
-    stub_can(:set_sac_family_main_person, true)
-    familienmitglied.update!(email: nil, sac_family_main_person: false)
-    rendered_component = render_inline(component)
-    expect(rendered_component).to have_css('span.text-muted[title="Die Person hat keine E-Mail Adresse und kann daher nicht zum Familienrechnungsempfänger gemacht werden."]')
+    context "when not sac_family_main_person" do
+      before { familienmitglied.update!(sac_family_main_person: false) }
+
+      it_behaves_like "renders correct icon", "a.text-muted", "Zum Familienrechnungsempfänger machen"
+    end
+
+    context "when email is not set" do
+      before { familienmitglied.update!(email: nil, sac_family_main_person: false) }
+
+      it_behaves_like "renders correct icon", "span.text-muted", "Die Person hat keine E-Mail Adresse und kann daher nicht zum Familienrechnungsempfänger gemacht werden."
+    end
   end
 
   context "neunanmeldung" do
