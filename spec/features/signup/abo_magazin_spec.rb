@@ -141,15 +141,23 @@ describe "self_registration_abo_magazin", js: true do
     end
   end
 
-  it "allows person that is very young" do
-    visit group_self_registration_path(group_id: group.id)
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
-    complete_main_person_form
-    fill_in "Geburtsdatum", with: 100.years.from_now.to_date
-    expect do
+  shared_examples "birthday validation" do |description, birthday, expected_step|
+    it "handles #{description} person" do
+      visit group_self_registration_path(group_id: group.id)
+      fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       click_on "Weiter"
-      expect_active_step "Abo"
+      complete_main_person_form
+      fill_in "Geburtsdatum", with: birthday
+      click_on "Weiter"
+
+      expect_active_step expected_step
+      if Time.zone.today < birthday
+        expect_validation_error "Person muss 0 Jahre oder älter sein"
+      end
     end
   end
+
+  it_behaves_like "birthday validation", "today", Time.zone.today, "Abo"
+  it_behaves_like "birthday validation", "10 years ago", 10.years.ago, "Abo"
+  it_behaves_like "birthday validation", "1 day from now", 1.day.from_now, "Personendaten"
 end
