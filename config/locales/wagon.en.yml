@@ -105,7 +105,6 @@ en:
 
     errors:
       messages:
-        must_be_older_than_18: Person must be 18 years or older.
         youth_not_allowed_in_family: |
           Young people between the ages of 18 and 21 cannot be
           be accepted in a family membership.
@@ -1211,7 +1210,7 @@ en:
   household_aside_member_component:
     main_person: Family bill recipient
     set_main_person: Become a family invoice recipient
-    unverified_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
+    missing_email: ""
     cannot_set_main_person: Contact the office to change the family invoice recipient
 
   invoices:

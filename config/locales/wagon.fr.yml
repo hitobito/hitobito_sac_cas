@@ -105,7 +105,6 @@ fr:
 
     errors:
       messages:
-        must_be_older_than_18: La personne doit être âgée de 18 ans ou plus
         youth_not_allowed_in_family: |
           Les jeunes âgés de 18 à 21 ans ne peuvent pas être membres d'une famille
           être admis en tant que membre familial.
@@ -1261,7 +1260,7 @@ fr:
   household_aside_member_component:
     main_person: Bénéficiaire du compte familial
     set_main_person: Devenir bénéficiaire de la facture familiale
-    unverified_email: "L'adresse e-mail n'est pas confirmée, la personne ne peut donc pas être désignée comme destinataire du compte familial."
+    missing_email: ""
     cannot_set_main_person: Contacte le secrétariat pour modifier le bénéficiaire du compte familial.
 
   invoices:
