@@ -37,15 +37,15 @@ describe SacImports::QualificationsImporter do
     expected_output = Array.new(10) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200010 (Leiter*in Kinderbergsteigen):" << " ❌ Person couldn't be found, Qualification kind couldn't be found\n"
     expected_output << Array.new(5) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
-    expected_output << "4200005 (Wanderleiter*in Kantonal + SBV):" << " ❌ Qualification kind couldn't be found\n"
-    expected_output << "4200006 (Schneeschuhleiter*in bis WT4):" << " ❌ Qualification kind couldn't be found\n"
+    expected_output << "4200005 (Wanderleiter*in Kantonal + SBV):" << " ❌ Qualification kind couldn't be found, Qualification kind muss ausgefüllt werden\n"
+    expected_output << "4200006 (Schneeschuhleiter*in bis WT4):" << " ❌ Qualification kind couldn't be found, Qualification kind muss ausgefüllt werden\n"
     expected_output << Array.new(3) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200010 (SAC Tourenleiter - Aspirant*in):" << " ❌ Person couldn't be found\n"
     expected_output << /\d+ \(.*\):/ << " ✅\n"
-    expected_output << "4200001 (SAC Tourenleiter*in 1 Winter Senioren):" << " ❌ Qualification kind couldn't be found\n"
+    expected_output << "4200001 (SAC Tourenleiter*in 1 Winter Senioren):" << " ❌ Qualification kind couldn't be found, Qualification kind muss ausgefüllt werden\n"
     expected_output << Array.new(4) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200006 (SAC Tourenleiter*in 1 Winter):" << " ❌ Active in NAV3 but would be inactive by hitobito\n"
-    expected_output << "4200007 (Murmeltierdoktor*in):" << " ❌ Qualification kind couldn't be found\n"
+    expected_output << "4200007 (Murmeltierdoktor*in):" << " ❌ Qualification kind couldn't be found, Qualification kind muss ausgefüllt werden\n"
     expected_output << Array.new(2) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
     expected_output << "4200010 (SAC Tourenleiter*in Alpinwandern):" << " ❌ Person couldn't be found, Qualification kind couldn't be found\n"
     expected_output << Array.new(5) { [/\d+ \(.*\):/, " ✅\n"] }.flatten

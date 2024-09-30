@@ -28,6 +28,13 @@ module SacImports
       @row = row
     end
 
+    def valid?
+      self_valid = super
+      qualification_valid = qualification&.valid?
+      errors.merge!(qualification.errors) if !qualification.nil?
+      self_valid && qualification_valid
+    end
+
     def import!
       qualification.save!
     end
