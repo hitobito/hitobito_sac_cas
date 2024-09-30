@@ -238,6 +238,11 @@ de:
         annual: Jährlich wiederkehrend
         book_discount_code: Rabattcode Buchversand
         brief_description: Kurzbeschreibung
+        canceled_reason: Absagegrund
+        canceled_reasons:
+          minimum_participants: Minimale Teilnehmerzahl nicht erreicht
+          no_leader: Ausfall Kursleitung
+          weather: Wetterrisiko
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
         level: Kursstufe

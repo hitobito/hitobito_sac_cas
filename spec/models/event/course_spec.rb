@@ -97,10 +97,18 @@ describe Event::Course do
       ].to_h
     end
 
-    it "season is configure as an i18n_enum" do
+    it "season is configured as an i18n_enum" do
       expect(described_class.season_labels).to eq [
         [:summer, "Sommer"],
         [:winter, "Winter"]
+      ].to_h
+    end
+
+    it "canceled_reason is configured as an i18n_enum" do
+      expect(described_class.canceled_reason_labels).to eq [
+        [:minimum_participants, "Minimale Teilnehmerzahl nicht erreicht"],
+        [:no_leader, "Ausfall Kursleitung"],
+        [:weather, "Wetterrisiko"]
       ].to_h
     end
   end
