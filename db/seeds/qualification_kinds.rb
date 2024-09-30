@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-QualificationKind.seed_once(:id,
+QualificationKind.seed(:id,
   {id: 1, tourenchef_may_edit: true},
   {id: 2, tourenchef_may_edit: true},
   {id: 3, tourenchef_may_edit: true},
@@ -36,7 +36,7 @@ QualificationKind.seed_once(:id,
   {id: 28, tourenchef_may_edit: true},
   {id: 29, tourenchef_may_edit: true})
 
-QualificationKind::Translation.seed_once(:qualification_kind_id, :locale,
+QualificationKind::Translation.seed(:qualification_kind_id, :locale,
   {qualification_kind_id: 1, locale: "de", label: "Bergführer Aspirant/in"},
   {qualification_kind_id: 1, locale: "fr", label: "Bergführer Aspirant/in"},
   {qualification_kind_id: 1, locale: "it", label: "Bergführer Aspirant/in"},
