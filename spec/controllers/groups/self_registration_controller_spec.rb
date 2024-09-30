@@ -26,4 +26,20 @@ describe Groups::SelfRegistrationController do
       expect(flash[:notice]).to eq "Es existiert bereits ein Login für diese E-Mail. Melde dich hier an."
     end
   end
+
+  context "with existing membership" do
+    let(:member) { people(:mitglied) }
+    let(:admin) { people(:admin) }
+
+    before do
+      sign_in(member)
+    end
+
+    it "redirects to memberships tab with a flash message" do
+      get :show, params: wizard_params(main_email_field: {email: admin.email})
+
+      expect(response).to redirect_to(history_group_person_path(group_id: member.primary_group_id, id: member.id))
+      expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle."
+    end
+  end
 end

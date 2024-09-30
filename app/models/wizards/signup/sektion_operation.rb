@@ -9,10 +9,10 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person_attrs:, newsletter:)
+    def initialize(group:, person:, newsletter:)
       @group = group
-      person_attrs[:gender] = nil if person_attrs[:gender] == I18nEnums::NIL_KEY
-      @person_attrs = person_attrs
+      person.gender = nil if person.gender == I18nEnums::NIL_KEY
+      @person = person
       @newsletter = newsletter
     end
 
@@ -43,7 +43,7 @@ module Wizards::Signup
 
     private
 
-    attr_reader :group, :person_attrs, :newsletter
+    attr_reader :group, :person, :newsletter
 
     def validate(model)
       model.valid?.tap do
@@ -59,10 +59,6 @@ module Wizards::Signup
 
     def paying_person?
       role.person.sac_membership.paying_person?(role.beitragskategorie)
-    end
-
-    def person
-      @person ||= Person.new(person_attrs)
     end
 
     def role
@@ -110,7 +106,9 @@ module Wizards::Signup
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
 
-    def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
+    def exclude_from_mailing_list
+      mailing_list.subscriptions.find_or_initialize_by(subscriber: person).update!(excluded: true)
+    end
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 

@@ -782,4 +782,37 @@ describe "signup/sektion", :js do
       end
     end
   end
+
+  describe "self registration for logged in users" do
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+    before do
+      sign_in(person)
+    end
+
+    context "SAC member" do
+      let(:person) { people(:mitglied) }
+
+      it "redirects to memberships tab with a flash message" do
+        visit group_self_registration_path(group_id: group)
+        expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle.")
+      end
+    end
+
+    context "SAC subscriber" do
+      let(:person) { people(:abonnent) }
+
+      it "contains the users data pre-filled" do
+        visit group_self_registration_path(group_id: group)
+        expect(page).to have_field("Vorname", with: person.first_name)
+        expect(page).to have_field("Nachname", with: person.last_name)
+
+        expect(page).to have_field("Strasse", with: person.address)
+        expect(page).to have_field("Housenumber", with: person.house_number)
+        expect(page).to have_field("PLZ", with: person.zip_code)
+        expect(page).to have_field("Ort", with: person.town)
+        expect(page).to have_field("Geburtsdatum", with: person.birthday)
+      end
+    end
+  end
 end

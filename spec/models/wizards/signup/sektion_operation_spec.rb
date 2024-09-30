@@ -33,7 +33,7 @@ describe Wizards::Signup::SektionOperation do
 
   let(:newsletter) { true }
 
-  subject(:operation) { described_class.new(person_attrs: person_attrs, group:, newsletter:) }
+  subject(:operation) { described_class.new(person: Person.new(person_attrs), group:, newsletter:) }
 
   describe "validations" do
     it "is valid" do

@@ -25,6 +25,22 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
 
   def initialize(...)
     super
-    self.country ||= Settings.addresses.imported_countries.to_a.first
+    if respond_to?(:current_user) && current_user&.present?
+      self.gender ||= current_user.gender
+      self.first_name ||= current_user.first_name
+      self.last_name ||= current_user.last_name
+      self.birthday ||= current_user.birthday
+      self.email ||= current_user.email
+      self.address_care_of ||= current_user.address_care_of
+      self.street ||= current_user.street
+      self.housenumber ||= current_user.housenumber
+      self.postbox ||= current_user.postbox
+      self.zip_code ||= current_user.zip_code
+      self.town ||= current_user.town
+      self.country ||= current_user.country
+      self.phone_number ||= current_user.phone_numbers&.first&.number
+    else
+      self.country ||= Settings.addresses.imported_countries.to_a.first
+    end
   end
 end

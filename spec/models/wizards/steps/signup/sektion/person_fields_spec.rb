@@ -25,6 +25,10 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
     }
   }
 
+  before do
+    allow(wizard).to receive(:current_user).and_return(nil)
+  end
+
   describe "::human_attribute_name" do
     it "reads from person" do
       expect(described_class.human_attribute_name(:first_name)).to eq "Vorname"

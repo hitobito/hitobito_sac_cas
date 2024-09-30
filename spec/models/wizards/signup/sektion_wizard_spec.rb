@@ -228,5 +228,17 @@ describe Wizards::Signup::SektionWizard do
         expect(maxi.subscriptions).to be_empty
       end
     end
+
+    context "self registration for logged in users" do
+      let(:person) { people(:mitglied) }
+
+      subject(:wizard) { build(required_attrs.merge(current_ability: Ability.new(person))) }
+
+      it "skips the email step" do
+        expect(wizard.step_at(0)).not_to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+        expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::Sektion::PersonFields)
+        expect(wizard.email).to eq(person.email)
+      end
+    end
   end
 end
