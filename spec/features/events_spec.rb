@@ -43,6 +43,9 @@ describe :events, js: true do
       end
         .to change { event.price_member }.to(100.05)
         .and change { event.price_regular }.to(100.12)
+
+      expect(page).to have_content("Mitgliederpreis CHF 100.05")
+      expect(page).to have_content("Normalpreis CHF 100.12")
     end
   end
 
