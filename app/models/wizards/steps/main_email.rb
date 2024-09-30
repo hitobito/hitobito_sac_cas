@@ -23,7 +23,8 @@ class Wizards::Steps::MainEmail < Wizards::Step
   def ensure_email_available
     return if email.blank?
 
-    if Person.exists?(email: email)
+    person = Person.find_by(email: email)
+    if person.present? && !(current_user == person)
       errors.add(:email, I18n.t("activerecord.errors.models.person.attributes.email.taken"))
     end
   end
