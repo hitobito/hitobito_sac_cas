@@ -43,22 +43,25 @@ if root.address.blank?
   end
 end
 
-Group::Geschaeftsstelle.seed(:name, :parent_id, {
-  name: "SAC Geschäftsstelle",
+Group::Geschaeftsstelle.seed_once(:parent_id, {
   parent_id: root.id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::Geschaeftsleitung.seed_once(:parent_id, {
+  parent_id: root.id
+})
+
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "2 Externe Kontakte",
   parent_id: root.id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "Autoren",
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "Druckereien",
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
@@ -66,6 +69,7 @@ Group::ExterneKontakte.seed(:name, :parent_id, {
 matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
   :name, :parent_id,
   {name: "SAC Matterhorn",
+   navision_id: 9999,
    foundation_year: 1899,
    section_canton: "VS",
    parent_id: root.id},
@@ -105,9 +109,6 @@ seed_club_hut(bluemlisalp, "Stockhornbiwak", 258)
 seed_section_hut(bluemlisalp, "Ski- & Ferienhaus Obergestelen", 448786)
 seed_section_hut(bluemlisalp, "Sunnhüsi", 448785)
 
-unless Rails.env.development?
-  # TODO: fix development seeder so it will run in a reasonable time
-  SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
-end
+SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
 
 Group.rebuild!

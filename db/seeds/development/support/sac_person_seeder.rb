@@ -10,13 +10,13 @@ require Rails.root.join("db", "seeds", "support", "person_seeder")
 class SacPersonSeeder < PersonSeeder
   def amount(role_type)
     case role_type.name.demodulize
-    when "Mitglied" then 42
+    when "Mitglied" then 12
     when "Neuanmeldung" then 3
     when "Beguenstigt" then 0
     when "Ehrenmitglied" then 0
-    when "Tourenleiter" then 12
-    when "Abonnent" then 42
-    when "BasicLogin" then 42
+    when "Tourenleiter" then 3
+    when "Abonnent" then 10
+    when "BasicLogin" then 10
     else 1
     end
   end
@@ -96,7 +96,7 @@ class SacPersonSeeder < PersonSeeder
 
   # for mitglieder roles, from/to has to be set to be valid
   def update_mitglieder_role_dates
-    update_role_dates(Group::SektionsMitglieder::Mitglied)
+    update_member_role_dates
     Group::SektionsMitglieder::MitgliedZusatzsektion.all.find_each do |r|
       create_stammsektion_role(r)
       stamm_role = r.person.roles.find_by(type: "Group::SektionsMitglieder::Mitglied")
@@ -140,9 +140,8 @@ class SacPersonSeeder < PersonSeeder
     )
   end
 
-  def update_role_dates(role_class)
-    role_class.find_each do |r|
-      yield(r) if block_given?
+  def update_member_role_dates
+    Group::SektionsMitglieder::Mitglied.find_each do |r|
       r.update!(created_at: membership_from(r.person),
         delete_on: Time.zone.today.end_of_year)
     end
