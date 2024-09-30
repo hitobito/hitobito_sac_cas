@@ -783,4 +783,18 @@ describe "signup/sektion", :js do
       end
     end
   end
+
+  describe "self registration for logged in users" do
+    let(:person) { people(:mitglied) }
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+    before do
+      sign_in(person)
+    end
+
+    it "redirects to memberships tab with a flash message" do
+      visit group_self_registration_path(group_id: group)
+      expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle.")
+    end
+  end
 end
