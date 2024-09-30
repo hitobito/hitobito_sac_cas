@@ -1128,6 +1128,8 @@ de:
 
     form_tabs:
       communication: Kommunikation
+      prices: Preise
+
     general_fields:
       kind_overrides_link_title:
         "Folgende Felder werden übernommen: Beschreibung,

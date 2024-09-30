@@ -26,6 +26,26 @@ describe :events, js: true do
     }
   }
 
+  context "prices" do
+    let(:event) { Fabricate(:course, groups: [group]) }
+
+    it "allows to fill in prices" do
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_on("Preise")
+
+      fill_in "Mitgliederpreis", with: "100.05"
+      fill_in "Normalpreis", with: "100.12"
+
+      expect do
+        click_button("Speichern", match: :first)
+        expect(page).to have_content(/Anlass .* wurde erfolgreich aktualisiert./)
+        event.reload
+      end
+        .to change { event.price_member }.to(100.05)
+        .and change { event.price_regular }.to(100.12)
+    end
+  end
+
   context "overriding behaviour" do
     before do
       kind.attributes = kind_attrs

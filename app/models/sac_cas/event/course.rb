@@ -129,7 +129,14 @@ module SacCas::Event::Course
       :specialities,
       :similar_tours,
       :program,
-      :book_discount_code
+      :book_discount_code,
+      :price_member,
+      :price_regular,
+      :price_subsidized,
+      :price_js_active_member,
+      :price_js_active_regular,
+      :price_js_passive_member,
+      :price_js_passive_regular
     ]
 
     self.used_attributes -= [
