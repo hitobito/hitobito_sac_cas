@@ -40,7 +40,7 @@ it:
       wizards/steps/signup/main_email_field:
         email: e-mail
       wizards/steps/signup/person_fields:
-        gender: Saluto
+        gender: ""
         phone_number: Telefono
         address: Via e no.
         adult_consent: Dichiarazione di consenso del tutore legale
@@ -52,7 +52,7 @@ it:
         data_protection: Informativa sulla privacy
         statutes: Statuti
       wizards/steps/signup/sektion/family_fields/member:
-        gender: Saluto
+        gender: ""
         email: ""
         phone_number: ""
         email_optional: ""
@@ -90,7 +90,7 @@ it:
       wizards/steps/choose_sektion:
         group_id: Selezionare la sezione
       wizards/steps/main_email:
-        email: E-mail principale
+        email: ""
       wizards/steps/termination_choose_date:
         terminate_on: "Data di partenza"
         now: Immediatamente
@@ -280,6 +280,13 @@ it:
           ready: Pronti per l'implementazione
           closed: Completato
           canceled: Annullato
+        price_member: ""
+        price_regular: ""
+        price_subsidized: ""
+        price_js_active_member: ""
+        price_js_active_regular: ""
+        price_js_passive_member: ""
+        price_js_passive_regular: ""
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
@@ -297,6 +304,8 @@ it:
         adult_consent: Conferma dell'età
         terms_and_conditions: GTC
         actual_days: Giorni effettivi
+        price: ""
+        price_category: ""
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -327,14 +336,15 @@ it:
           digital: Digitale
           print: Fisico
         genders:
-          _nil: altro
+          _nil: ""
+        birthday: ""
         membership_years: Numero di anni di iscrizione
         membership_number: Membro n.
         navision_id: Navision no.
         salutations:
-          m: Signor
-          w: Signora
-          _nil: Altro
+          m: ""
+          w: ""
+          _nil: ""
         recipient_salutations:
           m: Signor
           w: Signora
@@ -482,6 +492,10 @@ it:
             %{name} %{age} ha anni e quindi non può essere aggiunto come bambino.
           manager_is_not_adult: >-
             %{name} %{age} è vecchio di anni e quindi non può essere aggiunto come amministratore.
+        person:
+          birthday:
+              must_be_before_year: ""
+              must_be_after_year: ""
         qualification:
           attributes:
             finish_at:
@@ -1225,7 +1239,7 @@ it:
 
   groups/self_registration:
     global:
-      main_email_title: E-mail principale
+      main_email_title: ""
       emailless_main_person_title: Dati personali
       neuanmeldung_main_person_title: Dati personali
       abo_issue_title: Abbonamento
@@ -1247,7 +1261,7 @@ it:
   household_aside_member_component:
     main_person: Destinatario della fattura per la famiglia
     set_main_person: Diventare destinatari di una fattura familiare
-    missing_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
+    unverified_email: "L'indirizzo e-mail non è stato confermato, pertanto la persona non può essere inserita tra i destinatari delle fatture familiari."
     cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
 
   invoices:
@@ -1551,7 +1565,7 @@ it:
       choose_date_title: Selezione della data
 
       signup:
-        main_email_field_title: E-mail principale
+        main_email_field_title: ""
         person_fields_title: Dati personali
         agreement_fields:
           adult_consent_caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
@@ -1566,6 +1580,7 @@ it:
         sektion:
           family_fields_title: Membri della famiglia
           family_fields:
+            add: ""
             email_taken: >
             membership_info_box: >
               Se si aggiungono altre persone, si sceglie un abbonamento familiare. Questo è possibile per un massimo di 2 adulti di età pari o superiore a 23 anni e un numero qualsiasi di bambini di età compresa tra 6 e 17 anni.
@@ -1614,7 +1629,8 @@ it:
         choose_date:
           info_text: "Quando dovrebbe avvenire il cambio di sezione?"
         summary:
-          info_text: "%{switch_on} La sezione master viene modificata tramite ."
+          info_text: ""
+          info_text_no_confirmation: ""
           next_button: Ordine a pagamento
       join_zusatzsektion:
         summary:

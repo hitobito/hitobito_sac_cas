@@ -40,7 +40,7 @@ en:
       wizards/steps/signup/main_email_field:
         email: e-mail
       wizards/steps/signup/person_fields:
-        gender: Salutation
+        gender: ""
         phone_number: Telephone
         address: Street and no.
         adult_consent: Declaration of consent by the parent or legal guardian
@@ -52,7 +52,7 @@ en:
         data_protection: Privacy policy
         statutes: Statutes
       wizards/steps/signup/sektion/family_fields/member:
-        gender: Salutation
+        gender: ""
         email: ""
         phone_number: ""
         email_optional: ""
@@ -90,7 +90,7 @@ en:
       wizards/steps/choose_sektion:
         group_id: Select section
       wizards/steps/main_email:
-        email: Main e-mail
+        email: ""
       wizards/steps/termination_choose_date:
         terminate_on: "Leaving date"
         now: Immediately
@@ -278,6 +278,13 @@ en:
           ready: Ready for implementation
           closed: Completed
           canceled: Canceled
+        price_member: ""
+        price_regular: ""
+        price_subsidized: ""
+        price_js_active_member: ""
+        price_js_active_regular: ""
+        price_js_passive_member: ""
+        price_js_passive_regular: ""
       event/kind_category:
         cost_center_id: Cost center
         cost_unit_id: Cost unit
@@ -295,6 +302,8 @@ en:
         adult_consent: Age confirmation
         terms_and_conditions: GTC
         actual_days: Effective days
+        price: ""
+        price_category: ""
       external_training:
         person: Person
         event_kind: Course type
@@ -325,14 +334,15 @@ en:
           digital: Digital
           print: Physical
         genders:
-          _nil: other
+          _nil: ""
+        birthday: ""
         membership_years: Number of member-years
         membership_number: Member no.
         navision_id: Navision no.
         salutations:
-          m: Man
-          w: Woman
-          _nil: Other
+          m: ""
+          w: ""
+          _nil: ""
         recipient_salutations:
           m: Mr.
           w: Woman
@@ -479,6 +489,10 @@ en:
             %{name} is %{age} years old and therefore cannot be added as a child.
           manager_is_not_adult: >-
             %{name} is %{age} years old and therefore cannot be added as an administrator.
+        person:
+          birthday:
+              must_be_before_year: ""
+              must_be_after_year: ""
         qualification:
           attributes:
             finish_at:
@@ -1175,7 +1189,7 @@ en:
 
   groups/self_registration:
     global:
-      main_email_title: Main e-mail
+      main_email_title: ""
       emailless_main_person_title: Personal data
       neuanmeldung_main_person_title: Personal data
       abo_issue_title: Subscription
@@ -1197,7 +1211,7 @@ en:
   household_aside_member_component:
     main_person: Family bill recipient
     set_main_person: Become a family invoice recipient
-    missing_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
+    unverified_email: "The e-mail address has not been confirmed, so the person cannot be made a family invoice recipient."
     cannot_set_main_person: Contact the office to change the family invoice recipient
 
   invoices:
@@ -1494,7 +1508,7 @@ en:
       choose_date_title: Date selection
 
       signup:
-        main_email_field_title: Main e-mail
+        main_email_field_title: ""
         person_fields_title: Personal data
         agreement_fields:
           adult_consent_caption: I confirm that I am at least 18 years old or have the consent of my legal guardian
@@ -1509,6 +1523,7 @@ en:
         sektion:
           family_fields_title: Family members
           family_fields:
+            add: ""
             email_taken: >
             membership_info_box: >
               By adding more people, you choose a family membership. This is possible for a maximum of 2 adults aged 23 and over and any number of children aged between 6 and 17.
@@ -1557,7 +1572,8 @@ en:
         choose_date:
           info_text: "When should the section change take place?"
         summary:
-          info_text: "The master section is changed via %{switch_on}."
+          info_text: ""
+          info_text_no_confirmation: ""
           next_button: Order for a fee
       join_zusatzsektion:
         summary:
