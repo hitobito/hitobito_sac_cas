@@ -5,12 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Wizards::Steps::Signup::AboMagazin
-  class PersonFields < Wizards::Steps::Signup::PersonFields
-    self.minimum_age = 0
-    self.partial = "wizards/steps/signup/person_fields"
+module SacCas::Event::Answer
+  extend ActiveSupport::Concern
 
-    validates :street, :housenumber, :town, :zip_code,
-      :country, presence: true
-  end
+  MISSING = [nil, "", "no", "non", "nein"]
 end

@@ -5,25 +5,19 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Event::SurveyMailer < ApplicationMailer
+class Event::ParticipantReminderMailer < ApplicationMailer
   include EventMailer
   include MultilingualMailer
 
-  SURVEY = "event_survey"
+  REMINDER = "event_participant_reminder"
 
-  def survey(participation)
+  def reminder(participation)
     @participation = participation
-    @course = participation.event
     @person = participation.person
+    @course = participation.event
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
-    compose_multilingual(@person, SURVEY, locales)
-  end
-
-  private
-
-  def placeholder_survey_link
-    @course.link_survey
+    compose_multilingual(@person, REMINDER, locales)
   end
 end

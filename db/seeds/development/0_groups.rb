@@ -105,4 +105,9 @@ seed_club_hut(bluemlisalp, "Stockhornbiwak", 258)
 seed_section_hut(bluemlisalp, "Ski- & Ferienhaus Obergestelen", 448786)
 seed_section_hut(bluemlisalp, "Sunnhüsi", 448785)
 
+unless Rails.env.development?
+  # TODO: fix development seeder so it will run in a reasonable time
+  SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
+end
+
 Group.rebuild!

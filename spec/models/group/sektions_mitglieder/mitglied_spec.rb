@@ -52,12 +52,12 @@ describe Group::SektionsMitglieder::Mitglied do
       expect { create_role }.to change(Delayed::Job, :count).by(1)
     end
 
-    it "doesnt enqueue the job if the abacus subject key is set" do
+    it "doesn't enqueue the job if the abacus subject key is set" do
       person.update!(abacus_subject_key: person.id)
       expect { create_role }.not_to change(Delayed::Job, :count)
     end
 
-    it "doesnt enqueue the job if data quality errors exist" do
+    it "doesn't enqueue the job if data quality errors exist" do
       person.update!(first_name: nil)
       expect { create_role }.not_to change(Delayed::Job, :count)
     end

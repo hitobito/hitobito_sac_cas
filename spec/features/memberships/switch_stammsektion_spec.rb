@@ -55,7 +55,7 @@ describe "switching stammsektion", js: true do
         "sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültigt.")
     end
 
-    it "displays correct info text when group doesnt need confirmation" do
+    it "displays correct info text when group doesn't need confirmation" do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       select "SAC Matterhorn"

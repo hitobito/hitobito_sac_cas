@@ -68,12 +68,12 @@ describe Event::LeaderReminderJob do
       Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: 1.week.from_now)])
     end
 
-    it "doesnt mail a reminder" do
+    it "doesn't mail a reminder" do
       expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
     end
   end
 
-  context "course doesnt start next week or in 8 weeks" do
+  context "course doesn't start next week or in 8 weeks" do
     subject(:course) do
       course = Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: start_at)])
       course.participations.create!(person: people(:admin))
@@ -83,7 +83,7 @@ describe Event::LeaderReminderJob do
     context "starts in 7 weeks" do
       let(:start_at) { 7.weeks.from_now }
 
-      it "doesnt mail a reminder" do
+      it "doesn't mail a reminder" do
         course
         expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
       end
@@ -92,7 +92,7 @@ describe Event::LeaderReminderJob do
     context "starts in 9 weeks" do
       let(:start_at) { 9.weeks.from_now }
 
-      it "doesnt mail a reminder" do
+      it "doesn't mail a reminder" do
         course
         expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
       end

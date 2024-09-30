@@ -6,24 +6,30 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 CustomContent.seed(:key,
-  {key: Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION,
+  {key: Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, application-url, event-details"},
-  {key: Event::ParticipationMailer::CONTENT_SUMMON,
+   placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link"},
+  {key: Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, application-url"},
+  {key: Event::ParticipationMailer::SUMMONED_PARTICIPATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, application-url, person-url, event-link, book-discount-code"},
   {key: Event::ApplicationConfirmationMailer::APPLIED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ApplicationConfirmationMailer::UNCONFIRMED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ApplicationConfirmationMailer::ASSIGNED,
    placeholders_required: "event-name",
-   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, missing-information"},
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, application-closing-at, person-url, participation-price, missing-information"},
   {key: Event::ParticipationCanceledMailer::CONFIRMATION,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
+  {key: Event::ParticipantReminderMailer::REMINDER,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url, missing-information"},
   {key: Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link"},
@@ -63,15 +69,25 @@ CustomContent.seed(:key,
    placeholders_required: "first-name, sektion-name"})
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_REJECTED_PARTICIPATION).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION).id,
    locale: "de",
-   label: "Anlass: E-Mail Ablehnung",
+   label: "Kurs: E-Mail Keine Teilnahme 'Warteliste'",
    subject: "Kursablehnung",
    body: "Hallo {recipient-name},<br><br>" \
-    "Du wurdest leider für den Kurs {event-name} abgelehnt.<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION).id,
+   locale: "de",
+   label: "Kurs: E-Mail Keine Teilnahme 'Abgelehnt'",
+   subject: "Kursablehnung",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Du wurdest leider für den Kurs {event-name} (Nummer: {event-number}) abgelehnt.<br><br>" \
     "Anmeldung: {application-url}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMONED_PARTICIPATION).id,
    locale: "de",
    label: "Kurs: E-Mail Aufgebot",
    subject: "Kurs: E-Mail Aufgebot",
@@ -82,7 +98,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Event-Link: {event-link}<br>" \
     "Book-Discount-Code: {book-discount-code}<br>" \
     "Kursdetails:<br><br>{event-details}"},
-  {custom_content_id: CustomContent.get(Event::ParticipationMailer::CONTENT_SUMMON).id,
+  {custom_content_id: CustomContent.get(Event::ParticipationMailer::SUMMONED_PARTICIPATION).id,
    locale: "fr",
    label: "Événement: E-mail de convocation",
    subject: "Convocation au cours",
@@ -101,6 +117,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Warteliste gesetzt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
@@ -112,6 +129,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Du wurdest für den Kurs {event-name} (Nummer: {event-number}) auf die unbestätigte Kursanmeldung gesetzt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
@@ -123,6 +141,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Deine Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde bestätigt. " \
     "Anmeldeschluss ist der {application-closing-at}.<br><br>" \
     "Anmeldung: {application-url}<br>" \
+    "Preis: {participation-price}<br>" \
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
@@ -136,6 +155,16 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}<br><br>{missing-information}"},
+  {custom_content_id: CustomContent.get(Event::ParticipantReminderMailer::REMINDER).id,
+   locale: "de",
+   label: "Kurs: E-Mail Reminder TN Administrationsangaben",
+   subject: "Fehlende Administrationsangaben",
+   body: "Hallo {recipient-name},<br><br>" \
+    "{missing-information}<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::LeaderReminderMailer::REMINDER_NEXT_WEEK).id,
    locale: "de",
    label: "Kurs: E-Mail Kursvorbereitungen abschliessen",

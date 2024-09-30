@@ -32,7 +32,9 @@ module HitobitoSacCas
     config.to_prepare do # rubocop:disable Metrics/BlockLength
       JobManager.wagon_jobs += [
         Event::CloseApplicationsJob,
+        Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
+        Event::SurveyJob,
         Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Qualifications::ExpirationMailerJob,
@@ -50,6 +52,7 @@ module HitobitoSacCas
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
+      Event::Answer.include SacCas::Event::Answer
       FutureRole.prepend SacCas::FutureRole
       Group.include SacCas::Group
       Household.prepend SacCas::Household

@@ -31,6 +31,11 @@ describe SacImports::Wso2PeopleImporter do
       .and_return(sac_imports_src)
   end
 
+  before do
+    csv_source_instance = SacImports::CsvSource.new(:WSO21, source_dir: sac_imports_src)
+    report.instance_variable_set(:@source_file, csv_source_instance)
+  end
+
   it "creates report for members in source file" do
     expected_output = [
       "4200000 (example@example.com):", " ✅\n",

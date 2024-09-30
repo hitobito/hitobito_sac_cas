@@ -22,23 +22,4 @@ class Event::ApplicationConfirmationMailer < ApplicationMailer
 
     compose_multilingual(@person, content_key, locales)
   end
-
-  private
-
-  def placeholder_missing_information
-    missing = [nil, "", "nein", "non", "no"]
-    missing_questions = join_lines(Event::Question.admin.joins(:answers)
-      .where(answers: {participation: @participation, answer: missing})
-      .pluck(:question)
-      .map { |question| [content_tag(:li, question)] }.flatten, nil)
-
-    return "" if missing_questions.blank?
-
-    escape_html(t("event.participations.missing_information")) + br_tag + content_tag(:ul, missing_questions)
-  end
-
-  def content_tag(name, content = nil)
-    content = yield if block_given?
-    "<#{name}>".html_safe + content + "</#{name}>".html_safe
-  end
 end

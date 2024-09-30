@@ -69,10 +69,10 @@ Beim Seeden werden folgende Daten importiert:
 Die Importe müssen in folgender Reihenfolge ausgeführt werden:
 
 ```txt
-sac_imports:nav6-1_sac_section
+sac_imports:nav6-1_sac_sections
 sac_imports:nav1-1_people
 sac_imports:nav1-2_membership_years_report
-sac_imports:wso2-1_people
+sac_imports:wso21-1_people
 sac_imports:nav2-1_roles
 sac_imports:nav3-1_qualifications
 sac_imports:nav5-1_huts
@@ -107,7 +107,7 @@ Dieser Import sollte nach NAV6 ausgeführt werden.
 
 You can run the import with: `bundle exec rails sac_imports:1_people`
 
-### `sac_imports:wso2-1_people`
+### `sac_imports:wso21-1_people`
 
 ### `sac_imports:nav2-1_roles`
 
@@ -124,7 +124,3 @@ Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. A
 Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
 ### `sac_imports:nav8-1_austrittsgruende`
-
-
-
-

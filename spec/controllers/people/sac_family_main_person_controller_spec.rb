@@ -51,6 +51,16 @@ describe People::SacFamilyMainPersonController, type: :controller do
       end
     end
 
+    context "when the person doesn't have an email" do
+      before { adult.update!(email: nil) }
+
+      it "raises access denied error" do
+        expect {
+          put :update, params: {id: adult.id}
+        }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
     context "when the update is successful" do
       it "sets the sac_family_main_person to true for adult1 and false for others" do
         put :update, params: {id: adult.id}
@@ -76,6 +86,17 @@ describe People::SacFamilyMainPersonController, type: :controller do
         expect(adult.sac_family_main_person).to be_falsey
         expect(adult2.sac_family_main_person).to be_truthy
         expect(child.sac_family_main_person).to be_falsey
+      end
+
+      it "sets the sac_family_main_person to true without confirmed_at" do
+        adult.update!(confirmed_at: nil)
+        expect(adult.confirmed_at).to eq(nil)
+
+        put :update, params: {id: adult.id}
+        expect(response).to redirect_to(adult)
+
+        adult.reload
+        expect(adult.sac_family_main_person).to be_truthy
       end
 
       it "only allows adults to become main persons" do

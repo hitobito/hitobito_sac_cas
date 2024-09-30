@@ -27,6 +27,10 @@ module EventMailer
     ))
   end
 
+  def placeholder_participation_price
+    sprintf("%.2f", @participation.price)
+  end
+
   def placeholder_application_opening_at
     l(@course.application_opening_at)
   end
@@ -71,5 +75,21 @@ module EventMailer
       formatted = block_given? ? yield : value
       escape_html("#{label}:") + br_tag + formatted
     end
+  end
+
+  def placeholder_missing_information
+    missing_questions = join_lines(Event::Question.admin.joins(:answers)
+      .where(answers: {participation: @participation, answer: Event::Answer::MISSING})
+      .pluck(:question)
+      .map { |question| content_tag(:li, question) }, nil)
+
+    return "" if missing_questions.blank?
+
+    escape_html(t("event.participations.missing_information")) + br_tag + content_tag(:ul, missing_questions)
+  end
+
+  def content_tag(name, content = nil)
+    content = yield if block_given?
+    "<#{name}>".html_safe + content + "</#{name}>".html_safe
   end
 end

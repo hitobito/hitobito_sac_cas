@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class SacImports::CsvSource
+  SOURCE_DIR = Rails.root.join("tmp", "sac_imports_src").freeze
   NIL_VALUES = ["", "NULL", "null", "Null"].freeze
   SOURCE_HEADERS = {
     NAV1: {
@@ -50,6 +51,43 @@ class SacImports::CsvSource
       other: "Anderes"
     },
     # NAV3: {},
+    NAV6: {
+      navision_id: "NAV Sektions-ID",
+      level_1_id: "Level 1",
+      level_2_id: "Level 2",
+      level_3_id: "Level 3",
+      is_active: "Ist aktiv",
+      section_name: "Name",
+      address: "Adresse",
+      postbox: "Zusätzliche Adresszeile",
+      town: "Ort",
+      zip_code: "PLZ",
+      canton: "Kanton",
+      phone: "Telefonnummer",
+      email: "Haupt-E-Mail",
+      has_jo: "Hat JO",
+      youth_homepage: "Homepage Jugend",
+      foundation_year: "Gründungsjahr",
+      self_registration_without_confirmation: "Mit Freigabeprozess",
+      termination_by_section_only: "Austritt nur durch Sektion",
+      language: "Sprache",
+      membership_configs: {
+        section_fee_adult: "Sektionsbeitrag Mitgliedschaft Einzel",
+        section_fee_family: "Sektionsbeitrag Mitgliedschaft Familie",
+        section_fee_youth: "Sektionsbeitrag Mitgliedschaft Jugend",
+        section_entry_fee_adult: "Eintrittsgebühr Mitgliedschaft Einzel",
+        section_entry_fee_family: "Eintrittsgebühr Mitgliedschaft Familie",
+        section_entry_fee_youth: "Eintrittsgebühr Mitgliedschaft Jugend",
+        bulletin_postage_abroad: "Porto Ausland Sektionsbulletin",
+        sac_fee_exemption_for_honorary_members: "Zentralverbandsgebührenerlass für Ehrenmitglieder",
+        section_fee_exemption_for_honorary_members: "Sektionsgebührenerlass für Ehrenmitglieder",
+        sac_fee_exemption_for_benefited_members: "Zentralverbandsgebührenerlass für Begünstigte",
+        section_fee_exemption_for_benefited_members: "Sektionsgebührenerlass für Begünstigte",
+        reduction_amount: "Reduktionsbetrag Mitgliedsjahre/Alter",
+        reduction_required_membership_years: "Reduktion ab Mitgliedsjahren",
+        reduction_required_age: "Reduktion ab Altersjahren"
+      }
+    },
     WSO21: {
       wso2_legacy_password_hash: "UM_USER_PASSWORD",
       wso2_legacy_password_salt: "UM_SALT_VALUE",
@@ -78,7 +116,8 @@ class SacImports::CsvSource
 
   AVAILABLE_SOURCES = SOURCE_HEADERS.keys.freeze
 
-  def initialize(source_name)
+  def initialize(source_name, source_dir: SOURCE_DIR)
+    @source_dir = source_dir
     @source_name = source_name
     assert_available_source
   end
@@ -95,29 +134,37 @@ class SacImports::CsvSource
 
   def process_row(row)
     row = row.to_h
-    hash = {}
-    headers.keys.each do |header_key|
-      value = row[headers[header_key]]
-      value = nil if NIL_VALUES.include?(value)
-
+    headers.each_with_object({}) do |(header_key, source_key), hash|
+      if source_key.is_a?(Hash)
+        sub_hash = source_key
+        value = process_sub_hash(sub_hash, row)
+      else
+        value = row[source_key]
+        value = clean_value(value)
+      end
       hash[header_key] = value
     end
-    hash
+  end
+
+  def process_sub_hash(sub_hash, row)
+    sub_hash.each_with_object({}) do |(sub_header_key, source_key), sub_hash|
+      sub_hash[sub_header_key] = clean_value(row[source_key])
+    end
+  end
+
+  def clean_value(value)
+    NIL_VALUES.include?(value) ? nil : value
   end
 
   def path
-    files = Dir.glob("#{source_dir}/#{@source_name}_*.csv")
-    raise("No source file #{@source_name}_*.csv found in #{source_dir}.") if files.empty?
+    files = Dir.glob("#{@source_dir}/#{@source_name}_*.csv")
+    raise("No source file #{@source_name}_*.csv found in #{@source_dir}.") if files.empty?
 
-    source_dir.join(files.last)
+    @source_dir.join(files.last)
   end
 
   def headers
     SOURCE_HEADERS[@source_name]
-  end
-
-  def source_dir
-    Rails.root.join("tmp", "sac_imports_src")
   end
 
   def assert_available_source

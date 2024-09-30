@@ -13,7 +13,7 @@ describe "people invoices page" do
   before { sign_in(admin) }
 
   context "no issues" do
-    it "doesnt show an alert" do
+    it "doesn't show an alert" do
       visit new_group_person_membership_invoice_path(group_id: admin.groups.first.id, person_id: admin.id)
       expect(page).not_to have_css(".alert-danger")
     end

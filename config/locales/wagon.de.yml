@@ -107,7 +107,6 @@ de:
 
     errors:
       messages:
-        must_be_older_than_18: Person muss 18 Jahre oder älter sein.
         youth_not_allowed_in_family: |
           Jugendliche im Alter von 18 bis 21 Jahre können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
@@ -1239,7 +1238,7 @@ de:
   household_aside_member_component:
     main_person: Familienrechnungsempfänger
     set_main_person: Zum Familienrechnungsempfänger machen
-    unverified_email: Die Email Adresse ist nicht bestätigt, die Person kann daher nicht zum Familienrechnungsempfänger gemacht werden.
+    missing_email: Die Person hat keine E-Mail Adresse und kann daher nicht zum Familienrechnungsempfänger gemacht werden.
     cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
 
   invoices:

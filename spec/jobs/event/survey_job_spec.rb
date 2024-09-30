@@ -46,7 +46,7 @@ describe Event::SurveyJob do
   context "without link_survey" do
     before { course.update!(link_survey: nil) }
 
-    it "doesnt send an email" do
+    it "doesn't send an email" do
       expect { job.perform }.not_to have_enqueued_mail(Event::SurveyMailer)
     end
   end
@@ -54,7 +54,7 @@ describe Event::SurveyJob do
   context "not 3 days ago" do
     before { course.dates.reload.first.update!(finish_at: 4.days.ago) }
 
-    it "doesnt send an email" do
+    it "doesn't send an email" do
       expect { job.perform }.not_to have_enqueued_mail(Event::SurveyMailer)
     end
   end

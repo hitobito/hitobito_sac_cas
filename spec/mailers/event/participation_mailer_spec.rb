@@ -14,25 +14,34 @@ describe Event::ParticipationMailer do
       Fabricate(:event_date, start_at: 1.week.from_now)
     ])
   }
-  let(:participation) { Fabricate(:event_participation, event: event, person: person) }
-  let(:mail) { Event::ParticipationMailer.confirmation(participation) }
+  let(:participation) { Fabricate(:event_participation, event:, person:) }
 
   before do
     Fabricate(:phone_number, contactable: person, public: true)
     event.groups.first.course_admin_email = "kurse@sac-cas.ch"
   end
 
-  subject { mail.parts.first.body }
-
-  describe "#rejection" do
-    let(:mail) { Event::ParticipationMailer.reject(participation) }
+  describe "#reject_applied" do
+    let(:mail) { Event::ParticipationMailer.reject_applied(participation) }
 
     it "sends to email addresses of declined participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
       expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
       expect(mail.subject).to eq "Kursablehnung"
       expect(mail.body.to_s).to include("Hallo Edmund,")
-      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs abgelehnt")
+      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs (Nummer: #{event.number}) abgelehnt")
+    end
+  end
+
+  describe "#reject_rejected" do
+    let(:mail) { Event::ParticipationMailer.reject_rejected(participation) }
+
+    it "sends to email addresses of declined participant" do
+      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
+      expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
+      expect(mail.subject).to eq "Kursablehnung"
+      expect(mail.body.to_s).to include("Hallo Edmund,")
+      expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs (Nummer: #{event.number}) abgelehnt")
     end
   end
 
@@ -95,7 +104,7 @@ describe Event::ParticipationMailer do
       end
     end
 
-    context "course languages that dont have custom content" do
+    context "course languages that don't have custom content" do
       before { event.update!(language: "it") }
 
       it "sends in default language" do

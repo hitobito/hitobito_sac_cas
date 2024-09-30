@@ -64,7 +64,7 @@ describe People::Neuanmeldungen::Approve do
     expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
   end
 
-  it "doesnt create invoice or send email for person in family when not main person" do
+  it "doesn't create invoice or send email for person in family when not main person" do
     people(:familienmitglied2).roles.destroy_all
     neuanmeldung = create_role(:family, person: people(:familienmitglied2))
 
