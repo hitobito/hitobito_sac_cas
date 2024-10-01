@@ -44,10 +44,8 @@ module SacImports
     end
 
     def qualification
-      @qualification ||= person&.qualifications&.find_or_initialize_by(qualification_kind_id: qualification_kind_id) do |qualification|
-        qualification.start_at = row[:start_at]
-        qualification.finish_at = row[:finish_at]
-      end
+      @qualification ||= person&.qualifications&.find_or_initialize_by(
+        qualification_kind_id: qualification_kind_id, start_at: row[:start_at], finish_at: row[:finish_at])
     end
 
     def qualification_kind_id
