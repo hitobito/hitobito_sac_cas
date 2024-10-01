@@ -10,20 +10,16 @@ require HitobitoSacCas::Wagon.root.join("db", "seeds", "development", "support",
 puzzlers = [
   "Carlo Beltrame",
   "Matthias Viehweger",
-  "Micha Luedi",
   "Nils Rauch",
   "Oliver Dietschi",
   "Olivier Brian",
-  "Pascal Simon",
   "Pascal Zumkehr",
   "Thomas Ellenberger",
-  "Tobias Stern",
-  "Tobias Hinderling"
+  "Tobias Stern"
 ]
 
 devs = {
   "Stefan Sykes" => "stefan.sykes@sac-cas.ch",
-  "Daniel Menet" => "daniel.menet@sac-cas.ch",
   "Nathalie König" => "nathalie.koenig@sac-cas.ch",
   "Reto Giger" => "reto.giger@sac-cas.ch",
   "Pascal Werndli" => "pascal.werndli@sac-cas.ch",

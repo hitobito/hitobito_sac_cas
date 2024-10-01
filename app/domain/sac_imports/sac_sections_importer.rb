@@ -61,15 +61,7 @@ module SacImports
       entry_valid = entry.valid?
       @output.print(entry_valid ? " ✅\n" : " ❌ #{entry.errors}\n")
       if entry_valid
-        if Rails.env.development?
-          begin
-            entry.import! # TODO: fix DEV SEEDER
-          rescue => e
-            @output.print(" ❌ #{e.message}\n")
-          end
-        else
-          entry.import!
-        end
+        entry.import!
       end
     end
   end

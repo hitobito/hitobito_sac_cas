@@ -7,6 +7,7 @@
 
 require Rails.root.join("db", "seeds", "support", "group_seeder")
 
+SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
 seeder = GroupSeeder.new
 
 root = Group.roots.first
@@ -43,43 +44,40 @@ if root.address.blank?
   end
 end
 
-Group::Geschaeftsstelle.seed(:name, :parent_id, {
-  name: "SAC Geschäftsstelle",
+Group::Geschaeftsstelle.seed_once(:parent_id, {
   parent_id: root.id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::Geschaeftsleitung.seed_once(:parent_id, {
+  parent_id: root.id
+})
+
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "2 Externe Kontakte",
   parent_id: root.id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "Autoren",
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
-Group::ExterneKontakte.seed(:name, :parent_id, {
+Group::ExterneKontakte.seed_once(:name, :parent_id, {
   name: "Druckereien",
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
-matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
+bluemlisalp = Group.find_by(navision_id: 1650)
+matterhorn = Group.find_by(navision_id: 9999)
+
+uto = Group::Sektion.seed(
   :name, :parent_id,
-  {name: "SAC Matterhorn",
-   foundation_year: 1899,
-   section_canton: "VS",
-   parent_id: root.id},
   {name: "SAC UTO",
    navision_id: 5300,
    foundation_year: 1863,
    section_canton: "ZH",
-   parent_id: root.id},
-  {name: "SAC Blüemlisalp",
-   navision_id: 1650,
-   foundation_year: 1874,
-   section_canton: "BE",
    parent_id: root.id}
-)
+).first
 
 matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
 matterhorn_neuanmeldungen.update!(
@@ -104,10 +102,5 @@ seed_club_hut(bluemlisalp, "Baltschiederklause", 25)
 seed_club_hut(bluemlisalp, "Stockhornbiwak", 258)
 seed_section_hut(bluemlisalp, "Ski- & Ferienhaus Obergestelen", 448786)
 seed_section_hut(bluemlisalp, "Sunnhüsi", 448785)
-
-unless Rails.env.development?
-  # TODO: fix development seeder so it will run in a reasonable time
-  SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
-end
 
 Group.rebuild!

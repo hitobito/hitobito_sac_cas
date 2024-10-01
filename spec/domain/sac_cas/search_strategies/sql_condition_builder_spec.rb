@@ -33,11 +33,11 @@ describe SearchStrategies::SqlConditionBuilder do
     end
 
     it "finds person by birthday" do
-      person.update!(birthday: Date.new(2014, 10, 1))
-      expect(Person.where(build("1.10.2014", %w[people.birthday]))).to eq [person]
-      expect(Person.where(build("01.10.2014", %w[people.birthday]))).to eq [person]
-      expect(Person.where(build("01.10", %w[people.birthday]))).to eq [person]
-      expect(Person.where(build("2014", %w[people.birthday]))).to include(person)
+      person.update!(birthday: Date.new(2013, 10, 1))
+      expect(Person.where(build("1.10.2013", %w[people.birthday]))).to eq [person]
+      expect(Person.where(build("01.10.2013", %w[people.birthday]))).to eq [person]
+      expect(Person.where(build("01.10", %w[people.birthday]))).to include(person)
+      expect(Person.where(build("2013", %w[people.birthday]))).to include(person)
     end
 
     it "ignores word without numbers" do

@@ -30,4 +30,13 @@
 #
 class ExternalInvoice::Course < ExternalInvoice
   # link is an Event::Participation object for a Event::Course
+
+  class << self
+    def invoice_participation(participation)
+      return if participation.price.nil?
+
+      # TODO: SAC#1008
+      Invoices::Abacus::CreateCourseInvoiceJob.new(participation).enqueue!
+    end
+  end
 end
