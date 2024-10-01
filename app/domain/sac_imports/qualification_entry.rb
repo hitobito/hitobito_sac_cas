@@ -15,17 +15,19 @@ module SacImports
 
     def nav3_active_matches_qualification_active
       if qualification && row[:active] == "1" && !qualification.active?
-        errors.add(:base, "Active in NAV3 but would be inactive by hitobito")
+        @warning = "Active in NAV3 but would be inactive by hitobito"
       end
       if qualification && row[:active] != "1" && qualification.active?
-        errors.add(:base, "Inactive in NAV3 but would be active by hitobio")
+        @warning = "Inactive in NAV3 but would be active by hitobio"
       end
     end
 
     attr_reader :row
+    attr_reader :warning
 
     def initialize(row)
       @row = row
+      @warning = nil
     end
 
     def valid?
