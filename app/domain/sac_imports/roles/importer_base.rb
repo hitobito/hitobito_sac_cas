@@ -6,10 +6,16 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Roles
-  class MembershipsImporter < ImporterBase
+  class ImporterBase
+
+    def initialize(output, csv_report, failed_person_ids)
+      @output = output
+      @source_file = source_file
+      @csv_report = csv_report
+    end
 
     def create
-      data = @source_file.rows(filter: { role: /^Mitglied \(Stammsektion\).+/ })
+      data = @source_file.rows
       data.each do |row|
         process_row(row)
       end

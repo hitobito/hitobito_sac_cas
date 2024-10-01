@@ -111,6 +111,10 @@ You can run the import with: `bundle exec rails sac_imports:1_people`
 
 ### `sac_imports:nav2-1_roles`
 
+1. Import Mitglied Stammsektion (
+1. Import Zusatzsektion
+1. Import Funktionär
+
 Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen.
 
 ### `sac_imports:nav3-1_qualifications`

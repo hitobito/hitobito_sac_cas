@@ -5,13 +5,15 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacImports::Roles
-  class Importer
+module SacImports
+  class RolesImporter
     REPORT_HEADERS = [
-      :navision_id,
-      :navision_name,
-      :group,
-      :layer,
+      :membership_id,
+      :person_name,
+      :target_layer,
+      :target_group,
+      :target_sub_group,
+      :target_role,
       :errors,
       :warnings
     ].freeze
@@ -24,7 +26,7 @@ module SacImports::Roles
     end
 
     def create
-      MembershipsImporter.new(@output, @source_file, @csv_report, @skipped_rows).create
+      Roles::MembershipsImporter.new(@output, @csv_report, @failed_person_ids).create
       @csv_report.finalize(output: @output)
     end
   end

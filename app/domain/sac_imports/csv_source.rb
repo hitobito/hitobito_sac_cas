@@ -40,14 +40,14 @@ class SacImports::CsvSource
       navision_id: "Kontaktnummer",
       valid_from: "GültigAb",
       valid_until: "GültigBis",
-      layer: "Layer",
-      group_lvl_1: "Gruppe_Lvl_1",
-      group_lvl_2: "Gruppe_Lvl_2",
-      group_lvl_3: "Gruppe_Lvl_3",
-      group_lvl_4: "Gruppe_Lvl_4",
+      layer_type: "Layer",
+      group_level1: "Gruppe_Lvl_1",
+      group_level2: "Gruppe_Lvl_2",
+      group_level3: "Gruppe_Lvl_3",
+      group_level4: "Gruppe_Lvl_4",
       role: "Rolle",
-      zusatzbeschrieb: "Zusatzbeschrieb",
-      name: "Name",
+      role_description: "Zusatzbeschrieb",
+      person_name: "Name",
       other: "Anderes"
     },
     # NAV3: {},
@@ -122,15 +122,24 @@ class SacImports::CsvSource
     assert_available_source
   end
 
-  def rows
+  def rows(filter: nil)
     data = []
-    CSV.foreach(path, headers: true, encoding: "bom|utf-8") do |row|
-      data << process_row(row)
+    CSV.foreach(path, headers: true, encoding: "bom|utf-8") do |raw_row|
+      row = process_row(raw_row)
+      next unless filter.blank? || filter_match?(row, filter)
+
+      data << row
     end
     data
   end
 
   private
+
+  def filter_match?(row, filter)
+    filter.all? do |key, value|
+      row[key].match?(value)
+    end
+  end
 
   def process_row(row)
     row = row.to_h

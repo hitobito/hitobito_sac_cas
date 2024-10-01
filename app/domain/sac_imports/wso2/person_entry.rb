@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacImports
-  class Wso2PersonEntry
+module SacImports::Wso2
+  class PersonEntry
     GENDERS = {HERR: "m", FRAU: "w"}.freeze
     LANGUAGES = {D: "de", F: "fr", I: "it", E: "en"}.freeze
     DEFAULT_LANGUAGE = "de"
