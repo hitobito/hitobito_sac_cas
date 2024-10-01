@@ -7,6 +7,7 @@
 
 require Rails.root.join("db", "seeds", "support", "group_seeder")
 
+SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
 seeder = GroupSeeder.new
 
 root = Group.roots.first
@@ -66,24 +67,17 @@ Group::ExterneKontakte.seed_once(:name, :parent_id, {
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
-matterhorn, uto, bluemlisalp = *Group::Sektion.seed(
+bluemlisalp = Group.find_by(navision_id: 1650)
+matterhorn = Group.find_by(navision_id: 9999)
+
+uto = Group::Sektion.seed(
   :name, :parent_id,
-  {name: "SAC Matterhorn",
-   navision_id: 9999,
-   foundation_year: 1899,
-   section_canton: "VS",
-   parent_id: root.id},
   {name: "SAC UTO",
    navision_id: 5300,
    foundation_year: 1863,
    section_canton: "ZH",
-   parent_id: root.id},
-  {name: "SAC Blüemlisalp",
-   navision_id: 1650,
-   foundation_year: 1874,
-   section_canton: "BE",
    parent_id: root.id}
-)
+).first
 
 matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
 matterhorn_neuanmeldungen.update!(
@@ -108,7 +102,5 @@ seed_club_hut(bluemlisalp, "Baltschiederklause", 25)
 seed_club_hut(bluemlisalp, "Stockhornbiwak", 258)
 seed_section_hut(bluemlisalp, "Ski- & Ferienhaus Obergestelen", 448786)
 seed_section_hut(bluemlisalp, "Sunnhüsi", 448785)
-
-SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
 
 Group.rebuild!
