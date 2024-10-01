@@ -327,26 +327,36 @@ describe Event::Course do
 
   describe "when state changes to ready" do
     let(:course) { events(:assignment_closed) }
-
-    # set up participants who have been assigned
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
-    let!(:assigned_participation) { Fabricate(:event_participation, event: course, application:, state: :assigned) }
+    let!(:participation) { Fabricate(:event_participation, event: course, application:, state: :assigned, price: 10) }
+
+    before { course.dates.build(start_at: Time.zone.local(2025, 5, 11)) }
 
     context "from assignment_closed" do
       it "updates assigned participants to summoned" do
-        course.dates.build(start_at: Time.zone.local(2025, 5, 11))
-
-        expected_participation = assigned_participation.dup
-        expected_participation.state = "assigned"
         expect { course.update!(state: :ready) }
           .to change { course.participations.first.state }.to(eq("summoned"))
           .and have_enqueued_mail(Event::ParticipationMailer, :summon).once
+          .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+      end
+
+      xit "doesn't enqueue a job if there already is an external invoice" do
+        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
+
+        expect { course.update!(state: :ready) }.not_to change(
+          Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
+        )
+      end
+
+      it "doesn't enqueue a job if participation price is nil" do
+        participation.update_attribute(:price, nil)
+
+        expect { course.update!(state: :ready) }.not_to change(Delayed::Job, :count)
       end
     end
 
     context "from closed" do
       it "does not update assigned participants to summoned" do
-        course.dates.build(start_at: Time.zone.local(2025, 5, 11))
         course.update_attribute(:state, :closed)
 
         expect { course.update!(state: :ready) }

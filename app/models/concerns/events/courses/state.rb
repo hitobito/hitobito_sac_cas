@@ -98,6 +98,7 @@ module Events::Courses::State
   def summon_assigned_participants
     assigned_participants.each do |participation|
       Event::ParticipationMailer.summon(participation).deliver_later
+      ExternalInvoice::Course.invoice_participation(participation)
     end
     assigned_participants.update_all(state: :summoned)
   end
