@@ -27,9 +27,14 @@ describe :events, js: true do
   }
 
   context "prices" do
-    let(:event) { Fabricate(:course, groups: [group]) }
+    let(:event) { events(:top_course) }
+
+    # TODO: Workaround for hitobito_youth changes. See
+    # https://github.com/hitobito/hitobito_youth/issues/58 for context
+    before { event.init_questions(disclosure: :hidden) }
 
     it "allows to fill in prices" do
+      expect(event).to be_valid
       visit edit_group_event_path(group_id: group.id, id: event.id)
       click_on("Preise")
 
