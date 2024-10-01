@@ -10,6 +10,7 @@ require "spec_helper"
 describe SacImports::SacSectionsImporter do
   let(:output) { double(puts: nil, print: nil) }
   let!(:importer) { described_class.new(output: output) }
+  let(:nav6_csv_fixture) { file_fixture("sac_imports_src/NAV6_fixture.csv") }
 
   let(:section_bluemlisalp) { Group::Sektion.find_by(navision_id: 1650) }
   let(:section_burgdorf) { Group::Sektion.find_by(navision_id: 1850) }
@@ -36,14 +37,12 @@ describe SacImports::SacSectionsImporter do
   let(:bluemlisalp_membership_config_2024) { SacSectionMembershipConfig.find_by(group_id: section_bluemlisalp.id, valid_from: 2024) }
 
   before do
-    test_csv_source_dir_path = Pathname.new(File.dirname(test_csv_source.path))
-    csv_source_instance = SacImports::CsvSource.new(:NAV6, source_dir: test_csv_source_dir_path)
+    csv_source_instance = SacImports::CsvSource.new(:NAV6)
+    allow(csv_source_instance).to receive(:path).and_return(nav6_csv_fixture)
     importer.instance_variable_set(:@source_file, csv_source_instance)
   end
 
   context "Imports sections/ortsgruppe with attributes and membership configs" do
-    let(:selected_test_section_ids) { [1650, 1850, 1853, 2330, 5650, 1900] }
-
     it "imports all sac sections with membership configs" do
       expect(section_bluemlisalp).to be_persisted
 
@@ -59,6 +58,8 @@ describe SacImports::SacSectionsImporter do
         "1900 CAS Chasseral:",
         " ✅\n",
         "1853 SAC Burgdorf Damen:",
+        " ✅\n",
+        "9999 SAC Matterhorn:",
         " ✅\n"
       ]
 
@@ -70,7 +71,7 @@ describe SacImports::SacSectionsImporter do
 
       expect do
         importer.create
-      end.to change { Group::Sektion.count }.by(4)
+      end.to change { Group::Sektion.count }.by(5)
         .and change { Group::Ortsgruppe.count }.by(1)
 
       expect(section_burgdorf).to be_present
@@ -104,7 +105,7 @@ describe SacImports::SacSectionsImporter do
       end
     end
 
-    it "reports failing sections in output", skip: "fails on CI" do
+    it "reports failing sections in output" do
       # make section invalid
       Group.where(navision_id: section_bluemlisalp.navision_id).update_all(letter_address_position: "invalid")
       expect(section_bluemlisalp.reload).not_to be_valid
@@ -133,12 +134,10 @@ describe SacImports::SacSectionsImporter do
   end
 
   context "creates sub groups" do
-    let(:selected_test_section_ids) { [1850, 1853] }
-
     it "creates sac default sub groups for sektion + a ortsgruppe as sub group" do
       expect do
         importer.create
-      end.to change { Group::Sektion.count }.by(1)
+      end.to change { Group::Sektion.count }.by(5)
         .and change { Group::Ortsgruppe.count }.by(1)
 
       expected_sub_groups = [
@@ -159,23 +158,5 @@ describe SacImports::SacSectionsImporter do
         expect(c.where(parent_id: section_burgdorf.id).count).to eq(1)
       end
     end
-  end
-
-  private
-
-  def test_csv_source
-    source_csv = HitobitoSacCas::Wagon.root.join("spec", "fixtures", "files", "sac_imports_src", "NAV6_fixture.csv")
-    filtered_rows = CSV.read(source_csv, headers: true).select do |row|
-      selected_test_section_ids.include?(row["NAV Sektions-ID"].to_i)
-    end
-    temp_csv = Tempfile.new(["NAV6_fixture-#{SecureRandom.alphanumeric(5)}", ".csv"])
-    temp_csv.close
-    CSV.open(temp_csv.path, "w") do |csv|
-      csv << filtered_rows.first.headers
-      filtered_rows.each do |row|
-        csv << row
-      end
-    end
-    temp_csv
   end
 end

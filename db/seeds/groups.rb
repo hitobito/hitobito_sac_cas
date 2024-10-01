@@ -13,7 +13,7 @@ def seed_magazin_abo(name, parent)
   end
 end
 
-Group::SacCas.seed_once(:parent_id, name: "SAC/CAS")
+Group::SacCas.seed_once(:name, name: "SAC/CAS")
 
 Group::Abos.seed_once(:parent_id, parent_id: Group.root.id)
 abos = Group::Abos.find_by(parent_id: Group.root.id)
