@@ -17,7 +17,19 @@ describe Event::CourseResource, type: :resource do
       :accommodation,
       :season,
       :start_point_of_time,
-      :minimum_age
+      :minimum_age,
+
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :price_member,
+      :price_regular,
+      :price_subsidized,
+      :price_js_active_member,
+      :price_js_active_regular,
+      :price_js_passive_member,
+      :price_js_passive_regular
     ]
   end
 
