@@ -5,3 +5,5 @@
 
 - if entry.course? && can?(:update, entry)
   = Dropdown::Events::Courses::State.new(self, entry)
+- if entry.course? && can?(:create, entry)
+  = action_button(t(".attach_key_data_sheets"), group_event_key_data_sheets_path(@group, entry), :file, method: :post)

@@ -39,4 +39,11 @@ class CourseCompensationCategory < ApplicationRecord
   def to_s
     "#{short_name} (#{kind_label})"
   end
+
+  def current_compensation_rate(cutoff = Time.zone.now)
+    course_compensation_rates.where(
+      "(:cutoff >= valid_from) AND (valid_to IS NULL OR valid_to >= :cutoff)",
+      cutoff: cutoff
+    ).first
+  end
 end
