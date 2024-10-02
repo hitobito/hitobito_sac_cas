@@ -20,7 +20,7 @@ describe SacCas::Beitragskategorie::Calculator do
 
   context "#family_age?" do
     it "returns true for adult" do
-      [22, 99].each do |age|
+      [23, 99].each do |age|
         calculator = described_class.new(person(age))
         expect(calculator.adult?).to eq(true), "expected #{age} to be adult"
         expect(calculator.family_age?).to eq(true), "expected #{age} to be family_age"
@@ -41,7 +41,7 @@ describe SacCas::Beitragskategorie::Calculator do
     end
 
     it "returns false for youth" do
-      [18, 21].each do |age|
+      [18, 22].each do |age|
         calculator = described_class.new(person(age))
         expect(calculator.family_age?).to eq(false), "expected #{age} to be youth"
       end
@@ -54,25 +54,25 @@ describe SacCas::Beitragskategorie::Calculator do
   end
 
   context "#calculate" do
-    it "returns adult for person with 22 years or older" do
-      expect(category(age: 22)).to eq(:adult)
+    it "returns adult for person with 23 years or older" do
+      expect(category(age: 23)).to eq(:adult)
       expect(category(age: 99)).to eq(:adult)
     end
 
-    it "returns youth for person between 6 and 21 years not in a family" do
+    it "returns youth for person between 6 and 22 years not in a family" do
       expect(category(age: 6)).to eq(:youth)
       expect(category(age: 15)).to eq(:youth)
-      expect(category(age: 21)).to eq(:youth)
+      expect(category(age: 22)).to eq(:youth)
     end
 
     it "returns family for adult family member" do
-      expect(category(age: 22, household: true)).to eq(:family)
+      expect(category(age: 23, household: true)).to eq(:family)
       expect(category(age: 99, household: true)).to eq(:family)
     end
 
-    it "returns youth for person between 18 and 21 if in same household with others" do
+    it "returns youth for person between 18 and 22 if in same household with others" do
       expect(category(age: 18, household: true)).to eq(:youth)
-      expect(category(age: 21, household: true)).to eq(:youth)
+      expect(category(age: 22, household: true)).to eq(:youth)
     end
 
     it "returns nil for person younger than 6 years" do
@@ -86,9 +86,8 @@ describe SacCas::Beitragskategorie::Calculator do
     it "respects reference_date" do
       person = person(15, false, Time.zone.today)
       expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
-      expect(described_class.new(person,
-        reference_date: 7.years.from_now - 1.day).calculate).to eq(:youth)
-      expect(described_class.new(person, reference_date: 7.years.from_now).calculate).to eq(:adult)
+      expect(described_class.new(person, reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
+      expect(described_class.new(person, reference_date: 8.years.from_now).calculate).to eq(:adult)
     end
 
     context "not for sac family" do
@@ -96,25 +95,25 @@ describe SacCas::Beitragskategorie::Calculator do
         described_class.new(person(age, household)).calculate(for_sac_family: false)
       end
 
-      it "returns adult for person with 22 years or older" do
-        expect(category(age: 22)).to eq(:adult)
+      it "returns adult for person with 23 years or older" do
+        expect(category(age: 23)).to eq(:adult)
         expect(category(age: 99)).to eq(:adult)
       end
 
-      it "returns youth for person between 6 and 21 years not in a family" do
+      it "returns youth for person between 6 and 22 years not in a family" do
         expect(category(age: 6)).to eq(:youth)
         expect(category(age: 15)).to eq(:youth)
-        expect(category(age: 21)).to eq(:youth)
+        expect(category(age: 22)).to eq(:youth)
       end
 
       it "returns adult for adult family member" do
-        expect(category(age: 22, household: true)).to eq(:adult)
+        expect(category(age: 23, household: true)).to eq(:adult)
         expect(category(age: 99, household: true)).to eq(:adult)
       end
 
-      it "returns youth for person between 18 and 21 if in same household with others" do
+      it "returns youth for person between 18 and 22 if in same household with others" do
         expect(category(age: 18, household: true)).to eq(:youth)
-        expect(category(age: 21, household: true)).to eq(:youth)
+        expect(category(age: 22, household: true)).to eq(:youth)
       end
 
       it "returns nil for person younger than 6 years" do
@@ -128,10 +127,8 @@ describe SacCas::Beitragskategorie::Calculator do
       it "respects reference_date" do
         person = person(15, false)
         expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
-        expect(described_class.new(person,
-          reference_date: 7.years.from_now - 1.day).calculate).to eq(:youth)
-        expect(described_class.new(person,
-          reference_date: 7.years.from_now).calculate).to eq(:adult)
+        expect(described_class.new(person, reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
+        expect(described_class.new(person, reference_date: 8.years.from_now).calculate).to eq(:adult)
       end
     end
   end
