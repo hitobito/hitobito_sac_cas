@@ -1,4 +1,4 @@
-## unreleased
+## Version 2.3
 
 *  Beim Empfänger-Export auf der Personenliste sind auch die strukturierte Adresse und die Anrede enthalten (hitobito_sac_cas#688)
 * Neuer Personen-Export "Empfänger Familien" für den physischen Versand des Sektionsbulletins
