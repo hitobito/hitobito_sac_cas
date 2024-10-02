@@ -1179,6 +1179,8 @@ de:
         price_with_vat: CHF %{amount} inkl. MwSt.
         switzerland: Schweiz
         international: Weltweit
+        duration_title: Dauer und Erneuerung des Abonnements
+        duration_text: Du erhältst eine jährliche Rechnung im Voraus. Das Abonnement kann jederzeit zum Ende der laufenden Periode gekündigt werden.
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
 
