@@ -26,6 +26,50 @@ describe :events, js: true do
     }
   }
 
+  context "prices" do
+    let(:event) { events(:top_course) }
+
+    # TODO: Workaround for hitobito_youth changes. See
+    # https://github.com/hitobito/hitobito_youth/issues/58 for context
+    before { event.init_questions(disclosure: :hidden) }
+
+    it "allows to fill in prices" do
+      expect(event).to be_valid
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_on("Preise")
+
+      fill_in "Mitgliederpreis", with: "100.05"
+      fill_in "Normalpreis", with: "100.15"
+      fill_in "Subventionierter Preis", with: "90.05"
+      fill_in "J&S A-Mitgliederpreis", with: "89.05"
+      fill_in "J&S A-Normalpreis", with: "90.15"
+      fill_in "J&S P-Mitgliederpreis", with: "82.05"
+      fill_in "J&S P-Normalpreis", with: "89.15"
+
+      expect do
+        click_button("Speichern", match: :first)
+        expect(page).to have_content(/Anlass .* wurde erfolgreich aktualisiert./)
+        event.reload
+      end
+        .to change { event.price_member }.to(100.05)
+        .and change { event.price_regular }.to(100.15)
+        .and change { event.price_subsidized }.to(90.05)
+        .and change { event.price_js_active_member }.to(89.05)
+        .and change { event.price_js_active_regular }.to(90.15)
+        .and change { event.price_js_passive_member }.to(82.05)
+        .and change { event.price_js_passive_regular }.to(89.15)
+
+      price_selector = "#main article"
+      find(price_selector).assert_text("Mitgliederpreis CHF 100.05")
+      find(price_selector).assert_text("Normalpreis CHF 100.15")
+      find(price_selector).assert_text("Subventionierter Preis CHF 90.05")
+      find(price_selector).assert_text("J&S A-Mitgliederpreis CHF 89.05")
+      find(price_selector).assert_text("J&S A-Normalpreis CHF 90.15")
+      find(price_selector).assert_text("J&S P-Mitgliederpreis CHF 82.05")
+      find(price_selector).assert_text("J&S P-Normalpreis CHF 89.15")
+    end
+  end
+
   context "overriding behaviour" do
     before do
       kind.attributes = kind_attrs
