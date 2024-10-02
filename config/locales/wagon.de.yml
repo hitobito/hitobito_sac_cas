@@ -108,7 +108,7 @@ de:
     errors:
       messages:
         youth_not_allowed_in_family: |
-          Jugendliche im Alter von 18 bis 21 Jahre können nicht
+          Jugendliche im Alter von %{from_age} bis %{to_age} Jahren können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
 
