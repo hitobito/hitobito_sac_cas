@@ -22,10 +22,14 @@
           %p.multiline= format_event_application_conditions(entry)
 
       - if entry.course_kind?
-        = labeled(Event::Kind.human_attribute_name(:minimum_age),
-                  entry.minimum_age.present? ? t('events.minimum_age_with_years', minimum_age: entry.minimum_age) : '')
-        = labeled(Event::Kind.human_attribute_name(:maximum_age),
-                  entry.maximum_age.present? ? t('events.maximum_age_with_years', maximum_age: entry.maximum_age) : '')
+        - if entry.minimum_age.present?
+          = labeled(Event::Kind.human_attribute_name(:minimum_age),
+                    t('events.minimum_age_with_years', minimum_age: entry.minimum_age))
+        - if entry.maximum_age.present?
+          = labeled(Event::Kind.human_attribute_name(:maximum_age),
+                    t('events.maximum_age_with_years', maximum_age: entry.maximum_age))
+        - if entry.canceled_reason.present?
+          = labeled(Event::Course.human_attribute_name(:canceled_reason), entry.canceled_reason_label)
         = labeled(t('events.preconditions'), grouped_qualification_kinds_string(entry.kind, 'precondition', 'participant'))
 
   - if entry.course_kind?
