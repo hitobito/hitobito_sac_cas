@@ -8,30 +8,37 @@
 module SacImports::Roles
   class ImporterBase
 
-    def initialize(output, csv_report, failed_person_ids)
+    def initialize(output, csv_report, failed_person_ids: [])
       @output = output
       @source_file = source_file
       @csv_report = csv_report
+      @failed_person_ids = failed_person_ids
     end
 
     def create
-      data = @source_file.rows
+      data = @source_file.rows(filter: @rows_filter)
       data.each do |row|
         process_row(row)
       end
     end
 
+    private
+
     def process_row(row)
-      # 0. skip person if in failed_person_ids
-      # 1. find person
-      #   a. if person not found, skip row, report error
-      # 2. really_destroy all existing membership roles
-      # 3. 
-      unless skipped_row?(row)
-        import!(row, "memberships") do |row|
-          MembershipEntry.new(row)
-        end
-      end
+      person = fetch_person(row)
+      return unless person
+    end
+
+    def fetch_person(row)
+      person = Person.find_by(id: row[:navision_id])
+      return person unless person.nil?
+
+      @failed_person_ids << row[:navision_id]
+      @csv_report.add_row({
+        navision_membership_number: row[:navision_id],
+        navision_name: row[:navision_name],
+        errors: entry.errors
+      })
     end
   end
 end

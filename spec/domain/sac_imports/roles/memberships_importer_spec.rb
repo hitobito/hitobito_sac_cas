@@ -33,6 +33,10 @@ describe SacImports::Roles::MembershipsImporter do
     importer.instance_variable_set(:@source_file, csv_source_instance)
   end
 
+  it "reports people not found if they do not exist by navision id" do
+  end
+
   it "Creates or updates membership roles and sets family main person" do
+    # it adds error and report if person cannot be found
   end
 end

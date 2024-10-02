@@ -8,12 +8,12 @@
 module SacImports::Roles
   class MembershipsImporter < ImporterBase
 
-    def create
-      data = @source_file.rows(filter: { role: /^Mitglied \(Stammsektion\).+/ })
-      data.each do |row|
-        process_row(row)
-      end
+    def initialize(output, csv_report, failed_person_ids)
+      super
+      @rows_filter = { role: /^Mitglied \(Stammsektion\).+/ }
     end
+
+    private
 
     def process_row(row)
       # 0. skip person if in failed_person_ids
