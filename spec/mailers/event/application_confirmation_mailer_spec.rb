@@ -68,4 +68,12 @@ describe Event::ApplicationConfirmationMailer do
       )
     end
   end
+
+  context "missing price" do
+    before { participation.update!(price: nil) }
+
+    it "sends email to participant with empty price" do
+      expect(mail.body.to_s).to include("Hallo Edmund,", "Preis: <br>")
+    end
+  end
 end
