@@ -39,6 +39,15 @@ CustomContent.seed(:key,
   {key: Event::PublishedMailer::NOTICE,
    placeholders_required: "event-name",
    placeholders_optional: "recipient-name, event-details, event-number, event-link, six-weeks-before-start, application-opening-at"},
+  {key: Event::CanceledMailer::MINIMUM_PARTICIPANTS,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
+  {key: Event::CanceledMailer::NO_LEADER,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
+  {key: Event::CanceledMailer::WEATHER,
+   placeholders_required: "event-name",
+   placeholders_optional: "recipient-name, event-details, event-number, event-link, application-url, person-url"},
   {key: Event::ApplicationPausedMailer::NOTICE,
    placeholders_required: "event-name",
    placeholders_optional: "event-number, event-link, event-details"},
@@ -204,6 +213,39 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Kursanmeldung abgeschlossen",
    body: "Lieber Kursadmin,<br><br>" \
     "Die Anmeldung für den Kurs {event-name} (Nummer: {event-number}) wurde abgeschlossen.<br><br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::CanceledMailer::MINIMUM_PARTICIPANTS).id,
+   locale: "de",
+   label: "Kurs: E-Mail Absage — Minimale Teilnehmerzahl nicht erreicht",
+   subject: "Kurs abgesagt wegen zu wenig Anmeldungen",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Der Kurs {event-name} (Nummer: {event-number}) wurde leider abgesagt. " \
+    "Grund dafür ist eine zu geringe Teilnehmerzahl.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::CanceledMailer::NO_LEADER).id,
+   locale: "de",
+   label: "Kurs: E-Mail Absage — Ausfall Kursleitung",
+   subject: "Kurs abgesagt wegen Ausfall der Kursleitung",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Der Kurs {event-name} (Nummer: {event-number}) wurde leider abgesagt. " \
+    "Grund dafür ist der Ausfall der Kursleitung.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
+    "Event-Link: {event-link}<br>" \
+    "Kursdetails:<br><br>{event-details}"},
+  {custom_content_id: CustomContent.get(Event::CanceledMailer::WEATHER).id,
+   locale: "de",
+   label: "Kurs: E-Mail Absage — Wetterrisiko",
+   subject: "Kurs abgesagt wegen Wetterrisiko",
+   body: "Hallo {recipient-name},<br><br>" \
+    "Der Kurs {event-name} (Nummer: {event-number}) wurde leider abgesagt. " \
+    "Grund dafür ist das Wetterrisiko.<br><br>" \
+    "Anmeldung: {application-url}<br>" \
+    "Person: {person-url}<br>" \
     "Event-Link: {event-link}<br>" \
     "Kursdetails:<br><br>{event-details}"},
   {custom_content_id: CustomContent.get(Event::SurveyMailer::SURVEY).id,
