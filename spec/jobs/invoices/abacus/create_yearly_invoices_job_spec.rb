@@ -67,7 +67,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
 
   def create_person(role_created_at: Date.new(invoice_year, 1, 1), params: {})
     group = groups(:bluemlisalp_mitglieder)
-    person = Fabricate.create(:person_with_address, **params)
+    person = Fabricate.create(:person, **params)
     Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, created_at: role_created_at, group:, person:)
     person
   end

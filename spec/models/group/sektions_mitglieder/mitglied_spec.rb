@@ -58,7 +58,7 @@ describe Group::SektionsMitglieder::Mitglied do
     end
 
     it "doesn't enqueue the job if data quality errors exist" do
-      person.update!(first_name: nil)
+      allow(person).to receive(:data_quality).and_return("error")
       expect { create_role }.not_to change(Delayed::Job, :count)
     end
   end

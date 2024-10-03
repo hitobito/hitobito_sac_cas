@@ -10,6 +10,7 @@ module SacCas::Person
 
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
+  REQUIRED_FIELDS_ROLES = [*SacCas::ABONNENT_ROLES, *SacCas::MITGLIED_STAMMSEKTION_ROLES].map(&:sti_name)
 
   prepended do
     Person::SEARCHABLE_ATTRS << :id
@@ -48,6 +49,8 @@ module SacCas::Person
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
+    validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
+      if: -> { roles.exists?(type: REQUIRED_FIELDS_ROLES) }
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality

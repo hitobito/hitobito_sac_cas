@@ -16,7 +16,7 @@ describe People::DataQualityCheckerJob do
 
     it "checks the data quality of all people" do
       batch_selects = 4
-      issues_created = 9 # validation and insert
+      issues_created = 6 # validation and insert
       affected_people = 4 # update data_quality
       expect do
         expect_query_count { job.perform }.to eq(batch_selects + issues_created * 2 + affected_people)

@@ -189,5 +189,32 @@ describe PeopleController do
         expect(response.body).to_not include("Geburtsdatum muss nach dem 31.12.#{Date.current.year - 120} liegen.")
       end
     end
+
+    context "email" do
+      let(:member) { people(:mitglied) }
+
+      subject(:request) do
+        put :update, params: {id: member.id, group_id: member.groups.first.id, person: {email: nil}}
+      end
+
+      it "can set empty email as backoffice user" do
+        expect { request }.to change { member.reload.email }.to(nil)
+      end
+
+      it "cannot set empty email as non backoffice user" do
+        sign_in(people(:familienmitglied))
+        expect { request }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "cannot set empty email as self" do
+        sign_in(member)
+        expect { request }.not_to change { member.reload.email }
+      end
+
+      it "can save with empty email as self if email was already empty before" do
+        sign_in(member)
+        expect { request }.not_to change { member.reload.email }
+      end
+    end
   end
 end
