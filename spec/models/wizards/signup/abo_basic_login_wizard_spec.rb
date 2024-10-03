@@ -30,8 +30,7 @@ describe Wizards::Signup::AboBasicLoginWizard do
         last_name: "Muster",
         address_care_of: "c/o Musterleute",
         birthday: "1.1.2000",
-        data_protection: "1",
-        statutes: "1"
+        data_protection: "1"
       }
     }
   }
@@ -60,10 +59,9 @@ describe Wizards::Signup::AboBasicLoginWizard do
       end
 
       it "is invalid agreements are not checked" do
-        required_attrs[:person_fields][:statutes] = "0"
         required_attrs[:person_fields][:data_protection] = "0"
         expect(wizard).not_to be_valid
-        expect(wizard.person_fields.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
+        expect(wizard.person_fields.errors.full_messages).to eq ["Datenschutzerklärung muss akzeptiert werden"]
       end
     end
   end
