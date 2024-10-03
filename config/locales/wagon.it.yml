@@ -106,8 +106,6 @@ it:
     errors:
       messages:
         youth_not_allowed_in_family: |
-          I giovani di età compresa tra i 18 e i 21 anni non possono essere
-          essere accettati in un'associazione familiare.
         invalid_date_range: "%{start_on} %{end_on} deve essere compreso tra e"
 
       models:
@@ -235,6 +233,11 @@ it:
         annual: Annualmente ricorrente
         book_discount_code: Codice sconto spedizione libro
         brief_description: Breve descrizione
+        canceled_reason: ""
+        canceled_reasons:
+          minimum_participants: ""
+          no_leader: ""
+          weather: ""
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
         level: Livello del corso
@@ -1158,6 +1161,8 @@ it:
 
     form_tabs:
       communication: Comunicazione
+      prices: ""
+
     general_fields:
       kind_overrides_link_title:
         "Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giorni di formazione, Alloggio riservato dal SAC, Alloggio, Centro di costo, Unità di costo"
@@ -1207,6 +1212,8 @@ it:
         price_with_vat: "%{amount} CHF incl. IVA."
         switzerland: Svizzera
         international: In tutto il mondo
+        duration_title: ""
+        duration_text: ""
       create:
         redirect_existing_email: Esiste già un login per questa e-mail. Effettuare il login qui.
 

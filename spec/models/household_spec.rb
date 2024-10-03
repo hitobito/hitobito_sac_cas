@@ -135,7 +135,7 @@ describe Household do
       end
 
       it "makes reference person main person for new household" do
-        person.update!(birthday: 22.years.ago)
+        person.update!(birthday: 23.years.ago)
         adult.update!(birthday: 24.years.ago)
         expect do
           household.add(adult).save!
@@ -146,7 +146,7 @@ describe Household do
         household.add(child)
         household.save!
 
-        person.update!(birthday: 22.years.ago)
+        person.update!(birthday: 23.years.ago)
         adult.update!(birthday: 24.years.ago)
         expect do
           household.remove(person)

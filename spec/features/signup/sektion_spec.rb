@@ -325,7 +325,7 @@ describe "signup/sektion", js: true do
       click_on "Weiter als Familienmitgliedschaft", match: :first
 
       within("#error_explanation") do
-        expect(page).to have_content "Jugendliche im Alter von 18 bis 21 Jahre können nicht in einer Familienmitgliedschaft aufgenommen werden"
+        expect(page).to have_content "Jugendliche im Alter von 18 bis 22 Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden"
       end
     end
 

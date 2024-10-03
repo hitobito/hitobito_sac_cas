@@ -30,7 +30,7 @@ module Wizards::Steps::Signup::Sektion
     validate :assert_email_unique, if: :email
 
     def adult?
-      Person.new(birthday: birthday).adult?
+      Person.new(birthday:).adult?
     end
 
     def required_attrs
@@ -40,15 +40,16 @@ module Wizards::Steps::Signup::Sektion
     private
 
     def assert_email_unique
-      if Person.exists?(email: email)
-        errors.add(:email, :taken)
-      end
+      errors.add(:email, :taken) if Person.exists?(email:)
     end
 
     def assert_family_age
-      calculator = SacCas::Beitragskategorie::Calculator.new(Person.new(birthday: birthday))
-      return if calculator.family_age? # everyting in order, no need to check further
-      errors.add(:birthday, :youth_not_allowed_in_family) if calculator.youth?
+      calculator = SacCas::Beitragskategorie::Calculator.new(Person.new(birthday:))
+      return if calculator.family_age? || !calculator.youth? # everything in order, no need to check further
+
+      errors.add(:birthday, :youth_not_allowed_in_family,
+        from_age: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.end.next,
+        to_age: SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH.end.pred)
     end
   end
 end

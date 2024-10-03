@@ -106,8 +106,6 @@ en:
     errors:
       messages:
         youth_not_allowed_in_family: |
-          Young people between the ages of 18 and 21 cannot be
-          be accepted in a family membership.
         invalid_date_range: "must be between %{start_on} and %{end_on} "
 
       models:
@@ -233,6 +231,11 @@ en:
         annual: Annually recurring
         book_discount_code: Discount code book shipping
         brief_description: Brief description
+        canceled_reason: ""
+        canceled_reasons:
+          minimum_participants: ""
+          no_leader: ""
+          weather: ""
         cost_center_id: Cost center
         cost_unit_id: Cost unit
         level: Course level
@@ -1108,6 +1111,8 @@ en:
 
     form_tabs:
       communication: Communication
+      prices: ""
+
     general_fields:
       kind_overrides_link_title:
         "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
@@ -1157,6 +1162,8 @@ en:
         price_with_vat: "CHF %{amount} incl. VAT."
         switzerland: Switzerland
         international: Worldwide
+        duration_title: ""
+        duration_text: ""
       create:
         redirect_existing_email: There is already a login for this e-mail. Log in here.
 

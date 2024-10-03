@@ -45,6 +45,7 @@ class SacImports::CsvReport
   end
 
   def csv_append(row_content)
+    row_content = row_content.with_indifferent_access
     row_content = @headers.map { |header| row_content[header] }
     CSV.open(csv_file_path, "ab", col_sep: COLUMN_SEPARATOR) do |csv|
       csv << row_content

@@ -8,15 +8,15 @@
 module SacImports::Roles
   class ImporterBase
 
-    def initialize(output, csv_report, failed_person_ids: [])
+    def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
       @output = output
-      @source_file = source_file
+      @csv_source = csv_source
       @csv_report = csv_report
       @failed_person_ids = failed_person_ids
     end
 
     def create
-      data = @source_file.rows(filter: @rows_filter)
+      data = @csv_source.rows(filter: @rows_filter)
       data.each do |row|
         process_row(row)
       end
@@ -30,15 +30,43 @@ module SacImports::Roles
     end
 
     def fetch_person(row)
+      if @failed_person_ids.include?(row[:navision_id])
+        report_person_failed_before(row)
+        return
+      end
+
       person = Person.find_by(id: row[:navision_id])
       return person unless person.nil?
 
+      report_person_not_found(row)
+      nil
+    end
+
+    def report_person_not_found(row)
       @failed_person_ids << row[:navision_id]
+      add_report_row(row, errors: "Person not found in hitobito")
+    end
+
+    def report_person_failed_before(row)
+      add_report_row(row, errors: "A previous role could not be imported for this person, skipping")
+    end
+
+    def add_report_row(row, errors: nil, warnings: nil)
       @csv_report.add_row({
-        navision_membership_number: row[:navision_id],
-        navision_name: row[:navision_name],
-        errors: entry.errors
+        navision_id: row[:navision_id],
+        person_name: row[:person_name],
+        valid_from: row[:valid_from],
+        valid_until: row[:valid_until],
+        target_group: target_group_path(row),
+        target_role: row[:role],
+        errors: errors,
+        warnings: warnings
       })
+    end
+
+    def target_group_path(row)
+      group_keys = %i[layer_type group_level1 group_level2 group_level3 group_level4]
+      group_keys.map { |key| row[key] }.compact.join(" > ")
     end
   end
 end

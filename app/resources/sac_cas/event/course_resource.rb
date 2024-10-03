@@ -24,6 +24,14 @@ module SacCas::Event::CourseResource
       attribute :specialities, :string
       attribute :similar_tours, :string
       attribute :program, :string
+
+      attribute :price_member, :float
+      attribute :price_regular, :float
+      attribute :price_subsidized, :float
+      attribute :price_js_active_member, :float
+      attribute :price_js_active_regular, :float
+      attribute :price_js_passive_member, :float
+      attribute :price_js_passive_regular, :float
     end
   end
 end

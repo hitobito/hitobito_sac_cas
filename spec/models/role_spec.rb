@@ -115,7 +115,7 @@ describe Role do
         let(:role_type) { role_type }
         let(:group) { group }
 
-        def build_role(age: 22, beitragskategorie: :family, household_key: "household42", family_main_person: false)
+        def build_role(age: 23, beitragskategorie: :family, household_key: "household42", family_main_person: false)
           person = Fabricate.build(:person,
             birthday: age.years.ago,
             household_key: household_key,

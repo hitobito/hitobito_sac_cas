@@ -352,6 +352,48 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "price_member": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_regular": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_subsidized": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_js_active_member": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_js_active_regular": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_js_passive_member": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_js_passive_regular": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
@@ -378,6 +420,20 @@
         "similar_tours": {
         },
         "program": {
+        },
+        "price_member": {
+        },
+        "price_regular": {
+        },
+        "price_subsidized": {
+        },
+        "price_js_active_member": {
+        },
+        "price_js_active_regular": {
+        },
+        "price_js_passive_member": {
+        },
+        "price_js_passive_regular": {
         }
       },
       "filters": {

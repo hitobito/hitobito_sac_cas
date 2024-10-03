@@ -34,7 +34,7 @@ describe "events/_attrs.html.haml" do
   end
 
   context "Event::Course" do
-    let(:event) { Fabricate.build(:course) }
+    let(:event) { Fabricate.build(:course, minimum_age: 10, canceled_reason: :weather) }
 
     it "renders additional attrs" do
       expect(dom).to have_css ".well dl:nth-of-type(2) dt", text: "Kursstufe"
@@ -43,6 +43,7 @@ describe "events/_attrs.html.haml" do
       expect(dom).to have_css ".well dl:nth-of-type(5) dt", text: "Sprache"
       expect(dom).to have_css ".well dl:nth-of-type(5) dt", text: "Kursbeginn"
       expect(dom).to have_css "aside dt", text: "Mindestalter"
+      expect(dom).to have_css "aside dt", text: "Absagegrund"
     end
   end
 end

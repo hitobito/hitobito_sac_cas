@@ -8,11 +8,11 @@
 module SacImports
   class RolesImporter
     REPORT_HEADERS = [
-      :membership_id,
+      :navision_id,
       :person_name,
-      :target_layer,
-      :target_group,
-      :target_sub_group,
+      :valid_from,
+      :valid_until,
+      :target_group_path,
       :target_role,
       :errors,
       :warnings
@@ -26,7 +26,7 @@ module SacImports
     end
 
     def create
-      Roles::MembershipsImporter.new(@output, @csv_report, @failed_person_ids).create
+      Roles::MembershipsImporter.new(output: @output, csv_report: @csv_report, @failed_person_ids).create
       @csv_report.finalize(output: @output)
     end
   end

@@ -106,8 +106,6 @@ fr:
     errors:
       messages:
         youth_not_allowed_in_family: |
-          Les jeunes âgés de 18 à 21 ans ne peuvent pas être membres d'une famille
-          être admis en tant que membre familial.
         invalid_date_range: "doit se situer entre %{start_on} et %{end_on} "
 
       models:
@@ -235,6 +233,11 @@ fr:
         annual: Récurrent chaque année
         book_discount_code: Code de réduction Envoi de livres
         brief_description: Brève description
+        canceled_reason: ""
+        canceled_reasons:
+          minimum_participants: ""
+          no_leader: ""
+          weather: ""
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
         level: Niveau de cours
@@ -1158,6 +1161,8 @@ fr:
 
     form_tabs:
       communication: Communication
+      prices: ""
+
     general_fields:
       kind_overrides_link_title:
         "Les champs suivants sont repris : Description, Conditions d'admission, Nombre minimal de participants, Nombre maximal de participants, Âge minimal, Saison, Jours de formation, Réservation de l'hébergement par le CAS, Hébergement, Centre de coûts, Organisme payeur"
@@ -1207,6 +1212,8 @@ fr:
         price_with_vat: "CHF %{amount} TVA incluse"
         switzerland: Suisse
         international: Dans le monde entier
+        duration_title: ""
+        duration_text: ""
       create:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
 

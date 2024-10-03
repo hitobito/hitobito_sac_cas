@@ -81,6 +81,7 @@ module SacCas::Event::Course
   LANGUAGES = %w[de_fr fr de it].freeze
   MEALS = %w[breakfast half_board lunch self_cooking full_board].freeze
   START_POINTS_OF_TIME = %w[day evening].freeze
+  CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze
 
   WEAK_VALIDATION_STATES = %w[created canceled].freeze
 
@@ -107,6 +108,8 @@ module SacCas::Event::Course
       Event::Kind::ACCOMMODATIONS,
       i18n_prefix: "#{I18N_KIND}.accommodations"
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
+    i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
+    enum canceled_reason: CANCELED_REASONS
 
     self.used_attributes += [
       :language,
@@ -129,7 +132,14 @@ module SacCas::Event::Course
       :specialities,
       :similar_tours,
       :program,
-      :book_discount_code
+      :book_discount_code,
+      :price_member,
+      :price_regular,
+      :price_subsidized,
+      :price_js_active_member,
+      :price_js_active_regular,
+      :price_js_passive_member,
+      :price_js_passive_regular
     ]
 
     self.used_attributes -= [
