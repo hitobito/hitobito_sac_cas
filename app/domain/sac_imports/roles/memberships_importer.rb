@@ -22,17 +22,8 @@ module SacImports::Roles
     private
 
     def process_row(row)
-      super(row)
-      # 0. skip person if in failed_person_ids
-      # 1. find person
-      #   a. if person not found, skip row, report error
-      # 2. really_destroy all existing membership roles
-      # 3. 
-      #unless skipped_row?(row)
-        #import!(row, "memberships") do |row|
-          #MembershipEntry.new(row)
-        #end
-      #end
+      super(row) do
+      end
     end
 
     def destroy_existing_membership_roles

@@ -26,6 +26,8 @@ module SacImports::Roles
     def process_row(row)
       person = fetch_person(row)
       return unless person
+
+      yield
     end
 
     def fetch_person(row)
@@ -43,14 +45,26 @@ module SacImports::Roles
 
     def report_person_not_found(row)
       @failed_person_ids << row[:navision_id]
-      add_report_row(row, errors: "Person not found in hitobito")
+      report(row, error: "Person not found in hitobito")
     end
 
     def report_person_failed_before(row)
-      add_report_row(row, errors: "A previous role could not be imported for this person, skipping")
+      report(row, error: "A previous role could not be imported for this person, skipping")
     end
 
-    def add_report_row(row, errors: nil, message: nil)
+    def report(row, message: nil, warning: nil, error: nil)
+      output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
+      if error.present?
+        output_message << "❌ #{error}\n"
+      else
+        output_message << "✅ #{message||warning}\n"
+      end
+
+      @output.print(output_message)
+      add_report_row(row, message: message, warning: warning, error: error)
+    end
+
+    def add_report_row(row, message: nil, warning: nil, error: nil)
       @csv_report.add_row({
         navision_id: row[:navision_id],
         person_name: row[:person_name],
@@ -58,8 +72,9 @@ module SacImports::Roles
         valid_until: row[:valid_until],
         target_group: target_group_path(row),
         target_role: row[:role],
-        errors: errors,
-        message: message
+        message: message,
+        warning: warning,
+        error: error
       })
     end
 

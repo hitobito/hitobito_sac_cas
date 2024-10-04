@@ -15,7 +15,8 @@ module SacImports
       :target_group_path,
       :target_role,
       :message,
-      :errors
+      :warning,
+      :error
     ].freeze
 
     def initialize(output: $stdout)
