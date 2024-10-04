@@ -3,7 +3,4 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= c.fields_for do |form|
-  = form.labeled_date_field :issues_from, help: simple_format(t('.issues_from_help'))
-  .align-with-form
-    = render "wizards/steps/signup/agreement_fields", form: form
+= render 'wizards/steps/signup/person_fields', c:

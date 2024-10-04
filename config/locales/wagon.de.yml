@@ -1557,6 +1557,9 @@ de:
         agreement_fields:
           adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
           newsletter_caption: Ich möchte einen Newsletter abonnieren
+        abo_basic_login:
+          person_fields:
+            next_button: SAC-KONTO ERSTELLEN
         abo_magazin:
           issues_from_field_title: Abo
           issues_from_field:

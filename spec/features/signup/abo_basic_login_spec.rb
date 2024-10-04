@@ -24,7 +24,6 @@ describe :self_registration do
     fill_in "Telefon", with: "+41 79 123 45 56"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_town", with: "Zürich"
-    check "Ich habe die Statuten gelesen und stimme diesen zu"
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
   end
 
@@ -44,7 +43,7 @@ describe :self_registration do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     expect_active_step("E-Mail")
     expect_validation_error("E-Mail ist nicht gültig")
   end
@@ -52,10 +51,10 @@ describe :self_registration do
   it "creates person" do
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     complete_main_person_form
     expect do
-      click_on "Registrieren"
+      click_button "SAC-KONTO ERSTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
     expect(Person.last.roles.last.delete_on).not_to be_nil
@@ -64,12 +63,12 @@ describe :self_registration do
   it "subscribes to mailinglist" do
     visit group_self_registration_path(group_id: group)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     complete_main_person_form
     check "Ich möchte einen Newsletter abonnieren"
 
     expect do
-      click_on "Registrieren"
+      click_button "SAC-KONTO ERSTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
 
@@ -84,12 +83,12 @@ describe :self_registration do
   it "opts out of mailinglist" do
     visit group_self_registration_path(group_id: group)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     complete_main_person_form
     uncheck "Ich möchte einen Newsletter abonnieren"
 
     expect do
-      click_on "Registrieren"
+      click_button "SAC-KONTO ERSTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
 
