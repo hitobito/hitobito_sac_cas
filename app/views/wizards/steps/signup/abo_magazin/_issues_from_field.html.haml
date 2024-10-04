@@ -5,4 +5,5 @@
 
 = c.fields_for do |form|
   = form.labeled_date_field :issues_from, help: simple_format(t('.issues_from_help'))
-  = render "wizards/steps/signup/agreement_fields", form: form
+  .align-with-form
+    = render "wizards/steps/signup/agreement_fields", form: form

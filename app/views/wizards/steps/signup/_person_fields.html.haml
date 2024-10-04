@@ -6,4 +6,5 @@
 = c.fields_for do |form|
   = render "wizards/steps/signup/common_person_fields", form: form
   - if form.object.respond_to?(:newsletter)
-    = render "wizards/steps/signup/agreement_fields", form: form
+    .align-with-form
+      = render "wizards/steps/signup/agreement_fields", form: form
