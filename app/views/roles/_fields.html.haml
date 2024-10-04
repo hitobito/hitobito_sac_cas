@@ -5,4 +5,4 @@
       = f.date_field(:delete_on, disabled: !can?(:destroy, @role), class: 'date col-6', value: f(@role.delete_on))
   = render_extensions :fields, locals: {f:}
 - else
-  = render '../../../hitobito/app/views/roles/fields', f:  
+  = render_core_partial "roles/fields", f: f
