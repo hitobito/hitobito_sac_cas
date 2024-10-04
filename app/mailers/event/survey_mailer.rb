@@ -24,6 +24,6 @@ class Event::SurveyMailer < ApplicationMailer
   private
 
   def placeholder_survey_link
-    @course.link_survey
+    link_to(@course.link_survey)
   end
 end
