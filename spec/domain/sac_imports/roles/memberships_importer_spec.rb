@@ -20,11 +20,34 @@ describe SacImports::Roles::MembershipsImporter do
 
   # csv report
   let(:report_file) { Rails.root.join("log", "sac_imports", "nav2-1_roles_2024-01-23-11:42.csv") }
-  let(:report_headers) { %w[navision_id person_name valid_from valid_until target_group target_role errors warnings] }
+  let(:report_headers) { %w[navision_id person_name valid_from valid_until target_group target_role message errors] }
   let(:csv_report_instance) { SacImports::CsvReport.new(:"nav2-1_roles", report_headers) }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
   let(:importer) { described_class.new(output: output, csv_source: csv_source, csv_report: csv_report_instance) }
+
+  let!(:person2) { Fabricate(:person, id: 4200002) }
+  let!(:person2_membership_role) do
+    Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+              person: person2,
+              created_at: DateTime.new(2010, 1, 1),
+              delete_on: DateTime.new(2024, 12, 31),
+              group: groups(:bluemlisalp_mitglieder))
+  end
+  let!(:person2_additional_membership_role) do
+    Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.name.to_sym,
+              person: person2,
+              created_at: DateTime.new(2018, 1, 1),
+              delete_on: DateTime.new(2024, 12, 31),
+              group: groups(:matterhorn_mitglieder))
+  end
+  let!(:person2_inactive_membership_role) do
+    Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+              person: person2,
+              created_at: DateTime.new(2000, 1, 1),
+              delete_on: DateTime.new(2008, 12, 31),
+              group: groups(:bluemlisalp_mitglieder))
+  end
 
   around do |example|
     # make sure there's no csv report from previous run
@@ -49,17 +72,22 @@ describe SacImports::Roles::MembershipsImporter do
                                      "2022-12-31",
                                      "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
                                      "Mitglied (Stammsektion) (Jugend)",
-                                     "Person not found in hitobito", nil])
+                                     nil, "Person not found in hitobito"])
     expect(csv_report.third).to eq(["4200000",
                                     "Nachname 1 Vorname 1",
                                      "2023-01-01",
                                      "2024-12-31",
                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
                                     "Mitglied (Stammsektion) (Einzel)",
-                                    "A previous role could not be imported for this person, skipping", nil])
+                                    nil, "A previous role could not be imported for this person, skipping"])
   end
 
-  it "Creates or updates membership roles and sets family main person" do
-    # it adds error and report if person cannot be found
+  it "creates/resets membership roles and sets family main person" do
+    importer.create
+
+    person2_membership_role_ids = [person2_membership_role.id,
+                                   person2_additional_membership_role.id,
+                                   person2_inactive_membership_role.id]
+    expect(Role.where(id: person2_membership_role_ids)).not_to exist
   end
 end

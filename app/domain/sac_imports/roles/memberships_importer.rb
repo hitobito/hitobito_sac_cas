@@ -9,8 +9,14 @@ module SacImports::Roles
   class MembershipsImporter < ImporterBase
 
     def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
-      super
       @rows_filter = { role: /^Mitglied \(Stammsektion\).+/ }
+      super
+      @csv_source_person_ids = collect_csv_source_person_ids
+    end
+    
+    def create
+      destroy_existing_membership_roles
+      super
     end
 
     private
@@ -27,6 +33,16 @@ module SacImports::Roles
           #MembershipEntry.new(row)
         #end
       #end
+    end
+
+    def destroy_existing_membership_roles
+      role_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
+      membership_roles = Role.with_deleted.where(type: role_types, person_id: @csv_source_person_ids)
+      membership_roles.delete_all
+    end
+
+    def collect_csv_source_person_ids
+      @data.map { |row| row[:navision_id].to_i }.uniq
     end
   end
 end

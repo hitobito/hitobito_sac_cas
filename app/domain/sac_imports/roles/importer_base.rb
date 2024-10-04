@@ -10,14 +10,13 @@ module SacImports::Roles
 
     def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
       @output = output
-      @csv_source = csv_source
       @csv_report = csv_report
       @failed_person_ids = failed_person_ids
+      @data = csv_source.rows(filter: @rows_filter)
     end
 
     def create
-      data = @csv_source.rows(filter: @rows_filter)
-      data.each do |row|
+      @data.each do |row|
         process_row(row)
       end
     end
@@ -51,7 +50,7 @@ module SacImports::Roles
       add_report_row(row, errors: "A previous role could not be imported for this person, skipping")
     end
 
-    def add_report_row(row, errors: nil, warnings: nil)
+    def add_report_row(row, errors: nil, message: nil)
       @csv_report.add_row({
         navision_id: row[:navision_id],
         person_name: row[:person_name],
@@ -60,7 +59,7 @@ module SacImports::Roles
         target_group: target_group_path(row),
         target_role: row[:role],
         errors: errors,
-        warnings: warnings
+        message: message
       })
     end
 

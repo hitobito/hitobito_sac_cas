@@ -14,8 +14,8 @@ module SacImports
       :valid_until,
       :target_group_path,
       :target_role,
-      :errors,
-      :warnings
+      :message,
+      :errors
     ].freeze
 
     def initialize(output: $stdout)
