@@ -82,7 +82,9 @@ describe Invoices::Abacus::SubjectInterface do
     let(:subjects) { people(:mitglied, :familienmitglied, :familienmitglied_kind).map { |p| Invoices::Abacus::Subject.new(p) } }
 
     before do
-      Person.where(zip_code: nil).update_all(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
+      people(:familienmitglied, :familienmitglied_kind).each do |member|
+        member.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
+      end
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
     end
 

@@ -28,12 +28,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
   end
 
   let(:unexpected_people) do
-    person_1 = Fabricate.create(:person_with_address)
-    person_2 = Fabricate.create(:person_with_address)
-    [
-      person_1,
-      person_2
-    ]
+    Fabricate.times(2, :person)
   end
 
   def create_mix_of_people
@@ -229,7 +224,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
   def create_person(role_created_at: Date.new(2024, 1, 1), params: {})
     group = groups(:bluemlisalp_mitglieder)
-    person = Fabricate.create(:person_with_address, **params)
+    person = Fabricate.create(:person, **params)
     Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, created_at: role_created_at, group:, person:)
     person
   end

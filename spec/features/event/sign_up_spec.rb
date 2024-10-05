@@ -73,6 +73,7 @@ describe "Event Signup", :js do
     context "with role Mitglied" do
       before do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: admin)
+        admin.update!(birthday: nil)
       end
 
       it "has multi step wizard with subsidy checkbox" do
@@ -118,7 +119,7 @@ describe "Event Signup", :js do
 
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Kontaktangaben"
-        expect(page).to have_text "PLZ muss ausgefüllt werden"
+        expect(page).to have_text "Geburtsdatum muss ausgefüllt werden"
         expect(page).to have_css "h2.card-title", text: "Kostenübersicht"
       end
     end
