@@ -2,7 +2,6 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= turbo_frame_tag(:aside, class: '.col-md') do
-  - if wizard.group && !wizard.last_step?
-    = render(SelfRegistration::FeeComponent.new(group: c.model.group, birthdays: c.model.birthdays))
+= turbo_frame_tag(partial_name, class: 'col-md') do
+  = render "abo_infos", costs: wizard.costs
   = render(SelfRegistration::InfosComponent.new)
