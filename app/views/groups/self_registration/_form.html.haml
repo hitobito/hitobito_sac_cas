@@ -7,10 +7,7 @@
   = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: :aside
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
 
-    - if wizard.respond_to?(:birthdays)
+    - if wizard.asides.present?
       = c.with_aside do
-        = render "aside", c: , wizard:
-
-    - if wizard.respond_to?(:costs)
-      = c.with_footer do
-        = render "abo_infos", costs: wizard.costs
+        - Array.wrap(wizard.asides).each do |aside|
+          = render aside, partial_name: aside, c: c, wizard: wizard

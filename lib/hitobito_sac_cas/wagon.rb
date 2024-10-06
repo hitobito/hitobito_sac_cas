@@ -200,6 +200,8 @@ module HitobitoSacCas
           :sac_remark_section_4,
           :sac_remark_section_5
         ])
+
+      Wizards::Base.class_attribute :asides, default: []
     end
 
     initializer "sac_cas.add_inflections" do |_app|

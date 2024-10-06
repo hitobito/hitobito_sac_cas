@@ -2,7 +2,7 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= turbo_frame_tag(:aside, class: '.col-md') do
+= turbo_frame_tag(partial_name, class: 'col-md') do
   - if wizard.is_a?(Wizards::Signup::SektionWizard) && !wizard.last_step?
     = render 'wizards/signup/section_fee_summary', active: wizard.beitragskategorie_unknown?,
       adult: wizard.fees_for(:adult, Time.zone.now.beginning_of_year),
