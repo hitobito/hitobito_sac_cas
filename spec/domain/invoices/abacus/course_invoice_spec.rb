@@ -31,7 +31,7 @@ describe Invoices::Abacus::CourseInvoice do
 
   context "#position" do
     it "creates position with correct values" do
-      position = subject.position
+      position = subject.positions.first
 
       expect(position.name).to eq("Normalpreis - Einstiegskurs")
       expect(position.grouping).to eq("Normalpreis - Einstiegskurs")
