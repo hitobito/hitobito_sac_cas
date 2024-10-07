@@ -6,9 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Invoices::Abacus::CreateCourseInvoiceJob < Invoices::Abacus::CreateInvoiceJob
-
   def initialize(external_invoice)
-    super(external_invoice)
+    super
   end
 
   def invoice_data

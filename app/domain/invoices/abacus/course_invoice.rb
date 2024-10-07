@@ -30,7 +30,7 @@ module Invoices
         fields = {}
         fields[:user_field8] = participation.event.number if invoice?
         fields[:user_field9] = participation.event.name if invoice?
-        fields[:user_field10] = participation.event.dates.map { |date| "#{date.start_at.strftime('%d.%m.%Y')} - #{date.finish_at&.strftime('%d.%m.%Y')}" }.join(", ") if invoice?
+        fields[:user_field10] = participation.event.dates.map { |date| "#{date.start_at.strftime("%d.%m.%Y")} - #{date.finish_at&.strftime("%d.%m.%Y")}" }.join(", ") if invoice?
         fields
       end
 
