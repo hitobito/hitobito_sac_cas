@@ -52,7 +52,7 @@ Das Erzeugen der Rechnung erfolgt über `Invoices::Abacus::MembershipInvoice`,
 welche eine `ExternalInvoice::SacMembership` erstellt und die für die Abacus-Schnittstelle notwendigen Daten
 in einem `Invoices::Abacus::SalesOrder` generiert.
 
-Die Orchestrierung der Rechnungserzeugung erfolgt für Einzelrechnungen über den `Invoices::Abacus::CreateInvoiceJob` /  `Invoices::Abacus::MembershipInvoiceGenerator` bzw.
+Die Orchestrierung der Rechnungserzeugung erfolgt für Einzelrechnungen über den `Invoices::Abacus::CreateMembershipInvoiceJob` /  `Invoices::Abacus::MembershipInvoiceGenerator` bzw.
 für mehrere Rechnungen aufs Mal (Jahresinkasso) über den `Invoices::Abacus::CreateYearlyInvoicesJob`. Diese beiden Klassen
 senden die Daten via `Invoice::Abacus::SalesOrderInterface` an das Abacus API.
 

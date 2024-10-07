@@ -310,6 +310,14 @@ de:
         actual_days: Effektive Tage
         price: "Preis"
         price_category: "Preiskategorie"
+        price_category:
+          member: "Mitgliederpreis"
+          regular: "Normalpreis"
+          subsidized: "Subventionierter Preis"
+          js_active_member: "J&S A-Mitgliederpreis"
+          js_active_regular: "J&S A-Normalpreis"
+          js_passive_member: "J&S P-Mitgliederpreis"
+          js_passive_regular: "J&S P-Normalpreis"
       external_training:
         person: Person
         event_kind: Kursart
@@ -1426,6 +1434,9 @@ de:
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
+
+    course_invoices:
+      no_invoice_possible: "WIP Probleme beim Erstellen der Rechung"
 
     neuanmeldungen:
       multiselect_actions:

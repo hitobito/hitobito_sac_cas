@@ -64,7 +64,7 @@ module People::Neuanmeldungen
         sent_at: Date.current,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
     end
 
     def send_confirmation_mail(person)

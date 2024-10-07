@@ -7,32 +7,35 @@
 
 require "spec_helper"
 
-describe Invoices::Abacus::CreateInvoiceJob do
-  let(:person) { people(:mitglied) }
-  let(:section) { groups(:bluemlisalp) }
+describe Invoices::Abacus::CreateCourseInvoiceJob do
+  let(:mitglied) { people(:mitglied) }
+  let(:kind) { event_kinds(:ski_course) }
+  let(:course) { Fabricate(:sac_course, kind: kind) }
+  let(:participation) { Fabricate(:event_participation, event: course, person: mitglied, price: 20, price_category: 1) }
   let(:now) { Time.zone.local(2024, 8, 24, 1) }
-
   let(:external_invoice) {
-    Fabricate(:external_invoice, person: person,
-      link: section,
+    Fabricate(:external_invoice,
+      person: mitglied,
+      link: participation,
       state: :draft,
-      issued_at: reference_date,
-      sent_at: reference_date,
-      year: reference_date.year,
+      issued_at: now,
+      sent_at: now,
+      year: now.year,
       total: 0,
-      type: "ExternalInvoice::SacMembership")
+      type: "ExternalInvoice::Course")
   }
-  let(:reference_date) { now }
   let(:client) { instance_double(Invoices::Abacus::Client) }
 
-  before { travel_to(now) }
+  before do
+    course.dates.destroy_all
+    Event::Date.create!(event: course, start_at: "01.01.2024", finish_at: "31.01.2024")
+    Event::Date.create!(event: course, start_at: "01.03.2024", finish_at: "31.03.2024")
+    participation.reload
+    travel_to(now)
+    allow(job).to receive(:client).and_return(client)
+  end
 
-  let(:discount) { nil }
-  let(:new_entry) { false }
-
-  subject(:job) { described_class.new(external_invoice, reference_date, discount: discount, new_entry: new_entry) }
-
-  before { allow(job).to receive(:client).and_return(client) }
+  subject(:job) { described_class.new(external_invoice) }
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
     allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit)
@@ -43,34 +46,19 @@ describe Invoices::Abacus::CreateInvoiceJob do
   end
 
   context "invoice errors" do
-    context "without memberships" do
+    context "without course prices" do
       let(:log_entry) { HitobitoLogEntry.last }
-      let(:reference_date) { 1.year.from_now }
 
       it "creates log, updates invoice state to error" do
+        participation.update!(price_category: nil, price: nil)
+
         expect do
           job.perform
         end.to change { HitobitoLogEntry.count }.by(1)
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
-        expect(log_entry.subject).to eq external_invoice
-      end
-    end
-
-    context "for non sac_family_main_person person" do
-      let(:log_entry) { HitobitoLogEntry.last }
-      let(:person) { people(:familienmitglied2) }
-
-      it "creates log, updates invoice state to error" do
-        expect do
-          job.perform
-        end.to change { HitobitoLogEntry.count }.by(1)
-          .and change { external_invoice.reload.state }.to("error")
-        expect(log_entry.level).to eq "error"
-        expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
+        expect(log_entry.message).to eq "WIP Probleme beim Erstellen der Rechung"
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -109,21 +97,6 @@ describe Invoices::Abacus::CreateInvoiceJob do
           2.times { Delayed::Worker.new.run(delayed_job.reload) }
         end.to change { HitobitoLogEntry.count }.by(2)
           .and change { external_invoice.reload.state }.to("error")
-      end
-    end
-
-    context "data quality errors" do
-      let(:log_entry) { HitobitoLogEntry.last }
-
-      before { person.update!(data_quality: :error) }
-
-      it "creates log, updates invoice state to error" do
-        expect { job.perform }.to change { HitobitoLogEntry.count }.by(1)
-          .and change { external_invoice.reload.state }.to("error")
-        expect(log_entry.level).to eq("error")
-        expect(log_entry.category).to eq("rechnungen")
-        expect(log_entry.message).to match(/Datenqualitätsprobleme/)
-        expect(log_entry.subject).to eq(external_invoice)
       end
     end
   end

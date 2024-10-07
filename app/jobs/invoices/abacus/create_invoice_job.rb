@@ -6,21 +6,18 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Invoices::Abacus::CreateInvoiceJob < BaseJob
-  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry]
+  self.parameters = [:external_invoice_id]
 
-  attr_reader :external_invoice_id, :reference_date, :discount, :new_entry
+  attr_reader :external_invoice_id
 
-  def initialize(external_invoice, reference_date, discount: nil, new_entry: false)
+  def initialize(external_invoice)
     @external_invoice_id = external_invoice.id
-    @reference_date = reference_date
-    @discount = discount
-    @new_entry = new_entry
   end
 
   def perform
-    if membership_invoice.invoice? && person.data_quality != "error"
+    if invoice_data.invoice? && person.data_quality != "error"
       transmit_subject
-      external_invoice.update!(total: membership_invoice.total)
+      external_invoice.update!(total: invoice_data.total)
       transmit_sales_order
     else
       assign_error
@@ -29,7 +26,6 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   def error(job, exception)
     super
-
     create_error_log_entry(exception.to_s)
   end
 
@@ -41,15 +37,7 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   def assign_error
     external_invoice.update!(state: :error)
-    create_error_log_entry(I18n.t(
-      if person.data_quality == "error"
-        ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY
-      elsif membership_invoice.memberships.none?
-        ExternalInvoice::SacMembership::NO_MEMBERSHIPS_KEY
-      else
-        ExternalInvoice::SacMembership::NOT_POSSIBLE_KEY
-      end
-    ))
+    create_error_log_entry(I18n.t(invoice_error_key))
   end
 
   def transmit_subject
@@ -60,8 +48,8 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
   def transmit_sales_order
     sales_order = Invoices::Abacus::SalesOrder.new(
       external_invoice,
-      membership_invoice.positions,
-      membership_invoice.additional_user_fields
+      invoice_data.positions,
+      invoice_data.additional_user_fields
     )
     Invoices::Abacus::SalesOrderInterface.new(client).create(sales_order)
   end
@@ -70,15 +58,9 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
     HitobitoLogEntry.create!(
       message: message,
       level: :error,
-      category: ExternalInvoice::SacMembership::ERROR_CATEGORY,
+      category: ExternalInvoice::ERROR_CATEGORY,
       subject: external_invoice
     )
-  end
-
-  def membership_invoice
-    @membership ||= Invoices::Abacus::MembershipInvoiceGenerator
-      .new(external_invoice.person_id, external_invoice.link, reference_date, custom_discount: discount)
-      .build(new_entry: new_entry)
   end
 
   def external_invoice
@@ -88,4 +70,13 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
   def client = @client ||= Invoices::Abacus::Client.new
 
   def person = @person ||= Person.find(external_invoice.person_id)
+
+  # Override in subclass
+  def invoice_data
+    raise NotImplementedError, "invoice_data has to be implemented in subclass"
+  end
+
+  def invoice_error_key
+    raise NotImplementedError, "invoice_error_key has to be implemented in subclass"
+  end
 end
