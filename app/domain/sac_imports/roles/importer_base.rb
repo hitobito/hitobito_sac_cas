@@ -13,6 +13,7 @@ module SacImports::Roles
       @csv_report = csv_report
       @failed_person_ids = failed_person_ids
       @data = csv_source.rows(filter: @rows_filter)
+      @navision_import_group = fetch_navision_import_group
     end
 
     def create
@@ -27,7 +28,9 @@ module SacImports::Roles
       person = fetch_person(row)
       return unless person
 
-      yield
+      if yield(person)
+        clear_navision_import_role(person)
+      end
     end
 
     def fetch_person(row)
@@ -43,16 +46,26 @@ module SacImports::Roles
       nil
     end
 
+    def clear_navision_import_role(person)
+      person.roles.where(group: @navision_import_group).delete_all
+    end
+
+    def fetch_navision_import_group
+      navision_import_group =
+        Group::ExterneKontakte
+        .find_by(name: "Navision Import", parent: Group.root)
+    end
+
     def report_person_not_found(row)
-      @failed_person_ids << row[:navision_id]
-      report(row, error: "Person not found in hitobito")
+      report(row, nil, error: "Person not found in hitobito")
     end
 
     def report_person_failed_before(row)
-      report(row, error: "A previous role could not be imported for this person, skipping")
+      report(row, nil, error: "A previous role could not be imported for this person, skipping")
     end
 
-    def report(row, message: nil, warning: nil, error: nil)
+    def report(row, person, message: nil, warning: nil, error: nil)
+      @failed_person_ids << row[:navision_id] if person && error.present?
       output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
       if error.present?
         output_message << "❌ #{error}\n"
