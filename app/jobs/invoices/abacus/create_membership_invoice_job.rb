@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInvoiceJob
+  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry]
+
   attr_reader :reference_date, :discount, :new_entry
 
   def initialize(external_invoice, reference_date, discount: nil, new_entry: false)

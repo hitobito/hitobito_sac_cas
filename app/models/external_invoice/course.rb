@@ -44,7 +44,7 @@ class ExternalInvoice::Course < ExternalInvoice
         state: :draft,
         total: participation.price,
         link: participation,
-        year: participation.event.dates.order(:started_at).first.started_at.year
+        year: participation.event.dates.order(:start_at).first.start_at.year
       )
 
       Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!
