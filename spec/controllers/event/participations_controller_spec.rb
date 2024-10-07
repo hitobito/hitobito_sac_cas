@@ -310,32 +310,32 @@ describe Event::ParticipationsController do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:params) { {group_id: group.id, event_id: event.id, id: participation.id} }
 
-    it "PUT summon sets participation active and state to summoned" do
-      put :summon, params: params
-      participation.reload
-      expect(participation.active).to be true
+    it "PUT#summon sets participation active and state to summoned" do
+      expect { put :summon, params: params }
+        .not_to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count)
+      expect(participation.reload.active).to be true
       expect(participation.state).to eq "summoned"
       expect(flash[:notice]).to match(/wurde aufgeboten/)
     end
 
+    it "PUT#summon enqueues invoice if participation price is set" do
+      participation.update!(price: 10)
+      expect { put :summon, params: params }
+        .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+    end
+
     it "PUT#cancel sets statement and default canceled_at" do
       freeze_time
-      put :cancel, params: params.merge({
-        event_participation: {cancel_statement: "next time!"}
-      })
-      participation.reload
-      expect(participation.state).to eq "canceled"
+      put :cancel, params: params.merge({event_participation: {cancel_statement: "next time!"}})
+      expect(participation.reload.state).to eq "canceled"
       expect(participation.canceled_at).to eq Time.zone.today
       expect(participation.cancel_statement).to eq "next time!"
     end
 
     it "PUT#cancel can override canceled_at" do
       freeze_time
-      put :cancel, params: params.merge({
-        event_participation: {canceled_at: 1.day.ago}
-      })
-      participation.reload
-      expect(participation.state).to eq "canceled"
+      put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
+      expect(participation.reload.state).to eq "canceled"
       expect(participation.canceled_at).to eq 1.day.ago.to_date
       expect(participation.cancel_statement).to be_nil
     end
@@ -343,11 +343,8 @@ describe Event::ParticipationsController do
     it "PUT#cancel cannot override canceled_at when canceling own participation" do
       freeze_time
       participation.update!(person: people(:admin))
-      put :cancel, params: params.merge({
-        event_participation: {canceled_at: 1.day.ago}
-      })
-      participation.reload
-      expect(participation.state).to eq "canceled"
+      put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
+      expect(participation.reload.state).to eq "canceled"
       expect(participation.canceled_at).to eq Time.zone.today
       expect(participation.cancel_statement).to be_nil
     end
@@ -356,11 +353,8 @@ describe Event::ParticipationsController do
       freeze_time
       event.update_columns(applications_cancelable: false)
       participation.update!(person: people(:admin))
-      put :cancel, params: params.merge({
-        event_participation: {canceled_at: 1.day.ago}
-      })
-      participation.reload
-      expect(participation.state).to eq "assigned"
+      put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
+      expect(participation.reload.state).to eq "assigned"
       expect(flash[:alert]).to eq ["ist nicht gültig"]
     end
   end
@@ -380,8 +374,7 @@ describe Event::ParticipationsController do
           event_participation: {actual_days: "2", person_id: participation.person.id}
         }
       expect(response).to redirect_to(participation_path)
-      participation.reload
-      expect(participation.actual_days).to eq(2)
+      expect(participation.reload.actual_days).to eq(2)
     end
 
     it "does not allow to edit actual_days without participations_full in event" do
@@ -393,8 +386,7 @@ describe Event::ParticipationsController do
           event_participation: {actual_days: 2}
         }
       expect(response).to redirect_to(participation_path)
-      participation.reload
-      expect(participation.actual_days).to be_nil
+      expect(participation.reload.actual_days).to be_nil
     end
 
     describe "#price_category" do
