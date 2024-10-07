@@ -29,6 +29,7 @@
 #  index_external_invoices_on_person_id  (person_id)
 #
 class ExternalInvoice < ActiveRecord::Base
+  ERROR_CATEGORY = "rechnungen"
   STATES = %w[draft open payed cancelled error]
 
   include I18nEnums

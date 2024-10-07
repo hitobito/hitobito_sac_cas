@@ -35,10 +35,9 @@ class ExternalInvoice::SacMembership < ExternalInvoice
 
   after_update :handle_state_change_to_payed
 
-  ERROR_CATEGORY = "rechnungen"
   NOT_POSSIBLE_KEY = "people.membership_invoices.no_invoice_possible"
-  NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
   DATA_QUALITY_ERROR_KEY = "people.membership_invoices.data_quality_error"
+  NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
 
   def title
     I18n.t("invoices.sac_memberships.title", year: year)
