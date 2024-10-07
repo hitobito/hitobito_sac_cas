@@ -107,10 +107,15 @@ module SacImports
       person.street, person.housenumber = parse_address
 
       if email.present?
-        person.email = email
-        # Do not call person#confirm here as it persists the record.
-        # Instead we set confirmed_at manually.
-        person.confirmed_at = Time.zone.at(0)
+        if Person.where(email: email).exists?
+          person.additional_emails << ::AdditionalEmail.new(email: email, label: "Duplikat")
+          @warning = "Email #{email} already exists in the system. Importing with additional_email."
+        else
+          person.email = email
+          # Do not call person#confirm here as it persists the record.
+          # Instead we set confirmed_at manually.
+          person.confirmed_at = Time.zone.at(0)
+        end
       end
     end
 
