@@ -51,7 +51,7 @@ describe People::Neuanmeldungen::Approve do
       .to change { neuanmeldung_role_class.count }.by(-3)
       .and change { neuanmeldung_approved_role_class.count }.by(3)
       .and change { ExternalInvoice::SacMembership.count }.by(3)
-      .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(3)
+      .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(3)
       .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.first.person, sektion)
       .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.third.person, sektion)
       .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.fourth.person, sektion)
@@ -70,7 +70,7 @@ describe People::Neuanmeldungen::Approve do
 
     expect { described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call }
       .to not_change { ExternalInvoice::SacMembership.count }
-      .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
+      .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
       .and not_have_enqueued_mail(People::NeuanmeldungenMailer)
   end
 
@@ -96,7 +96,7 @@ describe People::Neuanmeldungen::Approve do
 
     it "send an email and invoice to person" do
       expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
-        .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+        .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
         .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
     end
 
@@ -106,7 +106,7 @@ describe People::Neuanmeldungen::Approve do
       it "send an email to main person of family" do
         person.update_columns(sac_family_main_person: true)
         expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
-          .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
           .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
       end
 
@@ -115,7 +115,7 @@ describe People::Neuanmeldungen::Approve do
         Person.where(id: [person.id, other.id]).update_all(household_key: "test")
         person.update_columns(sac_family_main_person: false)
         expect { approver.call }.to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(2)
-          .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
           .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(other, sektion)
       end
     end

@@ -85,7 +85,7 @@ module Wizards::Signup
         sent_at: today,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateInvoiceJob.new(invoice, today, new_entry: true).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, today, new_entry: true).enqueue!
     end
 
     def enqueue_confirmation_mail
