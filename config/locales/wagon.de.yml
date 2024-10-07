@@ -5,6 +5,7 @@
 
 de:
   global:
+    date_field_placeholder: DD.MM.YYYY
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
