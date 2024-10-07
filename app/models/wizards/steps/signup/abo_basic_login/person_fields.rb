@@ -7,10 +7,11 @@
 
 module Wizards::Steps::Signup::AboBasicLogin
   class PersonFields < Wizards::Steps::Signup::PersonFields
+    def self.agreements = [:data_protection]
+
     include Wizards::Steps::Signup::AgreementFields
 
     NON_ASSIGNABLE_ATTRS = Wizards::Steps::Signup::AgreementFields::AGREEMENTS + [:newsletter]
-    self.partial = "wizards/steps/signup/person_fields"
 
     def requires_adult_consent? = false
 

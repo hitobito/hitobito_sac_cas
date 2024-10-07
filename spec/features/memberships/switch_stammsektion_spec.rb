@@ -99,13 +99,13 @@ describe "switching stammsektion", js: true do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:familienmitglied) }
 
-    before { person.update!(first_name: nil) }
+    before { person.update!(birthday: nil) }
 
     it "shows an alert info message" do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       expect(find(".alert-info").text).to include("kann wegen ungültigen Daten nicht durchgeführt werden")
-      expect(page).to have_text("Vorname ist leer")
+      expect(page).to have_text("Geburtsdatum ist leer")
     end
   end
 end

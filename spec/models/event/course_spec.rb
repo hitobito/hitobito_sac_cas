@@ -468,18 +468,50 @@ describe Event::Course do
   end
 
   describe "when state changes to canceled" do
-    let(:course) { Fabricate(:sac_open_course, language: "de") }
+    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
 
-    before do
-      course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-      ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
-      ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course)
+    context "with participants" do
+      before do
+        course.participations.create!([
+          {person: people(:admin), roles: [Event::Role::Leader.new]},
+          {person: people(:mitglied)}
+        ])
+      end
+
+      it "sends an email to all participants if canceled because of minimum participants" do
+        expect { course.update!(state: :canceled, canceled_reason: :minimum_participants) }
+          .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).twice
+      end
+
+      it "sends an email to all participants if canceled because of no_leader" do
+        expect { course.update!(state: :canceled, canceled_reason: :no_leader) }
+          .to have_enqueued_mail(Event::CanceledMailer, :no_leader).twice
+      end
+
+      it "sends an email to all participants if canceled because of weather" do
+        expect { course.update!(state: :canceled, canceled_reason: :weather) }
+          .to have_enqueued_mail(Event::CanceledMailer, :weather).twice
+      end
     end
 
-    it "queues job to cancel invoices for all participants" do
-      expect do
-        course.update!(state: :canceled)
-      end.to change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(2)
+    context "without participants" do
+      it "doesnt send an email" do
+        expect { course.update!(state: :canceled) }.not_to have_enqueued_mail(Event::CanceledMailer)
+      end
+    end
+
+    context "invoice" do
+      before do
+        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
+        ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course)
+      end
+
+      it "queues job to cancel invoices for all participants" do
+        expect do
+          course.update!(state: :canceled)
+        end.to change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(2)
+      end
     end
   end
 end

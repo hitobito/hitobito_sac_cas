@@ -415,15 +415,6 @@ describe Person do
           expect(person.data_quality).to eq("warning")
         end
 
-        it "validates the street, zip_code, and town" do
-          expect do
-            person.update!(street: nil, zip_code: nil, town: nil)
-          end.to change(person.data_quality_issues, :count).by(3)
-          expect(person.data_quality_issues.map(&:message))
-            .to include("Strasse ist leer", "PLZ ist leer", "Ort ist leer")
-          expect(person.data_quality).to eq("error")
-        end
-
         it "validates the email and phone_numbers" do
           expect do
             person.phone_numbers.destroy_all
@@ -479,7 +470,7 @@ describe Person do
     end
 
     it "doesn't enqueue the job if data quality errors exist" do
-      expect { person.update!(first_name: nil) }.not_to change(job, :count)
+      expect { person.update!(birthday: nil) }.not_to change(job, :count)
     end
   end
 

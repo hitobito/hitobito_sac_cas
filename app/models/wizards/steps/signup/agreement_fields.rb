@@ -9,20 +9,18 @@ module Wizards::Steps::Signup
   module AgreementFields
     extend ActiveSupport::Concern
 
-    AGREEMENTS = [
-      :statutes,
-      :data_protection
-    ].freeze
+    AGREEMENTS = %i[statutes data_protection].freeze
 
     included do
       include Rails.application.routes.url_helpers
 
-      AGREEMENTS.each do |agreement|
+      class_attribute :agreements, default: AGREEMENTS unless respond_to?(:agreements)
+      attribute :newsletter, :boolean
+
+      agreements.each do |agreement|
         attribute agreement, :boolean, default: false
         validates agreement, acceptance: true
       end
-
-      attribute :newsletter, :boolean
     end
 
     def link_translations(key)

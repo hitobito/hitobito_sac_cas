@@ -5,25 +5,35 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Event::SurveyMailer < ApplicationMailer
+class Event::CanceledMailer < ApplicationMailer
   include EventMailer
   include MultilingualMailer
 
-  SURVEY = "event_survey"
+  MINIMUM_PARTICIPANTS = "event_canceled_minimum_participants"
+  NO_LEADER = "event_canceled_no_leader"
+  WEATHER = "event_canceled_weather"
 
-  def survey(participation)
+  def minimum_participants(participation)
+    send_mail(participation, MINIMUM_PARTICIPANTS)
+  end
+
+  def no_leader(participation)
+    send_mail(participation, NO_LEADER)
+  end
+
+  def weather(participation)
+    send_mail(participation, WEATHER)
+  end
+
+  private
+
+  def send_mail(participation, content_key)
     @participation = participation
     @course = participation.event
     @person = participation.person
     headers[:bcc] = @course.groups.first.course_admin_email
     locales = @course.language.split("_")
 
-    compose_multilingual(@person, SURVEY, locales)
-  end
-
-  private
-
-  def placeholder_survey_link
-    link_to(@course.link_survey)
+    compose_multilingual(@person, content_key, locales)
   end
 end

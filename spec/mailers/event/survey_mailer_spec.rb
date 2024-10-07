@@ -25,7 +25,7 @@ describe Event::SurveyMailer do
     expect(mail.body.to_s).to include(
       "Hallo Edmund,",
       "wenn du dir einen Moment Zeit nehmen könntest, um an unserer Umfrage teilzunehmen",
-      "https://example.com/survey"
+      "<a href=\"https://example.com/survey\">https://example.com/survey</a>"
     )
   end
 end

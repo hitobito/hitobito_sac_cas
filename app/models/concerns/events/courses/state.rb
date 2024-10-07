@@ -31,6 +31,7 @@ module Events::Courses::State
     after_update :send_application_published_email, if: :state_changed_from_created_to_application_open?
     after_update :send_application_paused_email, if: :state_changed_to_application_paused?
     after_update :send_application_closed_email, if: :state_changed_to_application_closed?
+    after_update :send_canceled_email, if: :state_changed_to_canceled?
     after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
     after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
     after_update :cancel_invoices, if: :state_changed_to_canceled?
@@ -73,16 +74,16 @@ module Events::Courses::State
     saved_change_to_attribute(:state)&.second == "application_closed"
   end
 
+  def state_changed_to_canceled?
+    saved_change_to_attribute(:state)&.second == "canceled"
+  end
+
   def state_changed_from_assignment_closed_to_ready?
     saved_change_to_attribute(:state) == ["assignment_closed", "ready"]
   end
 
   def state_changed_from_created_to_application_open?
     saved_change_to_attribute(:state) == ["created", "application_open"]
-  end
-
-  def state_changed_to_canceled?
-    saved_change_to_attribute(:state)&.second == "canceled"
   end
 
   def notify_rejected_participants
@@ -129,6 +130,14 @@ module Events::Courses::State
 
   def send_application_closed_email
     Event::ApplicationClosedMailer.notice(self).deliver_later if groups.first.course_admin_email.present?
+  end
+
+  def send_canceled_email
+    return if canceled_reason.nil?
+
+    participations.each do |participation|
+      Event::CanceledMailer.send(canceled_reason, participation).deliver_later
+    end
   end
 
   def adjust_state

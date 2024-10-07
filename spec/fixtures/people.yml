@@ -10,6 +10,10 @@ admin:
   id: 600_000
   first_name: Anna
   last_name: Admin
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: support@hitobito.example.com
   gender: m
   primary_group: geschaeftsstelle
@@ -34,6 +38,10 @@ familienmitglied:
   id: 600_002
   first_name: Tenzing
   last_name: Norgay
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: t.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
@@ -45,6 +53,10 @@ familienmitglied2:
   id: 600_003
   first_name: Frieda
   last_name: Norgay
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: f.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 25.years.ago %>
@@ -55,6 +67,10 @@ familienmitglied_kind:
   id: 600_004
   first_name: Nima
   last_name: Norgay
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: n.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
   birthday: <%= 10.years.ago %>
@@ -65,6 +81,10 @@ abonnent:
   id: 600_005
   first_name: Magazina
   last_name: Leserate
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: magazina.l@hitobito.example.com
   gender: w
   primary_group: abo_die_alpen
@@ -75,6 +95,10 @@ tourenchef:
   id: 600_006
   first_name: Ida
   last_name: Paschke
+  street: Ophovenerstrasse
+  housenumber: 79a
+  zip_code: 2843
+  town: Neu Carlscheid
   email: paschke-ida@hitobito.example.com
   gender: f
   primary_group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse

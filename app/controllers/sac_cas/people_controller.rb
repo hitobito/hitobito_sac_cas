@@ -12,7 +12,7 @@ module SacCas::PeopleController
 
   prepended do
     before_action :set_lookup_prefixes
-    before_update :check_birthday
+    before_update :check_birthday, :check_email
   end
 
   def list_filter_args
@@ -64,5 +64,17 @@ module SacCas::PeopleController
     return unless entry.sac_membership_active? && entry.birthday_changed?
 
     People::BirthdayValidator.new(entry, current_user).validate!
+  end
+
+  def check_email
+    return if entry.email.present? || entry.changes[:email]&.first.nil? ||
+      (entry != current_user && current_user_has_backoffice_role?)
+
+    entry.errors.add(:email, :blank)
+    throw(:abort) # don't save record
+  end
+
+  def current_user_has_backoffice_role?
+    current_user.roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
   end
 end
