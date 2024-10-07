@@ -16,7 +16,7 @@ describe SacImports::PeopleImporter do
   let(:invalid_person_navision_id) { "4200010" }
 
   let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-1_people_2024-01-23-11:42.csv") }
-  let(:report_headers) { %w[navision_membership_number navision_name errors] }
+  let(:report_headers) { %w[navision_membership_number navision_name warnings errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
   around do |example|
@@ -56,7 +56,7 @@ describe SacImports::PeopleImporter do
 
     expect(csv_report.size).to eq(2)
     expect(csv_report.first).to eq(report_headers)
-    expect(csv_report.second).to eq([invalid_person_navision_id, nil, "Bitte geben Sie einen Namen ein"])
+    expect(csv_report.second).to eq([invalid_person_navision_id, nil, nil, "Bitte geben Sie einen Namen ein"])
   end
 
   it "imports people and assigns role" do

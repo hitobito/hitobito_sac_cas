@@ -14,11 +14,12 @@ module SacImports
     DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    attr_reader :row, :group
+    attr_reader :row, :group, :warning
 
     def initialize(row, group)
       @row = row
       @group = group
+      @warning = nil
     end
 
     def person
