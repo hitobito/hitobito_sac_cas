@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Invoices::SacMemberships::MembershipManager do
+  include ActiveJob::TestHelper
+
   let(:end_of_next_year) { Time.zone.today.next_year.end_of_year }
   let(:mitglied) { roles(:mitglied) }
   let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
@@ -108,8 +110,7 @@ describe Invoices::SacMemberships::MembershipManager do
       subject { described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), end_of_next_year.year) }
 
       it "creates stammsektion role" do
-        subject.update_membership_status
-
+        expect { subject.update_membership_status }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
         expect(new_member.confirmed_at).to be_within(2.seconds).of(Time.zone.now)
         expect(new_member.sac_membership.active?).to eq(true)
         expect(new_member.roles.count).to eq(1)
