@@ -14,6 +14,7 @@ module SacImports::Roles
       @failed_person_ids = failed_person_ids
       @data = csv_source.rows(filter: @rows_filter)
       @navision_import_group = fetch_navision_import_group
+      @csv_source_person_ids = collect_csv_source_person_ids
     end
 
     def create
@@ -89,6 +90,10 @@ module SacImports::Roles
         warning: warning,
         error: error
       })
+    end
+
+    def collect_csv_source_person_ids
+      @data.map { |row| row[:navision_id].to_i }.uniq
     end
 
     def target_group_path(row)

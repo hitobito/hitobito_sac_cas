@@ -22,12 +22,11 @@ module SacImports::Roles
     def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
       @rows_filter = { role: /^Mitglied \(Stammsektion\).+/ }
       super
-      @csv_source_person_ids = collect_csv_source_person_ids
     end
     
     def create
       delete_existing_membership_roles
-      # reset_family_main_person
+      reset_family_main_person
       super
     end
 
@@ -41,8 +40,8 @@ module SacImports::Roles
         beitragskategorie = extract_beitragskategorie(row)
         # fail if invalid beitragskategorie
         
-        create_membership_role(row, membership_group, person, beitragskategorie)
-        set_family_main_person(person, row)
+        role = create_membership_role(row, membership_group, person, beitragskategorie)
+        set_family_main_person(person, role)
         clear_navision_import_role(person)
         report(row, person, message: "Membership role created")
         true
@@ -61,6 +60,7 @@ module SacImports::Roles
       end
 
       role.save!(context: :import)
+      role
     end
 
     def extract_beitragskategorie(row)
@@ -78,18 +78,20 @@ module SacImports::Roles
       nil
     end
 
-    def set_family_main_person(person, row)
-      # if role active and  row Mitglied (Stammsektion) (Familie)
+    def set_family_main_person(person, role)
+      if !role.deleted? && role.beitragskategorie == "family"
+        person.update!(sac_family_main_person: true)
+      end
+    end
+
+    def reset_family_main_person
+      Person.where(id: @csv_source_person_ids).update_all(sac_family_main_person: false)
     end
 
     def delete_existing_membership_roles
       role_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
       membership_roles = Role.with_deleted.where(type: role_types, person_id: @csv_source_person_ids)
       membership_roles.delete_all
-    end
-
-    def collect_csv_source_person_ids
-      @data.map { |row| row[:navision_id].to_i }.uniq
     end
   end
 end

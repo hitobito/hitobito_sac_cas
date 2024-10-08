@@ -107,7 +107,7 @@ describe SacImports::Roles::MembershipsImporter do
                                       nil, nil, "Person not found in hitobito"])
     end
 
-    it "creates/resets membership roles and sets family main person" do
+    it "creates/resets membership roles" do
       sac_chaux_fonds = Group::Sektion.create!(name: "CAS La Chaux-de-Fonds", foundation_year: 1942, parent_id: Group.root.id)
       person5 = Fabricate(:person, id: 4200005, first_name: "Hans", last_name: "Muster")
 
@@ -177,6 +177,8 @@ describe SacImports::Roles::MembershipsImporter do
 
   context "with mocked csv rows" do
     let(:mitglied) { people(:mitglied) }
+    let(:active_membership_role) { mitglied.roles.first }
+    let(:inactive_membership_role) { mitglied.roles.deleted.first }
 
     let(:row) do
       {
@@ -195,10 +197,15 @@ describe SacImports::Roles::MembershipsImporter do
       }
     end
 
+    let(:rows) { [row].compact }
+
     let(:csv_source) do
       csv_source_instance = SacImports::CsvSource.new(:NAV2)
-      allow(csv_source_instance).to receive(:rows).and_return([row])
+      allow(csv_source_instance).to receive(:rows).and_return(rows)
       csv_source_instance
+    end
+
+    context "creates/resets membership roles" do
     end
 
     context "family main person" do
@@ -220,9 +227,41 @@ describe SacImports::Roles::MembershipsImporter do
                                      "Membership role created", nil, nil])
         mitglied.reload
         expect(mitglied.roles.count).to eq(1)
+        expect(active_membership_role.beitragskategorie).to eq("family")
+        expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
+        expect(mitglied.sac_family_main_person).to eq(true)
       end
 
       it "creates inactive family role and sets sac_family_main_person to false" do
+        row[:valid_until] = "2023-12-31"
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+                                     "Hillary Edmund",
+                                     "2000-06-21",
+                                     "2023-12-31",
+                                     "Sektion > SAC Blüemlisalp > Mitglieder",
+                                     "Mitglied (Stammsektion) (Familie)",
+                                     "Membership role created", nil, nil])
+
+        mitglied.reload
+        expect(mitglied.roles.count).to eq(0)
+        expect(mitglied.roles.deleted.count).to eq(1)
+        expect(inactive_membership_role.beitragskategorie).to eq("family")
+        expect(inactive_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
+        expect(mitglied.sac_family_main_person).to eq(false)
+      end
+
+      it "resets sac_family_main_person if previously set" do
+        mitglied.update!(sac_family_main_person: true)
+        row[:role] = "Mitglied (Stammsektion) (Einzel)"
+
+        importer.create
+        mitglied.reload
+        expect(mitglied.sac_family_main_person).to eq(false)
       end
     end
   end
