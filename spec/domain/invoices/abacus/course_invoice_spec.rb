@@ -47,8 +47,8 @@ describe Invoices::Abacus::CourseInvoice do
     it "sets additional user fields" do
       additional_user_fields = subject.additional_user_fields
 
-      expect(additional_user_fields[:user_field8]).to eq("10000")
-      expect(additional_user_fields[:user_field9]).to eq("Eventus")
+      expect(additional_user_fields[:user_field8]).to eq(course.number)
+      expect(additional_user_fields[:user_field9]).to eq(course.name)
       expect(additional_user_fields[:user_field10]).to eq("01.01.2024 - 31.01.2024, 01.03.2024 - 31.03.2024")
     end
   end
