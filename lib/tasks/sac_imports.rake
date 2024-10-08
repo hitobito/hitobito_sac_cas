@@ -35,6 +35,11 @@ namespace :sac_imports do
     SacImports::RolesImporter.new(role_type: :membership).create
   end
 
+  desc "Imports families"
+  task "nav1-2_sac_families" do
+    SacImports::FamilyImporter.new.create
+  end
+
   desc "Imports qualifications"
   task "nav3-1_qualifications": [:environment] do
     SacImports::QualificationsImporter.new.create
