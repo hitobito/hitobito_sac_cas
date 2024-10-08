@@ -221,6 +221,16 @@ describe SacImports::Roles::MembershipsImporter do
 
         importer.create
       end
+
+
+      it "reports if membership role cannot be created" do
+        role_instance = Role.new
+        expect(Group::SektionsMitglieder::Mitglied).to receive(:new).and_return(role_instance)
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ Hitobito Role: Person muss ausgefüllt werden, Group muss ausgefüllt werden, Rolle muss ausgefüllt werden\n")
+
+        importer.create
+      end
     end
 
     context "family main person" do

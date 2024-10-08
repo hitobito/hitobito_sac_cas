@@ -57,6 +57,16 @@ module SacImports::Roles
       false
     end
 
+    def save_role!(role, row)
+      begin
+        role.save!(context: :import)
+      rescue ActiveRecord::RecordInvalid
+        report(row, nil, error: "Hitobito Role: " + role.errors.full_messages.join(', '))
+        return nil
+      end
+      role
+    end
+
     def clear_navision_import_role(person)
       person.roles.where(group: @navision_import_group).delete_all
     end

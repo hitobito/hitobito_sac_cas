@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Roles
-  class MembershipsImporter < ImporterBase
+  class AdditionalMembershipsImporter < ImporterBase
 
     BEITRAGSKATEGORIE_MAPPING = {
       "Einzel" => :adult,
@@ -20,13 +20,7 @@ module SacImports::Roles
                                               Group::Ortsgruppe.sti_name].freeze
 
     def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
-      @rows_filter = { role: /^Mitglied \(Stammsektion\).+/ }
-      super
-    end
-    
-    def create
-      delete_existing_membership_roles
-      reset_family_main_person
+      @rows_filter = { role: /^Mitglied \(Zusatzsektion\).+/ }
       super
     end
 
@@ -41,20 +35,19 @@ module SacImports::Roles
         beitragskategorie = extract_beitragskategorie(row)
         return false unless beitragskategorie.present? 
         
-        role = create_membership_role(row, membership_group, person, beitragskategorie)
+        role = create_additional_membership_role(row, membership_group, person, beitragskategorie)
         return false unless role.present?
 
-        set_family_main_person(person, role)
-        report(row, person, message: "Membership role created")
+        report(row, person, message: "Additional Membership role created")
         true
       end
     end
 
-    def create_membership_role(row, membership_group, person, beitragskategorie)
-      role = Group::SektionsMitglieder::Mitglied.new(group: membership_group,
-                                                     person: person,
-                                                     beitragskategorie: beitragskategorie,
-                                                     created_at: row[:valid_from])
+    def create_additional_membership_role(row, membership_group, person, beitragskategorie)
+      role = Group::SektionsMitglieder::MitgliedZusatzsektion.new(group: membership_group,
+                                                                  person: person,
+                                                                  beitragskategorie: beitragskategorie,
+                                                                  created_at: row[:valid_from])
       if Date.parse(row[:valid_until]).past?
         role.deleted_at = row[:valid_until]
       else
@@ -65,7 +58,7 @@ module SacImports::Roles
     end
 
     def extract_beitragskategorie(row)
-      kat = row[:role][/^Mitglied \(Stammsektion\) \((.*?)\)/, 1]
+      kat = row[:role][/^Mitglied \(Zusatzsektion\) \((.*?)\)/, 1]
       kat = BEITRAGSKATEGORIE_MAPPING[kat]
       return kat if kat.present?
 
@@ -81,22 +74,6 @@ module SacImports::Roles
 
       report(row, person, error: "No Section/Ortsgruppe group found for '#{row[:group_level1]}'")
       nil
-    end
-
-    def set_family_main_person(person, role)
-      if !role.deleted? && role.beitragskategorie == "family"
-        person.update!(sac_family_main_person: true)
-      end
-    end
-
-    def reset_family_main_person
-      Person.where(id: @csv_source_person_ids).update_all(sac_family_main_person: false)
-    end
-
-    def delete_existing_membership_roles
-      role_types = SacCas::MITGLIED_ROLES.map(&:sti_name)
-      membership_roles = Role.with_deleted.where(type: role_types, person_id: @csv_source_person_ids)
-      membership_roles.delete_all
     end
   end
 end
