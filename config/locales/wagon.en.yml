@@ -1519,6 +1519,9 @@ en:
         agreement_fields:
           adult_consent_caption: I confirm that I am at least 18 years old or have the consent of my legal guardian
           newsletter_caption: I would like to subscribe to a newsletter
+        abo_basic_login:
+          person_fields:
+            next_button: ""
         abo_magazin:
           issues_from_field_title: Subscription
           issues_from_field:
