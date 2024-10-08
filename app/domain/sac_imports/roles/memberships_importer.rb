@@ -34,11 +34,12 @@ module SacImports::Roles
 
     def process_row(row)
       super(row) do |person|
+        # skip todo row
         membership_group = fetch_membership_group(row, person)
         return false unless membership_group.present?
 
         beitragskategorie = extract_beitragskategorie(row)
-        # fail if invalid beitragskategorie
+        return false unless beitragskategorie.present? 
         
         role = create_membership_role(row, membership_group, person, beitragskategorie)
         set_family_main_person(person, role)
@@ -65,7 +66,11 @@ module SacImports::Roles
 
     def extract_beitragskategorie(row)
       kat = row[:role][/^Mitglied \(Stammsektion\) \((.*?)\)/, 1]
-      BEITRAGSKATEGORIE_MAPPING[kat]
+      kat = BEITRAGSKATEGORIE_MAPPING[kat]
+      return kat if kat.present?
+
+      report(row, nil, error: "Invalid Beitragskategorie in '#{row[:role]}'")
+      false
     end
 
     def fetch_membership_group(row, person)

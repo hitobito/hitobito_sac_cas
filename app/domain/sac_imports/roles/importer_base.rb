@@ -26,6 +26,7 @@ module SacImports::Roles
     private
 
     def process_row(row)
+      return unless dates_valid?(row)
       person = fetch_person(row)
       return unless person
 
@@ -47,6 +48,15 @@ module SacImports::Roles
       nil
     end
 
+    def dates_valid?(row)
+      valid_until = Date.parse(row[:valid_until])
+      valid_from = Date.parse(row[:valid_from])
+      return true if valid_from < valid_until
+
+      report(row, nil, error: "valid_from (GültigAb) cannot be before valid_until (GültigBis)")
+      false
+    end
+
     def clear_navision_import_role(person)
       person.roles.where(group: @navision_import_group).delete_all
     end
@@ -66,7 +76,7 @@ module SacImports::Roles
     end
 
     def report(row, person, message: nil, warning: nil, error: nil)
-      @failed_person_ids << row[:navision_id] if person && error.present?
+      @failed_person_ids << row[:navision_id] if error.present?
       output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
       if error.present?
         output_message << "❌ #{error}\n"

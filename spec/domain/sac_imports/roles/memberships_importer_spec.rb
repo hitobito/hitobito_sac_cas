@@ -42,46 +42,19 @@ describe SacImports::Roles::MembershipsImporter do
 
     let!(:person1) { Fabricate(:person, id: 4200001, first_name: "Johannes", last_name: "Maurer") }
     let!(:person1_navision_import_role) { Fabricate(Group::ExterneKontakte::Kontakt.name.to_sym, person: person1, group: navision_import_group) }
-    let!(:person2) { Fabricate(:person, id: 4200002, first_name: "Harry", last_name: "Potter") }
-    let!(:person2_membership_role) do
-      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-                person: person2,
-                created_at: DateTime.new(2010, 1, 1),
-                delete_on: DateTime.new(2024, 12, 31),
-                group: groups(:bluemlisalp_mitglieder))
-    end
-    let!(:person2_additional_membership_role) do
-      Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.name.to_sym,
-                person: person2,
-                created_at: DateTime.new(2018, 1, 1),
-                delete_on: DateTime.new(2024, 12, 31),
-                group: groups(:matterhorn_mitglieder))
-    end
-    let!(:person2_inactive_membership_role) do
-      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-                person: person2,
-                created_at: DateTime.new(2000, 1, 1),
-                delete_on: DateTime.new(2008, 12, 31),
-                group: groups(:bluemlisalp_mitglieder))
-    end
-    let!(:person2_other_role) { Fabricate(Group::AboMagazin::Abonnent.name.to_sym, person: person2, group: groups(:abo_die_alpen)) }
-    let!(:person2_navision_import_role) { Fabricate(Group::ExterneKontakte::Kontakt.name.to_sym, person: person2, group: navision_import_group) }
-    let!(:sac_winterthur_mitglieder) do
-      section = Group::Sektion
-        .create!(name: "SAC Winterthur",
-                 foundation_year: 1900,
-                 parent_id: Group.root.id)
-      Group::SektionsMitglieder.find_by(parent_id: section.id)
-    end
+    let!(:sac_chaux_de_fonds) { Group::Sektion.create!(name: "CAS La Chaux-de-Fonds", parent: Group.root, foundation_year: 1942) }
 
-    it "reports people not found if they do not exist by navision id" do
+    it "imports role from nav2 csv fixture file" do
       expected_output = []
-      2.times { expected_output << "4200000 (Nachname 1 Vorname 1): ❌ Person not found in hitobito\n" }
+      expected_output << "4200000 (Nachname 1 Vorname 1): ❌ Person not found in hitobito\n"
+      expected_output << "4200000 (Nachname 1 Vorname 1): ❌ A previous role could not be imported for this person, skipping\n"
       expected_output << "4200003 (Cochet Frederique): ❌ Person not found in hitobito\n"
-      3.times { expected_output << "4200004 (Alder John): ❌ Person not found in hitobito\n" }
+      expected_output << "4200004 (Alder John): ❌ Person not found in hitobito\n"
+      2.times { expected_output << "4200004 (Alder John): ❌ A previous role could not be imported for this person, skipping\n" }
       expected_output << "4200005 (Muster Hans): ❌ Person not found in hitobito\n"
       expected_output << "4200006 (Buri Max): ❌ Person not found in hitobito\n"
       expected_output << "4200008 (Bühler Christian): ❌ Person not found in hitobito\n"
+      expected_output << "4200001 (Maurer Johannes): ✅ Membership role created\n"
 
       expected_output.each do |output_line|
         expect(output).to receive(:print).with(output_line)
@@ -91,86 +64,33 @@ describe SacImports::Roles::MembershipsImporter do
 
       expect(csv_report.size).to eq(13)
       expect(csv_report.first).to eq(report_headers)
-      expect(csv_report.second).to eq(["4200000",
-                                       "Nachname 1 Vorname 1",
-                                       "2014-10-06",
-                                       "2022-12-31",
-                                       "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                       "Mitglied (Stammsektion) (Jugend)",
-                                       nil, nil, "Person not found in hitobito"])
-      expect(csv_report.third).to eq(["4200000",
-                                      "Nachname 1 Vorname 1",
-                                      "2023-01-01",
-                                      "2024-12-31",
-                                      "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                      "Mitglied (Stammsektion) (Einzel)",
-                                      nil, nil, "Person not found in hitobito"])
-    end
-
-    it "creates/resets membership roles" do
-      sac_chaux_fonds = Group::Sektion.create!(name: "CAS La Chaux-de-Fonds", foundation_year: 1942, parent_id: Group.root.id)
-      person5 = Fabricate(:person, id: 4200005, first_name: "Hans", last_name: "Muster")
-
-      expected_output = []
-      expected_output << "4200005 (Muster Hans): ❌ No Section/Ortsgruppe group found for 'CAS Jaman'\n"
-      #expected_output << "4200001 (Maurer Johannes): ❌ A previous role could not be imported for this person, skipping\n"
-      expected_output << "4200002 (Potter Harry): ✅ Membership role created\n"
-
-      expected_output.each do |output_line|
-        expect(output).to receive(:print).with(output_line)
-      end
-
-      importer.create
-
-      # person1
-      ## creates new membership roles
-      expect(person1.reload.roles.count).to eq(1) # should have only one active role
-      person1_new_membership_role = person1.roles.find_by(type: Group::SektionsMitglieder::Mitglied.sti_name)
-      expect(person1_new_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
-      expect(person1_new_membership_role.group.parent).to eq(sac_chaux_fonds)
-      expect(person1_new_membership_role.beitragskategorie).to eq("family")
-      expect(person1_new_membership_role.created_at.to_date).to eq(Date.new(2018, 6, 7))
-      expect(person1_new_membership_role.delete_on).to eq(Date.new(2024, 12, 31))
-      expect(person1.sac_family_main_person).to eq(false)
-      person1_new_inactive_membership_role = person1.roles.deleted.find_by(type: Group::SektionsMitglieder::Mitglied.sti_name)
-      expect(person1_new_inactive_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
-      expect(person1_new_inactive_membership_role.group.parent).to eq(sac_chaux_fonds)
-      expect(person1_new_inactive_membership_role.beitragskategorie).to eq("adult")
-      expect(person1_new_inactive_membership_role.created_at.to_date).to eq(Date.new(2014, 10, 6))
-      expect(person1_new_inactive_membership_role.delete_on).to be_nil
-      expect(person1_new_inactive_membership_role.deleted_at.to_date).to eq(Date.new(2018, 6, 6))
-
-      ## but does not touch membership roles for people outside current NAV2
-      expect(roles(:mitglied)).to be_persisted
-      ## and does not touch non membership roles
-      expect(person2_other_role.reload).to be_persisted
-
-      # person2
-      ## resets all existing membership roles
-      person2_existing_membership_role_ids = [person2_membership_role.id,
-                                              person2_additional_membership_role.id,
-                                              person2_inactive_membership_role.id]
-      expect(Role.with_deleted.where(id: person2_existing_membership_role_ids)).not_to exist
-      ## creates new membership roles
-      person2_new_membership_role = person2.roles.with_deleted.find_by(type: Group::SektionsMitglieder::Mitglied.sti_name)
-      expect(person2_new_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
-      expect(person2_new_membership_role.group).to eq(sac_winterthur_mitglieder)
-      expect(person2_new_membership_role.beitragskategorie).to eq("adult")
-      ## removes navision import role if present
-      expect(person2.roles.where(group: navision_import_group)).not_to exist
-
-      # person3
-      ## does not remove navision import role if no membership role could be created
-      #expect(person3.roles.where(group: navision_import_group)).to exist
-
-      expect(csv_report.size).to eq(13)
-      expect(csv_report.first).to eq(report_headers)
-      expect(csv_report[5]).to eq(["4200002",
-                                   "Potter Harry",
+      expect(csv_report[1]).to eq(["4200000",
+                                   "Nachname 1 Vorname 1",
                                    "2014-10-06",
-                                   "2020-01-29",
-                                   "Sektion > SAC Winterthur > Mitglieder",
+                                   "2022-12-31",
+                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                   "Mitglied (Stammsektion) (Jugend)",
+                                   nil, nil, "Person not found in hitobito"])
+      expect(csv_report[2]).to eq(["4200000",
+                                   "Nachname 1 Vorname 1",
+                                   "2023-01-01",
+                                   "2024-12-31",
+                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
                                    "Mitglied (Stammsektion) (Einzel)",
+                                   nil, nil, "A previous role could not be imported for this person, skipping"])
+      expect(csv_report[3]).to eq(["4200001",
+                                   "Maurer Johannes",
+                                   "2014-10-06",
+                                   "2018-06-06",
+                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                   "Mitglied (Stammsektion) (Einzel)",
+                                   "Membership role created", nil, nil])
+      expect(csv_report[4]).to eq(["4200001",
+                                   "Maurer Johannes",
+                                   "2018-06-07",
+                                   "2024-12-31",
+                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                   "Mitglied (Stammsektion) (Frei Fam)",
                                    "Membership role created", nil, nil])
     end
   end
@@ -206,6 +126,101 @@ describe SacImports::Roles::MembershipsImporter do
     end
 
     context "creates/resets membership roles" do
+      it "clears existing membership roles and creates new membership role" do
+        existing_roles = [roles(:mitglied), roles(:mitglied_zweitsektion)]
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Membership role created\n")
+        existing_roles.each do |role|
+          expect(role).to be_persisted
+        end
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+                                     "Hillary Edmund",
+                                     "2000-06-21",
+                                     "2024-12-31",
+                                     "Sektion > SAC Blüemlisalp > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     "Membership role created", nil, nil])
+
+        mitglied.reload
+        expect(mitglied.roles.count).to eq(1)
+        expect(active_membership_role.beitragskategorie).to eq("adult")
+        expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
+        expect(active_membership_role.group.parent.name).to eq("SAC Blüemlisalp")
+        expect(mitglied.sac_family_main_person).to eq(false)
+
+        existing_roles.each do |role|
+          expect(Role.where(id: role.id)).not_to exist
+        end
+      end
+
+      it "reports person not found" do
+        row[:navision_id] = "42"
+
+        expect(output).to receive(:print).with("42 (Hillary Edmund): ❌ Person not found in hitobito\n")
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["42",
+                                     "Hillary Edmund",
+                                     "2000-06-21",
+                                     "2024-12-31",
+                                     "Sektion > SAC Blüemlisalp > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     nil, nil, "Person not found in hitobito"])
+      end
+
+      it "reports failing membership role creation and skips further role creation" do
+        second_row = row.dup
+        row[:valid_until] = "1992-01-01" # set valid_until before valid_from
+        rows << second_row
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ valid_from (GültigAb) cannot be before valid_until (GültigBis)\n")
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ A previous role could not be imported for this person, skipping\n")
+
+        importer.create
+
+        expect(csv_report.size).to eq(3)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+                                     "Hillary Edmund",
+                                     "2000-06-21",
+                                     "1992-01-01",
+                                     "Sektion > SAC Blüemlisalp > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
+      end
+
+      it "reports missing section/ortsguppe group" do
+        row[:group_level1] = "SAC Unknown"
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ No Section/Ortsgruppe group found for 'SAC Unknown'\n")
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+                                     "Hillary Edmund",
+                                     "2000-06-21",
+                                     "2024-12-31",
+                                     "Sektion > SAC Unknown > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
+      end
+
+      it "reports unknown beitragskategorie" do
+        row[:role] = "Mitglied (Stammsektion) (ERROR)"
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ Invalid Beitragskategorie in 'Mitglied (Stammsektion) (ERROR)'\n")
+
+        importer.create
+      end
     end
 
     context "family main person" do
