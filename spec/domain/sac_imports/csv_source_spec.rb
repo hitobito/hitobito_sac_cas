@@ -68,4 +68,17 @@ describe SacImports::CsvSource do
       zip_code: "3972"
     })
   end
+
+  it "converts NAV3 content to hashes with key value pairs defined by header mapping" do
+    @source_name = :NAV3
+    rows = source_file.rows
+    expect(rows.count).to eq(38)
+    expect(rows.first).to eq({
+      navision_id: "4200000",
+      active: "1",
+      start_at: "2022-06-26",
+      finish_at: "2028-12-31",
+      qualification_kind: "SAC Tourenleiter*in 1 Sommer"
+    })
+  end
 end
