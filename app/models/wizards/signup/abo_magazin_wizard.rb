@@ -23,7 +23,7 @@ module Wizards::Signup
     def requires_policy_acceptance? = false
 
     def calculated_costs
-      case self.step("person_fields").country == "CH"
+      case step("person_fields").country == "CH"
       when "CH"
         costs.find { |cost| cost.country == :switzerland }.amount
       else
