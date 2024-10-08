@@ -7,7 +7,7 @@
   = form.check_box :newsletter
   = t('.newsletter_caption')
 
-- %w(statutes contribution_regulations data_protection).each do |key|
+- %w(agb statutes contribution_regulations data_protection).each do |key|
   - if form.object.attributes.key?(key)
     = render 'groups/self_registration/agreement_link', f: form, key: key,
         link: link_to(*form.object.link_translations(key), target: :_blank)

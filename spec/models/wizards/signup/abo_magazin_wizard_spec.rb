@@ -38,8 +38,8 @@ describe Wizards::Signup::AboMagazinWizard do
         country: "CH",
         phone_number: "+41 79 123 45 67"
       },
-      issues_from_field: {
-        statutes: true,
+      summary: {
+        agb: true,
         data_protection: true
       }
     }
@@ -83,18 +83,11 @@ describe Wizards::Signup::AboMagazinWizard do
     context "issue_from_field" do
       before { @current_step = 2 }
 
-      it "is invalid if before today" do
-        travel_to(Time.zone.local(2024, 7, 31))
-        required_attrs[:issues_from_field][:issues_from] = Time.zone.yesterday
-        expect(wizard).not_to be_valid
-        expect(wizard.issues_from_field.errors.full_messages).to eq ["Ab Ausgabe muss 31.07.2024 oder danach sein"]
-      end
-
       it "is invalid agreements are not checked" do
-        required_attrs[:issues_from_field][:statutes] = "0"
-        required_attrs[:issues_from_field][:data_protection] = "0"
+        required_attrs[:summary][:statutes] = "0"
+        required_attrs[:summary][:data_protection] = "0"
         expect(wizard).not_to be_valid
-        expect(wizard.issues_from_field.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
+        expect(wizard.summary.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
       end
     end
   end
@@ -117,9 +110,20 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     it "creates newsletter exclusion for all" do
-      required_attrs[:issues_from_field][:newsletter] = "0"
+      required_attrs[:summary][:newsletter] = "0"
       wizard.save!
       expect(max.subscriptions).to have(1).item
+    end
+  end
+
+  describe "#calculate_costs" do
+    it "calculates costs for swiss people" do
+      expect(wizard.calculate_costs).to eq(60)
+    end
+
+    it "calculates costs for people abroad" do
+      required_attrs[:person_fields][:country] = "DE"
+      expect(wizard.calculate_costs).to eq(76)
     end
   end
 end

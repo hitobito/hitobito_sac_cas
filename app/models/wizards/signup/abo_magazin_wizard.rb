@@ -10,7 +10,7 @@ module Wizards::Signup
     self.steps = [
       Wizards::Steps::Signup::MainEmailField,
       Wizards::Steps::Signup::AboMagazin::PersonFields,
-      Wizards::Steps::Signup::AboMagazin::IssuesFromField
+      Wizards::Steps::Signup::AboMagazin::Summary
     ]
 
     def costs = [
@@ -18,8 +18,17 @@ module Wizards::Signup
       OpenStruct.new(amount: 76, country: :international)
     ]
 
-    delegate :newsletter, to: :issues_from_field
+    delegate :newsletter, to: :summary
 
     def requires_policy_acceptance? = false
+
+    def calculated_costs
+      case self.step("person_fields").country == "CH"
+      when "CH"
+        costs.find { |cost| cost.country == :switzerland }.amount
+      else
+        costs.find { |cost| cost.country == :international }.amount
+      end
+    end
   end
 end

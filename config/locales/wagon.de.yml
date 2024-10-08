@@ -50,10 +50,8 @@ de:
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
         statutes: Statuten
-      wizards/steps/signup/abo_magazin/issues_from_field:
-        issues_from: Ab Ausgabe
+      wizards/steps/signup/abo_magazin/summary:
         data_protection: Datenschutzerklärung
-        statutes: Statuten
       wizards/steps/signup/sektion/family_fields/member:
         gender: Geschlecht
         email: E-Mail
@@ -1191,6 +1189,7 @@ de:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
 
       agreement_link:
+        agb_text: Ich habe die %{link} gelesen und stimme diesen zu
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
         sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
         contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
@@ -1509,6 +1508,8 @@ de:
         3000 Bern 14
         Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
         <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
+      link_agb_title: AGB
+      link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
       link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
       link_faqs_title: FAQs
       link_statutes: https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_DE.pdf
@@ -1571,12 +1572,19 @@ de:
           person_fields:
             next_button: SAC-KONTO ERSTELLEN
         abo_magazin:
-          issues_from_field_title: Abo
-          issues_from_field:
-            issues_from_help: |
-              Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
-              Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
-              mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
+          abo_info_table: 
+            order: Abo Bestellung
+            wanted_magazin: Gewünschtes Magazin
+            magazin_release: Ab Ausgabe
+            magazin_release_info: Nächste Ausgabe nach Zahlungseingang
+            price: Preis
+          person_info_table:
+            your_information: Deine Angaben
+          summary_title: Abo
+          summary:
+            info_text: Nach Abschluss deiner Bestellung wird dir die Rechnung per E-Mail zugestellt.
+            next_button: ABO KOSTENPFLICHTIG BESTELLEN
+            
         sektion:
           family_fields_title: Familienmitglieder
           family_fields:

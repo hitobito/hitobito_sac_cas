@@ -1,0 +1,44 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+%table.table.w-50
+  %thead
+    %tr
+      %th.h3.fw-bold.w-50=t(".your_information")
+      %th
+  %tbody
+    %tr
+      %td=person.class.human_attribute_name(:gender)
+      %td=t("activerecord.attributes.person.genders.#{person.gender.nil? ? "_nil" : person.gender}")
+    %tr
+      %td=person.class.human_attribute_name(:first_name)
+      %td=person.first_name
+    %tr
+      %td=person.class.human_attribute_name(:last_name)
+      %td=person.last_name
+    %tr
+      %td=t("activemodel.attributes.wizards/steps/signup/main_email_field.email")
+      %td=wizard.main_email_field.email
+    %tr
+      %td=person.class.human_attribute_name(:birthday)
+      %td=person.birthday.strftime("%d.%m.%Y")
+    %tr
+      %td=person.class.human_attribute_name(:address)
+      %td="#{person.street} #{person.housenumber}"
+    %tr
+      %td=person.class.human_attribute_name(:address_care_of)
+      %td=person.address_care_of
+    %tr
+      %td=person.class.human_attribute_name(:postbox)
+      %td=person.postbox
+    %tr
+      %td=person.class.human_attribute_name(:zip_code)
+      %td=person.zip_code
+    %tr
+      %td=person.class.human_attribute_name(:town)
+      %td=person.town
+    %tr
+      %td=person.class.human_attribute_name(:country)
+      %td=Countries.label(person.country)
