@@ -12,7 +12,7 @@ namespace :sac_imports do
 
   desc "Imports SAC Sections"
   task "nav6-1_sac_section": [:environment] do
-    raise "Not implemented"
+    SacImports::SacSectionsImporter.new.create
   end
 
   desc "Imports people and companies from Navision"
