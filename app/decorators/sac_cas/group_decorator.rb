@@ -9,9 +9,10 @@ module SacCas::GroupDecorator
   def members_count
     return unless sektion_or_ortsgruppe?
 
-    object.children.flat_map(&:roles).count do |role|
-      (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
-    end
+    Role.where(
+      type: (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).map(&:sti_name),
+      group_id: object.children.map(&:id)
+    ).count
   end
 
   def membership_admission_through_gs?
