@@ -9,12 +9,14 @@ require "spec_helper"
 
 describe SacImports::RolesImporter do
   let(:output) { double(puts: nil, print: nil) }
-  let(:nav2_csv_fixture) { file_fixture("sac_imports_src/NAV2_fixture.csv") }
-  let!(:importer) { described_class.new(output: output) }
+  let(:importer) { described_class.new(output: output, role_type: role_type) }
 
-  let(:report_file) { Rails.root.join("log", "sac_imports", "nav2-1_roles_people_2024-01-23-11:42.csv") }
-  let(:report_headers) { %w[navision_id navision_name group layer errors warnings] }
+  # csv report
+  let(:report_file) { Rails.root.join("log", "sac_imports", "nav2-1_roles_2024-01-23-11:42.csv") }
+  let(:report_headers) { %w[navision_id person_name valid_from valid_until target_group target_role message warning error] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
+
+  let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
 
   around do |example|
     # make sure there's no csv report from previous run
@@ -28,29 +30,67 @@ describe SacImports::RolesImporter do
     travel_back
   end
 
-  before do
-    # Mock the file loading behavior in CSVImporter
-    csv_source_instance = SacImports::CsvSource.new(:NAV2)
-    allow(csv_source_instance).to receive(:path).and_return(nav2_csv_fixture)
-    importer.instance_variable_set(:@source_file, csv_source_instance)
-  end
+  context "with membership role type" do
+    let(:role_type) { :membership }
 
-  it "creates csv report entries for roles with errors" do
-    expected_output = Array.new(10) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
-    expected_output << "#{invalid_person_navision_id} ():"
-    expected_output << " ❌ Bitte geben Sie einen Namen ein\n"
+    context "with NAV2 csv file fixture" do
+      let!(:navision_import_group) { Group::ExterneKontakte.create!(name: "Navision Import", parent: Group.root) }
 
-    expected_output.each do |output_line|
-      expect(output).to receive(:print).with(output_line)
+      let!(:person1) { Fabricate(:person, id: 4200001, first_name: "Johannes", last_name: "Maurer") }
+      let!(:person1_navision_import_role) { Fabricate(Group::ExterneKontakte::Kontakt.name.to_sym, person: person1, group: navision_import_group) }
+      let!(:sac_chaux_de_fonds) { Group::Sektion.create!(name: "CAS La Chaux-de-Fonds", parent: Group.root, foundation_year: 1942) }
+
+      it "imports role from nav2 csv fixture file" do
+        stub_const("SacImports::CsvSource::SOURCE_DIR", sac_imports_src)
+        expected_output = []
+        expected_output << "4200000 (Nachname 1 Vorname 1): ❌ Person not found in hitobito\n"
+        expected_output << "4200000 (Nachname 1 Vorname 1): ❌ A previous role could not be imported for this person, skipping\n"
+        expected_output << "4200003 (Cochet Frederique): ❌ Person not found in hitobito\n"
+        expected_output << "4200004 (Alder John): ❌ Person not found in hitobito\n"
+        2.times { expected_output << "4200004 (Alder John): ❌ A previous role could not be imported for this person, skipping\n" }
+        expected_output << "4200005 (Muster Hans): ❌ Person not found in hitobito\n"
+        expected_output << "4200006 (Buri Max): ❌ Person not found in hitobito\n"
+        expected_output << "4200008 (Bühler Christian): ❌ Person not found in hitobito\n"
+        expected_output << "4200001 (Maurer Johannes): ✅ Membership role created\n"
+
+        expected_output.each do |output_line|
+          expect(output).to receive(:print).with(output_line)
+        end
+
+        importer.create
+
+        expect(csv_report.size).to eq(14)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report[1]).to eq(["4200000",
+                                     "Nachname 1 Vorname 1",
+                                     "2014-10-06",
+                                     "2022-12-31",
+                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                     "Mitglied (Stammsektion) (Jugend)",
+                                     nil, nil, "Person not found in hitobito"])
+        expect(csv_report[2]).to eq(["4200000",
+                                     "Nachname 1 Vorname 1",
+                                     "2023-01-01",
+                                     "2024-12-31",
+                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     nil, nil, "A previous role could not be imported for this person, skipping"])
+        expect(csv_report[3]).to eq(["4200001",
+                                     "Maurer Johannes",
+                                     "2014-10-06",
+                                     "2018-06-06",
+                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                     "Mitglied (Stammsektion) (Einzel)",
+                                     "Membership role created", nil, nil])
+        expect(csv_report[4]).to eq(["4200001",
+                                     "Maurer Johannes",
+                                     "2018-06-07",
+                                     "2024-12-31",
+                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+                                     "Mitglied (Stammsektion) (Frei Fam)",
+                                     "Membership role created", nil, nil])
+      end
     end
-    expect(output).to receive(:puts).with("Report written to #{report_file}")
-
-    importer.create
-
-    expect(File.exist?(report_file)).to be_truthy
-
-    expect(csv_report.size).to eq(2)
-    expect(csv_report.first).to eq(report_headers)
-    expect(csv_report.second).to eq([invalid_person_navision_id, nil, "Bitte geben Sie einen Namen ein"])
   end
+
 end
