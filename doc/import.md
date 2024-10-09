@@ -71,11 +71,12 @@ Die Importe müssen in folgender Reihenfolge ausgeführt werden:
 
 ```txt
 sac_imports:nav1-1_people
+sac_imports:wso21-1_people
 sac_imports:nav6-1_sac_sections
 sac_imports:nav2-1_membership_roles
+sac_imports:nav1-2_sac_families
 sac_imports:nav3-1_qualifications
 sac_imports:nav5-1_huts
-sac_imports:wso21-1_people
 sac_imports:nav8-1_austrittsgruende
 sac_imports:nav1-2_membership_years_report
 ```
@@ -116,6 +117,11 @@ You can run the import with: `bundle exec rails sac_imports:1_people`
 ### `sac_imports:nav2-1_membership_roles`
 
 Importiert alle aktiven und inaktiven Mitglieds-Rollen (Stammsektion, Zusatzsektion)
+
+### `sac_imports:nav1-2_sac_families`
+
+Setzt die `household_key` bei den Personen welche die `Group::SektionsMitglieder::Mitglied` Rolle mit beitragskategorie
+:family haben.
 
 ### `sac_imports:nav3-1_qualifications`
 
