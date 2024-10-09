@@ -9,6 +9,8 @@ module SacCas::Event::ParticipationContactData
   extend ActiveSupport::Concern
 
   prepended do
+    attr_reader :event
+
     delegate :salutation_label, to: :person
 
     delegate :subsidy_amount, :subsidizable?, to: :participation
