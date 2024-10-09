@@ -32,7 +32,7 @@ namespace :sac_imports do
 
   desc "Imports membership roles"
   task "nav2-1_membership_roles": [:environment] do
-    SacImports::Roles::Importer.new(role_type: :membership).create
+    SacImports::RolesImporter.new(role_type: :membership).create
   end
 
   desc "Imports qualifications"
