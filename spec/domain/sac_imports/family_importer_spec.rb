@@ -53,21 +53,27 @@ describe SacImports::FamilyImporter do
     let(:person_household_mapping) do
       {
         main_person.id => "F50235",
-        second_person.id => "F50235"
+        second_person.id => "F50235",
+        people(:familienmitglied).id => "F42"
       }
     end
 
+    def create_family_role!(person)
+      role = Group::SektionsMitglieder::Mitglied.new(
+        group: groups(:bluemlisalp_mitglieder),
+        person_id: person.id,
+        beitragskategorie: "family",
+        created_at: Time.current,
+        delete_on: Time.current.end_of_year
+      )
+      role.save!(context: :import)
+    end
+
     before do
+      create_family_role!(main_person)
+      create_family_role!(second_person)
       person_household_mapping.each do |person_id, household_key|
         expect(importer).to receive(:person_id_to_household_key).with(person_id).and_return(household_key)
-        role = Group::SektionsMitglieder::Mitglied.new(
-          group: groups(:bluemlisalp_mitglieder),
-          person_id: person_id,
-          beitragskategorie: "family",
-          created_at: Time.current,
-          delete_on: Time.current.end_of_year
-        )
-        role.save!(context: :import)
       end
       allow(importer).to receive(:person_id_to_household_key).and_return(nil)
     end
@@ -80,7 +86,7 @@ describe SacImports::FamilyImporter do
       expect(File.exist?(report_file)).to be_truthy
       expect(csv_report.size).to eq(4)
       expect(csv_report.first).to eq(report_headers)
-      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 3)
+      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["Person has different household_key than the one in NAV1 data"] + ["No household_key found in NAV1 data"] * 2)
     end
   end
 end
