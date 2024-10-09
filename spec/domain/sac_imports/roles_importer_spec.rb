@@ -89,6 +89,13 @@ describe SacImports::RolesImporter do
                                      "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
                                      "Mitglied (Stammsektion) (Frei Fam)",
                                      "Membership role created", nil, nil])
+        expect(csv_report[13]).to eq(["4200005",
+                                     "Muster Hans",
+                                     "2014-10-06",
+                                     "2016-10-11",
+                                     "Sektion > CAS Moléson > Mitglieder",
+                                     "Mitglied (Zusatzsektion) (Einzel)",
+                                     nil, nil, "A previous role could not be imported for this person, skipping"])
       end
     end
   end
