@@ -7,7 +7,6 @@
 
 module SacImports::Roles
   class MembershipsImporter < ImporterBase
-
     BEITRAGSKATEGORIE_MAPPING = {
       "Einzel" => :adult,
       "Jugend" => :youth,
@@ -17,13 +16,13 @@ module SacImports::Roles
     }
 
     SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
-                                              Group::Ortsgruppe.sti_name].freeze
+      Group::Ortsgruppe.sti_name].freeze
 
-    def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
-      @rows_filter = { role: /^Mitglied \(Stammsektion\).+/ }
+    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
+      @rows_filter = {role: /^Mitglied \(Stammsektion\).+/}
       super
     end
-    
+
     def create
       delete_existing_membership_roles
       reset_family_main_person
@@ -33,16 +32,16 @@ module SacImports::Roles
     private
 
     def process_row(row)
-      super(row) do |person|
+      super do |person|
         # skip todo row
         membership_group = fetch_membership_group(row, person)
-        return false unless membership_group.present?
+        return false if membership_group.blank?
 
         beitragskategorie = extract_beitragskategorie(row)
-        return false unless beitragskategorie.present? 
-        
+        return false if beitragskategorie.blank?
+
         role = create_membership_role(row, membership_group, person, beitragskategorie)
-        return false unless role.present?
+        return false if role.blank?
 
         set_family_main_person(person, role)
         report(row, person, message: "Membership role created")
@@ -52,9 +51,9 @@ module SacImports::Roles
 
     def create_membership_role(row, membership_group, person, beitragskategorie)
       role = Group::SektionsMitglieder::Mitglied.new(group: membership_group,
-                                                     person: person,
-                                                     beitragskategorie: beitragskategorie,
-                                                     created_at: row[:valid_from])
+        person: person,
+        beitragskategorie: beitragskategorie,
+        created_at: row[:valid_from])
       if Date.parse(row[:valid_until]).past?
         role.deleted_at = row[:valid_until]
       else

@@ -81,7 +81,7 @@ describe SacImports::CsvSource do
 
   it "applies additional regex value filter for rows" do
     @source_name = :NAV2
-    rows = source_file.rows(filter: { role: /^Mitglied \(Stammsektion\).+/ })
+    rows = source_file.rows(filter: {role: /^Mitglied \(Stammsektion\).+/})
     expect(rows.count).to eq(12)
   end
 

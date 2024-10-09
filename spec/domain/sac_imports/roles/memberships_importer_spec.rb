@@ -65,33 +65,33 @@ describe SacImports::Roles::MembershipsImporter do
       expect(csv_report.size).to eq(13)
       expect(csv_report.first).to eq(report_headers)
       expect(csv_report[1]).to eq(["4200000",
-                                   "Nachname 1 Vorname 1",
-                                   "2014-10-06",
-                                   "2022-12-31",
-                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                   "Mitglied (Stammsektion) (Jugend)",
-                                   nil, nil, "Person not found in hitobito"])
+        "Nachname 1 Vorname 1",
+        "2014-10-06",
+        "2022-12-31",
+        "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+        "Mitglied (Stammsektion) (Jugend)",
+        nil, nil, "Person not found in hitobito"])
       expect(csv_report[2]).to eq(["4200000",
-                                   "Nachname 1 Vorname 1",
-                                   "2023-01-01",
-                                   "2024-12-31",
-                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                   "Mitglied (Stammsektion) (Einzel)",
-                                   nil, nil, "A previous role could not be imported for this person, skipping"])
+        "Nachname 1 Vorname 1",
+        "2023-01-01",
+        "2024-12-31",
+        "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+        "Mitglied (Stammsektion) (Einzel)",
+        nil, nil, "A previous role could not be imported for this person, skipping"])
       expect(csv_report[3]).to eq(["4200001",
-                                   "Maurer Johannes",
-                                   "2014-10-06",
-                                   "2018-06-06",
-                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                   "Mitglied (Stammsektion) (Einzel)",
-                                   "Membership role created", nil, nil])
+        "Maurer Johannes",
+        "2014-10-06",
+        "2018-06-06",
+        "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+        "Mitglied (Stammsektion) (Einzel)",
+        "Membership role created", nil, nil])
       expect(csv_report[4]).to eq(["4200001",
-                                   "Maurer Johannes",
-                                   "2018-06-07",
-                                   "2024-12-31",
-                                   "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                   "Mitglied (Stammsektion) (Frei Fam)",
-                                   "Membership role created", nil, nil])
+        "Maurer Johannes",
+        "2018-06-07",
+        "2024-12-31",
+        "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+        "Mitglied (Stammsektion) (Frei Fam)",
+        "Membership role created", nil, nil])
     end
   end
 
@@ -129,21 +129,19 @@ describe SacImports::Roles::MembershipsImporter do
       it "clears existing membership roles and creates new membership role" do
         existing_roles = [roles(:mitglied), roles(:mitglied_zweitsektion)]
         expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Membership role created\n")
-        existing_roles.each do |role|
-          expect(role).to be_persisted
-        end
+        expect(existing_roles).to all(be_persisted)
 
         importer.create
 
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "2024-12-31",
-                                     "Sektion > SAC Blüemlisalp > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     "Membership role created", nil, nil])
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          "Membership role created", nil, nil])
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(1)
@@ -167,12 +165,12 @@ describe SacImports::Roles::MembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["42",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "2024-12-31",
-                                     "Sektion > SAC Blüemlisalp > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     nil, nil, "Person not found in hitobito"])
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          nil, nil, "Person not found in hitobito"])
       end
 
       it "reports failing membership role creation and skips further role creation" do
@@ -188,12 +186,12 @@ describe SacImports::Roles::MembershipsImporter do
         expect(csv_report.size).to eq(3)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "1992-01-01",
-                                     "Sektion > SAC Blüemlisalp > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
+          "Hillary Edmund",
+          "2000-06-21",
+          "1992-01-01",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
       end
 
       it "reports missing section/ortsguppe group" do
@@ -206,12 +204,12 @@ describe SacImports::Roles::MembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "2024-12-31",
-                                     "Sektion > SAC Unknown > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Unknown > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
       end
 
       it "reports unknown beitragskategorie" do
@@ -221,7 +219,6 @@ describe SacImports::Roles::MembershipsImporter do
 
         importer.create
       end
-
 
       it "reports if membership role cannot be created" do
         role_instance = Role.new
@@ -244,12 +241,12 @@ describe SacImports::Roles::MembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "2024-12-31",
-                                     "Sektion > SAC Blüemlisalp > Mitglieder",
-                                     "Mitglied (Stammsektion) (Familie)",
-                                     "Membership role created", nil, nil])
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Familie)",
+          "Membership role created", nil, nil])
         mitglied.reload
         expect(mitglied.roles.count).to eq(1)
         expect(active_membership_role.beitragskategorie).to eq("family")
@@ -265,12 +262,12 @@ describe SacImports::Roles::MembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2000-06-21",
-                                     "2023-12-31",
-                                     "Sektion > SAC Blüemlisalp > Mitglieder",
-                                     "Mitglied (Stammsektion) (Familie)",
-                                     "Membership role created", nil, nil])
+          "Hillary Edmund",
+          "2000-06-21",
+          "2023-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Familie)",
+          "Membership role created", nil, nil])
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(0)
@@ -290,5 +287,4 @@ describe SacImports::Roles::MembershipsImporter do
       end
     end
   end
-
 end

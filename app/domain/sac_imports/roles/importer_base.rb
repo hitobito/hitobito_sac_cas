@@ -7,8 +7,7 @@
 
 module SacImports::Roles
   class ImporterBase
-
-    def initialize(output: $stdout, csv_source:, csv_report: , failed_person_ids: [])
+    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
       @output = output
       @csv_report = csv_report
       @failed_person_ids = failed_person_ids
@@ -61,7 +60,7 @@ module SacImports::Roles
       begin
         role.save!(context: :import)
       rescue ActiveRecord::RecordInvalid
-        report(row, nil, error: "Hitobito Role: " + role.errors.full_messages.join(', '))
+        report(row, nil, error: "Hitobito Role: " + role.errors.full_messages.join(", "))
         return nil
       end
       role
@@ -72,8 +71,7 @@ module SacImports::Roles
     end
 
     def fetch_navision_import_group
-      navision_import_group =
-        Group::ExterneKontakte
+      Group::ExterneKontakte
         .find_by(name: "Navision Import", parent: Group.root)
     end
 
@@ -88,10 +86,10 @@ module SacImports::Roles
     def report(row, person, message: nil, warning: nil, error: nil)
       @failed_person_ids << row[:navision_id] if error.present?
       output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
-      if error.present?
-        output_message << "❌ #{error}\n"
+      output_message << if error.present?
+        "❌ #{error}\n"
       else
-        output_message << "✅ #{message||warning}\n"
+        "✅ #{message || warning}\n"
       end
 
       @output.print(output_message)

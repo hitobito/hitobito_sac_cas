@@ -53,5 +53,4 @@ describe SacImports::RolesImporter do
     expect(csv_report.first).to eq(report_headers)
     expect(csv_report.second).to eq([invalid_person_navision_id, nil, "Bitte geben Sie einen Namen ein"])
   end
-
 end

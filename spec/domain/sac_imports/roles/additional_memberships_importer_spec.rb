@@ -45,7 +45,7 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
     let!(:person5_membership_role) do
       Group::SektionsMitglieder::Mitglied
         .create!(group: moleson_mitglieder_group, person: person5,
-                 created_at: "2010-01-01", delete_on: "2024-12-31")
+          created_at: "2010-01-01", delete_on: "2024-12-31")
     end
 
     it "imports role from nav2 csv fixture file" do
@@ -56,12 +56,12 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
       expect(csv_report.size).to eq(2)
       expect(csv_report.first).to eq(report_headers)
       expect(csv_report[1]).to eq(["4200005",
-                                   "Muster Hans",
-                                   "2014-10-06",
-                                   "2016-10-11",
-                                   "Sektion > CAS Moléson > Mitglieder",
-                                   "Mitglied (Zusatzsektion) (Einzel)",
-                                   "Additional Membership role created", nil, nil])
+        "Muster Hans",
+        "2014-10-06",
+        "2016-10-11",
+        "Sektion > CAS Moléson > Mitglieder",
+        "Mitglied (Zusatzsektion) (Einzel)",
+        "Additional Membership role created", nil, nil])
 
       person5.reload
       expect(person5.roles.count).to eq(1)
@@ -110,12 +110,12 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2017-06-21",
-                                     "2024-12-31",
-                                     "Sektion > CAS Moléson > Mitglieder",
-                                     "Mitglied (Zusatzsektion) (Einzel)",
-                                     "Additional Membership role created", nil, nil])
+          "Hillary Edmund",
+          "2017-06-21",
+          "2024-12-31",
+          "Sektion > CAS Moléson > Mitglieder",
+          "Mitglied (Zusatzsektion) (Einzel)",
+          "Additional Membership role created", nil, nil])
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(3)
@@ -139,12 +139,12 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["42",
-                                     "Hillary Edmund",
-                                     "2017-06-21",
-                                     "2024-12-31",
-                                     "Sektion > CAS Moléson > Mitglieder",
-                                     "Mitglied (Zusatzsektion) (Einzel)",
-                                     nil, nil, "Person not found in hitobito"])
+          "Hillary Edmund",
+          "2017-06-21",
+          "2024-12-31",
+          "Sektion > CAS Moléson > Mitglieder",
+          "Mitglied (Zusatzsektion) (Einzel)",
+          nil, nil, "Person not found in hitobito"])
       end
 
       it "reports failing additional membership role creation and skips further role creation" do
@@ -160,12 +160,12 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
         expect(csv_report.size).to eq(3)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2017-06-21",
-                                     "1992-01-01",
-                                     "Sektion > CAS Moléson > Mitglieder",
-                                     "Mitglied (Zusatzsektion) (Einzel)",
-                                     nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
+          "Hillary Edmund",
+          "2017-06-21",
+          "1992-01-01",
+          "Sektion > CAS Moléson > Mitglieder",
+          "Mitglied (Zusatzsektion) (Einzel)",
+          nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
       end
 
       it "reports missing section/ortsguppe group" do
@@ -178,12 +178,12 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
         expect(csv_report.size).to eq(2)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report.second).to eq(["600001",
-                                     "Hillary Edmund",
-                                     "2017-06-21",
-                                     "2024-12-31",
-                                     "Sektion > SAC Unknown > Mitglieder",
-                                     "Mitglied (Zusatzsektion) (Einzel)",
-                                     nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
+          "Hillary Edmund",
+          "2017-06-21",
+          "2024-12-31",
+          "Sektion > SAC Unknown > Mitglieder",
+          "Mitglied (Zusatzsektion) (Einzel)",
+          nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
       end
 
       it "reports unknown beitragskategorie" do

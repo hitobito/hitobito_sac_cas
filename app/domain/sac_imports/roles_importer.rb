@@ -27,7 +27,7 @@ module SacImports
     end
 
     def create
-      Roles::MembershipsImporter.new(output: @output, csv_report: @csv_report, @failed_person_ids).create
+      # Roles::MembershipsImporter.new(output: @output, csv_report: @csv_report, @failed_person_ids).create
       @csv_report.finalize(output: @output)
     end
   end
