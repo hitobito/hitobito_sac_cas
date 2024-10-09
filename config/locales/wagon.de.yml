@@ -1079,7 +1079,7 @@ de:
         summary_title: Zusammenfassung
       subsidy_step:
         title: Subventionsbeitrag beantragen
-        subsidy_field: "Subventionierten Preis von CHF %{amount} beantragen"
+        subsidy_field: "Subventionierten Preis von %{amount} beantragen"
         subsidy_link_label: Subventionsantrag
         subsidy_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf
         general_info:

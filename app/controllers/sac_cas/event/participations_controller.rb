@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category]
+    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category price]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter, :send_participation_confirmation_email

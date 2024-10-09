@@ -8,8 +8,6 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
-  DUMMY_SUBSIDY = 620
-
   prepended do
     enum price_category: {
       price_member: 0,
@@ -33,7 +31,17 @@ module SacCas::Event::Participation
   end
 
   def subsidy_amount
-    subsidy ? DUMMY_SUBSIDY : 0
+    subsidy ? event.price_subsidized : 0
+  end
+
+  def course_pricing
+    price, category = if person.sac_membership_active?
+      subsidy ? [subsidy_amount, :subsidized] : [event.price_member, :member]
+    else
+      [event.price_regular, :regular]
+    end
+
+    {price: price, price_category: category}
   end
 
   def subsidizable?
