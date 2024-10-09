@@ -39,9 +39,9 @@ describe SacImports::FamilyImporter do
           .to change { Person.find(4200004).household_key }.from(nil).to(household_key_in_fixture)
 
         expect(File.exist?(report_file)).to be_truthy
-        expect(csv_report.size).to eq(4)
+        expect(csv_report.size).to eq(5)
         expect(csv_report.first).to eq(report_headers)
-        expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 3)
+        expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 3 + ["Only one person in household"])
       end
     end
   end
@@ -54,7 +54,8 @@ describe SacImports::FamilyImporter do
       [
         {navision_id: main_person.id.to_s, family: "F50235"},
         {navision_id: second_person.id.to_s, family: "F50235"},
-        {navision_id: people(:familienmitglied).id.to_s, family: "F42"}
+        {navision_id: people(:familienmitglied).id.to_s, family: "F42"},
+        {navision_id: people(:familienmitglied2).id.to_s, family: nil}
       ]
     end
 
@@ -80,11 +81,12 @@ describe SacImports::FamilyImporter do
         .to change { main_person.reload.household_key }.from(nil).to("F50235")
         .and change { second_person.reload.household_key }.from(nil).to("F50235")
         .and change { people(:familienmitglied).reload.household_key }.from("4242").to("F42")
+        .and change { people(:familienmitglied2).reload.household_key }.from("4242").to(nil)
 
       expect(File.exist?(report_file)).to be_truthy
-      expect(csv_report.size).to eq(3)
+      expect(csv_report.size).to eq(5)
       expect(csv_report.first).to eq(report_headers)
-      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2)
+      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2 + ["Only one person in household"] * 2)
     end
   end
 end
