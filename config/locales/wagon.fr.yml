@@ -1576,6 +1576,9 @@ fr:
         agreement_fields:
           adult_consent_caption: Je confirme que j'ai au moins 18 ans ou que j'ai l'accord de mes parents ou tuteurs.
           newsletter_caption: Je souhaite m'abonner à une newsletter
+        abo_basic_login:
+          person_fields:
+            next_button: ""
         abo_magazin:
           issues_from_field_title: Abonnement
           issues_from_field:

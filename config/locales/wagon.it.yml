@@ -1576,6 +1576,9 @@ it:
         agreement_fields:
           adult_consent_caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
           newsletter_caption: Vorrei iscrivermi alla newsletter
+        abo_basic_login:
+          person_fields:
+            next_button: ""
         abo_magazin:
           issues_from_field_title: Abbonamento
           issues_from_field:

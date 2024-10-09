@@ -37,7 +37,7 @@ namespace :sac_imports do
 
   desc "Imports qualifications"
   task "nav3-1_qualifications": [:environment] do
-    raise "Not implemented"
+    SacImports::QualificationsImporter.new.create
   end
 
   desc "Imports huts (options: FILE=#{default_files[:huts]})"
