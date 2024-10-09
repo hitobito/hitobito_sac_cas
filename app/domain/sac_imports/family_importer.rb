@@ -28,6 +28,7 @@ module SacImports
       Role.where(type: "Group::SektionsMitglieder::Mitglied", beitragskategorie: :family).includes(:person).find_each do |role|
         process_person(role.person)
       end
+      sanity_check_families
       @csv_report.finalize(output: @output)
     end
 
@@ -74,6 +75,18 @@ module SacImports
       else
         # Household key does not exist yet, save it on the person
         person.update!(household_key: household_key)
+      end
+    end
+
+    def sanity_check_families
+      Person.group(:household_key).having("COUNT(*) = 1").pluck(:household_key).each do |household_key|
+        person = Person.find_by(household_key: household_key)
+        @csv_report.add_row({
+          navision_id: person.id,
+          hitobito_person: person.to_s,
+          household_key: household_key,
+          errors: "Only one person in household"
+        })
       end
     end
   end
