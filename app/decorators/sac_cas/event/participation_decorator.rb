@@ -7,8 +7,35 @@
 
 module SacCas::Event::ParticipationDecorator
   extend ActiveSupport::Concern
+  include SacCas::EventParticipationHelper
 
   def to_s(*)
     to_s_without_state(*)
+  end
+
+  def event_prices
+    prices = present_event_prices.map { |attr, price| [format_event_price(attr, price), attr] }
+    prices.unshift(former_price_select_option) if event_price_changed?
+    prices << [t("no_price_select"), nil] if present_event_prices.empty?
+
+    [prices, event_price_changed? ? {selected: "former"} : {}]
+  end
+
+  private
+
+  def present_event_prices
+    @present_event_prices ||= event.attributes.slice(*Event::Course::PRICE_ATTRIBUTES.map(&:to_s)).compact
+  end
+
+  def event_price_changed?
+    @price_changed ||= present_event_prices[price_category] != price
+  end
+
+  def former_price_select_option
+    [t("former_price_select", price_label: format_event_price(price_category, price)), "former"]
+  end
+
+  def t(key, **)
+    I18n.t(key, scope: "event.participations.fields_sac_cas", **)
   end
 end
