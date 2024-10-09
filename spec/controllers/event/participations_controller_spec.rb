@@ -396,5 +396,35 @@ describe Event::ParticipationsController do
       participation.reload
       expect(participation.actual_days).to be_nil
     end
+
+    describe "#price_category" do
+      before { participation.update!(price: 20, price_category: "price_regular") }
+
+      it "updates price when changing price_category" do
+        expect do
+          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
+                                event_participation: {price_category: "price_member"}}
+        end.to change { participation.reload.price }.from(20).to(10)
+          .and change { participation.price_category }.from("price_regular").to("price_member")
+      end
+
+      it "updates price when event#price changed, even if price_category stays the same" do
+        event.update!(price_regular: 30)
+        expect do
+          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
+                                event_participation: {price_category: "price_regular"}}
+        end.to change { participation.reload.price }.from(20).to(30)
+          .and not_change { participation.price_category }
+      end
+
+      it "doesn't update price when event#price changed if price_category should still use former price" do
+        event.update!(price_regular: 30)
+        expect do
+          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
+                                event_participation: {price_category: "former"}}
+        end.to not_change { participation.reload.price }
+          .and not_change { participation.price_category }
+      end
+    end
   end
 end

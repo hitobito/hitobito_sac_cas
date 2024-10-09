@@ -47,9 +47,12 @@ module SacCas::Event::ParticipationsController
 
   def assign_attributes
     permitted = permitted_params
-    # prevent former price from being updated if it's still selected
-    permitted.delete(:price_category) if permitted[:price_category] == "former"
+    permitted.delete(:price_category) if keep_former_price?
     entry.attributes = permitted
+  end
+
+  def keep_former_price?
+    permitted_params[:price_category] == "former"
   end
 
   def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -174,7 +177,7 @@ module SacCas::Event::ParticipationsController
   end
 
   def update_participation_price
-    return unless entry.saved_change_to_price_category?
+    return if keep_former_price?
 
     entry.update!(price: entry.price_category.nil? ? nil : @event.send(entry.price_category))
   end

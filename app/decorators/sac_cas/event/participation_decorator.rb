@@ -28,7 +28,7 @@ module SacCas::Event::ParticipationDecorator
   end
 
   def event_price_changed?
-    @price_changed ||= present_event_prices[price_category] != price
+    @price_changed ||= model.persisted? && present_event_prices[price_category] != price
   end
 
   def former_price_select_option
