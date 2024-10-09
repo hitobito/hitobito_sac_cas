@@ -84,7 +84,7 @@ module SacImports::Roles
 
     def set_family_main_person(person, role)
       if !role.deleted? && role.beitragskategorie == "family"
-        person.update!(sac_family_main_person: true)
+        person.update_columns(sac_family_main_person: true)
       end
     end
 

@@ -50,7 +50,7 @@ module SacCas::Person
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
-      if: -> { roles.exists?(type: REQUIRED_FIELDS_ROLES) }
+      if: :roles_require_address_fields?
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
@@ -130,5 +130,13 @@ module SacCas::Person
       !sac_membership_invoice?
 
     Invoices::Abacus::TransmitPersonJob.new(self).enqueue!
+  end
+
+  def roles_require_address_fields?
+    # do not validate this if nothing or only primary_group changed
+    return false if changes.keys == ["primary_group_id"]
+    return false if changes.keys.empty?
+
+    roles.exists?(type: REQUIRED_FIELDS_ROLES)
   end
 end
