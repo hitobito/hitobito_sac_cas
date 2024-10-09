@@ -23,6 +23,7 @@ module SacImports
     end
 
     def create
+      reset_all_household_keys!
       Role.where(type: "Group::SektionsMitglieder::Mitglied", beitragskategorie: :family).includes(:person).find_each do |role|
         process_person(role.person)
       end
@@ -31,8 +32,17 @@ module SacImports
 
     private
 
+    def rows
+      @rows ||= @source_file.rows
+    end
+
+    def reset_all_household_keys!
+      person_ids = rows.pluck(:navision_id)
+      Person.where(id: person_ids).update_all(household_key: nil)
+    end
+
     def person_id_to_household_key(person_id)
-      @person_id_to_household_key_map ||= @source_file.rows.filter { |p| !p[:family].nil? }.to_h { |p| [p[:navision_id], p[:family]] }
+      @person_id_to_household_key_map ||= rows.filter { |p| !p[:family].nil? }.to_h { |p| [p[:navision_id], p[:family]] }
       @person_id_to_household_key_map[person_id.to_s]
     end
 
@@ -54,7 +64,6 @@ module SacImports
     def assign_household(person, household_key)
       raise StandardError, "No household_key found in NAV1 data" if household_key.blank?
       return if household_key == person.household_key # already assigned
-      raise StandardError, "Person has different household_key than the one in NAV1 data" if person.household_key && person.household_key != household_key
 
       if (other_person = ::Person.find_by(household_key: household_key))
         # Household key exists already, assign person to existing household

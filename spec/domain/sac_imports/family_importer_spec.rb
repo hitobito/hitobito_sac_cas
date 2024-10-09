@@ -50,12 +50,12 @@ describe SacImports::FamilyImporter do
     let(:main_person) { Fabricate(:person, sac_family_main_person: true) }
     let(:second_person) { Fabricate(:person) }
 
-    let(:person_household_mapping) do
-      {
-        main_person.id => "F50235",
-        second_person.id => "F50235",
-        people(:familienmitglied).id => "F42"
-      }
+    let(:rows) do
+      [
+        {navision_id: main_person.id.to_s, family: "F50235"},
+        {navision_id: second_person.id.to_s, family: "F50235"},
+        {navision_id: people(:familienmitglied).id.to_s, family: "F42"}
+      ]
     end
 
     def create_family_role!(person)
@@ -72,21 +72,19 @@ describe SacImports::FamilyImporter do
     before do
       create_family_role!(main_person)
       create_family_role!(second_person)
-      person_household_mapping.each do |person_id, household_key|
-        expect(importer).to receive(:person_id_to_household_key).with(person_id).and_return(household_key)
-      end
-      allow(importer).to receive(:person_id_to_household_key).and_return(nil)
+      allow(importer).to receive(:rows).and_return(rows)
     end
 
     it "creates the households accordingly" do
       expect { importer.create }
         .to change { main_person.reload.household_key }.from(nil).to("F50235")
         .and change { second_person.reload.household_key }.from(nil).to("F50235")
+        .and change { people(:familienmitglied).reload.household_key }.from("4242").to("F42")
 
       expect(File.exist?(report_file)).to be_truthy
-      expect(csv_report.size).to eq(4)
+      expect(csv_report.size).to eq(3)
       expect(csv_report.first).to eq(report_headers)
-      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["Person has different household_key than the one in NAV1 data"] + ["No household_key found in NAV1 data"] * 2)
+      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2)
     end
   end
 end
