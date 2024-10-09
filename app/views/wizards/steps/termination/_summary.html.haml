@@ -5,7 +5,7 @@
 
 - stimulus_ctrl = 'form-field-check-dependent'
 %div{data: { controller: stimulus_ctrl }}
-  - if current_user.backoffice? and c.model.mitglied_termination_by_section_only?
+  - if current_user.backoffice? && c.model.mitglied_termination_by_section_only?
     .alert.alert-info
       = t('.termination_by_section_only')
   - if c.model.family_membership?
@@ -19,10 +19,10 @@
       %strong=t('.data_retention_info_title')
       %p=t('.data_retention_info_text')
       = form.labeled(:data_retention_consent) do
-        = form.check_box :data_retention_consent, {data: { "#{stimulus_ctrl}-target" => "checkbox" }}
+        = form.check_box :data_retention_consent, {data: { action: "#{stimulus_ctrl}#handleMasterCheckbox", "#{stimulus_ctrl}-target" => "checkbox" }}
     = t('.newsletter_info_text')
     = form.labeled(:subscribe_newsletter) do
-      = form.check_box :subscribe_newsletter, {prompt: true, data: { action: "#{stimulus_ctrl}#handleCheckbox", "dependent-checkbox" => true }}
+      = form.check_box :subscribe_newsletter, {prompt: true, data: { action: "#{stimulus_ctrl}#handleDependentCheckbox", "dependent-checkbox" => true }}
     = t('.fundraiser_info_text')
     = form.labeled(:subscribe_fundraising_list) do
-      = form.check_box :subscribe_fundraising_list, {prompt: true, data: { action: "#{stimulus_ctrl}#handleCheckbox", "dependent-checkbox" => true }}
+      = form.check_box :subscribe_fundraising_list, {prompt: true, data: { action: "#{stimulus_ctrl}#handleDependentCheckbox", "dependent-checkbox" => true }}
