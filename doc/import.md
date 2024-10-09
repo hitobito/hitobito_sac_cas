@@ -102,6 +102,9 @@ Dieser Import sollte nach NAV6 ausgeführt werden.
 #### Hinweise:
 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
+- Wenn eine Person eine E-Mail hat welche bereits als Haupt-Emaildadresse existier wird sie mit einer Emailadresse unter
+  `additional_emails` angelegt. (Siehe <https://github.com/hitobito/hitobito_sac_cas/issues/1079>)
+
 
 ### `sac_imports:nav1-2_membership_years_report`
 

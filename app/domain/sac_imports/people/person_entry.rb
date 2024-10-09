@@ -14,11 +14,12 @@ module SacImports::People
     DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    attr_reader :row, :group
+    attr_reader :row, :group, :warning
 
     def initialize(row, group)
       @row = row
       @group = group
+      @warning = nil
     end
 
     def person
@@ -106,10 +107,15 @@ module SacImports::People
       person.street, person.housenumber = parse_address
 
       if email.present?
-        person.email = email
-        # Do not call person#confirm here as it persists the record.
-        # Instead we set confirmed_at manually.
-        person.confirmed_at = Time.zone.at(0)
+        if Person.where(email: email).exists?
+          person.additional_emails << ::AdditionalEmail.new(email: email, label: "Duplikat")
+          @warning = "Email #{email} already exists in the system. Importing with additional_email."
+        else
+          person.email = email
+          # Do not call person#confirm here as it persists the record.
+          # Instead we set confirmed_at manually.
+          person.confirmed_at = Time.zone.at(0)
+        end
       end
     end
 

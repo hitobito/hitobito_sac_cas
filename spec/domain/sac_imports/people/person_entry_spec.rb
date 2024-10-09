@@ -119,6 +119,19 @@ describe SacImports::People::PersonEntry do
       row[:language] = nil
       expect(person.language).to eq "de"
     end
+
+    context "when person with the email already exists" do
+      before { Fabricate(:person, email: "max.muster@example.com") }
+
+      it "still imports the person, but with a warning" do
+        expect(person.email).to be_nil
+        expect(entry).to be_valid
+        expect(entry.warning).to include("additional_email")
+        expect { entry.import! }
+          .to change(AdditionalEmail, :count).by(1)
+          .and change(Person, :count).by(1)
+      end
+    end
   end
 
   describe "phone numbers" do

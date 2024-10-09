@@ -10,6 +10,7 @@ module SacImports
     REPORT_HEADERS = [
       :navision_membership_number,
       :navision_name,
+      :warnings,
       :errors
     ]
 
@@ -47,6 +48,13 @@ module SacImports
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.errors}\n")
       if entry.valid?
         entry.import!
+        if entry.warning
+          @csv_report.add_row({
+            navision_membership_number: row[:navision_id],
+            navision_name: row[:navision_name],
+            warnings: entry.warning
+          })
+        end
       else
         @csv_report.add_row({
           navision_membership_number: row[:navision_id],

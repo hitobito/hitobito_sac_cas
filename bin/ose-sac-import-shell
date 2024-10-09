@@ -57,16 +57,16 @@ oc wait --for=condition=Ready pod/rails-sac-imports
 
 echo 'Copying csv source files to sac import container ...'
 oc exec rails-sac-imports -- mkdir -p /app-src/tmp/sac_imports_src/
-oc cp $CSV_SRC_DIR/*.csv rails-sac-imports:/app-src/tmp/sac_imports_src/
+oc cp $CSV_SRC_DIR rails-sac-imports:/app-src/tmp/
 
 echo 'Copying xlsx source files to sac import container ...'
 oc exec rails-sac-imports -- mkdir -p /app-src/tmp/xlsx/
 oc cp $XLSX_SRC_DIR rails-sac-imports:/app-src/tmp/
 
-oc rsh rails-sac-imports bash
+oc exec -it rails-sac-imports -- bash -c 'export RAILS_SILENCE_ACTIVE_RECORD=1 && exec bash'
 
 mkdir -p $LOCAL_LOG_DIR
 oc cp rails-sac-imports:/app-src/log/sac_imports $LOCAL_LOG_DIR
 echo "Logs copied to $LOCAL_LOG_DIR/sac_imports/"
 
-oc delete pod rails-sac-imports
+echo "to remove running import pod run: 'oc delete pod rails-sac-imports'"
