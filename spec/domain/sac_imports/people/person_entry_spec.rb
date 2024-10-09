@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::PersonEntry do
+describe SacImports::People::PersonEntry do
   let(:group) { Group::ExterneKontakte.new(id: 1) }
   let(:row) do
     SacImports::CsvSource::SOURCE_HEADERS[:NAV1].keys.index_with { |_symbol| nil }.merge(

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Wso2PersonEntry do
+describe SacImports::Wso2::PersonEntry do
   let(:navision_id) { nil }
   let(:email) { "max.muster@example.com" }
   let(:basic_login_group) { Group::AboBasicLogin.create!(parent: groups(:abos)) }
