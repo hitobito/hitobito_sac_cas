@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports
-  class RolesImporter
+  class MembershipRolesImporter
     REPORT_HEADERS = [
       :navision_id,
       :person_name,

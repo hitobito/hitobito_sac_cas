@@ -30,8 +30,8 @@ namespace :sac_imports do
     SacImports::Wso2PeopleImporter.new.create
   end
 
-  desc "Imports memberships"
-  task "nav2-1_roles": [:environment] do
+  desc "Imports membership roles"
+  task "nav2-1_membership_roles": [:environment] do
     SacImports::Roles::Importer.new.create
   end
 

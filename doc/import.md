@@ -109,13 +109,9 @@ You can run the import with: `bundle exec rails sac_imports:1_people`
 
 ### `sac_imports:wso21-1_people`
 
-### `sac_imports:nav2-1_roles`
+### `sac_imports:nav2-1_membership_roles`
 
-1. Import Mitglied Stammsektion (
-1. Import Zusatzsektion
-1. Import Funktionär
-
-Importiert alle aktiven und inaktiven Stammsektions-Mitglied-Rollen.
+Importiert alle aktiven und inaktiven Mitglieds-Rollen (Stammsektion, Zusatzsektion)
 
 ### `sac_imports:nav3-1_qualifications`
 
