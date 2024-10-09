@@ -84,10 +84,10 @@ describe Wizards::Signup::AboMagazinWizard do
       before { @current_step = 2 }
 
       it "is invalid agreements are not checked" do
-        required_attrs[:summary][:statutes] = "0"
+        required_attrs[:summary][:agb] = "0"
         required_attrs[:summary][:data_protection] = "0"
         expect(wizard).not_to be_valid
-        expect(wizard.summary.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
+        expect(wizard.summary.errors.full_messages).to eq ["Agb muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
       end
     end
   end
@@ -118,12 +118,12 @@ describe Wizards::Signup::AboMagazinWizard do
 
   describe "#calculate_costs" do
     it "calculates costs for swiss people" do
-      expect(wizard.calculate_costs).to eq(60)
+      expect(wizard.calculated_costs).to eq(60)
     end
 
     it "calculates costs for people abroad" do
       required_attrs[:person_fields][:country] = "DE"
-      expect(wizard.calculate_costs).to eq(76)
+      expect(wizard.calculated_costs).to eq(76)
     end
   end
 end

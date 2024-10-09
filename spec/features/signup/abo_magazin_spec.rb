@@ -46,12 +46,11 @@ describe "self_registration_abo_magazin", js: true do
   def complete_last_page(date: Date.tomorrow, submit: true)
     expect_active_step "Abo"
     expect_shared_partial
-    fill_in "Ab Ausgabe", with: I18n.l(date)
-    check "Ich habe die Statuten gelesen und stimme diesen zu"
+    check "Ich habe die AGB gelesen und stimme diesen zu"
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
     yield if block_given?
     if submit
-      click_on "Registrieren"
+      click_on "ABO KOSTENPFLICHTIG BESTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end
   end
@@ -79,24 +78,6 @@ describe "self_registration_abo_magazin", js: true do
     expect do
       complete_last_page
     end.to change { Person.count }.by(1)
-  end
-
-  it "renders date validation message" do
-    visit group_self_registration_path(group_id: group.id)
-    expect_active_step "E-Mail"
-    expect_shared_partial
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
-
-    expect_active_step "Personendaten"
-    expect_shared_partial
-    complete_main_person_form
-    click_on "Weiter"
-
-    expect do
-      complete_last_page(date: Date.yesterday)
-    end.not_to change { Person.count }
-    expect(page).to have_text "Ab Ausgabe muss #{I18n.l(Time.zone.today)} oder danach sein"
   end
 
   it "subscribes to mailinglist" do
