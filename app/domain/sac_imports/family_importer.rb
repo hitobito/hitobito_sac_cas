@@ -13,6 +13,7 @@ module SacImports
       :household_key,
       :errors
     ]
+    class ImportError < StandardError; end
 
     attr_reader :output, :source_file, :csv_report
 
@@ -51,7 +52,7 @@ module SacImports
       @output.print("#{person.id} (#{person}):")
       assign_household(person, household_key)
       @output.print(" ✅\n")
-    rescue StandardError => e
+    rescue ImportError, ActiveRecord::RecordInvalid => e
       @output.print(" ❌ #{e.message}\n")
       @csv_report.add_row({
         navision_id: person.id,
@@ -62,7 +63,7 @@ module SacImports
     end
 
     def assign_household(person, household_key)
-      raise StandardError, "No household_key found in NAV1 data" if household_key.blank?
+      raise ImportError, "No household_key found in NAV1 data" if household_key.blank?
       return if household_key == person.household_key # already assigned
 
       if (other_person = ::Person.find_by(household_key: household_key))
