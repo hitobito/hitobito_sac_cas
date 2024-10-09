@@ -11,19 +11,20 @@ class Signup::SektionMailer < ApplicationMailer
   CONFIRMATION = "sektion_signup_confirmation"
   APPROVAL_PENDING_CONFIRMATION = "sektion_signup_approval_pending_confirmation"
 
-  def confirmation(person, section)
-    send_mail(person, section, CONFIRMATION)
+  def confirmation(person, section, beitragskategorie)
+    send_mail(person, section, beitragskategorie, CONFIRMATION)
   end
 
-  def approval_pending_confirmation(person, section)
-    send_mail(person, section, APPROVAL_PENDING_CONFIRMATION)
+  def approval_pending_confirmation(person, section, beitragskategorie)
+    send_mail(person, section, beitragskategorie, APPROVAL_PENDING_CONFIRMATION)
   end
 
   private
 
-  def send_mail(person, section, content_key)
+  def send_mail(person, section, beitragskategorie, content_key)
     @person = person
     @section = section
+    @beitragskategorie = beitragskategorie
     headers[:bcc] = [SacCas::MV_EMAIL, section.email].compact_blank
     locales = [person.language]
 
@@ -75,8 +76,11 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_invoice_details
-    # Blocked by https://github.com/hitobito/hitobito_sac_cas/issues/933
-    "TODO"
+    presenter = Invoices::SacMemberships::SectionSignupFeePresenter.new(
+      @section,
+      @beitragskategorie
+    )
+    ApplicationController.render("wizards/signup/_section_fee_details", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
   end
 
   def placeholder_profile_url

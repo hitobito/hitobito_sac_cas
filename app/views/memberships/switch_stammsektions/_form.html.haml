@@ -5,10 +5,13 @@
 
 - @sheet = Sheet::Memberships::SwitchStammsektion.new(self, nil, group)
 
-= standard_form(wizard, url: group_person_switch_stammsektion_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f| 
+= standard_form(wizard, url: group_person_switch_stammsektion_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f|
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
     = c.with_aside do
       .col-md
         - if wizard.step(:choose_sektion)&.group
-          = render(SelfRegistration::FeeComponent.new(group: c.model.choose_sektion.group, birthdays: []))
+          = render 'wizards/signup/section_fee_summary', active: true,
+            adult: wizard.fees_for(:adult, Time.zone.now.beginning_of_year),
+            family: wizard.fees_for(:family, Time.zone.now.beginning_of_year),
+            youth: wizard.fees_for(:youth, Time.zone.now.beginning_of_year)
         = render(SelfRegistration::InfosComponent.new)

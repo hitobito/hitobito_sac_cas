@@ -37,7 +37,7 @@ describe "switching stammsektion", js: true do
       select "SAC Matterhorn"
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
-      expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+      expect(page).to have_content "Beitragskategorien SAC Matterhorn"
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Dein Sektionswechsel zu SAC Matterhorn wurde vorgenommen."
@@ -87,7 +87,7 @@ describe "switching stammsektion", js: true do
       select "SAC Matterhorn"
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
-      expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+      expect(page).to have_content "Beitragskategorien SAC Matterhorn"
       expect do
         click_on "Kostenpflichtig bestellen"
         expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."

@@ -1,0 +1,19 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+-#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+-#  or at https://github.com/hitobito/hitobito.
+
+%aside.card{class: ("d-none" unless active)}
+  .card-body
+    %h2.card-title=t('.title', section: adult.section)
+    .card-text
+      %table.table.table-borderless
+        %tbody
+          %tr
+            %td= adult.beitragskategorie_label
+            %td= adult.beitragskategorie_amount
+          %tr.border-top
+            %td= family.beitragskategorie_label
+            %td= family.beitragskategorie_amount
+          %tr.border-top
+            %td= youth.beitragskategorie_label
+            %td= youth.beitragskategorie_amount

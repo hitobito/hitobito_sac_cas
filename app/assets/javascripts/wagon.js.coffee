@@ -25,6 +25,8 @@ document.addEventListener 'click', (e) ->
     toggle '.next-as-single', true
     toggle '.next-as-family', false
     top_toolbar.classList.add 'd-none'
+
+    $('[data-forwarder-target=click]').click() # trigger aside reload
   else
     toggle '.next-as-single', false
     toggle '.next-as-family', true
