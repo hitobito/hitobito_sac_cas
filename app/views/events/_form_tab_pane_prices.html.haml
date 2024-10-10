@@ -6,4 +6,4 @@
 - if entry.is_a?(Event::Course)
   #prices.tab-pane
     = field_set_tag do
-      = f.labeled_input_fields(*entry.used_attributes(:price_member, :price_regular, :price_subsidized, :price_js_active_member, :price_js_active_regular, :price_js_passive_member, :price_js_passive_regular), addon: t('global.currency'), type: 'number', step: 0.01)
+      = f.labeled_input_fields(*entry.used_attributes(*Event::Course::PRICE_ATTRIBUTES), addon: t('global.currency'), type: 'number', step: 0.01)

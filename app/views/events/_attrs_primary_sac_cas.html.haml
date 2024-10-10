@@ -17,6 +17,7 @@
     = labeled_attr(entry, :start_point_of_time)
   - if entry.is_a?(Event::Course)
     = labeled t("events.form_tabs.prices") do
-      - [:price_member, :price_regular, :price_subsidized, :price_js_active_member, :price_js_active_regular, :price_js_passive_member, :price_js_passive_regular].each do |price|
-        - if entry.send(price).present?
-          #{entry.model.class.human_attribute_name(price)} CHF #{entry.send(price)}<br>
+      - Event::Course::PRICE_ATTRIBUTES.each do |price_attr|
+        - if entry.send(price_attr).present?
+          = format_event_price(price_attr, entry.send(price_attr))
+          %br

@@ -1,0 +1,20 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+%table.table.w-50
+  %thead
+    %tr
+      %th.h3.fw-bold.w-50=t(".order")
+      %th
+  %tbody
+    %tr
+      %td=t(".wanted_magazin")
+      %td=wizard.group
+    %tr
+      %td=t(".magazin_release")
+      %td=t(".magazin_release_info")
+    %tr
+      %td=t(".price")
+      %td="#{wizard.calculated_costs} CHF"

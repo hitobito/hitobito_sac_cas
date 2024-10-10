@@ -12,13 +12,13 @@ module SacCas::Event::Participation
 
   prepended do
     enum price_category: {
-      member: 0,
-      regular: 1,
-      subsidized: 2,
-      js_active_member: 3,
-      js_active_regular: 4,
-      js_passive_member: 5,
-      js_passive_regular: 6
+      price_member: 0,
+      price_regular: 1,
+      price_subsidized: 2,
+      price_s_active_member: 3,
+      price_js_active_regular: 4,
+      price_js_passive_member: 5,
+      price_js_passive_regular: 6
     }
 
     before_save :update_previous_state, if: :state_changed?
