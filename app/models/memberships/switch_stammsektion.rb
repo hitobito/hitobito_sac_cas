@@ -27,11 +27,15 @@ module Memberships
     end
 
     def existing_membership(person)
-      People::SacMembership.new(person).stammsektion_role.tap do |role|
-        next unless role
+      role = People::SacMembership.new(person).stammsektion_role
+      return unless role
 
-        role.attributes = {delete_on: nil, deleted_at: (now - 1.day).end_of_day}
+      if role.created_at.today?
+        role.mark_for_destruction
+      else
+        role.attributes = {delete_on: nil, deleted_at: now.yesterday.end_of_day}
       end
+      role
     end
 
     def new_membership(person, beitragskategorie)
