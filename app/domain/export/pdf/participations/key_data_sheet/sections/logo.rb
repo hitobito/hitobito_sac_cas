@@ -20,7 +20,12 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Logo < Export::Pdf::S
   end
 
   def logo_path
-    logo = "logo.png"
+    logo_lang = if [:it, :de, :fr].include?(I18n.locale)
+      I18n.locale
+    else
+      :de
+    end
+    logo = "pdf/sac_logo_cmyk_#{logo_lang}_pos.opti.jpg"
 
     image_path(logo)
   end
