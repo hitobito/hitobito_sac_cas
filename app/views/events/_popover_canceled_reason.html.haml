@@ -1,0 +1,18 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+%p= t('.cancel_info', name: entry.name, number: entry.number)
+
+= standard_form(entry) do |f|
+  = f.labeled t('.canceled_reason_label') do
+    = f.select(:canceled_reason, entry.model.class.canceled_reason_labels.invert,
+        {prompt: t('helpers.select.prompt'), required: true}, {class: 'form-select form-select-sm'})
+  = f.labeled t('.inform_participants_label') do
+    = check_box_tag(:inform_participants, required: true)
+    = t('.inform_participants_caption')
+  = action_button(t('.cancel_button'),
+      state_group_event_path(params[:group_id], params[:id], {state: :canceled}), nil, class: 'btn-danger',
+      method: :put, data: {confirm: t('.cancel_confirmation', name: entry.name, number: entry.number)})
+  = cancel_link('#')

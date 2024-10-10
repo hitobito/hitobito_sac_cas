@@ -7,3 +7,5 @@
   = Dropdown::Events::Courses::State.new(self, entry)
 - if entry.course? && can?(:create, entry)
   = action_button(t(".attach_key_data_sheets"), group_event_key_data_sheets_path(@group, entry), :file_pdf, method: :post)
+
+= Event::PopoverCanceledReason.new(self, entry).render
