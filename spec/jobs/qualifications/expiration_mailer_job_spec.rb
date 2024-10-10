@@ -10,11 +10,6 @@ require "spec_helper"
 describe Qualifications::ExpirationMailerJob do
   include ActiveJob::TestHelper
 
-  before do
-    ActionMailer::Base.deliveries.clear
-    load "./db/seeds/custom_contents.rb"
-  end
-
   subject(:job) { described_class.new }
 
   let(:person) { people(:mitglied) }
@@ -45,8 +40,7 @@ describe Qualifications::ExpirationMailerJob do
 
     it "mails a reminder" do
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:today, person.id).and_call_original
-
-      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once
     end
 
     it "does not mail a reminder if another valid qualification is still active" do
@@ -58,8 +52,7 @@ describe Qualifications::ExpirationMailerJob do
 
       # remove this expectation after integration testing, when only today expirations are reminded
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year, person.id).and_return(double(deliver_later: nil))
-
-      expect_no_enqueued_mail_jobs { job.perform }
+      expect { job.perform }.not_to have_enqueued_mail(Qualifications::ExpirationMailer)
     end
   end
 
@@ -77,8 +70,7 @@ describe Qualifications::ExpirationMailerJob do
       )
 
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year, person.id).and_call_original
-
-      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once
     end
   end
 
@@ -91,7 +83,7 @@ describe Qualifications::ExpirationMailerJob do
       expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:year_after_next_year, person.id).and_call_original
       travel_to "2000-12-31".to_date
 
-      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).exactly(:once)
+      expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once
     end
   end
 
@@ -102,8 +94,7 @@ describe Qualifications::ExpirationMailerJob do
 
     it "does not mail a reminder" do
       expect(Qualifications::ExpirationMailer).to receive(:reminder).never
-
-      expect_no_enqueued_mail_jobs { job.perform }
+      expect { job.perform }.not_to have_enqueued_mail(Qualifications::ExpirationMailer)
     end
   end
 
@@ -129,7 +120,7 @@ describe Qualifications::ExpirationMailerJob do
         finish_at: finish_at
       )
       travel_to "2020-12-31".to_date
-      expect_no_enqueued_mail_jobs { job.perform }
+      expect { job.perform }.not_to have_enqueued_mail(Qualifications::ExpirationMailer)
     end
   end
 end
