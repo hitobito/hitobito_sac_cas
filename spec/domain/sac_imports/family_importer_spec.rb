@@ -88,5 +88,20 @@ describe SacImports::FamilyImporter do
       expect(csv_report.first).to eq(report_headers)
       expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2 + ["Only one person in household"] * 2)
     end
+
+    it "can also assign person with validation errors" do
+      second_person.update_columns(town: nil)
+
+      expect { importer.create }
+        .to change { main_person.reload.household_key }.from(nil).to("F50235")
+        .and change { second_person.reload.household_key }.from(nil).to("F50235")
+        .and change { people(:familienmitglied).reload.household_key }.from("4242").to("F42")
+        .and change { people(:familienmitglied2).reload.household_key }.from("4242").to(nil)
+
+      expect(File.exist?(report_file)).to be_truthy
+      expect(csv_report.size).to eq(5)
+      expect(csv_report.first).to eq(report_headers)
+      expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2 + ["Only one person in household"] * 2)
+    end
   end
 end
