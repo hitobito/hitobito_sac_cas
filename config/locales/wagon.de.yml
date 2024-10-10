@@ -57,8 +57,6 @@ de:
         gender: Geschlecht
         email: E-Mail
         phone_number: Telefon
-        email_optional: E-Mail (optional)
-        phone_number_optional: Telefon (optional)
       wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
