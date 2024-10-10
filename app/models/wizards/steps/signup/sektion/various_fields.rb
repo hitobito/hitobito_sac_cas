@@ -23,6 +23,7 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def current_date_entry_reductions
+      require 'pry'; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
       with_reduction_info do |date_from, date_to, discount, index|
         I18n.t("period_info_#{index}", scope: "wizards.steps.signup.sektion.various_fields", date_to:, date_from:, discount:)
       end
@@ -34,13 +35,13 @@ module Wizards::Steps::Signup::Sektion
       [nil, :discount_date_1, :discount_date_2, :discount_date_3].each_cons(2).each.with_index(1) do |(from_date_key, to_date_key), index|
         from, formatted_from = formatted_date(from_date_key) if from_date_key
         to, formatted_to = formatted_date(to_date_key, subtract_one_day: true)
-        discount = SacMembershipConfig.last.discount_percent(to) unless to.nil?
+        discount = SacMembershipConfig.active(Time.zone.now).discount_percent(to) unless to.nil?
         return yield(formatted_from, formatted_to, discount, index) if (from..to).cover?(today)
       end
     end
 
     def formatted_date(date_key, subtract_one_day: false)
-      date = date_from_string(SacMembershipConfig.last.public_send(date_key))
+      date = date_from_string(SacMembershipConfig.active(Time.zone.now).public_send(date_key))
       if date.present?
         date = subtract_one_day ? date - 1.day : date
         [date, I18n.l(date, format: "%d.%B")]
