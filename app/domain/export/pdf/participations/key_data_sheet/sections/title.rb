@@ -17,7 +17,10 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Title < Export::Pdf::
 
     pdf.move_down(5.mm)
 
-    text(t("greeting", name: model.person.first_name))
+    t("greeting", name: model.person.first_name).split("\n").each do |line|
+      text(line)
+      pdf.move_down(5.mm)
+    end
   end
 
   def t(key, options = {})

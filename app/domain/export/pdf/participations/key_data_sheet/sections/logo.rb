@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Logo < Export::Pdf::Section
-  LOGO_WIDTH = 180
-  LOGO_HEIGHT = 70
+  LOGO_WIDTH = 170
+  LOGO_HEIGHT = 71
 
   def render
     render_logo
@@ -15,7 +15,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Logo < Export::Pdf::S
 
   def render_logo
     float do
-      image(logo_path, at: [pdf.bounds.right - LOGO_WIDTH, pdf.bounds.top], width: LOGO_WIDTH, height: LOGO_HEIGHT)
+      # logo is algined right and the text is matched with the first line of the text
+      image(logo_path, at: [pdf.bounds.right - LOGO_WIDTH, pdf.bounds.top + 7], width: LOGO_WIDTH, height: LOGO_HEIGHT)
     end
   end
 
