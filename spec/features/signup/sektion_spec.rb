@@ -242,8 +242,8 @@ describe "signup/sektion", js: true do
         expect(find_field("Nachname")[:class]).to match(/\bis-invalid\b/)
         expect(find_field("Geburtsdatum")[:class]).to match(/\bis-invalid\b/)
 
-        expect(find_field("E-Mail (optional)")[:class]).not_to match(/\bis-invalid\b/)
-        expect(find_field("Telefon (optional)")[:class]).not_to match(/\bis-invalid\b/)
+        expect(find_field("E-Mail")[:class]).not_to match(/\bis-invalid\b/)
+        expect(find_field("Telefon")[:class]).not_to match(/\bis-invalid\b/)
       end
     end
 
@@ -280,7 +280,7 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxi.muster@hitobito.example.com"
         choose "divers"
       end
 
@@ -381,7 +381,7 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxi.muster@hitobito.example.com"
         choose "divers"
       end
       assert_aside(beitragskategorie: :family)
@@ -400,23 +400,6 @@ describe "signup/sektion", js: true do
       people = Person.where(last_name: "Muster")
       expect(people).to have(2).items
       expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
-    end
-
-    it "changes label of email and phone number" do
-      click_on "Weiteres Familienmitglied hinzufügen"
-      within "#members_fields .fields:nth-child(1)" do
-        expect(page).to have_css("label", text: "E-Mail (optional)")
-        expect(page).to have_css("label", text: "Telefon (optional)")
-        fill_in "Geburtsdatum", with: "01.01.2000"
-        fill_in "Vorname", with: "any" # trigger change event
-        expect(page).to have_css("label", text: "E-Mail")
-        expect(page).not_to have_css("label", text: "E-Mail (optional)")
-        expect(page).not_to have_css("label", text: "Telefon (optional)")
-        fill_in "Geburtsdatum", with: "01.01.2014"
-        fill_in "Vorname", with: "any" # trigger change event
-        expect(page).to have_css("label", text: "E-Mail (optional)")
-        expect(page).to have_css("label", text: "Telefon (optional)")
-      end
     end
 
     it "validates emails dynamically for household input" do
@@ -685,7 +668,7 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Larissa"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "larissa.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "larissa.muster@hitobito.example.com"
         choose "divers"
       end
       click_on "Weiter als Familienmitgliedschaft", match: :first
