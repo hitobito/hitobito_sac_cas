@@ -558,7 +558,7 @@ describe "signup/sektion", :js do
         choose "weiblich"
       end
 
-      click_link "Zurück"
+      click_link "Zurück", match: :first
       fill_in "Geburtsdatum", with: twenty_years_ago
       click_button "Weiter"
       assert_aside(beitragskategorie: :youth)
