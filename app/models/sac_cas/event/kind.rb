@@ -58,11 +58,9 @@ module SacCas::Event::Kind
     validates :short_name, presence: true
 
     validate :maximum_age_greater_than_minimum_age, if: -> { maximum_age.present? }
-    validate :kinds_must_be_allowed
 
     SEASONS = %w[winter summer].freeze
     ACCOMMODATIONS = %w[no_overnight hut pension pension_or_hut bivouac].freeze
-    ALLOWED_KINDS = %w[day flat].freeze
 
     i18n_enum :season, SEASONS
     i18n_enum :accommodation, ACCOMMODATIONS
@@ -99,12 +97,6 @@ module SacCas::Event::Kind
   def maximum_age_greater_than_minimum_age
     if maximum_age < (minimum_age || 0)
       errors.add(:maximum_age, :greater_than_or_equal_to, count: minimum_age || 0)
-    end
-  end
-
-  def kinds_must_be_allowed
-    if course_compensation_categories.any? { |ccc| !ALLOWED_KINDS.include?(ccc.kind) }
-      errors.add(:course_compensation_category_ids, :invalid)
     end
   end
 end
