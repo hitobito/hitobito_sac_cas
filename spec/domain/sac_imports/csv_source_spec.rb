@@ -34,9 +34,19 @@ describe SacImports::CsvSource do
   it "converts csv content to hashes with key value pairs defined by header mapping" do
     @source_name = :NAV2
     rows = source_file.rows
-    expect(rows.count).to eq(2)
-    expect(rows.first).to eq({navision_name: "Montana Andreas", navision_id: "1000", household_key: nil, group_navision_id: "1500", navision_membership_years: "44"})
-    expect(rows.second).to eq({navision_name: "Hillary Edmund", navision_id: "600001", household_key: nil, group_navision_id: "1650", navision_membership_years: "9"})
+    expect(rows.count).to eq(16)
+    expect(rows.last).to eq({navision_id: "4200008",
+                             valid_from: "2018-02-15",
+                             valid_until: nil,
+                             layer_type: "SAC/CAS",
+                             group_level1: "Verbände & Organisationen",
+                             group_level2: "Rettungsstationen",
+                             group_level3: "Samedan",
+                             group_level4: nil,
+                             role: "Mitglied",
+                             role_description: "Retter I",
+                             person_name: "Bühler Christian",
+                             other: "9038V"})
   end
 
   it "converts WSO21 content to hashes with key value pairs defined by header mapping" do
@@ -67,6 +77,12 @@ describe SacImports::CsvSource do
       wso2_legacy_password_salt: "xwQcHLXumdiO3O22lSX6Jw==",
       zip_code: "3972"
     })
+  end
+
+  it "applies additional regex value filter for rows" do
+    @source_name = :NAV2
+    rows = source_file.rows(filter: {role: /^Mitglied \(Stammsektion\).+/})
+    expect(rows.count).to eq(12)
   end
 
   it "converts NAV3 content to hashes with key value pairs defined by header mapping" do

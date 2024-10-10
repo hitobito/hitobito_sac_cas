@@ -44,7 +44,7 @@ module SacImports
 
     def process_row(row)
       @output.print("#{row[:navision_id]} (#{row[:navision_name]}):")
-      entry = PersonEntry.new(row, target_group)
+      entry = People::PersonEntry.new(row, target_group)
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.errors}\n")
       if entry.valid?
         entry.import!

@@ -19,7 +19,7 @@ module SacImports
       # truemail_with_regex
       @output = output
       @source_file = CsvSource.new(:WSO21)
-      @csv_report = CsvReport.new(:"wso2-1_people", REPORT_HEADERS)
+      @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)
     end
 
     def create
@@ -46,7 +46,7 @@ module SacImports
 
     def process_row(row)
       @output.print("#{row[:navision_id]} (#{row[:email]}):")
-      entry = Wso2PersonEntry.new(row, basic_login_group, abo_group, navision_import_group)
+      entry = Wso2::PersonEntry.new(row, basic_login_group, abo_group, navision_import_group)
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!

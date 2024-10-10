@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacImports
+module SacImports::People
   class PersonEntry
     GENDERS = {"0": "m", "1": "w"}.freeze
     PERSON_TYPES = {"1": "person", "2": "company"}.freeze

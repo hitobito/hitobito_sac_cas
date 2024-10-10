@@ -12,7 +12,7 @@ namespace :sac_imports do
 
   desc "Imports SAC Sections"
   task "nav6-1_sac_section": [:environment] do
-    raise "Not implemented"
+    SacImports::SacSectionsImporter.new.create
   end
 
   desc "Imports people and companies from Navision"
@@ -30,9 +30,9 @@ namespace :sac_imports do
     SacImports::Wso2PeopleImporter.new.create
   end
 
-  desc "Imports memberships"
-  task "nav2-1_roles": [:environment] do
-    raise "Not implemented"
+  desc "Imports membership roles"
+  task "nav2-1_membership_roles": [:environment] do
+    SacImports::RolesImporter.new(role_type: :membership).create
   end
 
   desc "Imports qualifications"

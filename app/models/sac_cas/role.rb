@@ -122,6 +122,7 @@ module SacCas::Role
   end
 
   def set_preferred_primary!
-    person.update!(primary_group: Groups::Primary.new(person).identify)
+    primary_group = Groups::Primary.new(person).identify
+    person.update_columns(primary_group_id: primary_group.id) if primary_group
   end
 end
