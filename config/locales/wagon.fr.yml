@@ -5,6 +5,7 @@
 
 fr:
   global:
+    date_field_placeholder: ""
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Années
@@ -47,16 +48,12 @@ fr:
         contribution_regulations: Règlement des cotisations
         data_protection: Déclaration de confidentialité
         statutes: Statuts
-      wizards/steps/signup/abo_magazin/issues_from_field:
-        issues_from: A partir de l'édition
-        data_protection: Déclaration de confidentialité
-        statutes: Statuts
+      wizards/steps/signup/abo_magazin/summary:
+        data_protection: ""
       wizards/steps/signup/sektion/family_fields/member:
         gender: ""
         email: ""
         phone_number: ""
-        email_optional: ""
-        phone_number_optional: ""
       wizards/steps/signup/sektion/various_fields:
         register_on: Date d'entrée au
         self_registration_reason_id: Motif d'entrée
@@ -1131,6 +1128,10 @@ fr:
         terms_and_conditions_link_label: CONDITIONS GÉNÉRALES DE VENTE
         terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
         subscribe_newsletter: "Oui, je souhaite être informé des nouveautés du Club Alpin Suisse CAS"
+      fields_sac_cas:
+        former_price_select: ""
+        no_price_select: ""
+        price_label: ""
       summoned_notice: "%{participant} a été convoqué."
       actions_show_youth:
         summon_button: Convocation
@@ -1218,6 +1219,7 @@ fr:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
 
       agreement_link:
+        agb_text: ""
         statutes_text: "J'ai lu et j'accepte %{link} "
         sektion_statuten_text: "J'ai lu et j'accepte %{link} "
         contribution_regulations_text: "J'ai lu et j'approuve %{link} "
@@ -1529,6 +1531,8 @@ fr:
         3000 Bern 14
         Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
         <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
+      link_agb_title: ""
+      link_agb: ""
       link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       link_faqs_title: FAQ
       link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_FR.pdf"
@@ -1591,12 +1595,19 @@ fr:
           person_fields:
             next_button: ""
         abo_magazin:
-          issues_from_field_title: Abonnement
-          issues_from_field:
-            issues_from_help: |
-              L'abonnement prend effet à partir du prochain numéro possible.
-              Si la revue doit être livrée à une date ultérieure, veuillez nous informer du début de la livraison.
-              indiquez à partir de quel numéro nous pouvons commencer la livraison.
+          abo_info_table: 
+            order: ""
+            wanted_magazin: ""
+            magazin_release: ""
+            magazin_release_info: ""
+            price: ""
+          person_info_table:
+            your_information: ""
+          summary_title: ""
+          summary:
+            info_text: ""
+            next_button: ""
+            
         sektion:
           family_fields_title: Membres de la famille
           family_fields:
