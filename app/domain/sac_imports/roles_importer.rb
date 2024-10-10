@@ -19,7 +19,7 @@ module SacImports
       :error
     ].freeze
 
-    def initialize(output: $stdout, role_type:)
+    def initialize(role_type:, output: $stdout)
       @output = output
       @role_type = role_type
       @source_file = SacImports::CsvSource.new(:NAV2)
@@ -40,17 +40,17 @@ module SacImports
     def memberships_importer
       Roles::MembershipsImporter
         .new(csv_source: @source_file,
-             output: @output,
-             csv_report: @csv_report,
-             failed_person_ids: @failed_person_ids)
+          output: @output,
+          csv_report: @csv_report,
+          failed_person_ids: @failed_person_ids)
     end
 
     def additional_memberships_importer
       Roles::AdditionalMembershipsImporter
         .new(csv_source: @source_file,
-             output: @output,
-             csv_report: @csv_report,
-             failed_person_ids: @failed_person_ids)
+          output: @output,
+          csv_report: @csv_report,
+          failed_person_ids: @failed_person_ids)
     end
   end
 end

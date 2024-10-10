@@ -62,42 +62,41 @@ describe SacImports::RolesImporter do
         expect(csv_report.size).to eq(14)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report[1]).to eq(["4200000",
-                                     "Nachname 1 Vorname 1",
-                                     "2014-10-06",
-                                     "2022-12-31",
-                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                     "Mitglied (Stammsektion) (Jugend)",
-                                     nil, nil, "Person not found in hitobito"])
+          "Nachname 1 Vorname 1",
+          "2014-10-06",
+          "2022-12-31",
+          "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+          "Mitglied (Stammsektion) (Jugend)",
+          nil, nil, "Person not found in hitobito"])
         expect(csv_report[2]).to eq(["4200000",
-                                     "Nachname 1 Vorname 1",
-                                     "2023-01-01",
-                                     "2024-12-31",
-                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     nil, nil, "A previous role could not be imported for this person, skipping"])
+          "Nachname 1 Vorname 1",
+          "2023-01-01",
+          "2024-12-31",
+          "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          nil, nil, "A previous role could not be imported for this person, skipping"])
         expect(csv_report[3]).to eq(["4200001",
-                                     "Maurer Johannes",
-                                     "2014-10-06",
-                                     "2018-06-06",
-                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                     "Mitglied (Stammsektion) (Einzel)",
-                                     "Membership role created", nil, nil])
+          "Maurer Johannes",
+          "2014-10-06",
+          "2018-06-06",
+          "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          "Membership role created", nil, nil])
         expect(csv_report[4]).to eq(["4200001",
-                                     "Maurer Johannes",
-                                     "2018-06-07",
-                                     "2024-12-31",
-                                     "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
-                                     "Mitglied (Stammsektion) (Frei Fam)",
-                                     "Membership role created", nil, nil])
+          "Maurer Johannes",
+          "2018-06-07",
+          "2024-12-31",
+          "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
+          "Mitglied (Stammsektion) (Frei Fam)",
+          "Membership role created", nil, nil])
         expect(csv_report[13]).to eq(["4200005",
-                                     "Muster Hans",
-                                     "2014-10-06",
-                                     "2016-10-11",
-                                     "Sektion > CAS Moléson > Mitglieder",
-                                     "Mitglied (Zusatzsektion) (Einzel)",
-                                     nil, nil, "A previous role could not be imported for this person, skipping"])
+          "Muster Hans",
+          "2014-10-06",
+          "2016-10-11",
+          "Sektion > CAS Moléson > Mitglieder",
+          "Mitglied (Zusatzsektion) (Einzel)",
+          nil, nil, "A previous role could not be imported for this person, skipping"])
       end
     end
   end
-
 end
