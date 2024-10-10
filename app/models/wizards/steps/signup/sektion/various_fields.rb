@@ -23,7 +23,6 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def current_date_entry_reductions
-      require 'pry'; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
       with_reduction_info do |date_from, date_to, discount, index|
         I18n.t("period_info_#{index}", scope: "wizards.steps.signup.sektion.various_fields", date_to:, date_from:, discount:)
       end
