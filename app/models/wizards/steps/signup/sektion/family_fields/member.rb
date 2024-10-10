@@ -28,13 +28,14 @@ module Wizards::Steps::Signup::Sektion
     validates :phone_number, presence: true, if: :adult?
     validate :assert_family_age, if: :birthday
     validate :assert_email_unique, if: :email
+    validate :require_gender
 
     def adult?
       Person.new(birthday:).adult?
     end
 
     def required_attrs
-      [:email_required, :phone_number_required]
+      %i[email_required phone_number_required gender]
     end
 
     private
@@ -50,6 +51,10 @@ module Wizards::Steps::Signup::Sektion
       errors.add(:birthday, :youth_not_allowed_in_family,
         from_age: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.end.next,
         to_age: SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH.end.pred)
+    end
+
+    def require_gender
+      errors.add(:gender, :blank) if attributes["gender"].nil?
     end
   end
 end

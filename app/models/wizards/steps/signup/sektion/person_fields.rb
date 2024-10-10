@@ -9,12 +9,18 @@ module Wizards::Steps::Signup::Sektion
   class PersonFields < Wizards::Steps::Signup::PersonFields
     self.partial = "wizards/steps/signup/person_fields"
 
+    validate :require_gender
     validates :street, :housenumber, :town, :zip_code,
       :country, :phone_number, presence: true
 
-    # let form builder know that it should mark address as required
     def required_attrs
-      [:address]
+      [:address, :gender]
+    end
+
+    private
+
+    def require_gender
+      errors.add(:gender, :blank) if attributes["gender"].nil?
     end
   end
 end
