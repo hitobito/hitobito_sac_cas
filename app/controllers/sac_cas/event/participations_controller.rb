@@ -13,10 +13,11 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    permitted_attrs << :subsidy << :adult_consent << :terms_and_conditions << :newsletter
+    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter, :send_participation_confirmation_email
+    after_save :update_participation_price
     before_cancel :assert_participant_cancelable?
   end
 
@@ -40,10 +41,18 @@ module SacCas::Event::ParticipationsController
 
   def permitted_attrs
     permitted = self.class.permitted_attrs.dup
-
     permitted << :actual_days if can?(:edit_actual_days, entry)
-
     permitted
+  end
+
+  def assign_attributes
+    permitted = permitted_params
+    permitted.delete(:price_category) if keep_former_price?
+    entry.attributes = permitted
+  end
+
+  def keep_former_price?
+    permitted_params[:price_category] == "former"
   end
 
   def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -165,5 +174,11 @@ module SacCas::Event::ParticipationsController
     end
 
     Event::ApplicationConfirmationMailer.confirmation(entry, content_key).deliver_later
+  end
+
+  def update_participation_price
+    return if keep_former_price?
+
+    entry.update!(price: entry.price_category.nil? ? nil : @event.send(entry.price_category))
   end
 end
