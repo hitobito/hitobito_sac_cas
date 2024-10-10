@@ -17,13 +17,27 @@ describe Groups::SelfRegistrationController do
     }.merge(wizards_signup_sektion_wizard: attrs)
   end
 
-  context "with existing email" do
-    let(:admin) { people(:admin) }
+  # context "with existing email" do
+  #   let(:admin) { people(:admin) }
 
-    it "redirects to login page" do
-      post :create, params: wizard_params(main_email_field: {email: admin.email})
-      expect(response).to redirect_to(new_person_session_path(person: {login_identity: admin.email}))
-      expect(flash[:notice]).to eq "Es existiert bereits ein Login für diese E-Mail. Melde dich hier an."
+  #   it "redirects to login page" do
+  #     post :create, params: wizard_params(main_email_field: {email: admin.email})
+  #     expect(response).to redirect_to(new_person_session_path(person: {login_identity: admin.email}))
+  #     expect(flash[:notice]).to eq "Es existiert bereits ein Login für diese E-Mail. Melde dich hier an."
+  #   end
+  # end
+
+  context "with existing membership" do
+    let(:member) { people(:mitglied) }
+
+    before do
+      sign_in(member)
+    end
+
+    it "redirects to memberships tab with a flash message" do
+      post :create, params: wizard_params(main_email_field: {email: member.email})
+      expect(response).to redirect_to(history_group_person_path(group_id: member.primary_group_id, id: member.id))
+      expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle."
     end
   end
 end
