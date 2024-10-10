@@ -22,7 +22,7 @@ describe Export::Tabular::People::SacRecipientHouseholds do
       salutation: "Anrede",
       first_name: "Vorname",
       last_name: "Name",
-      address_care_of: "zusätzliche Adresszeile",
+      address_care_of: "Adresszusatz",
       address: "Strasse",
       postbox: "Postfach",
       zip_code: "PLZ",

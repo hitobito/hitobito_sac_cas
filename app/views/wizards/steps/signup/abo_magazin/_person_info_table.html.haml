@@ -25,11 +25,11 @@
       %td=person.class.human_attribute_name(:birthday)
       %td=person.birthday.strftime("%d.%m.%Y")
     %tr
-      %td=person.class.human_attribute_name(:address)
-      %td="#{person.street} #{person.housenumber}"
-    %tr
       %td=person.class.human_attribute_name(:address_care_of)
       %td=person.address_care_of
+    %tr
+      %td=person.class.human_attribute_name(:address)
+      %td="#{person.street} #{person.housenumber}"
     %tr
       %td=person.class.human_attribute_name(:postbox)
       %td=person.postbox

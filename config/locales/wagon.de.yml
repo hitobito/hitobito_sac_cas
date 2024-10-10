@@ -325,6 +325,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
       person:
+        address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt
         family_id: Familien ID
