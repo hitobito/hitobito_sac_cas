@@ -173,7 +173,7 @@ describe SacImports::Roles::MembershipsImporter do
           nil, nil, "Person not found in hitobito"])
       end
 
-      it "reports failing membership role creation and skips further role creation" do
+      it "reports if valid_from is after valid_until and skips further role creation for this person" do
         second_row = row.dup
         row[:valid_until] = "1992-01-01" # set valid_until before valid_from
         rows << second_row
@@ -210,6 +210,27 @@ describe SacImports::Roles::MembershipsImporter do
           "Sektion > SAC Unknown > Mitglieder",
           "Mitglied (Stammsektion) (Einzel)",
           nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
+      end
+
+      it "assings sac section members group as primary group" do
+        row[:group_level1] = "SAC Matterhorn"
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Membership role created\n")
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Matterhorn > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          "Membership role created", nil, nil])
+
+        mitglied.reload
+        expect(mitglied.primary_group).to eq(groups(:matterhorn_mitglieder))
       end
 
       it "reports unknown beitragskategorie" do

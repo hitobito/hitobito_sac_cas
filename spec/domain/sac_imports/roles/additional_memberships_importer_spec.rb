@@ -147,7 +147,7 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
           nil, nil, "Person not found in hitobito"])
       end
 
-      it "reports failing additional membership role creation and skips further role creation" do
+      it "reports if valid_from is after valid_until and skips further role creation for this person" do
         second_row = row.dup
         row[:valid_until] = "1992-01-01" # set valid_until before valid_from
         rows << second_row

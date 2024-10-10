@@ -133,10 +133,6 @@ module SacCas::Person
   end
 
   def roles_require_address_fields?
-    # do not validate this if nothing or only primary_group changed
-    return false if changes.keys == ["primary_group_id"]
-    return false if changes.keys.empty?
-
     roles.exists?(type: REQUIRED_FIELDS_ROLES)
   end
 end
