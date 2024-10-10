@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "signup/sektion", js: true do
+describe "signup/sektion", :js do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
   let(:person) { Person.find_by(email: "max.muster@hitobito.example.com") }
@@ -20,9 +20,8 @@ describe "signup/sektion", js: true do
   end
 
   def expect_active_step(step_name)
-    expect(page)
-      .to have_css(".step-headers li.active", text: step_name),
-        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
+    expect(page).to have_css(".step-headers li.active", text: step_name),
+      "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
@@ -47,11 +46,17 @@ describe "signup/sektion", js: true do
       "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
   end
 
+  # force step rerender because the buttons don't always show up immediately
+  def force_rerender
+    click_link "Zurück", match: :first
+    click_button "Weiter", match: :first
+  end
+
   def complete_main_person_form
     assert_step "E-Mail"
     assert_aside
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     assert_step "Personendaten"
     choose "männlich"
     fill_in "Vorname", with: "Max"
@@ -67,14 +72,14 @@ describe "signup/sektion", js: true do
     expect(page).not_to have_field("Newsletter")
     assert_aside(beitragskategorie: :adult)
     yield if block_given?
-    click_on "Weiter"
+    click_button "Weiter"
   end
 
   def complete_household_form
     assert_step "Familienmitglieder"
-    click_on "Weiteres Familienmitglied hinzufügen"
+    click_link "Weiteres Familienmitglied hinzufügen"
 
-    within "#members_fields .fields:nth-child(1)" do
+    within "#members_fields .fields:first-child" do
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
       fill_in "Geburtsdatum", with: "01.01.1981"
@@ -83,7 +88,8 @@ describe "signup/sektion", js: true do
       choose "weiblich"
     end
     yield if block_given?
-    click_on "Weiter als Familienmitgliedschaft", match: :first
+    force_rerender
+    click_button "Weiter als Familienmitgliedschaft", match: :first
   end
 
   def complete_last_page(submit: true)
@@ -95,13 +101,9 @@ describe "signup/sektion", js: true do
 
     yield if block_given?
     if submit
-      click_on "Registrieren"
+      click_button "Registrieren"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end
-  end
-
-  def click_on_breadcrumb(link_text)
-    within(".step-headers") { click_on link_text }
   end
 
   def format_date(time_or_date)
@@ -112,7 +114,7 @@ describe "signup/sektion", js: true do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    click_button "Weiter"
     expect_active_step("E-Mail")
     expect_validation_error("E-Mail ist nicht gültig")
   end
@@ -126,13 +128,13 @@ describe "signup/sektion", js: true do
 
       visit group_self_registration_path(group_id: group)
       fill_in "Mail", with: person.email
-      click_on "Weiter"
+      click_button "Weiter"
       expect(page).to have_css ".alert-success",
         text: "Es existiert bereits ein Login für diese E-Mail."
       expect(page).to have_css "h1", text: "Anmelden"
       expect(page).to have_field "Haupt‑E‑Mail / Mitglied‑Nr", with: person.email
       fill_in "Passwort", with: password
-      click_on "Anmelden"
+      click_button "Anmelden"
       # In https://github.com/hitobito/hitobito_sac_cas/pull/860 we removed the
       # customized SAC self-inscription. There was some logic in
       # app/models/self_inscription.rb to find the correct group to get the
@@ -148,8 +150,8 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       expect(page).to have_css("h2", text: "Fragen zur Mitgliedschaft?")
       complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
-      click_button "Weiter", match: :first
+      click_button "Weiter als Einzelmitglied"
+      click_button "Weiter"
 
       expect do
         complete_last_page
@@ -195,13 +197,12 @@ describe "signup/sektion", js: true do
       )
       visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-      click_on "Weiter"
+      click_button "Weiter"
       fill_in "wizards_signup_sektion_wizard_person_fields_street", with: "Belp"
       dropdown = find('ul[role="listbox"]')
       expect(dropdown).to have_content("Belpstrasse 3007 Bern")
 
-      find('ul[role="listbox"] li[role="option"]', text: "Belpstrasse 3007 Bern", match: :first)
-        .click
+      find('ul[role="listbox"] li[role="option"]', text: "Belpstrasse 3007 Bern").click
 
       expect(page).to have_field("wizards_signup_sektion_wizard_person_fields_zip_code", with: "3007")
       expect(page).to have_field("wizards_signup_sektion_wizard_person_fields_town", with: "Bern")
@@ -211,8 +212,8 @@ describe "signup/sektion", js: true do
     it "validates required fields" do
       visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-      click_on "Weiter"
-      click_on "Weiter", match: :first
+      click_button "Weiter"
+      click_button "Weiter"
 
       expect(page).to have_selector("#error_explanation") # wait for the error message to appear
       expect(find_field("Vorname")[:class]).to match(/\bis-invalid\b/)
@@ -233,11 +234,12 @@ describe "signup/sektion", js: true do
     end
 
     it "validates household required fields" do
-      click_on "Weiteres Familienmitglied hinzufügen"
-      click_on "Weiter als Familienmitgliedschaft", match: :first
+      click_link "Weiteres Familienmitglied hinzufügen"
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
 
       expect(page).to have_selector("#error_explanation") # wait for the error message to appear
-      within "#members_fields .fields:nth-child(1)" do
+      within "#members_fields .fields:first-child" do
         expect(find_field("Vorname")[:class]).to match(/\bis-invalid\b/)
         expect(find_field("Nachname")[:class]).to match(/\bis-invalid\b/)
         expect(find_field("Geburtsdatum")[:class]).to match(/\bis-invalid\b/)
@@ -248,24 +250,26 @@ describe "signup/sektion", js: true do
     end
 
     it "switches back to Einzelmitgliedschaft when adding and removing member" do
-      click_on "Weiteres Familienmitglied hinzufügen"
-      within "#members_fields .fields:nth-child(1)" do
+      click_link "Weiteres Familienmitglied hinzufügen"
+      within "#members_fields .fields:first-child" do
         fill_in "Geburtsdatum", with: "01.01.1981"
         fill_in "Vorname", with: "Maxine"
       end
+      force_rerender
       expect(page).to have_button "Weiter als Familienmitgliedschaft"
       assert_aside(beitragskategorie: :family)
-      within "#members_fields .fields:nth-child(1)" do
-        click_on "Entfernen"
+      within "#members_fields .fields:first-child" do
+        click_link "Entfernen"
       end
+      force_rerender
       expect(page).to have_button "Weiter als Einzelmitglied"
       assert_aside(beitragskategorie: :einzel)
     end
 
     it "can create several people in same household" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
-      within "#members_fields .fields:nth-child(1)" do
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1981"
@@ -274,7 +278,7 @@ describe "signup/sektion", js: true do
         choose "weiblich"
       end
       assert_aside(beitragskategorie: :family)
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
@@ -285,8 +289,9 @@ describe "signup/sektion", js: true do
       end
 
       assert_aside(beitragskategorie: :family)
-      click_button("Weiter als Familienmitgliedschaft", match: :first)
-      click_button("Weiter", match: :first)
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      click_button "Weiter"
 
       expect do
         complete_last_page
@@ -302,9 +307,9 @@ describe "signup/sektion", js: true do
     end
 
     it "validates we only can have one additional adult in household" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
-      within "#members_fields .fields:nth-child(1)" do
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1981"
@@ -314,7 +319,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside(beitragskategorie: :family)
 
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -325,7 +330,8 @@ describe "signup/sektion", js: true do
       end
       assert_aside(beitragskategorie: :family)
 
-      click_on "Weiter als Familienmitgliedschaft", match: :first
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
 
       within("#error_explanation") do
         expect(page).to have_content "In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen."
@@ -333,14 +339,15 @@ describe "signup/sektion", js: true do
     end
 
     it "validates we can not add youth in household" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
-      within "#members_fields .fields:nth-child(1)" do
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(20.years.ago)
       end
-      click_on "Weiter als Familienmitgliedschaft", match: :first
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
 
       within("#error_explanation") do
         expect(page).to have_content "Jugendliche im Alter von 18 bis 22 Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden"
@@ -350,23 +357,24 @@ describe "signup/sektion", js: true do
     it "can have many children in household" do
       anchor_date = 15.years.ago.to_date
       7.times.each do |i|
-        click_on "Weiteres Familienmitglied hinzufügen"
+        click_link "Weiteres Familienmitglied hinzufügen"
         within "#members_fields .fields:nth-child(#{i + 1})" do
           fill_in "Vorname", with: "Kind #{i + 1}"
           fill_in "Nachname", with: "Muster"
           fill_in "Geburtsdatum", with: format_date(anchor_date + i.years)
         end
       end
-      click_on "Weiter als Familienmitgliedschaft", match: :first
-      click_on "Weiter", match: :first
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      click_button "Weiter"
       expect(page).to have_button "Registrieren"
       expect(page).to have_no_selector "#error_explanation"
     end
 
     it "can add and remove housemate" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
-      within "#members_fields .fields:nth-child(1)" do
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1981"
@@ -376,7 +384,7 @@ describe "signup/sektion", js: true do
       end
       assert_aside(beitragskategorie: :family)
 
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -385,12 +393,13 @@ describe "signup/sektion", js: true do
         choose "divers"
       end
       assert_aside(beitragskategorie: :family)
-      within "#members_fields .fields:nth-child(1)" do
-        click_on "Entfernen"
+      within "#members_fields .fields:first-child" do
+        click_link "Entfernen"
       end
       assert_aside(beitragskategorie: :family)
-      click_on "Weiter als Familienmitgliedschaft", match: :first
-      click_button "Weiter", match: :first
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      click_button "Weiter"
 
       expect do
         complete_last_page
@@ -403,7 +412,7 @@ describe "signup/sektion", js: true do
     end
 
     it "validates emails dynamically for household input" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       fill_in "E-Mail", with: "e.hillary@hitobito.example.com"
       fill_in "Vorname", with: "Maxi"
       field = find_field("E-Mail")
@@ -419,18 +428,19 @@ describe "signup/sektion", js: true do
     end
 
     it "does not treat empty email as invalid" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       fill_in "Geburtsdatum", with: "01.01.2000"
 
-      click_on "Weiter als Familienmitgliedschaft", match: :first
-      within "#members_fields .fields:nth-child(1)" do
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      within "#members_fields .fields:first-child" do
         expect(page).to have_content "E-Mail muss ausgefüllt werden"
         expect(page).not_to have_content "Die E-Mail Adresse ist bereits registriert"
       end
     end
 
     it "validates emails within household on form submit" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
@@ -438,13 +448,14 @@ describe "signup/sektion", js: true do
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       fill_in "Telefon", with: "0791234567"
       choose "weiblich"
-      click_on "Weiter als Familienmitgliedschaft", match: :first
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
       expect(page).to have_content "E-Mail ist bereits vergeben"
-      expect(page).to have_button "Weiter als Familienmitgliedschaft", match: :first
+      expect(page).to have_button "Weiter als Familienmitgliedschaft"
     end
 
     it "validates phone_number of housemate" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
 
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
@@ -452,21 +463,22 @@ describe "signup/sektion", js: true do
       fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
       fill_in "Telefon", with: "123"
       choose "weiblich"
-      click_on "Weiter als Familienmitgliedschaft", match: :first
-      within "#members_fields .fields:nth-child(1)" do
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      within "#members_fields .fields:first-child" do
         expect(page).to have_content "Telefon ist nicht gültig"
       end
     end
 
     it "can continue with incomplete removed housemate" do
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       fill_in "Vorname", with: "Maxine"
       fill_in "Nachname", with: "Muster"
-      within "#members_fields .fields:nth-child(1)" do
-        click_on "Entfernen"
+      within "#members_fields .fields:first-child" do
+        click_link "Entfernen"
       end
-      click_on "Weiter als Einzelmitglied", match: :first
-      click_button "Weiter", match: :first
+      click_button "Weiter als Einzelmitglied"
+      click_button "Weiter"
       expect(page).to have_button "Registrieren"
     end
 
@@ -474,8 +486,7 @@ describe "signup/sektion", js: true do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
       it "validates birthday is valid" do
-        skip("Sometimes does not work on CI. Nobody knows why, so just skip it") if ci?
-        click_on "Weiteres Familienmitglied hinzufügen"
+        click_link "Weiteres Familienmitglied hinzufügen"
 
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
@@ -483,36 +494,37 @@ describe "signup/sektion", js: true do
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
-        click_on "Weiter als Familienmitgliedschaft", match: :first
+        force_rerender
+        click_button "Weiter als Familienmitgliedschaft", match: :first
         expect(page).to have_content "Person muss 6 Jahre oder älter sein"
       end
     end
 
     context "button groups" do
-      it "has only bottom button toolbar without hosemate" do
+      it "has only bottom button toolbar without housemate" do
         expect(page).to have_selector(".btn-toolbar.bottom")
         expect(page).to have_no_selector(".btn-toolbar.top")
       end
 
       it "has both button groups with housemate" do
-        click_on("Weiteres Familienmitglied hinzufügen")
+        click_link "Weiteres Familienmitglied hinzufügen"
+        force_rerender
 
         expect(page).to have_selector(".btn-toolbar.bottom")
         expect(page).to have_selector(".btn-toolbar.top")
       end
 
       it "has both button groups with housemate when navigating back" do
-        click_on("Weiteres Familienmitglied hinzufügen")
+        click_link "Weiteres Familienmitglied hinzufügen"
         fill_in "Vorname", with: "Max"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1980"
         fill_in "E-Mail", with: "maxine.muster@hitobito.example.com"
         fill_in "Telefon", with: "0791234567"
-        within(".btn-toolbar.top") do
-          click_on("Weiter als Familienmitgliedschaft")
-        end
+        force_rerender
+        click_button "Weiter als Familienmitgliedschaft", match: :first
         assert_step "Zusatzdaten"
-        click_on("Zurück")
+        click_link "Zurück"
 
         expect(page).to have_selector(".btn-toolbar.bottom")
         expect(page).to have_selector(".btn-toolbar.top")
@@ -536,8 +548,8 @@ describe "signup/sektion", js: true do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
 
-      click_on "Weiteres Familienmitglied hinzufügen"
-      within "#members_fields .fields:nth-child(1)" do
+      click_link "Weiteres Familienmitglied hinzufügen"
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1981"
@@ -546,11 +558,11 @@ describe "signup/sektion", js: true do
         choose "weiblich"
       end
 
-      click_on "Zurück", match: :first
+      click_link "Zurück"
       fill_in "Geburtsdatum", with: twenty_years_ago
-      click_on "Weiter"
+      click_button "Weiter"
       assert_aside(beitragskategorie: :youth)
-      click_on "Weiter"
+      click_button "Weiter"
       expect do
         complete_last_page
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -566,12 +578,12 @@ describe "signup/sektion", js: true do
     before do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
+      click_button "Weiter als Einzelmitglied"
     end
 
     it "creates excluding subscription if newsletter is unchecked" do
       root.update!(sac_newsletter_mailing_list_id: list.id)
-      click_button "Weiter", match: :first
+      click_button "Weiter"
       uncheck "Ich möchte einen Newsletter abonnieren"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -584,7 +596,7 @@ describe "signup/sektion", js: true do
       reason = SelfRegistrationReason.create!(text: "soso")
       expect(page).to have_css("label", text: "Eintrittsgrund")
       choose "soso"
-      click_on "Weiter", match: :first
+      click_button "Weiter"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
@@ -601,8 +613,8 @@ describe "signup/sektion", js: true do
       group.layer_group.update!(privacy_policy: image)
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
-      click_button "Weiter", match: :first
+      click_button "Weiter als Einzelmitglied"
+      click_button "Weiter"
     end
 
     it "fails if section policy is not accepted" do
@@ -629,7 +641,7 @@ describe "signup/sektion", js: true do
     it "should open privacy policy in new tab" do
       visit group_self_registration_path(group_id: group)
       complete_main_person_form
-      click_on "Weiter als Einzelmitglied", match: :first
+      click_button "Weiter als Einzelmitglied"
 
       expect(page).to have_link("Statuten", target: "_blank")
       expect(page).to have_link("Beitragsreglement", target: "_blank")
@@ -644,8 +656,8 @@ describe "signup/sektion", js: true do
     end
 
     it "should display person and entry fee card" do
-      click_on "Weiter als Einzelmitglied", match: :first
-      click_button "Weiter", match: :first
+      click_button "Weiter als Einzelmitglied"
+      click_button "Weiter"
 
       expect(find_all(".well").count).to eq(2)
       expect(page).to have_css(".well", text: "Kontaktperson")
@@ -654,8 +666,8 @@ describe "signup/sektion", js: true do
     end
 
     it "should display summary card for each family member" do
-      click_on "Weiteres Familienmitglied hinzufügen"
-      within "#members_fields .fields:nth-child(1)" do
+      click_link "Weiteres Familienmitglied hinzufügen"
+      within "#members_fields .fields:first-child" do
         fill_in "Vorname", with: "Maxine"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1981"
@@ -663,7 +675,7 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
       end
-      click_on "Weiteres Familienmitglied hinzufügen"
+      click_link "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Larissa"
         fill_in "Nachname", with: "Muster"
@@ -671,8 +683,10 @@ describe "signup/sektion", js: true do
         fill_in "E-Mail", with: "larissa.muster@hitobito.example.com"
         choose "divers"
       end
-      click_on "Weiter als Familienmitgliedschaft", match: :first
-      click_on "Weiter", match: :first
+
+      force_rerender
+      click_button "Weiter als Familienmitgliedschaft", match: :first
+      click_button "Weiter"
       assert_step "Zusammenfassung"
 
       expect(find_all(".well").count).to eq(4)
@@ -684,34 +698,32 @@ describe "signup/sektion", js: true do
   describe "wizard stepping navigation" do
     context "for family registration" do
       it "can go back and forth" do
-        skip("Does not work on CI. Nobody knows why, so just skip it") if ci?
-
         visit group_self_registration_path(group_id: group)
         complete_main_person_form
         complete_household_form
         assert_step "Zusatzdaten"
 
-        click_on "Zurück", match: :first
+        click_link "Zurück", match: :first
         assert_step "Familienmitglieder"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Zusatzdaten"
-        click_on "Zurück", match: :first
-        click_on "Zurück", match: :first
+        click_link "Zurück", match: :first
+        click_link "Zurück", match: :first
         assert_step "Personendaten"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Familienmitglieder"
 
-        click_on "Zurück", match: :first
-        click_on "Zurück", match: :first
+        click_link "Zurück", match: :first
+        click_link "Zurück", match: :first
         assert_step "E-Mail"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Personendaten"
-        click_on "Weiter", match: :first
+        click_button "Weiter", match: :first
         assert_step "Familienmitglieder"
 
-        click_on "Zurück", match: :first
-        click_on "Weiter", match: :first
-        click_on "Weiter als Familienmitgliedschaft", match: :first
+        click_link "Zurück", match: :first
+        click_button "Weiter", match: :first
+        click_button "Weiter als Familienmitgliedschaft", match: :first
         assert_step "Zusatzdaten"
       end
     end
@@ -720,30 +732,30 @@ describe "signup/sektion", js: true do
       before do
         visit group_self_registration_path(group_id: group)
         complete_main_person_form
-        click_on "Weiter als Einzelmitglied", match: :first
+        click_button "Weiter als Einzelmitglied"
         assert_step "Zusatzdaten"
       end
 
       it "can go back and forth" do
-        click_on "Zurück", match: :first
+        click_link "Zurück"
         assert_step "Familienmitglieder"
-        click_button "Weiter", match: :first
+        click_button "Weiter"
         assert_step "Zusatzdaten"
-        click_on "Zurück", match: :first
-        click_on "Zurück", match: :first
+        click_link "Zurück"
+        click_link "Zurück"
         assert_step "Personendaten"
-        click_button "Weiter", match: :first
+        click_button "Weiter"
         assert_step "Familienmitglieder"
-        click_on "Zurück", match: :first
-        click_on "Zurück", match: :first
+        click_link "Zurück"
+        click_link "Zurück"
         assert_step "E-Mail"
-        click_button "Weiter", match: :first
+        click_button "Weiter"
         assert_step "Personendaten"
-        click_button "Weiter", match: :first
+        click_button "Weiter"
         assert_step "Familienmitglieder"
-        click_on "Zurück", match: :first
-        click_button "Weiter", match: :first
-        click_on "Weiter als Einzelmitglied", match: :first
+        click_link "Zurück"
+        click_button "Weiter"
+        click_button "Weiter als Einzelmitglied"
         assert_step "Zusatzdaten"
       end
     end
@@ -758,15 +770,15 @@ describe "signup/sektion", js: true do
       end
 
       it "can go back and forth" do
-        click_on "Zurück", match: :first
+        click_link "Zurück"
         assert_step "Personendaten"
-        click_on "Weiter", match: :first
+        click_button "Weiter"
         assert_step "Zusatzdaten"
-        click_on "Zurück", match: :first
-        click_on "Zurück", match: :first
+        click_link "Zurück"
+        click_link "Zurück"
         assert_step "E-Mail"
-        click_on "Weiter", match: :first
-        click_on "Weiter", match: :first
+        click_button "Weiter"
+        click_button "Weiter"
         assert_step "Zusatzdaten"
       end
     end
