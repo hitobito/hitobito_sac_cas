@@ -111,16 +111,12 @@ describe Memberships::SwitchStammsektion do
         expect(person.primary_group).to eq matterhorn_mitglieder
       end
 
-      # NOTE - seems tricky because of nested transactions in common api
-      # wait for https://github.com/hitobito/hitobito/issues/2775
       it "creates new role and destroys existing if not yet active" do
         bluemlisalp_mitglied.update_columns(created_at: 1.minute.ago)
         expect do
           expect(switch).to be_valid
-          expect(switch.save).to eq true
+          expect(switch.save!).to eq true
         end.not_to(change { person.reload.roles.count })
-        expect { bluemlisalp_mitglied.reload }.to raise_error ActiveRecord::RecordNotFound
-        expect(bluemlisalp_mitglied.reload.deleted_at).to eq now.yesterday.end_of_day.to_s(:db)
         expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder

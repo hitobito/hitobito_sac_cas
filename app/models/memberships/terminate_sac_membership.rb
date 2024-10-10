@@ -56,7 +56,7 @@ module Memberships
     end
 
     def save
-      valid? && save_roles.all? && save_people.all?
+      valid? && save_roles && save_people.all?
     end
 
     private
