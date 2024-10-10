@@ -51,7 +51,7 @@ describe "wizards/steps/signup/abo_magazin/_person_info_table.html.haml" do
     expect(dom).to have_text "01.01.2000"
     expect(dom).to have_text "Strasse und Nr."
     expect(dom).to have_text "Musterplatz 23"
-    expect(dom).to have_text "zusätzliche Adresszeile"
+    expect(dom).to have_text "Adresszusatz"
     expect(dom).to have_text "2.Stock"
     expect(dom).to have_text "Postfach"
     expect(dom).to have_text "Postfach 23"
