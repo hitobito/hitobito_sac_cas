@@ -34,59 +34,59 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [70, 776, "SAC Kurse / Touren 2024"],
       [70, 737, "Eckdatenblatt -Kurs-/Tourenleitung"],
       [70, 712, "Hallo Edmund"],
-      [70, 702, "Nachfolgend senden wir dir die wichtigsten Informationen:"],
-      [75, 685, "Veranstaltungs-Nr."],
-      [195, 685, "10"],
-      [75, 664, "Bezeichungs / Titel"],
-      [195, 664, "Tourenleiter/in 1 Sommer"],
-      [75, 644, "Angebot / Stufe"],
-      [195, 644, "Einstiegskurs"],
-      [75, 623, "Leitung"],
-      [195, 623, "Edmund Hillary"],
-      [75, 603, "Tageshonorar"],
-      [75, 583, "Durchführungsdatum"],
-      [195, 583, "01.03.2023 - "],
-      [195, 572, "03.04.2023 - 10.04.2023"],
-      [75, 552, "Durchführungsort"],
-      [75, 531, "Unterkunft"],
-      [195, 531, "Wird reserviert durch SAC"],
-      [75, 511, "Unterkunft Budget"],
-      [195, 511, "Pro Person / Nacht mit Halbpension"],
-      [75, 480, "Unterkunft Kategorie"],
-      [195, 480, "ohne Übernachtung"],
-      [75, 460, "Durchführungssprache"],
-      [195, 460, "Deutsch"],
-      [75, 440, "Inhalt / Programm"],
-      [195, 440, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 419, "Teilnehmeranforderungen"],
-      [195, 419, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
-      [75, 399, "Detailprogramm Teilnehmer"],
-      [75, 388, "Kurse"],
-      [195, 399, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
-      [195, 388, "eingefordert"],
-      [75, 368, "Detailprogramm Teilnehmer"],
-      [75, 358, "Touren"],
-      [195, 368, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
-      [195, 358, "Cloud hinterlegt"],
-      [75, 337, "Anmeldeschluss"],
-      [75, 317, "Minimale Teilnehmerzahl"],
-      [75, 296, "Maximale Teilnehmerzahl"],
-      [75, 276, "Durchführung - ja/nein?"],
-      [195, 276, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 266, "gefällt"],
-      [75, 245, "Durchführung – Absage"],
-      [195, 245, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 225, "Ideale Klassengrösse"],
-      [75, 204, "Maximale Klassengrösse"],
-      [75, 184, "Klassenlehrer"],
-      [195, 184, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 174, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [70, 688, "Nachfolgend senden wir dir die wichtigsten Informationen:"],
+      [75, 656, "Veranstaltungs-Nr."],
+      [195, 656, "10"],
+      [75, 636, "Bezeichungs / Titel"],
+      [195, 636, "Tourenleiter/in 1 Sommer"],
+      [75, 615, "Angebot / Stufe"],
+      [195, 615, "Einstiegskurs"],
+      [75, 595, "Leitung"],
+      [195, 595, "Edmund Hillary"],
+      [75, 575, "Tageshonorar"],
+      [75, 554, "Durchführungsdatum"],
+      [195, 554, "01.03.2023 - "],
+      [195, 543, "03.04.2023 - 10.04.2023"],
+      [75, 523, "Durchführungsort"],
+      [75, 502, "Unterkunft"],
+      [195, 502, "Wird reserviert durch SAC"],
+      [75, 482, "Unterkunft Budget"],
+      [195, 482, "Pro Person / Nacht mit Halbpension"],
+      [75, 461, "Unterkunft Kategorie"],
+      [195, 461, "ohne Übernachtung"],
+      [75, 441, "Durchführungssprache"],
+      [195, 441, "Deutsch"],
+      [75, 420, "Inhalt / Programm"],
+      [195, 420, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 400, "Teilnehmeranforderungen"],
+      [195, 400, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
+      [75, 380, "Detailprogramm Teilnehmer"],
+      [75, 369, "Kurse"],
+      [195, 380, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
+      [195, 369, "eingefordert"],
+      [75, 349, "Detailprogramm Teilnehmer"],
+      [75, 338, "Touren"],
+      [195, 349, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
+      [195, 338, "Cloud hinterlegt"],
+      [75, 317, "Anmeldeschluss"],
+      [75, 297, "Minimale Teilnehmerzahl"],
+      [75, 276, "Maximale Teilnehmerzahl"],
+      [75, 256, "Durchführung - ja/nein?"],
+      [195, 256, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 246, "gefällt"],
+      [75, 225, "Durchführung – Absage"],
+      [195, 225, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 205, "Ideale Klassengrösse"],
+      [75, 184, "Maximale Klassengrösse"],
+      [75, 164, "Klassenlehrer"],
+      [195, 164, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 154, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
       [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
 
   let(:expected_logo_position) {
-    {x: 370.28, y: 726.89, width: 397, height: 166, displayed_width: 71460.0, displayed_height: 11620.0}
+    {x: 380.28, y: 732.89, width: 721, height: 301, displayed_width: 122570.0, displayed_height: 21371.0}
   }
 
   context "course compensation categories of kind day and flat" do
@@ -109,17 +109,22 @@ describe Export::Pdf::Participations::KeyDataSheet do
       let(:event_role_type) { Event::Role::Leader }
 
       it "renders" do
-        expect(text_with_position(analyzer)).to include([75, 603, "Tageshonorar"],
-          [195, 583, "Tageshonorar Kursleiter"],
-          [326, 583, "1"],
-          [372, 583, "Tag"],
-          [428, 583, "à CHF"],
-          [493, 583, "100.0"],
-          [195, 562, "Pauschale Kursleiter"],
-          [312, 562, "1"],
-          [356, 562, "Pauschale"],
-          [435, 562, "à CHF"],
-          [499, 562, "60.0"])
+        expected_postions = [
+          [75, 575, "Tageshonorar"],
+          [195, 554, "Tageshonorar Kursleiter"],
+          [326, 554, "1"],
+          [372, 554, "Tag"],
+          [428, 554, "à CHF"],
+          [493, 554, "100.0"],
+          [195, 533, "Pauschale Kursleiter"],
+          [312, 533, "1"],
+          [356, 533, "Pauschale"],
+          [435, 533, "à CHF"],
+          [499, 533, "60.0"]
+        )
+
+        find_matches(expected_postions)
+
       end
 
       it "does not render categories without valid rate at event start" do
@@ -132,8 +137,9 @@ describe Export::Pdf::Participations::KeyDataSheet do
       let(:event_role_type) { Event::Role::AssistantLeader }
 
       it "renders" do
-        expect(text_with_position(analyzer)).to include([75, 603, "Tageshonorar"],
-          [195, 583, "Tageshonorar Klassenleiter"],
+        expected_postions = [
+          [75, 575, "Tageshonorar"],
+          [195, 554, "Tageshonorar Klassenleiter"],
           [338, 583, "1"],
           [382, 583, "Tag"],
           [436, 583, "à CHF"],
@@ -142,7 +148,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
           [322, 562, "1"],
           [364, 562, "Pauschale"],
           [441, 562, "à CHF"],
-          [502, 562, "40.0"])
+          [502, 562, "40.0"]
+        ]
+
+        find_matches(expected_postions)
       end
 
       it "does not render categories without valid rate at event start" do
@@ -166,11 +175,13 @@ describe Export::Pdf::Participations::KeyDataSheet do
       let(:event_role_type) { Event::Role::Leader }
 
       it "renders" do
-        expect(text_with_position(analyzer)).to include([75, 511, "Unterkunft Budget"],
-          [195, 511, "Pro Person / Nacht mit Halbpension"],
-          [195, 490, "Anreise"],
-          [322, 490, "CHF"],
-          [439, 490, "50.0"])
+        expect(text_with_position(analyzer)).to include(
+          [75, 483, "Unterkunft Budget"],
+          [195, 483, "Pro Person / Nacht mit Halbpension"],
+          [195, 462, "Anreise"],
+          [322, 462, "CHF"],
+          [439, 462, "50.0"]
+        )
       end
 
       it "does not render categories without valid rate at event start" do
@@ -182,11 +193,13 @@ describe Export::Pdf::Participations::KeyDataSheet do
       let(:event_role_type) { Event::Role::AssistantLeader }
 
       it "renders" do
-        expect(text_with_position(analyzer)).to include([75, 511, "Unterkunft Budget"],
-          [195, 511, "Pro Person / Nacht mit Halbpension"],
-          [195, 490, "Anreise"],
-          [322, 490, "CHF"],
-          [439, 490, "50.0"])
+        expect(text_with_position(analyzer)).to include(
+          [75, 483, "Unterkunft Budget"],
+          [195, 483, "Pro Person / Nacht mit Halbpension"],
+          [195, 462, "Anreise"],
+          [322, 462, "CHF"],
+          [439, 462, "50.0"]
+        )
       end
 
       it "does not render categories without valid rate at event start" do
@@ -314,5 +327,19 @@ describe Export::Pdf::Participations::KeyDataSheet do
   def image_included_in_images?(image_path)
     image_data = Digest::MD5.hexdigest(File.binread(image_path))
     extract_image_objects.include?(image_data)
+  end
+
+  def find_potential_matches(actual_positions, expected_position_text)
+    actual_positions.select do |x, y, text|
+      text.include?(expected_position_text)
+    end.map { |x, y, text| "#{text} at x: #{x}, y: #{y}" }
+  end
+
+  def find_matches(expected_positions, actual_positions = text_with_position(analyzer))
+    expected_positions.each do |x, y, text|
+      expect(actual_positions).to(include([x, y, text]),
+        "expected #{x}, #{y} to be #{text}. \
+        potential matches: #{find_potential_matches(actual_positions, text).join("\n")}")
+    end
   end
 end
