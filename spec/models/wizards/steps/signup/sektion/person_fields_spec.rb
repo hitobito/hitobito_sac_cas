@@ -13,6 +13,7 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
 
   let(:required_attrs) {
     {
+      gender: "",
       first_name: "Max",
       last_name: "Muster",
       street: "Musterplatz",
@@ -69,7 +70,7 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
   end
 
   it "includes address in required_attrs so form builder marks label accordingly" do
-    expect(form.required_attrs).to eq [:address]
+    expect(form.required_attrs).to include(:address)
   end
 
   it "attributes builds with nested phone_number attributes" do

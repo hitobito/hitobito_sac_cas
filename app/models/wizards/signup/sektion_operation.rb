@@ -11,6 +11,7 @@ module Wizards::Signup
 
     def initialize(group:, person_attrs:, newsletter:)
       @group = group
+      person_attrs[:gender] = nil if person_attrs[:gender] == I18nEnums::NIL_KEY
       @person_attrs = person_attrs
       @newsletter = newsletter
     end
