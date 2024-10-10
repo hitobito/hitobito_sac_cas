@@ -32,6 +32,11 @@ Rails.application.routes.draw do
             put :summon, on: :member
           end
         end
+        scope module: "events" do
+          resources :participations, only: [] do
+            post :invoice, on: :member, controller: "courses/invoices", action: :create
+          end
+        end
       end
 
       resources :people, only: [] do

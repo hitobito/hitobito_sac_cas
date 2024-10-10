@@ -1105,6 +1105,11 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+      actions_show_sac_cas:
+        create_invoice_button: Rechnung erstellen
+        create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
+      invoice_created_notice: Rechnung wurde erfolgreich erstellt.
+      invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
       popover_participant_cancels:
         cancel_info:

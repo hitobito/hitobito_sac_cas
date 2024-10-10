@@ -1,0 +1,9 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if can?(:summon, entry.model)
+  = action_button(t('.create_invoice_button'),
+                  invoice_group_event_participation_path(@group, @event, entry), :plus,
+                  data: {method: :post, confirm: t('.create_invoice_confirmation'), in_button_group: true})
