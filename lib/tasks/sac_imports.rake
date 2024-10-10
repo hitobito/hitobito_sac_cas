@@ -20,11 +20,6 @@ namespace :sac_imports do
     SacImports::PeopleImporter.new.create
   end
 
-  desc "Analyzes imported and calculated membership years and creates report"
-  task "nav1-2_membership_years_report": [:environment] do
-    SacImports::MembershipYearsReport.new.create
-  end
-
   desc "Import people from WSO2"
   task "wso21-1_people": [:environment] do
     SacImports::Wso2PeopleImporter.new.create
@@ -36,8 +31,13 @@ namespace :sac_imports do
   end
 
   desc "Imports families"
-  task "nav1-2_sac_families" do
+  task "nav1-2_sac_families": [:environment] do
     SacImports::FamilyImporter.new.create
+  end
+
+  desc "Analyzes imported and calculated membership years and creates report"
+  task "nav1-2_membership_years_report": [:environment] do
+    SacImports::MembershipYearsReport.new.create
   end
 
   desc "Imports qualifications"
