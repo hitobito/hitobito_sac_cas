@@ -31,12 +31,27 @@
 class ExternalInvoice::Course < ExternalInvoice
   # link is an Event::Participation object for a Event::Course
 
+  NOT_POSSIBLE_KEY = "people.course_invoices.no_invoice_possible"
+
   class << self
     def invoice_participation(participation)
       return if participation.price.nil?
 
-      # TODO: SAC#1008
-      Invoices::Abacus::CreateCourseInvoiceJob.new(participation).enqueue!
+      external_invoice = ExternalInvoice.create(
+        person: participation.person,
+        issued_at: Date.current,
+        sent_at: Date.current,
+        state: :draft,
+        total: participation.price,
+        link: participation,
+        year: participation.event.dates.order(:start_at).first.start_at.year
+      )
+
+      Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!
     end
+  end
+
+  def title
+    "#{participation.event.name} (#{participation.event.number})"
   end
 end
