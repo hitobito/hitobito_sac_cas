@@ -84,3 +84,10 @@
 .mh-20-px {
   max-height: 20px;
 }
+
+::placeholder {
+  font-style: italic;
+  color: $border-color;
+  /* Firefox adds a lower opacity to the placeholder, so we use opacity: 1 to fix this */
+  opacity: 1;
+}

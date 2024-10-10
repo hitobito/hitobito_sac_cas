@@ -15,7 +15,7 @@
     = form.error_messages
     = form.labeled_gender_inline_radio_buttons
     = form.labeled_input_fields :first_name, :last_name
-    = form.labeled_date_field :birthday, data: {action: 'focusout->sac--signup#toggleFields focusout->forwarder#click'}
+    = form.labeled_date_field :birthday, data: {action: 'focusout->sac--signup#toggleFields focusout->forwarder#click'}, placeholder: t('global.date_field_placeholder'), yearRange: '-100:+0'
     = form.labeled_adult_required_field :email, data: {action: 'change->sac--signup#validateEmail'} do
       .d-none.invalid-feedback{data: { 'sac--signup_target': :emailInfo}}
         %span= I18n.t("wizards.steps.signup.sektion.family_fields.email_taken")

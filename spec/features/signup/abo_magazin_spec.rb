@@ -160,4 +160,18 @@ describe "self_registration_abo_magazin", js: true do
   it_behaves_like "birthday validation", "today", Time.zone.today, "Abo"
   it_behaves_like "birthday validation", "10 years ago", 10.years.ago, "Abo"
   it_behaves_like "birthday validation", "1 day from now", 1.day.from_now, "Personendaten"
+
+  it "selects birthday via date picker" do
+    travel_to Time.zone.local(2024, 1, 1) do
+      visit group_self_registration_path(group_id: group)
+      fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+      click_button "Weiter"
+      fill_in "Geburtsdatum", with: "01.01.2024"
+      find("label", text: "Geburtsdatum").click
+      expect(page).to have_css(".ui-datepicker-year option:nth-of-type(1)", text: 1924)
+      select "1924"
+      click_on "3"
+      expect(page).to have_field("Geburtsdatum", with: "03.01.1924")
+    end
+  end
 end
