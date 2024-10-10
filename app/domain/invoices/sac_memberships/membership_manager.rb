@@ -54,6 +54,7 @@ class Invoices::SacMemberships::MembershipManager
   def update_role_to_stammsektion_mitglied(person)
     person.sac_membership.neuanmeldung_stammsektion_role.destroy
     create_mitglied_role(person)
+    Invoices::SacMembershipsMailer.confirmation(person).deliver_later
   end
 
   def update_roles_to_zusatzsektion_mitglied(person)
