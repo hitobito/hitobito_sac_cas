@@ -22,7 +22,7 @@ class Export::Pdf::Passes::Sections::Logo < Export::Pdf::Section
     else
       :de
     end
-    logo = "membership_pass/sac_logo_cmyk_#{logo_lang}_pos.opti.jpg"
+    logo = "pdf/sac_logo_cmyk_#{logo_lang}_pos.opti.jpg"
 
     image_path(logo)
   end
