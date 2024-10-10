@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::EventParticipationsHelper
-  def event_participation_table_options(t)
+  def event_participation_table_options(t, event)
     if parent.possible_participation_states.any?
       t.sortable_attr(:state)
     end
