@@ -49,8 +49,8 @@ module SacCas::Person
     has_many :roles_with_deleted, -> { with_deleted }, class_name: "Role", foreign_key: "person_id"
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
-    validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
-      if: :roles_require_address_fields?
+    #validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
+      #if: :roles_require_address_fields?
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
@@ -137,6 +137,8 @@ module SacCas::Person
   end
 
   def roles_require_address_fields?
+    return false if validation_context == :import
+
     roles.exists?(type: REQUIRED_FIELDS_ROLES)
   end
 end
