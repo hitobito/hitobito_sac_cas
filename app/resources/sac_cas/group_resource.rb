@@ -35,7 +35,6 @@ module SacCas::GroupResource
     DESCRIPTION
       @object.decorate.members_count
     end
-    on_extra_attribute(:members_count) { |scope| scope.includes(:children) }
 
     extra_attribute :membership_admission_through_gs, :boolean, description: <<~DESCRIPTION do
       Membership applications are processed by the Geschäftsstelle.

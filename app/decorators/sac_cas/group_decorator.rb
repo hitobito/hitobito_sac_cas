@@ -11,7 +11,7 @@ module SacCas::GroupDecorator
 
     Role.where(
       type: (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).map(&:sti_name),
-      group_id: object.children.map(&:id)
+      group_id: object.child_ids
     ).count
   end
 
