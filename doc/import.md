@@ -1,6 +1,6 @@
 # Datenimport
 
-Hitobito lösst verschiedene Systeme vom SAC/CAS ab. Um Datenfehler zu finden und vom SAC/CAS bereinigen zu lassen, soll
+Hitobito löst verschiedene Systeme vom SAC/CAS ab. Um Datenfehler zu finden und vom SAC/CAS bereinigen zu lassen, soll
 beim Import ein Report erstellt werden, der auf Validierungsfehler hinweist. Durch Abhängigkeiten und verschiedenen
 Datenquellen, erfolgt der Import in mehreren Schritten. Schlussendlich sollen die Daten mittels des Imports ins
 Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht mehr benötigt.
@@ -9,12 +9,13 @@ Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht me
 
 1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
 1. In Openshift einloggen und in das gewünschte Projekt wechseln
-1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist
+1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist (auf sac-int/sac-prod aktuell vorhanden)
 1. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
 1. Beten das alles gut geht
 1. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
 1. exit um die Shell zu verlassen
 1. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
+1. Falls der pod nicht mehr benötigt wird, diesen killen `oc delete pod rails-sac-imports`
 
 ## Quelldaten
 
@@ -25,7 +26,7 @@ Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgen
 - **Zellen**: Zeichenketten umfasst mit "
 - **Header**: erste Zeile
 
-Die Dateien sind im Nextcloud abgelegt. **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
+Die Dateien sind im Nextcloud abgelegt (Ordner sac-trans) **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
 
 | #     | Inhalt                                               | Art       |
 |-------|------------------------------------------------------|-----------|
@@ -56,7 +57,7 @@ Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source.rb)
 
 Jeder Import erstellt einen CSV Report in RAILS_CORE_ROOT/log/sac_imports/. In diesem wird pro Import-Zeile eine Zeile im Report CSV erstellt.
 
-`$IMPORT_NAME_$TIMESTAMP.csv`, e.g. `1_people_2024-06-01-12:00.csv`
+`$IMPORT_NAME_$TIMESTAMP.csv`, e.g. `nav1-1_people_2024-06-01-12:00.csv`
 
 Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
 
@@ -69,21 +70,23 @@ Beim Seeden werden folgende Daten importiert:
 Die Importe müssen in folgender Reihenfolge ausgeführt werden:
 
 ```txt
-sac_imports:nav6-1_sac_sections
 sac_imports:nav1-1_people
-sac_imports:nav1-2_membership_years_report
-sac_imports:wso21-1_people
-sac_imports:nav2-1_roles
+sac_imports:nav6-1_sac_sections
+sac_imports:nav2-1_membership_roles
 sac_imports:nav3-1_qualifications
 sac_imports:nav5-1_huts
+sac_imports:wso21-1_people
 sac_imports:nav8-1_austrittsgruende
+sac_imports:nav1-2_membership_years_report
 ```
 
 Importe können mit `bundle exec rails sac_imports:nav6-1_sac_section` ausgeführt werden.
 
 ### `sac_imports:nav6-1_sac_section`
 
-#### Alle Sektionen löschen
+#### Alle Sektionen vorher löschen
+
+Optinonal falls man dies resetten möchte
 
 ```ruby
 Group::Ortsgruppe.all.each { |o| o.children.each(&:really_destroy!) }
@@ -92,8 +95,6 @@ Group::Sektion.all.find_each { |s| s.really_destroy! }
 ```
 
 ### `sac_imports:nav1-1_people`
-
-Dieser Import sollte nach NAV6 ausgeführt werden.
 
 #### Diskrepanzen:
 
