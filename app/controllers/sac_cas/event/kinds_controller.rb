@@ -39,6 +39,6 @@ module SacCas::Event::KindsController
     @cost_centers = CostCenter.list
     @cost_units = CostUnit.list
     @kind_categories = Event::KindCategory.list
-    @course_compensation_categories = CourseCompensationCategory.all
+    @course_compensation_categories = CourseCompensationCategory.list
   end
 end
