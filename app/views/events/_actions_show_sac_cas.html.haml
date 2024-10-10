@@ -5,3 +5,5 @@
 
 - if entry.course? && can?(:update, entry)
   = Dropdown::Events::Courses::State.new(self, entry)
+
+= Event::PopoverCanceledReason.new(self, entry).render
