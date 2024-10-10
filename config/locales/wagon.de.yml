@@ -5,6 +5,7 @@
 
 de:
   global:
+    date_field_placeholder: DD.MM.YYYY
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
@@ -57,8 +58,6 @@ de:
         gender: Geschlecht
         email: E-Mail
         phone_number: Telefon
-        email_optional: E-Mail (optional)
-        phone_number_optional: Telefon (optional)
       wizards/steps/signup/sektion/various_fields:
         register_on: Eintrittsdatum per
         self_registration_reason_id: Eintrittsgrund
@@ -501,8 +500,8 @@ de:
             %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
         person:
           birthday:
-              must_be_before_year: muss vor dem 01.01.%{year} liegen.
-              must_be_after_year: muss nach dem 31.12.%{year} liegen.
+            must_be_before_year: muss vor dem 01.01.%{year} liegen.
+            must_be_after_year: muss nach dem 31.12.%{year} liegen.
         qualification:
           attributes:
             finish_at:
@@ -1266,6 +1265,15 @@ de:
         adult: Einzelmitglied
         family: Familienmitglied
         youth: Jugendmitglied
+      section_signup_fee_presenter:
+        annual_fee: jährlicher Beitrag
+        entry_fee: "+ einmalige Eintrittsgebühr"
+        discount: "- %{percent}% Rabatt auf den jährlichen Beitrag"
+        total_amount: Total erstmalig
+        beitragskategorien:
+          adult: Einzelmitgliedschaft
+          family: Familienmitgliedschaft
+          youth: Jugendmitgliedschaft
 
   mailer:
     footer:
@@ -1489,8 +1497,6 @@ de:
         add: Neu
 
   self_registration:
-    fee_component:
-      title: Beiträge in der Sektion %{group}
     infos_component:
       title_questions: Fragen zur Mitgliedschaft?
       title_contact: Kontakt
@@ -1541,6 +1547,10 @@ de:
     status_invalid: Mitgliedschaft ungültig
 
   wizards:
+    signup:
+      section_fee_summary:
+        title: Beitragskategorien %{section}
+
     steps:
       choose_sektion_title: Sektion wählen
       summary_title: Bestätigung

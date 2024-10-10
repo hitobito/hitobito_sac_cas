@@ -87,6 +87,10 @@ module SacCas::Person
     SacCas::Beitragskategorie::Calculator.new(self, reference_date: reference_date).adult?
   end
 
+  def youth?(reference_date: Time.zone.today.end_of_year)
+    SacCas::Beitragskategorie::Calculator.new(self, reference_date: reference_date).youth?
+  end
+
   def picture_profile_default
     "profile.svg" # default image for profile variant
   end

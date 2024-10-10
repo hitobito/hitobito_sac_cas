@@ -91,7 +91,7 @@ describe "joining zusatzsektion", js: true do
         select "SAC Matterhorn"
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Bestätigung"
-        expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+        expect(page).to have_content "Beitragskategorien SAC Matterhorn"
         expect do
           click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",
@@ -106,7 +106,7 @@ describe "joining zusatzsektion", js: true do
         select "SAC Matterhorn"
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Bestätigung"
-        expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+        expect(page).to have_content "Beitragskategorien SAC Matterhorn"
         expect do
           click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",
@@ -125,6 +125,6 @@ describe "joining zusatzsektion", js: true do
     select "SAC Matterhorn"
     click_on "Weiter"
     expect(page).to have_css "li.active", text: "Bestätigung"
-    expect(page).to have_content "Beiträge in der Sektion SAC Matterhorn"
+    expect(page).to have_content "Beitragskategorien SAC Matterhorn"
   end
 end

@@ -31,12 +31,15 @@ describe "signup/sektion", js: true do
     end
   end
 
-  def assert_aside(*birthdays)
-    expect(page).to have_css("aside h2", text: "Fragen zur Mitgliedschaft?")
-    expect(page).to have_css("aside#fees h2", text: "Beiträge in der Sektion #{group.layer_group.name}")
-    birthdays.each do |birthday|
-      expect(page).to have_css("aside#fees li", text: birthday)
+  def assert_aside(beitragskategorie: :all)
+    kind = case beitragskategorie
+    when :all then "Beitragskategorien"
+    when :adult then "Einzelmitgliedschaft"
+    when :youth then "Jugendmitgliedschaft"
+    when :family then "Familienmitgliedschaft"
     end
+    expect(page).to have_css("aside h2", text: "#{kind} #{group.layer_group.name}")
+    expect(page).to have_css("aside h2", text: "Fragen zur Mitgliedschaft?")
   end
 
   def assert_step(step_name)
@@ -62,7 +65,7 @@ describe "signup/sektion", js: true do
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field("Newsletter")
-    assert_aside("01.01.1980")
+    assert_aside(beitragskategorie: :adult)
     yield if block_given?
     click_on "Weiter"
   end
@@ -239,9 +242,24 @@ describe "signup/sektion", js: true do
         expect(find_field("Nachname")[:class]).to match(/\bis-invalid\b/)
         expect(find_field("Geburtsdatum")[:class]).to match(/\bis-invalid\b/)
 
-        expect(find_field("E-Mail (optional)")[:class]).not_to match(/\bis-invalid\b/)
-        expect(find_field("Telefon (optional)")[:class]).not_to match(/\bis-invalid\b/)
+        expect(find_field("E-Mail")[:class]).not_to match(/\bis-invalid\b/)
+        expect(find_field("Telefon")[:class]).not_to match(/\bis-invalid\b/)
       end
+    end
+
+    it "switches back to Einzelmitgliedschaft when adding and removing member" do
+      click_on "Weiteres Familienmitglied hinzufügen"
+      within "#members_fields .fields:nth-child(1)" do
+        fill_in "Geburtsdatum", with: "01.01.1981"
+        fill_in "Vorname", with: "Maxine"
+      end
+      expect(page).to have_button "Weiter als Familienmitgliedschaft"
+      assert_aside(beitragskategorie: :family)
+      within "#members_fields .fields:nth-child(1)" do
+        click_on "Entfernen"
+      end
+      expect(page).to have_button "Weiter als Einzelmitglied"
+      assert_aside(beitragskategorie: :einzel)
     end
 
     it "can create several people in same household" do
@@ -255,18 +273,18 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
       end
-      assert_aside("01.01.1980", "01.01.1981")
+      assert_aside(beitragskategorie: :family)
       click_on "Weiteres Familienmitglied hinzufügen"
 
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxi.muster@hitobito.example.com"
         choose "divers"
       end
 
-      assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
+      assert_aside(beitragskategorie: :family)
       click_button("Weiter als Familienmitgliedschaft", match: :first)
       click_button("Weiter", match: :first)
 
@@ -294,7 +312,7 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
       end
-      assert_aside("01.01.1980", "01.01.1981")
+      assert_aside(beitragskategorie: :family)
 
       click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
@@ -305,7 +323,7 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "divers"
       end
-      assert_aside("01.01.1980", "01.01.1981", "01.01.1978")
+      assert_aside(beitragskategorie: :family)
 
       click_on "Weiter als Familienmitgliedschaft", match: :first
 
@@ -356,22 +374,21 @@ describe "signup/sektion", js: true do
         fill_in "Telefon", with: "0791234567"
         choose "weiblich"
       end
-      assert_aside("01.01.1980", "01.01.1981")
+      assert_aside(beitragskategorie: :family)
 
       click_on "Weiteres Familienmitglied hinzufügen"
       within "#members_fields .fields:nth-child(2)" do
         fill_in "Vorname", with: "Maxi"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "maxi.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "maxi.muster@hitobito.example.com"
         choose "divers"
       end
-      assert_aside("01.01.1980", "01.01.1981", format_date(15.years.ago))
-
+      assert_aside(beitragskategorie: :family)
       within "#members_fields .fields:nth-child(1)" do
         click_on "Entfernen"
       end
-      assert_aside("01.01.1980", format_date(15.years.ago))
+      assert_aside(beitragskategorie: :family)
       click_on "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter", match: :first
 
@@ -383,23 +400,6 @@ describe "signup/sektion", js: true do
       people = Person.where(last_name: "Muster")
       expect(people).to have(2).items
       expect(people.pluck(:first_name)).to match_array(%w[Max Maxi])
-    end
-
-    it "changes label of email and phone number" do
-      click_on "Weiteres Familienmitglied hinzufügen"
-      within "#members_fields .fields:nth-child(1)" do
-        expect(page).to have_css("label", text: "E-Mail (optional)")
-        expect(page).to have_css("label", text: "Telefon (optional)")
-        fill_in "Geburtsdatum", with: "01.01.2000"
-        fill_in "Vorname", with: "any" # trigger change event
-        expect(page).to have_css("label", text: "E-Mail")
-        expect(page).not_to have_css("label", text: "E-Mail (optional)")
-        expect(page).not_to have_css("label", text: "Telefon (optional)")
-        fill_in "Geburtsdatum", with: "01.01.2014"
-        fill_in "Vorname", with: "any" # trigger change event
-        expect(page).to have_css("label", text: "E-Mail (optional)")
-        expect(page).to have_css("label", text: "Telefon (optional)")
-      end
     end
 
     it "validates emails dynamically for household input" do
@@ -549,8 +549,8 @@ describe "signup/sektion", js: true do
       click_on "Zurück", match: :first
       fill_in "Geburtsdatum", with: twenty_years_ago
       click_on "Weiter"
+      assert_aside(beitragskategorie: :youth)
       click_on "Weiter"
-      assert_aside(twenty_years_ago)
       expect do
         complete_last_page
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
@@ -668,7 +668,7 @@ describe "signup/sektion", js: true do
         fill_in "Vorname", with: "Larissa"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: format_date(15.years.ago)
-        fill_in "E-Mail (optional)", with: "larissa.muster@hitobito.example.com"
+        fill_in "E-Mail", with: "larissa.muster@hitobito.example.com"
         choose "divers"
       end
       click_on "Weiter als Familienmitgliedschaft", match: :first

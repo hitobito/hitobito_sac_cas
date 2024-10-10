@@ -3,12 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
+- birthday_data = { action: 'focusout->forwarder#click' } if form.object.wizard.respond_to?(:birthdays)
+
 = form.labeled_gender_inline_radio_buttons
 = form.labeled_input_field :first_name
 = form.labeled_input_field :last_name
-- if form.object.wizard.respond_to?(:birthdays)
-  = form.labeled_date_field :birthday, data: { action: 'focusout->forwarder#click' }
-- else
-  = form.labeled_date_field :birthday
+= form.labeled_date_field :birthday, placeholder: t('global.date_field_placeholder'), yearRange: '-100:+0', data: birthday_data
 = render 'contactable/address_fields', f: form
 = form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')
