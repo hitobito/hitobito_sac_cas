@@ -4,6 +4,11 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for do |form|
-  = form.labeled_date_field :issues_from, help: simple_format(t('.issues_from_help'))
   .align-with-form
+    
+    = render "wizards/steps/signup/abo_magazin/abo_info_table"
+    = render "wizards/steps/signup/abo_magazin/person_info_table", person: wizard.person_fields
+
+    .alert.alert-info.w-50=t(".info_text")
+    
     = render "wizards/steps/signup/agreement_fields", form: form

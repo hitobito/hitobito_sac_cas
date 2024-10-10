@@ -6,7 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Wizards::Steps::Signup::AboMagazin
-  class IssuesFromField < Wizards::Step
+  class Summary < Wizards::Step
+    def self.agreements = [:agb, :data_protection]
+
     include Wizards::Steps::Signup::AgreementFields
 
     attribute :issues_from, :date, default: -> { Time.zone.today }
