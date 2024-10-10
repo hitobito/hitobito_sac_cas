@@ -18,6 +18,7 @@ module SacCas::Event::ParticipationsController
     around_create :proceed_wizard
     after_create :subscribe_newsletter, :send_participation_confirmation_email
     after_save :update_participation_price
+    after_summon :enqueue_invoice_job
     before_cancel :assert_participant_cancelable?
   end
 
@@ -174,6 +175,10 @@ module SacCas::Event::ParticipationsController
     end
 
     Event::ApplicationConfirmationMailer.confirmation(entry, content_key).deliver_later
+  end
+
+  def enqueue_invoice_job
+    ExternalInvoice::Course.invoice_participation(entry)
   end
 
   def update_participation_price
