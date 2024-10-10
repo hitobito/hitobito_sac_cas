@@ -72,7 +72,7 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_membership_category
-    t(@person.roles.first.beitragskategorie, scope: "roles.beitragskategorie")
+    t(@beitragskategorie, scope: "roles.beitragskategorie")
   end
 
   def placeholder_invoice_details
