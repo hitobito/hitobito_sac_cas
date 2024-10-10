@@ -74,7 +74,7 @@ module SacImports
         household.save!(context: :import)
       else
         # Household key does not exist yet, save it on the person
-        person.update!(household_key: household_key)
+        person.update_columns(household_key: household_key)
       end
     end
 
