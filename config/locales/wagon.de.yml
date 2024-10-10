@@ -1625,6 +1625,7 @@ de:
             info_alert_neuanmeldungen_nv: "Dein verbindlicher Antrag wurde an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
             info_alert_neuanmeldungen_sektion: "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
             entry_per: "Eintritt per:"
+            next_button: Mitgliedschaft beantragen
           summary_person_card:
             contact_person: "Kontaktperson"
           summary_family_member_card:
