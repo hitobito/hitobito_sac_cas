@@ -114,6 +114,10 @@ module SacCas::Event::Course
     i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
     enum canceled_reason: CANCELED_REASONS
 
+    self.role_types = [Event::Role::Leader,
+      Event::Role::AssistantLeader,
+      Event::Course::Role::Participant]
+
     self.used_attributes += [
       :language,
       :cost_center_id,
