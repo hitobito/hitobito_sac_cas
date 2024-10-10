@@ -94,14 +94,14 @@ describe "signup/sektion", :js do
 
   def complete_last_page(submit: true)
     assert_step "Zusammenfassung"
-    expect(page).to have_button("Registrieren"), "expected to be on last page"
+    expect(page).to have_button("Mitgliedschaft beantragen"), "expected to be on last page"
     check "Ich habe die Statuten gelesen und stimme diesen zu"
     check "Ich habe das Beitragsreglement gelesen und stimme diesen zu"
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
 
     yield if block_given?
     if submit
-      click_button "Registrieren"
+      click_on "Mitgliedschaft beantragen"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end
   end
@@ -367,7 +367,7 @@ describe "signup/sektion", :js do
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter"
-      expect(page).to have_button "Registrieren"
+      expect(page).to have_button "Mitgliedschaft beantragen"
       expect(page).to have_no_selector "#error_explanation"
     end
 
@@ -479,7 +479,7 @@ describe "signup/sektion", :js do
       end
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
-      expect(page).to have_button "Registrieren"
+      expect(page).to have_button "Mitgliedschaft beantragen"
     end
 
     context "bluemlisalp_neuanmeldungen_sektion" do
