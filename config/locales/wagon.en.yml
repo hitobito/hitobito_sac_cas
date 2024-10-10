@@ -493,8 +493,8 @@ en:
             %{name} is %{age} years old and therefore cannot be added as an administrator.
         person:
           birthday:
-              must_be_before_year: ""
-              must_be_after_year: ""
+            must_be_before_year: ""
+            must_be_after_year: ""
         qualification:
           attributes:
             finish_at:
@@ -1236,6 +1236,15 @@ en:
         adult: Individual member
         family: Family member
         youth: Youth member
+      section_signup_fee_presenter:
+        annual_fee: ""
+        entry_fee: ""
+        discount: ""
+        total_amount: ""
+        beitragskategorien:
+          adult: ""
+          family: ""
+          youth: ""
 
   mailer:
     footer:
@@ -1450,8 +1459,6 @@ en:
         add: New
 
   self_registration:
-    fee_component:
-      title: "Contributions in the section %{group}"
     infos_component:
       title_questions: "Questions about membership?"
       title_contact: Contact
@@ -1503,6 +1510,10 @@ en:
     status_invalid: Membership invalid
 
   wizards:
+    signup:
+      section_fee_summary:
+        title: ""
+
     steps:
       choose_sektion_title: Select section
       summary_title: Confirmation

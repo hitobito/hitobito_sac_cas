@@ -496,8 +496,8 @@ fr:
             %{name} est âgé de %{age} ans et ne peut donc pas être ajouté comme administrateur*.
         person:
           birthday:
-              must_be_before_year: ""
-              must_be_after_year: ""
+            must_be_before_year: ""
+            must_be_after_year: ""
         qualification:
           attributes:
             finish_at:
@@ -1286,6 +1286,15 @@ fr:
         adult: Membre individuel
         family: Membre de la famille
         youth: Membre jeune
+      section_signup_fee_presenter:
+        annual_fee: ""
+        entry_fee: ""
+        discount: ""
+        total_amount: ""
+        beitragskategorien:
+          adult: ""
+          family: ""
+          youth: ""
 
   mailer:
     footer:
@@ -1508,8 +1517,6 @@ fr:
         add: Nouveau
 
   self_registration:
-    fee_component:
-      title: "Contributions dans la section %{group}"
     infos_component:
       title_questions: "Questions concernant l’affiliation?"
       title_contact: Contact
@@ -1560,6 +1567,10 @@ fr:
     status_invalid: Adhésion non valide
 
   wizards:
+    signup:
+      section_fee_summary:
+        title: ""
+
     steps:
       choose_sektion_title: Choisir une section
       summary_title: Confirmation
