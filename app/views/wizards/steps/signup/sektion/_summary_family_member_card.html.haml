@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-.well.p-3.row.col-11.col-xxl-5.flex-flow-column.me-auto.ms-3.pb-5.h-200-px
+.well.p-3.row.col-11.col-xxl-5.flex-flow-column.me-auto.ms-3.h-200-px
   .mb-2.h3= person.adult? ? t(".adult") : t(".child")
   .mb-3.fw-bold= "#{person.first_name} #{person.last_name}"
   = labeled(person.class.human_attribute_name(:gender), t("activerecord.attributes.person.genders.#{person.gender.nil? ? "_nil" : person.gender}"))
