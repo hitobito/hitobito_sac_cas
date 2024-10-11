@@ -291,7 +291,7 @@ describe "signup/sektion", :js do
       assert_aside(beitragskategorie: :family)
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
-      click_button "Weiter"
+      click_button "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -362,11 +362,12 @@ describe "signup/sektion", :js do
           fill_in "Vorname", with: "Kind #{i + 1}"
           fill_in "Nachname", with: "Muster"
           fill_in "Geburtsdatum", with: format_date(anchor_date + i.years)
+          choose "divers"
         end
       end
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
-      click_button "Weiter"
+      click_button "Weiter", match: :first
       expect(page).to have_button "Mitgliedschaft beantragen"
       expect(page).to have_no_selector "#error_explanation"
     end
@@ -399,7 +400,7 @@ describe "signup/sektion", :js do
       assert_aside(beitragskategorie: :family)
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
-      click_button "Weiter"
+      click_button "Weiter", match: :first
 
       expect do
         complete_last_page
@@ -516,6 +517,7 @@ describe "signup/sektion", :js do
 
       it "has both button groups with housemate when navigating back" do
         click_link "Weiteres Familienmitglied hinzufügen"
+        choose "männlich"
         fill_in "Vorname", with: "Max"
         fill_in "Nachname", with: "Muster"
         fill_in "Geburtsdatum", with: "01.01.1980"
@@ -686,7 +688,7 @@ describe "signup/sektion", :js do
 
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
-      click_button "Weiter"
+      click_button "Weiter", match: :first
       assert_step "Zusammenfassung"
 
       expect(find_all(".well").count).to eq(4)

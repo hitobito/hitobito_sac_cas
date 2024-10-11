@@ -13,6 +13,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
 
   let(:required_attrs) {
     {
+      gender: "w",
       first_name: "Maxine",
       last_name: "Muster",
       birthday: "01.01.2000",

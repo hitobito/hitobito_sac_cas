@@ -13,6 +13,7 @@ describe Wizards::Signup::SektionOperation do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:person_attrs) {
     {
+      gender: "m",
       first_name: "Max",
       last_name: "Muster",
       address_care_of: "c/o Musterleute",
@@ -64,6 +65,7 @@ describe Wizards::Signup::SektionOperation do
         .and not_change { ExternalInvoice::SacMembership.count }
 
       max = Person.find_by(first_name: "Max")
+      expect(max.gender).to eq "m"
       expect(max.first_name).to eq "Max"
       expect(max.last_name).to eq "Muster"
       expect(max.address_care_of).to eq "c/o Musterleute"
@@ -80,6 +82,20 @@ describe Wizards::Signup::SektionOperation do
       expect(max.roles.first.group).to eq group
       expect(max.phone_numbers.first.label).to eq "Mobil"
       expect(max.phone_numbers.first.number).to eq "+41 79 123 45 67"
+    end
+
+    describe "gender" do
+      it "saves empty string as nil" do
+        person_attrs[:gender] = ""
+        expect { operation.save! }.to change { Person.count }.by(1)
+        expect(Person.last.gender).to be_nil
+      end
+
+      it "saves _nil string as nil" do
+        person_attrs[:gender] = "_nil"
+        expect { operation.save! }.to change { Person.count }.by(1)
+        expect(Person.last.gender).to be_nil
+      end
     end
 
     describe "password reset email" do

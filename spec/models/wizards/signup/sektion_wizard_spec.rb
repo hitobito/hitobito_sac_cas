@@ -23,6 +23,7 @@ describe Wizards::Signup::SektionWizard do
         email: "max.muster@example.com"
       },
       person_fields: {
+        gender: "_nil",
         first_name: "Max",
         last_name: "Muster",
         address_care_of: "c/o Musterleute",
@@ -66,7 +67,7 @@ describe Wizards::Signup::SektionWizard do
       expect(wizard.person_fields.errors.full_messages).to eq ["Strasse muss ausgefüllt werden"]
     end
 
-    it "is invalid when on family_fields step and birthday is blank" do
+    it "is invalid when on family_fields step and gender or birthday is blank" do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
@@ -76,16 +77,17 @@ describe Wizards::Signup::SektionWizard do
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq [
+      expect(wizard.family_fields.members.first.errors.full_messages).to contain_exactly(
+        "Geschlecht muss ausgefüllt werden",
         "Geburtsdatum muss ausgefüllt werden"
-      ]
+      )
     end
 
     it "is invalid when on family_fields step and resuses main person email" do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com", phone_number: "0791234567"}]
+          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
@@ -98,7 +100,7 @@ describe Wizards::Signup::SektionWizard do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
+          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
@@ -158,8 +160,8 @@ describe Wizards::Signup::SektionWizard do
     it "creates multiple people and sets household key and address" do
       required_attrs[:family_fields] = {
         members_attributes: [
-          [0, {first_name: "Maxine", last_name: "Muster", birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com", phone_number: "0791234567"}],
-          [1, {first_name: "Maxi", last_name: "Muster", birthday: 12.years.ago.beginning_of_year.to_s}]
+          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com", phone_number: "0791234567"}],
+          [1, {gender: "m", first_name: "Maxi", last_name: "Muster", birthday: 12.years.ago.beginning_of_year.to_s}]
         ]
       }
       expect(wizard).to be_valid
@@ -179,7 +181,7 @@ describe Wizards::Signup::SektionWizard do
       before do
         required_attrs[:family_fields] = {
           members_attributes: [
-            [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}]
+            [1, {gender: "m", first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}]
           ]
         }
       end
@@ -197,7 +199,7 @@ describe Wizards::Signup::SektionWizard do
       before do
         required_attrs[:family_fields] = {
           members_attributes: [
-            [1, {first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}]
+            [1, {gender: "m", first_name: "Maxi", last_name: "Muster", birthday: "1.1.2012"}]
           ]
         }
       end
