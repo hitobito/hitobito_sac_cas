@@ -13,6 +13,8 @@ describe Wizards::Steps::Signup::Sektion::VariousFields do
 
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
+  before { SacMembershipConfig.update_all(valid_from: 2000) }
+
   context "current_date_entry_reductions text" do
     it "renders first period info text on first day of period" do
       travel_to(Time.zone.local(2000, 1, 1)) do
