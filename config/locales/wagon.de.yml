@@ -1582,7 +1582,7 @@ de:
           person_fields:
             next_button: SAC-KONTO ERSTELLEN
         abo_magazin:
-          abo_info_table: 
+          abo_info_table:
             order: Abo Bestellung
             wanted_magazin: Gewünschtes Magazin
             magazin_release: Ab Ausgabe
@@ -1594,7 +1594,7 @@ de:
           summary:
             info_text: Nach Abschluss deiner Bestellung wird dir die Rechnung per E-Mail zugestellt.
             next_button: ABO KOSTENPFLICHTIG BESTELLEN
-            
+
         sektion:
           family_fields_title: Familienmitglieder
           family_fields:
@@ -1622,9 +1622,10 @@ de:
           summary_fields:
             my_membership: "Meine Mitgliedschaft"
             family_members: "Familienmitglieder"
-            info_alert_neuanmeldungen_nv: "Dein verbindlicher Antrag wurde an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
-            info_alert_neuanmeldungen_sektion: "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
+            info_alert_neuanmeldungen_sektion: "Dein verbindlicher Antrag wird an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
+            info_alert_neuanmeldungen_nv: "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
             entry_per: "Eintritt per:"
+            next_button: Mitgliedschaft beantragen
           summary_person_card:
             contact_person: "Kontaktperson"
           summary_family_member_card:

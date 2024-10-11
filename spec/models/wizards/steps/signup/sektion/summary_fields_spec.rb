@@ -82,4 +82,23 @@ describe Wizards::Steps::Signup::Sektion::SummaryFields do
       end
     end
   end
+
+  describe "info_alert_text" do
+    context "with sektion manages signup" do
+      let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+      it "has expected text" do
+        expect(fields.info_alert_text).to eq "Dein verbindlicher Antrag wird an die Sektion SAC Blüemlisalp weitergeleitet. " \
+          "Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
+      end
+    end
+
+    context "with sektion does not manage signup" do
+      let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+
+      it "has expected text" do
+        expect(fields.info_alert_text).to eq "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
+      end
+    end
+  end
 end
