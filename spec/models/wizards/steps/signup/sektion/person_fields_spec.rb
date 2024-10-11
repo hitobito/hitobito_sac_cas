@@ -13,6 +13,7 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
 
   let(:required_attrs) {
     {
+      gender: "_nil",
       first_name: "Max",
       last_name: "Muster",
       street: "Musterplatz",
