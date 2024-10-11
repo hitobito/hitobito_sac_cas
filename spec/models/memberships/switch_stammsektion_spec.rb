@@ -110,6 +110,17 @@ describe Memberships::SwitchStammsektion do
         expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
       end
+
+      it "creates new role and destroys existing if not yet active" do
+        bluemlisalp_mitglied.update_columns(created_at: 1.minute.ago)
+        expect do
+          expect(switch).to be_valid
+          expect(switch.save!).to eq true
+        end.not_to(change { person.reload.roles.count })
+        expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
+        expect(matterhorn_mitglied.delete_on).to eq now.end_of_year.to_date
+        expect(person.primary_group).to eq matterhorn_mitglieder
+      end
     end
 
     context "family" do

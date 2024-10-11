@@ -40,6 +40,19 @@ describe Memberships::JoinBase do
       expect(obj).to be_valid
     end
 
+    it "is valid with overlapping membership that is marked for destruction" do
+      conflicting_role = create_role(:matterhorn_mitglieder, "Mitglied")
+      new_role = Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
+        group: join_section, person: person)
+      person.reload
+
+      allow(obj).to(receive(:prepare_roles)) { [conflicting_role, new_role] }
+      expect(obj).not_to be_valid
+
+      conflicting_role.mark_for_destruction
+      expect(obj).to be_valid
+    end
+
     it "is invalid and contains all validation and role validation errors" do
       allow(obj).to receive(:prepare_roles) do |person|
         # invalid role without group
@@ -172,6 +185,20 @@ describe Memberships::JoinBase do
         person.reload
         expect(sac_membership.active_in?(groups(:matterhorn))).to eq(true)
         expect(sac_membership.active_in?(groups(:bluemlisalp))).to eq(false)
+      end
+
+      it "destroys roles marked for destruction" do
+        conflicting_role = bluemlisalp_mitglied
+        conflicting_role.mark_for_destruction
+        new_role = Fabricate.build(Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:matterhorn_mitglieder), person: person)
+
+        allow(obj).to(receive(:prepare_roles)) { [conflicting_role, new_role] }
+
+        expect(obj.save).to eq true
+
+        expect { conflicting_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(new_role.reload).to be_present
       end
     end
 

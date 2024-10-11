@@ -13,7 +13,7 @@ module Memberships::CommonApi
   end
 
   def save
-    valid? && save_roles.all?
+    valid? && save_roles
   end
 
   def save!
@@ -39,22 +39,29 @@ module Memberships::CommonApi
     # instead of the new values.
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction(requires_new: true) do
-      roles.each do |role|
-        role.validate # required to trigger before_validation callbacks
-        ActiveRecord::Base.connection.create_savepoint("before_role_save")
-        role.save(validate: false)
-      rescue ActiveRecord::NotNullViolation, PG::NotNullViolation
-        ActiveRecord::Base.connection.rollback_to_savepoint("before_role_save")
-      end
-      roles.each do |role|
-        role.validate
-        role.errors.full_messages.each do |msg|
-          errors.add(:base, "#{role.person}: #{msg}")
-        end
-      end
+      roles_to_destroy, roles_to_update = roles.partition(&:marked_for_destruction?)
+      roles_to_destroy.each { |role| role.delete }
+      roles_to_update.each { |role| save_role_without_validations(role) }
+      roles_to_update.each { |role| validate_role(role) }
       raise ActiveRecord::Rollback
     end
     errors.empty?
+  end
+
+  def save_role_without_validations(role)
+    role.transaction(requires_new: true) do
+      role.validate # required to trigger before_validation callbacks
+      role.save(validate: false)
+    rescue ActiveRecord::NotNullViolation, PG::NotNullViolation
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def validate_role(role)
+    role.validate
+    role.errors.full_messages.each do |msg|
+      errors.add(:base, "#{role.person}: #{msg}")
+    end
   end
 
   # prepare roles of correct type in correct subgroup of sektion
@@ -67,9 +74,12 @@ module Memberships::CommonApi
     # As in #validate_roles, we must save existing roles first while ignoring validations.
     # See comments on #validate_roles for more details.
     Role.transaction do
-      roles.each { |role| role.save(validate: false) }
-      roles.each(&:save!)
+      destroy_roles, update_roles = roles.partition(&:marked_for_destruction?)
+      destroy_roles.each(&:destroy!)
+      update_roles.each { |role| role.save(validate: false) }
+      update_roles.each(&:save!)
     end.tap { update_primary_groups }
+    true
   end
 
   def update_primary_groups
