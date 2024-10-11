@@ -1018,6 +1018,10 @@ de:
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
 
   event:
+    courses:
+      key_data_sheets:
+        create:
+          success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.
     kinds:
       push_down:
         success: Die gespeicherten Daten wurden auf alle aktiven Kurse übertragen.
@@ -1057,6 +1061,8 @@ de:
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
           Mo bis Fr 08:00 - 17:00 Uhr.
+      list_sac_cas:
+        key_data_sheets: Eckdatenblätter
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1125,6 +1131,7 @@ de:
 
   events:
     actions_show_sac_cas:
+      attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       state_buttons:
         created: Zurück als Entwurf
         application_open: Publizieren
@@ -1325,6 +1332,59 @@ de:
         default: Sektions Attribute
       group/ortsgruppe:
         default: Ortsgruppen Attribute
+
+  participations:
+    key_data_sheet:
+      file_name_prefix: Eckdatenblatt
+      leader_file_prefix: Kursleiter
+      assistant_leader_file_prefix: Klassenleiter
+      year_title: SAC Kurse / Touren %{year}
+      title: Eckdatenblatt -Kurs-/Tourenleitung
+      greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
+      footer: Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch
+      table:
+        number: Veranstaltungs-Nr.
+        name: Bezeichungs / Titel
+        level: Angebot / Stufe
+        leaders: Leitung
+        compensation: Tageshonorar
+        event_dates_durations: Durchführungsdatum
+        event_dates_locations: Durchführungsort
+        accommodation: Unterkunft
+        accommodation_budget:
+          label: Unterkunft Budget
+          text: Pro Person / Nacht mit Halbpension
+        accommodations:
+          sac: Wird reserviert durch SAC
+          event_specific: Wird reserviert durch Kursleitung
+        accommodation_category: Unterkunft Kategorie
+        language: Durchführungssprache
+        content:
+          label: Inhalt / Programm
+          text: Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm
+        participant_requirements:
+          label: Teilnehmeranforderungen
+          text: Gemäss Ausschreibung SAC Kurse / Touren 2024
+        participant_program_course:
+          label: Detailprogramm Teilnehmer Kurse
+          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung eingefordert
+        participant_program_tour:
+          label: Detailprogramm Teilnehmer Touren
+          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-Cloud hinterlegt
+        application_closing_at: Anmeldeschluss
+        minimum_participants: Minimale Teilnehmerzahl
+        maximum_participants: Maximale Teilnehmerzahl
+        participation_yes_no:
+          label: Durchführung - ja/nein?
+          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt
+        participation_cancellation:
+          label: Durchführung – Absage
+          text: Bitte Klassenlehrer und Unterkunft informieren
+        ideal_class_size: Ideale Klassengrösse
+        maximum_class_size: Maximale Klassengrösse
+        class_teacher:
+          label: Klassenlehrer
+          text: Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
 
   passes:
     membership:

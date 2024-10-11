@@ -166,11 +166,11 @@ class Export::Pdf::Passes::Membership
     end
 
     def scissors_image_path
-      image_path("membership_pass/scissors.png")
+      image_path("pdf/scissors.png")
     end
 
     def reciprocity_image_path
-      image_path("membership_pass/reciprocity_logo_membership_pass.png")
+      image_path("pdf/reciprocity_logo_membership_pass.png")
     end
 
     def image_path(name)
