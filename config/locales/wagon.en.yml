@@ -318,6 +318,7 @@ en:
         created_at: Created
         updated_at: Changed
       person:
+        address_care_of: ""
         correspondence: Membership card & invoicing
         confirmed_at: ""
         family_id: Family ID

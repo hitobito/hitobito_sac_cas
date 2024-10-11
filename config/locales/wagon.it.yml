@@ -320,6 +320,7 @@ it:
         created_at: Creato
         updated_at: Modificato
       person:
+        address_care_of: ""
         correspondence: Tessera associativa e fatturazione
         confirmed_at: ""
         family_id: ID famiglia

@@ -320,6 +320,7 @@ fr:
         created_at: Créé
         updated_at: Modifié
       person:
+        address_care_of: ""
         correspondence: Carte de membre & facturation
         confirmed_at: ""
         family_id: ID de la famille
