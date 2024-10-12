@@ -36,9 +36,9 @@ module SacCas::Event::Participation
 
   def course_pricing
     price, category = if person.sac_membership_active?
-      subsidy ? [subsidy_amount, :subsidized] : [event.price_member, :member]
+      subsidy ? [subsidy_amount, :price_subsidized] : [event.price_member, :price_member]
     else
-      [event.price_regular, :regular]
+      [event.price_regular, :price_regular]
     end
 
     {price: price, price_category: category}
