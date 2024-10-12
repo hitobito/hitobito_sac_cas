@@ -16,8 +16,8 @@ module Invoices
 
       def positions
         @positions ||= [Invoices::Abacus::InvoicePosition.new(
-          name: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_category")} - #{participation.event.kind.level}",
-          grouping: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_category")} - #{participation.event.kind.level}",
+          name: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_categories")} - #{participation.event.kind.level}",
+          grouping: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_categories")} - #{participation.event.kind.level}",
           amount: participation.price,
           count: 1,
           article_number: SacMembershipConfig.active(participation.event.dates.order(:start_at).first.start_at).course_fee_article_number,
