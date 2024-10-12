@@ -1436,7 +1436,7 @@ de:
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
 
     course_invoices:
-      no_invoice_possible: "WIP Probleme beim Erstellen der Rechung"
+      no_invoice_possible: "Probleme beim Erstellen der Rechung"
 
     neuanmeldungen:
       multiselect_actions:

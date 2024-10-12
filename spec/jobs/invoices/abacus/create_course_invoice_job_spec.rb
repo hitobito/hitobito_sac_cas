@@ -58,7 +58,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "WIP Probleme beim Erstellen der Rechung"
+        expect(log_entry.message).to eq "Probleme beim Erstellen der Rechung"
         expect(log_entry.subject).to eq external_invoice
       end
     end
