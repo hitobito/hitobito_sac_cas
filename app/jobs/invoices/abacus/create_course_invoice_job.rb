@@ -5,21 +5,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Invoices::Abacus::CreateCourseInvoiceJob < BaseJob
-  self.parameters = [:external_invoice_id]
-
+class Invoices::Abacus::CreateCourseInvoiceJob < Invoices::Abacus::CreateInvoiceJob
   def initialize(external_invoice)
-    super()
-    @external_invoice_id = external_invoice.id
+    super
   end
 
-  def perform
-    "TODO: SAC#1008"
+  def invoice_data
+    Invoices::Abacus::CourseInvoice.new(external_invoice.link)
   end
 
-  private
-
-  def external_invoice
-    @external_invoice ||= ExternalInvoice.find_by(id: @external_invoice_id)
+  def invoice_error_key
+    ExternalInvoice::Course::NOT_POSSIBLE_KEY
   end
 end

@@ -111,7 +111,7 @@ describe Wizards::Signup::SektionOperation do
       it "does not create invoice but enqueues confirmation email" do
         expect { operation.save! }
           .to not_change { ExternalInvoice::SacMembership.count }
-          .and not_change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }
+          .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
           .and have_enqueued_mail(Signup::SektionMailer, :approval_pending_confirmation).exactly(:once)
           .with(operation.send(:person), group.layer_group, "adult")
       end
@@ -131,7 +131,7 @@ describe Wizards::Signup::SektionOperation do
       it "does not create invoice but enqueues job and confirmation email" do
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
-          .and change { Delayed::Job.where("handler like '%CreateInvoiceJob%'").count }.by(1)
+          .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
           .and have_enqueued_mail(Signup::SektionMailer, :confirmation).exactly(:once)
           .with(operation.send(:person), group.layer_group, "adult")
 

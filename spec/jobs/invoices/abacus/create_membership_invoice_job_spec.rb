@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Invoices::Abacus::CreateInvoiceJob do
+describe Invoices::Abacus::CreateMembershipInvoiceJob do
   let(:person) { people(:mitglied) }
   let(:section) { groups(:bluemlisalp) }
   let(:now) { Time.zone.local(2024, 8, 24, 1) }

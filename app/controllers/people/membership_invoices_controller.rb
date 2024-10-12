@@ -45,7 +45,7 @@ class People::MembershipInvoicesController < ApplicationController
   end
 
   def enqueue_job_and_redirect
-    Invoices::Abacus::CreateInvoiceJob.new(
+    Invoices::Abacus::CreateMembershipInvoiceJob.new(
       @external_invoice,
       invoice_form.reference_date,
       discount: invoice_form.discount,
