@@ -1110,7 +1110,7 @@ it:
         summary_title: Sintesi
       subsidy_step:
         title: Richiedere una sovvenzione
-        subsidy_field: "%{amount} Richiedere un prezzo agevolato di CHF"
+        subsidy_field: "%{amount} Richiedere un prezzo agevolato di"
         subsidy_link_label: Richiesta di sovvenzione
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:

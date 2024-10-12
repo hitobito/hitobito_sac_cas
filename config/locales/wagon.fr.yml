@@ -1110,7 +1110,7 @@ fr:
         summary_title: Résumé
       subsidy_step:
         title: Demander une subvention
-        subsidy_field: "Demander un prix subventionné de CHF %{amount} "
+        subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:
