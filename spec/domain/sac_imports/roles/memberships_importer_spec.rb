@@ -276,6 +276,7 @@ describe SacImports::Roles::MembershipsImporter do
       end
 
       it "creates inactive family role and sets sac_family_main_person to false" do
+        mitglied.update!(sac_family_main_person: true)
         row[:valid_until] = "2023-12-31"
 
         importer.create
@@ -295,6 +296,30 @@ describe SacImports::Roles::MembershipsImporter do
         expect(mitglied.roles.ended.count).to eq(1)
         expect(inactive_membership_role.beitragskategorie).to eq("family")
         expect(inactive_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
+        expect(mitglied.sac_family_main_person).to eq(false)
+      end
+
+      it "does not set family main person for Frei Fam" do
+        mitglied.update!(sac_family_main_person: true)
+        row[:role] = "Mitglied (Stammsektion) (Frei Fam)"
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Mitglied (Stammsektion) (Frei Fam)",
+          "Membership role created", nil, nil])
+
+        mitglied.reload
+        expect(mitglied.roles.count).to eq(1)
+        expect(mitglied.roles.deleted.count).to eq(0)
+        expect(active_membership_role.beitragskategorie).to eq("family")
+        expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
         expect(mitglied.sac_family_main_person).to eq(false)
       end
 
