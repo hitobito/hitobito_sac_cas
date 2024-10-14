@@ -1069,7 +1069,7 @@ de:
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
           Mo bis Fr 08:00 - 17:00 Uhr.
-      list_sac_cas:
+      list:
         key_data_sheets: Eckdatenblätter
       states:
         absent: Keine Teilnahme an diesem Kurs.
