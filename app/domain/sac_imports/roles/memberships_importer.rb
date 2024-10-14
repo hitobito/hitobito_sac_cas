@@ -43,7 +43,7 @@ module SacImports::Roles
         role = create_membership_role(row, membership_group, person, beitragskategorie)
         return false if role.blank?
 
-        set_family_main_person(person, role)
+        set_family_main_person(row, person, role)
         report(row, person, message: "Membership role created")
         true
       end
@@ -78,8 +78,11 @@ module SacImports::Roles
       nil
     end
 
-    def set_family_main_person(person, role)
-      if !role.ended? && role.beitragskategorie == "family"
+    def set_family_main_person(row, person, role)
+      # only set family main person if Beitragskategorie is Familie, not Frei Fam, Frei Kind
+      return unless row[:role] == "Mitglied (Stammsektion) (Familie)"
+
+      if !role.deleted? && role.beitragskategorie == "family"
         person.update_columns(sac_family_main_person: true)
       end
     end
