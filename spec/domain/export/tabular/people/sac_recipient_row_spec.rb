@@ -73,12 +73,17 @@ describe Export::Tabular::People::SacRecipientRow do
     end
 
     it "returns salutation based on Person#language" do
-      person.language = "fr"
-      expect(value(:salutation)).to be_nil
-      person.gender = "m"
-      expect(value(:salutation)).to eq("Monsieur")
-      person.gender = "w"
-      expect(value(:salutation)).to eq("Madame")
+      with_translations(fr: {activerecord: {attributes: {person: {recipient_salutations: {
+        m: "Monsieur",
+        w: "Madame"
+      }}}}}) do
+        person.language = "fr"
+        expect(value(:salutation)).to be_nil
+        person.gender = "m"
+        expect(value(:salutation)).to eq("Monsieur")
+        person.gender = "w"
+        expect(value(:salutation)).to eq("Madame")
+      end
     end
   end
 end

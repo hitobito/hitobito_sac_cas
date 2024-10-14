@@ -21,7 +21,7 @@ module Memberships
       # for the person as a fallback value.
       beitragskategorie = old_role&.beitragskategorie ||
         SacCas::Beitragskategorie::Calculator.new(person).calculate
-      new_role = new_membership(person, beitragskategorie)
+      new_role = new_membership(person, beitragskategorie, old_role&.end_on_was)
 
       [old_role, new_role].compact
     end
@@ -30,25 +30,25 @@ module Memberships
       role = People::SacMembership.new(person).stammsektion_role
       return unless role
 
-      if role.created_at.today?
+      if role.start_on.today?
         role.mark_for_destruction
       else
-        role.attributes = {delete_on: nil, deleted_at: now.yesterday.end_of_day}
+        role.end_on = now.to_date - 1.day
       end
       role
     end
 
-    def new_membership(person, beitragskategorie)
+    def new_membership(person, beitragskategorie, end_on)
       membership_group.roles.build({
         type: role_type,
-        created_at: now,
-        delete_on: now.end_of_year,
-        person: person,
+        start_on: now.to_date,
+        end_on: end_on || now.to_date.end_of_year,
+        person:,
         # `Role#set_beitragskategorie` gets called in a before_validation callback, but
         # `Memberships::CommonApi#validate_roles` and `Memberships::CommonApi#save_roles`
         # first save the roles with `validate: false` to make the role validations working which
         # depend on persisted values. So we need to set the beitragskategorie here manually.
-        beitragskategorie: beitragskategorie
+        beitragskategorie:
       })
     end
 

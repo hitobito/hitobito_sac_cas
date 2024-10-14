@@ -34,8 +34,4 @@ module SacCas::Group
   def sektion_or_ortsgruppe?
     [Group::Sektion, Group::Ortsgruppe].any? { |c| is_a?(c) }
   end
-
-  def preferred_primary?
-    Groups::Primary::GROUP_TYPES.include?(type)
-  end
 end

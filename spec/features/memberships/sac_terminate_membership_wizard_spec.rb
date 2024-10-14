@@ -39,12 +39,13 @@ describe "terminate sac membership wizard", js: true do
         role.reload
       end
         .to change { person.roles.count }.by(-2)
-        .and change { role.deleted_at }.from(nil)
+        .and change { role.terminated }.to(true)
+        .and change { role.end_on }.to(Date.current.yesterday)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
     end
 
     it "can execute wizard at end of year" do
-      role.update!(delete_on: Date.new(Date.current.year + 1, 12, 31))
+      role.update!(end_on: 10.years.from_now)
       visit history_group_person_path(group_id: group.id, id: person.id)
       within("#role_#{role.id}") do
         click_link "Austritt"
@@ -62,7 +63,8 @@ describe "terminate sac membership wizard", js: true do
         role.reload
       end
         .to change { role.termination_reason }.from(nil).to(termination_reason)
-        .and change { role.delete_on }.to(Date.new(Date.current.year, 12, 31))
+        .and change { role.terminated }.to(true)
+        .and change { role.end_on }.to(Date.current.end_of_year)
     end
   end
 
@@ -85,7 +87,6 @@ describe "terminate sac membership wizard", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-      expect(role.delete_on).not_to be_nil
     end
 
     it "role validation errors on wizard" do
@@ -166,26 +167,11 @@ describe "terminate sac membership wizard", js: true do
     end
 
     context "when additional section of familymember has mitglied_termination_by_section_only=true" do
-      let(:terminate_on) { Time.zone.now.yesterday.to_date }
-      let(:termination_reason) { termination_reasons(:moved) }
-
-      before do
-        # check that additional section
-        role.layer_group.update!(mitglied_termination_by_section_only: false)
-        additional_section.update!(mitglied_termination_by_section_only: true)
-        # leave additional section for the main person to check state for family member
-        additional_section.update_columns(deleted_at: Time.zone.now.yesterday)
-      end
-
-      after do
-        # restore the main person addtional section role to not affect other tests
-        additional_section.update_columns(deleted_at: nil)
-        role.layer_group.update!(mitglied_termination_by_section_only: false)
-        additional_section.update!(mitglied_termination_by_section_only: false)
-      end
-
       it "shows an info text" do
+        additional_section.update!(mitglied_termination_by_section_only: true)
+
         visit history_group_person_path(group_id: group.id, id: person.id)
+
         within("#role_#{role.id}") do |content|
           expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
         end

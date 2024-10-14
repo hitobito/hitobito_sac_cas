@@ -15,7 +15,7 @@ shared_examples "people_managers#create" do
     Fabricate(:person, primary_group: groups(:bluemlisalp_mitglieder), **opts).tap do |person|
       # add a role to make the person findable
       Group::SektionsMitglieder::Mitglied.create!(person: person, group: groups(:bluemlisalp_mitglieder),
-        created_at: 1.year.ago, delete_on: 2.years.from_now)
+        start_on: 1.year.ago, delete_on: 2.years.from_now)
     end
   end
 

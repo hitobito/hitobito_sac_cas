@@ -45,7 +45,7 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
     let!(:person5_membership_role) do
       Group::SektionsMitglieder::Mitglied
         .create!(group: moleson_mitglieder_group, person: person5,
-          created_at: "2010-01-01", delete_on: "2024-12-31")
+          start_on: "2010-01-01", end_on: "2024-12-31")
     end
 
     it "imports role from nav2 csv fixture file" do
@@ -65,8 +65,8 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
 
       person5.reload
       expect(person5.roles.count).to eq(1)
-      expect(person5.roles.deleted.count).to eq(1)
-      additional_membership_role = person5.roles.deleted.first
+      expect(person5.roles.ended.count).to eq(1)
+      additional_membership_role = person5.roles.ended.first
       expect(additional_membership_role.beitragskategorie).to eq("adult")
       expect(additional_membership_role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
     end
@@ -119,7 +119,7 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(3)
-        expect(mitglied.roles.deleted.count).to eq(0)
+        expect(mitglied.roles.ended.count).to eq(0)
         additional_membership_role =
           Group::SektionsMitglieder::MitgliedZusatzsektion.find_by(person: mitglied, group: moleson_mitglieder_group)
         expect(additional_membership_role.beitragskategorie).to eq("adult")

@@ -16,8 +16,9 @@ describe People::DataQualityCheckerJob do
 
     it "checks the data quality of all people" do
       batch_selects = 4
-      issues_created = 6 # validation and insert
-      affected_people = 4 # update data_quality
+      issues_created = 5 # 1 exists query from uniqueness validation and 1 insert per issue
+      affected_people = 3 # update data_quality
+
       expect do
         expect_query_count { job.perform }.to eq(batch_selects + issues_created * 2 + affected_people)
       end.to change { person.data_quality_issues.count }.by(1)

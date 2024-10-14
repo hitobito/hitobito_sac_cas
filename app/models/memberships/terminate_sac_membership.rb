@@ -31,9 +31,9 @@ module Memberships
     ].freeze
 
     attribute :terminate_on, :date
-    attribute :subscribe_newsletter, :boolean
-    attribute :subscribe_fundraising_list, :boolean
-    attribute :data_retention_consent, :boolean
+    attribute :subscribe_newsletter, :boolean, default: false
+    attribute :subscribe_fundraising_list, :boolean, default: false
+    attribute :data_retention_consent, :boolean, default: false
     attribute :termination_reason_id, :integer
 
     validates :terminate_on, inclusion: {in: ->(_) { acceptable_termination_dates }}
@@ -52,11 +52,15 @@ module Memberships
       assert_sektions_mitglied
       assert_main_person_if_family
       assert_not_already_terminated
-      assert_not_already_deleted
+      assert_not_already_ended
     end
 
     def save
-      valid? && save_roles && save_people.all?
+      valid?.tap do
+        destroy_future_roles
+        save_roles
+        save_people
+      end
     end
 
     private
@@ -73,19 +77,19 @@ module Memberships
 
     def relevant_roles(person)
       types = RELEVANT_ROLES.map(&:to_s)
-      person.roles.select { |role| types.include?(role.type) || types.include?(role.convert_to) }
+      person.roles.select { |role| types.include?(role.type) }
+    end
+
+    def membership_end_on
+      original_membership_end_on = person.sac_membership.stammsektion_role.end_on
+      [terminate_on, original_membership_end_on].compact.min
     end
 
     def apply_role_changes(role)
       role.write_attribute(:terminated, true)
       role.termination_reason_id = termination_reason_id
 
-      if terminate_on.future?
-        role.delete_on = [terminate_on, role.delete_on].compact.min
-      else
-        role.delete_on = nil
-        role.deleted_at = terminate_on
-      end
+      role.end_on = membership_end_on
     end
 
     def build_future_role(person)
@@ -93,10 +97,15 @@ module Memberships
 
       person.roles.build(
         group: basic_login_group,
-        type: FutureRole.sti_name,
-        convert_to: Group::AboBasicLogin::BasicLogin.sti_name,
-        convert_on: terminate_on + 1.day
+        type: Group::AboBasicLogin::BasicLogin.sti_name,
+        start_on: membership_end_on + 1.day
       )
+    end
+
+    def destroy_future_roles
+      Role.future
+        .where(person: affected_people, type: RELEVANT_ROLES.map(&:sti_name))
+        .destroy_all
     end
 
     def save_people
@@ -140,8 +149,8 @@ module Memberships
       raise "already terminated" if @role.terminated?
     end
 
-    def assert_not_already_deleted
-      raise "already deleted" if @role.deleted_at?
+    def assert_not_already_ended
+      raise "already deleted" if @role.end_on&.past?
     end
 
     def assert_main_person_if_family

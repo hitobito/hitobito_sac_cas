@@ -80,9 +80,9 @@ module Export::Tabular::People
     # Eintrittsjahr der allerersten Mitgliederrolle dieser Person,
     # egal welche Sektion gerade exportiert wird
     def eintrittsjahr
-      entry.roles_with_deleted.select do |role|
-        (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).include?(role.class)
-      end.map(&:created_at).min&.year
+      entry.roles_unscoped.select do |role|
+        SacCas::MITGLIED_ROLES.include?(role.class)
+      end.map(&:start_on).min&.year
     end
 
     # Mögliche Werte: Weiblich / Männlich / Andere

@@ -3020,8 +3020,14 @@
           "writable": false,
           "description": null
         },
-        "deleted_at": {
-          "type": "datetime",
+        "start_on": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "end_on": {
+          "type": "date",
           "readable": true,
           "writable": false,
           "description": null
@@ -3060,7 +3066,9 @@
         },
         "updated_at": {
         },
-        "deleted_at": {
+        "start_on": {
+        },
+        "end_on": {
         },
         "person_id": {
         },
@@ -3105,8 +3113,19 @@
             "lte"
           ]
         },
-        "deleted_at": {
-          "type": "datetime",
+        "start_on": {
+          "type": "date",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "end_on": {
+          "type": "date",
           "operators": [
             "eq",
             "not_eq",

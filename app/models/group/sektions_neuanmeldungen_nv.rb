@@ -16,6 +16,7 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   class NeuanmeldungZusatzsektion < ::Role
     include SacCas::Role::MitgliedZusatzsektion
+    include SacCas::Role::HardDestroy
   end
 
   class Leserecht < ::Role

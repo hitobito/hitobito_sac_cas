@@ -10,27 +10,29 @@ require "spec_helper"
 describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   subject(:extend_roles) { described_class.new(date).extend_roles }
 
-  let!(:person) { people(:mitglied).tap { |p| p.roles.first.update!(delete_on: 1.year.ago) } }
+  let(:person) { people(:mitglied) }
+  let!(:person_mitglied_role) { person.roles.with_inactive.first.tap { |r| r.update!(end_on: 1.year.ago) } }
   let(:date) { 1.week.from_now.to_date }
 
   context "with role" do
     it "extends the role" do
-      expect { extend_roles }.to change { person.roles.first.delete_on }.to(date)
+      expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(date)
     end
   end
 
   context "with multiple people and roles" do
-    let!(:member) { people(:familienmitglied).tap { |p| p.roles.first.update!(delete_on: 1.year.ago) } }
-    let!(:role) do
-      person.roles.create!(group: person.groups.first, created_at: 2.days.ago, delete_on: 1.day.ago,
+    let!(:person_ehrenmitglied_role) do
+      person.roles.create!(group: person.groups.first, created_at: 2.days.ago, end_on: 1.day.ago,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
     end
+    let(:other_person) { people(:familienmitglied) }
+    let!(:other_person_role) { other_person.roles.first.tap { |r| r.update!(end_on: 1.year.ago) } }
 
     it "extends roles" do
       expect { extend_roles }
-        .to change { person.roles.first.delete_on }.to(date)
-        .and change { member.roles.first.delete_on }.to(date)
-        .and change { role.reload.delete_on }.to(date)
+        .to change { person_mitglied_role.reload.end_on }.to(date)
+        .and change { person_ehrenmitglied_role.reload.end_on }.to(date)
+        .and change { other_person_role.reload.end_on }.to(date)
     end
 
     it "only makes 3 database queries" do
@@ -38,51 +40,41 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
   end
 
-  context "without required role" do
-    before { person.roles.first.destroy! }
+  it "doesnt extend terminated role" do
+    person_mitglied_role.update!(end_on: 1.year.from_now) # role can't be ended to be allowed to terminate
+    expect(Roles::Termination.new(role: person_mitglied_role, terminate_on: 1.day.from_now).call).to be_truthy
+    expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
+  end
 
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+  context "with role#end_on at date" do
+    before { person_mitglied_role.update!(end_on: date) }
+
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
-  context "with terminated role" do
-    before { Roles::Termination.new(role: person.roles.first, terminate_on: 1.day.from_now).call }
+  context "with role#end_on after date" do
+    before { person_mitglied_role.update!(end_on: date + 1.week) }
 
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
-    end
-  end
-
-  context "with role#delete_on at date" do
-    before { person.roles.first.update!(delete_on: date) }
-
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
-    end
-  end
-
-  context "with role#delete_on after date" do
-    before { person.roles.first.update!(delete_on: date + 1.week) }
-
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
   context "with person#data_quality errors" do
     before { person.update!(data_quality: :error) }
 
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
   context "with invoice the same year as the specified date" do
     before { ExternalInvoice::SacMembership.create!(person: person, year: date.year) }
 
-    it "doesn't extend the role" do
-      expect { extend_roles }.not_to change { person.roles.first.delete_on }
+    it "doesnt extend the role" do
+      expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
@@ -90,7 +82,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     before { ExternalInvoice::SacMembership.create!(person: person, year: date.year.next) }
 
     it "extends the role" do
-      expect { extend_roles }.to change { person.roles.first.delete_on }.to(date)
+      expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(date)
     end
   end
 end

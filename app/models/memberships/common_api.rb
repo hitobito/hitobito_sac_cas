@@ -65,7 +65,7 @@ module Memberships::CommonApi
   end
 
   # prepare roles of correct type in correct subgroup of sektion
-  # and with correct dates (convert_on/delete_on)
+  # and with correct end_on date
   def prepare_roles(_person)
     []
   end
@@ -75,10 +75,11 @@ module Memberships::CommonApi
     # See comments on #validate_roles for more details.
     Role.transaction do
       destroy_roles, update_roles = roles.partition(&:marked_for_destruction?)
-      destroy_roles.each(&:destroy!)
+      destroy_roles.each { |r| Role.with_inactive.find_by(id: r.id)&.really_destroy! }
       update_roles.each { |role| role.save(validate: false) }
       update_roles.each(&:save!)
-    end.tap { update_primary_groups }
+    end
+    update_primary_groups
     true
   end
 

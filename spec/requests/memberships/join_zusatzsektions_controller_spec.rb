@@ -146,6 +146,10 @@ describe Memberships::JoinZusatzsektionsController do
       end
 
       it "POST#create creates multiple roles and redirects" do
+        # first remove existing zusatzsektion roles in group so we can test without conflicts
+        groups(:matterhorn_mitglieder).roles.with_inactive
+          .where(type: "Group::SektionsMitglieder::MitgliedZusatzsektion").delete_all
+
         expect { request }.to change(Role, :count).by(3)
         expect(response).to redirect_to person_path(person, format: :html)
         expect(flash[:notice]).to eq "Eure 3 Zusatzmitgliedschaften in <i>SAC " \

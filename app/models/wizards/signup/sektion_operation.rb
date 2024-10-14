@@ -20,6 +20,8 @@ module Wizards::Signup
     end
 
     def save!
+      raise "cannot save invalid model: \n#{errors.full_messages}" unless valid?
+
       save_person_and_role
 
       if paying_person?
@@ -71,8 +73,8 @@ module Wizards::Signup
         person: person,
         group: group,
         type: role_type,
-        created_at: Time.zone.now,
-        delete_on: (Time.zone.today.end_of_year unless neuanmeldung?)
+        start_on: today,
+        end_on: (today unless neuanmeldung?)
       )
     end
 

@@ -53,16 +53,16 @@ describe People::Neuanmeldungen::Reject do
     expect(person.reload.roles).not_to include(neuanmeldung)
 
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-      created_at: 1.year.ago, person: neuanmeldung.person)
+      start_on: 1.year.ago, person: neuanmeldung.person)
     neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name,
-      group: group, created_at: 1.month.ago, person: neuanmeldung.person)
+      group: group, start_on: 1.month.ago, person: neuanmeldung.person)
 
     rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung_zusatzsektion)
   end
 
   it "deletes rejected Roles, if it has other deleted roles" do
-    person.roles.each { |role| role.update!(deleted_at: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
+    person.roles.each { |role| role.update!(end_on: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
 
     rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)

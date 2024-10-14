@@ -12,8 +12,8 @@ shared_examples "requires a concurrently active mitglied role" do |zusatzsektion
       zusatzsektion_type.sti_name,
       person: person,
       group: groups(:bluemlisalp_mitglieder),
-      created_at: 1.month.ago,
-      delete_on: 1.month.from_now
+      start_on: 1.month.ago,
+      end_on: 1.month.from_now
     )
 
     expect(zusatz_role).not_to be_valid
@@ -23,12 +23,12 @@ shared_examples "requires a concurrently active mitglied role" do |zusatzsektion
       Group::SektionsMitglieder::Mitglied.name,
       person: person,
       group: groups(:matterhorn_mitglieder),
-      created_at: 3.month.ago,
-      delete_on: 2.month.ago
+      start_on: 3.month.ago,
+      end_on: 2.month.ago
     )
     expect(zusatz_role).not_to be_valid
 
-    mitglied_role.update!(delete_on: 1.month.from_now)
+    mitglied_role.update!(end_on: 1.month.from_now)
     expect(zusatz_role).to be_valid
   end
 end

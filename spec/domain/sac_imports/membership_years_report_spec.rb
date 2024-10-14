@@ -18,19 +18,19 @@ describe SacImports::MembershipYearsReport do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
       group: bluemlisalp_mitglieder,
       person: Fabricate(:person, id: 4200000),
-      created_at: "2000-1-1")
+      start_on: "2000-1-1")
   end
   let!(:member2) do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
       group: bluemlisalp_mitglieder,
       person: Fabricate(:person, id: 4200001),
-      created_at: "2010-1-1")
+      start_on: "2010-1-1")
   end
   let!(:member4) do
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
       group: bluemlisalp_mitglieder,
       person: Fabricate(:person, id: 4200003),
-      created_at: "2015-12-1")
+      start_on: "2015-12-1")
   end
 
   let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-2_membership_years_report_2024-01-23-11:42.csv") }
