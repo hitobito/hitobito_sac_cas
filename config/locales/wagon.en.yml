@@ -1060,7 +1060,7 @@ en:
         summary_title: Summary
       subsidy_step:
         title: Apply for a subsidy
-        subsidy_field: "Apply for a subsidized price of %{amount} "
+        subsidy_field: "Apply for a subsidized price of CHF %{amount} "
         subsidy_link_label: Subsidy application
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:
@@ -1086,6 +1086,11 @@ en:
       summoned_notice: "%{participant} was called up."
       actions_show_youth:
         summon_button: Call up
+      actions_show_sac_cas:
+        create_invoice_button: ""
+        create_invoice_confirmation: ""
+      invoice_created_notice: ""
+      invoice_not_created_alert: ""
 
       popover_participant_cancels:
         cancel_info:
