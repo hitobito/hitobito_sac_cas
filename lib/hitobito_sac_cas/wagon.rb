@@ -50,7 +50,6 @@ module HitobitoSacCas
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
       Event::Participation.prepend SacCas::Event::Participation
-      Event::Role.prepend SacCas::Event::Role
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
