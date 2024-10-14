@@ -177,7 +177,7 @@ module SacCas::Event::ParticipationsController
     Event::ApplicationConfirmationMailer.confirmation(entry, content_key).deliver_later
   end
 
-  def enqueue_invoice_job
+  def enqueue_invoice_job    
     ExternalInvoice::Course.invoice_participation(entry)
   end
 
