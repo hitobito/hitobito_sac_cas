@@ -73,7 +73,7 @@ module SacImports::People
     end
 
     def parse_address
-      address = row[:address]
+      address = row[:street_name]
       return if address.blank?
 
       Address::Parser.new(address).parse
@@ -85,9 +85,6 @@ module SacImports::People
       person.last_name = row[:last_name] unless company?
       person.address_care_of = row[:address_care_of]
       person.postbox = row[:postbox]
-      person.address = row[:address]
-      person.street = row[:street]
-      person.housenumber = row[:housenumber]
       person.country = country
       person.town = row[:town]
       person.zip_code = row[:zip_code]
@@ -104,7 +101,12 @@ module SacImports::People
       person.company = company?
       person.company_name = row[:last_name] if company?
 
-      person.street, person.housenumber = parse_address
+      if row[:housenumber].present?
+        person.street = row[:street_name]
+        person.housenumber = row[:housenumber]
+      else
+        person.street, person.housenumber = parse_address
+      end
 
       if email.present?
         if Person.where(email: email).exists?
