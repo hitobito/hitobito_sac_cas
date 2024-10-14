@@ -18,9 +18,10 @@ module SacCas::Household
     validate :assert_someone_is_a_member, on: :update
   end
 
-  def initialize(reference_person, maintain_sac_family: true)
+  def initialize(reference_person, maintain_sac_family: true, validate_members: true)
     super(reference_person)
     @maintain_sac_family = maintain_sac_family
+    @validate_members = validate_members
   end
 
   def save(context: :update)
@@ -164,4 +165,10 @@ module SacCas::Household
   def candidates = adults.select(&:email?)
 
   def adults = people_by_agegroup(:adult)
+
+  def validate_members
+    # do not validate members for sac imports
+    return unless @validate_members
+    super
+  end
 end
