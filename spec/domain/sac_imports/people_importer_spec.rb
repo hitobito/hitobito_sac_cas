@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::PeopleImporter do
+describe SacImports::PeopleImporter, versioning: true do
   let(:output) { double(puts: nil, print: nil) }
   let(:nav1_csv_fixture) { file_fixture("sac_imports_src/NAV1_fixture.csv") }
   let!(:importer) { described_class.new(output: output) }
@@ -57,6 +57,11 @@ describe SacImports::PeopleImporter do
     expect(csv_report.size).to eq(2)
     expect(csv_report.first).to eq(report_headers)
     expect(csv_report.second).to eq([invalid_person_navision_id, nil, nil, "Bitte geben Sie einen Namen ein"])
+  end
+
+  it "does not create version entries for imported people" do
+    expect { importer.create }
+      .not_to change { PaperTrail::Version.count }
   end
 
   it "imports people and assigns role" do

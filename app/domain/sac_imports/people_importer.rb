@@ -15,6 +15,7 @@ module SacImports
     ]
 
     def initialize(output: $stdout)
+      PaperTrail.enabled = false # disable versioning for imports
       truemail_with_regex
       @output = output
       @source_file = CsvSource.new(:NAV1)

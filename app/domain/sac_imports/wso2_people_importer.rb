@@ -16,7 +16,7 @@ module SacImports
     ]
 
     def initialize(output: $stdout)
-      # truemail_with_regex
+      PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @source_file = CsvSource.new(:WSO21)
       @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)

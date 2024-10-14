@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::FamilyImporter do
+describe SacImports::FamilyImporter, versioning: true do
   let(:output) { double(puts: nil, print: nil) }
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:importer) { described_class.new(output: output) }
@@ -102,6 +102,11 @@ describe SacImports::FamilyImporter do
       expect(csv_report.size).to eq(5)
       expect(csv_report.first).to eq(report_headers)
       expect(csv_report.pluck(3).compact).to eq(["errors"] + ["No household_key found in NAV1 data"] * 2 + ["Only one person in household"] * 2)
+    end
+
+    it "does not create any version entries" do
+      expect { importer.create }
+        .not_to change { PaperTrail::Version.count }
     end
   end
 end

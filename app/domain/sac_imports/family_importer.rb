@@ -18,6 +18,7 @@ module SacImports
     attr_reader :output, :source_file, :csv_report
 
     def initialize(output: $stdout)
+      PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @source_file = CsvSource.new(:NAV1)
       @csv_report = CsvReport.new(:"nav1-2_sac_families", REPORT_HEADERS)
