@@ -48,8 +48,8 @@ module SacCas::Person
     has_many :external_trainings, dependent: :destroy
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
-    #validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
-      #if: :roles_require_address_fields?
+    validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
+      if: :roles_require_name_and_address?
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality
@@ -135,9 +135,7 @@ module SacCas::Person
     Invoices::Abacus::TransmitPersonJob.new(self).enqueue!
   end
 
-  def roles_require_address_fields?
-    return false if validation_context == :import
-
+  def roles_require_name_and_address?
     roles.exists?(type: REQUIRED_FIELDS_ROLES)
   end
 end
