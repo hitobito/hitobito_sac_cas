@@ -109,7 +109,7 @@ module SacImports::People
       end
 
       if email.present?
-        if Person.where(email: email).exists?
+        if Person.where.not(id: person.id).where(email: email).exists?
           person.additional_emails << ::AdditionalEmail.new(email: email, label: "Duplikat")
           @warning = "Email #{email} already exists in the system. Importing with additional_email."
         else
@@ -138,7 +138,7 @@ module SacImports::People
     end
 
     def build_role(person)
-      person.roles.build(group: group, type: TARGET_ROLE)
+      person.roles.find_or_initialize_by(group: group, type: TARGET_ROLE)
     end
 
     def build_error_messages
