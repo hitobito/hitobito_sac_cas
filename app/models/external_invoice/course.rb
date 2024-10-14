@@ -37,7 +37,7 @@ class ExternalInvoice::Course < ExternalInvoice
     def invoice_participation(participation)
       return if participation.price.nil?
 
-      external_invoice = ExternalInvoice.create(
+      external_invoice = ExternalInvoice::Course.create(
         person: participation.person,
         issued_at: Date.current,
         sent_at: Date.current,
@@ -52,6 +52,6 @@ class ExternalInvoice::Course < ExternalInvoice
   end
 
   def title
-    "#{participation.event.name} (#{participation.event.number})"
+    "#{link.event.name} (#{link.event.number})"
   end
 end
