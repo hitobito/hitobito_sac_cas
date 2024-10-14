@@ -7,7 +7,7 @@
 # Overrides settings from the main application
 application:
   name: SAC/CAS-Portal
-  languages: 
+  languages:
     de: Deutsch
     fr: Français
     it: Italiano
@@ -45,6 +45,7 @@ sftp:
 
 oidc:
   use_refresh_token: true
+  use_jwt_access_token: true
 
 people:
   people_managers:
