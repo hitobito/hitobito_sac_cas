@@ -9,9 +9,9 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person_attrs:, newsletter:)
+    def initialize(group:, person:, newsletter:)
       @group = group
-      @person_attrs = person_attrs
+      @person = person
       @newsletter = newsletter
     end
 
@@ -42,7 +42,7 @@ module Wizards::Signup
 
     private
 
-    attr_reader :group, :person_attrs, :newsletter
+    attr_reader :group, :person, :newsletter
 
     def validate(model)
       model.valid?.tap do
@@ -58,10 +58,6 @@ module Wizards::Signup
 
     def paying_person?
       role.person.sac_membership.paying_person?(role.beitragskategorie)
-    end
-
-    def person
-      @person ||= Person.new(person_attrs)
     end
 
     def role
