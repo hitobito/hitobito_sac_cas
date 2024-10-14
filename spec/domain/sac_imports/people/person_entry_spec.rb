@@ -104,15 +104,25 @@ describe SacImports::People::PersonEntry do
 
     it "sets address attributes" do
       row[:address_care_of] = "test"
-      row[:address] = "Landweg 1a"
-      row[:postbox] = "Postfach 3000"
+      row[:street_name] = "landweg 1a"
+      row[:postbox] = "postfach 3000"
 
       expect(person.address_care_of).to eq "test"
-      expect(person.street).to eq "Landweg"
+      expect(person.street).to eq "landweg"
       expect(person.housenumber).to eq "1a"
-      expect(person.postbox).to eq "Postfach 3000"
+      expect(person.postbox).to eq "postfach 3000"
 
-      expect(person.address).to eq "Landweg 1a"
+      expect(person.address).to eq "landweg 1a"
+    end
+
+    it "sets street and housenumber if housenumber in own column" do
+      row[:street_name] = "landweg"
+      row[:housenumber] = "1a"
+
+      expect(person.street).to eq "landweg"
+      expect(person.housenumber).to eq "1a"
+
+      expect(person.address).to eq "landweg 1a"
     end
 
     it "language defaults to de" do
