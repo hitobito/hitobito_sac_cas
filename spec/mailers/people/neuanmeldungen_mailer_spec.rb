@@ -54,5 +54,16 @@ describe People::NeuanmeldungenMailer do
       expect(mail.subject).to eq("Rejetée")
       expect(mail.body.to_s).to include("Bonjour")
     end
+
+    it "sends confirmation email to deleted person" do
+      person.delete
+      expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
+      expect(mail.bcc).to include "mv@sac-cas.ch"
+      expect(mail.subject).to eq("SAC Eintritt Antragsablehnung")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund,",
+        "Die SAC Blüemlisalp hat deinen Antrag geprüft. Leider müssen wir dir mitteilen"
+      )
+    end
   end
 end

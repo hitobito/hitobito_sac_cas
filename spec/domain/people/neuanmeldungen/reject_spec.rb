@@ -98,6 +98,11 @@ describe People::Neuanmeldungen::Reject do
       expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
     end
 
+    it "send an email to deleted person" do
+      person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
+    end
+
     context "family" do
       let(:neuanmeldung) { create_role(:family) }
 
