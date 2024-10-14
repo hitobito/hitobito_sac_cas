@@ -50,6 +50,7 @@ module HitobitoSacCas
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
       Event::Participation.prepend SacCas::Event::Participation
+      Event::Role.prepend SacCas::Event::Role
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
@@ -149,6 +150,7 @@ module HitobitoSacCas
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
