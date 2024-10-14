@@ -20,6 +20,7 @@ module SacImports
     ].freeze
 
     def initialize(role_type:, output: $stdout)
+      PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @role_type = role_type
       @source_file = SacImports::CsvSource.new(:NAV2)

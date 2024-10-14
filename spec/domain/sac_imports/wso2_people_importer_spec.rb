@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Wso2PeopleImporter do
+describe SacImports::Wso2PeopleImporter, versioning: true do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:report_file) { Rails.root.join("log", "sac_imports", "wso21-1_people_2024-01-23-11:42.csv") }
   let(:output) { $stdout } # double(puts: nil, print: nil) }
@@ -65,6 +65,7 @@ describe SacImports::Wso2PeopleImporter do
       .and change { existing_person_matching.confirmed_at }
       .and change { existing_person_matching.correspondence }.to("digital")
       .and not_change { existing_person_mismatch.reload }
+      .and not_change { PaperTrail::Version.count }
 
     expect(File.exist?(report_file)).to be_truthy
 

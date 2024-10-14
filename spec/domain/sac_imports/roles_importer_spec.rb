@@ -30,7 +30,7 @@ describe SacImports::RolesImporter do
     travel_back
   end
 
-  context "with membership role type" do
+  context "with membership role type", versioning: true do
     let(:role_type) { :membership }
 
     context "with NAV2 csv file fixture" do
@@ -57,7 +57,8 @@ describe SacImports::RolesImporter do
           expect(output).to receive(:print).with(output_line)
         end
 
-        importer.create
+        expect { importer.create }
+          .not_to change { PaperTrail::Version.count }
 
         expect(csv_report.size).to eq(14)
         expect(csv_report.first).to eq(report_headers)
