@@ -22,11 +22,19 @@ module SacImports
       @csv_report = CsvReport.new(:"nav1-1_people", REPORT_HEADERS)
     end
 
-    def create
+    def create(start_at_navision_id: nil)
       data = @source_file.rows
+
+      if start_at_navision_id.present?
+        start_from_row = data.find { |row| row[:navision_id] == start_at_navision_id }
+        data = data[data.index(start_from_row)..-1]
+        @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row[:last_name]} #{start_from_row[:first_name]})\n")
+      end
+
       data.each do |row|
         process_row(row)
       end
+
       @csv_report.finalize(output: @output)
     end
 

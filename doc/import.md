@@ -97,6 +97,9 @@ Group::Sektion.all.find_each { |s| s.really_destroy! }
 
 ### `sac_imports:nav1-1_people`
 
+optional kann eine navision id angegeben ab der Row ab dem der Import gestartet werden soll.
+`START_AT_NAVISION_ID=42 rails sac_imports:nav1-1_people`
+
 #### Diskrepanzen:
 
 - `Street Name` und `Street No_`, sowie `Address` passen nicht immer zusammen, wobei `Street Name` und `Street No_` oft nicht ausgefüllt sind.
