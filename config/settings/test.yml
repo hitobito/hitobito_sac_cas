@@ -1,0 +1,2 @@
+oidc:
+  use_jwt_access_token: false
