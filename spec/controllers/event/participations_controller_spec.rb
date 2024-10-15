@@ -322,6 +322,16 @@ describe Event::ParticipationsController do
       participation.update!(price: 10)
       expect { put :summon, params: params }
         .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+        .and change { participation.reload.state }.to("summoned")
+    end
+
+    it "PUT#summon doesn't enqueue same invoice twice" do
+      ExternalInvoice::Course.create!(person: participation.person, total: 10, link: participation)
+      participation.update!(price: 10)
+
+      expect(ExternalInvoice::Course).to receive(:invoice_participation).with(participation).once.and_call_original
+      expect { put :summon, params: params }
+        .not_to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count)
     end
 
     it "PUT#cancel sets statement and default canceled_at" do
