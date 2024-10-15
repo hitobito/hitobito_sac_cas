@@ -27,14 +27,13 @@ module SacImports
 
       if start_at_navision_id.present?
         start_from_row = data.find { |row| row[:navision_id] == start_at_navision_id }
-        data = data[data.index(start_from_row)..-1]
+        data = data[data.index(start_from_row)..]
         @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row[:last_name]} #{start_from_row[:first_name]})\n")
       end
 
       Parallel.map(data, in_threads: 12) do |row|
         process_row(row)
-      rescue Exception => e # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-        raise_exception = e
+      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
         raise Parallel::Break
       end
 

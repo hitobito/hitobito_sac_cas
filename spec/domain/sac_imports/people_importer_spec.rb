@@ -125,5 +125,4 @@ describe SacImports::PeopleImporter, versioning: true do
       importer.create(start_at_navision_id: "4200008")
     end
   end
-
 end
