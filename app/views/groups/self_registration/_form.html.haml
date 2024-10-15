@@ -4,10 +4,10 @@
 
 = standard_form(wizard, url: group_self_registration_path, data: { controller: "forwarder", forwarder_delay_value: 150 }) do |f|
   = f.honeypot(:verification)
-  = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: :aside
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
 
     - if wizard.asides.present?
       = c.with_aside do
         - Array.wrap(wizard.asides).each do |aside|
+          = render 'shared/hidden_submit', label: 'Update Fees', formaction: nil, turbo_frame: aside
           = render aside, partial_name: aside, c: c, wizard: wizard
