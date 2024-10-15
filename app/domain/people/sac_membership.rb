@@ -103,9 +103,10 @@ class People::SacMembership
   end
 
   def family?(consider_neuanmeldung: false)
-    roles = [stammsektion_role].compact
-    roles += [neuanmeldung_stammsektion_role] if consider_neuanmeldung
-    roles.any? { |role| role.beitragskategorie.family? }
+    [
+      stammsektion_role,
+      (neuanmeldung_stammsektion_role if consider_neuanmeldung)
+    ].compact.any? { |role| role.beitragskategorie.family? }
   end
 
   def family_id
