@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
     resources :event_levels, module: "event", controller: "levels", except: [:show]
 
+    resources :external_invoices, only: [:show], module: :people, param: :invoice_id
+
     resources :groups, only: [] do
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]

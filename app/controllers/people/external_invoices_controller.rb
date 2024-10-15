@@ -15,6 +15,12 @@ class People::ExternalInvoicesController < ListController
     redirect_to external_invoices_group_person_path(group, person)
   end
 
+  def show
+    person_id = invoice.person_id
+    group_id = Person.where(id: person_id).pick(:primary_group_id)
+    redirect_to external_invoices_group_person_path(group_id, person_id)
+  end
+
   private
 
   def list_entries
