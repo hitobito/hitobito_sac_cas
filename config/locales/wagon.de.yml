@@ -1436,6 +1436,9 @@ de:
 
     course_invoices:
       no_invoice_possible: "Probleme beim Erstellen der Rechung"
+      position_name: "%{description} für %{level}"
+      processing_fee: Bearbeitungsgebühr
+      cancellation_costs: "%{percentage}% Annullationskosten"
 
     neuanmeldungen:
       multiselect_actions:
