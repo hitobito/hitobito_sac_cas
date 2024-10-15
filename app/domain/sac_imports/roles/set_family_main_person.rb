@@ -5,9 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+# more efficient way to set family main person, used manually, maybe usefull for future imports
 module SacImports::Roles
   class SetFamilyMainPerson < ImporterBase
-
     def initialize(csv_source: SacImports::CsvSource.new(:NAV2), output: $stdout)
       @rows_filter = {role: /^Mitglied \(Stammsektion\) \(Familie\)$/, valid_until: "2024-12-31"}
       csv_report = SacImports::CsvReport.new(:"nav2-1_roles", [])
@@ -23,7 +23,7 @@ module SacImports::Roles
 
     def set_family_main_person
       Person.where(id: @csv_source_person_ids).update_all(sac_family_main_person: true)
-      p "Family main person count #{@csv_source_person_ids.count}"
+      Rails.logger.debug { "Family main person count #{@csv_source_person_ids.count}" }
     end
 
     def reset_family_main_person
