@@ -47,7 +47,8 @@ module People::Neuanmeldungen
     end
 
     def send_rejection_mail(person)
-      People::NeuanmeldungenMailer.reject(person, group.layer_group).deliver_later
+      person_attrs = person.attributes.slice(*People::NeuanmeldungenMailer::REJECTED_PERSON_ATTRS)
+      People::NeuanmeldungenMailer.reject(person_attrs, group.layer_group).deliver_later
     end
   end
 end

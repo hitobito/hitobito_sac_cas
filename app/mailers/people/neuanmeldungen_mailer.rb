@@ -8,19 +8,16 @@
 class People::NeuanmeldungenMailer < ApplicationMailer
   include MultilingualMailer
 
-  # used since the record could be destroyed before the mail is sent
-  Person = Data.define(:id, :email, :first_name, :language, :default_group_id)
-
   APPROVED = "people_registration_approved"
   REJECTED = "people_registration_rejected"
+  REJECTED_PERSON_ATTRS = %w[first_name email language primary_group_id]
 
-  def approve(person_record, section)
-    person = create_data_person(person_record)
+  def approve(person, section)
     send_mail(person, section, APPROVED)
   end
 
-  def reject(person_record, section)
-    person = create_data_person(person_record)
+  def reject(person_attrs, section)
+    person = Person.new(person_attrs)
     send_mail(person, section, REJECTED)
   end
 
@@ -45,13 +42,5 @@ class People::NeuanmeldungenMailer < ApplicationMailer
 
   def placeholder_profile_url
     group_person_url(@person.default_group_id, @person.id)
-  end
-
-  def create_data_person(record)
-    Person.new(record.id,
-      record.email,
-      record.first_name,
-      record.language,
-      record.default_group_id)
   end
 end

@@ -35,7 +35,8 @@ describe People::NeuanmeldungenMailer do
   end
 
   context "#reject" do
-    let(:mail) { described_class.reject(person, group.layer_group) }
+    let(:person_attrs) { person.attributes.slice(*described_class::REJECTED_PERSON_ATTRS) }
+    let(:mail) { described_class.reject(person_attrs, group.layer_group) }
 
     it "sends confirmation email to person" do
       expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
