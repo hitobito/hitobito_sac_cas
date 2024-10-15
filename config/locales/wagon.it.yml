@@ -305,6 +305,14 @@ it:
         actual_days: Giorni effettivi
         price: ""
         price_category: ""
+        price_categories:
+          price_member: ""
+          price_regular: ""
+          price_subsidized: ""
+          price_js_active_member: ""
+          price_js_active_regular: ""
+          price_js_passive_member: ""
+          price_js_passive_regular: ""
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -1060,6 +1068,10 @@ it:
     sac_section_membership_configs: Parametri per le fatture dei soci
 
   event:
+    courses:
+      key_data_sheets:
+        create:
+          success: ""
     kinds:
       push_down:
         success: I dati salvati sono stati trasferiti a tutti i corsi attivi.
@@ -1094,6 +1106,8 @@ it:
         contact_text: |
           Potete raggiungerci durante i nostri orari di lavoro
           Dal lunedì al venerdì dalle 08:00 alle 17:00.
+      list_sac_cas:
+        key_data_sheets: ""
       states:
         absent: Non è prevista la partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1110,7 +1124,7 @@ it:
         summary_title: Sintesi
       subsidy_step:
         title: Richiedere una sovvenzione
-        subsidy_field: "%{amount} Richiedere un prezzo agevolato di CHF"
+        subsidy_field: ""
         subsidy_link_label: Richiesta di sovvenzione
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:
@@ -1153,6 +1167,7 @@ it:
 
   events:
     actions_show_sac_cas:
+      attach_key_data_sheets: ""
       state_buttons:
         created: Indietro come bozza
         application_open: Pubblicare
@@ -1345,6 +1360,59 @@ it:
       group/ortsgruppe:
         default: Attributi del gruppo locale
 
+  participations:
+    key_data_sheet:
+      file_name_prefix: ""
+      leader_file_prefix: ""
+      assistant_leader_file_prefix: ""
+      year_title: ""
+      title: ""
+      greeting: ""
+      footer: ""
+      table:
+        number: ""
+        name: ""
+        level: ""
+        leaders: ""
+        compensation: ""
+        event_dates_durations: ""
+        event_dates_locations: ""
+        accommodation: ""
+        accommodation_budget:
+          label: ""
+          text: ""
+        accommodations:
+          sac: ""
+          event_specific: ""
+        accommodation_category: ""
+        language: ""
+        content:
+          label: ""
+          text: ""
+        participant_requirements:
+          label: ""
+          text: ""
+        participant_program_course:
+          label: ""
+          text: ""
+        participant_program_tour:
+          label: ""
+          text: ""
+        application_closing_at: ""
+        minimum_participants: ""
+        maximum_participants: ""
+        participation_yes_no:
+          label: ""
+          text: ""
+        participation_cancellation:
+          label: ""
+          text: ""
+        ideal_class_size: ""
+        maximum_class_size: ""
+        class_teacher:
+          label: ""
+          text: ""
+
   passes:
     membership:
       file_name_prefix: CAS-TesseraMembro
@@ -1382,6 +1450,9 @@ it:
         create_invoice: "Creare la fattura"
         mv_yearly_invoice: "Bilancio annuale di MV"
         zusatzsektion_eintrittsrechnung: "Sezione aggiuntiva per la fattura Sezione"
+
+    course_invoices:
+      no_invoice_possible: ""
 
     neuanmeldungen:
       multiselect_actions:
@@ -1601,7 +1672,7 @@ it:
           person_fields:
             next_button: ""
         abo_magazin:
-          abo_info_table: 
+          abo_info_table:
             order: ""
             wanted_magazin: ""
             magazin_release: ""
@@ -1613,7 +1684,7 @@ it:
           summary:
             info_text: ""
             next_button: ""
-            
+
         sektion:
           family_fields_title: Membri della famiglia
           family_fields:
@@ -1637,9 +1708,10 @@ it:
           summary_fields:
             my_membership: ""
             family_members: ""
-            info_alert_neuanmeldungen_nv: ""
             info_alert_neuanmeldungen_sektion: ""
+            info_alert_neuanmeldungen_nv: ""
             entry_per: ""
+            next_button: ""
           summary_person_card:
             contact_person: ""
           summary_family_member_card:
