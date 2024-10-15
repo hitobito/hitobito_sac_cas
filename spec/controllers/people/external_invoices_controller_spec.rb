@@ -13,6 +13,38 @@ describe People::ExternalInvoicesController do
 
   before { sign_in(person) }
 
+  describe "#show" do
+    let(:sample_time) { Time.zone.local(2024, 1, 1, 0, 0, 0, 0) }
+    let(:invoice) {
+      ExternalInvoice.create!(state: "open", abacus_sales_order_key: "123456", total: 100.0,
+        issued_at: sample_time, created_at: sample_time, year: 2024, sent_at: sample_time,
+        updated_at: sample_time, person_id: person.id,
+        type: "ExternalInvoice")
+    }
+
+    context "as member" do
+      it "is unauthorized" do
+        expect do
+          get :index, params: {group_id: group_id, id: person.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as employee" do
+      before do
+        person.roles.create!(
+          group: groups(:geschaeftsstelle),
+          type: Group::Geschaeftsstelle::Mitarbeiter.sti_name
+        )
+      end
+
+      it "redirects to the person's external invoice page" do
+        get :show, params: {invoice_id: invoice.id}
+        expect(response).to redirect_to external_invoices_group_person_path(person.primary_group.id, person.id)
+      end
+    end
+  end
+
   context "#index" do
     context "as member" do
       it "is unauthorized" do
