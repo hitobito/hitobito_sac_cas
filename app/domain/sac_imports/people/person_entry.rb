@@ -133,7 +133,7 @@ module SacImports::People
       # rubocop:enable Lint/SymbolConversion
 
       phone_numbers.each do |label, number|
-        person.phone_numbers.build(number: number, label: label) if phone_valid?(number)
+        person.phone_numbers.find_or_initialize_by(number: number, label: label) if phone_valid?(number)
       end
     end
 
