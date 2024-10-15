@@ -92,6 +92,8 @@ describe SacImports::Roles::MembershipsImporter do
         "Sektion > CAS La Chaux-de-Fonds > Mitglieder",
         "Mitglied (Stammsektion) (Frei Fam)",
         "Membership role created", nil, nil])
+
+      expect(person1.reload.primary_group).to eq(Group::SektionsMitglieder.find_by(parent: sac_chaux_de_fonds))
     end
   end
 
@@ -130,6 +132,8 @@ describe SacImports::Roles::MembershipsImporter do
         existing_roles = [roles(:mitglied), roles(:mitglied_zweitsektion)]
         expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Membership role created\n")
         expect(existing_roles).to all(be_persisted)
+        # make sure primary group is set
+        mitglied.update_columns(primary_group_id: nil)
 
         importer.create
 
@@ -149,6 +153,7 @@ describe SacImports::Roles::MembershipsImporter do
         expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
         expect(active_membership_role.group.parent.name).to eq("SAC Blüemlisalp")
         expect(mitglied.sac_family_main_person).to eq(false)
+        expect(mitglied.primary_group).to eq(groups(:bluemlisalp_mitglieder))
 
         existing_roles.each do |role|
           expect(Role.where(id: role.id)).not_to exist
