@@ -109,4 +109,24 @@ describe SacImports::PeopleImporter, versioning: true do
 
     expect(Person.find_by(id: invalid_person_navision_id)).to be_nil
   end
+
+  context "with start_at_navision_id" do
+    it "starts imported from given navision_id" do
+      expected_output = ["Starting import from row with navision_id 4200008 (Bühler Christian)\n"]
+      expected_output << "4200008 ():"
+      expected_output << " ✅\n"
+      expected_output << "4200009 ():"
+      expected_output << " ✅\n"
+      expected_output << "#{invalid_person_navision_id} ():"
+      expected_output << " ❌ Bitte geben Sie einen Namen ein\n"
+
+      expected_output.each do |output_line|
+        expect(output).to receive(:print).with(output_line)
+      end
+      expect(output).to receive(:puts).with("Report written to #{report_file}")
+
+      importer.create(start_at_navision_id: "4200008")
+    end
+  end
+
 end

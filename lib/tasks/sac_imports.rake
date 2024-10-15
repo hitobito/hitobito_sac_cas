@@ -17,7 +17,7 @@ namespace :sac_imports do
 
   desc "Imports people and companies from Navision"
   task "nav1-1_people": [:environment] do
-    SacImports::PeopleImporter.new.create
+    SacImports::PeopleImporter.new.create(start_at_navision_id: ENV["START_AT_NAVISION_ID"])
   end
 
   desc "Import people from WSO2"
