@@ -35,7 +35,7 @@ class ExternalInvoice::Course < ExternalInvoice
 
   class << self
     def invoice_participation(participation)
-      return if participation.price.nil?
+      return if participation.price.nil? || ExternalInvoice::Course.exists?(link: participation)
 
       external_invoice = ExternalInvoice::Course.create(
         person: participation.person,
