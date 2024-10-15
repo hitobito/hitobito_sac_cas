@@ -31,8 +31,11 @@ module SacImports
         @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row[:last_name]} #{start_from_row[:first_name]})\n")
       end
 
-      data.each do |row|
+      Parallel.map(data, in_threads: 12) do |row|
         process_row(row)
+      rescue Exception => e # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
+        raise_exception = e
+        raise Parallel::Break
       end
 
       @csv_report.finalize(output: @output)
@@ -52,9 +55,9 @@ module SacImports
     end
 
     def process_row(row)
-      @output.print("#{row[:navision_id]} (#{row[:navision_name]}):")
       entry = People::PersonEntry.new(row, target_group)
-      @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.errors}\n")
+      status = entry.valid? ? "✅" : "❌ #{entry.errors}"
+      @output.print("#{row[:navision_id]} (#{row[:navision_name]}): #{status}\n")
       if entry.valid?
         entry.import!
         if entry.warning
