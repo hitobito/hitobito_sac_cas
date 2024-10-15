@@ -474,7 +474,6 @@ fr:
         too_many_adults_in_family: "Une adhésion familiale comprend au maximum %{max_adults} adultes."
         only_one_mitglied_role_allowed_at_a_time: "a déjà une adhésion dont la validité se chevauche."
         must_be_in_past: doit se situer dans le passé
-        must_be_present_unless_deleted: "doit être présent s'il n'est pas supprimé."
         must_have_mitglied_role: "doit être membre pendant toute la durée de validité de la section complémentaire."
         must_have_mitglied_role_in_group: "doit être membre du groupe sélectionné."
         must_have_one_family_main_person_in_family: "Dans une affiliation familiale, un destinataire de facture doit être défini."
@@ -1106,7 +1105,7 @@ fr:
         contact_text: |
           Tu peux nous joindre pendant nos heures de bureau
           Du lundi au vendredi de 08:00 à 17:00 heures.
-      list_sac_cas:
+      list:
         key_data_sheets: ""
       states:
         absent: Pas de participation à ce cours.

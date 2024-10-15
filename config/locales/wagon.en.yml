@@ -471,7 +471,6 @@ en:
         too_many_adults_in_family: "A family membership includes a maximum of %{max_adults} adults."
         only_one_mitglied_role_allowed_at_a_time: "already has a membership with overlapping validity."
         must_be_in_past: must be in the past
-        must_be_present_unless_deleted: "must be present if not deleted."
         must_have_mitglied_role: "must be a member for the entire period of validity of the supplementary section."
         must_have_mitglied_role_in_group: "must be a member of the selected group."
         must_have_one_family_main_person_in_family: "An invoice recipient must be defined in a family membership."
@@ -1056,7 +1055,7 @@ en:
         contact_text: |
           You can reach us during our business hours
           Mon to Fri 08:00 - 17:00.
-      list_sac_cas:
+      list:
         key_data_sheets: ""
       states:
         absent: No participation in this course.

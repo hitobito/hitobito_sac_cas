@@ -474,7 +474,6 @@ it:
         too_many_adults_in_family: "%{max_adults} L'iscrizione di una famiglia comprende un massimo di adulti."
         only_one_mitglied_role_allowed_at_a_time: "ha già un'appartenenza con validità sovrapposta."
         must_be_in_past: deve essere nel passato
-        must_be_present_unless_deleted: "deve essere presente se non è stato cancellato."
         must_have_mitglied_role: "deve essere socio per l'intero periodo di validità della sezione aggiuntiva."
         must_have_mitglied_role_in_group: "deve essere un membro del gruppo selezionato."
         must_have_one_family_main_person_in_family: "Il destinatario della fattura deve essere definito in un'associazione familiare."
@@ -1106,7 +1105,7 @@ it:
         contact_text: |
           Potete raggiungerci durante i nostri orari di lavoro
           Dal lunedì al venerdì dalle 08:00 alle 17:00.
-      list_sac_cas:
+      list:
         key_data_sheets: ""
       states:
         absent: Non è prevista la partecipazione a questo corso.
