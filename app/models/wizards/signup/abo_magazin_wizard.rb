@@ -13,7 +13,7 @@ module Wizards::Signup
       Wizards::Steps::Signup::AboMagazin::Summary
     ]
 
-    self.asides = "aside_abo"
+    self.asides = ["aside_abo"]
 
     def costs = [
       OpenStruct.new(amount: 60, country: :switzerland),

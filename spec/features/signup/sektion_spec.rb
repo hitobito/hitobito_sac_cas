@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "signup/sektion", js: true do
+describe "signup/sektion", :js do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
   let(:person) { Person.find_by(email: "max.muster@hitobito.example.com") }

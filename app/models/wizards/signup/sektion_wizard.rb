@@ -15,7 +15,7 @@ module Wizards::Signup
       Wizards::Steps::Signup::Sektion::SummaryFields
     ]
 
-    self.asides = "aside_sektion"
+    self.asides = ["aside_sektion"]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
     ADDRESS_KEYS = %i[address_care_of street housenumber postbox zip_code town country]
