@@ -322,7 +322,7 @@ describe SacImports::Roles::MembershipsImporter do
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(1)
-        expect(mitglied.roles.deleted.count).to eq(0)
+        expect(mitglied.roles.ended_or_archived.count).to eq(0)
         expect(active_membership_role.beitragskategorie).to eq("family")
         expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
         expect(mitglied.sac_family_main_person).to eq(false)

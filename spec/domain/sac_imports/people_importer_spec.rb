@@ -41,9 +41,8 @@ describe SacImports::PeopleImporter, versioning: true do
   end
 
   it "creates csv report entries for people with errors" do
-    expected_output = Array.new(10) { [/\d+ \(.*\):/, " ✅\n"] }.flatten
-    expected_output << "#{invalid_person_navision_id} ():"
-    expected_output << " ❌ Bitte geben Sie einen Namen ein\n"
+    expected_output = Array.new(10) { /\d+ \(.*\): ✅\n/ }
+    expected_output << "#{invalid_person_navision_id} (): ❌ Bitte geben Sie einen Namen ein\n"
 
     expected_output.each do |output_line|
       expect(output).to receive(:print).with(output_line)

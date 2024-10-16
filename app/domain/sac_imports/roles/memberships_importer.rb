@@ -33,7 +33,6 @@ module SacImports::Roles
 
     def process_row(row)
       super do |person|
-        # skip todo row
         membership_group = fetch_membership_group(row, person)
         return false if membership_group.blank?
 
@@ -82,7 +81,7 @@ module SacImports::Roles
       # only set family main person if Beitragskategorie is Familie, not Frei Fam, Frei Kind
       return unless row[:role] == "Mitglied (Stammsektion) (Familie)"
 
-      if !role.deleted? && role.beitragskategorie == "family"
+      if role.active? && role.beitragskategorie == "family"
         person.update_columns(sac_family_main_person: true)
       end
     end
