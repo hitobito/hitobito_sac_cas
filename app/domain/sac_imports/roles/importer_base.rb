@@ -21,12 +21,18 @@ module SacImports::Roles
     end
 
     def create
-      @data.each do |row|
+      Parallel.map(@data, in_threads: nr_of_threads) do |row|
         process_row(row)
+      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
+        raise Parallel::Break
       end
     end
 
     private
+
+    def nr_of_threads
+      Rails.env.test? ? 1 : 6
+    end
 
     def process_row(row)
       return unless dates_valid?(row)
