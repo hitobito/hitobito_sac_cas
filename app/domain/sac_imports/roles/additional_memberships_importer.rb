@@ -62,13 +62,23 @@ module SacImports::Roles
     end
 
     def fetch_membership_group(row, person)
-      parent_group = Group.find_by(name: row[:group_level1], type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
+      group_name = extract_group_name(row)
+      parent_group = Group.find_by(name: group_name, type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
       if parent_group
         return Group::SektionsMitglieder.find_by(parent_id: parent_group.id)
       end
 
       report(row, person, error: "No Section/Ortsgruppe group found for '#{row[:group_level1]}'")
       nil
+    end
+
+    def extract_group_name(row)
+      # if ortsgruppe
+      if row[:group_level3] == "Mitglieder"
+        return row[:group_level2]
+      end
+
+      row[:group_level1]
     end
   end
 end
