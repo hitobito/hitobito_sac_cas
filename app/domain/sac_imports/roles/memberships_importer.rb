@@ -15,9 +15,6 @@ module SacImports::Roles
       "Frei Kind" => :family
     }
 
-    SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
-      Group::Ortsgruppe.sti_name].freeze
-
     def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
       @rows_filter = {role: /^Mitglied \(Stammsektion\).+/}
       super
@@ -65,26 +62,6 @@ module SacImports::Roles
 
       report(row, nil, error: "Invalid Beitragskategorie in '#{row[:role]}'")
       false
-    end
-
-    def fetch_membership_group(row, person)
-      group_name = extract_group_name(row)
-      parent_group = Group.find_by(name: group_name, type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
-      if parent_group
-        return Group::SektionsMitglieder.find_by(parent_id: parent_group.id)
-      end
-
-      report(row, person, error: "No Section/Ortsgruppe group found for '#{group_name}'")
-      nil
-    end
-
-    def extract_group_name(row)
-      # if ortsgruppe
-      if row[:group_level3] == "Mitglieder"
-        return row[:group_level2]
-      end
-
-      row[:group_level1]
     end
 
     def set_family_main_person(row, person, role)
