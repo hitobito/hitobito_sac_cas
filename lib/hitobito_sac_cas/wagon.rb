@@ -44,6 +44,7 @@ module HitobitoSacCas
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
       # extend application classes here
+      CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
