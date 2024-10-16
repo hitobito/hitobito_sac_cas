@@ -67,65 +67,44 @@ describe "terminate sac membership wizard", js: true do
         .and change { role.end_on }.to(Date.current.end_of_year)
     end
 
-    it "checks data_retention_consent when subscribe_newsletter is checked" do
-      visit history_group_person_path(group_id: group.id, id: person.id)
-      within("#role_#{role.id}") do
-        click_link "Austritt"
+    describe "data retention checkboxes" do
+      let(:data_retention_checkbox) { find(:checkbox, "Meine Daten sollen nach dem Austritt erhalten bleiben") }
+      let(:newsletter_checkbox) { find(:checkbox, "Newsletter beibehalten") }
+      let(:fundraising_checkbox) { find(:checkbox, "über Spendenaktionen informiert werden") }
+
+      before do
+        visit history_group_person_path(group_id: group.id, id: person.id)
+        within("#role_#{role.id}") do
+          click_link "Austritt"
+        end
+        choose "Sofort"
+        click_button "Weiter"
       end
-      choose "Sofort"
-      click_button "Weiter"
-      check "Newsletter beibehalten"
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
-      uncheck "Newsletter beibehalten"
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
-    end
 
-    it "checks data_retention_consent when sac spenden is checked" do
-      visit history_group_person_path(group_id: group.id, id: person.id)
-      within("#role_#{role.id}") do
-        click_link "Austritt"
+      it "checks data_retention_consent when subscribe_newsletter is checked" do
+        check "Newsletter beibehalten"
+        expect(data_retention_checkbox).to be_checked
+        uncheck "Newsletter beibehalten"
+        expect(newsletter_checkbox).not_to be_checked
+        expect(data_retention_checkbox).to be_checked
       end
-      choose "Sofort"
-      click_button "Weiter"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
-      uncheck "Ich möchte weiterhin über Spendenaktionen informiert werden."
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).not_to be_checked
-    end
 
-    it "do not uncheck data_retention_consent when unchecking newsletter or sac spenden" do
-      visit history_group_person_path(group_id: group.id, id: person.id)
-      within("#role_#{role.id}") do
-        click_link "Austritt"
+      it "checks data_retention_consent when sac spenden is checked" do
+        check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        expect(data_retention_checkbox).to be_checked
+        uncheck "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        expect(fundraising_checkbox).not_to be_checked
+        expect(data_retention_checkbox).to be_checked
       end
-      choose "Sofort"
-      click_button "Weiter"
-      check "Newsletter beibehalten"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
-      uncheck "Newsletter beibehalten"
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
 
-      # check other dependent checkbox
-      check "Newsletter beibehalten"
-      uncheck "Ich möchte weiterhin über Spendenaktionen informiert werden."
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_data_retention_consent")).to be_checked
-    end
-
-    it "unchecks all dependent checkboxes when master checkbox is deselected" do
-      visit history_group_person_path(group_id: group.id, id: person.id)
-      within("#role_#{role.id}") do
-        click_link "Austritt"
+      it "unchecks all dependent checkboxes when unchecking master checkbox" do
+        check "Newsletter beibehalten"
+        check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        uncheck "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
+        expect(data_retention_checkbox).not_to be_checked
+        expect(fundraising_checkbox).not_to be_checked
+        expect(data_retention_checkbox).not_to be_checked
       end
-      choose "Sofort"
-      click_button "Weiter"
-      check "Newsletter beibehalten"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
-
-      uncheck "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_subscribe_newsletter")).not_to be_checked
-      expect(find("#wizards_memberships_terminate_sac_membership_wizard_summary_subscribe_fundraising_list")).not_to be_checked
     end
   end
 
