@@ -12,6 +12,8 @@ module Wizards::Signup
       Wizards::Steps::Signup::AboTourenPortal::PersonFields
     ]
 
+    self.asides = ["aside_abo"]
+
     def costs = [OpenStruct.new(amount: 45)]
   end
 end
