@@ -254,6 +254,33 @@ describe SacImports::Roles::MembershipsImporter do
 
         importer.create
       end
+
+      it "creates membership role in ortsgruppe" do
+        row[:group_level2] = "SAC Blüemlisalp Ausserberg"
+        row[:group_level3] = "Mitglieder"
+
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Membership role created\n")
+
+        importer.create
+
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+          "Hillary Edmund",
+          "2000-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > SAC Blüemlisalp Ausserberg > Mitglieder",
+          "Mitglied (Stammsektion) (Einzel)",
+          "Membership role created", nil, nil])
+
+        mitglied.reload
+        expect(mitglied.roles.count).to eq(1)
+        expect(active_membership_role.beitragskategorie).to eq("adult")
+        expect(active_membership_role).to be_a(Group::SektionsMitglieder::Mitglied)
+        expect(active_membership_role.group.parent.name).to eq("SAC Blüemlisalp Ausserberg")
+        expect(mitglied.sac_family_main_person).to eq(false)
+        expect(mitglied.primary_group).to eq(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
+      end
     end
 
     context "family main person" do
