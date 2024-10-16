@@ -16,7 +16,7 @@ module SacCas::Event::ParticipationDecorator
   def event_prices
     prices = present_event_prices.map { |attr, price| [format_event_price(attr, price), attr] }
     prices.unshift(former_price_select_option) if event_price_changed?
-    prices << [t("no_price_select"), nil] if present_event_prices.empty?
+    prices << [t("no_price_select"), nil] if present_event_prices.empty? || event_leader?
 
     [prices, event_price_changed? ? {selected: "former"} : {}]
   end
@@ -33,6 +33,10 @@ module SacCas::Event::ParticipationDecorator
 
   def former_price_select_option
     [t("former_price_select", price_label: format_event_price(price_category, price)), "former"]
+  end
+
+  def event_leader?
+    roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
   end
 
   def t(key, **)
