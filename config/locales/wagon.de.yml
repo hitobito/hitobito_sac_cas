@@ -319,7 +319,7 @@ de:
           price_js_passive_member: "J&S P-Mitgliederpreis"
           price_js_passive_regular: "J&S P-Normalpreis"
       event/role:
-        self_employed: "selbständig erwerbend"
+        self_employed: selbständig erwerbend
       external_training:
         person: Person
         event_kind: Kursart
@@ -1170,6 +1170,7 @@ de:
         Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger"
     maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
     roles:
+      self_employed: selbständig erwerbend
       not_self_employed: unselbständig erwerbend
 
   external_trainings:
