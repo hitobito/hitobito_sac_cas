@@ -3,7 +3,7 @@
 -#  or at https://github.com/hitobito/hitobito.
 
 = turbo_frame_tag(partial_name, class: 'col-md') do
-  - if wizard.is_a?(Wizards::Signup::SektionWizard) && !wizard.last_step?
+  - if !wizard.last_step?
     = render 'wizards/signup/section_fee_summary', active: wizard.beitragskategorie_unknown?,
       adult: wizard.fees_for(:adult, Time.zone.now.beginning_of_year),
       family: wizard.fees_for(:family, Time.zone.now.beginning_of_year),
