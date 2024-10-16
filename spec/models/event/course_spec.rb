@@ -478,6 +478,12 @@ describe Event::Course do
         ])
       end
 
+      it "changes participation states to canceled" do
+        expect(course.participations.count).to eq(2)
+        course.update!(state: :canceled, canceled_reason: :minimum_participants)
+        expect(course.participations.reload.map(&:state)).to eq(%w[annulled annulled])
+      end
+
       it "sends an email to all participants if canceled because of minimum participants" do
         expect { course.update!(state: :canceled, canceled_reason: :minimum_participants) }
           .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).twice
@@ -502,9 +508,9 @@ describe Event::Course do
 
     context "invoice" do
       before do
-        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course.participations.first)
-        ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course.participations.first)
+        p1, p2 = course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+        ExternalInvoice::Course.create!(person_id: p1.person_id, link: p1)
+        ExternalInvoice::Course.create!(person_id: p2.person_id, link: p2)
       end
 
       it "queues job to cancel invoices for all participants" do
