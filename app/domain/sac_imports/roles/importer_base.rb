@@ -7,6 +7,10 @@
 
 module SacImports::Roles
   class ImporterBase
+
+    SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
+      Group::Ortsgruppe.sti_name].freeze
+
     def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
       @output = output
       @csv_report = csv_report
@@ -117,6 +121,26 @@ module SacImports::Roles
     def target_group_path(row)
       group_keys = %i[layer_type group_level1 group_level2 group_level3 group_level4]
       group_keys.map { |key| row[key] }.compact.join(" > ")
+    end
+
+    def fetch_membership_group(row, person)
+      group_name = extract_membership_group_name(row)
+      parent_group = Group.find_by(name: group_name, type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
+      if parent_group
+        return Group::SektionsMitglieder.find_by(parent_id: parent_group.id)
+      end
+
+      report(row, person, error: "No Section/Ortsgruppe group found for '#{group_name}'")
+      nil
+    end
+
+    def extract_membership_group_name(row)
+      # if ortsgruppe
+      if row[:group_level3] == "Mitglieder"
+        return row[:group_level2]
+      end
+
+      row[:group_level1]
     end
   end
 end
