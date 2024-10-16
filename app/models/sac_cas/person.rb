@@ -130,7 +130,7 @@ module SacCas::Person
   def transmit_data_to_abacus
     return if (Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES & saved_changes.keys).empty? ||
       data_quality == "error" ||
-      !sac_membership_invoice?
+      (abacus_subject_key.blank? && !sac_membership_invoice?)
 
     Invoices::Abacus::TransmitPersonJob.new(self).enqueue!
   end
