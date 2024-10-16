@@ -45,7 +45,7 @@ module SacCas::Event::Participation
   end
 
   def subsidizable?
-    event.course? && person.roles.any? do |role|
+    event.course? && event.price_subsidized.present? && person.roles.any? do |role|
       role.class.include?(SacCas::Role::MitgliedStammsektion)
     end
   end

@@ -50,7 +50,7 @@ describe "Event Signup", :js do
 
   context "course" do
     let(:group) { groups(:root) }
-    let(:event) { Fabricate(:sac_open_course, groups: [group]) }
+    let(:event) { Fabricate(:sac_open_course, groups: [group], price_subsidized: 10) }
 
     it "has multi step wizard without subsidy" do
       visit group_event_path(group_id: group, id: event.id)

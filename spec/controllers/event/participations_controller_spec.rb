@@ -247,6 +247,8 @@ describe Event::ParticipationsController do
     end
 
     context "subsidizable" do
+      before { event.update!(price_subsidized: 10) }
+
       it "renders subsidy after answers" do
         post :create, params: params.merge(step: "answers")
         expect(response).to render_template("new")

@@ -74,7 +74,7 @@ describe Event::Participation do
   end
 
   describe "#subsidizable?" do
-    let(:course) { Fabricate.build(:sac_course, applications_cancelable: true) }
+    let(:course) { Fabricate.build(:sac_course, applications_cancelable: true, price_subsidized: 10) }
 
     subject(:participation) { Fabricate.build(:event_participation, event: course) }
 
@@ -82,6 +82,10 @@ describe Event::Participation do
       group = groups(key)
       types = group.role_types.collect { |rt| [rt.to_s.demodulize, rt.sti_name] }.to_h
       participation.person.roles.build(type: types.fetch(role), group: group)
+    end
+
+    it "is false when price_subsidized is nil" do
+      expect(participation).not_to be_subsidizable
     end
 
     it "is false when person has no role" do
