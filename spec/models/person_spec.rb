@@ -460,6 +460,11 @@ describe Person do
       expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
     end
 
+    it "enqueues the job with an existing abacus_subject_key but without an sac membership invoice" do
+      person.roles.destroy_all
+      expect { person.update!(first_name: "Abacus", abacus_subject_key: 42) }.to change(job, :count).by(1)
+    end
+
     it "doesn't enqueue the job if an irrelevant attribute changed" do
       expect { person.update!(company_name: "Abacus") }.not_to change(job, :count)
     end
