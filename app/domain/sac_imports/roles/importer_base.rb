@@ -7,7 +7,6 @@
 
 module SacImports::Roles
   class ImporterBase
-
     SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
       Group::Ortsgruppe.sti_name].freeze
 

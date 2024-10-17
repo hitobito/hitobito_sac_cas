@@ -7,7 +7,6 @@
 
 module SacImports::Roles
   class HonoraryImporter < ImporterBase
-
     def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
       @rows_filter = {role: /^Ehrenmitglied$/}
       super
@@ -36,8 +35,8 @@ module SacImports::Roles
     def create_honorary_role(row, membership_group, person)
       role = Group::SektionsMitglieder::Ehrenmitglied
         .new(group: membership_group,
-             person: person,
-             start_on: row[:valid_from])
+          person: person,
+          start_on: row[:valid_from])
 
       save_role!(role, row)
     end

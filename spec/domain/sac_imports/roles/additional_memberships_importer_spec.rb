@@ -153,8 +153,8 @@ describe SacImports::Roles::AdditionalMembershipsImporter do
         expect(mitglied.roles.count).to eq(2)
         additional_membership_role =
           Group::SektionsMitglieder::MitgliedZusatzsektion
-          .find_by(person: mitglied,
-                   group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
+            .find_by(person: mitglied,
+              group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
         expect(additional_membership_role.beitragskategorie).to eq("adult")
         expect(mitglied.sac_family_main_person).to eq(false)
         expect(mitglied.primary_group).to eq(groups(:bluemlisalp_mitglieder))
