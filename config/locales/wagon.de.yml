@@ -318,6 +318,8 @@ de:
           price_js_active_regular: "J&S A-Normalpreis"
           price_js_passive_member: "J&S P-Mitgliederpreis"
           price_js_passive_regular: "J&S P-Normalpreis"
+      event/role:
+        self_employed: selbständig erwerbend
       external_training:
         person: Person
         event_kind: Kursart
@@ -529,6 +531,12 @@ de:
       event/level:
         one: Kursstufe
         other: Kursstufen
+      event/role/leader:
+        one: Kursleitung
+        other: Kursleitung
+      event/role/assistant_leader:
+        one: Klassenleitung
+        other: Klassenleitung
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen
@@ -1161,6 +1169,9 @@ de:
         Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
         Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger"
     maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
+    roles:
+      self_employed: selbständig erwerbend
+      not_self_employed: unselbständig erwerbend
 
   external_trainings:
     form:
