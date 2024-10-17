@@ -34,10 +34,10 @@ module SacImports::Roles
     end
 
     def create_honorary_role(row, membership_group, person)
-      role = Group::SektionsMitglieder::Ehrenmitglied.new(group: membership_group,
-        person: person,
-        start_on: row[:valid_from],
-        end_on: row[:valid_until])
+      role = Group::SektionsMitglieder::Ehrenmitglied
+        .new(group: membership_group,
+             person: person,
+             start_on: row[:valid_from])
 
       save_role!(role, row)
     end
