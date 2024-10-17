@@ -34,8 +34,8 @@ describe SacImports::CsvSource do
   it "converts csv content to hashes with key value pairs defined by header mapping" do
     @source_name = :NAV2
     rows = source_file.rows
-    expect(rows.count).to eq(16)
-    expect(rows.last).to eq({navision_id: "4200008",
+    expect(rows.count).to eq(18)
+    expect(rows[15]).to eq({navision_id: "4200008",
                              valid_from: "2018-02-15",
                              valid_until: nil,
                              layer_type: "SAC/CAS",
