@@ -17,7 +17,7 @@ module Events::Courses::State
      application_closed: [:assignment_closed, :canceled],
      assignment_closed: [:ready, :application_closed, :canceled],
      ready: [:closed, :assignment_closed, :canceled],
-     canceled: [:application_open],
+     canceled: [:application_open], # BEWARE: canceled means "annuliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
      closed: [:ready]}.freeze
 
   APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
@@ -27,14 +27,14 @@ module Events::Courses::State
 
     validate :assert_valid_state_change, if: :state_changed?
     before_create :set_default_state
-    before_save :adjust_state, if: :application_closing_at_changed?
+    before_save :adjust_application_state, if: :application_closing_at_changed?
     after_update :send_application_published_email, if: :state_changed_from_created_to_application_open?
     after_update :send_application_paused_email, if: :state_changed_to_application_paused?
     after_update :send_application_closed_email, if: :state_changed_to_application_closed?
-    after_update :send_canceled_email, if: :state_changed_to_canceled?
     after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
     after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
-    after_update :cancel_invoices, if: :state_changed_to_canceled?
+    after_update :annul_participations, if: :state_changed_to_canceled?
+    after_update :send_absent_invoices, if: :state_changed_to_closed?
   end
 
   def available_states(state = self.state)
@@ -63,19 +63,27 @@ module Events::Courses::State
   end
 
   def state_changed_to_assignment_closed?
-    saved_change_to_attribute(:state)&.second == "assignment_closed"
+    state_changed_to?(:assignment_closed)
   end
 
   def state_changed_to_application_paused?
-    saved_change_to_attribute(:state)&.second == "application_paused"
+    state_changed_to?(:application_paused)
   end
 
   def state_changed_to_application_closed?
-    saved_change_to_attribute(:state)&.second == "application_closed"
+    state_changed_to?(:application_closed)
   end
 
   def state_changed_to_canceled?
-    saved_change_to_attribute(:state)&.second == "canceled"
+    state_changed_to?(:canceled)
+  end
+
+  def state_changed_to_closed?
+    state_changed_to?(:closed)
+  end
+
+  def state_changed_to?(new_state)
+    saved_change_to_attribute(:state)&.second == new_state.to_s
   end
 
   def state_changed_from_assignment_closed_to_ready?
@@ -99,37 +107,35 @@ module Events::Courses::State
   def summon_assigned_participants
     assigned_participants.each do |participation|
       Event::ParticipationMailer.summon(participation).deliver_later
-      ExternalInvoice::Course.invoice_participation(participation)
+      unless ExternalInvoice::CourseParticipation.exists?(link: participation)
+        ExternalInvoice::CourseParticipation.invoice!(participation)
+      end
     end
     assigned_participants.update_all(state: :summoned)
-  end
-
-  def cancel_invoices
-    course_invoices.each do |invoice|
-      Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
-    end
-  end
-
-  def course_invoices
-    ExternalInvoice::Course.where(link: self)
   end
 
   def assigned_participants
     participations.where(state: :assigned)
   end
 
-  def send_application_published_email
-    leaders.each do |leader|
-      Event::PublishedMailer.notice(self, leader).deliver_later
+  def annul_participations
+    participations.update_all(state: :annulled)
+    send_canceled_email
+    cancel_invoices(all_course_invoices)
+  end
+
+  def cancel_invoices(invoices)
+    invoices.each do |invoice|
+      Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
   end
 
-  def send_application_paused_email
-    Event::ApplicationPausedMailer.notice(self).deliver_later if groups.first.course_admin_email.present?
-  end
-
-  def send_application_closed_email
-    Event::ApplicationClosedMailer.notice(self).deliver_later if groups.first.course_admin_email.present?
+  def all_course_invoices
+    ExternalInvoice.where(
+      link_id: participations.select(:id),
+      link_type: Event::Participation.sti_name,
+      type: [ExternalInvoice::CourseParticipation, ExternalInvoice::CourseAnnulation].map(&:sti_name)
+    )
   end
 
   def send_canceled_email
@@ -140,7 +146,30 @@ module Events::Courses::State
     end
   end
 
-  def adjust_state
+  def send_application_published_email
+    leaders.each do |leader|
+      Event::PublishedMailer.notice(self, leader).deliver_later
+    end
+  end
+
+  def send_application_paused_email
+    Event::ApplicationPausedMailer.notice(self).deliver_later if course_admin_email?
+  end
+
+  def send_application_closed_email
+    Event::ApplicationClosedMailer.notice(self).deliver_later if course_admin_email?
+  end
+
+  def send_absent_invoices
+    participations.where(state: :absent).find_each do |participation|
+      unless ExternalInvoice::CourseAnnulation.exists?(link: participation, total: participation.price)
+        cancel_invoices(participation.external_invoices)
+        ExternalInvoice::CourseAnnulation.invoice!(participation)
+      end
+    end
+  end
+
+  def adjust_application_state
     if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
       self.state = "application_closed"
     end
@@ -148,5 +177,9 @@ module Events::Courses::State
     if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
       self.state = "application_open"
     end
+  end
+
+  def course_admin_email?
+    groups.first.course_admin_email.present?
   end
 end

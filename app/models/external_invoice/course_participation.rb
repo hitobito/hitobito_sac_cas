@@ -28,23 +28,23 @@
 #  index_external_invoices_on_link       (link_type,link_id)
 #  index_external_invoices_on_person_id  (person_id)
 #
-class ExternalInvoice::Course < ExternalInvoice
-  # link is an Event::Participation object for a Event::Course
+class ExternalInvoice::CourseParticipation < ExternalInvoice
+  NOT_POSSIBLE_KEY = "invoices.course_participation.no_invoice_possible"
 
-  NOT_POSSIBLE_KEY = "people.course_invoices.no_invoice_possible"
+  # link is an Event::Participation object for a Event::Course
+  validates :link_type, inclusion: {in: %w[Event::Participation]}
 
   class << self
-    def invoice_participation(participation)
-      return if participation.price.nil? || ExternalInvoice::Course.exists?(link: participation)
+    def invoice!(participation)
+      return if participation.price.to_i.zero?
 
-      external_invoice = ExternalInvoice::Course.create(
+      external_invoice = create!(
         person: participation.person,
         issued_at: Date.current,
         sent_at: Date.current,
         state: :draft,
-        total: participation.price,
         link: participation,
-        year: participation.event.dates.order(:start_at).first.start_at.year
+        year: participation.event.dates.first.start_at.year
       )
 
       Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!

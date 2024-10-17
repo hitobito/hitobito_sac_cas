@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Events::Courses::InvoicesController do
+describe Event::Courses::InvoicesController do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course) }
