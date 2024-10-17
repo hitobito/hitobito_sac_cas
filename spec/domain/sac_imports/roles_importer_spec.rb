@@ -60,7 +60,7 @@ describe SacImports::RolesImporter do
         expect { importer.create }
           .not_to change { PaperTrail::Version.count }
 
-        expect(csv_report.size).to eq(14)
+        expect(csv_report.size).to eq(16)
         expect(csv_report.first).to eq(report_headers)
         expect(csv_report[1]).to eq(["4200000",
           "Nachname 1 Vorname 1",
