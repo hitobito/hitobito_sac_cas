@@ -26,6 +26,7 @@ module HitobitoSacCas
     config.before_initialize do |_app|
       Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
       Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
+      Settings.add_source!(File.join(paths["config"].existent, "settings", "#{Rails.env}.yml"))
       Settings.reload!
     end
 
@@ -109,6 +110,7 @@ module HitobitoSacCas
       Event::RoleDecorator.prepend SacCas::Event::RoleDecorator
 
       ## Domain
+      People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
@@ -128,6 +130,7 @@ module HitobitoSacCas
       ## Helpers
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
+      EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
       PeopleHelper.prepend SacCas::PeopleHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
