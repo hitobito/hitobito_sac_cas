@@ -16,13 +16,11 @@ class JsonApi::ExternalInvoiceAbility
 
   private
 
-  attr_reader :user
-
   def allow_index
     can :index, ExternalInvoice
   end
 
   def backoffice?
-    user.roles.map(&:class).any? { |r| SacCas::SAC_BACKOFFICE_ROLES.include?(r) }
+    @user.roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
   end
 end

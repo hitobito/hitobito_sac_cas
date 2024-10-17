@@ -3366,6 +3366,16 @@
         }
       }
     },
+    "/api/event_levels": {
+      "actions": {
+        "index": {
+          "resource": "Event::LevelResource"
+        },
+        "show": {
+          "resource": "Event::LevelResource"
+        }
+      }
+    },
     "/api/events": {
       "actions": {
         "index": {
