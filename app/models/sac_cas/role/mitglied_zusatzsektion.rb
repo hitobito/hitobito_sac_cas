@@ -29,19 +29,11 @@ module SacCas::Role::MitgliedZusatzsektion
     openended_membership = all_memberships.find { !_1.end_on? }
     return if openended_membership.present? && openended_membership.start_on <= start_on
 
-    # If the end_on date is present, we can iterate over the active period and check all days.
-    # Otherwise we have to check the active period until the start of the open ended membership.
-    # Unless there is no open ended membership, in which case it can not be covered.
-    check_range = end_on.present? ? active_period : start_on...openended_membership&.start_on
-
-    if check_range.end.present?
-      uncovered_days = all_memberships.reduce(check_range.to_a) do |days, mitglied_role|
-        days.reject { |day| mitglied_role.active_period.cover?(day) }
-      end
-
-      return if uncovered_days.empty?
+    # Iterate over the active period and check if all days are covered by a membership
+    uncovered_days = all_memberships.reduce(active_period.to_a) do |days, mitglied_role|
+      days.reject { |day| mitglied_role.active_period.cover?(day) }
     end
 
-    errors.add(:person, :must_have_mitglied_role)
+    errors.add(:person, :must_have_mitglied_role) if uncovered_days.any?
   end
 end
