@@ -1703,6 +1703,8 @@ de:
           summary_family_member_card:
             adult: "Erwachsene Person"
             child: "Kind"
+          summary_entry_fee_card:
+            immediate_entry_date: "Eintrittsdatum: per sofort"
 
         various_fields:
           newsletter: Ich möchte einen Newsletter abonnieren

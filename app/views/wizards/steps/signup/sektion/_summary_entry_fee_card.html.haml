@@ -4,8 +4,9 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .well.p-3.row.col-11.col-xxl-5.flex-flow-column.me-auto.ms-3
-  = content_tag :span, wizard.fee.beitragskategorie_label, class: "mb-2 h3"
-  = content_tag(:div, "Sektion #{wizard.group.layer_group.name}", class: "h6 fw-bold mh-20-px")
+  .mb-2.h3= wizard.fee.beitragskategorie_label
+  .mb-2.fw-bold= "Sektion #{wizard.group.layer_group.name}"
+  %dd.mb-4= t(".immediate_entry_date")
   - *positions, total = wizard.fee.lines
   - positions.each do |line|
     %div
