@@ -67,6 +67,8 @@ describe SacImports::Roles::HonoraryImporter do
       expect(person5.roles.count).to eq(2)
       honorary_role = person5.roles.find_by(type: "Group::SektionsMitglieder::Ehrenmitglied")
       expect(honorary_role.group).to eq(jaman_mitglieder_group)
+      expect(honorary_role.start_on).to eq(Date.new(2022, 6, 1))
+      expect(honorary_role.end_on).to be_nil
     end
   end
 
@@ -99,7 +101,8 @@ describe SacImports::Roles::HonoraryImporter do
     end
 
     context "creates honorary roles" do
-      it "creates new honorary role" do
+      it "creates new honorary role and resets existing ones" do
+        existing_role = Group::SektionsMitglieder::Ehrenmitglied.create!(person: mitglied, group: groups(:bluemlisalp_mitglieder))
         expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Honorary role created\n")
 
         importer.create
@@ -119,112 +122,44 @@ describe SacImports::Roles::HonoraryImporter do
         honorary_role =
           Group::SektionsMitglieder::Ehrenmitglied.find_by(person: mitglied)
         expect(honorary_role.group).to eq(groups(:bluemlisalp_mitglieder))
+        expect(Group::SektionsMitglieder::Ehrenmitglied.where(id: existing_role.id)).not_to exist
       end
 
-      #it "creates addtional membership role in ortsgruppe" do
-        #roles(:mitglied_zweitsektion).destroy!
-        #row[:group_level1] = "SAC Blüemlisalp"
-        #row[:group_level2] = "SAC Blüemlisalp Ausserberg"
-        #row[:group_level3] = "Mitglieder"
+      it "reports person not found" do
+        row[:navision_id] = "42"
 
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Additional Membership role created\n")
+        expect(output).to receive(:print).with("42 (Hillary Edmund): ❌ Person not found in hitobito\n")
 
-        #importer.create
+        importer.create
 
-        #expect(csv_report.size).to eq(2)
-        #expect(csv_report.first).to eq(report_headers)
-        #expect(csv_report.second).to eq(["600001",
-          #"Hillary Edmund",
-          #"2017-06-21",
-          #"2024-12-31",
-          #"Sektion > SAC Blüemlisalp > SAC Blüemlisalp Ausserberg > Mitglieder",
-          #"Mitglied (Zusatzsektion) (Einzel)",
-          #"Additional Membership role created", nil, nil])
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["42",
+          "Hillary Edmund",
+          "2022-06-21",
+          "2024-12-31",
+          "Sektion > SAC Blüemlisalp > Mitglieder",
+          "Ehrenmitglied",
+          nil, nil, "Person not found in hitobito"])
+      end
 
-        #mitglied.reload
-        #expect(mitglied.roles.count).to eq(2)
-        #additional_membership_role =
-          #Group::SektionsMitglieder::MitgliedZusatzsektion
-          #.find_by(person: mitglied,
-                   #group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
-        #expect(additional_membership_role.beitragskategorie).to eq("adult")
-        #expect(mitglied.sac_family_main_person).to eq(false)
-        #expect(mitglied.primary_group).to eq(groups(:bluemlisalp_mitglieder))
-      #end
+      it "reports missing section/ortsguppe group" do
+        row[:group_level1] = "SAC Unknown"
 
-      #it "reports person not found" do
-        #row[:navision_id] = "42"
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ No Section/Ortsgruppe group found for 'SAC Unknown'\n")
 
-        #expect(output).to receive(:print).with("42 (Hillary Edmund): ❌ Person not found in hitobito\n")
+        importer.create
 
-        #importer.create
-
-        #expect(csv_report.size).to eq(2)
-        #expect(csv_report.first).to eq(report_headers)
-        #expect(csv_report.second).to eq(["42",
-          #"Hillary Edmund",
-          #"2017-06-21",
-          #"2024-12-31",
-          #"Sektion > CAS Moléson > Mitglieder",
-          #"Mitglied (Zusatzsektion) (Einzel)",
-          #nil, nil, "Person not found in hitobito"])
-      #end
-
-      #it "reports if valid_from is after valid_until and skips further role creation for this person" do
-        #second_row = row.dup
-        #row[:valid_until] = "1992-01-01" # set valid_until before valid_from
-        #rows << second_row
-
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ valid_from (GültigAb) cannot be before valid_until (GültigBis)\n")
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ A previous role could not be imported for this person, skipping\n")
-
-        #importer.create
-
-        #expect(csv_report.size).to eq(3)
-        #expect(csv_report.first).to eq(report_headers)
-        #expect(csv_report.second).to eq(["600001",
-          #"Hillary Edmund",
-          #"2017-06-21",
-          #"1992-01-01",
-          #"Sektion > CAS Moléson > Mitglieder",
-          #"Mitglied (Zusatzsektion) (Einzel)",
-          #nil, nil, "valid_from (GültigAb) cannot be before valid_until (GültigBis)"])
-      #end
-
-      #it "reports missing section/ortsguppe group" do
-        #row[:group_level1] = "SAC Unknown"
-
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ No Section/Ortsgruppe group found for 'SAC Unknown'\n")
-
-        #importer.create
-
-        #expect(csv_report.size).to eq(2)
-        #expect(csv_report.first).to eq(report_headers)
-        #expect(csv_report.second).to eq(["600001",
-          #"Hillary Edmund",
-          #"2017-06-21",
-          #"2024-12-31",
-          #"Sektion > SAC Unknown > Mitglieder",
-          #"Mitglied (Zusatzsektion) (Einzel)",
-          #nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
-      #end
-
-      #it "reports unknown beitragskategorie" do
-        #row[:role] = "Mitglied (Zusatzsektion) (ERROR)"
-
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ Invalid Beitragskategorie in 'Mitglied (Zusatzsektion) (ERROR)'\n")
-
-        #importer.create
-      #end
-
-      #it "reports if additional membership role cannot be created" do
-        #role_instance = Role.new
-        #expect(Group::SektionsMitglieder::MitgliedZusatzsektion).to receive(:new).and_return(role_instance)
-
-        #expect(output).to receive(:print).with("600001 (Hillary Edmund): ❌ Hitobito Role: Person muss ausgefüllt werden, Group muss ausgefüllt werden, Rolle muss ausgefüllt werden\n")
-
-        #importer.create
-      #end
+        expect(csv_report.size).to eq(2)
+        expect(csv_report.first).to eq(report_headers)
+        expect(csv_report.second).to eq(["600001",
+          "Hillary Edmund",
+          "2022-06-21",
+          "2024-12-31",
+          "Sektion > SAC Unknown > Mitglieder",
+          "Ehrenmitglied",
+          nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
+      end
     end
   end
 end
