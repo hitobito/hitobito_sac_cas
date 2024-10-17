@@ -20,27 +20,27 @@ describe "wizards/steps/signup/sektion/_summary_entry_fee_card.html.haml" do
 
   it "renders summary card with discount information" do
     travel_to(Date.new(2024, 10, 11)) do
-      expect(dom).to have_css(".well div:nth-of-type(1).fw-bold.h6", text: "Sektion SAC Blüemlisalp")
-      expect(dom).to have_css(".well div:nth-of-type(2) dt", text: "CHF 127.00")
-      expect(dom).to have_css(".well div:nth-of-type(2) dd", text: "jährlicher Beitrag")
+      expect(dom).to have_css(".well div:nth-of-type(2).fw-bold", text: "Sektion SAC Blüemlisalp")
       expect(dom).to have_css(".well div:nth-of-type(3) dt", text: "CHF 127.00")
-      expect(dom).to have_css(".well div:nth-of-type(3) dd", text: "- 100% Rabatt auf den jährlichen Beitrag")
-      expect(dom).to have_css(".well div:nth-of-type(4) dt", text: "CHF 20.00")
-      expect(dom).to have_css(".well div:nth-of-type(4) dd", text: "+ einmalige Eintrittsgebühr")
+      expect(dom).to have_css(".well div:nth-of-type(3) dd", text: "jährlicher Beitrag")
+      expect(dom).to have_css(".well div:nth-of-type(4) dt", text: "CHF 127.00")
+      expect(dom).to have_css(".well div:nth-of-type(4) dd", text: "- 100% Rabatt auf den jährlichen Beitrag")
       expect(dom).to have_css(".well div:nth-of-type(5) dt", text: "CHF 20.00")
-      expect(dom).to have_css(".well div:nth-of-type(5) dd", text: "Total erstmalig")
+      expect(dom).to have_css(".well div:nth-of-type(5) dd", text: "+ einmalige Eintrittsgebühr")
+      expect(dom).to have_css(".well div:nth-of-type(6) dt", text: "CHF 20.00")
+      expect(dom).to have_css(".well div:nth-of-type(6) dd", text: "Total erstmalig")
     end
   end
 
   it "renders summary card without discount information" do
     travel_to(Date.new(2024, 3, 11)) do
-      expect(dom).to have_css(".well div:nth-of-type(1).fw-bold.h6", text: "Sektion SAC Blüemlisalp")
-      expect(dom).to have_css(".well div:nth-of-type(2) dt", text: "CHF 127.00")
-      expect(dom).to have_css(".well div:nth-of-type(2) dd", text: "jährlicher Beitrag")
-      expect(dom).to have_css(".well div:nth-of-type(3) dt", text: "CHF 20.00")
-      expect(dom).to have_css(".well div:nth-of-type(3) dd", text: "+ einmalige Eintrittsgebühr")
-      expect(dom).to have_css(".well div:nth-of-type(4) dt", text: "CHF 147.00")
-      expect(dom).to have_css(".well div:nth-of-type(4) dd", text: "Total erstmalig")
+      expect(dom).to have_css(".well div:nth-of-type(2).fw-bold", text: "Sektion SAC Blüemlisalp")
+      expect(dom).to have_css(".well div:nth-of-type(3) dt", text: "CHF 127.00")
+      expect(dom).to have_css(".well div:nth-of-type(3) dd", text: "jährlicher Beitrag")
+      expect(dom).to have_css(".well div:nth-of-type(4) dt", text: "CHF 20.00")
+      expect(dom).to have_css(".well div:nth-of-type(4) dd", text: "+ einmalige Eintrittsgebühr")
+      expect(dom).to have_css(".well div:nth-of-type(5) dt", text: "CHF 147.00")
+      expect(dom).to have_css(".well div:nth-of-type(5) dd", text: "Total erstmalig")
     end
   end
 end

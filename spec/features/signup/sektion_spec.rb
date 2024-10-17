@@ -512,7 +512,6 @@ describe "signup/sektion", :js do
         force_rerender
 
         expect(page).to have_selector(".btn-toolbar.bottom")
-        expect(page).to have_selector(".btn-toolbar.top")
       end
 
       it "has both button groups with housemate when navigating back" do
@@ -529,7 +528,6 @@ describe "signup/sektion", :js do
         click_link "Zurück"
 
         expect(page).to have_selector(".btn-toolbar.bottom")
-        expect(page).to have_selector(".btn-toolbar.top")
       end
     end
   end

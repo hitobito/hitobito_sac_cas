@@ -26,6 +26,7 @@ describe Wizards::Signup::AboMagazinWizard do
         email: "max.muster@example.com"
       },
       person_fields: {
+        gender: "m",
         first_name: "Max",
         last_name: "Muster",
         address_care_of: "c/o Musterleute",
