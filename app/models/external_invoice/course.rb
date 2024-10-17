@@ -33,6 +33,8 @@ class ExternalInvoice::Course < ExternalInvoice
 
   NOT_POSSIBLE_KEY = "people.course_invoices.no_invoice_possible"
 
+  after_save :update_participation_invoice_state
+
   class << self
     def invoice_participation(participation)
       return if participation.price.nil? || ExternalInvoice::Course.exists?(link: participation)
@@ -53,5 +55,17 @@ class ExternalInvoice::Course < ExternalInvoice
 
   def title
     "#{link.event.name} (#{link.event.number})"
+  end
+
+  private
+
+  def update_participation_invoice_state
+    if newest_participation_invoice?
+      link.update!(invoice_state: state)
+    end
+  end
+
+  def newest_participation_invoice?
+    self.class.where(link: self.link).order(created_at: :desc).first == self
   end
 end
