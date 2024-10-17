@@ -31,7 +31,7 @@ describe ExternalInvoice::Course do
       expect(participation.invoice_state).to eq("payed")
     end
 
-    context "multiple invoices" do     
+    context "multiple invoices" do
       let(:old_external_invoice) { ExternalInvoice::Course.create!(person: mitglied, link: participation, created_at: external_invoice.created_at - 2.days) }
 
       it "updates state if newest invoice" do

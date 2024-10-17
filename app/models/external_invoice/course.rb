@@ -66,6 +66,6 @@ class ExternalInvoice::Course < ExternalInvoice
   end
 
   def newest_participation_invoice?
-    self.class.where(link: self.link).order(created_at: :desc).first == self
+    self.class.where(link: link).order(created_at: :desc).first == self
   end
 end

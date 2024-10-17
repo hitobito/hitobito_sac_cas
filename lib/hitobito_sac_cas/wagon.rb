@@ -206,7 +206,7 @@ module HitobitoSacCas
 
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,
-          [:invoice_state])
+        [:invoice_state])
 
       Wizards::Base.class_attribute :asides, default: []
     end
