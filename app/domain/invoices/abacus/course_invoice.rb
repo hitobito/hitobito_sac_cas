@@ -12,34 +12,66 @@ module Invoices
 
       def initialize(participation)
         @participation = participation
+        @course = participation.event
+        @amount = participation.price || 0
       end
 
       def positions
+        grouping = "#{Event::Course.human_attribute_name(@participation.price_category) if @participation.price_category?} - #{@course.kind.level}"
+        name = @participation.canceled_at? ? canceled_name : grouping
+
         @positions ||= [Invoices::Abacus::InvoicePosition.new(
-          name: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_categories")} - #{participation.event.kind.level}",
-          grouping: "#{I18n.t(participation.price_category, scope: "activerecord.attributes.event/participation.price_categories")} - #{participation.event.kind.level}",
-          amount: participation.price,
-          count: 1,
-          article_number: SacMembershipConfig.active(participation.event.dates.order(:start_at).first.start_at).course_fee_article_number,
-          cost_center: participation.event.kind.cost_center.code,
-          cost_unit: participation.event.kind.cost_unit.code
+          name:, grouping:, amount: @amount, count: 1,
+          article_number: SacMembershipConfig.active(course_start_date).course_fee_article_number,
+          cost_center: @course.kind.cost_center.code,
+          cost_unit: @course.kind.cost_unit.code
         )]
       end
 
       def additional_user_fields
-        fields = {}
-        fields[:user_field8] = participation.event.number if invoice?
-        fields[:user_field9] = participation.event.name if invoice?
-        fields[:user_field10] = participation.event.dates.map { |date| "#{date.start_at.strftime("%d.%m.%Y")} - #{date.finish_at&.strftime("%d.%m.%Y")}" }.join(", ") if invoice?
-        fields
+        return {} unless invoice?
+
+        {
+          user_field8: @course.number,
+          user_field9: @course.name,
+          user_field10: @course.dates.map do |date|
+            "#{date.start_at.strftime("%d.%m.%Y")} - #{date.finish_at&.strftime("%d.%m.%Y")}"
+          end.join(", ")
+        }
       end
 
       def total
-        positions.sum(&:amount)
+        positions.first.amount
       end
 
       def invoice?
-        positions.any?(&:amount)
+        positions.first.amount != 0
+      end
+
+      private
+
+      def course_start_date
+        @course_start_date ||= @course.dates.order(:start_at).first.start_at.to_date
+      end
+
+      def canceled_name
+        days_until_start = (course_start_date - @participation.canceled_at).to_i
+
+        description, @amount = if days_until_start > 30
+          [t("processing_fee"), 80]
+        elsif days_until_start >= 20
+          [t("cancellation_costs", percentage: 50), @amount * 0.5]
+        elsif days_until_start >= 10
+          [t("cancellation_costs", percentage: 75), @amount * 0.75]
+        else
+          [t("cancellation_costs", percentage: 100), @amount]
+        end
+
+        t("position_name", description:, level: @course.kind.level)
+      end
+
+      def t(key, **)
+        I18n.t(key, scope: "people.course_invoices", **)
       end
     end
   end

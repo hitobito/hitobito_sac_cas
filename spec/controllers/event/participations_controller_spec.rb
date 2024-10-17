@@ -369,6 +369,18 @@ describe Event::ParticipationsController do
       expect(participation.reload.state).to eq "assigned"
       expect(flash[:alert]).to eq ["ist nicht gültig"]
     end
+
+    it "PUT#cancel enqueues invoice and cancel invoice job if person has invoice" do
+      invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
+      participation.update!(price: 10)
+      freeze_time
+
+      expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}}) }
+        .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+        .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
+        .and change { invoice.reload.state }.to("cancelled")
+        .and change { participation.reload.state }.to("canceled")
+    end
   end
 
   describe "PUT#update" do

@@ -20,6 +20,7 @@ module SacCas::Event::ParticipationsController
     after_save :update_participation_price
     after_summon :enqueue_invoice_job
     before_cancel :assert_participant_cancelable?
+    after_cancel :cancel_invoices
   end
 
   def cancel
@@ -179,6 +180,14 @@ module SacCas::Event::ParticipationsController
 
   def enqueue_invoice_job
     ExternalInvoice::Course.invoice_participation(entry)
+  end
+
+  def cancel_invoices
+    entry.person.external_invoices.where(link: entry).find_each do |invoice|
+      invoice.update!(state: :cancelled)
+      Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+    end
+    enqueue_invoice_job
   end
 
   def update_participation_price
