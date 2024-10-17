@@ -35,7 +35,8 @@ describe People::NeuanmeldungenMailer do
   end
 
   context "#reject" do
-    let(:mail) { described_class.reject(person, group.layer_group) }
+    let(:person_attrs) { person.attributes.slice(*described_class::REJECTED_PERSON_ATTRS) }
+    let(:mail) { described_class.reject(person_attrs, group.layer_group) }
 
     it "sends confirmation email to person" do
       expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
@@ -53,6 +54,17 @@ describe People::NeuanmeldungenMailer do
       person.update!(language: :fr)
       expect(mail.subject).to eq("Rejetée")
       expect(mail.body.to_s).to include("Bonjour")
+    end
+
+    it "sends confirmation email to deleted person" do
+      person.delete
+      expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
+      expect(mail.bcc).to include "mv@sac-cas.ch"
+      expect(mail.subject).to eq("SAC Eintritt Antragsablehnung")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund,",
+        "Die SAC Blüemlisalp hat deinen Antrag geprüft. Leider müssen wir dir mitteilen"
+      )
     end
   end
 end

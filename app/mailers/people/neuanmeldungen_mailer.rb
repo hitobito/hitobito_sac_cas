@@ -10,12 +10,14 @@ class People::NeuanmeldungenMailer < ApplicationMailer
 
   APPROVED = "people_registration_approved"
   REJECTED = "people_registration_rejected"
+  REJECTED_PERSON_ATTRS = %w[first_name email language primary_group_id]
 
   def approve(person, section)
     send_mail(person, section, APPROVED)
   end
 
-  def reject(person, section)
+  def reject(person_attrs, section)
+    person = Person.new(person_attrs)
     send_mail(person, section, REJECTED)
   end
 
@@ -27,7 +29,7 @@ class People::NeuanmeldungenMailer < ApplicationMailer
     headers[:bcc] = [SacCas::MV_EMAIL, section.email].compact_blank
     locales = [person.language]
 
-    compose_multilingual(person, content_key, locales)
+    compose_multilingual(person.email, content_key, locales)
   end
 
   def placeholder_first_name

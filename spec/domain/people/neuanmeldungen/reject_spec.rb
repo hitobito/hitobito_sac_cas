@@ -94,8 +94,15 @@ describe People::Neuanmeldungen::Reject do
   end
 
   describe "email" do
+    let(:person_attrs) { person.attributes.slice("first_name", "email", "language", "primary_group_id") }
+
     it "send an email to the person" do
-      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs, sektion)
+    end
+
+    it "send an email to deleted person" do
+      person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
     end
 
     context "family" do
@@ -103,7 +110,7 @@ describe People::Neuanmeldungen::Reject do
 
       it "send an email to main person of family" do
         person.update_columns(sac_family_main_person: true)
-        expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person, sektion)
+        expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs, sektion)
       end
 
       it "does not send email to other family member" do
