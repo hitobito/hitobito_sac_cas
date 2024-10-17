@@ -5,6 +5,7 @@
 
 module SacCas::EventParticipationsHelper
   def event_participation_table_options(t, event:, group:)
+    t.sortable_attr(:state)
     if parent.possible_participation_states.any?
       t.sortable_attr(:state)
     end
