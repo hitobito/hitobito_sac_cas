@@ -9,7 +9,7 @@ shared_examples "Mitglied role required" do
   let(:person) { Fabricate(:person) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
-  let(:role) { described_class.new(person: person, group: group) }
+  let(:role) { described_class.new(person:, group:, start_on: 1.day.from_now, end_on: 4.days.from_now) }
 
   it "is invalid without Mitglied role in group" do
     expect(role).to_not be_valid
