@@ -20,7 +20,7 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
   private
 
   def invoice_data
-    @membership ||= Invoices::Abacus::MembershipInvoiceGenerator
+    @invoice_data ||= Invoices::Abacus::MembershipInvoiceGenerator
       .new(external_invoice.person_id, external_invoice.link, reference_date, custom_discount: discount)
       .build(new_entry: new_entry)
   end

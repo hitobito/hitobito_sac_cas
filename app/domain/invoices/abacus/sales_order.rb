@@ -11,7 +11,7 @@ module Invoices
       SOURCE_SYSTEM = "hitobito"
       BACKLOG_ID = 0
       TYPE = "Product"
-      INVOICE_KINDS = {
+      DOCUMENT_CODES = {
         sac_membership: "R",
         course: "RK"
       }.with_indifferent_access.freeze
@@ -64,8 +64,8 @@ module Invoices
           invoice_value_date: entity.issued_at,
           total_amount: entity.total.to_f,
           language: entity.person.language,
-          document_code_invoice: INVOICE_KINDS.fetch(entity.type_key),
-          process_flow_number: PROCESS_FLOW_NUMBERS.fetch(entity.type_key),
+          document_code_invoice: DOCUMENT_CODES.fetch(entity.invoice_kind),
+          process_flow_number: PROCESS_FLOW_NUMBERS.fetch(entity.invoice_kind),
           user_fields: order_user_fields
         }
       end

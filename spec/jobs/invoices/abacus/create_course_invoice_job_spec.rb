@@ -22,7 +22,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
       sent_at: now,
       year: now.year,
       total: 0,
-      type: "ExternalInvoice::Course")
+      type: "ExternalInvoice::CourseParticipation")
   }
   let(:client) { instance_double(Invoices::Abacus::Client) }
 
@@ -43,6 +43,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
     expect do
       job.perform
     end.to change { external_invoice.reload.total }
+    expect(external_invoice.total).to eq(20)
   end
 
   context "invoice errors" do

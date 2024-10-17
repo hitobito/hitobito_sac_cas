@@ -11,10 +11,13 @@ class Invoices::Abacus::CreateCourseInvoiceJob < Invoices::Abacus::CreateInvoice
   end
 
   def invoice_data
-    Invoices::Abacus::CourseInvoice.new(external_invoice.link)
+    @invoice_data ||=
+      external_invoice.is_a?(ExternalInvoice::CourseAnnulation) ?
+      Invoices::Abacus::CourseAnnulationInvoice.new(external_invoice.link) :
+      Invoices::Abacus::CourseParticipationInvoice.new(external_invoice.link)
   end
 
   def invoice_error_key
-    ExternalInvoice::Course::NOT_POSSIBLE_KEY
+    ExternalInvoice::CourseParticipation::NOT_POSSIBLE_KEY
   end
 end

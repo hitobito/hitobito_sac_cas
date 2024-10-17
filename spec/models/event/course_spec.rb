@@ -348,8 +348,8 @@ describe Event::Course do
           .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
       end
 
-      xit "doesn't enqueue a job if there already is an external invoice" do
-        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
+      it "doesn't enqueue a job if there already is an external invoice" do
+        ExternalInvoice::CourseParticipation.create!(person_id: participation.person_id, link: participation)
 
         expect { course.update!(state: :ready) }.not_to change(
           Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
@@ -509,8 +509,8 @@ describe Event::Course do
     context "invoice" do
       before do
         p1, p2 = course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-        ExternalInvoice::Course.create!(person_id: p1.person_id, link: p1)
-        ExternalInvoice::Course.create!(person_id: p2.person_id, link: p2)
+        ExternalInvoice::CourseParticipation.create!(person_id: p1.person_id, link: p1)
+        ExternalInvoice::CourseParticipation.create!(person_id: p2.person_id, link: p2)
       end
 
       it "queues job to cancel invoices for all participants" do
@@ -525,10 +525,15 @@ describe Event::Course do
     let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :ready) } }
 
     before do
-      course.participations.create!([
-        {person: people(:admin), roles: [Event::Role::Leader.new]},
-        {person: people(:mitglied)}
+      _p1, p2, p3, p4 = course.participations.create!([
+        {person: people(:admin), roles: [Event::Role::Leader.new], price: 0},
+        {person: people(:mitglied), state: :absent, price: 42},
+        {person: people(:familienmitglied), state: :attended, price: 42},
+        {person: people(:familienmitglied2), state: :absent, price: 42}
       ])
+      ExternalInvoice::CourseParticipation.create!(person_id: p2.person_id, link: p2, total: p2.price)
+      ExternalInvoice::CourseParticipation.create!(person_id: p3.person_id, link: p3, total: p3.price)
+      ExternalInvoice::CourseAnnulation.create!(person_id: p4.person_id, link: p4, total: p4.price) # annulation invoice alredy exists
     end
 
     it "does not set participation state for assigned participations" do
@@ -540,7 +545,14 @@ describe Event::Course do
       course.participations.update_all(state: :summoned)
       course.update!(state: :closed)
 
-      expect(course.participations.pluck(:state)).to eq(["attended", "attended"])
+      expect(course.participations.pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
+    end
+
+    it "queues job for absent invoices for absent participants" do
+      expect do
+        course.update!(state: :closed)
+      end.to change { Delayed::Job.where("handler like '%CreateCourseInvoiceJob%'").count }.by(1).and \
+        change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(1)
     end
   end
 

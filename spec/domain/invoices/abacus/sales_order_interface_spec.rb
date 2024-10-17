@@ -32,7 +32,7 @@ describe Invoices::Abacus::SalesOrderInterface do
     stub_login_requests
   end
 
-  it "creates sales order in abacus" do
+  it "creates sac membership sales order in abacus" do
     positions = [
       Invoices::Abacus::InvoicePosition.new(
         name: "Abo Die Alpen",
@@ -60,11 +60,39 @@ describe Invoices::Abacus::SalesOrderInterface do
     sales_order = Invoices::Abacus::SalesOrder.new(invoice, positions)
 
     stub_create_sales_order_request
-    stub_trigger_sales_order_request
+    stub_trigger_sales_order_request(19)
 
     interface.create(sales_order)
 
     expect(invoice.abacus_sales_order_key).to eq(19)
+  end
+
+
+  it "creates course participation sales order in abacus" do
+    course = Fabricate(:sac_course, kind: event_kinds(:ski_course))
+    participation = Fabricate(:event_participation, event: course, person: person, price: 20, price_category: 1)
+    invoice =  ExternalInvoice::CourseParticipation.create!(
+      person: person,
+      issued_at: "2020-01-15",
+      sent_at: "2020-01-05",
+      link: participation
+    )
+    positions = [
+      Invoices::Abacus::InvoicePosition.new(
+        name: "Kursname (234)",
+        count: 1, amount: 20,
+        article_number: 234,
+        grouping: "Kursname (234)"
+      )
+    ]
+    sales_order = Invoices::Abacus::SalesOrder.new(invoice, positions)
+
+    stub_create_course_sales_order_request(invoice.id)
+    stub_trigger_sales_order_request(20)
+
+    interface.create(sales_order)
+
+    expect(invoice.abacus_sales_order_key).to eq(20)
   end
 
   it "cancel sales order in abacus" do
@@ -202,8 +230,28 @@ describe Invoices::Abacus::SalesOrderInterface do
       )
   end
 
-  def stub_trigger_sales_order_request
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
+  def stub_create_course_sales_order_request(invoice_id)
+    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders")
+      .with(
+        body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
+              "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
+              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"KR\",\"ProcessFlowNumber\":2,\"UserFields\":" \
+              "{\"UserField1\":\"#{invoice_id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
+              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":20.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"Product\":{\"Description\":\"Kursname (234)\",\"ProductNumber\":\"234\"},\"Accounts\":{},\"UserFields\":{\"UserField1\":\"Kursname (234)\"}}]}",
+        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
+      )
+      .to_return(
+        status: 200,
+        body: "{\"SalesOrderId\":20,\"SalesOrderBacklogId\":0,\"CustomerId\":7,\"OrderDate\":\"#{today_string}\"," \
+              "\"DeliveryDate\":\"2020-01-05\",\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
+              "\"TotalAmount\":0.0,\"UserFields\":" \
+              "{\"UserField1\":#{invoice_id},\"UserField2\":\"hitobito\"}}"
+      )
+  end
+
+  def stub_trigger_sales_order_request(id)
+    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=#{id},SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
       .with(
         body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}

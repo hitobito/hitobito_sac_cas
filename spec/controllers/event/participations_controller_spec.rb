@@ -328,10 +328,10 @@ describe Event::ParticipationsController do
     end
 
     it "PUT#summon doesn't enqueue same invoice twice" do
-      ExternalInvoice::Course.create!(person: participation.person, total: 10, link: participation)
+      ExternalInvoice::CourseParticipation.create!(person: participation.person, total: 10, link: participation)
       participation.update!(price: 10)
 
-      expect(ExternalInvoice::Course).to receive(:invoice_participation).with(participation).once.and_call_original
+      expect(ExternalInvoice::CourseParticipation).not_to receive(:invoice!)
       expect { put :summon, params: params }
         .not_to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count)
     end
