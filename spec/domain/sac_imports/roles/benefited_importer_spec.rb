@@ -38,7 +38,6 @@ describe SacImports::Roles::BenefitedImporter do
       csv_source_instance
     end
 
-
     let!(:sac_bernina) { Group::Sektion.create!(name: "SAC Bernina", parent: Group.root, foundation_year: 1942) }
     let(:bernina_mitglieder_group) { Group::SektionsMitglieder.find_by(parent: sac_bernina) }
     let!(:person8) { Fabricate(:person, id: 4200008, first_name: "Christian", last_name: "Bühler") }

@@ -17,9 +17,6 @@ describe SacImports::Roles::HonoraryImporter do
   let(:csv_report_instance) { SacImports::CsvReport.new(:"nav2-1_roles", report_headers) }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
-  let!(:cas_jaman) { Group::Sektion.create!(name: "CAS Jaman", parent: Group.root, foundation_year: 1942) }
-  let(:jaman_mitglieder_group) { Group::SektionsMitglieder.find_by(parent: cas_jaman) }
-
   around do |example|
     # make sure there's no csv report from previous run
     File.delete(report_file) if File.exist?(report_file)
@@ -41,6 +38,8 @@ describe SacImports::Roles::HonoraryImporter do
       csv_source_instance
     end
 
+    let!(:cas_jaman) { Group::Sektion.create!(name: "CAS Jaman", parent: Group.root, foundation_year: 1942) }
+    let(:jaman_mitglieder_group) { Group::SektionsMitglieder.find_by(parent: cas_jaman) }
     let!(:person5) { Fabricate(:person, id: 4200005, first_name: "Hans", last_name: "Muster") }
     let!(:person5_membership_role) do
       Group::SektionsMitglieder::Mitglied
