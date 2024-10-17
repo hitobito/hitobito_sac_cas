@@ -22,7 +22,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
       sent_at: now,
       year: now.year,
       total: 0,
-      type: "ExternalInvoice::Course")
+      type: "ExternalInvoice::CourseParticipation")
   }
   let(:client) { instance_double(Invoices::Abacus::Client) }
 

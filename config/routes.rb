@@ -33,12 +33,10 @@ Rails.application.routes.draw do
           resource :key_data_sheets, only: [:create], module: :courses
           resources :participations, only: [] do
             put :summon, on: :member
-          end
-        end
-        scope module: "events" do
-          resources :participations, only: [] do
             post :invoice, on: :member, controller: "courses/invoices", action: :create
           end
+
+          put "state" => "courses/state#update", on: :member
         end
       end
 
@@ -60,6 +58,7 @@ Rails.application.routes.draw do
           get "membership_invoice_positions" => "people/membership_invoice_positions#show"
         end
       end
+
       namespace :people do
         namespace :neuanmeldungen do
           resource :approves, only: [:new, :create]
@@ -70,12 +69,6 @@ Rails.application.routes.draw do
       resources :mitglieder_exports, only: [:create],
         constraints: {format: "csv"},
         defaults: {format: "csv"}
-
-      resources :events, only: [] do
-        member do
-          put "state" => "events/courses/state#update"
-        end
-      end
     end
 
     resources :termination_reasons, except: [:show]

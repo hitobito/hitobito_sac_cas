@@ -28,28 +28,8 @@
 #  index_external_invoices_on_link       (link_type,link_id)
 #  index_external_invoices_on_person_id  (person_id)
 #
-class ExternalInvoice::SacMembership < ExternalInvoice
-  # link is a Group::Section or Group::Ortsgruppe object
-
-  after_update :handle_state_change_to_payed
-
-  NOT_POSSIBLE_KEY = "people.membership_invoices.no_invoice_possible"
-  DATA_QUALITY_ERROR_KEY = "people.membership_invoices.data_quality_error"
-  NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
-
+class ExternalInvoice::CourseAnnulation < ExternalInvoice::CourseParticipation
   def title
-    I18n.t("invoices.sac_memberships.title", year: year)
-  end
-
-  private
-
-  def handle_state_change_to_payed
-    if state_changed_to_payed?
-      Invoices::SacMemberships::InvoicePayedJob.new(person.id, link.id, year).enqueue!
-    end
-  end
-
-  def state_changed_to_payed?
-    saved_change_to_state? && state == "payed"
+    "#{link.event.name} (#{link.event.number}) - #{I18n.t("invoices.course_annulation.title")}"
   end
 end
