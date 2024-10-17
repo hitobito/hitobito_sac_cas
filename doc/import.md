@@ -5,17 +5,20 @@ beim Import ein Report erstellt werden, der auf Validierungsfehler hinweist. Dur
 Datenquellen, erfolgt der Import in mehreren Schritten. Schlussendlich sollen die Daten mittels des Imports ins
 Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht mehr benötigt.
 
-## Ausführen der Imports auf Openshift
+* [Konzepte](#Konzepte)
+* [Quelldaten](#Quelldaten)
+* [CSV Report](#CSV-Report)
+* [Importe](#Importe)
+* [Ausführen der Imports auf Openshift](#Ausführen-der-Imports-auf-Openshift)
+* [Development](#Development)
 
-1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
-1. In Openshift einloggen und in das gewünschte Projekt wechseln
-1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist (auf sac-int/sac-prod aktuell vorhanden)
-1. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
-1. Beten das alles gut geht
-1. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
-1. exit um die Shell zu verlassen
-1. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
-1. Falls der pod nicht mehr benötigt wird, diesen killen `oc delete pod rails-sac-imports`
+## Konzepte
+
+- Jeder Import kann mehrfach ausgeführt werden
+- Bei einem weiteren Ausführen werden die einzelnen Daten resettet: z.B. werden alle Mitgliederrollen einer Person erst gelöscht bevor diese Importiert werden
+- Ein Import erstellt beim Ausführen grundsätzlich einen [CSV Report](#CSV-Report)
+- `SacImports` ist der Namespace für sämtlichen Import-Code
+- Imports werden via rake Tasks getriggert (`lib/tasks/sac_imports.rake`)
 
 ## Quelldaten
 
@@ -42,16 +45,6 @@ Die Dateien sind im Nextcloud abgelegt (Ordner sac-trans) **Die Daten dürfen nu
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
 Siehe [SacImports::CsvSource](../app/domain/sac_imports/csv_source.rb)
-
-## Entwickler
-
-- Zufällige Zeilen aus einer .csv-Datei in eine neue .csv-Datei schreiben:
-  ```bash
-  head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
-  ```
-- `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
-- In `/spec/fixtures/files/sac_imports_src/sac_imports_fixture.ods` werden die Fixtures verfasst und mit dem Skript `hitobito_sac_cas/spec/fixtures/files/sac_imports_src/export_sac_imports_fixture.sh` die jeweiligen Fixtures im CSV-Format erstellt. Es wird LibreOffice 7.2 oder neuer benötigt.
-- `sac_imports.rake` sucht in `hitobito/tmp/sac_imports_src` nach den CSV-Dateien die importiert werden sollen. Der Name der CSV-Datei muss mit der ID (Muster: `[ID]_*.csv`) beginnen: bspw. NAV1_people.csv
 
 ## CSV Report
 
@@ -137,3 +130,25 @@ Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. A
 Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
 ### `sac_imports:nav8-1_austrittsgruende`
+
+## Ausführen der Imports auf Openshift
+
+1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
+1. In Openshift einloggen und in das gewünschte Projekt wechseln
+1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist (auf sac-int/sac-prod aktuell vorhanden)
+1. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
+1. Beten das alles gut geht
+1. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
+1. exit um die Shell zu verlassen
+1. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
+1. Falls der pod nicht mehr benötigt wird, diesen killen `oc delete pod rails-sac-imports`
+
+## Development
+
+- Zufällige Zeilen aus einer .csv-Datei in eine neue .csv-Datei schreiben:
+  ```bash
+  head -n 1 input.csv > output.csv && tail -n +2 input.csv | shuf -n 2000 >> output.csv
+  ```
+- `RAILS_SILENCE_ACTIVE_RECORD=1` kann die Geschwindigkeit des Imports erhöhen.
+- In `/spec/fixtures/files/sac_imports_src/sac_imports_fixture.ods` werden die Fixtures verfasst und mit dem Skript `hitobito_sac_cas/spec/fixtures/files/sac_imports_src/export_sac_imports_fixture.sh` die jeweiligen Fixtures im CSV-Format erstellt. Es wird LibreOffice 7.2 oder neuer benötigt.
+- `sac_imports.rake` sucht in `hitobito/tmp/sac_imports_src` nach den CSV-Dateien die importiert werden sollen. Der Name der CSV-Datei muss mit der ID (Muster: `[ID]_*.csv`) beginnen: bspw. NAV1_people.csv
