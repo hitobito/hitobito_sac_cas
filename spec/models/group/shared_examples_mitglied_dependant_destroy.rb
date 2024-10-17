@@ -12,7 +12,7 @@ shared_examples "Mitglied dependant destroy" do
   end
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
-  let!(:role) { described_class.new(person:, group:).tap(&:save!) }
+  let!(:role) { described_class.new(person:, group:, start_on: 1.year.ago, end_on: 1.day.from_now).tap(&:save!) }
 
   context "with Mitglied role" do
     it "gets ended if it is old enough" do
