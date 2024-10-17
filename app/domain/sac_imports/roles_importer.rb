@@ -32,6 +32,8 @@ module SacImports
       if @role_type == :membership
         memberships_importer.create
         additional_memberships_importer.create
+        benefited_importer.create
+        honorary_importer.create
       end
       @csv_report.finalize(output: @output)
     end
@@ -48,6 +50,22 @@ module SacImports
 
     def additional_memberships_importer
       Roles::AdditionalMembershipsImporter
+        .new(csv_source: @source_file,
+          output: @output,
+          csv_report: @csv_report,
+          failed_person_ids: @failed_person_ids)
+    end
+
+    def benefited_importer
+      Roles::BenefitedImporter
+        .new(csv_source: @source_file,
+          output: @output,
+          csv_report: @csv_report,
+          failed_person_ids: @failed_person_ids)
+    end
+
+    def honorary_importer
+      Roles::HonoraryImporter
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,
