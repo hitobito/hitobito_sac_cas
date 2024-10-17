@@ -111,7 +111,7 @@ module Events::Courses::State
   end
 
   def course_invoices
-    ExternalInvoice::Course.where(link: self)
+    ExternalInvoice::Course.where(link: self.participations)
   end
 
   def assigned_participants
