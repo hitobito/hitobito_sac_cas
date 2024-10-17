@@ -12,5 +12,10 @@ module Wizards::Steps::Signup::AboMagazin
 
     validates :street, :housenumber, :town, :zip_code,
       :country, presence: true
+
+    # let form builder know that it should mark address as required
+    def required_attrs
+      [:address]
+    end
   end
 end

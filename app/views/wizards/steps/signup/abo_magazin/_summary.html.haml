@@ -9,6 +9,6 @@
     = render "wizards/steps/signup/abo_magazin/abo_info_table"
     = render "wizards/steps/signup/abo_magazin/person_info_table", person: wizard.person_fields
 
-    .alert.alert-info.w-50=t(".info_text")
+    .alert.alert-info=t(".info_text")
     
     = render "wizards/steps/signup/agreement_fields", form: form
