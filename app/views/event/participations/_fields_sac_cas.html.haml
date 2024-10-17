@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 - if @event.course?
-  = f.labeled t('.price_label') do
+  = f.labeled(Event::Participation.human_attribute_name(:price)) do
     = f.select(:price_category, *entry.event_prices, {class: 'form-select form-select-sm'})
 
 - if @event.course? && can?(:edit_actual_days, entry)

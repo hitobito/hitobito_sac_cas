@@ -29,6 +29,20 @@ describe "participation edit page", :js do
   context "event with prices" do
     before { participation.update!(price: 10, price_category: "price_member") }
 
+    it "shows empty price option for leaders" do
+      participation.roles.create!(type: Event::Role::AssistantLeader)
+
+      visit participation_path
+      within "#event_participation_price_category" do
+        expect(page).to have_css("option", text: "Keine Kosten")
+        select "Keine Kosten"
+      end
+      expect do
+        click_on("Speichern")
+        expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
+      end.to change { participation.reload.price }.from(10).to(nil)
+    end
+
     it "shows options for present prices" do
       visit participation_path
       within "#event_participation_price_category" do
@@ -48,7 +62,7 @@ describe "participation edit page", :js do
 
       visit participation_path
       within "#event_participation_price_category" do
-        expect(page).to have_css("option[selected]", text: "Ehemaliger Mitgliederpreis CHF 10.00")
+        expect(page).to have_css("option[selected]", text: "Bisheriger Mitgliederpreis CHF 10.00")
         expect(page).to have_css("option", text: "Mitgliederpreis CHF 15.00")
         expect(page).to have_css("option", text: "Normalpreis CHF 20.00")
       end
@@ -63,7 +77,7 @@ describe "participation edit page", :js do
 
       visit participation_path
       within "#event_participation_price_category" do
-        expect(page).to have_css("option[selected]", text: "Ehemaliger Mitgliederpreis CHF 10.00")
+        expect(page).to have_css("option[selected]", text: "Bisheriger Mitgliederpreis CHF 10.00")
         select "Mitgliederpreis CHF 15.00"
       end
       expect do

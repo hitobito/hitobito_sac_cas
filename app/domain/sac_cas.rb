@@ -49,6 +49,8 @@ module SacCas
 
   ### Various roles
 
+  EVENT_LEADER_ROLES = [::Event::Role::Leader, ::Event::Role::AssistantLeader].freeze
+
   SAC_BACKOFFICE_ROLES = [
     ::Group::Geschaeftsstelle::Mitarbeiter,
     ::Group::Geschaeftsstelle::Admin
