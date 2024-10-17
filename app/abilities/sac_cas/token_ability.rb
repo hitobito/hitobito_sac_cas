@@ -12,5 +12,6 @@ module SacCas::TokenAbility
     super
 
     can :manage, ExternalInvoice if token.layer.root?
+    can :manage, Event::Level if token.layer.root?
   end
 end
