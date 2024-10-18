@@ -30,7 +30,7 @@ module SacCas::StandardFormBuilder
     classes += " required" unless optional
     classes += " d-none" if (!optional && !object.adult?) || (optional && object.adult?)
     sac_target = optional ? "optionalLabel" : "requiredLabel"
-    label_text = optional ? captionize("#{attr}_optional", klass) : captionize(attr, klass)
+    label_text = captionize(attr, klass)
     label(attr, label_text, class: classes, data: {"sac--signup_target": sac_target})
   end
 end
