@@ -11,7 +11,8 @@ module SacCas::RoleDecorator
   def for_oauth
     {
       **super,
-      layer_group_id: object.group.layer_group_id
+      layer_group_id: object.group.layer_group.id,
+      layer_group_name: object.group.layer_group.name
     }
   end
 end

@@ -58,7 +58,22 @@ describe RoleDecorator, :draper_with_helpers do
       let(:role) { roles(:admin) }
 
       it "never includes beitragskategorie" do
+        role.label = "test"
+        role.beitragskategorie = :family
+        formatted_name = "<strong>Administration</strong>&nbsp;(test)"
+
+        expect(decorated_name).to eq(formatted_name)
       end
+    end
+  end
+
+  describe "#for_oauth" do
+    let(:for_auth) { decorator.for_oauth }
+    let(:role) { roles(:mitglied) }
+
+    it "includes layer_group_id and layer_group_name" do
+      expect(for_auth[:layer_group_id]).to eq groups(:bluemlisalp).id
+      expect(for_auth[:layer_group_name]).to eq "SAC Blüemlisalp"
     end
   end
 end
