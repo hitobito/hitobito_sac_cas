@@ -7,6 +7,6 @@
 
 Fabricator(:event_level, class_name: "Event::Level") do
   label { Faker::Lorem.words.join(" ") }
-  code { Faker::Number.number }
-  difficulty { Faker::Number.number }
+  code { Faker::Number.between(from: 1, to: 1000) }
+  difficulty { Faker::Number.between(from: 1, to: 1000) }
 end
