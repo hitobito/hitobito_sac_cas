@@ -84,7 +84,8 @@ RSpec.describe "GET oauth/profile", type: :request do
           role_class: "Group::SektionsMitglieder::Mitglied",
           role_name: "Mitglied (Stammsektion)",
           permissions: [],
-          layer_group_id: user.roles.first.group.layer_group_id
+          layer_group_id: user.roles.first.group.layer_group_id,
+          layer_group_name: "SAC Blüemlisalp"
         }, {
           group_id: user.roles.second.group_id,
           group_name: user.roles.second.group.name,
@@ -92,7 +93,9 @@ RSpec.describe "GET oauth/profile", type: :request do
           role_class: "Group::SektionsMitglieder::MitgliedZusatzsektion",
           role_name: "Mitglied (Zusatzsektion)",
           permissions: [],
-          layer_group_id: user.roles.second.group.layer_group_id
+          layer_group_id: user.roles.second.group.layer_group_id,
+
+          layer_group_name: "SAC Matterhorn"
         }]
       }.deep_stringify_keys)
     end

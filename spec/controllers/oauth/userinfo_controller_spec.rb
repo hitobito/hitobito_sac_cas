@@ -43,6 +43,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
     end
 
     context "with with_roles scope" do
+      let(:root) { groups(:root) }
       let(:token) do
         app.access_tokens.create!(resource_owner_id: user.id,
           scopes: "openid with_roles", expires_in: 2.hours)
@@ -82,7 +83,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
               role_class: "Group::Geschaeftsstelle::Admin",
               role_name: "Administration",
               permissions: %w[layer_and_below_full admin impersonation read_all_people],
-              layer_group_id: user.roles.first.group.layer_group_id
+              layer_group_id: root.id,
+              layer_group_name: root.name
             }
           ]
         }.deep_stringify_keys)

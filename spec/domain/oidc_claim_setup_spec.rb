@@ -42,6 +42,12 @@ describe OidcClaimSetup do
   context "with_roles" do
     let(:scope) { :with_roles }
 
+    it "includes layer_group_id and layer_group_name" do
+      role = claims[:roles].first
+      expect(role[:layer_group_id]).to eq groups(:root).id
+      expect(role[:layer_group_name]).to eq "SAC/CAS"
+    end
+
     describe "membership_years" do
       it "is blank when no matching number exists" do
         expect(claim_keys).to include("membership_years")

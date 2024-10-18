@@ -16,6 +16,10 @@ module SacCas::PersonDecorator
     {id: id, label: h.h(full_label_with_changed_suffix)}
   end
 
+  def roles_for_oauth
+    object.roles.includes(group: :layer_group).collect(&:decorate).collect(&:for_oauth)
+  end
+
   def as_quicksearch
     super.tap do |data|
       data[:label] = h.h(full_label_with_changed_suffix)
