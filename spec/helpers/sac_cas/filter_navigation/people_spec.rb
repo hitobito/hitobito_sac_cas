@@ -13,7 +13,7 @@ describe "FilterNavigation::People" do
   include UtilityHelper
 
   let(:person) { Fabricate.build(:person) }
-  let(:group) { Fabricate.build(described_class.sti_name, id: 1).decorate }
+  let(:group) { Fabricate.build(described_class.sti_name, id: 1, layer_group: groups(:root)).decorate }
   let(:params) { {group_id: group.id} }
 
   let(:filter_list) { Person::Filter::List.new(group, nil) }
@@ -85,7 +85,7 @@ describe "FilterNavigation::People" do
   end
 
   describe Group::SacCas do
-    it "has Neuanmeldunge filter" do
+    it "has Neuanmeldungen filter" do
       expect(dom).to have_link "Neuanmeldungen"
     end
 
