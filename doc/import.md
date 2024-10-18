@@ -134,14 +134,19 @@ Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 ## Ausführen der Imports auf Openshift
 
 1. Im $RAILS_CORE_ROOT/tmp/sac_import_src/ die entsprechenden CSV-Dateien ablegen (Siehe [CSV Source Files](#csv-source-files))
-1. In Openshift einloggen und in das gewünschte Projekt wechseln
-1. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist (auf sac-int/sac-prod aktuell vorhanden)
-1. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
-1. Beten das alles gut geht
-1. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
-1. exit um die Shell zu verlassen
-1. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
-1. Falls der pod nicht mehr benötigt wird, diesen killen `oc delete pod rails-sac-imports`
+2. In Openshift einloggen und in das gewünschte Projekt wechseln
+3. Sicherstellen das das PVC mit dem Namen `sac-imports` vorhanden ist (auf sac-int/sac-prod aktuell vorhanden)
+4. hitobito_sac_cas/bin/ose-sac-import-shell ausführen
+5. Beten das alles gut geht
+6. In der Shell im rails-sac-imports Pod die gewünschten Imports ausführen
+7. exit um die Shell zu verlassen
+8. CSV Log files auf deinem Rechner in hitobito_sac_cas/tmp/sac_import-logs einsehen und ggf. an SAC weiterleiten
+9. Falls der pod nicht mehr benötigt wird, diesen killen `oc delete pod rails-sac-imports`
+
+Nach dem Ausführen der Importe müssen nacheinander noch die folgenden Jobs ausgeführt werden:
+
+1. Datenqualität Prüfung für alle Personen: `People::DataQualityCheckerJob.new.perform`
+2. Abacus sync aller Mitglieder: `Invoices::Abacus::TransmitAllMembersJob.new.perform`
 
 ## Development
 
