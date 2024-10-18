@@ -497,6 +497,19 @@
           ],
           "single": true
         },
+        "kind_category_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "level_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
+        },
         "state": {
           "type": "string",
           "operators": [
@@ -620,15 +633,15 @@
           "description": null,
           "resource": "PersonResource"
         },
-        "dates": {
-          "type": "has_many",
-          "description": null,
-          "resource": "Event::DateResource"
-        },
         "kind": {
           "type": "belongs_to",
           "description": null,
           "resource": "Event::KindResource"
+        },
+        "dates": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::DateResource"
         },
         "leaders": {
           "type": "has_many",
@@ -1268,6 +1281,19 @@
             "eq"
           ],
           "single": true
+        },
+        "kind_category_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "level_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
         }
       },
       "relationships": {
@@ -1275,6 +1301,11 @@
           "type": "belongs_to",
           "description": null,
           "resource": "PersonResource"
+        },
+        "kind": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::KindResource"
         },
         "dates": {
           "type": "has_many",
@@ -3356,6 +3387,16 @@
     }
   ],
   "endpoints": {
+    "/api/event_kind_categories": {
+      "actions": {
+        "index": {
+          "resource": "Event::KindCategoryResource"
+        },
+        "show": {
+          "resource": "Event::KindCategoryResource"
+        }
+      }
+    },
     "/api/event_kinds": {
       "actions": {
         "index": {
@@ -3363,6 +3404,16 @@
         },
         "show": {
           "resource": "Event::KindResource"
+        }
+      }
+    },
+    "/api/event_levels": {
+      "actions": {
+        "index": {
+          "resource": "Event::LevelResource"
+        },
+        "show": {
+          "resource": "Event::LevelResource"
         }
       }
     },

@@ -3,15 +3,12 @@
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas
+#  https://github.com/hitobito/hitobito_sac_cas.
 
-module SacCas::TokenAbility
-  private
+class JsonApi::Event::LevelAbility
+  include CanCan::Ability
 
-  def define_invoice_abilities
-    super
-
-    can :manage, ExternalInvoice if token.layer.root?
-    can :manage, Event::Level if token.layer.root?
+  def initialize(main_ability)
+    can :read, Event::Level if main_ability.can?(:list_available, Event)
   end
 end
