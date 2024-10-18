@@ -1398,6 +1398,9 @@ en:
 
     course_invoices:
       no_invoice_possible: ""
+      position_name: ""
+      processing_fee: ""
+      cancellation_costs: ""
 
     neuanmeldungen:
       multiselect_actions:
