@@ -7,6 +7,8 @@
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::Section
   FIRST_COLUMN_WIDTH = 120
+  COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
+  ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS = [50, 70]
 
   def render
     table(table_data)
@@ -18,7 +20,6 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
       [t("name"), event.name],
       [t("level"), event.kind.level.label],
       [t("leaders"), leaders],
-      [t("compensation"), ""],
       *compensation_table,
       [t("event_dates_durations"), event_dates_durations],
       [t("event_dates_locations"), event_dates_locations],
@@ -69,24 +70,31 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_row(compensation_category)
+    table_width = bounds.width - FIRST_COLUMN_WIDTH
+
+    column_widths = [table_width - COMPENSATION_SUBTABLE_COLUMN_WIDTHS.sum] + COMPENSATION_SUBTABLE_COLUMN_WIDTHS
     event_days = (compensation_category.kind == :day) ? total_event_days : 1
     ["",
       make_subtable([[compensation_category.send(:"name_#{participation_leader_type}"),
         event_days,
         compensation_category.kind_label,
         "à CHF",
-        compensation_category.current_compensation_rate(event_start_at).send(:"rate_#{participation_leader_type}")]])]
+        compensation_category.current_compensation_rate(event_start_at).send(:"rate_#{participation_leader_type}")]],
+        column_widths:)]
   end
 
   def accommodation_budget_table
-    valid_course_compensation_categories_scope.where(kind: :budget).includes(:course_compensation_rates).list.map do |category|
+    table_width = bounds.width - FIRST_COLUMN_WIDTH
+
+    column_widths = [table_width - ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS.sum] + ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS
+    valid_course_compensation_categories_scope.includes(:course_compensation_rates).list.map do |category|
       [
         "",
         make_subtable([[
           category.short_name,
           "CHF",
           category.current_compensation_rate.rate_leader # what about rate_assistant_leader?
-        ]])
+        ]], column_widths:)
       ]
     end.presence || [["", ""]]
   end
