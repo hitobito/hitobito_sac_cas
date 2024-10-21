@@ -43,9 +43,7 @@ module Dropdown::Events::Courses
 
     def confirm_text_for_step(step)
       key = "events.actions_show_sac_cas.state_buttons.#{step}_confirm_text"
-      if I18n.exists?(key)
-        I18n.t(key)
-      end
+      I18n.t(key) if I18n.exists?(key)
     end
   end
 end
