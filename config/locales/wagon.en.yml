@@ -1095,7 +1095,6 @@ en:
       fields_sac_cas:
         former_price_select: ""
         no_price_select: ""
-        price_label: ""
       summoned_notice: "%{participant} was called up."
       actions_show_youth:
         summon_button: Call up

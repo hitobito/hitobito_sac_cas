@@ -1145,7 +1145,6 @@ it:
       fields_sac_cas:
         former_price_select: ""
         no_price_select: ""
-        price_label: ""
       summoned_notice: "%{participant} è stato richiamato."
       actions_show_youth:
         summon_button: Richiamare
