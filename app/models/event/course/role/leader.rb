@@ -5,10 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module Event::Course::Role
-  class Leader < Event::Role
-    self.permissions = [:participations_full, :qualify]
+class Event::Course::Role::Leader < Event::Role
+  self.permissions = [:participations_full, :qualify]
 
-    self.kind = :leader
-  end
+  self.kind = :leader
 end
