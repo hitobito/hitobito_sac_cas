@@ -386,8 +386,8 @@ describe Event::Course do
 
       context "with course leaders" do
         before do
-          course.participations.first.roles.create!(type: Event::Role::Leader)
-          course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
+          course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+          course.participations.last.roles.create!(type: Event::Course::Role::AssistantLeader)
         end
 
         it "sends an email to the course admin and leader" do
@@ -397,7 +397,7 @@ describe Event::Course do
       end
 
       context "with course assistant leader" do
-        before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
+        before { course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader) }
 
         it "sends an email to the course admin and assistant leader" do
           expect { course.update!(state: :application_open) }
@@ -473,7 +473,7 @@ describe Event::Course do
     context "with participants" do
       before do
         course.participations.create!([
-          {person: people(:admin), roles: [Event::Role::Leader.new]},
+          {person: people(:admin), roles: [Event::Course::Role::Leader.new]},
           {person: people(:mitglied)}
         ])
       end
