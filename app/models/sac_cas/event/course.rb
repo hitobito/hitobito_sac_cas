@@ -87,7 +87,7 @@ module SacCas::Event::Course
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
-  LEADER_ROLES = [Event::Role::Leader, Event::Role::AssistantLeader].map(&:sti_name)
+  LEADER_ROLES = [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map(&:sti_name)
 
   INHERITED_ATTRIBUTES = [
     :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
@@ -114,8 +114,8 @@ module SacCas::Event::Course
     i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
     enum canceled_reason: CANCELED_REASONS
 
-    self.role_types = [Event::Role::Leader,
-      Event::Role::AssistantLeader,
+    self.role_types = [Event::Course::Role::Leader,
+      Event::Course::Role::AssistantLeader,
       Event::Course::Role::Participant]
 
     self.used_attributes += [
@@ -159,6 +159,20 @@ module SacCas::Event::Course
     self.revoked_participation_states = %w[rejected canceled absent annulled]
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
+
+    [
+      ::Event::Role::Leader,
+      ::Event::Role::AssistantLeader
+    ].each do |type|
+      disable_role_type(type)
+    end
+
+    [
+      ::Event::Course::Role::Leader,
+      ::Event::Course::Role::AssistantLeader
+    ].each do |type|
+      register_role_type(type)
+    end
 
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
