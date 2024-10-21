@@ -8,5 +8,5 @@
 class Event::Course::Role::AssistantLeader < Event::Role
   self.permissions = [:participations_full, :qualify]
 
-  self.kind = :assistant_leader
+  self.kind = :leader
 end
