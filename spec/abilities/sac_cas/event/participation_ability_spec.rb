@@ -27,10 +27,10 @@ describe Event::ParticipationAbility do
     let(:role) { build_role(:bluemlisalp_funktionaere, "Andere") }
 
     describe "summon" do
-      it "leader may summon" do
+      it "leader may not summon" do
         build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
           .roles.create!(type: Event::Course::Role::Leader.sti_name)
-        expect(subject).to be_able_to(:summon, participation)
+        expect(subject).not_to be_able_to(:summon, participation)
       end
 
       it "participant may not summon" do
