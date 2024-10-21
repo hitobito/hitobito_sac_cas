@@ -79,14 +79,6 @@ module Memberships::CommonApi
       update_roles.each { |role| role.save(validate: false) }
       update_roles.each(&:save!)
     end
-    update_primary_groups
     true
-  end
-
-  def update_primary_groups
-    affected_people.each do |person|
-      person.reload # Unsure why this reload is necessary
-      person.update!(primary_group: Groups::Primary.new(person).identify)
-    end
   end
 end
