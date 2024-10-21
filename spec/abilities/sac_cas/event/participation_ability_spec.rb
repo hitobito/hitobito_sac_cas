@@ -29,13 +29,13 @@ describe Event::ParticipationAbility do
     describe "summon" do
       it "leader may summon" do
         build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-          .roles.create!(type: Event::Role::Leader.sti_name)
+          .roles.create!(type: Event::Course::Role::Leader.sti_name)
         expect(subject).to be_able_to(:summon, participation)
       end
 
       it "participant may not summon" do
         build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-          .roles.create!(type: Event::Role::Participant.sti_name)
+          .roles.create!(type: Event::Course::Role::Participant.sti_name)
         expect(subject).not_to be_able_to(:summon, participation)
       end
     end
@@ -67,7 +67,7 @@ describe Event::ParticipationAbility do
         let(:own_participation) { build(:bluemlisalp_funktionaere, event: top_course, person: role.person) }
 
         before do
-          Event::Role::Leader.create!(participation: own_participation)
+          Event::Course::Role::Leader.create!(participation: own_participation)
         end
 
         it "may edit_actual_days others" do
