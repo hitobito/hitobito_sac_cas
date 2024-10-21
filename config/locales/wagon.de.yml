@@ -318,6 +318,14 @@ de:
           price_js_active_regular: "J&S A-Normalpreis"
           price_js_passive_member: "J&S P-Mitgliederpreis"
           price_js_passive_regular: "J&S P-Normalpreis"
+        invoice_state: Rechnung
+        invoice_states:
+          _nil: Nicht fakturiert
+          draft: Entwurf
+          open: Offen
+          payed: Bezahlt
+          cancelled: Storniert
+          error: Fehler
       event/role:
         self_employed: selbständig erwerbend
       external_training:

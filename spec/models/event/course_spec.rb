@@ -503,8 +503,8 @@ describe Event::Course do
     context "invoice" do
       before do
         course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course)
-        ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course)
+        ExternalInvoice::Course.create!(person_id: course.participations.first.person_id, link: course.participations.first)
+        ExternalInvoice::Course.create!(person_id: course.participations.second.person_id, link: course.participations.first)
       end
 
       it "queues job to cancel invoices for all participants" do
