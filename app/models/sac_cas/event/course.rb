@@ -168,6 +168,8 @@ module SacCas::Event::Course
 
     attribute :waiting_list, default: false
 
+    private
+    
     def update_attended_participants_state
       participations.where(state: :summoned).find_each do |participation|
         participation.update(state: :attended)
