@@ -514,4 +514,43 @@ describe Event::Course do
       end
     end
   end
+
+  describe "when state changes to closed" do
+    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :ready) } }
+
+    before do
+      course.participations.create!([
+        {person: people(:admin), roles: [Event::Role::Leader.new]},
+        {person: people(:mitglied)}
+      ])
+    end
+
+    it "does not set participation state for assigned participations" do
+      expect { course.update!(state: :closed) }
+        .not_to change { course.participations.pluck(:state) }
+    end
+
+    it "sets participation state to attended for summoned participations" do
+      course.participations.update_all(state: :summoned)
+      course.update!(state: :closed)
+
+      expect(course.participations.pluck(:state)).to eq(["attended", "attended"])
+    end
+  end
+
+  describe "when state changes from closed" do
+    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :closed) } }
+
+    before do
+      course.participations.create!([
+        {person: people(:admin), roles: [Event::Role::Leader.new], state: :summoned},
+        {person: people(:mitglied), state: :summoned}
+      ])
+    end
+
+    it "does nothing" do
+      expect { course.update!(state: :ready) }
+        .not_to change { course.participations.pluck(:state) }
+    end
+  end
 end

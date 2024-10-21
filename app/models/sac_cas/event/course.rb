@@ -171,6 +171,18 @@ module SacCas::Event::Course
     delegate :level, to: :kind, allow_nil: true
 
     attribute :waiting_list, default: false
+
+    private
+
+    def update_attended_participants_state
+      participations.where(state: :summoned).find_each do |participation|
+        participation.update(state: :attended)
+      end
+    end
+
+    def update_assigned_participants_state
+      # do nothing
+    end
   end
 
   def minimum_age

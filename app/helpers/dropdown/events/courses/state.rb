@@ -27,7 +27,7 @@ module Dropdown::Events::Courses
     def init_items
       course.available_states.each do |step|
         link = template.state_group_event_path(template.params[:group_id], course, {state: step})
-        add_item(label_for_step(step), link, method: :put)
+        add_item(label_for_step(step), link, method: :put, "data-confirm": confirm_text_for_step(step))
       end
     end
 
@@ -39,6 +39,11 @@ module Dropdown::Events::Courses
       else
         label_translation_default
       end
+    end
+
+    def confirm_text_for_step(step)
+      key = "events.actions_show_sac_cas.state_buttons.#{step}_confirm_text"
+      I18n.t(key) if I18n.exists?(key)
     end
   end
 end

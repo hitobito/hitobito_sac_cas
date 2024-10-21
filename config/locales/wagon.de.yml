@@ -1162,6 +1162,7 @@ de:
         assignment_closed: Zuteilung abschliessen
         ready: Bereit zur Durchführung
         closed: Abschliessen
+        closed_confirm_text: Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annulationskostenrechnung 100% erzeugt.
         canceled: Absagen
       state_back_buttons:
         assignment_closed: Zurück zur Zuteilung
