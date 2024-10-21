@@ -14,7 +14,7 @@ describe Event::Courses::KeyDataSheetsController do
   let(:group) { event.groups.first }
 
   let!(:leader_participations) do
-    [Event::Role::Leader, Event::Role::AssistantLeader].map do |event_role|
+    [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
       Fabricate(event_role.name.to_sym,
         participation: Fabricate(:event_participation, event: event)).participation
     end
