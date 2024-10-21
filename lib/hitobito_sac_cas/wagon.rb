@@ -107,6 +107,7 @@ module HitobitoSacCas
       RoleDecorator.prepend SacCas::RoleDecorator
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
+      Event::RoleDecorator.prepend SacCas::Event::RoleDecorator
 
       ## Domain
       People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
@@ -149,6 +150,7 @@ module HitobitoSacCas
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
