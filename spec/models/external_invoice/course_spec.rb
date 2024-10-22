@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe ExternalInvoice::Course do
+describe ExternalInvoice::CourseParticipation do
   let(:date) { Date.new(2023, 1, 1) }
   let(:mitglied) { people(:mitglied) }
   let(:kind) { event_kinds(:ski_course) }
@@ -22,7 +22,7 @@ describe ExternalInvoice::Course do
       sent_at: date,
       year: date.year,
       total: 0,
-      type: "ExternalInvoice::Course")
+      type: "ExternalInvoice::CourseParticipation")
   }
 
   describe "after_save callback" do
@@ -32,7 +32,7 @@ describe ExternalInvoice::Course do
     end
 
     context "multiple invoices" do
-      let(:old_external_invoice) { ExternalInvoice::Course.create!(person: mitglied, link: participation, created_at: external_invoice.created_at - 2.days) }
+      let(:old_external_invoice) { ExternalInvoice::CourseParticipation.create!(person: mitglied, link: participation, created_at: external_invoice.created_at - 2.days) }
 
       it "updates state if newest invoice" do
         external_invoice.update!(state: :payed)

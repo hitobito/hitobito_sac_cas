@@ -1292,6 +1292,12 @@ de:
     cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
 
   invoices:
+    course_participation:
+      no_invoice_possible: "Probleme beim Erstellen der Rechung"
+    course_annulation:
+      title: Annulationskostenrechnung
+      processing_fee: Bearbeitungsgebühr
+      cancellation_costs: "%{percentage}% Annullationskosten"
     sac_memberships:
       title: Mitgliedschaftsrechnung %{year}
       positions:
@@ -1452,12 +1458,6 @@ de:
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
         zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
-
-    course_invoices:
-      no_invoice_possible: "Probleme beim Erstellen der Rechung"
-      position_name: "%{description} für %{level}"
-      processing_fee: Bearbeitungsgebühr
-      cancellation_costs: "%{percentage}% Annullationskosten"
 
     neuanmeldungen:
       multiselect_actions:

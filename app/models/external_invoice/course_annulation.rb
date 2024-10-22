@@ -28,44 +28,8 @@
 #  index_external_invoices_on_link       (link_type,link_id)
 #  index_external_invoices_on_person_id  (person_id)
 #
-class ExternalInvoice::Course < ExternalInvoice
-  # link is an Event::Participation object for a Event::Course
-
-  NOT_POSSIBLE_KEY = "people.course_invoices.no_invoice_possible"
-
-  after_save :update_participation_invoice_state
-
-  class << self
-    def invoice_participation(participation)
-      return if participation.price.nil? || ExternalInvoice::Course.exists?(link: participation)
-
-      external_invoice = ExternalInvoice::Course.create(
-        person: participation.person,
-        issued_at: Date.current,
-        sent_at: Date.current,
-        state: :draft,
-        total: participation.price,
-        link: participation,
-        year: participation.event.dates.order(:start_at).first.start_at.year
-      )
-
-      Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!
-    end
-  end
-
+class ExternalInvoice::CourseAnnulation < ExternalInvoice::CourseParticipation
   def title
-    "#{link.event.name} (#{link.event.number})"
-  end
-
-  private
-
-  def update_participation_invoice_state
-    if newest_participation_invoice?
-      link.update!(invoice_state: state)
-    end
-  end
-
-  def newest_participation_invoice?
-    self.class.where(link: link).order(created_at: :desc).first == self
+    "#{link.event.name} (#{link.event.number}) - #{I18n.t("invoices.course_annulation.title")}"
   end
 end

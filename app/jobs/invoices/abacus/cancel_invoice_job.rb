@@ -14,7 +14,7 @@ class Invoices::Abacus::CancelInvoiceJob < BaseJob
   end
 
   def perform
-    return unless external_invoice # may have been deleted already
+    return if !external_invoice || external_invoice.state == "cancelled" # may have been deleted already
 
     sales_order = Invoices::Abacus::SalesOrder.new(external_invoice)
     Invoices::Abacus::SalesOrderInterface.new.cancel(sales_order)

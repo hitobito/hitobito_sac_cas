@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Invoices::Abacus::CourseInvoice do
+describe Invoices::Abacus::CourseParticipationInvoice do
   let(:member) { people(:mitglied) }
   let(:course) do
     Fabricate(:sac_course, kind: event_kinds(:ski_course), dates: [
@@ -42,46 +42,6 @@ describe Invoices::Abacus::CourseInvoice do
       expect(position.article_number).to eq("49")
       expect(position.cost_center).to eq("kurs-1")
       expect(position.cost_unit).to eq("ski-1")
-    end
-
-    context "with canceled participation" do
-      before { participation.update!(state: :canceled, canceled_at:) }
-
-      context "over 30 days until course starts" do
-        let(:canceled_at) { Date.new(2023, 12, 1) }
-
-        it "creates position with processing fee" do
-          expect(position.name).to eq("Bearbeitungsgebühr für Einstiegskurs")
-          expect(position.amount).to eq(80)
-        end
-      end
-
-      context "over 20 days until course starts" do
-        let(:canceled_at) { Date.new(2023, 12, 10) }
-
-        it "creates position with 50% cancellation costs" do
-          expect(position.name).to eq("50% Annullationskosten für Einstiegskurs")
-          expect(position.amount).to eq(10)
-        end
-      end
-
-      context "over 10 days until course starts" do
-        let(:canceled_at) { Date.new(2023, 12, 20) }
-
-        it "creates position with 75% cancellation costs" do
-          expect(position.name).to eq("75% Annullationskosten für Einstiegskurs")
-          expect(position.amount).to eq(15)
-        end
-      end
-
-      context "less than 10 days until course starts" do
-        let(:canceled_at) { Date.new(2023, 12, 30) }
-
-        it "creates position with 100% cancellation costs" do
-          expect(position.name).to eq("100% Annullationskosten für Einstiegskurs")
-          expect(position.amount).to eq(20)
-        end
-      end
     end
   end
 

@@ -34,6 +34,8 @@ class ExternalInvoice < ActiveRecord::Base
 
   include I18nEnums
 
+  class_attribute :invoice_kind
+
   belongs_to :person
   belongs_to :link, polymorphic: true, optional: true
   has_many :hitobito_log_entries, as: :subject, dependent: :nullify
@@ -44,10 +46,6 @@ class ExternalInvoice < ActiveRecord::Base
   validates :state, inclusion: {in: STATES}
 
   scope :list, -> { order(:created_at) }
-
-  def type_key
-    self.class.name.demodulize.underscore
-  end
 
   def cancellable?
     abacus_sales_order_key.present? && state != "cancelled" && state != "error"

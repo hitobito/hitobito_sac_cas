@@ -179,7 +179,7 @@ module SacCas::Event::ParticipationsController
   end
 
   def enqueue_invoice_job
-    ExternalInvoice::Course.invoice_participation(entry)
+    ExternalInvoice::CourseParticipation.invoice!(entry) unless ExternalInvoice::CourseParticipation.exists?(link: entry)
   end
 
   def cancel_invoices

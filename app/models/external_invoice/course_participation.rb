@@ -28,30 +28,46 @@
 #  index_external_invoices_on_link       (link_type,link_id)
 #  index_external_invoices_on_person_id  (person_id)
 #
-class ExternalInvoice::SacMembership < ExternalInvoice
-  # link is a Group::Section or Group::Ortsgruppe object
+class ExternalInvoice::CourseParticipation < ExternalInvoice
+  NOT_POSSIBLE_KEY = "invoices.course_participation.no_invoice_possible"
 
-  self.invoice_kind = :sac_membership
+  self.invoice_kind = :course
 
-  after_update :handle_state_change_to_payed
+  # link is an Event::Participation object for a Event::Course
+  validates :link_type, inclusion: {in: %w[Event::Participation]}
 
-  NOT_POSSIBLE_KEY = "people.membership_invoices.no_invoice_possible"
-  DATA_QUALITY_ERROR_KEY = "people.membership_invoices.data_quality_error"
-  NO_MEMBERSHIPS_KEY = "people.membership_invoices.no_memberships"
+  after_save :update_participation_invoice_state
+
+  class << self
+    def invoice!(participation)
+      return if participation.price.to_i.zero?
+
+      external_invoice = create!(
+        person: participation.person,
+        issued_at: Date.current,
+        sent_at: Date.current,
+        state: :draft,
+        link: participation,
+        year: participation.event.dates.first.start_at.year
+      )
+
+      Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!
+    end
+  end
 
   def title
-    I18n.t("invoices.sac_memberships.title", year: year)
+    "#{link.event.name} (#{link.event.number})"
   end
 
   private
 
-  def handle_state_change_to_payed
-    if state_changed_to_payed?
-      Invoices::SacMemberships::InvoicePayedJob.new(person.id, link.id, year).enqueue!
+  def update_participation_invoice_state
+    if newest_participation_invoice?
+      link.update!(invoice_state: state)
     end
   end
 
-  def state_changed_to_payed?
-    saved_change_to_state? && state == "payed"
+  def newest_participation_invoice?
+    self.class.where(link: link).order(created_at: :desc).first == self
   end
 end
