@@ -25,8 +25,8 @@ describe Event::LeaderReminderJob do
 
     before do
       course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-      course.participations.first.roles.create!(type: Event::Role::Leader)
-      course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
+      course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+      course.participations.last.roles.create!(type: Event::Course::Role::AssistantLeader)
     end
 
     it "mails a reminder to the course leaders" do
@@ -51,7 +51,7 @@ describe Event::LeaderReminderJob do
 
       before do
         course_next_week.participations.create!(person: people(:admin))
-        course_next_week.participations.first.roles.create!(type: Event::Role::Leader)
+        course_next_week.participations.first.roles.create!(type: Event::Course::Role::Leader)
       end
 
       it "mails a reminder for both" do
@@ -77,7 +77,7 @@ describe Event::LeaderReminderJob do
     subject(:course) do
       course = Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: start_at)])
       course.participations.create!(person: people(:admin))
-      course.participations.first.roles.create!(type: Event::Role::Leader)
+      course.participations.first.roles.create!(type: Event::Course::Role::Leader)
     end
 
     context "starts in 7 weeks" do

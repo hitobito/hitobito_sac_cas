@@ -30,7 +30,7 @@ describe "participation edit page", :js do
     before { participation.update!(price: 10, price_category: "price_member") }
 
     it "shows empty price option for leaders" do
-      participation.roles.create!(type: Event::Role::AssistantLeader)
+      participation.roles.create!(type: Event::Course::Role::AssistantLeader)
 
       visit participation_path
       within "#event_participation_price_category" do
