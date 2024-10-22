@@ -13,6 +13,11 @@ describe Event::ParticipationAbility do
     Event::Participation.new(event: event, person: person, application_id: -1)
   end
 
+  def build_participation_role(person, role_type)
+    build(:bluemlisalp_funktionaere, event: top_course, person: person).tap(&:save!)
+      .roles.create!(type: role_type)
+  end
+
   def build_role(key, role)
     group = groups(key)
     types = group.role_types.collect { |rt| [rt.to_s.demodulize, rt.sti_name] }.to_h
@@ -25,17 +30,63 @@ describe Event::ParticipationAbility do
     let(:top_course) { events(:top_course) }
     let(:participation) { build(:bluemlisalp_funktionaere, event: top_course) }
     let(:role) { build_role(:bluemlisalp_funktionaere, "Andere") }
+  
+    context "leader" do
+      let(:role_type) { Event::Course::Role::Leader.sti_name }
 
-    describe "summon" do
-      it "leader may not summon" do
-        build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-          .roles.create!(type: Event::Course::Role::Leader.sti_name)
+      before do
+        build_participation_role(role.person, role_type)
+      end
+  
+      it "cannot assign" do
+        expect(subject).not_to be_able_to(:assign, participation)
+      end
+  
+      it "can be absent" do
+        expect(subject).to be_able_to(:absent, participation)
+      end
+  
+      it "can attend" do
+        expect(subject).to be_able_to(:attend, participation)
+      end
+  
+      it "cannot summon" do
         expect(subject).not_to be_able_to(:summon, participation)
       end
+    end
+  
+    context "assistant leader" do
+      let(:role_type) { Event::Course::Role::AssistantLeader.sti_name }
+  
+      before do
+        build_participation_role(role.person, role_type)
+      end
 
-      it "participant may not summon" do
-        build(:bluemlisalp_funktionaere, event: top_course, person: role.person).tap(&:save!)
-          .roles.create!(type: Event::Course::Role::Participant.sti_name)
+      it "cannot assign" do
+        expect(subject).not_to be_able_to(:assign, participation)
+      end
+  
+      it "can be absent" do
+        expect(subject).to be_able_to(:absent, participation)
+      end
+  
+      it "can attend" do
+        expect(subject).to be_able_to(:attend, participation)
+      end
+  
+      it "cannot summon" do
+        expect(subject).not_to be_able_to(:summon, participation)
+      end
+    end
+  
+    context "participant" do
+      let(:role_type) { Event::Course::Role::Participant.sti_name }
+  
+      before do
+        build_participation_role(role.person, role_type)
+      end
+
+      it "cannot summon" do
         expect(subject).not_to be_able_to(:summon, participation)
       end
     end
