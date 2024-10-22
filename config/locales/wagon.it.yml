@@ -1192,6 +1192,7 @@ it:
         assignment_closed: Finalizzare l'assegnazione
         ready: Pronti per l'implementazione
         closed: Finalizzare
+        closed_confirm_text: ""
         canceled: Cancellazioni
       state_back_buttons:
         assignment_closed: Torna all'assegnazione

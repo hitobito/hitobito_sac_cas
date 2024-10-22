@@ -1140,6 +1140,7 @@ en:
         assignment_closed: Finalize allocation
         ready: Ready for implementation
         closed: Finalize
+        closed_confirm_text: ""
         canceled: Cancellations
       state_back_buttons:
         assignment_closed: Back to the allocation

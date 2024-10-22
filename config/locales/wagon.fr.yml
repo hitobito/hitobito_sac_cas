@@ -1192,6 +1192,7 @@ fr:
         assignment_closed: Terminer l'attribution
         ready: Prêt à mettre en œuvre
         closed: Fermer
+        closed_confirm_text: ""
         canceled: Annulations
       state_back_buttons:
         assignment_closed: Retour à l'allocation
