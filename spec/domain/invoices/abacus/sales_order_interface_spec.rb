@@ -234,7 +234,7 @@ describe Invoices::Abacus::SalesOrderInterface do
       .with(
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
               "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
-              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"KR\",\"ProcessFlowNumber\":2,\"UserFields\":" \
+              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"RK\",\"ProcessFlowNumber\":2,\"UserFields\":" \
               "{\"UserField1\":\"#{invoice_id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
               "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":20.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Kursname (234)\",\"ProductNumber\":\"234\"},\"Accounts\":{},\"UserFields\":{\"UserField1\":\"Kursname (234)\"}}]}",
