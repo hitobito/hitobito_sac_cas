@@ -67,11 +67,10 @@ describe Invoices::Abacus::SalesOrderInterface do
     expect(invoice.abacus_sales_order_key).to eq(19)
   end
 
-
   it "creates course participation sales order in abacus" do
     course = Fabricate(:sac_course, kind: event_kinds(:ski_course))
     participation = Fabricate(:event_participation, event: course, person: person, price: 20, price_category: 1)
-    invoice =  ExternalInvoice::CourseParticipation.create!(
+    invoice = ExternalInvoice::CourseParticipation.create!(
       person: person,
       issued_at: "2020-01-15",
       sent_at: "2020-01-05",
