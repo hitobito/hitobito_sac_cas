@@ -311,6 +311,14 @@ en:
           price_js_active_regular: ""
           price_js_passive_member: ""
           price_js_passive_regular: ""
+        invoice_state: ""
+        invoice_states:
+          _nil: ""
+          draft: ""
+          open: ""
+          payed: ""
+          cancelled: ""
+          error: ""
       event/role:
         self_employed: ""
       external_training:
