@@ -100,6 +100,7 @@ module SacCas::Event::Course
 
   prepended do # rubocop:disable Metrics/BlockLength
     include I18nEnums
+    # all course state specific callbacks are defined here
     include Events::Courses::State
 
     translates :brief_description, :specialities, :similar_tours, :program

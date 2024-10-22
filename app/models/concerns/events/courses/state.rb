@@ -32,9 +32,10 @@ module Events::Courses::State
     after_update :send_application_paused_email, if: :state_changed_to_application_paused?
     after_update :send_application_closed_email, if: :state_changed_to_application_closed?
     after_update :send_canceled_email, if: :state_changed_to_canceled?
+    after_update :cancel_invoices, if: :state_changed_to_canceled?
+    after_update :annul_participations, if: :state_changed_to_canceled?
     after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
     after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
-    after_update :cancel_invoices, if: :state_changed_to_canceled?
   end
 
   def available_states(state = self.state)
@@ -63,19 +64,23 @@ module Events::Courses::State
   end
 
   def state_changed_to_assignment_closed?
-    saved_change_to_attribute(:state)&.second == "assignment_closed"
+    state_changed_to?(:assignment_closed)
   end
 
   def state_changed_to_application_paused?
-    saved_change_to_attribute(:state)&.second == "application_paused"
+    state_changed_to?(:application_paused)
   end
 
   def state_changed_to_application_closed?
-    saved_change_to_attribute(:state)&.second == "application_closed"
+    state_changed_to?(:application_closed)
   end
 
   def state_changed_to_canceled?
-    saved_change_to_attribute(:state)&.second == "canceled"
+    state_changed_to?(:canceled)
+  end
+
+  def state_changed_to?(new_state)
+    saved_change_to_attribute(:state)&.second == new_state.to_s
   end
 
   def state_changed_from_assignment_closed_to_ready?
@@ -104,14 +109,21 @@ module Events::Courses::State
     assigned_participants.update_all(state: :summoned)
   end
 
+  def annul_participations
+    participations.update_all(state: :annulled)
+  end
+
   def cancel_invoices
-    course_invoices.each do |invoice|
+    course_invoices.find_each do |invoice|
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
   end
 
   def course_invoices
-    ExternalInvoice::Course.where(link: participations)
+    ExternalInvoice::Course.where(
+      link_id: participations.select(:id),
+      link_type: Event::Participation.sti_name
+    )
   end
 
   def assigned_participants
