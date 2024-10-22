@@ -20,18 +20,12 @@ class ExternalTrainingAbility < AbilityDsl::Base
     subject.person
   end
 
-  def in_same_layer_or_below_unless_sektions_mitgliederverwaltung
-    without_role(Group::SektionsFunktionaere::Mitgliederverwaltung) do
-      in_same_layer_or_below
-    end
-  end
-
   def in_same_layer_if_section_may_create
     in_same_layer && permisson_on_root_or_section_may_create(:layer_full)
   end
 
-  def in_same_layer_or_below_unless_sektions_mitgliederverwaltung_if_section_may_create
-    in_same_layer_or_below_unless_sektions_mitgliederverwaltung && permisson_on_root_or_section_may_create(:layer_and_below_full)
+  def in_same_layer_or_below_if_section_may_create
+    in_same_layer_or_below && permisson_on_root_or_section_may_create(:layer_and_below_full)
   end
 
   def in_same_group_if_section_may_create
@@ -42,6 +36,7 @@ class ExternalTrainingAbility < AbilityDsl::Base
     in_same_group_or_below && permisson_on_root_or_section_may_create(:group_and_below_full)
   end
 
+  # always allow when permission is on root group, if not, check for section_may_create on event kind
   def permisson_on_root_or_section_may_create(permission)
     permitted_groups = user.groups_with_permission(permission)
     user_context.layer_ids(permitted_groups).include?(Group.root.id) ||

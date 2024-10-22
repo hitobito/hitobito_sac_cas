@@ -15,30 +15,29 @@ describe ExternalTrainingAbility do
 
   subject(:ability) { Ability.new(role.person.reload) }
 
-
   context "root layer" do
     context "with layer_and_below_full" do
       let(:role) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle)) }
 
       context "in same layer" do
         let(:person) { Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym, group: groups(:geschaeftsstelle)).person }
-  
+
         it "can create and destroy" do
           expect(ability).to be_able_to(:create, external_training)
           expect(ability).to be_able_to(:destroy, external_training)
         end
-  
+
         it "can create and destroy if section may not create" do
           Event::Kind.first.update!(section_may_create: false)
-  
+
           expect(ability).to be_able_to(:create, external_training)
           expect(ability).to be_able_to(:destroy, external_training)
         end
       end
-  
+
       context "in layer below" do
         let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)).person }
-  
+
         it "can create and destroy in layer below" do
           expect(ability).to be_able_to(:create, external_training)
           expect(ability).to be_able_to(:destroy, external_training)
