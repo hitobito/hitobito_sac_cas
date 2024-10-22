@@ -46,7 +46,7 @@ module Invoices
       end
 
       def beitragskategorie_amount
-        parts = [format_position_amount(:total_amount)]
+        parts = [format_position_amount(:annual_fee)]
         if entry_fee.positive?
           parts += [translate_position_text(:entry_fee)]
           parts += [format_position_amount(:entry_fee)]
