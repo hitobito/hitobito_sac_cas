@@ -9,7 +9,7 @@ def seed_magazin_abo(name, parent)
   Group::AboMagazin.seed_once(:parent_id, :name) do |a|
     a.parent_id = parent.id
     a.name = name
-    a.self_registration_role_type = "Group::AboMagazin::Abonnent"
+    a.self_registration_role_type = Group::AboMagazin::Neuanmeldung.sti_name
   end
 end
 
