@@ -313,6 +313,8 @@ it:
           price_js_active_regular: ""
           price_js_passive_member: ""
           price_js_passive_regular: ""
+      event/role:
+        self_employed: ""
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -529,6 +531,14 @@ it:
         one: Livello del corso
         many: Livelli del corso
         other: Livelli del corso
+      event/role/leader:
+        one: ''
+        many: ''
+        other: ''
+      event/role/assistant_leader:
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -1187,6 +1197,9 @@ it:
       kind_overrides_link_title:
         "Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giorni di formazione, Alloggio riservato dal SAC, Alloggio, Centro di costo, Unità di costo"
     maximum_age_with_years: "%{maximum_age} Anni (annata)"
+    roles:
+      self_employed: ""
+      not_self_employed: ""
 
   external_trainings:
     form:

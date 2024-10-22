@@ -313,6 +313,8 @@ fr:
           price_js_active_regular: ""
           price_js_passive_member: ""
           price_js_passive_regular: ""
+      event/role:
+        self_employed: ""
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -529,6 +531,14 @@ fr:
         one: Niveau de cours
         many: Niveaux de cours
         other: Niveaux de cours
+      event/role/leader:
+        one: ''
+        many: ''
+        other: ''
+      event/role/assistant_leader:
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1187,6 +1197,9 @@ fr:
       kind_overrides_link_title:
         "Les champs suivants sont repris : Description, Conditions d'admission, Nombre minimal de participants, Nombre maximal de participants, Âge minimal, Saison, Jours de formation, Réservation de l'hébergement par le CAS, Hébergement, Centre de coûts, Organisme payeur"
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
+    roles:
+      self_employed: ""
+      not_self_employed: ""
 
   external_trainings:
     form:

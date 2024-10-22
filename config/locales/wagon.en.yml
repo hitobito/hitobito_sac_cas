@@ -311,6 +311,8 @@ en:
           price_js_active_regular: ""
           price_js_passive_member: ""
           price_js_passive_regular: ""
+      event/role:
+        self_employed: ""
       external_training:
         person: Person
         event_kind: Course type
@@ -521,6 +523,12 @@ en:
       event/level:
         one: Course level
         other: Course levels
+      event/role/leader:
+        one: ''
+        other: ''
+      event/role/assistant_leader:
+        one: ''
+        other: ''
       external_training:
         one: External training
         other: External training
@@ -1137,6 +1145,9 @@ en:
       kind_overrides_link_title:
         "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
     maximum_age_with_years: "%{maximum_age} Years (vintage)"
+    roles:
+      self_employed: ""
+      not_self_employed: ""
 
   external_trainings:
     form:
