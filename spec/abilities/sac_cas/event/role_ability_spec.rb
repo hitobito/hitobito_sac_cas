@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::RoleAbility do
-
   subject(:ability) { Ability.new(role.person.reload) }
 
   context "any" do
