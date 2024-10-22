@@ -7,7 +7,6 @@
 
 class ExternalInvoiceAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
-  include SacCas::AbilityConstraints
 
   on(ExternalInvoice) do
     permission(:layer_and_below_full).may(:manage).if_backoffice

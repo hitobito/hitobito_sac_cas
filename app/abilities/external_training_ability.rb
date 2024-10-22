@@ -7,12 +7,10 @@
 
 class ExternalTrainingAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
-  include SacCas::AbilityConstraints
 
   on(ExternalTraining) do
     permission(:layer_full).may(:create, :destroy).in_same_layer
-    permission(:layer_and_below_full).may(:create, :destroy)
-      .in_same_layer_or_below_unless_sektions_mitgliederverwaltung
+    permission(:layer_and_below_full).may(:create, :destroy).in_same_layer_or_below
 
     permission(:group_full).may(:create, :destroy).in_same_group
     permission(:group_and_below_full).may(:create, :destroy).in_same_group_or_below
@@ -20,11 +18,5 @@ class ExternalTrainingAbility < AbilityDsl::Base
 
   def person
     subject.person
-  end
-
-  def in_same_layer_or_below_unless_sektions_mitgliederverwaltung
-    without_role(Group::SektionsFunktionaere::Mitgliederverwaltung) do
-      in_same_layer_or_below
-    end
   end
 end
