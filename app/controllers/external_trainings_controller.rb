@@ -25,8 +25,12 @@ class ExternalTrainingsController < CrudController
   before_render_form :load_event_kinds
   before_render_form :load_other_people
 
+  # skip authorization for create to assign_attributes before authorization
+  skip_authorize_resource only: [:create]
+
   def create
     assign_attributes
+    authorize!(:create, entry)
     if ExternalTraining.transaction { save_entry }
       redirect_to(history_path, notice: create_success_message)
     else
