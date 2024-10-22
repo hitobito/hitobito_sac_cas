@@ -13,7 +13,7 @@ module Invoices
       TYPE = "Product"
       INVOICE_KINDS = {
         sac_membership: "R",
-        course: "C"
+        course: "RK"
       }.with_indifferent_access.freeze
       PROCESS_FLOW_NUMBERS = {
         sac_membership: 1,
