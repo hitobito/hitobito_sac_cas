@@ -93,4 +93,16 @@ describe "person show page" do
       end
     end
   end
+
+  describe "person without roles" do
+    let(:person_without_role) { Fabricate(:person) }
+
+    it "shows full person view and can view history" do
+      visit group_person_path(group_id: groups(:root).id, id: person_without_role.id)
+      expect(page).to have_link "Mitgliedschaften / Verlauf"
+      expect(page).to have_css "h2", text: "Weitere Angaben"
+      click_on "Mitgliedschaften / Verlauf"
+      expect(page).to have_text "Hier kannst du deine Mitgliedschaften verwalten"
+    end
+  end
 end

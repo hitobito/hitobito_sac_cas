@@ -12,7 +12,13 @@ module SacCas::PersonAbility
   prepended do
     on(Person) do
       class_side(:create_households).if_backoffice
-      permission(:read_all_people).may(:read_all_people, :show).everybody
+      permission(:read_all_people)
+        .may(:read_all_people, :show)
+        .everybody
+      permission(:read_all_people)
+        .may(:history, :show_details, :show_full, :index_notes, :log, :security)
+        .if_backoffice
+
       permission(:layer_and_below_full)
         .may(:index_external_invoices, :create_membership_invoice, :cancel_external_invoice, :security)
         .if_backoffice
