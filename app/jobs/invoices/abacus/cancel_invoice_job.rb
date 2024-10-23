@@ -14,19 +14,21 @@ class Invoices::Abacus::CancelInvoiceJob < BaseJob
   end
 
   def perform
-    return if !external_invoice || external_invoice.state == "cancelled" # may have been deleted already
+    return if !external_invoice ||
+      external_invoice.abacus_sales_order_key.blank? || # may not have been sent to abacus yet
+      external_invoice.state == "cancelled" # may have been cancelled already
 
     sales_order = Invoices::Abacus::SalesOrder.new(external_invoice)
     Invoices::Abacus::SalesOrderInterface.new.cancel(sales_order)
   end
 
-  def error(_job, exception, payload = parameters)
+  def error(_job, exception)
     HitobitoLogEntry.create!(
       level: "error",
       category: "rechnungen",
-      message: exception.message,
-      subject: external_invoice,
-      payload: payload
+      message: I18n.t("invoices.errors.cancel_invoice_failed"),
+      payload: exception.message,
+      subject: external_invoice
     )
     super
   end

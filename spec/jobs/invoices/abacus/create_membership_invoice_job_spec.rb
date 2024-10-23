@@ -97,7 +97,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
           .and not_change { external_invoice.reload.state }
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "ouch"
+        expect(log_entry.message).to eq "Probleme beim Erstellen der Rechnung"
+        expect(log_entry.payload).to eq "ouch"
         expect(log_entry.subject).to eq external_invoice
       end
 

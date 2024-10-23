@@ -29,8 +29,6 @@
 #  index_external_invoices_on_person_id  (person_id)
 #
 class ExternalInvoice::CourseParticipation < ExternalInvoice
-  NOT_POSSIBLE_KEY = "invoices.course_participation.no_invoice_possible"
-
   self.invoice_kind = :course
 
   # link is an Event::Participation object for a Event::Course

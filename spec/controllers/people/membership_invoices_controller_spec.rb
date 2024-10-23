@@ -61,8 +61,7 @@ describe People::MembershipInvoicesController do
           .and not_change { Delayed::Job.count }
 
         expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
-        expect(flash[:alert]).to eq "Die gewünschte Person hat Datenqualitätsprobleme. " \
-          "Es wurde entsprechend keine Rechnung erstellt."
+        expect(flash[:alert]).to eq "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
       end
     end
   end

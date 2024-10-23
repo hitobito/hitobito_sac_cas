@@ -27,11 +27,11 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
 
   def invoice_error_key
     if person.data_quality == "error"
-      ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY
+      "invoices.errors.data_quality_error"
     elsif invoice_data.memberships.none?
-      ExternalInvoice::SacMembership::NO_MEMBERSHIPS_KEY
+      "people.membership_invoices.no_memberships"
     else
-      ExternalInvoice::SacMembership::NOT_POSSIBLE_KEY
+      "people.membership_invoices.no_invoice_possible"
     end
   end
 end
