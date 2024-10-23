@@ -6,14 +6,4 @@
   .card-body
     %h2.card-title="#{presenter.beitragskategorie_label} #{group.layer_group}"
     .card-text
-      %table.table.table-borderless
-        %tbody
-          - *positions, total = presenter.lines
-          - positions.each do |line|
-            %tr
-              %td= line.amount
-              %td= line.label
-        %tfoot.fw-bold.border-top
-          %tr
-            %td= total.amount
-            %td= total.label
+      = render "wizards/signup/section_fee_positions_table", presenter: presenter

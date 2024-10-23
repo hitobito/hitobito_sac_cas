@@ -80,7 +80,7 @@ class Signup::SektionMailer < ApplicationMailer
       @section,
       @beitragskategorie
     )
-    ApplicationController.render("wizards/signup/_section_fee_details", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
+    ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
   end
 
   def placeholder_profile_url
