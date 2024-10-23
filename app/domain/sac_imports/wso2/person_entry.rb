@@ -20,7 +20,7 @@ module SacImports::Wso2
     validate :person_must_exist_if_navision_id_is_present
 
     def existing_and_wso2_email_matches
-      if person.persisted? && email != person.email
+      if person.persisted? && person.email? && email != person.email
         errors.add(:email, "#{row[:email]} does not match the current email")
       end
       if !person.persisted? && Person.exists?(email: email)
@@ -91,16 +91,15 @@ module SacImports::Wso2
       person.transaction do
         person.save!
         remove_navision_import_role!
-        if !person.valid?
-          raise ActiveRecord::RecordInvalid
-        end
       end
     end
 
     private
 
     def remove_navision_import_role!
-      person.roles.where(group_id: @navision_import_group.id).find_each(&:really_destroy!)
+      return unless person.persisted?
+
+      Role.where(person_id: person.id, group_id: @navision_import_group.id).delete_all
     end
 
     def assign_common_attributes(person)
@@ -121,9 +120,6 @@ module SacImports::Wso2
     def assign_attributes(person)
       assign_common_attributes(person)
 
-      person.primary_group = @basic_login_group
-      person.email = email
-
       person.first_name = row[:first_name]
       person.last_name = row[:last_name]
       person.address_care_of = row[:address_care_of]
@@ -138,14 +134,15 @@ module SacImports::Wso2
       person.birthday = row[:birthday]
       person.gender = gender
       person.language = language
-      person.phone_numbers.build(
-        number: row[:phone],
-        label: "Hauptnummer"
-      )
-      person.phone_numbers.build(
-        number: row[:phone_business],
-        label: "Arbeit"
-      )
+
+      assign_phone_number(person, row[:number], "Hauptnummer")
+      assign_phone_number(person, row[:phone_business], "Arbeit")
+    end
+
+    def assign_phone_number(person, number, label)
+      return if number.blank? || person.phone_numbers.any? { |phone_number| phone_number.number == number }
+
+      person.phone_numbers << PhoneNumber.new(number: number, label: label)
     end
 
     def assign_roles(person)
@@ -190,7 +187,7 @@ module SacImports::Wso2
       existing_person = navision_id && Person.find_by_id(navision_id)
       return existing_person if existing_person.present?
 
-      Person.where(primary_group: @basic_login_group, email: email).first_or_initialize
+      Person.where(email: email).first_or_initialize
     end
   end
 end

@@ -15,18 +15,21 @@ module SacImports
       :errors
     ]
 
-    def initialize(output: $stdout)
+    def initialize(output: $stdout, debug: false)
       PaperTrail.enabled = false # disable versioning for imports
       @output = output
+      @debug = debug
       @source_file = CsvSource.new(:WSO21)
       @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)
     end
 
     def create
       data = @source_file.rows
+      @progress = Progress.new(data.size, silent: @debug, output: @output)
       data.each do |row|
         process_row(row)
       end
+
       @csv_report.finalize(output: @output)
     end
 
@@ -45,9 +48,10 @@ module SacImports
     end
 
     def process_row(row)
-      @output.print("#{row[:navision_id]} (#{row[:email]}):")
+      @progress.step
+      @output.print("#{row[:navision_id]} (#{row[:email]}):") if @debug
       entry = Wso2::PersonEntry.new(row, basic_login_group, abo_group, navision_import_group)
-      @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
+      @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}  --- ETA:#{@progress.eta}\n") if @debug
       if entry.valid?
         entry.import!
         if entry.warning

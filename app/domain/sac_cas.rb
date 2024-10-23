@@ -69,7 +69,7 @@ module SacCas
 
   ABONNENT_ROLES = [
     ::Group::AboMagazin::Abonnent,
-    ::Group::AboTourenPortal::Abonnent
+    # ::Group::AboTourenPortal::Abonnent
   ].freeze
 
   WIZARD_MANAGED_ROLES = [
