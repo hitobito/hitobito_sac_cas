@@ -26,7 +26,6 @@ module SacImports
     ROW_IMPORTERS = [
       SacImports::Huts::HutCommissionRow,
       SacImports::Huts::HutsRow,
-      SacImports::Huts::HutRow,
       SacImports::Huts::SacCasPrivathuetteRow,
       SacImports::Huts::SacCasClubhuetteRow,
       SacImports::Huts::SektionshuetteRow,
@@ -60,7 +59,7 @@ module SacImports
     private
 
     def print_summary(model_class)
-      model_class.where('type LIKE "%huette%"').group(:type).count.sort_by(&:second).each do |row|
+      model_class.where("type LIKE '%huette%'").group(:type).count.sort_by(&:second).each do |row|
         p row
       end
     end
@@ -74,8 +73,8 @@ module SacImports
     end
 
     def import_sac_cas_hut_groups
-      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasClubhuetten)
-      Group::SacCas.first.children.find_or_create_by(type: Group::SacCasPrivathuetten)
+      Group.root.children.find_or_create_by(type: Group::SacCasClubhuetten.sti_name)
+      Group.root.children.find_or_create_by(type: Group::SacCasPrivathuetten.sti_name)
     end
 
     def without_query_logging
