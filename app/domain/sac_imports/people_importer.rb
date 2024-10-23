@@ -31,10 +31,8 @@ module SacImports
         @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row[:last_name]} #{start_from_row[:first_name]})\n")
       end
 
-      Parallel.map(data, in_threads: 12) do |row|
+      data.each do |row|
         process_row(row)
-      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-        raise Parallel::Break
       end
 
       @csv_report.finalize(output: @output)

@@ -109,8 +109,8 @@ module SacImports::People
       end
 
       if email.present?
-        if Person.where.not(id: person.id).where(email: email).exists?
-          person.additional_emails << ::AdditionalEmail.new(email: email, label: "Duplikat")
+        if Person.where.not(id: person.id).where("LOWER(email) LIKE LOWER(?)", email).exists?
+          person.additional_emails = [::AdditionalEmail.new(email: email, label: "Duplikat")]
           @warning = "Email #{email} already exists in the system. Importing with additional_email."
         else
           person.email = email
@@ -126,15 +126,9 @@ module SacImports::People
     end
 
     def build_phone_numbers(person)
-      # rubocop:disable Lint/SymbolConversion
-      phone_numbers = {
-        "Hauptnummer": row[:phone]
-      }.freeze
-      # rubocop:enable Lint/SymbolConversion
-
-      phone_numbers.each do |label, number|
-        person.phone_numbers.find_or_initialize_by(number: number, label: label) if phone_valid?(number)
-      end
+      number = row[:phone].presence
+      phone_numbers = phone_valid?(number) ? [PhoneNumber.new(number:, label: "Hauptnummer")] : []
+      person.phone_numbers = phone_numbers
     end
 
     def build_role(person)

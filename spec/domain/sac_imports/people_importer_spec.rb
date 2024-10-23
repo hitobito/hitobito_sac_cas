@@ -109,6 +109,29 @@ describe SacImports::PeopleImporter, versioning: true do
     expect(Person.find_by(id: invalid_person_navision_id)).to be_nil
   end
 
+  context "for person having already taken email" do
+    let(:email) { "example@example.com" }
+    let!(:existing_person) { Fabricate(:person, email: email) }
+
+    it "adds email as additional email" do
+      importer.create
+
+      person = Person.find(people_navision_ids.first)
+      expect(person.email).to be_blank
+      expect(person.additional_emails.count).to eq(1)
+      expect(person.additional_emails.first.email).to eq(email)
+      expect(person.additional_emails.first.label).to eq("Duplikat")
+    end
+
+    it "does not add email as additional email if it already exists" do
+      person = Person.new(id: "4200000").tap { |p| p.save(validate: false) }
+      person.additional_emails.create!(email: email, label: "Duplikat")
+
+      expect { importer.create }
+        .not_to change { person.additional_emails.count }
+    end
+  end
+
   context "with start_at_navision_id" do
     it "starts imported from given navision_id" do
       expected_output = ["Starting import from row with navision_id 4200008 (Bühler Christian)\n"]
