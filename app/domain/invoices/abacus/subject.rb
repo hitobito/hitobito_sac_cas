@@ -45,7 +45,11 @@ module Invoices
       end
 
       def assign_subject_key(data)
-        entity.update_column(:abacus_subject_key, data[:id]) unless entity.abacus_subject_key?  # rubocop:disable Rails/SkipsModelValidations
+        # Raise an error if abacus did not use the person.id as subject key
+        # (even though SubjectInterface checked that the person.id is not taken yet in Abacus)
+        raise "Abacus created subject with id=#{data[:id]} but person has id=#{entity.id}" if entity.id != data[:id].to_i
+
+        entity.update_column(:abacus_subject_key, data[:id]) unless entity.abacus_subject_key == data[:id]  # rubocop:disable Rails/SkipsModelValidations
       end
 
       def subject_attrs

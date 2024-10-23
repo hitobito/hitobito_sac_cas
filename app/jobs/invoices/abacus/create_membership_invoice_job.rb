@@ -25,13 +25,11 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
       .build(new_entry: new_entry)
   end
 
-  def invoice_error_key
-    if person.data_quality == "error"
-      "invoices.errors.data_quality_error"
-    elsif invoice_data.memberships.none?
-      "people.membership_invoices.no_memberships"
+  def default_invoice_error_message
+    if invoice_data.memberships.none?
+      I18n.t("people.membership_invoices.no_memberships")
     else
-      "people.membership_invoices.no_invoice_possible"
+      I18n.t("people.membership_invoices.no_invoice_possible")
     end
   end
 end

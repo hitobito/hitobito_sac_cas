@@ -17,21 +17,27 @@ class Invoices::Abacus::TransmitPersonJob < BaseJob
     return if person.nil? # may have been deleted already
 
     subject = Invoices::Abacus::Subject.new(person)
-    Invoices::Abacus::SubjectInterface.new.transmit(subject)
+    unless Invoices::Abacus::SubjectInterface.new.transmit(subject)
+      create_log_error(subject.error_messages.join(", "))
+    end
   end
 
   def error(_job, exception)
-    HitobitoLogEntry.create!(
-      category: :rechnungen,
-      level: :error,
-      message: "Die Personendaten konnten nicht an Abacus übermittelt werden",
-      payload: exception.message,
-      subject: person
-    )
+    create_log_error(exception.message)
     super
   end
 
   private
+
+  def create_log_error(message)
+    HitobitoLogEntry.create!(
+      category: :rechnungen,
+      level: :error,
+      message: "Die Personendaten konnten nicht an Abacus übermittelt werden",
+      payload: message,
+      subject: person
+    )
+  end
 
   def person
     @person ||= Person.find_by(id: @person_id)

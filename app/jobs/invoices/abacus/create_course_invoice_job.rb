@@ -17,11 +17,7 @@ class Invoices::Abacus::CreateCourseInvoiceJob < Invoices::Abacus::CreateInvoice
       Invoices::Abacus::CourseParticipationInvoice.new(external_invoice.link)
   end
 
-  def invoice_error_key
-    if person.data_quality == "error"
-      "invoices.errors.data_quality_error"
-    else
-      "invoices.course_participation.no_invoice_possible"
-    end
+  def default_invoice_error_message
+    I18n.t("invoices.course_participation.no_invoice_possible")
   end
 end

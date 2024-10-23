@@ -30,13 +30,30 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   it "creates person in abacus" do
+    stub_get_non_existing_subject_request
     stub_create_subject_request
     stub_create_address_request
     stub_create_communication_request
     stub_create_customer_request
 
-    interface.transmit(subject)
+    expect(interface.transmit(subject)).to be(true)
     expect(person.abacus_subject_key).to eq(person.id)
+  end
+
+  it "returns false if subject key is already taken in abacus" do
+    stub_get_subject_request
+
+    expect(interface.transmit(subject)).to be(false)
+    expect(subject.errors).to eq({abacus_subject_key: :taken})
+  end
+
+  it "fails if abacus assigns a different subject key" do
+    stub_get_non_existing_subject_request
+    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}"
+    response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    stub_simple_request(:post, "Subjects", body, response)
+
+    expect { interface.transmit(subject) }.to raise_error("Abacus created subject with id=1234 but person has id=#{person.id}")
   end
 
   it "does nothing if attrs are unchanged" do
@@ -257,6 +274,15 @@ describe Invoices::Abacus::SubjectInterface do
   def stub_get_subject_request
     path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
     stub_simple_request(:get, path, nil, get_subject_response)
+  end
+
+  def stub_get_non_existing_subject_request
+    path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
+    stub_request(:get, "#{host}/api/entity/v1/mandants/#{mandant}/#{path}")
+      .with(
+        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
+      )
+      .to_return(status: 404, body: "")
   end
 
   def stub_simple_request(method, path, request_body, response_body = "{}")
