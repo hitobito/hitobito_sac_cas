@@ -1294,6 +1294,7 @@ de:
   invoices:
     errors:
       data_quality_error: "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
+      create_subject_failed: "Probleme beim Übermitteln der Personendaten"
       create_invoice_failed: "Probleme beim Erstellen der Rechnung"
       cancel_invoice_failed: "Probleme beim Stornieren der Rechnung"
     course_participation:

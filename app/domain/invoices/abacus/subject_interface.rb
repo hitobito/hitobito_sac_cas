@@ -12,11 +12,14 @@ module Invoices
         @client = client
       end
 
-      # Requires abacus
       def transmit(subject)
         return false unless subject.valid?
 
-        remote = fetch(subject.subject_id)
+        # Create abacus subject with id from hitobito.
+        # If the id is already taken in abacus, flag an error
+        remote = fetch(subject.subject_or_entity_id)
+        return false if check_subject_key_taken(subject, remote)
+
         remote ? update(subject, remote) : create(subject)
         true
       end
@@ -26,7 +29,7 @@ module Invoices
 
         # Initial people imports to hitobito are run multiple times, but People always get the same Id.
         # Each time, the database is cleared. Subjects persisted in Abacus, however, are not affected.
-        # Because we try to use the same Id in hitobito and in Abacus, we fetch by Person#id from Abacus
+        # Because we use the same Id in hitobito and in Abacus, we fetch by Person#id from Abacus
         # if the abacus_subject_key is not set yet. If this Id already exists in Abacus, we assume it's
         # the same person and set the abacus_subject_key accordingly.
         parts = fetch_batch(subjects)
@@ -44,6 +47,8 @@ module Invoices
       rescue RestClient::NotFound
         nil
       end
+
+      private
 
       def fetch_batch(subjects)
         client.batch do
@@ -87,12 +92,7 @@ module Invoices
         end
       end
 
-      private
-
       def create_subject_request(subject)
-        # Create abacus subject with id from hitobito if possible.
-        # If the id is already taken, abacus will reassign another one,
-        # which is persisted in Person#abacus_subject_key.
         client.create(:subject, subject.subject_attrs.merge(id: subject.entity.id))
       end
 
@@ -170,6 +170,13 @@ module Invoices
         return if customers.present?
 
         create_customer(subject)
+      end
+
+      def check_subject_key_taken(subject, remote)
+        return false unless remote && subject.subject_id.zero?
+
+        subject.errors[:abacus_subject_key] = :taken
+        true
       end
 
       def client

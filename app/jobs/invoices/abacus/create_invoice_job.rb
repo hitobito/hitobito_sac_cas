@@ -15,8 +15,7 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
   end
 
   def perform
-    if invoice_data.invoice? && person.data_quality != "error"
-      transmit_subject
+    if invoice_data.invoice? && person.data_quality != "error" && transmit_subject
       external_invoice.update!(total: invoice_data.total)
       transmit_sales_order
     else
@@ -37,11 +36,10 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   def assign_error
     external_invoice.update!(state: :error)
-    create_error_log_entry(I18n.t(invoice_error_key))
+    create_error_log_entry(*invoice_error_message)
   end
 
   def transmit_subject
-    subject = Invoices::Abacus::Subject.new(person)
     Invoices::Abacus::SubjectInterface.new(client).transmit(subject)
   end
 
@@ -72,9 +70,25 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   def person = @person ||= Person.find(external_invoice.person_id)
 
+  def subject = @subject ||= Invoices::Abacus::Subject.new(person)
+
   # Override in subclass
   def invoice_data
     raise NotImplementedError, "invoice_data has to be implemented in subclass"
+  end
+
+  def invoice_error_message
+    if person.data_quality == "error"
+      I18n.t("invoices.errors.data_quality_error")
+    elsif subject.errors.present?
+      [I18n.t("invoices.errors.create_subject_failed"), subject.error_messages.join(", ")]
+    else
+      default_invoice_error_message
+    end
+  end
+
+  def default_invoice_error_message
+    I18n.t("invoices.errors.create_invoice_failed")
   end
 
   def invoice_error_key

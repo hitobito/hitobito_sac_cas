@@ -38,7 +38,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
   subject(:job) { described_class.new(external_invoice) }
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
-    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit)
+    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
     allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
     expect do
       job.perform
@@ -60,6 +60,28 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
         expect(log_entry.message).to eq "Diese/r Teilnehmer/in erhält keine Rechnung."
+        expect(log_entry.subject).to eq external_invoice
+      end
+    end
+
+    context "with subject errors" do
+      it "logs error message and terminates" do
+        expect_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_wrap_original do |original, subject|
+          subject.errors[:abacus_subject_key] = :taken
+          false
+        end
+        expect(job).not_to receive(:transmit_sales_order)
+
+        expect do
+          job.perform
+        end.to change { HitobitoLogEntry.count }.by(1)
+          .and change { external_invoice.reload.state }.to("error")
+
+        log_entry = HitobitoLogEntry.last
+        expect(log_entry.level).to eq "error"
+        expect(log_entry.category).to eq "rechnungen"
+        expect(log_entry.message).to eq "Probleme beim Übermitteln der Personendaten"
+        expect(log_entry.payload).to eq "Abacus subject key ist bereits vergeben"
         expect(log_entry.subject).to eq external_invoice
       end
     end

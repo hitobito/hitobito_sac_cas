@@ -35,7 +35,7 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
   before { allow(job).to receive(:client).and_return(client) }
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
-    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit)
+    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
     allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
     expect do
       job.perform
