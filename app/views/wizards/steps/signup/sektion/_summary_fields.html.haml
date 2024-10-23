@@ -7,9 +7,7 @@
   .align-with-form
     = content_tag(:h2, t(".my_membership"), class: "fw-bold")
     .row
-      = render "wizards/steps/signup/sektion/summary_entry_fee_card"
       = render "wizards/steps/signup/sektion/summary_person_card", person: wizard.person_fields
-
     - if wizard.respond_to?(:family_fields) && wizard.family_fields.members.present?
       = content_tag(:h2, t(".family_members"), class: "fw-bold")
       .row
