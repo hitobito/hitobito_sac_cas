@@ -1314,6 +1314,12 @@ it:
     cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
 
   invoices:
+    course_participation:
+      no_invoice_possible: ""
+    course_annulation:
+      title: ""
+      processing_fee: ""
+      cancellation_costs: ""
     sac_memberships:
       title: "Fattura associativa %{year}"
       positions:
@@ -1470,12 +1476,6 @@ it:
         create_invoice: "Creare la fattura"
         mv_yearly_invoice: "Bilancio annuale di MV"
         zusatzsektion_eintrittsrechnung: "Sezione aggiuntiva per la fattura Sezione"
-
-    course_invoices:
-      no_invoice_possible: ""
-      position_name: ""
-      processing_fee: ""
-      cancellation_costs: ""
 
     neuanmeldungen:
       multiselect_actions:
@@ -1740,6 +1740,8 @@ it:
           summary_family_member_card:
             adult: ""
             child: ""
+          summary_entry_fee_card:
+            immediate_entry_date: ""
 
         various_fields:
           newsletter: Vorrei iscrivermi alla newsletter

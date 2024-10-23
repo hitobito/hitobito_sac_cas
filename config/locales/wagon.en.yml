@@ -1262,6 +1262,12 @@ en:
     cannot_set_main_person: Contact the office to change the family invoice recipient
 
   invoices:
+    course_participation:
+      no_invoice_possible: ""
+    course_annulation:
+      title: ""
+      processing_fee: ""
+      cancellation_costs: ""
     sac_memberships:
       title: "Membership invoice %{year}"
       positions:
@@ -1414,12 +1420,6 @@ en:
         create_invoice: "Create invoice"
         mv_yearly_invoice: "MV annual financial statements"
         zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
-
-    course_invoices:
-      no_invoice_possible: ""
-      position_name: ""
-      processing_fee: ""
-      cancellation_costs: ""
 
     neuanmeldungen:
       multiselect_actions:
@@ -1681,6 +1681,8 @@ en:
           summary_family_member_card:
             adult: ""
             child: ""
+          summary_entry_fee_card:
+            immediate_entry_date: ""
 
         various_fields:
           newsletter: I would like to subscribe to a newsletter

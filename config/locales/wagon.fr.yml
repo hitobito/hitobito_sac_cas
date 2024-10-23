@@ -1314,6 +1314,12 @@ fr:
     cannot_set_main_person: Contacte le secrétariat pour modifier le bénéficiaire du compte familial.
 
   invoices:
+    course_participation:
+      no_invoice_possible: ""
+    course_annulation:
+      title: ""
+      processing_fee: ""
+      cancellation_costs: ""
     sac_memberships:
       title: "Facture d'adhésion %{year}"
       positions:
@@ -1470,12 +1476,6 @@ fr:
         create_invoice: "Créer une facture"
         mv_yearly_invoice: "Comptes annuels de l'AG"
         zusatzsektion_eintrittsrechnung: "Facture d'entrée de section supplémentaire Section"
-
-    course_invoices:
-      no_invoice_possible: ""
-      position_name: ""
-      processing_fee: ""
-      cancellation_costs: ""
 
     neuanmeldungen:
       multiselect_actions:
@@ -1740,6 +1740,8 @@ fr:
           summary_family_member_card:
             adult: ""
             child: ""
+          summary_entry_fee_card:
+            immediate_entry_date: ""
 
         various_fields:
           newsletter: Je souhaite m'abonner à une newsletter
