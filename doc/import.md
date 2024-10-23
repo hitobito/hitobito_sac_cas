@@ -129,6 +129,8 @@ Importiert alle Hütten und hängt diese unter den Sektionen entsprechend ein. A
 
 Datei: $CORE_ROOT/tmp/xlsx/huetten_beziehungen.xlsx
 
+`FILE=./tmp/sac_imports_src/Huetten_Beziehungen_20230704.xlsx rails sac_imports:nav5-1_huts`
+
 ### `sac_imports:nav8-1_austrittsgruende`
 
 ## Ausführen der Imports auf Openshift
