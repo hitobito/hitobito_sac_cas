@@ -26,7 +26,7 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
 
   def error(job, exception)
     super
-    create_error_log_entry(exception.to_s)
+    create_error_log_entry(I18n.t("invoices.errors.create_invoice_failed"), exception.to_s)
   end
 
   def failure(job)
@@ -54,9 +54,10 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
     Invoices::Abacus::SalesOrderInterface.new(client).create(sales_order)
   end
 
-  def create_error_log_entry(message)
+  def create_error_log_entry(message, payload = nil)
     HitobitoLogEntry.create!(
       message: message,
+      payload: payload,
       level: :error,
       category: ExternalInvoice::ERROR_CATEGORY,
       subject: external_invoice

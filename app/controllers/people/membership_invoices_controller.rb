@@ -23,7 +23,7 @@ class People::MembershipInvoicesController < ApplicationController
       if person.data_quality != "error"
         enqueue_job_and_redirect
       else
-        mark_with_error_and_redirect(ExternalInvoice::SacMembership::DATA_QUALITY_ERROR_KEY)
+        mark_with_error_and_redirect("invoices.errors.data_quality_error")
       end
     else
       @group = group

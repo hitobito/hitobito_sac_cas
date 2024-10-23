@@ -59,7 +59,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "Probleme beim Erstellen der Rechung"
+        expect(log_entry.message).to eq "Diese/r Teilnehmer/in erhält keine Rechnung."
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -86,7 +86,8 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
           .and not_change { external_invoice.reload.state }
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        expect(log_entry.message).to eq "ouch"
+        expect(log_entry.message).to eq "Probleme beim Erstellen der Rechnung"
+        expect(log_entry.payload).to eq "ouch"
         expect(log_entry.subject).to eq external_invoice
       end
 
