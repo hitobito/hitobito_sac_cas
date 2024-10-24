@@ -32,10 +32,11 @@ module Invoices
       def additional_user_fields
         return {} unless invoice?
 
+        # limit strings according to Abacus field lengths
         {
-          user_field8: event.number,
-          user_field9: event.name,
-          user_field10: event_dates_label
+          user_field8: event.number.to_s[0, 50],
+          user_field9: event.name.to_s[0, 100],
+          user_field10: event_dates_label[0, 100]
         }
       end
 
@@ -54,9 +55,7 @@ module Invoices
       end
 
       def event_dates_label
-        event.dates.map do |date|
-          "#{date.start_at.strftime("%d.%m.%Y")} - #{date.finish_at&.strftime("%d.%m.%Y")}"
-        end.join(", ")
+        event.dates.map { |date| Duration.new(date.start_at, date.finish_at).to_s(:short) }.join(", ")
       end
 
       def article_number
