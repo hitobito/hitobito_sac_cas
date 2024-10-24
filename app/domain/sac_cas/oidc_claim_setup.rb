@@ -44,6 +44,7 @@ module SacCas::OidcClaimSetup
     super
 
     add_claim(:picture_url, scope: [:name, :with_roles])
+    add_claim(:membership_verify_url, scope: [:name, :with_roles])
     add_claim(:phone, scope: [:name, :with_roles])
 
     add_claim(:membership_years, scope: :with_roles)
@@ -54,6 +55,10 @@ module SacCas::OidcClaimSetup
 
   def picture_url(owner)
     owner.decorate.picture_full_url
+  end
+
+  def membership_verify_url(owner)
+    People::Membership::VerificationQrCode.new(owner).verify_url
   end
 
   def phone(owner)
