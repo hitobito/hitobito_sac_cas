@@ -64,9 +64,9 @@ Die Importe müssen in folgender Reihenfolge ausgeführt werden:
 
 ```txt
 sac_imports:nav1-1_people
-sac_imports:wso21-1_people
 sac_imports:nav6-1_sac_sections
 sac_imports:nav2-1_membership_roles
+sac_imports:wso21-1_people
 sac_imports:nav1-2_sac_families
 sac_imports:nav3-1_qualifications
 sac_imports:nav5-1_huts

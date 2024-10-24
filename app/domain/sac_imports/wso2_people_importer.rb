@@ -21,14 +21,17 @@ module SacImports
       @debug = debug
       @source_file = CsvSource.new(:WSO21)
       @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)
+      @imported_people_ids = []
     end
 
     def create
-      data = @source_file.rows
+      data = @source_file.rows.select
       @progress = Progress.new(data.size, silent: @debug, output: @output)
       data.each do |row|
         process_row(row)
       end
+
+      remove_navision_import_roles!
 
       @csv_report.finalize(output: @output)
     end
@@ -47,6 +50,10 @@ module SacImports
       @navision_import_group ||= Group::ExterneKontakte.find_by!(name: "Navision Import")
     end
 
+    def remove_navision_import_roles!
+      Role.where(person_id: @imported_people_ids, group_id: navision_import_group.id).delete_all
+    end
+
     def process_row(row)
       @progress.step
       @output.print("#{row[:navision_id]} (#{row[:email]}):") if @debug
@@ -54,6 +61,7 @@ module SacImports
       @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}  --- ETA:#{@progress.eta}\n") if @debug
       if entry.valid?
         entry.import!
+        @imported_people_ids << entry.person.id
         if entry.warning
           @csv_report.add_row({
             navision_id: row[:navision_id],

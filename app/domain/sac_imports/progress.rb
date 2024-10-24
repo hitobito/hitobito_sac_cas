@@ -28,9 +28,10 @@ module SacImports
 
       return if @silent
 
-      relative_position = (100 * @position.to_f / @size).round
+      relative_position = (20 * @position.to_f / @size).round
       progress = "=" * relative_position
-      printf("\rProgress: [%-100s] %d%% %s ETA: %s", progress, relative_position, @spinner.next, eta.seconds.from_now)
+
+      printf("\rProgress: [%-20s] %d%% %s ETA: %s", progress, relative_position, @spinner.next, eta.seconds.from_now)
     end
 
     def eta

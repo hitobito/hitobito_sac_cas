@@ -88,19 +88,10 @@ module SacImports::Wso2
     def import!
       raise ActiveRecord::RecordInvalid if !valid?
 
-      person.transaction do
-        person.save!
-        remove_navision_import_role!
-      end
+      person.save!
     end
 
     private
-
-    def remove_navision_import_role!
-      return unless person.persisted?
-
-      Role.where(person_id: person.id, group_id: @navision_import_group.id).delete_all
-    end
 
     def assign_common_attributes(person)
       person.wso2_legacy_password_hash = row[:wso2_legacy_password_hash]
@@ -146,18 +137,21 @@ module SacImports::Wso2
     end
 
     def assign_roles(person)
+      assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name) if abonnent?
+      assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name) if gratisabonnent?
+
       return if person.sac_membership_active?
 
-      if row[:role_basiskonto] == "1"
-        assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name)
-      end
-      if row[:role_abonnent] == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name)
-      end
-      if row[:role_gratisabonnent] == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name)
-      end
+      assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name) if basiskonto?
+
+      raise "No role assigned:\n#{inspect}" #unless person.roles.any?
     end
+
+    def basiskonto? = row[:role_basiskonto] == "1"
+
+    def abonnent? = row[:role_abonnent] == "1"
+
+    def gratisabonnent? = row[:role_gratisabonnent] == "1"
 
     def assign_role(person, group, type)
       person.roles.where(group:, type:).first_or_initialize
