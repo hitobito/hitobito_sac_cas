@@ -6,15 +6,11 @@
 = c.fields_for do |form|
   .align-with-form
     = content_tag(:h2, t(".my_membership"), class: "fw-bold")
-    .row
-      = render "wizards/steps/signup/sektion/summary_entry_fee_card"
-      = render "wizards/steps/signup/sektion/summary_person_card", person: wizard.person_fields
-
+    = render "wizards/steps/signup/sektion/summary_person_card", person: wizard.person_fields
     - if wizard.respond_to?(:family_fields) && wizard.family_fields.members.present?
       = content_tag(:h2, t(".family_members"), class: "fw-bold")
-      .row
-        - wizard.family_fields.members.sort_by(&:birthday).each do |family_member|
-          = render "wizards/steps/signup/sektion/summary_family_member_card", person: family_member
+      - wizard.family_fields.members.sort_by(&:birthday).each do |family_member|
+        = render "wizards/steps/signup/sektion/summary_family_member_card", person: family_member
 
     = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?
 

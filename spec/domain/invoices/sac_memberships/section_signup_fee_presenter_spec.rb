@@ -22,9 +22,25 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
   ]
 
   shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:|
-    context "beitragskategorie=#{beitragskategorie}" do
-      let(:presenter) { described_class.new(group, beitragskategorie.to_s) }
+    let(:presenter) { described_class.new(group, beitragskategorie.to_s) }
 
+    expected_labels = {family: "Familienmitgliedschaft",
+                       adult: "Einzelmitgliedschaft",
+                       youth: "Jugendmitgliedschaft"}
+
+    it "has beitragskategorie_label #{expected_labels[beitragskategorie]}" do
+      expect(presenter.beitragskategorie_label).to eq expected_labels[beitragskategorie]
+    end
+
+    it "has identical beitragskategorie_amount all year long" do
+      travel_to(Date.new(2024, 11)) do
+        parts = presenter.beitragskategorie_amount.split(" + ")
+        expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
+        expect(parts.second).to eq "einmalige Eintrittsgebühr CHF #{format("%.2f", entry_fee)}"
+      end
+    end
+
+    context "beitragskategorie=#{beitragskategorie}" do
       it "has expected values set" do
         travel_to(Date.new(2024, 1, 1)) do
           expect(presenter.annual_fee.to_f).to eq(annual_fee)
