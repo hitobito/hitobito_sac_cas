@@ -28,6 +28,7 @@ class People::ExternalInvoicesController < ListController
       .where(search_conditions)
       .where(person: person).list
 
+    scope = scope.reorder(sort_expression) if sorting?
     scope.page(params[:page]).per(50)
   end
 
