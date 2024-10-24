@@ -36,6 +36,10 @@ describe OidcClaimSetup do
       expect(claims[:picture_url]).to eq owner.decorate.picture_full_url
     end
 
+    it "membership_verify_url is present" do
+      expect(claims[:membership_verify_url]).to be_present
+    end
+
     it_behaves_like "shared claims"
   end
 
