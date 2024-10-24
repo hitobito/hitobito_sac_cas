@@ -43,44 +43,43 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [195, 615, "Einstiegskurs"],
       [75, 595, "Leitung"],
       [195, 595, "Edmund Hillary"],
-      [75, 575, "Tageshonorar"],
-      [75, 554, "Durchführungsdatum"],
-      [195, 554, "01.03.2023 - "],
-      [195, 544, "03.04.2023 - 10.04.2023"],
-      [75, 523, "Durchführungsort"],
-      [75, 503, "Unterkunft"],
-      [195, 503, "Wird reserviert durch SAC"],
-      [75, 483, "Unterkunft Budget"],
-      [195, 483, "Pro Person / Nacht mit Halbpension"],
-      [75, 452, "Unterkunft Kategorie"],
-      [195, 452, "ohne Übernachtung"],
-      [75, 432, "Durchführungssprache"],
-      [195, 432, "Deutsch"],
-      [75, 411, "Inhalt / Programm"],
-      [195, 411, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 391, "Teilnehmeranforderungen"],
-      [195, 391, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
-      [75, 371, "Detailprogramm Teilnehmer"],
-      [75, 360, "Kurse"],
-      [195, 371, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
-      [195, 360, "eingefordert"],
-      [75, 340, "Detailprogramm Teilnehmer"],
-      [75, 329, "Touren"],
-      [195, 340, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
-      [195, 329, "Cloud hinterlegt"],
-      [75, 309, "Anmeldeschluss"],
-      [75, 289, "Minimale Teilnehmerzahl"],
-      [75, 268, "Maximale Teilnehmerzahl"],
-      [75, 248, "Durchführung - ja/nein?"],
-      [195, 248, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 237, "gefällt"],
-      [75, 217, "Durchführung – Absage"],
-      [195, 217, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 196, "Ideale Klassengrösse"],
-      [75, 176, "Maximale Klassengrösse"],
-      [75, 156, "Klassenlehrer"],
-      [195, 156, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 145, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [75, 575, "Durchführungsdatum"],
+      [195, 575, "01.03.2023 - "],
+      [195, 564, "03.04.2023 - 10.04.2023"],
+      [75, 544, "Durchführungsort"],
+      [75, 523, "Unterkunft"],
+      [195, 523, "Wird reserviert durch SAC"],
+      [75, 503, "Unterkunft Budget"],
+      [195, 503, "Pro Person / Nacht mit Halbpension"],
+      [75, 473, "Unterkunft Kategorie"],
+      [195, 473, "ohne Übernachtung"],
+      [75, 452, "Durchführungssprache"],
+      [195, 452, "Deutsch"],
+      [75, 432, "Inhalt / Programm"],
+      [195, 432, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 411, "Teilnehmeranforderungen"],
+      [195, 411, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
+      [75, 391, "Detailprogramm Teilnehmer"],
+      [75, 381, "Kurse"],
+      [195, 391, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
+      [195, 381, "eingefordert"],
+      [75, 360, "Detailprogramm Teilnehmer"],
+      [75, 350, "Touren"],
+      [195, 360, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
+      [195, 350, "Cloud hinterlegt"],
+      [75, 329, "Anmeldeschluss"],
+      [75, 309, "Minimale Teilnehmerzahl"],
+      [75, 289, "Maximale Teilnehmerzahl"],
+      [75, 268, "Durchführung - ja/nein?"],
+      [195, 268, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 258, "gefällt"],
+      [75, 237, "Durchführung – Absage"],
+      [195, 237, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 217, "Ideale Klassengrösse"],
+      [75, 196, "Maximale Klassengrösse"],
+      [75, 176, "Klassenlehrer"],
+      [195, 176, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 166, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
       [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
@@ -110,17 +109,16 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expected_postions = [
-          [75, 575, "Tageshonorar"],
-          [195, 554, "Tageshonorar Kursleiter"],
-          [326, 554, "1"],
-          [372, 554, "Tag"],
-          [428, 554, "à CHF"],
-          [493, 554, "100.0"],
-          [195, 534, "Pauschale Kursleiter"],
-          [312, 534, "1"],
-          [356, 534, "Pauschale"],
-          [435, 534, "à CHF"],
-          [499, 534, "60.0"]
+          [195, 575, "Tageshonorar Kursleiter"],
+          [335, 575, "1"],
+          [355, 575, "Tag"],
+          [435, 575, "à CHF"],
+          [485, 575, "100.0"],
+          [195, 554, "Pauschale Kursleiter"],
+          [335, 554, "1"],
+          [355, 554, "Pauschale"],
+          [435, 554, "à CHF"],
+          [485, 554, "60.0"]
         ]
 
         find_matches(expected_postions)
@@ -137,17 +135,16 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expected_postions = [
-          [75, 575, "Tageshonorar"],
-          [195, 554, "Tageshonorar Klassenleiter"],
-          [338, 554, "1"],
-          [382, 554, "Tag"],
-          [436, 554, "à CHF"],
-          [499, 554, "50.0"],
-          [195, 534, "Pauschale Klassenleiter"],
-          [322, 534, "1"],
-          [364, 534, "Pauschale"],
-          [441, 534, "à CHF"],
-          [502, 534, "40.0"]
+          [195, 575, "Tageshonorar Klassenleiter"],
+          [335, 575, "1"],
+          [355, 575, "Tag"],
+          [435, 575, "à CHF"],
+          [485, 575, "50.0"],
+          [195, 554, "Pauschale Klassenleiter"],
+          [335, 554, "1"],
+          [355, 554, "Pauschale"],
+          [435, 554, "à CHF"],
+          [485, 554, "40.0"]
         ]
 
         find_matches(expected_postions)
@@ -175,11 +172,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
-          [75, 483, "Unterkunft Budget"],
-          [195, 483, "Pro Person / Nacht mit Halbpension"],
-          [195, 462, "Anreise"],
-          [322, 462, "CHF"],
-          [439, 462, "50.0"]
+          [75, 503, "Unterkunft Budget"],
+          [195, 503, "Pro Person / Nacht mit Halbpension"],
+          [195, 483, "Anreise"],
+          [435, 483, "CHF"],
+          [485, 483, "50.0"]
         )
       end
 
@@ -193,11 +190,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
-          [75, 483, "Unterkunft Budget"],
-          [195, 483, "Pro Person / Nacht mit Halbpension"],
-          [195, 462, "Anreise"],
-          [322, 462, "CHF"],
-          [439, 462, "50.0"]
+          [75, 503, "Unterkunft Budget"],
+          [195, 503, "Pro Person / Nacht mit Halbpension"],
+          [195, 483, "Anreise"],
+          [435, 483, "CHF"],
+          [485, 483, "50.0"]
         )
       end
 
@@ -252,13 +249,13 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "reserve_accommodation" do
       it "renders sac accommodation if true" do
         event.update!(reserve_accommodation: true)
-        text = analyzer.show_text[18]
+        text = analyzer.show_text[17]
         expect(text).to eq("Wird reserviert durch SAC")
       end
 
       it "renders event_specific if false" do
         event.update!(reserve_accommodation: false)
-        text = analyzer.show_text[18]
+        text = analyzer.show_text[17]
         expect(text).to eq("Wird reserviert durch Kursleitung")
       end
     end
