@@ -10,50 +10,57 @@ module SacImports::Roles
     SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
       Group::Ortsgruppe.sti_name].freeze
 
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
+    def initialize(csv_source:, csv_report:, people:, groups:, output: $stdout, debug: false, failed_person_ids: [], successful_person_ids: [])
       @output = output
+      @debug = debug
       @csv_report = csv_report
+      @people = people
+      @groups = groups
       @failed_person_ids = failed_person_ids
+      @successful_person_ids = successful_person_ids
       @data = csv_source.rows(filter: @rows_filter)
       @navision_import_group = fetch_navision_import_group
       @csv_source_person_ids = collect_csv_source_person_ids
     end
 
     def create
-      Parallel.map(@data, in_threads: nr_of_threads) do |row|
+      @progress = SacImports::Progress.new(@data.size, title:, silent: @debug, output: @output)
+      @data.each do |row|
         process_row(row)
-      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-        raise Parallel::Break
       end
+      clear_navision_import_roles
     end
 
     private
+
+    def title = self.class.name.demodulize.gsub(/Importer$/, "")
+
+    def navision_id(row)
+      Integer(row[:navision_id]) if row[:navision_id].present?
+    end
 
     def nr_of_threads
       Rails.env.test? ? 1 : 6
     end
 
     def process_row(row)
+      @progress.step
       return unless dates_valid?(row)
       person = fetch_person(row)
       return unless person
 
-      if yield(person)
-        clear_navision_import_role(person)
-      end
+      yield(person)
     end
 
     def fetch_person(row)
-      if @failed_person_ids.include?(row[:navision_id])
+      if @failed_person_ids.include?(navision_id(row))
         report_person_failed_before(row)
         return
       end
 
-      person = Person.find_by(id: row[:navision_id])
-      return person unless person.nil?
+      return report_person_not_found(row) unless @people.key?(navision_id(row))
 
-      report_person_not_found(row)
-      nil
+      @people[navision_id(row)]
     end
 
     def dates_valid?(row)
@@ -67,7 +74,7 @@ module SacImports::Roles
 
     def save_role!(role, row)
       begin
-        role.save!(context: :import)
+        role.save(validate: false)
       rescue ActiveRecord::RecordInvalid
         report(row, nil, error: "Hitobito Role: " + role.errors.full_messages.join(", "))
         return nil
@@ -75,13 +82,13 @@ module SacImports::Roles
       role
     end
 
-    def clear_navision_import_role(person)
-      person.roles.where(group: @navision_import_group).delete_all
+    def clear_navision_import_roles
+      @navision_import_group.roles.where(person_id: @successful_person_ids).delete_all
     end
 
     def fetch_navision_import_group
-      Group::ExterneKontakte
-        .find_by(name: "Navision Import", parent: Group.root)
+      @fetch_navision_import_group ||=
+        @groups.find { |group| group.is_a?(Group::ExterneKontakte) && group.name == "Navision Import" && parent == Group.root }
     end
 
     def report_person_not_found(row)
@@ -93,15 +100,13 @@ module SacImports::Roles
     end
 
     def report(row, person, message: nil, warning: nil, error: nil)
-      @failed_person_ids << row[:navision_id] if error.present?
-      output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
-      output_message << if error.present?
-        "❌ #{error}\n"
-      else
-        "✅ #{message || warning}\n"
-      end
+      (error.present? ? @failed_person_ids : @successful_person_ids) << navision_id(row)
 
-      @output.print(output_message)
+      message_prefix = "#{navision_id(row)} (#{row[:person_name]})"
+      symbol = error.present? ? "❌" : "✅"
+      details = error || message || warning
+
+      @output.puts("#{message_prefix}: #{symbol} #{details}") if @debug
       add_report_row(row, message: message, warning: warning, error: error)
     end
 
@@ -120,7 +125,7 @@ module SacImports::Roles
     end
 
     def collect_csv_source_person_ids
-      @data.map { |row| row[:navision_id].to_i }.uniq
+      @data.map { |row| navision_id(row) }.uniq
     end
 
     def target_group_path(row)
@@ -130,9 +135,9 @@ module SacImports::Roles
 
     def fetch_membership_group(row, person)
       group_name = extract_membership_group_name(row)
-      parent_group = Group.find_by(name: group_name, type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
+      parent_group = @groups.find { |group| group.name == group_name && SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES.include?(group.class.sti_name) }
       if parent_group
-        return Group::SektionsMitglieder.find_by(parent_id: parent_group.id)
+        return @groups.find { |group| group.is_a?(Group::SektionsMitglieder) && group.parent_id == parent_group.id }
       end
 
       report(row, person, error: "No Section/Ortsgruppe group found for '#{group_name}'")

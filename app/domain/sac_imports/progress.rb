@@ -7,7 +7,8 @@
 
 module SacImports
   class Progress
-    def initialize(size, silent: false, output: $stdout)
+    def initialize(size, title: "Progress", silent: false, output: $stdout)
+      @title = title
       @start_at = Time.now
       @size = size
       @position = 0
@@ -31,7 +32,7 @@ module SacImports
       relative_position = (20 * @position.to_f / @size).round
       progress = "=" * relative_position
 
-      printf("\rProgress: [%-20s] %d%% %s ETA: %s", progress, relative_position, @spinner.next, eta.seconds.from_now)
+      printf("\r#{@title}: [%-20s] %d%% %s, %d/s ETA: %s", progress, relative_position, @spinner.next, throughput, eta.seconds.from_now)
     end
 
     def eta
@@ -39,6 +40,11 @@ module SacImports
 
       elapsed = Time.now - @start_at
       elapsed / @position * (@size - @position)
+    end
+
+    def throughput
+      elapsed = Time.now - @start_at
+      (@position.to_f / elapsed).round(2)
     end
   end
 end

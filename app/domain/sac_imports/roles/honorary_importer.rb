@@ -7,7 +7,7 @@
 
 module SacImports::Roles
   class HonoraryImporter < ImporterBase
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
+    def initialize(...)
       @rows_filter = {role: /^Ehrenmitglied$/}
       super
     end

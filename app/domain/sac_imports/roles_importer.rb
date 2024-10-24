@@ -26,9 +26,13 @@ module SacImports
       @source_file = SacImports::CsvSource.new(:NAV2)
       @csv_report = SacImports::CsvReport.new(:"nav2-1_roles", REPORT_HEADERS)
       @failed_person_ids = []
+      @successful_person_ids = []
     end
 
     def create
+      @people = Person.all.index_by(&:id)
+      @groups = Group.includes(:parent).all.to_a
+
       if @role_type == :membership
         memberships_importer.create
         additional_memberships_importer.create
@@ -40,12 +44,19 @@ module SacImports
 
     private
 
+    def remove_navision_import_roles!
+      Role.where(person_id: @imported_people_ids, group_id: navision_import_group.id).delete_all
+    end
+
     def memberships_importer
       Roles::MembershipsImporter
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,
-          failed_person_ids: @failed_person_ids)
+          people: @people,
+          groups: @groups,
+          failed_person_ids: @failed_person_ids,
+          successful_person_ids: @successful_person_ids)
     end
 
     def additional_memberships_importer
@@ -53,7 +64,10 @@ module SacImports
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,
-          failed_person_ids: @failed_person_ids)
+          people: @people,
+          groups: @groups,
+          failed_person_ids: @failed_person_ids,
+          successful_person_ids: @successful_person_ids)
     end
 
     def benefited_importer
@@ -61,7 +75,10 @@ module SacImports
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,
-          failed_person_ids: @failed_person_ids)
+          people: @people,
+          groups: @groups,
+          failed_person_ids: @failed_person_ids,
+          successful_person_ids: @successful_person_ids)
     end
 
     def honorary_importer
@@ -69,7 +86,10 @@ module SacImports
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,
-          failed_person_ids: @failed_person_ids)
+          people: @people,
+          groups: @groups,
+          failed_person_ids: @failed_person_ids,
+          successful_person_ids: @successful_person_ids)
     end
   end
 end

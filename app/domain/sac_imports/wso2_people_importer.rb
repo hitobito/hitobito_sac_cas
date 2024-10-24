@@ -51,7 +51,7 @@ module SacImports
     end
 
     def remove_navision_import_roles!
-      Role.where(person_id: @imported_people_ids, group_id: navision_import_group.id).delete_all
+      navision_import_group.roles.where(person_id: @imported_people_ids).delete_all
     end
 
     def process_row(row)
