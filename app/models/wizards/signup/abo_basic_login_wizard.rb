@@ -17,6 +17,8 @@ module Wizards::Signup
     delegate :email, to: :main_email_field
     delegate :newsletter, to: :person_fields
 
+    self.asides = ["aside_abo_basic_login"]
+
     def save!
       super
       exclude_from_mailing_list unless newsletter

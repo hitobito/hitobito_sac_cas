@@ -34,3 +34,8 @@ Group::AboBasicLogin.seed_once(:parent_id) do |a|
   a.parent_id = abos.id
   a.self_registration_role_type = "Group::AboBasicLogin::BasicLogin"
 end
+basic_login = Group::AboBasicLogin.find_by(parent_id: abos.id)
+basic_login.attributes = {locale: :de, custom_self_registration_title: "Kostenloses SAC-Konto erstellen"}
+basic_login.attributes = {locale: :fr, custom_self_registration_title: "Créer un compte SAC gratuit"}
+basic_login.attributes = {locale: :it, custom_self_registration_title: "Creare un account SAC gratuito"}
+basic_login.save!
