@@ -8,8 +8,6 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
-  INVOICE_STATES = %w[draft open payed cancelled error]
-
   prepended do
     include I18nEnums
 
@@ -23,7 +21,7 @@ module SacCas::Event::Participation
       price_js_passive_regular: 6
     }
 
-    i18n_enum :invoice_state, INVOICE_STATES, scopes: true, queries: true
+    i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 
     before_save :update_previous_state, if: :state_changed?
 

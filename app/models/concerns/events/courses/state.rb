@@ -28,13 +28,15 @@ module Events::Courses::State
     validate :assert_valid_state_change, if: :state_changed?
     before_create :set_default_state
     before_save :adjust_application_state, if: :application_closing_at_changed?
-    after_update :send_application_published_email, if: :state_changed_from_created_to_application_open?
-    after_update :send_application_paused_email, if: :state_changed_to_application_paused?
-    after_update :send_application_closed_email, if: :state_changed_to_application_closed?
-    after_update :notify_rejected_participants, if: :state_changed_to_assignment_closed?
-    after_update :summon_assigned_participants, if: :state_changed_from_assignment_closed_to_ready?
-    after_update :annul_participations, if: :state_changed_to_canceled?
-    after_update :send_absent_invoices, if: :state_changed_to_closed?
+    after_update :send_application_published_email,
+      if: -> { saved_change_to_state?(from: "created", to: "application_open") }
+    after_update :summon_assigned_participants,
+      if: -> { saved_change_to_state?(from: "assignment_closed", to: "ready") }
+    after_update :send_application_paused_email, if: -> { state_changed_to?(:application_paused) }
+    after_update :send_application_closed_email, if: -> { state_changed_to?(:application_closed) }
+    after_update :notify_rejected_participants, if: -> { state_changed_to?(:assignment_closed) }
+    after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
+    after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
   end
 
   def available_states(state = self.state)
@@ -62,36 +64,8 @@ module Events::Courses::State
     self.state = :created
   end
 
-  def state_changed_to_assignment_closed?
-    state_changed_to?(:assignment_closed)
-  end
-
-  def state_changed_to_application_paused?
-    state_changed_to?(:application_paused)
-  end
-
-  def state_changed_to_application_closed?
-    state_changed_to?(:application_closed)
-  end
-
-  def state_changed_to_canceled?
-    state_changed_to?(:canceled)
-  end
-
-  def state_changed_to_closed?
-    state_changed_to?(:closed)
-  end
-
   def state_changed_to?(new_state)
-    saved_change_to_attribute(:state)&.second == new_state.to_s
-  end
-
-  def state_changed_from_assignment_closed_to_ready?
-    saved_change_to_attribute(:state) == ["assignment_closed", "ready"]
-  end
-
-  def state_changed_from_created_to_application_open?
-    saved_change_to_attribute(:state) == ["created", "application_open"]
+    saved_change_to_state?(to: new_state.to_s)
   end
 
   def notify_rejected_participants
@@ -119,7 +93,7 @@ module Events::Courses::State
   end
 
   def annul_participations
-    participations.update_all(state: :annulled)
+    participations.update_all(state: :annulled, active: false)
     send_canceled_email
     cancel_invoices(all_course_invoices)
   end
