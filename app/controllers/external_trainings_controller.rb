@@ -53,7 +53,7 @@ class ExternalTrainingsController < CrudController
   end
 
   def load_event_kinds
-    @event_kinds = Event::Kind.list
+    @event_kinds = Event::Kind.list.accessible_by(EventKindReadables.new(current_user))
   end
 
   def load_other_people
