@@ -10,7 +10,7 @@ class SacImports::CsvReport
 
   def initialize(sac_import_name, headers)
     @start_time = Time.zone.now
-    @timestamp = Time.zone.now.strftime("%Y-%m-%d-%H:%M")
+    @timestamp = format_time(Time.zone.now)
     @sac_import_name = sac_import_name
     @headers = headers
     csv_init
@@ -21,12 +21,21 @@ class SacImports::CsvReport
   end
 
   def finalize(output: $stdout)
-    output.puts "\n\n\nReport generated in #{(Time.zone.now - @start_time) / 60} minutes."
+    log(
+      "Started: #{@timestamp}, " \
+        "completed: #{format_time(Time.zone.now)}, " \
+        "duration: #{format_duration} minutes"
+    )
+    output.puts "\n\n\nReport generated in #{format_duration}."
     output.puts "Thank you for flying with SAC Imports."
     output.puts "Report written to #{csv_file_path}"
   end
 
   private
+
+  def format_time(time) = time.strftime("%Y-%m-%d-%H:%M")
+
+  def format_duration = "#{(Time.zone.now - @start_time) / 60} minutes"
 
   def log_dir
     @log_dir ||= create_log_dir
@@ -52,7 +61,15 @@ class SacImports::CsvReport
     end
   end
 
+  def log(line)
+    File.write(log_file_path, "#{line}\n", mode: "a")
+  end
+
   def csv_file_path
     @csv_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.csv"
+  end
+
+  def log_file_path
+    @log_file_path ||= "#{log_dir}/#{@sac_import_name}.log"
   end
 end
