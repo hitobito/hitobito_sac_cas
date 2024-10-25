@@ -258,7 +258,7 @@ en:
           applied: Waiting list
           assigned: Confirmed
           summoned: Called up
-          anulled: Annulled
+          annulled: ""
         program: Program
         reserve_accommodation: Book accommodation through SAC
         season: Season
@@ -1262,6 +1262,11 @@ en:
     cannot_set_main_person: Contact the office to change the family invoice recipient
 
   invoices:
+    errors:
+      data_quality_error: ""
+      create_subject_failed: ""
+      create_invoice_failed: ""
+      cancel_invoice_failed: ""
     course_participation:
       no_invoice_possible: ""
     course_annulation:
@@ -1410,7 +1415,6 @@ en:
     membership_invoices:
       no_invoice_possible: "There are no membership fees for the desired person and section, or these are already covered by other invoices."
       no_memberships: "There is no membership for the desired section on the selected date. Accordingly, no invoice has been issued."
-      data_quality_error: "The requested person has data quality problems. Accordingly, no invoice was created."
       success_notice: "The desired invoice is generated and sent to Abacus"
       new:
         title: "Create membership invoice"

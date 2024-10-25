@@ -260,7 +260,7 @@ it:
           applied: Lista d'attesa
           assigned: Confermato
           summoned: Richiamato
-          anulled: Annullato
+          annulled: ""
         program: Programma
         reserve_accommodation: Prenota l'alloggio tramite SAC
         season: Stagione
@@ -1314,6 +1314,11 @@ it:
     cannot_set_main_person: Contattare l'ufficio per far cambiare il destinatario della fattura familiare.
 
   invoices:
+    errors:
+      data_quality_error: ""
+      create_subject_failed: ""
+      create_invoice_failed: ""
+      cancel_invoice_failed: ""
     course_participation:
       no_invoice_possible: ""
     course_annulation:
@@ -1466,7 +1471,6 @@ it:
     membership_invoices:
       no_invoice_possible: "Non ci sono quote associative per la persona e la sezione desiderate, oppure queste sono già coperte da altre fatture."
       no_memberships: "Non ci sono soci per la sezione desiderata nella data selezionata. Di conseguenza, non è stata emessa alcuna fattura."
-      data_quality_error: "La persona richiesta ha problemi di qualità dei dati. Di conseguenza, non è stata creata alcuna fattura."
       success_notice: "La fattura desiderata viene generata e inviata ad Abacus."
       new:
         title: "Creare la fattura dell'iscrizione"

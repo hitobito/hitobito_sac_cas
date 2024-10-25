@@ -260,7 +260,7 @@ fr:
           applied: Liste d'attente
           assigned: Confirmé
           summoned: Convoqué
-          anulled: Annule
+          annulled: ""
         program: Programme
         reserve_accommodation: Réserver un hébergement par le CAS
         season: Saison
@@ -1314,6 +1314,11 @@ fr:
     cannot_set_main_person: Contacte le secrétariat pour modifier le bénéficiaire du compte familial.
 
   invoices:
+    errors:
+      data_quality_error: ""
+      create_subject_failed: ""
+      create_invoice_failed: ""
+      cancel_invoice_failed: ""
     course_participation:
       no_invoice_possible: ""
     course_annulation:
@@ -1466,7 +1471,6 @@ fr:
     membership_invoices:
       no_invoice_possible: "Il n'y a pas de frais d'adhésion pour la personne et la section souhaitées, ou ceux-ci sont déjà couverts par d'autres factures."
       no_memberships: "Il n'y a pas d'affiliation pour la section souhaitée à la date choisie. Aucune facture n'a donc été établie."
-      data_quality_error: "La personne souhaitée a des problèmes de qualité de données. Aucune facture n'a été établie en conséquence."
       success_notice: "La facture souhaitée est générée et transmise à Abacus."
       new:
         title: "Créer une facture d'adhésion"
