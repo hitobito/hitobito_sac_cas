@@ -161,6 +161,29 @@ describe PersonAbility do
     end
   end
 
+  %i[history show_full show_details index_notes log security].each do |action|
+    describe "#{action} on person without roles" do
+      let(:person_without_roles) { Fabricate(:person) }
+
+      context "backoffice role with read_all_people" do
+        let(:person) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.sti_name, group: groups(:geschaeftsstelle)).person }
+
+        it "may #{action}" do
+          expect(ability).to be_able_to(action, person_without_roles)
+        end
+      end
+
+      context "other role with read_all_people" do
+        let(:group) { Fabricate(Group::Geschaeftsleitung.sti_name, parent: groups(:root)) }
+        let(:person) { Fabricate(Group::Geschaeftsleitung::Geschaeftsfuehrung.sti_name, group: group).person }
+
+        it "may not #{action}" do
+          expect(ability).not_to be_able_to(action, person_without_roles)
+        end
+      end
+    end
+  end
+
   describe "security" do
     let(:person) { people(:mitglied) }
 

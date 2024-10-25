@@ -144,6 +144,7 @@ module HitobitoSacCas
       admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]
 
       ## Controllers
+      ApplicationController.prepend SacCas::ApplicationController
       EventsController.prepend SacCas::EventsController
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController
