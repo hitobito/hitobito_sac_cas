@@ -24,12 +24,10 @@ class People::ExternalInvoicesController < ListController
   private
 
   def list_entries
-    scope = ExternalInvoice
+    super.list
+      .where(person: person)
       .where(search_conditions)
-      .where(person: person).list
-
-    scope = scope.reorder(sort_expression) if sorting?
-    scope.page(params[:page]).per(50)
+      .page(params[:page]).per(50)
   end
 
   def person
