@@ -10,6 +10,7 @@ module SacCas::Event::Participation
 
   prepended do
     include I18nEnums
+    include CapitalizedDependentErrors
 
     enum price_category: {
       price_member: 0,
@@ -27,7 +28,7 @@ module SacCas::Event::Participation
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
-    has_many :external_invoices, as: :link, dependent: :destroy
+    has_many :external_invoices, as: :link, dependent: :restrict_with_error
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
