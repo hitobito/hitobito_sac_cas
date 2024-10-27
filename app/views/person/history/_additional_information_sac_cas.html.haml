@@ -1,7 +1,7 @@
 #external_trainings
   %h2
     .mt-4=ExternalTraining.model_name.human(count: 2)
-    - if can?(:create, @person.external_trainings.build)
+    - if can?(:new, @person.external_trainings.build)
       %span.float-end= button_action_add(new_group_person_external_training_path(@group, @person))
 
   = table(@external_trainings, class: 'table table-striped table-fixed') do |t|
