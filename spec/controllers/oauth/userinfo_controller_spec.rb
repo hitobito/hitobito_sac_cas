@@ -13,6 +13,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
   let(:data) { JSON.parse(response.body) }
 
+  before do
+    allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
+  end
+
   describe "GET#show" do
     context "with name scope" do
       let(:token) do
@@ -37,7 +41,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           town: user.town,
           country: user.country,
           phone: nil,
-          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/
+          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+          membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42"
         }.deep_stringify_keys)
       end
     end
@@ -75,6 +80,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           phone: nil,
           membership_years: "0.0",
           picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
+          membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
           roles: [
             {
               group_id: user.roles.first.group_id,

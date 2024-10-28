@@ -16,6 +16,10 @@ RSpec.describe "GET oauth/profile", type: :request do
       resource_owner_id: user.id)
   end
 
+  before do
+    allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
+  end
+
   def make_request(skip_checks: true)
     get "/oauth/profile", headers: {Authorization: "Bearer " + token.token, "X-Scope": scope}
     return if skip_checks
@@ -44,6 +48,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         town: user.town,
         country: user.country,
         picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
         phone: nil
       }.deep_stringify_keys)
     end
@@ -75,6 +80,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         primary_group_id: user.primary_group_id,
         language: user.language,
         picture_url: "http://www.example.com/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg",
+        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
         phone: nil,
         membership_years: (Date.current.year - 2015.to_f).to_s,
         roles: [{
