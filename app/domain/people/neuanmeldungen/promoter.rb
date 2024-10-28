@@ -12,10 +12,11 @@ class People::Neuanmeldungen::Promoter
     PaidInvoiceCondition
   ].freeze
 
-  NEUANMELDUNG_ROLES = SacCas::NEUANMELDUNG_ROLES.map(&:sti_name).freeze
+  NEUANMELDUNG_ROLES = [
+    Group::AboMagazin::Neuanmeldung
+  ].map(&:sti_name).freeze
+
   OBSOLETE_ROLES = [
-    Group::AboTourenPortal::Abonnent,
-    Group::AboTourenPortal::Neuanmeldung,
     Group::AboMagazin::Abonnent,
     Group::AboMagazin::Neuanmeldung,
     Group::AboBasicLogin::BasicLogin

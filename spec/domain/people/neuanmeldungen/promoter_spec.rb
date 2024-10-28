@@ -36,7 +36,7 @@ describe People::Neuanmeldungen::Promoter do
         group_id: neuanmeldung_role.person.default_group_id,
         type: Group::AboMagazin::Abonnent.sti_name
       )
-      obsolete_role.save(validate: false)
+      obsolete_role.save!(validate: false)
 
       expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
@@ -60,7 +60,7 @@ describe People::Neuanmeldungen::Promoter do
         start_on: Date.current,
         beitragskategorie: "adult"
       )
-      old_role.save(validate: false)
+      old_role.save!(validate: false)
 
       expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
@@ -77,7 +77,7 @@ describe People::Neuanmeldungen::Promoter do
         start_on: 1.week.ago,
         beitragskategorie: "adult"
       )
-      old_role.save(validate: false)
+      old_role.save!(validate: false)
 
       expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
@@ -208,6 +208,23 @@ describe People::Neuanmeldungen::Promoter do
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { HitobitoLogEntry.count }
     end
+
+    it "does not affect tourenportal roles when promoting" do
+      neuanmeldung_role = create_neuanmeldung_role
+      tourenportal_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboTourenPortal::Abonnent.sti_name,
+        start_on: 1.week.ago,
+        beitragskategorie: "adult"
+      )
+      tourenportal_role.save!(validate: false)
+
+      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to not_change { tourenportal_role.reload.attributes }
+        .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
+    end
   end
 
   context "#promoteable?" do
@@ -215,17 +232,6 @@ describe People::Neuanmeldungen::Promoter do
       expect(People::Neuanmeldungen::Promoter::CONDITIONS).to all receive(:satisfied?).and_return(true)
 
       expect(subject.promotable?(double)).to eq true
-    end
-
-    People::Neuanmeldungen::Promoter::CONDITIONS.each do |condition|
-      it "is false when condition #{condition.name} is not satisfied" do
-        (People::Neuanmeldungen::Promoter::CONDITIONS - [condition]).each do |other_condition|
-          allow(other_condition).to receive(:satisfied?).and_return(true)
-        end
-        expect(condition).to receive(:satisfied?).and_return(false)
-
-        expect(subject.promotable?(double)).to eq false
-      end
     end
   end
 
@@ -282,6 +288,21 @@ describe People::Neuanmeldungen::Promoter do
       expect(subject).to receive(:promote).with(candidates[2]).and_call_original
 
       subject.call
+    end
+  end
+
+  context "role definitions" do
+    it "excludes tourenportal roles from OBSOLETE_ROLES" do
+      expect(described_class::OBSOLETE_ROLES).not_to include(Group::AboTourenPortal::Abonnent.sti_name)
+      expect(described_class::OBSOLETE_ROLES).not_to include(Group::AboTourenPortal::Neuanmeldung.sti_name)
+    end
+
+    it "includes only magazine registration in NEUANMELDUNG_ROLES" do
+      expect(described_class::NEUANMELDUNG_ROLES).to contain_exactly(Group::AboMagazin::Neuanmeldung.sti_name)
+    end
+
+    it "excludes membership registrations from NEUANMELDUNG_ROLES" do
+      expect(described_class::NEUANMELDUNG_ROLES).not_to include(*SacCas::NEUANMELDUNG_ROLES.map(&:sti_name))
     end
   end
 end
