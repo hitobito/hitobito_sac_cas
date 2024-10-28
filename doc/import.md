@@ -63,13 +63,15 @@ Beim Seeden werden folgende Daten importiert:
 Die Importe müssen in folgender Reihenfolge ausgeführt werden:
 
 ```txt
+sac_imports:nav6-1_sac_sections
+sac_imports:nav5-1_huts
 sac_imports:nav1-1_people
 sac_imports:wso21-1_people
-sac_imports:nav6-1_sac_sections
-sac_imports:nav2-1_membership_roles
-sac_imports:nav1-2_sac_families
 sac_imports:nav3-1_qualifications
-sac_imports:nav5-1_huts
+sac_imports:nav2-1-membership_roles
+sac_imports:nav2-21-create_missing_groups
+sac_imports:nav2-22-non_membership_roles
+sac_imports:nav1-2_sac_families
 sac_imports:nav8-1_austrittsgruende
 sac_imports:nav1-2_membership_years_report
 ```

@@ -6,42 +6,23 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports
-  class RolesImporter
-    REPORT_HEADERS = [
-      :navision_id,
-      :person_name,
-      :valid_from,
-      :valid_until,
-      :target_group,
-      :target_role,
-      :message,
-      :warning,
-      :error
-    ].freeze
+  class Nav21RolesMembershipImporter < Nav2Base
+    self.source_file = :NAV21
+    self.report_name = "nav2_1-roles-membership"
 
-    def initialize(role_type:, output: $stdout)
-      PaperTrail.enabled = false # disable versioning for imports
-      @output = output
-      @role_type = role_type
-      @source_file = SacImports::CsvSource.new(:NAV2)
-      @csv_report = SacImports::CsvReport.new(:"nav2-1_roles", REPORT_HEADERS)
-      @failed_person_ids = []
-    end
+    private
 
-    def create
-      if @role_type == :membership
+    def run_import
+      log_count_change(:roles) do
         memberships_importer.create
         additional_memberships_importer.create
         benefited_importer.create
         honorary_importer.create
       end
-      @csv_report.finalize(output: @output)
     end
 
-    private
-
     def memberships_importer
-      Roles::MembershipsImporter
+      Roles::Nav21MembershipsImporter
         .new(csv_source: @source_file,
           output: @output,
           csv_report: @csv_report,

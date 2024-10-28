@@ -24,8 +24,18 @@ namespace :sac_imports do
   end
 
   desc "Imports membership roles"
-  task "nav2-1_membership_roles": [:environment] do
-    SacImports::RolesImporter.new(role_type: :membership).create
+  task "nav2-1-membership_roles": [:environment] do
+    SacImports::Nav21RolesMembershipImporter.new.create
+  end
+
+  desc "Imports missing groups"
+  task "nav2-21-create_missing_groups": [:environment] do
+    SacImports::Nav221CreateMissingGroups.new.create
+  end
+
+  desc "Imports non-membership roles"
+  task "nav2-22-non_membership_roles": [:environment] do
+    SacImports::Nav222RolesNonMembershipImporter.new.create
   end
 
   desc "Imports families"

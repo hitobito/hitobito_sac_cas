@@ -15,10 +15,7 @@ module SacImports::Roles
       "Frei Kind" => :family
     }
 
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
-      @rows_filter = {role: /^Mitglied \(Zusatzsektion\).+/}
-      super
-    end
+    self.rows_filter = {role: /^Mitglied \(Zusatzsektion\).+/}
 
     private
 

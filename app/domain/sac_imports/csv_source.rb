@@ -36,7 +36,21 @@ class SacImports::CsvSource
       sac_remark_section_5: "Sektionsinfo 5 Bemerkung",
       sac_remark_national_office: "Geschäftsstelle Bemerkung"
     },
-    NAV2: {
+    NAV21: {
+      navision_id: "Kontaktnummer",
+      valid_from: "GültigAb",
+      valid_until: "GültigBis",
+      layer_type: "Layer",
+      group_level1: "Gruppe_Lvl_1",
+      group_level2: "Gruppe_Lvl_2",
+      group_level3: "Gruppe_Lvl_3",
+      group_level4: "Gruppe_Lvl_4",
+      role: "Rolle",
+      role_description: "Zusatzbeschrieb",
+      person_name: "Name",
+      other: "Anderes"
+    },
+    NAV22: {
       navision_id: "Kontaktnummer",
       valid_from: "GültigAb",
       valid_until: "GültigBis",
@@ -134,15 +148,20 @@ class SacImports::CsvSource
       row = process_row(raw_row)
       next unless filter.blank? || filter_match?(row, filter)
 
-      data << row
+      if block_given?
+        yield rows
+      else
+        data << row
+      end
     end
-    data
+    data unless block_given?
   end
 
   private
 
   def filter_match?(row, filter)
     filter.all? do |key, value|
+      raise "Key '#{key}' not found in row: #{row.keys.inspect}" unless row.key?(key)
       row[key].match?(value)
     end
   end

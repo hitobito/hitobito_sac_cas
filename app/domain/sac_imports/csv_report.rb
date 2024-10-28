@@ -14,21 +14,27 @@ class SacImports::CsvReport
     @sac_import_name = sac_import_name
     @headers = headers
     csv_init
+    log("Started: #{@timestamp}")
   end
 
   def add_row(row)
     csv_append(row)
   end
 
+  def log(line)
+    File.write(log_file_path, "#{line}\n", mode: "a")
+  end
+
   def finalize(output: $stdout)
     log(
       "Started: #{@timestamp}, " \
         "completed: #{format_time(Time.zone.now)}, " \
-        "duration: #{format_duration} minutes"
+        "duration: #{format_duration}"
     )
     output.puts "\n\n\nReport generated in #{format_duration}."
     output.puts "Thank you for flying with SAC Imports."
     output.puts "Report written to #{csv_file_path}"
+    output.puts "Log written to #{log_file_path}"
   end
 
   private
@@ -61,15 +67,11 @@ class SacImports::CsvReport
     end
   end
 
-  def log(line)
-    File.write(log_file_path, "#{line}\n", mode: "a")
-  end
-
   def csv_file_path
     @csv_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.csv"
   end
 
   def log_file_path
-    @log_file_path ||= "#{log_dir}/#{@sac_import_name}.log"
+    @log_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.log"
   end
 end

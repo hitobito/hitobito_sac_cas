@@ -7,10 +7,7 @@
 
 module SacImports::Roles
   class BenefitedImporter < ImporterBase
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
-      @rows_filter = {role: /^Begünstigt$/}
-      super
-    end
+    self.rows_filter = {role: /^Begünstigt$/}
 
     def create
       delete_existing_benefited_roles

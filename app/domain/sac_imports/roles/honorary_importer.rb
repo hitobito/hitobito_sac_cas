@@ -7,10 +7,7 @@
 
 module SacImports::Roles
   class HonoraryImporter < ImporterBase
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
-      @rows_filter = {role: /^Ehrenmitglied$/}
-      super
-    end
+    self.rows_filter = {role: /^Ehrenmitglied$/}
 
     def create
       delete_existing_honorary_roles

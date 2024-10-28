@@ -10,24 +10,33 @@ module SacImports::Roles
     SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
       Group::Ortsgruppe.sti_name].freeze
 
+    class_attribute :rows_filter
+
     def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
       @output = output
       @csv_report = csv_report
       @failed_person_ids = failed_person_ids
-      @data = csv_source.rows(filter: @rows_filter)
+      # @csv_source = csv_source
+      @data = csv_source.rows(filter: rows_filter)
       @navision_import_group = fetch_navision_import_group
       @csv_source_person_ids = collect_csv_source_person_ids
     end
 
     def create
+      # @csv_source.rows(filter: rows_filter).each { process_row(_1) }
+      @data.each { process_row(_1) }
       Parallel.map(@data, in_threads: nr_of_threads) do |row|
         process_row(row)
-      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-        raise Parallel::Break
       end
     end
 
     private
+
+    def title = self.class.name.demodulize.gsub(/Importer$/, "")
+
+    def navision_id(row)
+      Integer(row[:navision_id]) if row[:navision_id].present?
+    end
 
     def nr_of_threads
       Rails.env.test? ? 1 : 6
@@ -94,18 +103,21 @@ module SacImports::Roles
 
     def report(row, person, message: nil, warning: nil, error: nil)
       @failed_person_ids << row[:navision_id] if error.present?
-      output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
-      output_message << if error.present?
-        "❌ #{error}\n"
+
+      message_prefix = "#{row[:navision_id]} (#{row[:person_name]})"
+      symbol = error.present? ? "❌" : "✅"
+      details = error || message || warning
+      status = if error.present?
+        "error"
       else
-        "✅ #{message || warning}\n"
+        warning.present? ? "warning" : "success"
       end
 
-      @output.print(output_message)
-      add_report_row(row, message: message, warning: warning, error: error)
+      @output.puts("#{message_prefix}: #{symbol} #{details}")
+      add_report_row(row, status, message: message, warning: warning, error: error)
     end
 
-    def add_report_row(row, message: nil, warning: nil, error: nil)
+    def add_report_row(row, status, message: nil, warning: nil, error: nil)
       @csv_report.add_row({
         navision_id: row[:navision_id],
         person_name: row[:person_name],
@@ -113,6 +125,7 @@ module SacImports::Roles
         valid_until: row[:valid_until],
         target_group: target_group_path(row),
         target_role: row[:role],
+        status: status,
         message: message,
         warning: warning,
         error: error
@@ -120,7 +133,7 @@ module SacImports::Roles
     end
 
     def collect_csv_source_person_ids
-      @data.map { |row| row[:navision_id].to_i }.uniq
+      @data.map { |row| navision_id(row) }.uniq
     end
 
     def target_group_path(row)

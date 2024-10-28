@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacImports::Roles
-  class MembershipsImporter < ImporterBase
+  class Nav21MembershipsImporter < ImporterBase
     BEITRAGSKATEGORIE_MAPPING = {
       "Einzel" => :adult,
       "Jugend" => :youth,
@@ -15,10 +15,7 @@ module SacImports::Roles
       "Frei Kind" => :family
     }
 
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
-      @rows_filter = {role: /^Mitglied \(Stammsektion\).+/}
-      super
-    end
+    self.rows_filter = {role: /^Mitglied \(Stammsektion\).+/}
 
     def create
       delete_existing_membership_roles
