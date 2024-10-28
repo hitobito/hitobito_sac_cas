@@ -12,7 +12,7 @@ describe SacImports::FamilyImporter, versioning: true do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:importer) { described_class.new(output: output) }
 
-  let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-2_sac_families_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-2_sac_families_2024-01-23-1142.csv") }
   let(:report_headers) { %w[navision_id hitobito_person household_key errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 

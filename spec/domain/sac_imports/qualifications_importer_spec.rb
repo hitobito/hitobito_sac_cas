@@ -11,7 +11,7 @@ describe SacImports::QualificationsImporter do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:output) { $stdout } # double(puts: nil, print: nil) }
   let(:report) { described_class.new(output: output) }
-  let(:report_file) { Rails.root.join("log", "sac_imports", "8_qualifications_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "8_qualifications_2024-01-23-1142.csv") }
   let(:report_headers) {
     %w[navision_id hitobito_person navision_qualification_active
       navision_start_at navision_finish_at navision_qualification_kind warnings errors]

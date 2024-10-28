@@ -32,9 +32,9 @@ module SacImports
       SacImports::Huts::SektionsClubhuetteRow
     ]
 
-    def initialize(path)
-      raise "Hütten Beziehungen Export excel file not found" unless path.exist?
-      @path = path
+    def initialize
+      @path = source_path
+      raise "Hütten Beziehungen Export excel file not found" unless @path.exist?
     end
 
     def import!
@@ -57,6 +57,12 @@ module SacImports
     end
 
     private
+
+    def source_path
+      CsvSource::SOURCE_DIR.children.find do |pathname|
+        pathname.to_s =~ /H(ue|ü)tten_Beziehungen/
+      end
+    end
 
     def print_summary(model_class)
       model_class.where("type LIKE '%huette%'").group(:type).count.sort_by(&:second).each do |row|

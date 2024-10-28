@@ -12,7 +12,7 @@ describe SacImports::RolesImporter do
   let(:importer) { described_class.new(output: output, role_type: role_type) }
 
   # csv report
-  let(:report_file) { Rails.root.join("log", "sac_imports", "nav2-1_roles_2024-01-23-11:42.csv") }
+  let(:report_file) { Rails.root.join("log", "sac_imports", "nav2-1_roles_2024-01-23-1142.csv") }
   let(:report_headers) { %w[navision_id person_name valid_from valid_until target_group target_role message warning error] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 

@@ -8,10 +8,8 @@
 namespace :sac_imports do
   def skip_existing? = ["1", "true"].exclude?(ENV["REIMPORT_ALL"].to_s.downcase)
 
-  def default_files = {huts: "tmp/xlsx/huetten_beziehungen.xlsx"}
-
   desc "Imports SAC Sections"
-  task "nav6-1_sac_section": [:environment] do
+  task "nav6-1_sac_sections": [:environment] do
     SacImports::SacSectionsImporter.new.create
   end
 
@@ -45,17 +43,13 @@ namespace :sac_imports do
     SacImports::QualificationsImporter.new.create
   end
 
-  desc "Imports huts (options: FILE=#{default_files[:huts]})"
+  desc "Imports huts"
   task "nav5-1_huts": [:environment] do
-    SacImports::HutsImporter.new(read_file(:huts)).import!
+    SacImports::HutsImporter.new.import!
   end
 
   desc "Imports Austrittsgründe"
   task "nav8-1_austrittsgruende": [:environment] do
     raise "Not implemented"
-  end
-
-  def read_file(kind)
-    Pathname(ENV["FILE"].presence || Rails.root.join(default_files.fetch(kind)))
   end
 end

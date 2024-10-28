@@ -33,7 +33,7 @@ class SacImports::CsvReport
 
   private
 
-  def format_time(time) = time.strftime("%Y-%m-%d-%H:%M")
+  def format_time(time) = time.strftime("%Y-%m-%d-%H%M")
 
   def format_duration = "#{(Time.zone.now - @start_time) / 60} minutes"
 
