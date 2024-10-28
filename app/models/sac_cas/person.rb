@@ -49,7 +49,7 @@ module SacCas::Person
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
-      if: :roles_require_name_and_address?
+      if: :roles_require_name_and_address?, on: [:create, :update]
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality

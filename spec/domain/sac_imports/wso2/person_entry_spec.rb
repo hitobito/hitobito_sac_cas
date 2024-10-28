@@ -115,6 +115,13 @@ describe SacImports::Wso2::PersonEntry do
           expect(entry).to be_valid
         end
       end
+
+      context "if the existing person has no email" do
+        it "doesn't set an error" do
+          existing_person.update!(email: nil)
+          expect(entry).to be_valid
+        end
+      end
     end
 
     describe "#import!" do
@@ -123,6 +130,14 @@ describe SacImports::Wso2::PersonEntry do
         expect { entry.import! }
           .to not_change { Person.count }
           .and change { existing_person.reload.wso2_legacy_password_hash }.from(nil).to("foo")
+      end
+
+      it "when the existing person has no email it sets the email" do
+        existing_person.update!(email: nil)
+        expect(entry).to be_valid
+        expect { entry.import! }
+          .to not_change { Person.count }
+          .and change { existing_person.reload.email }.from(nil)
       end
 
       context "When the person had a Navision ID role" do

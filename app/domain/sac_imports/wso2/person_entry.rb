@@ -20,7 +20,7 @@ module SacImports::Wso2
     validate :person_must_exist_if_navision_id_is_present
 
     def existing_and_wso2_email_matches
-      if person.persisted? && email != person.email
+      if person.persisted? && person.email? && email != person.email
         errors.add(:email, "#{row[:email]} does not match the current email")
       end
       if !person.persisted? && Person.exists?(email: email)
@@ -116,9 +116,6 @@ module SacImports::Wso2
     def assign_attributes(person)
       assign_common_attributes(person)
 
-      person.primary_group = @basic_login_group
-      person.email = email
-
       person.first_name = row[:first_name]
       person.last_name = row[:last_name]
       person.address_care_of = row[:address_care_of]
@@ -133,29 +130,33 @@ module SacImports::Wso2
       person.birthday = row[:birthday]
       person.gender = gender
       person.language = language
-      person.phone_numbers.build(
-        number: row[:phone],
-        label: "Hauptnummer"
-      )
-      person.phone_numbers.build(
-        number: row[:phone_business],
-        label: "Arbeit"
-      )
+
+      assign_phone_number(person, row[:number], "Hauptnummer")
+      assign_phone_number(person, row[:phone_business], "Arbeit")
+    end
+
+    def assign_phone_number(person, number, label)
+      return if number.blank? || person.phone_numbers.any? { |phone_number| phone_number.number == number }
+
+      person.phone_numbers << PhoneNumber.new(number: number, label: label)
     end
 
     def assign_roles(person)
+      assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name) if abonnent?
+      assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name) if gratisabonnent?
+
       return if person.sac_membership_active?
 
-      if row[:role_basiskonto] == "1"
-        assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name)
-      end
-      if row[:role_abonnent] == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name)
-      end
-      if row[:role_gratisabonnent] == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name)
-      end
+      assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name) if basiskonto?
+
+      raise "No role assigned:\n#{inspect}" unless person.roles.any?
     end
+
+    def basiskonto? = row[:role_basiskonto] == "1"
+
+    def abonnent? = row[:role_abonnent] == "1"
+
+    def gratisabonnent? = row[:role_gratisabonnent] == "1"
 
     def assign_role(person, group, type)
       person.roles.where(group:, type:).first_or_initialize
@@ -185,7 +186,9 @@ module SacImports::Wso2
       existing_person = navision_id && Person.find_by_id(navision_id)
       return existing_person if existing_person.present?
 
-      Person.where(primary_group: @basic_login_group, email: email).first_or_initialize
+      return Person.new if email.blank?
+
+      Person.where(email: email).first_or_initialize
     end
   end
 end

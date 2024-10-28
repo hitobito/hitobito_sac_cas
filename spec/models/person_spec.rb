@@ -8,6 +8,46 @@
 require "spec_helper"
 
 describe Person do
+  context "validations" do
+    let(:person) { Person.new(first_name: "John", last_name: "Doe", birthday: 25.years.ago) }
+
+    context "without address" do
+      it "is valid" do
+        expect(person).to be_valid
+      end
+
+      context "with Abonnement Role" do
+        before do
+          Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), person: person)
+        end
+
+        it "it is invalid" do
+          expect(person).not_to be_valid
+          expect(person.errors[:street]).to include("muss ausgefüllt werden")
+        end
+
+        it "it is valid with scope imports" do
+          expect(person).to be_valid(:imports)
+        end
+      end
+
+      context "with Mitglied Role" do
+        before do
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: person)
+        end
+
+        it "it is invalid" do
+          expect(person).not_to be_valid
+          expect(person.errors[:street]).to include("muss ausgefüllt werden")
+        end
+
+        it "it is valid with scope imports" do
+          expect(person).to be_valid(:imports)
+        end
+      end
+    end
+  end
+
   context "family_id" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { Fabricate(:person, household_key: "1234ABCD", birthday: 25.years.ago) }

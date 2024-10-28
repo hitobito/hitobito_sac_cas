@@ -135,6 +135,21 @@ describe SacImports::People::PersonEntry do
 
       it "still imports the person, but with a warning" do
         expect(person.email).to be_nil
+        expect(person.additional_emails).to have(1).item
+        expect(person.additional_emails.first.email).to eq email
+        expect(entry).to be_valid
+        expect(entry.warning).to include("additional_email")
+        expect { entry.import! }
+          .to change(AdditionalEmail, :count).by(1)
+          .and change(Person, :count).by(1)
+      end
+
+      it "ignores case when checking for existing email" do
+        row[:email] = "Max.Muster@Example.com"
+
+        expect(person.email).to be_nil
+        expect(person.additional_emails).to have(1).item
+        expect(person.additional_emails.first.email).to eq row[:email]
         expect(entry).to be_valid
         expect(entry.warning).to include("additional_email")
         expect { entry.import! }
