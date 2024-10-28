@@ -71,7 +71,7 @@ module SacImports::Wso2
 
     def valid?
       self_valid = super
-      person_valid = person.valid?
+      person_valid = person.valid?(context: :import)
 
       errors.merge!(person.errors)
       person.roles.each do |role|
@@ -86,15 +86,10 @@ module SacImports::Wso2
     end
 
     def import!
-      raise ActiveRecord::RecordInvalid if !valid?
+      raise ActiveRecord::RecordInvalid unless valid?
 
-      person.transaction do
-        person.save!
-        remove_navision_import_role!
-        if !person.valid?
-          raise ActiveRecord::RecordInvalid
-        end
-      end
+      person.save!(context: :import)
+      remove_navision_import_role!
     end
 
     private

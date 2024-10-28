@@ -35,6 +35,57 @@ describe SacImports::Wso2::PersonEntry do
 
   before { travel_to(Time.zone.local(2024, 9, 12, 11, 11)) }
 
+  describe "#valid?" do
+    let(:addition_fields) { {role_basiskonto: "1"} }
+
+    it "is valid" do
+      expect(entry).to be_valid
+    end
+
+    it "does not need an address" do
+      row.merge!(address: nil, zip_code: nil, town: nil)
+      expect(entry.person.address).to be_nil
+      expect(entry).to be_valid
+    end
+  end
+
+  describe "#import!" do
+    let(:addition_fields) { {role_basiskonto: "1"} }
+
+    it "creates a person" do
+      expect { entry.import! }
+        .to change { Person.count }.by(1)
+        .and change { Role.count }.by(1)
+
+      person = Person.last
+      expect(person.first_name).to eq("Max")
+      expect(person.last_name).to eq("Muster")
+      expect(person.address).to eq("Ophovenerstrasse 79a")
+      expect(person.zip_code).to eq("2843")
+      expect(person.town).to eq("Neu Carlscheid")
+      expect(person.email).to eq(email)
+      expect(person.gender).to eq("m")
+      expect(person.language).to eq("de")
+      expect(person.birthday).to eq(Date.new(1957, 1, 1))
+    end
+
+    it "does not need an address" do
+      row.merge!(address: nil, zip_code: nil, town: nil)
+      expect(entry.person.address).to be_nil
+
+      expect { entry.import! }
+        .to change { Person.count }.by(1)
+        .and change { Role.count }.by(1)
+
+      person = Person.last
+      expect(person.first_name).to eq("Max")
+      expect(person.last_name).to eq("Muster")
+      expect(person.address).to be_nil
+      expect(person.zip_code).to be_nil
+      expect(person.town).to be_nil
+    end
+  end
+
   context "with existing person" do
     let!(:existing_person) { Fabricate(:person) }
     let(:navision_id) { existing_person.id }
