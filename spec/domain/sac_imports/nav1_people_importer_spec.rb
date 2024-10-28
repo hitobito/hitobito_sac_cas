@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::PeopleImporter, versioning: true do
+describe SacImports::Nav1PeopleImporter, versioning: true do
   let(:output) { double(puts: nil, print: nil) }
   let(:nav1_csv_fixture) { file_fixture("sac_imports_src/NAV1_fixture.csv") }
   let!(:importer) { described_class.new(output: output) }

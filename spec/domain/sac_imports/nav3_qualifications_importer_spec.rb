@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::QualificationsImporter do
+describe SacImports::Nav3QualificationsImporter do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:output) { $stdout } # double(puts: nil, print: nil) }
   let(:report) { described_class.new(output: output) }

@@ -15,17 +15,24 @@ module SacImports::Wso2
     include ActiveModel::Validations
 
     validate :existing_and_wso2_email_matches
+    validate :email_is_not_taken
     validate :valid_gender
     validate :at_least_one_role
     validate :person_must_exist_if_navision_id_is_present
 
     def existing_and_wso2_email_matches
-      if person.persisted? && email != person.email
-        errors.add(:email, "#{row[:email]} does not match the current email")
-      end
-      if !person.persisted? && Person.exists?(email: email)
-        errors.add(:email, "#{row[:email]} already exists")
-      end
+      return unless person.persisted?
+
+      person_emails = [person.email.presence, *person.additional_emails.map(&:email)].compact
+      return if person_emails.include?(email)
+
+      errors.add(:email, "#{row[:email]} does not match the current emails #{person_emails}")
+    end
+
+    def email_is_not_taken
+      return if person.persisted? || !Person.exists?(email: email)
+
+      errors.add(:email, "#{row[:email]} already exists")
     end
 
     def at_least_one_role
@@ -50,12 +57,12 @@ module SacImports::Wso2
     attr_reader :row
     attr_reader :warning
 
-    def initialize(row, basic_login_group, abo_group, navision_import_group)
+    def initialize(row, basic_login_group, abo_group, existing_emails)
       @row = row
       @basic_login_group = basic_login_group
       @abo_group = abo_group
-      @navision_import_group = navision_import_group
       @warning = nil
+      @existing_emails = existing_emails
     end
 
     def person
@@ -82,21 +89,16 @@ module SacImports::Wso2
     end
 
     def error_messages
-      errors.full_messages.join(", ")
+      (errors.full_messages + [warning]).join(", ")
     end
 
     def import!
       raise ActiveRecord::RecordInvalid unless valid?
 
       person.save!(context: :import)
-      remove_navision_import_role!
     end
 
     private
-
-    def remove_navision_import_role!
-      person.roles.where(group_id: @navision_import_group.id).find_each(&:really_destroy!)
-    end
 
     def assign_common_attributes(person)
       person.wso2_legacy_password_hash = row[:wso2_legacy_password_hash]
@@ -104,8 +106,6 @@ module SacImports::Wso2
       if row[:email_verified] == "1"
         person.confirmed_at = Time.zone.at(0)
         person.correspondence = "digital"
-      else
-        @warning = "Email not verified"
       end
     end
 
@@ -115,9 +115,6 @@ module SacImports::Wso2
 
     def assign_attributes(person)
       assign_common_attributes(person)
-
-      person.primary_group = @basic_login_group
-      person.email = email
 
       person.first_name = row[:first_name]
       person.last_name = row[:last_name]
@@ -133,15 +130,34 @@ module SacImports::Wso2
       person.birthday = row[:birthday]
       person.gender = gender
       person.language = language
-      person.phone_numbers.build(
-        number: row[:phone],
-        label: "Hauptnummer"
-      )
-      person.phone_numbers.build(
-        number: row[:phone_business],
-        label: "Arbeit"
+      build_phone_number(person, :phone, "Hauptnummer")
+      build_phone_number(person, :phone_business, "Arbeit")
+    end
+
+    def build_phone_number(person, attr, label)
+      number_string = row[attr].presence || return
+      number = Phonelib.parse(number_string)
+
+      if number.valid?
+        formatted_number = number.international # as formatted in callback on PhoneNumber
+        return if person.phone_numbers.any? { |phone| phone.number == formatted_number }
+
+        person.phone_numbers.build(number: formatted_number, label: label)
+      else
+        add_invalid_phone_number_as_note(person, number_string, label)
+      end
+    end
+
+    def add_invalid_phone_number_as_note(person, number_string, label)
+      return if person.notes.any? { |note| note.text.include?(number_string) }
+
+      person.notes.build(
+        author: Person.root,
+        text: "Importiert mit ungültiger Telefonnummer #{label}: '#{number_string}'"
       )
     end
+
+    def phone_valid?(number) = number.present? && Phonelib.valid?(number)
 
     def assign_roles(person)
       return if person.sac_membership_active?
@@ -181,11 +197,48 @@ module SacImports::Wso2
       @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""), exception: false)
     end
 
-    def find_or_initialize_person(row)
-      existing_person = navision_id && Person.find_by_id(navision_id)
-      return existing_person if existing_person.present?
+    def um_id = row[:um_id]
 
-      Person.where(primary_group: @basic_login_group, email: email).first_or_initialize
+    def um_id_tag ="UM-ID-#{um_id}"
+
+    def find_or_initialize_person(row)
+      return find_or_initialize_by_navision_id if navision_id.present?
+      return Person.new if email.blank?
+
+      by_tag = Person.tagged_with(um_id_tag).first
+      return by_tag if by_tag.present?
+
+      initialize_new_person
+    end
+
+    def find_or_initialize_by_navision_id
+      person = Person.includes(:additional_emails).find_by(id: navision_id)
+
+      if person.nil?
+        person = Person.new
+        errors.add(:id, "Person with id #{navision_id} not found in hitobito")
+      end
+
+      person
+    end
+
+    def initialize_new_person
+      Person.new(tag_list: um_id_tag).tap do |person|
+        if @existing_emails.add?(email.downcase)
+          person.email = email
+        else
+          person.additional_emails.build(email:, label: "Duplikat")
+          warn(
+            "Email #{email} already exists in the system. Importing with additional_email."
+          )
+        end
+      end
+    end
+
+    def email_taken? = Person.where("lower(email) = ?", email).exists?
+
+    def warn(message)
+      @warning = [@warning, message].compact.join(" / ")
     end
   end
 end

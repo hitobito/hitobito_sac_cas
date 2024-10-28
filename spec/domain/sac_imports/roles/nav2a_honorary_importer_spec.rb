@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Roles::BenefitedImporter do
+describe SacImports::Roles::Nav2aHonoraryImporter do
   let(:output) { double(puts: nil, print: nil) }
   let(:importer) { described_class.new(output: output, csv_source: csv_source, csv_report: csv_report_instance) }
 
@@ -38,36 +38,36 @@ describe SacImports::Roles::BenefitedImporter do
       csv_source_instance
     end
 
-    let!(:sac_bernina) { Group::Sektion.create!(name: "SAC Bernina", parent: Group.root, foundation_year: 1942) }
-    let(:bernina_mitglieder_group) { Group::SektionsMitglieder.find_by(parent: sac_bernina) }
-    let!(:person8) { Fabricate(:person, id: 4200008, first_name: "Christian", last_name: "Bühler") }
-    let!(:person8_membership_role) do
+    let!(:cas_jaman) { Group::Sektion.create!(name: "CAS Jaman", parent: Group.root, foundation_year: 1942) }
+    let(:jaman_mitglieder_group) { Group::SektionsMitglieder.find_by(parent: cas_jaman) }
+    let!(:person5) { Fabricate(:person, id: 4200005, first_name: "Hans", last_name: "Muster") }
+    let!(:person5_membership_role) do
       Group::SektionsMitglieder::Mitglied
-        .create!(group: bernina_mitglieder_group, person: person8,
+        .create!(group: jaman_mitglieder_group, person: person5,
           start_on: "2010-01-01", end_on: "2024-12-31")
     end
 
     it "imports role from nav2 csv fixture file" do
-      expect(output).to receive(:print).with("4200008 (Bühler Christian): ✅ Benefited role created\n")
+      expect(output).to receive(:print).with("4200005 (Muster Hans): ✅ Honorary role created\n")
 
       importer.create
 
       expect(csv_report.size).to eq(2)
       expect(csv_report.first).to eq(report_headers)
-      expect(csv_report[1]).to eq(["4200008",
-        "Bühler Christian",
-        "2022-10-06",
+      expect(csv_report[1]).to eq(["4200005",
+        "Muster Hans",
+        "2022-06-01",
         "2024-12-31",
-        "Sektion > SAC Bernina > Mitglieder",
-        "Begünstigt",
-        "Benefited role created", nil, nil])
+        "Sektion > CAS Jaman > Mitglieder",
+        "Ehrenmitglied",
+        "Honorary role created", nil, nil])
 
-      person8.reload
-      expect(person8.roles.count).to eq(2)
-      benefited_role = person8.roles.find_by(type: "Group::SektionsMitglieder::Beguenstigt")
-      expect(benefited_role.group).to eq(bernina_mitglieder_group)
-      expect(benefited_role.start_on).to eq(Date.new(2022, 10, 6))
-      expect(benefited_role.end_on).to be_nil
+      person5.reload
+      expect(person5.roles.count).to eq(2)
+      honorary_role = person5.roles.find_by(type: "Group::SektionsMitglieder::Ehrenmitglied")
+      expect(honorary_role.group).to eq(jaman_mitglieder_group)
+      expect(honorary_role.start_on).to eq(Date.new(2022, 6, 1))
+      expect(honorary_role.end_on).to be_nil
     end
   end
 
@@ -84,7 +84,7 @@ describe SacImports::Roles::BenefitedImporter do
         group_level2: "Mitglieder",
         group_level3: nil,
         group_level4: nil,
-        role: "Begünstigt",
+        role: "Ehrenmitglied",
         role_description: nil,
         person_name: "Hillary Edmund",
         other: nil
@@ -99,10 +99,10 @@ describe SacImports::Roles::BenefitedImporter do
       csv_source_instance
     end
 
-    context "creates Benefited roles" do
-      it "creates new benefited role and resets existing ones" do
-        existing_role = Group::SektionsMitglieder::Beguenstigt.create!(person: mitglied, group: groups(:bluemlisalp_mitglieder))
-        expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Benefited role created\n")
+    context "creates honorary roles" do
+      it "creates new honorary role and resets existing ones" do
+        existing_role = Group::SektionsMitglieder::Ehrenmitglied.create!(person: mitglied, group: groups(:bluemlisalp_mitglieder))
+        expect(output).to receive(:print).with("600001 (Hillary Edmund): ✅ Honorary role created\n")
 
         importer.create
 
@@ -113,14 +113,14 @@ describe SacImports::Roles::BenefitedImporter do
           "2022-06-21",
           "2024-12-31",
           "Sektion > SAC Blüemlisalp > Mitglieder",
-          "Begünstigt",
-          "Benefited role created", nil, nil])
+          "Ehrenmitglied",
+          "Honorary role created", nil, nil])
 
         mitglied.reload
         expect(mitglied.roles.count).to eq(3)
-        benefited_role =
-          Group::SektionsMitglieder::Beguenstigt.find_by(person: mitglied)
-        expect(benefited_role.group).to eq(groups(:bluemlisalp_mitglieder))
+        honorary_role =
+          Group::SektionsMitglieder::Ehrenmitglied.find_by(person: mitglied)
+        expect(honorary_role.group).to eq(groups(:bluemlisalp_mitglieder))
         expect(Group::SektionsMitglieder::Ehrenmitglied.where(id: existing_role.id)).not_to exist
       end
 
@@ -138,7 +138,7 @@ describe SacImports::Roles::BenefitedImporter do
           "2022-06-21",
           "2024-12-31",
           "Sektion > SAC Blüemlisalp > Mitglieder",
-          "Begünstigt",
+          "Ehrenmitglied",
           nil, nil, "Person not found in hitobito"])
       end
 
@@ -156,7 +156,7 @@ describe SacImports::Roles::BenefitedImporter do
           "2022-06-21",
           "2024-12-31",
           "Sektion > SAC Unknown > Mitglieder",
-          "Begünstigt",
+          "Ehrenmitglied",
           nil, nil, "No Section/Ortsgruppe group found for 'SAC Unknown'"])
       end
     end

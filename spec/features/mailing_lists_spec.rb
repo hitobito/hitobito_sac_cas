@@ -12,7 +12,7 @@ describe "Mailing list edit page", js: true do
   let(:mailing_list) { Fabricate(:mailing_list, group: groups(:root)) }
   let(:newsletter) do
     MailingListSeeder.seed!
-    MailingList.find_by(internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY)
+    MailingList.find_by(internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY)
   end
 
   def show_mailing_list(mailing_list)

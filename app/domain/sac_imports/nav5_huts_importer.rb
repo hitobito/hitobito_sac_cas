@@ -11,7 +11,9 @@ require_relative "huts/huts_row"
 require_relative "huts/hut_row"
 
 module SacImports
-  class HutsImporter
+  class Nav5HutsImporter
+    include LogCounts
+
     HEADERS = {
       contact_navision_id: "Kontaktnr.",
       contact_name: "Kontaktname",
@@ -32,17 +34,39 @@ module SacImports
       SacImports::Huts::SektionsClubhuetteRow
     ]
 
-    def initialize
+    REPORT_HEADERS = [
+      :navision_id,
+      :name,
+      :status,
+      :message,
+      :warning,
+      :error
+    ].freeze
+
+    attr_reader :output, :csv_report
+
+    def initialize(output: $stdout)
       @path = source_path
       raise "Hütten Beziehungen Export excel file not found" unless @path.exist?
+
+      @output = output
+      @csv_report = SacImports::CsvReport.new("nav5-huts", REPORT_HEADERS, output:)
     end
 
     def import!
-      without_query_logging do
+      @csv_report.log("The file contains #{rows.size} rows.")
+      progress = SacImports::Progress.new(rows.size * ROW_IMPORTERS.size, title: "NAV5 Huts")
+
+      log_counts_delta(csv_report,
+        Group::SacCasClubhuette,
+        Group::Sektionshuetten,
+        Group::SektionsClubhuette,
+        Group::SacCasPrivathuette) do
         import_sac_cas_hut_groups
         ROW_IMPORTERS.each do |importer_class|
           rows.each do |row|
-            importer = importer_class.new(row)
+            progress.step
+            importer = importer_class.new(row, csv_report:, output:)
             importer.import! if importer.can_process?
           end
         end
@@ -52,8 +76,7 @@ module SacImports
           Group.rebuild!(false)
         end
       end
-      print_summary(Group)
-      print_summary(Role)
+      csv_report.finalize
     end
 
     private
@@ -66,7 +89,8 @@ module SacImports
 
     def print_summary(model_class)
       model_class.where("type LIKE '%huette%'").group(:type).count.sort_by(&:second).each do |row|
-        p row
+        output.puts row
+        csv_report.log(row)
       end
     end
 
@@ -81,13 +105,6 @@ module SacImports
     def import_sac_cas_hut_groups
       Group.root.children.find_or_create_by(type: Group::SacCasClubhuetten.sti_name)
       Group.root.children.find_or_create_by(type: Group::SacCasPrivathuetten.sti_name)
-    end
-
-    def without_query_logging
-      old_logger = ActiveRecord::Base.logger
-      ActiveRecord::Base.logger = nil
-      yield
-      ActiveRecord::Base.logger = old_logger
     end
 
     def ignoring_archival

@@ -19,12 +19,12 @@ module SacCas::Ability
   end
 
   def prevent_changes_to_newsletter_mailing_list
-    with_options(internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY) do
+    with_options(internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY) do
       cannot [:destroy], MailingList
       cannot [:update], MailingList, [:subscribable_for, :subscribable_mode, :filter_chain]
     end
     cannot [:update, :destroy], Subscription, mailing_list: {
-      internal_key: SacCas::NEWSLETTER_MAILING_LIST_INTERNAL_KEY
+      internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY
     }
     cannot [:update], Group, [:sac_newsletter_mailing_list_id]
   end

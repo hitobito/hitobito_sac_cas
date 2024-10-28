@@ -1,16 +1,78 @@
 # Datenimport
 
+## PROD Import
+
+Import Files finden sich auf [Nextcloud](https://files.puzzle.ch/apps/files/files/7246438?dir=/sac-trans), die neuesten Dateien sind im `latest` die
+Reports legen wir in den Folder `csv-logs`. Am besten soll dieser Folder ins erwartete Verzeichnis `tmp/sac_imports_src` gelinkt werden
+
+```
+  ln -s ~/Documents/Nextcloud/sac-trans/latest/ sac_imports_src
+```
+
+Der Import soll lokal in einer dedizierten DB erfolgen `export RAILS_DB_NAME=hit_sac_cas_prod` und erfolgt mittels rake tasks in der folgenden Reihenfolge
+
+0. `rails db:drop db:create db:migrate wagon:migrate` # nicht gleichzeitig mit `seed` ausführen!
+1. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
+2. `rails sac_imports:nav6-1_sac_section` # Import Sektionen und Ortsgruppen
+3. `rails sac_imports:nav5-1_huts` # Importiert Hütten Gruppen und Hüttenkontakte
+4. `rails sac_imports:nav2b-1_missing_groups` # Importiert fehlende Gruppen
+5. `rails sac_imports:nav1-1_people` # Importiert Personen aus navision
+6. `rails sac_imports:wso21-1_people` # Importiert alte Passwörter und Personen die nicht im Navision sind
+7. `rails sac_imports:nav3-1_qualifications` # Importiert Qualifikationen der Personen
+8. `rails sac_imports:nav2a-1_membership_roles` # Importiert alle Mitgliedschaftsrollen (Stammsektion,Zusatzsektion)
+9. `rails sac_imports:nav2a-2_set_family_main_person` # Setzt family main person Flag
+10. `rails sac_imports:nav2a-3_families` # Macht Familien auf basis bisher importierter daten (kein file)
+11. `rails sac_imports:nav2b-2_non_membership_roles` # Importiert alle anderen Rollen
+12. `rails sac_imports:nav8-1_austrittsgruende` # Fällt eventuell weg
+13. `rails sac_imports:nav1-2_membership_years_report` # Generiert Mitgliedsschaftsjahre Report
+
+Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
+
+### Was noch zu definieren ist
+
+- Wann und wo sind folgenden Daten final und können in den Import integriert werden?
+
+  - CustomContents (global) -> per 30. Nov in Excel Datei geliefert, als seeds hinterlegen
+  - OIDC Applikationen (global) -> per 30. Nov in PROD eingepflegt
+  - ServiceTokens (pro Gruppe) -> per 30. Nov in PROD eingepflegt
+
+  Ab 1. Dez unveränderte API keys etc. in PROD  
+
+- Noch zu definierende Punkte
+
+  - Konfiguration von der root gruppe (mailing liste)
+  - SAC Newsletter (und ev. weiter) Mailingliste (Abo Gruppen) (SAC-Newsletter
+    SAC-Inside Newsletter
+    Tourenleiter Newsletter
+    Die Alpen (physisch)
+    Die Alpen (digital)
+    Spendenaufrufe)
+  - Newsletter opt-in / opt-out pro Person
+  - Mailchimp Newsletter export (Andi Gurtner)
+  - KVS import
+  - Wann werden die mails wieder scharfgeschalten
+
+### Ablauf
+
+- Daten lokal importieren
+- Pods herunterfahren
+- DB Dump auf prod cluster einspielen
+- Pods hochfahren
+- TBD -> Emails scharf schalten??
+
+## Bisherige Import info
+
 Hitobito löst verschiedene Systeme vom SAC/CAS ab. Um Datenfehler zu finden und vom SAC/CAS bereinigen zu lassen, soll
 beim Import ein Report erstellt werden, der auf Validierungsfehler hinweist. Durch Abhängigkeiten und verschiedenen
 Datenquellen, erfolgt der Import in mehreren Schritten. Schlussendlich sollen die Daten mittels des Imports ins
 Hitobito migriert werden. Danach wird der hier beschriebene Datenimport nicht mehr benötigt.
 
-* [Konzepte](#Konzepte)
-* [Quelldaten](#Quelldaten)
-* [CSV Report](#CSV-Report)
-* [Importe](#Importe)
-* [Ausführen der Imports auf Openshift](#Ausführen-der-Imports-auf-Openshift)
-* [Development](#Development)
+- [Konzepte](#Konzepte)
+- [Quelldaten](#Quelldaten)
+- [CSV Report](#CSV-Report)
+- [Importe](#Importe)
+- [Ausführen der Imports auf Openshift](#Ausführen-der-Imports-auf-Openshift)
+- [Development](#Development)
 
 ## Konzepte
 
@@ -31,16 +93,16 @@ Die Daten bestehen aus verschiedenen .csv-Dateien. Die .csv-Dateien haben folgen
 
 Die Dateien sind im Nextcloud abgelegt (Ordner sac-trans) **Die Daten dürfen nur anonymisiert im öffentlichen Bereich verwendet werden!**
 
-| #     | Inhalt                                               | Art       |
-|-------|------------------------------------------------------|-----------|
-| NAV1  | Alle Kontakte (natürliche und juristische Personen)  | via CSV   |
-| NAV2  | Rollen und Gruppen                                   | via CSV   |
-| NAV3  | Qualifikationen                                      | via CSV   |
-| NAV5  | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)     | via XLSX  |
-| NAV6  | Sektionen und Ortsgruppen                            | via CSV   |
-| NAV7  | Qualifikationsarten                                  | via Seeds |
-| NAV8  | Austrittsgründe                                      | via CSV   |
-| WSO21 | Datenexport aus WSO21                                | via CSV   |
+| #     | Inhalt                                              | Art       |
+| ----- | --------------------------------------------------- | --------- |
+| NAV1  | Alle Kontakte (natürliche und juristische Personen) | via CSV   |
+| NAV2  | Rollen und Gruppen                                  | via CSV   |
+| NAV3  | Qualifikationen                                     | via CSV   |
+| NAV5  | Hüttenbeziehungen (Hütten und Hüttenfunktionäre)    | via XLSX  |
+| NAV6  | Sektionen und Ortsgruppen                           | via CSV   |
+| NAV7  | Qualifikationsarten                                 | via Seeds |
+| NAV8  | Austrittsgründe                                     | via CSV   |
+| WSO21 | Datenexport aus WSO21                               | via CSV   |
 
 Weitere informationen sind in [HIT-490](https://saccas.atlassian.net/browse/HIT-490) zu finden.
 
@@ -53,28 +115,6 @@ Jeder Import erstellt einen CSV Report in RAILS_CORE_ROOT/log/sac_imports/. In d
 `$IMPORT_NAME_$TIMESTAMP.csv`, e.g. `nav1-1_people_2024-06-01-12:00.csv`
 
 Siehe [SacImports::CsvReport](../app/domain/sac_imports/csv_report.rb)
-
-## Importe
-
-Beim Seeden werden folgende Daten importiert:
-
-- Qualifikationsarten: `hitobito_sac_cas/db/seeds/qualification_kinds.rb`
-
-Die Importe müssen in folgender Reihenfolge ausgeführt werden:
-
-```txt
-sac_imports:nav1-1_people
-sac_imports:wso21-1_people
-sac_imports:nav6-1_sac_sections
-sac_imports:nav2-1_membership_roles
-sac_imports:nav1-2_sac_families
-sac_imports:nav3-1_qualifications
-sac_imports:nav5-1_huts
-sac_imports:nav8-1_austrittsgruende
-sac_imports:nav1-2_membership_years_report
-```
-
-Importe können mit `bundle exec rails sac_imports:nav6-1_sac_section` ausgeführt werden.
 
 ### `sac_imports:nav6-1_sac_section`
 
@@ -102,7 +142,6 @@ optional kann eine navision id angegeben ab der Row ab dem der Import gestartet 
 - Geschlecht `2` bedeutet es handelt sich um eine Firma.
 - Wenn eine Person eine E-Mail hat welche bereits als Haupt-Emaildadresse existier wird sie mit einer Emailadresse unter
   `additional_emails` angelegt. (Siehe <https://github.com/hitobito/hitobito_sac_cas/issues/1079>)
-
 
 ### `sac_imports:nav1-2_membership_years_report`
 

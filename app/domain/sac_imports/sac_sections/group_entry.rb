@@ -37,14 +37,14 @@ module SacImports
     end
 
     def section_name
-      row[:section_name].gsub(/^#{navision_id}\s/, "")
+      row.section_name.gsub(/^#{navision_id}\s/, "")
     end
 
     def import!
       group.save!
       setup_self_registration
       assign_membership_configs
-      archive_group! if row[:is_active] == "0"
+      archive_group! if row.is_active == "0"
     end
 
     private
@@ -54,7 +54,7 @@ module SacImports
     end
 
     def neuanmeldungen_group
-      if row[:self_registration_without_confirmation] == "1"
+      if row.self_registration_without_confirmation == "1"
         Group::SektionsNeuanmeldungenNv.find_by(parent_id: group.id)
       else
         Group::SektionsNeuanmeldungenSektion.find_or_create_by(parent_id: group.id)
@@ -66,12 +66,12 @@ module SacImports
     end
 
     def navision_id
-      @navision_id ||= row[:navision_id].to_i
+      @navision_id ||= row.navision_id.to_i
     end
 
     def fetch_parent
-      if row[:level_3_id].present?
-        return Group::Sektion.find_by(navision_id: row[:level_3_id])
+      if row.level_3_id.present?
+        return Group::Sektion.find_by(navision_id: row.level_2_id)
       end
 
       Group.root
@@ -85,25 +85,26 @@ module SacImports
     end
 
     def parse_address
-      address = row[:address]
+      address = row.address
       return if address.blank?
 
       Address::Parser.new(address).parse
     end
 
     def assign_attributes(group) # rubocop:disable Metrics/AbcSize
+      group.id = navision_id
       group.parent = parent
       group.name = section_name
 
-      group.postbox = row[:postbox]
+      group.postbox = row.postbox
       group.street, group.housenumber = parse_address
-      group.zip_code = row[:zip_code]
-      group.town = row[:town]
+      group.zip_code = row.zip_code
+      group.town = row.town
 
-      group.foundation_year = row[:foundation_year]
-      group.section_canton = row[:canton]
+      group.foundation_year = row.foundation_year
+      group.section_canton = row.canton
       group.language = language(row)
-      group.mitglied_termination_by_section_only = row[:termination_by_section_only] == "1"
+      group.mitglied_termination_by_section_only = row.termination_by_section_only == "1"
 
       build_phone_numbers(group)
       build_email(group)
@@ -112,8 +113,8 @@ module SacImports
     end
 
     def assign_membership_configs
-      CsvSource::SOURCE_HEADERS[:NAV6][:membership_configs].keys.each do |key|
-        membership_config.send(:"#{key}=", row[:membership_configs][key])
+      CsvSource::NAV6MEMBERSHIP_CONFIGS.each do |key|
+        membership_config.send(:"#{key}=", row.public_send(key))
       end
       membership_config.save!
     end
@@ -128,18 +129,19 @@ module SacImports
     end
 
     def language(row)
-      row[:language][0..1].upcase
+      row.language[0..1].upcase
     end
 
     def set_youth_homepage(row, group)
-      has_jo = row[:has_jo] == "1"
+      has_jo = row.has_jo == "1"
       return nil unless has_jo
 
       group.social_accounts.where(label: "Homepage Jugend").destroy_all
-      group.social_accounts.build(name: row[:youth_homepage], label: "Homepage Jugend")
+      group.social_accounts.build(name: row.youth_homepage, label: "Homepage Jugend")
     end
 
     def build_email(group)
+      email = row.email&.downcase
       return unless email.present? && Truemail.valid?(email)
 
       group.email = email
@@ -148,7 +150,7 @@ module SacImports
     def build_phone_numbers(group)
       # rubocop:disable Lint/SymbolConversion
       phone_numbers = {
-        "Hauptnummer": row[:phone]
+        "Hauptnummer": row.phone
       }.freeze
       # rubocop:enable Lint/SymbolConversion
 
@@ -166,7 +168,5 @@ module SacImports
         I18n.t(key, **args)
       end
     end
-
-    def email = row[:email]&.downcase
   end
 end

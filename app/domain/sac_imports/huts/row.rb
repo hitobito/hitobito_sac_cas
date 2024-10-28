@@ -1,9 +1,11 @@
 module SacImports::Huts
   class Row
-    attr_reader :row
+    attr_reader :row, :csv_report, :output
 
-    def initialize(row)
+    def initialize(row, csv_report:, output: $stdout)
       @row = row
+      @csv_report = csv_report
+      @output = output
     end
 
     def can_process?

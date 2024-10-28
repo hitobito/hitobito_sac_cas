@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Roles::MembershipsImporter do
+describe SacImports::Roles::Nav2a1MembershipsImporter do
   let(:output) { double(puts: nil, print: nil) }
   let(:importer) { described_class.new(output: output, csv_source: csv_source, csv_report: csv_report_instance) }
 
