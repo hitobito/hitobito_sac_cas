@@ -8,19 +8,23 @@
 require "spec_helper"
 
 describe ExternalInvoice do
-  context "destroy" do
-    let(:participation) { Fabricate(:event_participation) }
-    let!(:external_invoice) { Fabricate(:external_invoice, link: participation) }
+  describe "#destroy" do
+    let!(:participation) { Fabricate(:event_participation) }
 
-    it "is prevented if associated external_invoices exist" do
-      expect { participation.destroy }.not_to change { Event::Participation.count }
-      expect(participation.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
-        "da abhängige Rechnungen existieren."
+    context "with associated external_invoice" do
+      before { Fabricate(:external_invoice, link: participation) }
+
+      it "is prevented" do
+        expect { participation.destroy }.not_to change { Event::Participation.count }
+        expect(participation.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
+          "da abhängige Rechnungen existieren."
+      end
     end
 
-    it "succeeds if no associated external_invoices exists" do
-      external_invoice.destroy!
-      expect { participation.destroy }.to change { Event::Participation.count }.by(-1)
+    context "without associated external_invoice" do
+      it "succeeds" do
+        expect { participation.destroy }.to change { Event::Participation.count }.by(-1)
+      end
     end
   end
 end
