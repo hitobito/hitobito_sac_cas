@@ -16,7 +16,9 @@ describe OidcClaimSetup do
   subject(:claims) { Doorkeeper::OpenidConnect::ClaimsBuilder.generate(token, response) }
 
   before do
+    allow(ENV).to receive(:fetch).and_call_original
     allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME", "localhost:3000").and_return("hitobito.example.com")
+    allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME").and_return("hitobito.example.com")
     allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
   end
 
