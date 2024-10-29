@@ -1151,6 +1151,9 @@ de:
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
+        create_course_leader_invoice_button: Kurskaderabrechnung erstellen
+      popover_create_course_leader_invoice:
+        create_invoice: Abrechnung erstellen
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
