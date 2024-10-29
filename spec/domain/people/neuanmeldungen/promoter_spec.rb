@@ -134,6 +134,7 @@ describe People::Neuanmeldungen::Promoter do
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::MitgliedZusatzsektion.count }.by(1)
+        .and change { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.count }.by(-1)
 
       zusatzsektion_role = neuanmeldung_role.person.roles.last
       expect(zusatzsektion_role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
@@ -211,6 +212,20 @@ describe People::Neuanmeldungen::Promoter do
 
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { tourenportal_role.reload.attributes }
+        .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
+    end
+
+    it "does not affect other Neuanmeldung roles when promoting" do
+      neuanmeldung_role = create_neuanmeldung_role
+
+      Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.create!(
+        group: groups(:matterhorn_neuanmeldungen_sektion),
+        person: neuanmeldung_role.person,
+        start_on: Time.zone.now
+      )
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to not_change { Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.count }
         .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
     end
   end
