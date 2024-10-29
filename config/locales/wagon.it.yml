@@ -218,6 +218,7 @@ it:
         seasons:
           winter: Inverno
           summer: Estate
+        section_may_create: ""
         reserve_accommodation: Prenota l'alloggio tramite SAC
         maximum_participants: Numero massimo di partecipanti
         minimum_participants: Numero minimo di partecipanti

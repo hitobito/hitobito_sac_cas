@@ -216,6 +216,7 @@ en:
         seasons:
           winter: Winter
           summer: Summer
+        section_may_create: ""
         reserve_accommodation: Book accommodation through SAC
         maximum_participants: Maximum number of participants
         minimum_participants: Minimum number of participants
