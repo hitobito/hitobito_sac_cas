@@ -114,13 +114,15 @@ describe People::ExternalInvoicesController do
               ENV["TZ"],
               ENV["LANGUAGE"],
               ENV["LOCALE"],
+              ENV["LANG"],
               I18n.locale.to_s,
               I18n.default_locale.to_s,
               Time.zone,
               invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"),
               invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
               invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M") == invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
-              main.text
+              main.text,
+              `locale`
             ]).to eq([])
 
             expect(main).to have_selector("td", text: invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"))
