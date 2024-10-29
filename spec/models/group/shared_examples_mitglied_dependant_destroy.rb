@@ -24,7 +24,7 @@ shared_examples "Mitglied dependant destroy" do
     end
 
     it "gets hard deleted if it is not old enough" do
-      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago + 1.minute)
+      role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago + 2.hour)
       expect { mitglied_role.destroy(always_soft_destroy: true) }
         .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
