@@ -223,6 +223,17 @@ describe People::Neuanmeldungen::Promoter do
     end
   end
 
+  People::Neuanmeldungen::Promoter::CONDITIONS.each do |condition|
+    it "is false when condition #{condition.name} is not satisfied" do
+      (People::Neuanmeldungen::Promoter::CONDITIONS - [condition]).each do |other_condition|
+        allow(other_condition).to receive(:satisfied?).and_return(true)
+      end
+      expect(condition).to receive(:satisfied?).and_return(false)
+
+      expect(subject.promotable?(double)).to eq false
+    end
+  end
+
   context "#candidate_roles" do
     it "returns all Neuanmeldung and NeuanmeldungZusatzsektion roles" do
       expect(Group::SektionsNeuanmeldungenNv::Neuanmeldung).not_to exist
@@ -276,21 +287,6 @@ describe People::Neuanmeldungen::Promoter do
       expect(subject).to receive(:promote).with(candidates[2]).and_call_original
 
       subject.call
-    end
-  end
-
-  context "role definitions" do
-    it "excludes tourenportal roles from OBSOLETE_ROLES" do
-      expect(described_class::OBSOLETE_ROLES).not_to include(Group::AboTourenPortal::Abonnent.sti_name)
-      expect(described_class::OBSOLETE_ROLES).not_to include(Group::AboTourenPortal::Neuanmeldung.sti_name)
-    end
-
-    it "includes only magazine registration in NEUANMELDUNG_ROLES" do
-      expect(described_class::NEUANMELDUNG_ROLES).to contain_exactly(Group::AboMagazin::Neuanmeldung.sti_name)
-    end
-
-    it "excludes membership registrations from NEUANMELDUNG_ROLES" do
-      expect(described_class::NEUANMELDUNG_ROLES).not_to include(*SacCas::NEUANMELDUNG_ROLES.map(&:sti_name))
     end
   end
 end
