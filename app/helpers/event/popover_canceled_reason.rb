@@ -20,14 +20,6 @@ class Event::PopoverCanceledReason
   private
 
   def popover_content
-    popover = @context.render("events/popover_canceled_reason", entry: @event).to_s
-
-    action_button(
-      t("events.actions_show_sac_cas.state_buttons.canceled"),
-      nil,
-      "times",
-      data: {bs_toggle: "popover", bs_content: popover, bs_placement: :bottom},
-      in_button_group: true
-    )
+    @context.render("events/popover_canceled_reason", entry: @event).to_s
   end
 end

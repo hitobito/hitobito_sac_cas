@@ -52,6 +52,14 @@ module Events::Courses::State
     available_states.any?(new_state.to_sym)
   end
 
+  def send_canceled_email
+    return if canceled_reason.nil?
+
+    all_participants.each do |participation|
+      Event::CanceledMailer.send(canceled_reason, participation).deliver_later
+    end
+  end
+
   private
 
   def assert_valid_state_change
@@ -94,7 +102,6 @@ module Events::Courses::State
 
   def annul_participations
     all_participants.update_all("previous_state = state, active = FALSE, state = 'annulled'")
-    send_canceled_email
     cancel_invoices(all_course_invoices)
   end
 
@@ -116,14 +123,6 @@ module Events::Courses::State
       link_type: Event::Participation.sti_name,
       type: [ExternalInvoice::CourseParticipation, ExternalInvoice::CourseAnnulation].map(&:sti_name)
     )
-  end
-
-  def send_canceled_email
-    return if canceled_reason.nil?
-
-    all_participants.each do |participation|
-      Event::CanceledMailer.send(canceled_reason, participation).deliver_later
-    end
   end
 
   def send_application_published_email

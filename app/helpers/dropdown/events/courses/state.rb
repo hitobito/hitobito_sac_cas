@@ -28,7 +28,6 @@ module Dropdown::Events::Courses
       course.available_states.each do |step|
         link = template.state_group_event_path(template.params[:group_id], course, {state: step})
         label = label_for_step(step)
-
         if respond_to?(:"state_item_#{step}", true)
           send(:"state_item_#{step}", label, link)
         else
@@ -51,11 +50,13 @@ module Dropdown::Events::Courses
       I18n.t(key) if I18n.exists?(key)
     end
 
-    # def state_item_canceled(label, link)
-    #   item = add_item(label, "#")
-    #   item.sub_items = Event::Course.canceled_reason_labels.values.map do |reason|
-    #     Dropdown::Item.new(reason, "#TODO")
-    #   end
-    # end
+    def state_item_canceled(label, link)
+      popover = Event::PopoverCanceledReason.new(@template, course).render
+      add_item(label, "javascript:void(0)",
+        "data-bs-toggle": "popover",
+        "data-anchor": "[data-bs-toggle='dropdown']",
+        "data-bs-placement": :bottom,
+        "data-bs-content": popover.to_str)
+    end
   end
 end

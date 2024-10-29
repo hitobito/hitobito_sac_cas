@@ -5,14 +5,14 @@
 
 %p= t('.cancel_info', name: entry.name, number: entry.number)
 
-= standard_form(entry) do |f|
+= standard_form(entry, url: state_group_event_path(params[:group_id], params[:id], {state: :canceled}), method: :put) do |f|
   = f.labeled t('.canceled_reason_label') do
     = f.select(:canceled_reason, entry.model.class.canceled_reason_labels.invert,
-        {prompt: t('helpers.select.prompt'), required: true}, {class: 'form-select form-select-sm'})
+        {prompt: t('helpers.select.prompt')}, {class: 'form-select form-select-sm', required: true})
   = f.labeled t('.inform_participants_label') do
     = check_box_tag(:inform_participants, required: true)
     = t('.inform_participants_caption')
-  = action_button(t('.cancel_button'),
-      state_group_event_path(params[:group_id], params[:id], {state: :canceled}), nil, class: 'btn-danger',
-      method: :put, data: {confirm: t('.cancel_confirmation', name: entry.name, number: entry.number)})
+  = f.submit t('.cancel_button'), 
+      class: 'btn btn-danger',
+      data: { confirm: t('.cancel_confirmation', name: entry.name, number: entry.number) }
   = cancel_link('#')
