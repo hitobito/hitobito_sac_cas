@@ -12,13 +12,13 @@ class People::Neuanmeldungen::Promoter
     PaidInvoiceCondition
   ].freeze
 
-  NEUANMELDUNG_ROLES = [
-    Group::AboMagazin::Neuanmeldung
-  ].map(&:sti_name).freeze
+  # These roles get destoyed
+  NEUANMELDUNG_ROLES = [Group::AboMagazin::Neuanmeldung.sti_name].freeze
 
+  # These roles get destroyed if they are in the future or set to terminated if
+  # they are currently active
   OBSOLETE_ROLES = [
     Group::AboMagazin::Abonnent,
-    Group::AboMagazin::Neuanmeldung,
     Group::AboBasicLogin::BasicLogin
   ].map(&:sti_name).freeze
 
