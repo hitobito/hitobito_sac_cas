@@ -16,8 +16,9 @@ class People::Neuanmeldungen::Promoter
   NEUANMELDUNG_ROLES = [Group::AboMagazin::Neuanmeldung.sti_name].freeze
 
   # These roles get destroyed if they are in the future or set to terminated if
-  # they are currently active
-  OBSOLETE_ROLES = [
+  # they are currently active. We need to repeat the roles from
+  # NEUANMELDUNG_ROLES since future roles will be excluded by the default scope.
+  OBSOLETE_ROLES = NEUANMELDUNG_ROLES + [
     Group::AboMagazin::Abonnent,
     Group::AboBasicLogin::BasicLogin
   ].map(&:sti_name).freeze

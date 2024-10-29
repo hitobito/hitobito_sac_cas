@@ -52,6 +52,33 @@ describe People::Neuanmeldungen::Promoter do
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
     end
 
+    it "deletes Group::AboMagazin::Neuanmeldung roles from the current day" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Neuanmeldung.sti_name,
+        start_on: Date.current,
+        beitragskategorie: "adult"
+      )
+      old_role.save!(validate: false)
+      expect { subject.promote(neuanmeldung_role) }
+        .to change { Group::AboMagazin::Neuanmeldung.count }.by(-1)
+    end
+
+    it "deletes Group::AboMagazin::Neuanmeldung future roles" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Neuanmeldung.sti_name,
+        start_on: 1.week.from_now,
+        beitragskategorie: "adult"
+      )
+      old_role.save!(validate: false)
+      expect { subject.promote(neuanmeldung_role) }
+        # Need to use unscoped to also count future roles
+        .to change { Group::AboMagazin::Neuanmeldung.unscoped.count }.by(-1)
+    end
+
     it "terminates old roles created today" do
       neuanmeldung_role = create_neuanmeldung_role
       old_role = neuanmeldung_role.person.roles.new(
