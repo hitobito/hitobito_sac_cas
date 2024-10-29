@@ -100,7 +100,9 @@ describe People::ExternalInvoicesController do
             expect(main).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
             expect(main).to have_selector("td", text: invoice.total.to_s)
             expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
-            expect(Time.zone).to be("Europe/Zurich")
+
+            expect(ActiveRecord::Base.connection.execute("show timezone;")[0]).to be("Europe/Zurich")
+
             expect(main).to have_selector("td", text: invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"))
             expect(main).to have_selector("td", text: invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"))
           end
