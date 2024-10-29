@@ -1142,7 +1142,7 @@ en:
         ready: Ready for implementation
         closed: Finalize
         closed_confirm_text: ""
-        canceled: Cancellations
+        canceled: Cancel
       state_back_buttons:
         assignment_closed: Back to the allocation
         application_closed: Back to the completed registration

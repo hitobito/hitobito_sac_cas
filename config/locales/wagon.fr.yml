@@ -19,34 +19,34 @@ fr:
 
   errors:
     messages:
-      assert_old_enough: "doit avoir une date de naissance et être âgé d'au moins %{minimum_years} "
-      too_young: "doit être âgé de %{minimum_years} ans ou plus"
-      assert_old_enough_with_age: "doit avoir une date de naissance et être âgé d'au moins %{minimum_years} "
+      assert_old_enough: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
+      too_young: "doit être âgé·e de %{minimum_years} ans ou plus"
+      assert_old_enough_with_age: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       conflicting_family_membership: >-
-        %{name} a déjà une affiliation familiale et ne peut donc pas être ajouté à un ménage familial.
+        %{name} a déjà une affiliation familiale et ne peut donc pas être ajouté·e à un ménage familial.
   activemodel:
     attributes:
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
-        send_date: ""
+        send_date: "Date d’envoi et de facturation"
         discount: "Réduction"
-        new_entry: "Droit d'entrée"
+        new_entry: "Droit d’entrée"
         section_id: "Adhésion"
       people/yearly_membership/invoice_form:
         invoice_year: "Exercice comptable"
         invoice_date: "Date de réservation"
-        send_date: ""
-        role_finish_date: "Rallonger les rouleaux jusqu'à"
+        send_date: "Date d’envoi et de facturation"
+        role_finish_date: "Rallonger les rouleaux jusqu’à"
       wizards/steps/signup/main_email_field:
-        email: Courrier électronique
+        email: E-mail
       wizards/steps/signup/person_fields:
         gender: Sexe
         phone_number: Téléphone
-        address: Rue et n
-        adult_consent: Consentement du tuteur légal
+        address: Rue et n°
+        adult_consent: Consentement du représentant légal
         contribution_regulations: Règlement des cotisations
-        data_protection: Déclaration de confidentialité
+        data_protection: Politique de confidentialité
         statutes: Statuts
       wizards/steps/signup/abo_magazin/summary:
         data_protection: Politique de confidentialité
@@ -55,18 +55,18 @@ fr:
         email: E-mail
         phone_number: Téléphone
       wizards/steps/signup/sektion/various_fields:
-        register_on: Date d'entrée au
-        self_registration_reason_id: Motif d'entrée
+        register_on: Date d’entrée au
+        self_registration_reason_id: Motif d’entrée
       wizards/steps/signup/sektion/summary_fields:
-        sektion_statuten: ""
-        adult_consent: ""
-        contribution_regulations: ""
-        data_protection: ""
-        statutes: ""
+        sektion_statuten: Statuts de la section
+        adult_consent: Consentement du responsable légal
+        contribution_regulations: Règlement des cotisations
+        data_protection: Politique de confidentialité
+        statutes: Statuts
       wizards/steps/choose_membership:
-        register_as: "À qui s'applique l'affiliation complémentaire ?"
-        family: pour toute la famille
-        myself: pour moi-même
+        register_as: "A qui s’applique l’affiliation complémentaire?"
+        family: à toute la famille
+        myself: à moi-même
       wizards/steps/switch_stammsektion:
         now: immédiatement
       memberships/leave_zusatzsektion:
@@ -74,11 +74,11 @@ fr:
       people/neuanmeldungen/reject:
         note: Remarque
       self_inscription:
-        register_on: Date d'entrée au
+        register_on: Date d’entrée au
         register_on_options:
           now: immédiatement
-          jul: 01 juillet
-          oct: 01 octobre
+          jul: 1er juillet
+          oct: 1er octobre
         register_as: Entrée en tant que
         register_as_options:
           extra: Section complémentaire
@@ -87,11 +87,11 @@ fr:
       wizards/steps/choose_sektion:
         group_id: Choisir une section
       wizards/steps/main_email:
-        email: ""
+        email: E-mail
       wizards/steps/termination_choose_date:
         terminate_on: "Date de sortie"
         now: Immédiatement
-        end_of_year: "Au 31.12.%{year}"
+        end_of_year: "Au 31.12.%{year} "
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: "Motif de sortie"
       wizards/steps/termination/summary:
@@ -103,6 +103,8 @@ fr:
     errors:
       messages:
         youth_not_allowed_in_family: |
+          Les adolescent·es âgé·es de %{from_age} à %{to_age} ans ne peuvent pas être admis·es
+          dans une affiliation familiale.
         invalid_date_range: "doit se situer entre %{start_on} et %{end_on} "
 
       models:
@@ -113,10 +115,10 @@ fr:
               household_address: "L'adresse '%{address}' est reprise pour tous les membres de la famille."
             base:
               at_least_one_adult: Une famille doit comprendre au moins 1 personne adulte.
-              no_adult_member_with_email: ""
+              no_adult_member_with_email: Le ménage ne comprend pas d’adulte disposant d’une adresse e-mail.
               not_more_than_two_adults: Une famille peut contenir au maximum 2 personnes adultes.
               at_least_two_members: Une famille doit contenir au moins 2 personnes.
-              removed_member_has_no_email: ""
+              removed_member_has_no_email: La personne retirée ne possède pas d’adresse e-mail.
         household_member:
           attributes:
             base:
@@ -148,7 +150,7 @@ fr:
             email:
               taken: est déjà pris. L'e-mail doit être unique par personne.
         wizards/steps/check_data_quality_errors:
-          data_quality_error: ""
+          data_quality_error: L’action ne peut pas être effectuée en raison de données non valables. Veuillez relancer l’action après avoir corrigé les données.
     models:
       people/neuanmeldungen/approve:
         one: Reprendre l'inscription
@@ -218,7 +220,7 @@ fr:
         seasons:
           winter: Hiver
           summer: Été
-        section_may_create: ""
+        section_may_create: Peut être créé par la section
         reserve_accommodation: Réserver un hébergement par le CAS
         maximum_participants: Nombre maximum de participants
         minimum_participants: Nombre minimal de participants
@@ -231,11 +233,11 @@ fr:
         annual: Récurrent chaque année
         book_discount_code: Code de réduction Envoi de livres
         brief_description: Brève description
-        canceled_reason: ""
+        canceled_reason: Motif d’annulation
         canceled_reasons:
-          minimum_participants: ""
-          no_leader: ""
-          weather: ""
+          minimum_participants: Nombre minimal de participant·es non atteint
+          no_leader: Absence de direction du cours
+          weather: Risque météorologique
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
         level: Niveau de cours
@@ -261,7 +263,7 @@ fr:
           applied: Liste d'attente
           assigned: Confirmé
           summoned: Convoqué
-          annulled: ""
+          annulled: Annulé
         program: Programme
         reserve_accommodation: Réserver un hébergement par le CAS
         season: Saison
@@ -280,13 +282,13 @@ fr:
           ready: Prêt à mettre en œuvre
           closed: Terminé
           canceled: Annulé
-        price_member: ""
-        price_regular: ""
-        price_subsidized: ""
-        price_js_active_member: ""
-        price_js_active_regular: ""
-        price_js_passive_member: ""
-        price_js_passive_regular: ""
+        price_member: "Prix pour les membres"
+        price_regular: "Prix normal"
+        price_subsidized: "Prix subventionné"
+        price_js_active_member: "Prix pour les membres A J+S"
+        price_js_active_regular: "Prix normal A J+S"
+        price_js_passive_member: "Prix pour les membres P J+S"
+        price_js_passive_regular: "Prix normal P J+S"
       event/kind_category:
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
@@ -304,26 +306,26 @@ fr:
         adult_consent: Confirmation de l'âge
         terms_and_conditions: CONDITIONS GÉNÉRALES DE VENTE
         actual_days: Jours effectifs
-        price: ""
-        price_category: ""
+        price: "Prix"
+        price_category: "Catégorie de prix"
         price_categories:
-          price_member: ""
-          price_regular: ""
-          price_subsidized: ""
-          price_js_active_member: ""
-          price_js_active_regular: ""
-          price_js_passive_member: ""
-          price_js_passive_regular: ""
-        invoice_state: ""
+          price_member: "Prix pour les membres"
+          price_regular: "Prix normal"
+          price_subsidized: "Prix subventionné"
+          price_js_active_member: "Prix pour les membres A J+S"
+          price_js_active_regular: "Prix normal A J+S"
+          price_js_passive_member: "Prix pour les membres P J+S"
+          price_js_passive_regular: "Prix normal P J+S"
+        invoice_state: Facture
         invoice_states:
-          _nil: ""
-          draft: ""
-          open: ""
-          payed: ""
-          cancelled: ""
-          error: ""
+          _nil: Non facturé
+          draft: Brouillon
+          open: Ouvert
+          payed: Payé
+          cancelled: Annulé
+          error: Erreur
       event/role:
-        self_employed: ""
+        self_employed: travailleur indépendant
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -339,9 +341,9 @@ fr:
         created_at: Créé
         updated_at: Modifié
       person:
-        address_care_of: ""
+        address_care_of: complément d’adresse
         correspondence: Carte de membre & facturation
-        confirmed_at: ""
+        confirmed_at: e-mail confirmé
         family_id: ID de la famille
         sac_family_main_person: Factures à (famille)
         sac_remark_national_office: Remarques Secrétariat
@@ -355,15 +357,15 @@ fr:
           digital: Numérique
           print: Physique
         genders:
-          _nil: ""
-        birthday: ""
+          _nil: divers
+        birthday: date de naissance
         membership_years: Nombre de membres-années
         membership_number: N° de membre
         navision_id: N° de Navision
         salutations:
-          m: ""
-          w: ""
-          _nil: ""
+          m: homme
+          w: femme
+          _nil: divers
         recipient_salutations:
           m: Monsieur
           w: Madame
@@ -512,8 +514,8 @@ fr:
             %{name} est âgé de %{age} ans et ne peut donc pas être ajouté comme administrateur*.
         person:
           birthday:
-            must_be_before_year: ""
-            must_be_after_year: ""
+            must_be_before_year: "doit être antérieur au 1er janvier%{year}."
+            must_be_after_year: "doit être postérieur au 31.12.%{year}."
         qualification:
           attributes:
             finish_at:
