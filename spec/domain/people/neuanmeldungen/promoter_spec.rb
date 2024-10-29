@@ -9,7 +9,9 @@ require "spec_helper"
 
 describe People::Neuanmeldungen::Promoter do
   def create_neuanmeldung_role(family_main_person: true, **opts)
-    person = Fabricate(:person, sac_family_main_person: family_main_person)
+    # Need to fake the created_at date, so that the NoDuplicateCondition check works.
+    # When PaidInvoiceCondition gets implemented we probably need to adapt here as well
+    person = Fabricate(:person, sac_family_main_person: family_main_person, created_at: 1.hour.ago)
     Fabricate(
       :role,
       person: person,
@@ -38,8 +40,6 @@ describe People::Neuanmeldungen::Promoter do
       )
       obsolete_role.save!(validate: false)
 
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
-
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(-1)
         .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -62,8 +62,6 @@ describe People::Neuanmeldungen::Promoter do
       )
       old_role.save!(validate: false)
 
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
-
       expect { subject.promote(neuanmeldung_role) }
         .to change { old_role.reload.terminated }.to(true)
         .and change { old_role.end_on }.to(Date.current)
@@ -79,8 +77,6 @@ describe People::Neuanmeldungen::Promoter do
       )
       old_role.save!(validate: false)
 
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
-
       expect { subject.promote(neuanmeldung_role) }
         .to change { old_role.reload.terminated }.to(true)
         .and change { old_role.end_on }.to(Date.current.yesterday)
@@ -89,7 +85,6 @@ describe People::Neuanmeldungen::Promoter do
     it "sets beitragskategorie from Neuanmeldung" do
       SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |beitragskategorie|
         neuanmeldung_role = create_neuanmeldung_role(beitragskategorie: beitragskategorie)
-        expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
         expect { subject.promote(neuanmeldung_role) }
           .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -101,7 +96,6 @@ describe People::Neuanmeldungen::Promoter do
     it "sets timestamps" do
       freeze_time
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -115,7 +109,6 @@ describe People::Neuanmeldungen::Promoter do
       neuanmeldung_role = create_neuanmeldung_role(
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.name
       )
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -152,7 +145,6 @@ describe People::Neuanmeldungen::Promoter do
       neuanmeldung_role = create_neuanmeldung_role(
         type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name
       )
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { Role.count }
@@ -173,7 +165,6 @@ describe People::Neuanmeldungen::Promoter do
 
     it "logs error when an error occurs" do
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect(neuanmeldung_role).to receive(:destroy!)
         .and_raise("Oh my gosh, something ugly happened!")
@@ -197,7 +188,6 @@ describe People::Neuanmeldungen::Promoter do
 
     it "does not log duplicate errors" do
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true).twice
 
       expect(neuanmeldung_role).to receive(:destroy!)
         .and_raise("Oh my gosh, something ugly happened!").twice
@@ -218,8 +208,6 @@ describe People::Neuanmeldungen::Promoter do
         beitragskategorie: "adult"
       )
       tourenportal_role.save!(validate: false)
-
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { tourenportal_role.reload.attributes }
