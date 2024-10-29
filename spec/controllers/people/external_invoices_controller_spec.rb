@@ -116,6 +116,7 @@ describe People::ExternalInvoicesController do
               ENV["LOCALE"],
               I18n.locale.to_s,
               I18n.default_locale.to_s,
+              Time.zone,
               invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"),
               invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
               invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M") == invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
