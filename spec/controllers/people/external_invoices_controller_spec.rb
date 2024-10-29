@@ -95,7 +95,7 @@ describe People::ExternalInvoicesController do
             expect(main).to have_selector("td", text: "Offen")
             expect(main).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
             expect(main).to have_selector("td", text: invoice.total.to_s)
-            expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y %H:%M:%S.%L"))
+            expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
             expect(main).to have_selector("td", text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
             expect(main).to have_selector("td", text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
           end
