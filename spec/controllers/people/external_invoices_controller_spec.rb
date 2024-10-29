@@ -58,6 +58,7 @@ describe People::ExternalInvoicesController do
       render_views
       let(:sample_time) { Time.zone.local(2024, 1, 1, 0, 0, 0, 0) }
       let(:invoice) {
+        p sample_time
         ExternalInvoice.create!(state: "open", abacus_sales_order_key: "123456", total: 100.0,
           issued_at: sample_time, created_at: sample_time, year: 2024, sent_at: sample_time,
           updated_at: sample_time, person_id: person.id,
@@ -82,6 +83,8 @@ describe People::ExternalInvoicesController do
         end
 
         it "renders the external invoice" do
+          p invoice.created_at
+          p I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M")
           Capybara.string(response.body).find("#main").tap do |main|
             expect(main).to have_selector("a", text: "Mitgliedschaftsrechnung erstellen")
             expect(main).to have_selector("th", text: "Titel")
