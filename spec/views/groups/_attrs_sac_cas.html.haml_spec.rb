@@ -24,6 +24,9 @@ describe "groups/_attrs_sac_cas.html.haml" do
     let(:group) { groups(:bluemlisalp) }
 
     it "renders sektions and nav sektions id fields" do
+      expect(dom).to have_css "dl dt", text: "Gruppentyp technisch"
+      expect(dom).to have_css "dl dd", text: group.class.sti_name
+
       expect(dom).to have_css "dl dt", text: "Gruppen-ID"
       expect(dom).to have_css "dl dd", text: group.id
 
@@ -41,6 +44,9 @@ describe "groups/_attrs_sac_cas.html.haml" do
     let(:group) { Fabricate(Group::Ortsgruppe.sti_name, parent: groups(:bluemlisalp), navision_id: 123, foundation_year: 2000) }
 
     it "renders sektions and nav sektions id fields" do
+      expect(dom).to have_css "dl dt", text: "Gruppentyp technisch"
+      expect(dom).to have_css "dl dd", text: group.class.sti_name
+
       expect(dom).to have_css "dl dt", text: "Gruppen-ID"
       expect(dom).to have_css "dl dd", text: group.id
 
@@ -53,6 +59,9 @@ describe "groups/_attrs_sac_cas.html.haml" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
 
     it "does render sektions and nav sektions id fields" do
+      expect(dom).to have_css "dl dt", text: "Gruppentyp technisch"
+      expect(dom).to have_css "dl dd", text: group.class.sti_name
+
       expect(dom).to have_css "dl dt", text: "Gruppen-ID"
       expect(dom).not_to have_css "dl dt", text: "NAV Sektions-ID"
     end

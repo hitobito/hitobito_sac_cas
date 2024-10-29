@@ -374,6 +374,7 @@ de:
           w: Frau
         additional_information: Bemerkungen (z.B. Beruf)
       group:
+        type: Gruppentyp technisch
         group_id: Gruppen-ID
         navision_id: NAV Sektions-ID
         sac_cas_self_registration_url: SAC Selbstregistrierung
