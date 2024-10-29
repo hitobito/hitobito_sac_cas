@@ -59,6 +59,7 @@ describe People::ExternalInvoicesController do
       let(:sample_time) { Time.zone.local(2024, 1, 1, 0, 0, 0, 0) }
       let(:invoice) {
         p sample_time
+        p Time.zone
         ExternalInvoice.create!(state: "open", abacus_sales_order_key: "123456", total: 100.0,
           issued_at: sample_time, created_at: sample_time, year: 2024, sent_at: sample_time,
           updated_at: sample_time, person_id: person.id,
@@ -99,6 +100,7 @@ describe People::ExternalInvoicesController do
             expect(main).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
             expect(main).to have_selector("td", text: invoice.total.to_s)
             expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
+            expect(Time.zone).to be("Europe/Zurich")
             expect(main).to have_selector("td", text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
             expect(main).to have_selector("td", text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
           end
