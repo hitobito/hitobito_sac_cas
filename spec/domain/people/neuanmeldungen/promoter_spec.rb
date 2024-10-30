@@ -9,7 +9,9 @@ require "spec_helper"
 
 describe People::Neuanmeldungen::Promoter do
   def create_neuanmeldung_role(family_main_person: true, **opts)
-    person = Fabricate(:person, sac_family_main_person: family_main_person)
+    # Need to fake the created_at date, so that the NoDuplicateCondition check works.
+    # When PaidInvoiceCondition gets implemented we probably need to adapt here as well
+    person = Fabricate(:person, sac_family_main_person: family_main_person, created_at: 1.hour.ago)
     Fabricate(
       :role,
       person: person,
@@ -36,9 +38,7 @@ describe People::Neuanmeldungen::Promoter do
         group_id: neuanmeldung_role.person.default_group_id,
         type: Group::AboMagazin::Abonnent.sti_name
       )
-      obsolete_role.save(validate: false)
-
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+      obsolete_role.save!(validate: false)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(-1)
@@ -52,6 +52,33 @@ describe People::Neuanmeldungen::Promoter do
       expect(mitglied_role).to be_a(Group::SektionsMitglieder::Mitglied)
     end
 
+    it "deletes Group::AboMagazin::Neuanmeldung roles from the current day" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Neuanmeldung.sti_name,
+        start_on: Date.current,
+        beitragskategorie: "adult"
+      )
+      old_role.save!(validate: false)
+      expect { subject.promote(neuanmeldung_role) }
+        .to change { Group::AboMagazin::Neuanmeldung.count }.by(-1)
+    end
+
+    it "deletes Group::AboMagazin::Neuanmeldung future roles" do
+      neuanmeldung_role = create_neuanmeldung_role
+      old_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboMagazin::Neuanmeldung.sti_name,
+        start_on: 1.week.from_now,
+        beitragskategorie: "adult"
+      )
+      old_role.save!(validate: false)
+      expect { subject.promote(neuanmeldung_role) }
+        # Need to use unscoped to also count future roles
+        .to change { Group::AboMagazin::Neuanmeldung.unscoped.count }.by(-1)
+    end
+
     it "terminates old roles created today" do
       neuanmeldung_role = create_neuanmeldung_role
       old_role = neuanmeldung_role.person.roles.new(
@@ -60,9 +87,7 @@ describe People::Neuanmeldungen::Promoter do
         start_on: Date.current,
         beitragskategorie: "adult"
       )
-      old_role.save(validate: false)
-
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+      old_role.save!(validate: false)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { old_role.reload.terminated }.to(true)
@@ -77,9 +102,7 @@ describe People::Neuanmeldungen::Promoter do
         start_on: 1.week.ago,
         beitragskategorie: "adult"
       )
-      old_role.save(validate: false)
-
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
+      old_role.save!(validate: false)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { old_role.reload.terminated }.to(true)
@@ -89,7 +112,6 @@ describe People::Neuanmeldungen::Promoter do
     it "sets beitragskategorie from Neuanmeldung" do
       SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |beitragskategorie|
         neuanmeldung_role = create_neuanmeldung_role(beitragskategorie: beitragskategorie)
-        expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
         expect { subject.promote(neuanmeldung_role) }
           .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -101,7 +123,6 @@ describe People::Neuanmeldungen::Promoter do
     it "sets timestamps" do
       freeze_time
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -115,7 +136,6 @@ describe People::Neuanmeldungen::Promoter do
       neuanmeldung_role = create_neuanmeldung_role(
         type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.name
       )
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::Mitglied.count }.by(1)
@@ -141,6 +161,7 @@ describe People::Neuanmeldungen::Promoter do
 
       expect { subject.promote(neuanmeldung_role) }
         .to change { Group::SektionsMitglieder::MitgliedZusatzsektion.count }.by(1)
+        .and change { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.count }.by(-1)
 
       zusatzsektion_role = neuanmeldung_role.person.roles.last
       expect(zusatzsektion_role).to be_a(Group::SektionsMitglieder::MitgliedZusatzsektion)
@@ -152,7 +173,6 @@ describe People::Neuanmeldungen::Promoter do
       neuanmeldung_role = create_neuanmeldung_role(
         type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name
       )
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { Role.count }
@@ -173,7 +193,6 @@ describe People::Neuanmeldungen::Promoter do
 
     it "logs error when an error occurs" do
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true)
 
       expect(neuanmeldung_role).to receive(:destroy!)
         .and_raise("Oh my gosh, something ugly happened!")
@@ -197,7 +216,6 @@ describe People::Neuanmeldungen::Promoter do
 
     it "does not log duplicate errors" do
       neuanmeldung_role = create_neuanmeldung_role
-      expect(subject).to receive(:promotable?).with(neuanmeldung_role).and_return(true).twice
 
       expect(neuanmeldung_role).to receive(:destroy!)
         .and_raise("Oh my gosh, something ugly happened!").twice
@@ -208,6 +226,35 @@ describe People::Neuanmeldungen::Promoter do
       expect { subject.promote(neuanmeldung_role) }
         .to not_change { HitobitoLogEntry.count }
     end
+
+    it "does not affect tourenportal roles when promoting" do
+      neuanmeldung_role = create_neuanmeldung_role
+      tourenportal_role = neuanmeldung_role.person.roles.new(
+        group_id: neuanmeldung_role.person.default_group_id,
+        type: Group::AboTourenPortal::Abonnent.sti_name,
+        start_on: 1.week.ago,
+        beitragskategorie: "adult"
+      )
+      tourenportal_role.save!(validate: false)
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to not_change { tourenportal_role.reload.attributes }
+        .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
+    end
+
+    it "does not affect other Neuanmeldung roles when promoting" do
+      neuanmeldung_role = create_neuanmeldung_role
+
+      Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.create!(
+        group: groups(:matterhorn_neuanmeldungen_sektion),
+        person: neuanmeldung_role.person,
+        start_on: Time.zone.now
+      )
+
+      expect { subject.promote(neuanmeldung_role) }
+        .to not_change { Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.count }
+        .and change { Group::SektionsMitglieder::Mitglied.count }.by(1)
+    end
   end
 
   context "#promoteable?" do
@@ -216,16 +263,16 @@ describe People::Neuanmeldungen::Promoter do
 
       expect(subject.promotable?(double)).to eq true
     end
+  end
 
-    People::Neuanmeldungen::Promoter::CONDITIONS.each do |condition|
-      it "is false when condition #{condition.name} is not satisfied" do
-        (People::Neuanmeldungen::Promoter::CONDITIONS - [condition]).each do |other_condition|
-          allow(other_condition).to receive(:satisfied?).and_return(true)
-        end
-        expect(condition).to receive(:satisfied?).and_return(false)
-
-        expect(subject.promotable?(double)).to eq false
+  People::Neuanmeldungen::Promoter::CONDITIONS.each do |condition|
+    it "is false when condition #{condition.name} is not satisfied" do
+      (People::Neuanmeldungen::Promoter::CONDITIONS - [condition]).each do |other_condition|
+        allow(other_condition).to receive(:satisfied?).and_return(true)
       end
+      expect(condition).to receive(:satisfied?).and_return(false)
+
+      expect(subject.promotable?(double)).to eq false
     end
   end
 
