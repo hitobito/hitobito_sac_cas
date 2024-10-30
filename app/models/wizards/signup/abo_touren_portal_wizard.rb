@@ -14,6 +14,6 @@ module Wizards::Signup
 
     self.asides = ["aside_abo"]
 
-    def costs = [OpenStruct.new(amount: 45)]
+    def costs = SacCas::ABO_COSTS[:tourenportal]
   end
 end

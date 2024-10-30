@@ -7,6 +7,7 @@
 
 class Signup::SektionMailer < ApplicationMailer
   include MultilingualMailer
+  include CommonMailerPlaceholders
 
   CONFIRMATION = "sektion_signup_confirmation"
   APPROVAL_PENDING_CONFIRMATION = "sektion_signup_approval_pending_confirmation"
@@ -31,42 +32,6 @@ class Signup::SektionMailer < ApplicationMailer
     compose_multilingual(person, content_key, locales)
   end
 
-  def placeholder_first_name
-    @person.first_name
-  end
-
-  def placeholder_last_name
-    @person.last_name
-  end
-
-  def placeholder_birthday
-    l(@person.birthday)
-  end
-
-  def placeholder_email
-    @person.email
-  end
-
-  def placeholder_phone_number
-    @person.phone_numbers.first
-  end
-
-  def placeholder_address_care_of
-    @person.address_care_of
-  end
-
-  def placeholder_street_with_number
-    @person.address
-  end
-
-  def placeholder_postbox
-    @person.postbox
-  end
-
-  def placeholder_zip_code
-    @person.zip_code
-  end
-
   def placeholder_section_name
     @section.to_s
   end
@@ -81,13 +46,5 @@ class Signup::SektionMailer < ApplicationMailer
       @beitragskategorie
     )
     ApplicationController.render("wizards/signup/_section_fee_details", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
-  end
-
-  def placeholder_profile_url
-    group_person_url(@person.default_group_id, @person.id)
-  end
-
-  def placeholder_faq_url
-    t("global.links.faq")
   end
 end
