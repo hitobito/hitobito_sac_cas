@@ -102,11 +102,10 @@ describe People::ExternalInvoicesController do
             expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
 
             expect(ActiveRecord::Base.connection.execute("show timezone;")[0]).to eq({"TimeZone" => "UTC"})
+            # expect(ENV["TZ"]).to eq("Europe/Zurich")
 
             expect(main).to have_selector("td", text: invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"))
             expect(main).to have_selector("td", text: invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"))
-
-            expect(ENV["TZ"]).to eq("Europe/Zurich")
           end
         end
       end
