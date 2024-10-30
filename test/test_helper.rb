@@ -9,6 +9,7 @@
 load File.expand_path("../../app_root.rb", __FILE__)
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../../Gemfile", __FILE__)
 ENV["RAILS_ENV"] = "test"
+ENV["TZ"] = "Europe/Zurich"
 require File.expand_path("config/environment", ENV["APP_ROOT"])
 require "rails/test_help"
 

@@ -103,30 +103,10 @@ describe People::ExternalInvoicesController do
 
             expect(ActiveRecord::Base.connection.execute("show timezone;")[0]).to eq({"TimeZone" => "UTC"})
 
-            expect([
-              ActiveRecord::Base.connection.execute("show timezone;")[0],
-              "Application TZ: #{Time.zone}",
-              "Sample time: #{sample_time}",
-              "Sample time in UTC: #{sample_time.utc}",
-              "DB time: #{invoice.reload.created_at}",
-              "DB time in app TZ: #{invoice.reload.created_at.in_time_zone}",
-              invoice.created_at.to_s,
-              ENV["TZ"],
-              ENV["LANGUAGE"],
-              ENV["LOCALE"],
-              ENV["LANG"],
-              I18n.locale.to_s,
-              I18n.default_locale.to_s,
-              Time.zone,
-              invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"),
-              invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
-              invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M") == invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"),
-              main.text,
-              `locale`
-            ]).to eq([])
-
             expect(main).to have_selector("td", text: invoice.created_at.localtime.strftime("%d.%m.%Y %H:%M"))
             expect(main).to have_selector("td", text: invoice.updated_at.localtime.strftime("%d.%m.%Y %H:%M"))
+
+            expect(ENV["TZ"]).to eq("Europe/Zurich")
           end
         end
       end
