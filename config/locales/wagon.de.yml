@@ -328,7 +328,7 @@ de:
           cancelled: Storniert
           error: Fehler
       event/role:
-        self_employed: selbständig erwerbend
+        self_employed: Selbständig erwerbend
       external_training:
         person: Person
         event_kind: Kursart
