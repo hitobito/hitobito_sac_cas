@@ -8,13 +8,12 @@
 ENV["RAILS_STRUCTURED_ADDRESSES"] = "1"
 ENV["RAILS_ADDRESS_MIGRATION"] = "0"
 ENV["TZ"] = "Europe/Zurich"
-# ENV["RAILS_TZ"] = "Europe/Zurich"
-# ActiveRecord::Base.default_timezone = "Europe/Zurich"
 
 load File.expand_path("../app_root.rb", __dir__)
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
 
 require File.join(ENV.fetch("APP_ROOT", nil), "spec", "spec_helper.rb")
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[HitobitoSacCas::Wagon.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
