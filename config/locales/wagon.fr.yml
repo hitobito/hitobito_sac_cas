@@ -23,7 +23,7 @@ fr:
       too_young: "doit être âgé·e de %{minimum_years} ans ou plus"
       assert_old_enough_with_age: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       conflicting_family_membership: >-
-        %{name} a déjà une affiliation familiale et ne peut donc pas être ajouté·e à un ménage familial.
+        %{name} a déjà une adhésion familiale et ne peut donc pas être ajouté·e à un ménage familial.
   activemodel:
     attributes:
       people/membership/invoice_form:
@@ -64,7 +64,7 @@ fr:
         data_protection: Politique de confidentialité
         statutes: Statuts
       wizards/steps/choose_membership:
-        register_as: "A qui s’applique l’affiliation complémentaire?"
+        register_as: "A qui s’applique l’adhésion complémentaire?"
         family: à toute la famille
         myself: à moi-même
       wizards/steps/switch_stammsektion:
@@ -104,7 +104,7 @@ fr:
       messages:
         youth_not_allowed_in_family: |
           Les adolescent·es âgé·es de %{from_age} à %{to_age} ans ne peuvent pas être admis·es
-          dans une affiliation familiale.
+          dans une adhésion familiale.
         invalid_date_range: "doit se situer entre %{start_on} et %{end_on} "
 
       models:
@@ -185,7 +185,7 @@ fr:
           flat: Forfait
           budget: Budget
         description: Description
-        name_leader: Désignation Direction du cours
+        name_leader: Désignation du ou de la responsable du cours
         name_assistant_leader: Désignation Chef de classe
         course_compensation_rates: Taux de rémunération
         updated_at: Modifié
@@ -193,7 +193,7 @@ fr:
       course_compensation_rate:
         valid_from: Valable à partir du
         valid_to: Valable jusqu'au
-        rate_leader: Approche Direction du cours
+        rate_leader: Approche du ou de la responsable du cours
         rate_assistant_leader: Taux Direction de classe
         course_compensation_category_id: Catégorie de rémunération
         updated_at: Modifié
@@ -236,7 +236,7 @@ fr:
         canceled_reason: Motif d’annulation
         canceled_reasons:
           minimum_participants: Nombre minimal de participant·es non atteint
-          no_leader: Absence de direction du cours
+          no_leader: Absence du ou de la responsable du cours
           weather: Risque météorologique
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
@@ -454,9 +454,9 @@ fr:
         section_fee_adult: "Cotisation à la section, adhésion individuelle"
         section_fee_family: "Cotisation à la section, adhésion famille"
         section_fee_youth: "Cotisation à la section, adhésion des jeunes"
-        section_entry_fee_adult: "Droit d'entrée, adhésion individuelle"
-        section_entry_fee_family: "Droit d'entrée, adhésion famille"
-        section_entry_fee_youth: "Droit d'entrée, adhésion Jeunesse"
+        section_entry_fee_adult: "Frais d’entrée, adhésion individuelle"
+        section_entry_fee_family: "Frais d’entrée, adhésion familiale"
+        section_entry_fee_youth: "Frais d’entrée, adhésion jeunesse"
         bulletin_postage_abroad: Frais de port étranger Bulletin de la section
         sac_fee_exemption_for_honorary_members: Réduction des frais de l'association centrale pour les membres d'honneur
         section_fee_exemption_for_honorary_members: Réduction des frais de section pour les membres d'honneur
@@ -543,13 +543,13 @@ fr:
         many: Niveaux de cours
         other: Niveaux de cours
       event/role/leader:
-        one: ''
-        many: ''
-        other: ''
+        one: Responsable du cours
+        many: Responsable du cours
+        other: Responsable du cours
       event/role/assistant_leader:
-        one: ''
-        many: ''
-        other: ''
+        one: Responsable de classe
+        many: Responsable de classe
+        other: Responsable de classe
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1165,14 +1165,14 @@ fr:
         subscribe_newsletter: "Oui, je souhaite être informé des nouveautés du Club Alpin Suisse CAS"
       fields_sac_cas:
         former_price_select: ""
-        no_price_select: ""
+        no_price_select: Pas de frais
       summoned_notice: "%{participant} a été convoqué."
       actions_show_youth:
         summon_button: Convocation
       actions_show_sac_cas:
-        create_invoice_button: ""
-        create_invoice_confirmation: ""
-      invoice_created_notice: ""
+        create_invoice_button: Créer une facture
+        create_invoice_confirmation: Merci de confirmer la création de la facture.
+      invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: ""
 
       popover_participant_cancels:
@@ -1203,7 +1203,7 @@ fr:
 
     form_tabs:
       communication: Communication
-      prices: ""
+      prices: Prix
 
     general_fields:
       kind_overrides_link_title:
@@ -1291,7 +1291,7 @@ fr:
 
   groups/self_registration:
     global:
-      main_email_title: ""
+      main_email_title: E-mail
       emailless_main_person_title: Données personnelles
       neuanmeldung_main_person_title: Données personnelles
       abo_issue_title: Abonnement
@@ -1319,39 +1319,39 @@ fr:
   invoices:
     errors:
       data_quality_error: ""
-      create_subject_failed: ""
-      create_invoice_failed: ""
-      cancel_invoice_failed: ""
+      create_subject_failed: "Problèmes lors de la transmission des données personnelles"
+      create_invoice_failed: "Problèmes lors de la création de la facture"
+      cancel_invoice_failed: "Problèmes lors de l’annulation de facture"
     course_participation:
-      no_invoice_possible: ""
+      no_invoice_possible: "Ce·tte participant·e ne reçoit pas de facture."
     course_annulation:
-      title: ""
-      processing_fee: ""
-      cancellation_costs: ""
+      title: Calcul des frais d’annulation
+      processing_fee: Frais de traitement
+      cancellation_costs: "%{percentage}% de frais d’annulation"
     sac_memberships:
       title: "Facture d'adhésion %{year}"
       positions:
         hut_solidarity_fee: fr test 2
-        sac_entry_feed: fr test 3
+        sac_entry_feed: Frais d’entrée Association centrale
         sac_fee: Contribution de l'association centrale
         sac_magazine_postage_abroad: Porto Les Alpes Association centrale
         sac_magazine: fr test 6
         section_bulletin_postage_abroad: "fr test 8 %{section}"
-        section_entry_fee: "Droit d'entrée %{section}"
+        section_entry_fee: "Frais d’entrée %{section}"
         section_fee: "Contribution %{section}"
       beitragskategorie:
         adult: Membre individuel
         family: Membre de la famille
         youth: Membre jeune
       section_signup_fee_presenter:
-        annual_fee: ""
-        entry_fee: ""
+        annual_fee: contribution annuelle
+        entry_fee: "+ frais d’entrée uniques"
         discount: ""
         total_amount: ""
         beitragskategorien:
-          adult: ""
-          family: ""
-          youth: ""
+          adult: Adhésion individuelle
+          family: Adhésion familiale
+          youth: Adhésion jeunesse
 
   mailer:
     footer:
@@ -1378,9 +1378,9 @@ fr:
     terminate_sac_memberships:
       create:
         success:
-          one: ""
-          many: ""
-          other: ""
+          one: "Ton adhésion au CAS a été résiliée."
+          many: "Vos %{count} adhésions au CAS ont été résiliées."
+          other: "Vos %{count} adhésions au CAS ont été résiliées."
 
   mitglieder_exports:
     export_enqueued: "Export est lancé en arrière-plan et téléchargé une fois terminé."
@@ -1397,34 +1397,34 @@ fr:
   participations:
     key_data_sheet:
       file_name_prefix: ""
-      leader_file_prefix: ""
-      assistant_leader_file_prefix: ""
+      leader_file_prefix: Responsable du cours
+      assistant_leader_file_prefix: Responsable de la classe
       year_title: ""
       title: ""
       greeting: ""
       footer: ""
       table:
         number: ""
-        name: ""
-        level: ""
-        leaders: ""
-        compensation: ""
-        event_dates_durations: ""
-        event_dates_locations: ""
-        accommodation: ""
+        name: Désignation / titre
+        level: Offre / catégorie
+        leaders: Direction
+        compensation: Tarif journalier
+        event_dates_durations: Date de réalisation
+        event_dates_locations: Lieu de réalisation
+        accommodation: Hébergement
         accommodation_budget:
-          label: ""
-          text: ""
+          label: Budget pour l’hébergement
+          text: Par personne / nuit avec demi-pension
         accommodations:
-          sac: ""
-          event_specific: ""
-        accommodation_category: ""
-        language: ""
+          sac: Réservation par le CAS
+          event_specific: Réservation par le ou la responsable du cours
+        accommodation_category: Catégorie de l’hébergement
+        language: Langue
         content:
-          label: ""
-          text: ""
+          label: Contenu / Programme
+          text: Selon le programme du cours (si disponible) ou le programme des randonnées
         participant_requirements:
-          label: ""
+          label: Conditions requises pour les participant·es
           text: ""
         participant_program_course:
           label: ""
@@ -1578,7 +1578,7 @@ fr:
       membership_family: Adhésion de la famille
       membership_youth: Adhésion des jeunes
       sac_fee: Cotisation à l'association centrale
-      entry_fee: Frais d'entrée
+      entry_fee: Frais d’entrée
       magazine_fee: Abonnement au CAS Magazine
       hut_solidarity_fee_without_hut: " fr test 2"
       hut_solidarity_fee_with_hut: " fr test 2"
@@ -1609,7 +1609,7 @@ fr:
       membership_family: Adhésion de la famille
       membership_youth: Adhésion des jeunes
       section_fee: Cotisation à la section
-      section_entry_fee: Frais d'entrée
+      section_entry_fee: Frais d’entrée
       bulletin_fee: Abonnement au bulletin de la section
       reductions: Réductions
       valid_from: Valable à partir de l'année
@@ -1638,8 +1638,8 @@ fr:
         3000 Bern 14
         Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
         <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
-      link_agb_title: ""
-      link_agb: ""
+      link_agb_title: CGV
+      link_agb: "https://www.sac-cas.ch/fr/meta/cgv-les-alpes/"
       link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       link_faqs_title: FAQ
       link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_FR.pdf"
@@ -1649,7 +1649,7 @@ fr:
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
-      link_membership_title: ""
+      link_membership_title: Demander une adhésion maintenant
 
   sheet/memberships/join_zusatzsektion:
     title: Rejoindre la section complémentaire
@@ -1736,12 +1736,12 @@ fr:
           various_fields_title: Données supplémentaires
           summary_fields_title: ""
           summary_fields:
-            my_membership: ""
+            my_membership: "Mon adhésion"
             family_members: ""
             info_alert_neuanmeldungen_sektion: ""
-            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_nv: "Après avoir fait ta demande d’adhésion formelle, tu recevras la facture par e-mail."
             entry_per: ""
-            next_button: ""
+            next_button: Demander une adhésion
           summary_person_card:
             contact_person: ""
           summary_family_member_card:
