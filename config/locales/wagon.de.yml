@@ -190,7 +190,7 @@ de:
         description: Beschreibung
         name_leader: Bezeichnung Kursleitung
         name_assistant_leader: Bezeichnung Klassenleitung
-        course_compensation_rates: Vergütungsansätze
+        course_compensation_rates: Vergütungsansätze # uses include CapitalizedDependentErrors
         updated_at: Geändert
         created_at: Erstellt
       course_compensation_rate:
@@ -327,6 +327,7 @@ de:
           payed: Bezahlt
           cancelled: Storniert
           error: Fehler
+        external_invoices: Rechnungen # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Selbständig erwerbend
       external_training:
@@ -550,6 +551,9 @@ de:
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen
+      external_invoice:
+        one: Rechnung
+        other: Rechnungen
       sac_membership_config:
         one: Parameter für Mitgliedschaftsrechnungen
         other: Parameter für Mitgliedschaftsrechnungen
