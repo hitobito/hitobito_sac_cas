@@ -7,6 +7,7 @@
 
 ENV["RAILS_STRUCTURED_ADDRESSES"] = "1"
 ENV["RAILS_ADDRESS_MIGRATION"] = "0"
+ENV["TZ"] = "Europe/Zurich"
 
 load File.expand_path("../app_root.rb", __dir__)
 ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
