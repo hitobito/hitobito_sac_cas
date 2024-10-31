@@ -12,7 +12,7 @@ class Event::LevelsController < SimpleCrudController
     label: {
       joins: [:translations],
       order: ["event_level_translations.label"]
-    },
+    }
   }
 
   def self.model_class
