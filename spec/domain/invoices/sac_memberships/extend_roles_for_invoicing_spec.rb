@@ -11,8 +11,10 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   subject(:extend_roles) { described_class.new(date).extend_roles }
 
   let(:person) { people(:mitglied) }
-  let!(:person_mitglied_role) { person.roles.with_inactive.first.tap { |r| r.update!(end_on: 1.year.ago) } }
+  let(:person_mitglied_role) { roles(:mitglied) }
   let(:date) { 1.week.from_now.to_date }
+
+  before { set_end_on_for_all_roles(person) }
 
   context "with role" do
     it "extends the role" do
@@ -22,21 +24,39 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   context "with multiple people and roles" do
     let!(:person_ehrenmitglied_role) do
-      person.roles.create!(group: person.groups.first, created_at: 2.days.ago, end_on: 1.day.ago,
+      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago, end_on: 1.day.ago,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
     end
     let(:other_person) { people(:familienmitglied) }
-    let!(:other_person_role) { other_person.roles.first.tap { |r| r.update!(end_on: 1.year.ago) } }
+
+    before { set_end_on_for_all_roles(other_person) }
 
     it "extends roles" do
       expect { extend_roles }
         .to change { person_mitglied_role.reload.end_on }.to(date)
         .and change { person_ehrenmitglied_role.reload.end_on }.to(date)
-        .and change { other_person_role.reload.end_on }.to(date)
+        .and change { other_person.roles.with_inactive.map(&:end_on) }.to([date, date])
     end
 
     it "only makes 3 database queries" do
       expect_query_count { extend_roles }.to eq(3) # SELECT in batches (2x) and UPDATE all (1x)
+    end
+
+    context "with multiple batches and various roles" do
+      it "extends all roles" do
+        # Zusatzsektion Mitglied Roles are updated in another batch,
+        # after stammsektion roles have already been updated
+        stub_const("#{described_class.name}::BATCH_SIZE", 2)
+        person_mitglied_role.update_column(:id, 10)
+        roles(:familienmitglied).update_column(:id, 11)
+        person_ehrenmitglied_role.update_column(:id, 12)
+        roles(:mitglied_zweitsektion).update_column(:id, 21)
+        roles(:familienmitglied_zweitsektion).update_column(:id, 23)
+
+        expect { extend_roles }
+          .to change { person.roles.with_inactive.map(&:end_on) }.to([date, date, date])
+          .and change { other_person.roles.with_inactive.map(&:end_on) }.to([date, date])
+      end
     end
   end
 
@@ -47,10 +67,10 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   end
 
   context "with role#end_on at date" do
-    before { person_mitglied_role.update!(end_on: date) }
+    before { person.roles.with_inactive.update_all(end_on: date) }
 
     it "doesnt extend the role" do
-      expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
+      expect { expect_query_count { extend_roles }.to eq(1) }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
@@ -84,5 +104,9 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     it "extends the role" do
       expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(date)
     end
+  end
+
+  def set_end_on_for_all_roles(person)
+    person.roles.with_inactive.each { |r| r.update!(end_on: 1.year.ago) }
   end
 end
