@@ -186,6 +186,17 @@ module SacCas::Event::Course
     end
   end
 
+  def compensation_rates
+    CourseCompensationRate.joins(course_compensation_category: :event_kinds)
+      .where(event_kinds: {id: kind_id})
+      .at(start_at)
+      .order("course_compensation_categories.short_name")
+  end
+
+  def start_at
+    dates.first.start_at
+  end
+
   def minimum_age
     read_attribute(:minimum_age)
   end

@@ -7,6 +7,8 @@
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::Section
   FIRST_COLUMN_WIDTH = 120
+  COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
+  ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS = [50, 70]
 
   def render
     table(table_data)
@@ -18,7 +20,6 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
       [t("name"), event.name],
       [t("level"), event.kind.level.label],
       [t("leaders"), leaders],
-      [t("compensation"), ""],
       *compensation_table,
       [t("event_dates_durations"), event_dates_durations],
       [t("event_dates_locations"), event_dates_locations],
@@ -61,48 +62,65 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_table
-    scope = valid_course_compensation_categories_scope.where(kind: [:day, :flat])
+    order_statement = <<-SQL
+      CASE WHEN(course_compensation_categories.kind = 'day') THEN 0 
+      WHEN(course_compensation_categories.kind = 'flat') THEN 1 END
+    SQL
 
-    scope.map do |category|
-      compensation_row(category)
+    event_compensation_rates([:day, :flat]).reorder(Arel.sql(order_statement)).map do |rate|
+      compensation_row(rate)
     end
   end
 
-  def compensation_row(compensation_category)
-    event_days = (compensation_category.kind == :day) ? total_event_days : 1
+  def compensation_row(rate)
+    table_width = bounds.width - FIRST_COLUMN_WIDTH
+
+    column_widths = [table_width - COMPENSATION_SUBTABLE_COLUMN_WIDTHS.sum] + COMPENSATION_SUBTABLE_COLUMN_WIDTHS
+    event_days = (rate.course_compensation_category.kind == :day) ? total_event_days : 1
     ["",
-      make_subtable([[compensation_category.send(:"name_#{participation_leader_type}"),
+      make_subtable([[compensation_category_name(rate),
         event_days,
-        compensation_category.kind_label,
+        rate.course_compensation_category.kind_label,
         "à CHF",
-        compensation_category.current_compensation_rate(event_start_at).send(:"rate_#{participation_leader_type}")]])]
+        compensation_rate(rate)]],
+        column_widths:)]
   end
 
   def accommodation_budget_table
-    valid_course_compensation_categories_scope.where(kind: :budget).includes(:course_compensation_rates).list.map do |category|
+    table_width = bounds.width - FIRST_COLUMN_WIDTH
+
+    column_widths = [table_width - ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS.sum] + ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS
+    event_compensation_rates(:budget).map do |rate|
       [
         "",
         make_subtable([[
-          category.short_name,
+          compensation_category_name(rate),
           "CHF",
-          category.current_compensation_rate.rate_leader # what about rate_assistant_leader?
-        ]])
+          compensation_rate(rate)
+        ]], column_widths:)
       ]
     end.presence || [["", ""]]
   end
 
+  def event_compensation_rates(kinds)
+    event.compensation_rates.includes(:course_compensation_category)
+      .where(course_compensation_categories: {kind: kinds})
+  end
+
+  def compensation_category_name(rate)
+    rate.course_compensation_category.send(:"name_#{participation_leader_type}")
+  end
+
+  def compensation_rate(rate)
+    rate.send(:"rate_#{participation_leader_type}")
+  end
+
   def make_subtable(data, options = {})
-    pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH))
+    pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH, cell_style: {border_width: 0.5}))
   end
 
   def event_dates_locations
     event_dates.pluck(:location).join("\n")
-  end
-
-  def valid_course_compensation_categories_scope
-    event.kind.course_compensation_categories
-      .joins(:course_compensation_rates)
-      .where("(:start_at >= valid_from) AND (valid_to IS NULL OR valid_to >= :start_at)", start_at: event_start_at)
   end
 
   def accommodation

@@ -1090,8 +1090,6 @@ de:
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
           Mo bis Fr 08:00 - 17:00 Uhr.
-      list:
-        key_data_sheets: Eckdatenblätter
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1141,6 +1139,7 @@ de:
         summon_button: Aufbieten
       actions_show_sac_cas:
         create_invoice_button: Rechnung erstellen
+        attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.

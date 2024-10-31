@@ -27,6 +27,7 @@ class CourseCompensationRate < ApplicationRecord
   validates_by_schema
   belongs_to :course_compensation_category
   scope :list, -> { includes(course_compensation_category: [:translations]).order(valid_from: :DESC).order("course_compensation_categories.short_name ASC") }
+  scope :at, ->(date) { where("(:date >= valid_from) AND (valid_to IS NULL OR valid_to >= :date)", date: date) }
   validate :assert_category_uniqueness_during_validity_period
 
   def assert_category_uniqueness_during_validity_period
