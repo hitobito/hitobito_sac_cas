@@ -229,9 +229,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
     context "with multiple leaders" do
       let!(:additional_leaders) do
-        (0..3).to_a.map do
+        [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
           participation = Fabricate(Event::Role::Leader.name.to_sym,
-            participation: Fabricate(:event_participation, event: event)).participation
+            participation: Fabricate(:event_participation, event: event),
+            person: _1).participation
           participation.reload
 
           participation.person
@@ -286,9 +287,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
     context "with multiple leaders" do
       let!(:additional_leaders) do
-        (0..3).to_a.map do
+        [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
           participation = Fabricate(Event::Role::Leader.name.to_sym,
-            participation: Fabricate(:event_participation, event: event)).participation
+            participation: Fabricate(:event_participation, event: event),
+            person: _1).participation
           participation.reload
 
           participation.person
