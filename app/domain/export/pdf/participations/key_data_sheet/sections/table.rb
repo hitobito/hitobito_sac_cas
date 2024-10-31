@@ -116,7 +116,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def make_subtable(data, options = {})
-    pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH))
+    pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH, cell_style: {border_width: 0.5}))
   end
 
   def event_dates_locations
