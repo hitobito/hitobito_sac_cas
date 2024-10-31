@@ -11,7 +11,7 @@ it:
     years: anni
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
-      membership: ""
+      membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
 
   settings:
     email:
@@ -19,136 +19,138 @@ it:
 
   errors:
     messages:
-      assert_old_enough: "%{minimum_years} devono avere una data di nascita e un'età minima di almeno un anno"
-      too_young: "%{minimum_years} deve avere almeno un anno di età"
-      assert_old_enough_with_age: "%{minimum_years} devono avere una data di nascita e un'età minima di almeno un anno"
+      assert_old_enough: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
+      too_young: "deve avere almeno %{minimum_years} anni"
+      assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       conflicting_family_membership: >-
-        %{name} ha già un'affiliazione familiare e quindi non può essere aggiunto a un nucleo familiare.
+        %{name} è già parte di un societariato famigliare e quindi non può essere aggiunto a un nucleo famigliare.
   activemodel:
     attributes:
       people/membership/invoice_form:
         reference_date: "Scadenza"
-        invoice_date: ""
-        send_date: ""
+        invoice_date: "Data di registrazione"
+        send_date: "Data di spedizione e fatturazione"
         discount: "Sconto"
-        new_entry: "Biglietto d'ingresso"
-        section_id: "Soci"
+        new_entry: "Quota di adesione"
+        section_id: "Affiliazione"
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
-        invoice_date: ""
-        send_date: ""
-        role_finish_date: "Estendere i rulli per"
+        invoice_date: "Data di registrazione"
+        send_date: "Data di spedizione e fatturazione"
+        role_finish_date: "Estendere i ruoli fino a"
       wizards/steps/signup/main_email_field:
-        email: e-mail
+        email: E-mail
       wizards/steps/signup/person_fields:
-        gender: ""
+        gender: Sesso
         phone_number: Telefono
-        address: Via e no.
+        address: Via e n.
         adult_consent: Dichiarazione di consenso del tutore legale
-        contribution_regulations: Regolamenti sui contributi
-        data_protection: Informativa sulla privacy
-        statutes: Statuti
+        contribution_regulations: Regolamento delle quote sociali
+        data_protection: Protezione dei dati
+        statutes: Statuto
       wizards/steps/signup/abo_magazin/summary:
-        data_protection: ""
+        data_protection: Protezione dei dati
       wizards/steps/signup/sektion/family_fields/member:
-        gender: ""
-        email: ""
-        phone_number: ""
+        gender: Sesso
+        email: E-mail
+        phone_number: Telefono
       wizards/steps/signup/sektion/various_fields:
-        register_on: Data di iscrizione per
-        self_registration_reason_id: Motivo dell'ingresso
+        register_on: Data di adesione per
+        self_registration_reason_id: Motivo dell’adesione
       wizards/steps/signup/sektion/summary_fields:
-        sektion_statuten: ""
-        adult_consent: ""
-        contribution_regulations: ""
-        data_protection: ""
-        statutes: ""
+        sektion_statuten: Statuto della sezione
+        adult_consent: Dichiarazione di consenso del tutore legale
+        contribution_regulations: Regolamento delle quote sociali
+        data_protection: Protezione dei dati
+        statutes: Statuto
       wizards/steps/choose_membership:
-        register_as: "A chi si applica l'iscrizione aggiuntiva?"
+        register_as: "A chi si applica l’affiliazione aggiuntiva?"
         family: per tutta la famiglia
         myself: per me stesso
       wizards/steps/switch_stammsektion:
-        now: immediatamente
+        now: subito
       memberships/leave_zusatzsektion:
-        terminate_on: Data di partenza
+        terminate_on: Data di disdetta
       people/neuanmeldungen/reject:
         note: Osservazione
       self_inscription:
-        register_on: Data di iscrizione per
+        register_on: Data di adesione per
         register_on_options:
-          now: immediatamente
+          now: subito
           jul: 01 luglio
           oct: 01 ottobre
-        register_as: Ingresso come
+        register_as: Adesione come
         register_as_options:
           extra: Sezione aggiuntiva
-          replace: Nuova sezione master (sostituisce la precedente)
+          replace: Nuova sezione base (sostituisce la precedente)
 
       wizards/steps/choose_sektion:
         group_id: Selezionare la sezione
       wizards/steps/main_email:
-        email: ""
+        email: E-mail
       wizards/steps/termination_choose_date:
-        terminate_on: "Data di partenza"
-        now: Immediatamente
+        terminate_on: "Data di disdetta"
+        now: Subito
         end_of_year: "Il 31.12.%{year}"
       wizards/steps/leave_zusatzsektion/summary:
-        termination_reason_id: "Motivo della partenza"
+        termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
-        termination_reason_id: "Motivo della partenza"
-        data_retention_consent: "I miei dati dovranno essere conservati anche dopo la mia partenza e potrò essere contattato per appelli alla donazione."
-        subscribe_newsletter: "Conservare la newsletter"
-        subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di raccolta fondi."
+        termination_reason_id: "Motivo della disdetta"
+        data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per le campagne di donazione."
+        subscribe_newsletter: "Mantenere la newsletter"
+        subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
 
     errors:
       messages:
         youth_not_allowed_in_family: |
-        invalid_date_range: "%{start_on} %{end_on} deve essere compreso tra e"
+          I giovani di età compresa tra %{from_age} e %{to_age} anni non possono
+          essere inseriti in un societariato famigliare.
+        invalid_date_range: "deve essere compreso tra %{start_on} e  %{end_on} "
 
       models:
         household:
           attributes:
             members:
-              no_members: "Almeno una persona della famiglia deve essere già membro del SAC."
-              household_address: "%{address}L'indirizzo ' ' viene utilizzato per tutti i membri della famiglia."
+              no_members: "Almeno una persona della famiglia deve essere già socio del CAS."
+              household_address: "L’indirizzo '%{address}' viene utilizzato per tutti i membri della famiglia."
             base:
-              at_least_one_adult: Una famiglia deve contenere almeno 1 persona adulta.
-              no_adult_member_with_email: ""
-              not_more_than_two_adults: Una famiglia può contenere al massimo 2 adulti.
-              at_least_two_members: Una famiglia deve contenere almeno 2 persone.
-              removed_member_has_no_email: ""
+              at_least_one_adult: Ogni famiglia deve comprendere almeno 1 persona adulta.
+              no_adult_member_with_email: Il nucleo non comprende nessun adulto con un indirizzo e-mail.
+              not_more_than_two_adults: Ogni famiglia può comprendere al massimo 2 adulti.
+              at_least_two_members: Ogni famiglia deve comprendere almeno 2 persone.
+              removed_member_has_no_email: La persona cancellata non dispone di un indirizzo e-mail.
         household_member:
           attributes:
             base:
               birthday_missing: "%{person_name} non ha una data di nascita."
-              family_age_range_not_fulfilled: "%{person_name} non possono essere aggiunti. Sono ammesse solo persone di età compresa tra i 6 e i 17 anni o dai 22 anni in su."
-              in_other_household_present: "%{person_name} non può essere aggiunto perché la persona è già assegnata a un'altra famiglia."
-              membership_in_other_section: "%{person_name} è già membro di un'altra sezione."
-              no_email: "%{person_name} non ha un indirizzo e-mail confermato."
-              planned_termination: "%{person_name} ha pianificato un'uscita di scena."
+              family_age_range_not_fulfilled: "%{person_name} non può essere aggiunto. Sono ammesse solo persone di età compresa tra i 6 e i 17 anni o dai 22 anni in su."
+              in_other_household_present: "%{person_name} non può essere aggiunto perché la persona è già assegnata a un’altra famiglia."
+              membership_in_other_section: "%{person_name} è già socio presso un’altra sezione."
+              no_email: "%{person_name} non dispone di un indirizzo e-mail verificato."
+              planned_termination: "%{person_name} ha pianificato una disdetta"
         memberships/join_base:
           attributes:
             person:
-              must_be_sac_member: deve essere un membro Sac
+              must_be_sac_member: deve essere socio del CAS
               must_not_be_join_section_member:
-                è già membro della sezione o ha una domanda di adesione aperta
-              must_be_family_main_person: deve essere la persona principale della famiglia
+                è già socio della sezione o ha una richiesta di adesione aperta
+              must_be_family_main_person: deve essere la persona di riferimento per la famiglia
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
         data_quality_issue:
           messages:
             empty: è vuoto
-            less_than_6_years_before_entry: è inferiore a 6 anni prima dell'adesione al SAC
+            less_than_6_years_before_entry: sono trascorsi meno di 6 anni dall’adesione al CAS
 
         wizards/steps/choose_sektion:
-          requires_admin: Vi chiediamo di richiedere la modifica della sezione desiderata per telefono o per e-mail*. Contattateci a questo scopo
+          requires_admin: La modifica della sezione desiderata va effettuata contattandoci per telefono o per e-mail*.
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
-              taken: è già occupato. L'e-mail deve essere unica per ogni persona.
+              taken: è già in uso. L’e-mail deve essere unica per ogni persona.
         wizards/steps/check_data_quality_errors:
-          data_quality_error: ""
+          data_quality_error: L’azione non può essere eseguita poiché i dati non sono validi. Ripetere l’azione dopo aver corretto i dati.
     models:
       people/neuanmeldungen/approve:
         one: Acquisizione della registrazione
@@ -157,19 +159,19 @@ it:
       people/neuanmeldungen/reject:
         one: Rifiutare la registrazione
         many: Rifiuto delle domande
-        other: Rifiuto delle domande
+        other: Rifiutare le registrazioni
 
   activerecord:
     attributes:
       cost_center:
-        label: Designazione
+        label: Denominazione
         event_kind_categories: Categorie di corsi
         event_kinds: Tipi di corso
         courses: Corsi
         updated_at: Modificato
         created_at: Creato
       cost_unit:
-        label: Designazione
+        label: Denominazione
         event_kind_categories: Categorie di corsi
         event_kinds: Tipi di corso
         courses: Corsi
@@ -181,18 +183,18 @@ it:
         kinds:
           day: Giorno
           flat: Tariffa forfettaria
-          budget: Bilancio
-        description: Descrizione del
-        name_leader: Designazione Gestione del corso
-        name_assistant_leader: Nome Capoclasse
-        course_compensation_rates: Approcci retributivi
+          budget: Budget
+        description: Descrizione
+        name_leader: Denominazione Direzione del corso
+        name_assistant_leader: Denominazione Direzione della classe
+        course_compensation_rates: Tassi di retribuzione
         updated_at: Modificato
         created_at: Creato
       course_compensation_rate:
         valid_from: Valido da
         valid_to: Valido fino a
-        rate_leader: Approccio Gestione del corso
-        rate_assistant_leader: Approccio alla gestione della classe
+        rate_leader: Impostazione Direzione del corso
+        rate_assistant_leader: Impostazione Direzione della classe
         course_compensation_category_id: Categoria di retribuzione
         updated_at: Modificato
         created_at: Creato
@@ -202,13 +204,13 @@ it:
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
       event/kind:
-        accommodation: Sistemazione
+        accommodation: Alloggio
         accommodations:
           no_overnight: senza pernottamento
           hut: Capanna
           pension: Pensione/locanda di montagna
-          pension_or_hut: Pensione/locanda di montagna o rifugio
-          bivouac: Pernottamento all'aperto/bivacco
+          pension_or_hut: Pensione/locanda di montagna o capanna
+          bivouac: Pernottamento all’aperto/bivacco
         level_id: Livello del corso
         kind_category_id: Categoria del corso
         cost_center_id: Centro di costo
@@ -218,8 +220,8 @@ it:
         seasons:
           winter: Inverno
           summer: Estate
-        section_may_create: ""
-        reserve_accommodation: Prenota l'alloggio tramite SAC
+        section_may_create: Creabile dalla sezione
+        reserve_accommodation: Prenotare l’alloggio tramite CAS
         maximum_participants: Numero massimo di partecipanti
         minimum_participants: Numero minimo di partecipanti
         maximum_age: Età massima
@@ -227,15 +229,15 @@ it:
         maximum_class_size: Dimensione massima della classe
         training_days: Giornate di formazione
       event/course:
-        accommodation: Sistemazione
-        annual: Annualmente ricorrente
+        accommodation: Alloggio
+        annual: Annuale
         book_discount_code: Codice sconto spedizione libro
         brief_description: Breve descrizione
-        canceled_reason: ""
+        canceled_reason: Motivo della cancellazione
         canceled_reasons:
-          minimum_participants: ""
-          no_leader: ""
-          weather: ""
+          minimum_participants: Numero minimo di partecipanti non raggiunto
+          no_leader: Annullamento della Direzione del corso
+          weather: Rischio meteorologico
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
         level: Livello del corso
@@ -245,10 +247,10 @@ it:
           de: Tedesco
           fr: Francese
           it: Italiano
-        link_leaders: Squadra del corso di collegamento
-        link_participants: Partecipanti al link
-        link_survey: Sondaggio sui link
-        meals: Ristorazione
+        link_leaders: Link quadro del corso
+        link_participants: Link partecipanti
+        link_survey: Link sondaggio
+        meals: Vitto
         meals_options:
           breakfast: Colazione
           half_board: Mezza pensione
@@ -258,15 +260,15 @@ it:
         minimum_age: Età minima
         participation_states:
           unconfirmed: Non confermato
-          applied: Lista d'attesa
+          applied: Lista d’attesa
           assigned: Confermato
-          summoned: Richiamato
-          annulled: ""
+          summoned: Pubblicato
+          annulled: Annullato
         program: Programma
-        reserve_accommodation: Prenota l'alloggio tramite SAC
+        reserve_accommodation: Prenotare l’alloggio tramite CAS
         season: Stagione
-        specialities: Caratteristiche speciali
-        similar_tours: Tour a confronto
+        specialities: Particolarità
+        similar_tours: Escursioni a confronto
         start_point_of_time: Inizio del corso
         start_point_of_times:
           day: Giorno
@@ -277,16 +279,16 @@ it:
           application_paused: Registrazione sospesa
           application_closed: Registrazione completata
           assignment_closed: Assegnazione completata
-          ready: Pronti per l'implementazione
+          ready: Pronto per l’esecuzione
           closed: Completato
-          canceled: Annullato
-        price_member: ""
-        price_regular: ""
-        price_subsidized: ""
-        price_js_active_member: ""
-        price_js_active_regular: ""
-        price_js_passive_member: ""
-        price_js_passive_regular: ""
+          canceled: Cancellato
+        price_member: "Prezzo per i soci"
+        price_regular: "Prezzo normale"
+        price_subsidized: "Prezzo sovvenzionato"
+        price_js_active_member: "Prezzo per i soci G+S - A"
+        price_js_active_regular: "Prezzo normale G+S - A"
+        price_js_passive_member: "Prezzo per i soci G+S - P"
+        price_js_passive_regular: "Prezzo normale G+S - P"
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
@@ -369,6 +371,7 @@ it:
           w: Signora
         additional_information: Osservazioni (ad es. professione)
       group:
+        type: ""
         group_id: ID gruppo
         navision_id: ID sezione NAV
         sac_cas_self_registration_url: Autoregistrazione SAC

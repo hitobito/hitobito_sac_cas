@@ -371,6 +371,7 @@ fr:
           w: Madame
         additional_information: Remarques (p. ex. profession)
       group:
+        type: Type de groupe technique
         group_id: ID du groupe
         navision_id: ID de section NAV
         sac_cas_self_registration_url: SAC auto-enregistrement
@@ -571,7 +572,7 @@ fr:
       group/sac_cas:
         one: Club alpin suisse CAS
         many: Club alpin suisse CAS
-        other: Club alpin suisse CAS
+        other: Club Alpin Suisse CAS
       group/ehrenmitglieder:
         one: Membres d'honneur
         many: Membres d'honneur
@@ -1080,8 +1081,8 @@ fr:
     terminate_sac_membership_wizard_link: Mettre fin à l'adhésion au CAS
 
   dropdown/people_export:
-    recipients: ""
-    recipient_households: ""
+    recipients: Destinataire – personne individuelle
+    recipient_households: Destinataire – familles
 
   dropdown/group_edit:
     sac_membership_configs: Paramètres pour les factures des membres
@@ -1091,7 +1092,7 @@ fr:
     courses:
       key_data_sheets:
         create:
-          success: ""
+          success: La/les fiche(s) technique(s) a/ont été générée(s) et ajoutée(s) au cours en tant qu’annexe.
     kinds:
       push_down:
         success: Les données enregistrées ont été transférées à tous les cours actifs.
@@ -1127,7 +1128,7 @@ fr:
           Tu peux nous joindre pendant nos heures de bureau
           Du lundi au vendredi de 08:00 à 17:00 heures.
       list:
-        key_data_sheets: ""
+        key_data_sheets: Fiches techniques
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1144,7 +1145,7 @@ fr:
         summary_title: Résumé
       subsidy_step:
         title: Demander une subvention
-        subsidy_field: ""
+        subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
         general_info:
@@ -1164,7 +1165,7 @@ fr:
         terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
         subscribe_newsletter: "Oui, je souhaite être informé des nouveautés du Club Alpin Suisse CAS"
       fields_sac_cas:
-        former_price_select: ""
+        former_price_select: "Ancien %{price_label}"
         no_price_select: Pas de frais
       summoned_notice: "%{participant} a été convoqué."
       actions_show_youth:
@@ -1173,7 +1174,7 @@ fr:
         create_invoice_button: Créer une facture
         create_invoice_confirmation: Merci de confirmer la création de la facture.
       invoice_created_notice: La facture a été créée avec succès.
-      invoice_not_created_alert: ""
+      invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
       popover_participant_cancels:
         cancel_info:
@@ -1186,7 +1187,7 @@ fr:
 
   events:
     actions_show_sac_cas:
-      attach_key_data_sheets: ""
+      attach_key_data_sheets: Créer toutes les fiches techniques
       state_buttons:
         created: Retour en tant que projet
         application_open: Publier
@@ -1210,8 +1211,8 @@ fr:
         "Les champs suivants sont repris : Description, Conditions d'admission, Nombre minimal de participants, Nombre maximal de participants, Âge minimal, Saison, Jours de formation, Réservation de l'hébergement par le CAS, Hébergement, Centre de coûts, Organisme payeur"
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
     roles:
-      self_employed: ""
-      not_self_employed: ""
+      self_employed: travailleur·se indépendant·e
+      not_self_employed: salarié·e
 
   external_trainings:
     form:
@@ -1244,8 +1245,8 @@ fr:
 
     self_registration:
       form:
-        has_account: ""
-        to_login_page: ""
+        has_account: "As-tu déjà un login CAS?"
+        to_login_page: S’inscrire
       abo_issue:
         issues_from_help: |
           L'abonnement prend effet à partir du prochain numéro possible.
@@ -1257,13 +1258,13 @@ fr:
         price_with_vat: "CHF %{amount} TVA incluse"
         switzerland: Suisse
         international: Dans le monde entier
-        duration_title: ""
-        duration_text: ""
+        duration_title: Durée et renouvellement de l’abonnement
+        duration_text: Tu reçois une facture annuelle à l’avance. L’abonnement peut être résilié à tout moment pour la fin de la période en cours.
       create:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
 
       agreement_link:
-        agb_text: ""
+        agb_text: "J’ai lu et j’accepte les %{link}"
         statutes_text: "J'ai lu et j'accepte %{link} "
         sektion_statuten_text: "J'ai lu et j'accepte %{link} "
         contribution_regulations_text: "J'ai lu et j'approuve %{link} "
@@ -1313,12 +1314,12 @@ fr:
   household_aside_member_component:
     main_person: Bénéficiaire du compte familial
     set_main_person: Devenir bénéficiaire de la facture familiale
-    missing_email: ""
+    missing_email: La personne n’a pas d’adresse e-mail et ne peut donc pas recevoir le statut de destinataire des factures familiales.
     cannot_set_main_person: Contacte le secrétariat pour modifier le bénéficiaire du compte familial.
 
   invoices:
     errors:
-      data_quality_error: ""
+      data_quality_error: "La personne a des problèmes de qualité des données, c’est pourquoi aucune facture n’a été établie."
       create_subject_failed: "Problèmes lors de la transmission des données personnelles"
       create_invoice_failed: "Problèmes lors de la création de la facture"
       cancel_invoice_failed: "Problèmes lors de l’annulation de facture"
@@ -1346,8 +1347,8 @@ fr:
       section_signup_fee_presenter:
         annual_fee: contribution annuelle
         entry_fee: "+ frais d’entrée uniques"
-        discount: ""
-        total_amount: ""
+        discount: "- %{percent}% de rabais sur la cotisation annuelle"
+        total_amount: Total pour la première fois
         beitragskategorien:
           adult: Adhésion individuelle
           family: Adhésion familiale
@@ -1356,6 +1357,10 @@ fr:
   mailer:
     footer:
       address: |
+        Club Alpin Suisse CAS
+        Monbijoustrasse 61
+        3000 Berne 14
+        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
   memberships:
     join_zusatzsektions:
       create:
@@ -1396,15 +1401,15 @@ fr:
 
   participations:
     key_data_sheet:
-      file_name_prefix: ""
+      file_name_prefix: Fiche technique
       leader_file_prefix: Responsable du cours
       assistant_leader_file_prefix: Responsable de la classe
-      year_title: ""
-      title: ""
-      greeting: ""
-      footer: ""
+      year_title: "Cours / randonnées du CAS %{year}"
+      title: Fiche technique – direction du cours / de la randonnée
+      greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
+      footer: "Club Alpin Suisse CAS, Monbijoustrasse 61, Case postale, CH-3000 Berne 14, +41 31 370 18 43/44, alpin@sac-cas.ch"
       table:
-        number: ""
+        number: N° de la manifestation
         name: Désignation / titre
         level: Offre / catégorie
         leaders: Direction
@@ -1425,26 +1430,26 @@ fr:
           text: Selon le programme du cours (si disponible) ou le programme des randonnées
         participant_requirements:
           label: Conditions requises pour les participant·es
-          text: ""
+          text: Selon l’annonce des cours / randonnées du CAS 2024
         participant_program_course:
-          label: ""
+          label: Programme détaillé des cours pour les participant·e·s
           text: ""
         participant_program_tour:
-          label: ""
+          label: Programme détaillé des randonnées pour les participant·e·s
           text: ""
-        application_closing_at: ""
-        minimum_participants: ""
-        maximum_participants: ""
+        application_closing_at: Date limite d’inscription
+        minimum_participants: Nombre minimal de participant·e·s
+        maximum_participants: Nombre maximal de participant·e·s
         participation_yes_no:
-          label: ""
-          text: ""
+          label: "Réalisation - oui/non?"
+          text: La décision est prise en commun sur la base du nombre d’inscriptions à la date limite d’inscription.
         participation_cancellation:
-          label: ""
-          text: ""
-        ideal_class_size: ""
-        maximum_class_size: ""
+          label: Réalisation – annulation
+          text: Veuillez informer l’enseignant·e et l’hébergement
+        ideal_class_size: Taille de classe idéale
+        maximum_class_size: Nombre maximal d’élèves par classe
         class_teacher:
-          label: ""
+          label: Enseignant·e
           text: ""
 
   passes:
@@ -1629,14 +1634,14 @@ fr:
     infos_component:
       title_questions: "Questions concernant l’affiliation?"
       title_contact: Contact
-      title_membership: ""
+      title_membership: "Souhaites-tu devenir membre du CAS?"
       title_documents: Documents
       additional_infos: "Pour davantage d’informations, consultez la %{link}."
       address: |
         Club Alpin Suisse CAS
         Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
+        3000 Berne 14
+        Tél: <a href="tel:+41313701818">+41 31 370 18 18</a>
         <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: CGV
       link_agb: "https://www.sac-cas.ch/fr/meta/cgv-les-alpes/"
@@ -1680,7 +1685,7 @@ fr:
   wizards:
     signup:
       section_fee_summary:
-        title: ""
+        title: "Catégories de cotisation  %{section}"
 
     steps:
       choose_sektion_title: Choisir une section
@@ -1700,32 +1705,33 @@ fr:
           newsletter_caption: Je souhaite m'abonner à une newsletter
         abo_basic_login:
           person_fields:
-            next_button: ""
+            next_button: CRÉER UN COMPTE CAS
         abo_magazin:
           abo_info_table:
-            order: ""
-            wanted_magazin: ""
-            magazin_release: ""
-            magazin_release_info: ""
+            order: Commande d’abonnement
+            wanted_magazin: Magazine souhaité
+            magazin_release: A partir du numéro
+            magazin_release_info: Prochaine numéro après réception du paiement
             price: Prix
           person_info_table:
-            your_information: ""
-          summary_title: ""
+            your_information: Tes données
+          summary_title: Abonnement
           summary:
-            info_text: ""
-            next_button: ""
+            info_text: "Une fois ta commande terminée, tu recevras la facture par e-mail."
+            next_button: COMMANDER UN ABONNEMENT PAYANT
 
         sektion:
           family_fields_title: Membres de la famille
           family_fields:
-            add: ""
+            add: Ajouter un·e autre membre de la famille
             email_taken: >
+              L’adresse e-mail est déjà enregistrée et cette personne ne peut donc pas être ajoutée à la famille. Merci de contacter le service des membres pour enregistrer ta famille: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >
               En ajoutant d'autres personnes, tu optes pour une adhésion familiale. Celle-ci est possible pour deux adultes au maximum, âgés de 23 ans ou plus, et un nombre illimité d'enfants âgés de 6 à 17 ans.
 
               L'adhésion familiale est également possible pour les couples sans enfants. Si tu souhaites créer une affiliation familiale avec un membre déjà existant, contacte le secrétariat du CAS.
           various_fields:
-            immediate_entry_date: ""
+            immediate_entry_date: "Date d’entrée: immédiatement"
             period_info_1: ""
             period_info_2: ""
             period_info_3: ""
@@ -1734,21 +1740,21 @@ fr:
             next_as_household_link: Continuer comme membre de la famille
 
           various_fields_title: Données supplémentaires
-          summary_fields_title: ""
+          summary_fields_title: Résumé
           summary_fields:
             my_membership: "Mon adhésion"
-            family_members: ""
+            family_members: "Membres de la famille"
             info_alert_neuanmeldungen_sektion: ""
             info_alert_neuanmeldungen_nv: "Après avoir fait ta demande d’adhésion formelle, tu recevras la facture par e-mail."
-            entry_per: ""
+            entry_per: "Entrée au:"
             next_button: Demander une adhésion
           summary_person_card:
-            contact_person: ""
+            contact_person: "Personne de contact"
           summary_family_member_card:
-            adult: ""
-            child: ""
+            adult: "Personne adulte"
+            child: "Enfant"
           summary_entry_fee_card:
-            immediate_entry_date: ""
+            immediate_entry_date: "Date d’entrée: immédiatement"
 
         various_fields:
           newsletter: Je souhaite m'abonner à une newsletter

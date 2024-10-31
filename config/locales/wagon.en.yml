@@ -367,6 +367,7 @@ en:
           w: Woman
         additional_information: Remarks (e.g. profession)
       group:
+        type: ""
         group_id: Group ID
         navision_id: NAV Section ID
         sac_cas_self_registration_url: SAC self-registration
