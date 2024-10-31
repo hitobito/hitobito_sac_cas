@@ -187,7 +187,8 @@ module SacCas::Event::ParticipationsController
       invoice.update!(state: :cancelled)
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
-    enqueue_invoice_job
+
+    ExternalInvoice::CourseAnnulation.invoice!(entry)
   end
 
   def update_participation_price
