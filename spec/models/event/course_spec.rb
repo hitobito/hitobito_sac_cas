@@ -335,31 +335,44 @@ describe Event::Course do
 
   describe "when state changes to ready" do
     let(:course) { events(:assignment_closed) }
-    let(:application) { Fabricate(:event_application, priority_1: course, rejected: false) }
-    let!(:participation) { Fabricate(:event_participation, event: course, application:, state: :assigned, price: 10) }
+    let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
+    let(:leader) { @participations.first }
+    let(:participant) { @participations.second }
 
     before { course.dates.build(start_at: Time.zone.local(2025, 5, 11)) }
+
+    before do
+      @participations = course.participations.create!([
+        {person: people(:admin)},
+        {person: people(:mitglied), state: :assigned, price: 10, application: application},
+        {person: people(:familienmitglied), state: :assigned, price: 10}
+      ])
+      @participations.first.roles.create!(type: Event::Role::Leader)
+      @participations.second.roles.create!(type: Event::Course::Role::Participant)
+      @participations.third.roles.create!(type: Event::Course::Role::Participant)
+    end
 
     context "from assignment_closed" do
       it "updates assigned participants to summoned" do
         expect { course.update!(state: :ready) }
-          .to change { course.participations.first.state }.to(eq("summoned"))
-          .and have_enqueued_mail(Event::ParticipationMailer, :summon).once
-          .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+          .to change { participant.reload.state }.to(eq("summoned"))
+          .and have_enqueued_mail(Event::ParticipationMailer, :summon).twice
+          .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(2)
+        expect(leader.reload.state).to eq("assigned")
       end
 
       it "doesn't enqueue a job if there already is an external invoice" do
-        ExternalInvoice::CourseParticipation.create!(person_id: participation.person_id, link: participation)
+        ExternalInvoice::CourseParticipation.create!(person_id: participant.person_id, link: participant)
 
-        expect { course.update!(state: :ready) }.not_to change(
+        expect { course.update!(state: :ready) }.to change(
           Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
-        )
+        ).by(1)
       end
 
       it "doesn't enqueue a job if participation price is nil" do
-        participation.update_attribute(:price, nil)
+        participant.update_attribute(:price, nil)
 
-        expect { course.update!(state: :ready) }.not_to change(Delayed::Job, :count)
+        expect { course.update!(state: :ready) }.to change(Delayed::Job, :count).by(1)
       end
     end
 
@@ -368,7 +381,7 @@ describe Event::Course do
         course.update_attribute(:state, :closed)
 
         expect { course.update!(state: :ready) }
-          .to_not change { course.participations.first.state }
+          .to_not change { participant.reload.state }
       end
     end
   end
@@ -380,14 +393,15 @@ describe Event::Course do
 
     context "from created" do
       before do
-        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
+        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}, {person: people(:familienmitglied)}])
         course.update!(state: :created)
       end
 
       context "with course leaders" do
         before do
           course.participations.first.roles.create!(type: Event::Role::Leader)
-          course.participations.last.roles.create!(type: Event::Role::AssistantLeader)
+          course.participations.second.roles.create!(type: Event::Role::AssistantLeader)
+          course.participations.third.roles.create!(type: Event::Course::Role::Participant)
         end
 
         it "sends an email to the course admin and leader" do
@@ -473,15 +487,18 @@ describe Event::Course do
     context "with participants" do
       before do
         course.participations.create!([
-          {person: people(:admin), roles: [Event::Role::Leader.new]},
-          {person: people(:mitglied)}
+          {person: people(:admin), state: :assigned, active: true, roles: [Event::Role::Leader.new]},
+          {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
+          {person: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
         ])
       end
 
       it "changes participation states to canceled" do
-        expect(course.participations.count).to eq(2)
+        expect(course.participations.count).to eq(3)
         course.update!(state: :canceled, canceled_reason: :minimum_participants)
-        expect(course.participations.reload.map(&:state)).to eq(%w[annulled annulled])
+        participations = course.participations.reload
+        expect(participations.map(&:state)).to eq(%w[assigned annulled annulled])
+        expect(participations.map(&:previous_state)).to eq([nil, "assigned", "rejected"])
       end
 
       it "sends an email to all participants if canceled because of minimum participants" do

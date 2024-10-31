@@ -17,7 +17,7 @@ module Events::Courses::State
      application_closed: [:assignment_closed, :canceled],
      assignment_closed: [:ready, :application_closed, :canceled],
      ready: [:closed, :assignment_closed, :canceled],
-     canceled: [:application_open], # BEWARE: canceled means "annuliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
+     canceled: [:application_open], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
      closed: [:ready]}.freeze
 
   APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
@@ -89,13 +89,19 @@ module Events::Courses::State
   end
 
   def assigned_participants
-    participations.where(state: :assigned)
+    participants_scope.where(state: :assigned)
   end
 
   def annul_participations
-    participations.update_all(state: :annulled, active: false)
+    all_participants.update_all("previous_state = state, active = FALSE, state = 'annulled'")
     send_canceled_email
     cancel_invoices(all_course_invoices)
+  end
+
+  def all_participants # also including not active
+    participations
+      .joins(:roles)
+      .where(event_roles: {type: participant_types.collect(&:sti_name)})
   end
 
   def cancel_invoices(invoices)
@@ -115,7 +121,7 @@ module Events::Courses::State
   def send_canceled_email
     return if canceled_reason.nil?
 
-    participations.each do |participation|
+    all_participants.each do |participation|
       Event::CanceledMailer.send(canceled_reason, participation).deliver_later
     end
   end
