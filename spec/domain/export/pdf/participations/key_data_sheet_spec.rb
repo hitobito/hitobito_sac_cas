@@ -161,10 +161,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
     before do
       event_start_at = event.dates.order(start_at: :asc).first.start_at
       budget_category = event.kind.course_compensation_categories.create!(kind: :budget, short_name: "Anreise", name_leader: "Anreise Kursleiter", name_assistant_leader: "Anreise Klassenleiter")
-      budget_category.course_compensation_rates.create!(rate_leader: 50, rate_assistant_leader: 50, valid_from: event_start_at - 10.days)
+      budget_category.course_compensation_rates.create!(rate_leader: 30, rate_assistant_leader: 50, valid_from: event_start_at - 10.days)
 
       budget_category_without_valid_rate = event.kind.course_compensation_categories.create!(kind: :budget, short_name: "Anreise ohne validen Ansatz", name_leader: "Anreise Kursleiter ohne validen Ansatz", name_assistant_leader: "Anreise Klassenleiter ohne validen Ansatz")
-      budget_category_without_valid_rate.course_compensation_rates.create!(rate_leader: 50, rate_assistant_leader: 50, valid_from: event_start_at + 10.days)
+      budget_category_without_valid_rate.course_compensation_rates.create!(rate_leader: 30, rate_assistant_leader: 50, valid_from: event_start_at + 10.days)
     end
 
     context "as leader" do
@@ -174,9 +174,9 @@ describe Export::Pdf::Participations::KeyDataSheet do
         expect(text_with_position(analyzer)).to include(
           [75, 503, "Unterkunft Budget"],
           [195, 503, "Pro Person / Nacht mit Halbpension"],
-          [195, 483, "Anreise"],
+          [195, 483, "Anreise Kursleiter"],
           [435, 483, "CHF"],
-          [485, 483, "50.0"]
+          [485, 483, "30.0"]
         )
       end
 
@@ -192,7 +192,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
         expect(text_with_position(analyzer)).to include(
           [75, 503, "Unterkunft Budget"],
           [195, 503, "Pro Person / Nacht mit Halbpension"],
-          [195, 483, "Anreise"],
+          [195, 483, "Anreise Klassenleiter"],
           [435, 483, "CHF"],
           [485, 483, "50.0"]
         )
