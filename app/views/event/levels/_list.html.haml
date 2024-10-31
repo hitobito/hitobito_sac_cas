@@ -4,6 +4,5 @@
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
 = table(entries, class: 'table table-striped table-hover') do |t|
-  - t.attr(:label)
-  - t.sortable_attrs(:code, :difficulty, :updated_at)
+  - t.sortable_attrs(:label, :code, :difficulty, :updated_at)
   - add_table_actions(t)
