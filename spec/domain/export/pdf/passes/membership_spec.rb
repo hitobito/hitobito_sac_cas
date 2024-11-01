@@ -47,8 +47,8 @@ describe Export::Pdf::Passes::Membership do
         [61, 148, "Mitgliederausweis"],
         [510, 83, "SAC-Partner"],
         [309, 182, "REGA 1414                    SOS Europe 112"],
-        [311, 168, "Notfallnummer / N° d'urgence / No. di emergenza"],
-        [311, 137, "Notfallkontakt / Contact d'urgence / Contatto di emergenza"],
+        [311, 168, "Notfallnummer / N° d’urgence / No. di emergenza"],
+        [311, 137, "Notfallkontakt / Contact d’urgence / Contatto di emergenza"],
         [490, 148, "www.sac-cas.ch"]
       ]
     }
@@ -139,8 +139,8 @@ describe Export::Pdf::Passes::Membership do
         [160, 92, "no Suigyomatsu Unraimatsu Furaimatsu"],
         [160, 98, "Jugemu Jugemu Goko-no Surikire Kaijarisuigyo-"],
         [309, 182, "REGA 1414                    SOS Europe 112"],
-        [311, 137, "Notfallkontakt / Contact d'urgence / Contatto di emergenza"],
-        [311, 168, "Notfallnummer / N° d'urgence / No. di emergenza"],
+        [311, 137, "Notfallkontakt / Contact d’urgence / Contatto di emergenza"],
+        [311, 168, "Notfallnummer / N° d’urgence / No. di emergenza"],
         [490, 148, "www.sac-cas.ch"],
         [510, 83, "SAC-Partner"]
       ]
