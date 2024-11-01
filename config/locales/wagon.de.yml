@@ -1312,7 +1312,7 @@ de:
       title: Mitgliedschaftsrechnung %{year}
       positions:
         hut_solidarity_fee: Hütten Solidaritätsbeitrag
-        sac_entry_feed: Eintrittsgebühr Zentralverband
+        sac_entry_fee: Eintrittsgebühr Zentralverband
         sac_fee: Beitrag Zentralverband
         sac_magazine_postage_abroad: Porto Die Alpen Zentralverband
         sac_magazine: Alpengebühren

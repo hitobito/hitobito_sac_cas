@@ -56,30 +56,35 @@ describe Invoices::SacMemberships::PositionGenerator do
       expect(positions[0].amount).to eq(40.0)
       expect(positions[0].creditor.to_s).to eq(sac.to_s)
       expect(positions[0].article_number).to eq(config.sac_fee_article_number)
+      expect(positions[0].label).to eq("Beitrag Zentralverband")
 
       expect(positions[1].name).to eq("hut_solidarity_fee")
       expect(positions[1].grouping).to eq(:sac_fee)
       expect(positions[1].amount).to eq(20.0)
       expect(positions[1].creditor.to_s).to eq(sac.to_s)
       expect(positions[1].article_number).to eq(config.hut_solidarity_fee_article_number)
+      expect(positions[1].label).to eq("Hütten Solidaritätsbeitrag")
 
       expect(positions[2].name).to eq("sac_magazine")
       expect(positions[2].grouping).to eq(:sac_fee)
       expect(positions[2].amount).to eq(25.0)
       expect(positions[2].creditor.to_s).to eq(sac.to_s)
       expect(positions[2].article_number).to eq(config.magazine_fee_article_number)
+      expect(positions[2].label).to eq("Alpengebühren")
 
       expect(positions[3].name).to eq("section_fee")
       expect(positions[3].grouping).to eq(nil)
       expect(positions[3].amount).to eq(42.0)
       expect(positions[3].creditor.to_s).to eq(main_section.to_s)
       expect(positions[3].article_number).to eq(config.section_fee_article_number)
+      expect(positions[3].label).to eq("Beitrag SAC Blüemlisalp")
 
       expect(positions[4].name).to eq("section_fee")
       expect(positions[4].grouping).to eq(nil)
       expect(positions[4].amount).to eq(56.0)
       expect(positions[4].creditor.to_s).to eq(additional_section.to_s)
       expect(positions[4].article_number).to eq(config.section_fee_article_number)
+      expect(positions[4].label).to eq("Beitrag SAC Matterhorn")
     end
 
     context "with custom discount" do
@@ -193,6 +198,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[4].label).to eq("Beitrag SAC Blüemlisalp")
         expect(positions[4].amount).to eq(84.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[5].label).to eq("Porto Bulletin SAC Blüemlisalp")
         expect(positions[5].amount).to eq(13.0)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].label).to eq("Beitrag SAC Blüemlisalp Ausserberg")
@@ -748,12 +754,14 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[4].grouping).to eq(nil)
         expect(positions[4].creditor.to_s).to eq(sac.to_s)
         expect(positions[4].article_number).to eq(config.sac_entry_fee_article_number)
+        expect(positions[4].label).to eq("Eintrittsgebühr Zentralverband")
 
         expect(positions[5].name).to eq("section_entry_fee")
         expect(positions[5].amount).to eq(10.0)
         expect(positions[5].grouping).to eq(nil)
         expect(positions[5].creditor.to_s).to eq(main_section.to_s)
         expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
+        expect(positions[5].label).to eq("Eintrittsgebühr SAC Blüemlisalp")
       end
 
       context "middle of the year" do
