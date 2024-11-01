@@ -183,7 +183,7 @@ en:
         description: Description
         name_leader: Designation Course management
         name_assistant_leader: Title Class leader
-        course_compensation_rates: Remuneration approaches
+        course_compensation_rates: Remuneration approaches # uses include CapitalizedDependentErrors
         updated_at: Changed
         created_at: Created
       course_compensation_rate:
@@ -320,6 +320,7 @@ en:
           payed: ""
           cancelled: ""
           error: ""
+        external_invoices: "" # uses include CapitalizedDependentErrors
       event/role:
         self_employed: ""
       external_training:
@@ -542,6 +543,9 @@ en:
       external_training:
         one: External training
         other: External training
+      external_invoice:
+        one: ''
+        other: ''
       sac_membership_config:
         one: Parameters for membership invoices
         other: Parameters for membership invoices

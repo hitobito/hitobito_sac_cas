@@ -96,7 +96,7 @@ it:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
         termination_reason_id: "Motivo della disdetta"
-        data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per le campagne di donazione."
+        data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per gli appelli di donazione."
         subscribe_newsletter: "Mantenere la newsletter"
         subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
 
@@ -187,7 +187,7 @@ it:
         description: Descrizione
         name_leader: Denominazione Direzione del corso
         name_assistant_leader: Denominazione Direzione della classe
-        course_compensation_rates: Tassi di retribuzione
+        course_compensation_rates: Tassi di retribuzione # uses include CapitalizedDependentErrors
         updated_at: Modificato
         created_at: Creato
       course_compensation_rate:
@@ -293,39 +293,40 @@ it:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
       event/level:
-        label: Designazione
+        label: Denominazione
         code: Codice
-        description: Descrizione del
+        description: Descrizione
         difficulty: Livello di difficoltà
         created_at: Creato
         updated_at: Modificato
         deleted_at: Soppresso
       event/participation:
         additional_information: Commento
-        cancel_statement: Motivo
-        adult_consent: Conferma dell'età
-        terms_and_conditions: GTC
+        cancel_statement: Motivazione
+        adult_consent: Conferma dell’età
+        terms_and_conditions: CGC
         actual_days: Giorni effettivi
-        price: ""
-        price_category: ""
+        price: "Prezzo"
+        price_category: "Categoria di prezzo"
         price_categories:
-          price_member: ""
-          price_regular: ""
-          price_subsidized: ""
-          price_js_active_member: ""
-          price_js_active_regular: ""
-          price_js_passive_member: ""
-          price_js_passive_regular: ""
-        invoice_state: ""
+          price_member: "Prezzo per i soci"
+          price_regular: "Prezzo normale"
+          price_subsidized: "Prezzo sovvenzionato"
+          price_js_active_member: "Prezzo per i soci G+S - A"
+          price_js_active_regular: "Prezzo normale G+S - A"
+          price_js_passive_member: "Prezzo per i soci G+S - P"
+          price_js_passive_regular: "Prezzo normale G+S - P"
+        invoice_state: Fattura
         invoice_states:
-          _nil: ""
-          draft: ""
-          open: ""
-          payed: ""
-          cancelled: ""
-          error: ""
+          _nil: Non fatturato
+          draft: Bozza
+          open: Aperta
+          payed: Saldata
+          cancelled: Stornata
+          error: Errore
+        external_invoices: Fatture # uses include CapitalizedDependentErrors
       event/role:
-        self_employed: ""
+        self_employed: Lavoratore autonomo
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -334,19 +335,19 @@ it:
         provider: Fornitore
         start_at: Data di inizio
         finish_at: Data di fine
-        training_days: Giorni di formazione
-        link: Collegamento
+        training_days: Giornate di formazione
+        link: Link
         other_people_ids: Altre persone
         remarks: Osservazione
         created_at: Creato
         updated_at: Modificato
       person:
-        address_care_of: ""
-        correspondence: Tessera associativa e fatturazione
-        confirmed_at: ""
+        address_care_of: Complemento di indirizzo
+        correspondence: Tessera soci e fatturazione
+        confirmed_at: E-mail verificata
         family_id: ID famiglia
-        sac_family_main_person: Bollette a (famiglia)
-        sac_remark_national_office: Ufficio Commenti
+        sac_family_main_person: Fatture a (famiglia)
+        sac_remark_national_office: Osservazioni Segretariato centrale
         sac_remark_section_1: Osservazioni Sezione 1
         sac_remark_section_2: Osservazioni Sezione 2
         sac_remark_section_3: Osservazioni Sezione 3
@@ -355,50 +356,50 @@ it:
         data_quality: Qualità dei dati
         correspondences:
           digital: Digitale
-          print: Fisico
+          print: Fisica
         genders:
-          _nil: ""
-        birthday: ""
-        membership_years: Numero di anni di iscrizione
-        membership_number: Membro n.
-        navision_id: Navision no.
+          _nil: diversa
+        birthday: Data di nascita
+        membership_years: Numero di anni di affiliazione
+        membership_number: Socio n.
+        navision_id: Navision n.
         salutations:
-          m: ""
-          w: ""
-          _nil: ""
+          m: uomo
+          w: donna
+          _nil: altro
         recipient_salutations:
           m: Signor
           w: Signora
         additional_information: Osservazioni (ad es. professione)
       group:
-        type: ""
+        type: Tipo di gruppo tecnico
         group_id: ID gruppo
         navision_id: ID sezione NAV
-        sac_cas_self_registration_url: Autoregistrazione SAC
+        sac_cas_self_registration_url: Autoregistrazione CAS
       group/sac_cas:
-        sac_newsletter_mailing_list_id: ID di iscrizione alla newsletter SAC
-        sac_magazine_mailing_list_id: ID abbonamento Alpi
-        sac_fundraising_mailing_list_id: Appello alle donazioni ID abbonamento
-        course_admin_email: Gestione dei corsi via e-mail
+        sac_newsletter_mailing_list_id: ID abbonamento Newsletter SAC
+        sac_magazine_mailing_list_id: ID abbonamento Le Alpi
+        sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
+        course_admin_email: E-mail Amministrazione dei corsi
       group/sektion:
         foundation_year: Anno di fondazione
-        section_canton: Canton
+        section_canton: Cantone
         language: Lingua
         languages:
           DE: Tedesco
-          FR: Français
+          FR: Francese
           IT: Italiano
-        mitglied_termination_by_section_only: Dimissioni solo per sezione
+        mitglied_termination_by_section_only: Disdetta solo tramite sezione
       group/ortsgruppe:
         foundation_year: Anno di fondazione
-        section_canton: Canton
+        section_canton: Cantone
         language: Lingua
         languages:
           DE: Tedesco
-          FR: Français
+          FR: Francese
           IT: Italiano
       role:
-        membership_years: Anni di appartenenza
+        membership_years: Anni di affiliazione
         class:
           kind:
             neuanmeldung:
@@ -409,102 +410,102 @@ it:
             description:
               read_all_people: Letto da tutte le persone.
       qualification_kind:
-        tourenchef_may_edit: Modificabile dal tour manager
+        tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
-        finish_at: Fino a quando
+        finish_at: Fino a
       sac_membership_config:
-        valid_from: Valido dall'anno
-        sac_fee_adult: "Quota organizzativa centrale, iscrizione individuale"
-        sac_fee_family: "Quota di iscrizione all'organizzazione centrale, iscrizione familiare"
-        sac_fee_youth: "Quota associativa centrale, iscrizione giovani"
-        entry_fee_adult: "Biglietto d'ingresso, iscrizione singola"
-        entry_fee_family: "Ingresso a pagamento, abbonamento famiglia"
-        entry_fee_youth: "Ingresso a pagamento, abbonamento giovani"
-        hut_solidarity_fee_with_hut_adult: "Contributo di solidarietà per le capanne Sezione con capanne, iscrizione individuale"
-        hut_solidarity_fee_with_hut_family: "Contributo di solidarietà per le capanne Sezione con le capanne, appartenenza alla famiglia"
-        hut_solidarity_fee_with_hut_youth: "Contributo di solidarietà per le capanne Sezione con capanne, adesione dei giovani"
-        hut_solidarity_fee_without_hut_adult: "Contributo di solidarietà per le capanne Sezione senza capanne, iscrizione individuale"
-        hut_solidarity_fee_without_hut_family: "Contributo di solidarietà per le capanne Sezione senza capanne, iscrizione familiare"
-        hut_solidarity_fee_without_hut_youth: "Contributo di solidarietà per le capanne Sezione senza capanne, iscrizione dei giovani"
-        magazine_fee_adult: "Quota di abbonamento alla rivista SAC, socio individuale"
-        magazine_fee_family: "Abbonamento alla rivista SAC, abbonamento famiglia"
-        magazine_fee_youth: "Abbonamento alla rivista SAC, abbonamento giovani"
-        service_fee: Servizio a pagamento
-        magazine_postage_abroad: Affrancatura all'estero Rivista SAC
-        reduction_amount: Importo della riduzione
-        reduction_required_membership_years: Riduzione per anni di appartenenza
-        sac_fee_article_number: Contributo dell'organizzazione centrale
-        sac_entry_fee_article_number: Quote di iscrizione all'organizzazione centrale
-        hut_solidarity_fee_article_number: Contributo di solidarietà della capanna
-        magazine_fee_article_number: Abbonamento alla rivista SAC
-        magazine_postage_abroad_article_number: Affrancatura all'estero Rivista SAC
-        section_entry_fee_article_number: Quote di iscrizione alle sezioni
+        valid_from: Valido dall’anno
+        sac_fee_adult: "Contributo Associazione centrale, affiliazione individuale"
+        sac_fee_family: "Contributo Associazione centrale, affiliazione famigliare"
+        sac_fee_youth: "Contributo Associazione centrale, affiliazione giovani"
+        entry_fee_adult: "Quota di adesione, affiliazione individuale"
+        entry_fee_family: "Quota di adesione, affiliazione famigliare"
+        entry_fee_youth: "Quota di adesione, affiliazione giovani"
+        hut_solidarity_fee_with_hut_adult: "Contributo di solidarietà alle capanne per sezione con capanne, affilazione individuale"
+        hut_solidarity_fee_with_hut_family: "Contributo di solidarietà alle capanne per sezione con capanne, affiliazione famigliare"
+        hut_solidarity_fee_with_hut_youth: "Contributo di solidarietà alle capanne per sezione con capanne, affiliazione giovani"
+        hut_solidarity_fee_without_hut_adult: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione individuale"
+        hut_solidarity_fee_without_hut_family: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione famigliare"
+        hut_solidarity_fee_without_hut_youth: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione giovani"
+        magazine_fee_adult: "Quota di abbonamento alla rivista CAS, affiliazione individuale"
+        magazine_fee_family: "Quota di abbonamento alla rivista CAS, affiliazione famigliare"
+        magazine_fee_youth: "Quota di abbonamento alla rivista CAS, affiliazione giovani"
+        service_fee: Quota di servizio
+        magazine_postage_abroad: Affrancatura per l’estero rivista CAS
+        reduction_amount: Importo di riduzione
+        reduction_required_membership_years: Riduzione in base agli anni di affiliazione
+        sac_fee_article_number: Contributo Associazione centrale
+        sac_entry_fee_article_number: Quote di adesione all’Associazione centrale
+        hut_solidarity_fee_article_number: Contributo di solidarietà alle capanne
+        magazine_fee_article_number: Quota di abbonamento alla rivista CAS
+        magazine_postage_abroad_article_number: Affrancatura per l’estero rivista CAS
+        section_entry_fee_article_number: Quote di adesione alla sezione
         section_fee_article_number: Contributo di sezione
-        section_bulletin_postage_abroad_article_number: Bollettino postale della sezione estero
-        service_fee_article_number: Servizio a pagamento
-        balancing_payment_article_number: Pagamenti di perequazione
-        course_fee_article_number: Costo del corso
+        section_bulletin_postage_abroad_article_number: Affrancatura per l’estero bollettino di sezione
+        service_fee_article_number: Quota di servizio
+        balancing_payment_article_number: Compensazioni
+        course_fee_article_number: Quote del corso
         discount_date_1: Data di sconto 1
-        discount_percent_1: Sconto per cento 1
+        discount_percent_1: Percentuale di sconto 1
         discount_date_2: Data di sconto 2
-        discount_percent_2: Sconto per cento 2
+        discount_percent_2: Percentuale di sconto 2
         discount_date_3: Data di sconto 3
-        discount_percent_3: Sconto per cento 3
+        discount_percent_3: Percentuale di sconto 3
       sac_section_membership_config:
-        valid_from: Valido dall'anno
-        section_fee_adult: "Quota di sezione, iscrizione individuale"
-        section_fee_family: "Quota di sezione, abbonamento famiglia"
-        section_fee_youth: "Quota di sezione, iscrizione giovani"
-        section_entry_fee_adult: "Biglietto d'ingresso, iscrizione singola"
-        section_entry_fee_family: "Ingresso a pagamento, abbonamento famiglia"
-        section_entry_fee_youth: "Ingresso a pagamento, abbonamento giovani"
-        bulletin_postage_abroad: Bollettino postale della sezione estero
-        sac_fee_exemption_for_honorary_members: Esonero dalla quota associativa centrale per i soci onorari
-        section_fee_exemption_for_honorary_members: Esonero dalla quota di iscrizione alla sezione per i soci onorari
-        sac_fee_exemption_for_benefited_members: Esonero dalla tassa di associazione centrale per i beneficiari
-        section_fee_exemption_for_benefited_members: Esonero dalla tassa di sezione per i beneficiari
-        reduction_amount: Importo della riduzione Anni di affiliazione/età
-        reduction_required_membership_years: Riduzione per anni di appartenenza
-        reduction_required_age: Riduzione dagli anni di età
+        valid_from: Valido dall’anno
+        section_fee_adult: "Contributo di sezione, affiliazione individuale"
+        section_fee_family: "Contributo di sezione, affiliazione famigliare"
+        section_fee_youth: "Contributo di sezione, affiliazione giovani"
+        section_entry_fee_adult: "Quota di adesione, affiliazione individuale"
+        section_entry_fee_family: "Quota di adesione, affiliazione famigliare"
+        section_entry_fee_youth: "Quota di adesione, affiliazione giovani"
+        bulletin_postage_abroad: Affrancatura per l’estero bollettino di sezione
+        sac_fee_exemption_for_honorary_members: Esonero dalla quota destinata all’Associazione centrale per i soci onorari
+        section_fee_exemption_for_honorary_members: Esonero dalla quota destinata alla sezione per i soci onorari
+        sac_fee_exemption_for_benefited_members: Esonero dalla quota destinata all’Associazione centrale per i beneficiari
+        section_fee_exemption_for_benefited_members: Esonero dalla quota destinata alla sezione per i beneficiari
+        reduction_amount: Importo di riduzione anni di affiliazione/età
+        reduction_required_membership_years: Riduzione in base agli anni di affiliazione
+        reduction_required_age: Riduzione in base all’età
       external_invoice:
         title: Titolo
         state: Stato
-        abacus_sales_order_key: Numero d'abaco
+        abacus_sales_order_key: Numero d’abaco
         total: Totale
         issued_at: Data della fattura
-        created_at: Creato
-        updated_at: Aggiornato
+        created_at: Creata
+        updated_at: Aggiornata
         states:
           draft: Bozza
-          open: Aperto
-          payed: Pagato
-          cancelled: Annullato
+          open: Aperta
+          payed: Saldata
+          cancelled: Stornata
           error: Errore
 
     errors:
       messages:
-        already_has_mitglied_role: "%{start_on} %{end_on}è già un membro (da a )."
-        already_has_neuanmeldung_role: "%{start_on} %{end_on}ha già una nuova registrazione (da a )."
-        too_many_adults_in_family: "%{max_adults} L'iscrizione di una famiglia comprende un massimo di adulti."
-        only_one_mitglied_role_allowed_at_a_time: "ha già un'appartenenza con validità sovrapposta."
+        already_has_mitglied_role: "è già socio (dal %{start_on} al %{end_on})."
+        already_has_neuanmeldung_role: "ha già una nuova registrazione (dal %{start_on} al %{end_on})."
+        too_many_adults_in_family: "L’affiliazione famigliare comprende un massimo di %{max_adults} adulti."
+        only_one_mitglied_role_allowed_at_a_time: "ha già un’affiliazione con validità sovrapposta."
         must_be_in_past: deve essere nel passato
-        must_have_mitglied_role: "deve essere socio per l'intero periodo di validità della sezione aggiuntiva."
-        must_have_mitglied_role_in_group: "deve essere un membro del gruppo selezionato."
-        must_have_one_family_main_person_in_family: "Il destinatario della fattura deve essere definito in un'associazione familiare."
+        must_have_mitglied_role: "deve essere socio per l’intero periodo di validità della sezione aggiuntiva."
+        must_have_mitglied_role_in_group: "deve essere socio del gruppo selezionato."
+        must_have_one_family_main_person_in_family: "Per ogni famiglia deve essere indicato un desinatario per le fatture."
 
       models:
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
-              uniqueness_during_validity_period: può fare riferimento a un solo approccio retributivo per periodo di validità.
+              uniqueness_during_validity_period: può referenziare solo un tasso di retribuzione per periodo di validità.
 
         event/participation:
           attributes:
             actual_days:
-              longer_than_event_duration: non deve essere superiore alla durata prevista del corso.
+              longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
 
         group/sektions_touren_und_kurse/tourenleiter:
-          requires_active_qualification: persona deve avere almeno una qualifica attiva.
+          requires_active_qualification: La persona deve avere almeno una qualifica attiva.
 
         people_manager:
           in_different_household: >-
@@ -538,7 +539,7 @@ it:
       course_compensation_rate:
         one: Approccio retributivo
         many: Approcci retributivi
-        other: Approcci retributivi
+        other: Tassi di retribuzione
       event/level:
         one: Livello del corso
         many: Livelli del corso
@@ -555,6 +556,10 @@ it:
         one: Formazione esterna
         many: Formazione esterna
         other: Formazione esterna
+      external_invoice:
+        one: ''
+        many: ''
+        other: ''
       sac_membership_config:
         one: Parametri per le fatture dei soci
         many: Parametri per le fatture dei soci
@@ -1333,9 +1338,9 @@ it:
       title: "Fattura associativa %{year}"
       positions:
         hut_solidarity_fee: Cabine Contributo di solidarietà
-        sac_entry_feed: Biglietto d'ingresso Organizzazione centrale
-        sac_fee: Contributo dell'organizzazione centrale
-        sac_magazine_postage_abroad: Affrancatura Associazione Centrale Alpi
+        sac_entry_feed: Quota di adesione Associazione centrale
+        sac_fee: Contributo Associazione centrale
+        sac_magazine_postage_abroad: Affrancatura Le Alpi Associazione Centrale
         sac_magazine: Tasse alpine
         section_bulletin_postage_abroad: "Bollettino di Porto %{section}"
         section_entry_fee: "Biglietto d'ingresso %{section}"
@@ -1578,11 +1583,11 @@ it:
       membership_adult: Soci Individuali
       membership_family: Iscrizione della famiglia
       membership_youth: Iscrizione dei giovani
-      sac_fee: Contributo dell'organizzazione centrale
+      sac_fee: Contributo Associazione centrale
       entry_fee: Biglietto d'ingresso
       magazine_fee: Abbonamento alla rivista SAC
-      hut_solidarity_fee_without_hut: Contributo di solidarietà per le capanne senza capanne
-      hut_solidarity_fee_with_hut: Contributo di solidarietà con le capanne
+      hut_solidarity_fee_without_hut: Contributo di solidarietà alle capanne senza capanne
+      hut_solidarity_fee_with_hut: Contributo di solidarietà alle capanne con capanne
       reductions: Riduzioni
       discounts: Sconti per ingressi entro l'anno
       discount_date: Dalla data
@@ -1590,8 +1595,8 @@ it:
       article_numbers: Numeri di prodotto Abacus
       valid_from: Valido dall'anno
       service_fee: Servizio a pagamento
-      magazine_postage_abroad: Affrancatura all'estero Rivista SAC
-      reduction_amount: Importo della riduzione
+      magazine_postage_abroad: Affrancatura per l’estero rivista CAS
+      reduction_amount: Importo di riduzione
       reduction_required_membership_years: Riduzione per anni di appartenenza
       discount_date_1: Data di sconto 1
       discount_percent_1: Sconto per cento 1
@@ -1614,12 +1619,12 @@ it:
       bulletin_fee: Quota di iscrizione Bollettino di sezione
       reductions: Riduzioni
       valid_from: Valido dall'anno
-      bulletin_postage_abroad: Bollettino postale della sezione estero
-      sac_fee_exemption_for_honorary_members: Esonero dalla quota associativa centrale per i soci onorari
+      bulletin_postage_abroad: Affrancatura per l’estero bollettino di sezione
+      sac_fee_exemption_for_honorary_members: Esonero dalla quota destinata all'Associazione centrale per i soci onorari
       section_fee_exemption_for_honorary_members: Esonero dalla quota di iscrizione alla sezione per i soci onorari
-      sac_fee_exemption_for_benefited_members: Esonero dalla tassa di associazione centrale per i beneficiari
+      sac_fee_exemption_for_benefited_members: Esonero dalla quota destinata all'Associazione centrale per i beneficiari
       section_fee_exemption_for_benefited_members: Esonero dalla tassa di sezione per i beneficiari
-      reduction_amount: Importo della riduzione Anni di affiliazione/età
+      reduction_amount: Importo di riduzione anni di affiliazione/età
       reduction_required_membership_years: Riduzione per anni di appartenenza
       reduction_required_age: Riduzione dagli anni di età
     global:
