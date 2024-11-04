@@ -263,7 +263,7 @@ fr:
           applied: Liste d’attente
           assigned: Confirmé
           summoned: Convoqué
-          annulled: Annulé
+          annulled: ""
         program: Programme
         reserve_accommodation: Réserver un hébergement via le CAS
         season: Saison
@@ -1132,8 +1132,6 @@ fr:
         contact_text: |
           Tu peux nous joindre pendant nos heures de bureau
           du lundi au vendredi de 8 h à 17 h.
-      list:
-        key_data_sheets: Fiches techniques
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1177,6 +1175,7 @@ fr:
         summon_button: Convocation
       actions_show_sac_cas:
         create_invoice_button: Créer une facture
+        attach_key_data_sheet: ""
         create_invoice_confirmation: Merci de confirmer la création de la facture.
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.

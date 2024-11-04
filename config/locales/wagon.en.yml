@@ -1077,8 +1077,6 @@ en:
         contact_text: |
           You can reach us during our business hours
           Mon to Fri 08:00 - 17:00.
-      list:
-        key_data_sheets: ""
       states:
         absent: No participation in this course.
         annulled: This course has been canceled.
@@ -1122,6 +1120,7 @@ en:
         summon_button: Call up
       actions_show_sac_cas:
         create_invoice_button: ""
+        attach_key_data_sheet: ""
         create_invoice_confirmation: ""
       invoice_created_notice: ""
       invoice_not_created_alert: ""
