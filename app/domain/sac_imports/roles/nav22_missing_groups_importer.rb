@@ -10,7 +10,7 @@ module SacImports::Roles
     include Nav22Shared
 
     def create
-      @csv_source.rows.uniq do |row|
+      @data.uniq do |row|
         # Check each hierarchy combination only once
         [row[:layer_type], row[:group_level1], row[:group_level2], row[:group_level3], row[:group_level4]]
       end.each { |row| process_row(row) }

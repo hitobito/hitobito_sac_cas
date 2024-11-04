@@ -23,8 +23,7 @@ module SacImports::Roles
     end
 
     def create
-      # @csv_source.rows(filter: rows_filter).each { process_row(_1) }
-      @data.each { process_row(_1) }
+      # @data.each { process_row(_1) }
       Parallel.map(@data, in_threads: nr_of_threads) do |row|
         process_row(row)
       end

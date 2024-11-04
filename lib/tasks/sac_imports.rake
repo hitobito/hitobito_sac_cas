@@ -8,23 +8,36 @@
 namespace :sac_imports do
   def skip_existing? = ["1", "true"].exclude?(ENV["REIMPORT_ALL"].to_s.downcase)
 
+  task setup: [:environment] do
+    Person.skip_callback(:commit, :after, :transmit_data_to_abacus)
+    Group::SektionsMitglieder::Mitglied.skip_callback(:commit, :after, :transmit_data_to_abacus)
+
+    Person.skip_callback(:save, :after, :check_data_quality)
+    Group::SektionsMitglieder::Mitglied.skip_callback(:create, :after, :check_data_quality)
+    Group::SektionsMitglieder::Mitglied.skip_callback(:destroy, :after, :check_data_quality)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:create, :after, :check_data_quality)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:destroy, :after, :check_data_quality)
+    PhoneNumber.skip_callback(:create, :after, :check_data_quality)
+    PhoneNumber.skip_callback(:destroy, :after, :check_data_quality)
+  end
+
   desc "Imports SAC Sections"
-  task "nav6-1_sac_sections": [:environment] do
+  task "nav6-1_sac_sections": :setup do
     SacImports::SacSectionsImporter.new.create
   end
 
   desc "Imports people and companies from Navision"
-  task "nav1-1_people": [:environment] do
+  task "nav1-1_people": :setup do
     SacImports::PeopleImporter.new.create(start_at_navision_id: ENV["START_AT_NAVISION_ID"])
   end
 
   desc "Import people from WSO2"
-  task "wso21-1_people": [:environment] do
+  task "wso21-1_people": :setup do
     SacImports::Wso2PeopleImporter.new.create
   end
 
   desc "Imports membership roles"
-  task "nav2-1-membership_roles": [:environment] do
+  task "nav2-1-membership_roles": :setup do
     SacImports::Nav21RolesMembershipImporter.new.create
   end
 
@@ -34,7 +47,7 @@ namespace :sac_imports do
   end
 
   desc "Imports non-membership roles"
-  task "nav2-22-non_membership_roles": [:environment] do
+  task "nav2-22-non_membership_roles": :setup do
     SacImports::Nav222RolesNonMembershipImporter.new.create
   end
 
