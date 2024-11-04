@@ -9,7 +9,8 @@ class Group::SektionsTourenUndKurse < Group
   self.static_name = true
 
   children Group::SektionsTourenUndKurseSommer,
-    Group::SektionsTourenUndKurseWinter
+    Group::SektionsTourenUndKurseWinter,
+    Group::SektionsTourenUndKurseAllgemein
 
   ### ROLES
 
