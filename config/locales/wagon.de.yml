@@ -679,6 +679,9 @@ de:
       group/sektions_kommission_umwelt_und_kultur:
         one: Kommission Umwelt und Kultur
         other: Kommissionen Umwelt und Kultur
+      group/sektions_touren_und_kurse_allgemein:
+        one: Kommission Touren und Kurse Allgemein
+        other: Kommissionen Touren und Kurse Allgemein
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -741,6 +744,9 @@ de:
       group/abo_magazin/neuanmeldung:
         one: Neuanmeldung
         description: Neuanmeldung
+      group/abo_magazin/gratisabonnent:
+        one: Gratisabonnent
+        description: Gratisabonnent
       group/abo_magazin/andere:
         one: Andere
         description: Andere
@@ -1016,6 +1022,9 @@ de:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Andere
         description: Andere
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: Tourenchef
+        other: Tourenchef
 
   # sort top level keys alphabetically from here on
 
