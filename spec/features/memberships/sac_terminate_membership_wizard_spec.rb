@@ -105,6 +105,13 @@ describe "terminate sac membership wizard", js: true do
         expect(fundraising_checkbox).not_to be_checked
         expect(data_retention_checkbox).not_to be_checked
       end
+
+      it "checks all dependent checkboxes when checking master checkbox" do
+        check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
+        expect(data_retention_checkbox).to be_checked
+        expect(fundraising_checkbox).to be_checked
+        expect(data_retention_checkbox).to be_checked
+      end
     end
   end
 
