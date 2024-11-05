@@ -18,6 +18,12 @@ class Event::Courses::StateController < ApplicationController
 
   def save_next_state
     entry.state = next_state
+    if next_state&.to_sym == :canceled
+      entry.canceled_reason = params.dig(:event, :canceled_reason)
+      entry.inform_participants = params.dig(:event, :inform_participants)
+    elsif next_state&.to_sym == :application_open
+      reset_canceled_reason
+    end
 
     if entry.save
       set_success_notice
@@ -45,6 +51,10 @@ class Event::Courses::StateController < ApplicationController
 
   def state_possible?
     entry.state_possible?(next_state)
+  end
+
+  def reset_canceled_reason
+    entry.canceled_reason = nil
   end
 
   def entry

@@ -36,5 +36,17 @@ describe Event::Participation, :js do
       dismiss_confirm { click_on("Rechnung erstellen") }
       expect(page).not_to have_css(".alert")
     end
+
+    it "can cancel participation and supply a reason in popover" do
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      within(".btn-toolbar") do
+        click_on "Abmelden"
+      end
+      within(".popover") do
+        fill_in "Begründung", with: "Some Reason"
+        click_on "Abmelden"
+      end
+      expect(page).to have_content "Edmund Hillary wurde abgemeldet."
+    end
   end
 end

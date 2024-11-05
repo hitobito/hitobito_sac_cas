@@ -1196,6 +1196,13 @@ de:
       self_employed: selbständig erwerbend
       not_self_employed: unselbständig erwerbend
 
+    popover_canceled_reason:
+      cancel_button: Definitiv Absagen
+      cancel_confirmation: Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden
+      cancel_info: Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
+      inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
+      canceled_reason_label: Grund
+
   external_trainings:
     form:
       help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
