@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe EventsController, js: true do
+describe "event state transitions", js: true do
   include ActiveJob::TestHelper
 
   let!(:event) do
@@ -20,11 +20,11 @@ describe EventsController, js: true do
     Fabricate(Event::Course::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, person:)).participation.tap { _1.reload }
   end
 
-  let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
-
   let(:person) { people(:admin) }
 
   describe "canceling event" do
+    let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
+
     before do
       sign_in(person)
       visit event_path
@@ -35,23 +35,19 @@ describe EventsController, js: true do
 
     it "may cancel without sending emails" do
       click_on "Definitiv Absagen"
-      perform_enqueued_jobs do
-        expect do
-          accept_confirm
-          expect(page).to have_content "Wetterrisiko"
-        end.not_to change { ActionMailer::Base.deliveries.count }
-      end
+      expect do
+        accept_confirm
+        expect(page).to have_content "Absagegrund\nWetterrisiko"
+      end.not_to have_enqueued_mail(Event::CanceledMailer)
     end
 
     it "may cancel and send emails" do
       check "Alle Teilnehmenden per E-Mail über Absage informieren"
       click_on "Definitiv Absagen"
-      perform_enqueued_jobs do
-        expect do
-          accept_confirm
-          expect(page).to have_content "Wetterrisiko"
-        end.to change { ActionMailer::Base.deliveries.count }.by(1)
-      end
+      expect do
+        accept_confirm
+        expect(page).to have_content "Absagegrund\nWetterrisiko"
+      end.to have_enqueued_mail(Event::CanceledMailer).once
     end
   end
 end
