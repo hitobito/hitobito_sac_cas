@@ -98,9 +98,9 @@ de:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
         termination_reason_id: "Austrittsgrund"
-        data_retention_consent: "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-        subscribe_newsletter: "Newsletter beibehalten"
-        subscribe_fundraising_list: "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
+        subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
+        subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
 
     errors:
       messages:
