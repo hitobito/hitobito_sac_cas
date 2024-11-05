@@ -47,26 +47,30 @@ describe Export::Pdf::Passes::Membership do
         [61, 148, "Mitgliederausweis"],
         [510, 83, "SAC-Partner"],
         [309, 182, "REGA 1414                    SOS Europe 112"],
-        [311, 168, "Notfallnummer / N° d’urgence / No. di emergenza"],
-        [311, 137, "Notfallkontakt / Contact d’urgence / Contatto di emergenza"],
+        [311, 168, build_multilanguage_string("emergency_number")],
+        [311, 137, build_multilanguage_string("emergency_contact")],
         [490, 148, "www.sac-cas.ch"]
       ]
     }
 
     let(:texts_fr) {
-      texts.dup.tap { |x|
-        x[4][2] = "Membre: #{member.membership_number}"
-        x[5][2] = "Carte membre"
-        x[6] = [506, 83, "Partenaire CAS"]
-      }
+      I18n.with_locale(:fr) do
+        texts.dup.tap { |x|
+          x[4][2] = "#{I18n.t("passes.membership.member")}: #{member.membership_number}"
+          x[5][2] = I18n.t("passes.membership.title")
+          x[6] = [506, 83, I18n.t("passes.membership.sac_partner")]
+        }
+      end
     }
 
     let(:texts_it) {
-      texts.dup.tap { |x|
-        x[4][2] = "Membro: #{member.membership_number}"
-        x[5][2] = "Tessera di Membro"
-        x[6] = [510, 83, "Partner CAS"]
-      }
+      I18n.with_locale(:it) do
+        texts.dup.tap { |x|
+          x[4][2] = "#{I18n.t("passes.membership.member")}: #{member.membership_number}"
+          x[5][2] = I18n.t("passes.membership.title")
+          x[6] = [510, 83, I18n.t("passes.membership.sac_partner")]
+        }
+      end
     }
 
     let(:expected_image_positions) {
@@ -139,8 +143,8 @@ describe Export::Pdf::Passes::Membership do
         [160, 92, "no Suigyomatsu Unraimatsu Furaimatsu"],
         [160, 98, "Jugemu Jugemu Goko-no Surikire Kaijarisuigyo-"],
         [309, 182, "REGA 1414                    SOS Europe 112"],
-        [311, 137, "Notfallkontakt / Contact d’urgence / Contatto di emergenza"],
-        [311, 168, "Notfallnummer / N° d’urgence / No. di emergenza"],
+        [311, 137, build_multilanguage_string("emergency_contact")],
+        [311, 168, build_multilanguage_string("emergency_number")],
         [490, 148, "www.sac-cas.ch"],
         [510, 83, "SAC-Partner"]
       ]
@@ -201,5 +205,13 @@ describe Export::Pdf::Passes::Membership do
   def image_included_in_images?(image_path)
     image_data = Digest::MD5.hexdigest(File.binread(image_path))
     extract_image_objects.include?(image_data)
+  end
+
+  def build_multilanguage_string(key)
+    [:de, :fr, :it].map do |lang|
+      I18n.with_locale(lang) do
+        I18n.t(key, scope: "passes.membership")
+      end
+    end.join(" / ")
   end
 end
