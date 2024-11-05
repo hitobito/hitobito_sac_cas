@@ -23,9 +23,13 @@ module Events::Courses::State
   APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
 
   included do
+    attr_accessor :inform_participants
+
     self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
 
     validate :assert_valid_state_change, if: :state_changed?
+    validates :canceled_reason, presence: true, if: -> { state_changed_to?(:canceled) }
+
     before_create :set_default_state
     before_save :adjust_application_state, if: :application_closing_at_changed?
     after_update :send_application_published_email,
@@ -36,6 +40,7 @@ module Events::Courses::State
     after_update :send_application_closed_email, if: -> { state_changed_to?(:application_closed) }
     after_update :notify_rejected_participants, if: -> { state_changed_to?(:assignment_closed) }
     after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
+    after_update :send_canceled_email, if: -> { state_changed_to?(:canceled) && inform_participants? }
     after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
   end
 
@@ -156,6 +161,10 @@ module Events::Courses::State
     if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
       self.state = "application_open"
     end
+  end
+
+  def inform_participants?
+    inform_participants.to_i.positive?
   end
 
   def course_admin_email?

@@ -18,17 +18,12 @@ class Event::Courses::StateController < ApplicationController
 
   def save_next_state
     entry.state = next_state
-    if next_state&.to_sym == :canceled
-      canceled_reason = params.dig(:event, :canceled_reason)
-      entry.canceled_reason = canceled_reason if Event::Course::CANCELED_REASONS.include?(canceled_reason)
-    elsif next_state&.to_sym == :application_open
+    entry.attributes = params.require(:event).permit(:canceled_reason, :inform_participants)
+    if next_state&.to_sym == :application_open
       reset_canceled_reason
     end
 
     if entry.save
-      if next_state&.to_sym == :canceled && params[:inform_participants]
-        entry.send_canceled_email
-      end
       set_success_notice
     else
       set_failure_notice

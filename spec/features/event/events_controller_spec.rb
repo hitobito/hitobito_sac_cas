@@ -8,31 +8,48 @@
 require "spec_helper"
 
 describe EventsController, js: true do
-  let(:event) do
-    event = Fabricate(:sac_course, kind: event_kinds(:ski_course))
-    event.update_column(:state, :application_open)
-    Fabricate(:event_participation, event: event, person: person, price: 20, price_category: 1)
-    event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
-    event
+  include ActiveJob::TestHelper
+
+  let!(:event) do
+    Fabricate(:sac_course, kind: event_kinds(:ski_course))
+      .tap { |e| e.update_column(:state, :application_open) }
+      .tap { |e| e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago) }
+  end
+
+  let!(:participation) do
+    Fabricate(Event::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, person:)).participation.tap { _1.reload }
   end
 
   let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
 
   let(:person) { people(:admin) }
 
-  it "can cancel event" do
-    sign_in(person)
+  describe "canceling event" do
+    before do
+      sign_in(person)
+      visit event_path
+      click_on "Publiziert" # open dropdown
+      click_on "Absagen"
+      select "Wetterrisiko"
+    end
 
-    visit event_path
-    find("a.dropdown-menu", text: "Publiziert", wait: 2).click
-    find('ul[role="menu"] li', text: "Absagen", wait: 2).click
+    it "may cancel without sending emails" do
+      click_on "Definitiv Absagen"
+      perform_enqueued_jobs do
+        expect do
+          accept_confirm
+        end.not_to change { ActionMailer::Base.deliveries.count }
+      end
+    end
 
-    select "Alle Teilnehmenden per E-Mail über Absage informieren"
-    click_on "Definitiv absagen"
-    accept_confirm do
-      expect do
-        perform_enqueued_jobs
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
+    it "may cancel and send emails" do
+      check "Alle Teilnehmenden per E-Mail über Absage informieren"
+      click_on "Definitiv Absagen"
+      perform_enqueued_jobs do
+        expect do
+          accept_confirm
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
     end
   end
 end
