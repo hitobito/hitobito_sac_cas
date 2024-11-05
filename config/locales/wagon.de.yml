@@ -680,8 +680,8 @@ de:
         one: Kommission Umwelt und Kultur
         other: Kommissionen Umwelt und Kultur
       group/sektions_touren_und_kurse_allgemein:
-        one: Kommission Touren und Kurse Allgemein
-        other: Kommissionen Touren und Kurse Allgemein
+        one: Touren und Kurse
+        other: Touren und Kurse
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
