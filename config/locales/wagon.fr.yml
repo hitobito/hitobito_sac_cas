@@ -263,7 +263,7 @@ fr:
           applied: Liste d’attente
           assigned: Confirmé
           summoned: Convoqué
-          annulled: ""
+          annulled: Annulé
         program: Programme
         reserve_accommodation: Réserver un hébergement via le CAS
         season: Saison
@@ -1175,7 +1175,7 @@ fr:
         summon_button: Convocation
       actions_show_sac_cas:
         create_invoice_button: Créer une facture
-        attach_key_data_sheet: ""
+        attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
@@ -1337,7 +1337,7 @@ fr:
       title: "Facture d’adhésion %{year}"
       positions:
         hut_solidarity_fee: Contribution de solidarité aux cabanes
-        sac_entry_feed: Frais d’entrée à l’association centrale
+        sac_entry_fee: Frais d’entrée à l’association centrale
         sac_fee: Contribution à l’association centrale
         sac_magazine_postage_abroad: Frais de port Les Alpes à l’association centrale
         sac_magazine: Frais Les Alpes

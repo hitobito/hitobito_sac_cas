@@ -141,7 +141,7 @@ it:
         data_quality_issue:
           messages:
             empty: è vuoto
-            less_than_6_years_before_entry: sono trascorsi meno di 6 anni dall’adesione al CAS
+            less_than_6_years_before_entry: Mancano meno di 6 anni all’adesione al CAS
 
         wizards/steps/choose_sektion:
           requires_admin: La modifica della sezione desiderata va effettuata contattandoci per telefono o per e-mail*.
@@ -193,8 +193,8 @@ it:
       course_compensation_rate:
         valid_from: Valido dal
         valid_to: Valido fino al
-        rate_leader: Impostazione Direzione del corso
-        rate_assistant_leader: Impostazione Direzione della classe
+        rate_leader: Aliquota di costo Direzione del corso
+        rate_assistant_leader: Aliquota di costo Direzione della classe
         course_compensation_category_id: Categoria di retribuzione
         updated_at: Modificato
         created_at: Creato
@@ -521,7 +521,7 @@ it:
         qualification:
           attributes:
             finish_at:
-              not_after_start: "deve essere dal"
+              not_after_start: "deve essere successivo alla data indicata come \"dal\""
 
     models:
       cost_center:
@@ -1155,7 +1155,7 @@ it:
           "In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne."
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
         detail_info_text:
-          "La registrazione con la firma del responsabile delle escursioni conferma che sei un accompagnatore CAS attivo o futuro e ti dà diritto al prezzo sovvenzionato del corso.  Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>."
+          "La registrazione con la firma del responsabile delle escursioni conferma la tariffa per le guide CAS attiva o futura e ti dà diritto al prezzo sovvenzionato del corso. Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>."
       summary_step:
         annulation_remarks: |
           Si consiglia di stipulare un’assicurazione contro l’annullamento. In caso di ritiro prima dell’inizio del corso, i clienti dovranno sostenere i seguenti costi di recesso:
@@ -1337,7 +1337,7 @@ it:
       title: "Fattura di affiliazione %{year}"
       positions:
         hut_solidarity_fee: Contributo di solidarietà alle capanne
-        sac_entry_feed: Quota di adesione Associazione centrale
+        sac_entry_fee: Quota di adesione Associazione centrale
         sac_fee: Contributo Associazione centrale
         sac_magazine_postage_abroad: Affrancatura Le Alpi Associazione Centrale
         sac_magazine: Quota Alpi

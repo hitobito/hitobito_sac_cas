@@ -1282,7 +1282,7 @@ en:
       title: "Membership invoice %{year}"
       positions:
         hut_solidarity_fee: Cabins Solidarity contribution
-        sac_entry_feed: Entrance fee Central Association
+        sac_entry_fee: ""
         sac_fee: Contribution Central Association
         sac_magazine_postage_abroad: Postage The Alps Central Association
         sac_magazine: Alpine fees
