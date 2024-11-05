@@ -6,7 +6,7 @@
 %p= t('.cancel_info', name: entry.name, number: entry.number)
 
 = standard_form(entry, url: state_group_event_path(params[:group_id], params[:id], {state: :canceled}), method: :put) do |f|
-  = f.labeled_collection_select(:canceled_reason, entry.model.class.canceled_reason_labels, :first, :last, { prompt: true}, { class: 'form-select form-select-sm' })
+  = f.labeled_collection_select(:canceled_reason, entry.model.class.canceled_reason_labels, :first, :last, { prompt: true}, { class: 'form-select form-select-sm', required: true })
   = f.indented do
     = f.boolean_field(:inform_participants, caption: t('.inform_participants_caption'))
 

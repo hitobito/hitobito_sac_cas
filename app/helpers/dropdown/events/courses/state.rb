@@ -11,11 +11,20 @@ module Dropdown::Events::Courses
 
     delegate :t, to: :template
 
+    ID = "course-state-dropdown"
+
     def initialize(template, course)
       @course = course
       @template = template
       super(template, current_state_label, :"exchange-alt")
       init_items
+    end
+
+    def to_s
+      template.content_tag(:div, id: ID, class: "btn-group dropdown") do
+        render_dropdown_button +
+          render_items
+      end
     end
 
     private
@@ -54,7 +63,7 @@ module Dropdown::Events::Courses
       popover = Event::PopoverCanceledReason.new(@template, course).render
       add_item(label, "javascript:void(0)",
         "data-bs-toggle": "popover",
-        "data-anchor": "[data-bs-toggle='dropdown']",
+        "data-anchor": "##{ID}",
         "data-bs-placement": :bottom,
         "data-bs-content": popover.to_str)
     end

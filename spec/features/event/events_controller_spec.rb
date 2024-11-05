@@ -17,7 +17,7 @@ describe EventsController, js: true do
   end
 
   let!(:participation) do
-    Fabricate(Event::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, person:)).participation.tap { _1.reload }
+    Fabricate(Event::Course::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, person:)).participation.tap { _1.reload }
   end
 
   let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
@@ -38,6 +38,7 @@ describe EventsController, js: true do
       perform_enqueued_jobs do
         expect do
           accept_confirm
+          expect(page).to have_content "Wetterrisiko"
         end.not_to change { ActionMailer::Base.deliveries.count }
       end
     end
@@ -48,6 +49,7 @@ describe EventsController, js: true do
       perform_enqueued_jobs do
         expect do
           accept_confirm
+          expect(page).to have_content "Wetterrisiko"
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
       end
     end

@@ -486,6 +486,7 @@ describe Event::Course do
 
     context "with participants" do
       before do
+        course.inform_participants = "1"
         course.participations.create!([
           {person: people(:admin), state: :assigned, active: true, roles: [Event::Role::Leader.new]},
           {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
@@ -514,6 +515,12 @@ describe Event::Course do
       it "sends an email to all participants if canceled because of weather" do
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
           .to have_enqueued_mail(Event::CanceledMailer, :weather).twice
+      end
+
+      it "does not sends an emails when inform_participants=0" do
+        course.inform_participants = 0
+        expect { course.update!(state: :canceled, canceled_reason: :weather) }
+          .not_to have_enqueued_mail
       end
     end
 
