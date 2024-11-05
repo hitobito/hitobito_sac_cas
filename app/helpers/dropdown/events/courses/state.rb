@@ -60,12 +60,11 @@ module Dropdown::Events::Courses
     end
 
     def state_item_canceled(label, link)
-      popover = Event::PopoverCanceledReason.new(@template, course).render
       add_item(label, "javascript:void(0)",
         "data-bs-toggle": "popover",
         "data-anchor": "##{ID}",
         "data-bs-placement": :bottom,
-        "data-bs-content": popover.to_str)
+        "data-bs-content": template.render("events/popover_canceled_reason", entry: course))
     end
   end
 end
