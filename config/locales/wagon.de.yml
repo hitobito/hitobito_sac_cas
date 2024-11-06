@@ -1332,7 +1332,7 @@ de:
         sac_magazine: Alpengebühren
         section_bulletin_postage_abroad: Porto Bulletin %{section}
         section_entry_fee: Eintrittsgebühr %{section}
-        section_fee: Beitrag %{section}
+        section_fee: Beitrag Sektion %{section}
       beitragskategorie:
         adult: Einzelmitglied
         family: Familienmitglied
