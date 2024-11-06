@@ -26,6 +26,13 @@ describe :events, js: true do
     }
   }
 
+  def click_tab(name)
+    within(".nav-tabs") do
+      click_on name
+    end
+    expect(page).to have_css(".nav-tabs .nav-link.active", text: name)
+  end
+
   context "prices" do
     let(:event) { events(:top_course) }
 
@@ -36,7 +43,7 @@ describe :events, js: true do
     it "allows to fill in prices" do
       expect(event).to be_valid
       visit edit_group_event_path(group_id: group.id, id: event.id)
-      click_on("Preise")
+      click_tab "Preise"
 
       fill_in "Mitgliederpreis", with: "100.05"
       fill_in "Normalpreis", with: "100.15"
@@ -84,17 +91,17 @@ describe :events, js: true do
       expect(page).to have_select "Kostenstelle", selected: "(keine)"
       expect(page).to have_select "Kostenträger", selected: "(keine)"
 
-      click_on "Daten"
+      click_tab "Daten"
       expect(page).to have_select "Saison", selected: "(keine)"
       expect(page).to have_select "Kursbegin", selected: "(keine)"
 
-      click_on "Anmeldung"
+      click_tab "Anmeldung"
       expect(page).to have_field "Maximale Teilnehmerzahl", with: ""
       expect(page).to have_field "Minimale Teilnehmerzahl", with: ""
       expect(page).to have_field "Mindestalter", with: ""
       expect(page).to have_field "Aufnahmebedingungen", with: ""
 
-      click_on "Allgemein"
+      click_tab "Allgemein"
       expect(page).to have_field "Ausbildungstage", with: ""
       select "DMY (Dummy)"
 
@@ -104,9 +111,9 @@ describe :events, js: true do
       expect(page).to have_select "Kostenstelle", selected: "kurs-1 - Kurse"
       expect(page).to have_select "Kostenträger", selected: "ski-1 - Ski Technik"
 
-      click_on "Daten"
+      click_tab "Daten"
       expect(page).to have_select "Saison", selected: "Sommer"
-      click_on "Anmeldung"
+      click_tab "Anmeldung"
       expect(page).to have_field "Maximale Teilnehmerzahl", with: "10"
       expect(page).to have_field "Minimale Teilnehmerzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
@@ -123,16 +130,16 @@ describe :events, js: true do
       select cost_center.to_s
       select cost_unit.to_s
 
-      click_on "Daten"
+      click_tab "Daten"
       select "Winter"
 
-      click_on "Anmeldung"
+      click_tab "Anmeldung"
       fill_in "Maximale Teilnehmerzahl", with: "10"
       fill_in "Minimale Teilnehmerzahl", with: "5"
       fill_in "Mindestalter", with: "12"
       fill_in "Aufnahmebedingungen", with: "keine Vorraussetzungen"
 
-      click_on "Allgemein"
+      click_tab "Allgemein"
       select "DMY (Dummy)"
 
       # Checkbox gets resetted as checked is the default state
@@ -142,10 +149,10 @@ describe :events, js: true do
       expect(page).to have_select "Kostenstelle", selected: cost_center.to_s
       expect(page).to have_select "Kostenträger", selected: cost_unit.to_s
 
-      click_on "Daten"
+      click_tab "Daten"
       expect(page).to have_select "Saison", selected: "Winter"
 
-      click_on "Anmeldung"
+      click_tab "Anmeldung"
       expect(page).to have_field "Maximale Teilnehmerzahl", with: "10"
       expect(page).to have_field "Minimale Teilnehmerzahl", with: "5"
       expect(page).to have_field "Mindestalter", with: "12"
