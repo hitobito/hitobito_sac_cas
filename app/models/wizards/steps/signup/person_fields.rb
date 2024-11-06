@@ -23,8 +23,6 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
   attribute :country, :string
   attribute :phone_number, :string
 
-  validates :first_name, :last_name, presence: true
-
   def initialize(...)
     super
     self.country ||= Settings.addresses.imported_countries.to_a.first
