@@ -51,7 +51,6 @@ describe CostCommon do
       I18n.with_locale(:de) { expect(model.label).to eq "de" }
       I18n.with_locale(:fr) { expect(model.label).to eq "fr" }
       I18n.with_locale(:it) { expect(model.label).to eq "it" }
-      I18n.with_locale(:en) { expect(model.label).to eq "en" }
     end
 
     it "#to_s joins code with label" do

@@ -11,7 +11,6 @@ application:
     de: Deutsch
     fr: Français
     it: Italiano
-    en: English
   logo:
     image: sac_logo_de.svg
     multilanguage_image:
