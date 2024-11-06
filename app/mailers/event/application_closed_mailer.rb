@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::ApplicationClosedMailer < ApplicationMailer
-  include EventMailer
+  include CourseMailer
   include MultilingualMailer
 
   NOTICE = "event_application_closed_notice"

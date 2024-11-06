@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::SurveyMailer < ApplicationMailer
-  include EventMailer
+  include CourseMailer
   include MultilingualMailer
 
   SURVEY = "event_survey"

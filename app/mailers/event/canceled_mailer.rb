@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::CanceledMailer < ApplicationMailer
-  include EventMailer
+  include CourseMailer
   include MultilingualMailer
 
   MINIMUM_PARTICIPANTS = "event_canceled_minimum_participants"

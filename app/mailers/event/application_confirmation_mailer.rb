@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::ApplicationConfirmationMailer < ApplicationMailer
-  include EventMailer
+  include CourseMailer
   include MultilingualMailer
 
   APPLIED = "course_application_confirmation_applied"

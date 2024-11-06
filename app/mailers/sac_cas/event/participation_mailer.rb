@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Event::ParticipationMailer
-  include EventMailer
   include MultilingualMailer
 
   REJECT_APPLIED_PARTICIPATION = "event_participation_reject_applied"
@@ -41,5 +40,18 @@ module SacCas::Event::ParticipationMailer
 
   def placeholder_book_discount_code
     @course.book_discount_code.to_s
+  end
+
+  def placeholder_event_number
+    @course.number
+  end
+
+  def placeholder_person_url
+    link_to(group_person_url(@course.group_ids.first, @person))
+  end
+
+  def placeholder_event_link
+    link_to("#{placeholder_event_name} (#{placeholder_event_number})",
+      group_event_url(group_id: @course.group_ids.first, id: @course.id))
   end
 end
