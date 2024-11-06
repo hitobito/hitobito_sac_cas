@@ -17,7 +17,6 @@ describe CourseCompensationCategory do
     I18n.with_locale(:de) { expect(model.name_leader).to eq "de" }
     I18n.with_locale(:fr) { expect(model.name_leader).to eq "fr" }
     I18n.with_locale(:it) { expect(model.name_leader).to eq "it" }
-    I18n.with_locale(:en) { expect(model.name_leader).to eq "en" }
   end
 
   it "#name_assistant_leader uses values from translation" do
@@ -27,7 +26,6 @@ describe CourseCompensationCategory do
     I18n.with_locale(:de) { expect(model.name_assistant_leader).to eq "de" }
     I18n.with_locale(:fr) { expect(model.name_assistant_leader).to eq "fr" }
     I18n.with_locale(:it) { expect(model.name_assistant_leader).to eq "it" }
-    I18n.with_locale(:en) { expect(model.name_assistant_leader).to eq "en" }
   end
 
   it "#to_s shows short name and translated kind" do

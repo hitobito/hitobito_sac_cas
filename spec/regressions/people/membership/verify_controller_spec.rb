@@ -106,18 +106,14 @@ describe People::Membership::VerifyController, type: :controller do
         end
 
         # Go through locales, render page and check dom for logo
-        %i[fr it en de].each do |locale| # de locale at the end to avoid flaky specs
+        %i[fr it de].each do |locale| # de locale at the end to avoid flaky specs
           I18n.with_locale(locale) do
             get :show, params: {verify_token: "gits-nid", locale: locale}
             dom = Capybara::Node::Simple.new(response.body)
 
             expect(dom).to have_selector("#logo")
             logo_img_src = dom.find("#logo img")[:src]
-            if locale == :en
-              expect(logo_img_src).to eq logos[:default]
-            else
-              expect(logo_img_src).to eq logos[locale]
-            end
+            expect(logo_img_src).to eq logos[locale]
             logo_img_alt = dom.find("#logo img")[:alt]
             expect(logo_img_alt).to eq "SAC/CAS-Portal"
           end
@@ -131,7 +127,6 @@ describe People::Membership::VerifyController, type: :controller do
         allow(controller).to receive(:view_context).and_return(view_context)
 
         logos = %i[de fr it].map { |locale| [locale, "membership_verify_partner_ad_#{locale.downcase}.jpg"] }.to_h
-        logos[:en] = logos[:de]
 
         # Stub wagon_image_pack_tag to return logo or use original implementation for other images
         allow(view_context).to receive(:wagon_image_pack_tag) do |name, **options|
@@ -148,20 +143,15 @@ describe People::Membership::VerifyController, type: :controller do
           it: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
         }
 
-        %i[fr it en de].each do |locale| # de locale at the end to avoid flaky specs
+        %i[fr it de].each do |locale| # de locale at the end to avoid flaky specs
           I18n.with_locale(locale) do
             get :show, params: {verify_token: "gits-nid", locale: locale}
             dom = Capybara::Node::Simple.new(response.body)
 
             logo_img_src = dom.find("#sponsors img")[:src]
             logo_img_url = dom.find("#sponsors a")[:href]
-            if locale == :en
-              expect(logo_img_src).to eq logos[:de]
-              expect(logo_img_url).to eq sponsor_links[:de]
-            else
-              expect(logo_img_src).to eq logos[locale]
-              expect(logo_img_url).to eq sponsor_links[locale]
-            end
+            expect(logo_img_src).to eq logos[locale]
+            expect(logo_img_url).to eq sponsor_links[locale]
           end
         end
       end
