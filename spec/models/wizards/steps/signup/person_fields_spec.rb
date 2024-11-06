@@ -13,6 +13,7 @@ describe Wizards::Steps::Signup::PersonFields do
 
   let(:required_attrs) {
     {
+      gender: "m",
       first_name: "Max",
       last_name: "Muster",
       birthday: "01.01.2000"

@@ -659,9 +659,8 @@ describe "signup/sektion", :js do
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
 
-      expect(find_all(".well").count).to eq(2)
+      expect(find_all(".well").count).to eq(1)
       expect(page).to have_css(".well", text: "Kontaktperson")
-      expect(page).to have_css(".well", text: "Sektion SAC Blüemlisalp")
       expect(page).not_to have_css("h2", text: "Familienmitglieder")
     end
 
@@ -689,7 +688,7 @@ describe "signup/sektion", :js do
       click_button "Weiter", match: :first
       assert_step "Zusammenfassung"
 
-      expect(find_all(".well").count).to eq(4)
+      expect(find_all(".well").count).to eq(3)
       expect(page).to have_css(".well", text: "Erwachsene Person")
       expect(page).to have_css(".well", text: "Kind")
     end

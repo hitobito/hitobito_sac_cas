@@ -1,0 +1,15 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of hitobito and licensed under the
+-#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
+-#  or at https://github.com/hitobito/hitobito.
+
+%table.table.table-borderless
+  %tbody
+    - *positions, total = presenter.lines
+    - positions.each do |line|
+      %tr
+        %td= line.amount
+        %td= line.label
+  %tfoot.fw-bold.border-top
+    %tr
+      %td= total.amount
+      %td= total.label

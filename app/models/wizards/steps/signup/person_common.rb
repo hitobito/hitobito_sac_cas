@@ -14,9 +14,13 @@ module Wizards::Steps::Signup::PersonCommon
     class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
     validate :assert_valid_phone_number
     validate :assert_minimum_age
-    validates :birthday, presence: true
+    validates :gender, :first_name, :last_name, :birthday, presence: true
 
     attr_reader :person # for :assert_old_enough validation
+
+    include I18nEnums
+
+    i18n_enum :gender, Person::GENDERS + [I18nEnums::NIL_KEY], i18n_prefix: "activerecord.attributes.person.genders"
   end
 
   module ClassMethods

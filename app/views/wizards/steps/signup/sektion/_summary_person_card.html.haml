@@ -3,15 +3,16 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-.well.p-3.row.col-11.col-xxl-5.flex-flow-column.me-auto.ms-3
+.well.p-3
   .mb-2.h3= t(".contact_person")
   .mb-3.fw-bold= "#{person.first_name} #{person.last_name}"
-  = labeled(person.class.human_attribute_name(:gender), t("activerecord.attributes.person.genders.#{person.gender.nil? ? "_nil" : person.gender}"))
-  = labeled(person.class.human_attribute_name(:address_care_of), person.address_care_of, no_value_hide_label: true)
-  = labeled(person.class.human_attribute_name(:address), "#{person.street} #{person.housenumber}", no_value_hide_label: true)
-  = labeled(person.class.human_attribute_name(:postbox), person.postbox, no_value_hide_label: true)
-  = labeled(t("contactable.fields.zip_town"), "#{person.zip_code} #{person.town}", no_value_hide_label: true)
-  = labeled(person.class.human_attribute_name(:country), person.country)
-  = labeled(person.class.human_attribute_name(:birthday), person.birthday.strftime("%d.%m.%Y"), no_value_hide_label: true)
-  = labeled(person.class.human_attribute_name(:phone_number), person.phone_number, no_value_hide_label: true)
-  = labeled(t("activemodel.attributes.wizards/steps/signup/main_email_field.email"), wizard.main_email_field.email, no_value_hide_label: true)
+  .col-xxl-6
+    = labeled(person.class.human_attribute_name(:gender), person.gender_label)
+    = labeled(person.class.human_attribute_name(:address_care_of), person.address_care_of, no_value_hide_label: true)
+    = labeled(person.class.human_attribute_name(:address), "#{person.street} #{person.housenumber}", no_value_hide_label: true)
+    = labeled(person.class.human_attribute_name(:postbox), person.postbox, no_value_hide_label: true)
+    = labeled(t("contactable.fields.zip_town"), "#{person.zip_code} #{person.town}", no_value_hide_label: true)
+    = labeled(person.class.human_attribute_name(:country), person.country)
+    = labeled(person.class.human_attribute_name(:birthday), person.birthday.strftime("%d.%m.%Y"), no_value_hide_label: true)
+    = labeled(person.class.human_attribute_name(:phone_number), person.phone_number, no_value_hide_label: true)
+    = labeled(t("activemodel.attributes.wizards/steps/signup/main_email_field.email"), wizard.main_email_field.email, no_value_hide_label: true)
