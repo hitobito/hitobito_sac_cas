@@ -33,6 +33,10 @@ module Wizards::Steps::Signup::PersonCommon
     end
   end
 
+  def gender_label
+    Person.new(gender: self.gender).gender_label
+  end
+
   private
 
   def assert_valid_phone_number

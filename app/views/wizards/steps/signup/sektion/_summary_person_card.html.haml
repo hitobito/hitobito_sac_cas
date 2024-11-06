@@ -7,7 +7,7 @@
   .mb-2.h3= t(".contact_person")
   .mb-3.fw-bold= "#{person.first_name} #{person.last_name}"
   .col-xxl-6
-    = labeled(person.class.human_attribute_name(:gender), t("activerecord.attributes.person.genders.#{person.gender.nil? ? "_nil" : person.gender}"))
+    = labeled(person.class.human_attribute_name(:gender), person.gender_label)
     = labeled(person.class.human_attribute_name(:address_care_of), person.address_care_of, no_value_hide_label: true)
     = labeled(person.class.human_attribute_name(:address), "#{person.street} #{person.housenumber}", no_value_hide_label: true)
     = labeled(person.class.human_attribute_name(:postbox), person.postbox, no_value_hide_label: true)
