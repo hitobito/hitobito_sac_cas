@@ -37,7 +37,7 @@ module Wizards::Signup
       exclude_from_mailing_list if mailing_list && !newsletter
       enqueue_duplicate_locator_job
       enqueue_notification_email
-      send_password_reset_email
+      send_password_reset_email unless person.persisted?
       true
     end
 

@@ -230,7 +230,7 @@ describe Wizards::Signup::SektionWizard do
     end
 
     context "self registration for logged in users" do
-      let(:person) { people(:mitglied) }
+      let(:person) { people(:abonnent) }
 
       subject(:wizard) { build(required_attrs.merge(current_ability: Ability.new(person))) }
 
@@ -238,6 +238,12 @@ describe Wizards::Signup::SektionWizard do
         expect(wizard.step_at(0)).not_to be_instance_of(Wizards::Steps::Signup::MainEmailField)
         expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::Sektion::PersonFields)
         expect(wizard.email).to eq(person.email)
+      end
+
+      it "saving does create role and changes primary group" do
+        expect { wizard.save! }.to change { person.roles.count }.by(1)
+          .and not_change { Person.count }
+          .and not_change { person.reload.attributes.compact_blank.except("primary_group_id") }
       end
     end
   end
