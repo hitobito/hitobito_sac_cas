@@ -60,6 +60,8 @@ CustomContent.seed(:key,
   {key: Qualifications::ExpirationMailer::REMINDER_TODAY},
   {key: Qualifications::ExpirationMailer::REMINDER_NEXT_YEAR},
   {key: Qualifications::ExpirationMailer::REMINDER_YEAR_AFTER_NEXT_YEAR},
+  {key: Signup::AboMagazinMailer::CONFIRMATION,
+   placeholders_required: "first-name, last-name, birthday, email, address-care-of, street-with-number, postbox, zip-code, town, country, abo-name, language, gender, costs, newsletter-subscribed, agb-link, data-protection-link"},
   {key: Signup::SektionMailer::CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
   {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
@@ -279,6 +281,44 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    subject: "Erinnerung TL-Anerkennung",
    body: "Liebe(r) Tourenleiter(in), in 2 Jahren läuft deine TL-Anerkennung ab. " \
     "Plane rechtzeitig deine Fortbildungskurse in Absprache mit deinem(r) Tourenchef(in)."},
+  {custom_content_id: CustomContent.get(Signup::AboMagazinMailer::CONFIRMATION).id,
+   locale: "de",
+   label: "Abo Magazin: Bestellbestätigung",
+   subject: "Bestellbestätigung - {abo-name}",
+   body: <<~TEXT.strip.delete("\n")
+     <strong>Abo Bestellung</strong><br>
+     <br>
+     |   |   |<br>
+     | - | - |<br>
+     | Gewünschte Sprache | {language} |<br>
+     | Ab Ausgabe | Nächste Ausgabe nach Zahlungseingang |<br>
+     | Preis | {costs} |<br>
+     <br>
+     <strong>Deine Angaben</strong><br>
+     <br>
+     |   |   |<br>
+     | - | - |<br>
+     | Geschlecht | {gender} |<br>
+     | Vorname | {first-name} |<br>
+     | Nachname | {last-name} |<br>
+     | E-Mail | {email} |<br>
+     | Adresszusatz | {address-care-of} |<br>
+     | Strasse und Nr. | {street-with-number} |<br>
+     | Postfach | {postbox} |<br>
+     | PLZ | {zip-code} |<br>
+     | Ort | {town} |<br>
+     | Land | {country} |<br>
+     | Geburtsdatum | {birthday} |<br>
+     <br>
+     <strong>Bestätigung</strong><br>
+     <br>
+     {newsletter-subscribed}<br>
+     Ich habe die {agb-link} gelesen und stimme diesen zu.<br>
+     Ich habe die {data-protection-link} gelesen und stimme diesen zu.<br>
+     <br>
+     Die Rechnung wird dir in einer separaten E-Mail zugestellt.
+   TEXT
+  },
   {custom_content_id: CustomContent.get(Signup::SektionMailer::CONFIRMATION).id,
    locale: "de",
    label: "SAC Eintritt: Bestellbestätigung ohne Freigabe",

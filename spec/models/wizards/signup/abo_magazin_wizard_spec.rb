@@ -115,6 +115,26 @@ describe Wizards::Signup::AboMagazinWizard do
       wizard.save!
       expect(max.subscriptions).to have(1).item
     end
+
+    describe "sending email" do
+      include ActiveJob::TestHelper
+
+      it "enqueues with newsletter" do
+        required_attrs[:summary][:newsletter] = "0"
+        expect do
+          wizard.save!
+        end.to have_enqueued_mail(Signup::AboMagazinMailer, :confirmation)
+          .with(kind_of(Person), group, false)
+      end
+
+      it "enqueues without newsletter" do
+        required_attrs[:summary][:newsletter] = "1"
+        expect do
+          wizard.save!
+        end.to have_enqueued_mail(Signup::AboMagazinMailer, :confirmation)
+          .with(kind_of(Person), group, true)
+      end
+    end
   end
 
   describe "#calculate_costs" do

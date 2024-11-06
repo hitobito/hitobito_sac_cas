@@ -84,6 +84,17 @@ module SacCas
   MV_EMAIL = "mv@sac-cas.ch"
   NEWSLETTER_MAILING_LIST_INTERNAL_KEY = "sac_newsletter"
 
+  AboCost = Data.define(:amount, :country)
+  ABO_COSTS = {
+    magazin: [
+      AboCost.new(amount: 60, country: :switzerland),
+      AboCost.new(amount: 76, country: :international)
+    ],
+    tourenportal: [
+      AboCost.new(amount: 45, country: nil)
+    ]
+  }
+
   def main_phone_label
     Settings.phone_number.predefined_labels.find { |l| l =~ /Haupt/ }
   end

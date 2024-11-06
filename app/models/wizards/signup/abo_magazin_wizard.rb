@@ -15,12 +15,9 @@ module Wizards::Signup
 
     self.asides = ["aside_abo"]
 
-    def costs = [
-      OpenStruct.new(amount: 60, country: :switzerland),
-      OpenStruct.new(amount: 76, country: :international)
-    ]
-
     delegate :newsletter, to: :summary
+
+    def costs = SacCas::ABO_COSTS[:magazin]
 
     def requires_policy_acceptance? = false
 
@@ -31,6 +28,12 @@ module Wizards::Signup
       else
         costs.find { |cost| cost.country == :international }.amount
       end
+    end
+
+    def enqueue_notification_email
+      Signup::AboMagazinMailer
+        .confirmation(person, group, newsletter)
+        .deliver_later
     end
   end
 end
