@@ -18,11 +18,29 @@
     .alert.alert-info
       %strong=t('.data_retention_info_title')
       %p=t('.data_retention_info_text')
-      = form.labeled(:data_retention_consent) do
+    = form.label(:data_retention_consent, class: 'row mb-2') do
+      .col-md-3.col-xl-2.pb-1
+      .col-md-9
         = form.check_box :data_retention_consent, {data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" }}
-    = t('.newsletter_info_text')
-    = form.labeled(:subscribe_newsletter) do
-      = form.check_box :subscribe_newsletter, {prompt: true, data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
-    = t('.fundraiser_info_text')
-    = form.labeled(:subscribe_fundraising_list) do
-      = form.check_box :subscribe_fundraising_list, {prompt: true, data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
+        = t('.data_retention_consent')
+
+
+    .row
+      .col-md-3.col-xl-2.pb-1
+      .col-md-9
+        = t('.newsletter_info_text')
+    = form.label(:subscribe_newsletter,  class: 'row mb-2') do
+      .col-md-3.col-xl-2.pb-1
+      .col-md-9
+        = form.check_box :subscribe_newsletter, {prompt: true, data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
+        = t('.subscribe_newsletter')
+
+    .row
+      .col-md-3.col-xl-2.pb-1
+      .col-md-9
+        = t('.fundraiser_info_text')
+    = form.label(:subscribe_fundraising_list, class: 'row mb-2') do
+      .col-md-3.col-xl-2.pb-1
+      .col-md-9
+        = form.check_box :subscribe_fundraising_list, {prompt: true, data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
+        = t('.subscribe_fundraising_list')

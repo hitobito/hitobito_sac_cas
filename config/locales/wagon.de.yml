@@ -98,9 +98,6 @@ de:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
         termination_reason_id: "Austrittsgrund"
-        data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
-        subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
-        subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
 
     errors:
       messages:
@@ -1814,6 +1811,9 @@ de:
             Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht.
             Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke verwenden, wie z B. für die SAC App).
             Falls du dies nicht möchtest, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren."
+          data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
           newsletter_info_text: " Falls du den SAC Newsletter weiterhin erhalten möchtest, kannst du uns dies hier mitteilen:"
+          subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
           fundraiser_info_text: "Falls wir dich für Spendenaufrufe weiterhin kontaktieren dürfen, kannst du uns dies hier mitteilen:"
+          subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
           next_button: "Austritt beantragen"
