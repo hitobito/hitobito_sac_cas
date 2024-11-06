@@ -53,7 +53,7 @@ class Signup::AboMagazinMailer < ApplicationMailer
   end
 
   def placeholder_language
-    Event::Course.language_labels.stringify_keys[@person.language]
+    Person::LANGUAGES[@person.language.to_sym]
   end
 
   def placeholder_newsletter_subscribed
