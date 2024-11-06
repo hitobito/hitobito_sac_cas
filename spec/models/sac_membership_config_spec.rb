@@ -42,8 +42,6 @@
 #  hut_solidarity_fee_article_number              :string(255)      not null
 #  magazine_fee_article_number                    :string(255)      not null
 #  section_bulletin_postage_abroad_article_number :string(255)      not null
-#  service_fee_article_number                     :string(255)      not null
-#  balancing_payment_article_number               :string(255)      not null
 #  course_fee_article_number                      :string(255)      not null
 #
 
