@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::PublishedMailer < ApplicationMailer
-  include EventMailer
+  include CourseMailer
   include MultilingualMailer
 
   NOTICE = "event_published_notice"

@@ -21,6 +21,20 @@ describe Event::ParticipationMailer do
     event.groups.first.course_admin_email = "kurse@sac-cas.ch"
   end
 
+  describe "#confirmation" do
+    let(:mail) { Event::ParticipationMailer.confirmation(participation) }
+
+    it "sends to email addresses of confirmed participant" do
+      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
+      expect(mail.subject).to eq "Bestätigung der Anmeldung"
+      body = mail.parts.first
+      expect(body.content_type).to eq("text/html; charset=UTF-8")
+      expect(body.to_s).to include("Hallo Edmund")
+      expect(body.to_s).to include("folgenden Anlass angemeldet:")
+      expect(body.to_s).to include("Test Kurs")
+    end
+  end
+
   describe "#reject_applied" do
     let(:mail) { Event::ParticipationMailer.reject_applied(participation) }
 
