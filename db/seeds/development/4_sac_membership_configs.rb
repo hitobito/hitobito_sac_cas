@@ -38,6 +38,4 @@ SacMembershipConfig.seed_once(:valid_from,
   section_fee_article_number: "SKB",
   section_entry_fee_article_number: "SKE",
   section_bulletin_postage_abroad_article_number: "PBU",
-  service_fee_article_number: "0",
-  balancing_payment_article_number: "0",
   course_fee_article_number: "KGB")
