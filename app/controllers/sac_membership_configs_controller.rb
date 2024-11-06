@@ -37,8 +37,6 @@ class SacMembershipConfigsController < CrudController
     :section_fee_article_number,
     :section_entry_fee_article_number,
     :section_bulletin_postage_abroad_article_number,
-    :service_fee_article_number,
-    :balancing_payment_article_number,
     :course_fee_article_number,
     :discount_date_1,
     :discount_percent_1,
