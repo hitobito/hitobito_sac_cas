@@ -11,7 +11,6 @@
 # Table name: sac_membership_configs
 #
 #  id                                             :bigint           not null, primary key
-#  balancing_payment_article_number               :string(255)      not null
 #  course_fee_article_number                      :string(255)      not null
 #  discount_date_1                                :string(255)
 #  discount_date_2                                :string(255)
@@ -46,7 +45,6 @@
 #  section_entry_fee_article_number               :string(255)      not null
 #  section_fee_article_number                     :string(255)      not null
 #  service_fee                                    :decimal(5, 2)    not null
-#  service_fee_article_number                     :string(255)      not null
 #  valid_from                                     :integer          not null
 #
 # Indexes

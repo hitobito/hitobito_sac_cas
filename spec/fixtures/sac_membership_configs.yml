@@ -8,7 +8,6 @@
 # Table name: sac_membership_configs
 #
 #  id                                             :bigint           not null, primary key
-#  balancing_payment_article_number               :string(255)      not null
 #  course_fee_article_number                      :string(255)      not null
 #  discount_date_1                                :string(255)
 #  discount_date_2                                :string(255)
@@ -43,7 +42,6 @@
 #  section_entry_fee_article_number               :string(255)      not null
 #  section_fee_article_number                     :string(255)      not null
 #  service_fee                                    :decimal(5, 2)    not null
-#  service_fee_article_number                     :string(255)      not null
 #  valid_from                                     :integer          not null
 #
 # Indexes
@@ -51,8 +49,8 @@
 #  index_sac_membership_configs_on_valid_from  (valid_from) UNIQUE
 #
 
-'2024':
-  valid_from: '2024'
+"2024":
+  valid_from: "2024"
   sac_fee_adult: 40
   sac_fee_family: 50
   sac_fee_youth: 20
@@ -72,9 +70,9 @@
   magazine_postage_abroad: 10
   reduction_amount: 10
   reduction_required_membership_years: 50
-  discount_date_1: '1.7.'
+  discount_date_1: "1.7."
   discount_percent_1: 50
-  discount_date_2: '1.10.'
+  discount_date_2: "1.10."
   discount_percent_2: 100
   discount_date_3:
   discount_percent_3:
@@ -86,6 +84,4 @@
   section_fee_article_number: 98
   section_entry_fee_article_number: 97
   section_bulletin_postage_abroad_article_number: 46
-  service_fee_article_number: 47
-  balancing_payment_article_number: 48
   course_fee_article_number: 49
