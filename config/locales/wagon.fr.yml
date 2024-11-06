@@ -726,6 +726,10 @@ fr:
         one: Commission Environnement et culture
         many: Commissions Environnement et Culture
         other: Commissions Environnement et Culture
+      group/sektions_touren_und_kurse_allgemein:
+        one: ''
+        many: ''
+        other: ''
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -788,6 +792,9 @@ fr:
       group/abo_magazin/neuanmeldung:
         one: Nouvelle inscription
         description: Nouvelle inscription
+      group/abo_magazin/gratisabonnent:
+        one: ""
+        description: ""
       group/abo_magazin/andere:
         one: Autres
         description: Autres
@@ -1063,6 +1070,10 @@ fr:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Autres
         description: Autres
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ''
+        many: ''
+        other: ''
 
   # sort top level keys alphabetically from here on
 

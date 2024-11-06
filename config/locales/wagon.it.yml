@@ -726,6 +726,10 @@ it:
         one: Commissione Ambiente e Cultura
         many: Commissioni Ambiente e Cultura
         other: Commissioni Ambiente e Cultura
+      group/sektions_touren_und_kurse_allgemein:
+        one: ''
+        many: ''
+        other: ''
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -788,6 +792,9 @@ it:
       group/abo_magazin/neuanmeldung:
         one: Nuova registrazione
         description: Nuova registrazione
+      group/abo_magazin/gratisabonnent:
+        one: ""
+        description: ""
       group/abo_magazin/andere:
         one: Altro
         description: Altro
@@ -1063,6 +1070,10 @@ it:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Altro
         description: Altro
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ''
+        many: ''
+        other: ''
 
   # sort top level keys alphabetically from here on
 
