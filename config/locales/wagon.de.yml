@@ -25,9 +25,13 @@ de:
       conflicting_family_membership: >-
         %{name} hat bereits eine Familienmitgliedschaft und kann daher
         nicht einem Familienhaushalt hinzugefügt werden.
+      total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
 
   activemodel:
     attributes:
+      event/courses/leader_settlement_invoice:
+        actual_days: Effektive Tage
+        iban: IBAN
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -1154,6 +1158,7 @@ de:
         create_course_leader_invoice_button: Kurskaderabrechnung erstellen
       popover_create_course_leader_invoice:
         create_invoice: Abrechnung erstellen
+        info_text_html: Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden. <br> Falls die kontoführende Person bzw. Institution MWST-pflichtig ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
