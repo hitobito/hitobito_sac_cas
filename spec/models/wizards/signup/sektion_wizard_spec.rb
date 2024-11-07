@@ -228,5 +228,53 @@ describe Wizards::Signup::SektionWizard do
         expect(maxi.subscriptions).to be_empty
       end
     end
+
+    context "self registration for logged in users" do
+      let(:required_attrs) {
+        {
+          person_fields: {
+            country: "CH",
+            phone_number: "+41 79 123 45 67"
+          },
+          various_fields: {},
+          summary_fields: {
+            statutes: true,
+            contribution_regulations: true,
+            data_protection: true
+          }
+        }
+      }
+
+      let(:person) { people(:abonnent) }
+
+      subject(:wizard) { build(required_attrs.merge(current_ability: Ability.new(person))) }
+
+      it "skips the email step" do
+        expect(wizard.step_at(0)).not_to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+        expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::Sektion::PersonFields)
+        expect(wizard.email).to eq(person.email)
+      end
+
+      it "is valid if required fields are set" do
+        expect(wizard).to be_valid
+      end
+
+      it "is invalid if required field is missing" do
+        required_attrs[:person_fields].delete(:country)
+        expect(wizard).not_to be_valid
+        expect(wizard.person_fields.errors.full_messages).to eq ["Land muss ausgefüllt werden"]
+      end
+
+      it "saving creates role and updates person" do
+        required_attrs[:person_fields][:first_name] = "Tester"
+        expect(wizard).to be_valid
+        expect { wizard.save! }.to change { person.roles.count }.by(1)
+          .and change { person.reload.phone_numbers.count }.by(1)
+          .and change { person.reload.first_name }.from("Magazina").to("Tester")
+          .and change { person.reload.country }.from(nil).to("CH")
+          .and not_change { Person.count }
+          .and not_change { person.reload.attributes.compact_blank.except(*%w[primary_group_id country first_name updated_at]) }
+      end
+    end
   end
 end

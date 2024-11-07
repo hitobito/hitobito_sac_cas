@@ -20,7 +20,6 @@ module Wizards::Signup
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
     ADDRESS_KEYS = %i[address_care_of street housenumber postbox zip_code town country]
 
-    delegate :email, to: :main_email_field
     delegate :person_attributes, :birthday, to: :person_fields
     delegate :self_registration_reason_id, to: :various_fields
     delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
@@ -28,6 +27,10 @@ module Wizards::Signup
     delegate :unknown?, :adult?, :youth?, :family?, to: :beitragskategorie, prefix: true
 
     public :group
+
+    def email
+      current_user&.email || step(:main_email_field)&.email
+    end
 
     def save!
       valid? && operations.all?(&:save!)
@@ -97,7 +100,7 @@ module Wizards::Signup
 
     def members = respond_to?(:family_fields) ? family_fields.members : []
 
-    def person_attributes = person_fields.person_attributes.merge(main_email_field.attributes)
+    def person_attributes = person_fields.person_attributes.merge(email:)
 
     def household_key
       @household_key ||= Household.new(Person.new).send(:next_key) if members.any?
@@ -108,7 +111,9 @@ module Wizards::Signup
     end
 
     def step_after(step_name_or_class)
-      if step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
+      if step_name_or_class == :_start && current_user
+        Wizards::Steps::Signup::Sektion::PersonFields.step_name
+      elsif step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
         Wizards::Steps::Signup::Sektion::VariousFields.step_name
       else
         super

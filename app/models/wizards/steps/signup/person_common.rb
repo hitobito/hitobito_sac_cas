@@ -16,6 +16,8 @@ module Wizards::Steps::Signup::PersonCommon
     validate :assert_minimum_age
     validates :gender, :first_name, :last_name, :birthday, presence: true
 
+    attribute :id, :integer # for when dealing with persisted users
+
     attr_reader :person # for :assert_old_enough validation
 
     include I18nEnums
@@ -33,11 +35,15 @@ module Wizards::Steps::Signup::PersonCommon
     attributes.compact.symbolize_keys.except(:phone_number).then do |attrs|
       next attrs if phone_number.blank?
 
-      attrs.merge(phone_numbers_attributes: [{label: PHONE_NUMBER_LABEL, number: phone_number}])
+      attrs.merge(phone_numbers_attributes: [{label: PHONE_NUMBER_LABEL, number: phone_number, id: phone_number_id}.compact])
     end
   end
 
   private
+
+  def phone_number_id
+    PhoneNumber.find_by(label: PHONE_NUMBER_LABEL, contactable_id: id, contactable_type: Person.sti_name)&.id if id
+  end
 
   def assert_valid_phone_number
     if phone_number.present? && PhoneNumber.new(number: phone_number).tap(&:valid?).errors.key?(:number)

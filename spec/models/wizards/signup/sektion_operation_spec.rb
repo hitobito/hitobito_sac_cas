@@ -169,6 +169,42 @@ describe Wizards::Signup::SektionOperation do
         end
       end
     end
+
+    context "persisted person" do
+      let(:person) { people(:abonnent) }
+
+      before do
+        person_attrs[:id] = person.id
+        person_attrs[:last_name] = "Leseratte"
+      end
+
+      it "creates role and updates attributes" do
+        expect { operation.save! }
+          .to not_change { Person.count }
+          .and change { person.reload.first_name }.from("Magazina").to("Max")
+          .and not_change { person.reload.last_name }
+          .and change { person.roles.count }.by(1)
+          .and not_change { Subscription.count }
+          .and change { Delayed::Job.count }.by(1)
+          .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }
+          .and not_change { ExternalInvoice::SacMembership.count }
+          .and not_change { ActionMailer::Base.deliveries.count }
+
+        expect(person.roles.last.type).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
+        expect(person.roles.last.group).to eq group
+        expect(person.phone_numbers.first.label).to eq "Mobil"
+        expect(person.phone_numbers.first.number).to eq "+41 79 123 45 67"
+      end
+
+      it "does not duplicate phone_number when id is set" do
+        number = person.phone_numbers.create!(label: "Mobil", number: "+41 79 123 45 67")
+        person_attrs[:phone_numbers_attributes][0][:id] = number.id
+
+        expect { operation.save! }
+          .to change { person.roles.count }
+          .and not_change { person.phone_numbers.count }
+      end
+    end
   end
 
   context "with newsletter exclusion" do

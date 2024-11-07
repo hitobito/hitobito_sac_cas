@@ -35,9 +35,9 @@ module Wizards::Signup
       end
 
       exclude_from_mailing_list if mailing_list && !newsletter
-      enqueue_duplicate_locator_job
       enqueue_notification_email
-      send_password_reset_email
+      enqueue_duplicate_locator_job if new_record?
+      send_password_reset_email if new_record?
       true
     end
 
@@ -62,7 +62,9 @@ module Wizards::Signup
     end
 
     def person
-      @person ||= Person.new(person_attrs)
+      @person ||= (new_record? ? Person.new : Person.find(person_attrs[:id])).tap do |p|
+        p.attributes = person_attrs
+      end
     end
 
     def role
@@ -110,7 +112,11 @@ module Wizards::Signup
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
 
-    def exclude_from_mailing_list = mailing_list.subscriptions.create!(subscriber: person, excluded: true)
+    def new_record? = person_attrs[:id].blank?
+
+    def exclude_from_mailing_list
+      mailing_list.subscriptions.find_or_initialize_by(subscriber: person).update!(excluded: true)
+    end
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 

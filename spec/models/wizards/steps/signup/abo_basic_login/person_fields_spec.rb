@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::AboBasicLogin::PersonFields do
-  let(:wizard) { instance_double(Wizards::Signup::AboBasicLoginWizard) }
+  let(:wizard) { instance_double(Wizards::Signup::AboBasicLoginWizard, current_user: nil) }
   subject(:form) { described_class.new(wizard) }
 
   let(:required_attrs) {
