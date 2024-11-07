@@ -25,7 +25,9 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
 
   def initialize(...)
     super
-    if respond_to?(:current_user) && current_user&.present?
+
+    if current_user
+      self.id = current_user.id
       self.gender ||= current_user.gender
       self.first_name ||= current_user.first_name
       self.last_name ||= current_user.last_name
@@ -38,7 +40,7 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
       self.zip_code ||= current_user.zip_code
       self.town ||= current_user.town
       self.country ||= current_user.country
-      self.phone_number ||= current_user.phone_numbers&.first&.number
+      self.phone_number ||= current_user.phone_numbers.find_by(label: Wizards::Steps::Signup::PersonCommon::PHONE_NUMBER_LABEL)&.number
     else
       self.country ||= Settings.addresses.imported_countries.to_a.first
     end

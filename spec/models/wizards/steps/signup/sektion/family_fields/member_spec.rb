@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false) }
+  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil) }
   let(:family) { instance_double(Wizards::Steps::Signup::Sektion::FamilyFields, emails: %w[test@example.com]) }
   subject(:member) { described_class.new }
 

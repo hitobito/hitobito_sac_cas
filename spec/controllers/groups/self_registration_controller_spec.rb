@@ -17,6 +17,63 @@ describe Groups::SelfRegistrationController do
     }.merge(wizards_signup_sektion_wizard: attrs)
   end
 
+  describe "completing wizard" do
+    let(:required_params) {
+      wizard_params(
+        main_email_field: {
+          email: "max.muster@example.com"
+        },
+        person_fields: {
+          gender: "_nil",
+          first_name: "Max",
+          last_name: "Muster",
+          address_care_of: "c/o Musterleute",
+          street: "Musterplatz",
+          housenumber: "42",
+          postbox: "Postfach 23",
+          town: "Zurich",
+          zip_code: "8000",
+          birthday: "1.1.2000",
+          country: "CH",
+          phone_number: "+41 79 123 45 67"
+        },
+        various_fields: {},
+        summary_fields: {
+          statutes: true,
+          contribution_regulations: true,
+          data_protection: true
+        }
+      )
+    }
+
+    context "anonymous" do
+      it "redirects to login" do
+        post :create, params: required_params.merge(step: 4)
+        expect(response).to redirect_to new_person_session_path
+        expect(flash[:notice]).to eq "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
+      end
+    end
+
+    context "when logged in" do
+      let(:abonnent) { people(:abonnent) }
+
+      it "redirects to history_group_person_path" do
+        sign_in(abonnent)
+        post :create, params: required_params.merge(step: 3)
+        expect(response).to redirect_to history_group_person_path(abonnent.roles.first.group, abonnent)
+        expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
+      end
+    end
+  end
+
+  context "without email" do
+    it "redirects to login page" do
+      Person.create!(first_name: "noemail")
+      post :create, params: wizard_params
+      expect(response).to render_template(:show)
+    end
+  end
+
   context "with existing email" do
     let(:admin) { people(:admin) }
 
@@ -27,19 +84,31 @@ describe Groups::SelfRegistrationController do
     end
   end
 
-  context "with existing membership" do
-    let(:member) { people(:mitglied) }
-    let(:admin) { people(:admin) }
+  context "when signed in" do
+    before { sign_in(person) }
 
-    before do
-      sign_in(member)
+    context "with existing membership" do
+      let(:person) { people(:mitglied) }
+
+      it "redirects to memberships tab with a flash message" do
+        get :show, params: wizard_params
+
+        expect(response).to redirect_to(history_group_person_path(group_id: person.primary_group_id, id: person.id))
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle."
+      end
     end
 
-    it "redirects to memberships tab with a flash message" do
-      get :show, params: wizard_params(main_email_field: {email: admin.email})
+    context "with existing family" do
+      let(:person) { people(:familienmitglied) }
 
-      expect(response).to redirect_to(history_group_person_path(group_id: member.primary_group_id, id: member.id))
-      expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle."
+      before { Role.where(id: roles(:familienmitglied).id).delete_all }
+
+      it "redirects to memberships tab with a flash message" do
+        get :show, params: wizard_params
+
+        expect(response).to redirect_to(history_group_person_path(group_id: person.primary_group_id, id: person.id))
+        expect(flash[:notice]).to eq "Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC Geschäftsstelle."
+      end
     end
   end
 end

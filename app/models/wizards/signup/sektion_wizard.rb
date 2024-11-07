@@ -28,12 +28,6 @@ module Wizards::Signup
 
     public :group
 
-    def build_person
-      return current_user.tap { |user| user.assign_attributes(person_attributes) } if current_user.persisted?
-
-      super
-    end
-
     def email
       current_user&.email || step(:main_email_field)&.email
     end
@@ -73,13 +67,7 @@ module Wizards::Signup
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|
-        person = if current_user.persisted?
-          current_user
-        else
-          Person.new(person_attrs)
-        end
-
-        SektionOperation.new(person:, group:, newsletter:)
+        SektionOperation.new(person_attrs:, group:, newsletter:)
       end
     end
 
@@ -123,7 +111,7 @@ module Wizards::Signup
     end
 
     def step_after(step_name_or_class)
-      if step_name_or_class == :_start && current_user.persisted?
+      if step_name_or_class == :_start && current_user
         Wizards::Steps::Signup::Sektion::PersonFields.step_name
       elsif step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
         Wizards::Steps::Signup::Sektion::VariousFields.step_name

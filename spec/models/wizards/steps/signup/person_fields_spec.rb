@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::PersonFields do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false) }
+  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil) }
   subject(:form) { described_class.new(wizard) }
 
   let(:required_attrs) {
@@ -70,5 +70,42 @@ describe Wizards::Steps::Signup::PersonFields do
     expect(form.person_attributes).to eq required_attrs
       .except(:phone_number)
       .merge(country: "CH", birthday: Date.new(2000, 1, 1))
+  end
+
+  context "with current user" do
+    let(:params) { {} }
+    let(:person) { people(:abonnent) }
+    let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: person) }
+
+    subject(:form) { described_class.new(wizard, **params) }
+
+    it "reads attributes from current_user" do
+      person.attributes = {postbox: 1234, address_care_of: "tbd", country: "US"}
+      expect(form.id).to eq person.id
+      expect(form.gender).to eq "w"
+      expect(form.first_name).to eq "Magazina"
+      expect(form.last_name).to eq "Leseratte"
+      expect(form.birthday).to eq Date.new(1993, 6, 12)
+      expect(form.street).to eq "Ophovenerstrasse"
+      expect(form.housenumber).to eq "79a"
+      expect(form.postbox).to eq "1234"
+      expect(form.address_care_of).to eq "tbd"
+      expect(form.zip_code).to eq "2843"
+      expect(form.town).to eq "Neu Carlscheid"
+      expect(form.country).to eq "US"
+      expect(form.phone_number).to be_blank
+    end
+
+    it "reads phone_number if present" do
+      number = person.phone_numbers.create!(label: "Mobil", number: "0791234567")
+      expect(form.phone_number).to eq "+41 79 123 45 67"
+      expect(form.person_attributes[:phone_numbers_attributes][0][:id]).to eq number.id
+    end
+
+    it "params override values read from person" do
+      params[:first_name] = "Test"
+      expect(form.first_name).to eq "Test"
+      expect(form.last_name).to eq "Leseratte"
+    end
   end
 end

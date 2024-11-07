@@ -9,10 +9,10 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person:, newsletter:)
+    def initialize(group:, person_attrs:, newsletter:)
       @group = group
-      person.gender = nil if person.gender == I18nEnums::NIL_KEY
-      @person = person
+      person_attrs[:gender] = nil if person_attrs[:gender] == I18nEnums::NIL_KEY
+      @person_attrs = person_attrs
       @newsletter = newsletter
     end
 
@@ -35,15 +35,15 @@ module Wizards::Signup
       end
 
       exclude_from_mailing_list if mailing_list && !newsletter
-      enqueue_duplicate_locator_job
       enqueue_notification_email
-      send_password_reset_email unless person.persisted?
+      enqueue_duplicate_locator_job if new_record?
+      send_password_reset_email if new_record?
       true
     end
 
     private
 
-    attr_reader :group, :person, :newsletter
+    attr_reader :group, :person_attrs, :newsletter
 
     def validate(model)
       model.valid?.tap do
@@ -59,6 +59,12 @@ module Wizards::Signup
 
     def paying_person?
       role.person.sac_membership.paying_person?(role.beitragskategorie)
+    end
+
+    def person
+      @person ||= (new_record? ? Person.new : Person.find(person_attrs[:id])).tap do |p|
+        p.attributes = person_attrs
+      end
     end
 
     def role
@@ -105,6 +111,8 @@ module Wizards::Signup
     def role_type = group.self_registration_role_type
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
+
+    def new_record? = person_attrs[:id].blank?
 
     def exclude_from_mailing_list
       mailing_list.subscriptions.find_or_initialize_by(subscriber: person).update!(excluded: true)

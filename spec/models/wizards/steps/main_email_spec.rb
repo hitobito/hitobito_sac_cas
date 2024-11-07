@@ -10,7 +10,7 @@ require "spec_helper"
 
 describe Wizards::Steps::MainEmail do
   let(:params) { {} }
-  let(:wizard) { nil } # we don't need a wizard for the model specs
+  let(:wizard) { instance_double(Wizards::Base, current_user: nil) }
   let(:subject) { described_class.new(wizard, **params) }
 
   describe "validations" do

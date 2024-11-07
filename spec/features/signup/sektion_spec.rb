@@ -806,12 +806,16 @@ describe "signup/sektion", :js do
         visit group_self_registration_path(group_id: group)
         expect(page).to have_field("Vorname", with: person.first_name)
         expect(page).to have_field("Nachname", with: person.last_name)
-
-        expect(page).to have_field("Strasse", with: person.address)
-        expect(page).to have_field("Housenumber", with: person.house_number)
-        expect(page).to have_field("PLZ", with: person.zip_code)
-        expect(page).to have_field("Ort", with: person.town)
-        expect(page).to have_field("Geburtsdatum", with: person.birthday)
+        fill_in "Vorname", with: "Test"
+        fill_in "Telefon", with: "+41 79 123 45 56"
+        find(:label, "Land").click
+        find(:option, text: "Vereinigte Staaten").click
+        click_button "Weiter"
+        click_button "Weiter als Einzelmitglied"
+        click_button "Weiter"
+        complete_last_page
+        expect(page).to have_content "Deine Anmeldung wurde erfolgreich gespeichert"
+        expect(person.reload.first_name).to eq "Test"
       end
     end
   end
