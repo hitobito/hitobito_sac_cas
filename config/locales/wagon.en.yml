@@ -130,7 +130,8 @@ en:
           attributes:
             person:
               must_be_sac_member: must be a Sac member
-              must_not_be_join_section_member: is already a member of the section or has an open application for membership
+              must_not_be_join_section_member:
+                is already a member of the section or has an open application for membership
               must_be_family_main_person: must be the main person in the family
         person:
           data_quality_issue:
@@ -436,6 +437,8 @@ en:
         section_entry_fee_article_number: Section entry fees
         section_fee_article_number: Section contribution
         section_bulletin_postage_abroad_article_number: Postage abroad Section Bulletin
+        service_fee_article_number: Service fee
+        balancing_payment_article_number: Compensation payments
         course_fee_article_number: Course fees
         discount_date_1: Discount date 1
         discount_percent_1: Discount percentage 1
@@ -532,17 +535,17 @@ en:
         one: Course level
         other: Course levels
       event/role/leader:
-        one: ""
-        other: ""
+        one: ''
+        other: ''
       event/role/assistant_leader:
-        one: ""
-        other: ""
+        one: ''
+        other: ''
       external_training:
         one: External training
         other: External training
       external_invoice:
-        one: ""
-        other: ""
+        one: ''
+        other: ''
       sac_membership_config:
         one: Parameters for membership invoices
         other: Parameters for membership invoices
@@ -669,8 +672,8 @@ en:
         one: Environment and Culture Commission
         other: Environment and Culture Commissions
       group/sektions_touren_und_kurse_allgemein:
-        one: ""
-        other: ""
+        one: ''
+        other: ''
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -1012,8 +1015,8 @@ en:
         one: Other
         description: Other
       group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ""
-        other: ""
+        one: ''
+        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1054,15 +1057,19 @@ en:
         success: The saved data was transferred to all active courses.
       actions_edit:
         push_down_button: Transfer data to courses
-        push_down_button_confirm: "Do you really want to transfer the saved data to all active courses? This will overwrite the current values."
+        push_down_button_confirm:
+          "Do you really want to transfer the saved data to all active courses? This will overwrite the current values."
       kind_category_field:
-        category_overrides_link_title: "The following fields are transferred: Cost center, Cost object"
+        category_overrides_link_title:
+          "The following fields are transferred: Cost center, Cost object"
     kind_categories:
       push_down:
-        success: "Cost center (%{cost_center}) and cost object (%{cost_unit}) were transferred to all assigned course types."
+        success:
+          "Cost center (%{cost_center}) and cost object (%{cost_unit}) were transferred to all assigned course types."
       actions_edit:
         push_down_button: Transfer data to course types
-        push_down_button_confirm: "Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten."
+        push_down_button_confirm:
+          "Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten."
 
     participations:
       missing_information: The following certificates are required for participation in this course. Please submit these if you have not already done so.
@@ -1098,9 +1105,11 @@ en:
         subsidy_field: ""
         subsidy_link_label: Subsidy application
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
-        general_info: "As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this."
+        general_info:
+          "As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this."
         detail_info_header: "What do I have to do to apply for a subsidy?"
-        detail_info_text: "Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>."
+        detail_info_text:
+          "Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>."
       summary_step:
         annulation_remarks: |
           Cancellation insurance is recommended. The following cancellation costs would be borne by the customer if he/she cancels before the start of the course:
@@ -1126,11 +1135,13 @@ en:
       invoice_not_created_alert: ""
 
       popover_participant_cancels:
-        cancel_info: "Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration."
+        cancel_info:
+          "Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration."
 
     participation_contact_datas:
       fields:
-        overrides_person_data_info: Please note that the customizations you enter here will be transferred to your profile.
+        overrides_person_data_info:
+          Please note that the customizations you enter here will be transferred to your profile.
 
   events:
     actions_show_sac_cas:
@@ -1154,11 +1165,19 @@ en:
       prices: ""
 
     general_fields:
-      kind_overrides_link_title: "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
+      kind_overrides_link_title:
+        "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
     maximum_age_with_years: "%{maximum_age} Years (vintage)"
     roles:
       self_employed: ""
       not_self_employed: ""
+
+    popover_canceled_reason:
+      cancel_button: ""
+      cancel_confirmation: ""
+      cancel_info: ""
+      inform_participants_caption: ""
+      canceled_reason_label: ""
 
   external_trainings:
     form:
@@ -1698,7 +1717,8 @@ en:
           data_protection_text: "I have read and agree to the %{link} "
       choose_sektion:
         no_self_service_info_text: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
-        backoffice_no_self_service_info_text: "Please note: the change is to a section that accepts members independently. You may need to clarify this change with the section in advance"
+        backoffice_no_self_service_info_text:
+          "Please note: the change is to a section that accepts members independently. You may need to clarify this change with the section in advance"
       choose_membership:
         not_main_family_person_info_text: >-
           You can take out an additional membership as an individual. If the additional membership is to apply to the whole family, the main family member must take out the membership. To do this, please contact %{name}.
@@ -1737,7 +1757,8 @@ en:
           termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
           family_warning: "Please note: the resignation is requested for the entire family membership. This affects: %{family_member_names}."
           data_retention_info_title: "Storage of your data"
-          data_retention_info_text: "After you leave, we will keep your data for six months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
+          data_retention_info_text:
+            "After you leave, we will keep your data for six months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
           newsletter_info_text: " If you would like to continue receiving the SAC Newsletter, you can let us know here:"
           fundraiser_info_text: "If we may continue to contact you for donation appeals, you can let us know here:"
           next_button: "Request resignation"
