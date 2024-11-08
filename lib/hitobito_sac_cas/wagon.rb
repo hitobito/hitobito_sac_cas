@@ -109,7 +109,11 @@ module HitobitoSacCas
       Event::RoleDecorator.prepend SacCas::Event::RoleDecorator
 
       ## Domain
-      People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
+
+      Rails.application.config.to_prepare do
+        People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
+      end
+
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers.merge!(
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
