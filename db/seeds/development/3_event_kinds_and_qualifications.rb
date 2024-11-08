@@ -145,7 +145,8 @@ class EventsQualifactionsSeeder
   def seed_event_kind_translations
     rows = EVENT_CATEGORIES_AND_KINDS.values.flat_map do |kinds|
       kinds.map do |kind|
-        {locale: "de", label: kind, event_kind_id: identify(kind)}
+        event_kind_id = identify(kind)
+        {locale: "de", label: kind, short_name: "S#{event_kind_id.to_s[0..3]}", event_kind_id: event_kind_id}
       end
     end
     Event::Kind::Translation.seed(:event_kind_id, rows)
