@@ -3,11 +3,14 @@ module SacImports
     IGNORED_COLUMNS = %w[id created_at updated_at]
 
     def self.generate_custom_contents
-      new(CustomContent, :key).generate
-      new(CustomContent::Translation, :custom_content_id, :locale).generate
+      new(CustomContent, keys: [:key]).generate
+      new(CustomContent::Translation, keys: [:custom_content_id, :locale]).generate
+      action_text_scope = ActionText::RichText.where(record_type: CustomContent::Translation.sti_name)
+      new(ActionText::RichText, scope: action_text_scope, keys: [:record_id, :record_type]).generate
     end
 
-    def initialize(model, *keys)
+    def initialize(model, scope: model.all, keys: [])
+      @scope = scope
       @model = model
       @keys = keys
       @mode = :seed
@@ -22,7 +25,7 @@ module SacImports
 
     private
 
-    attr_reader :model, :keys, :mode, :file
+    attr_reader :scope, :model, :keys, :mode, :file
 
     def generate_code
       text = ""
@@ -39,7 +42,7 @@ module SacImports
 
     def rows
       cols = model.column_names - IGNORED_COLUMNS
-      model.pluck(*cols).map do |row|
+      scope.pluck(*cols).map do |row|
         cols.zip(row).to_h
       end
     end
