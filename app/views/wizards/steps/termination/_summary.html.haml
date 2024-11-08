@@ -15,14 +15,17 @@
   = c.fields_for do |form|
     = form.labeled(:termination_reason_id) do
       = form.select :termination_reason_id, c.model.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
-    .alert.alert-info
-      %strong=t('.data_retention_info_title')
-      %p=t('.data_retention_info_text')
-    = form.label(:data_retention_consent, class: 'row mb-2') do
+
+    .row
       .col-md-3.col-xl-2.pb-1
-      .col-md-9
-        = form.check_box :data_retention_consent, {data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" }}
-        = t('.data_retention_consent')
+      .col-md-9.col-xl-7.col-xxl6
+        .alert.alert-info
+          %strong=t('.data_retention_info_title')
+          %p=t('.data_retention_info_text')
+          = form.label(:data_retention_consent, class: 'row mb-2') do
+            .col-md-9
+              = form.check_box :data_retention_consent, {data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" }}
+              = t('.data_retention_consent')
 
 
     .row
