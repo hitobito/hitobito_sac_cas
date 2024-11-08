@@ -96,9 +96,6 @@ en:
         termination_reason_id: "Reason for leaving"
       wizards/steps/termination/summary:
         termination_reason_id: "Reason for leaving"
-        data_retention_consent: "My data should be retained after I leave and I can be contacted for donation appeals"
-        subscribe_newsletter: "Maintain newsletter"
-        subscribe_fundraising_list: "I would like to continue to be informed about fundraising campaigns."
 
     errors:
       messages:
@@ -1755,8 +1752,10 @@ en:
           termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
           family_warning: "Please note: the resignation is requested for the entire family membership. This affects: %{family_member_names}."
           data_retention_info_title: "Storage of your data"
-          data_retention_info_text:
-            "After you leave, we will keep your data for six months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
+          data_retention_info_text: "After you leave, we will keep your data for twelve months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
           newsletter_info_text: " If you would like to continue receiving the SAC Newsletter, you can let us know here:"
           fundraiser_info_text: "If we may continue to contact you for donation appeals, you can let us know here:"
+          data_retention_consent: "My data should be retained after I leave and I can be contacted for donation appeals"
+          subscribe_newsletter: "Maintain newsletter"
+          subscribe_fundraising_list: "I would like to continue to be informed about fundraising campaigns."
           next_button: "Request resignation"

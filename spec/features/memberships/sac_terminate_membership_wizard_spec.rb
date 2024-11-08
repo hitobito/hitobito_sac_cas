@@ -30,9 +30,9 @@ describe "terminate sac membership wizard", js: true do
       choose "Sofort"
       click_button "Weiter"
       select termination_reason.text
-      check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      check "SAC-Newsletter weiterhin erhalten"
+      check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
+      check "über Spendenaktionen vom SAC informiert werden"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -54,9 +54,9 @@ describe "terminate sac membership wizard", js: true do
       choose "Auf 31.12.#{Date.current.year}"
       click_button "Weiter"
       select termination_reason.text
-      check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      check "SAC-Newsletter weiterhin erhalten"
+      check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
+      check "über Spendenaktionen vom SAC informiert werden"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -68,9 +68,9 @@ describe "terminate sac membership wizard", js: true do
     end
 
     describe "data retention checkboxes" do
-      let(:data_retention_checkbox) { find(:checkbox, "Meine Daten sollen nach dem Austritt erhalten bleiben") }
-      let(:newsletter_checkbox) { find(:checkbox, "Newsletter beibehalten") }
-      let(:fundraising_checkbox) { find(:checkbox, "über Spendenaktionen informiert werden") }
+      let(:data_retention_checkbox) { find(:checkbox, "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben.") }
+      let(:newsletter_checkbox) { find(:checkbox, "SAC-Newsletter weiterhin erhalten") }
+      let(:fundraising_checkbox) { find(:checkbox, "über Spendenaktionen vom SAC informiert werden") }
 
       before do
         visit history_group_person_path(group_id: group.id, id: person.id)
@@ -82,28 +82,35 @@ describe "terminate sac membership wizard", js: true do
       end
 
       it "checks data_retention_consent when subscribe_newsletter is checked" do
-        check "Newsletter beibehalten"
+        check "SAC-Newsletter weiterhin erhalten"
         expect(data_retention_checkbox).to be_checked
-        uncheck "Newsletter beibehalten"
+        uncheck "SAC-Newsletter weiterhin erhalten"
         expect(newsletter_checkbox).not_to be_checked
         expect(data_retention_checkbox).to be_checked
       end
 
       it "checks data_retention_consent when sac spenden is checked" do
-        check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        check "über Spendenaktionen vom SAC informiert werden"
         expect(data_retention_checkbox).to be_checked
-        uncheck "Ich möchte weiterhin über Spendenaktionen informiert werden."
+        uncheck "über Spendenaktionen vom SAC informiert werden"
         expect(fundraising_checkbox).not_to be_checked
         expect(data_retention_checkbox).to be_checked
       end
 
       it "unchecks all dependent checkboxes when unchecking master checkbox" do
-        check "Newsletter beibehalten"
-        check "Ich möchte weiterhin über Spendenaktionen informiert werden."
-        uncheck "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
+        check "SAC-Newsletter weiterhin erhalten"
+        check "über Spendenaktionen vom SAC informiert werden"
+        uncheck "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
         expect(data_retention_checkbox).not_to be_checked
         expect(fundraising_checkbox).not_to be_checked
         expect(data_retention_checkbox).not_to be_checked
+      end
+
+      it "checks all dependent checkboxes when checking master checkbox" do
+        check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
+        expect(data_retention_checkbox).to be_checked
+        expect(fundraising_checkbox).to be_checked
+        expect(data_retention_checkbox).to be_checked
       end
     end
   end
@@ -116,9 +123,9 @@ describe "terminate sac membership wizard", js: true do
       end
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
       select termination_reason.text
-      check "Newsletter beibehalten"
-      check "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-      check "Ich möchte weiterhin über Spendenaktionen informiert werden."
+      check "SAC-Newsletter weiterhin erhalten"
+      check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
+      check "über Spendenaktionen vom SAC informiert werden"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
