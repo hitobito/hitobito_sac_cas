@@ -442,8 +442,6 @@ it:
         section_entry_fee_article_number: Quote di adesione alla sezione
         section_fee_article_number: Contributo di sezione
         section_bulletin_postage_abroad_article_number: Affrancatura per l’estero bollettino di sezione
-        service_fee_article_number: Quota di servizio
-        balancing_payment_article_number: Compensazioni
         course_fee_article_number: Quote del corso
         discount_date_1: Data di sconto 1
         discount_percent_1: Percentuale di sconto 1
@@ -1361,7 +1359,7 @@ it:
         sac_magazine: Quota Alpi
         section_bulletin_postage_abroad: "Affrancatura bollettino %{section}"
         section_entry_fee: "Quota di adesione %{section}"
-        section_fee: "Contributo %{section}"
+        section_fee: ""
       beitragskategorie:
         adult: Socio individuale
         family: Socio famigliare

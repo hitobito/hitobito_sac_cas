@@ -442,8 +442,6 @@ fr:
         section_entry_fee_article_number: Frais d’entrée dans la section
         section_fee_article_number: Cotisation à la section
         section_bulletin_postage_abroad_article_number: Frais de port à l’étranger du bulletin de la section
-        service_fee_article_number: Frais de service
-        balancing_payment_article_number: Paiements compensatoires
         course_fee_article_number: Frais de cours
         discount_date_1: Date de remise 1
         discount_percent_1: Pourcentage de remise 1
@@ -1361,7 +1359,7 @@ fr:
         sac_magazine: Frais Les Alpes
         section_bulletin_postage_abroad: "Frais de port bulletin %{section}"
         section_entry_fee: "Frais d’entrée %{section}"
-        section_fee: "Contribution %{section}"
+        section_fee: ""
       beitragskategorie:
         adult: Membre individuel
         family: Membre famille

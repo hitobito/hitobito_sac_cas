@@ -437,8 +437,6 @@ en:
         section_entry_fee_article_number: Section entry fees
         section_fee_article_number: Section contribution
         section_bulletin_postage_abroad_article_number: Postage abroad Section Bulletin
-        service_fee_article_number: Service fee
-        balancing_payment_article_number: Compensation payments
         course_fee_article_number: Course fees
         discount_date_1: Discount date 1
         discount_percent_1: Discount percentage 1
@@ -1304,7 +1302,7 @@ en:
         sac_magazine: Alpine fees
         section_bulletin_postage_abroad: "Porto Bulletin %{section}"
         section_entry_fee: "Entrance fee %{section}"
-        section_fee: "Contribution %{section}"
+        section_fee: ""
       beitragskategorie:
         adult: Individual member
         family: Family member
