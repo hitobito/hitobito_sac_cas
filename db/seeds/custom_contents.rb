@@ -63,9 +63,9 @@ CustomContent.seed(:key,
   {key: Signup::AboMagazinMailer::CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, address-care-of, street-with-number, postbox, zip-code, town, country, abo-name, language, gender, costs, newsletter-subscribed, agb-link, data-protection-link"},
   {key: Signup::SektionMailer::CONFIRMATION,
-   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
+   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details, profile-url, faq-url"},
   {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
-   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, section-name, membership-category, invoice-details, profile-url, faq-url"},
+   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details, profile-url, faq-url"},
   {key: Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED,
    placeholders_required: "first-name, profile-url"},
   {key: Memberships::LeaveZusatzsektionMailer::CONFIRMATION,
@@ -344,6 +344,8 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Strasse und Nr: {street-with-number}<br>" \
     "Postfach: {postbox}<br>" \
     "PLZ: {zip-code}<br><br>" \
+    "Ort: {town}<br><br>" \
+    "Land: {country}<br><br>" \
     "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
     "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
     "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
@@ -376,6 +378,8 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Strasse und Nr: {street-with-number}<br>" \
     "Postfach: {postbox}<br>" \
     "PLZ: {zip-code}<br><br>" \
+    "Ort: {town}<br><br>" \
+    "Land: {country}<br><br>" \
     "Du wirst in kürze eine weitere E-Mail mit der Rechnung erhalten. Sobald die Zahlung bei uns eingegangen ist, " \
     "wird deine Mitgliedschaft vollständig aktiviert und alle Dienste können genutzt werden.<br><br>" \
     "Den digitalen Mitgliederausweis findest du in deinem <a href='{profile-url}'>SAC-Portal</a> Profil. " \
