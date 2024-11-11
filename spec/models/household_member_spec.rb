@@ -73,6 +73,16 @@ describe HouseholdMember do
       expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion."])
     end
 
+    it "is invalid if member has terminated membership" do
+      other_household_person = Fabricate(:person)
+      role = create_mitglied_role(other_household_person, group: :bluemlisalp_mitglieder)
+      create_mitglied_role(person, group: :bluemlisalp_mitglieder)
+      Roles::Termination.new(role: role, terminate_on: 1.day.from_now).call
+      household_member = HouseholdMember.new(other_household_person, household)
+      expect(household_member.valid?).to eq false
+      expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} hat einen Austritt geplant."])
+    end
+
     context "with additional membership" do
       let(:other_household_person) { Fabricate(:person) }
 
