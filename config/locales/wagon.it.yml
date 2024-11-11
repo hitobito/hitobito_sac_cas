@@ -96,8 +96,6 @@ it:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
         termination_reason_id: "Motivo della disdetta"
-        subscribe_newsletter: "Mantenere la newsletter"
-        subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
 
     errors:
       messages:
@@ -131,7 +129,8 @@ it:
           attributes:
             person:
               must_be_sac_member: deve essere socio del CAS
-              must_not_be_join_section_member: è già socio della sezione o ha una richiesta di adesione aperta
+              must_not_be_join_section_member:
+                è già socio della sezione o ha una richiesta di adesione aperta
               must_be_family_main_person: deve essere la persona di riferimento per la famiglia
         person:
           data_quality_issue:
@@ -517,7 +516,7 @@ it:
         qualification:
           attributes:
             finish_at:
-              not_after_start: 'deve essere successivo alla data indicata come "dal"'
+              not_after_start: "deve essere successivo alla data indicata come \"dal\""
 
     models:
       cost_center:
@@ -723,9 +722,9 @@ it:
         many: Commissioni Ambiente e Cultura
         other: Commissioni Ambiente e Cultura
       group/sektions_touren_und_kurse_allgemein:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -1067,9 +1066,9 @@ it:
         one: Altro
         description: Altro
       group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1110,15 +1109,19 @@ it:
         success: I dati salvati sono stati trasferiti a tutti i corsi attivi.
       actions_edit:
         push_down_button: Trasferire i dati ai corsi
-        push_down_button_confirm: "Desidera davvero trasferire i dati salvati a tutti i corsi attivi? In questo modo si sovrascriveranno i valori attuali."
+        push_down_button_confirm:
+          "Desidera davvero trasferire i dati salvati a tutti i corsi attivi? In questo modo si sovrascriveranno i valori attuali."
       kind_category_field:
-        category_overrides_link_title: "Vengono trasferiti i seguenti campi: centro di costo, unità di costo"
+        category_overrides_link_title:
+          "Vengono trasferiti i seguenti campi: centro di costo, unità di costo"
     kind_categories:
       push_down:
-        success: "Il centro di costo (%{cost_center}) e l'unità di costo (%{cost_unit}) sono stati trasferiti a tutti i tipi di corso assegnati."
+        success:
+          "Il centro di costo (%{cost_center}) e l'unità di costo (%{cost_unit}) sono stati trasferiti a tutti i tipi di corso assegnati."
       actions_edit:
         push_down_button: Trasferire i dati ai tipi di corso
-        push_down_button_confirm: "Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali."
+        push_down_button_confirm:
+          "Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali."
 
     participations:
       missing_information: "Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo."
@@ -1154,9 +1157,11 @@ it:
         subsidy_field: "Richiedere un prezzo sovvenzionato di %{amount}"
         subsidy_link_label: Richiesta di sovvenzione
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
-        general_info: "In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne."
+        general_info:
+          "In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne."
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
-        detail_info_text: "La registrazione con la firma del responsabile delle escursioni conferma la tariffa per le guide CAS attiva o futura e ti dà diritto al prezzo sovvenzionato del corso. Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>."
+        detail_info_text:
+          "La registrazione con la firma del responsabile delle escursioni conferma la tariffa per le guide CAS attiva o futura e ti dà diritto al prezzo sovvenzionato del corso. Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>."
       summary_step:
         annulation_remarks: |
           Si consiglia di stipulare un’assicurazione contro l’annullamento. In caso di ritiro prima dell’inizio del corso, i clienti dovranno sostenere i seguenti costi di recesso:
@@ -1182,11 +1187,13 @@ it:
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
 
       popover_participant_cancels:
-        cancel_info: "Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento della cancellazione saranno addebitate le spese di elaborazione e cancellazione."
+        cancel_info:
+          "Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento della cancellazione saranno addebitate le spese di elaborazione e cancellazione."
 
     participation_contact_datas:
       fields:
-        overrides_person_data_info: Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
+        overrides_person_data_info:
+          Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
 
   events:
     actions_show_sac_cas:
@@ -1210,7 +1217,8 @@ it:
       prices: Prezzi
 
     general_fields:
-      kind_overrides_link_title: "Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo"
+      kind_overrides_link_title:
+        "Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo"
     maximum_age_with_years: "%{maximum_age} anni (anno)"
     roles:
       self_employed: lavoratore autonomo
@@ -1776,7 +1784,8 @@ it:
           data_protection_text: "Ho letto %{link} e acconsento"
       choose_sektion:
         no_self_service_info_text: La modifica della sezione desiderata va effettuata contattandoci per telefono o per e-mail*.
-        backoffice_no_self_service_info_text: "Attenzione: la modifica riguarda una sezione che accetta i soci in modo indipendente. Potrebbe essere necessario chiarire in anticipo questa  modifica con la sezione."
+        backoffice_no_self_service_info_text:
+          "Attenzione: la modifica riguarda una sezione che accetta i soci in modo indipendente. Potrebbe essere necessario chiarire in anticipo questa  modifica con la sezione."
       choose_membership:
         not_main_family_person_info_text: >-
           In qualità di socio individuale puoi effettuare un’affiliazione aggiuntiva. Se deve essere applicata a tutta la famiglia, l’affiliazione aggiuntiva deve essere effettuata dal socio di riferimento della famiglia.  A tal fine, si prega di contattare %{name}.
@@ -1815,8 +1824,11 @@ it:
           termination_by_section_only: "Attenzione: la disdetta riguarda una sezione in cui non è attiva la funzione di disdetta per il socio. Potrebbe essere necessario chiarire in anticipo la disdetta con la sezione."
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
           data_retention_info_title: "Conservare i dati"
-          data_retention_info_text: "Dopo la disdetta conserveremo i tuoi dati per sei mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta."
-          data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per gli appelli di donazione."
-          subscribe_newsletter: "Mantenere la newsletter"
-          subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
+          data_retention_info_text:
+            ""
+          data_retention_consent: ""
+          newsletter_info_text: "Se desideri continuare a ricevere la Newsletter del CAS, puoi comunicarcelo qui:"
+          subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
+          fundraiser_info_text: "Se desideri continuare a essere contattato per gli appelli di donazione, puoi comunicarcelo qui:"
+          subscribe_fundraising_list: ""
           next_button: "Richiedere disdetta"
