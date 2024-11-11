@@ -96,6 +96,10 @@ it:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
         termination_reason_id: "Motivo della disdetta"
+        data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per gli appelli di donazione."
+        subscribe_newsletter: "Mantenere la newsletter"
+        subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
+
     errors:
       messages:
         youth_not_allowed_in_family: |
@@ -1278,6 +1282,9 @@ it:
         duration_text: Ricevi una fattura annuale in anticipo. L’abbonamento può essere disdetto in qualsiasi momento alla fine del periodo in corso.
       create:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
+        existing_membership_notice: ""
+        existing_family_notice: ""
+        signed_up_notice: ""
 
       agreement_link:
         agb_text: "Ho letto %{link}e acconsento"
@@ -1820,10 +1827,8 @@ it:
           termination_by_section_only: "Attenzione: la disdetta riguarda una sezione in cui non è attiva la funzione di disdetta per il socio. Potrebbe essere necessario chiarire in anticipo la disdetta con la sezione."
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
           data_retention_info_title: "Conservare i dati"
-          data_retention_info_text: "Dopo la disdetta conserveremo i tuoi dati per dodici mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta."
+          data_retention_info_text:
+            "Dopo la disdetta conserveremo i tuoi dati per sei mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta."
           newsletter_info_text: "Se desideri continuare a ricevere la Newsletter del CAS, puoi comunicarcelo qui:"
           fundraiser_info_text: "Se desideri continuare a essere contattato per gli appelli di donazione, puoi comunicarcelo qui:"
-          data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per gli appelli di donazione."
-          subscribe_newsletter: "Mantenere la newsletter"
-          subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
           next_button: "Richiedere disdetta"
