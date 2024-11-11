@@ -15,6 +15,8 @@ module MultilingualMailer
   def compose_multilingual(recipients, content_key, locales = [])
     return if recipients.blank?
 
+    view_context  # must be set explicitly for draper see (hitobito/hitobito#6f310725c2)
+
     content = CustomContent.get(content_key)
     locales = [I18n.locale] if locales.empty?
     subject, body = localized_subject_and_body(content, locales)
