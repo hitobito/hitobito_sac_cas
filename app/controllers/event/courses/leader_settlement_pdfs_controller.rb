@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Courses::LeaderSettlementPdfsController < ApplicationController
+  include AsyncDownload
+
   def create
     authorize!(:create, Event::Courses::LeaderSettlementInvoice.new) # TODO
     @group = group
@@ -11,13 +13,22 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     assign_attributes
 
     if invoice_form.valid?
-      # TODO
+      render_pdf_in_background
     else
       render turbo_stream: turbo_stream.replace(
         "leader_settlement_invoice_form",
         partial: "event/participations/popover_create_course_leader_invoice",
         locals: { invoice_form: invoice_form }
       ), status: :unprocessable_entity
+    end
+  end
+
+  def render_pdf_in_background
+    with_async_download_cookie(:pdf, :leader_settlement) do |filename|
+      Export::LeaderSettlementExportJob.new(current_person.id, 
+                                            Event::Participation.first.id, # TODO
+                                            @invoice_form.iban, 
+                                            filename: filename).enqueue!
     end
   end
 
