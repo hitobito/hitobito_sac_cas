@@ -1817,6 +1817,6 @@ fr:
           data_retention_info_title: "Conservation de tes données"
           data_retention_info_text: "Après ta sortie, nous conservons tes données pendant six mois avant de les supprimer définitivement. La suppression a les conséquences suivantes pour toi: si tu souhaites adhérer à nouveau au CAS plus tard, tu devras à nouveau payer les frais d’entrée et ton nombre d’années d’adhésion repartira de zéro. Le cas échéant, les qualifications obtenues et les formations suivies (y compris les heures de formation continue) seront supprimées. Ton login CAS sera supprimé et tu ne pourras plus l’utiliser à d’autres fins, par exemple dans l’application CAS). Si tu ne le souhaites pas, tu dois nous autoriser ici à conserver tes données après ta démission."
           data_retention_consent: "Je souhaite que mes données soient conservées après ma résiliation et je peux être contacté·e pour des appels aux dons."
-          newsletter_info_text: " Si tu souhaites continuer à recevoir la newsletter du CAS, tu peux nous le faire savoir ici:"
-          fundraiser_info_text: "Si tu souhaites que nous continuions à te contacter pour des appels aux dons, tu peux nous le faire savoir ici:"
+          subscribe_newsletter: "Conserver la newsletter"
+          subscribe_fundraising_list: "Je souhaite continuer à être informé·e des campagnes de dons"
           next_button: "Demander une résiliation"
