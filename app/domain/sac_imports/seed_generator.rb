@@ -11,22 +11,12 @@ module SacImports
       new(Oauth::Application, keys: [:uid]).generate
     end
 
-    def self.import_custom_contents
-      CustomContent.destroy_all
-
-      load(Rails.root.join("tmp", "custom_contents.rb"))
-      load(Rails.root.join("tmp", "custom_content_translations.rb"))
-      load(Rails.root.join("tmp", "action_text_rich_texts.rb"))
-      load(Rails.root.join("tmp", "service_tokens.rb"))
-      load(Rails.root.join("tmp", "oauth_applications.rb"))
-    end
-
     def initialize(model, scope: model.all, keys: [])
       @scope = scope
       @model = model
       @keys = keys
       @mode = :seed
-      @file = Rails.root.join("tmp/#{model.table_name}.rb")
+      @file = Rails.root.join("db/seeds/#{model.table_name}_generated.rb")
     end
 
     def generate
@@ -34,10 +24,6 @@ module SacImports
       file.write(code)
       puts "Generating code written to #{file}" # rubocop:disable Rails/Output
     end
-
-    private
-
-    attr_reader :scope, :model, :keys, :mode, :file
 
     def generate_code
       text = ""
@@ -47,6 +33,10 @@ module SacImports
       end
       text << ")\n"
     end
+
+    private
+
+    attr_reader :scope, :model, :keys, :mode, :file
 
     def seed_keys
       keys.map { |col| ":#{col}" }.join(" ,")
