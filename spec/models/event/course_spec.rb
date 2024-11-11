@@ -488,8 +488,9 @@ describe Event::Course do
       before do
         course.inform_participants = "1"
         course.participations.create!([
-          {person: people(:admin), roles: [Event::Course::Role::Leader.new]},
-          {person: people(:mitglied)}
+          {person: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
+          {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
+          {person: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
         ])
       end
 
