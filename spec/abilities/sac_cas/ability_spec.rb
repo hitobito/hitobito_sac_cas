@@ -32,7 +32,7 @@ describe Ability do
       context "mailing_lists" do
         let(:a_mailing_list) { Fabricate(:mailing_list, group: groups(:root)) }
         let(:newsletter) do
-          MailingList.find_by(internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY)
+          MailingList.find_by(internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY)
         end
 
         it "can update mailing list" do

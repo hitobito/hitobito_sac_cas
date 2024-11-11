@@ -8,12 +8,12 @@
 # Seed the newsletter with `seed_once` to avoid overwriting changed attributes.
 sac_newsletter_list = MailingList.seed_once(
   :internal_key,
-  internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY,
+  internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY,
   group_id: Group.root.id,
   name: "SAC/CAS Newsletter",
   subscribable_for: "configured",
   subscribable_mode: "opt_out"
-).first || MailingList.find_by(internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY)
+).first || MailingList.find_by(internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY)
 
 sac_newsletter_subscription = Subscription.seed_once(
   :mailing_list_id,

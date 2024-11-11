@@ -10,7 +10,7 @@ require "spec_helper"
 describe MailingList do
   context "seeded data" do
     def newsletter
-      MailingList.find_by(internal_key: SacCas::MAILING_LIST_NEWSLETTER_INTERNAL_KEY)
+      MailingList.find_by(internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY)
     end
 
     it "has newsletter mailing list" do
