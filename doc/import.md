@@ -28,6 +28,37 @@ Der Import soll lokal in einer dedizierten DB erfolgen `export RAILS_DB_NAME=hit
 
 Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
 
+Importieren auf dem lokalen system
+
+```
+  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod db:drop db:create
+  cat ~/tmp/fix-family-main-people.dump | DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails dbconsole -p
+```
+
+Exportieren der custom contents von INT
+
+```
+  oc project hit-sac-cas-int
+  DISABLE_SPRING=1 ./bin/with_cluster_db rails sac_exports:custom_contents
+  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r 'CustomContent.destroy_all'
+  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r 'CustomContent::Translation.destroy_all'
+  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r ../hitobito_sac_cas/db/seeds/custom_contents.rb
+```
+
+und oauth und tokens von PROD
+
+```
+  oc project hit-sac-cas-prod
+  DISABLE_SPRING=1 ./bin/with_cluster_db rails sac_exports:tokens_and_apps
+  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r ../hitobito_sac_cas/db/seeds/tokens_and_apps.rb
+```
+
+Dump exportieren und auf prod einspielen
+
+```
+PGPASSWORD=hitobito pg_dump -h localhost -U hitobito hit_sac_cas_prod | gzip >  tmp/hit_sac_cas_prod.sql.gz
+```
+
 ### Was noch zu definieren ist
 
 - Wann und wo sind folgenden Daten final und können in den Import integriert werden?
@@ -36,7 +67,7 @@ Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PR
   - OIDC Applikationen (global) -> per 30. Nov in PROD eingepflegt
   - ServiceTokens (pro Gruppe) -> per 30. Nov in PROD eingepflegt
 
-  Ab 1. Dez unveränderte API keys etc. in PROD  
+  Ab 1. Dez unveränderte API keys etc. in PROD
 
 - Noch zu definierende Punkte
 
