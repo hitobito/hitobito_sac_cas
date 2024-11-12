@@ -88,6 +88,8 @@ module SacImports::Roles
       end
 
       @output.puts("#{message_prefix}: #{symbol} #{details}") if error.present?
+      return unless error.present? || warning.present?
+
       add_report_row(row, status, message: message, warning: warning, error: error)
     end
 

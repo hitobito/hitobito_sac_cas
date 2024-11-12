@@ -25,8 +25,8 @@ module SacImports::Roles
           report(row, person, error: "Role type '#{row.role}' not found in '#{group.decorate.label_with_parent}'") && next
 
         create_role(row, group, person, role_type, row.role_description)
-        report(row, person, message: "Role '#{role_type.label}' created in '#{group.decorate
-                                                                             .label_with_parent}'")
+        # report(row, person, message: "Role '#{role_type.label}' created in '#{group.decorate
+        #                                                                      .label_with_parent}'")
       rescue ActiveRecord::RecordInvalid => e
         report(row, person, message: "Role '#{role_type.label}' in '#{group.decorate.label_with_parent}'", error: e.message)
       rescue => e
