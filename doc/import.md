@@ -56,8 +56,10 @@ und oauth und tokens von PROD
 Dump exportieren und auf prod einspielen
 
 ```
-PGPASSWORD=hitobito pg_dump -h localhost -U hitobito hit_sac_cas_prod | gzip >  tmp/hit_sac_cas_prod.sql.gz
+PGPASSWORD=hitobito pg_dump -cOx -h localhost -U hitobito hit_sac_cas_prod | sed 's/public/database/g;' | gzip > tmp/hit_sac_cas_prod.sql
 ```
+
+Wie umgehen mit schema name?? (beste variante wäre beim lokale arbeiten schon das database schema zu verwenden)
 
 ### Was noch zu definieren ist
 
