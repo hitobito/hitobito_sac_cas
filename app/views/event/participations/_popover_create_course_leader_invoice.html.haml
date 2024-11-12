@@ -5,7 +5,7 @@
 
 = turbo_frame_tag "leader_settlement_invoice_form" do
   = standard_form(defined?(invoice_form) ? invoice_form : Event::Courses::LeaderSettlementInvoice.new,
-                  url: group_event_leader_settlement_pdfs_path(@group, @event), method: :post) do |f|
+                  url: leader_settlement_pdfs_group_event_participation_path(@group, @event, @participation.id), method: :post) do |f|
     .alert.alert-info= t(".info_text_html")
     = f.error_messages
     = f.labeled_input_field :actual_days, value: defined?(invoice_form) ? invoice_form.actual_days : entry.actual_days

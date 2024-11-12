@@ -31,10 +31,10 @@ Rails.application.routes.draw do
       resources :events, only: [] do
         scope module: "event" do
           resource :key_data_sheets, only: [:create], module: :courses
-          resource :leader_settlement_pdfs, only: [:create], module: :courses
           resources :participations, only: [] do
             put :summon, on: :member
             post :invoice, on: :member, controller: "courses/invoices", action: :create
+            post :leader_settlement_pdfs, on: :member, action: :create, module: :courses, controller: "courses/participations/leader_settlement_pdfs"
           end
 
           put "state" => "courses/state#update", on: :member

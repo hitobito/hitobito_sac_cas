@@ -3,17 +3,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Event::Courses::LeaderSettlementPdfsController < ApplicationController
+class Event::Courses::Participations::LeaderSettlementPdfsController < ApplicationController
   include AsyncDownload
 
   def create
     authorize!(:create, Event::Courses::LeaderSettlementInvoice.new) # TODO
     @group = group
     @event = event
+    @participation = participation
     assign_attributes
 
     if invoice_form.valid?
-      render_pdf_in_background
+      participation.update!(actual_days: invoice_form.actual_days) && render_pdf_in_background
     else
       render turbo_stream: turbo_stream.replace(
         "leader_settlement_invoice_form",
@@ -26,8 +27,7 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
   def render_pdf_in_background
     with_async_download_cookie(:pdf, :leader_settlement) do |filename|
       Export::LeaderSettlementExportJob.new(current_person.id, 
-                                            Event::Participation.first.id, # TODO
-                                            @invoice_form.iban, 
+                                            participation.id,
                                             filename: filename).enqueue!
     end
   end
@@ -49,4 +49,6 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
   def group = @group ||= Group.find(params[:group_id])
 
   def event = @event ||= Event::Course.find(params[:event_id])
+
+  def participation = @participation ||= Event::Participation.find(params[:id])
 end

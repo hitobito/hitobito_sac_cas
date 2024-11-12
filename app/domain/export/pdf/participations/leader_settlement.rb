@@ -14,14 +14,19 @@ module Export::Pdf::Participations
     end
 
     def render
+      pdf = Export::Pdf::Document.new.pdf
+      invoice = Invoice.new(iban: @iban, 
+                            payee: Person::Address.new(@participation.person).for_invoice, 
+                            currency: "CHF", 
+                            payment_purpose: "Kurs #{@participation.event.number}", 
+                            recipient_address: "Schweizer Alpen-Club SAC\nZentralverband, Monbijoustrasse 61\n3000 Bern 14\n\n\n", 
+                            total: 100, title: "Testrechnung", 
+                            esr_number: "12345", 
+                            sequence_number: "1-1", 
+                            reference: "12345", 
+                            group_id: 1)
       Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, @options).render
       pdf.render
     end
-
-    def invoice
-      @invoice = Invoice.new(iban: @iban, payee: "TODO", recipient_address: "TODO", total: 100, title: "TODO", esr_number: "TODO", sequence_number: "TODO", reference: "TODO", group_id: 1)
-    end
-
-    def pdf = @pdf = Export::Pdf::Document.new(margin: MARGIN).pdf
   end
 end
