@@ -24,7 +24,7 @@ module SacImports
         "Not Main Person" => not_main_person_scope) do
         log_missing(main_person_ids_from_file - family_membership_people_ids)
 
-        main_people_ids = main_person_ids_from_file | family_membership_people_ids
+        main_people_ids = main_person_ids_from_file & family_membership_people_ids
         set_family_main_person(main_people_ids)
       end
     end
