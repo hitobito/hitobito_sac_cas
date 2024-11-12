@@ -9,8 +9,11 @@ require "spec_helper"
 
 describe SacImports::People::PersonEntry do
   let(:group) { Group::ExterneKontakte.new(id: 1) }
+  let(:source) { SacImports::CsvSource::SOURCE_HEADERS[:NAV1] }
+  let(:data) { source.new(**row.reverse_merge(source.members.index_with(nil))) }
+
   let(:row) do
-    SacImports::CsvSource::SOURCE_HEADERS[:NAV1].keys.index_with { |_symbol| nil }.merge(
+    {
       navision_id: 123,
       first_name: "Max",
       last_name: "Muster",
@@ -18,10 +21,11 @@ describe SacImports::People::PersonEntry do
       gender: "0",
       language: "DES",
       birthday: 40.years.ago.to_date
-    )
+    }
   end
+  let(:existing_emails) { Concurrent::Set.new(Person.pluck(:email).compact) }
 
-  subject(:entry) { described_class.new(row, group) }
+  subject(:entry) { described_class.new(data, group, existing_emails) }
 
   before { travel_to(Time.zone.local(2022, 10, 20, 11, 11)) }
 
@@ -49,10 +53,13 @@ describe SacImports::People::PersonEntry do
       expect(entry.errors).to be_empty
     end
 
-    it "is invalid without group" do
-      person = described_class.new(row.merge(birthday: 6.years.ago), nil)
-      expect(person).not_to be_valid
-      expect(person.errors).to eq "Rollen ist nicht gültig, Group muss ausgefüllt werden"
+    context "without group" do
+      let(:group) { nil }
+
+      it "is invalid without group" do
+        expect(entry).not_to be_valid
+        expect(entry.errors).to eq "Rollen ist nicht gültig, Group muss ausgefüllt werden"
+      end
     end
   end
 
@@ -69,7 +76,7 @@ describe SacImports::People::PersonEntry do
       expect(person.gender).to be_nil
       expect(person.language).to eq "de"
       expect(person.company).to eq true
-      expect(person.company_name).to eq "Puzzle GmbH"
+      expect(person.company_name).to eq "first Puzzle GmbH"
       expect(person).to be_valid
     end
   end
@@ -140,6 +147,12 @@ describe SacImports::People::PersonEntry do
         expect { entry.import! }
           .to change(AdditionalEmail, :count).by(1)
           .and change(Person, :count).by(1)
+      end
+
+      it "does not import" do
+        expect(person.email).to eq "max.muster@example.com"
+        expect { entry.import! }
+          .to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end

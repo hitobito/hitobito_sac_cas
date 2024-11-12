@@ -10,13 +10,13 @@ require "spec_helper"
 describe SacImports::Nav1PeopleImporter, versioning: true do
   let(:output) { double(puts: nil, print: nil) }
   let(:nav1_csv_fixture) { file_fixture("sac_imports_src/NAV1_fixture.csv") }
-  let!(:importer) { described_class.new(output: output) }
+  let(:importer) { described_class.new(output: output) }
 
   let(:people_navision_ids) { %w[4200000 4200001 4200002 4200003 4200004 4200005 4200006 4200007 4200008 4200009] }
   let(:invalid_person_navision_id) { "4200010" }
 
   let(:report_file) { Rails.root.join("log", "sac_imports", "nav1-1_people_2024-01-23-1142.csv") }
-  let(:report_headers) { %w[navision_membership_number navision_name warnings errors] }
+  let(:report_headers) { %w[navision_membership_number navision_name status warnings errors] }
   let(:csv_report) { CSV.read(report_file, col_sep: ";") }
 
   around do |example|
@@ -31,40 +31,46 @@ describe SacImports::Nav1PeopleImporter, versioning: true do
     travel_back
   end
 
-  before do
-    expect(Truemail.configuration.default_validation_type).to eq(:regex)
+  def run_import(**kw_args)
+    allow(Truemail.configuration).to receive(:default_validation_type).and_return(:regex)
+    Tempfile.create do |file|
+      file.write(nav1_csv_fixture.read.lines[1..].join)
+      file.rewind
 
-    # Mock the file loading behavior in CSVImporter
-    csv_source_instance = SacImports::CsvSource.new(:NAV1)
-    allow(csv_source_instance).to receive(:path).and_return(nav1_csv_fixture)
-    importer.instance_variable_set(:@source_file, csv_source_instance)
+      # Mock the file loading behavior in CSVImporter
+      csv_source_instance = SacImports::CsvSource.new(:NAV1)
+      allow(csv_source_instance).to receive(:path).and_return(file)
+      importer.instance_variable_set(:@source_file, csv_source_instance)
+      importer.create(**kw_args)
+      File.unlink file
+    end
   end
 
   it "creates csv report entries for people with errors" do
     expected_output = Array.new(10) { /\d+ \(.*\): ✅\n/ }
-    expected_output << "#{invalid_person_navision_id} (): ❌ Bitte geben Sie einen Namen ein\n"
+    expected_output << "#{invalid_person_navision_id} ( ): ❌ Bitte geben Sie einen Namen ein\n"
 
     expected_output.each do |output_line|
       expect(output).to receive(:print).with(output_line)
     end
     expect(output).to receive(:puts).with("Report written to #{report_file}")
 
-    importer.create
+    run_import
 
     expect(File.exist?(report_file)).to be_truthy
 
     expect(csv_report.size).to eq(2)
     expect(csv_report.first).to eq(report_headers)
-    expect(csv_report.second).to eq([invalid_person_navision_id, nil, nil, "Bitte geben Sie einen Namen ein"])
+    expect(csv_report.second).to eq([invalid_person_navision_id, " ", "error", nil, "Bitte geben Sie einen Namen ein"])
   end
 
   it "does not create version entries for imported people" do
-    expect { importer.create }
+    expect { run_import }
       .not_to change { PaperTrail::Version.count }
   end
 
   it "imports people and assigns role" do
-    importer.create
+    run_import
 
     people_navision_ids.each do |id|
       person = Person.find(id)
@@ -75,7 +81,7 @@ describe SacImports::Nav1PeopleImporter, versioning: true do
   end
 
   it "imports natürliche person" do
-    importer.create
+    run_import
 
     person = Person.find(people_navision_ids.first)
 
@@ -104,17 +110,18 @@ describe SacImports::Nav1PeopleImporter, versioning: true do
   end
 
   it "does not import invalid person" do
-    importer.create
+    run_import
 
     expect(Person.find_by(id: invalid_person_navision_id)).to be_nil
   end
 
   context "for person having already taken email" do
     let(:email) { "example@example.com" }
-    let!(:existing_person) { Fabricate(:person, email: email) }
+
+    before { Fabricate(:person, email: email) }
 
     it "adds email as additional email" do
-      importer.create
+      run_import
 
       person = Person.find(people_navision_ids.first)
       expect(person.email).to be_blank
@@ -127,7 +134,7 @@ describe SacImports::Nav1PeopleImporter, versioning: true do
       person = Person.new(id: "4200000").tap { |p| p.save(validate: false) }
       person.additional_emails.create!(email: email, label: "Duplikat")
 
-      expect { importer.create }
+      expect { run_import }
         .not_to change { person.additional_emails.count }
     end
   end
@@ -135,16 +142,16 @@ describe SacImports::Nav1PeopleImporter, versioning: true do
   context "with start_at_navision_id" do
     it "starts imported from given navision_id" do
       expected_output = ["Starting import from row with navision_id 4200008 (Bühler Christian)\n"]
-      expected_output << "4200008 (): ✅\n"
-      expected_output << "4200009 (): ✅\n"
-      expected_output << "#{invalid_person_navision_id} (): ❌ Bitte geben Sie einen Namen ein\n"
+      expected_output << "4200008 (Christian Bühler): ✅\n"
+      expected_output << "4200009 (Scarlett Gygax): ✅\n"
+      expected_output << "#{invalid_person_navision_id} ( ): ❌ Bitte geben Sie einen Namen ein\n"
 
       expected_output.each do |output_line|
         expect(output).to receive(:print).with(output_line)
       end
       expect(output).to receive(:puts).with("Report written to #{report_file}")
 
-      importer.create(start_at_navision_id: "4200008")
+      run_import(start_at_navision_id: "4200008")
     end
   end
 end
