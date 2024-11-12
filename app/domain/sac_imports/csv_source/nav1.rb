@@ -35,13 +35,13 @@ class SacImports::CsvSource
     :person_type, # "Personentyp",
     :member_kind, # "Mitgliederart",
     :beitragskategorie, # "Beitragskategorie",
-    :die_alpen_physisch_opt_in, # "OPT_IN_Die_Alpen_physisch",
-    :die_alpen_digital_opt_in, # "OPT_IN_Die_Alpen_digital",
-    :fundraising_opt_in, # "OPT_IN_Fundraising",
-    :sektionsbulletin_physisch_opt_in, # "OPT_IN_Sektionsbulletin_physisch",
-    :sektionsbulletin_digital_opt_in, # "OPT_IN_Sektionsbulletin_digital",
-    :die_alpen_physisch_opt_out, # "OPT_OUT_Die_Alpen_physisch",
-    :die_alpen_digital_opt_out, # "OPT_OUT_Die_Alpen_digital",
+    :opt_in_die_alpen_physisch, # "OPT_IN_Die_Alpen_physisch",
+    :opt_in_die_alpen_digital, # "OPT_IN_Die_Alpen_digital",
+    :opt_in_fundraising, # "OPT_IN_Fundraising",
+    :opt_in_sektionsbulletin_physisch_opt_in, # "OPT_IN_Sektionsbulletin_physisch",
+    :opt_in_sektionsbulletin_digital_opt_in, # "OPT_IN_Sektionsbulletin_digital",
+    :opt_out_die_alpen_physisch, # "OPT_OUT_Die_Alpen_physisch",
+    :opt_out_die_alpen_digital, # "OPT_OUT_Die_Alpen_digital",
     :termination_reason # "Austrittsgrund"
   )
 end
