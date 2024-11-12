@@ -71,7 +71,6 @@ module SacImports
       entry = People::PersonEntry.new(row, target_group, @existing_emails)
       name = "#{row.first_name} #{row.last_name}"
       if entry.valid?
-        @output.print("#{row.navision_id} (#{name}): ✅\n")
         entry.import!
         if entry.warning
           @csv_report.add_row({
