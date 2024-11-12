@@ -16,29 +16,28 @@ class Event::Courses::Participations::LeaderSettlementPdfsController < Applicati
     if invoice_form.valid?
       participation.update!(actual_days: invoice_form.actual_days) && render_pdf_in_background
     else
-      render turbo_stream: turbo_stream.replace(
-        "leader_settlement_invoice_form",
-        partial: "event/participations/popover_create_course_leader_invoice",
-        locals: {invoice_form: invoice_form}
-      ), status: :unprocessable_entity
+      rerender_form(:unprocessable_entity)
     end
   end
 
   def render_pdf_in_background
-    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}", render_command: -> {
-      render turbo_stream: turbo_stream.replace(
-        "leader_settlement_invoice_form",
-        partial: "event/participations/popover_create_course_leader_invoice",
-        locals: { invoice_form: invoice_form }
-      ), status: :ok
-    }) do |filename|
+    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}", render_command: -> { rerender_form(:ok) }) do |filename|
       Export::LeaderSettlementExportJob.new(current_person.id,
         participation.id,
+        invoice_form.iban,
         filename: filename).enqueue!
     end
   end
 
   private
+
+  def rerender_form(status)
+    render turbo_stream: turbo_stream.replace(
+      "leader_settlement_invoice_form",
+      partial: "event/participations/popover_create_course_leader_invoice",
+      locals: { invoice_form: invoice_form }
+    ), status: status
+  end
 
   def assign_attributes
     invoice_form.attributes = invoice_form_params

@@ -4,19 +4,20 @@
 #  https://github.com/hitobito/hitobito.
 
 class Export::LeaderSettlementExportJob < Export::ExportBaseJob
-  self.parameters = PARAMETERS + [:participation_id]
+  self.parameters = PARAMETERS + [:participation_id, :iban]
 
-  def initialize(user_id, participation_id, options)
+  attr_reader :participation_id, :iban, :options
+
+  def initialize(user_id, participation_id, iban, options)
     super(:pdf, user_id, options)
     @participation_id = participation_id
+    @iban = iban
     @options = options
   end
 
   private
 
-  def data
-    Export::Pdf::Participations::LeaderSettlement.new(participation, "CH93 0076 2011 6238 5295 7", @options).render
-  end
+  def data = Export::Pdf::Participations::LeaderSettlement.new(participation, iban, options).render
 
-  def participation = @participation = Event::Participation.find(@participation_id)
+  def participation = @participation = Event::Participation.find(participation_id)
 end
