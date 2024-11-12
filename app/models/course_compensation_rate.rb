@@ -30,6 +30,12 @@ class CourseCompensationRate < ApplicationRecord
   scope :at, ->(date) { where("(:date >= valid_from) AND (valid_to IS NULL OR valid_to >= :date)", date: date) }
   validate :assert_category_uniqueness_during_validity_period
 
+  class << self
+    def active(date = Time.zone.today)
+      where(valid_from: ..date).where("valid_to >= ? OR valid_to IS NULL", date)
+    end
+  end
+
   def assert_category_uniqueness_during_validity_period
     scope = CourseCompensationRate.where(course_compensation_category: course_compensation_category)
     if scope

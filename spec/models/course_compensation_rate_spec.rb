@@ -98,4 +98,31 @@ describe CourseCompensationRate do
       end
     end
   end
+
+  context "active" do
+    let!(:rate1) { Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 1), valid_to: 1.month.from_now) }
+    let!(:rate2) { Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 24), valid_to: 1.month.from_now) }
+    let!(:rate3) { Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 31), valid_to: 1.month.from_now) }
+
+    it "returns all rates" do
+      expect(described_class.active).to match_array([rate1, rate2, rate3])
+    end
+
+    it "returns only active rates as of a specific date" do
+      expect(described_class.active(Date.new(2021, 5, 25))).to match_array([rate1, rate2])
+    end
+
+    it "returns nothing when the date is too late" do
+      expect(described_class.active(6.months.from_now)).to be_empty
+    end
+
+    it "returns nothing when the date is too early" do
+      expect(described_class.active(Date.new(2021, 1, 1))).to be_empty
+    end
+
+    it "returns rates even without valid_to dates" do
+      described_class.update_all(valid_to: nil)
+      expect(described_class.active).to match_array([rate1, rate2, rate3])
+    end
+  end
 end
