@@ -7,7 +7,28 @@
 
 class MigrateEventRolesToCourseRoles < ActiveRecord::Migration[6.1]
   def change
-    execute "UPDATE event_roles SET type = 'Event::Course::Role::Leader' WHERE type = 'Event::Role::Leader';"
-    execute "UPDATE event_roles SET type = 'Event::Course::Role::AssistantLeader' WHERE type = 'Event::Role::AssistantLeader';"
+    execute <<-SQL.squish
+      UPDATE event_roles
+      SET type = 'Event::Course::Role::Leader'
+      WHERE type = 'Event::Role::Leader'
+      AND participation_id IN (
+        SELECT event_participations.id
+        FROM event_participations
+        INNER JOIN events ON event_participations.event_id = events.id
+        WHERE events.type = 'Event::Course'
+      );
+    SQL
+
+    execute <<-SQL.squish
+      UPDATE event_roles
+      SET type = 'Event::Course::Role::AssistantLeader'
+      WHERE type = 'Event::Role::AssistantLeader'
+      AND participation_id IN (
+        SELECT event_participations.id
+        FROM event_participations
+        INNER JOIN events ON event_participations.event_id = events.id
+        WHERE events.type = 'Event::Course'
+      );
+    SQL
   end
 end
