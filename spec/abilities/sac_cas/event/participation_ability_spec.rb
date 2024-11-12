@@ -91,6 +91,44 @@ describe Event::ParticipationAbility do
       end
     end
 
+    describe "leader_settlement" do
+      let(:top_course) { events(:top_course) }
+      let(:participation) { build(:bluemlisalp_mitglieder, event: top_course) }
+      let(:role) { build_role(:bluemlisalp_mitglieder, "Mitglied") }
+
+      context "leader" do
+        before do
+          build(:bluemlisalp_mitglieder, event: top_course, person: role.person).tap(&:save!)
+            .roles.create!(type: Event::Role::Leader.sti_name)
+        end
+
+        it "may leader_settlement her own" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
+        end
+
+        it "may not leader_settlement other participations" do
+          other_participation = build(:bluemlisalp_mitglieder, event: top_course)
+          expect(subject).not_to be_able_to(:leader_settlement, other_participation)
+        end
+      end
+
+      context "assistant leader" do
+        before do
+          build(:bluemlisalp_mitglieder, event: top_course, person: role.person).tap(&:save!)
+            .roles.create!(type: Event::Role::AssistantLeader.sti_name)
+        end
+
+        it "may leader_settlement her own" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
+        end
+
+        it "may not leader_settlement other participations" do
+          other_participation = build(:bluemlisalp_mitglieder, event: top_course)
+          expect(subject).not_to be_able_to(:leader_settlement, other_participation)
+        end
+      end
+    end
+
     describe "cancel" do
       it "may not cancel others" do
         expect(subject).not_to be_able_to(:cancel, participation)

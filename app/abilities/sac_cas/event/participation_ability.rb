@@ -18,6 +18,7 @@ module SacCas::Event::ParticipationAbility
 
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer
+      permission(:any).may(:leader_settlement).if_can_edit_course_or_her_own
       general(:summon).if_application
       general(:destroy).unless_her_own
     end
@@ -25,5 +26,9 @@ module SacCas::Event::ParticipationAbility
 
   def unless_her_own
     !her_own
+  end
+
+  def if_can_edit_course_or_her_own
+    her_own || Ability.new(user).can?(:edit, participation.event)
   end
 end

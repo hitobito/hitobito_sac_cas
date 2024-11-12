@@ -6,11 +6,11 @@
 class Event::Courses::Participations::LeaderSettlementPdfsController < ApplicationController
   include AsyncDownload
 
+  before_action :authorize_class
+
   def create
-    authorize!(:create, Event::Courses::LeaderSettlementInvoice.new) # TODO
     @group = group
     @event = event
-    @participation = participation
     assign_attributes
 
     if invoice_form.valid?
@@ -19,16 +19,16 @@ class Event::Courses::Participations::LeaderSettlementPdfsController < Applicati
       render turbo_stream: turbo_stream.replace(
         "leader_settlement_invoice_form",
         partial: "event/participations/popover_create_course_leader_invoice",
-        locals: { invoice_form: invoice_form }
+        locals: {invoice_form: invoice_form}
       ), status: :unprocessable_entity
     end
   end
 
   def render_pdf_in_background
     with_async_download_cookie(:pdf, :leader_settlement) do |filename|
-      Export::LeaderSettlementExportJob.new(current_person.id, 
-                                            participation.id,
-                                            filename: filename).enqueue!
+      Export::LeaderSettlementExportJob.new(current_person.id,
+        participation.id,
+        filename: filename).enqueue!
     end
   end
 
@@ -42,6 +42,10 @@ class Event::Courses::Participations::LeaderSettlementPdfsController < Applicati
     params
       .require(:event_courses_leader_settlement_invoice)
       .permit(:actual_days, :iban).merge(course: event)
+  end
+
+  def authorize_class
+    authorize!(:leader_settlement, participation)
   end
 
   def invoice_form = @invoice_form ||= Event::Courses::LeaderSettlementInvoice.new
