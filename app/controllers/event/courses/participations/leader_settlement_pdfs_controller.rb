@@ -25,7 +25,13 @@ class Event::Courses::Participations::LeaderSettlementPdfsController < Applicati
   end
 
   def render_pdf_in_background
-    with_async_download_cookie(:pdf, :leader_settlement) do |filename|
+    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}", render_command: -> {
+      render turbo_stream: turbo_stream.replace(
+        "leader_settlement_invoice_form",
+        partial: "event/participations/popover_create_course_leader_invoice",
+        locals: { invoice_form: invoice_form }
+      ), status: :ok
+    }) do |filename|
       Export::LeaderSettlementExportJob.new(current_person.id,
         participation.id,
         filename: filename).enqueue!

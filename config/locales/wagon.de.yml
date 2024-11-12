@@ -1227,6 +1227,9 @@ de:
     new:
       title: Kursstufe erstellen
 
+  event/courses/participations/leader_settlement_pdfs:
+    export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
+
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
     tour_guides_active: Aktive Tourenleiter

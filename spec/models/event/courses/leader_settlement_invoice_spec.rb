@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe Event::Courses::LeaderSettlementInvoice do
-
   describe "validations" do
     let(:course) do
       course = Fabricate.build(:sac_course)
@@ -37,7 +36,7 @@ describe Event::Courses::LeaderSettlementInvoice do
     it "is invalid without actual_days" do
       leader_settlement_invoice.actual_days = nil
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:actual_days]).to include ("muss ausgefüllt werden")
+      expect(leader_settlement_invoice.errors[:actual_days]).to include("muss ausgefüllt werden")
     end
 
     it "is invalid when actual_days is negative" do
