@@ -7,7 +7,7 @@
 
 module SacImports::Wso2
   class PersonEntry
-    GENDERS = {HERR: "m", FRAU: "w"}.freeze
+    GENDERS = {HERR: "m", FRAU: "w", FIRMA: nil}.freeze
     LANGUAGES = {D: "de", F: "fr", I: "it", E: "en"}.freeze
     DEFAULT_LANGUAGE = "de"
     DEFAULT_COUNTRY = "CH"
