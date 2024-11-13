@@ -171,7 +171,6 @@ Group::Ortsgruppe.seed_once(:id,
    "language" => "DE",
    "mitglied_termination_by_section_only" => true})
 
-binding.pry
 bluemlisalp = Group.find(1650)
 matterhorn = Group.find(9999)
 
