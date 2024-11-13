@@ -16,7 +16,11 @@ describe Wizards::Steps::Signup::PersonFields do
       gender: "m",
       first_name: "Max",
       last_name: "Muster",
-      birthday: "01.01.2000"
+      birthday: "01.01.2000",
+      street: "Musterplatz",
+      housenumber: "23",
+      town: "Zurich",
+      zip_code: "8000"
     }
   }
 

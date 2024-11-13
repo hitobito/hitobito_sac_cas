@@ -23,6 +23,9 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
   attribute :country, :string
   attribute :phone_number, :string
 
+  validates :gender, :street, :housenumber, :town, :zip_code,
+    :country, presence: true
+
   def initialize(...)
     super
 

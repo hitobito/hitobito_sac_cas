@@ -21,9 +21,12 @@ describe :self_registration do
     fill_in "Nachname", with: "Muster"
     fill_in "Geburtsdatum", with: "01.01.1980"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_street", with: "Musterplatz"
+    fill_in "wizards_signup_abo_basic_login_wizard_person_fields_housenumber", with: "42"
     fill_in "Telefon", with: "+41 79 123 45 56"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_town", with: "Zürich"
+    find(:label, "Land").click
+    find(:option, text: "Vereinigte Staaten").click
     check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
   end
 

@@ -31,7 +31,13 @@ describe Wizards::Signup::AboBasicLoginWizard do
         last_name: "Muster",
         address_care_of: "c/o Musterleute",
         birthday: "1.1.2000",
-        data_protection: "1"
+        data_protection: "1",
+        street: "Musterplatz",
+        housenumber: "42",
+        postbox: "Postfach 23",
+        town: "Zurich",
+        zip_code: "8000",
+        country: "CH"
       }
     }
   }
