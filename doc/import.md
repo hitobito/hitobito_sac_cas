@@ -9,7 +9,15 @@ Reports legen wir in den Folder `csv-logs`. Am besten soll dieser Folder ins erw
   ln -s ~/Documents/Nextcloud/sac-trans/latest/ sac_imports_src
 ```
 
-Der Import soll lokal in einer dedizierten DB erfolgen `export RAILS_DB_NAME=hit_sac_cas_prod` und erfolgt mittels rake tasks in der folgenden Reihenfolge
+Wir setzen env Variablen analog zur prod
+
+```
+  export RAILS_DB_SCHEMA=database
+  export RAILS_DB_NAME=hit_sac_cas_prod
+  export DISABLE_SPRING=1
+```
+
+Der Import erfolgt mittels rake tasks in der folgenden Reihenfolge
 
 0. `rails db:drop db:create db:migrate wagon:migrate` # nicht gleichzeitig mit `seed` ausführen!
 1. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
@@ -31,32 +39,38 @@ Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PR
 Importieren auf dem lokalen system
 
 ```
-  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod db:drop db:create
-  cat ~/tmp/fix-family-main-people.dump | DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails dbconsole -p
+  rails db:drop db:create
+  cat ~/tmp/fix-family-main-people.dump |  rails dbconsole -p
 ```
 
-Exportieren der custom contents von INT
+Exportieren der custom contents von INT und tokens von PROD
 
 ```
   oc project hit-sac-cas-int
-  DISABLE_SPRING=1 ./bin/with_cluster_db rails sac_exports:custom_contents
-  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r 'CustomContent.destroy_all'
-  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r 'CustomContent::Translation.destroy_all'
-  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r ../hitobito_sac_cas/db/seeds/custom_contents.rb
-```
+  ./bin/with_cluster_db rails sac_exports:custom_contents
 
-und oauth und tokens von PROD
-
-```
   oc project hit-sac-cas-prod
-  DISABLE_SPRING=1 ./bin/with_cluster_db rails sac_exports:tokens_and_apps
-  DISABLE_SPRING=1 RAILS_DB_NAME=hit_sac_cas_prod rails r ../hitobito_sac_cas/db/seeds/tokens_and_apps.rb
+  ./bin/with_cluster_db rails sac_exports:tokens_and_apps
+```
+
+Einspielen dieser seeds in lokale DB
+
+```
+  rails r 'CustomContent.destroy_all'
+  rails r 'CustomContent::Translation.destroy_all'
+  rails r ../hitobito_sac_cas/db/seeds/custom_contents.rb
+  rails r ../hitobito_sac_cas/db/seeds/tokens_and_apps.rb
 ```
 
 Dump exportieren und auf prod einspielen
 
 ```
-PGPASSWORD=hitobito pg_dump -cOx -h localhost -U hitobito hit_sac_cas_prod | sed 's/public/database/g;' | gzip > tmp/hit_sac_cas_prod.sql
+  PGPASSWORD=hitobito pg_dump -cOx -h localhost -U hitobito hit_sac_cas_prod | gzip > tmp/hit_sac_cas_prod.sql.gz
+  unset PGUSER
+  unset PGPASSWORD
+
+  oc project hit-sac-cas-prod
+  zcat tmp/hit_sac_cas_prod.sql.gz | ./bin/with_cluster_db rails dbconsole -p
 ```
 
 Wie umgehen mit schema name?? (beste variante wäre beim lokale arbeiten schon das database schema zu verwenden)
