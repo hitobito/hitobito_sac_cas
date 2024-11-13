@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe SacImports::People::PersonEntry do
   let(:group) { Group::ExterneKontakte.new(id: 1) }
-  let(:source) { SacImports::CsvSource::SOURCE_HEADERS[:NAV1] }
+  let(:source) { SacImports::CsvSource::SOURCES[:NAV1] }
   let(:data) { source.new(**row.reverse_merge(source.members.index_with(nil))) }
 
   let(:row) do

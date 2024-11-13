@@ -65,11 +65,11 @@ namespace :sac_imports do
     "sac_imports:nav5-1_huts",
     "sac_imports:nav2b-1_missing_groups",
     "sac_imports:nav1-1_people",
-    "sac_imports:wso21-1_people",
     "sac_imports:nav3-1_qualifications",
     "sac_imports:nav2a-1_membership_roles",
     "sac_imports:nav2a-2_set_family_main_person",
     "sac_imports:nav2a-3_families",
+    "sac_imports:wso21-1_people",
     "sac_imports:nav2b-2_non_membership_roles",
     "sac_imports:nav8-1_austrittsgruende",
     "sac_imports:nav1-2_membership_years_report"

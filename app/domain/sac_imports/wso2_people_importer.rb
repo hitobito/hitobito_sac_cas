@@ -10,8 +10,8 @@ module SacImports
     include LogCounts
 
     REPORT_HEADERS = [
-      :um_id,
       :navision_id,
+      :um_id,
       :first_name,
       :last_name,
       :status,
@@ -22,9 +22,11 @@ module SacImports
     def initialize(output: $stdout)
       PaperTrail.enabled = false # disable versioning for imports
       @output = output
-      @source_file = CsvSource.new(:WSO21, headers: true)
+      @source_file = CsvSource.new(:WSO21)
       @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS, output:)
       @existing_emails = load_existing_emails
+      basic_login_group # warm up to ensure group is present before forking threads
+      abo_group # warm up to ensure group is present before forking threads
     end
 
     def create
@@ -36,7 +38,11 @@ module SacImports
         Person.unscoped,
         "People with wso2 pass" => Person.where.not(wso2_legacy_password_hash: nil)) do
         data = @source_file.rows
+        data = data.drop(1) if data.first&.navision_id == "ContactNo" # skip header row
+
         progress = Progress.new(data.size, title: "WSO2 People Import", output: @output)
+
+        # Parallel.map(data, in_threads: Etc.nprocessors) do |row|
         data.each do |row|
           progress.step
           process_row(row)
@@ -60,28 +66,28 @@ module SacImports
     end
 
     def process_row(row)
-      # @output.print("#{row[:navision_id]} (#{row[:email]}):")
+      # @output.print("#{row.navision_id} (#{row.email}):")
       entry = Wso2::PersonEntry.new(row, basic_login_group, abo_group, @existing_emails)
       # @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!
         if entry.warning
           @csv_report.add_row({
-            um_id: row[:um_id],
-            navision_id: row[:navision_id],
-            first_name: row[:first_name],
-            last_name: row[:last_name],
+            navision_id: row.navision_id,
+            um_id: row.um_id,
+            first_name: row.first_name,
+            last_name: row.last_name,
             warnings: entry.warning,
             status: "warning"
           })
         end
       else
-        @output.puts("#{row[:navision_id]} (#{row[:email]}): ❌ #{entry.error_messages}")
+        @output.puts("#{row.navision_id} (#{row.email}): ❌ #{entry.error_messages}")
         @csv_report.add_row({
-          um_id: row[:um_id],
-          navision_id: row[:navision_id],
-          first_name: row[:first_name],
-          last_name: row[:last_name],
+          navision_id: row.navision_id,
+          um_id: row.um_id,
+          first_name: row.first_name,
+          last_name: row.last_name,
           errors: entry.error_messages,
           status: "error"
         })

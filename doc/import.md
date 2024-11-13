@@ -25,11 +25,11 @@ Der Import erfolgt mittels rake tasks in der folgenden Reihenfolge
 3. `rails sac_imports:nav5-1_huts` # Importiert Hütten Gruppen und Hüttenkontakte
 4. `rails sac_imports:nav2b-1_missing_groups` # Importiert fehlende Gruppen
 5. `rails sac_imports:nav1-1_people` # Importiert Personen aus navision
-6. `rails sac_imports:wso21-1_people` # Importiert alte Passwörter und Personen die nicht im Navision sind
-7. `rails sac_imports:nav3-1_qualifications` # Importiert Qualifikationen der Personen
-8. `rails sac_imports:nav2a-1_membership_roles` # Importiert alle Mitgliedschaftsrollen (Stammsektion,Zusatzsektion)
-9. `rails sac_imports:nav2a-2_set_family_main_person` # Setzt family main person Flag
-10. `rails sac_imports:nav2a-3_families` # Macht Familien auf basis bisher importierter daten (kein file)
+6. `rails sac_imports:nav3-1_qualifications` # Importiert Qualifikationen der Personen
+7. `rails sac_imports:nav2a-1_membership_roles` # Importiert alle Mitgliedschaftsrollen (Stammsektion,Zusatzsektion)
+8. `rails sac_imports:nav2a-2_set_family_main_person` # Setzt family main person Flag
+9. `rails sac_imports:nav2a-3_families` # Macht Familien auf basis bisher importierter daten (kein file)
+10. `rails sac_imports:wso21-1_people` # Importiert alte Passwörter und Personen die nicht im Navision sind
 11. `rails sac_imports:nav2b-2_non_membership_roles` # Importiert alle anderen Rollen
 12. `rails sac_imports:nav8-1_austrittsgruende` # Fällt eventuell weg
 13. `rails sac_imports:nav1-2_membership_years_report` # Generiert Mitgliedsschaftsjahre Report

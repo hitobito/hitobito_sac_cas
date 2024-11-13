@@ -32,7 +32,7 @@ module SacImports
     private
 
     def main_person_ids_from_file
-      @main_person_ids_from_file ||= @data.map { |row| Integer(row.navision_id) }.uniq
+      @main_person_ids_from_file ||= @data.map { |row| Integer(row.navision_id.to_s.sub(/^0*/, "")) }.uniq
     end
 
     def set_family_main_person(ids)

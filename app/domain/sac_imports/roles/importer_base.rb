@@ -33,7 +33,7 @@ module SacImports::Roles
     def title = self.class.name.demodulize.gsub(/Importer$/, "")
 
     def navision_id(row)
-      Integer(row.navision_id) if row.navision_id.present?
+      Integer(row.navision_id.to_s.sub(/^0*/, "")) if row.navision_id.present?
     end
 
     def nr_of_threads

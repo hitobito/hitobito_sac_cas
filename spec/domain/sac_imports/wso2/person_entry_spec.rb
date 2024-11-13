@@ -15,7 +15,7 @@ describe SacImports::Wso2::PersonEntry do
   let(:navision_import_group) { Group::ExterneKontakte.create!(name: "Navision Import", parent: Group::SacCas.first!) }
   let(:addition_fields) { {} }
   let(:row) do
-    SacImports::CsvSource::SOURCE_HEADERS[:NAV1].keys.index_with { |_symbol| nil }.merge(
+    SacImports::CsvSource::SOURCES[:NAV1].keys.index_with { |_symbol| nil }.merge(
       wso2_legacy_password_hash: "foo",
       navision_id: navision_id,
       first_name: "Max",
