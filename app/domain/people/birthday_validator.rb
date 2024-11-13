@@ -22,25 +22,27 @@ class People::BirthdayValidator
   end
 
   def validate_birthday_range
-    if entry.birthday.year >= max_year
-      add_error(:must_be_before_year, max_year)
-    elsif entry.birthday.year < min_year
-      add_error(:must_be_after_year, min_year)
+    if entry.birthday > min_age_date
+      add_error(:must_be_before_year, min_age_date) # Error for too young
+    elsif entry.birthday < max_age_date
+      add_error(:must_be_after_year, max_age_date) # Error for too old
     end
   end
-
-  def add_error(error_type, year = nil)
-    if year
-      entry.errors.add(:birthday, I18n.t("activerecord.errors.models.person.birthday.#{error_type}", year: year))
+  
+  def add_error(error_type, date = nil)
+    if date
+      entry.errors.add(:birthday, I18n.t("activerecord.errors.models.person.birthday.#{error_type}", date: date.strftime("%d.%m.%Y")))
     else
       entry.errors.add(:birthday, I18n.t("activerecord.errors.messages.#{error_type}"))
     end
-    throw(:abort) # do not save record
+    throw(:abort) # Prevent saving the record
   end
-
-  def current_year = Time.current.year
-
-  def max_year = current_year - 6
-
-  def min_year = current_year - 120
+  
+  def min_age_date
+    6.years.ago.to_date
+  end
+  
+  def max_age_date
+    120.years.ago.to_date
+  end
 end
