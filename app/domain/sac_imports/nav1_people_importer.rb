@@ -37,6 +37,8 @@ module SacImports
         @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row.last_name} #{start_from_row.first_name})\n")
       end
 
+      target_group # warm up the target group, otherwise each thread will create a new one
+
       log_counts_delta(@csv_report,
         Person.unscoped,
         AdditionalEmail.where(contactable_type: Person.sti_name)) do
