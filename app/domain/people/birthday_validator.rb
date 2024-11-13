@@ -28,7 +28,7 @@ class People::BirthdayValidator
       add_error(:must_be_after_year, max_age_date) # Error for too old
     end
   end
-  
+
   def add_error(error_type, date = nil)
     if date
       entry.errors.add(:birthday, I18n.t("activerecord.errors.models.person.birthday.#{error_type}", date: date.strftime("%d.%m.%Y")))
@@ -37,11 +37,11 @@ class People::BirthdayValidator
     end
     throw(:abort) # Prevent saving the record
   end
-  
+
   def min_age_date
     6.years.ago.to_date
   end
-  
+
   def max_age_date
     120.years.ago.to_date
   end

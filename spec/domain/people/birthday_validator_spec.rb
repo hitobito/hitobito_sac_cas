@@ -20,22 +20,22 @@ describe People::BirthdayValidator do
     expect { validator.validate_birthday_range }.not_to throw_symbol(:abort)
     expect(person.errors[:birthday]).to be_empty
   end
-  
+
   it "adds error when 5 years and 364 days old" do
     person.update!(birthday: Date.parse("07.06.1999"))
     expect { validator.validate_birthday_range }.to throw_symbol(:abort)
     expect(person.errors[:birthday]).to eq ["muss vor dem 06.06.1999 liegen."]
   end
-  
+
   it "adds no error when exactly 119 years and 364 days old" do
     person.update!(birthday: Date.parse("07.06.1885"))
     expect { validator.validate_birthday_range }.not_to throw_symbol(:abort)
     expect(person.errors[:birthday]).to be_empty
   end
-  
+
   it "adds error when over 120 years old" do
     person.update!(birthday: Date.parse("05.06.1885"))
     expect { validator.validate_birthday_range }.to throw_symbol(:abort)
     expect(person.errors[:birthday]).to eq ["muss nach dem 06.06.1885 liegen."]
-  end  
+  end
 end
