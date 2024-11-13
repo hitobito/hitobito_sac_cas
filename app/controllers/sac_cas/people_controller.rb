@@ -49,7 +49,8 @@ module SacCas::PeopleController
   end
 
   def filter_entries
-    super.with_membership_years
+    entries = add_table_display_to_query(person_filter.entries, current_person).with_membership_years
+    sort_by_sort_expression(entries)
   end
 
   def prepare_entries(entries)
