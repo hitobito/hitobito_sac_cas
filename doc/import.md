@@ -9,12 +9,11 @@ Reports legen wir in den Folder `csv-logs`. Am besten soll dieser Folder ins erw
   ln -s ~/Documents/Nextcloud/sac-trans/latest/ sac_imports_src
 ```
 
-Wir setzen env Variablen analog zur prod
+Wir setzen env Variablen analog zur prod (unklar noch wie mit dem DB_SCHEMA)
 
 ```
-  export RAILS_DB_SCHEMA=database
-  export RAILS_DB_NAME=hit_sac_cas_prod
   export DISABLE_SPRING=1
+  export RAILS_DB_NAME=hit_sac_cas_prod
 ```
 
 Der Import erfolgt mittels rake tasks in der folgenden Reihenfolge
@@ -33,6 +32,7 @@ Der Import erfolgt mittels rake tasks in der folgenden Reihenfolge
 11. `rails sac_imports:nav2b-2_non_membership_roles` # Importiert alle anderen Rollen
 12. `rails sac_imports:nav8-1_austrittsgruende` # Fällt eventuell weg
 13. `rails sac_imports:nav1-2_membership_years_report` # Generiert Mitgliedsschaftsjahre Report
+14. `rails sac_imports:cleanup` # Verschiedene Cleanup Tasks
 
 Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
 
@@ -53,13 +53,20 @@ Exportieren der custom contents von INT und tokens von PROD
   ./bin/with_cluster_db rails sac_exports:tokens_and_apps
 ```
 
-Einspielen dieser seeds in lokale DB
+Einspielen dieser seeds in lokale DB und user vorbereiten
 
 ```
-  rails r 'CustomContent.destroy_all'
-  rails r 'CustomContent::Translation.destroy_all'
+  rails r 'CustomContent.destroy_all; CustomContent::Translation.destroy_all'
   rails r ../hitobito_sac_cas/db/seeds/custom_contents.rb
   rails r ../hitobito_sac_cas/db/seeds/tokens_and_apps.rb
+  rails r "Person.root.update(password: ENV.fetch('ROOT_PW'), password_confirmation: ENV.fetch('ROOT_PW'))"
+  rails dev:local:admin
+```
+
+Schema umbenennen
+
+```
+  echo 'ALTER SCHEMA public RENAME TO database' | rails dbconsole -p
 ```
 
 Dump exportieren und auf prod einspielen

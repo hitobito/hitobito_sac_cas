@@ -147,6 +147,11 @@ namespace :sac_imports do
     raise "Not implemented"
   end
 
+  desc "Run cleanup tasks"
+  task cleanup: [:environment] do
+    SacImports::Cleanup.new.run
+  end
+
   task :dump_database, [:dump_name] => :environment do |t, args|
     target_dir = SacImports::CsvReport::LOG_DIR
 
