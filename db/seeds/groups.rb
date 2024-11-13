@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 def seed_magazin_abo(id, name, parent, title_de:, title_fr:, title_it:, title_en:)
-  Group::AboMagazin.seed_once(:parent_id, :id) do |a|
+  Group::AboMagazin.seed_once(:id) do |a|
     a.parent_id = parent.id
     a.id = id
     a.name = name
@@ -20,12 +20,12 @@ def seed_magazin_abo(id, name, parent, title_de:, title_fr:, title_it:, title_en
   end
 end
 
-Group::SacCas.seed_once(:name, id: 1, name: "SAC/CAS")
+Group::SacCas.seed_once(:id, id: 1, name: "SAC/CAS")
 
-Group::Abos.seed_once(:parent_id, id: 2, parent_id: Group.root.id)
+Group::Abos.seed_once(:id, id: 2, parent_id: Group.root.id)
 abos = Group::Abos.find_by(parent_id: Group.root.id)
 
-Group::AboMagazine.seed_once(:parent_id, id: 3, parent_id: abos.id)
+Group::AboMagazine.seed_once(:id, id: 3, parent_id: abos.id)
 magazine = Group::AboMagazine.find_by(parent_id: abos.id)
 
 seed_magazin_abo(4, "Die Alpen DE", magazine,
@@ -44,13 +44,13 @@ seed_magazin_abo(6, "Le Alpi IT", magazine,
   title_it: "Abbonarsi a «Le Alpi»",
   title_en: "Subscribe to  «Le Alpi»")
 
-Group::AboTourenPortal.seed_once(:parent_id) do |a|
+Group::AboTourenPortal.seed_once(:id) do |a|
   a.id = 7
   a.parent_id = abos.id
   a.self_registration_role_type = "Group::AboTourenPortal::Abonnent"
 end
 
-Group::AboBasicLogin.seed_once(:parent_id) do |a|
+Group::AboBasicLogin.seed_once(:id) do |a|
   a.id = 8
   a.parent_id = abos.id
   a.self_registration_role_type = "Group::AboBasicLogin::BasicLogin"
@@ -61,3 +61,5 @@ Group::AboBasicLogin.seed_once(:parent_id) do |a|
     Group::Translation.new(locale: "en", custom_self_registration_title: "Create a free SAC account")
   ]
 end
+
+Group::ExterneKontakte.seed_once(:id, id: 9, parent_id: Group.root.id, name: "SAC Mitglieder / ehemalig")

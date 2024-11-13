@@ -17,6 +17,12 @@ module SacImports
       :errors
     ]
 
+    Groups = Data.define(:import, :alumni)
+    GROUP_NAMES = {
+      import: "Navision Import",
+      alumni: "SAC Mitglieder / ehemalig"
+    }
+
     def initialize(output: $stdout)
       PaperTrail.enabled = false # disable versioning for imports
       truemail_with_regex
@@ -37,7 +43,7 @@ module SacImports
         @output.print("Starting import from row with navision_id #{start_at_navision_id} (#{start_from_row.last_name} #{start_from_row.first_name})\n")
       end
 
-      target_group # warm up the target group, otherwise each thread will create a new one
+      groups # warm up the target group, otherwise each thread will create a new one
 
       log_counts_delta(@csv_report,
         Person.unscoped,
@@ -62,15 +68,18 @@ module SacImports
       Truemail.configuration.default_validation_type = :regex
     end
 
-    def target_group
-      @target_group ||= Group::ExterneKontakte.find_or_create_by!(
-        name: "Navision Import",
-        parent_id: Group::SacCas.first!.id
-      )
+    def groups
+      @groups ||= Groups.new(**find_or_create_groups)
+    end
+
+    def find_or_create_groups
+      GROUP_NAMES.map do |key, name|
+        [key, Group::ExterneKontakte.find_or_create_by!(name: name, parent_id: Group::SacCas.first!.id)]
+      end.to_h
     end
 
     def process_row(row)
-      entry = People::PersonEntry.new(row, target_group, @existing_emails)
+      entry = People::PersonEntry.new(row, groups, @existing_emails)
       name = "#{row.first_name} #{row.last_name}"
       if entry.valid?
         entry.import!

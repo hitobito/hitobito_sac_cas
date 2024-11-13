@@ -8,7 +8,12 @@
 require "spec_helper"
 
 describe SacImports::People::PersonEntry do
-  let(:group) { Group::ExterneKontakte.new(id: 1) }
+  let(:contact_groups) {
+    SacImports::Nav1PeopleImporter::Groups.new(
+      import: Group::ExterneKontakte.new(id: 1, name: "import", parent: groups(:root)),
+      alumni: Group::ExterneKontakte.new(id: 2, name: "alumni", parent: groups(:root))
+    )
+  }
   let(:source) { SacImports::CsvSource::SOURCES[:NAV1] }
   let(:data) { source.new(**row.reverse_merge(source.members.index_with(nil))) }
 
@@ -25,7 +30,7 @@ describe SacImports::People::PersonEntry do
   end
   let(:existing_emails) { Concurrent::Set.new(Person.pluck(:email).compact) }
 
-  subject(:entry) { described_class.new(data, group, existing_emails) }
+  subject(:entry) { described_class.new(data, contact_groups, existing_emails) }
 
   before { travel_to(Time.zone.local(2022, 10, 20, 11, 11)) }
 
@@ -54,7 +59,7 @@ describe SacImports::People::PersonEntry do
     end
 
     context "without group" do
-      let(:group) { nil }
+      let(:contact_groups) { SacImports::Nav1PeopleImporter::Groups.new(alumni: nil, import: nil) }
 
       it "is invalid without group" do
         expect(entry).not_to be_valid
@@ -178,7 +183,7 @@ describe SacImports::People::PersonEntry do
     subject(:role) { entry.person.roles.first }
 
     it "sets expected type and group" do
-      expect(role.group).to eq group
+      expect(role.group).to eq contact_groups.import
       expect(role.type).to eq "Group::ExterneKontakte::Kontakt"
       expect(role).to be_valid
     end

@@ -14,11 +14,11 @@ module SacImports::People
     DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    attr_reader :row, :group, :warning, :existing_emails
+    attr_reader :row, :groups, :warning, :existing_emails
 
-    def initialize(row, group, existing_emails)
+    def initialize(row, groups, existing_emails)
       @row = row
-      @group = group
+      @groups = groups
       @warning = nil
       @existing_emails = existing_emails
     end
@@ -162,6 +162,13 @@ module SacImports::People
 
     def build_role(person)
       person.roles.find_or_initialize_by(group: group, type: TARGET_ROLE)
+    end
+
+    def group
+      case row.termination_reason
+      when /Gestorben/i then groups.alumni
+      else groups.import
+      end
     end
 
     def build_error_messages
