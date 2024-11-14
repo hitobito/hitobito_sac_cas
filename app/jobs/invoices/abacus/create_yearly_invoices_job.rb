@@ -136,7 +136,8 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       issued_at: @invoice_date,
       sent_at: @send_date,
       # also see comment in ExternalInvoice::SacMembership
-      link: membership_invoice.member.stammsektion
+      link: membership_invoice.member.stammsektion,
+      invoice_kind: :sac_membership_yearly
     )
   end
 

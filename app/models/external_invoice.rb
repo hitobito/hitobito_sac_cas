@@ -34,8 +34,6 @@ class ExternalInvoice < ActiveRecord::Base
 
   include I18nEnums
 
-  class_attribute :invoice_kind
-
   belongs_to :person
   belongs_to :link, polymorphic: true, optional: true
   has_many :hitobito_log_entries, as: :subject, dependent: :nullify
