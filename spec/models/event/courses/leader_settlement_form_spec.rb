@@ -10,7 +10,7 @@ require "spec_helper"
 describe Event::Courses::LeaderSettlementForm do
   describe "validations" do
     let(:course) do
-      course = Fabricate.build(:sac_course)
+      course = Fabricate.build(:sac_course, start_point_of_time: :day)
       course.dates.build(start_at: Time.zone.local(2012, 5, 11))
       course
     end
