@@ -107,7 +107,7 @@ module SacImports::Wso2
 
       person.country = country
       person.town = row.town
-      person.zip_code = row.zip_code
+      person.zip_code = row.zip_code&.strip
       person.birthday = row.birthday
       person.gender = gender
       person.language = language
@@ -211,7 +211,7 @@ module SacImports::Wso2
     end
 
     def find_by_navision_id
-      person = Person.includes(:additional_emails).find_by(id: navision_id)
+      person = Person.find_by(id: navision_id)
 
       errors.add(:id, "Person with id #{navision_id} not found in hitobito") unless person
 
