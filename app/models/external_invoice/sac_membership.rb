@@ -31,12 +31,16 @@
 class ExternalInvoice::SacMembership < ExternalInvoice
   # link is a Group::Section or Group::Ortsgruppe object
 
-  self.invoice_kind = :sac_membership
+  attr_writer :invoice_kind
 
   after_update :handle_state_change_to_payed
 
   def title
     I18n.t("invoices.sac_memberships.title", year: year)
+  end
+
+  def invoice_kind
+    @invoice_kind || :sac_membership
   end
 
   private

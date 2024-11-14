@@ -113,7 +113,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
 
       stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
         .with(
-          body: /"CustomerId":123.*"CustomerId":124/m,
+          body: /"CustomerId":123.*"ProcessFlowNumber":1,.*"CustomerId":124/m,
           headers: {
             "Authorization" => "Bearer 42",
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
@@ -126,7 +126,7 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
         )
       stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
         .with(
-          body: /"CustomerId":130.*"CustomerId":131/m,
+          body: /"CustomerId":130.*"ProcessFlowNumber":1,.*"CustomerId":131/m,
           headers: {
             "Authorization" => "Bearer 42",
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
