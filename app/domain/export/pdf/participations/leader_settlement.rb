@@ -59,7 +59,7 @@ module Export::Pdf::Participations
 
     def compensations(kind)
       participation.event.compensation_rates.select do |rate|
-        kind == "day" ? rate.course_compensation_category.kind == "day" : rate.course_compensation_category.kind != "day"
+        (kind == "day") ? rate.course_compensation_category.kind == "day" : rate.course_compensation_category.kind != "day"
       end
     end
 

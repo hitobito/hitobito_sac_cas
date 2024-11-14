@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::Courses::LeaderSettlementInvoice do
+describe Event::Courses::LeaderSettlementForm do
   describe "validations" do
     let(:course) do
       course = Fabricate.build(:sac_course)

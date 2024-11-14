@@ -1156,7 +1156,7 @@ de:
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
         create_course_leader_invoice_button: Kurskaderabrechnung erstellen
-      popover_create_course_leader_invoice:
+      popover_create_course_leader_settlement:
         create_invoice: Abrechnung erstellen
         info_text_html: Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden. <br> Falls die kontoführende Person bzw. Institution MWST-pflichtig ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.

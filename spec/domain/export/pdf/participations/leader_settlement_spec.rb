@@ -105,7 +105,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
       it "calculates correct total_amount when having multiple flat categories" do
         second_flat_category = CourseCompensationCategory.create!(short_name: "KP-REISE/MATERIAL-II", kind: "flat")
         Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 1), valid_to: Date.new(2022, 5, 1), rate_leader: 50, rate_assistant_leader: 40, course_compensation_category: second_flat_category)
-        course.kind.course_compensation_categories =  [course_compensation_category(:day), second_flat_category, course_compensation_category(:flat), course_compensation_category(:budget)]
+        course.kind.course_compensation_categories = [course_compensation_category(:day), second_flat_category, course_compensation_category(:flat), course_compensation_category(:budget)]
         expect(pdf_content.strings).to include("193.00")
       end
     end
@@ -194,7 +194,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
       it "calculates correct total_amount when having multiple flat categories" do
         second_flat_category = CourseCompensationCategory.create!(short_name: "KP-REISE/MATERIAL-II", kind: "flat")
         Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 1), valid_to: Date.new(2022, 5, 1), rate_leader: 50, rate_assistant_leader: 40, course_compensation_category: second_flat_category)
-        course.kind.course_compensation_categories =  [course_compensation_category(:day), second_flat_category, course_compensation_category(:flat), course_compensation_category(:budget)]
+        course.kind.course_compensation_categories = [course_compensation_category(:day), second_flat_category, course_compensation_category(:flat), course_compensation_category(:budget)]
         expect(pdf_content.strings).to include("118.00")
       end
     end

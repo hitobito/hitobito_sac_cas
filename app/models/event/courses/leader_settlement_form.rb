@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-class Event::Courses::LeaderSettlementInvoice
+class Event::Courses::LeaderSettlementForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
