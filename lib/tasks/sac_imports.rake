@@ -32,7 +32,7 @@ namespace :sac_imports do
   end
 
   desc "Enable debug logging"
-  task debug: :environment do
+  task debug: :setup do
     Rails.logger = Logger.new(SacImports::CsvReport::LOG_DIR.join("rails.log"))
     ActiveRecord::Base.logger = Logger.new(SacImports::CsvReport::LOG_DIR.join("activerecord.log"))
   end
