@@ -58,7 +58,7 @@ module Export::Pdf::Participations
     end
 
     def compensations(kind)
-      CourseCompensationRate.active(participation.event.dates.order(:start_at).first.start_at).select do |rate|
+      participation.event.compensation_rates.select do |rate|
         kind == "day" ? rate.course_compensation_category.kind == "day" : rate.course_compensation_category.kind != "day"
       end
     end
