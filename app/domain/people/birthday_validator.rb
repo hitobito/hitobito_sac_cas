@@ -23,9 +23,9 @@ class People::BirthdayValidator
 
   def validate_birthday_range
     if entry.birthday > min_age_date
-      add_error(:must_be_before_year, min_age_date) # Error for too young
+      add_error(:must_be_before, min_age_date) # Error for too young
     elsif entry.birthday < max_age_date
-      add_error(:must_be_after_year, max_age_date) # Error for too old
+      add_error(:must_be_after, max_age_date) # Error for too old
     end
   end
 
