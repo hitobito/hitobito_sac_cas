@@ -16,7 +16,7 @@ module SacImports
       @model = model
       @keys = keys
       @mode = :seed
-      @file = Rails.root.join("db/seeds/#{model.table_name}_generated.rb")
+      @file = Rails.root.join("tmp/#{model.table_name}_generated.rb")
     end
 
     def generate
