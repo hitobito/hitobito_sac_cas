@@ -47,7 +47,7 @@ module SacImports
     # But Sektion and Ortsgruppe create have default child groups, so we must set the primary key
     # sequence to a higher value than the highest group navision_id to avoid collisions.
     def set_pk_sequence
-      return if Group.maximum(:id) > 6000
+      return if Group.maximum(:id).to_i > 6000
 
       ActiveRecord::Base.connection.set_pk_sequence!(:groups, 6000)
     end
