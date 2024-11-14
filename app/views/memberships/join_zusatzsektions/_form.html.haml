@@ -10,8 +10,8 @@
     = c.with_aside do
       .col-md
         - if wizard.step(:choose_sektion)&.group
-          = render 'wizards/signup/section_fee_summary', active: true,
-            adult: wizard.fees_for(:adult, Time.zone.now.beginning_of_year),
-            family: wizard.fees_for(:family, Time.zone.now.beginning_of_year),
-            youth: wizard.fees_for(:youth, Time.zone.now.beginning_of_year)
+          = render 'wizards/signup/section_fee_summary', active: true, skip_entry_fee: true,
+            adult: wizard.fees_for(:adult),
+            family: wizard.fees_for(:family),
+            youth: wizard.fees_for(:youth)
         = render(SelfRegistration::InfosComponent.new)

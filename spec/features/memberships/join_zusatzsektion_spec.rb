@@ -92,6 +92,7 @@ describe "joining zusatzsektion", js: true do
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Bestätigung"
         expect(page).to have_content "Beitragskategorien SAC Matterhorn"
+        expect(page).not_to have_css(".card", text: "einmalige Eintrittsgebühr")
         expect do
           click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",

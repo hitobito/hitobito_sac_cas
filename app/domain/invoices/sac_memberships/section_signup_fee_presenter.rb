@@ -27,7 +27,7 @@ module Invoices
       delegate :discount_factor, to: :context
       attr_reader :beitragskategorie, :section
 
-      def initialize(section, beitragskategorie, date = Time.zone.today)
+      def initialize(section, beitragskategorie, date: Time.zone.today)
         @section = section
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
@@ -45,9 +45,9 @@ module Invoices
         I18n.t("beitragskategorien.#{beitragskategorie}", scope: i18n_scope)
       end
 
-      def beitragskategorie_amount
+      def beitragskategorie_amount(skip_entry_fee: false)
         parts = [format_position_amount(:annual_fee)]
-        if entry_fee.positive?
+        if entry_fee.positive? && !skip_entry_fee
           parts += [translate_position_text(:entry_fee)]
           parts += [format_position_amount(:entry_fee)]
         end

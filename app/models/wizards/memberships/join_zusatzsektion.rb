@@ -51,8 +51,12 @@ module Wizards::Memberships
       @backoffice
     end
 
-    def fees_for(beitragskategorie, reference_date)
-      Invoices::SacMemberships::SectionSignupFeePresenter.new(choose_sektion.group, beitragskategorie, reference_date)
+    def fees_for(beitragskategorie)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(
+        choose_sektion.group,
+        beitragskategorie,
+        date: Time.zone.now.beginning_of_year
+      )
     end
 
     private

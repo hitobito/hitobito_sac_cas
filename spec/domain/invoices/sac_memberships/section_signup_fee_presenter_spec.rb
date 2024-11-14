@@ -32,11 +32,21 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
       expect(presenter.beitragskategorie_label).to eq expected_labels[beitragskategorie]
     end
 
-    it "has identical beitragskategorie_amount all year long" do
-      travel_to(Date.new(2024, 11)) do
-        parts = presenter.beitragskategorie_amount.split(" + ")
-        expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
-        expect(parts.second).to eq "einmalige Eintrittsgebühr CHF #{format("%.2f", entry_fee)}"
+    describe "beitragskategorie_amount" do
+      it "is identical all year long" do
+        travel_to(Date.new(2024, 11)) do
+          parts = presenter.beitragskategorie_amount.split(" + ")
+          expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
+          expect(parts.second).to eq "einmalige Eintrittsgebühr CHF #{format("%.2f", entry_fee)}"
+        end
+      end
+
+      it "can exclude entry_fee" do
+        travel_to(Date.new(2024, 11)) do
+          parts = presenter.beitragskategorie_amount(skip_entry_fee: true).split(" + ")
+          expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
+          expect(parts.second).to be_nil
+        end
       end
     end
 
