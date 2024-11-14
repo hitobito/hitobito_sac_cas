@@ -51,7 +51,7 @@ module SacImports::Wso2
     end
 
     def person
-      @person ||= find_or_initialize_person
+      @person ||= find_person || Person.new
     end
 
     def valid?
@@ -85,6 +85,7 @@ module SacImports::Wso2
         person.confirmed_at = Time.zone.at(0)
         person.correspondence = "digital"
       end
+      person.tag_list << um_id_tag
     end
 
     def assign_existing_person_attributes
@@ -153,7 +154,7 @@ module SacImports::Wso2
 
       # if email is not taken yet, assign it
       person.email = email && return if @existing_emails.add?(email.downcase)
-      
+
       # otherwise do not assign an email but add it as additional email
       person.additional_emails.build(email:, label: "Duplikat")
       warn(
@@ -203,38 +204,18 @@ module SacImports::Wso2
 
     def um_id_tag ="UM-ID-#{um_id}"
 
-    def find_or_initialize_person
-      return find_or_initialize_by_navision_id if navision_id.present?
-      return Person.new if email.blank?
+    def find_person
+      return find_by_navision_id if navision_id.present?
 
-      by_tag = Person.tagged_with(um_id_tag).first
-      return by_tag if by_tag.present?
-
-      initialize_new_person
+      Person.tagged_with(um_id_tag).first
     end
 
-    def find_or_initialize_by_navision_id
+    def find_by_navision_id
       person = Person.includes(:additional_emails).find_by(id: navision_id)
 
-      if person.nil?
-        person = Person.new
-        errors.add(:id, "Person with id #{navision_id} not found in hitobito")
-      end
+      errors.add(:id, "Person with id #{navision_id} not found in hitobito") unless person
 
       person
-    end
-
-    def initialize_new_person
-      Person.new(tag_list: um_id_tag).tap do |person|
-        if @existing_emails.add?(email.downcase)
-          person.email = email
-        else
-          person.additional_emails.build(email:, label: "Duplikat")
-          warn(
-            "Email #{email} already exists in the system. Importing with additional_email."
-          )
-        end
-      end
     end
 
     def warn(message)
