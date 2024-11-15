@@ -7,6 +7,7 @@
 
 module SacImports::Wso2
   class PersonEntry
+    # Assume no gender if FIRMA is given
     GENDERS = {HERR: "m", FRAU: "w", FIRMA: nil}.freeze
     LANGUAGES = {D: "de", F: "fr", I: "it", E: "en"}.freeze
     DEFAULT_LANGUAGE = "de"
@@ -40,10 +41,10 @@ module SacImports::Wso2
     attr_reader :row
     attr_reader :warning
 
-    def initialize(row, basic_login_group, abo_group, existing_emails)
+    def initialize(row, basic_login_group, tourenportal_group, existing_emails)
       @row = row
       @basic_login_group = basic_login_group
-      @abo_group = abo_group
+      @tourenportal_group = tourenportal_group
       @warning = nil
       @existing_emails = existing_emails
       person.new_record? ? assign_new_person_attributes : assign_existing_person_attributes
@@ -55,19 +56,25 @@ module SacImports::Wso2
     end
 
     def valid?
-      self_valid = super
-      person_valid = person.valid?(context: :import)
+      super
+      person.valid?(context: :import)
 
       errors.merge!(person.errors)
       person.roles.each do |role|
         errors.merge!(role.errors)
       end
 
-      self_valid && person_valid
+      errors.empty?
     end
 
     def error_messages
       (errors.full_messages + [warning]).join(", ")
+    end
+
+    def um_id_tag ="UM-ID-#{row.um_id}"
+
+    def gender
+      GENDERS[row.gender&.to_sym]
     end
 
     def import!
@@ -81,9 +88,12 @@ module SacImports::Wso2
     def assign_common_attributes
       person.wso2_legacy_password_hash = row.wso2_legacy_password_hash
       person.wso2_legacy_password_salt = row.wso2_legacy_password_salt
+
       if row.email_verified == "1"
-        person.confirmed_at = Time.zone.at(0)
+        person.confirmed_at ||= Time.zone.at(0)
         person.correspondence = "digital"
+      else
+        person.correspondence = "print" unless person.confirmed_at?
       end
       person.tag_list << um_id_tag
     end
@@ -143,17 +153,24 @@ module SacImports::Wso2
     def assign_email_existing_person
       return if email.blank? || person.email&.downcase == email # emails match, nothing to do
 
-      if person.email.present?
-        warn("Email mismatch, overwriting current email #{person.email} with #{email}")
+      if @existing_emails.add?(email)
+        if person.email.present?
+          warn("Email mismatch, overwriting current email #{person.email} with #{email}")
+        end
+        person.email = email # email from WSO2 takes precedence
+      else
+        warn("Email #{email} already exists in the system, importing with additional_email.")
+        unless person.additional_emails.any? { |e| e.email == email }
+          person.additional_emails.build(email:, label: "Duplikat")
+        end
       end
-      person.email = email # email from WSO2 takes precedence
     end
 
     def assign_email_new_person
       return if email.blank?
 
       # if email is not taken yet, assign it
-      person.email = email && return if @existing_emails.add?(email.downcase)
+      person.email = email and return if @existing_emails.add?(email.downcase)
 
       # otherwise do not assign an email but add it as additional email
       person.additional_emails.build(email:, label: "Duplikat")
@@ -163,16 +180,18 @@ module SacImports::Wso2
     end
 
     def assign_roles
+      if row.role_abonnent == "1"
+        assign_role(person, @tourenportal_group, Group::AboTourenPortal::Abonnent.sti_name)
+      end
+      if row.role_gratisabonnent == "1"
+        assign_role(person, @tourenportal_group, Group::AboTourenPortal::Gratisabonnent.sti_name)
+      end
+
+      # do not assign basic login role if person is already SAC member
       return if person.sac_membership_active?
 
       if row.role_basiskonto == "1"
         assign_role(person, @basic_login_group, Group::AboBasicLogin::BasicLogin.sti_name)
-      end
-      if row.role_abonnent == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Abonnent.sti_name)
-      end
-      if row.role_gratisabonnent == "1"
-        assign_role(person, @abo_group, Group::AboTourenPortal::Gratisabonnent.sti_name)
       end
     end
 
@@ -188,10 +207,6 @@ module SacImports::Wso2
       row.country || DEFAULT_COUNTRY
     end
 
-    def gender
-      GENDERS[row.gender&.to_sym]
-    end
-
     def email
       row.email&.downcase
     end
@@ -200,22 +215,10 @@ module SacImports::Wso2
       @navision_id ||= Integer(row.navision_id.to_s.sub(/^0*/, ""), exception: false)
     end
 
-    def um_id = row.um_id
-
-    def um_id_tag ="UM-ID-#{um_id}"
-
     def find_person
-      return find_by_navision_id if navision_id.present?
+      return Person.find_by(id: navision_id) if navision_id.present?
 
       Person.tagged_with(um_id_tag).first
-    end
-
-    def find_by_navision_id
-      person = Person.find_by(id: navision_id)
-
-      errors.add(:id, "Person with id #{navision_id} not found in hitobito") unless person
-
-      person
     end
 
     def warn(message)
