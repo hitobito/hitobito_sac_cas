@@ -16,7 +16,10 @@ class Group::SektionsMitglieder < ::Group
 
     validates :end_on, presence: true
 
+    attr_readonly :family_id
+
     after_create_commit :transmit_data_to_abacus
+    before_validation :set_family_id, if: -> { beitragskategorie.family? }
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private
@@ -30,6 +33,10 @@ class Group::SektionsMitglieder < ::Group
       Invoices::Abacus::TransmitPersonJob.new(person).enqueue! if
         person.abacus_subject_key.blank? &&
           person.data_quality != "error"
+    end
+
+    def set_family_id
+      self.family_id = person.household_key
     end
   end
 
