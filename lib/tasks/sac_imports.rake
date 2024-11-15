@@ -52,29 +52,30 @@ namespace :sac_imports do
   end
 
   desc "Reset database and run all imports"
-  task full_monkey_dance: :prepare_database do
-    # run in a separate process than the migrations to avoid issues with schema reloading
-    system("bundle exec rails sac_imports:run_imports")
+  task full_monkey_dance: [
+    :setup,
+    :prepare_database,
+    :all
+  ]
 
-    puts "All imports done"
-  end
-
-  task run_imports: [
-    "sac_imports:setup",
-    "sac_imports:nav6-1_sac_section",
-    "sac_imports:nav5-1_huts",
-    "sac_imports:nav2b-1_missing_groups",
-    "sac_imports:nav1-1_people",
-    "sac_imports:nav3-1_qualifications",
-    "sac_imports:nav2a-1_membership_roles",
-    "sac_imports:nav2a-2_set_family_main_person",
-    "sac_imports:nav2a-3_families",
-    "sac_imports:wso21-1_people",
-    "sac_imports:nav2b-2_non_membership_roles",
-    "sac_imports:nav8-1_austrittsgruende",
-    "sac_imports:nav1-2_membership_years_report"
+  task all: [
+    :setup,
+    :"nav6-1_sac_section",
+    "nav5-1_huts",
+    "nav2b-1_missing_groups",
+    "nav1-1_people",
+    "nav3-1_qualifications",
+    "nav2a-1_membership_roles",
+    "nav2a-2_set_family_main_person",
+    "nav2a-3_families",
+    "wso21-1_people",
+    "nav2b-2_non_membership_roles",
+    # "nav8-1_austrittsgruende",
+    # "nav1-2_membership_years_report",
+    :cleanup,
+    :rename_schema
   ] do
-    puts "All imports done"
+    puts "\e[42;31;1m 😃 All imports done and final DB dump completed 😃 \e[0m"
   end
 
   desc "Imports SAC Sections"
@@ -150,6 +151,18 @@ namespace :sac_imports do
   desc "Run cleanup tasks"
   task cleanup: [:environment] do
     SacImports::Cleanup.new.run
+  end
+
+  desc "Rename schema 'public' → 'database' and generate dump"
+  task rename_schema: :setup do
+    puts "\e[1;33mRenaming schema 'public' → 'database'\e[0m"
+    ActiveRecord::Base.connection.execute <<~SQL
+      ALTER SCHEMA public RENAME TO database;
+    SQL
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "renamed-schema")
+    ActiveRecord::Base.connection.execute <<~SQL
+      ALTER SCHEMA database RENAME TO public;
+    SQL
   end
 
   task :dump_database, [:dump_name] => :environment do |t, args|
