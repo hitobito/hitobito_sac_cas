@@ -6,7 +6,5 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SacCasVerbaende < ::Group
-  self.static_name = true
-
-  children Group::SacCasVerband
+  children SacCasVerbaende, Group::SacCasVerband
 end
