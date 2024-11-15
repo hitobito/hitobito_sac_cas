@@ -163,7 +163,7 @@ describe PeopleController do
                                 person: {birthday: 5.years.ago}}
         end.not_to change { member.reload.birthday }
 
-        expect(response.body).to include("Geburtsdatum muss vor dem 01.01.#{Date.current.year - 6} liegen.")
+        expect(response.body).to include("Geburtsdatum muss vor dem #{6.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
       end
 
       it "cannot update birthday to before 120 years ago" do
@@ -172,7 +172,7 @@ describe PeopleController do
                                 person: {birthday: 121.years.ago}}
         end.not_to change { member.reload.birthday }
 
-        expect(response.body).to include("Geburtsdatum muss nach dem 31.12.#{Date.current.year - 120} liegen.")
+        expect(response.body).to include("Geburtsdatum muss nach dem #{120.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
       end
 
       it "does not validate if birthday was not changed" do
