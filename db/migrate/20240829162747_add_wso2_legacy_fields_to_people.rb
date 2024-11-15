@@ -9,5 +9,6 @@ class AddWso2LegacyFieldsToPeople < ActiveRecord::Migration[6.1]
   def change
     add_column :people, :wso2_legacy_password_hash, :string
     add_column :people, :wso2_legacy_password_salt, :string
+    Person.reset_column_information
   end
 end
