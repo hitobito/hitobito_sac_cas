@@ -130,7 +130,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def participation_leader_type
-    if @model.roles.any? { _1.is_a?(Event::Role::Leader) }
+    if @model.roles.any? { _1.is_a?(Event::Course::Role::Leader) }
       :leader
     else
       :assistant_leader

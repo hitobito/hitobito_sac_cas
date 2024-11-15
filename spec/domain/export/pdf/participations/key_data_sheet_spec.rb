@@ -105,7 +105,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as leader" do
-      let(:event_role_type) { Event::Role::Leader }
+      let(:event_role_type) { Event::Course::Role::Leader }
 
       it "renders" do
         expected_postions = [
@@ -131,7 +131,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as assistant leader" do
-      let(:event_role_type) { Event::Role::AssistantLeader }
+      let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
       it "renders" do
         expected_postions = [
@@ -168,7 +168,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as leader" do
-      let(:event_role_type) { Event::Role::Leader }
+      let(:event_role_type) { Event::Course::Role::Leader }
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
@@ -186,7 +186,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as assistant leader" do
-      let(:event_role_type) { Event::Role::AssistantLeader }
+      let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
@@ -205,7 +205,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
   end
 
   context "as leader" do
-    let(:event_role_type) { Event::Role::Leader }
+    let(:event_role_type) { Event::Course::Role::Leader }
 
     it "sanitizes filename" do
       expect(subject.filename).to eq "Eckdatenblatt_Kursleiter_edmund_hillary_#{now.strftime("%Y_%m_%d_%H%I")}.pdf"
@@ -230,7 +230,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Role::Leader.name.to_sym,
+          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
             participation: Fabricate(:event_participation, event: event),
             person: _1).participation
           participation.reload
@@ -263,7 +263,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
   end
 
   context "as assistant leader" do
-    let(:event_role_type) { Event::Role::AssistantLeader }
+    let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
     it "sanitizes filename" do
       expect(subject.filename).to eq "Eckdatenblatt_Klassenleiter_edmund_hillary_#{now.strftime("%Y_%m_%d_%H%I")}.pdf"
@@ -288,7 +288,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Role::Leader.name.to_sym,
+          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
             participation: Fabricate(:event_participation, event: event),
             person: _1).participation
           participation.reload

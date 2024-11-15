@@ -87,7 +87,7 @@ module SacCas::Event::Course
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
-  LEADER_ROLES = [Event::Role::Leader, Event::Role::AssistantLeader].map(&:sti_name)
+  LEADER_ROLES = [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map(&:sti_name)
 
   INHERITED_ATTRIBUTES = [
     :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
@@ -115,8 +115,8 @@ module SacCas::Event::Course
     i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
     enum canceled_reason: CANCELED_REASONS
 
-    self.role_types = [Event::Role::Leader,
-      Event::Role::AssistantLeader,
+    self.role_types = [Event::Course::Role::Leader,
+      Event::Course::Role::AssistantLeader,
       Event::Course::Role::Participant]
 
     self.used_attributes += [

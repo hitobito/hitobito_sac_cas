@@ -73,7 +73,7 @@ class Export::Pdf::Participations::KeyDataSheet
   end
 
   def leader_type_file_prefix
-    if @participation.roles.any? { _1.is_a?(Event::Role::Leader) }
+    if @participation.roles.any? { _1.is_a?(Event::Course::Role::Leader) }
       t(:leader_file_prefix)
     else
       t(:assistant_leader_file_prefix)

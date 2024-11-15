@@ -543,6 +543,12 @@ de:
       event/role/assistant_leader:
         one: Klassenleitung
         other: Klassenleitung
+      event/course/role/leader:
+        one: Kursleitung
+        other: Kursleitung
+      event/course/role/assistant_leader:
+        one: Klassenleitung
+        other: Klassenleitung
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen

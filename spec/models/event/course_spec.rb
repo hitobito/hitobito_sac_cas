@@ -347,7 +347,7 @@ describe Event::Course do
         {person: people(:mitglied), state: :assigned, price: 10, application: application},
         {person: people(:familienmitglied), state: :assigned, price: 10}
       ])
-      @participations.first.roles.create!(type: Event::Role::Leader)
+      @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
       @participations.third.roles.create!(type: Event::Course::Role::Participant)
     end
@@ -399,8 +399,8 @@ describe Event::Course do
 
       context "with course leaders" do
         before do
-          course.participations.first.roles.create!(type: Event::Role::Leader)
-          course.participations.second.roles.create!(type: Event::Role::AssistantLeader)
+          course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+          course.participations.second.roles.create!(type: Event::Course::Role::AssistantLeader)
           course.participations.third.roles.create!(type: Event::Course::Role::Participant)
         end
 
@@ -411,7 +411,7 @@ describe Event::Course do
       end
 
       context "with course assistant leader" do
-        before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
+        before { course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader) }
 
         it "sends an email to the course admin and assistant leader" do
           expect { course.update!(state: :application_open) }
@@ -488,7 +488,7 @@ describe Event::Course do
       before do
         course.inform_participants = "1"
         course.participations.create!([
-          {person: people(:admin), state: :assigned, active: true, roles: [Event::Role::Leader.new]},
+          {person: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
           {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
           {person: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
         ])
@@ -550,7 +550,7 @@ describe Event::Course do
 
     before do
       _p1, p2, p3, p4 = course.participations.create!([
-        {person: people(:admin), roles: [Event::Role::Leader.new], price: 0},
+        {person: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
         {person: people(:mitglied), state: :absent, price: 42},
         {person: people(:familienmitglied), state: :attended, price: 42},
         {person: people(:familienmitglied2), state: :absent, price: 42}
@@ -585,7 +585,7 @@ describe Event::Course do
 
     before do
       course.participations.create!([
-        {person: people(:admin), roles: [Event::Role::Leader.new], state: :summoned},
+        {person: people(:admin), roles: [Event::Course::Role::Leader.new], state: :summoned},
         {person: people(:mitglied), state: :summoned}
       ])
     end

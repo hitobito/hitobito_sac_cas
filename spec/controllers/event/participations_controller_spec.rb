@@ -397,7 +397,7 @@ describe Event::ParticipationsController do
 
     it "allows to edit actual_days with participations_full in event" do
       own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
-      Event::Role::Leader.create!(participation: own_participation)
+      Event::Course::Role::Leader.create!(participation: own_participation)
       patch :update,
         params: {
           group_id: group.id,
