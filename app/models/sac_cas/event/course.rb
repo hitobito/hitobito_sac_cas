@@ -161,13 +161,6 @@ module SacCas::Event::Course
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
 
-    [
-      ::Event::Role::Leader,
-      ::Event::Role::AssistantLeader
-    ].each do |type|
-      disable_role_type(type)
-    end
-
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
     validates :number, presence: true, uniqueness: {if: :number}
