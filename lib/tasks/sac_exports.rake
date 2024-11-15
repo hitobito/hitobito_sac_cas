@@ -6,22 +6,32 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 namespace :sac_exports do
-  desc "Reads and overrides custom_contents"
-  task custom_contents: :environment do
+  desc "Write all"
+  task write_seeds: [:read_from_int, :read_from_prod]
+
+  desc "Reads and overrides custom_contents from int"
+  task read_from_int: :environment do
     action_text_scope = ActionText::RichText.where(record_type: CustomContent::Translation.sti_name)
 
-    code = SacImports::SeedGenerator.new(CustomContent, keys: [:key]).generate_code
-    code += SacImports::SeedGenerator.new(CustomContent::Translation, keys: [:custom_content_id, :locale]).generate_code
-    code += SacImports::SeedGenerator.new(ActionText::RichText, scope: action_text_scope, keys: [:record_id, :record_type]).generate_code
+    SacExports::ClusterContext.new(:int).with_database do
+      code = SacExports::SeedGenerator.new(CustomContent, keys: [:key]).generate_code
+      code += SacExports::SeedGenerator.new(CustomContent::Translation, keys: [:custom_content_id, :locale]).generate_code
+      code += SacExports::SeedGenerator.new(ActionText::RichText, scope: action_text_scope, keys: [:record_id, :record_type]).generate_code
 
-    write(:custom_contents, code)
+      write(:custom_contents, code)
+    end
   end
 
-  desc "Reads and overrides tokens_and_apps"
-  task tokens_and_apps: :environment do
-    code = SacImports::SeedGenerator.new(ServiceToken, keys: [:token]).generate_code
-    code += SacImports::SeedGenerator.new(Oauth::Application, keys: [:uid]).generate_code
-    write(:tokens_and_apps, code)
+  desc "Reads and overrides tokens_and_apps and sac config from prod"
+  task read_from_prod: :environment do
+    SacExports::ClusterContext.new(:prod).with_database do
+      code = SacExports::SeedGenerator.new(ServiceToken, keys: [:token]).generate_code
+      code += SacExports::SeedGenerator.new(Oauth::Application, keys: [:uid]).generate_code
+      write(:tokens_and_apps, code)
+
+      code = SacExports::SeedGenerator.new(SacMembershipConfig, keys: [:id]).generate_code
+      write(:sac_membership_configs, code)
+    end
   end
 
   def write(seed, code)

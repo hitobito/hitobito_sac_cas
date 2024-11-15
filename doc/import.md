@@ -5,6 +5,8 @@
 Import Files finden sich auf [Nextcloud](https://files.puzzle.ch/apps/files/files/7246438?dir=/sac-trans), die neuesten Dateien sind im `latest` die
 Reports legen wir in den Folder `csv-logs`. Am besten soll dieser Folder ins erwartete Verzeichnis `tmp/sac_imports_src` gelinkt werden
 
+Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
+
 ```
   ln -s ~/Documents/Nextcloud/sac-trans/latest/ sac_imports_src
 ```
@@ -18,39 +20,28 @@ Wir setzen env Variablen analog zur prod (unklar noch wie mit dem DB_SCHEMA)
 
 Der Import erfolgt mittels rake tasks in der folgenden Reihenfolge
 
-0. `rails db:drop db:create db:migrate wagon:migrate` # nicht gleichzeitig mit `seed` ausführen!
-1. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
-2. `rails sac_imports:nav6-1_sac_section` # Import Sektionen und Ortsgruppen
-3. `rails sac_imports:nav5-1_huts` # Importiert Hütten Gruppen und Hüttenkontakte
-4. `rails sac_imports:nav2b-1_missing_groups` # Importiert fehlende Gruppen
-5. `rails sac_imports:nav1-1_people` # Importiert Personen aus navision
-6. `rails sac_imports:nav3-1_qualifications` # Importiert Qualifikationen der Personen
-7. `rails sac_imports:nav2a-1_membership_roles` # Importiert alle Mitgliedschaftsrollen (Stammsektion,Zusatzsektion)
-8. `rails sac_imports:nav2a-2_set_family_main_person` # Setzt family main person Flag
-9. `rails sac_imports:nav2a-3_families` # Macht Familien auf basis bisher importierter daten (kein file)
-10. `rails sac_imports:wso21-1_people` # Importiert alte Passwörter und Personen die nicht im Navision sind
-11. `rails sac_imports:nav2b-2_non_membership_roles` # Importiert alle anderen Rollen
-12. `rails sac_imports:nav8-1_austrittsgruende` # Fällt eventuell weg
-13. `rails sac_imports:nav1-2_membership_years_report` # Generiert Mitgliedsschaftsjahre Report
-14. `rails sac_imports:cleanup` # Verschiedene Cleanup Tasks
-
-Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
+0. `rails sac_exports:write_seeds` # Liest Daten von int und prod und schreibt diese als seed daten nach hitobito_sac_cas/db/seeds
+1. `rails db:drop db:create db:migrate wagon:migrate` # nicht gleichzeitig mit `seed` ausführen!
+2. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
+3. `rails sac_imports:nav6-1_sac_section` # Import Sektionen und Ortsgruppen
+4. `rails sac_imports:nav5-1_huts` # Importiert Hütten Gruppen und Hüttenkontakte
+5. `rails sac_imports:nav2b-1_missing_groups` # Importiert fehlende Gruppen
+6. `rails sac_imports:nav1-1_people` # Importiert Personen aus navision
+7. `rails sac_imports:nav3-1_qualifications` # Importiert Qualifikationen der Personen
+8. `rails sac_imports:nav2a-1_membership_roles` # Importiert alle Mitgliedschaftsrollen (Stammsektion,Zusatzsektion)
+9. `rails sac_imports:nav2a-2_set_family_main_person` # Setzt family main person Flag
+10. `rails sac_imports:nav2a-3_families` # Macht Familien auf basis bisher importierter daten (kein file)
+11. `rails sac_imports:wso21-1_people` # Importiert alte Passwörter und Personen die nicht im Navision sind
+12. `rails sac_imports:nav2b-2_non_membership_roles` # Importiert alle anderen Rollen
+13. `rails sac_imports:nav8-1_austrittsgruende` # Fällt eventuell weg
+14. `rails sac_imports:nav1-2_membership_years_report` # Generiert Mitgliedsschaftsjahre Report
+15. `rails sac_imports:cleanup` # Verschiedene Cleanup Tasks
 
 Importieren auf dem lokalen system
 
 ```
   rails db:drop db:create
   cat ~/tmp/fix-family-main-people.dump |  rails dbconsole -p
-```
-
-Exportieren der custom contents von INT und tokens von PROD
-
-```
-  oc project hit-sac-cas-int
-  ./bin/with_cluster_db rails sac_exports:custom_contents
-
-  oc project hit-sac-cas-prod
-  ./bin/with_cluster_db rails sac_exports:tokens_and_apps
 ```
 
 Einspielen dieser seeds in lokale DB und user vorbereiten

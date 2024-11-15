@@ -1,4 +1,4 @@
-module SacImports
+module SacExports
   class SeedGenerator
     def self.generate_custom_contents
       new(CustomContent, keys: [:key]).generate
