@@ -1795,8 +1795,8 @@ de:
           next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
-          admission: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
-          admission_through_gs: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+          admission: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+          admission_through_gs: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
           next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
