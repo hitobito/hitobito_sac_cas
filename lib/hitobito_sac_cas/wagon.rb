@@ -222,6 +222,15 @@ module HitobitoSacCas
       Doorkeeper.configuration.scopes.add "user_groups"
     end
 
+    # Re-trigger validates_by_schema after applying migrations via wagon maintain_test_schema
+    def prepare_test_db_with_reloaded_schema_validations
+      prepare_test_db_without_reloaded_schema_validations
+      [Person, Group, Role, CostUnit, CostCenter, Event::KindCategory].each(&:validates_by_schema)
+    end
+
+    alias_method :prepare_test_db_without_reloaded_schema_validations, :prepare_test_db
+    alias_method :prepare_test_db, :prepare_test_db_with_reloaded_schema_validations
+
     private
 
     def seed_fixtures

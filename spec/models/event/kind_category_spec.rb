@@ -18,13 +18,13 @@ describe Event::KindCategory do
     it "validates presence of cost_center" do
       category.cost_center_id = nil
       expect(category).not_to be_valid
-      expect(category.errors[:cost_center_id]).to eq ["muss ausgefüllt werden"]
+      expect(category.errors[:cost_center]).to eq ["muss ausgefüllt werden"]
     end
 
     it "validates presence of cost_unit" do
       category.cost_unit_id = nil
       expect(category).not_to be_valid
-      expect(category.errors[:cost_unit_id]).to eq ["muss ausgefüllt werden"]
+      expect(category.errors[:cost_unit]).to eq ["muss ausgefüllt werden"]
     end
   end
 
