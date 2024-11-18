@@ -12,6 +12,17 @@ de:
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
       membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
+    sac:
+      name: "Schweizer Alpen-Club SAC"
+      zentralverband: "Zentralverband"
+      address: "Monbijoustrasse 61"
+      town: "3000 Bern 14"
+      postbox: "Postfach"
+      phone: "+41 31 370 18 18"
+      phone_self_registration: "+41 31 370 18 43/44"
+      email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
+      website: "https://www.sac-cas.ch"
 
   settings:
     email:
@@ -29,7 +40,7 @@ de:
 
   activemodel:
     attributes:
-      event/courses/leader_settlement_invoice:
+      event/courses/leader_settlement_form:
         actual_days: Effektive Tage
         iban: IBAN
       people/membership/invoice_form:
@@ -1364,14 +1375,6 @@ de:
           family: Familienmitgliedschaft
           youth: Jugendmitgliedschaft
 
-  mailer:
-    footer:
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
-
   memberships:
     join_zusatzsektions:
       create:
@@ -1414,7 +1417,6 @@ de:
       year_title: SAC Kurse / Touren %{year}
       title: Eckdatenblatt -Kurs-/Tourenleitung
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
-      footer: Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch
       table:
         number: Veranstaltungs-Nr.
         name: Bezeichungs / Titel
@@ -1644,12 +1646,6 @@ de:
       title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
       additional_infos: Mehr Informationen findest du unter den %{link}.
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: AGB
       link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
       link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
