@@ -140,7 +140,6 @@ module SacImports
     end
 
     def build_email(group)
-      email = row[:email]
       return unless email.present? && Truemail.valid?(email)
 
       group.email = email
@@ -167,5 +166,7 @@ module SacImports
         I18n.t(key, **args)
       end
     end
+
+    def email = row[:email]&.downcase
   end
 end

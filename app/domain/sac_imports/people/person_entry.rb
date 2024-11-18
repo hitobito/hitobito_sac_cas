@@ -65,7 +65,7 @@ module SacImports::People
     end
 
     def email
-      row[:email]
+      row[:email]&.downcase
     end
 
     def company?
@@ -109,7 +109,7 @@ module SacImports::People
       end
 
       if email.present?
-        if Person.where.not(id: person.id).where("LOWER(email) LIKE LOWER(?)", email).exists?
+        if Person.where.not(id: person.id).where(email: email).exists?
           person.additional_emails = [::AdditionalEmail.new(email: email, label: "Duplikat")]
           @warning = "Email #{email} already exists in the system. Importing with additional_email."
         else
