@@ -1238,7 +1238,7 @@ de:
     new:
       title: Kursstufe erstellen
 
-  event/courses/participations/leader_settlement_pdfs:
+  event/courses/leader_settlement_pdfs:
     export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
 
   filter_navigation/people:

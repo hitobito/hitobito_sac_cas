@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= turbo_frame_tag "leader_settlement_form" do
+%div#leader_settlement_form
   = standard_form(entry,
                   url: group_event_leader_settlement_pdfs_path(@group, @event, participation_id: defined?(@participation) ? @participation.id : params[:id]), 
                   method: :post) do |f|
