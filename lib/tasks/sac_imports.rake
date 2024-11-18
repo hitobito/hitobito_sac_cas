@@ -33,6 +33,11 @@ namespace :sac_imports do
     SacImports::FamilyImporter.new.create
   end
 
+  desc "Update family addresses to be the same as the main person"
+  task "nav1-2_sac_families": [:environment] do
+    SacImports::FamilyAddressUpdater.new.update
+  end
+
   desc "Analyzes imported and calculated membership years and creates report"
   task "nav1-2_membership_years_report": [:environment] do
     SacImports::MembershipYearsReport.new.create
