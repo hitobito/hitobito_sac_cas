@@ -43,6 +43,7 @@ module SacCas::OidcClaimSetup
   def run
     super
 
+    add_claim(:language, scope: [:with_roles])
     add_claim(:picture_url, scope: [:name, :with_roles])
     add_claim(:membership_verify_url, scope: [:name, :with_roles])
     add_claim(:phone, scope: [:name, :with_roles])
