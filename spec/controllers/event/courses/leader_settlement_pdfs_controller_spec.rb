@@ -19,9 +19,9 @@ describe Event::Courses::LeaderSettlementPdfsController do
   let(:group) { course.groups.first }
 
   let!(:leader_participations) do
-    [Event::Role::Leader, Event::Role::AssistantLeader].map do |event_role|
+    [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
       Fabricate(event_role.name.to_sym,
-        participation: Fabricate(:event_participation, event: course)).participation
+        participation: Fabricate(:event_participation, event: course), self_employed: true).participation
     end
   end
 
@@ -49,7 +49,7 @@ describe Event::Courses::LeaderSettlementPdfsController do
         expect_any_instance_of(Event::Courses::LeaderSettlementForm).to receive(:valid?).and_return(false)
         post :create, params: {group_id: group,
                                event_id: course,
-                               participation_id: leader_participations.second.id,
+                               participation_id: leader_participations.first.id,
                                event_courses_leader_settlement_form: {iban: "", actual_days: 2}}
         expect(response.media_type).to eq Mime[:turbo_stream]
       end
@@ -58,7 +58,7 @@ describe Event::Courses::LeaderSettlementPdfsController do
         expect do
           post :create, params: {group_id: group,
                                  event_id: course,
-                                 participation_id: leader_participations.second.id,
+                                 participation_id: leader_participations.first.id,
                                  event_courses_leader_settlement_form: {iban: "CH66 0076 2011 6238 5295 8", actual_days: 2}}
         end.to change { Delayed::Job.where("handler like '%LeaderSettlementExportJob%'").count }.by(1)
       end
