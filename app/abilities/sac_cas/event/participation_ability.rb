@@ -29,7 +29,7 @@ module SacCas::Event::ParticipationAbility
   end
 
   def if_self_employed_and_her_own_or_for_leaded_events
-    participation.roles.any? { |role| Event::Course::LEADER_ROLES.include?(role.type) && role.self_employed }  && # has any self employed leader role
+    participation.roles.any? { |role| Event::Course::LEADER_ROLES.include?(role.type) && role.self_employed } && # has any self employed leader role
       her_own || for_leaded_events
   end
 end

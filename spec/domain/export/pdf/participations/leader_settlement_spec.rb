@@ -127,7 +127,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
       course.kind.course_compensation_categories = [course_compensation_category(:day), course_compensation_category(:flat), course_compensation_category(:budget)]
       participation.roles.reload
     end
-  
+
     it "renders full invoice" do
       invoice_text = [
         [14, 276, "Empfangsschein"],
@@ -161,44 +161,44 @@ describe Export::Pdf::Participations::LeaderSettlement do
         [346, 177, "Zentralverband, Monbijoustrasse 61"],
         [346, 165, "3000 Bern 14"]
       ]
-  
+
       text_with_position.each_with_index do |l, i|
         expect(l).to eq(invoice_text[i])
       end
     end
-  
+
     context "total_amount" do
       it "calculates correct total amount when kind has each compensation category once" do
         expect(pdf_content.strings).to include("78.00")
       end
-  
+
       it "calculates correct total amount when kind has only day and budget category" do
         course.kind.course_compensation_categories = [course_compensation_category(:day), course_compensation_category(:budget)]
         expect(pdf_content.strings).to include("53.00")
       end
-  
+
       it "calculates correct total amount when kind has only day and flat category" do
         course.kind.course_compensation_categories = [course_compensation_category(:day), course_compensation_category(:flat)]
         expect(pdf_content.strings).to include("65.00")
       end
-  
+
       it "calculates correct total amount when kind has only budget and flat category" do
         course.kind.course_compensation_categories = [course_compensation_category(:budget), course_compensation_category(:flat)]
         expect(pdf_content.strings).to include("38.00")
       end
-  
+
       it "calculates correct total_amount when having multiple day categories" do
         second_day_category = create_course_compensation(kind: "day", rate_leader: 20, rate_assistant_leader: 10)
         course.kind.course_compensation_categories = [course_compensation_category(:day), second_day_category, course_compensation_category(:budget), course_compensation_category(:flat)]
         expect(pdf_content.strings).to include("118.00")
       end
-  
+
       it "calculates correct total_amount when having multiple budget categories" do
         second_budget_category = create_course_compensation(kind: "budget", rate_leader: 30, rate_assistant_leader: 20)
         course.kind.course_compensation_categories = [course_compensation_category(:day), second_budget_category, course_compensation_category(:budget), course_compensation_category(:flat)]
         expect(pdf_content.strings).to include("98.00")
       end
-  
+
       it "calculates correct total_amount when having multiple flat categories" do
         second_flat_category = create_course_compensation(kind: "flat", rate_leader: 50, rate_assistant_leader: 40)
         course.kind.course_compensation_categories = [course_compensation_category(:day), second_flat_category, course_compensation_category(:budget), course_compensation_category(:flat)]

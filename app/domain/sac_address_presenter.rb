@@ -1,5 +1,5 @@
 class SacAddressPresenter
-  def initialize(locale_data = I18n.t('global.sac'))
+  def initialize(locale_data = I18n.t("global.sac"))
     @data = locale_data
   end
 
@@ -46,6 +46,6 @@ class SacAddressPresenter
   end
 
   def telephone_link(telephone)
-    telephone.gsub(/\s+/, '')
+    telephone.gsub(/\s+/, "")
   end
 end
