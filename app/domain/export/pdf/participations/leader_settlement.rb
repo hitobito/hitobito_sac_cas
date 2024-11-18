@@ -5,46 +5,38 @@
 
 module Export::Pdf::Participations
   class LeaderSettlement
-    attr_reader :participation, :iban, :options
+    attr_reader :participation, :iban, :options, :pdf, :invoice
 
     def initialize(participation, iban, options = {})
       @participation = participation
       @iban = iban
       @options = options
+      @pdf = Export::Pdf::Document.new.pdf
+      @invoice = build_invoice
     end
 
     def render
-      pdf = create_pdf_document
-      invoice = prepare_invoice
-      render_payment_slip(pdf, invoice)
+      render_payment_slip
       pdf.render
     end
 
     private
 
-    def create_pdf_document = Export::Pdf::Document.new.pdf
-
     def formatted_payee_address = Person::Address.new(participation.person).for_invoice
 
     def payment_purpose_text = "Kurs #{participation.event.number}"
 
-    def recipient_address_text = "Schweizer Alpen-Club SAC\nZentralverband, Monbijoustrasse 61\n3000 Bern 14\n\n\n"
+    def render_payment_slip = Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
 
-    def render_payment_slip(pdf, invoice) = Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
+    def total_amount = (compensation_amount("day") * participation&.actual_days) + compensation_amount("non_day")
 
-    def total_amount = (day_compensation_total * participation&.actual_days) + non_day_compensation_total
-
-    def day_compensation_total = compensation_amount("day")
-
-    def non_day_compensation_total = compensation_amount("non_day")
-
-    def prepare_invoice
+    def build_invoice
       Invoice.new(
         iban: iban,
         payee: formatted_payee_address,
         currency: "CHF",
         payment_purpose: payment_purpose_text,
-        recipient_address: recipient_address_text,
+        recipient_address: SacAddressPresenter.new.format(:leader_settlement),
         total: total_amount,
         sequence_number: "1-1",
         reference: nil
@@ -64,8 +56,8 @@ module Export::Pdf::Participations
     end
 
     def relevant_event_role
-      participation.roles.find { |r| r.type == Event::Role::Leader.sti_name } ||
-        participation.roles.find { |r| r.type == Event::Role::AssistantLeader.sti_name }
+      participation.roles.find { |r| r.type == Event::Course::Role::Leader.sti_name } ||
+        participation.roles.find { |r| r.type == Event::Course::Role::AssistantLeader.sti_name }
     end
   end
 end

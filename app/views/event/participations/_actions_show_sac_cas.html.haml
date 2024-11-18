@@ -12,8 +12,7 @@
   = action_button(t(".attach_key_data_sheet"), group_event_key_data_sheets_path(@group, @event, {participation_ids: entry.id}), :file_pdf, method: :post)
 
 - if can?(:leader_settlement, entry.model)
-  - if entry.roles.any? { |role| Event::Course::LEADER_ROLES.include?(role.type) && role.self_employed } # has any self employed leader role
-    = action_button(t('.create_course_leader_invoice_button'),
-                  nil,
-                  :plus,
-                  data: { bs_toggle: 'popover', bs_title: t('.create_course_leader_invoice_button'), bs_placement: 'bottom', bs_content: render('popover_create_course_leader_settlement').to_str })
+  = action_button(t('.create_course_leader_invoice_button'),
+                nil,
+                :file_pdf,
+                data: { bs_toggle: 'popover', bs_title: t('.create_course_leader_invoice_button'), bs_placement: 'bottom', bs_content: render('popover_create_course_leader_settlement', entry: Event::Courses::LeaderSettlementForm.new(actual_days: entry.actual_days)).to_str })

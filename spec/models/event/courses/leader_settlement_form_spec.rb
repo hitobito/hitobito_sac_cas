@@ -24,31 +24,31 @@ describe Event::Courses::LeaderSettlementForm do
     it "is invalid without an iban" do
       leader_settlement_invoice.iban = nil
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:iban]).to eq ["muss ausgefüllt werden"]
+      expect(leader_settlement_invoice.errors.full_messages).to eq ["IBAN muss ausgefüllt werden"]
     end
 
     it "is invalid with an incorrect IBAN format" do
       leader_settlement_invoice.iban = "INVALID_IBAN"
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:iban]).to include("ist nicht gültig")
+      expect(leader_settlement_invoice.errors.full_messages).to eq ["IBAN ist nicht gültig"]
     end
 
     it "is invalid without actual_days" do
       leader_settlement_invoice.actual_days = nil
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:actual_days]).to include("muss ausgefüllt werden")
+      expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage muss ausgefüllt werden"]
     end
 
     it "is invalid when actual_days is negative" do
       leader_settlement_invoice.actual_days = -1
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:actual_days]).to include("muss größer oder gleich 0 sein")
+      expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage muss größer oder gleich 0 sein"]
     end
 
     it "is invalid when actual_days exceeds course total days" do
       leader_settlement_invoice.actual_days = 2
       expect(leader_settlement_invoice).not_to be_valid
-      expect(leader_settlement_invoice.errors[:actual_days]).to include("darf die totalen Tage des Kurses nicht überschreiten")
+      expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage darf die totalen Tage des Kurses nicht überschreiten"]
     end
   end
 end

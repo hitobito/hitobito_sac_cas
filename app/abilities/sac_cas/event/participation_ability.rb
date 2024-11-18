@@ -18,7 +18,7 @@ module SacCas::Event::ParticipationAbility
 
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer
-      permission(:any).may(:leader_settlement).if_can_edit_course_or_her_own
+      permission(:any).may(:leader_settlement).if_self_employed_and_her_own_or_for_leaded_events
       general(:summon).if_application
       general(:destroy).unless_her_own
     end
@@ -28,7 +28,9 @@ module SacCas::Event::ParticipationAbility
     !her_own
   end
 
-  def if_can_edit_course_or_her_own
-    her_own || Ability.new(user).can?(:edit, participation.event)
+  def if_self_employed_and_her_own_or_for_leaded_events
+    require 'pry'; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
+    participation.roles.any? { |role| Event::Course::LEADER_ROLES.include?(role.type) && role.self_employed }  && # has any self employed leader role
+      her_own || for_leaded_events
   end
 end

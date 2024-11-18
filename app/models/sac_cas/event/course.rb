@@ -175,7 +175,7 @@ module SacCas::Event::Course
 
     def total_event_days
       @total_event_days ||= begin
-        total_event_days = dates.sum { _1.duration.days }
+        total_event_days = dates.map(&:duration).sum(&:days)
         total_event_days -= 0.5 if start_point_of_time.to_sym == :evening
         total_event_days
       end

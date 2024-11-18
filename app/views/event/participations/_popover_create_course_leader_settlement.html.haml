@@ -4,11 +4,11 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = turbo_frame_tag "leader_settlement_form" do
-  = standard_form(defined?(leader_settlement_form) ? leader_settlement_form : Event::Courses::LeaderSettlementForm.new,
+  = standard_form(entry,
                   url: group_event_leader_settlement_pdfs_path(@group, @event, participation_id: defined?(@participation) ? @participation.id : params[:id]), 
                   method: :post) do |f|
     .alert.alert-info= t(".info_text_html")
     = f.error_messages
-    = f.labeled_input_field :actual_days, value: defined?(leader_settlement_form) ? leader_settlement_form.actual_days : entry.actual_days
+    = f.labeled_input_field :actual_days, value: entry.actual_days
     = f.labeled_input_field(:iban)
     = form_buttons(f, submit_label: t(".create_invoice"), cancel_url: '#')

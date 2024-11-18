@@ -13,8 +13,8 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     @event = event
     assign_attributes
 
-    if leader_settlement_form.valid?
-      participation.update!(actual_days: leader_settlement_form.actual_days) && render_pdf_in_background
+    if entry.valid?
+      participation.update!(actual_days: entry.actual_days) && render_pdf_in_background
     else
       rerender_form(:unprocessable_entity)
     end
@@ -26,7 +26,7 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}", render_command: -> { rerender_form(:ok) }) do |filename|
       Export::LeaderSettlementExportJob.new(current_person.id,
         participation.id,
-        leader_settlement_form.iban,
+        entry.iban,
         filename: filename).enqueue!
     end
   end
@@ -35,12 +35,12 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     render turbo_stream: turbo_stream.replace(
       "leader_settlement_form",
       partial: "event/participations/popover_create_course_leader_settlement",
-      locals: {leader_settlement_form: leader_settlement_form}
+      locals: {entry: entry}
     ), status: status
   end
 
   def assign_attributes
-    leader_settlement_form.attributes = leader_settlement_form_params
+    entry.attributes = leader_settlement_form_params
   end
 
   def leader_settlement_form_params
@@ -53,7 +53,7 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     authorize!(:leader_settlement, participation)
   end
 
-  def leader_settlement_form = @leader_settlement_form ||= Event::Courses::LeaderSettlementForm.new
+  def entry = @entry ||= Event::Courses::LeaderSettlementForm.new
 
   def group = @group ||= Group.find(params[:group_id])
 
