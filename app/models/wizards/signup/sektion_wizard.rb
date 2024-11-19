@@ -48,8 +48,8 @@ module Wizards::Signup
       fees_for(beitragskategorie)
     end
 
-    def fees_for(beitragskategorie, reference_date = Time.zone.today)
-      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie, reference_date)
+    def fees_for(beitragskategorie)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie)
     end
 
     private

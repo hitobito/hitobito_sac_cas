@@ -2,6 +2,8 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
+- amount_args = local_assigns.slice(:skip_entry_fee).to_h
+
 %aside.card{class: ("d-none" unless active)}
   .card-body
     %h2.card-title=t('.title', section: adult.section)
@@ -10,10 +12,10 @@
         %tbody
           %tr
             %td= adult.beitragskategorie_label
-            %td= adult.beitragskategorie_amount
+            %td= adult.beitragskategorie_amount(**amount_args)
           %tr.border-top
             %td= family.beitragskategorie_label
-            %td= family.beitragskategorie_amount
+            %td= family.beitragskategorie_amount(**amount_args)
           %tr.border-top
             %td= youth.beitragskategorie_label
-            %td= youth.beitragskategorie_amount
+            %td= youth.beitragskategorie_amount(**amount_args)
