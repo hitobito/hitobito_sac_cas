@@ -114,6 +114,11 @@ namespace :sac_imports do
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2a3-families")
   end
 
+  desc "Update family addresses to be the same as the main person"
+  task "nav2a-3_update_sac_familiy_address": [:environment] do
+    SacImports::FamilyAddressUpdater.new.update
+  end
+
   desc "NAV2b Imports missing groups"
   task "nav2b-1_missing_groups": [:environment] do
     SacImports::Nav2b1CreateMissingGroups.new.create
