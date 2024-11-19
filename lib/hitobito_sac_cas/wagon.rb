@@ -209,6 +209,10 @@ module HitobitoSacCas
         TableDisplays::ShowFullColumn,
         [:invoice_state])
 
+      Synchronize::Mailchimp::Synchronizator.member_fields = [
+        [:language, ->(p) { p.language }]
+      ]
+
       Wizards::Base.class_attribute :asides, default: []
     end
 
