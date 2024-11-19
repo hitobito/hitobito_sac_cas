@@ -511,8 +511,8 @@ fr:
             %{name} est âgé·e de %{age} ans et ne peut donc pas être ajouté·e comme administrateur·rice*.
         person:
           birthday:
-            must_be_before_year: "doit être antérieur au 1er janvier%{year}."
-            must_be_after_year: "doit être postérieur au 31 décembre.%{year}."
+            must_be_before: ""
+            must_be_after: ""
         qualification:
           attributes:
             finish_at:
@@ -547,6 +547,14 @@ fr:
         one: Responsable de classe
         many: Responsable de classe
         other: Chef·fe de classe
+      event/course/role/leader:
+        one: ''
+        many: ''
+        other: ''
+      event/course/role/assistant_leader:
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1801,8 +1809,8 @@ fr:
           next_button: Commande payante
       join_zusatzsektion:
         summary:
-          admission: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. Ceci déclenche une facture. L’adhésion supplémentaire sera activée après le paiement de la facture."
-          admission_through_gs: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. La section comprend un processus de validation manuelle. Ceci ne déclenche pas encore de facture, mais seulement une fois la validation effectuée. L’adhésion supplémentaire sera activée après le paiement de la facture."
+          admission: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. La section comprend un processus de validation manuelle. Ceci ne déclenche pas encore de facture, mais seulement une fois la validation effectuée. L’adhésion supplémentaire sera activée après le paiement de la facture."
+          admission_through_gs: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. Ceci déclenche une facture. L’adhésion supplémentaire sera activée après le paiement de la facture."
           next_button: Commande payante
       membership_terminated_info:
         info: "Ton adhésion a été annulée au %{date}. Si tu souhaites réactiver ton adhésion, merci de te rendre sur le site du CAS."

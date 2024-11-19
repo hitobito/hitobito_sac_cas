@@ -506,8 +506,8 @@ en:
             %{name} is %{age} years old and therefore cannot be added as an administrator.
         person:
           birthday:
-            must_be_before_year: ""
-            must_be_after_year: ""
+            must_be_before: ""
+            must_be_after: ""
         qualification:
           attributes:
             finish_at:
@@ -533,6 +533,12 @@ en:
         one: ''
         other: ''
       event/role/assistant_leader:
+        one: ''
+        other: ''
+      event/course/role/leader:
+        one: ''
+        other: ''
+      event/course/role/assistant_leader:
         one: ''
         other: ''
       external_training:
