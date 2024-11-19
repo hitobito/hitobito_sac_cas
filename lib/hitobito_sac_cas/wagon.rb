@@ -225,7 +225,16 @@ module HitobitoSacCas
     # Re-trigger validates_by_schema after applying migrations via wagon maintain_test_schema
     def prepare_test_db_with_reloaded_schema_validations
       prepare_test_db_without_reloaded_schema_validations
-      [Person, Group, Role, CostUnit, CostCenter, PhoneNumber, Qualification, Event::KindCategory].each(&:validates_by_schema)
+      [
+        Person,
+        Group,
+        Role,
+        CostUnit,
+        CostCenter,
+        PhoneNumber,
+        Qualification,
+        Event::KindCategory
+      ].each(&:validates_by_schema)
     end
 
     alias_method :prepare_test_db_without_reloaded_schema_validations, :prepare_test_db
