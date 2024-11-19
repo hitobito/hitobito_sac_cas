@@ -14,6 +14,11 @@ if Rake::Task.task_defined?("spec:features")
       t.rspec_opts = "--tag ~type:feature"
     end
 
+    RSpec::Core::RakeTask.new(:single) do |t|
+      t.pattern = "./spec/api/graphiti*_spec.rb"
+      t.rspec_opts = "--tag ~type:feature"
+    end
+
     task all: ["spec:features", "spec:without_features"]
   end
 
