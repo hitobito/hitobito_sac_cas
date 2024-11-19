@@ -28,7 +28,7 @@ on:
 
 jobs:
   wagon_tests:
-    uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@task/debug-ci
+    uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
     with:
       wagon_repository: ${{ github.event.repository.name }}
       wagon_dependency_repository: hitobito_youth
