@@ -113,8 +113,6 @@ module Memberships
         person.subscriptions.destroy_all
         subscribe_to(newsletter, person) if subscribe_newsletter
         subscribe_to(fundraising, person) if subscribe_fundraising_list
-        p [:data_retention_consent, data_retention_consent]
-        p [:person_validators, Person.validators_on(:data_retention_consent).count]
         person.update(data_retention_consent: data_retention_consent)
         cancel_open_membership_invoices(person)
       end
