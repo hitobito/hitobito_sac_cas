@@ -19,6 +19,7 @@ describe Group::SektionsMitglieder::Mitglied do
       role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:)
       expect(role.beitragskategorie).to be_family
       expect(role.family_id).to eq "4242"
+      expect(role.reload.family_id).to eq "4242"
     end
 
     [:adult, :youth].each do |beitragskategorie|
@@ -26,6 +27,7 @@ describe Group::SektionsMitglieder::Mitglied do
         role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:, beitragskategorie: beitragskategorie)
         expect(role.beitragskategorie).to eq beitragskategorie.to_s
         expect(role.family_id).to be_nil
+        expect(role.reload.family_id).to be_nil
       end
     end
   end
