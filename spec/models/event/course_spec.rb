@@ -597,81 +597,70 @@ describe Event::Course do
   end
 
   describe "#total_event_days" do
-    subject(:course) { Fabricate(:sac_course, start_point_of_time: :day) }
+    subject(:course) { Fabricate.build(:sac_course, start_point_of_time: :day) }
 
-    before do
-      course.dates.destroy_all
+    it "returns 0 days when there are no dates" do
+      expect(course.total_event_days).to eq(0)
     end
 
-    context "when there are no dates" do
-      it "returns 0 days" do
-        expect(course.total_event_days).to eq(0)
-      end
-    end
-
-    context "only single date" do
-      context "without finish_at date" do
-        before { course.dates.build(start_at: Time.zone.parse("2024-01-01")) }
-
-        it "returns 1 day" do
-          expect(course.total_event_days).to eq(1)
-        end
+    describe "single date with only start_at" do
+      it "returns 1 for date" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01"))
+        expect(course.total_event_days).to eq(1)
       end
 
-      context "with start_at and finish_at on the same day" do
-        before do
-          course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 23:00"))
-        end
-
-        it "returns 1 day" do
-          expect(course.total_event_days).to eq(1)
-        end
+      it "returns 1 for datetime" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 11:00"))
+        expect(course.total_event_days).to eq(1)
       end
 
-      context "with start_at and finish_at over multiple days" do
-        before do
-          course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 08:00"))
-        end
-
-        it "returns 3 days" do
-          expect(course.total_event_days).to eq(3)
-        end
+      it "subtracts 0.5 when even starts in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 20:00"))
+        expect(course.total_event_days).to eq(0.5)
       end
     end
 
-    context "multiple dates" do
-      before do
+    describe "single date with start and finish at" do
+      it "returns 1 if they are on the sem date" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 23:00"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "returns still 1 if they they finish in the morning" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "returns 0.5 if event starts in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        expect(course.total_event_days).to eq(0.5)
+      end
+
+      it "counts days ignoring start and end times on each day" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        expect(course.total_event_days).to eq(3)
+      end
+
+      it "still subtracts 0.5 if starting in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        expect(course.total_event_days).to eq(2.5)
+      end
+    end
+
+    describe "multiple dates" do
+      it "returns the total days across all dates" do
         course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
         course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
-      end
-
-      it "returns the total days across all dates" do
         expect(course.total_event_days).to eq(5)
       end
-    end
-
-    context "start_point_of_time is evening" do
-      context "single date" do
-        before do
-          course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 08:00"))
-          course.update!(start_point_of_time: :evening)
-        end
-
-        it "returns total days minus 0.5" do
-          expect(course.total_event_days).to eq(2.5)
-        end
-      end
-
-      context "multiple dates" do
-        before do
-          course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
-          course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
-          course.update!(start_point_of_time: :evening)
-        end
-
-        it "returns total days minus 0.5" do
-          expect(course.total_event_days).to eq(4.5)
-        end
+      it "still subtracts 0.5 if starting in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
+        expect(course.total_event_days).to eq(4.5)
       end
     end
   end
