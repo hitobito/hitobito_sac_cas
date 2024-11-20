@@ -5,7 +5,7 @@
 
 #leader_settlement_form
   = standard_form(entry,
-                  url: group_event_leader_settlement_pdfs_path(@group, @event, participation_id: @participation.id), 
+                  url: group_event_leader_settlement_pdfs_path(@group, @event, participation_id: @participation.id),
                   method: :post) do |f|
     .alert.alert-info= t(".info_text_html")
     = f.error_messages
