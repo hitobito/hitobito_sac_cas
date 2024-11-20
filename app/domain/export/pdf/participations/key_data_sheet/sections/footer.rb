@@ -14,7 +14,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Footer < Export::Pdf:
     pdf.font_size = FONT_SIZE
 
     bounding_box(POSITION, width: bounds.width, height: HEIGHT) do
-      text(I18n.t("participations.key_data_sheet.footer"))
+      text(SacAddressPresenter.new.format(:key_data_sheet))
     end
   end
 end

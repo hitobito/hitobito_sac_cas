@@ -12,6 +12,17 @@ de:
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
       membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
+    sac:
+      name: "Schweizer Alpen-Club SAC"
+      zentralverband: "Zentralverband"
+      address: "Monbijoustrasse 61"
+      town: "3000 Bern 14"
+      postbox: "Postfach"
+      phone: "+41 31 370 18 18"
+      phone_self_registration: "+41 31 370 18 43/44"
+      email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
+      website: "https://www.sac-cas.ch"
 
   settings:
     email:
@@ -25,9 +36,13 @@ de:
       conflicting_family_membership: >-
         %{name} hat bereits eine Familienmitgliedschaft und kann daher
         nicht einem Familienhaushalt hinzugefügt werden.
+      total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
 
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: Effektive Tage
+        iban: IBAN
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -1151,6 +1166,10 @@ de:
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
+        create_course_leader_invoice_button: Kurskaderabrechnung erstellen
+      popover_create_course_leader_settlement:
+        create_invoice: Abrechnung erstellen
+        info_text_html: Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden. <br> Falls die kontoführende Person bzw. Institution MWST-pflichtig ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
@@ -1218,6 +1237,9 @@ de:
   event/levels:
     new:
       title: Kursstufe erstellen
+
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
@@ -1353,14 +1375,6 @@ de:
           family: Familienmitgliedschaft
           youth: Jugendmitgliedschaft
 
-  mailer:
-    footer:
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
-
   memberships:
     join_zusatzsektions:
       create:
@@ -1403,7 +1417,6 @@ de:
       year_title: SAC Kurse / Touren %{year}
       title: Eckdatenblatt -Kurs-/Tourenleitung
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
-      footer: Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch
       table:
         number: Veranstaltungs-Nr.
         name: Bezeichungs / Titel
@@ -1633,12 +1646,6 @@ de:
       title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
       additional_infos: Mehr Informationen findest du unter den %{link}.
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: AGB
       link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
       link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft

@@ -18,6 +18,10 @@ module SacCas::Event::ParticipationAbility
 
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer
+
+      permission(:layer_and_below_full).may(:leader_settlement).in_same_layer_for_self_employed_leader
+      permission(:any).may(:leader_settlement).for_herself_if_self_employed_leader
+
       general(:summon).if_application
       general(:destroy).unless_her_own
     end
@@ -25,5 +29,19 @@ module SacCas::Event::ParticipationAbility
 
   def unless_her_own
     !her_own
+  end
+
+  def in_same_layer_for_self_employed_leader
+    in_same_layer && self_employed_leader
+  end
+
+  def for_herself_if_self_employed_leader
+    her_own && self_employed_leader
+  end
+
+  private
+
+  def self_employed_leader
+    contains_any?(Event::Course::LEADER_ROLES, participation.roles.select(&:self_employed).map(&:type))
   end
 end

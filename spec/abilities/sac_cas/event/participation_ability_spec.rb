@@ -13,9 +13,9 @@ describe Event::ParticipationAbility do
     Event::Participation.new(event: event, person: person, application_id: -1)
   end
 
-  def build_participation_role(person, role_type)
+  def build_participation_role(person, role_type, participation: nil, self_employed: false)
     build(:bluemlisalp_funktionaere, event: top_course, person: person).tap(&:save!)
-      .roles.create!(type: role_type)
+      .roles.create!(type: role_type, participation: participation)
   end
 
   def build_role(key, role)
@@ -88,6 +88,68 @@ describe Event::ParticipationAbility do
 
       it "cannot summon" do
         expect(subject).not_to be_able_to(:summon, participation)
+      end
+    end
+
+    describe "leader_settlement" do
+      let(:top_course) { events(:top_course) }
+      let(:role) { build_role(:bluemlisalp_mitglieder, "Mitglied") }
+      let(:participation) { build(:bluemlisalp_mitglieder, event: top_course, person: role.person) }
+
+      context "not self employed" do
+        before do
+          participation.save!
+          participation.roles.create!(type: Event::Course::Role::Leader, self_employed: false)
+        end
+
+        it "may not leader_settlement when participation is not self employed" do
+          expect(subject).not_to be_able_to(:leader_settlement, participation)
+        end
+      end
+
+      context "leader" do
+        before do
+          participation.save!
+          participation.roles.build(type: Event::Course::Role::Leader, self_employed: true)
+        end
+
+        it "may leader_settlement her own" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
+        end
+
+        it "may not leader_settlement other participations" do
+          other_participation = build(:bluemlisalp_mitglieder, event: top_course)
+          expect(subject).not_to be_able_to(:leader_settlement, other_participation)
+        end
+      end
+
+      context "assistant leader" do
+        before do
+          participation.save!
+          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+        end
+
+        it "may leader_settlement her own" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
+        end
+
+        it "may not leader_settlement other participations" do
+          other_participation = build(:bluemlisalp_mitglieder, event: top_course)
+          expect(subject).not_to be_able_to(:leader_settlement, other_participation)
+        end
+      end
+
+      context "layer and below full" do
+        let(:role) { roles(:admin) }
+
+        before do
+          participation.save!
+          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+        end
+
+        it "may leader_settlement on anty participations" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
+        end
       end
     end
 

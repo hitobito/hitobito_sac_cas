@@ -10,7 +10,7 @@
 
   .card-body
     %h2.card-title=t('.title_contact')
-    %address.card-text=simple_format(t('.address'))
+    %address.card-text=simple_format(SacAddressPresenter.new.format(:self_registration))
 
   .card-body
     %h2.card-title=t('.title_membership')
