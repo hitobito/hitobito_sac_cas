@@ -72,11 +72,18 @@ module SacCas
     ::Group::AboTourenPortal::Abonnent
   ].freeze
 
+  # Prevent those from being edited via roles UI
   WIZARD_MANAGED_ROLES = [
     ::Group::SektionsMitglieder::Mitglied,
     ::Group::SektionsMitglieder::MitgliedZusatzsektion,
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+    ::Group::AboMagazin::Abonnent,
+    ::Group::AboMagazin::Neuanmeldung,
+    ::Group::AboMagazin::Gratisabonnent,
+    ::Group::AboTourenPortal::Abonnent,
+    ::Group::AboTourenPortal::Neuanmeldung,
+    ::Group::AboTourenPortal::Gratisabonnent
   ].freeze
 
   ###
