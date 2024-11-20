@@ -5,59 +5,52 @@
 
 module Export::Pdf::Participations
   class LeaderSettlement
-    attr_reader :participation, :iban, :options, :pdf, :invoice
-
     def initialize(participation, iban, options = {})
       @participation = participation
       @iban = iban
       @options = options
-      @pdf = Export::Pdf::Document.new.pdf
-      @invoice = build_invoice
     end
 
     def render
-      render_payment_slip
-      pdf.render
+      Export::Pdf::Document.new.pdf.tap do |pdf|
+        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
+      end.then(&:render)
     end
 
     private
 
-    def formatted_payee_address = Person::Address.new(participation.person).for_invoice
+    attr_reader :participation, :iban, :options
 
-    def payment_purpose_text = "Kurs #{participation.event.number}"
-
-    def render_payment_slip = Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
-
-    def total_amount = (compensation_amount("day") * participation&.actual_days) + compensation_amount("non_day")
-
-    def build_invoice
-      Invoice.new(
+    def invoice
+      @invoice ||= Invoice.new(
         iban: iban,
-        payee: formatted_payee_address,
+        payee: Person::Address.new(participation.person).for_invoice,
         currency: "CHF",
-        payment_purpose: payment_purpose_text,
+        payment_purpose: "Kurs #{participation.event.number}",
         recipient_address: SacAddressPresenter.new.format(:leader_settlement),
-        total: total_amount,
+        total: daily_compensations + other_compensations,
         sequence_number: "1-1",
         reference: nil
       )
     end
 
+    def daily_compensations = participation.actual_days * compensation_amount(:day)
+
+    def other_compensations = (compensations_by_kind.keys - [:day]).sum { |key| compensation_amount(key) }
+
     def compensation_amount(kind)
-      compensations(kind).map do |compensation|
+      compensations_by_kind.fetch(kind, []).map do |compensation|
         compensation.send(:"rate_#{relevant_event_role.type.demodulize.underscore}")
       end.sum || 0
     end
 
-    def compensations(kind)
-      participation.event.compensation_rates.select do |rate|
-        (kind == "day") ? rate.course_compensation_category.kind == "day" : rate.course_compensation_category.kind != "day"
-      end
+    def compensations_by_kind
+      @compensations_by_kind ||= participation.event.compensation_rates
+        .group_by { |rate| rate.course_compensation_category.kind.to_sym }
     end
 
     def relevant_event_role
-      participation.roles.find { |r| r.type == Event::Course::Role::Leader.sti_name } ||
-        participation.roles.find { |r| r.type == Event::Course::Role::AssistantLeader.sti_name }
+      participation.roles.find { |r| Event::Course::LEADER_ROLES.include?(r.type) }
     end
   end
 end
