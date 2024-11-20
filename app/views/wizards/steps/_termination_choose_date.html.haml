@@ -3,6 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
+- if c.model.wizard.role.terminated?
+  .alert.alert-warning
+    = t('.membership_already_terminated', end_on: l(c.model.wizard.role.end_on))
+
 - if c.model.wizard.mitglied_termination_by_section_only?
   .alert.alert-warning
     = t('.warning_termination_by_section_only')

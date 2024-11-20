@@ -41,7 +41,7 @@ module Dropdown
     def add_wizard(wizard_class, path)
       wizard_name = wizard_class.to_s.demodulize.to_s.underscore
       target_url = send(path, group_id: @group.id, person_id: @person.id)
-      add_item(translate("#{wizard_name}_link"), target_url, method: :get)
+      add_item(dropdown_option_name(wizard_name), target_url, method: :get)
     end
 
     def build(wizard_class)
@@ -53,6 +53,11 @@ module Dropdown
 
     def t(key)
       I18n.t(key, scope: "dropdowns.memberships")
+    end
+
+    def dropdown_option_name(wizard_name)
+      suffix = "_terminated" if person.sac_membership.terminated? && wizard_name == "terminate_sac_membership_wizard"
+      translate("#{wizard_name}#{suffix}_link")
     end
   end
 end
