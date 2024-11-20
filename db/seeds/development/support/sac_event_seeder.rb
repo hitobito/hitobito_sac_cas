@@ -8,9 +8,8 @@
 require Rails.root.join("db", "seeds", "support", "event_seeder")
 
 class SacEventSeeder < EventSeeder
-  def seed_sac_course(group_id)
-    event = seed_event(group_id, :course)
-    event.update!(
+  def course_attributes(values)
+    super.merge(
       cost_center: CostCenter.first,
       cost_unit: CostUnit.first,
       language: :de,
@@ -18,12 +17,12 @@ class SacEventSeeder < EventSeeder
       start_point_of_time: :day,
       contact_id: Person.last.id,
       price_member: 10,
-      price_regular: 20
+      price_regular: 20,
+      number: "#{current_year - rand(5)}-#{rand(100000)}"
     )
-    event
   end
 
-  def seed_sac_course_with_assignment_closed(group_id)
-    seed_sac_course(group_id).update_column(:state, :assignment_closed)
+  def current_year
+    @current_year ||= Time.zone.today.year
   end
 end

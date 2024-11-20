@@ -13,10 +13,10 @@ root = Group.roots.first
 srand(42)
 
 def seed_club_hut(sektion, name, navision_id)
-  sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by(parent_id: sektion.id)
-  kommissionen = Group::SektionsKommissionen.find_or_create_by(parent_id: sektions_funktionaere.id)
-  Group::SektionsKommissionHuetten.find_or_create_by(parent_id: kommissionen.id)
-  clubhuetten = Group::SektionsClubhuetten.find_or_create_by(parent_id: sektions_funktionaere.id)
+  sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by!(parent_id: sektion.id)
+  kommissionen = Group::SektionsKommissionen.find_or_create_by!(parent_id: sektions_funktionaere.id)
+  Group::SektionsKommissionHuetten.find_or_create_by!(parent_id: kommissionen.id, name: "Hüttenkommission")
+  clubhuetten = Group::SektionsClubhuetten.find_or_create_by!(parent_id: sektions_funktionaere.id)
   Group::SektionsClubhuette.seed(:name, :parent_id, {
     name: name,
     navision_id: navision_id,
@@ -25,10 +25,10 @@ def seed_club_hut(sektion, name, navision_id)
 end
 
 def seed_section_hut(sektion, name, navision_id)
-  sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by(parent_id: sektion.id)
-  kommissionen = Group::SektionsKommissionen.find_or_create_by(parent_id: sektions_funktionaere.id)
-  Group::SektionsKommissionHuetten.find_or_create_by(parent_id: kommissionen.id)
-  sektionshuetten = Group::Sektionshuetten.find_or_create_by(parent_id: sektions_funktionaere.id)
+  sektions_funktionaere = Group::SektionsFunktionaere.find_or_create_by!(parent_id: sektion.id)
+  kommissionen = Group::SektionsKommissionen.find_or_create_by!(parent_id: sektions_funktionaere.id)
+  Group::SektionsKommissionHuetten.find_or_create_by!(parent_id: kommissionen.id, name: "Hüttenkommission")
+  sektionshuetten = Group::Sektionshuetten.find_or_create_by!(parent_id: sektions_funktionaere.id)
   Group::Sektionshuette.seed(:name, :parent_id, {
     name: name,
     navision_id: navision_id,
