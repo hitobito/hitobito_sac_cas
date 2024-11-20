@@ -99,7 +99,7 @@ describe Event::ParticipationAbility do
       context "not self employed" do
         before do
           participation.save!
-          participation.roles.build(type: Event::Course::Role::Leader, self_employed: false)
+          participation.roles.create!(type: Event::Course::Role::Leader, self_employed: false)
         end
 
         it "may not leader_settlement when participation is not self employed" do
@@ -136,6 +136,19 @@ describe Event::ParticipationAbility do
         it "may not leader_settlement other participations" do
           other_participation = build(:bluemlisalp_mitglieder, event: top_course)
           expect(subject).not_to be_able_to(:leader_settlement, other_participation)
+        end
+      end
+
+      context "layer and below full" do
+        let(:role) { roles(:admin) }
+
+        before do
+          participation.save!
+          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+        end
+
+        it "may leader_settlement on anty participations" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
         end
       end
     end
