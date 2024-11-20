@@ -11,6 +11,27 @@ require_relative "../shared_examples_mitglied"
 describe Group::SektionsMitglieder::Mitglied do
   it_behaves_like "validates Mitglied active period"
 
+  context "#create" do
+    let(:group) { groups(:bluemlisalp_mitglieder) }
+    let(:person) { Fabricate(:person, household_key: 4242, birthday: 10.years.ago) }
+
+    it "sets family_id from household_key for family membership" do
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:)
+      expect(role.beitragskategorie).to be_family
+      expect(role.family_id).to eq "4242"
+      expect(role.reload.family_id).to eq "4242"
+    end
+
+    [:adult, :youth].each do |beitragskategorie|
+      it "does not set family_id for #{beitragskategorie}" do
+        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:, beitragskategorie: beitragskategorie)
+        expect(role.beitragskategorie).to eq beitragskategorie.to_s
+        expect(role.family_id).to be_nil
+        expect(role.reload.family_id).to be_nil
+      end
+    end
+  end
+
   context "household" do
     let(:familienmitglied) { roles(:familienmitglied) }
     let(:familienmitglied2) { roles(:familienmitglied2) }
