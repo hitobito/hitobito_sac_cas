@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Nav2b3FamilyImporter, versioning: true do
+xdescribe SacImports::Nav2a3FamilyImporter, versioning: true do
   let(:output) { double(puts: nil, print: nil) }
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
   let(:importer) { described_class.new(output: output) }

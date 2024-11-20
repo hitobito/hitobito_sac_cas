@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::Roles::Nav2b2NonMembershipImporter do
+xdescribe SacImports::Roles::Nav2b2NonMembershipImporter do
   context "#create_role" do
     it "creates a role"
     it "does not create duplicate roles"

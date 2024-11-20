@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe SacImports::Huts::HutsRow do
-  let(:importer) { described_class.new(row) }
+  let(:importer) { described_class.new(row, csv_report: double) }
 
   let(:row) do
     SacImports::Nav5HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(

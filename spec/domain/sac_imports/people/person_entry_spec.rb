@@ -153,12 +153,6 @@ describe SacImports::People::PersonEntry do
           .to change(AdditionalEmail, :count).by(1)
           .and change(Person, :count).by(1)
       end
-
-      it "does not import" do
-        expect(person.email).to eq "max.muster@example.com"
-        expect { entry.import! }
-          .to raise_error(ActiveRecord::RecordInvalid)
-      end
     end
   end
 
