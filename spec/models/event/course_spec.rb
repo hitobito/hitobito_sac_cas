@@ -497,7 +497,7 @@ describe Event::Course do
       it "changes participation states to canceled" do
         expect(course.participations.count).to eq(3)
         course.update!(state: :canceled, canceled_reason: :minimum_participants)
-        participations = course.participations.order(:state)
+        participations = course.participations.order(:state, :previous_state)
         expect(participations.map(&:state)).to eq(%w[annulled annulled assigned])
         expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
       end
