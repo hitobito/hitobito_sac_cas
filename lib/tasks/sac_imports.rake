@@ -72,6 +72,7 @@ namespace :sac_imports do
     "nav2b-2_non_membership_roles",
     # "nav8-1_austrittsgruende",
     # "nav1-2_membership_years_report",
+    :update_sac_familiy_address,
     :cleanup,
     :rename_schema
   ] do
@@ -115,7 +116,7 @@ namespace :sac_imports do
   end
 
   desc "Update family addresses to be the same as the main person"
-  task "nav2a-3_update_sac_familiy_address": [:environment] do
+  task "update_sac_familiy_address": [:environment] do
     SacImports::FamilyAddressUpdater.new.update
   end
 
