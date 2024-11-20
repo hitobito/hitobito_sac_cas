@@ -11,6 +11,10 @@ module Memberships
       active_member? && (for_self? || backoffice?)
     end
 
+    def for_self_when_not_terminated_if_active_member_or_backoffice
+      active_member? && (for_self? && !terminated? || backoffice?)
+    end
+
     def backoffice?
       user_context.user.backoffice?
     end
@@ -21,6 +25,10 @@ module Memberships
 
     def active_member?
       People::SacMembership.new(subject.person).active?
+    end
+
+    def terminated?
+      subject.person.sac_membership.terminated?
     end
   end
 end
