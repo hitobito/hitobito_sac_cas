@@ -22,8 +22,8 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
   context "with terminated primary role" do
     it "only has MembershipTerminatedInfo step" do
       role.update_column(:terminated, true)
-      expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::MembershipTerminatedInfo)
-      expect(wizard.step_at(1)).to be_nil
+      expect(wizard.step_at(0)).to be_kind_of(Wizards::Steps::TerminationChooseDate)
+      expect(wizard.step_at(1)).to be_kind_of(Wizards::Steps::Termination::Summary)
     end
   end
 
