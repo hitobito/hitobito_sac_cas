@@ -9,5 +9,5 @@
 = form.labeled_input_field :first_name
 = form.labeled_input_field :last_name
 = form.labeled_date_field :birthday, placeholder: t('global.date_field_placeholder'), yearRange: '-100:+0', data: birthday_data
-= render 'contactable/address_fields', f: form
+= render 'contactable/address_fields', f: form, country_data: { action: 'forwarder#click' }
 = form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')
