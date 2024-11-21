@@ -8,7 +8,6 @@
 module Wizards::Memberships
   class TerminateSacMembershipWizard < Wizards::Base
     self.steps = [
-      Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::AskFamilyMainPerson,
       Wizards::Steps::TerminationNoSelfService,
       Wizards::Steps::TerminationChooseDate,
