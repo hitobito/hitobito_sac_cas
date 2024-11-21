@@ -13,18 +13,6 @@ fr:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       membership: "https://www.sac-cas.ch/fr/membres/devenir-membre/"
 
-    sac:
-      name: "Club Alpin Suisse CAS"
-      zentralverband: "Zentralverband"
-      address: "Monbijoustrasse 61"
-      town: "3000 Berne 14"
-      postbox: "Case postale"
-      phone: "+41 31 370 18 18"
-      phone_self_registration: "+41 31 370 18 43/44"
-      email: "alpin@sac-cas.ch"
-      email_mv: "mv@sac-cas.ch"
-      website: "https://www.sac-cas.ch"
-
   settings:
     email:
       sender: "Club Alpin Suisse CAS <noreply@%{mail_domain}> "
@@ -141,7 +129,8 @@ fr:
           attributes:
             person:
               must_be_sac_member: doit être membre du CAS
-              must_not_be_join_section_member: est déjà membre de la section ou a une demande d’adhésion ouverte
+              must_not_be_join_section_member:
+                est déjà membre de la section ou a une demande d’adhésion ouverte
               must_be_family_main_person: doit être la personne principale de la famille
         person:
           data_quality_issue:
@@ -559,13 +548,13 @@ fr:
         many: Responsable de classe
         other: Chef·fe de classe
       event/course/role/leader:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
       event/course/role/assistant_leader:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formation externe
         many: Formations externes
@@ -741,9 +730,9 @@ fr:
         many: Commissions Environnement et Culture
         other: Commissions Environnement et Culture
       group/sektions_touren_und_kurse_allgemein:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
@@ -1085,9 +1074,9 @@ fr:
         one: Autres
         description: Autres
       group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ""
-        many: ""
-        other: ""
+        one: ''
+        many: ''
+        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1128,15 +1117,19 @@ fr:
         success: Les données enregistrées ont été transférées à tous les cours actifs.
       actions_edit:
         push_down_button: Transférer des données vers des cours
-        push_down_button_confirm: "Voulez-vous vraiment transférer les données enregistrées à tous les cours actifs? Ce faisant, les valeurs actuelles seront écrasées."
+        push_down_button_confirm:
+          "Voulez-vous vraiment transférer les données enregistrées à tous les cours actifs? Ce faisant, les valeurs actuelles seront écrasées."
       kind_category_field:
-        category_overrides_link_title: "Les champs suivants sont repris: Centre de coûts, Support de coûts"
+        category_overrides_link_title:
+          "Les champs suivants sont repris: Centre de coûts, Support de coûts"
     kind_categories:
       push_down:
-        success: "Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés."
+        success:
+          "Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés."
       actions_edit:
         push_down_button: Transférer des données vers des types de cours
-        push_down_button_confirm: "Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées."
+        push_down_button_confirm:
+          "Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées."
 
     participations:
       missing_information: "Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait."
@@ -1172,9 +1165,11 @@ fr:
         subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
-        general_info: "En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier."
+        general_info:
+          "En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier."
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
-        detail_info_text: "Une inscription signée par le·la chef·fe de randonnée ou la cheffe de randonnée confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>."
+        detail_info_text:
+          "Une inscription signée par le·la chef·fe de randonnée ou la cheffe de randonnée confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>."
       summary_step:
         annulation_remarks: |
           Il est recommandé de souscrire une assurance pour frais d’annulation. Les frais d’annulation suivants seraient assumés par le client/la cliente en cas d’annulation avant le début du cours:
@@ -1200,11 +1195,13 @@ fr:
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
       popover_participant_cancels:
-        cancel_info: "Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Les éventuels frais de traitement et d’annulation sont facturés avec la désinscription."
+        cancel_info:
+          "Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Les éventuels frais de traitement et d’annulation sont facturés avec la désinscription."
 
     participation_contact_datas:
       fields:
-        overrides_person_data_info: Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
+        overrides_person_data_info:
+          Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
 
   events:
     actions_show_sac_cas:
@@ -1228,7 +1225,8 @@ fr:
       prices: Prix
 
     general_fields:
-      kind_overrides_link_title: "Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts"
+      kind_overrides_link_title:
+        "Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts"
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
     roles:
       self_employed: travailleur·se indépendant·e
@@ -1384,6 +1382,13 @@ fr:
           family: Adhésion familiale
           youth: Adhésion jeunesse
 
+  mailer:
+    footer:
+      address: |
+        Club Alpin Suisse CAS
+        Monbijoustrasse 61
+        3000 Berne 14
+        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
   memberships:
     join_zusatzsektions:
       create:
@@ -1430,6 +1435,7 @@ fr:
       year_title: "Cours / randonnées du CAS %{year}"
       title: Fiche technique – direction du cours / de la randonnée
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
+      footer: "Club Alpin Suisse CAS, Monbijoustrasse 61, Case postale, CH-3000 Berne 14, +41 31 370 18 43/44, alpin@sac-cas.ch"
       table:
         number: N° de la manifestation
         name: Désignation / titre
@@ -1786,7 +1792,8 @@ fr:
           data_protection_text: "J’ai lu et j’accepte les %{link}"
       choose_sektion:
         no_self_service_info_text: "Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous"
-        backoffice_no_self_service_info_text: "Attention: le changement a lieu dans une section qui procède elle-même à l’admission des membres. Le cas échéant, tu dois clarifier ce changement au préalable avec la section."
+        backoffice_no_self_service_info_text:
+          "Attention: le changement a lieu dans une section qui procède elle-même à l’admission des membres. Le cas échéant, tu dois clarifier ce changement au préalable avec la section."
       choose_membership:
         not_main_family_person_info_text: >-
           Tu peux souscrire une adhésion supplémentaire en tant que personne seule. Si l’adhésion supplémentaire doit être valable pour toute la famille, la personne principale de la famille doit y souscrire. Pour cela, adresse-toi à %{name}.
@@ -1825,7 +1832,8 @@ fr:
           termination_by_section_only: "Attention: la résiliation concerne une section où la fonction de démission est désactivée pour le·la membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section."
           family_warning: "Attention: la résiliation est demandée pour l’ensemble des membres de la famille. Sont concerné·e·s: %{family_member_names}."
           data_retention_info_title: "Conservation de tes données"
-          data_retention_info_text: "Après ta sortie, nous conservons tes données pendant six douze mois avant de les supprimer définitivement. La suppression a les conséquences suivantes pour toi: si tu souhaites adhérer à nouveau au CAS plus tard, tu devras à nouveau payer les frais d’entrée et ton nombre d’années d’adhésion repartira de zéro. Le cas échéant, les qualifications obtenues et les formations suivies (y compris les heures de formation continue) seront supprimées. Ton login CAS sera supprimé et tu ne pourras plus l’utiliser à d’autres fins, par exemple dans l’application CAS). Si tu ne le souhaites pas, tu dois nous autoriser ici à conserver tes données après ta démission."
+          data_retention_info_text:
+            "Après ta sortie, nous conservons tes données pendant six douze mois avant de les supprimer définitivement. La suppression a les conséquences suivantes pour toi: si tu souhaites adhérer à nouveau au CAS plus tard, tu devras à nouveau payer les frais d’entrée et ton nombre d’années d’adhésion repartira de zéro. Le cas échéant, les qualifications obtenues et les formations suivies (y compris les heures de formation continue) seront supprimées. Ton login CAS sera supprimé et tu ne pourras plus l’utiliser à d’autres fins, par exemple dans l’application CAS). Si tu ne le souhaites pas, tu dois nous autoriser ici à conserver tes données après ta démission."
           data_retention_consent: "Je souhaite que mes données soient conservées après ma sortie du CAS."
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."

@@ -53,6 +53,15 @@ describe "joining zusatzsektion", js: true do
     it "can handle membership admission through gs" do
       allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(true)
       fill_out_form
+      expect(page).to have_content "Hiermit wird eine Rechnung ausgelöst."
+      click_on "Kostenpflichtig bestellen"
+      expect(page).to have_css "#flash .alert-success",
+        text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
+    end
+
+    it "can handle membership admission through sektion" do
+      allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(false)
+      fill_out_form
       expect(page).to have_content "Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe."
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
