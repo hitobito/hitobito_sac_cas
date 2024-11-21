@@ -1369,6 +1369,7 @@ de:
       section_signup_fee_presenter:
         annual_fee: jährlicher Beitrag
         entry_fee: "+ einmalige Eintrittsgebühr"
+        abroad_fee: "+ Gebühren Ausland"
         discount: "- %{percent}% Rabatt auf den jährlichen Beitrag"
         total_amount: Total erstmalig
         beitragskategorien:
