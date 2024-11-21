@@ -30,6 +30,13 @@ describe Memberships::TerminateSacMembership do
       end.to raise_error("already terminated")
     end
 
+    it "does not raise when role is already terminated but backoffice is true" do
+      role.update_columns(terminated: true)
+      expect do
+        described_class.new(role, Time.zone.yesterday, backoffice: true)
+      end.not_to raise_error
+    end
+
     it "raises when role is already ended" do
       role.update_columns(end_on: Date.current.yesterday)
       expect do
@@ -156,6 +163,14 @@ describe Memberships::TerminateSacMembership do
         end.not_to(change { person.roles.count })
         expect(role.reload.end_on).to eq end_of_year
         expect(mitglied_zweitsektion.reload.end_on).to eq end_of_year
+      end
+
+      it "does update end_on when backoffice" do
+        termination.save!
+        expect(role.reload.terminated).to be_truthy
+        expect(role.reload.end_on).to eq(end_of_year)
+        described_class.new(role, Time.zone.yesterday, backoffice: true, termination_reason_id: reason.id).save!
+        expect(role.reload.end_on).to eq(Time.zone.yesterday)
       end
     end
 
