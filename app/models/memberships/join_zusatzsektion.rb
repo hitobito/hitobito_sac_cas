@@ -22,7 +22,29 @@ module Memberships
       sac_family_membership? ? super : [person]
     end
 
+    def save!
+      generate_invoice(roles.first) unless confirmation_needed?
+
+      super
+    end
+
     private
+
+    def confirmation_needed?
+      group_for_neuanmeldung.is_a?(Group::SektionsNeuanmeldungenSektion)
+    end
+
+    def generate_invoice(role)
+      invoice = ExternalInvoice::SacMembership.create!(
+        person: role.person,
+        state: :draft,
+        year: Date.current.year,
+        issued_at: Date.current,
+        sent_at: Date.current,
+        link: role.layer_group
+      )
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: false).enqueue!
+    end
 
     def prepare_roles(person)
       group_for_neuanmeldung.roles.build(
