@@ -126,6 +126,7 @@ module HitobitoSacCas
       EventResource.include SacCas::EventResource
       Event::CourseResource.include SacCas::Event::CourseResource
       Event::KindResource.include SacCas::Event::KindResource
+      Person::NameResource.course_leader_role = Event::Course::Role::Leader
 
       ## Helpers
       EventKindsHelper.prepend SacCas::EventKindsHelper
