@@ -45,7 +45,7 @@ module Memberships
       [Time.zone.yesterday, Time.zone.now.end_of_year.to_date]
     end
 
-    def initialize(role, terminate_on, backoffice:, **params)
+    def initialize(role, terminate_on, backoffice: false, **params)
       @role = role
       @backoffice = backoffice
       super(params.merge(terminate_on: terminate_on))
