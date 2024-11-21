@@ -29,8 +29,8 @@ class Export::Pdf::Participations::KeyDataSheet
   def filename
     parts = [t(:file_name_prefix)]
     parts << leader_type_file_prefix
-    parts << person.full_name.parameterize(separator: "_")
-    parts << Time.zone.now.strftime("%Y_%m_%d_%H%I")
+    parts << person.full_name.parameterize(separator: "_", preserve_case: true)
+    parts << Time.zone.now.strftime("%Y_%m_%d_%H%M")
     [parts.join("_"), :pdf].join(".")
   end
 

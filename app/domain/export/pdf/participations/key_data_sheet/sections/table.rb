@@ -63,7 +63,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
 
   def compensation_table
     order_statement = <<-SQL
-      CASE WHEN(course_compensation_categories.kind = 'day') THEN 0 
+      CASE WHEN(course_compensation_categories.kind = 'day') THEN 0
       WHEN(course_compensation_categories.kind = 'flat') THEN 1 END
     SQL
 
@@ -99,7 +99,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
           compensation_rate(rate)
         ]], column_widths:)
       ]
-    end.presence || [["", ""]]
+    end
   end
 
   def event_compensation_rates(kinds)
