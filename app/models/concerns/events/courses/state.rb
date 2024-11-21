@@ -131,9 +131,15 @@ module Events::Courses::State
   end
 
   def send_application_published_email
-    leaders.each do |leader|
+    all_leaders.each do |leader|
       Event::PublishedMailer.notice(self, leader).deliver_later
     end
+  end
+
+  def all_leaders
+    Person.where(id: participations.joins(:roles)
+      .where(roles: {type: SacCas::Event::Course::LEADER_ROLES})
+      .select(:person_id))
   end
 
   def send_application_paused_email

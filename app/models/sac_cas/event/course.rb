@@ -215,11 +215,6 @@ module SacCas::Event::Course
     super
   end
 
-  def leaders
-    Person.where(id: participations.joins(:roles)
-      .where(roles: {type: LEADER_ROLES}).pluck(:person_id))
-  end
-
   private
 
   def weak_validation_state?
