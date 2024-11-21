@@ -16,4 +16,17 @@ module SacCas::Dropdown::PeopleExport
         data: {checkable: true})
     end
   end
+
+  def is_course?(event)
+    event.course?
+  end
+
+  # original method in youth wagon
+  def add_course_items(item, path)
+    super
+
+    item.sub_items << Dropdown::Item.new(translate(:course_data),
+      path.merge(course_data: true),
+      data: {checkable: true})
+  end
 end

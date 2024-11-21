@@ -30,8 +30,9 @@ mitglied:
   town: Neu Carlscheid
   country: CH
   email: e.hillary@hitobito.example.com
+  gender: w
   primary_group: bluemlisalp_mitglieder
-  birthday: <%= Date.new(2000, 1,1) %>
+  birthday: <%= Date.new(2000, 1, 1) %>
   language: de
 
 familienmitglied:

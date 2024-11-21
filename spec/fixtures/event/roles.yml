@@ -3,9 +3,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-#top_leader:
-  #participation: top_leader
-  #type: Event::Role::Leader
+top_leader:
+  participation: top_mitglied
+  type: Event::Role::Participant
 
 #top_tn:
   #participation: top_participant
