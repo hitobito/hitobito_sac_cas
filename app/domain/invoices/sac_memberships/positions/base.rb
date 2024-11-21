@@ -11,20 +11,27 @@ module Invoices
       class Base
         class_attribute :grouping, :section_payment_possible
 
-        attr_reader :member, :membership, :context
+        attr_reader :member, :membership, :context, :country
         attr_writer :amount
 
         delegate :date, :config, :discount_factor, :sac, to: :context
         delegate :beitragskategorie, to: :membership
 
-        def initialize(member, membership)
+        def initialize(member, membership, country)
           @member = member
           @membership = membership
+          @country = country
           @context = member.context
         end
 
         def active?
           paying_person?
+        end
+
+        def abroad?
+          return true if country != "CH"
+
+          member.living_abroad? && member.sac_magazine? && paying_person?
         end
 
         def creditor

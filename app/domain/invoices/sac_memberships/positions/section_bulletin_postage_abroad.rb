@@ -10,7 +10,7 @@ module Invoices
     module Positions
       class SectionBulletinPostageAbroad < Base
         def active?
-          member.living_abroad? && section.bulletin_postage_abroad.to_i.positive? && paying_person?
+          abroad?
         end
 
         def gross_amount
