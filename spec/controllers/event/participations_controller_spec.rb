@@ -299,13 +299,6 @@ describe Event::ParticipationsController do
         end
       end
     end
-
-    describe "participation confirmation email" do
-      it "sends an email" do
-        expect { post :create, params: {group_id: group.id, event_id: event.id} }
-          .to have_enqueued_mail(Event::ApplicationConfirmationMailer).once
-      end
-    end
   end
 
   context "state changes" do

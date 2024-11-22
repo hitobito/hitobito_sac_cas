@@ -175,6 +175,7 @@ module HitobitoSacCas
       People::Membership::VerifyController.include Localizable
 
       ## Jobs
+      Event::ParticipationConfirmationJob.prepend SacCas::Event::ParticipationConfirmationJob
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
 

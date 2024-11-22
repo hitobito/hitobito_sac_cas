@@ -16,7 +16,7 @@ module SacCas::Event::ParticipationsController
     self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category price]
 
     around_create :proceed_wizard
-    after_create :subscribe_newsletter, :send_participation_confirmation_email
+    after_create :subscribe_newsletter
     after_save :update_participation_price
     after_summon :enqueue_invoice_job
     before_cancel :assert_participant_cancelable?
@@ -161,21 +161,6 @@ module SacCas::Event::ParticipationsController
     super.tap do |e|
       e.newsletter = true if subscribe_newsletter?
     end
-  end
-
-  def send_participation_confirmation_email
-    # Ignore if participation is not yet persisted during wizard steps
-    return if entry.new_record?
-
-    content_key = if entry.state == "assigned"
-      Event::ApplicationConfirmationMailer::ASSIGNED
-    elsif entry.state == "unconfirmed"
-      Event::ApplicationConfirmationMailer::UNCONFIRMED
-    else
-      Event::ApplicationConfirmationMailer::APPLIED
-    end
-
-    Event::ApplicationConfirmationMailer.confirmation(entry, content_key).deliver_later
   end
 
   def enqueue_invoice_job
