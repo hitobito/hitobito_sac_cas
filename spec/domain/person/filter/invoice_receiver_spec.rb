@@ -93,7 +93,7 @@ describe Person::Filter::InvoiceReceiver do
 
       it "includes zusatzsektion member" do
         create_role(mitglied, :matterhorn_mitglieder)
-        create_role(MitgliedZusatzsektion, :bluemlisalp_mitglieder)
+        create_role(mitglied_zusatzsektion, :bluemlisalp_mitglieder)
         expect(entries).to include(test_person)
       end
 
@@ -113,7 +113,7 @@ describe Person::Filter::InvoiceReceiver do
 
       it "includes zusatzsektion member" do
         create_role(mitglied, :matterhorn_mitglieder)
-        create_role(MitgliedZusatzsektion, :bluemlisalp_mitglieder)
+        create_role(mitglied_zusatzsektion, :bluemlisalp_mitglieder)
         expect(entries).to include(test_person)
       end
     end
@@ -142,7 +142,7 @@ describe Person::Filter::InvoiceReceiver do
 
       it "excludes zusatzsektion member of layer" do
         create_role(mitglied, :matterhorn_mitglieder)
-        create_role(MitgliedZusatzsektion, :bluemlisalp_mitglieder)
+        create_role(mitglied_zusatzsektion, :bluemlisalp_mitglieder)
         expect(entries).not_to include(test_person)
       end
 
