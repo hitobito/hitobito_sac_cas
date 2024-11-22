@@ -20,22 +20,22 @@ describe SacImports::CsvSource do
   end
 
   it "throws error if requested source file does not exist" do
-    @source_name = :NAV2
+    @source_name = :NAV2a
     expect(Dir)
       .to receive(:glob)
-      .with(sac_imports_src.join("NAV2_*.csv").to_s)
+      .with(sac_imports_src.join("NAV2a_*.csv").to_s)
       .and_return([])
 
     expect do
       source_file.rows
-    end.to raise_error(/^No source file NAV2_\*\.csv found in.+$/)
+    end.to raise_error(/^No source file NAV2a_\*\.csv found in.+$/)
   end
 
   it "converts csv content to hashes with key value pairs defined by header mapping" do
-    @source_name = :NAV2
+    @source_name = :NAV2b
     rows = source_file.rows
-    expect(rows.count).to eq(18)
-    expect(rows[15]).to eq({navision_id: "4200008",
+    expect(rows.count).to eq(5)
+    expect(rows[2].to_h).to include({navision_id: "4200008",
                              valid_from: "2018-02-15",
                              valid_until: nil,
                              layer_type: "SAC/CAS",
@@ -45,15 +45,14 @@ describe SacImports::CsvSource do
                              group_level4: nil,
                              role: "Mitglied",
                              role_description: "Retter I",
-                             person_name: "Bühler Christian",
-                             other: "9038V"})
+                             person_name: "Bühler Christian"})
   end
 
   it "converts WSO21 content to hashes with key value pairs defined by header mapping" do
     @source_name = :WSO21
     rows = source_file.rows
-    expect(rows.count).to eq(9)
-    expect(rows.first).to eq({
+    expect(rows.count).to eq(10)
+    expect(rows.second.to_h).to include({
       address: "Drosselweg 99b",
       address_care_of: nil,
       birthday: "16.11.1993",
@@ -80,7 +79,7 @@ describe SacImports::CsvSource do
   end
 
   it "applies additional regex value filter for rows" do
-    @source_name = :NAV2
+    @source_name = :NAV2a
     rows = source_file.rows(filter: {role: /^Mitglied \(Stammsektion\).+/})
     expect(rows.count).to eq(12)
   end
@@ -89,7 +88,7 @@ describe SacImports::CsvSource do
     @source_name = :NAV3
     rows = source_file.rows
     expect(rows.count).to eq(38)
-    expect(rows.first).to eq({
+    expect(rows.first.to_h).to include({
       navision_id: "4200000",
       active: "1",
       start_at: "2022-06-26",

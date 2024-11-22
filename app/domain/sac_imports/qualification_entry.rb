@@ -14,10 +14,10 @@ module SacImports
     validate :nav3_active_matches_qualification_active
 
     def nav3_active_matches_qualification_active
-      if qualification && row[:active] == "1" && !qualification.active?
+      if qualification && row.active == "1" && !qualification.active?
         @warning = "Active in NAV3 but would be inactive by hitobito"
       end
-      if qualification && row[:active] != "1" && qualification.active?
+      if qualification && row.active != "1" && qualification.active?
         @warning = "Inactive in NAV3 but would be active by hitobio"
       end
     end
@@ -47,15 +47,15 @@ module SacImports
 
     def qualification
       @qualification ||= person&.qualifications&.find_or_initialize_by(
-        qualification_kind_id: qualification_kind_id, start_at: row[:start_at], finish_at: row[:finish_at])
+        qualification_kind_id: qualification_kind_id, start_at: row.start_at, finish_at: row.finish_at)
     end
 
     def qualification_kind_id
-      @qualification_kind_id ||= QualificationKind.find_by(label: row[:qualification_kind])&.id
+      @qualification_kind_id ||= QualificationKind.find_by(label: row.qualification_kind)&.id
     end
 
     def person
-      @person ||= Person.find_by_id(row[:navision_id])
+      @person ||= Person.find_by_id(row.navision_id)
     end
   end
 end

@@ -950,6 +950,9 @@ de:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: Tourenchef*in
+        description: Tourenchef*in
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Tourenchef*in
         description: Tourenchef*in
@@ -1038,9 +1041,6 @@ de:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Andere
         description: Andere
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: Tourenchef
-        other: Tourenchef
 
   # sort top level keys alphabetically from here on
 

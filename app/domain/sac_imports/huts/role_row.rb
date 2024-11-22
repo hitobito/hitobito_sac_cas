@@ -25,7 +25,8 @@ module SacImports::Huts
       unless group
         # TODO fix bugs in data export, where not all huts are exported
         #   and some hut chiefs belong to things other than huts
-        Rails.logger.debug { "Skipping #{role} for unknown hut #{contact_navision_id}" }
+        output.puts "Skipping #{role} for unknown hut #{contact_navision_id}"
+        csv_report.log("Skipping #{role} for unknown hut #{contact_navision_id}")
         return
       end
 

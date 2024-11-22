@@ -7,10 +7,14 @@
 
 module SacImports
   class Wso2PeopleImporter
+    include LogCounts
+
     REPORT_HEADERS = [
       :navision_id,
+      :um_id,
       :first_name,
       :last_name,
+      :status,
       :warnings,
       :errors
     ]
@@ -19,18 +23,39 @@ module SacImports
       PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @source_file = CsvSource.new(:WSO21)
-      @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS)
+      @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS, output:)
+      @existing_emails = load_existing_emails
+      basic_login_group # warm up to ensure group is present before forking threads
+      abo_group # warm up to ensure group is present before forking threads
     end
 
     def create
-      data = @source_file.rows
-      data.each do |row|
-        process_row(row)
+      @csv_report.log("The file contains #{@source_file.lines_count} rows.")
+
+      log_counts_delta(@csv_report,
+        Group::AboBasicLogin::BasicLogin,
+        Group::AboTourenPortal::Abonnent,
+        Person.unscoped,
+        "People with wso2 pass" => Person.where.not(wso2_legacy_password_hash: nil)) do
+        data = @source_file.rows
+        data = data.drop(1) if data.first&.navision_id == "ContactNo" # skip header row
+
+        progress = Progress.new(data.size, title: "WSO2 People Import", output: @output)
+
+        # Parallel.map(data, in_threads: Etc.nprocessors) do |row|
+        data.each do |row|
+          progress.step
+          process_row(row)
+        end
       end
-      @csv_report.finalize(output: @output)
+      @csv_report.finalize
     end
 
     private
+
+    def load_existing_emails
+      Concurrent::Set.new(Person.select("lower(email) as email").distinct.pluck(:email))
+    end
 
     def basic_login_group
       @basic_login_group ||= Group::AboBasicLogin.first!
@@ -40,30 +65,31 @@ module SacImports
       @abo_group ||= Group::AboTourenPortal.first!
     end
 
-    def navision_import_group
-      @navision_import_group ||= Group::ExterneKontakte.find_by!(name: "Navision Import")
-    end
-
     def process_row(row)
-      @output.print("#{row[:navision_id]} (#{row[:email]}):")
-      entry = Wso2::PersonEntry.new(row, basic_login_group, abo_group, navision_import_group)
-      @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
+      # @output.print("#{row.navision_id} (#{row.email}):")
+      entry = Wso2::PersonEntry.new(row, basic_login_group, abo_group, @existing_emails)
+      # @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!
         if entry.warning
           @csv_report.add_row({
-            navision_id: row[:navision_id],
-            first_name: row[:first_name],
-            last_name: row[:last_name],
-            warnings: entry.warning
+            navision_id: row.navision_id,
+            um_id: row.um_id,
+            first_name: row.first_name,
+            last_name: row.last_name,
+            warnings: entry.warning,
+            status: "warning"
           })
         end
       else
+        @output.puts("#{row.navision_id} (#{row.email}): ❌ #{entry.error_messages}")
         @csv_report.add_row({
-          navision_id: row[:navision_id],
-          first_name: row[:first_name],
-          last_name: row[:last_name],
-          errors: entry.error_messages
+          navision_id: row.navision_id,
+          um_id: row.um_id,
+          first_name: row.first_name,
+          last_name: row.last_name,
+          errors: entry.error_messages,
+          status: "error"
         })
       end
     end
