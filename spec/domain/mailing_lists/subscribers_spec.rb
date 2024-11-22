@@ -69,6 +69,7 @@ describe MailingLists::Subscribers do
         it "includes member in a zusatzsektion" do
           create_role(mitglied, :bluemlisalp_mitglieder)
           create_role(mitglied_zusatzsektion, :matterhorn_mitglieder)
+          expect(entries).to include(test_person)
         end
 
         it "excludes member without zusatzsektion" do
