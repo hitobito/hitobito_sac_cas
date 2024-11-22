@@ -45,7 +45,7 @@ class SacImports::CsvSource
     def terminated?
       return false if valid_until.blank?
 
-      REFERENCE_DATE > Date.parse(valid_until)
+      Date.parse(valid_until) < REFERENCE_DATE
     end
   end
 end

@@ -31,7 +31,7 @@ class SacImports::CsvReport
   end
 
   def log(line)
-    puts(line)
+    @output.puts(line)
     File.write(log_file_path, "#{line}\n", mode: "a")
   end
 
