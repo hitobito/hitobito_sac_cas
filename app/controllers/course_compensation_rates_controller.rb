@@ -13,10 +13,4 @@ class CourseCompensationRatesController < SimpleCrudController
     :rate_assistant_leader,
     :course_compensation_category_id
   ]
-
-  private
-
-  def list_entries
-    super.list
-  end
 end
