@@ -12,6 +12,17 @@ en:
     links:
       faq: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
       membership: ""
+    sac:
+      name: ""
+      zentralverband: ""
+      address: ""
+      town: ""
+      postbox: ""
+      phone: ""
+      phone_self_registration: ""
+      email: ""
+      email_mv: ""
+      website: ""
 
   settings:
     email:
@@ -24,8 +35,13 @@ en:
       assert_old_enough_with_age: "must have a date of birth and be at least %{minimum_years} years old"
       conflicting_family_membership: >-
         %{name} already has a family membership and therefore cannot be added to a family household.
+      total_event_days_exceeded: ""
+
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: ""
+        iban: ""
       people/membership/invoice_form:
         reference_date: "Deadline"
         invoice_date: ""
@@ -1132,6 +1148,10 @@ en:
         create_invoice_button: ""
         attach_key_data_sheet: ""
         create_invoice_confirmation: ""
+        create_course_leader_invoice_button: ""
+      popover_create_course_leader_settlement:
+        create_invoice: ""
+        info_text_html: ""
       invoice_created_notice: ""
       invoice_not_created_alert: ""
 
@@ -1194,6 +1214,9 @@ en:
   event/levels:
     new:
       title: Create course level
+
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: ""
 
   filter_navigation/people:
     tour_guides_none: No tour leader
@@ -1323,9 +1346,6 @@ en:
           family: ""
           youth: ""
 
-  mailer:
-    footer:
-      address: |
   memberships:
     join_zusatzsektions:
       create:
@@ -1368,7 +1388,6 @@ en:
       year_title: ""
       title: ""
       greeting: ""
-      footer: ""
       table:
         number: ""
         name: ""
@@ -1594,13 +1613,6 @@ en:
       title_membership: ""
       title_documents: Documents
       additional_infos: "You can find more information in the %{link}."
-      address: |
-        Swiss Alpine Club SAC
-        Monbijoustrasse 61
-        P.O.Box
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: ""
       link_agb: ""
       link_faqs: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"

@@ -12,6 +12,17 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
+    sac:
+      name: ""
+      zentralverband: ""
+      address: ""
+      town: ""
+      postbox: ""
+      phone: ""
+      phone_self_registration: ""
+      email: ""
+      email_mv: ""
+      website: ""
 
   settings:
     email:
@@ -24,8 +35,13 @@ it:
       assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
+      total_event_days_exceeded: ""
+
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: ""
+        iban: ""
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di registrazione"
@@ -1191,6 +1207,10 @@ it:
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
+        create_course_leader_invoice_button: ""
+      popover_create_course_leader_settlement:
+        create_invoice: ""
+        info_text_html: ""
       invoice_created_notice: La fattura è stata creata con successo.
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
 
@@ -1253,6 +1273,9 @@ it:
   event/levels:
     new:
       title: Creare il livello del corso
+
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: ""
 
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
@@ -1382,13 +1405,6 @@ it:
           family: Affiliazione famigliare
           youth: Affiliazione giovani
 
-  mailer:
-    footer:
-      address: |
-        Club Alpino Svizzero CAS
-        Monbijoustrasse 61
-        3000 Berna 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
   memberships:
     join_zusatzsektions:
       create:
@@ -1435,7 +1451,6 @@ it:
       year_title: "Corsi / Escursioni CAS %{year}"
       title: Scheda dei dati di riferimento direzione corso/escursioni
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
-      footer: "Club Alpino Svizzero CAS, Monbijoustrasse 61, Casella postale, CH-3000 Berna 14, +41 31 370 18 43/44, alpin@sac-cas.ch"
       table:
         number: Evento n.
         name: Denominazione / Titolo
@@ -1665,12 +1680,6 @@ it:
       title_membership: "Desideri diventare socio del CAS?"
       title_documents: Documenti
       additional_infos: "Trovi maggiori informazioni nelle %{link}."
-      address: |
-        Club Alpino Svizzero CAS
-        Monbijoustrasse 61
-        3000 Berna 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: CGC
       link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
       link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"

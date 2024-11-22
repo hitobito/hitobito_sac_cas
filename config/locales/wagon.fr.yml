@@ -12,6 +12,17 @@ fr:
     links:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       membership: "https://www.sac-cas.ch/fr/membres/devenir-membre/"
+    sac:
+      name: ""
+      zentralverband: ""
+      address: ""
+      town: ""
+      postbox: ""
+      phone: ""
+      phone_self_registration: ""
+      email: ""
+      email_mv: ""
+      website: ""
 
   settings:
     email:
@@ -24,8 +35,13 @@ fr:
       assert_old_enough_with_age: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       conflicting_family_membership: >-
         %{name} a déjà une adhésion familiale et ne peut donc pas être ajouté·e à un ménage familial.
+      total_event_days_exceeded: ""
+
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: ""
+        iban: ""
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -1191,6 +1207,10 @@ fr:
         create_invoice_button: Créer une facture
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
+        create_course_leader_invoice_button: ""
+      popover_create_course_leader_settlement:
+        create_invoice: ""
+        info_text_html: ""
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
@@ -1253,6 +1273,9 @@ fr:
   event/levels:
     new:
       title: Créer un niveau de cours
+
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: ""
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de randonnée
@@ -1382,13 +1405,6 @@ fr:
           family: Adhésion familiale
           youth: Adhésion jeunesse
 
-  mailer:
-    footer:
-      address: |
-        Club Alpin Suisse CAS
-        Monbijoustrasse 61
-        3000 Berne 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
   memberships:
     join_zusatzsektions:
       create:
@@ -1435,7 +1451,6 @@ fr:
       year_title: "Cours / randonnées du CAS %{year}"
       title: Fiche technique – direction du cours / de la randonnée
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
-      footer: "Club Alpin Suisse CAS, Monbijoustrasse 61, Case postale, CH-3000 Berne 14, +41 31 370 18 43/44, alpin@sac-cas.ch"
       table:
         number: N° de la manifestation
         name: Désignation / titre
@@ -1665,12 +1680,6 @@ fr:
       title_membership: "Souhaites-tu devenir membre du CAS?"
       title_documents: Documents
       additional_infos: "Tu trouversa de plus amples informations sur %{link}."
-      address: |
-        Club Alpin Suisse CAS
-        Monbijoustrasse 61
-        3000 Berne 14
-        Tél: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: CGV
       link_agb: "https://www.sac-cas.ch/fr/meta/cgv-les-alpes/"
       link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
