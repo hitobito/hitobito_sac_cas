@@ -1574,6 +1574,14 @@ de:
         one: Anmeldung wurde abgelehnt
         other: "%{count} Anmeldungen wurden abgelehnt"
 
+  people_filters:
+    invoice_receiver:
+      title: Rechnungsempfänger in %{group_name}
+    filter:
+      invoice_receiver:
+        stammsektion: Rechnungsempfänger SAC Mitgliedschaft
+        zusatzsektion: Rechnungsempfänger Zusatzsektion
+
   roles:
     beitragskategorie:
       adult: Einzel

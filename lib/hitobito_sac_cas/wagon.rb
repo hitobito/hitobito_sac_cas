@@ -43,6 +43,8 @@ module HitobitoSacCas
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
+      MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
+
       # extend application classes here
       CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event

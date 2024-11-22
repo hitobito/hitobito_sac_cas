@@ -23,6 +23,27 @@ describe "Mailing list edit page", js: true do
     visit edit_group_mailing_list_path(group_id: mailing_list.group_id, id: mailing_list.id)
   end
 
+  context "configuring subscription" do
+    it "filters has global invoice receiver option" do
+      sign_in(people(:admin))
+      edit_mailing_list(mailing_list)
+      click_link "Abonnenten"
+
+      find("h2", text: "Globale Bedingungen").click_link
+      click_link "Rechnungsempfänger"
+      check "Rechnungsempfänger SAC Mitgliedschaft"
+      click_button "Speichern"
+      expect(page).to have_text "Rechnungsempfänger SAC Mitgliedschaft"
+
+      find("h2", text: "Globale Bedingungen").click_link
+      uncheck "Rechnungsempfänger SAC Mitgliedschaft"
+      check "Rechnungsempfänger Zusatzsektion"
+      click_button "Speichern"
+      expect(page).to have_text "Rechnungsempfänger Zusatzsektion"
+      expect(page).to have_no_text "Rechnungsempfänger SAC Mitgliedschaft"
+    end
+  end
+
   [:root, :admin].each do |person_key|
     context "as #{person_key}" do
       let(:user) { people(person_key) }
