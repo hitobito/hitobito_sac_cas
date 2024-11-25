@@ -15,9 +15,9 @@ describe Export::Pdf::Participations::KeyDataSheet do
   let(:now) { Time.zone.now }
 
   let(:person) { people(:mitglied) }
-  let(:participation) do
+  let!(:participation) do
     Fabricate(event_role_type.name.to_sym,
-      participation: Fabricate(:event_participation, event: event, person: person)).participation.tap { _1.reload }
+      participation: event_participations(:top_mitglied)).participation.tap { _1.reload }
   end
 
   let(:pdf) { subject.render }
@@ -47,39 +47,41 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [195, 575, "01.03.2023 - "],
       [195, 564, "03.04.2023 - 10.04.2023"],
       [75, 544, "Durchführungsort"],
-      [75, 523, "Unterkunft"],
-      [195, 523, "Wird reserviert durch SAC"],
-      [75, 503, "Unterkunft Budget"],
-      [195, 503, "Pro Person / Nacht mit Halbpension"],
-      [75, 483, "Unterkunft Kategorie"],
-      [195, 483, "ohne Übernachtung"],
-      [75, 462, "Durchführungssprache"],
-      [195, 462, "Deutsch"],
-      [75, 442, "Inhalt / Programm"],
-      [195, 442, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 421, "Teilnehmeranforderungen"],
-      [195, 421, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
-      [75, 401, "Detailprogramm Teilnehmer"],
-      [75, 391, "Kurse"],
-      [195, 401, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
-      [195, 391, "eingefordert"],
-      [75, 370, "Detailprogramm Teilnehmer"],
-      [75, 360, "Touren"],
-      [195, 370, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
-      [195, 360, "Cloud hinterlegt"],
-      [75, 339, "Anmeldeschluss"],
-      [75, 319, "Minimale Teilnehmerzahl"],
-      [75, 299, "Maximale Teilnehmerzahl"],
-      [75, 278, "Durchführung - ja/nein?"],
-      [195, 278, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 268, "gefällt"],
-      [75, 247, "Durchführung – Absage"],
-      [195, 247, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 227, "Ideale Klassengrösse"],
-      [75, 206, "Maximale Klassengrösse"],
-      [75, 186, "Klassenlehrer"],
-      [195, 186, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 176, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [195, 544, "Bern"],
+      [195, 533, "Zurich"],
+      [75, 513, "Unterkunft"],
+      [195, 513, "Wird reserviert durch SAC"],
+      [75, 493, "Unterkunft Budget"],
+      [195, 493, "Pro Person / Nacht mit Halbpension"],
+      [75, 472, "Unterkunft Kategorie"],
+      [195, 472, "ohne Übernachtung"],
+      [75, 452, "Durchführungssprache"],
+      [195, 452, "Deutsch"],
+      [75, 431, "Inhalt / Programm"],
+      [195, 431, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 411, "Teilnehmeranforderungen"],
+      [195, 411, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
+      [75, 391, "Detailprogramm Teilnehmer"],
+      [75, 380, "Kurse"],
+      [195, 391, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
+      [195, 380, "eingefordert"],
+      [75, 360, "Detailprogramm Teilnehmer"],
+      [75, 349, "Touren"],
+      [195, 360, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
+      [195, 349, "Cloud hinterlegt"],
+      [75, 329, "Anmeldeschluss"],
+      [75, 309, "Minimale Teilnehmerzahl"],
+      [75, 288, "Maximale Teilnehmerzahl"],
+      [75, 268, "Durchführung - ja/nein?"],
+      [195, 268, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 257, "gefällt"],
+      [75, 237, "Durchführung – Absage"],
+      [195, 237, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 216, "Ideale Klassengrösse"],
+      [75, 196, "Maximale Klassengrösse"],
+      [75, 176, "Klassenlehrer"],
+      [195, 176, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 165, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
       [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
@@ -172,11 +174,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
-          [75, 503, "Unterkunft Budget"],
-          [195, 503, "Pro Person / Nacht mit Halbpension"],
-          [195, 483, "Anreise Kursleiter"],
-          [435, 483, "CHF"],
-          [485, 483, "30.0"]
+          [75, 493, "Unterkunft Budget"],
+          [195, 493, "Pro Person / Nacht mit Halbpension"],
+          [195, 472, "Anreise Kursleiter"],
+          [435, 472, "CHF"],
+          [485, 472, "30.0"]
         )
       end
 
@@ -190,11 +192,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
-          [75, 503, "Unterkunft Budget"],
-          [195, 503, "Pro Person / Nacht mit Halbpension"],
-          [195, 483, "Anreise Klassenleiter"],
-          [435, 483, "CHF"],
-          [485, 483, "50.0"]
+          [75, 493, "Unterkunft Budget"],
+          [195, 493, "Pro Person / Nacht mit Halbpension"],
+          [195, 472, "Anreise Klassenleiter"],
+          [435, 472, "CHF"],
+          [485, 472, "50.0"]
         )
       end
 
@@ -230,9 +232,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
-            participation: Fabricate(:event_participation, event: event),
-            person: _1).participation
+          participation = event.participations.where(person: _1).first
+          participation ||= Fabricate(:event_participation, event: event)
+          Fabricate(Event::Course::Role::Leader.name.to_sym,
+            participation: participation,
+            person: _1)
           participation.reload
 
           participation.person
@@ -250,13 +254,13 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "reserve_accommodation" do
       it "renders sac accommodation if true" do
         event.update!(reserve_accommodation: true)
-        text = analyzer.show_text[17]
+        text = analyzer.show_text[19]
         expect(text).to eq("Wird reserviert durch SAC")
       end
 
       it "renders event_specific if false" do
         event.update!(reserve_accommodation: false)
-        text = analyzer.show_text[17]
+        text = analyzer.show_text[19]
         expect(text).to eq("Wird reserviert durch Kursleitung")
       end
     end
@@ -288,9 +292,11 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
-            participation: Fabricate(:event_participation, event: event),
-            person: _1).participation
+          participation = event.participations.where(person: _1).first
+          participation ||= Fabricate(:event_participation, event: event)
+          Fabricate(Event::Course::Role::Leader.name.to_sym,
+            participation: participation,
+            person: _1)
           participation.reload
 
           participation.person
