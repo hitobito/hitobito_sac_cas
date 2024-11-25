@@ -57,11 +57,21 @@ describe Groups::SelfRegistrationController do
     context "when logged in" do
       let(:abonnent) { people(:abonnent) }
 
+      before { sign_in(abonnent) }
+
       it "redirects to history_group_person_path" do
-        sign_in(abonnent)
         post :create, params: required_params.merge(step: 3)
-        expect(response).to redirect_to history_group_person_path(abonnent.roles.first.group, abonnent)
+        expect(response).to redirect_to history_group_person_path(group, abonnent)
         expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
+      end
+
+      context "without active role" do
+        it "redirects to history_group_person_path" do
+          abonnent.roles.update_all(end_on: 1.week.ago)
+          post :create, params: required_params.merge(step: 3)
+          expect(response).to redirect_to history_group_person_path(group, abonnent)
+          expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
+        end
       end
     end
   end
