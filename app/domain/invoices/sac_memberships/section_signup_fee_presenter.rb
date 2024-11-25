@@ -30,14 +30,15 @@ module Invoices
       Line = Data.define(:amount, :label)
 
       delegate :discount_factor, to: :context
-      attr_reader :beitragskategorie, :section, :country
+      attr_reader :person, :beitragskategorie, :section
 
-      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil)
+      def initialize(section, person, beitragskategorie, date: Time.zone.today)
         @section = section
+        @person = person
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
-        @country = country
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
+        member.instance_variable_set(:@sac_magazine, true)
       end
 
       def lines
@@ -85,13 +86,11 @@ module Invoices
       attr_reader :context, :sac_magazine, :i18n_scope
 
       def build_positions(classes)
-        classes.map { |klass| klass.new(member, membership, country) }
+        classes.map { |klass| klass.new(member, membership) }
           .filter(&:active?)
       end
 
       def membership = @membership ||= Membership.new(section, beitragskategorie, nil)
-
-      def person = @person ||= Person.new(sac_family_main_person: true)
 
       def member = @member ||= Member.new(person, context)
 

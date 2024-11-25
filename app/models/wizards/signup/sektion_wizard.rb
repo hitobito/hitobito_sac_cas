@@ -49,7 +49,7 @@ module Wizards::Signup
     end
 
     def fees_for(beitragskategorie)
-      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie, country: person.country)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, person, beitragskategorie)
     end
 
     private
