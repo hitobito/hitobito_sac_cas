@@ -43,8 +43,9 @@ class Signup::SektionMailer < ApplicationMailer
   def placeholder_invoice_details
     presenter = Invoices::SacMemberships::SectionSignupFeePresenter.new(
       @section,
-      Person.with_membership_years.find(@person.id),
-      @beitragskategorie
+      @beitragskategorie,
+      country: @person.country,
+      sac_magazine: true
     )
     ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
   end

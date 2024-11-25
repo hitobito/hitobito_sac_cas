@@ -17,7 +17,7 @@ describe "wizards/signup/_section_fee_summary.html.haml" do
   }
 
   def fees_for(beitragskategorie)
-    Invoices::SacMemberships::SectionSignupFeePresenter.new(group, Person.new(sac_family_main_person: true), beitragskategorie, date: Time.zone.now.beginning_of_year)
+    Invoices::SacMemberships::SectionSignupFeePresenter.new(group, beitragskategorie, date: Time.zone.now.beginning_of_year)
   end
 
   it "is hidden if not active" do

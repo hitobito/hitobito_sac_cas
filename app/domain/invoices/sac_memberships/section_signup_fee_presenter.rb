@@ -32,14 +32,14 @@ module Invoices
       delegate :discount_factor, to: :context
       attr_reader :person, :beitragskategorie, :section
 
-      def initialize(section, person, beitragskategorie, date: Time.zone.today)
+      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false)
         @section = section
         @person = person
-        person.update(sac_family_main_person: true) # aside will always show fees for the family main person
+        person.update(country: country) unless country.nil?
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
-        member.instance_variable_set(:@sac_magazine, true) 
+        member.instance_variable_set(:@sac_magazine, sac_magazine) 
         # during the signup process, the member isn't part of the magazine mailing list yet, but
         # will be per default after signup, positions depending on the sac_magazine
         # should be displayed in aside suring signup
@@ -47,7 +47,7 @@ module Invoices
 
       def lines
         @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee, :total_amount].collect do |position|
-          next if position =~ /discount/ && discount_factor == 1
+          next if position =~ /discount/ && discount_factor == 1 || send(position) == 0
           Line.new(format_position_amount(position), translate_position_text(position))
         end.compact
       end
@@ -95,6 +95,8 @@ module Invoices
       end
 
       def membership = @membership ||= Membership.new(section, beitragskategorie, nil)
+
+      def person = @person ||= Person.new(sac_family_main_person: true)
 
       def member = @member ||= Member.new(person, context)
 

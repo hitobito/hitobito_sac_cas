@@ -54,7 +54,6 @@ module Wizards::Memberships
     def fees_for(beitragskategorie)
       Invoices::SacMemberships::SectionSignupFeePresenter.new(
         choose_sektion.group,
-        Person.with_membership_years.find(person.id),
         beitragskategorie,
         date: Time.zone.now.beginning_of_year
       )
