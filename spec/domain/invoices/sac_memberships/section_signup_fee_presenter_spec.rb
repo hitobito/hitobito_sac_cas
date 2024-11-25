@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe Invoices::SacMemberships::SectionSignupFeePresenter do
   let(:group) { groups(:bluemlisalp) }
+  let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
@@ -21,8 +22,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     OpenStruct.new(range: Date.new(2024, 10, 1)..Date.new(2024, 12, 31), percent: 100)
   ]
 
-  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:|
-    let(:presenter) { described_class.new(group, beitragskategorie.to_s) }
+  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:, abroad_fee:|
+    let(:presenter) { described_class.new(group, person, beitragskategorie.to_s) }
 
     expected_labels = {family: "Familienmitgliedschaft",
                        adult: "Einzelmitgliedschaft",
@@ -79,8 +80,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
           before { travel_to(date) }
 
-          it "has 3 lines" do
-            expect(presenter.lines).to have(3).items
+          it "has 4 lines" do
+            expect(presenter.lines).to have(4).items
           end
 
           it "has entry_fee as second line" do
@@ -88,9 +89,15 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
             expect(presenter.lines.second.label).to eq "+ einmalige Eintrittsgebühr"
           end
 
-          it "has total als third line" do
-            expect(presenter.lines.third.amount).to eq "CHF #{format_number(annual_fee + entry_fee)}"
-            expect(presenter.lines.third.label).to eq "Total erstmalig"
+          it "has abroad_fee as third line" do
+            person.update!(country: "DE")
+            expect(presenter.lines.third.amount).to eq "CHF 23.00"
+            expect(presenter.lines.third.label).to eq "+ Gebühren Ausland"
+          end
+
+          it "has total als fourth line" do
+            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(annual_fee + entry_fee)}"
+            expect(presenter.lines.fourth.label).to eq "Total erstmalig"
           end
         end
 
@@ -101,8 +108,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
           before { travel_to(date) }
 
-          it "has 4 lines" do
-            expect(presenter.lines).to have(4).items
+          it "has 5 lines" do
+            expect(presenter.lines).to have(5).items
           end
 
           it "has discount as second line" do
@@ -115,9 +122,15 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
             expect(presenter.lines.third.label).to eq "+ einmalige Eintrittsgebühr"
           end
 
-          it "has total as fourth line" do
-            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(annual_fee + entry_fee - discount_amount)}"
-            expect(presenter.lines.fourth.label).to eq "Total erstmalig"
+          it "has abroad_fee as fourth line" do
+            person.update!(country: "DE")
+            expect(presenter.lines.fourth.amount).to eq "CHF 23.00"
+            expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
+          end
+
+          it "has total as fifth line" do
+            expect(presenter.lines.fifth.amount).to eq "CHF #{format_number(annual_fee + entry_fee - discount_amount)}"
+            expect(presenter.lines.fifth.label).to eq "Total erstmalig"
           end
         end
       end
@@ -145,7 +158,7 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     end
   end
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35, abroad_fee: 10
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20, abroad_fee: 10
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15, abroad_fee: 10
 end
