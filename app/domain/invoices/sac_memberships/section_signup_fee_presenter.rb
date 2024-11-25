@@ -35,10 +35,11 @@ module Invoices
       def initialize(section, person, beitragskategorie, date: Time.zone.today)
         @section = section
         @person = person
+        person.update(sac_family_main_person: true) # aside will always show fees for the family main person
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
-        member.instance_variable_set(:@sac_magazine, true)
+        member.instance_variable_set(:@sac_magazine, true) # during the signup process, the member isn't part of the magazine mailing list yet, but will be per default after signup, posttions depending on the sac_magazine will be active after signup
       end
 
       def lines
