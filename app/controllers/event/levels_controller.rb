@@ -9,10 +9,7 @@ class Event::LevelsController < SimpleCrudController
   self.permitted_attrs = [:label, :code, :difficulty, :description]
 
   self.sort_mappings = {
-    label: {
-      joins: [:translations],
-      order: ["event_level_translations.label"]
-    }
+    label: "event_level_translations.label"
   }
 
   def self.model_class
