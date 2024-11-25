@@ -1001,6 +1001,9 @@ fr:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Droit d’écriture
         description: Droit d’écriture
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Chef·fe de randonnée
         description: Chef·fe de randonnée
@@ -1089,10 +1092,6 @@ fr:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Autres
         description: Autres
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ''
-        many: ''
-        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1607,6 +1606,14 @@ fr:
         one: Inscription refusée
         many: "%{count} inscriptions refusées"
         other: "%{count} inscriptions refusées"
+
+  people_filters:
+    invoice_receiver:
+      title: ""
+    filter:
+      invoice_receiver:
+        stammsektion: ""
+        zusatzsektion: ""
 
   roles:
     beitragskategorie:

@@ -943,6 +943,9 @@ en:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Writing right
         description: Writing right
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Tour manager
         description: Tour manager
@@ -1031,9 +1034,6 @@ en:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Other
         description: Other
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ''
-        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1540,6 +1540,14 @@ en:
       success:
         one: Application was rejected
         other: "%{count} Applications were rejected"
+
+  people_filters:
+    invoice_receiver:
+      title: ""
+    filter:
+      invoice_receiver:
+        stammsektion: ""
+        zusatzsektion: ""
 
   roles:
     beitragskategorie:

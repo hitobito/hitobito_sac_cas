@@ -1001,6 +1001,9 @@ it:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Responsabile escursioni
         description: Responsabile escursioni
@@ -1089,10 +1092,6 @@ it:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Altro
         description: Altro
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ''
-        many: ''
-        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1607,6 +1606,14 @@ it:
         one: La domanda è stata respinta
         many: "%{count} Le domande sono state respinte"
         other: "%{count} registrazioni sono state rifiutate"
+
+  people_filters:
+    invoice_receiver:
+      title: ""
+    filter:
+      invoice_receiver:
+        stammsektion: ""
+        zusatzsektion: ""
 
   roles:
     beitragskategorie:
