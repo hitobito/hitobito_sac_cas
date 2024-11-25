@@ -75,7 +75,7 @@ module SacCas::Groups::SelfRegistrationController
 
   def redirect_target
     if current_user.present?
-      history_group_person_path(group_id: current_user.primary_group_id, id: current_user.id)
+      history_group_person_path(group_id: current_user.reload.primary_group_id, id: current_user.id)
     else
       new_person_session_path
     end
