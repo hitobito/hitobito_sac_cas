@@ -56,17 +56,12 @@ describe Memberships::TerminateSacMembershipsController do
         expect(response.body).not_to include "Weiter"
       end
 
-      it "renders a notice" do
-        request
-        expect_terminated_page
-      end
-
       context "as an admin" do
         let(:operator) { people(:admin) }
 
-        it "renders a notice" do
+        it "shows the date select step" do
           request
-          expect_terminated_page
+          expect_date_select_step
         end
       end
     end
