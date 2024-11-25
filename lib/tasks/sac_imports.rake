@@ -16,6 +16,8 @@ namespace :sac_imports do
 
     Truemail.configuration.default_validation_type = :regex
 
+    PaperTrail.enabled = false # disable versioning for imports
+
     Person.skip_callback(:update, :after, :schedule_duplicate_locator)
     Person.skip_callback(:commit, :after, :transmit_data_to_abacus)
     Group::SektionsMitglieder::Mitglied.skip_callback(:commit, :after, :transmit_data_to_abacus)
@@ -72,6 +74,7 @@ namespace :sac_imports do
     "nav2b-2_non_membership_roles",
     # "nav8-1_austrittsgruende",
     # "nav1-2_membership_years_report",
+    :update_sac_familiy_address,
     :cleanup,
     :rename_schema
   ] do
@@ -112,6 +115,11 @@ namespace :sac_imports do
   task "nav2a-3_families": [:environment] do
     SacImports::Nav2a3FamilyImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2a3-families")
+  end
+
+  desc "Update family addresses to be the same as the main person"
+  task update_sac_familiy_address: [:environment] do
+    SacImports::FamilyAddressUpdater.new.update
   end
 
   desc "NAV2b Imports missing groups"
