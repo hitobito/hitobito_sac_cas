@@ -121,8 +121,7 @@ module Wizards::Signup
     end
 
     def too_young_for_household?
-      birthday = params.with_indifferent_access.dig(:person_fields, :birthday)
-
+      birthday = params.with_indifferent_access.dig(:person_fields, :birthday) || current_user&.birthday
       if birthday
         years = ::Person.new(birthday: birthday).years
         years && years <= MIN_ADULT_YEARS

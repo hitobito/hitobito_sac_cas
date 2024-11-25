@@ -275,6 +275,24 @@ describe Wizards::Signup::SektionWizard do
           .and not_change { Person.count }
           .and not_change { person.reload.attributes.compact_blank.except(*%w[primary_group_id country first_name updated_at]) }
       end
+
+      describe "family fields" do
+        it "shows fields if person is old enough" do
+          person.birthday = 30.years.ago.to_date
+          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
+        end
+
+        it "skips fields if person is too young" do
+          person.birthday = 20.years.ago.to_date
+          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
+        end
+
+        it "shows fields if person is too young but birthday has been corrected to old enough" do
+          person.birthday = 20.years.ago.to_date
+          required_attrs[:person_fields][:birthday] = 30.years.ago.to_date
+          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
+        end
+      end
     end
   end
 end
