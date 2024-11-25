@@ -1818,8 +1818,8 @@ fr:
           next_button: Commande payante
       join_zusatzsektion:
         summary:
-          admission: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. La section comprend un processus de validation manuelle. Ceci ne déclenche pas encore de facture, mais seulement une fois la validation effectuée. L’adhésion supplémentaire sera activée après le paiement de la facture."
-          admission_through_gs: "L’adhésion supplémentaire à %{sektion_name} est demandée en tant que %{beitragskategorie}. Ceci déclenche une facture. L’adhésion supplémentaire sera activée après le paiement de la facture."
+          admission: ""
+          admission_through_gs: ""
           next_button: Commande payante
       membership_terminated_info:
         info: "Ton adhésion a été annulée au %{date}. Si tu souhaites réactiver ton adhésion, merci de te rendre sur le site du CAS."

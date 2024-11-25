@@ -1818,8 +1818,8 @@ it:
           next_button: Ordinare a pagamento
       join_zusatzsektion:
         summary:
-          admission: "L’affiliazione aggiuntiva a %{sektion_name} viene richiesta come %{beitragskategorie}. La sezione prevede una procedura di approvazione non automatica. La fattura sarà emessa solo dopo l’avvenuta approvazione. L’affiliazione aggiuntiva si attiva dopo il saldo della fattura."
-          admission_through_gs: "L’affiliazione a %{sektion_name} viene richiesta come %{beitragskategorie}. Ciò non prevede l’emissione di alcuna fattura. L’affiliazione aggiuntiva si attiva dopo il saldo della fattura."
+          admission: ""
+          admission_through_gs: ""
           next_button: Ordinare a pagamento
       membership_terminated_info:
         info: "L’affiliazione risulta disdetta dal %{date}. Se desideri riattivare la tua affiliazione ti invitiamo a consultare il sito del CAS."
