@@ -16,6 +16,8 @@ namespace :sac_imports do
 
     Truemail.configuration.default_validation_type = :regex
 
+    PaperTrail.enabled = false # disable versioning for imports
+
     Person.skip_callback(:update, :after, :schedule_duplicate_locator)
     Person.skip_callback(:commit, :after, :transmit_data_to_abacus)
     Group::SektionsMitglieder::Mitglied.skip_callback(:commit, :after, :transmit_data_to_abacus)
@@ -116,7 +118,7 @@ namespace :sac_imports do
   end
 
   desc "Update family addresses to be the same as the main person"
-  task "update_sac_familiy_address": [:environment] do
+  task update_sac_familiy_address: [:environment] do
     SacImports::FamilyAddressUpdater.new.update
   end
 
