@@ -56,7 +56,7 @@ describe SacImports::SacSections::GroupEntry do
       expect(list.name).to eq("Sektionsbulletin physisch")
       expect(list.internal_key).to eq SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY
       expect(list.subscribable_for).to eq("configured")
-      expect(list.subscribable_mode).to eq("opt_in")
+      expect(list.subscribable_mode).to eq("opt_out")
       expect(list.filter_chain.to_hash).to eq(
         "invoice_receiver" =>
            {"stammsektion" => "true", "zusatzsektion" => "true", "group_id" => "42"}

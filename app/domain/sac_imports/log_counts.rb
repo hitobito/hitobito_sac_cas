@@ -31,7 +31,7 @@ module SacImports
         prepare_definitions(labeled_scopes, tally_by_type: false)
 
       model_counts_before = definitions.each_with_object({}) do |d, counts|
-        counts[d] = {total: d.scope.count}
+        counts[d] = {total: d.scope.respond_to?(:call) ? d.scope.call : d.scope.count}
         # also calculate counts by type if enabled and the model is an STI baseclass
         if d.tally_by_type && d.model.attribute_names.include?(d.model.inheritance_column) &&
             d.model.table_name == d.model.send(:undecorated_table_name, d.model.name)
@@ -45,7 +45,7 @@ module SacImports
 
       definitions.each do |d|
         total_before = model_counts_before[d][:total]
-        total_after = d.scope.count
+        total_after = d.scope.respond_to?(:call) ? d.scope.call : d.scope.count
         delta = total_after - total_before
         data << [d.label, total_before, total_after, delta]
 

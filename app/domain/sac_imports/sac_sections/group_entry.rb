@@ -165,7 +165,7 @@ module SacImports
       setup_bulletin_paper if row.has_bulletin_paper == "1"
     end
 
-    def setup_mailing_list(internal_key, name, subscribable_for, filter_chain = {})
+    def setup_mailing_list(internal_key, name, subscribable_for, mode, filter_chain = {})
       return if group.mailing_lists.find_by(internal_key:)
 
       group.mailing_lists.create!(
@@ -173,7 +173,7 @@ module SacImports
         name:,
         filter_chain:,
         subscribable_for:,
-        subscribable_mode: "opt_in",
+        subscribable_mode: mode,
         subscriptions: [
           Subscription.new(
             subscriber: group,
@@ -189,13 +189,13 @@ module SacImports
     def setup_bulletin_digital
       internal_key = SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY
       name = "Sektionsbulletin digital"
-      setup_mailing_list(internal_key, name, "anyone")
+      setup_mailing_list(internal_key, name, "anyone", "opt_in")
     end
 
     def setup_bulletin_paper
       internal_key = SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY
       name = "Sektionsbulletin physisch"
-      setup_mailing_list(internal_key, name, "configured", filter_chain)
+      setup_mailing_list(internal_key, name, "configured", "opt_out", filter_chain)
     end
 
     def filter_chain

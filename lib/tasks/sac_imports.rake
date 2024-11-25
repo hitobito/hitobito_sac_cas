@@ -67,6 +67,7 @@ namespace :sac_imports do
     "nav2a-3_families",
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
+    "nav1-3_subscriptions",
     :update_sac_family_address,
     "nav17-1_event_kinds",
     :cleanup,
@@ -91,6 +92,12 @@ namespace :sac_imports do
   desc "Analyzes imported and calculated membership years and creates report"
   task "nav1-2_membership_years_report": :environment do
     SacImports::MembershipYearsReport.new.create
+  end
+
+  desc "NAV1 Imports subscriptions from Navision"
+  task "nav1-3_subscriptions": :setup do
+    SacImports::Nav1SubscriptionsImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav1-3_subscriptions")
   end
 
   desc "Import people from WSO2"
