@@ -164,17 +164,17 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     before do
       SacSectionMembershipConfig.find_by(group_id: group.id).update!(bulletin_postage_abroad: 100)
     end
-  
+
     it "does not have abroad fees for a Swiss person" do
       presenter = described_class.new(group, "adult", country: "CH", sac_magazine: true)
       expect(presenter.lines.size).to eq(4)
       expect(presenter.lines.map(&:label)).not_to include("+ Gebühren Ausland")
     end
-  
+
     it "only has section bulletin postage abroad fees for an abroad person excluded from the magazine" do
       presenter = described_class.new(group, "adult", country: "BE", sac_magazine: false)
       expect(presenter.lines.map(&:label)).to include("+ Gebühren Ausland")
       expect(presenter.lines.map(&:amount)).to include("CHF 100.00")
     end
-  end  
+  end
 end

@@ -30,16 +30,15 @@ module Invoices
       Line = Data.define(:amount, :label)
 
       delegate :discount_factor, to: :context
-      attr_reader :person, :beitragskategorie, :section
+      attr_reader :beitragskategorie, :section
 
       def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false)
         @section = section
-        @person = person
-        person.update(country: country) unless country.nil?
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
-        member.instance_variable_set(:@sac_magazine, sac_magazine) 
+        person.update(country: country) unless country.nil? # set country during signup process
+        member.instance_variable_set(:@sac_magazine, sac_magazine)
         # during the signup process, the member isn't part of the magazine mailing list yet, but
         # will be per default after signup, positions depending on the sac_magazine
         # should be displayed in aside suring signup
