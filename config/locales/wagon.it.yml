@@ -1113,6 +1113,7 @@ it:
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere la modifica della sezione
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
+    terminate_sac_membership_wizard_terminated_link: ""
 
   dropdown/people_export:
     recipients: Destinatari individuali
@@ -1833,6 +1834,7 @@ it:
       termination_choose_date:
         info_text: "Quando deve avvenire la disdetta?"
         warning_termination_by_section_only: "Attenzione: la disdetta riguarda una sezione in cui non è attiva la funzione di disdetta per il socio. Potrebbe essere necessario chiarire in anticipo la disdetta con la sezione."
+        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "Per richiedere la disdetta ti preghiamo di contattarci tramite telefono o e-mail."
       ask_family_main_person:

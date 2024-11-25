@@ -1113,6 +1113,7 @@ fr:
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
     terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
+    terminate_sac_membership_wizard_terminated_link: ""
 
   dropdown/people_export:
     recipients: Destinataire – personne individuelle
@@ -1833,6 +1834,7 @@ fr:
       termination_choose_date:
         info_text: "Quand la sortie doit-elle avoir lieu?"
         warning_termination_by_section_only: "Attention: la démission a lieu dans une section où la fonction de démission est désactivée pour le membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section."
+        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "Nous te prions de demander ta démission par téléphone ou par e-mail. Pour ce faire, prends contact avec nous."
       ask_family_main_person:

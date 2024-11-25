@@ -1055,6 +1055,7 @@ en:
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
     terminate_sac_membership_wizard_link: Terminate SAC membership
+    terminate_sac_membership_wizard_terminated_link: ""
 
   dropdown/people_export:
     recipients: ""
@@ -1766,6 +1767,7 @@ en:
       termination_choose_date:
         info_text: "When should the exit take place?"
         warning_termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
+        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "We ask you to apply for withdrawal by telephone or e-mail. Please contact us for this purpose."
       ask_family_main_person:
