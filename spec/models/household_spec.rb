@@ -348,4 +348,15 @@ describe Household do
       expect { household.reload }.not_to change { household.maintain_sac_family? }.from(true)
     end
   end
+
+  describe "overwrite address" do
+    it "applies address for all members with invalid state when updating one person" do
+      household.add(adult)
+      adult.update_column(:street, nil)
+
+      person.update!(street: "Langweilige Strasse")
+      expect { household.save!(context: :update_address) }.not_to raise_error
+      expect(household.members.map(&:person).map(&:street)).to all(eq("Langweilige Strasse"))
+    end
+  end
 end
