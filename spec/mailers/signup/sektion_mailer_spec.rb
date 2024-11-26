@@ -28,7 +28,7 @@ describe Signup::SektionMailer do
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
       expect(body).to include("+ Gebühren Ausland")
-      expect(body).to include("<td>CHF 10.00")
+      expect(body).to include("<td>CHF 23.00")
     end
 
     it "uses person language to localize message" do
@@ -61,7 +61,7 @@ describe Signup::SektionMailer do
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
       expect(body).to include("+ Gebühren Ausland")
-      expect(body).to include("<td>CHF 10.00")
+      expect(body).to include("<td>CHF 23.00")
     end
 
     it "uses person language to localize message" do
