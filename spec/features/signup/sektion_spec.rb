@@ -68,7 +68,7 @@ describe "signup/sektion", :js do
     fill_in "wizards_signup_sektion_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_sektion_wizard_person_fields_town", with: "Zürich"
     find(:label, "Land").click
-    find(:option, text: "Schweiz").click
+    find(:option, text: "Vereinigte Staaten").click
     expect(page).not_to have_field("Newsletter")
     assert_aside(beitragskategorie: :adult)
     yield if block_given?
@@ -786,8 +786,10 @@ describe "signup/sektion", :js do
   describe "self registration for people living abroad" do
     it "displays abroad_fees in aside" do
       visit group_self_registration_path(group_id: group)
+      fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+      click_button "Weiter"
       find(:label, "Land").click
-      find(:option, text: "Bolivien").click
+      find(:option, text: "Vereinigte Staaten").click
       expect(page).to have_text("+ Gebühren Ausland")
       expect(page).to have_text("CHF 23.00")
     end
