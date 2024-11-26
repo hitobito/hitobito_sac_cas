@@ -801,14 +801,14 @@ describe "signup/sektion", :js do
 
     it "doesnt display abroad_fees in aside for person from switzerland" do
       find(:label, "Land").click
-      find(:option, text: "Schweiz").click
+      find_all(:option, text: "Schweiz").first.click
       expect(page).not_to have_text("+ Gebühren Ausland")
       expect(page).not_to have_text("CHF 23.00")
     end
 
     it "doesnt display abroad_fees in aside for person from liechtenstein" do
       find(:label, "Land").click
-      find(:option, text: "Liechtenstein").click
+      find_all(:option, text: "Liechtenstein").first.click
       expect(page).not_to have_text("+ Gebühren Ausland")
       expect(page).not_to have_text("CHF 23.00")
     end

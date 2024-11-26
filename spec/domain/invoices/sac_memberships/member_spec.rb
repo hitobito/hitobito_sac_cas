@@ -53,7 +53,7 @@ describe Invoices::SacMemberships::Member do
       person.update_column(:country, "DE")
       expect(subject.living_abroad?).to be_truthy
     end
-  end 
+  end
 
   context "#membership years" do
     let(:person) { context.people_with_membership_years.find(people(:mitglied).id) }
