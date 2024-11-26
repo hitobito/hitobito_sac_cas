@@ -13,7 +13,6 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
-    SacSectionMembershipConfig.find_by(group_id: group.id).update!(bulletin_postage_abroad: 0)
   end
 
   date_ranges = [
@@ -22,8 +21,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     OpenStruct.new(range: Date.new(2024, 10, 1)..Date.new(2024, 12, 31), percent: 100)
   ]
 
-  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:, abroad_fee:|
-    let(:presenter) { described_class.new(group, beitragskategorie.to_s, country: "BE", sac_magazine: true) }
+  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:|
+    let(:presenter) { described_class.new(group, beitragskategorie.to_s) }
 
     expected_labels = {family: "Familienmitgliedschaft",
                        adult: "Einzelmitgliedschaft",
@@ -56,7 +55,7 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
         travel_to(Date.new(2024, 1, 1)) do
           expect(presenter.annual_fee.to_f).to eq(annual_fee)
           expect(presenter.entry_fee.to_f).to eq(entry_fee)
-          expect(presenter.total_amount.to_f).to eq(annual_fee + entry_fee + abroad_fee)
+          expect(presenter.total_amount.to_f).to eq(annual_fee + entry_fee)
         end
       end
 
@@ -80,8 +79,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
           before { travel_to(date) }
 
-          it "has 4 lines" do
-            expect(presenter.lines).to have(4).items
+          it "has 3 lines" do
+            expect(presenter.lines).to have(3).items
           end
 
           it "has entry_fee as second line" do
@@ -89,14 +88,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
             expect(presenter.lines.second.label).to eq "+ einmalige Eintrittsgebühr"
           end
 
-          it "has abroad_fee as third line" do
-            expect(presenter.lines.third.amount).to eq "CHF #{format_number(abroad_fee)}"
-            expect(presenter.lines.third.label).to eq "+ Gebühren Ausland"
-          end
-
-          it "has total als fourth line" do
-            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(annual_fee + entry_fee + abroad_fee)}"
-            expect(presenter.lines.fourth.label).to eq "Total erstmalig"
+          it "has total als third line" do
+            expect(presenter.lines.third.amount).to eq "CHF #{format_number(annual_fee + entry_fee)}"
+            expect(presenter.lines.third.label).to eq "Total erstmalig"
           end
         end
 
@@ -107,8 +101,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
           before { travel_to(date) }
 
-          it "has 5 lines" do
-            expect(presenter.lines).to have(5).items
+          it "has 4 lines" do
+            expect(presenter.lines).to have(4).items
           end
 
           it "has discount as second line" do
@@ -121,14 +115,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
             expect(presenter.lines.third.label).to eq "+ einmalige Eintrittsgebühr"
           end
 
-          it "has abroad_fee as fourth line" do
-            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(abroad_fee)}"
-            expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
-          end
-
-          it "has total as fifth line" do
-            expect(presenter.lines.fifth.amount).to eq "CHF #{format_number(annual_fee + entry_fee + abroad_fee - discount_amount)}"
-            expect(presenter.lines.fifth.label).to eq "Total erstmalig"
+          it "has total as fourth line" do
+            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(annual_fee + entry_fee - discount_amount)}"
+            expect(presenter.lines.fourth.label).to eq "Total erstmalig"
           end
         end
       end
@@ -141,24 +130,38 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
           it "is given from #{discount.range.begin}" do
             travel_to(discount.range.begin) do
               expect(presenter.discount.to_f).to eq discount_amount
-              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee + abroad_fee - discount_amount
+              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee - discount_amount
             end
           end
 
           it "is given until #{discount.range.end}" do
             travel_to(discount.range.end) do
               expect(presenter.discount.to_f).to eq discount_amount
-              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee + abroad_fee - discount_amount
+              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee - discount_amount
             end
           end
         end
       end
     end
+
+    context "abroad member" do
+      it "has abroad fees" do
+        presenter = described_class.new(group, beitragskategorie.to_s, country: "BO", sac_magazine: true)
+        expect(presenter.lines.fourth.amount).to eq "CHF 23.00"
+        expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
+      end
+
+      it "only has section bulletin postage abroad fees for an abroad person excluded from the magazine" do
+        presenter = described_class.new(group, beitragskategorie.to_s, country: "BO")
+        expect(presenter.lines.fourth.amount).to eq "CHF 13.00"
+        expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
+      end
+    end
   end
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35, abroad_fee: 10
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20, abroad_fee: 10
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15, abroad_fee: 10
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15
 
   context "abroad_fees" do
     before do
@@ -167,8 +170,7 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
     it "does not have abroad fees for a Swiss person" do
       presenter = described_class.new(group, "adult", country: "CH", sac_magazine: true)
-      expect(presenter.lines.size).to eq(4)
-      expect(presenter.lines.map(&:label)).not_to include("+ Gebühren Ausland")
+      
     end
 
     it "only has section bulletin postage abroad fees for an abroad person excluded from the magazine" do
