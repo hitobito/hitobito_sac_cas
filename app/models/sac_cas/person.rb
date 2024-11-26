@@ -21,7 +21,6 @@ module SacCas::Person
     Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
 
     Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
-    Person::LANGUAGES.delete(:en)
 
     paper_trail_options[:skip] += Person::SAC_REMARKS
     devise_login_id_attrs << :membership_number
