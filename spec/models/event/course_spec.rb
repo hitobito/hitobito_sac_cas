@@ -562,14 +562,14 @@ describe Event::Course do
 
     it "does not set participation state for assigned participations" do
       expect { course.update!(state: :closed) }
-        .not_to change { course.participations.pluck(:state) }
+        .not_to change { course.participations.order(:state).pluck(:state) }
     end
 
     it "sets participation state to attended for summoned participations" do
       course.participations.update_all(state: :summoned)
       course.update!(state: :closed)
 
-      expect(course.participations.pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
+      expect(course.participations.order(:state).pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
     end
 
     it "queues job for absent invoices for absent participants" do
@@ -592,7 +592,7 @@ describe Event::Course do
 
     it "does nothing" do
       expect { course.update!(state: :ready) }
-        .not_to change { course.participations.pluck(:state) }
+        .not_to change { course.participations.order(:state).pluck(:state) }
     end
   end
 
