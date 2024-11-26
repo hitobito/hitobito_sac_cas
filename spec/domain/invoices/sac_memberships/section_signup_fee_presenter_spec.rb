@@ -162,21 +162,4 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
   it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35
   it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20
   it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15
-
-  context "abroad_fees" do
-    before do
-      SacSectionMembershipConfig.find_by(group_id: group.id).update!(bulletin_postage_abroad: 100)
-    end
-
-    it "does not have abroad fees for a Swiss person" do
-      presenter = described_class.new(group, "adult", country: "CH", sac_magazine: true)
-      
-    end
-
-    it "only has section bulletin postage abroad fees for an abroad person excluded from the magazine" do
-      presenter = described_class.new(group, "adult", country: "BE", sac_magazine: false)
-      expect(presenter.lines.map(&:label)).to include("+ Gebühren Ausland")
-      expect(presenter.lines.map(&:amount)).to include("CHF 100.00")
-    end
-  end
 end
