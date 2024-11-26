@@ -76,8 +76,6 @@ module HitobitoSacCas
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
-      admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
-      admin[:active_for] << "event_levels"
 
       ## Abilities
       Role::Types::Permissions << :read_all_people
@@ -146,7 +144,7 @@ module HitobitoSacCas
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]
+      admin_item[:active_for] += %w[cost_centers cost_units event_levels termination_reasons course_compensation_categories course_compensation_rates]
 
       ## Controllers
       ApplicationController.include BasicAuth if Settings.basic_auth
