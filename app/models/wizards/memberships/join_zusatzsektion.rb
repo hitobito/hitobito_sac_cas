@@ -55,7 +55,8 @@ module Wizards::Memberships
       Invoices::SacMemberships::SectionSignupFeePresenter.new(
         choose_sektion.group,
         beitragskategorie,
-        date: Time.zone.now.beginning_of_year
+        date: Time.zone.now.beginning_of_year,
+        country: person.country
       )
     end
 
