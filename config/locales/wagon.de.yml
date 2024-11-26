@@ -1186,6 +1186,10 @@ de:
         overrides_person_data_info:
           Bitte beachte, dass die hier eingegebenen Anpassungen in dein
           Profil übernommen werden.
+    
+    register:
+      email_check:
+        enter_email: "" # to not display in sac wagon
 
   events:
     actions_show_sac_cas:
@@ -1223,7 +1227,7 @@ de:
       cancel_confirmation: Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden
       cancel_info: Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
-      canceled_reason_label: Grund
+      canceled_reason_label: Grund 
 
   external_trainings:
     form:
