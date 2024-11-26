@@ -1,0 +1,14 @@
+%aside.card
+  .card-body
+    %h2.mb-2.card-title=t('.contact_title')
+    .card-text=simple_format(t('.contact_text'))
+
+    .card-text.mt-2
+      = icon(:phone)
+      %span.ms-1 +41 31 370 18 43
+    .card-text
+      = icon(:phone)
+      %span.ms-1 +41 31 370 18 44
+    .card-text
+      = icon(:envelope)
+      %span.ms-1= t("global.sac.email")

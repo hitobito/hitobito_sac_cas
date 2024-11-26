@@ -1112,10 +1112,11 @@ de:
         summary_course_price: Kurskosten
         summary_subsidy: "- Subvention"
         summary_total: Total
+      contact_data_aside:
         contact_title: Fragen zur Anmeldung
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
-          Mo bis Fr 08:00 - 17:00 Uhr.
+          Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1583,6 +1584,19 @@ de:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
         zusatzsektion: Rechnungsempfänger Zusatzsektion
+
+  public_events:
+    show:
+      login_to_participate: Melde dich an, um an diesem Kurs teilzunehmen
+      with_sac_account: mit deinem SAC-Konto
+      is_sac_account_active: "Für SAC-Mitglieder: Ist dein persönliches SAC-Konto noch nicht aktiviert?"
+      login_questions: Fragen und Antworten zum Login
+      link_fag_sac_account: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/
+      first_time_here: Zum ersten Mal hier?
+      create_account_now: Jetzt dein kostenloses SAC-Konto erstellen
+      wanna_be_a_member: Möchtest du SAC-Mitglied werden?
+      request_sac_membership: SAC Mitgliedschaft beantragen
+      request_sac_membership_link: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
   roles:
     beitragskategorie:
