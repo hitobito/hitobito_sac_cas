@@ -31,7 +31,7 @@ module Invoices
       end
 
       def membership_years
-        return 0 if person.roles.empty?
+        return 0 if person.new_record? || person.roles.empty?
         # person must have been loaded with .with_membership_years(Date.new(date.year - 1, 12, 31))
         # so membership years correspond to the value that will be reached at the end of the reference year,
         # even if roles are not yet prolonged until the end of this year.

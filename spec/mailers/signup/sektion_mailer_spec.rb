@@ -25,6 +25,12 @@ describe Signup::SektionMailer do
       expect(body).to include("<td>CHF 127.00")
     end
 
+    it "includes abroad fees for person living abroad" do
+      person.update!(country: "BE")
+      expect(body).to include("+ Gebühren Ausland")
+      expect(body).to include("<td>CHF 23.00")
+    end
+
     it "uses person language to localize message" do
       CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour")
       person.update!(language: :fr)
@@ -50,6 +56,12 @@ describe Signup::SektionMailer do
         "Viel Spass beim SAC!"
       )
       expect(body).to include("<td>CHF 179.00")
+    end
+
+    it "includes abroad fees for person living abroad" do
+      person.update!(country: "BE")
+      expect(body).to include("+ Gebühren Ausland")
+      expect(body).to include("<td>CHF 23.00")
     end
 
     it "uses person language to localize message" do

@@ -17,6 +17,11 @@ module Invoices
         Positions::SacMagazine
       ].freeze
 
+      ABROAD_POSITIONS = [
+        Positions::SectionBulletinPostageAbroad,
+        Positions::SacMagazinePostageAbroad
+      ].freeze
+
       NEW_ENTRY_POSITIONS = [
         Positions::SacEntryFee,
         Positions::SectionEntryFee
@@ -27,16 +32,21 @@ module Invoices
       delegate :discount_factor, to: :context
       attr_reader :beitragskategorie, :section
 
-      def initialize(section, beitragskategorie, date: Time.zone.today)
+      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false)
         @section = section
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
+        person.update(country: country) unless country.nil? # set country during signup process
+        member.instance_variable_set(:@sac_magazine, sac_magazine)
+        # during the signup process, the member isn't part of the magazine mailing list yet, but
+        # will be per default after signup, positions depending on the sac_magazine
+        # should be displayed in aside suring signup
       end
 
       def lines
-        @lines ||= [:annual_fee, :discount, :entry_fee, :total_amount].collect do |position|
-          next if position =~ /discount/ && discount_factor == 1
+        @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee, :total_amount].collect do |position|
+          next if position =~ /discount/ && discount_factor == 1 || send(position) == 0
           Line.new(format_position_amount(position), translate_position_text(position))
         end.compact
       end
@@ -62,12 +72,16 @@ module Invoices
         build_positions(NEW_ENTRY_POSITIONS).sum(&:gross_amount)
       end
 
+      def abroad_fee
+        build_positions(ABROAD_POSITIONS).sum(&:gross_amount)
+      end
+
       def discount
         annual_fee * (1 - discount_factor)
       end
 
       def total_amount
-        (annual_fee + entry_fee - discount)
+        (annual_fee + entry_fee + abroad_fee - discount)
       end
 
       private
