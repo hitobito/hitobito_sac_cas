@@ -37,13 +37,11 @@ module Invoices
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
-
-        person.country = country
-
+        person.update(country: country) unless country.nil? # set country during signup process
+        member.instance_variable_set(:@sac_magazine, sac_magazine)
         # during the signup process, the member isn't part of the magazine mailing list yet, but
         # will be per default after signup, positions depending on the sac_magazine
-        # should be displayed in aside during signup
-        member.sac_magazine = sac_magazine
+        # should be displayed in aside suring signup
       end
 
       def lines
