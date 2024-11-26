@@ -74,6 +74,11 @@ describe Event::ParticipationsController do
       expect(dom).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
       expect(dom).to have_css "aside.card", count: 2
     end
+
+    it "doesn't render self_employed label" do
+      get :new, params: {group_id: group.id, event_id: event.id}
+      expect(dom).not_to have_field "Selbständig erwerbend"
+    end
   end
 
   context "GET#show" do
