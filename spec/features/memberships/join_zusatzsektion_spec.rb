@@ -42,6 +42,23 @@ describe "joining zusatzsektion", js: true do
       expect(page).to have_title "Zusatzsektion beitreten"
     end
 
+    it "displays section fee information" do
+      click_link "Mitgliedschaft anpassen"
+      click_link "Zusatzsektion beantragen"
+      select "SAC Matterhorn"
+      expect(page).to have_text "Einzelmitgliedschaft SAC Matterhorn"
+      expect(page).to have_text "jährlicher Beitrag"
+      expect(page).to have_text "+ einmalige Eintrittsgebühr"
+    end
+
+    it "displays section fee information for member living abroad" do
+      person.update_column(:country, "BE")
+      click_link "Mitgliedschaft anpassen"
+      click_link "Zusatzsektion beantragen"
+      select "SAC Matterhorn"
+      expect(page).to have_text "+ Gebühren Ausland"
+    end
+
     it "fills out form and redirects" do
       fill_out_form
       expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Einzelmitglied beantragt."
