@@ -7,10 +7,4 @@
 
 class CourseCompensationCategoriesController < SimpleCrudController
   self.permitted_attrs = [:short_name, :kind, :description, :name_leader, :name_assistant_leader]
-
-  private
-
-  def list_entries
-    super.list
-  end
 end
