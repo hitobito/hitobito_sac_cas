@@ -13,7 +13,7 @@ describe Wizards::Steps::MainEmail do
   let(:wizard) { instance_double(Wizards::Base, current_user: nil) }
   let(:subject) { described_class.new(wizard, **params) }
 
-  describe "validations" do
+  describe "validations", with_truemail_validation: true do
     context "without email" do
       it do
         is_expected.not_to be_valid
@@ -22,9 +22,8 @@ describe Wizards::Steps::MainEmail do
     end
 
     context "with invalid email" do
-      before { allow(Truemail).to receive(:valid?).and_return(false) }
-
       it do
+        params[:email] = "t@example.te"
         is_expected.not_to be_valid
         expect(subject.errors[:email].count).to eq 1
       end
