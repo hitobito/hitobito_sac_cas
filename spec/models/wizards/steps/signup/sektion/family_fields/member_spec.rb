@@ -62,6 +62,12 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
         expect(member).not_to be_valid
         expect(member.errors.full_messages).to include "E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."
       end
+
+      it "validates email using truemail", with_truemail_validation: true do
+        member.email = "t@example.te"
+        expect(member).not_to be_valid
+        expect(member.errors.full_messages).to include "E-Mail ist nicht gültig"
+      end
     end
 
     describe "birthday" do
