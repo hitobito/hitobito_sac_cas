@@ -12,6 +12,8 @@ module Invoices
     class Member
       attr_reader :person, :context, :sac_membership
 
+      attr_writer :sac_magazine
+
       delegate :id, :to_s, :language, :sac_family_main_person?, to: :person
       delegate :date, :sac_magazine_mailing_list, to: :context
       delegate :zusatzsektion_roles,
