@@ -12,6 +12,17 @@ de:
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
       membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
+    sac:
+      name: "Schweizer Alpen-Club SAC"
+      zentralverband: "Zentralverband"
+      address: "Monbijoustrasse 61"
+      town: "3000 Bern 14"
+      postbox: "Postfach"
+      phone: "+41 31 370 18 18"
+      phone_self_registration: "+41 31 370 18 43/44"
+      email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
+      website: "https://www.sac-cas.ch"
 
   settings:
     email:
@@ -25,9 +36,13 @@ de:
       conflicting_family_membership: >-
         %{name} hat bereits eine Familienmitgliedschaft und kann daher
         nicht einem Familienhaushalt hinzugefügt werden.
+      total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
 
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: Effektive Tage
+        iban: IBAN
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -98,9 +113,6 @@ de:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
         termination_reason_id: "Austrittsgrund"
-        data_retention_consent: "Meine Daten sollen nach dem Austritt erhalten bleiben und ich kann für Spendenaufrufe kontaktiert werden"
-        subscribe_newsletter: "Newsletter beibehalten"
-        subscribe_fundraising_list: "Ich möchte weiterhin über Spendenaktionen informiert werden."
 
     errors:
       messages:
@@ -517,8 +529,8 @@ de:
             %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
         person:
           birthday:
-            must_be_before_year: muss vor dem 01.01.%{year} liegen.
-            must_be_after_year: muss nach dem 31.12.%{year} liegen.
+            must_be_before: muss vor dem %{date} liegen.
+            must_be_after: muss nach dem %{date} liegen.
         qualification:
           attributes:
             finish_at:
@@ -544,6 +556,12 @@ de:
         one: Kursleitung
         other: Kursleitung
       event/role/assistant_leader:
+        one: Klassenleitung
+        other: Klassenleitung
+      event/course/role/leader:
+        one: Kursleitung
+        other: Kursleitung
+      event/course/role/assistant_leader:
         one: Klassenleitung
         other: Klassenleitung
       external_training:
@@ -932,6 +950,9 @@ de:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: Tourenchef*in
+        description: Tourenchef*in
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Tourenchef*in
         description: Tourenchef*in
@@ -1020,9 +1041,6 @@ de:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Andere
         description: Andere
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: Tourenchef
-        other: Tourenchef
 
   # sort top level keys alphabetically from here on
 
@@ -1044,6 +1062,7 @@ de:
     join_zusatzsektion_link: Zusatzsektion beantragen
     switch_stammsektion_link: Sektionswechsel beantragen
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
+    terminate_sac_membership_wizard_terminated_link: SAC Austritt anpassen
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1148,6 +1167,10 @@ de:
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
+        create_course_leader_invoice_button: Kurskaderabrechnung erstellen
+      popover_create_course_leader_settlement:
+        create_invoice: Abrechnung erstellen
+        info_text_html: Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden. <br> Falls die kontoführende Person bzw. Institution MWST-pflichtig ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
@@ -1215,6 +1238,9 @@ de:
   event/levels:
     new:
       title: Kursstufe erstellen
+
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
@@ -1343,20 +1369,13 @@ de:
       section_signup_fee_presenter:
         annual_fee: jährlicher Beitrag
         entry_fee: "+ einmalige Eintrittsgebühr"
+        abroad_fee: "+ Gebühren Ausland"
         discount: "- %{percent}% Rabatt auf den jährlichen Beitrag"
         total_amount: Total erstmalig
         beitragskategorien:
           adult: Einzelmitgliedschaft
           family: Familienmitgliedschaft
           youth: Jugendmitgliedschaft
-
-  mailer:
-    footer:
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
 
   memberships:
     join_zusatzsektions:
@@ -1400,7 +1419,6 @@ de:
       year_title: SAC Kurse / Touren %{year}
       title: Eckdatenblatt -Kurs-/Tourenleitung
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
-      footer: Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch
       table:
         number: Veranstaltungs-Nr.
         name: Bezeichungs / Titel
@@ -1558,6 +1576,14 @@ de:
         one: Anmeldung wurde abgelehnt
         other: "%{count} Anmeldungen wurden abgelehnt"
 
+  people_filters:
+    invoice_receiver:
+      title: Rechnungsempfänger in %{group_name}
+    filter:
+      invoice_receiver:
+        stammsektion: Rechnungsempfänger SAC Mitgliedschaft
+        zusatzsektion: Rechnungsempfänger Zusatzsektion
+
   roles:
     beitragskategorie:
       adult: Einzel
@@ -1630,12 +1656,6 @@ de:
       title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
       additional_infos: Mehr Informationen findest du unter den %{link}.
-      address: |
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: AGB
       link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
       link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
@@ -1785,14 +1805,15 @@ de:
           next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
-          admission: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
-          admission_through_gs: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+          admission: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+          admission_through_gs: Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
           next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: "Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite."
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
         warning_termination_by_section_only: "Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären."
+        membership_already_terminated: "Achtung: Die Mitgliedschaft ist bereits gekündigt per %{end_on}"
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:
@@ -1809,11 +1830,12 @@ de:
           family_warning: "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}."
           data_retention_info_title: "Aufbewahrung deiner Daten"
           data_retention_info_text:
-            "Nach deinem Austritt bewahren wir deine Daten noch sechs Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich die folgenden Konsequenzen:
+            "Nach deinem Austritt bewahren wir deine Daten noch zwölf Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich die folgenden Konsequenzen:
             Falls du später dem SAC wieder beitreten möchtest, musst du die Eintrittsgebühr erneut bezahlen und deine Anzahl Mitgliederjahre beginnen bei null.
             Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht.
             Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke verwenden, wie z B. für die SAC App).
             Falls du dies nicht möchtest, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren."
-          newsletter_info_text: " Falls du den SAC Newsletter weiterhin erhalten möchtest, kannst du uns dies hier mitteilen:"
-          fundraiser_info_text: "Falls wir dich für Spendenaufrufe weiterhin kontaktieren dürfen, kannst du uns dies hier mitteilen:"
+          data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
+          subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
+          subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
           next_button: "Austritt beantragen"

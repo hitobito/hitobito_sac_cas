@@ -22,7 +22,7 @@ application:
 
   # non UI languages for assigning to person#language
   additional_languages:
-    it: Italiano
+    en: English
 
 event:
   participations:

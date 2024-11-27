@@ -8,6 +8,16 @@
 require "spec_helper"
 
 describe Person do
+  context "language" do
+    it "is valid with en" do
+      person = Person.new(first_name: "Tyler", language: "invalid")
+      expect(person).not_to be_valid
+
+      person.language = "en"
+      expect(person).to be_valid
+    end
+  end
+
   context "family_id" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { Fabricate(:person, household_key: "1234ABCD", birthday: 25.years.ago) }

@@ -7,7 +7,6 @@
 
 require Rails.root.join("db", "seeds", "support", "group_seeder")
 
-SacImports::SacSectionsImporter.new(import_spec_fixture: true).create
 seeder = GroupSeeder.new
 
 root = Group.roots.first
@@ -67,17 +66,115 @@ Group::ExterneKontakte.seed_once(:name, :parent_id, {
   parent_id: Group::ExterneKontakte.find_by(name: "2 Externe Kontakte").id
 })
 
-bluemlisalp = Group.find_by(navision_id: 1650)
-matterhorn = Group.find_by(navision_id: 9999)
+ActiveRecord::Base.connection.set_pk_sequence!(:groups, 10_000)
+Group::Sektion.seed_once(:id,
+  {"id" => 1650,
+   "navision_id" => 1650,
+   "parent_id" => root.id,
+   "name" => "SAC Blüemlisalp",
+   "layer_group_id" => 1650,
+   "street" => "Postfach",
+   "zip_code" => 3600,
+   "town" => "Thun",
+   "foundation_year" => 1874,
+   "section_canton" => "BE",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => true},
+  {"id" => 1850,
+   "navision_id" => 1850,
+   "parent_id" => root.id,
+   "name" => "SAC Burgdorf",
+   "layer_group_id" => 1850,
+   "street" => "Postfach",
+   "zip_code" => 3400,
+   "town" => "Burgdorf",
+   "foundation_year" => 1879,
+   "section_canton" => "BE",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => true},
+  {"id" => 1900,
+   "navision_id" => 1900,
+   "parent_id" => root.id,
+   "name" => "CAS Chasseral",
+   "layer_group_id" => 1900,
+   "street" => "Postfach",
+   "zip_code" => 2610,
+   "town" => "St-Imier",
+   "foundation_year" => 1960,
+   "section_canton" => "BE",
+   "language" => "FR",
+   "mitglied_termination_by_section_only" => false},
+  {"id" => 2330,
+   "navision_id" => 2330,
+   "parent_id" => root.id,
+   "name" => "SAC Drei Tannen",
+   "layer_group_id" => 2330,
+   "zip_code" => 4616,
+   "town" => "Kappel SO",
+   "foundation_year" => 1934,
+   "section_canton" => "SO",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => false},
+  {"id" => 5300,
+   "navision_id" => 5300,
+   "parent_id" => root.id,
+   "name" => "SAC UTO",
+   "layer_group_id" => 5300,
+   "street" => "Stampfenbachstrasse",
+   "housenumber" => "57",
+   "zip_code" => 8006,
+   "town" => "Zürich",
+   "foundation_year" => 1863,
+   "section_canton" => "ZH",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => true},
+  {"id" => 5650,
+   "navision_id" => 5650,
+   "parent_id" => root.id,
+   "name" => "CAS Yverdon",
+   "layer_group_id" => 5650,
+   "postbox" => "Case postale 73",
+   "street" => "Rue du Collège",
+   "housenumber" => "7",
+   "zip_code" => 1401,
+   "town" => "Yverdon",
+   "foundation_year" => 1917,
+   "section_canton" => "VD",
+   "language" => "FR",
+   "mitglied_termination_by_section_only" => true},
+  {"id" => 9999,
+   "navision_id" => 9999,
+   "parent_id" => root.id,
+   "name" => "SAC Matterhorn",
+   "layer_group_id" => 9999,
+   "street" => "Postfach",
+   "zip_code" => 3920,
+   "town" => "Zermatt",
+   "foundation_year" => 1899,
+   "section_canton" => "VS",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => true})
 
-uto = Group::Sektion.seed(
-  :name, :parent_id,
-  {name: "SAC UTO",
-   navision_id: 5300,
-   foundation_year: 1863,
-   section_canton: "ZH",
-   parent_id: root.id}
-).first
+Group::Ortsgruppe.seed_once(:id,
+  {"id" => 1853,
+   "navision_id" => 1853,
+   "parent_id" => 1850,
+   "name" => "SAC Burgdorf Damen",
+   "type" => "Group::Ortsgruppe",
+   "layer_group_id" => 1853,
+   "street" => "Weslen",
+   "housenumber" => "101C",
+   "zip_code" => 3472,
+   "town" => "Wynigen",
+   "foundation_year" => 1879,
+   "section_canton" => "BE",
+   "language" => "DE",
+   "mitglied_termination_by_section_only" => true})
+
+bluemlisalp = Group.find(1650)
+matterhorn = Group.find(9999)
+
+uto = Group::Sektion.find(5300)
 
 matterhorn_neuanmeldungen = Group::SektionsNeuanmeldungenNv.find_by(parent_id: matterhorn.id)
 matterhorn_neuanmeldungen.update!(

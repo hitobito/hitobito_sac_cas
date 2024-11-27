@@ -51,35 +51,35 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [195, 523, "Wird reserviert durch SAC"],
       [75, 503, "Unterkunft Budget"],
       [195, 503, "Pro Person / Nacht mit Halbpension"],
-      [75, 473, "Unterkunft Kategorie"],
-      [195, 473, "ohne Übernachtung"],
-      [75, 452, "Durchführungssprache"],
-      [195, 452, "Deutsch"],
-      [75, 432, "Inhalt / Programm"],
-      [195, 432, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 411, "Teilnehmeranforderungen"],
-      [195, 411, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
-      [75, 391, "Detailprogramm Teilnehmer"],
-      [75, 381, "Kurse"],
-      [195, 391, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
-      [195, 381, "eingefordert"],
-      [75, 360, "Detailprogramm Teilnehmer"],
-      [75, 350, "Touren"],
-      [195, 360, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
-      [195, 350, "Cloud hinterlegt"],
-      [75, 329, "Anmeldeschluss"],
-      [75, 309, "Minimale Teilnehmerzahl"],
-      [75, 289, "Maximale Teilnehmerzahl"],
-      [75, 268, "Durchführung - ja/nein?"],
-      [195, 268, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 258, "gefällt"],
-      [75, 237, "Durchführung – Absage"],
-      [195, 237, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 217, "Ideale Klassengrösse"],
-      [75, 196, "Maximale Klassengrösse"],
-      [75, 176, "Klassenlehrer"],
-      [195, 176, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 166, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [75, 483, "Unterkunft Kategorie"],
+      [195, 483, "ohne Übernachtung"],
+      [75, 462, "Durchführungssprache"],
+      [195, 462, "Deutsch"],
+      [75, 442, "Inhalt / Programm"],
+      [195, 442, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 421, "Teilnehmeranforderungen"],
+      [195, 421, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
+      [75, 401, "Detailprogramm Teilnehmer"],
+      [75, 391, "Kurse"],
+      [195, 401, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
+      [195, 391, "eingefordert"],
+      [75, 370, "Detailprogramm Teilnehmer"],
+      [75, 360, "Touren"],
+      [195, 370, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
+      [195, 360, "Cloud hinterlegt"],
+      [75, 339, "Anmeldeschluss"],
+      [75, 319, "Minimale Teilnehmerzahl"],
+      [75, 299, "Maximale Teilnehmerzahl"],
+      [75, 278, "Durchführung - ja/nein?"],
+      [195, 278, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 268, "gefällt"],
+      [75, 247, "Durchführung – Absage"],
+      [195, 247, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 227, "Ideale Klassengrösse"],
+      [75, 206, "Maximale Klassengrösse"],
+      [75, 186, "Klassenlehrer"],
+      [195, 186, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 176, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
       [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
@@ -105,7 +105,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as leader" do
-      let(:event_role_type) { Event::Role::Leader }
+      let(:event_role_type) { Event::Course::Role::Leader }
 
       it "renders" do
         expected_postions = [
@@ -131,7 +131,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as assistant leader" do
-      let(:event_role_type) { Event::Role::AssistantLeader }
+      let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
       it "renders" do
         expected_postions = [
@@ -168,7 +168,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as leader" do
-      let(:event_role_type) { Event::Role::Leader }
+      let(:event_role_type) { Event::Course::Role::Leader }
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
@@ -186,7 +186,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     end
 
     context "as assistant leader" do
-      let(:event_role_type) { Event::Role::AssistantLeader }
+      let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
       it "renders" do
         expect(text_with_position(analyzer)).to include(
@@ -205,10 +205,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
   end
 
   context "as leader" do
-    let(:event_role_type) { Event::Role::Leader }
+    let(:event_role_type) { Event::Course::Role::Leader }
 
     it "sanitizes filename" do
-      expect(subject.filename).to eq "Eckdatenblatt_Kursleiter_edmund_hillary_#{now.strftime("%Y_%m_%d_%H%I")}.pdf"
+      expect(subject.filename).to eq "Eckdatenblatt_Kursleiter_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
     end
 
     context "text" do
@@ -220,7 +220,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
         expect(image_positions).to match_array [expected_logo_position]
       end
 
-      xit "has logo" do
+      it "has logo" do
         sections = subject.send(:sections)
         logo_path = sections[0].logo_path
         expect(image_included_in_images?(logo_path)).to be(true)
@@ -230,7 +230,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Role::Leader.name.to_sym,
+          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
             participation: Fabricate(:event_participation, event: event),
             person: _1).participation
           participation.reload
@@ -263,10 +263,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
   end
 
   context "as assistant leader" do
-    let(:event_role_type) { Event::Role::AssistantLeader }
+    let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
     it "sanitizes filename" do
-      expect(subject.filename).to eq "Eckdatenblatt_Klassenleiter_edmund_hillary_#{now.strftime("%Y_%m_%d_%H%I")}.pdf"
+      expect(subject.filename).to eq "Eckdatenblatt_Klassenleiter_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
     end
 
     context "text" do
@@ -278,7 +278,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
         expect(image_positions).to match_array [expected_logo_position]
       end
 
-      xit "has logo" do
+      it "has logo" do
         sections = subject.send(:sections)
         logo_path = sections[0].logo_path
         expect(image_included_in_images?(logo_path)).to be(true)
@@ -288,7 +288,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     context "with multiple leaders" do
       let!(:additional_leaders) do
         [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
-          participation = Fabricate(Event::Role::Leader.name.to_sym,
+          participation = Fabricate(Event::Course::Role::Leader.name.to_sym,
             participation: Fabricate(:event_participation, event: event),
             person: _1).participation
           participation.reload

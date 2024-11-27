@@ -29,6 +29,7 @@ familienmitglied:
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 
@@ -37,6 +38,7 @@ familienmitglied_zweitsektion:
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 
@@ -45,6 +47,7 @@ familienmitglied2:
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 
@@ -53,6 +56,7 @@ familienmitglied2_zweitsektion:
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 
@@ -61,6 +65,7 @@ familienmitglied_kind:
   group: bluemlisalp_mitglieder
   type: Group::SektionsMitglieder::Mitglied
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 
@@ -69,6 +74,7 @@ familienmitglied_kind_zweitsektion:
   group: matterhorn_mitglieder
   type: Group::SektionsMitglieder::MitgliedZusatzsektion
   beitragskategorie: family
+  family_id: 4242
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31
 

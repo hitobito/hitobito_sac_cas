@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Invoices::Abacus::CancelInvoiceJob do
-  let(:invoice) { Fabricate(:external_invoice, person_id: people(:mitglied)) }
+  let(:invoice) { Fabricate(:external_invoice, person_id: people(:mitglied), state: :cancelled) }
   let(:job) { described_class.new(invoice) }
 
   context "when the job works" do
@@ -19,17 +19,10 @@ describe Invoices::Abacus::CancelInvoiceJob do
       allow(Invoices::Abacus::SalesOrder).to receive(:new).with(any_args)
         .and_return(sales_order)
       allow(Invoices::Abacus::SalesOrderInterface).to receive(:new).and_return(sales_order_interface)
-      allow(sales_order_interface).to receive(:cancel).with(any_args)
-        .and_return(true)
-    end
-
-    it "does not update the invoice status" do
-      job.perform
-      expect(invoice.reload.state).to eq("open")
     end
 
     it "cancels the invoice in the abacus system" do
-      expect(sales_order_interface).to receive(:cancel)
+      expect(sales_order_interface).to receive(:cancel).and_return(true)
       job.perform
     end
   end

@@ -14,7 +14,6 @@ module SacCas::Person
 
   prepended do
     Person::SEARCHABLE_ATTRS << :id
-    include PgSearchable
 
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
@@ -22,14 +21,13 @@ module SacCas::Person
     Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
 
     Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
-    Person::LANGUAGES.delete(:en)
 
     paper_trail_options[:skip] += Person::SAC_REMARKS
     devise_login_id_attrs << :membership_number
 
     Person.used_attributes.delete(:nickname)
 
-    delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role,
+    delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role, :terminated?,
       to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 
@@ -49,7 +47,7 @@ module SacCas::Person
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     validates :first_name, :last_name, :street, :housenumber, :zip_code, :town, presence: true,
-      if: :roles_require_name_and_address?
+      if: :roles_require_name_and_address?, on: [:create, :update]
 
     before_save :set_digital_correspondence, if: :password_initialized?
     after_save :check_data_quality

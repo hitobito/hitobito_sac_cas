@@ -8,15 +8,9 @@
 module SacCas::StandardFormBuilder
   # Add address dynamically to required attrs to render label as required, but not trigger the validation for required attrs
   # Event::ParticipationContactData#assert_required_contact_attrs_valid
-  # rubocop:disable Rails/HelperInstanceVariable
-  def dynamic_required?(attr)
-    if @object.respond_to?(:required_attrs) && @object.required_attrs.include?(:street) && @object.required_attrs.include?(:housenumber)
-      @object.required_attrs << :address
-    end
-
-    super
+  def required?(attr)
+    (attr.to_s == "address") ? super(:street) && super(:housenumber) : super
   end
-  # rubocop:enable Rails/HelperInstanceVariable
 
   def labeled_gender_inline_radio_buttons
     checked = object.attributes["gender"].nil? ? {checked: false} : {}

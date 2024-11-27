@@ -7,49 +7,41 @@
 
 module SacImports::Roles
   class ImporterBase
-    SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES = [Group::Sektion.sti_name,
-      Group::Ortsgruppe.sti_name].freeze
-
-    def initialize(csv_source:, csv_report:, output: $stdout, failed_person_ids: [])
-      @output = output
-      @csv_report = csv_report
-      @failed_person_ids = failed_person_ids
-      @data = csv_source.rows(filter: @rows_filter)
-      @navision_import_group = fetch_navision_import_group
-      @csv_source_person_ids = collect_csv_source_person_ids
-    end
+    class_attribute :rows_filter
 
     def create
+      # @data.each { process_row(_1) }
+      @csv_report.log("The file contains #{@data.size} rows.")
+      progress = SacImports::Progress.new(@data.size, title: title)
+
       Parallel.map(@data, in_threads: nr_of_threads) do |row|
+        progress.step
         process_row(row)
-      rescue Exception # rubocop:disable Lint/RescueException we want to catch and re-raise all exceptions
-        raise Parallel::Break
       end
     end
 
     private
-
-    def nr_of_threads
-      Rails.env.test? ? 1 : 6
-    end
 
     def process_row(row)
       return unless dates_valid?(row)
       person = fetch_person(row)
       return unless person
 
-      if yield(person)
-        clear_navision_import_role(person)
-      end
+      yield(person)
+    end
+
+    def title = self.class.name.demodulize.gsub(/Importer$/, "")
+
+    def navision_id(row)
+      Integer(row.navision_id.to_s.sub(/^0*/, "")) if row.navision_id.present?
+    end
+
+    def nr_of_threads
+      Rails.env.test? ? 1 : 6
     end
 
     def fetch_person(row)
-      if @failed_person_ids.include?(row[:navision_id])
-        report_person_failed_before(row)
-        return
-      end
-
-      person = Person.find_by(id: row[:navision_id])
+      person = Person.find_by(id: row.navision_id)
       return person unless person.nil?
 
       report_person_not_found(row)
@@ -57,62 +49,59 @@ module SacImports::Roles
     end
 
     def dates_valid?(row)
-      valid_until = Date.parse(row[:valid_until])
-      valid_from = Date.parse(row[:valid_from])
-      return true if valid_from < valid_until
+      valid_until = Date.parse(row.valid_until) if row.valid_from.present?
+      valid_from = Date.parse(row.valid_from) if row.valid_from.present?
+      return true if valid_from.blank? || valid_until.blank? || valid_from < valid_until
 
       report(row, nil, error: "valid_from (GültigAb) cannot be before valid_until (GültigBis)")
       false
+    end
+
+    def terminated?(row)
+      return false if row.valid_until.blank?
+
+      Date.current.end_of_year > Date.parse(row.valid_until)
     end
 
     def save_role!(role, row)
       begin
         role.save!(context: :import)
       rescue ActiveRecord::RecordInvalid
-        report(row, nil, error: "Hitobito Role: " + role.errors.full_messages.join(", "))
+        report(row, nil, error: "#{role.class}: " + role.errors.full_messages.join(", "))
         return nil
       end
       role
-    end
-
-    def clear_navision_import_role(person)
-      person.roles.where(group: @navision_import_group).delete_all
-    end
-
-    def fetch_navision_import_group
-      Group::ExterneKontakte
-        .find_by(name: "Navision Import", parent: Group.root)
     end
 
     def report_person_not_found(row)
       report(row, nil, error: "Person not found in hitobito")
     end
 
-    def report_person_failed_before(row)
-      report(row, nil, error: "A previous role could not be imported for this person, skipping")
-    end
-
     def report(row, person, message: nil, warning: nil, error: nil)
-      @failed_person_ids << row[:navision_id] if error.present?
-      output_message = "#{row[:navision_id]} (#{row[:person_name]}): "
-      output_message << if error.present?
-        "❌ #{error}\n"
+      message_prefix = "#{row.navision_id} (#{person})"
+      symbol = error.present? ? "❌" : "✅"
+      details = error || message || warning
+      status = if error.present?
+        "error"
       else
-        "✅ #{message || warning}\n"
+        warning.present? ? "warning" : "success"
       end
 
-      @output.print(output_message)
-      add_report_row(row, message: message, warning: warning, error: error)
+      @output.puts("#{message_prefix}: #{symbol} #{details}") if error.present?
+      return unless error.present? || warning.present?
+
+      add_report_row(row, status, message: message, warning: warning, error: error)
     end
 
-    def add_report_row(row, message: nil, warning: nil, error: nil)
+    def add_report_row(row, status, message: nil, warning: nil, error: nil)
       @csv_report.add_row({
-        navision_id: row[:navision_id],
-        person_name: row[:person_name],
-        valid_from: row[:valid_from],
-        valid_until: row[:valid_until],
-        target_group: target_group_path(row),
-        target_role: row[:role],
+        navision_id: row.navision_id,
+        person_name: row.person_name,
+        valid_from: row.valid_from,
+        valid_until: row.valid_until,
+        target_group: row.group_path,
+        target_role: row.role,
+        status: status,
         message: message,
         warning: warning,
         error: error
@@ -120,32 +109,7 @@ module SacImports::Roles
     end
 
     def collect_csv_source_person_ids
-      @data.map { |row| row[:navision_id].to_i }.uniq
-    end
-
-    def target_group_path(row)
-      group_keys = %i[layer_type group_level1 group_level2 group_level3 group_level4]
-      group_keys.map { |key| row[key] }.compact.join(" > ")
-    end
-
-    def fetch_membership_group(row, person)
-      group_name = extract_membership_group_name(row)
-      parent_group = Group.find_by(name: group_name, type: SECTION_OR_ORTSGRUPPE_GROUP_TYPE_NAMES)
-      if parent_group
-        return Group::SektionsMitglieder.find_by(parent_id: parent_group.id)
-      end
-
-      report(row, person, error: "No Section/Ortsgruppe group found for '#{group_name}'")
-      nil
-    end
-
-    def extract_membership_group_name(row)
-      # if ortsgruppe
-      if row[:group_level3] == "Mitglieder"
-        return row[:group_level2]
-      end
-
-      row[:group_level1]
+      @data.map { |row| navision_id(row) }.uniq
     end
   end
 end

@@ -14,16 +14,19 @@ module SacImports::People
     DEFAULT_COUNTRY = "CH"
     TARGET_ROLE = Group::ExterneKontakte::Kontakt.sti_name
 
-    attr_reader :row, :group, :warning
+    attr_reader :row, :groups, :warning, :existing_emails
 
-    def initialize(row, group)
+    def initialize(row, groups, existing_emails)
       @row = row
-      @group = group
+      @groups = groups
       @warning = nil
+      @existing_emails = existing_emails
     end
 
     def person
-      @person ||= ::Person.find_or_initialize_by(id: navision_id).tap do |person|
+      @person ||= ::Person.includes(:additional_emails, :notes)
+        .find_or_initialize_by(id: navision_id)
+        .tap do |person|
         assign_attributes(person)
         build_phone_numbers(person)
         build_role(person)
@@ -45,27 +48,27 @@ module SacImports::People
     private
 
     def navision_id
-      @navision_id ||= Integer(row[:navision_id].to_s.sub(/^0*/, ""))
+      @navision_id ||= Integer(row.navision_id.to_s.sub(/^0*/, ""))
     end
 
     def country
-      row[:country] || DEFAULT_COUNTRY
+      row.country || DEFAULT_COUNTRY
     end
 
     def gender
-      GENDERS[row[:gender]&.to_sym]
+      GENDERS[row.gender&.to_sym]
     end
 
     def person_type
-      PERSON_TYPES[row[:person_type]&.to_sym] || "person"
+      PERSON_TYPES[row.person_type&.to_sym] || "person"
     end
 
     def language
-      LANGUAGES[row[:person_type]&.to_sym] || DEFAULT_LANGUAGE
+      LANGUAGES[row.language&.to_sym] || DEFAULT_LANGUAGE
     end
 
     def email
-      row[:email]
+      row.email&.downcase
     end
 
     def company?
@@ -73,7 +76,7 @@ module SacImports::People
     end
 
     def parse_address
-      address = row[:street_name]
+      address = row.street_name
       return if address.blank?
 
       Address::Parser.new(address).parse
@@ -81,43 +84,55 @@ module SacImports::People
 
     def assign_attributes(person) # rubocop:disable Metrics/AbcSize
       person.primary_group = group
-      person.first_name = row[:first_name] unless company?
-      person.last_name = row[:last_name] unless company?
-      person.address_care_of = row[:address_care_of]
-      person.postbox = row[:postbox]
+      person.first_name = row.first_name unless company?
+      person.last_name = row.last_name unless company?
+      person.address_care_of = row.address_care_of
+      person.postbox = row.postbox
       person.country = country
-      person.town = row[:town]
-      person.zip_code = row[:zip_code]
-      person.birthday = row[:birthday]
+      person.town = row.town
+      person.zip_code = row.zip_code
+      person.birthday = row.birthday
       person.gender = gender unless company?
       person.language = language
-      person.family_key = row[:family]
-      person.sac_remark_section_1 = row[:sac_remark_section_1]
-      person.sac_remark_section_2 = row[:sac_remark_section_2]
-      person.sac_remark_section_3 = row[:sac_remark_section_3]
-      person.sac_remark_section_4 = row[:sac_remark_section_4]
-      person.sac_remark_section_5 = row[:sac_remark_section_5]
-      person.sac_remark_national_office = row[:sac_remark_national_office]
-      person.company = company?
-      person.company_name = row[:last_name] if company?
+      person.sac_remark_section_1 = row.sac_remark_section_1
+      person.sac_remark_section_2 = row.sac_remark_section_2
+      person.sac_remark_section_3 = row.sac_remark_section_3
+      person.sac_remark_section_4 = row.sac_remark_section_4
+      person.sac_remark_section_5 = row.sac_remark_section_5
+      person.sac_remark_national_office = row.sac_remark_national_office
+      if company?
+        person.company = true
+        person.company_name = [row.first_name.presence, row.last_name.presence].compact.join(" ")
+      end
 
-      if row[:housenumber].present?
-        person.street = row[:street_name]
-        person.housenumber = row[:housenumber]
+      if row.housenumber.present?
+        person.street = row.street_name
+        person.housenumber = row.housenumber
       else
         person.street, person.housenumber = parse_address
       end
 
-      if email.present?
-        if Person.where.not(id: person.id).where("LOWER(email) LIKE LOWER(?)", email).exists?
-          person.additional_emails = [::AdditionalEmail.new(email: email, label: "Duplikat")]
-          @warning = "Email #{email} already exists in the system. Importing with additional_email."
-        else
-          person.email = email
-          # Do not call person#confirm here as it persists the record.
-          # Instead we set confirmed_at manually.
-          person.confirmed_at = Time.zone.at(0)
-        end
+      assign_email(person) if email.present?
+    end
+
+    def assign_email(person)
+      if person.persisted?
+        # for persisted people we have to do nothing if any of their email matches the new one
+        person_emails = [person.email, *person.additional_emails.map(&:email)]
+          .compact.map(&:downcase)
+        return if person_emails.include?(email.downcase)
+      end
+
+      if existing_emails.add?(email.downcase)
+        person.email = email
+        # Do not call person#confirm here as it persists the record.
+        # Instead we set confirmed_at manually.
+        person.confirmed_at = Time.zone.at(0)
+      else
+        person.additional_emails = [::AdditionalEmail.new(email: email, label: "Duplikat")]
+        warn(
+          "Email #{email} already exists in the system. Importing with additional_email."
+        )
       end
     end
 
@@ -126,17 +141,42 @@ module SacImports::People
     end
 
     def build_phone_numbers(person)
-      number = row[:phone].presence
-      phone_numbers = phone_valid?(number) ? [PhoneNumber.new(number:, label: "Hauptnummer")] : []
-      person.phone_numbers = phone_numbers
+      number = row.phone.presence || return
+
+      if phone_valid?(number)
+        phone_numbers = phone_valid?(number) ? [PhoneNumber.new(number:, label: "Hauptnummer")] : []
+        person.phone_numbers = phone_numbers
+      else
+        add_invalid_phone_number_as_note(person)
+      end
+    end
+
+    def add_invalid_phone_number_as_note(person)
+      return if person.notes.any? { |note| note.text.include?(row.phone) }
+
+      person.notes.build(
+        author: Person.root,
+        text: "Importiert mit ungültiger Telefonnummer: #{row.phone}"
+      )
     end
 
     def build_role(person)
       person.roles.find_or_initialize_by(group: group, type: TARGET_ROLE)
     end
 
+    def group
+      case row.termination_reason
+      when /Gestorben/i then groups.alumni
+      else groups.import
+      end
+    end
+
     def build_error_messages
       [person.errors.full_messages, person.roles.first.errors.full_messages].flatten.compact.join(", ")
+    end
+
+    def warn(message)
+      @warning = [@warning, message].compact.join(" / ")
     end
   end
 end

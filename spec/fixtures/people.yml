@@ -100,7 +100,7 @@ tourenchef:
   zip_code: 2843
   town: Neu Carlscheid
   email: paschke-ida@hitobito.example.com
-  gender: f
+  gender: w
   primary_group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de

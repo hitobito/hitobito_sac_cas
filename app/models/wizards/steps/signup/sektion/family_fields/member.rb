@@ -10,6 +10,8 @@ module Wizards::Steps::Signup::Sektion
     include ActiveModel::Model
     include ActiveModel::Attributes
     include ActiveModel::Validations
+    include ActiveModel::Dirty # required for ValidatedEmail
+    include ValidatedEmail
 
     include Wizards::Steps::Signup::PersonCommon
 

@@ -12,19 +12,18 @@ class Export::BackupMitgliederExportJob < BaseJob
   def initialize(group_id)
     super()
     @group_id = group_id
-    @errors = []
   end
 
   def perform
     sftp.upload_file(csv, file_path)
   rescue => e
     error(self, e, group: group)
-    @errors << [@group_id, e]
+    errors << [@group_id, e]
   end
 
   def log_results
     {
-      errors: @errors
+      errors: errors
     }
   end
 
@@ -51,5 +50,9 @@ class Export::BackupMitgliederExportJob < BaseJob
 
   def group
     @group ||= Group.find(@group_id)
+  end
+
+  def errors
+    @errors ||= []
   end
 end

@@ -23,7 +23,7 @@ describe "roles/_fields.html.haml" do
   end
 
   context "other role" do
-    let(:role) { roles(:abonnent_alpen) }
+    let(:role) { roles(:tourenchef_bluemlisalp_ortsgruppe_ausserberg) }
 
     it "shows 'Von' field" do
       expect(page).to have_text("Daten")

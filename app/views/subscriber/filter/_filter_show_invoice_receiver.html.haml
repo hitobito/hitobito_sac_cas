@@ -1,0 +1,12 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club SAC. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+- if @mailing_list.filter_chain[:invoice_receiver].present?
+  - filter_args = @mailing_list.filter_chain[:invoice_receiver].args
+
+  - Person::Filter::InvoiceReceiver::VISIBLE_ATTRS.each do |attr|
+    - if filter_args&.dig(attr)
+      %li
+        = t("people_filters.filter.invoice_receiver.#{attr}")

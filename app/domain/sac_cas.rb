@@ -49,7 +49,7 @@ module SacCas
 
   ### Various roles
 
-  EVENT_LEADER_ROLES = [::Event::Role::Leader, ::Event::Role::AssistantLeader].freeze
+  EVENT_LEADER_ROLES = [::Event::Course::Role::Leader, ::Event::Course::Role::AssistantLeader].freeze
 
   SAC_BACKOFFICE_ROLES = [
     ::Group::Geschaeftsstelle::Mitarbeiter,
@@ -72,17 +72,29 @@ module SacCas
     ::Group::AboTourenPortal::Abonnent
   ].freeze
 
+  # Prevent those from being edited via roles UI
   WIZARD_MANAGED_ROLES = [
     ::Group::SektionsMitglieder::Mitglied,
     ::Group::SektionsMitglieder::MitgliedZusatzsektion,
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+    ::Group::AboMagazin::Abonnent,
+    ::Group::AboMagazin::Neuanmeldung,
+    ::Group::AboMagazin::Gratisabonnent,
+    ::Group::AboTourenPortal::Abonnent,
+    ::Group::AboTourenPortal::Neuanmeldung,
+    ::Group::AboTourenPortal::Gratisabonnent
   ].freeze
 
   ###
 
   MV_EMAIL = "mv@sac-cas.ch"
-  NEWSLETTER_MAILING_LIST_INTERNAL_KEY = "sac_newsletter"
+  MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY = "sac_newsletter"
+  MAILING_LIST_SAC_INSIDE_INTERNAL_KEY = "sac_inside"
+  MAILING_LIST_TOURENLEITER_INTERNAL_KEY = "tourenleiter"
+  MAILING_LIST_DIE_ALPEN_PAPER_INTERNAL_KEY = "die_alpen_paper"
+  MAILING_LIST_DIE_ALPEN_DIGITAL_INTERNAL_KEY = "die_alpen_digital"
+  MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY = "spendenaufrufe"
 
   AboCost = Data.define(:amount, :country)
   ABO_COSTS = {

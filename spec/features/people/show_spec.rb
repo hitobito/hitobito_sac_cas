@@ -58,7 +58,7 @@ describe "person show page" do
       end
 
       describe "other roles" do
-        let(:role) { roles(:abonnent_alpen) }
+        let(:role) { roles(:tourenchef_bluemlisalp_ortsgruppe_ausserberg) }
 
         it "shows delete button" do
           visit group_person_path(group_id: role.group_id, id: role.person_id)

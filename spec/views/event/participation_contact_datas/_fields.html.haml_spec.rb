@@ -9,11 +9,13 @@ describe "event/participation_contact_datas/_fields.html.haml" do
   include FormatHelper
 
   let(:participation_contact_data) { Event::ParticipationContactData.new(events(:top_course), people(:mitglied)) }
+  let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
   let(:form_builder) { StandardFormBuilder.new(:participation_contact_data, participation_contact_data, view, {}) }
 
   before do
     allow(form_builder).to receive(:fields_for).and_return([])
     allow(view).to receive_messages(f: form_builder, entry: participation_contact_data, phone_numbers: [])
+    assign(:policy_finder, policy_finder)
   end
 
   let(:dom) {

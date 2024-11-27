@@ -347,7 +347,7 @@ describe Event::Course do
         {person: people(:mitglied), state: :assigned, price: 10, application: application},
         {person: people(:familienmitglied), state: :assigned, price: 10}
       ])
-      @participations.first.roles.create!(type: Event::Role::Leader)
+      @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
       @participations.third.roles.create!(type: Event::Course::Role::Participant)
     end
@@ -399,8 +399,8 @@ describe Event::Course do
 
       context "with course leaders" do
         before do
-          course.participations.first.roles.create!(type: Event::Role::Leader)
-          course.participations.second.roles.create!(type: Event::Role::AssistantLeader)
+          course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+          course.participations.second.roles.create!(type: Event::Course::Role::AssistantLeader)
           course.participations.third.roles.create!(type: Event::Course::Role::Participant)
         end
 
@@ -411,7 +411,7 @@ describe Event::Course do
       end
 
       context "with course assistant leader" do
-        before { course.participations.first.roles.create!(type: Event::Role::AssistantLeader) }
+        before { course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader) }
 
         it "sends an email to the course admin and assistant leader" do
           expect { course.update!(state: :application_open) }
@@ -488,7 +488,7 @@ describe Event::Course do
       before do
         course.inform_participants = "1"
         course.participations.create!([
-          {person: people(:admin), state: :assigned, active: true, roles: [Event::Role::Leader.new]},
+          {person: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
           {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
           {person: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
         ])
@@ -497,9 +497,9 @@ describe Event::Course do
       it "changes participation states to canceled" do
         expect(course.participations.count).to eq(3)
         course.update!(state: :canceled, canceled_reason: :minimum_participants)
-        participations = course.participations.reload
-        expect(participations.map(&:state)).to eq(%w[assigned annulled annulled])
-        expect(participations.map(&:previous_state)).to eq([nil, "assigned", "rejected"])
+        participations = course.participations.order(:state, :previous_state)
+        expect(participations.map(&:state)).to eq(%w[annulled annulled assigned])
+        expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
       end
 
       it "sends an email to all participants if canceled because of minimum participants" do
@@ -550,7 +550,7 @@ describe Event::Course do
 
     before do
       _p1, p2, p3, p4 = course.participations.create!([
-        {person: people(:admin), roles: [Event::Role::Leader.new], price: 0},
+        {person: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
         {person: people(:mitglied), state: :absent, price: 42},
         {person: people(:familienmitglied), state: :attended, price: 42},
         {person: people(:familienmitglied2), state: :absent, price: 42}
@@ -562,14 +562,14 @@ describe Event::Course do
 
     it "does not set participation state for assigned participations" do
       expect { course.update!(state: :closed) }
-        .not_to change { course.participations.pluck(:state) }
+        .not_to change { course.participations.order(:state).pluck(:state) }
     end
 
     it "sets participation state to attended for summoned participations" do
       course.participations.update_all(state: :summoned)
       course.update!(state: :closed)
 
-      expect(course.participations.pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
+      expect(course.participations.order(:state).pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
     end
 
     it "queues job for absent invoices for absent participants" do
@@ -585,14 +585,83 @@ describe Event::Course do
 
     before do
       course.participations.create!([
-        {person: people(:admin), roles: [Event::Role::Leader.new], state: :summoned},
+        {person: people(:admin), roles: [Event::Course::Role::Leader.new], state: :summoned},
         {person: people(:mitglied), state: :summoned}
       ])
     end
 
     it "does nothing" do
       expect { course.update!(state: :ready) }
-        .not_to change { course.participations.pluck(:state) }
+        .not_to change { course.participations.order(:state).pluck(:state) }
+    end
+  end
+
+  describe "#total_event_days" do
+    subject(:course) { Fabricate.build(:sac_course, start_point_of_time: :day) }
+
+    it "returns 0 days when there are no dates" do
+      expect(course.total_event_days).to eq(0)
+    end
+
+    describe "single date with only start_at" do
+      it "returns 1 for date" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "returns 1 for datetime" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 11:00"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "subtracts 0.5 when even starts in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 20:00"))
+        expect(course.total_event_days).to eq(0.5)
+      end
+    end
+
+    describe "single date with start and finish at" do
+      it "returns 1 if they are on the sem date" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 23:00"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "returns still 1 if they they finish in the morning" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        expect(course.total_event_days).to eq(1)
+      end
+
+      it "returns 0.5 if event starts in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        expect(course.total_event_days).to eq(0.5)
+      end
+
+      it "counts days ignoring start and end times on each day" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        expect(course.total_event_days).to eq(3)
+      end
+
+      it "still subtracts 0.5 if starting in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        expect(course.total_event_days).to eq(2.5)
+      end
+    end
+
+    describe "multiple dates" do
+      it "returns the total days across all dates" do
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
+        expect(course.total_event_days).to eq(5)
+      end
+      it "still subtracts 0.5 if starting in the evening" do
+        course.start_point_of_time = :evening
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
+        expect(course.total_event_days).to eq(4.5)
+      end
     end
   end
 end

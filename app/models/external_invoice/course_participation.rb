@@ -29,8 +29,6 @@
 #  index_external_invoices_on_person_id  (person_id)
 #
 class ExternalInvoice::CourseParticipation < ExternalInvoice
-  self.invoice_kind = :course
-
   # link is an Event::Participation object for a Event::Course
   validates :link_type, inclusion: {in: %w[Event::Participation]}
 
@@ -55,6 +53,10 @@ class ExternalInvoice::CourseParticipation < ExternalInvoice
 
   def title
     "#{link.event.name} (#{link.event.number})"
+  end
+
+  def invoice_kind
+    :course
   end
 
   private

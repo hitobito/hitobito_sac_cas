@@ -7,28 +7,44 @@
 
 class SacImports::CsvReport
   COLUMN_SEPARATOR = ";"
+  LOG_DIR = Rails.root.join("log", "sac_imports")
 
-  def initialize(sac_import_name, headers)
+  delegate :puts, to: :@output
+
+  def initialize(sac_import_name, headers, output: $stdout)
     @start_time = Time.zone.now
     @timestamp = format_time(Time.zone.now)
     @sac_import_name = sac_import_name
     @headers = headers
+    @output = output
     csv_init
+    log("Started: #{@timestamp}")
+    log("Database: #{ActiveRecord::Base.connection.current_database}")
+    output.puts "Report for #{@sac_import_name} started at #{@timestamp}."
+    output.puts "Report location: #{csv_file_path}"
+    output.puts "Log location: #{log_file_path}"
+    output.puts "Database: #{ActiveRecord::Base.connection.current_database}"
   end
 
   def add_row(row)
     csv_append(row)
   end
 
-  def finalize(output: $stdout)
+  def log(line)
+    @output.puts(line)
+    File.write(log_file_path, "#{line}\n", mode: "a")
+  end
+
+  def finalize
     log(
       "Started: #{@timestamp}, " \
         "completed: #{format_time(Time.zone.now)}, " \
-        "duration: #{format_duration} minutes"
+        "duration: #{format_duration}"
     )
-    output.puts "\n\n\nReport generated in #{format_duration}."
-    output.puts "Thank you for flying with SAC Imports."
-    output.puts "Report written to #{csv_file_path}"
+    @output.puts "\n\n\nReport generated in #{format_duration}."
+    @output.puts "Thank you for flying with SAC Imports."
+    @output.puts "Report written to #{csv_file_path}"
+    @output.puts "Log written to #{log_file_path}"
   end
 
   private
@@ -42,9 +58,8 @@ class SacImports::CsvReport
   end
 
   def create_log_dir
-    log_dir = Rails.root.join("log", "sac_imports")
-    log_dir.mkpath
-    log_dir
+    LOG_DIR.mkpath
+    LOG_DIR
   end
 
   def csv_init
@@ -61,15 +76,11 @@ class SacImports::CsvReport
     end
   end
 
-  def log(line)
-    File.write(log_file_path, "#{line}\n", mode: "a")
-  end
-
   def csv_file_path
     @csv_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.csv"
   end
 
   def log_file_path
-    @log_file_path ||= "#{log_dir}/#{@sac_import_name}.log"
+    @log_file_path ||= "#{log_dir}/#{@sac_import_name}_#{@timestamp}.log"
   end
 end

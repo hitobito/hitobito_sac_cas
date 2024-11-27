@@ -38,9 +38,15 @@ describe OidcClaimSetup do
 
   context "name" do
     let(:scope) { :name }
+    let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
 
-    it "picture_url is present" do
-      expect(claims[:picture_url]).to eq owner.decorate.picture_full_url
+    it "has fallback picture" do
+      expect(claims[:picture_url]).to eq "http://test.host/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg"
+    end
+
+    it "has redirect url to store image" do
+      expect(owner.picture.attach(Rack::Test::UploadedFile.new(logo))).to eq true
+      expect(claims[:picture_url]).to start_with "http://test.host/rails/active_storage/blobs/redirect"
     end
 
     it "membership_verify_url is present" do

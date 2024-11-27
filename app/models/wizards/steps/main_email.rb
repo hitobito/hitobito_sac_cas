@@ -6,19 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Wizards::Steps::MainEmail < Wizards::Step
+  include ActiveModel::Dirty # required for ValidatedEmail
   include ValidatedEmail
 
   attribute :email, :string
 
   validates :email, presence: true
   validate :ensure_email_available
-
-  # #email_changed? is used in `ValidatedEmail` to determine if the email
-  # should be validated. Here it should only be validated if the email is
-  # present.
-  def email_changed?
-    email.present?
-  end
 
   def ensure_email_available
     return if email.blank?

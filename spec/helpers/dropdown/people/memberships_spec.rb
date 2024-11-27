@@ -83,5 +83,11 @@ describe Dropdown::People::Memberships do
       stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
       expect(menu).to have_link "SAC-Mitgliedschaft beenden"
     end
+
+    it "contains correct dropdown option name when role terminated" do
+      person.sac_membership.stammsektion_role.update_column(:terminated, true)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
+      expect(menu).to have_link "SAC Austritt anpassen"
+    end
   end
 end

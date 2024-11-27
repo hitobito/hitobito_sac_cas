@@ -7,120 +7,18 @@
 
 class SacImports::CsvSource
   SOURCE_DIR = Rails.root.join("tmp", "sac_imports_src").freeze
-  NIL_VALUES = ["", "NULL", "null", "Null"].freeze
-  SOURCE_HEADERS = {
-    NAV1: {
-      navision_id: "No_",
-      membership_years: "Vereinsmitgliederjahre",
-      first_name: "First Name",
-      last_name: "Surname",
-      address_care_of: "Adresszusatz",
-      postbox: "Postfach",
-      street_name: "Street Name",
-      housenumber: "Street No_",
-      country: "Country_Region Code",
-      town: "City",
-      zip_code: "Post Code",
-      email: "E-Mail",
-      phone: "Phone No_",
-      birthday: "Date of Birth",
-      gender: "Geschlecht",
-      language: "Language Code",
-      social_media: "Social Media",
-      family: "Family No_",
-      person_type: "Personentyp",
-      sac_remark_section_1: "Sektionsinfo 1 Bemerkung",
-      sac_remark_section_2: "Sektionsinfo 2 Bemerkung",
-      sac_remark_section_3: "Sektionsinfo 3 Bemerkung",
-      sac_remark_section_4: "Sektionsinfo 4 Bemerkung",
-      sac_remark_section_5: "Sektionsinfo 5 Bemerkung",
-      sac_remark_national_office: "Geschäftsstelle Bemerkung"
-    },
-    NAV2: {
-      navision_id: "Kontaktnummer",
-      valid_from: "GültigAb",
-      valid_until: "GültigBis",
-      layer_type: "Layer",
-      group_level1: "Gruppe_Lvl_1",
-      group_level2: "Gruppe_Lvl_2",
-      group_level3: "Gruppe_Lvl_3",
-      group_level4: "Gruppe_Lvl_4",
-      role: "Rolle",
-      role_description: "Zusatzbeschrieb",
-      person_name: "Name",
-      other: "Anderes"
-    },
-    NAV3: {
-      navision_id: "Kontaktnummer",
-      active: "Ist_aktiv",
-      start_at: "Gültig von",
-      finish_at: "Gültig bis",
-      qualification_kind: "Qualifikation"
-    },
-    NAV6: {
-      navision_id: "NAV Sektions-ID",
-      level_1_id: "Level 1",
-      level_2_id: "Level 2",
-      level_3_id: "Level 3",
-      is_active: "Ist aktiv",
-      section_name: "Name",
-      address: "Adresse",
-      postbox: "Zusätzliche Adresszeile",
-      town: "Ort",
-      zip_code: "PLZ",
-      canton: "Kanton",
-      phone: "Telefonnummer",
-      email: "Haupt-E-Mail",
-      has_jo: "Hat JO",
-      youth_homepage: "Homepage Jugend",
-      foundation_year: "Gründungsjahr",
-      self_registration_without_confirmation: "Mit Freigabeprozess",
-      termination_by_section_only: "Austritt nur durch Sektion",
-      language: "Sprache",
-      membership_configs: {
-        section_fee_adult: "Sektionsbeitrag Mitgliedschaft Einzel",
-        section_fee_family: "Sektionsbeitrag Mitgliedschaft Familie",
-        section_fee_youth: "Sektionsbeitrag Mitgliedschaft Jugend",
-        section_entry_fee_adult: "Eintrittsgebühr Mitgliedschaft Einzel",
-        section_entry_fee_family: "Eintrittsgebühr Mitgliedschaft Familie",
-        section_entry_fee_youth: "Eintrittsgebühr Mitgliedschaft Jugend",
-        bulletin_postage_abroad: "Porto Ausland Sektionsbulletin",
-        sac_fee_exemption_for_honorary_members: "Zentralverbandsgebührenerlass für Ehrenmitglieder",
-        section_fee_exemption_for_honorary_members: "Sektionsgebührenerlass für Ehrenmitglieder",
-        sac_fee_exemption_for_benefited_members: "Zentralverbandsgebührenerlass für Begünstigte",
-        section_fee_exemption_for_benefited_members: "Sektionsgebührenerlass für Begünstigte",
-        reduction_amount: "Reduktionsbetrag Mitgliedsjahre/Alter",
-        reduction_required_membership_years: "Reduktion ab Mitgliedsjahren",
-        reduction_required_age: "Reduktion ab Altersjahren"
-      }
-    },
-    WSO21: {
-      wso2_legacy_password_hash: "UM_USER_PASSWORD",
-      wso2_legacy_password_salt: "UM_SALT_VALUE",
-      navision_id: "ContactNo",
-      gender: "Anredecode",
-      first_name: "Vorname",
-      last_name: "FamilienName",
-      address_care_of: "Addresszusatz",
-      address: "Strasse",
-      postbox: "Postfach",
-      town: "Ort",
-      zip_code: "PLZ",
-      country: "Land",
-      phone: "TelefonMobil",
-      phone_business: "TelefonG",
-      language: "Korrespondenzsprache",
-      email: "Mail",
-      birthday: "Geburtsdatum",
-      email_verified: "Email verified",
-      role_basiskonto: "Basis Konto",
-      role_abonnent: "Abonnent",
-      role_gratisabonnent: "NAV_FSA2020FREE"
-    }
-    # WSO22: {}
+  NIL_VALUES = ["", "NULL", "null", "Null", "1900-01-01"].freeze
+
+  SOURCES = {
+    NAV1: Nav1,
+    NAV2a: Nav2a,
+    NAV2b: Nav2b,
+    NAV3: Nav3,
+    NAV6: Nav6,
+    WSO21: Wso2
   }.freeze
 
-  AVAILABLE_SOURCES = SOURCE_HEADERS.keys.freeze
+  AVAILABLE_SOURCES = SOURCES.keys.freeze
 
   def initialize(source_name, source_dir: SOURCE_DIR)
     @source_dir = source_dir
@@ -130,34 +28,39 @@ class SacImports::CsvSource
 
   def rows(filter: nil)
     data = []
-    CSV.foreach(path, headers: true, encoding: "bom|utf-8") do |raw_row|
+    CSV.foreach(path, headers: false, encoding: "bom|utf-8") do |raw_row|
       row = process_row(raw_row)
       next unless filter.blank? || filter_match?(row, filter)
 
-      data << row
+      if block_given?
+        yield rows
+      else
+        data << row
+      end
     end
-    data
+    data unless block_given?
+  end
+
+  def lines_count
+    `wc -l "#{path}"`.strip.split(" ")[0].to_i
   end
 
   private
 
   def filter_match?(row, filter)
-    filter.all? do |key, value|
-      row[key].match?(value)
-    end
+    filter.all? { |key, value| row.public_send(key)&.match?(value) }
   end
 
   def process_row(row)
-    row = row.to_h
-    headers.each_with_object({}) do |(header_key, source_key), hash|
-      if source_key.is_a?(Hash)
-        sub_hash = source_key
-        value = process_sub_hash(sub_hash, row)
-      else
-        value = row[source_key]
-        value = clean_value(value)
-      end
-      hash[header_key] = value
+    check_row_size(row)
+    clean_row = row.map { |cell| clean_value(cell) }
+    column_data_class.new(*clean_row)
+  end
+
+  def check_row_size(row)
+    expected_size = column_data_class.members.size
+    if row.size != expected_size
+      raise "#{@source_name}: wrong number of columns, got #{row.size} expected #{expected_size}"
     end
   end
 
@@ -178,8 +81,8 @@ class SacImports::CsvSource
     @source_dir.join(files.last)
   end
 
-  def headers
-    SOURCE_HEADERS[@source_name]
+  def column_data_class
+    SOURCES[@source_name]
   end
 
   def assert_available_source

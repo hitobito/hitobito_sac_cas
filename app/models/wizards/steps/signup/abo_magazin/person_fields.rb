@@ -9,13 +9,5 @@ module Wizards::Steps::Signup::AboMagazin
   class PersonFields < Wizards::Steps::Signup::PersonFields
     self.minimum_age = 0
     self.partial = "wizards/steps/signup/person_fields"
-
-    validates :street, :housenumber, :town, :zip_code,
-      :country, presence: true
-
-    # let form builder know that it should mark address as required
-    def required_attrs
-      [:address]
-    end
   end
 end

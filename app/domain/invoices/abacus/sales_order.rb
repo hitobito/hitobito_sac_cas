@@ -12,12 +12,15 @@ module Invoices
       BACKLOG_ID = 0
       TYPE = "Product"
       DOCUMENT_CODES = {
+        sac_membership_yearly: "R",
         sac_membership: "R",
         course: "RK"
       }.with_indifferent_access.freeze
       PROCESS_FLOW_NUMBERS = {
-        sac_membership: 1,
-        course: 2
+        sac_membership_yearly: 1, # membership invoice created by the yearly batch job
+        sac_membership: 3, # membership invoice created individually
+        course: 2,
+        sac_magazine: 4 # coming up
       }.with_indifferent_access.freeze
 
       attr_reader :positions, :additional_user_fields

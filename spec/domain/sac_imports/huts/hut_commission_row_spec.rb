@@ -8,10 +8,10 @@
 require "spec_helper"
 
 describe SacImports::Huts::HutCommissionRow do
-  let(:importer) { described_class.new(row) }
+  let(:importer) { described_class.new(row, csv_report: double) }
 
   let(:row) do
-    SacImports::HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
+    SacImports::Nav5HutsImporter::HEADERS.keys.index_with { |_symbol| nil }.merge(
       contact_navision_id: "99993750",
       contact_name: "3750 SAC Blüemlisalp",
       hut_category: "SAC Clubhütte",

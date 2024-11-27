@@ -43,6 +43,8 @@ module HitobitoSacCas
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
+      MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
+
       # extend application classes here
       CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event
@@ -74,8 +76,6 @@ module HitobitoSacCas
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
-      admin = NavigationHelper::MAIN.find { |opts| opts[:label] == :admin }
-      admin[:active_for] << "event_levels"
 
       ## Abilities
       Role::Types::Permissions << :read_all_people
@@ -92,6 +92,8 @@ module HitobitoSacCas
       Ability.store.register TerminationReasonAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
+      Ability.store.register Memberships::TerminateSacMembershipWizardAbility
+      Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
       PersonAbility.prepend SacCas::PersonAbility
@@ -129,6 +131,7 @@ module HitobitoSacCas
       EventResource.include SacCas::EventResource
       Event::CourseResource.include SacCas::Event::CourseResource
       Event::KindResource.include SacCas::Event::KindResource
+      Person::NameResource.course_leader_role = Event::Course::Role::Leader
 
       ## Helpers
       EventKindsHelper.prepend SacCas::EventKindsHelper
@@ -145,9 +148,11 @@ module HitobitoSacCas
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units termination_reasons course_compensation_categories course_compensation_rates]
+      admin_item[:active_for] += %w[cost_centers cost_units event_levels termination_reasons course_compensation_categories course_compensation_rates]
 
       ## Controllers
+      ApplicationController.include BasicAuth if Settings.basic_auth
+
       ApplicationController.prepend SacCas::ApplicationController
       EventsController.prepend SacCas::EventsController
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
@@ -173,6 +178,7 @@ module HitobitoSacCas
       People::Membership::VerifyController.include Localizable
 
       ## Jobs
+      Event::ParticipationConfirmationJob.prepend SacCas::Event::ParticipationConfirmationJob
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
 
@@ -211,6 +217,10 @@ module HitobitoSacCas
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,
         [:invoice_state])
+
+      Synchronize::Mailchimp::Synchronizator.member_fields = [
+        [:language, ->(p) { p.language }]
+      ]
 
       Wizards::Base.class_attribute :asides, default: []
     end

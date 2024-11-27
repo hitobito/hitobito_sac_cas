@@ -9,12 +9,11 @@ module SacCas::HouseholdMember
   extend ActiveSupport::Concern
 
   prepended do
-    validate :assert_planned_termination, on: :destroy
+    validate :assert_planned_termination
   end
 
   def assert_planned_termination
-    if Group::SektionsMitglieder::Mitglied.where(person_id: person.id)
-        .where(terminated: true).exists?
+    if person.sac_membership.terminated?
       errors.add(:base, :planned_termination, person_name: person.full_name)
     end
   end

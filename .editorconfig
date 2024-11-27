@@ -22,4 +22,4 @@ trim_trailing_whitespace = false
 
 [*.rb]
 max_line_length = 100
-ij_wrap_on_typing = true
+ij_wrap_on_typing = false

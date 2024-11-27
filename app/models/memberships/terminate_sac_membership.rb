@@ -45,8 +45,9 @@ module Memberships
       [Time.zone.yesterday, Time.zone.now.end_of_year.to_date]
     end
 
-    def initialize(role, terminate_on, **params)
+    def initialize(role, terminate_on, backoffice: false, **params)
       @role = role
+      @backoffice = backoffice
       super(params.merge(terminate_on: terminate_on))
 
       assert_sektions_mitglied
@@ -146,7 +147,7 @@ module Memberships
     end
 
     def assert_not_already_terminated
-      raise "already terminated" if @role.terminated?
+      raise "already terminated" if @role.terminated? && !@backoffice
     end
 
     def assert_not_already_ended

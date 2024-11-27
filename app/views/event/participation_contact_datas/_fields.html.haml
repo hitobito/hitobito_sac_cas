@@ -17,5 +17,6 @@
     = ff.hidden_field(:public)
     = ff.hidden_field(:translated_label)
     = ff.hidden_field(:_destroy, value: false)
+= render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)
 
-.well=t('.overrides_person_data_info')
+.well.align-with-form=t('.overrides_person_data_info')

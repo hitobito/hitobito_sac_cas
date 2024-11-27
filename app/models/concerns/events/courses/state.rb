@@ -107,7 +107,7 @@ module Events::Courses::State
 
   def annul_participations
     all_participants.update_all("previous_state = state, active = FALSE, state = 'annulled'")
-    cancel_invoices(all_course_invoices)
+    cancel_invoices(open_course_invoices)
   end
 
   def all_participants # also including not active
@@ -118,22 +118,30 @@ module Events::Courses::State
 
   def cancel_invoices(invoices)
     invoices.each do |invoice|
+      invoice.update!(state: :cancelled)
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
   end
 
-  def all_course_invoices
+  def open_course_invoices
     ExternalInvoice.where(
       link_id: participations.select(:id),
       link_type: Event::Participation.sti_name,
+      state: [:draft, :open, :payed],
       type: [ExternalInvoice::CourseParticipation, ExternalInvoice::CourseAnnulation].map(&:sti_name)
     )
   end
 
   def send_application_published_email
-    leaders.each do |leader|
+    all_leaders.each do |leader|
       Event::PublishedMailer.notice(self, leader).deliver_later
     end
+  end
+
+  def all_leaders
+    Person.where(id: participations.joins(:roles)
+      .where(roles: {type: SacCas::Event::Course::LEADER_ROLES})
+      .select(:person_id))
   end
 
   def send_application_paused_email

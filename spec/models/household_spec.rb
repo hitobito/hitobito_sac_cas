@@ -120,6 +120,24 @@ describe Household do
       expect(household.valid?).to eq false
       expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
     end
+
+    it "is invalid if a person has a terminated membership" do
+      new_person = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+        group: groups(:bluemlisalp_mitglieder),
+        beitragskategorie: :adult,
+        created_at: 1.year.ago,
+        start_on: 1.year.ago).person
+      other_household_person = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+        group: groups(:bluemlisalp_mitglieder),
+        beitragskategorie: :adult,
+        created_at: 1.year.ago,
+        start_on: 1.year.ago).person
+      Roles::Termination.new(role: other_household_person.roles.first, terminate_on: 1.day.from_now).call
+      household = Household.new(new_person)
+      household.add(other_household_person)
+      expect(household.valid?).to eq false
+      expect(household.errors.full_messages.first).to include("#{other_household_person.full_name} hat einen Austritt geplant.")
+    end
   end
 
   describe "maintaining sac_family" do
@@ -328,6 +346,17 @@ describe Household do
 
       household = Household.new(person, maintain_sac_family: true)
       expect { household.reload }.not_to change { household.maintain_sac_family? }.from(true)
+    end
+  end
+
+  describe "overwrite address" do
+    it "applies address for all members with invalid state when updating one person" do
+      household.add(adult)
+      adult.update_column(:street, nil)
+
+      person.update!(street: "Langweilige Strasse")
+      expect { household.save!(context: :update_address) }.not_to raise_error
+      expect(household.members.map(&:person).map(&:street)).to all(eq("Langweilige Strasse"))
     end
   end
 end

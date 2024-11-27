@@ -12,6 +12,17 @@ en:
     links:
       faq: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
       membership: ""
+    sac:
+      name: ""
+      zentralverband: ""
+      address: ""
+      town: ""
+      postbox: ""
+      phone: ""
+      phone_self_registration: ""
+      email: ""
+      email_mv: ""
+      website: ""
 
   settings:
     email:
@@ -24,8 +35,13 @@ en:
       assert_old_enough_with_age: "must have a date of birth and be at least %{minimum_years} years old"
       conflicting_family_membership: >-
         %{name} already has a family membership and therefore cannot be added to a family household.
+      total_event_days_exceeded: ""
+
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: ""
+        iban: ""
       people/membership/invoice_form:
         reference_date: "Deadline"
         invoice_date: ""
@@ -96,9 +112,6 @@ en:
         termination_reason_id: "Reason for leaving"
       wizards/steps/termination/summary:
         termination_reason_id: "Reason for leaving"
-        data_retention_consent: "My data should be retained after I leave and I can be contacted for donation appeals"
-        subscribe_newsletter: "Maintain newsletter"
-        subscribe_fundraising_list: "I would like to continue to be informed about fundraising campaigns."
 
     errors:
       messages:
@@ -509,8 +522,8 @@ en:
             %{name} is %{age} years old and therefore cannot be added as an administrator.
         person:
           birthday:
-            must_be_before_year: ""
-            must_be_after_year: ""
+            must_be_before: ""
+            must_be_after: ""
         qualification:
           attributes:
             finish_at:
@@ -536,6 +549,12 @@ en:
         one: ''
         other: ''
       event/role/assistant_leader:
+        one: ''
+        other: ''
+      event/course/role/leader:
+        one: ''
+        other: ''
+      event/course/role/assistant_leader:
         one: ''
         other: ''
       external_training:
@@ -924,6 +943,9 @@ en:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Writing right
         description: Writing right
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Tour manager
         description: Tour manager
@@ -1012,9 +1034,6 @@ en:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Other
         description: Other
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ''
-        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1036,6 +1055,7 @@ en:
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
     terminate_sac_membership_wizard_link: Terminate SAC membership
+    terminate_sac_membership_wizard_terminated_link: ""
 
   dropdown/people_export:
     recipients: ""
@@ -1129,6 +1149,10 @@ en:
         create_invoice_button: ""
         attach_key_data_sheet: ""
         create_invoice_confirmation: ""
+        create_course_leader_invoice_button: ""
+      popover_create_course_leader_settlement:
+        create_invoice: ""
+        info_text_html: ""
       invoice_created_notice: ""
       invoice_not_created_alert: ""
 
@@ -1192,6 +1216,9 @@ en:
     new:
       title: Create course level
 
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: ""
+
   filter_navigation/people:
     tour_guides_none: No tour leader
     tour_guides_active: Active tour leaders
@@ -1225,6 +1252,9 @@ en:
         duration_text: ""
       create:
         redirect_existing_email: There is already a login for this e-mail. Log in here.
+        existing_membership_notice: ""
+        existing_family_notice: ""
+        signed_up_notice: ""
 
       agreement_link:
         agb_text: ""
@@ -1317,9 +1347,6 @@ en:
           family: ""
           youth: ""
 
-  mailer:
-    footer:
-      address: |
   memberships:
     join_zusatzsektions:
       create:
@@ -1362,7 +1389,6 @@ en:
       year_title: ""
       title: ""
       greeting: ""
-      footer: ""
       table:
         number: ""
         name: ""
@@ -1516,6 +1542,14 @@ en:
         one: Application was rejected
         other: "%{count} Applications were rejected"
 
+  people_filters:
+    invoice_receiver:
+      title: ""
+    filter:
+      invoice_receiver:
+        stammsektion: ""
+        zusatzsektion: ""
+
   roles:
     beitragskategorie:
       adult: Single
@@ -1588,13 +1622,6 @@ en:
       title_membership: ""
       title_documents: Documents
       additional_infos: "You can find more information in the %{link}."
-      address: |
-        Swiss Alpine Club SAC
-        Monbijoustrasse 61
-        P.O.Box
-        3000 Bern 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: ""
       link_agb: ""
       link_faqs: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
@@ -1740,6 +1767,7 @@ en:
       termination_choose_date:
         info_text: "When should the exit take place?"
         warning_termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
+        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "We ask you to apply for withdrawal by telephone or e-mail. Please contact us for this purpose."
       ask_family_main_person:
@@ -1756,7 +1784,8 @@ en:
           family_warning: "Please note: the resignation is requested for the entire family membership. This affects: %{family_member_names}."
           data_retention_info_title: "Storage of your data"
           data_retention_info_text:
-            "After you leave, we will keep your data for six months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
-          newsletter_info_text: " If you would like to continue receiving the SAC Newsletter, you can let us know here:"
-          fundraiser_info_text: "If we may continue to contact you for donation appeals, you can let us know here:"
+            "After you leave, we will keep your data for twelve months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
+          data_retention_consent: "I would like my data to be retained after I leave the SAC."
+          subscribe_newsletter: "I would like to stay informed about news from the SAC and continue to receive the SAC newsletter."
+          subscribe_fundraising_list: ""
           next_button: "Request resignation"

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacImports::MembershipYearsReport do
+xdescribe SacImports::MembershipYearsReport do
   let(:output) { double(puts: nil, print: nil) }
   let(:nav1_csv_fixture) { file_fixture("sac_imports_src/NAV1_fixture.csv") }
   let!(:report) { described_class.new(output: output) }

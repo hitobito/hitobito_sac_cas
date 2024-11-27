@@ -12,6 +12,17 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
+    sac:
+      name: ""
+      zentralverband: ""
+      address: ""
+      town: ""
+      postbox: ""
+      phone: ""
+      phone_self_registration: ""
+      email: ""
+      email_mv: ""
+      website: ""
 
   settings:
     email:
@@ -24,8 +35,13 @@ it:
       assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
+      total_event_days_exceeded: ""
+
   activemodel:
     attributes:
+      event/courses/leader_settlement_form:
+        actual_days: ""
+        iban: ""
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di registrazione"
@@ -96,9 +112,6 @@ it:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
         termination_reason_id: "Motivo della disdetta"
-        data_retention_consent: "I miei dati possono essere conservati anche dopo la mia disdetta e posso essere contattato per gli appelli di donazione."
-        subscribe_newsletter: "Mantenere la newsletter"
-        subscribe_fundraising_list: "Vorrei continuare a essere informato sulle campagne di donazione."
 
     errors:
       messages:
@@ -514,8 +527,8 @@ it:
             %{name} ha %{age} anni e quindi non può essere aggiunto come amministratore.
         person:
           birthday:
-            must_be_before_year: "deve essere prima del 01.01.%{year}."
-            must_be_after_year: "deve essere dopo il 31.12.%{year}."
+            must_be_before: ""
+            must_be_after: ""
         qualification:
           attributes:
             finish_at:
@@ -550,6 +563,14 @@ it:
         one: Gestione della classe
         many: Gestione della classe
         other: Direzione della classe
+      event/course/role/leader:
+        one: ''
+        many: ''
+        other: ''
+      event/course/role/assistant_leader:
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -980,6 +1001,9 @@ it:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
+      group/sektions_touren_und_kurse_allgemein/tourenchef:
+        one: ""
+        description: ""
       group/sektions_touren_und_kurse_sommer/tourenchef:
         one: Responsabile escursioni
         description: Responsabile escursioni
@@ -1068,10 +1092,6 @@ it:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Altro
         description: Altro
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: ''
-        many: ''
-        other: ''
 
   # sort top level keys alphabetically from here on
 
@@ -1093,6 +1113,7 @@ it:
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere la modifica della sezione
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
+    terminate_sac_membership_wizard_terminated_link: ""
 
   dropdown/people_export:
     recipients: Destinatari individuali
@@ -1186,6 +1207,10 @@ it:
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
+        create_course_leader_invoice_button: ""
+      popover_create_course_leader_settlement:
+        create_invoice: ""
+        info_text_html: ""
       invoice_created_notice: La fattura è stata creata con successo.
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
 
@@ -1249,6 +1274,9 @@ it:
     new:
       title: Creare il livello del corso
 
+  event/courses/leader_settlement_pdfs:
+    export_enqueued: ""
+
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
     tour_guides_active: Guide escursionistiche attive
@@ -1282,6 +1310,9 @@ it:
         duration_text: Ricevi una fattura annuale in anticipo. L’abbonamento può essere disdetto in qualsiasi momento alla fine del periodo in corso.
       create:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
+        existing_membership_notice: ""
+        existing_family_notice: ""
+        signed_up_notice: ""
 
       agreement_link:
         agb_text: "Ho letto %{link}e acconsento"
@@ -1374,13 +1405,6 @@ it:
           family: Affiliazione famigliare
           youth: Affiliazione giovani
 
-  mailer:
-    footer:
-      address: |
-        Club Alpino Svizzero CAS
-        Monbijoustrasse 61
-        3000 Berna 14
-        <a href="https://www.sac-cas.ch">www.sac-cas.ch</a>
   memberships:
     join_zusatzsektions:
       create:
@@ -1427,7 +1451,6 @@ it:
       year_title: "Corsi / Escursioni CAS %{year}"
       title: Scheda dei dati di riferimento direzione corso/escursioni
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
-      footer: "Club Alpino Svizzero CAS, Monbijoustrasse 61, Casella postale, CH-3000 Berna 14, +41 31 370 18 43/44, alpin@sac-cas.ch"
       table:
         number: Evento n.
         name: Denominazione / Titolo
@@ -1585,6 +1608,14 @@ it:
         many: "%{count} Le domande sono state respinte"
         other: "%{count} registrazioni sono state rifiutate"
 
+  people_filters:
+    invoice_receiver:
+      title: ""
+    filter:
+      invoice_receiver:
+        stammsektion: ""
+        zusatzsektion: ""
+
   roles:
     beitragskategorie:
       adult: Individuale
@@ -1657,12 +1688,6 @@ it:
       title_membership: "Desideri diventare socio del CAS?"
       title_documents: Documenti
       additional_infos: "Trovi maggiori informazioni nelle %{link}."
-      address: |
-        Club Alpino Svizzero CAS
-        Monbijoustrasse 61
-        3000 Berna 14
-        Tel: <a href="tel:+41313701818">+41 31 370 18 18</a>
-        <a href="mailto:mv@sac-cas.ch">mv@sac-cas.ch</a>
       link_agb_title: CGC
       link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
       link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
@@ -1801,14 +1826,15 @@ it:
           next_button: Ordinare a pagamento
       join_zusatzsektion:
         summary:
-          admission: "L’affiliazione a %{sektion_name} viene richiesta come %{beitragskategorie}. Ciò non prevede l’emissione di alcuna fattura. L’affiliazione aggiuntiva si attiva dopo il saldo della fattura."
-          admission_through_gs: "L’affiliazione aggiuntiva a %{sektion_name} viene richiesta come %{beitragskategorie}. La sezione prevede una procedura di approvazione non automatica. La fattura sarà emessa solo dopo l’avvenuta approvazione. L’affiliazione aggiuntiva si attiva dopo il saldo della fattura."
+          admission: ""
+          admission_through_gs: ""
           next_button: Ordinare a pagamento
       membership_terminated_info:
         info: "L’affiliazione risulta disdetta dal %{date}. Se desideri riattivare la tua affiliazione ti invitiamo a consultare il sito del CAS."
       termination_choose_date:
         info_text: "Quando deve avvenire la disdetta?"
         warning_termination_by_section_only: "Attenzione: la disdetta riguarda una sezione in cui non è attiva la funzione di disdetta per il socio. Potrebbe essere necessario chiarire in anticipo la disdetta con la sezione."
+        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "Per richiedere la disdetta ti preghiamo di contattarci tramite telefono o e-mail."
       ask_family_main_person:
@@ -1825,7 +1851,8 @@ it:
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
           data_retention_info_title: "Conservare i dati"
           data_retention_info_text:
-            "Dopo la disdetta conserveremo i tuoi dati per sei mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta."
-          newsletter_info_text: "Se desideri continuare a ricevere la Newsletter del CAS, puoi comunicarcelo qui:"
-          fundraiser_info_text: "Se desideri continuare a essere contattato per gli appelli di donazione, puoi comunicarcelo qui:"
+            "Dopo la disdetta conserveremo i tuoi dati per dodici mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta."
+          data_retention_consent: "Desidero che i miei dati vengano conservati anche dopo aver lasciato il CAS."
+          subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
+          subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
           next_button: "Richiedere disdetta"

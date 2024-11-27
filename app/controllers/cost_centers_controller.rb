@@ -7,10 +7,4 @@
 
 class CostCentersController < SimpleCrudController
   self.permitted_attrs = [:code, :label]
-
-  private
-
-  def list_entries
-    super.list
-  end
 end
