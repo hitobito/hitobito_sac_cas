@@ -25,7 +25,7 @@ describe Event::Courses::MailDispatchesController do
   end
 
   let(:course) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course), link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
+    Fabricate(:sac_course, kind: event_kinds(:ski_course), link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de", state: :ready)
   end
   let(:group) { course.groups.first }
 
