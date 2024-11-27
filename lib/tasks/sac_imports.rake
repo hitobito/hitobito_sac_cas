@@ -176,7 +176,7 @@ namespace :sac_imports do
   task :dump_database, [:dump_name] => :environment do |t, args|
     target_dir = SacImports::CsvReport::LOG_DIR
 
-    db_config = ActiveRecord::Base.configurations[Rails.env]
+    db_config = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
     db_name = db_config[:database]
     db_user = db_config[:username]
     db_pass = db_config[:password]

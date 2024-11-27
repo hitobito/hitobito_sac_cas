@@ -23,7 +23,7 @@ module SacExports
     end
 
     def dbconfig
-      @dbconfig ||= ActiveRecord::Base.configurations[:development].merge(
+      @dbconfig ||= ActiveRecord::Base.configurations.find_db_config(:development).configuration_hash.merge(
         host: host,
         database: namespace,
         username: Base64.decode64(credentials.username),
