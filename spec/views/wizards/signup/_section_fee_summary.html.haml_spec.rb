@@ -16,8 +16,8 @@ describe "wizards/signup/_section_fee_summary.html.haml" do
     Capybara::Node::Simple.new(@rendered)
   }
 
-  def fees_for(beitragskategorie)
-    Invoices::SacMemberships::SectionSignupFeePresenter.new(group, beitragskategorie, date: Time.zone.now.beginning_of_year)
+  def fees_for(beitragskategorie, skip_entry_fee: false)
+    Invoices::SacMemberships::SectionSignupFeePresenter.new(group, beitragskategorie, date: Time.zone.now.beginning_of_year, skip_entry_fee:)
   end
 
   it "is hidden if not active" do
@@ -25,7 +25,7 @@ describe "wizards/signup/_section_fee_summary.html.haml" do
     expect(dom).to have_css "aside.card.d-none"
   end
 
-  it "is hidden if not active" do
+  it "is visible if active" do
     render locals: {adult:, family:, youth:, active: true}
     expect(dom).to have_css "aside.card:not(.d-none)"
   end
@@ -41,12 +41,20 @@ describe "wizards/signup/_section_fee_summary.html.haml" do
   end
 
   it "renders label and amount without entry fee" do
-    render locals: {adult:, family:, youth:, active: true, skip_entry_fee: true}
+    render locals: {
+      adult: fees_for(:adult, skip_entry_fee: true),
+      family: fees_for(:family, skip_entry_fee: true),
+      youth: fees_for(:youth, skip_entry_fee: true),
+      active: true
+    }
     expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(1)", text: "Einzelmitgliedschaft"
     expect(dom).to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: "CHF 127.00"
+    expect(dom).not_to have_css "tr:nth-of-type(1) td:nth-of-type(2)", text: "+ einmalige Eintrittsgebühr CHF 20.00"
     expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(1)", text: "Familienmitgliedschaft"
     expect(dom).to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: "CHF 179.00"
+    expect(dom).not_to have_css "tr:nth-of-type(2) td:nth-of-type(2)", text: "+ einmalige Eintrittsgebühr CHF 35.00"
     expect(dom).to have_css "tr:nth-of-type(3) td:nth-of-type(1)", text: "Jugendmitgliedschaft"
     expect(dom).to have_css "tr:nth-of-type(3) td:nth-of-type(2)", text: "CHF 76.00"
+    expect(dom).not_to have_css "tr:nth-of-type(3) td:nth-of-type(2)", text: "+ einmalige Eintrittsgebühr CHF 15.00"
   end
 end
