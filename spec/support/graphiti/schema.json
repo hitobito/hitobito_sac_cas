@@ -1696,26 +1696,6 @@
           "readable": true,
           "description": null
         },
-        "foundation_year": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "section_canton": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "language": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "mitglied_termination_by_section_only": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
         "course_admin_email": {
           "type": "string",
           "readable": true,
@@ -1732,6 +1712,26 @@
           "description": null
         },
         "sac_fundraising_mailing_list_id": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "foundation_year": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "section_canton": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "mitglied_termination_by_section_only": {
           "type": "string",
           "readable": true,
           "description": null
