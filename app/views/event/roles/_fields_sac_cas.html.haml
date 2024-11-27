@@ -3,5 +3,5 @@
 - #  or later. see the copying file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-- if entry.kind == :leader
+- if @event.course? && entry.kind == :leader
   = f.labeled_check_box :self_employed, class: "mt-2"
