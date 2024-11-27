@@ -95,6 +95,12 @@ module SacCas
   MAILING_LIST_DIE_ALPEN_PAPER_INTERNAL_KEY = "die_alpen_paper"
   MAILING_LIST_DIE_ALPEN_DIGITAL_INTERNAL_KEY = "die_alpen_digital"
   MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY = "spendenaufrufe"
+  MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY = "sektionsbulletin_paper"
+  MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY = "sektionsbulletin_digital"
+
+  PROTECTED_MAILING_LISTS_INTERNAL_KEYS = constants(false)
+    .select { |c| c.to_s =~ /MAILING_LIST_.*INTERNAL_KEY/ }
+    .map { |c| const_get(c) }
 
   AboCost = Data.define(:amount, :country)
   ABO_COSTS = {

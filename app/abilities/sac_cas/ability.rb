@@ -10,22 +10,25 @@ module SacCas::Ability
 
   def define_root_abilities
     super
-    prevent_changes_to_newsletter_mailing_list
+    prevent_changes_to_newsletter_mailing_lists
   end
 
   def define_user_abilities(...)
     super
-    prevent_changes_to_newsletter_mailing_list
+    prevent_changes_to_newsletter_mailing_lists
   end
 
-  def prevent_changes_to_newsletter_mailing_list
-    with_options(internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY) do
-      cannot [:destroy], MailingList
-      cannot [:update], MailingList, [:subscribable_for, :subscribable_mode, :filter_chain]
+  def prevent_changes_to_newsletter_mailing_lists
+    SacCas::PROTECTED_MAILING_LISTS_INTERNAL_KEYS.each do |internal_key|
+      with_options(internal_key:) do
+        cannot [:destroy], MailingList
+        cannot [:update], MailingList, [:subscribable_for, :subscribable_mode, :filter_chain]
+      end
+      cannot [:manage], Subscription, mailing_list: {
+        internal_key:
+      }
     end
-    cannot [:update, :destroy], Subscription, mailing_list: {
-      internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY
-    }
+
     cannot [:update], Group, [:sac_newsletter_mailing_list_id]
   end
 end

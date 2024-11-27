@@ -36,8 +36,8 @@ class Group::SacCas < Group
 
   def assert_mounted_mailing_list_attrs
     assert_mounted_mailing_list_attr(:sac_newsletter_mailing_list_id)
-    assert_mounted_mailing_list_attr(:sac_magazine_mailing_list_id, allow_blank: true)
-    assert_mounted_mailing_list_attr(:sac_fundraising_mailing_list_id, allow_blank: true)
+    assert_mounted_mailing_list_attr(:sac_magazine_mailing_list_id)
+    assert_mounted_mailing_list_attr(:sac_fundraising_mailing_list_id)
   end
 
   def assert_mounted_mailing_list_attr(key, allow_blank: false)
