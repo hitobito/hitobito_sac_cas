@@ -50,7 +50,7 @@ module Invoices
           next if position =~ /discount/ && discount_factor == 1 || send(position) == 0
           Line.new(format_position_amount(position), translate_position_text(position))
         end.compact
-      end      
+      end
 
       def positions
         base_positions = {
@@ -62,7 +62,7 @@ module Invoices
 
         base_positions.delete(:entry_fee) if skip_entry_fee
         base_positions
-      end      
+      end
 
       def beitragskategorie_label
         I18n.t("beitragskategorien.#{beitragskategorie}", scope: i18n_scope)
@@ -97,7 +97,7 @@ module Invoices
         positions.reduce(0) do |total, (position, operation)|
           total.send(operation, send(position))
         end
-      end      
+      end
 
       private
 

@@ -49,7 +49,7 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
           expect(parts.second).to be_nil
 
           lines = presenter.lines
-          expect(lines.map(&:label)).not_to include('+ einmalige Eintrittsgebühr')
+          expect(lines.map(&:label)).not_to include("+ einmalige Eintrittsgebühr")
         end
       end
     end
