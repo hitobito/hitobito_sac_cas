@@ -22,8 +22,17 @@ module Dropdown::Events::Courses
     private
 
     def init_items
-      add_item(translate(".finish_preparation"), template.group_event_mail_dispatch_path(group, course), method: :post, "data-confirm": translate(".confirmation"))
-      add_item(translate(".survey"), template.group_event_mail_dispatch_path(group, course), method: :post, "data-confirm": translate(".confirmation"))
+      add_mail_item(:leader_reminder) if course.state == "ready"
+      add_mail_item(:survey)
+    end
+
+    def add_mail_item(mail_type)
+      add_item(
+        translate(".#{mail_type}"),
+        template.group_event_mail_dispatch_path(group, course, mail_type: mail_type),
+        method: :post,
+        "data-confirm": translate(".confirmation")
+      )
     end
   end
 end

@@ -1059,8 +1059,8 @@ de:
 
   dropdown/events/courses/mail_dispatch:
     title: Mailversand
-    finish_preparation: Vorbereitung abschliessen
-    survey: Umfrage
+    leader_reminder: "Kursleitung: Vorbereitung abschliessen"
+    survey: "Teilnehmende: Umfrage"
     confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
   dropdown/people/memberships:
@@ -1085,7 +1085,7 @@ de:
           success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.
       mail_dispatches:
         create:
-          success: 
+          success: Es wurden %{n} E-Mails verschickt.
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
       push_down:
