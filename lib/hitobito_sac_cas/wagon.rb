@@ -35,7 +35,6 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
-        Event::SurveyJob,
         Export::BackupMitgliederScheduleJob,
         PromoteNeuanmeldungenJob,
         Qualifications::ExpirationMailerJob,
