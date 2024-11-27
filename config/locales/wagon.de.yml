@@ -1057,6 +1057,12 @@ de:
     scopes:
       user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
 
+  dropdown/events/courses/mail_dispatch:
+    title: Mailversand
+    finish_preparation: Vorbereitung abschliessen
+    survey: Umfrage
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
   dropdown/people/memberships:
     title: Mitgliedschaft anpassen
     join_zusatzsektion_link: Zusatzsektion beantragen
@@ -1077,6 +1083,10 @@ de:
       key_data_sheets:
         create:
           success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.
+      mail_dispatches:
+        create:
+          success: 
+          warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
       push_down:
         success: Die gespeicherten Daten wurden auf alle aktiven Kurse übertragen.
