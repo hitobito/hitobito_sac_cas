@@ -56,7 +56,8 @@ module Wizards::Memberships
         choose_sektion.group,
         beitragskategorie,
         date: Time.zone.now.beginning_of_year,
-        country: person.country
+        country: person.country,
+        skip_entry_fee: true
       )
     end
 

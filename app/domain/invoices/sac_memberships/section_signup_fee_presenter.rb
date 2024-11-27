@@ -30,13 +30,14 @@ module Invoices
       Line = Data.define(:amount, :label)
 
       delegate :discount_factor, to: :context
-      attr_reader :beitragskategorie, :section
+      attr_reader :beitragskategorie, :section, :skip_entry_fee
 
-      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false)
+      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false, skip_entry_fee: false)
         @section = section
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
         @context = Context.new(date)
         @i18n_scope = self.class.to_s.underscore.tr("/", ".")
+        @skip_entry_fee = skip_entry_fee
         person.update(country: country) unless country.nil? # set country during signup process
         member.instance_variable_set(:@sac_magazine, sac_magazine)
         # during the signup process, the member isn't part of the magazine mailing list yet, but
@@ -45,17 +46,29 @@ module Invoices
       end
 
       def lines
-        @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee, :total_amount].collect do |position|
+        @lines ||= [*positions.keys, :total_amount].collect do |position|
           next if position =~ /discount/ && discount_factor == 1 || send(position) == 0
           Line.new(format_position_amount(position), translate_position_text(position))
         end.compact
-      end
+      end      
+
+      def positions
+        base_positions = {
+          annual_fee: :+,
+          discount: :-,
+          entry_fee: :+,
+          abroad_fee: :+
+        }
+
+        base_positions.delete(:entry_fee) if skip_entry_fee
+        base_positions
+      end      
 
       def beitragskategorie_label
         I18n.t("beitragskategorien.#{beitragskategorie}", scope: i18n_scope)
       end
 
-      def beitragskategorie_amount(skip_entry_fee: false)
+      def beitragskategorie_amount
         parts = [format_position_amount(:annual_fee)]
         if entry_fee.positive? && !skip_entry_fee
           parts += [translate_position_text(:entry_fee)]
@@ -81,8 +94,10 @@ module Invoices
       end
 
       def total_amount
-        (annual_fee + entry_fee + abroad_fee - discount)
-      end
+        positions.reduce(0) do |total, (position, operation)|
+          total.send(operation, send(position))
+        end
+      end      
 
       private
 
