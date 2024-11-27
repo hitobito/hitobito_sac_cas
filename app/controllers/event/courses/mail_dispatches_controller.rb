@@ -33,9 +33,9 @@ class Event::Courses::MailDispatchesController < ApplicationController
     redirect_to_success(leader_participations.count)
   end
 
-  def send_mails(participations, mailer_class, method_name, *args)
-    participations.each do |participation|
-      mailer_class.public_send(method_name, participation, *args).deliver_now
+  def send_mails(recipients, mailer_class, method_name, *args)
+    recipients.each do |recipient|
+      mailer_class.public_send(method_name, recipient, *args).deliver_later
     end
   end
 

@@ -58,6 +58,7 @@ describe Event::Courses::MailDispatchesController do
       end
 
       it "sends no survey emails when no survey link" do
+        course.update!(link_survey: nil)
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
         end.not_to have_enqueued_mail(Event::SurveyMailer, :survey)
