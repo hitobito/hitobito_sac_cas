@@ -42,10 +42,14 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
       end
 
       it "can exclude entry_fee" do
+        presenter.instance_variable_set(:@skip_entry_fee, true)
         travel_to(Date.new(2024, 11)) do
-          parts = presenter.beitragskategorie_amount(skip_entry_fee: true).split(" + ")
+          parts = presenter.beitragskategorie_amount.split(" + ")
           expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
           expect(parts.second).to be_nil
+
+          lines = presenter.lines
+          expect(lines.map(&:label)).not_to include('+ einmalige Eintrittsgebühr')
         end
       end
     end
