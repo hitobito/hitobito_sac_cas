@@ -8,7 +8,9 @@
 class Event::Courses::MailDispatchesController < ApplicationController
   def create
     authorize!(:create, course)
-  
+
+    raise CanCan::AccessDenied unless mail_type_possible_for_current_course_state?
+
     case mail_type
     when "survey"
       send_survey_mails
@@ -42,22 +44,33 @@ class Event::Courses::MailDispatchesController < ApplicationController
   def redirect_to_success(count)
     redirect_to group_event_path(group, course), flash: {notice: t(".success", n: count)}
   end
-  
+
   def redirect_to_warning
     redirect_to group_event_path(group, course), flash: {alert: t(".warning")}
   end
 
   def leader_participations
     @leader_participations ||= course.participations
-                                     .joins(:roles)
-                                     .where(roles: {type: Event::Course::Role::Leader.sti_name})
-                                     .distinct_on(:id)
+      .joins(:roles)
+      .where(roles: {type: Event::Course::Role::Leader.sti_name})
+      .distinct_on(:id)
+  end
+
+  def mail_type_possible_for_current_course_state?
+    mail_type_conditions[mail_type] || false
+  end
+
+  def mail_type_conditions
+    {
+      "leader_reminder" => course.state == "ready",
+      "survey" => ["ready", "closed"].include?(course.state)
+    }
   end
 
   def attended_participations = @attended_participations ||= course.participants_scope
 
   def group = @group ||= Group.find(params[:group_id])
-  
+
   def course = @course ||= Event::Course.find(params[:event_id])
 
   def mail_type = @mail_type ||= params[:mail_type]

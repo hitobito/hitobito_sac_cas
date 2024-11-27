@@ -5,6 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# rubocop:disable Rails/HelperInstanceVariable
+
 module Dropdown::Events::Courses
   class MailDispatch < ::Dropdown::Base
     attr_reader :course, :template, :group
@@ -36,3 +38,4 @@ module Dropdown::Events::Courses
     end
   end
 end
+# rubocop:enable Rails/HelperInstanceVariable

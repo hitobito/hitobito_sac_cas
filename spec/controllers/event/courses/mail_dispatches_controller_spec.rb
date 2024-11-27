@@ -10,7 +10,7 @@ require "spec_helper"
 describe Event::Courses::MailDispatchesController do
   include ActiveJob::TestHelper
 
-  before do 
+  before do
     sign_in(user)
     # leader participations
     [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
@@ -50,6 +50,15 @@ describe Event::Courses::MailDispatchesController do
         expect(flash[:notice]).to eq("Es wurden 1 E-Mails verschickt.")
       end
 
+      [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :closed, :canceled].each do |state|
+        it "unauthorized leader reminder mail for state #{state}" do
+          course.update_column(:state, state)
+          expect do
+            post :create, params: {group_id: group, event_id: course, mail_type: :leader_reminder}
+          end.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
       it "sends survey emails to every active participation" do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
@@ -62,7 +71,16 @@ describe Event::Courses::MailDispatchesController do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
         end.not_to have_enqueued_mail(Event::SurveyMailer, :survey)
-        expect(flash[:notice]).to eq("Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.")
+        expect(flash[:alert]).to eq("Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.")
+      end
+
+      [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :canceled].each do |state|
+        it "unauthorized survey mail for state #{state}" do
+          course.update_column(:state, state)
+          expect do
+            post :create, params: {group_id: group, event_id: course, mail_type: :survey}
+          end.to raise_error(CanCan::AccessDenied)
+        end
       end
     end
   end
