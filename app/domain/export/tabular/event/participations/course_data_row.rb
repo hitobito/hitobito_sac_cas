@@ -35,41 +35,23 @@ class Export::Tabular::Event::Participations::CourseDataRow < Export::Tabular::R
     end
   end
 
-  def event_dates_locations
-    event.dates.pluck(:location).uniq.join(", ")
-  end
+  def event_dates_locations = event.dates.pluck(:location).uniq.join(", ")
 
-  def event_first_date
-    event.dates.order(start_at: :asc).first.start_at
-  end
+  def event_first_date = event.dates.order(start_at: :asc).first.start_at
 
-  def event_last_date
-    event.dates.order(finish_at: :asc).last.finish_at
-  end
+  def event_last_date = event.dates.order(finish_at: :asc).last.finish_at
 
-  def person_gender
-    person.gender_label
-  end
+  def person_gender = person.gender_label
 
-  def person_language_code
-    [person.language.upcase, "S"].join
-  end
+  def person_language_code = [person.language.upcase, "S"].join
 
-  def person_stammsektion
-    [stammsektion&.id, stammsektion&.name].join(" ")
-  end
+  def person_stammsektion = [stammsektion&.id, stammsektion&.name].join(" ")
 
-  def person
-    @person ||= @entry.person
-  end
+  def person = @person ||= @entry.person
 
-  def event
-    @event ||= @entry.event
-  end
+  def event = @event ||= @entry.event
 
-  def stammsektion
-    @stammsektion ||= person.primary_group&.layer_group
-  end
+  def stammsektion = @stammsektion ||= person.primary_group&.layer_group
 
   def event_i18n_language
     {

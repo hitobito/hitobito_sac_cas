@@ -6,7 +6,3 @@
 top_mitglied:
   participation: top_mitglied
   type: Event::Role::Participant
-
-#top_tn:
-  #participation: top_participant
-  #type: Event::Role::Participant

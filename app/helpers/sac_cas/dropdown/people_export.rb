@@ -17,6 +17,7 @@ module SacCas::Dropdown::PeopleExport
     end
   end
 
+  # original method in youth wagon
   def is_course?(event)
     event.course?
   end
