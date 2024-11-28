@@ -9,7 +9,7 @@ require "spec_helper"
 
 xdescribe SacImports::Nav3QualificationsImporter do
   let(:sac_imports_src) { file_fixture("sac_imports_src").expand_path }
-  let(:output) { $stdout } # double(puts: nil, print: nil) }
+  let(:output) { double(puts: nil, print: nil) }
   let(:report) { described_class.new(output: output) }
   let(:report_file) { Rails.root.join("log", "sac_imports", "8_qualifications_2024-01-23-1142.csv") }
   let(:report_headers) {

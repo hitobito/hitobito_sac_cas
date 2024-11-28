@@ -1390,7 +1390,7 @@ fr:
         sac_magazine: Frais Les Alpes
         section_bulletin_postage_abroad: "Frais de port bulletin %{section}"
         section_entry_fee: "Frais d’entrée %{section}"
-        section_fee: ""
+        section_fee: "Cotisation Section %{section}"
       beitragskategorie:
         adult: Membre individuel
         family: Membre famille
@@ -1398,6 +1398,7 @@ fr:
       section_signup_fee_presenter:
         annual_fee: contribution annuelle
         entry_fee: "+ frais d’entrée uniques"
+        abroad_fee: ""
         discount: "- %{percent}% de rabais sur la cotisation annuelle"
         total_amount: Total pour la première fois
         beitragskategorien:

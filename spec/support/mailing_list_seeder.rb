@@ -9,7 +9,9 @@ class MailingListSeeder
   def self.seed!
     original_quiet_setting = SeedFu.quiet
     SeedFu.quiet = true
-    eval Pathname.new(File.dirname(__FILE__)).join("../../db/seeds/mailing_lists.rb").read
+
+    seed_file = Pathname.new(File.dirname(__FILE__)).join("../../db/seeds/mailing_lists.rb")
+    instance_eval(seed_file.read)
   ensure
     SeedFu.quiet = original_quiet_setting
   end

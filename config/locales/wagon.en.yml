@@ -1340,6 +1340,7 @@ en:
       section_signup_fee_presenter:
         annual_fee: ""
         entry_fee: ""
+        abroad_fee: ""
         discount: ""
         total_amount: ""
         beitragskategorien:

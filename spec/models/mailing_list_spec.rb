@@ -17,6 +17,9 @@ describe MailingList do
       expect(newsletter).not_to be_present
       MailingListSeeder.seed!
       expect(newsletter).to be_present
+      expect(newsletter.subscribable_for).to eq("configured")
+      expect(newsletter.subscribable_mode).to eq("opt_in")
+      expect(newsletter.filter_chain.to_hash).to be_blank
     end
 
     it "has newsletter mailing list subscription" do
@@ -24,23 +27,21 @@ describe MailingList do
       expect(newsletter.subscriptions).to contain_exactly(
         have_attributes(
           subscriber_id: Group.root.id,
-          subscriber_type: Group.sti_name,
-          related_role_types: contain_exactly(
-            have_attributes(role_type: Group::SektionsMitglieder::Mitglied.sti_name),
-            have_attributes(role_type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name),
-            have_attributes(role_type: Group::SektionsMitglieder::Ehrenmitglied.sti_name),
-            have_attributes(role_type: Group::SektionsMitglieder::Beguenstigt.sti_name),
-            have_attributes(role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name),
-            have_attributes(role_type: Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name),
-            have_attributes(role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name),
-            have_attributes(role_type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name),
-            have_attributes(role_type: Group::AboTourenPortal::Abonnent.sti_name),
-            have_attributes(role_type: Group::AboTourenPortal::Neuanmeldung.sti_name),
-            have_attributes(role_type: Group::AboMagazin::Abonnent.sti_name),
-            have_attributes(role_type: Group::AboMagazin::Neuanmeldung.sti_name),
-            have_attributes(role_type: Group::AboBasicLogin::BasicLogin.sti_name)
-          )
+          subscriber_type: Group.sti_name
         )
+      )
+
+      sub = newsletter.subscriptions.first
+      expect(sub.role_types).to contain_exactly(
+        Group::SektionsMitglieder::Mitglied.sti_name,
+        Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name,
+        Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
+        Group::AboTourenPortal::Abonnent.sti_name,
+        Group::AboTourenPortal::Gratisabonnent.sti_name,
+        Group::AboMagazin::Abonnent.sti_name,
+        Group::AboMagazin::Gratisabonnent.sti_name,
+        Group::AboMagazin::Neuanmeldung.sti_name,
+        Group::AboBasicLogin::BasicLogin.sti_name
       )
     end
   end
