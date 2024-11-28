@@ -1085,7 +1085,9 @@ de:
           success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.
       mail_dispatches:
         create:
-          success: Es wurden %{n} E-Mails verschickt.
+          success:
+            one: Es wurde eine E-Mail verschickt.
+            other: Es wurden %{count} E-Mails verschickt.
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
       push_down:

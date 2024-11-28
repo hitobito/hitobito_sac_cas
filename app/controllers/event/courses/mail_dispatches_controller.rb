@@ -42,7 +42,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   end
 
   def redirect_to_success(count)
-    redirect_to group_event_path(group, course), flash: {notice: t(".success", n: count)}
+    redirect_to group_event_path(group, course), flash: {notice: t(".success", count: count)}
   end
 
   def redirect_to_warning
