@@ -14,11 +14,19 @@ module Invoices
       SALUTATION_IDS = {
         mister: 1,
         miss: 2,
-        misses_and_misters: 3,
+        company: 3,
         family: 4,
         misters: 5,
-        misses: 6
+        misses: 6,
+        misses_and_misters: 7,
+        divers: 36
       }.freeze
+
+      GENDER_SALUTATIONS = {
+        "m" => :mister,
+        "w" => :miss,
+        nil => :divers
+      }.tap { |hash| hash.default = :divers }
 
       COMMUNICATION_TYPES = {
         email: "EMail",
@@ -58,7 +66,7 @@ module Invoices
           name: entity.last_name.to_s[0, 100],
           first_name: entity.first_name.to_s[0, 50],
           language: entity.language,
-          salutation_id: SALUTATION_IDS.fetch((entity.gender == "m") ? :mister : :miss)
+          salutation_id: SALUTATION_IDS.fetch(GENDER_SALUTATIONS[entity.gender])
         }
       end
 
