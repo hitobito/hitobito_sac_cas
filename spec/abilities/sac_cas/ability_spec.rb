@@ -71,6 +71,10 @@ describe Ability do
           expect(ability).to be_able_to(:destroy, Subscription.new(mailing_list: a_mailing_list))
         end
 
+        it "cannot create newsletter mailing list subscription" do
+          expect(ability).not_to be_able_to(:create, Subscription.new(mailing_list: newsletter))
+        end
+
         it "cannot update newsletter mailing list subscription" do
           expect(ability).not_to be_able_to(:update, Subscription.new(mailing_list: newsletter))
         end
