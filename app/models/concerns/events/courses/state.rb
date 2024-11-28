@@ -70,12 +70,16 @@ module Events::Courses::State
     end
   end
 
-  def email_dispatch_possible?(type = :any)
-    if type == :any
-      EMAIL_DISPATCH_CONDITIONS.values.flatten.any?(state.to_sym)
-    else
-      EMAIL_DISPATCH_CONDITIONS[type].include?(state.to_sym)
-    end
+  def survey_email_possible?
+    EMAIL_DISPATCH_CONDITIONS[:survey].include?(state.to_sym)
+  end
+
+  def leader_reminder_email_possible?
+    EMAIL_DISPATCH_CONDITIONS[:leader_reminder].include?(state.to_sym)
+  end
+
+  def any_email_possible?
+    EMAIL_DISPATCH_CONDITIONS.values.flatten.any?(state.to_sym)
   end
 
   private

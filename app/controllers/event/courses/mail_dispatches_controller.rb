@@ -9,7 +9,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   def create
     authorize!(:create, course)
 
-    raise CanCan::AccessDenied unless course.email_dispatch_possible?(mail_type.to_sym)
+    raise CanCan::AccessDenied unless course.send("#{mail_type}_email_possible?")
 
     case mail_type
     when "survey"
@@ -42,7 +42,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   end
 
   def redirect_to_success(count)
-    redirect_to group_event_path(group, course), flash: {notice: t(".success", count: count)}
+    redirect_to group_event_path(group, course), flash: {notice: t(".success", n: count)}
   end
 
   def redirect_to_warning
