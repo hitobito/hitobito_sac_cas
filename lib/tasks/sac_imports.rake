@@ -11,6 +11,14 @@ namespace :sac_imports do
   task setup: [:environment] do
     ENV["NO_ENV"] = "true" # makes sure we don't seed dev seeds
 
+    # with rails 7 something with connection pool handling changed and we get errors:
+    #   all pooled connections were in use (ActiveRecord::ConnectionTimeoutError)
+    # so we forcefully set the pool size to a high value
+    ActiveRecord::Base.connection_pool.disconnect!
+    ActiveRecord::Base.establish_connection(
+      ActiveRecord::Base.connection_db_config.configuration_hash.merge(pool: 200)
+    )
+
     Rails.logger = Logger.new(nil)
     ActiveRecord::Base.logger = Logger.new(nil)
 
@@ -176,7 +184,7 @@ namespace :sac_imports do
   task :dump_database, [:dump_name] => :environment do |t, args|
     target_dir = SacImports::CsvReport::LOG_DIR
 
-    db_config = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
+    db_config = ActiveRecord::Base.connection_db_config.configuration_hash
     db_name = db_config[:database]
     db_user = db_config[:username]
     db_pass = db_config[:password]
