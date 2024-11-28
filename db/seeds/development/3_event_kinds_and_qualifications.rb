@@ -31,23 +31,23 @@ class EventsQualifactionsSeeder
   }
 
   EVENT_CATEGORIES_AND_KINDS = {
-    "SAC Leiterausbildung Winter": [
+    "SAC - Leiterausbildung Winter": [
       "Tourenleiter/in 1 Winter",
       "Tourenleiter/in 2 Winter"
     ],
-    "SAC Leiterausbildung Sommer": [
+    "SAC - Leiterausbildung Sommer": [
       "Tourenleiter/in 1 Sommer",
       "Tourenleiter/in 2 Sommer",
       "Tourenleiter/in Bergwandern",
       "Tourenleiter/in Mountainbike"
     ],
-    "SAC Leiterfortbildung Winter": [
+    "SAC - Leiterfortbildung Winter": [
       "Skitouren Freeride",
       "Skitourenleiter/in Winter - Refresher",
       "Rettung - Erste Hilfe",
       {training_days: 2}
     ],
-    "SAC Leiterfortbildung Sommer": [
+    "SAC - Leiterfortbildung Sommer": [
       "Bergsteigen Sommer",
       "Entscheidungsfindung",
       "Rettung - Erste Hilfe",
@@ -103,10 +103,6 @@ class EventsQualifactionsSeeder
     seed_qualifications
     seed_qualification_translations
 
-    seed_event_kind_categories
-    seed_event_kind_category_translations
-
-    seed_event_level
     seed_event_kinds
     seed_event_kind_translations
 
@@ -128,16 +124,13 @@ class EventsQualifactionsSeeder
     QualificationKind::Translation.seed(:qualification_kind_id, :locale, attrs)
   end
 
-  def seed_event_level
-    Event::Level.seed(:id, {id: DUMMY_ID, code: 1, difficulty: 1})
-    Event::Level::Translation.seed(:event_level_id, {event_level_id: DUMMY_ID, locale: "de", label: "dummy"})
-  end
-
   def seed_event_kinds
-    rows = EVENT_CATEGORIES_AND_KINDS.flat_map do |category, kinds|
+    level = Event::Level.find_by(code: 6)
+    rows = EVENT_CATEGORIES_AND_KINDS.flat_map do |category_label, kinds|
+      category = Event::KindCategory.find_by(label: category_label)
       options = (kinds.last.is_a?(::Hash) ? kinds.pop : {})
-        .merge(cost_center_id: DUMMY_ID, cost_unit_id: DUMMY_ID, level_id: DUMMY_ID)
-      kinds.map { |kind| options.merge(id: identify(kind), kind_category_id: identify(category)) }
+        .merge(cost_center_id: category.cost_center_id, cost_unit_id: category.cost_unit_id, level_id: level.id)
+      kinds.map { |kind| options.merge(id: identify(kind), kind_category_id: category.id) }
     end
     Event::Kind.seed(:id, rows)
   end
@@ -150,20 +143,6 @@ class EventsQualifactionsSeeder
       end
     end
     Event::Kind::Translation.seed(:event_kind_id, rows)
-  end
-
-  def seed_event_kind_categories
-    rows = EVENT_CATEGORIES_AND_KINDS.keys.map do |label|
-      {id: identify(label), cost_center_id: DUMMY_ID, cost_unit_id: DUMMY_ID}
-    end
-    Event::KindCategory.seed(:id, rows)
-  end
-
-  def seed_event_kind_category_translations
-    rows = EVENT_CATEGORIES_AND_KINDS.keys.map do |category|
-      {locale: "de", label: category, event_kind_category_id: identify(category)}
-    end
-    Event::KindCategory::Translation.seed(:event_kind_category_id, rows)
   end
 
   def seed_qualifying_event_kinds
