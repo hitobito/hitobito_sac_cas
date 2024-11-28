@@ -9,7 +9,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   def create
     authorize!(:create, course)
 
-    raise CanCan::AccessDenied unless mail_type_possible_for_current_course_state?
+    raise CanCan::AccessDenied unless course.email_dispatch_possible?(mail_type.to_sym)
 
     case mail_type
     when "survey"
@@ -54,17 +54,6 @@ class Event::Courses::MailDispatchesController < ApplicationController
       .joins(:roles)
       .where(roles: {type: Event::Course::Role::Leader.sti_name})
       .distinct_on(:id)
-  end
-
-  def mail_type_possible_for_current_course_state?
-    mail_type_conditions[mail_type] || false
-  end
-
-  def mail_type_conditions
-    {
-      "leader_reminder" => course.state == "ready",
-      "survey" => ["ready", "closed"].include?(course.state)
-    }
   end
 
   def attended_participations = @attended_participations ||= course.participants_scope

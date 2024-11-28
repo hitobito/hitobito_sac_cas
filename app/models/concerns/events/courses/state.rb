@@ -22,6 +22,11 @@ module Events::Courses::State
 
   APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
 
+  EMAIL_DISPATCH_CONDITIONS = {
+    leader_reminder: [:ready],
+    survey: [:ready, :closed]
+  }
+
   included do
     attr_accessor :inform_participants
 
@@ -62,6 +67,14 @@ module Events::Courses::State
 
     all_participants.each do |participation|
       Event::CanceledMailer.send(canceled_reason, participation).deliver_later
+    end
+  end
+
+  def email_dispatch_possible?(type = :any)
+    if type == :any
+      EMAIL_DISPATCH_CONDITIONS.values.flatten.any?(state.to_sym)
+    else
+      EMAIL_DISPATCH_CONDITIONS[type].include?(state.to_sym)
     end
   end
 
