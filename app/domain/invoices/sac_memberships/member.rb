@@ -67,7 +67,7 @@ module Invoices
       end
 
       def living_abroad?
-        !(person.swiss? || person.country == "LI")
+        !(person.swiss? || person.country.downcase == "li")
       end
 
       def sac_magazine?
