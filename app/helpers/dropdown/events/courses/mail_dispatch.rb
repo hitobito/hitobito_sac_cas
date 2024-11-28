@@ -29,7 +29,7 @@ module Dropdown::Events::Courses
     end
 
     def add_mail_item(mail_type)
-      if course.send("#{mail_type}_email_possible?")
+      if course.send(:"#{mail_type}_email_possible?")
         add_item(
           translate(".#{mail_type}"),
           template.group_event_mail_dispatch_path(group, course, mail_type: mail_type),

@@ -9,7 +9,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   def create
     authorize!(:create, course)
 
-    raise CanCan::AccessDenied unless course.send("#{mail_type}_email_possible?")
+    raise CanCan::AccessDenied unless course.send(:"#{mail_type}_email_possible?")
 
     case mail_type
     when "survey"
