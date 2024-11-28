@@ -21,7 +21,8 @@ describe Invoices::Abacus::SubjectInterface do
       street: "Belpstrasse",
       housenumber: "37",
       zip_code: "3007",
-      town: "Bern"
+      town: "Bern",
+      gender: "w"
     )
 
     Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
@@ -63,6 +64,15 @@ describe Invoices::Abacus::SubjectInterface do
     interface.transmit(subject)
   end
 
+  it "set correct salutation ids" do
+    person.gender = "m"
+    expect(subject.subject_attrs.fetch(:salutation_id)).to eq(1)
+    person.gender = "w"
+    expect(subject.subject_attrs.fetch(:salutation_id)).to eq(2)
+    person.gender = nil
+    expect(subject.subject_attrs.fetch(:salutation_id)).to eq(36)
+  end
+
   it "creates address and customer if missing in abacus" do
     person.abacus_subject_key = person.id
     stub_request(:get, "#{host}/api/entity/v1/mandants/#{mandant}/Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers")
@@ -99,8 +109,8 @@ describe Invoices::Abacus::SubjectInterface do
     let(:subjects) { people(:mitglied, :familienmitglied, :familienmitglied_kind).map { |p| Invoices::Abacus::Subject.new(p) } }
 
     before do
-      people(:familienmitglied, :familienmitglied_kind).each do |member|
-        member.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
+      people(:familienmitglied, :familienmitglied_kind).each do |person|
+        person.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil, gender: "w")
       end
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
     end
