@@ -50,8 +50,6 @@ describe Qualifications::ExpirationMailerJob do
         finish_at: "2001-06-01".to_date
       )
 
-      # remove this expectation after integration testing, when only today expirations are reminded
-      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year, person.id).and_return(double(deliver_later: nil))
       expect { job.perform }.not_to have_enqueued_mail(Qualifications::ExpirationMailer)
     end
   end
@@ -102,8 +100,14 @@ describe Qualifications::ExpirationMailerJob do
     let(:admin) { people(:admin) }
     let(:finish_at) { "2001-06-01".to_date }
 
-    it "mails a reminder" do
+    it "mails a reminder to everyone with an email" do
       admin.qualifications.create!(
+        qualification_kind: qualification_kinds(:ski_leader),
+        start_at: "2000-01-01".to_date,
+        finish_at: finish_at
+      )
+      other = Fabricate(:person, email: nil)
+      other.qualifications.create!(
         qualification_kind: qualification_kinds(:ski_leader),
         start_at: "2000-01-01".to_date,
         finish_at: finish_at

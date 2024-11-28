@@ -12,9 +12,7 @@ class Qualifications::ExpirationMailerJob < RecurringJob
 
   def perform_internal
     moments = Qualifications::ExpirationMailer::MOMENTS
-    # send all reminders daily for testing purposes.
-    # remove this comment after integration testing
-    # moments = [:today] unless end_of_year?
+    moments = [:today] unless end_of_year?
 
     moments.each do |moment|
       people_with_expiring_qualifications(moment).each do |person_id|
@@ -24,7 +22,11 @@ class Qualifications::ExpirationMailerJob < RecurringJob
   end
 
   def people_with_expiring_qualifications(moment)
-    Qualifications::Expiring.entries(send(moment)).distinct.pluck(:person_id)
+    Qualifications::Expiring.entries(send(moment))
+      .joins(:person)
+      .where.not(people: {email: [nil, ""]})
+      .distinct
+      .pluck(:person_id)
   end
 
   def end_of_year?
