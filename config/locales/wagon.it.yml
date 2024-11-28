@@ -1390,7 +1390,7 @@ it:
         sac_magazine: Quota Alpi
         section_bulletin_postage_abroad: "Affrancatura bollettino %{section}"
         section_entry_fee: "Quota di adesione %{section}"
-        section_fee: ""
+        section_fee: "Contributo Sezione %{section}"
       beitragskategorie:
         adult: Socio individuale
         family: Socio famigliare
@@ -1398,6 +1398,7 @@ it:
       section_signup_fee_presenter:
         annual_fee: Contributo annuale
         entry_fee: "+ quota di adesione una tantum"
+        abroad_fee: ""
         discount: "- %{percent}% di sconto sul contributo annuale"
         total_amount: Totale prima volta
         beitragskategorien:
