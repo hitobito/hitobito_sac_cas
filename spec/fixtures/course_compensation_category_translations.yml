@@ -1,0 +1,29 @@
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+---
+day:
+  course_compensation_category_id: <%= ActiveRecord::FixtureSet.identify(:day) %>
+  locale: de
+  name_leader: Tageshonorar - Kursleitung
+  name_assistant_leader: Tageshonorar - Klassenleitung
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+flat:
+  course_compensation_category_id: <%= ActiveRecord::FixtureSet.identify(:flat) %>
+  locale: de
+  name_leader: Kurspauschale - Kursleitung
+  name_assistant_leader: Kurspauschale - Klassenleitung
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+budget:
+  course_compensation_category_id: <%= ActiveRecord::FixtureSet.identify(:budget) %>
+  locale: de
+  name_leader: SAC Hütte
+  name_assistant_leader: SAC Hütte
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

@@ -12,45 +12,76 @@ module Export::Pdf::Participations
     end
 
     def render
-      Export::Pdf::Document.new.pdf.tap do |pdf|
-        Export::Pdf::Invoice::PaymentSlipQr.new(pdf, invoice, options).render
-      end.then(&:render)
+      Export::Pdf::Invoice.render(invoice, options.merge(articles: true, payment_slip: true))
     end
 
     private
 
     attr_reader :participation, :iban, :options
+    delegate :event, :person, to: :participation
 
     def invoice
       @invoice ||= Invoice.new(
         iban: iban,
-        payee: Person::Address.new(participation.person).for_invoice,
         currency: "CHF",
-        payment_purpose: "Kurs #{participation.event.number}",
+        payment_purpose: "Kurs #{event.number}",
+        payment_slip: "qr",
+        title: title,
+        payee: sender_address,
+        address: sender_address,
         recipient_address: SacAddressPresenter.new.format(:leader_settlement),
-        total: daily_compensations + other_compensations,
-        sequence_number: "1-1",
-        reference: nil
-      )
+        sequence_number: sequence_number,
+        issued_at: invoice_date,
+        reference: nil,
+        letter_address_position: :right,
+        invoice_config: InvoiceConfig.new,
+        creator: person,
+        invoice_items: build_invoice_items
+      ).tap do |invoice|
+        invoice.total = invoice.invoice_items.sum(&:cost)
+      end
     end
 
-    def daily_compensations = participation.actual_days * compensation_amount(:day)
+    def sender_address = Person::Address.new(person).for_invoice
 
-    def other_compensations = (compensations_by_kind.keys - [:day]).sum { |key| compensation_amount(key) }
+    def title = "#{event.number} — #{event.name}"
 
-    def compensation_amount(kind)
+    def invoice_date = @invoice_date ||= Time.zone.today
+
+    def sequence_number = "#{person.id}-#{invoice_date.strftime("%Y-%m-%d")}"
+
+    def build_invoice_items
+      daily_compensation_items + other_compensation_items
+    end
+
+    def daily_compensation_items
+      build_items(:day, participation.actual_days)
+    end
+
+    def other_compensation_items
+      (compensations_by_kind.keys - [:day]).flat_map do |kind|
+        build_items(kind, 1)
+      end
+    end
+
+    def build_items(kind, count)
       compensations_by_kind.fetch(kind, []).map do |compensation|
-        compensation.send(:"rate_#{relevant_event_role.type.demodulize.underscore}")
-      end.sum || 0
+        category = compensation.course_compensation_category
+        name = category.send(:"name_#{role_type}").presence || category.short_name
+        unit_cost = compensation.send(:"rate_#{role_type}")
+        InvoiceItem.new(name: name, count: count, unit_cost: unit_cost, cost: unit_cost * count)
+      end
     end
 
     def compensations_by_kind
-      @compensations_by_kind ||= participation.event.compensation_rates
-        .group_by { |rate| rate.course_compensation_category.kind.to_sym }
+      @compensations_by_kind ||=
+        event.compensation_rates
+          .includes(:course_compensation_category)
+          .group_by { |rate| rate.course_compensation_category.kind.to_sym }
     end
 
-    def relevant_event_role
-      participation.roles.find { |r| Event::Course::LEADER_ROLES.include?(r.type) }
+    def role_type
+      @role_type ||= participation.roles.find { |r| Event::Course::LEADER_ROLES.include?(r.type) }.type.demodulize.underscore
     end
   end
 end

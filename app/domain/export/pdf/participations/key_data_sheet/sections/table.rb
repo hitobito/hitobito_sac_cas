@@ -62,14 +62,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_table
-    order_statement = <<-SQL
-      CASE WHEN(course_compensation_categories.kind = 'day') THEN 0
-      WHEN(course_compensation_categories.kind = 'flat') THEN 1 END
-    SQL
-
-    event_compensation_rates([:day, :flat]).reorder(Arel.sql(order_statement)).map do |rate|
-      compensation_row(rate)
-    end
+    event_compensation_rates(:day).map { |rate| compensation_row(rate) } +
+      event_compensation_rates(:flat).map { |rate| compensation_row(rate) }
   end
 
   def compensation_row(rate)
@@ -102,13 +96,14 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     end
   end
 
-  def event_compensation_rates(kinds)
+  def event_compensation_rates(kind)
     event.compensation_rates.includes(:course_compensation_category)
-      .where(course_compensation_categories: {kind: kinds})
+      .where(course_compensation_categories: {kind: kind})
   end
 
   def compensation_category_name(rate)
-    rate.course_compensation_category.send(:"name_#{participation_leader_type}")
+    rate.course_compensation_category.send(:"name_#{participation_leader_type}").presence ||
+      rate.course_compensation_category.short_name
   end
 
   def compensation_rate(rate)

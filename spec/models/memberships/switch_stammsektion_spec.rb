@@ -116,7 +116,7 @@ describe Memberships::SwitchStammsektion do
           expect(switch).to be_valid
           expect(switch.save!).to eq true
         end.not_to(change { person.reload.roles.count })
-        expect(matterhorn_mitglied.created_at).to eq now.to_s(:db)
+        expect(matterhorn_mitglied.created_at).to eq now.to_fs(:db)
         expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
       end

@@ -55,7 +55,7 @@ describe Wizards::Steps::ChooseSektion do
         expect(step).not_to be_valid
         expect(step.errors[:base]).to eq [
           "Wir bitten dich den gewünschten Sektionswechsel telefonisch oder per " \
-          "E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf"
+          "E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
         ]
       end
 

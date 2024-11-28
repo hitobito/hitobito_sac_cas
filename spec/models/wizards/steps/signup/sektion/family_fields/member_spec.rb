@@ -87,7 +87,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
       it "rejects birthday on last day 22 years ago but accepts on first day 23 years ago" do
         member.attributes = required_attrs.merge(birthday: 22.years.ago.end_of_year.to_date)
         expect(member).not_to be_valid
-        expect(member.errors.full_messages).to eq ["Geburtsdatum Jugendliche im Alter von 18 bis 22 Jahren können nicht\nin einer Familienmitgliedschaft aufgenommen werden.\n"]
+        expect(member.errors.full_messages).to eq ["Geburtsdatum Jugendliche im Alter von 18 bis 22 Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden."]
 
         member.attributes = required_attrs.merge(birthday: 23.years.ago.beginning_of_year.to_date)
         expect(member).to be_valid
