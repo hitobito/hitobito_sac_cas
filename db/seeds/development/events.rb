@@ -12,8 +12,8 @@ srand(42)
 seeder = SacEventSeeder.new
 
 8.times do
-  seeder.seed_sac_course(Group.root.id)
+  seeder.seed_event(Group.root.id, :course)
 end
 2.times do
-  seeder.seed_sac_course_with_assignment_closed(Group.root.id)
+  seeder.seed_event(Group.root.id, :course).update_column(:state, :assignment_closed)
 end
