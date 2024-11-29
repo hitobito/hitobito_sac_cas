@@ -1,5 +1,10 @@
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
 info_mail:
-  created_at: <%= 3.day.ago.midday.to_s(:db) %>
+  created_at: <%= 3.day.ago.midday.to_fs(:db) %>
   category: "mail"
   level: "info"
   message: "info_mail"
