@@ -22,10 +22,12 @@ describe Event::Courses::MailDispatchesController do
       Fabricate(Event::Course::Role::Participant.sti_name,
         participation: Fabricate(:event_participation, event: course, active: true))
     end
+
+    course.update_column(:state, :ready)
   end
 
   let(:course) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course), link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de", state: :ready)
+    Fabricate(:sac_course, kind: event_kinds(:ski_course), link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
   end
   let(:group) { course.groups.first }
 
@@ -47,7 +49,7 @@ describe Event::Courses::MailDispatchesController do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :leader_reminder}
         end.to have_enqueued_mail(Event::LeaderReminderMailer, :reminder).exactly(1).times
-        expect(flash[:notice]).to eq("Es wurden 1 E-Mails verschickt.")
+        expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
       end
 
       [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :closed, :canceled].each do |state|
@@ -67,7 +69,7 @@ describe Event::Courses::MailDispatchesController do
       end
 
       it "sends no survey emails when no survey link" do
-        course.update!(link_survey: nil)
+        course.update_column(:link_survey, nil)
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
         end.not_to have_enqueued_mail(Event::SurveyMailer, :survey)
