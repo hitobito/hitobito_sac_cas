@@ -11,7 +11,6 @@ class Event::LeaderReminderJob < RecurringJob
   private
 
   def perform_internal
-    send_reminder(1.week.from_now, Event::LeaderReminderMailer::REMINDER_NEXT_WEEK)
     send_reminder(8.weeks.from_now, Event::LeaderReminderMailer::REMINDER_8_WEEKS)
   end
 
