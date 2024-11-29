@@ -37,4 +37,22 @@ describe "people invoices page" do
                                "Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.")
     end
   end
+
+  context "double submit" do
+    let(:person) { people(:mitglied) }
+
+    it "submits invoice on second submit when first reference date was not in active membership range" do
+      person.sac_membership.stammsektion_role.update_columns(terminated: true, end_on: Time.zone.local(2024, 12, 31))
+
+      travel_to(Time.zone.local(2024, 4, 1)) do
+        visit new_group_person_membership_invoice_path(group_id: person.groups.first.id, person_id: person.id)
+        fill_in "Stichtag", with: "01.01.2025"
+        click_button "Rechnung erstellen"
+        expect(page).to have_text "Mitgliedschaft ist nicht gültig"
+        fill_in "Stichtag", with: "06.06.2024"
+        click_button "Rechnung erstellen"
+        expect(page).to have_text "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
+      end
+    end
+  end
 end
