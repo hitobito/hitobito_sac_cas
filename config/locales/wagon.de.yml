@@ -1073,6 +1073,7 @@ de:
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
     recipient_households: Empfänger Familien
+    course_data: Adressliste und Kursdaten
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
