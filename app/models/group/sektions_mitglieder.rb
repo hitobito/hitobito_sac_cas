@@ -19,7 +19,7 @@ class Group::SektionsMitglieder < ::Group
     attr_readonly :family_id
 
     after_create_commit :transmit_data_to_abacus
-    before_validation :set_family_id, if: -> { beitragskategorie&.family? }
+    before_validation :set_family_id, if: -> { beitragskategorie&.family? && family_id.blank? }
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private
