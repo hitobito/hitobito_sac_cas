@@ -9,11 +9,12 @@ module Memberships
   class JoinZusatzsektion < JoinBase
     delegate :group_for_neuanmeldung, to: :join_section
 
-    attr_reader :person, :join_section
+    attr_reader :person, :join_section, :beitragskategorie
 
     def initialize(join_section, person, sac_family_membership: false, **params)
       super(join_section, person, **params)
       @sac_family_membership = sac_family_membership
+      @beitragskategorie = derive_beitragskategorie
 
       raise "missing neuanmeldungen subgroup" unless group_for_neuanmeldung
     end

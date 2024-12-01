@@ -51,7 +51,7 @@ module CommonMailerPlaceholders
   end
 
   def placeholder_profile_url
-    group_person_url(@person.default_group_id, @person.id)
+    person_url(@person.id)
   end
 
   def placeholder_faq_url

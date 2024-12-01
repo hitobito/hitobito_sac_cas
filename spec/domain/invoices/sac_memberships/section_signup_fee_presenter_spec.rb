@@ -15,151 +15,217 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     SacSectionMembershipConfig.update_all(valid_from: 2020)
   end
 
-  date_ranges = [
-    OpenStruct.new(range: Date.new(2024, 1, 1)..Date.new(2024, 6, 30), percent: 0),
-    OpenStruct.new(range: Date.new(2024, 7, 1)..Date.new(2024, 9, 30), percent: 50),
-    OpenStruct.new(range: Date.new(2024, 10, 1)..Date.new(2024, 12, 31), percent: 100)
+  discount = Data.define(:range, :percent) do
+    def day = range.to_a.sample
+
+    def factor = percent * 0.01
+
+    def calc(amount) = amount * factor
+
+    def apply(amount) = amount - calc(amount)
+  end
+
+  discount_ranges = [
+    discount.new(range: Date.new(2024, 7, 1)..Date.new(2024, 9, 30), percent: 50),
+    discount.new(range: Date.new(2024, 10, 1)..Date.new(2024, 12, 31), percent: 100)
   ]
 
-  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:|
-    let(:presenter) { described_class.new(group, beitragskategorie.to_s) }
+  shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:, section_fee:, abroad_fees:|
+    let(:person) { Person.new }
+    let(:presenter) { described_class.new(group, beitragskategorie.to_s, person) }
 
     expected_labels = {family: "Familienmitgliedschaft",
                        adult: "Einzelmitgliedschaft",
                        youth: "Jugendmitgliedschaft"}
 
-    it "has beitragskategorie_label #{expected_labels[beitragskategorie]}" do
-      expect(presenter.beitragskategorie_label).to eq expected_labels[beitragskategorie]
+    def format_number(number) = format("%.2f", number)
+
+    def formatted_amount(number) = format("CHF %.2f", number)
+
+    describe "summary" do
+      it "label label #{expected_labels[beitragskategorie]}" do
+        expect(presenter.summary.label).to eq expected_labels[beitragskategorie]
+      end
+
+      describe "amount" do
+        subject(:parts) { presenter.summary.amount.split(" + ") }
+
+        it "includes annual_fee and entry fee without any discount" do
+          expect(parts).to have(2).items
+          expect(parts.first).to eq "CHF #{format_number(annual_fee)}"
+          expect(parts.second).to eq "einmalige Eintrittsgebühr #{formatted_amount(entry_fee)}"
+        end
+
+        context "not dealing with main membership" do
+          let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+
+          it "includes only section fee" do
+            expect(parts).to have(1).item
+            expect(parts.first).to eq formatted_amount(section_fee)
+          end
+        end
+      end
     end
 
-    describe "beitragskategorie_amount" do
-      it "is identical all year long" do
-        travel_to(Date.new(2024, 11)) do
-          parts = presenter.beitragskategorie_amount.split(" + ")
-          expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
-          expect(parts.second).to eq "einmalige Eintrittsgebühr CHF #{format("%.2f", entry_fee)}"
-        end
+    describe "lines" do
+      subject(:lines) { presenter.lines }
+
+      it "first line contains annual fee of #{annual_fee}" do
+        expect(lines.first.label).to eq "jährlicher Beitrag"
+        expect(lines.first.amount).to eq formatted_amount(annual_fee)
       end
 
-      it "can exclude entry_fee" do
-        travel_to(Date.new(2024, 11)) do
-          parts = presenter.beitragskategorie_amount(skip_entry_fee: true).split(" + ")
-          expect(parts.first).to eq "CHF #{format("%.2f", annual_fee)}"
-          expect(parts.second).to be_nil
-        end
-      end
-    end
+      context "without discount" do
+        before { travel_to(discount_ranges.first.range.begin - 1.day) }
 
-    context "beitragskategorie=#{beitragskategorie}" do
-      it "has expected values set" do
-        travel_to(Date.new(2024, 1, 1)) do
-          expect(presenter.annual_fee.to_f).to eq(annual_fee)
-          expect(presenter.entry_fee.to_f).to eq(entry_fee)
-          expect(presenter.total_amount.to_f).to eq(annual_fee + entry_fee)
-        end
-      end
-
-      it "has subtracts discount from total" do
-        travel_to(Date.new(2024, 8, 10)) do
-          expect(presenter.annual_fee.to_f).to eq(annual_fee)
-          expect(presenter.entry_fee.to_f).to eq(entry_fee)
-        end
-      end
-
-      describe "lines" do
-        def format_number(number) = format("%.2f", number)
-
-        it "has annual_fee as first line" do
-          expect(presenter.lines.first.amount).to eq "CHF #{format_number(annual_fee)}"
-          expect(presenter.lines.first.label).to eq "jährlicher Beitrag"
+        it "second line contains entry fee of #{entry_fee}" do
+          expect(lines.second.label).to eq "+ einmalige Eintrittsgebühr"
+          expect(lines.second.amount).to eq formatted_amount(entry_fee)
         end
 
-        context "without discount" do
-          let(:date) { date_ranges.first.range.to_a.sample }
+        it "last line contains total of #{annual_fee + entry_fee}" do
+          expect(lines.last.label).to eq "Total erstmalig"
+          expect(lines.last.amount).to eq formatted_amount(annual_fee + entry_fee)
+        end
 
-          before { travel_to(date) }
+        context "not dealing with main membership" do
+          let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
 
-          it "has 3 lines" do
-            expect(presenter.lines).to have(3).items
-          end
-
-          it "has entry_fee as second line" do
-            expect(presenter.lines.second.amount).to eq "CHF #{format_number(entry_fee)}"
-            expect(presenter.lines.second.label).to eq "+ einmalige Eintrittsgebühr"
-          end
-
-          it "has total als third line" do
-            expect(presenter.lines.third.amount).to eq "CHF #{format_number(annual_fee + entry_fee)}"
-            expect(presenter.lines.third.label).to eq "Total erstmalig"
+          it "only uses section fee of #{section_fee}" do
+            expect(lines).to have(2).items
+            expect(lines.last.label).to eq "Total erstmalig"
+            expect(lines.last.amount).to eq formatted_amount(section_fee)
           end
         end
 
-        context "with discount" do
-          let(:date) { date_ranges.second.range.to_a.sample }
-          let(:discount_percent) { date_ranges.second.percent }
-          let(:discount_amount) { annual_fee * (discount_percent * 0.01) }
+        context "living abroad" do
+          before { person.update(country: "DE") }
 
-          before { travel_to(date) }
-
-          it "has 4 lines" do
-            expect(presenter.lines).to have(4).items
+          it "third line contains abroad_fee of #{abroad_fees.values.sum}" do
+            expect(lines.third.label).to eq "+ Gebühren Ausland"
+            expect(lines.third.amount).to eq formatted_amount(abroad_fees.values.sum)
           end
 
-          it "has discount as second line" do
-            expect(presenter.lines.second.amount).to eq "CHF #{format_number(discount_amount)}"
-            expect(presenter.lines.second.label).to eq "- #{discount_percent}% Rabatt auf den jährlichen Beitrag"
+          it "last line contains total of #{annual_fee + entry_fee + abroad_fees.values.sum}" do
+            expect(lines.last.label).to eq "Total erstmalig"
+            expect(lines.last.amount).to eq formatted_amount(annual_fee + entry_fee + abroad_fees.values.sum)
           end
 
-          it "has entry_fee as third line" do
-            expect(presenter.lines.third.amount).to eq "CHF #{format_number(entry_fee)}"
-            expect(presenter.lines.third.label).to eq "+ einmalige Eintrittsgebühr"
-          end
+          context "not dealing with main membership" do
+            let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
 
-          it "has total as fourth line" do
-            expect(presenter.lines.fourth.amount).to eq "CHF #{format_number(annual_fee + entry_fee - discount_amount)}"
-            expect(presenter.lines.fourth.label).to eq "Total erstmalig"
-          end
-        end
-      end
-
-      date_ranges.each do |discount|
-        context "discount #{discount.percent}%" do
-          let(:discount_factor) { discount.percent * 0.01 }
-          let(:discount_amount) { annual_fee * discount_factor }
-
-          it "is given from #{discount.range.begin}" do
-            travel_to(discount.range.begin) do
-              expect(presenter.discount.to_f).to eq discount_amount
-              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee - discount_amount
-            end
-          end
-
-          it "is given until #{discount.range.end}" do
-            travel_to(discount.range.end) do
-              expect(presenter.discount.to_f).to eq discount_amount
-              expect(presenter.total_amount.to_f).to eq annual_fee + entry_fee - discount_amount
+            it "last line contains total of #{section_fee + abroad_fees[:section]}" do
+              expect(lines.second.label).to eq "+ Gebühren Ausland"
+              expect(lines.second.amount).to eq formatted_amount(abroad_fees[:section])
+              expect(lines.third.amount).to eq formatted_amount(section_fee + abroad_fees[:section])
             end
           end
         end
       end
-    end
 
-    context "abroad member" do
-      it "has abroad fees" do
-        presenter = described_class.new(group, beitragskategorie.to_s, country: "BO", sac_magazine: true)
-        expect(presenter.lines.fourth.amount).to eq "CHF 23.00"
-        expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
-      end
+      describe "with discount" do
+        discount_ranges.each do |discount|
+          context "discount #{discount.percent}% is given inside #{discount.range}" do
+            let(:discount_factor) { discount.percent * 0.01 }
+            let(:discount_amount) { annual_fee * discount_factor }
 
-      it "only has section bulletin postage abroad fees for an abroad person excluded from the magazine" do
-        presenter = described_class.new(group, beitragskategorie.to_s, country: "BO")
-        expect(presenter.lines.fourth.amount).to eq "CHF 13.00"
-        expect(presenter.lines.fourth.label).to eq "+ Gebühren Ausland"
+            before { travel_to(discount.day) }
+
+            it "second line contains discount of #{discount.calc(annual_fee)}" do
+              expect(lines.second.label).to eq "- #{discount.percent}% Rabatt auf den jährlichen Beitrag"
+              expect(lines.second.amount).to eq formatted_amount(discount.calc(annual_fee))
+            end
+
+            it "pushes down other lines and subtracts discount from total" do
+              expect(lines[-2].label).to eq "+ einmalige Eintrittsgebühr"
+              expect(lines[-2].amount).to eq formatted_amount(entry_fee)
+              expect(lines.last.label).to eq "Total erstmalig"
+              expect(lines.last.amount).to eq formatted_amount(discount.apply(annual_fee) + entry_fee)
+            end
+
+            context "not dealing with main membership" do
+              let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+
+              it "second line contains discount of #{discount.calc(section_fee)}" do
+                expect(lines.second.label).to eq "- #{discount.percent}% Rabatt auf den jährlichen Beitrag"
+                expect(lines.second.amount).to eq formatted_amount(discount.calc(section_fee))
+              end
+            end
+
+            context "living abroad" do
+              before { person.update(country: "DE") }
+
+              if discount.factor < 1
+                it "third line contains discounted abroad fees of #{discount.calc(abroad_fees.values.sum)} which is integrated in discount" do
+                  expect(lines.fourth.label).to eq "+ Gebühren Ausland"
+                  expect(lines.fourth.amount).to eq formatted_amount(discount.calc(abroad_fees.values.sum))
+                end
+              else
+
+                it "does not show abroad fee if discounted" do
+                  expect(lines.map(&:label)).not_to include "+ Gebühren Ausland"
+                end
+              end
+
+              it "last line contains total of #{discount.apply(annual_fee + abroad_fees.values.sum) + entry_fee}" do
+                expect(lines.last.label).to eq "Total erstmalig"
+                expect(lines.last.amount).to eq formatted_amount(discount.apply(annual_fee + abroad_fees.values.sum) + entry_fee)
+              end
+
+              context "not dealing with main membership" do
+                let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+
+                if discount.factor < 1
+                  it "third line contains discounted abroad section fee of #{discount.calc(abroad_fees[:section])} which is integrated in discount" do
+                    expect(lines.third.label).to eq "+ Gebühren Ausland"
+                    expect(lines.third.amount).to eq formatted_amount(discount.calc(abroad_fees[:section]))
+                  end
+                else
+
+                  it "does not show abroad fee if discounted" do
+                    expect(lines.map(&:label)).not_to include "+ Gebühren Ausland"
+                  end
+                end
+
+                it "last line contains total of #{discount.apply(section_fee + abroad_fees[:section])}" do
+                  expect(lines.last.label).to eq "Total erstmalig"
+                  expect(lines.last.amount).to eq formatted_amount(discount.apply(section_fee + abroad_fees[:section]))
+                end
+              end
+            end
+          end
+        end
       end
     end
   end
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20, section_fee: 42, abroad_fees: {section: 13, magazin: 10}
+
+  context "existing person with membership" do
+    let(:presenter) { described_class.new(group, :adult, people(:mitglied)) }
+
+    it "does not include entry fee in summary amount" do
+      expect(presenter.summary.amount).not_to include "Eintrittsgebühr"
+    end
+
+    it "does not include entry fee in presenter lines" do
+      expect(presenter.lines.map(&:label)).not_to include "+ einmalige Eintrittsgebühr"
+    end
+  end
+
+  context "existing person without membership" do
+    let(:presenter) { described_class.new(group, :adult, people(:abonnent)) }
+
+    it "does include entry fee in summary amount" do
+      expect(presenter.summary.amount).to include "Eintrittsgebühr"
+    end
+
+    it "does include entry fee in presenter lines" do
+      expect(presenter.lines.map(&:label)).to include "+ einmalige Eintrittsgebühr"
+    end
+  end
+
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35, section_fee: 84, abroad_fees: {section: 13, magazin: 10}
+
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15, section_fee: 21, abroad_fees: {section: 13, magazin: 10}
 end
