@@ -34,8 +34,7 @@ module Wizards::Memberships
     end
 
     def human_role_type
-      beitragskategorie = join_operation.roles.first.beitragskategorie
-      I18n.t(beitragskategorie, scope: "invoices.sac_memberships.beitragskategorie")
+      I18n.t(join_operation.beitragskategorie, scope: "invoices.sac_memberships.beitragskategorie")
     end
 
     def join_operation
@@ -51,11 +50,12 @@ module Wizards::Memberships
       @backoffice
     end
 
-    def fees_for(beitragskategorie)
+    def fee_presenter
       Invoices::SacMemberships::SectionSignupFeePresenter.new(
         choose_sektion.group,
-        beitragskategorie,
-        date: Time.zone.now.beginning_of_year
+        join_operation.beitragskategorie,
+        person,
+        main: false
       )
     end
 

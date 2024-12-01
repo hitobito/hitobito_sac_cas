@@ -142,7 +142,7 @@ describe Wizards::Memberships::JoinZusatzsektion do
     end
   end
 
-  describe "#human_role_type" do
+  describe "beitragskategorie" do
     let(:person) { people(:mitglied) }
     let(:params) { {"choose_sektion" => {group_id: matterhorn.id}} }
 
@@ -151,12 +151,15 @@ describe Wizards::Memberships::JoinZusatzsektion do
     end
 
     it "is Einzelmitglied" do
+      person.update(birthday: 23.years.ago)
       expect(wizard.human_role_type).to eq "Einzelmitglied"
+      expect(wizard.fee_presenter.summary.label).to eq "Einzelmitgliedschaft"
     end
 
     it "is Jungedmitglied when person is young enough" do
       person.update(birthday: 20.years.ago)
       expect(wizard.human_role_type).to eq "Jugendmitglied"
+      expect(wizard.fee_presenter.summary.label).to eq "Jugendmitgliedschaft"
     end
 
     context "family" do
@@ -164,6 +167,7 @@ describe Wizards::Memberships::JoinZusatzsektion do
 
       it "is Einzelmitglied" do
         expect(wizard.human_role_type).to eq "Einzelmitglied"
+        expect(wizard.fee_presenter.summary.label).to eq "Einzelmitgliedschaft"
       end
 
       context "when register_as is set accordingly" do
@@ -176,7 +180,39 @@ describe Wizards::Memberships::JoinZusatzsektion do
 
         it "is Familienmitglied if register_as is set accordingly" do
           expect(wizard.human_role_type).to eq "Familienmitglied"
+          expect(wizard.fee_presenter.summary.label).to eq "Familienmitgliedschaft"
         end
+      end
+    end
+  end
+
+  describe "fee" do
+    let(:person) { people(:mitglied) }
+    let(:params) { {"choose_sektion" => {group_id: matterhorn.id}} }
+
+    subject(:lines) { wizard.fee_presenter.lines }
+
+    it "lists full fee when joining before discout date" do
+      travel_to(Date.new(2024, 1, 1)) do
+        expect(lines).to have(2).items
+        expect(wizard.fee_presenter.total_amount.to_f).to eq(56)
+        expect(lines.first.label).to eq "jährlicher Beitrag"
+        expect(lines.first.amount).to eq "CHF 56.00"
+        expect(lines.last.label).to eq "Total erstmalig"
+        expect(lines.last.amount).to eq "CHF 56.00"
+      end
+    end
+
+    it "subtracts discount when joining after discout date" do
+      travel_to(Date.new(2024, 8, 1)) do
+        expect(lines).to have(3).items
+        expect(wizard.fee_presenter.total_amount.to_f).to eq(28)
+        expect(lines.first.label).to eq "jährlicher Beitrag"
+        expect(lines.first.amount).to eq "CHF 56.00"
+        expect(lines.second.label).to eq "- 50% Rabatt auf den jährlichen Beitrag"
+        expect(lines.second.amount).to eq "CHF 28.00"
+        expect(lines.third.label).to eq "Total erstmalig"
+        expect(lines.third.amount).to eq "CHF 28.00"
       end
     end
   end

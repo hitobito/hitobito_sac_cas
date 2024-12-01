@@ -43,10 +43,13 @@ module Wizards::Memberships
       @backoffice
     end
 
+    # NOTE - as long as we show summary of all beitragskategorien we must pass a new person
+    # for persisted person we expect sac_family_main_person to be set for family beitragskategorie
     def fees_for(beitragskategorie)
       Invoices::SacMemberships::SectionSignupFeePresenter.new(
         choose_sektion.group,
         beitragskategorie,
+        Person.new,
         date: Time.zone.now.beginning_of_year
       )
     end

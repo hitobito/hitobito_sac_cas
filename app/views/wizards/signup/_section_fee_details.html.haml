@@ -4,6 +4,6 @@
 
 %aside.card{class: ("d-none" unless active)}
   .card-body
-    %h2.card-title="#{presenter.beitragskategorie_label} #{group.layer_group}"
+    %h2.card-title="#{presenter.summary.label} #{presenter.section}"
     .card-text
       = render "wizards/signup/section_fee_positions_table", presenter: presenter

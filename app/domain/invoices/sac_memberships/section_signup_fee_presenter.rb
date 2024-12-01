@@ -10,94 +10,84 @@ module Invoices
     class SectionSignupFeePresenter
       include ActionView::Helpers::NumberHelper
 
-      COMMON_POSITIONS = [
-        Positions::SacFee,
-        Positions::SectionFee,
-        Positions::HutSolidarityFee,
-        Positions::SacMagazine
-      ].freeze
-
       ABROAD_POSITIONS = [
         Positions::SectionBulletinPostageAbroad,
         Positions::SacMagazinePostageAbroad
       ].freeze
 
-      NEW_ENTRY_POSITIONS = [
-        Positions::SacEntryFee,
-        Positions::SectionEntryFee
-      ].freeze
+      ANNUAL_POSITIONS =
+        PositionGenerator::SAC_POSITIONS +
+        PositionGenerator::SECTION_POSITIONS -
+        ABROAD_POSITIONS
 
-      Line = Data.define(:amount, :label)
+      NEW_ENTRY_POSITIONS = PositionGenerator::NEW_ENTRY_POSITIONS
 
-      delegate :discount_factor, to: :context
-      attr_reader :beitragskategorie, :section
+      Line = Data.define(:label, :amount) do
+        def to_s = "#{label} #{amount}"
+      end
 
-      def initialize(section, beitragskategorie, date: Time.zone.today, country: nil, sac_magazine: false)
+      attr_reader :section
+
+      def initialize(section, beitragskategorie, person, main: true, date: Time.zone.today)
         @section = section
+        @date = date
+        @main = main
+        @person = prepare(person)
         @beitragskategorie = ActiveSupport::StringInquirer.new(beitragskategorie.to_s)
-        @context = Context.new(date)
-        @i18n_scope = self.class.to_s.underscore.tr("/", ".")
-        person.update(country: country) unless country.nil? # set country during signup process
-        member.instance_variable_set(:@sac_magazine, sac_magazine)
-        # during the signup process, the member isn't part of the magazine mailing list yet, but
-        # will be per default after signup, positions depending on the sac_magazine
-        # should be displayed in aside suring signup
       end
 
       def lines
-        @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee, :total_amount].collect do |position|
-          next if position =~ /discount/ && discount_factor == 1 || send(position) == 0
-          Line.new(format_position_amount(position), translate_position_text(position))
-        end.compact
+        @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee].collect do |position|
+          Line.new(translate_position_text(position), format_position_amount(position)) if send(position).positive?
+        end.compact + [Line.new(translate_position_text(:total_amount), format_position_amount(:total_amount))]
       end
 
-      def beitragskategorie_label
-        I18n.t("beitragskategorien.#{beitragskategorie}", scope: i18n_scope)
+      def summary
+        @summary ||= Line.new(translate_position_text("beitragskategorien.#{beitragskategorie}"), build_summary_amount)
       end
 
-      def beitragskategorie_amount(skip_entry_fee: false)
+      def annual_fee = summed_positions(ANNUAL_POSITIONS, :gross_amount)
+
+      def entry_fee = summed_positions(NEW_ENTRY_POSITIONS, :gross_amount)
+
+      def abroad_fee = summed_positions(ABROAD_POSITIONS, :amount) # with already applied discount
+
+      def discount = annual_fee * (1 - discount_factor)
+
+      def total_amount = (annual_fee + entry_fee + abroad_fee - discount)
+
+      def positions = @positions ||= build_positions
+
+      private
+
+      attr_reader :beitragskategorie, :main, :date, :person
+      delegate :discount_factor, to: :context
+
+      def context = @context ||= Context.new(date)
+
+      def prepare(person)
+        return context.people_with_membership_years.find(person.id) if person.persisted?
+
+        person.tap { |p| p.sac_family_main_person = true }
+      end
+
+      def build_positions
+        member = Member.new(person, context)
+        new_entry = !member.stammsektion
+        member.sac_magazine = new_entry
+
+        membership = Membership.new(section, beitragskategorie, main)
+        PositionGenerator.new(member).generate([membership], new_entry:)
+      end
+
+      def build_summary_amount
         parts = [format_position_amount(:annual_fee)]
-        if entry_fee.positive? && !skip_entry_fee
+        if entry_fee.positive?
           parts += [translate_position_text(:entry_fee)]
           parts += [format_position_amount(:entry_fee)]
         end
         parts.join(" ")
       end
-
-      def annual_fee
-        build_positions(COMMON_POSITIONS).sum(&:gross_amount)
-      end
-
-      def entry_fee
-        build_positions(NEW_ENTRY_POSITIONS).sum(&:gross_amount)
-      end
-
-      def abroad_fee
-        build_positions(ABROAD_POSITIONS).sum(&:gross_amount)
-      end
-
-      def discount
-        annual_fee * (1 - discount_factor)
-      end
-
-      def total_amount
-        (annual_fee + entry_fee + abroad_fee - discount)
-      end
-
-      private
-
-      attr_reader :context, :sac_magazine, :i18n_scope
-
-      def build_positions(classes)
-        classes.map { |klass| klass.new(member, membership) }
-          .filter(&:active?)
-      end
-
-      def membership = @membership ||= Membership.new(section, beitragskategorie, nil)
-
-      def person = @person ||= Person.new(sac_family_main_person: true)
-
-      def member = @member ||= Member.new(person, context)
 
       def format_position_amount(position)
         value = send(position)
@@ -112,6 +102,10 @@ module Invoices
         options[:percent] = ((1 - discount_factor) * 100).to_i if /discount/.match?(position)
         I18n.t(position, **options)
       end
+
+      def i18n_scope = @i18n_scope ||= self.class.to_s.underscore.tr("/", ".")
+
+      def summed_positions(relevant_positions, method) = positions.select { |p| relevant_positions.include?(p.class) }.sum(&method)
     end
   end
 end

@@ -10,6 +10,9 @@ require "spec_helper"
 describe Signup::SektionMailer do
   let(:person) { people(:mitglied) }
   let(:body) { mail.body.to_s }
+  let(:fees) { Capybara::Node::Simple.new(body).find("table") }
+
+  before { travel_to(Date.new(2024, 7, 1)) }
 
   context "sektion requiring approval" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
@@ -21,14 +24,15 @@ describe Signup::SektionMailer do
       expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
       expect(body).to include("Sektion: SAC Blüemlisalp", "Hallo Edmund")
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
-      expect(body).to include(group_person_path(person.primary_group, person))
-      expect(body).to include("<td>CHF 127.00")
+      expect(body).to include(person_path(person))
+      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 127.00\r\njährlicher Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 63.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tfoot tr", text: "CHF 63.50\r\nTotal erstmalig")
     end
 
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
-      expect(body).to include("+ Gebühren Ausland")
-      expect(body).to include("<td>CHF 23.00")
+      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50\r\n+ Gebühren Ausland")
     end
 
     it "uses person language to localize message" do
@@ -40,28 +44,30 @@ describe Signup::SektionMailer do
 
   context "sektion not requiring approval" do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+    let(:person) { people(:familienmitglied) }
     let(:mail) { described_class.confirmation(person, group.layer_group, "family") }
 
     it "sends confirmation email" do
-      expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
+      expect(mail.to).to eq(["t.norgay@hitobito.example.com"])
       expect(mail.bcc).to include(SacCas::MV_EMAIL)
       expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
       expect(body).to include "Teil des grössten Bergsportverbands der Schweiz bist"
-      expect(body).to include(group_person_path(person.primary_group, person))
+      expect(body).to include(person_path(person))
       expect(body).to include(
         "Sektion: SAC Blüemlisalp",
         "Mitgliedschaftskategorie: Familie",
-        "Geburtsdatum: 01.01.2000",
+        "Geburtsdatum: 01.12.1999",
         "Strasse und Nr: Ophovenerstrasse 79a",
         "Viel Spass beim SAC!"
       )
-      expect(body).to include("<td>CHF 179.00")
+      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 179.00\r\njährlicher Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 89.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tfoot tr", text: "CHF 89.50\r\nTotal erstmalig")
     end
 
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
-      expect(body).to include("+ Gebühren Ausland")
-      expect(body).to include("<td>CHF 23.00")
+      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50\r\n+ Gebühren Ausland")
     end
 
     it "uses person language to localize message" do

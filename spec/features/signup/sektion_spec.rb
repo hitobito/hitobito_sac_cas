@@ -785,6 +785,7 @@ describe "signup/sektion", :js do
 
   describe "abroad_fees" do
     before do
+      travel_to(Date.new(2024, 6, 1))
       visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       click_button "Weiter"
