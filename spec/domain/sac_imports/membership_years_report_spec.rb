@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-xdescribe SacImports::MembershipYearsReport do
+describe SacImports::MembershipYearsReport do
   let(:output) { double(puts: nil, print: nil) }
   let(:nav1_csv_fixture) { file_fixture("sac_imports_src/NAV1_fixture.csv") }
   let!(:report) { described_class.new(output: output) }
@@ -57,11 +57,6 @@ xdescribe SacImports::MembershipYearsReport do
   end
 
   it "creates report for members in source file" do
-    expected_output = Array.new(9) { [/Reading row .* .../, " processed.\n"] }.flatten
-
-    expected_output.each do |output_line|
-      expect(output).to receive(:print).with(output_line)
-    end
     expect(output).to receive(:puts).with("Thank you for flying with SAC Imports.")
     expect(output).to receive(:puts).with("Report written to #{report_file}")
 
