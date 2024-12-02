@@ -33,8 +33,13 @@ module Wizards::Signup
           enqueue_approval_pending_confirmation_mail
         end
       end
-
-      exclude_from_mailing_list if mailing_list && !newsletter
+      if mailing_list
+        if newsletter
+          Person::Subscriptions.new(person).subscribe(mailing_list)
+        else
+          Person::Subscriptions.new(person).unsubscribe(mailing_list)
+        end
+      end
       enqueue_notification_email
       enqueue_duplicate_locator_job if new_record?
       send_password_reset_email if new_record?
@@ -115,10 +120,6 @@ module Wizards::Signup
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
 
     def new_record? = person_attrs[:id].blank?
-
-    def exclude_from_mailing_list
-      mailing_list.subscriptions.find_or_initialize_by(subscriber: person).update!(excluded: true)
-    end
 
     def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
 

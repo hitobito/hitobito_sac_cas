@@ -119,11 +119,12 @@ module SacCas::Event::ParticipationsController
 
     mailing_list = MailingList.find_by(id: group.sac_newsletter_mailing_list_id)
     return unless mailing_list
+    subscriptions = Person::Subscriptions.new(entry.person)
 
     if true?(entry.newsletter)
-      include_person_in_newsletter(mailing_list)
+      subscriptions.subscribe(mailing_list)
     else
-      mailing_list.exclude_person(entry.person)
+      subscriptions.unsubscribe(mailing_list)
     end
   end
 
@@ -132,18 +133,6 @@ module SacCas::Event::ParticipationsController
       group.root? &&
       group.sac_newsletter_mailing_list_id &&
       !params[:for_someone_else]
-  end
-
-  def include_person_in_newsletter(mailing_list)
-    # The newsletter mailing list is opt-out and only available for certain roles.
-    # (see db/seeds/mailing_lists.rb)
-    # Therefore, removing potential exclusions is all to do for a subscription.
-    mailing_list
-      .subscriptions
-      .where(subscriber_id: entry.person.id,
-        subscriber_type: Person.sti_name,
-        excluded: true)
-      .destroy_all
   end
 
   def assert_participant_cancelable?

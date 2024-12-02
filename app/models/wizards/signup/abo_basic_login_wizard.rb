@@ -21,7 +21,11 @@ module Wizards::Signup
 
     def save!
       super
-      exclude_from_mailing_list unless newsletter
+      if newsletter
+        Person::Subscriptions.new(person).subscribe(mailing_list)
+      else
+        Person::Subscriptions.new(person).unsubscribe(mailing_list)
+      end
     end
 
     private
@@ -38,9 +42,6 @@ module Wizards::Signup
         .merge(main_email_field.attributes)
     end
 
-    def exclude_from_mailing_list
-      mailing_list = MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
-      mailing_list&.subscriptions&.create!(subscriber: person, excluded: true)
-    end
+    def mailing_list = MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
   end
 end

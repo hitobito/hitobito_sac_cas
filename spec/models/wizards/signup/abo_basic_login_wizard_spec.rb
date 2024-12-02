@@ -90,10 +90,26 @@ describe Wizards::Signup::AboBasicLoginWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
-    it "creates newsletter exclusion for all" do
-      required_attrs[:person_fields][:newsletter] = "0"
-      wizard.save!
-      expect(max.subscriptions).to have(1).item
+    context "with opt_out newsletter" do
+      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
+
+      it "creates newsletter exclusion" do
+        required_attrs[:person_fields][:newsletter] = "0"
+        wizard.save!
+        expect(max.subscriptions.excluded).to have(1).item
+        expect(max.subscriptions.included).to have(0).item
+      end
+    end
+
+    context "with opt_in newsletter" do
+      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
+
+      it "creates newsletter inclusion" do
+        required_attrs[:person_fields][:newsletter] = "1"
+        wizard.save!
+        expect(max.subscriptions.excluded).to have(0).item
+        expect(max.subscriptions.included).to have(1).item
+      end
     end
   end
 end
