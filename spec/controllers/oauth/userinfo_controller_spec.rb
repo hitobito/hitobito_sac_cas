@@ -42,8 +42,26 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           country: user.country,
           phone: nil,
           picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
-          membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42"
+          membership_verify_url: nil
         }.deep_stringify_keys)
+      end
+
+      context "with membership" do
+        let(:user) { mitglied.person }
+        let(:mitglied) { roles(:mitglied) }
+
+        it "includes membership_verify_url" do
+          get :show, params: {access_token: token.token}
+          expect(response.status).to eq 200
+          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
+        end
+
+        it "includes membership_verify_url even if expired" do
+          mitglied.update!(end_on: 1.year.ago)
+          get :show, params: {access_token: token.token}
+          expect(response.status).to eq 200
+          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
+        end
       end
     end
 
@@ -80,7 +98,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           phone: nil,
           membership_years: "0.0",
           picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
-          membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
+          membership_verify_url: nil,
           roles: [
             {
               group_id: user.roles.first.group_id,

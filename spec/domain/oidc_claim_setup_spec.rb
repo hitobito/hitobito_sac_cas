@@ -18,8 +18,6 @@ describe OidcClaimSetup do
   before do
     allow(ENV).to receive(:fetch).and_call_original
     allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME", "localhost:3000").and_return("hitobito.example.com")
-    allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME").and_return("hitobito.example.com")
-    allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
   end
 
   shared_examples "shared claims" do
@@ -49,8 +47,18 @@ describe OidcClaimSetup do
       expect(claims[:picture_url]).to start_with "http://test.host/rails/active_storage/blobs/redirect"
     end
 
-    it "membership_verify_url is present" do
-      expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
+    it "membership_verify_url is nil" do
+      expect(claims[:membership_verify_url]).to be_nil
+    end
+
+    context "mitglied" do
+      let(:owner) { people(:mitglied) }
+
+      before { allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42") }
+
+      it "membership_verify_url is present" do
+        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
+      end
     end
 
     it_behaves_like "shared claims"
