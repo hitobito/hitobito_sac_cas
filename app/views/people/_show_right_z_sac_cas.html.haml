@@ -9,9 +9,9 @@
 - if can?(:update, entry) && entry.sac_membership_anytime?
   %section.sac-membership.row
     %h2.col-md-8
-      = t('.section_sac_membership') 
+      = t('.section_sac_membership')
     .col-sm-4.d-flex.justify-content-end
-      = action_button(t('.download_pdf'), membership_path(entry, format: :pdf), 
+      = action_button(t('.download_pdf'), membership_path(entry, format: :pdf),
         :download, class: 'membership-download', target: '_blank')
 
     .d-flex.justify-content-center.w-100
