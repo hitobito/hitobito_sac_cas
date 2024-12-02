@@ -18,7 +18,7 @@ class People::DataQualityChecker
     check_blank(:company_name, person.company?, :warning)
     check_blank(:first_name, !person.company?)
     check_blank(:last_name, !person.company?)
-    check_blank(:street, membership_invoice?)
+    check_blank(:street, membership_invoice?) if check_street?
     check_blank(:zip_code, membership_invoice?)
     check_blank(:town, membership_invoice?)
     check_blank(:email, membership_invoice?, :warning)
@@ -82,6 +82,14 @@ class People::DataQualityChecker
     return @membership_invoice if defined?(@membership_invoice)
 
     @membership_invoice = sac_membership.invoice?
+  end
+
+  def check_street?
+    person.dup.then do |p|
+      Person::AddressValidator.new.validate(p)
+
+      p.errors.attribute_names.include?(:street)
+    end
   end
 
   def issues
