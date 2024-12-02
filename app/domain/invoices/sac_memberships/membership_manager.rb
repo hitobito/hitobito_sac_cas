@@ -58,9 +58,10 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def update_roles_to_zusatzsektion_mitglied(person)
-    person.sac_membership.neuanmeldung_zusatzsektion_roles.each do |role|
+    person.sac_membership.neuanmeldung_zusatzsektion_roles.each_with_index do |role, index|
       role.destroy
       create_mitglied_zusatzsektion_role(person)
+      Invoices::SacMembershipsMailer.confirmation(person).deliver_later if index.zero?
     end
   end
 
