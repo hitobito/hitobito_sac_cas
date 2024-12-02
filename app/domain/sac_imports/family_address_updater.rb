@@ -21,8 +21,11 @@ module SacImports
     end
 
     def update
+      progress = Progress.new(family_main_people.size, title: "Family Address Updater", output: @output)
+
       with_paper_trail do
         family_main_people.each do |main_person|
+          progress.step
           preferred_person = get_preferred_household_person_with_valid_address(main_person)
           next if preferred_person.nil?
 
@@ -46,7 +49,7 @@ module SacImports
     end
 
     def get_preferred_household_person_with_valid_address(main_person)
-      if [main_person.street, main_person.housenumber, main_person.zip_code, main_person.town].any?(&:nil?)
+      if !address_ok?(main_person)
         if oldest_family_member_with_valid_address(main_person).nil?
           add_report_row(main_person.id, "ERROR: Familienhauptperson hat keine gültige Adresse und keine Familienmitglieder mit gültigen Adressen")
           nil
@@ -59,11 +62,16 @@ module SacImports
       end
     end
 
-    def oldest_family_member_with_valid_address(main_person)
-      main_person.household_people.select { |person| person.street && person.housenumber && person.zip_code && person.town }.min_by(&:birthday)
+    def address_ok?(person)
+      person.town.present? && person.zip_code.present? &&
+        (person.street.present? || person.postbox.present?)
     end
 
-    def family_main_people = Person.where(sac_family_main_person: true)
+    def oldest_family_member_with_valid_address(main_person)
+      main_person.household_people.select { |person| address_ok?(person) }.min_by(&:birthday)
+    end
+
+    def family_main_people = @family_main_people ||= Person.where(sac_family_main_person: true)
 
     def add_report_row(navision_id, message)
       @csv_report.add_row({

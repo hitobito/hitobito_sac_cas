@@ -54,13 +54,6 @@ namespace :sac_imports do
     system("NO_ENV=true bundle exec rails db:seed wagon:seed")
   end
 
-  desc "Reset database and run all imports"
-  task full_monkey_dance: [
-    :setup,
-    :prepare_database,
-    :all
-  ]
-
   task all: [
     :setup,
     :"nav6-1_sac_section",
@@ -74,9 +67,11 @@ namespace :sac_imports do
     "nav2a-3_families",
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
-    :update_sac_familiy_address,
-    :cleanup
+    :update_sac_family_address,
+    :cleanup,
+    :check_data_quality
   ] do
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "final_dump")
     puts "\e[42;31;1m 😃 All imports done and final DB dump completed 😃 \e[0m"
   end
 
@@ -93,7 +88,7 @@ namespace :sac_imports do
   end
 
   desc "Analyzes imported and calculated membership years and creates report"
-  task "nav1-2_membership_years_report": [:environment] do
+  task "nav1-2_membership_years_report": :environment do
     SacImports::MembershipYearsReport.new.create
   end
 
@@ -116,18 +111,19 @@ namespace :sac_imports do
   end
 
   desc "Imports families"
-  task "nav2a-3_families": [:environment] do
+  task "nav2a-3_families": :setup do
     SacImports::Nav2a3FamilyImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2a3-families")
   end
 
   desc "Update family addresses to be the same as the main person"
-  task update_sac_family_address: [:environment] do
+  task update_sac_family_address: :setup do
     SacImports::FamilyAddressUpdater.new.update
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "update_sac_familiy_address")
   end
 
   desc "NAV2b Imports missing groups"
-  task "nav2b-1_missing_groups": [:environment] do
+  task "nav2b-1_missing_groups": :setup do
     SacImports::Nav2b1CreateMissingGroups.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2b1-create-missing-groups")
   end
@@ -139,25 +135,27 @@ namespace :sac_imports do
   end
 
   desc "Imports qualifications"
-  task "nav3-1_qualifications": [:environment] do
+  task "nav3-1_qualifications": :setup do
     SacImports::Nav3QualificationsImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav3_qualifications")
   end
 
   desc "Imports huts"
-  task "nav5-1_huts": [:environment] do
+  task "nav5-1_huts": :setup do
     SacImports::Nav5HutsImporter.new.import!
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav5-huts")
   end
 
-  desc "Imports Austrittsgründe"
-  task "nav8-1_austrittsgruende": [:environment] do
-    raise "Not implemented"
+  desc "Run cleanup tasks"
+  task cleanup: :setup do
+    SacImports::Cleanup.new.run
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "cleanup")
   end
 
-  desc "Run cleanup tasks"
-  task cleanup: [:environment] do
-    SacImports::Cleanup.new.run
+  desc "Run data quality check"
+  task check_data_quality: :setup do
+    SacImports::DataQualityChecker.new.run
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "data_quality_check")
   end
 
   task :dump_database, [:dump_name] => :environment do |t, args|

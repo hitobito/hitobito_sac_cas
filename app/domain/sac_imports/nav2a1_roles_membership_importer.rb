@@ -14,8 +14,14 @@ module SacImports
 
     def run_import
       log_counts_delta(@csv_report, Role.unscoped,
-        "Aktuell gültig" => Role.all,
-        "Gekündigt" => Role.unscoped.where(terminated: true)) do
+        "Stammsektion Aktuell gültig" => Group::SektionsMitglieder::Mitglied,
+        "Stammsektion Abgelaufen" => Group::SektionsMitglieder::Mitglied.ended,
+        "Stammsektion Zukünftig" => Group::SektionsMitglieder::Mitglied.future,
+        "Zusatzsektion Aktuell gültig" => Group::SektionsMitglieder::MitgliedZusatzsektion,
+        "Zusatzsektion Abgelaufen" => Group::SektionsMitglieder::MitgliedZusatzsektion.ended,
+        "Zusatzsektion Zukünftig" => Group::SektionsMitglieder::MitgliedZusatzsektion.future,
+        "Stammsektion Gekündigt" => Group::SektionsMitglieder::Mitglied.with_inactive.where(terminated: true),
+        "Zusatzsektion Gekündigt" => Group::SektionsMitglieder::MitgliedZusatzsektion.with_inactive.where(terminated: true)) do
         memberships_importer.create
         additional_memberships_importer.create
       end
