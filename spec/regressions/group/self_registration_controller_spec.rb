@@ -44,6 +44,26 @@ describe Groups::SelfRegistrationController, type: :controller do
             expect(response.body).to have_field("Nachname", with: person.last_name)
           end
         end
+
+        context "when not signed in" do
+          it "renders self registration" do
+            get :show, params: {group_id: group.id}
+
+            expect(response).to render_template("self_registration/show")
+          end
+
+          context "for neuanmeldungen nv" do
+            let(:neuanmeldung_nv_group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+
+            it "renders self registration with deleted neuanmeldungen group" do
+              group.destroy!
+
+              get :show, params: {group_id: neuanmeldung_nv_group.id}
+
+              expect(response).to render_template("self_registration/show")
+            end
+          end
+        end
       end
     end
   end
