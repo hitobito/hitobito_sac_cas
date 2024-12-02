@@ -1100,10 +1100,9 @@ en:
         summary_course_price: Course costs
         summary_subsidy: "- Subsidy"
         summary_total: Total
-        contact_title: Questions about registration
+      contact_data_aside:
+        contact_title: ""
         contact_text: |
-          You can reach us during our business hours
-          Mon to Fri 08:00 - 17:00.
       states:
         absent: No participation in this course.
         annulled: This course has been canceled.
@@ -1164,6 +1163,10 @@ en:
       fields:
         overrides_person_data_info:
           Please note that the customizations you enter here will be transferred to your profile.
+    
+    register:
+      email_check:
+        enter_email: "" # to not display in sac wagon
 
   events:
     actions_show_sac_cas:
@@ -1199,7 +1202,7 @@ en:
       cancel_confirmation: ""
       cancel_info: ""
       inform_participants_caption: ""
-      canceled_reason_label: ""
+      canceled_reason_label: "" 
 
   external_trainings:
     form:
@@ -1550,6 +1553,19 @@ en:
       invoice_receiver:
         stammsektion: ""
         zusatzsektion: ""
+
+  public_events:
+    show:
+      login_to_participate: ""
+      with_sac_account: ""
+      is_sac_account_active: ""
+      login_questions: ""
+      link_fag_sac_account: ""
+      first_time_here: ""
+      create_account_now: ""
+      wanna_be_a_member: ""
+      request_sac_membership: ""
+      request_sac_membership_link: ""
 
   roles:
     beitragskategorie:

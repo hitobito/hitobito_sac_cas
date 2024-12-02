@@ -1158,10 +1158,9 @@ it:
         summary_course_price: Costi del corso
         summary_subsidy: "- Sovvenzione"
         summary_total: Totale
-        contact_title: Domande sulla registrazione
+      contact_data_aside:
+        contact_title: ""
         contact_text: |
-          Siamo raggiungibili durante i nostri orari di lavoro
-          Dal lunedì al venerdì dalle 08:00 alle 17:00.
       states:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1222,6 +1221,10 @@ it:
       fields:
         overrides_person_data_info:
           Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
+    
+    register:
+      email_check:
+        enter_email: "" # to not display in sac wagon
 
   events:
     actions_show_sac_cas:
@@ -1257,7 +1260,7 @@ it:
       cancel_confirmation: ""
       cancel_info: ""
       inform_participants_caption: ""
-      canceled_reason_label: ""
+      canceled_reason_label: "" 
 
   external_trainings:
     form:
@@ -1616,6 +1619,19 @@ it:
       invoice_receiver:
         stammsektion: ""
         zusatzsektion: ""
+
+  public_events:
+    show:
+      login_to_participate: ""
+      with_sac_account: ""
+      is_sac_account_active: ""
+      login_questions: ""
+      link_fag_sac_account: ""
+      first_time_here: ""
+      create_account_now: ""
+      wanna_be_a_member: ""
+      request_sac_membership: ""
+      request_sac_membership_link: ""
 
   roles:
     beitragskategorie:
