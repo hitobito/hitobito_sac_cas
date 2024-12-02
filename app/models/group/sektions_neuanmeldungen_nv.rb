@@ -31,7 +31,7 @@ class Group::SektionsNeuanmeldungenNv < ::Group
 
   # make this read-only so nobody can disable self-registration on those groups
   def self_registration_role_type
-    if parent.children.pluck(:type).include?(Group::SektionsNeuanmeldungenSektion.sti_name)
+    if parent.children.without_deleted.exists?(type: Group::SektionsNeuanmeldungenSektion.sti_name)
       nil
     else
       Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name
