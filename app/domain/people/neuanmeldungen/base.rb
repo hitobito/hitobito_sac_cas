@@ -15,7 +15,6 @@ module People::Neuanmeldungen
       Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
       Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
     ].freeze
-    APPROVED_NEUANMELDUNGEN_ROLE = Group::SektionsNeuanmeldungenNv::Neuanmeldung
     APPROVED_NEUANMELDUNGEN_GROUP = Group::SektionsNeuanmeldungenNv
 
     def call
@@ -33,6 +32,11 @@ module People::Neuanmeldungen
     end
 
     private
+
+    def approved_neuanmeldungen_role(role)
+      role_type = role.class.to_s.demodulize
+      APPROVED_NEUANMELDUNGEN_GROUP.const_get(role_type)
+    end
 
     def applicable_roles
       group.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), person: applicable_people)

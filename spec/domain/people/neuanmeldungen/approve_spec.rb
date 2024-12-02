@@ -17,9 +17,9 @@ describe People::Neuanmeldungen::Approve do
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldungen_nv) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
-  def create_role(beitragskategorie, person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true))
+  def create_role(beitragskategorie, person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true), type: neuanmeldung_role_class)
     Fabricate(
-      neuanmeldung_role_class.sti_name,
+      type.sti_name,
       group: neuanmeldungen_sektion,
       beitragskategorie: beitragskategorie,
       created_at: Time.zone.now.beginning_of_year,
@@ -28,8 +28,9 @@ describe People::Neuanmeldungen::Approve do
   end
 
   def expect_role(role, expected_role_class, expected_group)
-    expect(role.person.reload.roles).to have(1).item
-    actual_role = role.person.roles.first
+    roles = role.person.reload.roles.where.not(type: Group::SektionsMitglieder::Mitglied.sti_name)
+    expect(roles).to have(1).item
+    actual_role = roles.first
     expect(actual_role).to be_a expected_role_class
     expect(actual_role.group).to eq expected_group
     expect(actual_role.beitragskategorie).to eq role.beitragskategorie
@@ -62,6 +63,49 @@ describe People::Neuanmeldungen::Approve do
 
     expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
     expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
+  end
+
+  context "Zusatzsektion" do
+    let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion }
+    let(:neuanmeldung_approved_role_class) { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion }
+
+    it "replaces the neuanmeldungen_zusatzsektion roles with neuanmeldungen_zusatzsektion_nv roles" do
+      neuanmeldungen = [:adult, :adult, :youth, :family].map do |cat|
+        person = Fabricate(:person, sac_family_main_person: true)
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:matterhorn_mitglieder),
+          person: person,
+          start_on: 2.years.ago.beginning_of_year
+        )
+        create_role(cat, person: person).tap { |r| r.update_columns(start_on: 1.day.ago) }
+      end
+
+      approver = described_class.new(
+        group: neuanmeldungen_sektion,
+        people_ids: [
+          neuanmeldungen.first.person.id,
+          neuanmeldungen.third.person.id,
+          neuanmeldungen.fourth.person.id
+        ]
+      )
+
+      expect { approver.call }
+        .to change { neuanmeldung_role_class.count }.by(-3)
+        .and change { neuanmeldung_approved_role_class.count }.by(3)
+        .and change { ExternalInvoice::SacMembership.count }.by(3)
+        .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(3)
+        .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.first.person, sektion)
+        .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.third.person, sektion)
+        .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(neuanmeldungen.fourth.person, sektion)
+
+      expect_role(neuanmeldungen.first, neuanmeldung_approved_role_class, neuanmeldungen_nv)
+      expect_role(neuanmeldungen.third, neuanmeldung_approved_role_class, neuanmeldungen_nv)
+      expect_role(neuanmeldungen.fourth, neuanmeldung_approved_role_class, neuanmeldungen_nv)
+
+      expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
+      expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
+    end
   end
 
   it "doesn't create invoice or send email for person in family when not main person" do
