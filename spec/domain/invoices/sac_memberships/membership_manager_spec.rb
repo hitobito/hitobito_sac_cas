@@ -172,7 +172,7 @@ describe Invoices::SacMemberships::MembershipManager do
       subject { described_class.new(mitglied_person, groups(:matterhorn_neuanmeldungen_nv), end_of_next_year.year) }
 
       it "creates zusatzsektions role" do
-        subject.update_membership_status
+        expect { subject.update_membership_status }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
 
         expect(mitglied_person.roles.count).to eq(2)
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
