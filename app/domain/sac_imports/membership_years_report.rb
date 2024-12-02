@@ -26,8 +26,10 @@ module SacImports
 
     def create
       data = @source_file.rows
+      progress = Progress.new(data.size, title: "Membership Years Report", output: @output)
       fetch_hitobito_people(data)
       data.each do |row|
+        progress.step
         process_row(row)
       end
       @csv_report.finalize
@@ -36,21 +38,20 @@ module SacImports
     private
 
     def process_row(row)
-      @output.print "Reading row #{row[:last_name]} ..."
-      person = @hitobito_people[row[:navision_id].to_i]
+      person = @hitobito_people[row.navision_id.to_i]
       @csv_report.add_row({
-        navision_membership_number: row[:navision_id],
-        navision_name: [row[:last_name], row[:first_name]].compact.join(" ").presence,
-        navision_membership_years: row[:membership_years],
+        navision_membership_number: row.navision_id,
+        navision_name: [row.last_name, row.first_name].compact.join(" ").presence,
+        navision_membership_years: row.membership_years,
         hitobito_membership_years: person&.membership_years,
-        diff: membership_years_diff(row[:membership_years], person&.membership_years),
+        diff: membership_years_diff(row.membership_years, person&.membership_years),
         errors: errors_for(person)
       })
-      @output.print " processed.\n"
+      @output.puts "Person not found in hitobito: #{row.navision_id}" unless person
     end
 
     def fetch_hitobito_people(data)
-      people_ids = data.pluck(:navision_id).compact
+      people_ids = data.map(&:navision_id).compact
       @hitobito_people = Person.with_membership_years.where(id: people_ids).index_by(&:id)
     end
 
