@@ -56,7 +56,7 @@ describe Signup::SektionMailer do
       expect(body).to include(
         "Sektion: SAC Blüemlisalp",
         "Mitgliedschaftskategorie: Familie",
-        "Geburtsdatum: 01.12.1999",
+        "Geburtsdatum: #{I18n.l(person.birthday)}",
         "Strasse und Nr: Ophovenerstrasse 79a",
         "Viel Spass beim SAC!"
       )
