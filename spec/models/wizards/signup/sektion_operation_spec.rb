@@ -220,17 +220,57 @@ describe Wizards::Signup::SektionOperation do
     end
   end
 
-  context "with newsletter exclusion" do
-    let(:newsletter) { false }
+  describe "newsletter subscription" do
     let(:subscription) { Person.find_by(first_name: "Max").subscriptions.first }
 
-    it "#save! creates excluding subscription" do
-      expect do
-        operation.save!
-      end.to change { Subscription.count }.by(1)
+    context "with opt_out newsletter" do
+      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
 
-      expect(subscription).to be_excluded
-      expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
+      it "#save! doesn't create subscription" do
+        expect do
+          operation.save!
+        end.to not_change(Subscription, :count)
+      end
+    end
+
+    context "with opt_in newsletter" do
+      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
+
+      it "#save! creates including subscription" do
+        expect do
+          operation.save!
+        end.to change(Subscription, :count).by(1)
+
+        expect(subscription).not_to be_excluded
+        expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
+      end
+    end
+
+    context "with newsletter exclusion" do
+      let(:newsletter) { false }
+
+      context "with opt_out newsletter" do
+        before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
+
+        it "#save! creates excluding subscription" do
+          expect do
+            operation.save!
+          end.to change(Subscription, :count).by(1)
+
+          expect(subscription).to be_excluded
+          expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
+        end
+      end
+
+      context "with opt_in newsletter" do
+        before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
+
+        it "#save! doesn't create excluding subscription" do
+          expect do
+            operation.save!
+          end.to not_change(Subscription, :count)
+        end
+      end
     end
   end
 end
