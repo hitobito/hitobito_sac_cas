@@ -176,49 +176,103 @@ describe Event::ParticipationsController do
         expect(newsletter.subscribed?(user)).to be_truthy
       end
 
-      context "subscribed" do
-        context "when newsletter is true" do
-          let(:newsletter_param) { "1" }
+      context "with opt_out newsletter" do
+        before { newsletter.update!(subscribable_mode: :opt_out) }
 
-          it "does nothing if newsletter is true" do
+        context "subscribed" do
+          context "when newsletter is true" do
+            let(:newsletter_param) { "1" }
+
+            it "does nothing if newsletter is true" do
+              expect do
+                request
+                expect(response).to redirect_to(participation_path)
+              end.to change { Event::Participation.count }.by(1)
+              expect(newsletter.subscribed?(user)).to be_truthy
+            end
+          end
+
+          it "unsubscribe from sac mailing list" do
             expect do
               request
               expect(response).to redirect_to(participation_path)
             end.to change { Event::Participation.count }.by(1)
-            expect(newsletter.subscribed?(user)).to be_truthy
+            expect(newsletter.subscribed?(user)).to be_falsey
           end
         end
 
-        it "unsubscribe from sac mailing list" do
-          expect do
-            request
-            expect(response).to redirect_to(participation_path)
-          end.to change { Event::Participation.count }.by(1)
-          expect(newsletter.subscribed?(user)).to be_falsey
+        context "unsubscribed" do
+          before { newsletter.subscriptions.create!(subscriber: user, excluded: true) }
+
+          context "when newsletter is true" do
+            let(:newsletter_param) { "1" }
+
+            it "subscribes to sac mailing list" do
+              expect do
+                request
+                expect(response).to redirect_to(participation_path)
+              end.to change { Event::Participation.count }.by(1)
+              expect(newsletter.subscribed?(user)).to be_truthy
+            end
+          end
+
+          it "does nothing if newsletter is false" do
+            expect do
+              request
+              expect(response).to redirect_to(participation_path)
+            end.to change { Event::Participation.count }.by(1)
+            expect(newsletter.subscribed?(user)).to be_falsey
+          end
         end
       end
 
-      context "unsubscribed" do
-        before { newsletter.subscriptions.create!(subscriber: user, excluded: true) }
+      context "with opt_in newsletter" do
+        before { newsletter.update!(subscribable_mode: :opt_in) }
 
-        context "when newsletter is true" do
-          let(:newsletter_param) { "1" }
+        context "subscribed" do
+          before { newsletter.subscriptions.create!(subscriber: user, excluded: false) }
 
-          it "subscribes to sac mailing list" do
+          context "when newsletter is true" do
+            let(:newsletter_param) { "1" }
+
+            it "does nothing if newsletter is true" do
+              expect do
+                request
+                expect(response).to redirect_to(participation_path)
+              end.to change { Event::Participation.count }.by(1)
+              expect(newsletter.subscribed?(user)).to be_truthy
+            end
+          end
+
+          it "unsubscribe from sac mailing list" do
             expect do
               request
               expect(response).to redirect_to(participation_path)
             end.to change { Event::Participation.count }.by(1)
-            expect(newsletter.subscribed?(user)).to be_truthy
+            expect(newsletter.subscribed?(user)).to be_falsey
           end
         end
 
-        it "does nothing if newsletter is false" do
-          expect do
-            request
-            expect(response).to redirect_to(participation_path)
-          end.to change { Event::Participation.count }.by(1)
-          expect(newsletter.subscribed?(user)).to be_falsey
+        context "unsubscribed" do
+          context "when newsletter is true" do
+            let(:newsletter_param) { "1" }
+
+            it "subscribes to sac mailing list" do
+              expect do
+                request
+                expect(response).to redirect_to(participation_path)
+              end.to change { Event::Participation.count }.by(1)
+              expect(newsletter.subscribed?(user)).to be_truthy
+            end
+          end
+
+          it "does nothing if newsletter is false" do
+            expect do
+              request
+              expect(response).to redirect_to(participation_path)
+            end.to change { Event::Participation.count }.by(1)
+            expect(newsletter.subscribed?(user)).to be_falsey
+          end
         end
       end
     end
