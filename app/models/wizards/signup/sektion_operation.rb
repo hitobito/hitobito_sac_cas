@@ -62,10 +62,12 @@ module Wizards::Signup
     end
 
     def person
-      @person ||= (new_record? ? Person.new : Person.find(person_attrs[:id])).tap do |p|
+      @person ||= build_or_find_person.tap do |p|
         p.attributes = person_attrs
       end
     end
+
+    def build_or_find_person = new_record? ? Person.new(language: I18n.locale) : Person.find(person_attrs[:id])
 
     def role
       @role ||= build_role
