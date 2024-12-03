@@ -1108,6 +1108,12 @@ it:
     scopes:
       user_groups: "Leggere i gruppi, i ruoli e i campi calcolati."
 
+  dropdown/events/courses/mail_dispatch:
+    title: ""
+    leader_reminder: ""
+    survey: ""
+    confirmation: ""
+
   dropdown/people/memberships:
     title: Modificare l’affiliazione
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
@@ -1118,6 +1124,7 @@ it:
   dropdown/people_export:
     recipients: Destinatari individuali
     recipient_households: Destinatari famiglie
+    course_data: ""
 
   dropdown/group_edit:
     sac_membership_configs: Parametri per le fatture di affiliazione
@@ -1128,6 +1135,13 @@ it:
       key_data_sheets:
         create:
           success: Le schede dei dati di riferimento sono state create e aggiunte al corso come allegato.
+      mail_dispatches:
+        create:
+          success:
+            one: ''
+            many: ''
+            other: ''
+          warning: ""
     kinds:
       push_down:
         success: I dati salvati sono stati trasferiti a tutti i corsi attivi.

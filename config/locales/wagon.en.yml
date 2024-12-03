@@ -1050,6 +1050,12 @@ en:
     scopes:
       user_groups: "Read your groups, roles and calculated fields."
 
+  dropdown/events/courses/mail_dispatch:
+    title: ""
+    leader_reminder: ""
+    survey: ""
+    confirmation: ""
+
   dropdown/people/memberships:
     title: Customize membership
     join_zusatzsektion_link: Apply for additional section
@@ -1060,6 +1066,7 @@ en:
   dropdown/people_export:
     recipients: ""
     recipient_households: ""
+    course_data: ""
 
   dropdown/group_edit:
     sac_membership_configs: Parameters for membership invoices
@@ -1070,6 +1077,12 @@ en:
       key_data_sheets:
         create:
           success: ""
+      mail_dispatches:
+        create:
+          success:
+            one: ''
+            other: ''
+          warning: ""
     kinds:
       push_down:
         success: The saved data was transferred to all active courses.

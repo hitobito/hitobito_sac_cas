@@ -1108,6 +1108,12 @@ fr:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
 
+  dropdown/events/courses/mail_dispatch:
+    title: ""
+    leader_reminder: ""
+    survey: ""
+    confirmation: ""
+
   dropdown/people/memberships:
     title: Adapter l’adhésion
     join_zusatzsektion_link: Demander une section supplémentaire
@@ -1118,6 +1124,7 @@ fr:
   dropdown/people_export:
     recipients: Destinataire – personne individuelle
     recipient_households: Destinataire – familles
+    course_data: ""
 
   dropdown/group_edit:
     sac_membership_configs: Paramètres pour les factures des membres
@@ -1128,6 +1135,13 @@ fr:
       key_data_sheets:
         create:
           success: La/les fiche(s) technique(s) a/ont été générée(s) et ajoutée(s) au cours en tant qu’annexe.
+      mail_dispatches:
+        create:
+          success:
+            one: ''
+            many: ''
+            other: ''
+          warning: ""
     kinds:
       push_down:
         success: Les données enregistrées ont été transférées à tous les cours actifs.
