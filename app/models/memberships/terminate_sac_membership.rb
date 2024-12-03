@@ -112,20 +112,21 @@ module Memberships
     def save_people
       affected_people.each do |person|
         subscriptions = Person::Subscriptions.new(person)
-        if subscribe_newsletter
-          subscriptions.subscribe(newsletter)
-        else
-          subscriptions.unsubscribe(newsletter)
-        end
-
-        if subscribe_fundraising_list
-          subscriptions.subscribe(fundraising)
-        else
-          subscriptions.unsubscribe(fundraising)
-        end
+        change_mailing_list_subscription(subscriptions, newsletter, subscribe_newsletter)
+        change_mailing_list_subscription(subscriptions, fundraising, subscribe_fundraising_list)
 
         person.update(data_retention_consent: data_retention_consent)
         cancel_open_membership_invoices(person)
+      end
+    end
+
+    def change_mailing_list_subscription(subscriptions, mailing_list, subscribe)
+      if mailing_list
+        if subscribe
+          subscriptions.subscribe(mailing_list)
+        else
+          subscriptions.unsubscribe(mailing_list)
+        end
       end
     end
 
