@@ -159,6 +159,17 @@ describe Event::ParticipationsController do
     end
 
     context "newsletter" do
+      let(:newsletter_param) { "0" }
+      let(:request) do
+        post :create,
+          params: {
+            group_id: group.id,
+            event_id: event.id,
+            step: "summary",
+            event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: newsletter_param}
+          }
+      end
+
       it "is defined and user is subscribed by default" do
         expect(Group.root.sac_newsletter_mailing_list_id).to be_present
         expect(MailingList.where(id: Group.root.sac_newsletter_mailing_list_id)).to be_exist
@@ -166,29 +177,21 @@ describe Event::ParticipationsController do
       end
 
       context "subscribed" do
-        it "does nothing if newsletter is true" do
-          expect do
-            post :create,
-              params: {
-                group_id: group.id,
-                event_id: event.id,
-                step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
-              }
-            expect(response).to redirect_to(participation_path)
-          end.to change { Event::Participation.count }.by(1)
-          expect(newsletter.subscribed?(user)).to be_truthy
+        context "when newsletter is true" do
+          let(:newsletter_param) { "1" }
+
+          it "does nothing if newsletter is true" do
+            expect do
+              request
+              expect(response).to redirect_to(participation_path)
+            end.to change { Event::Participation.count }.by(1)
+            expect(newsletter.subscribed?(user)).to be_truthy
+          end
         end
 
         it "unsubscribe from sac mailing list" do
           expect do
-            post :create,
-              params: {
-                group_id: group.id,
-                event_id: event.id,
-                step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "0"}
-              }
+            request
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
           expect(newsletter.subscribed?(user)).to be_falsey
@@ -198,29 +201,21 @@ describe Event::ParticipationsController do
       context "unsubscribed" do
         before { newsletter.subscriptions.create!(subscriber: user, excluded: true) }
 
-        it "subscribes to sac mailing list" do
-          expect do
-            post :create,
-              params: {
-                group_id: group.id,
-                event_id: event.id,
-                step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
-              }
-            expect(response).to redirect_to(participation_path)
-          end.to change { Event::Participation.count }.by(1)
-          expect(newsletter.subscribed?(user)).to be_truthy
+        context "when newsletter is true" do
+          let(:newsletter_param) { "1" }
+
+          it "subscribes to sac mailing list" do
+            expect do
+              request
+              expect(response).to redirect_to(participation_path)
+            end.to change { Event::Participation.count }.by(1)
+            expect(newsletter.subscribed?(user)).to be_truthy
+          end
         end
 
         it "does nothing if newsletter is false" do
           expect do
-            post :create,
-              params: {
-                group_id: group.id,
-                event_id: event.id,
-                step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "0"}
-              }
+            request
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
           expect(newsletter.subscribed?(user)).to be_falsey
