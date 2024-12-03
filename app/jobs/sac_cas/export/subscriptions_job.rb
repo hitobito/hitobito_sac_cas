@@ -15,6 +15,10 @@ module SacCas::Export::SubscriptionsJob
     super
   end
 
+  def entries
+    super.select("household_key")
+  end
+
   def recipients_data
     Export::Tabular::People::SacRecipients.export(@format, entries, mailing_list.group)
   end
