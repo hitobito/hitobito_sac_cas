@@ -29,6 +29,11 @@ describe Invoices::SacMemberships::MembershipManager do
     Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
+  it "does not fail if running without any actual work todo" do
+    manager = described_class.new(Fabricate(:person), groups(:bluemlisalp_mitglieder), end_of_next_year.year)
+    expect { manager.update_membership_status }.not_to raise_error
+  end
+
   context "person has stammsektions role" do
     def updated_roles_count
       role_dates_before = Role.all.map(&:end_on)

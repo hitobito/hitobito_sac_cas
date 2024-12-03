@@ -36,7 +36,6 @@ module HitobitoSacCas
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
         Export::BackupMitgliederScheduleJob,
-        PromoteNeuanmeldungenJob,
         Qualifications::ExpirationMailerJob,
         Roles::TerminateTourenleiterJob
       ]
