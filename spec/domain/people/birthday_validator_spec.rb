@@ -9,7 +9,8 @@ require "spec_helper"
 
 describe People::BirthdayValidator do
   let(:person) { people(:mitglied) }
-  let(:validator) { described_class.new(person, people(:mitglied)) }
+  let(:current_user) { people(:mitglied) }
+  let(:validator) { described_class.new(person, current_user) }
 
   before do
     travel_to "06.06.2005"
@@ -37,5 +38,15 @@ describe People::BirthdayValidator do
     person.update!(birthday: Date.parse("05.06.1885"))
     expect { validator.validate_birthday_range }.to throw_symbol(:abort)
     expect(person.errors[:birthday]).to eq ["muss nach dem 06.06.1885 liegen."]
+  end
+
+  context "backoffice" do
+    let(:current_user) { people(:admin) }
+
+    it "adds error if blan" do
+      person.birthday = nil
+      expect { validator.validate! }.to throw_symbol(:abort)
+      expect(person.errors[:birthday]).to eq ["muss ausgefüllt werden"]
+    end
   end
 end

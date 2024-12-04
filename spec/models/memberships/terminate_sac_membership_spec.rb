@@ -1,4 +1,4 @@
-# frozen_string_literal: trueV
+# frozen_string_literal: true
 
 #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
@@ -224,6 +224,7 @@ describe Memberships::TerminateSacMembership do
             expect do
               expect(termination.save!).to eq true
             end.not_to(change { person.subscriptions.count })
+            expect(mailing_list.subscribed?(person)).to be false
           end
 
           it "creates newsletter subscription" do
@@ -231,14 +232,18 @@ describe Memberships::TerminateSacMembership do
             expect do
               expect(termination.save!).to eq true
             end.to change { mailing_list.subscriptions.count }.by(1)
+            expect(mailing_list.subscribed?(person)).to be true
           end
 
           it "does not fail on existing subscription" do
             params[:subscribe_newsletter] = true
-            mailing_list.subscriptions.create!(subscriber: person)
+            Person::Subscriptions.new(person).subscribe(mailing_list)
+            expect(mailing_list.subscribed?(person)).to be true
             expect do
               expect(termination.save!).to eq true
             end.not_to change { mailing_list.subscriptions.count }
+
+            expect(mailing_list.subscribed?(person)).to be true
           end
         end
 
