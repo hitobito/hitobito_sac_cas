@@ -240,7 +240,6 @@ describe Memberships::TerminateSacMembership do
             Person::Subscriptions.new(person).subscribe(mailing_list)
             expect(mailing_list.subscribed?(person)).to be true
             expect do
-              binding.pry
               expect(termination.save!).to eq true
             end.not_to change { mailing_list.subscriptions.count }
 

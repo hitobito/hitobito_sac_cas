@@ -33,7 +33,7 @@ module Wizards::Signup
           enqueue_approval_pending_confirmation_mail
         end
       end
-      mailing_list&.subscribe_if(person, mailing_list)
+      mailing_list&.subscribe_if(person, newsletter)
 
       enqueue_notification_email
       enqueue_duplicate_locator_job if new_record?

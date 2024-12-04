@@ -110,19 +110,13 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
-    it "creates newsletter exclusion for all" do
-      required_attrs[:summary][:newsletter] = "0"
-      wizard.save!
-      expect(max.subscriptions).to have(1).item
-    end
-
-    describe "sending email" do
+    describe "newsletter " do
       include ActiveJob::TestHelper
 
       it "enqueues with newsletter" do
         required_attrs[:summary][:newsletter] = "0"
         expect do
-          wizard.save!
+          expect { wizard.save! }.not_to change { Subscription.count }
         end.to have_enqueued_mail(Signup::AboMagazinMailer, :confirmation)
           .with(kind_of(Person), group, false)
       end
@@ -130,7 +124,7 @@ describe Wizards::Signup::AboMagazinWizard do
       it "enqueues without newsletter" do
         required_attrs[:summary][:newsletter] = "1"
         expect do
-          wizard.save!
+          expect { wizard.save! }.to change { Subscription.count }.by(1)
         end.to have_enqueued_mail(Signup::AboMagazinMailer, :confirmation)
           .with(kind_of(Person), group, true)
       end

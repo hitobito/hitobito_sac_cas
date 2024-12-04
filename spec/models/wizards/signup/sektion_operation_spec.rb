@@ -59,7 +59,7 @@ describe Wizards::Signup::SektionOperation do
       expect { operation.save! }
         .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
-        .and not_change { Subscription.count }
+        .and change { Subscription.count }.by(1)
         .and change { Delayed::Job.count }.by(1)
         .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }
         .and not_change { ExternalInvoice::SacMembership.count }
@@ -192,7 +192,7 @@ describe Wizards::Signup::SektionOperation do
           .and change { person.reload.first_name }.from("Magazina").to("Max")
           .and not_change { person.reload.last_name }
           .and change { person.roles.count }.by(1)
-          .and not_change { Subscription.count }
+          .and change { Subscription.count }.by(1)
           .and change { Delayed::Job.count }.by(1)
           .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }
           .and not_change { ExternalInvoice::SacMembership.count }
@@ -202,6 +202,7 @@ describe Wizards::Signup::SektionOperation do
         expect(person.roles.last.group).to eq group
         expect(person.phone_numbers.first.label).to eq "Mobil"
         expect(person.phone_numbers.first.number).to eq "+41 79 123 45 67"
+        expect(mailing_lists(:newsletter).people).to eq [person]
       end
 
       it "does not update language from locale" do
@@ -218,58 +219,15 @@ describe Wizards::Signup::SektionOperation do
           .and not_change { person.phone_numbers.count }
       end
     end
-  end
 
-  describe "newsletter subscription" do
-    let(:subscription) { Person.find_by(first_name: "Max").subscriptions.first }
-
-    context "with opt_out newsletter" do
-      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
-
-      it "#save! doesn't create subscription" do
-        expect do
-          operation.save!
-        end.to not_change(Subscription, :count)
-      end
-    end
-
-    context "with opt_in newsletter" do
-      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
-
-      it "#save! creates including subscription" do
-        expect do
-          operation.save!
-        end.to change(Subscription, :count).by(1)
-
-        expect(subscription).not_to be_excluded
-        expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
-      end
-    end
-
-    context "with newsletter exclusion" do
+    context "without newsletter" do
       let(:newsletter) { false }
 
-      context "with opt_out newsletter" do
-        before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
-
-        it "#save! creates excluding subscription" do
-          expect do
-            operation.save!
-          end.to change(Subscription, :count).by(1)
-
-          expect(subscription).to be_excluded
-          expect(subscription.mailing_list).to eq mailing_lists(:newsletter)
-        end
-      end
-
-      context "with opt_in newsletter" do
-        before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
-
-        it "#save! doesn't create excluding subscription" do
-          expect do
-            operation.save!
-          end.to not_change(Subscription, :count)
-        end
+      it "#save! creates excluding subscription" do
+        expect do
+          operation.save!
+        end.not_to change { Subscription.count }
+        expect(mailing_lists(:newsletter).people).to be_empty
       end
     end
   end
