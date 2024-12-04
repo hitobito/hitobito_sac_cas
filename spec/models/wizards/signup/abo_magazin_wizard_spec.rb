@@ -110,7 +110,7 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
-    describe "newsletter " do
+    describe "newsletter" do
       include ActiveJob::TestHelper
 
       it "enqueues with newsletter" do

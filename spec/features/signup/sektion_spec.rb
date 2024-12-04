@@ -580,32 +580,14 @@ describe "signup/sektion", :js do
       click_button "Weiter als Einzelmitglied"
     end
 
-    context "with opt_out newsletter" do
-      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_out) }
-
-      it "creates excluding subscription if newsletter is unchecked" do
-        click_button "Weiter"
-        uncheck "Ich möchte einen Newsletter abonnieren"
-        complete_last_page
-        expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        expect(person.subscriptions.excluded).to have(1).items
-        expect(person.subscriptions.included).to have(0).items
-      end
-    end
-
-    context "with opt_in newsletter" do
-      before { mailing_lists(:newsletter).update!(subscribable_mode: :opt_in) }
-
-      it "creates including subscription if newsletter is checked" do
-        click_button "Weiter"
-        check "Ich möchte einen Newsletter abonnieren"
-        complete_last_page
-        expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
-          "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        expect(person.subscriptions.excluded).to have(0).items
-        expect(person.subscriptions.included).to have(1).items
-      end
+    it "creates including subscription if newsletter is checked" do
+      click_button "Weiter"
+      check "Ich möchte einen Newsletter abonnieren"
+      complete_last_page
+      expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
+        "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
+      expect(person.subscriptions.excluded).to have(0).items
+      expect(person.subscriptions.included).to have(1).items
     end
 
     it "persists self_registration_reason" do
