@@ -21,11 +21,8 @@ module Wizards::Signup
 
     def save!
       super
-      if newsletter
-        Person::Subscriptions.new(person).subscribe(mailing_list)
-      else
-        Person::Subscriptions.new(person).unsubscribe(mailing_list)
-      end
+
+      mailing_list&.subscribe_if(person, newsletter)
     end
 
     private

@@ -117,15 +117,9 @@ module SacCas::Event::ParticipationsController
   def subscribe_newsletter
     return if !subscribe_newsletter? || entry.new_record?
 
-    mailing_list = MailingList.find_by(id: group.sac_newsletter_mailing_list_id)
-    return unless mailing_list
-    subscriptions = Person::Subscriptions.new(entry.person)
-
-    if true?(entry.newsletter)
-      subscriptions.subscribe(mailing_list)
-    else
-      subscriptions.unsubscribe(mailing_list)
-    end
+    MailingList
+      .find_by(id: group.sac_newsletter_mailing_list_id)
+      &.subscribe_if(entry.person, true?(entry.newsletter))
   end
 
   def subscribe_newsletter?

@@ -33,13 +33,8 @@ module Wizards::Signup
           enqueue_approval_pending_confirmation_mail
         end
       end
-      if mailing_list
-        if newsletter
-          Person::Subscriptions.new(person).subscribe(mailing_list)
-        else
-          Person::Subscriptions.new(person).unsubscribe(mailing_list)
-        end
-      end
+      mailing_list&.subscribe_if(person, mailing_list)
+
       enqueue_notification_email
       enqueue_duplicate_locator_job if new_record?
       send_password_reset_email if new_record?
