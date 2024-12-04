@@ -176,6 +176,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   context "living abroad" do
     before do
       person.update!(country: "DE")
+      person.subscriptions.create(mailing_list: mailing_lists(:sac_magazine))
       context.fetch_section(additional_section).bulletin_postage_abroad = 0
     end
 

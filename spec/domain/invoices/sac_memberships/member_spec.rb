@@ -26,13 +26,14 @@ describe Invoices::SacMemberships::Member do
         group: groups(:bluemlisalp_mitglieder),
         start_on: "2022-08-01"
       )
+      person.subscriptions.create(mailing_list: mailing_lists(:sac_magazine))
     end
 
     it { expect(subject.age).to eq(date.year - person.birthday.year) }
     it { expect(subject.stammsektion_role).to eq(roles(:mitglied)) }
     it { expect(subject.zusatzsektion_roles).to eq([roles(:mitglied_zweitsektion)]) }
     it { expect(subject.sac_ehrenmitglied?).to be_falsey }
-    it { expect(subject.sac_magazine?).to be_falsy }
+    it { expect(subject.sac_magazine?).to be_truthy }
     it { expect(subject.sac_family_main_person?).to be_falsey }
     it { expect(subject.sektion_ehrenmitglied?(groups(:bluemlisalp))).to be_truthy }
     it { expect(subject.sektion_ehrenmitglied?(groups(:matterhorn))).to be_falsey }
