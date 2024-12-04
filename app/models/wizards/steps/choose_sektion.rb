@@ -13,11 +13,10 @@ module Wizards
       validate :assert_group, if: :group
       validate :assert_group_self_service, if: :group
 
-      GROUP_TYPES = [Group::Sektion.sti_name, Group::Ortsgruppe.sti_name].freeze
-
       def groups
         Group
-          .where(type: GROUP_TYPES)
+          .where(type: SacCas::MEMBERSHIP_OPERATIONS_GROUP_TYPES)
+          .where.not(id: SacCas::MEMBERSHIP_OPERATIONS_EXCLUDED_IDS)
           .where.not(id: membership_roles.joins(:group).pluck("groups.layer_group_id"))
           .select(:id, :name)
       end

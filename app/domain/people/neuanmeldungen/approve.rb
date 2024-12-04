@@ -41,12 +41,12 @@ module People::Neuanmeldungen
 
     def create_approved_role?(role)
       approved_roles_group.roles
-        .where(type: APPROVED_NEUANMELDUNGEN_ROLE.sti_name, person_id: role.person_id)
+        .where(type: approved_neuanmeldungen_role(role).sti_name, person_id: role.person_id)
         .none?
     end
 
     def create_approved_role(role)
-      APPROVED_NEUANMELDUNGEN_ROLE.create!(
+      approved_neuanmeldungen_role(role).create!(
         group: approved_roles_group,
         person: role.person,
         beitragskategorie: role.beitragskategorie,
@@ -63,7 +63,11 @@ module People::Neuanmeldungen
         sent_at: Date.current,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: true).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: new_entry?(role)).enqueue!
+    end
+
+    def new_entry?(role)
+      role.is_a?(Group::SektionsNeuanmeldungenSektion::Neuanmeldung)
     end
 
     def send_confirmation_mail(person)

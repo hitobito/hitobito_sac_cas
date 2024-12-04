@@ -28,7 +28,7 @@ describe Signup::AboMagazinMailer do
     expect(body).to include("<td>Preis</td><td>CHF 60.00</td>")
 
     expect(body).to include("<strong>Deine Angaben</strong><br>")
-    expect(body).to include("<td>Geschlecht</td><td>divers</td>")
+    expect(body).to include("<td>Geschlecht</td><td>weiblich</td>")
     expect(body).to include("<td>Vorname</td><td>Edmund</td>")
     expect(body).to include("<td>Nachname</td><td>Hillary</td>")
     expect(body).to include("<td>E-Mail</td><td>e.hillary@hitobito.example.com</td>")

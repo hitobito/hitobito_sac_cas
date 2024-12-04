@@ -1064,6 +1064,12 @@ de:
     scopes:
       user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
 
+  dropdown/events/courses/mail_dispatch:
+    title: Mailversand
+    leader_reminder: "Kursleitung: Vorbereitung abschliessen"
+    survey: "Teilnehmende: Umfrage"
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
+
   dropdown/people/memberships:
     title: Mitgliedschaft anpassen
     join_zusatzsektion_link: Zusatzsektion beantragen
@@ -1074,6 +1080,7 @@ de:
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
     recipient_households: Empfänger Familien
+    course_data: Adressliste und Kursdaten
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
@@ -1084,6 +1091,12 @@ de:
       key_data_sheets:
         create:
           success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.
+      mail_dispatches:
+        create:
+          success:
+            one: Es wurde eine E-Mail verschickt.
+            other: Es wurden %{count} E-Mails verschickt.
+          warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
       push_down:
         success: Die gespeicherten Daten wurden auf alle aktiven Kurse übertragen.
@@ -1120,10 +1133,11 @@ de:
         summary_course_price: Kurskosten
         summary_subsidy: "- Subvention"
         summary_total: Total
+      contact_data_aside:
         contact_title: Fragen zur Anmeldung
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
-          Mo bis Fr 08:00 - 17:00 Uhr.
+          Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1204,6 +1218,10 @@ de:
         overrides_person_data_info: >-
           Bitte beachte, dass die hier eingegebenen Anpassungen in dein
           Profil übernommen werden.
+    
+    register:
+      email_check:
+        enter_email: "" # to not display in sac wagon
 
   events:
     actions_show_sac_cas:
@@ -1248,7 +1266,7 @@ de:
         allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet.
         Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
-      canceled_reason_label: Grund
+      canceled_reason_label: Grund 
 
   external_trainings:
     form:
@@ -1636,6 +1654,19 @@ de:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
         zusatzsektion: Rechnungsempfänger Zusatzsektion
+
+  public_events:
+    show:
+      login_to_participate: Melde dich an, um an diesem Kurs teilzunehmen
+      with_sac_account: mit deinem SAC-Konto
+      is_sac_account_active: "Für SAC-Mitglieder: Ist dein persönliches SAC-Konto noch nicht aktiviert?"
+      login_questions: Fragen und Antworten zum Login
+      link_fag_sac_account: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/
+      first_time_here: Zum ersten Mal hier?
+      create_account_now: Jetzt dein kostenloses SAC-Konto erstellen
+      wanna_be_a_member: Möchtest du SAC-Mitglied werden?
+      request_sac_membership: SAC Mitgliedschaft beantragen
+      request_sac_membership_link: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
   roles:
     beitragskategorie:

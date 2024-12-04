@@ -34,10 +34,25 @@ describe Invoices::SacMemberships::Member do
     it { expect(subject.sac_ehrenmitglied?).to be_falsey }
     it { expect(subject.sac_magazine?).to be_truthy }
     it { expect(subject.sac_family_main_person?).to be_falsey }
-    it { expect(subject.living_abroad?).to be_falsey }
     it { expect(subject.sektion_ehrenmitglied?(groups(:bluemlisalp))).to be_truthy }
     it { expect(subject.sektion_ehrenmitglied?(groups(:matterhorn))).to be_falsey }
     it { expect(subject.sektion_beguenstigt?(groups(:bluemlisalp))).to be_falsey }
+  end
+
+  context "#living_abroad" do
+    it "is false when person is living in switzerland" do
+      expect(subject.living_abroad?).to be_falsey
+    end
+
+    it "is false when person is living in liechtenstein" do
+      person.update_column(:country, "LI")
+      expect(subject.living_abroad?).to be_falsey
+    end
+
+    it "is true when person is living in germany" do
+      person.update_column(:country, "DE")
+      expect(subject.living_abroad?).to be_truthy
+    end
   end
 
   context "#membership years" do

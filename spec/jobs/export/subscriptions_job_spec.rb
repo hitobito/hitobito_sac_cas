@@ -32,4 +32,23 @@ describe Export::SubscriptionsJob do
       job.perform
     end
   end
+
+  context "with selection param triggering table display export" do
+    subject(:job) do
+      described_class.new(:csv, user.id, mailing_list.id, selection: true, filename: "dummy")
+    end
+
+    it "suceeds in exporting with Familien ID" do
+      Tempfile.create do |file|
+        Subscription.create!(mailing_list: mailing_list, subscriber: people(:familienmitglied))
+        expect(Export::Tabular::People::TableDisplays).to receive(:export).and_call_original
+        expect(AsyncDownloadFile).to receive(:maybe_from_filename).and_return(file)
+        job.perform
+        file.rewind
+        csv = CSV.parse(file.read, col_sep: ";", headers: true)
+        expect(csv.headers).to include "Familien ID"
+        expect(csv.pluck("Familien ID").compact.uniq).to eq %w[F4242]
+      end
+    end
+  end
 end

@@ -783,17 +783,35 @@ describe "signup/sektion", :js do
     end
   end
 
-  describe "self registration for people living abroad" do
-    it "displays abroad_fees in aside" do
+  describe "abroad_fees" do
+    before do
+      travel_to(Date.new(2024, 6, 1))
       visit group_self_registration_path(group_id: group)
       fill_in "E-Mail", with: "max.muster@hitobito.example.com"
       click_button "Weiter"
 
       fill_in "Geburtsdatum", with: "01.01.1980"
+    end
+
+    it "displays abroad_fees in aside for person not living in switzerland" do
       find(:label, "Land").click
       find(:option, text: "Vereinigte Staaten").click
       expect(page).to have_text("+ Gebühren Ausland")
       expect(page).to have_text("CHF 23.00")
+    end
+
+    it "doesnt display abroad_fees in aside for person from switzerland" do
+      find(:label, "Land").click
+      find_all(:option, text: "Schweiz").first.click
+      expect(page).not_to have_text("+ Gebühren Ausland")
+      expect(page).not_to have_text("CHF 23.00")
+    end
+
+    it "doesnt display abroad_fees in aside for person from liechtenstein" do
+      find(:label, "Land").click
+      find_all(:option, text: "Liechtenstein").first.click
+      expect(page).not_to have_text("+ Gebühren Ausland")
+      expect(page).not_to have_text("CHF 23.00")
     end
   end
 

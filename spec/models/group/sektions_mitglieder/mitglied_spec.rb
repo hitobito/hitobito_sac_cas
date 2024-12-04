@@ -22,6 +22,13 @@ describe Group::SektionsMitglieder::Mitglied do
       expect(role.reload.family_id).to eq "4242"
     end
 
+    it "does not set family_id if already set" do
+      role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:,
+        family_id: "F1234")
+      expect(role.family_id).to eq "F1234"
+      expect(role.reload.family_id).to eq "F1234"
+    end
+
     [:adult, :youth].each do |beitragskategorie|
       it "does not set family_id for #{beitragskategorie}" do
         role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:, beitragskategorie: beitragskategorie)

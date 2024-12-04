@@ -42,6 +42,7 @@ module SacImports
 
     def import!
       group.save!
+      setup_mailing_lists
       setup_self_registration
       assign_membership_configs
       archive_group! if row.is_active == "0"
@@ -157,6 +158,49 @@ module SacImports
       phone_numbers.each do |label, number|
         group.phone_numbers.build(number: number, label: label) if phone_valid?(number)
       end
+    end
+
+    def setup_mailing_lists
+      setup_bulletin_digital if row.has_bulletin_digital == "1"
+      setup_bulletin_paper if row.has_bulletin_paper == "1"
+    end
+
+    def setup_mailing_list(internal_key, name, subscribable_for, filter_chain = {})
+      return if group.mailing_lists.find_by(internal_key:)
+
+      group.mailing_lists.create!(
+        internal_key:,
+        name:,
+        filter_chain:,
+        subscribable_for:,
+        subscribable_mode: "opt_in",
+        subscriptions: [
+          Subscription.new(
+            subscriber: group,
+            role_types: [
+              Group::SektionsMitglieder::Mitglied,
+              Group::SektionsMitglieder::MitgliedZusatzsektion
+            ]
+          )
+        ]
+      )
+    end
+
+    def setup_bulletin_digital
+      internal_key = SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY
+      name = "Sektionsbulletin digital"
+      setup_mailing_list(internal_key, name, "anyone")
+    end
+
+    def setup_bulletin_paper
+      internal_key = SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY
+      name = "Sektionsbulletin physisch"
+      setup_mailing_list(internal_key, name, "configured", filter_chain)
+    end
+
+    def filter_chain
+      {"invoice_receiver" =>
+         {"stammsektion" => "true", "zusatzsektion" => "true", "group_id" => group.id.to_s}}
     end
 
     def build_error_messages

@@ -35,9 +35,7 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
-        Event::SurveyJob,
         Export::BackupMitgliederScheduleJob,
-        PromoteNeuanmeldungenJob,
         Qualifications::ExpirationMailerJob,
         Roles::TerminateTourenleiterJob
       ]
@@ -177,6 +175,7 @@ module HitobitoSacCas
       Event::ParticipationConfirmationJob.prepend SacCas::Event::ParticipationConfirmationJob
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
+      Export::EventParticipationsExportJob.prepend SacCas::Export::EventParticipationsExportJob
 
       ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull

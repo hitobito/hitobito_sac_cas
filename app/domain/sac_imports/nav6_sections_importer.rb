@@ -31,7 +31,9 @@ module SacImports
       @csv_report.log("The file contains #{data.size} rows.")
       progress = Progress.new(data.size, title: "NAV6 Sections")
 
-      log_counts_delta(@csv_report, Group.unscoped) do
+      log_counts_delta(@csv_report, Group.unscoped,
+        "Sektionsbulletin Papier" => sektionsbulletin_paper,
+        "Sektionsbulletin Digital" => sektionsbulletin_digital) do
         data.each do |row|
           progress.step
           process_row(row)
@@ -75,7 +77,7 @@ module SacImports
     end
 
     def report(entry)
-      @output.puts("#{row.section_name}: ❌ #{entry.errors}\n") if entry.errors.present?
+      @output.puts("#{entry.section_name}: ❌ #{entry.errors}") if entry.errors.present?
       @csv_report.add_row(
         id: entry.group.id,
         parent_id: entry.group.parent_id,
@@ -83,6 +85,14 @@ module SacImports
         status: entry.errors.blank? ? "success" : "error",
         errors: entry.errors
       )
+    end
+
+    def sektionsbulletin_paper
+      MailingList.where(internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY)
+    end
+
+    def sektionsbulletin_digital
+      MailingList.where(internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY)
     end
   end
 end

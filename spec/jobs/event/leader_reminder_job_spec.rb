@@ -55,9 +55,8 @@ describe Event::LeaderReminderJob do
       end
 
       it "mails a reminder for both" do
-        expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(3)
+        expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)
 
-        expect(ActionMailer::Base.deliveries.third_to_last.body.to_s).to match(/findet nächste Woche/)
         expect(last_email.body.to_s).to match(/findet 6 Wochen/)
       end
     end

@@ -84,6 +84,14 @@ describe Wizards::Signup::SektionOperation do
       expect(max.phone_numbers.first.number).to eq "+41 79 123 45 67"
     end
 
+    describe "language" do
+      it "does use current locale" do
+        allow(I18n).to receive(:locale).and_return(:fr)
+        expect { operation.save! }.to change { Person.count }.by(1)
+        expect(Person.last.language).to eq "fr"
+      end
+    end
+
     describe "gender" do
       it "saves empty string as nil" do
         person_attrs[:gender] = ""
@@ -194,6 +202,11 @@ describe Wizards::Signup::SektionOperation do
         expect(person.roles.last.group).to eq group
         expect(person.phone_numbers.first.label).to eq "Mobil"
         expect(person.phone_numbers.first.number).to eq "+41 79 123 45 67"
+      end
+
+      it "does not update language from locale" do
+        allow(I18n).to receive(:locale).and_return(:fr)
+        expect { operation.save! }.not_to change { person.reload.language }
       end
 
       it "does not duplicate phone_number when id is set" do

@@ -68,12 +68,11 @@ namespace :sac_imports do
     "nav1-1_people",
     "nav3-1_qualifications",
     "nav2a-1_membership_roles",
+    "nav1-2_membership_years_report",
     "nav2a-2_set_family_main_person",
     "nav2a-3_families",
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
-    # "nav8-1_austrittsgruende",
-    # "nav1-2_membership_years_report",
     :update_sac_familiy_address,
     :cleanup,
     :rename_schema
@@ -91,6 +90,11 @@ namespace :sac_imports do
   task "nav1-1_people": :setup do
     SacImports::Nav1PeopleImporter.new.create(start_at_navision_id: ENV["START_AT_NAVISION_ID"])
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav1-1_people")
+  end
+
+  desc "Analyzes imported and calculated membership years and creates report"
+  task "nav1-2_membership_years_report": [:environment] do
+    SacImports::MembershipYearsReport.new.create
   end
 
   desc "Import people from WSO2"
@@ -134,11 +138,6 @@ namespace :sac_imports do
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2b2-roles-non_membership")
   end
 
-  desc "Analyzes imported and calculated membership years and creates report"
-  task "nav1-2_membership_years_report": [:environment] do
-    SacImports::MembershipYearsReport.new.create
-  end
-
   desc "Imports qualifications"
   task "nav3-1_qualifications": [:environment] do
     SacImports::Nav3QualificationsImporter.new.create
@@ -176,7 +175,7 @@ namespace :sac_imports do
   task :dump_database, [:dump_name] => :environment do |t, args|
     target_dir = SacImports::CsvReport::LOG_DIR
 
-    db_config = ActiveRecord::Base.configurations[Rails.env]
+    db_config = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
     db_name = db_config[:database]
     db_user = db_config[:username]
     db_pass = db_config[:password]

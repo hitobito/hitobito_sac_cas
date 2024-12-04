@@ -51,6 +51,8 @@ describe :event_participation, js: true do
 
     is_expected.to have_text("Wichtige Bemerkungen über meine Teilnahme")
     is_expected.to have_selector("dt", text: "Anzahl Mitglieder-Jahre")
+    # Match exact text to check for absence of self_employed label
+    is_expected.to have_selector("tr", text: /^Teilnehmer\/-in$/)
 
     participation = Event::Participation.find_by(event: event, person: person)
 

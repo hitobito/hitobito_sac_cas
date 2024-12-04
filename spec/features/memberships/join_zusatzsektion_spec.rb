@@ -70,7 +70,7 @@ describe "joining zusatzsektion", js: true do
 
     it "can apply as youth member" do
       person.update!(birthday: 20.years.ago)
-      fill_out_form
+      fill_out_form "Jugendmitgliedschaft"
       expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Jugendmitglied beantragt."
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
@@ -100,7 +100,7 @@ describe "joining zusatzsektion", js: true do
         select "SAC Matterhorn"
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Bestätigung"
-        expect(page).to have_content "Beitragskategorien SAC Matterhorn"
+        expect(page).to have_content "Einzelmitgliedschaft SAC Matterhorn"
         expect(page).not_to have_css(".card", text: "einmalige Eintrittsgebühr")
         expect do
           click_on "Kostenpflichtig bestellen"
@@ -119,7 +119,7 @@ describe "joining zusatzsektion", js: true do
         select "SAC Matterhorn"
         click_on "Weiter"
         expect(page).to have_css "li.active", text: "Bestätigung"
-        expect(page).to have_content "Beitragskategorien SAC Matterhorn"
+        expect(page).to have_content "Familienmitgliedschaft SAC Matterhorn"
         expect do
           click_on "Kostenpflichtig bestellen"
           expect(page).to have_css "#flash .alert-success",
@@ -131,13 +131,13 @@ describe "joining zusatzsektion", js: true do
 
   private
 
-  def fill_out_form
+  def fill_out_form(beitragskategorie = "Einzelmitgliedschaft")
     click_link "Mitgliedschaft anpassen"
     click_link "Zusatzsektion beantragen"
     expect(page).to have_css "li.active", text: "Sektion wählen"
     select "SAC Matterhorn"
     click_on "Weiter"
     expect(page).to have_css "li.active", text: "Bestätigung"
-    expect(page).to have_content "Beitragskategorien SAC Matterhorn"
+    expect(page).to have_content "#{beitragskategorie} SAC Matterhorn"
   end
 end

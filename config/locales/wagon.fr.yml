@@ -1108,6 +1108,12 @@ fr:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
 
+  dropdown/events/courses/mail_dispatch:
+    title: ""
+    leader_reminder: ""
+    survey: ""
+    confirmation: ""
+
   dropdown/people/memberships:
     title: Adapter l’adhésion
     join_zusatzsektion_link: Demander une section supplémentaire
@@ -1118,6 +1124,7 @@ fr:
   dropdown/people_export:
     recipients: Destinataire – personne individuelle
     recipient_households: Destinataire – familles
+    course_data: ""
 
   dropdown/group_edit:
     sac_membership_configs: Paramètres pour les factures des membres
@@ -1128,6 +1135,13 @@ fr:
       key_data_sheets:
         create:
           success: La/les fiche(s) technique(s) a/ont été générée(s) et ajoutée(s) au cours en tant qu’annexe.
+      mail_dispatches:
+        create:
+          success:
+            one: ''
+            many: ''
+            other: ''
+          warning: ""
     kinds:
       push_down:
         success: Les données enregistrées ont été transférées à tous les cours actifs.
@@ -1158,10 +1172,9 @@ fr:
         summary_course_price: Frais de cours
         summary_subsidy: "- Subvention"
         summary_total: Total
-        contact_title: Questions sur l’inscription
+      contact_data_aside:
+        contact_title: ""
         contact_text: |
-          Tu peux nous joindre pendant nos heures de bureau
-          du lundi au vendredi de 8 h à 17 h.
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1222,6 +1235,10 @@ fr:
       fields:
         overrides_person_data_info:
           Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
+    
+    register:
+      email_check:
+        enter_email: "" # to not display in sac wagon
 
   events:
     actions_show_sac_cas:
@@ -1257,7 +1274,7 @@ fr:
       cancel_confirmation: ""
       cancel_info: ""
       inform_participants_caption: ""
-      canceled_reason_label: ""
+      canceled_reason_label: "" 
 
   external_trainings:
     form:
@@ -1616,6 +1633,19 @@ fr:
       invoice_receiver:
         stammsektion: ""
         zusatzsektion: ""
+
+  public_events:
+    show:
+      login_to_participate: ""
+      with_sac_account: ""
+      is_sac_account_active: ""
+      login_questions: ""
+      link_fag_sac_account: ""
+      first_time_here: ""
+      create_account_now: ""
+      wanna_be_a_member: ""
+      request_sac_membership: ""
+      request_sac_membership_link: ""
 
   roles:
     beitragskategorie:

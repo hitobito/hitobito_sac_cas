@@ -67,7 +67,7 @@ describe People::SacMembership do
         type: Group::SektionsMitglieder::Mitglied.sti_name,
         group: groups(:bluemlisalp_mitglieder),
         start_on: 1.month.from_now,
-        end_on: Date.current.end_of_year
+        end_on: 1.month.from_now.end_of_year
       )
     end
 

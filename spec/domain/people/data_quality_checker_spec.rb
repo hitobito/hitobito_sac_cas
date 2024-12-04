@@ -25,6 +25,32 @@ describe People::DataQualityChecker do
     expect(person.data_quality).to eq("warning")
   end
 
+  describe "street is blank" do
+    it "creates issue" do
+      person.update_columns(street: nil)
+      checker.check_data_quality
+      expect(person.data_quality_issues.map(&:attr)).to include "street"
+    end
+
+    it "does not create issue if postbox is present" do
+      person.update_columns(street: nil, postbox: "test")
+      checker.check_data_quality
+      expect(person.data_quality_issues.map(&:attr)).not_to include "street"
+    end
+
+    it "clears existing issue if postbox is present" do
+      person.data_quality_issues.create!(attr: :street, key: :empty, severity: :error)
+      checker.check_data_quality
+      expect(person.reload.data_quality_issues.map(&:attr)).not_to include "street"
+    end
+
+    it "does not create issue if postbox is blank for relaxed zip_code" do
+      person.update_columns(street: nil, zip_code: 1148)
+      checker.check_data_quality
+      expect(person.data_quality_issues.map(&:attr)).not_to include "street"
+    end
+  end
+
   it "performs no queries if everything is ok" do
     person.data_quality_issues.create!(attr: :phone_numbers, key: :empty, severity: "warning")
     person.update_column(:data_quality, "warning")

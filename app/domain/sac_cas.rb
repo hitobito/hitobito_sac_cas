@@ -82,8 +82,7 @@ module SacCas
     ::Group::AboMagazin::Neuanmeldung,
     ::Group::AboMagazin::Gratisabonnent,
     ::Group::AboTourenPortal::Abonnent,
-    ::Group::AboTourenPortal::Neuanmeldung,
-    ::Group::AboTourenPortal::Gratisabonnent
+    ::Group::AboTourenPortal::Neuanmeldung
   ].freeze
 
   ###
@@ -112,6 +111,12 @@ module SacCas
       AboCost.new(amount: 45, country: nil)
     ]
   }
+
+  MEMBERSHIP_OPERATIONS_GROUP_TYPES = [::Group::Sektion.sti_name, ::Group::Ortsgruppe.sti_name].freeze
+  MEMBERSHIP_OPERATIONS_EXCLUDED_IDS = [
+    2900, 3700, 2249, 2330, 2601, 3030, 3251,
+    3730, 3952, 3953, 3954, 4530, 4851, 5401
+  ]
 
   def main_phone_label
     Settings.phone_number.predefined_labels.find { |l| l =~ /Haupt/ }

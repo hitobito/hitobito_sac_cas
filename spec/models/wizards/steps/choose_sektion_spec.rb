@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe Wizards::Steps::ChooseSektion do
+  let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:wizard) do
     instance_double(Wizards::Memberships::JoinZusatzsektion, person: people(:abonnent),
       backoffice?: false)
@@ -28,11 +29,23 @@ describe Wizards::Steps::ChooseSektion do
       expect(step.errors[:group_id]).to eq ["ist nicht gültig"]
     end
 
+    it "excluded hard coded group ids" do
+      [
+        2900, 3700, 2249, 2330, 2601, 3030, 3251,
+        3730, 3952, 3953, 3954, 4530, 4851, 5401
+      ].each do |group_id|
+        bluemlisalp.update(id: group_id)
+        step.group_id = groups(:root).id
+        expect(step).not_to be_valid
+        expect(step.errors[:group_id]).to eq ["ist nicht gültig"]
+      end
+    end
+
     context "with existing memberships" do
       before { allow(wizard).to receive(:person).and_return(people(:mitglied)) }
 
       it "validates no mitgliedschaft in group exists" do
-        step.group_id = groups(:bluemlisalp).id
+        step.group_id = bluemlisalp.id
         expect(step).not_to be_valid
 
         expect(step.errors[:group_id]).to eq ["ist nicht gültig"]
@@ -47,7 +60,7 @@ describe Wizards::Steps::ChooseSektion do
 
     context "self service" do
       before do
-        step.group_id = groups(:bluemlisalp).id
+        step.group_id = bluemlisalp.id
       end
 
       it "is invalid when triggered by normal user" do

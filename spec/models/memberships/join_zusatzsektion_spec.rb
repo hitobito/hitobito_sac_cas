@@ -17,19 +17,19 @@ describe Memberships::JoinZusatzsektion do
 
   it "initialization fails if no neuanmeldungen subgroup exists" do
     expect do
-      described_class.new(Group::Sektion.new, :person)
+      described_class.new(Group::Sektion.new, Person.new)
     end.to raise_error("missing neuanmeldungen subgroup")
 
     expect do
-      described_class.new(Group::Ortsgruppe.new, :person)
+      described_class.new(Group::Ortsgruppe.new, Person.new)
     end.to raise_error("missing neuanmeldungen subgroup")
 
     expect do
-      described_class.new(groups(:bluemlisalp), :person)
+      described_class.new(groups(:bluemlisalp), Person.new)
     end.not_to raise_error
 
     expect do
-      described_class.new(groups(:bluemlisalp_ortsgruppe_ausserberg), :person)
+      described_class.new(groups(:bluemlisalp_ortsgruppe_ausserberg), Person.new)
     end.not_to raise_error
   end
 
@@ -167,13 +167,29 @@ describe Memberships::JoinZusatzsektion do
           expect(role.type).to eq "Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion"
         end
 
-        it "falls back to create role in NeuanmeldungenSektionNv group" do
-          groups(:matterhorn_neuanmeldungen_sektion).destroy
-          expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
-            .and change { ExternalInvoice::SacMembership.count }.by(1)
-            .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
-          expect(role.group).to eq groups(:matterhorn_neuanmeldungen_nv)
-          expect(role.type).to eq "Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion"
+        context "without NeuanmeldungenSektionSektion group" do
+          before { groups(:matterhorn_neuanmeldungen_sektion).destroy }
+
+          it "falls back to create role in NeuanmeldungenSektionNv group" do
+            expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
+              .and change { ExternalInvoice::SacMembership.count }.by(1)
+              .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
+            expect(role.group).to eq groups(:matterhorn_neuanmeldungen_nv)
+            expect(role.type).to eq "Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion"
+          end
+
+          describe "updating external invoice" do
+            let(:job) { Delayed::Job.find_by("handler like '%CreateMembershipInvoiceJob%'").payload_object }
+
+            it "does update external invoice via job" do
+              expect_any_instance_of(Invoices::Abacus::CreateInvoiceJob).to receive(:transmit_subject).and_return(true)
+              expect_any_instance_of(Invoices::Abacus::CreateInvoiceJob).to receive(:transmit_sales_order).and_return(true)
+              travel_to(Date.new(2024, 8, 1)) do
+                join_sektion.save!
+                expect { job.perform }.to change { person.external_invoices.last.total }.from(0).to(28)
+              end
+            end
+          end
         end
       end
 

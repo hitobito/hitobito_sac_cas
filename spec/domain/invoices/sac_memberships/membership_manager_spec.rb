@@ -29,6 +29,11 @@ describe Invoices::SacMemberships::MembershipManager do
     Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
+  it "does not fail if running without any actual work todo" do
+    manager = described_class.new(Fabricate(:person), groups(:bluemlisalp_mitglieder), end_of_next_year.year)
+    expect { manager.update_membership_status }.not_to raise_error
+  end
+
   context "person has stammsektions role" do
     def updated_roles_count
       role_dates_before = Role.all.map(&:end_on)
@@ -172,7 +177,7 @@ describe Invoices::SacMemberships::MembershipManager do
       subject { described_class.new(mitglied_person, groups(:matterhorn_neuanmeldungen_nv), end_of_next_year.year) }
 
       it "creates zusatzsektions role" do
-        subject.update_membership_status
+        expect { subject.update_membership_status }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
 
         expect(mitglied_person.roles.count).to eq(2)
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)

@@ -4,19 +4,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 
-#top_leader:
-  #event: top_course
-  #person: leader
-  #active: true
+top_mitglied:
+  event: top_course
+  person_id: 600_001
+  active: true
 
-#top_course_applicant:
-  #event: top_course
-  #person: member
-  #active: false
-  #application: top_course_applicant
-
-#top_participant:
-  #event: top_event
-  #person: member
-  #active: true
-  #application: top_participant
+top_familienmitglied:
+  event: top_course
+  person_id: 600_002
+  active: true

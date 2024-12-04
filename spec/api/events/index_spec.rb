@@ -45,7 +45,7 @@ RSpec.describe "event_levels#index", type: :request do
         leader = people(:tourenchef)
         participation = course.participations.create!(person: leader, active: true)
         Event::Course::Role::Leader.create!(participation: participation)
-        assistant = course.participations.create!(person: people(:familienmitglied), active: true)
+        assistant = event_participations(:top_familienmitglied)
         Event::Course::Role::AssistantLeader.create!(participation: assistant)
 
         jsonapi_get "/api/events", params: {include: "leaders"}
