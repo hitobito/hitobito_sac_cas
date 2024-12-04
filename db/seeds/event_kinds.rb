@@ -101,7 +101,7 @@ def seed_cost_units
     {cost_unit_id: cost_units.fetch("A8500"), locale: "de", label: "SAC - Tourenangebote Sommer"},
     {cost_unit_id: cost_units.fetch("A9000"), locale: "de", label: "SAC - Hüttenwartsausbildung"},
     {cost_unit_id: cost_units.fetch("A9100"), locale: "de", label: "SAC - Kurskaderausbildung"},
-    {cost_unit_id: cost_units.fetch("A9500"), locale: "de", label: "Sektionen - Angebote"})
+    {cost_unit_id: cost_units.fetch("A9500"), locale: "de", label: "SAC - Sektionen"})
 end
 
 ##### Kurskategorien (NAV 13)
@@ -207,8 +207,88 @@ def seed_event_levels
     {event_level_id: levels.fetch(9), locale: "fr", label: "Courses CAS - Niveau moeynnes", description: "Les courses « moyennes » du CAS présentent des difficultés techniques moyennes, un dénivelé de 800 à 1200 mètres et un temps de marche de 5 à 7 heures. Tu disposes d’expérience et tu as déjà suivi un cours de base dans la discipline choisie. Si tu te sens capable de tenir un rythme de 300 mètres de dénivelé par heure, tu profiteras encore plus de la course. Durant les courses tu consolideras les techniques et le savoir transmis dans la formation de base. Les courses d'application « moyennes » constituent une bonne base ou préparation pour participer à un cours de perfectionnement."})
 end
 
+def seed_course_compensation_categories
+  CourseCompensationCategory.seed_once(:short_name,
+    {short_name: "HO-0001", kind: :day, description: "Tageshonorar Bergführer"},
+    {short_name: "HO-0002", kind: :day, description: "Tageshonorar Bergführer Aspirant"},
+    {short_name: "HO-0003", kind: :day, description: "Tageshonorar Kletterlehrer"},
+    {short_name: "HO-0004", kind: :day, description: "Tageshonorar Wanderleiter"},
+    {short_name: "HO-0007", kind: :day, description: "Tageshonorar Schneehschuhleiter"},
+    {short_name: "HO-0008", kind: :day, description: "Tageshonorar Bike-Instruktor"},
+    {short_name: "HO-0009", kind: :day, description: "Tageshonorar Arzt / Assistenzarzt"},
+    {short_name: "HO-0011", kind: :day, description: "Tageshonorar Psychologe"},
+    {short_name: "HO-0012", kind: :day, description: "Tageshonorar Meteorologe"},
+    {short_name: "HON-KAT-I", kind: :day, description: "Tageshonorar/Kurskategorie I"},
+    {short_name: "HON-KAT-II", kind: :day, description: "Tageshonorar/Kurskategorie II"},
+    {short_name: "HON-KAT-III", kind: :day, description: "Tageshonorar/Kurskategorie III"},
+    {short_name: "HON-KAT-IV", kind: :day, description: "Tageshonorar/Kurskategorie IV"},
+    {short_name: "HON-KAT-V", kind: :day, description: "Tageshonorar/Kurskategorie V"},
+    {short_name: "KP-ADMIN-KAT I-IV", kind: :flat, description: "Kurspauschale/Administration"},
+    {short_name: "KP-REISE/MATERIAL", kind: :flat, description: "Kurspauschale/Reise und Material"},
+    {short_name: "KV-0001", kind: :day, description: "Kursvorbereitung Kursleitung"},
+    {short_name: "SPD-0001", kind: :flat, description: "Spesen Diverse"},
+    {short_name: "SPÖ-0001", kind: :flat, description: "Spesen Öffentlicher Verkehr"},
+    {short_name: "SPP-0001", kind: :flat, description: "Spesen Privatauto/Mietauto"},
+    {short_name: "TP-SKI-TECHNIK/PASS", kind: :day, description: "Tagespauschale - Skipass/Skitechnikkurse"},
+    {short_name: "UB-HUETTE", kind: :budget, description: "Budgetvorgabe für SAC Hütte"})
+
+  categories = CourseCompensationCategory.pluck(:short_name, :id).to_h
+  CourseCompensationCategory::Translation.seed_once(:course_compensation_category_id, :locale,
+    {course_compensation_category_id: categories.fetch("HO-0001"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Bergführer", name_assistant_leader: "Tageshonorar – Klassenleitung/Bergführer"},
+    {course_compensation_category_id: categories.fetch("HO-0002"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Bergführer Aspirant", name_assistant_leader: "Tageshonorar – Klassenleitung/Bergführer Aspirant"},
+    {course_compensation_category_id: categories.fetch("HO-0003"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kletterlehrer", name_assistant_leader: "Tageshonorar – Klassenleitung/Kletterlehrer"},
+    {course_compensation_category_id: categories.fetch("HO-0004"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Wanderleiter", name_assistant_leader: "Tageshonorar – Klassenleitung/Wanderleiter"},
+    {course_compensation_category_id: categories.fetch("HO-0007"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Schneeschuhleiter", name_assistant_leader: "Tageshonorar – Klassenleitung/Schneeschuhleiter"},
+    {course_compensation_category_id: categories.fetch("HO-0008"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Bike-Instruktor", name_assistant_leader: "Tageshonorar – Klassenleitung/Bike-Instruktor"},
+    {course_compensation_category_id: categories.fetch("HO-0009"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Arzt / Assistenzarzt", name_assistant_leader: "Tageshonorar – Klassenleitung/Arzt / Assistenzarzt"},
+    {course_compensation_category_id: categories.fetch("HO-0011"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Psychologe", name_assistant_leader: "Tageshonorar – Klassenleitung/Psychologe"},
+    {course_compensation_category_id: categories.fetch("HO-0012"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Meteorologe", name_assistant_leader: "Tageshonorar – Klassenleitung/Meteorologe"},
+    {course_compensation_category_id: categories.fetch("HON-KAT-I"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kurskategorie I", name_assistant_leader: "Tageshonorar – Klassenleitung/Kurskategorie I"},
+    {course_compensation_category_id: categories.fetch("HON-KAT-II"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kurskategorie II", name_assistant_leader: "Tageshonorar – Klassenleitung/Kurskategorie II"},
+    {course_compensation_category_id: categories.fetch("HON-KAT-III"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kurskategorie III", name_assistant_leader: "Tageshonorar – Klassenleitung/Kurskategorie III"},
+    {course_compensation_category_id: categories.fetch("HON-KAT-IV"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kurskategorie IV", name_assistant_leader: "Tageshonorar – Klassenleitung/Kurskategorie IV"},
+    {course_compensation_category_id: categories.fetch("HON-KAT-V"), locale: "de", name_leader: "Tageshonorar – Kursleitung/Kurskategorie V", name_assistant_leader: "Tageshonorar – Klassenleitung/Kurskategorie V"},
+    {course_compensation_category_id: categories.fetch("KP-ADMIN-KAT I-IV"), locale: "de", name_leader: "Kurspauschale – Kursleitung/Administration", name_assistant_leader: ""},
+    {course_compensation_category_id: categories.fetch("KP-REISE/MATERIAL"), locale: "de", name_leader: "Kurspauschale – Kursleitung/Reise und Material", name_assistant_leader: "Kurspauschale – Klassenleitung/Reise und Material"},
+    {course_compensation_category_id: categories.fetch("KV-0001"), locale: "de", name_leader: "Kursvorbereitung Kursleitung", name_assistant_leader: ""},
+    {course_compensation_category_id: categories.fetch("SPD-0001"), locale: "de", name_leader: "Spesen Kursleitung – Diverse", name_assistant_leader: "Spesen Klassenleitung – Diverse"},
+    {course_compensation_category_id: categories.fetch("SPÖ-0001"), locale: "de", name_leader: "Spesen – Kursleitung/Öffentlicher Verkehr", name_assistant_leader: "Spesen – Klassenleitung/Öffentlicher Verkehr"},
+    {course_compensation_category_id: categories.fetch("SPP-0001"), locale: "de", name_leader: "Spesen – Kursleitung/Privatauto/Mietauto", name_assistant_leader: "Spesen – Klassenleitung/Privatauto/Mietauto"},
+    {course_compensation_category_id: categories.fetch("TP-SKI-TECHNIK/PASS"), locale: "de", name_leader: "Tagespauschale – Kursleitung/Skipass/Skitechnikkurse", name_assistant_leader: "Tagespauschale – Klassenleitung/Skipass/Skitechnikkurse"},
+    {course_compensation_category_id: categories.fetch("UB-HUETTE"), locale: "de", name_leader: "SAC Hütte", name_assistant_leader: "SAC Hütte"})
+end
+
+def seed_course_compensation_rates
+  categories = CourseCompensationCategory.pluck(:short_name, :id).to_h
+  CourseCompensationRate.seed_once(:course_compensation_category_id,
+    {course_compensation_category_id: categories.fetch("HO-0001"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0002"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 440.00, rate_assistant_leader: 440.00},
+    {course_compensation_category_id: categories.fetch("HO-0003"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0004"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0007"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0008"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0009"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0011"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HO-0012"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 530.00, rate_assistant_leader: 530.00},
+    {course_compensation_category_id: categories.fetch("HON-KAT-I"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 550.00, rate_assistant_leader: 540.00},
+    {course_compensation_category_id: categories.fetch("HON-KAT-II"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 470.00, rate_assistant_leader: 460.00},
+    {course_compensation_category_id: categories.fetch("HON-KAT-III"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 570.00, rate_assistant_leader: 540.00},
+    {course_compensation_category_id: categories.fetch("HON-KAT-IV"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 600.00, rate_assistant_leader: 560.00},
+    {course_compensation_category_id: categories.fetch("HON-KAT-V"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 550.00, rate_assistant_leader: 540.00},
+    {course_compensation_category_id: categories.fetch("KP-ADMIN-KAT I-IV"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 150.00, rate_assistant_leader: 0.00},
+    {course_compensation_category_id: categories.fetch("KP-REISE/MATERIAL"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 130.00, rate_assistant_leader: 130.00},
+    {course_compensation_category_id: categories.fetch("KV-0001"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 50.00, rate_assistant_leader: 0.00},
+    {course_compensation_category_id: categories.fetch("SPD-0001"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 0.00, rate_assistant_leader: 0.00},
+    {course_compensation_category_id: categories.fetch("SPÖ-0001"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 0.00, rate_assistant_leader: 0.00},
+    {course_compensation_category_id: categories.fetch("SPP-0001"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 0.70, rate_assistant_leader: 0.70},
+    {course_compensation_category_id: categories.fetch("TP-SKI-TECHNIK/PASS"), valid_from: "2024-01-01", valid_to: nil, rate_leader: 60.00, rate_assistant_leader: 60.00},
+    {course_compensation_category_id: categories.fetch("UB-HUETTE"), valid_from: "2024-01-01", valid_to: "2024-12-31", rate_leader: 0.00, rate_assistant_leader: 0.00})
+end
+
 # once the integration environment is seeded, only seed when the database is empty
 seed_cost_centers # unless CostCenter.exist?
 seed_cost_units # unless CostUnit.exist?
 seed_event_kind_categories # unless Event::KindCategory.exist?
 seed_event_levels # unless Event::Level.exist?
+seed_course_compensation_categories # unless CourseCompensationCategory.exist?
+seed_course_compensation_rates # unless CourseCompensationRate.exist?
