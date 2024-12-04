@@ -111,6 +111,7 @@ module Memberships
 
     def save_people
       affected_people.each do |person|
+        person.subscriptions.destroy_all
         newsletter&.subscribe_if(person, subscribe_newsletter)
         fundraising&.subscribe_if(person, subscribe_fundraising_list)
 

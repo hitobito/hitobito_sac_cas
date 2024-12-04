@@ -26,7 +26,6 @@ describe Invoices::SacMemberships::Member do
         group: groups(:bluemlisalp_mitglieder),
         start_on: "2022-08-01"
       )
-      person.subscriptions.create(mailing_list: mailing_lists(:sac_magazine))
     end
 
     it { expect(subject.age).to eq(date.year - person.birthday.year) }

@@ -6,14 +6,14 @@
 newsletter:
   group: root
   name: Newsletter
-  subscribable_for: configured
+  subscribable_for: anyone
   subscribable_mode: opt_in
 
 sac_magazine:
   group: root
   name: Die Alpen
   subscribable_for: configured
-  subscribable_mode: opt_in
+  subscribable_mode: opt_out
 
 fundraising:
   group: root
