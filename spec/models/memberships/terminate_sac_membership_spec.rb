@@ -210,70 +210,15 @@ describe Memberships::TerminateSacMembership do
       end
 
       describe "subscriptions" do
-        before { params[:data_retention_consent] = true }
-
-        context "with opt_out newsletter" do
-          before { mailing_list.update!(subscribable_mode: :opt_out) }
-
-          it "destroys superfluous subscription and creates exclude" do
-            Fabricate(:subscription, subscriber: person, mailing_list: mailing_list)
-            expect do
-              expect(termination.save!).to eq true
-            end
-              .to change { person.subscriptions.included.count }.by(-1)
-              .and change { mailing_list.subscribed?(person) }.from(true).to(false)
-            expect(person.subscriptions.included.count).to eq 0
-            pending("TODO: Should it create an exclude record? See https://github.com/hitobito/hitobito/issues/3058")
-            expect(person.subscriptions.excluded.count).to eq 1
-          end
-
-          it "creates exclude when param is not set" do
-            expect do
-              expect(termination.save!).to eq true
-            end
-              .to change { mailing_list.subscribed?(person) }.from(true).to(false)
-              .and not_change { person.subscriptions.included.count }
-            expect(person.subscriptions.included.count).to eq 0
-            pending("TODO: Should it create an exclude record? See https://github.com/hitobito/hitobito/issues/3058")
-            expect(person.subscriptions.excluded.count).to eq 1
-          end
-
-          it "creates newsletter subscription" do
-            params[:subscribe_newsletter] = true
-            expect do
-              expect(termination.save!).to eq true
-            end.to change { mailing_list.subscriptions.count }.by(1)
-            # TODO: Is it necessary to create an exclude record? See https://github.com/hitobito/hitobito/issues/3058")
-            expect(person.subscriptions.included.count).to eq 1
-            expect(person.subscriptions.excluded.count).to eq 0
-            expect(mailing_list.subscribed?(person)).to be true
-          end
-
-          it "does not fail on existing subscription" do
-            params[:subscribe_newsletter] = true
-            mailing_list.subscriptions.create!(subscriber: person)
-            expect do
-              expect(termination.save!).to eq true
-            end.not_to change { mailing_list.subscriptions.count }
-            expect(person.subscriptions.included.count).to eq 1
-            expect(person.subscriptions.excluded.count).to eq 0
-            expect(mailing_list.subscribed?(person)).to be true
-          end
+        it "destroys existing subscriptions" do
+          Fabricate(:subscription, subscriber: person, mailing_list: mailing_list)
+          expect do
+            expect(termination.save!).to eq true
+          end.to change { person.subscriptions.count }.by(-1)
         end
 
-        context "with opt_in newsletter" do
-          before { mailing_list.update!(subscribable_mode: :opt_in) }
-
-          it "destroys existing subscriptions when param is not set" do
-            Person::Subscriptions.new(person).subscribe(mailing_list)
-            expect do
-              expect(termination.save!).to eq true
-            end.to change { person.subscriptions.count }.by(-1)
-
-            expect(person.subscriptions.included.count).to eq 0
-            expect(person.subscriptions.excluded.count).to eq 0
-            expect(mailing_list.subscribed?(person)).to be false
-          end
+        describe "root group newsletter" do
+          before { root.update!(sac_newsletter_mailing_list_id: mailing_list.id) }
 
           it "noops when param is not set" do
             expect do
@@ -287,14 +232,15 @@ describe Memberships::TerminateSacMembership do
             expect do
               expect(termination.save!).to eq true
             end.to change { mailing_list.subscriptions.count }.by(1)
-            pending("person should be subscribed. See https://github.com/hitobito/hitobito/issues/3058")
             expect(mailing_list.subscribed?(person)).to be true
           end
 
-          pending "does not fail on existing subscription" do
+          it "does not fail on existing subscription" do
             params[:subscribe_newsletter] = true
             Person::Subscriptions.new(person).subscribe(mailing_list)
+            expect(mailing_list.subscribed?(person)).to be true
             expect do
+              binding.pry
               expect(termination.save!).to eq true
             end.not_to change { mailing_list.subscriptions.count }
 
