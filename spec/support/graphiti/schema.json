@@ -3089,6 +3089,11 @@
         }
       },
       "extra_attributes": {
+        "membership_years": {
+          "type": "integer",
+          "readable": true,
+          "description": null
+        }
       },
       "sorts": {
         "id": {
