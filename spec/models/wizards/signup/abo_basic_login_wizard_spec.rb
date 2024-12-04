@@ -93,17 +93,15 @@ describe Wizards::Signup::AboBasicLoginWizard do
 
     it "creates newsletter subscription" do
       required_attrs[:person_fields][:newsletter] = "1"
-      expect do
-        expect { wizard.save! }.to change { max.subscriptions.count }
-      end
+      wizard.save!
+      expect(max.subscriptions).to have(1).item
       expect(newsletter.people).to eq [max]
     end
 
     it "does not create newsletter subscription" do
       required_attrs[:person_fields][:newsletter] = "0"
-      expect do
-        expect { wizard.save! }.not_to change { max.subscriptions.count }
-      end
+      wizard.save!
+      expect(max.subscriptions).to be_empty
       expect(newsletter.people).to be_empty
     end
   end
