@@ -74,7 +74,6 @@ module Invoices
       def build_positions
         member = Member.new(person, context)
         new_entry = !member.stammsektion
-        member.sac_magazine = new_entry
 
         membership = Membership.new(section, beitragskategorie, main)
         PositionGenerator.new(member).generate([membership], new_entry:)

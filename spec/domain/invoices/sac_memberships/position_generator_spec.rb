@@ -18,7 +18,6 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:magazine_list) { mailing_lists(:sac_magazine) }
 
   before do
-    travel_to date # TODO: this should not be necessary and might mask date related bugs
     SacMembershipConfig.update_all(valid_from: 2020)
     SacSectionMembershipConfig.update_all(valid_from: 2020)
     Role.update_all(end_on: date + 3.months)
@@ -212,7 +211,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
       context "without subscription" do
         before do
-          magazine_list.exclude_person(person)
+          magazine_list.subscriptions.create!(subscriber: person, excluded: true)
         end
 
         it "generates positions" do
@@ -648,7 +647,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
     context "last year without reduction" do
       before do
-        roles(:mitglied).update!(start_on: 1.year.ago)
+        roles(:mitglied).update!(start_on: Date.new(date.year - 1, 7, 13))
       end
 
       it "generates positions without reduction" do
@@ -671,7 +670,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:date) { Date.new(2023, 7, 1) }
 
       before do
-        Role.update_all(end_on: date.end_of_year)
+        Role.with_inactive.update_all(end_on: date.end_of_year)
       end
 
       it "generates discounted positions" do
@@ -841,6 +840,38 @@ describe Invoices::SacMemberships::PositionGenerator do
           expect(positions[5].article_number).to eq(config.section_entry_fee_article_number)
         end
       end
+
+      context "living abroad" do
+        before do
+          person.update!(country: "DE")
+        end
+
+        it "generates positions" do
+          expect(positions.size).to eq(8)
+
+          expect(positions[0].name).to eq("sac_fee")
+          expect(positions[0].amount).to eq(40.0)
+          expect(positions[1].name).to eq("hut_solidarity_fee")
+          expect(positions[1].amount).to eq(20.0)
+          expect(positions[2].name).to eq("sac_magazine")
+          expect(positions[2].amount).to eq(25.0)
+          expect(positions[3].name).to eq("sac_magazine_postage_abroad")
+          expect(positions[3].amount).to eq(10.0)
+
+          expect(positions[4].name).to eq("section_fee")
+          expect(positions[4].amount).to eq(42.0)
+          expect(positions[5].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[5].amount).to eq(13.0)
+
+          expect(positions[6].name).to eq("sac_entry_fee")
+          expect(positions[6].amount).to eq(10.0)
+          expect(positions[6].label).to eq("Eintrittsgebühr Zentralverband")
+
+          expect(positions[7].name).to eq("section_entry_fee")
+          expect(positions[7].amount).to eq(10.0)
+          expect(positions[7].label).to eq("Eintrittsgebühr SAC Blüemlisalp")
+        end
+      end
     end
   end
 
@@ -876,7 +907,7 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:beitragskategorie) { :youth }
 
       before do
-        Group::SektionsMitglieder::MitgliedZusatzsektion.where(person: person, beitragskategorie: :youth).delete_all
+        Group::SektionsMitglieder::MitgliedZusatzsektion.with_inactive.where(person: person, beitragskategorie: :youth).delete_all
         create_neuanmeldung_zusatzsektion
       end
 

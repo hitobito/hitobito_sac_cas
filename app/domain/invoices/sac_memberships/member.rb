@@ -11,7 +11,6 @@ module Invoices
 
     class Member
       attr_reader :person, :context, :sac_membership
-      attr_writer :sac_magazine
 
       delegate :id, :to_s, :language, :sac_family_main_person?, to: :person
       delegate :date, :sac_magazine_mailing_list, to: :context
@@ -74,7 +73,14 @@ module Invoices
       def sac_magazine?
         return @sac_magazine if defined?(@sac_magazine)
 
-        @sac_magazine = sac_magazine_mailing_list.subscribed?(person)
+        # Explicitly check for exclusion because `subscribed?` filters for roles active today,
+        # not at `context.date`.
+        # Furthermore, Neuanmeldung roles would not count as subscribed either, even though
+        # they will always obtain the magazine initially.
+        @sac_magazine =
+          !sac_magazine_mailing_list
+            .subscriptions
+            .exists?(subscriber: person, excluded: true)
       end
 
       def paying_person?(beitragskategorie)
