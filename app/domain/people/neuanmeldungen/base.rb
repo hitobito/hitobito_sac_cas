@@ -22,8 +22,12 @@ module People::Neuanmeldungen
     end
 
     def applicable_people
-      @applicable_people ||= Person.order_by_name.where(id: people_ids).select("*").flat_map do |person|
-        person.household.people
+      @applicable_people ||= Person.order_by_name.where(id: people_ids).includes(:roles).select("*").flat_map do |person|
+        if family_neuanmeldungs_role?(person)
+          person.household.people
+        else
+          person
+        end
       end.uniq
     end
 
@@ -32,6 +36,10 @@ module People::Neuanmeldungen
     end
 
     private
+
+    def family_neuanmeldungs_role?(person)
+      person.roles.where(type: NEUANMELDUNGEN_ROLES.map(&:sti_name), group: group).family.any?
+    end
 
     def approved_neuanmeldungen_role(role)
       role_type = role.class.to_s.demodulize
