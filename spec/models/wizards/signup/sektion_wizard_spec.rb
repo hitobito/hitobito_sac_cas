@@ -139,6 +139,7 @@ describe Wizards::Signup::SektionWizard do
     let(:max) { Person.find_by(email: "max.muster@example.com") }
     let(:maxi) { Person.find_by(first_name: "Maxi") }
     let(:maxine) { Person.find_by(first_name: "Maxine") }
+    let(:newsletter) { mailing_lists(:newsletter) }
 
     before { @current_step = 3 }
 
@@ -212,20 +213,22 @@ describe Wizards::Signup::SektionWizard do
         expect(maxi.privacy_policy_accepted_at).to eq Time.zone.now
       end
 
-      it "creates newsletter exclusion for all" do
-        freeze_time
-        required_attrs[:summary_fields][:newsletter] = "0"
-        wizard.save!
-        expect(max.subscriptions).to have(1).item
-        expect(maxi.subscriptions).to have(1).items
-      end
-
-      it "creates roles but no newsletter exclusions" do
+      it "creates roles and newsletter subscription for all" do
         freeze_time
         required_attrs[:summary_fields][:newsletter] = "1"
         expect { wizard.save! }.to change { Role.count }.by(2)
+        expect(max.subscriptions).to have(1).item
+        expect(maxi.subscriptions).to have(1).items
+        expect(mailing_lists(:newsletter).people).to match_array [max, maxi]
+      end
+
+      it "does not create newsletter subscription" do
+        freeze_time
+        required_attrs[:summary_fields][:newsletter] = "0"
+        expect { wizard.save! }.to change { Role.count }.by(2)
         expect(max.subscriptions).to be_empty
         expect(maxi.subscriptions).to be_empty
+        expect(mailing_lists(:newsletter).people).to be_empty
       end
     end
 

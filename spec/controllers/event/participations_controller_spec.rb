@@ -146,7 +146,7 @@ describe Event::ParticipationsController do
         expect(response).to render_template("new")
         expect(dom).to have_css "#error_explanation", text: "AGB muss akzeptiert werden"
       end.not_to change { Event::Participation.count }
-      expect(newsletter.subscribed?(user)).to be_truthy
+      expect(newsletter.subscribed?(user)).to be_falsey
     end
 
     it "does not check conditions for non root courses" do
@@ -162,10 +162,12 @@ describe Event::ParticipationsController do
       it "is defined and user is subscribed by default" do
         expect(Group.root.sac_newsletter_mailing_list_id).to be_present
         expect(MailingList.where(id: Group.root.sac_newsletter_mailing_list_id)).to be_exist
-        expect(newsletter.subscribed?(user)).to be_truthy
+        expect(newsletter.subscribed?(user)).to be_falsey
       end
 
       context "subscribed" do
+        before { newsletter.subscriptions.create!(subscriber: user) }
+
         it "does nothing if newsletter is true" do
           expect do
             post :create,
@@ -196,8 +198,6 @@ describe Event::ParticipationsController do
       end
 
       context "unsubscribed" do
-        before { newsletter.subscriptions.create!(subscriber: user, excluded: true) }
-
         it "subscribes to sac mailing list" do
           expect do
             post :create,

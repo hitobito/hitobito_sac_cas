@@ -573,7 +573,6 @@ describe "signup/sektion", :js do
 
   describe "supplements" do
     let(:root) { groups(:root) }
-    let(:list) { Fabricate(:mailing_list, group: root) }
 
     before do
       visit group_self_registration_path(group_id: group)
@@ -581,14 +580,14 @@ describe "signup/sektion", :js do
       click_button "Weiter als Einzelmitglied"
     end
 
-    it "creates excluding subscription if newsletter is unchecked" do
-      root.update!(sac_newsletter_mailing_list_id: list.id)
+    it "creates including subscription if newsletter is checked" do
       click_button "Weiter"
-      uncheck "Ich möchte einen Newsletter abonnieren"
+      check "Ich möchte einen Newsletter abonnieren"
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-      expect(person.subscriptions.excluded).to have(1).items
+      expect(person.subscriptions.excluded).to have(0).items
+      expect(person.subscriptions.included).to have(1).items
     end
 
     it "persists self_registration_reason" do

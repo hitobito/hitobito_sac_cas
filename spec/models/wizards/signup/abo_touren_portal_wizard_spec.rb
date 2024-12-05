@@ -85,6 +85,7 @@ describe Wizards::Signup::AboTourenPortalWizard do
 
   describe "saving" do
     let(:max) { Person.find_by(email: "max.muster@example.com") }
+    let(:newsletter) { mailing_lists(:newsletter) }
 
     before {
       group.save!
@@ -100,10 +101,18 @@ describe Wizards::Signup::AboTourenPortalWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
-    it "creates newsletter exclusion for all" do
+    it "does not create newsletter subscription" do
       required_attrs[:person_fields][:newsletter] = "0"
       wizard.save!
+      expect(max.subscriptions).to be_empty
+      expect(newsletter.people).to be_empty
+    end
+
+    it "does create newsletter subscription if required" do
+      required_attrs[:person_fields][:newsletter] = "1"
+      wizard.save!
       expect(max.subscriptions).to have(1).item
+      expect(newsletter.people).to eq [max]
     end
   end
 end
