@@ -75,8 +75,7 @@ namespace :sac_imports do
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
     :update_sac_familiy_address,
-    :cleanup,
-    :rename_schema
+    :cleanup
   ] do
     puts "\e[42;31;1m 😃 All imports done and final DB dump completed 😃 \e[0m"
   end
@@ -123,7 +122,7 @@ namespace :sac_imports do
   end
 
   desc "Update family addresses to be the same as the main person"
-  task update_sac_familiy_address: [:environment] do
+  task update_sac_family_address: [:environment] do
     SacImports::FamilyAddressUpdater.new.update
   end
 
@@ -159,18 +158,6 @@ namespace :sac_imports do
   desc "Run cleanup tasks"
   task cleanup: [:environment] do
     SacImports::Cleanup.new.run
-  end
-
-  desc "Rename schema 'public' → 'database' and generate dump"
-  task rename_schema: :setup do
-    puts "\e[1;33mRenaming schema 'public' → 'database'\e[0m"
-    ActiveRecord::Base.connection.execute <<~SQL
-      ALTER SCHEMA public RENAME TO database;
-    SQL
-    Rake::Task["sac_imports:dump_database"].execute(dump_name: "renamed-schema")
-    ActiveRecord::Base.connection.execute <<~SQL
-      ALTER SCHEMA database RENAME TO public;
-    SQL
   end
 
   task :dump_database, [:dump_name] => :environment do |t, args|
