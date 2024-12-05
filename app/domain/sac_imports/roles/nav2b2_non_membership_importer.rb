@@ -26,11 +26,9 @@ module SacImports::Roles
 
         create_role(row, group, person, role_type, row.role_description)
         # report(row, person, message: "Role '#{role_type.label}' created in '#{group.decorate
-        #                                                                      .label_with_parent}'")
-      rescue ActiveRecord::RecordInvalid => e
-        report(row, person, message: "Role '#{role_type.label}' in '#{group.decorate.label_with_parent}'", error: e.message)
+        #
       rescue => e
-        report(row, person, message: "Role '#{role_type.label}' in '#{group.decorate.label_with_parent}'", error: "#{e.message}, #{e.backtrace.first}")
+        log(row, person, role_type, group, error: "#{e.message}, #{e.backtrace.first}")
       end
     end
 
@@ -46,10 +44,25 @@ module SacImports::Roles
         .first_or_initialize(label: role_label)
       role.write_attribute(:terminated, true) if role_type.terminatable && row.terminated?
       role.save!(context: :import) if role.new_record?
+    rescue ActiveRecord::RecordInvalid => e
+      if e.message =~ /Person muss mindestens eine aktive Qualifikation besitzen/ &&
+          e.record.is_a?(Group::SektionsTourenUndKurse::Tourenleiter)
+        # handle special case where a Tourenleiter role is created without a currently valid qualification
+        log(row, person, role_type, group,
+          warning: "Person has no valid qualification for Tourenleiter role, created TourenleiterOhneQualifikation instead")
+        create_role(row, group, person, Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation, role_label)
+      else
+        log(row, person, role_type, group, error: e.message)
+      end
     end
 
     def find_role_type(group, role_label)
       group.role_types.find { |role_type| role_type.label == role_label }
+    end
+
+    def log(row, person, role_type, group, warning: nil, error: nil)
+      message = "Role '#{role_type.label}' in '#{group.decorate.label_with_parent}'"
+      report(row, person, message:, warning:, error:)
     end
   end
 end
