@@ -193,8 +193,9 @@ describe Wizards::Signup::SektionOperation do
           .and not_change { person.reload.last_name }
           .and change { person.roles.count }.by(1)
           .and change { Subscription.count }.by(1)
-          .and change { Delayed::Job.count }.by(1)
-          .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }
+          .and change { Delayed::Job.count }.by(2)
+          .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }.by(1)
+          .and change { Delayed::Job.where("handler like '%Invoices::Abacus::TransmitPersonJob%'").count }.by(1)
           .and not_change { ExternalInvoice::SacMembership.count }
           .and not_change { ActionMailer::Base.deliveries.count }
 

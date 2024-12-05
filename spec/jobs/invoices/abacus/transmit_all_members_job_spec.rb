@@ -20,6 +20,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
       people(:familienmitglied),
       people(:familienmitglied2),
       people(:familienmitglied_kind),
+      people(:abonnent),
       valid_person,
       create_person(params: {abacus_subject_key: "129", first_name: "Jane", last_name: "Doe"}),
       create_person(params: {abacus_subject_key: "130", first_name: "Jeffery", last_name: "Doe"}),
@@ -29,6 +30,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
   let(:unexpected_people) do
     Fabricate.times(2, :person)
+    Group::AboMagazin::Neuanmeldung.create!(person: Fabricate(:person), group: groups(:abo_die_alpen))
   end
 
   def create_mix_of_people
@@ -139,7 +141,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
                     })
       allow(Delayed::Worker).to receive(:max_attempts).and_return(2)
       expect { Delayed::Worker.new.run(job.enqueue!) }
-        .to change { HitobitoLogEntry.where(level: :error).count }.by(6)
+        .to change { HitobitoLogEntry.where(level: :error).count }.by(7)
 
       # test that error is logged through error method
       expect(HitobitoLogEntry.where(level: :error).last.message).to eq("Die Personendaten konnten nicht an Abacus übermittelt werden")

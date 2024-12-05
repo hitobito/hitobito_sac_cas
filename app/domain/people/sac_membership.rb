@@ -102,6 +102,10 @@ class People::SacMembership
       (@person.sac_family_main_person? || individual_membership?)
   end
 
+  def abonnent?
+    active_roles_of_type(Group::AboMagazin::Abonnent.sti_name).present?
+  end
+
   def family?(consider_neuanmeldung: false)
     [
       stammsektion_role,

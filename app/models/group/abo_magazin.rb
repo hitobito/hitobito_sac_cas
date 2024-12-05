@@ -11,6 +11,16 @@ class Group::AboMagazin < ::Group
     self.permissions = []
     self.basic_permissions_only = true
     self.terminatable = true
+
+    after_create_commit :transmit_data_to_abacus
+
+    private
+
+    def transmit_data_to_abacus
+      Invoices::Abacus::TransmitPersonJob.new(person).enqueue! if
+        person.abacus_subject_key.blank? &&
+          person.data_quality != "error"
+    end
   end
 
   class Neuanmeldung < ::Role

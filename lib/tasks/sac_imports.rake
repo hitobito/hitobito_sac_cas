@@ -21,6 +21,7 @@ namespace :sac_imports do
     Person.skip_callback(:update, :after, :schedule_duplicate_locator)
     Person.skip_callback(:commit, :after, :transmit_data_to_abacus)
     Group::SektionsMitglieder::Mitglied.skip_callback(:commit, :after, :transmit_data_to_abacus)
+    Group::AboMagazin::Abonnent.skip_callback(:commit, :after, :transmit_data_to_abacus)
 
     Person.skip_callback(:save, :after, :check_data_quality)
     Group::SektionsMitglieder::Mitglied.skip_callback(:create, :after, :check_data_quality)
