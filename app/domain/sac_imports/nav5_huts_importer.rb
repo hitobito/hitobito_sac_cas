@@ -57,11 +57,7 @@ module SacImports
       @csv_report.log("The file contains #{rows.size} rows.")
       progress = SacImports::Progress.new(rows.size * ROW_IMPORTERS.size, title: "NAV5 Huts")
 
-      log_counts_delta(csv_report,
-        Group::SacCasClubhuette,
-        Group::Sektionshuetten,
-        Group::SektionsClubhuette,
-        Group::SacCasPrivathuette) do
+      log_counts_delta(csv_report, Group) do
         import_sac_cas_hut_groups
         ROW_IMPORTERS.each do |importer_class|
           rows.each do |row|
