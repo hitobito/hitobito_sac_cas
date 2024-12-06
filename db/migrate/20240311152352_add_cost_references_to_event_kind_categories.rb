@@ -30,21 +30,28 @@ class AddCostReferencesToEventKindCategories < ActiveRecord::Migration[6.1]
 
   private
 
-  def insert_default(kind)
+  def insert_default(table)
+    return if entries_exist?(table) || !entries_exist?("event_kind_categories") || Rails.env.test?
+
     now = connection.adapter_name =~ /sqlite/i ? "datetime('now')" : "now()"
-    return if select_value("SELECT COUNT(*) FROM #{kind};").positive? || Rails.env.test?
-    execute "INSERT INTO #{kind} (code, created_at, updated_at) VALUES ('dummy', #{now}, #{now})"
+    execute "INSERT INTO #{table} (code, created_at, updated_at) VALUES ('dummy', #{now}, #{now})"
   end
 
-  def remove_default(kind)
-    execute "DELETE FROM #{kind} WHERE code = 'dummy';"
+  def remove_default(table)
+    execute "DELETE FROM #{table} WHERE code = 'dummy';"
   end
 
   def update_kind_categories
+    return unless entries_exist?("event_kind_categories")
+
     execute <<~SQL
     UPDATE event_kind_categories SET
       cost_center_id = (SELECT id FROM cost_centers ORDER BY id LIMIT 1),
       cost_unit_id = (SELECT id FROM cost_units ORDER BY id LIMIT 1)
     SQL
+  end
+
+  def entries_exist?(table)
+    select_value("SELECT COUNT(*) FROM #{table};").positive?
   end
 end
