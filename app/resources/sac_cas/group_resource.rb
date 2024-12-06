@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-#
 # Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
 # hitobito_sac_cas and licensed under the Affero General Public License version 3
 # or later. See the COPYING file at the top-level directory or at
@@ -47,5 +46,14 @@ module SacCas::GroupResource
       @object.decorate.membership_self_registration_url
     end
     on_extra_attribute(:membership_self_registration_url) { |scope| scope.includes(:children) }
+
+    %w[section_fee section_entry_fee].product(SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN).each do |prefix, suffix|
+      attr = [prefix, suffix].join("_")
+
+      extra_attribute attr.to_sym, :big_decimal, writable: false, sortable: false do
+        next unless @object.respond_to?(:sac_section_membership_configs)
+        @object.active_sac_section_membership_config.send(attr)
+      end
+    end
   end
 end
