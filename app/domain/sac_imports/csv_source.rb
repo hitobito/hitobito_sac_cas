@@ -15,6 +15,7 @@ class SacImports::CsvSource
     NAV2b: Nav2b,
     NAV3: Nav3,
     NAV6: Nav6,
+    NAV17: Nav17,
     WSO21: Wso2
   }.freeze
 
@@ -33,7 +34,7 @@ class SacImports::CsvSource
       next unless filter.blank? || filter_match?(row, filter)
 
       if block_given?
-        yield rows
+        yield row
       else
         data << row
       end
