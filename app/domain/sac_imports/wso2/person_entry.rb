@@ -121,7 +121,7 @@ module SacImports::Wso2
       person.birthday = row.birthday
       person.gender = gender
       person.language = language
-      build_phone_number(person, :phone, "Hauptnummer")
+      build_phone_number(person, :phone, "Haupt-Telefon")
       build_phone_number(person, :phone_business, "Arbeit")
     end
 
