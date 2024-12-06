@@ -83,7 +83,6 @@ describe MailingList do
         Group::SacCasPrivathuette::Huettenwart,
         Group::SacCasPrivathuette::Huettenchef,
         Group::SacCasPrivathuette::Andere,
-        Group::SacCasClubhuetten::Schreibrecht,
         Group::SacCasClubhuette::Huettenwart,
         Group::SacCasClubhuette::Huettenchef,
         Group::SacCasClubhuette::Andere,
@@ -118,8 +117,6 @@ describe MailingList do
         Group::SektionsKommissionUmweltUndKultur::Mitglied,
         Group::SektionsKommissionUmweltUndKultur::Praesidium,
         Group::SektionsKommissionUmweltUndKultur::Andere,
-        Group::SektionsKommission::Leserecht,
-        Group::SektionsKommission::Schreibrecht,
         Group::SektionsKommission::Mitglied,
         Group::SektionsKommission::Praesidium,
         Group::SektionsKommission::Andere
