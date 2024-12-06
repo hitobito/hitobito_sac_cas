@@ -1755,6 +1755,36 @@
           "type": "string",
           "readable": true,
           "description": null
+        },
+        "section_fee_adult": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
+        },
+        "section_fee_youth": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
+        },
+        "section_fee_family": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
+        },
+        "section_entry_fee_adult": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
+        },
+        "section_entry_fee_youth": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
+        },
+        "section_entry_fee_family": {
+          "type": "big_decimal",
+          "readable": true,
+          "description": null
         }
       },
       "sorts": {
