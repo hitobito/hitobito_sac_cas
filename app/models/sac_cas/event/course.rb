@@ -103,18 +103,6 @@ module SacCas::Event::Course
     # all course state specific callbacks are defined here
     include Events::Courses::State
 
-    translates :brief_description, :specialities, :similar_tours, :program
-
-    i18n_enum :language, LANGUAGES
-    i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
-    i18n_enum :meals, MEALS, i18n_prefix: "activerecord.attributes.event/course.meals_options"
-    i18n_enum :accommodation,
-      Event::Kind::ACCOMMODATIONS,
-      i18n_prefix: "#{I18N_KIND}.accommodations"
-    i18n_enum :start_point_of_time, START_POINTS_OF_TIME
-    i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
-    enum canceled_reason: CANCELED_REASONS
-
     self.role_types = [Event::Course::Role::Leader,
       Event::Course::Role::AssistantLeader,
       Event::Course::Role::Participant]
@@ -161,17 +149,31 @@ module SacCas::Event::Course
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
 
+    translates :brief_description, :specialities, :similar_tours, :program
+
+    i18n_enum :language, LANGUAGES
+    i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
+    i18n_enum :meals, MEALS, i18n_prefix: "activerecord.attributes.event/course.meals_options"
+    i18n_enum :accommodation,
+      Event::Kind::ACCOMMODATIONS,
+      i18n_prefix: "#{I18N_KIND}.accommodations"
+    i18n_enum :start_point_of_time, START_POINTS_OF_TIME
+    i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
+    enum :canceled_reason, CANCELED_REASONS # TODO convert column to string and remove this line for consistent enum handling
+
+    attribute :waiting_list, default: false
+
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
+
     validates :number, presence: true, uniqueness: {if: :number}
     validates :description, :application_opening_at, :application_closing_at, :contact_id,
       :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
       :accommodation, :price_member, :price_regular,
       presence: {unless: :weak_validation_state?}
+    validates :canceled_reason, presence: {if: -> { state_changed_to?(:canceled) }}
 
     delegate :level, to: :kind, allow_nil: true
-
-    attribute :waiting_list, default: false
 
     def total_event_days
       @total_event_days ||= begin
