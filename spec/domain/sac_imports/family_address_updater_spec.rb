@@ -37,7 +37,7 @@ describe SacImports::FamilyAddressUpdater do
     let!(:main_person) {
       create_family_member(1, sac_family_main_person: true,
         birthday: 50.years.ago).tap do |person|
-        person.update_columns(street: nil)
+        person.update_columns(street: nil, postbox: nil)
       end
     }
     let!(:family_member) {
@@ -75,7 +75,7 @@ describe SacImports::FamilyAddressUpdater do
                 household_key: household_key,
                 street: Faker::Address.street_name,
                 housenumber: Faker::Address.building_number,
-                postbox: [nil, Faker::Address.secondary_address].sample,
+                postbox: Faker::Address.secondary_address,
                 zip_code: Faker::Address.zip,
                 town: Faker::Address.city,
                 # hardcode to make sure it is not CH, otherwise the zip is validated -> flaky specs

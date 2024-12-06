@@ -33,7 +33,6 @@ module Events::Courses::State
     self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
 
     validate :assert_valid_state_change, if: :state_changed?
-    validates :canceled_reason, presence: true, if: -> { state_changed_to?(:canceled) }
 
     before_create :set_default_state
     before_save :adjust_application_state, if: :application_closing_at_changed?

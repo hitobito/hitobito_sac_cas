@@ -216,9 +216,9 @@ module SacImports::Wso2
     end
 
     def find_person
-      return Person.find_by(id: navision_id) if navision_id.present?
-
-      Person.tagged_with(um_id_tag).first
+      person ||= Person.find_by(id: navision_id) if navision_id.present?
+      person ||= Person.find_by(email: email) if email.present?
+      person || Person.tagged_with(um_id_tag).first
     end
 
     def warn(message)

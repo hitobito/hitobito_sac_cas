@@ -167,6 +167,11 @@ describe SacImports::Wso2::PersonEntry do
         row[:um_id] = "42"
       end
 
+      it "finds the person by email" do
+        row[:email] = people(:mitglied).email
+        expect(entry.person).to eq(people(:mitglied))
+      end
+
       it "finds the person by tag" do
         people(:mitglied).update!(tag_list: "UM-ID-42")
         expect(entry.person).to eq(people(:mitglied))
@@ -267,15 +272,6 @@ describe SacImports::Wso2::PersonEntry do
           it "assigns the email" do
             expect(entry.person.email).to eq(row[:email])
             expect(entry.warning).to be_blank
-          end
-
-          it "adds additional_email if the email is already taken" do
-            row[:email] = people(:familienmitglied).email # email of another person record
-            expect(entry.person.email).to be_blank
-            expect(entry.person.additional_emails.map(&:email)).to eq [row[:email]]
-            expect(entry.warning).to eq(
-              "Email #{row[:email]} already exists in the system, importing with additional_email."
-            )
           end
         end
 

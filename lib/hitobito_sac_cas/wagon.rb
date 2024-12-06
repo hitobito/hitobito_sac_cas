@@ -124,6 +124,7 @@ module HitobitoSacCas
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
       EventResource.include SacCas::EventResource
+      RoleResource.include SacCas::RoleResource
       Event::CourseResource.include SacCas::Event::CourseResource
       Event::KindResource.include SacCas::Event::KindResource
       Person::NameResource.course_leader_role = Event::Course::Role::Leader
