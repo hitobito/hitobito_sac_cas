@@ -287,7 +287,7 @@ describe SacImports::Wso2::PersonEntry do
             row[:phone] = "invalid"
             expect(entry.person.phone_numbers.map(&:number)).to eq [row[:phone_business]]
             expect(entry.person.notes.map(&:text)).to eq [
-              "Importiert mit ungültiger Telefonnummer Hauptnummer: 'invalid'"
+              "Importiert mit ungültiger Telefonnummer Haupt-Telefon: 'invalid'"
             ]
           end
         end

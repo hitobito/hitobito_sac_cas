@@ -10,7 +10,7 @@ class SacImports::CsvSource
   # they must match the order of the columns in the CSV files
   Wso2 = Data.define(
     :um_id, # "UM_ID",
-    :_um_user_name, # "UM_USER_NAME",
+    :um_user_name, # "UM_USER_NAME",
     :wso2_legacy_password_hash, # "UM_USER_PASSWORD",
     :wso2_legacy_password_salt, # "UM_SALT_VALUE",
     :_um_changed_time, # "UM_CHANGED_TIME",
