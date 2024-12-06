@@ -115,9 +115,7 @@ fr:
 
     errors:
       messages:
-        youth_not_allowed_in_family: |
-          Les adolescent·e·s âgé·e·s de %{from_age} à %{to_age} ans ne peuvent pas être admis·e·s
-          dans une adhésion familiale.
+        youth_not_allowed_in_family: >
         invalid_date_range: "doit se situer entre %{start_on} et %{end_on} "
 
       models:
@@ -136,16 +134,19 @@ fr:
           attributes:
             base:
               birthday_missing: "%{person_name} n’a pas de date de naissance."
-              family_age_range_not_fulfilled: "%{person_name} ne peut pas être ajouté·e. Seules les personnes âgées de 6 à 17 ans ou de 22 ans et plus sont autorisées."
-              in_other_household_present: "%{person_name} ne peut pas être ajouté·e, car la personne est déjà attribuée à une autre famille."
-              membership_in_other_section: "%{person_name} est déjà membre d’une autre section"
+              family_age_range_not_fulfilled: >-
+                %{person_name} ne peut pas être ajouté·e. Seules les personnes âgées de 6 à 17 ans ou de 22 ans et plus sont autorisées.
+              in_other_household_present: >-
+                %{person_name} ne peut pas être ajouté·e, car la personne est déjà attribuée à une autre famille.
+              membership_in_other_section: >-
+                %{person_name} est déjà membre d’une autre section
               no_email: "%{person_name} n’a pas d’adresse e-mail."
               planned_termination: "%{person_name} a prévu une résiliation."
         memberships/join_base:
           attributes:
             person:
               must_be_sac_member: doit être membre du CAS
-              must_not_be_join_section_member:
+              must_not_be_join_section_member: >-
                 est déjà membre de la section ou a une demande d’adhésion ouverte
               must_be_family_main_person: doit être la personne principale de la famille
         person:
@@ -157,13 +158,14 @@ fr:
             less_than_6_years_before_entry: se situe moins de 6 ans avant l’entrée au CAS
 
         wizards/steps/choose_sektion:
-          requires_admin: "Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous"
+          requires_admin: >
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: est déjà pris. L’e-mail doit être unique pour chaque personne.
         wizards/steps/check_data_quality_errors:
-          data_quality_error: L’action ne peut pas être effectuée en raison de données non valables. Merci de relancer l’action après avoir corrigé les données.
+          data_quality_error: >-
+            L’action ne peut pas être effectuée en raison de données non valables. Merci de relancer l’action après avoir corrigé les données.
     models:
       people/neuanmeldungen/approve:
         one: Reprendre l’inscription
@@ -1147,22 +1149,22 @@ fr:
         success: Les données enregistrées ont été transférées à tous les cours actifs.
       actions_edit:
         push_down_button: Transférer des données vers des cours
-        push_down_button_confirm:
-          "Voulez-vous vraiment transférer les données enregistrées à tous les cours actifs? Ce faisant, les valeurs actuelles seront écrasées."
+        push_down_button_confirm: >-
+          Voulez-vous vraiment transférer les données enregistrées à tous les cours actifs? Ce faisant, les valeurs actuelles seront écrasées.
       kind_category_field:
-        category_overrides_link_title:
-          "Les champs suivants sont repris: Centre de coûts, Support de coûts"
+        category_overrides_link_title: >-
+          Les champs suivants sont repris: Centre de coûts, Support de coûts
     kind_categories:
       push_down:
-        success:
-          "Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés."
+        success: >-
+          Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés.
       actions_edit:
         push_down_button: Transférer des données vers des types de cours
-        push_down_button_confirm:
-          "Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées."
-
+        push_down_button_confirm: >-
+          Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
     participations:
-      missing_information: "Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait."
+      missing_information: >-
+        Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
       answers_step:
         total_duration_days_help: "Durée prévue du cours: %{total_days} jours"
       edit:
@@ -1184,7 +1186,8 @@ fr:
         canceled: Tu as été désinscrit de ce cours.
         rejected: Les critères d’admission ne sont pas remplis. C’est pourquoi nous avons dû refuser ton inscription.
         summoned: Tu es convoqué·e pour ce cours.
-        unconfirmed: Tu es préinscrit·e à ce cours. L’inscription n’est pas encore définitive et doit être confirmée par l’administration du cours.
+        unconfirmed: >-
+          Tu es préinscrit·e à ce cours. L’inscription n’est pas encore définitive et doit être confirmée par l’administration du cours.
       step_wizard:
         answers_title: Données supplémentaires
         subsidy_title: Subvention
@@ -1194,11 +1197,11 @@ fr:
         subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
-        general_info:
-          "En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier."
+        general_info: >-
+          En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
-        detail_info_text:
-          "Une inscription signée par le·la chef·fe de randonnée ou la cheffe de randonnée confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>."
+        detail_info_text: >-
+          Une inscription signée par le·la chef·fe de randonnée ou la cheffe de randonnée confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>.
       summary_step:
         annulation_remarks: |
           Il est recommandé de souscrire une assurance pour frais d’annulation. Les frais d’annulation suivants seraient assumés par le client/la cliente en cas d’annulation avant le début du cours:
@@ -1223,19 +1226,17 @@ fr:
         create_course_leader_invoice_button: ""
       popover_create_course_leader_settlement:
         create_invoice: ""
-        info_text_html: ""
+        info_text_html: >
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
       popover_participant_cancels:
-        cancel_info:
-          "Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Les éventuels frais de traitement et d’annulation sont facturés avec la désinscription."
-
+        cancel_info: >-
+          Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Les éventuels frais de traitement et d’annulation sont facturés avec la désinscription.
     participation_contact_datas:
       fields:
-        overrides_person_data_info:
+        overrides_person_data_info: >-
           Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
-    
     register:
       email_check:
         enter_email: "" # to not display in sac wagon
@@ -1251,7 +1252,8 @@ fr:
         assignment_closed: Finaliser l’attribution
         ready: Prêt pour la réalisation
         closed: Finaliser
-        closed_confirm_text: La finalisation fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d’annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
+        closed_confirm_text: >-
+          La finalisation fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d’annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: Annulations
       state_back_buttons:
         assignment_closed: Retour à l’attribution
@@ -1262,8 +1264,8 @@ fr:
       prices: Prix
 
     general_fields:
-      kind_overrides_link_title:
-        "Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts"
+      kind_overrides_link_title: >-
+        Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
     roles:
       self_employed: travailleur·se indépendant·e
@@ -1271,8 +1273,8 @@ fr:
 
     popover_canceled_reason:
       cancel_button: ""
-      cancel_confirmation: ""
-      cancel_info: ""
+      cancel_confirmation: >
+      cancel_info: >
       inform_participants_caption: ""
       canceled_reason_label: "" 
 
@@ -1313,10 +1315,7 @@ fr:
         has_account: "As-tu déjà un login CAS?"
         to_login_page: S’inscrire
       abo_issue:
-        issues_from_help: |
-          L’abonnement prend effet à partir du prochain numéro possible.
-          Si le magazine doit être livré à une date ultérieure, merci de nous informer du début de la livraison.
-          indique-nous à partir de quel numéro nous pouvons commencer la livraison.
+        issues_from_help: >
       abo_infos:
         annual_price_header: Prix par an
         delivery_country_header: Pays d’expédition
@@ -1324,10 +1323,11 @@ fr:
         switzerland: Suisse
         international: Dans le monde entier
         duration_title: Durée et renouvellement de l’abonnement
-        duration_text: Tu reçois une facture annuelle à l’avance. L’abonnement peut être résilié à tout moment pour la fin de la période en cours.
+        duration_text: >-
+          Tu reçois une facture annuelle à l’avance. L’abonnement peut être résilié à tout moment pour la fin de la période en cours.
       create:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
-        existing_membership_notice: ""
+        existing_membership_notice: >
         existing_family_notice: ""
         signed_up_notice: ""
 
@@ -1344,14 +1344,13 @@ fr:
         register_on_info:
           jul: "En cas d’adhésion à partir du 1er juillet, tu bénéficies d’une réduction de 50% sur la cotisation annuelle."
           oct: "En cas d’adhésion à partir du 1er octobre, la cotisation annuelle est supprimée."
-        register_as_info: "Tu peux soit adhérer au CAS Blüemlisalp en tant que section supplémentaire, soit la choisir comme nouvelle section de base et quitter ainsi ton ancienne section de base. Remarque pour les familles: le changement de section de base est automatiquement valable pour tous·tes les membres de la famille. En revanche, l’adhésion à une section supplémentaire ne vaut que pour toi."
+        register_as_info: >
         inscribe: Rejoindre
       new:
         role_exists: Tu es déjà membre de cette section
       confirm:
         title: Confirmer l’adhésion
         information_text: >
-          Veuillez confirmer votre adhésion à la section %{sektion}. Cette procédure ne peut pas être annulée.
         submit_button: Demander l’adhésion
 
   groups/self_inscription:
@@ -1375,8 +1374,8 @@ fr:
       title: Gérer la famille
       shared_address_info: Tous·tes les membres de la famille partagent la même adresse.
     members_table_row:
-      unconfirmed_email_info: L’adresse e-mail doit être confirmée avant que la personne puisse être retirée de la famille.
-
+      unconfirmed_email_info: >-
+        L’adresse e-mail doit être confirmée avant que la personne puisse être retirée de la famille.
   household_aside_component:
     section_name: Famille
   household_aside_member_component:
@@ -1511,8 +1510,8 @@ fr:
         maximum_class_size: Nombre maximal d’élèves par classe
         class_teacher:
           label: Enseignant·e
-          text: La direction est assurée par les enseignant·e·s en fonction du nombre maximal de participant·e·s. Merci de l’indiquer dans le programme détaillé des cours et de l’envoyer par e-mail au secrétariat pour les randonnées.
-
+          text: >-
+            La direction est assurée par les enseignant·e·s en fonction du nombre maximal de participant·e·s. Merci de l’indiquer dans le programme détaillé des cours et de l’envoyer par e-mail au secrétariat pour les randonnées.
   passes:
     membership:
       file_name_prefix: SAC-CarteMembre
@@ -1526,8 +1525,7 @@ fr:
   person:
     history:
       index_notice_sac_cas:
-        sections_info_html: 'Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>'
-
+        sections_info_html: >
   people:
     membership:
       verify:
@@ -1538,13 +1536,17 @@ fr:
           membership_years: "Nombre d’années d’adhésion: %{membership_years}"
 
     membership_invoices:
-      no_invoice_possible: "Il n’y a pas de frais d’adhésion pour la personne et la section souhaitées, ou ceux-ci sont déjà couverts par d’autres factures."
-      no_memberships: "Il n’y a pas d’adhésion pour la section souhaitée à la date choisie. Aucune facture n’a donc été créée."
+      no_invoice_possible: >-
+        Il n’y a pas de frais d’adhésion pour la personne et la section souhaitées, ou ceux-ci sont déjà couverts par d’autres factures.
+      no_memberships: >-
+        Il n’y a pas d’adhésion pour la section souhaitée à la date choisie. Aucune facture n’a donc été créée.
       success_notice: "La facture souhaitée est générée et transmise à Abacus."
       new:
         title: "Créer une facture d’adhésion"
-        alert_info: "Après confirmation de ce dialogue, une facture d’adhésion est créée et envoyée au membre par e-mail ou par courrier. Il n’est pas procédé à une vérification pour savoir s’il existe déjà des factures d’adhésion ou dans quel statut elles se trouvent. Dans tous les cas, une nouvelle facture est émise. Aucune mutation ou prolongation de rôle n’est effectuée."
-        alert_warning: "Cette personne ne dispose pas de sa propre facture d’adhésion. Le cas échéant, les frais seront déduits de la facture d’une autre personne."
+        alert_info: >-
+          Après confirmation de ce dialogue, une facture d’adhésion est créée et envoyée au membre par e-mail ou par courrier. Il n’est pas procédé à une vérification pour savoir s’il existe déjà des factures d’adhésion ou dans quel statut elles se trouvent. Dans tous les cas, une nouvelle facture est émise. Aucune mutation ou prolongation de rôle n’est effectuée.
+        alert_warning: >-
+          Cette personne ne dispose pas de sa propre facture d’adhésion. Le cas échéant, les frais seront déduits de la facture d’une autre personne.
         alert_error: "Les contrôles de qualité des données suivants empêchent la création d’une facture d’adhésion:"
         create_invoice: "Créer une facture"
         mv_yearly_invoice: "Comptes annuels du service des membres"
@@ -1581,7 +1583,8 @@ fr:
     external_invoices:
       table:
         cancel_invoice: Annuler
-        cancel_invoice_confirmation: "Voulez-vous vraiment annuler cette facture? Cette action ne peut pas être annulée."
+        cancel_invoice_confirmation: >-
+          Voulez-vous vraiment annuler cette facture? Cette action ne peut pas être annulée.
       cancel:
         flash: "La facture %{invoice} (n° de commande %{abacus_sales_order_key}) est annulée"
       list:
@@ -1594,11 +1597,13 @@ fr:
       job_scheduling_info: "La procédure d’encaissement annuel a été lancée avec succès."
       new:
         title: "Début encaissement annuel du service des membres"
-        schedule_info_alert: "Lors de l’envoi de ce dialogue, l’encaissement annuel est lancé pour tous·tes les membres et les données sont transmises à Abacus. L’encaissement annuel ne peut pas être interrompu et dure plusieurs heures. Les rôles des membres sont ainsi prolongés."
-        job_already_scheduled_alert: "Une procédure d’encaissement annuel est déjà en cours. Ce n’est que lorsque cette procédure est terminée qu’une nouvelle peut être lancée."
+        schedule_info_alert: >-
+          Lors de l’envoi de ce dialogue, l’encaissement annuel est lancé pour tous·tes les membres et les données sont transmises à Abacus. L’encaissement annuel ne peut pas être interrompu et dure plusieurs heures. Les rôles des membres sont ainsi prolongés.
+        job_already_scheduled_alert: >-
+          Une procédure d’encaissement annuel est déjà en cours. Ce n’est que lorsque cette procédure est terminée qu’une nouvelle peut être lancée.
         create_invoice: "Démarrer"
-        submit_confirmation: "Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée."
-
+        submit_confirmation: >-
+          Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1801,16 +1806,15 @@ fr:
           family_fields:
             add: Ajouter un·e autre membre de la famille
             email_taken: >
-              L’adresse e-mail est déjà enregistrée et cette personne ne peut donc pas être ajoutée à la famille. Merci de contacter le service des membres pour enregistrer ta famille: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >
-              En ajoutant d’autres personnes, tu optes pour une adhésion familiale. Celle-ci est possible pour deux adultes au maximum, âgés de 23 ans ou plus, et un nombre illimité d’enfants âgés de 6 à 17 ans.
-
-              L’adhésion familiale est également possible pour les couples sans enfants. Si tu souhaites créer une adhésion familiale avec un membre déjà existant, contacte le secrétariat du CAS.
           various_fields:
             immediate_entry_date: "Date d’entrée: immédiatement"
-            period_info_1: "Jusqu’au %{date_to}, la cotisation complète de l’année en cours est due. D’autres frais peuvent encore s’appliquer si l’adresse de correspondance est enregistrée à l’étranger."
-            period_info_2: "En cas d’adhésion entre le %{date_from} et le %{date_to}, tu bénéficies d’une réduction de %{discount}sur la cotisation annuelle de l’année en cours. D’autres frais peuvent s’appliquer si l’adresse de correspondance est enregistrée à l’étranger."
-            period_info_3: "En cas d’adhésion à partir du %{date_from}, la cotisation annuelle de l’année en cours n’est pas due. D’autres frais peuvent encore s’appliquer si l’adresse de correspondance est enregistrée à l’étranger."
+            period_info_1: >-
+              Jusqu’au %{date_to}, la cotisation complète de l’année en cours est due. D’autres frais peuvent encore s’appliquer si l’adresse de correspondance est enregistrée à l’étranger.
+            period_info_2: >-
+              En cas d’adhésion entre le %{date_from} et le %{date_to}, tu bénéficies d’une réduction de %{discount}sur la cotisation annuelle de l’année en cours. D’autres frais peuvent s’appliquer si l’adresse de correspondance est enregistrée à l’étranger.
+            period_info_3: >-
+              En cas d’adhésion à partir du %{date_from}, la cotisation annuelle de l’année en cours n’est pas due. D’autres frais peuvent encore s’appliquer si l’adresse de correspondance est enregistrée à l’étranger.
           family_buttons:
             next_as_single_link: Continuer en tant que membre individuel·le
             next_as_household_link: Continuer comme adhésion familiale
@@ -1820,8 +1824,10 @@ fr:
           summary_fields:
             my_membership: "Mon adhésion"
             family_members: "Membres de la famille"
-            info_alert_neuanmeldungen_sektion: "Ta demande définitive sera transmise à la section %{name}. La section décide de l’admission de nouveaux·elles membres. Tu seras informé·e par e-mail dès que la décision sera prise."
-            info_alert_neuanmeldungen_nv: "Après avoir fait ta demande d’adhésion formelle, tu recevras la facture par e-mail."
+            info_alert_neuanmeldungen_sektion: >-
+              Ta demande définitive sera transmise à la section %{name}. La section décide de l’admission de nouveaux·elles membres. Tu seras informé·e par e-mail dès que la décision sera prise.
+            info_alert_neuanmeldungen_nv: >-
+              Après avoir fait ta demande d’adhésion formelle, tu recevras la facture par e-mail.
             entry_per: "Entrée au:"
             next_button: Demander une adhésion
           summary_person_card:
@@ -1839,9 +1845,10 @@ fr:
           contribution_regulations_text: "J’ai lu et j’accepte les %{link} "
           data_protection_text: "J’ai lu et j’accepte les %{link}"
       choose_sektion:
-        no_self_service_info_text: "Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous"
-        backoffice_no_self_service_info_text:
-          "Attention: le changement a lieu dans une section qui procède elle-même à l’admission des membres. Le cas échéant, tu dois clarifier ce changement au préalable avec la section."
+        no_self_service_info_text: >-
+          Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous
+        backoffice_no_self_service_info_text: >-
+          Attention: le changement a lieu dans une section qui procède elle-même à l’admission des membres. Le cas échéant, tu dois clarifier ce changement au préalable avec la section.
       choose_membership:
         not_main_family_person_info_text: >-
           Tu peux souscrire une adhésion supplémentaire en tant que personne seule. Si l’adhésion supplémentaire doit être valable pour toute la famille, la personne principale de la famille doit y souscrire. Pour cela, adresse-toi à %{name}.
@@ -1852,37 +1859,44 @@ fr:
         choose_date:
           info_text: "Quand le changement de section doit-il avoir lieu?"
         summary:
-          info_text: "L’adhésion de base à %{sektion} est demandée en tant que %{beitragskategorie}. La section comprend un processus de validation manuel. Merci de clarifier au préalable l’admission des membres avec%{sektion}. Merci de procéder à la facturation après la commande, si une nouvelle facture doit être établie. L’adhésion à la nouvelle section de base est valable immédiatement."
-          info_text_no_confirmation: "L’adhésion de base à %{sektion} est demandée en tant que %{beitragskategorie}. Ceci ne déclenche pas de facture. Merci de procéder à la facturation après la commande, si une nouvelle facture doit être établie. L’adhésion à la nouvelle section de base est valable immédiatement."
+          info_text: >-
+            L’adhésion de base à %{sektion} est demandée en tant que %{beitragskategorie}. La section comprend un processus de validation manuel. Merci de clarifier au préalable l’admission des membres avec%{sektion}. Merci de procéder à la facturation après la commande, si une nouvelle facture doit être établie. L’adhésion à la nouvelle section de base est valable immédiatement.
+          info_text_no_confirmation: >-
+            L’adhésion de base à %{sektion} est demandée en tant que %{beitragskategorie}. Ceci ne déclenche pas de facture. Merci de procéder à la facturation après la commande, si une nouvelle facture doit être établie. L’adhésion à la nouvelle section de base est valable immédiatement.
           next_button: Commande payante
       join_zusatzsektion:
         summary:
-          admission: ""
-          admission_through_gs: ""
+          admission: >
+          admission_through_gs: >
           next_button: Commande payante
       membership_terminated_info:
-        info: "Ton adhésion a été annulée au %{date}. Si tu souhaites réactiver ton adhésion, merci de te rendre sur le site du CAS."
+        info: >-
+          Ton adhésion a été annulée au %{date}. Si tu souhaites réactiver ton adhésion, merci de te rendre sur le site du CAS.
       termination_choose_date:
         info_text: "Quand la sortie doit-elle avoir lieu?"
-        warning_termination_by_section_only: "Attention: la démission a lieu dans une section où la fonction de démission est désactivée pour le membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section."
+        warning_termination_by_section_only: >-
+          Attention: la démission a lieu dans une section où la fonction de démission est désactivée pour le membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section.
         membership_already_terminated: ""
       termination_no_self_service:
         info_text: "Nous te prions de demander ta démission par téléphone ou par e-mail. Pour ce faire, prends contact avec nous."
       ask_family_main_person:
-        info_text: "La sortie de la section supplémentaire ne peut être demandée que pour l’ensemble de l’adhésion familiale et doit être demandée par la personne principale de ton adhésion familiale. Merci de t’adresser à %{family_main_person}."
+        info_text: >-
+          La sortie de la section supplémentaire ne peut être demandée que pour l’ensemble de l’adhésion familiale et doit être demandée par la personne principale de ton adhésion familiale. Merci de t’adresser à %{family_main_person}.
       leave_zusatzsektion:
         summary:
-          family_warning: "Attention: la sortie de la section supplémentaire est demandée pour l’ensemble de l’adhésion familiale. Sont concerné·e·s: %{family_member_names}."
+          family_warning: >-
+            Attention: la sortie de la section supplémentaire est demandée pour l’ensemble de l’adhésion familiale. Sont concerné·e·s: %{family_member_names}.
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
           next_button: "Demander une résiliation"
       termination:
         summary:
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
-          termination_by_section_only: "Attention: la résiliation concerne une section où la fonction de démission est désactivée pour le·la membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section."
+          termination_by_section_only: >-
+            Attention: la résiliation concerne une section où la fonction de démission est désactivée pour le·la membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section.
           family_warning: "Attention: la résiliation est demandée pour l’ensemble des membres de la famille. Sont concerné·e·s: %{family_member_names}."
           data_retention_info_title: "Conservation de tes données"
-          data_retention_info_text:
-            "Après ta sortie, nous conservons tes données pendant six douze mois avant de les supprimer définitivement. La suppression a les conséquences suivantes pour toi: si tu souhaites adhérer à nouveau au CAS plus tard, tu devras à nouveau payer les frais d’entrée et ton nombre d’années d’adhésion repartira de zéro. Le cas échéant, les qualifications obtenues et les formations suivies (y compris les heures de formation continue) seront supprimées. Ton login CAS sera supprimé et tu ne pourras plus l’utiliser à d’autres fins, par exemple dans l’application CAS). Si tu ne le souhaites pas, tu dois nous autoriser ici à conserver tes données après ta démission."
+          data_retention_info_text: >-
+            Après ta sortie, nous conservons tes données pendant six douze mois avant de les supprimer définitivement. La suppression a les conséquences suivantes pour toi: si tu souhaites adhérer à nouveau au CAS plus tard, tu devras à nouveau payer les frais d’entrée et ton nombre d’années d’adhésion repartira de zéro. Le cas échéant, les qualifications obtenues et les formations suivies (y compris les heures de formation continue) seront supprimées. Ton login CAS sera supprimé et tu ne pourras plus l’utiliser à d’autres fins, par exemple dans l’application CAS). Si tu ne le souhaites pas, tu dois nous autoriser ici à conserver tes données après ta démission.
           data_retention_consent: "Je souhaite que mes données soient conservées après ma sortie du CAS."
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."

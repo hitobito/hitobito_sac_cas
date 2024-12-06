@@ -115,7 +115,7 @@ en:
 
     errors:
       messages:
-        youth_not_allowed_in_family: |
+        youth_not_allowed_in_family: >
         invalid_date_range: "must be between %{start_on} and %{end_on} "
 
       models:
@@ -134,16 +134,19 @@ en:
           attributes:
             base:
               birthday_missing: "%{person_name} has no date of birth."
-              family_age_range_not_fulfilled: "%{person_name} cannot be added. Only persons aged 6-17 or 22 years and older are permitted."
-              in_other_household_present: "%{person_name} cannot be added as the person is already assigned to another family."
-              membership_in_other_section: "%{person_name} is already a member of another section."
+              family_age_range_not_fulfilled: >-
+                %{person_name} cannot be added. Only persons aged 6-17 or 22 years and older are permitted.
+              in_other_household_present: >-
+                %{person_name} cannot be added as the person is already assigned to another family.
+              membership_in_other_section: >-
+                %{person_name} is already a member of another section.
               no_email: "%{person_name} does not have a confirmed e-mail address."
               planned_termination: "%{person_name} has planned to leave the company."
         memberships/join_base:
           attributes:
             person:
               must_be_sac_member: must be a Sac member
-              must_not_be_join_section_member:
+              must_not_be_join_section_member: >-
                 is already a member of the section or has an open application for membership
               must_be_family_main_person: must be the main person in the family
         person:
@@ -155,13 +158,13 @@ en:
             less_than_6_years_before_entry: is less than 6 years before joining the SAC
 
         wizards/steps/choose_sektion:
-          requires_admin: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
+          requires_admin: >
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: is already taken. The e-mail must be unique per person.
         wizards/steps/check_data_quality_errors:
-          data_quality_error: ""
+          data_quality_error: >
     models:
       people/neuanmeldungen/approve:
         one: Take over registration
@@ -1088,22 +1091,22 @@ en:
         success: The saved data was transferred to all active courses.
       actions_edit:
         push_down_button: Transfer data to courses
-        push_down_button_confirm:
-          "Do you really want to transfer the saved data to all active courses? This will overwrite the current values."
+        push_down_button_confirm: >-
+          Do you really want to transfer the saved data to all active courses? This will overwrite the current values.
       kind_category_field:
-        category_overrides_link_title:
-          "The following fields are transferred: Cost center, Cost object"
+        category_overrides_link_title: >-
+          The following fields are transferred: Cost center, Cost object
     kind_categories:
       push_down:
-        success:
-          "Cost center (%{cost_center}) and cost object (%{cost_unit}) were transferred to all assigned course types."
+        success: >-
+          Cost center (%{cost_center}) and cost object (%{cost_unit}) were transferred to all assigned course types.
       actions_edit:
         push_down_button: Transfer data to course types
-        push_down_button_confirm:
-          "Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten."
-
+        push_down_button_confirm: >-
+          Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten.
     participations:
-      missing_information: The following certificates are required for participation in this course. Please submit these if you have not already done so.
+      missing_information: >-
+        The following certificates are required for participation in this course. Please submit these if you have not already done so.
       answers_step:
         total_duration_days_help: "Planned course duration: %{total_days} days"
       edit:
@@ -1125,7 +1128,8 @@ en:
         canceled: You have been deregistered from this course.
         rejected: The admission criteria have not been met. We therefore unfortunately had to reject your application.
         summoned: You are booked for this course.
-        unconfirmed: You are pre-registered for this course. Registration is not yet final and must be confirmed by the course administration.
+        unconfirmed: >-
+          You are pre-registered for this course. Registration is not yet final and must be confirmed by the course administration.
       step_wizard:
         answers_title: Additional data
         subsidy_title: Subsidy contribution
@@ -1135,11 +1139,11 @@ en:
         subsidy_field: ""
         subsidy_link_label: Subsidy application
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
-        general_info:
-          "As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this."
+        general_info: >-
+          As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this.
         detail_info_header: "What do I have to do to apply for a subsidy?"
-        detail_info_text:
-          "Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>."
+        detail_info_text: >-
+          Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>.
       summary_step:
         annulation_remarks: |
           Cancellation insurance is recommended. The following cancellation costs would be borne by the customer if he/she cancels before the start of the course:
@@ -1164,19 +1168,17 @@ en:
         create_course_leader_invoice_button: ""
       popover_create_course_leader_settlement:
         create_invoice: ""
-        info_text_html: ""
+        info_text_html: >
       invoice_created_notice: ""
       invoice_not_created_alert: ""
 
       popover_participant_cancels:
-        cancel_info:
-          "Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration."
-
+        cancel_info: >-
+          Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration.
     participation_contact_datas:
       fields:
-        overrides_person_data_info:
+        overrides_person_data_info: >-
           Please note that the customizations you enter here will be transferred to your profile.
-    
     register:
       email_check:
         enter_email: "" # to not display in sac wagon
@@ -1192,7 +1194,7 @@ en:
         assignment_closed: Finalize allocation
         ready: Ready for implementation
         closed: Finalize
-        closed_confirm_text: ""
+        closed_confirm_text: >
         canceled: Cancel
       state_back_buttons:
         assignment_closed: Back to the allocation
@@ -1203,8 +1205,8 @@ en:
       prices: ""
 
     general_fields:
-      kind_overrides_link_title:
-        "The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit"
+      kind_overrides_link_title: >-
+        The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit
     maximum_age_with_years: "%{maximum_age} Years (vintage)"
     roles:
       self_employed: ""
@@ -1212,8 +1214,8 @@ en:
 
     popover_canceled_reason:
       cancel_button: ""
-      cancel_confirmation: ""
-      cancel_info: ""
+      cancel_confirmation: >
+      cancel_info: >
       inform_participants_caption: ""
       canceled_reason_label: "" 
 
@@ -1254,10 +1256,7 @@ en:
         has_account: ""
         to_login_page: ""
       abo_issue:
-        issues_from_help: |
-          The subscription runs from the next possible issue.
-          If you would like the magazine to be delivered at a later date, please let us know
-          the issue from which we may begin delivery.
+        issues_from_help: >
       abo_infos:
         annual_price_header: Price per year
         delivery_country_header: Country of dispatch
@@ -1265,10 +1264,10 @@ en:
         switzerland: Switzerland
         international: Worldwide
         duration_title: ""
-        duration_text: ""
+        duration_text: >
       create:
         redirect_existing_email: There is already a login for this e-mail. Log in here.
-        existing_membership_notice: ""
+        existing_membership_notice: >
         existing_family_notice: ""
         signed_up_notice: ""
 
@@ -1285,14 +1284,13 @@ en:
         register_on_info:
           jul: "If you join on or after July 1, you will receive a 50% discount on the annual membership fee."
           oct: The annual membership fee is waived for members joining on or after October 1.
-        register_as_info: " You can either join the SAC Blüemlisalp as an additional section or you can select it as your new parent section and thus leave your previous parent section. Note for families: Changing the parent section automatically applies to all family members. Joining an additional section, on the other hand, only applies to you."
+        register_as_info: >
         inscribe: Join
       new:
         role_exists: You are already a member of this section
       confirm:
         title: Confirm accession
         information_text: >
-          Please confirm that you wish to join the %{sektion} section. This process cannot be reversed.
         submit_button: Apply to join
 
   groups/self_inscription:
@@ -1316,8 +1314,8 @@ en:
       title: Manage family
       shared_address_info: All family members share the same address.
     members_table_row:
-      unconfirmed_email_info: The e-mail address must be confirmed before the person can be removed from the family.
-
+      unconfirmed_email_info: >-
+        The e-mail address must be confirmed before the person can be removed from the family.
   household_aside_component:
     section_name: Family
   household_aside_member_component:
@@ -1448,8 +1446,7 @@ en:
         maximum_class_size: ""
         class_teacher:
           label: ""
-          text: ""
-
+          text: >
   passes:
     membership:
       file_name_prefix: SAC membership card
@@ -1463,8 +1460,7 @@ en:
   person:
     history:
       index_notice_sac_cas:
-        sections_info_html: ' You can manage your memberships here. You can find information on the various SAC sections at <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>'
-
+        sections_info_html: >
   people:
     membership:
       verify:
@@ -1475,13 +1471,17 @@ en:
           membership_years: "Number of years of membership: %{membership_years}"
 
     membership_invoices:
-      no_invoice_possible: "There are no membership fees for the desired person and section, or these are already covered by other invoices."
-      no_memberships: "There is no membership for the desired section on the selected date. Accordingly, no invoice has been issued."
+      no_invoice_possible: >-
+        There are no membership fees for the desired person and section, or these are already covered by other invoices.
+      no_memberships: >-
+        There is no membership for the desired section on the selected date. Accordingly, no invoice has been issued.
       success_notice: "The desired invoice is generated and sent to Abacus"
       new:
         title: "Create membership invoice"
-        alert_info: "Once this dialog has been confirmed, a membership invoice is created and sent to the member by e-mail or post. There is no check as to whether membership invoices already exist or what their status is. A new invoice is issued in each case. No role changes or extensions will be made."
-        alert_warning: "This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice."
+        alert_info: >-
+          Once this dialog has been confirmed, a membership invoice is created and sent to the member by e-mail or post. There is no check as to whether membership invoices already exist or what their status is. A new invoice is issued in each case. No role changes or extensions will be made.
+        alert_warning: >-
+          This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice.
         alert_error: "The following data quality checks prevent the creation of a membership invoice:"
         create_invoice: "Create invoice"
         mv_yearly_invoice: "MV annual financial statements"
@@ -1518,7 +1518,8 @@ en:
     external_invoices:
       table:
         cancel_invoice: Cancel
-        cancel_invoice_confirmation: "Do you really want to cancel this invoice? This action cannot be reversed."
+        cancel_invoice_confirmation: >-
+          Do you really want to cancel this invoice? This action cannot be reversed.
       cancel:
         flash: "The invoice %{invoice} (order no. %{abacus_sales_order_key}) is canceled"
       list:
@@ -1531,11 +1532,13 @@ en:
       job_scheduling_info: "The annual collection run was successfully launched."
       new:
         title: "Start of MV annual collection run"
-        schedule_info_alert: "When this dialog is sent, the annual collection run is started for all members and the data is transmitted to Abacus. The annual collection run cannot be canceled and takes several hours. The membership roles are hereby extended."
-        job_already_scheduled_alert: "An annual collection run is already in progress. A new run can only be started once this run has been completed."
+        schedule_info_alert: >-
+          When this dialog is sent, the annual collection run is started for all members and the data is transmitted to Abacus. The annual collection run cannot be canceled and takes several hours. The membership roles are hereby extended.
+        job_already_scheduled_alert: >-
+          An annual collection run is already in progress. A new run can only be started once this run has been completed.
         create_invoice: "Start"
-        submit_confirmation: "Do you really want to start the annual collection run for all members? This run cannot be canceled."
-
+        submit_confirmation: >-
+          Do you really want to start the annual collection run for all members? This run cannot be canceled.
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1735,14 +1738,11 @@ en:
             add: ""
             email_taken: >
             membership_info_box: >
-              By adding more people, you choose a family membership. This is possible for a maximum of 2 adults aged 23 and over and any number of children aged between 6 and 17.
-
-              Family membership is also available for couples without children. If you would like to set up a family membership with an existing member, please contact the SAC office.
           various_fields:
             immediate_entry_date: ""
-            period_info_1: ""
-            period_info_2: ""
-            period_info_3: ""
+            period_info_1: >
+            period_info_2: >
+            period_info_3: >
           family_buttons:
             next_as_single_link: Continue as an individual member
             next_as_household_link: Continue as family membership
@@ -1752,8 +1752,8 @@ en:
           summary_fields:
             my_membership: ""
             family_members: ""
-            info_alert_neuanmeldungen_sektion: ""
-            info_alert_neuanmeldungen_nv: ""
+            info_alert_neuanmeldungen_sektion: >
+            info_alert_neuanmeldungen_nv: >
             entry_per: ""
             next_button: ""
           summary_person_card:
@@ -1771,9 +1771,10 @@ en:
           contribution_regulations_text: "I have read the %{link} and agree with them"
           data_protection_text: "I have read and agree to the %{link} "
       choose_sektion:
-        no_self_service_info_text: We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
-        backoffice_no_self_service_info_text:
-          "Please note: the change is to a section that accepts members independently. You may need to clarify this change with the section in advance"
+        no_self_service_info_text: >-
+          We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose
+        backoffice_no_self_service_info_text: >-
+          Please note: the change is to a section that accepts members independently. You may need to clarify this change with the section in advance
       choose_membership:
         not_main_family_person_info_text: >-
           You can take out an additional membership as an individual. If the additional membership is to apply to the whole family, the main family member must take out the membership. To do this, please contact %{name}.
@@ -1784,37 +1785,42 @@ en:
         choose_date:
           info_text: "When should the section change take place?"
         summary:
-          info_text: ""
-          info_text_no_confirmation: ""
+          info_text: >
+          info_text_no_confirmation: >
           next_button: Order for a fee
       join_zusatzsektion:
         summary:
-          admission: ""
-          admission_through_gs: ""
+          admission: >
+          admission_through_gs: >
           next_button: Order for a fee
       membership_terminated_info:
-        info: "Your membership has been canceled via %{date}. If you would like to reactivate your membership, please visit the SAC website."
+        info: >-
+          Your membership has been canceled via %{date}. If you would like to reactivate your membership, please visit the SAC website.
       termination_choose_date:
         info_text: "When should the exit take place?"
-        warning_termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
+        warning_termination_by_section_only: >-
+          Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance.
         membership_already_terminated: ""
       termination_no_self_service:
         info_text: "We ask you to apply for withdrawal by telephone or e-mail. Please contact us for this purpose."
       ask_family_main_person:
-        info_text: "Withdrawal from the additional section can only be requested for the entire family membership and must be requested by the main person in your family membership. Please contact %{family_main_person}."
+        info_text: >-
+          Withdrawal from the additional section can only be requested for the entire family membership and must be requested by the main person in your family membership. Please contact %{family_main_person}.
       leave_zusatzsektion:
         summary:
-          family_warning: "Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}."
+          family_warning: >-
+            Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}.
           info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
           next_button: "Request resignation"
       termination:
         summary:
           info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
-          termination_by_section_only: "Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance."
+          termination_by_section_only: >-
+            Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance.
           family_warning: "Please note: the resignation is requested for the entire family membership. This affects: %{family_member_names}."
           data_retention_info_title: "Storage of your data"
-          data_retention_info_text:
-            "After you leave, we will keep your data for twelve months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave."
+          data_retention_info_text: >-
+            After you leave, we will keep your data for twelve months before deleting it permanently. Deletion has the following consequences for you: If you wish to rejoin the SAC at a later date, you will have to pay the joining fee again and your number of years of membership will start from zero. Any qualifications you have obtained and training courses you have completed (including training hours) will be deleted. Your SAC login will be deleted and you will no longer be able to use it for other purposes (e.g. for the SAC app). If you do not want this, you must allow us to keep your data after you leave.
           data_retention_consent: "I would like my data to be retained after I leave the SAC."
           subscribe_newsletter: "I would like to stay informed about news from the SAC and continue to receive the SAC newsletter."
           subscribe_fundraising_list: ""
