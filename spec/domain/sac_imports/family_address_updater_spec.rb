@@ -13,10 +13,10 @@ describe SacImports::FamilyAddressUpdater do
   context "when updating all families" do
     before do
       5.times do |iteration| # Create 5 families with random configurations
-        main_person = build_family_member(iteration, sac_family_main_person: true)
+        main_person = create_family_member(iteration, sac_family_main_person: true)
 
         Array.new(rand(1..5)) do
-          build_family_member(main_person.household_key)
+          create_family_member(main_person.household_key)
         end
       end
     end
@@ -34,16 +34,20 @@ describe SacImports::FamilyAddressUpdater do
   end
 
   context "when main person has invalid address" do
-    let!(:main_person) { build_family_member(1, sac_family_main_person: true) }
-    let!(:family_member) { build_family_member(main_person.household_key) }
-    let!(:young_family_member) { build_family_member(main_person.household_key) }
-
-    before do
-      young_family_member.update(birthday: family_member.birthday + 10.years)
-      young_family_member.reload
-      main_person.update_columns(street: nil)
-      main_person.reload
-    end
+    let!(:main_person) {
+      create_family_member(1, sac_family_main_person: true,
+        birthday: 50.years.ago).tap do |person|
+        person.update_columns(street: nil)
+      end
+    }
+    let!(:family_member) {
+      create_family_member(main_person.household_key,
+        birthday: 40.years.ago)
+    }
+    let!(:young_family_member) {
+      create_family_member(main_person.household_key,
+        birthday: 30.years.ago)
+    }
 
     it "uses adress of oldest household member" do
       expected_address_attrs = family_member.address_attrs
@@ -57,23 +61,25 @@ describe SacImports::FamilyAddressUpdater do
   it "creates versions even with paper trail globally disabled " do
     expect(PaperTrail.enabled?).to be_falsey
 
-    main_person = build_family_member(1, sac_family_main_person: true)
-    family_member = build_family_member(main_person.household_key)
+    main_person = create_family_member(1, sac_family_main_person: true)
+    family_member = create_family_member(main_person.household_key)
 
     expect { updater.update }.to change { PaperTrail::Version.count }.by(1)
     expect(family_member.versions).to have(1).item # Family member was updated with new address
   end
 
-  def build_family_member(household_key, sac_family_main_person: false)
+  def create_family_member(household_key, sac_family_main_person: false, **attrs)
     Fabricate(:person,
-      sac_family_main_person: sac_family_main_person,
-      household_key: household_key,
-      street: Faker::Address.street_name,
-      housenumber: Faker::Address.building_number,
-      postbox: [nil, Faker::Address.secondary_address].sample,
-      zip_code: Faker::Address.zip,
-      town: Faker::Address.city,
-      # hardcode to make sure it is not CH, otherwise the zip is validated -> flaky specs
-      country: "LI")
+              **attrs.reverse_merge(
+                sac_family_main_person: sac_family_main_person,
+                household_key: household_key,
+                street: Faker::Address.street_name,
+                housenumber: Faker::Address.building_number,
+                postbox: [nil, Faker::Address.secondary_address].sample,
+                zip_code: Faker::Address.zip,
+                town: Faker::Address.city,
+                # hardcode to make sure it is not CH, otherwise the zip is validated -> flaky specs
+                country: "LI"
+              ))
   end
 end
