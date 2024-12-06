@@ -23,7 +23,7 @@ describe GroupResource, :draper_with_helpers, type: :resource do
   end
 
   context "extra attributes" do
-    context "mounted_attributes" do
+    describe "mounted_attributes" do
       it "includes foundation year, section canton and language as extra attribute" do
         bluemlisalp.update!(created_at: 1.day.ago, foundation_year: 1900, section_canton: "BE",
           language: "FR")
@@ -45,7 +45,7 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       end
     end
 
-    context "has_youth_organization" do
+    describe "has_youth_organization" do
       before { params[:extra_fields] = {groups: "has_youth_organization"} }
 
       it 'is true for sektion with social account label "Homepage JO"' do
@@ -86,7 +86,7 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       end
     end
 
-    context "members_count" do
+    describe "members_count" do
       before do
         mitglied_zusatzsektion = Fabricate(:person)
         Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
@@ -129,7 +129,7 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       end
     end
 
-    context "membership_admission_through_gs" do
+    describe "membership_admission_through_gs" do
       before { params[:extra_fields] = {groups: "membership_admission_through_gs"} }
 
       it "is true for sektion without SektionsNeuanmeldungenSektion" do
@@ -152,7 +152,7 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       end
     end
 
-    context "membership_self_registration_url" do
+    describe "membership_self_registration_url" do
       let(:host) { Rails.configuration.action_mailer.default_url_options[:host] }
 
       before { params[:extra_fields] = {groups: "membership_self_registration_url"} }
@@ -178,6 +178,50 @@ describe GroupResource, :draper_with_helpers, type: :resource do
         params[:filter] = {id: {eq: group.id}}
         render
         expect(jsonapi_data[0].attributes["membership_self_registration_url"]).to be nil
+      end
+    end
+
+    describe "membership config" do
+      let(:extra_fields) do
+        %i[section_fee_adult section_fee_youth section_fee_family section_entry_fee_adult section_entry_fee_youth section_entry_fee_family]
+      end
+
+      before do
+        params[:filter] = {id: {eq: group.id}}
+        params[:extra_fields] = {groups: extra_fields.join(",")}
+        render
+      end
+
+      subject(:attributes) { jsonapi_data[0].attributes.symbolize_keys }
+
+      context "group with membership config" do
+        let(:group) { bluemlisalp }
+
+        it "has fee attributes" do
+          expect(attributes.slice(*extra_fields)).to eq(
+            section_fee_youth: "21.0",
+            section_fee_adult: "42.0",
+            section_fee_family: "84.0",
+            section_entry_fee_adult: "10.0",
+            section_entry_fee_youth: "5.0",
+            section_entry_fee_family: "20.0"
+          )
+        end
+      end
+
+      context "group without membership config" do
+        let(:group) { geschaeftsstelle }
+
+        it "has empty fee attributes" do
+          expect(attributes.slice(*extra_fields)).to eq(
+            section_fee_youth: nil,
+            section_fee_adult: nil,
+            section_fee_family: nil,
+            section_entry_fee_adult: nil,
+            section_entry_fee_youth: nil,
+            section_entry_fee_family: nil
+          )
+        end
       end
     end
   end
