@@ -21,7 +21,7 @@ class SacImports::CsvSource
     :town, # "City",
     :zip_code, # "Post Code",
     :email, # "E-Mail",
-    :phone, # "Phone No_",
+    :phone, # "Phone No_", -> Haupt-Telefon
     :birthday, # "Date of Birth",
     :gender, # "Geschlecht",
     :language, # "Language Code",
@@ -42,6 +42,18 @@ class SacImports::CsvSource
     :opt_in_sektionsbulletin_digital, # "OPT_IN_Sektionsbulletin_digital",
     :opt_out_sektionsbulletin_physisch, # "OPT_OUT_Sektionsbulletin_physisch",
     :opt_out_sektionsbulletin_digital, # "OPT_OUT_Sektionsbulletin_digital",
-    :termination_reason # "Austrittsgrund"
-  )
+    :termination_reason, # "Austrittsgrund"
+    :phone_private, # -> Privat
+    :phone_mobile, # -> Mobil
+    :phone_work # -> Geschäftlich
+  ) do
+    def initialize(phone_private: nil, phone_mobile: nil, phone_work: nil, **opts)
+      super
+    end
+
+    def self.valid_sizes
+      # it is valid with all columns or with all except the last three phone columns
+      [members.size, members.size - 3]
+    end
+  end
 end

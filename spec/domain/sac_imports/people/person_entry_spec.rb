@@ -159,17 +159,46 @@ describe SacImports::People::PersonEntry do
   describe "phone numbers" do
     subject(:numbers) { entry.person.phone_numbers }
 
-    it "sets phone numbers" do
+    it "sets phone number" do
       row[:phone] = "079 12 123 10"
       expect(numbers).to have(1).items
-      expect(numbers[0][:label]).to eq "Hauptnummer"
+      expect(numbers[0][:label]).to eq "Haupt-Telefon"
       expect(numbers[0][:number]).to eq "079 12 123 10"
       expect(numbers.collect(&:public).uniq).to eq [true]
     end
 
-    it "ignores invalid phone numbers" do
+    it "sets all phone numbers" do
+      row[:phone] = "079 12 123 10"
+      row[:phone_private] = "079 12 123 11"
+      row[:phone_mobile] = "079 12 123 12"
+      row[:phone_work] = "079 12 123 13"
+      expect(numbers).to have(4).items
+      expect(numbers.find { |n| n.label == "Haupt-Telefon" }.number).to eq "079 12 123 10"
+      expect(numbers.find { |n| n.label == "Privat" }.number).to eq "079 12 123 11"
+      expect(numbers.find { |n| n.label == "Mobil" }.number).to eq "079 12 123 12"
+      expect(numbers.find { |n| n.label == "Arbeit" }.number).to eq "079 12 123 13"
+    end
+
+    it "ignores invalid phone numbers and adds note" do
       row[:phone] = "123"
       expect(numbers).to have(0).item
+      expect(entry.person.notes).to have(1).item
+      expect(entry.person.notes.first.text)
+        .to eq "Importiert mit ungültiger Telefonnummer (Haupt-Telefon): \"123\""
+    end
+
+    it "adds notes for all invalid phone numbers" do
+      row[:phone] = "123"
+      row[:phone_private] = "456"
+      row[:phone_mobile] = "789"
+      row[:phone_work] = "012"
+      expect(numbers).to have(0).items
+      expect(entry.person.notes).to have(4).items
+      expect(entry.person.notes.collect(&:text))
+        .to eq ["Importiert mit ungültiger Telefonnummer (Haupt-Telefon): \"123\"",
+          "Importiert mit ungültiger Telefonnummer (Privat): \"456\"",
+          "Importiert mit ungültiger Telefonnummer (Mobil): \"789\"",
+          "Importiert mit ungültiger Telefonnummer (Arbeit): \"012\""]
     end
   end
 

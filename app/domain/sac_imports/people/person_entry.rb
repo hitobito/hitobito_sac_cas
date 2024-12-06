@@ -141,22 +141,36 @@ module SacImports::People
     end
 
     def build_phone_numbers(person)
-      number = row.phone.presence || return
+      person.phone_numbers = [:phone, :phone_private, :phone_mobile, :phone_work].map do |attr|
+        build_phone_number(person, attr)
+      end.compact
+    end
 
-      if phone_valid?(number)
-        phone_numbers = phone_valid?(number) ? [PhoneNumber.new(number:, label: "Hauptnummer")] : []
-        person.phone_numbers = phone_numbers
-      else
-        add_invalid_phone_number_as_note(person)
+    def build_phone_number(person, attr)
+      number = row.public_send(attr).presence || return
+      label = phone_number_label(attr)
+
+      return PhoneNumber.new(number:, label:) if phone_valid?(number)
+
+      add_invalid_phone_number_as_note(person, number, label)
+      nil
+    end
+
+    def phone_number_label(attr)
+      case attr
+      when :phone then "Haupt-Telefon"
+      when :phone_private then "Privat"
+      when :phone_mobile then "Mobil"
+      when :phone_work then "Arbeit"
       end
     end
 
-    def add_invalid_phone_number_as_note(person)
-      return if person.notes.any? { |note| note.text.include?(row.phone) }
+    def add_invalid_phone_number_as_note(person, number, label)
+      return if person.notes.any? { |note| note.text.include?(number) }
 
       person.notes.build(
         author: Person.root,
-        text: "Importiert mit ungültiger Telefonnummer: #{row.phone}"
+        text: "Importiert mit ungültiger Telefonnummer (#{label}): #{number.inspect}"
       )
     end
 
