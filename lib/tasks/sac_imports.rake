@@ -68,6 +68,7 @@ namespace :sac_imports do
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
     "nav1-3_subscriptions",
+    "chimp-subscriptions",
     :update_sac_family_address,
     "nav17-1_event_kinds",
     :cleanup,
@@ -158,6 +159,12 @@ namespace :sac_imports do
   task "nav17-1_event_kinds": :setup do
     SacImports::Nav17EventKindsImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav17-event-kinds")
+  end
+
+  desc "NAV1 Imports subscriptions from Navision"
+  task "chimp-subscriptions": :setup do
+    SacImports::ChimpImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "chimp-subscriptions")
   end
 
   desc "Run cleanup tasks"
