@@ -59,9 +59,9 @@ class SacImports::CsvSource
   end
 
   def check_row_size(row)
-    expected_size = column_data_class.members.size
-    if row.size != expected_size
-      raise "#{@source_name}: wrong number of columns, got #{row.size} expected #{expected_size}"
+    valid_sizes = column_data_class.try(:valid_sizes) || [column_data_class.members.size]
+    unless valid_sizes.include?(row.size)
+      raise "#{@source_name}: wrong number of columns, got #{row.size} expected #{valid_sizes.join(" or ")}"
     end
   end
 
