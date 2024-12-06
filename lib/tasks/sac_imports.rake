@@ -68,6 +68,7 @@ namespace :sac_imports do
     "wso21-1_people",
     "nav2b-2_non_membership_roles",
     :update_sac_family_address,
+    "nav17-1_event_kinds",
     :cleanup,
     :check_data_quality
   ] do
@@ -144,6 +145,12 @@ namespace :sac_imports do
   task "nav5-1_huts": :setup do
     SacImports::Nav5HutsImporter.new.import!
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav5-huts")
+  end
+
+  desc "Imports event kinds"
+  task "nav17-1_event_kinds": :setup do
+    SacImports::Nav17EventKindsImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav17-event-kinds")
   end
 
   desc "Run cleanup tasks"

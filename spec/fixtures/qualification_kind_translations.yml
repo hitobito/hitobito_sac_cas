@@ -10,3 +10,10 @@ ski_leader_de:
   label: Ski Leiter
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
+
+snowboard_leader_de:
+  qualification_kind_id: <%= ActiveRecord::FixtureSet.identify(:snowboard_leader) %>
+  locale: de
+  label: Snowboard Leiter
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
