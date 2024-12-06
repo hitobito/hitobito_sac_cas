@@ -286,9 +286,9 @@ def seed_course_compensation_rates
 end
 
 # once the integration environment is seeded, only seed when the database is empty
-seed_cost_centers # unless CostCenter.exist?
-seed_cost_units # unless CostUnit.exist?
-seed_event_kind_categories # unless Event::KindCategory.exist?
-seed_event_levels # unless Event::Level.exist?
-seed_course_compensation_categories # unless CourseCompensationCategory.exist?
-seed_course_compensation_rates # unless CourseCompensationRate.exist?
+seed_cost_centers unless CostCenter.exists?
+seed_cost_units unless CostUnit.exists?
+seed_event_kind_categories unless Event::KindCategory.exists?
+seed_event_levels unless Event::Level.exists?
+seed_course_compensation_categories unless CourseCompensationCategory.exists?
+seed_course_compensation_rates unless CourseCompensationRate.exists?
