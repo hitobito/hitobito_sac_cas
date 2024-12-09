@@ -37,10 +37,10 @@ describe SectionOffering do
       expect { section_offering.destroy }.not_to change(described_class, :count)
       expect(section_offering.errors.full_messages).to include("Datensatz kann nicht gelöscht werden, da ein abhängiger Sektion-Datensatz existiert.")
     end
-  
+
     it "does not destroy when having many associated sections" do
       Group::Sektion.second.section_offerings << section_offering
-  
+
       expect { section_offering.destroy }.not_to change(described_class, :count)
       expect(section_offering.errors.full_messages).to include("Datensatz kann nicht gelöscht werden, da abhängige Sektionen existieren.")
     end
