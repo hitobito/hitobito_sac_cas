@@ -1,0 +1,10 @@
+- # Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- # hitobito_sac_cas and licensed under the Affero General Public License version 3
+- # or later. See the COPYING file at the top-level directory or at
+- # https://github.com/hitobito/hitobito.
+
+- # Override the youth view to hide the AHV number.
+- # See https://github.com/hitobito/hitobito_sac_cas/issues/1346
+
+- if show_full
+  = render_attrs(entry, :j_s_number, :translated_nationality_j_s)
