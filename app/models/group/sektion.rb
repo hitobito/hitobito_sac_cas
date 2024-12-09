@@ -32,6 +32,7 @@ class Group::Sektion < Group
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
 
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
+  has_and_belongs_to_many :section_offerings, foreign_key: :group_id
 
   def sorting_name
     display_name.delete_prefix("SAC ").delete_prefix("CAS ")

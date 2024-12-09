@@ -4,3 +4,5 @@
   = nav CostCenter.model_name.human(count: 2), cost_centers_path, %w(cost_centers)
 - if can?(:index, CostUnit)
   = nav CostUnit.model_name.human(count: 2), cost_units_path, %w(cost_units)
+- if can?(:index, SectionOffering)
+  = nav SectionOffering.model_name.human(count: 2), section_offerings_path, %w(section_offerings)
