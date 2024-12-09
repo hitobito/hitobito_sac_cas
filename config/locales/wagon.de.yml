@@ -411,6 +411,7 @@ de:
           DE: Deutsch
           FR: Français
           IT: Italiano
+        section_offerings: Sektionsangebote
         mitglied_termination_by_section_only: Austritt nur durch Sektion
       group/ortsgruppe:
         foundation_year: Gründungsjahr
@@ -486,6 +487,8 @@ de:
         reduction_amount: Reduktionsbetrag Mitgliedsjahre/Alter
         reduction_required_membership_years: Reduktion ab Mitgliedsjahren
         reduction_required_age: Reduktion ab Altersjahren
+      section_offering:
+        title: Titel
       external_invoice:
         title: Titel
         state: Status
@@ -583,6 +586,9 @@ de:
       sac_section_membership_config:
         one: Parameter für Mitgliedschaftsrechnungen
         other: Parameter für Mitgliedschaftsrechnungen
+      section_offering:
+        one: Sektionsangebot
+        other: Sektionsangebote
       termination_reason:
         one: Vordefinierter Austrittsgrund
         other: Vordefinierte Austrittsgründe
