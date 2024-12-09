@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::Membership::VerifyController, js: true do
+describe People::Membership::VerifyController do
   let(:person) { people(:mitglied) }
   let!(:token) { person.membership_verify_token }
 
