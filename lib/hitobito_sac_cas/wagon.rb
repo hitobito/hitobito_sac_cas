@@ -89,6 +89,7 @@ module HitobitoSacCas
       Ability.store.register CourseCompensationRateAbility
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register TerminationReasonAbility
+      Ability.store.register SectionOfferingAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       Ability.store.register Memberships::TerminateSacMembershipWizardAbility
@@ -144,7 +145,7 @@ module HitobitoSacCas
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units event_levels termination_reasons course_compensation_categories course_compensation_rates]
+      admin_item[:active_for] += %w[cost_centers cost_units event_levels termination_reasons section_offerings course_compensation_categories course_compensation_rates]
 
       ## Controllers
       ApplicationController.include BasicAuth if Settings.basic_auth
@@ -157,6 +158,7 @@ module HitobitoSacCas
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
+      GroupsController.permitted_attrs << {section_offering_ids: []}
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
