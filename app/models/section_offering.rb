@@ -15,13 +15,12 @@
 #  updated_at :datetime         not null
 
 class SectionOffering < ApplicationRecord
-  has_and_belongs_to_many :sections, 
-                          class_name: Group::Sektion.sti_name, 
-                          foreign_key: :section_offering_id, 
-                          association_foreign_key: :group_id
+  has_and_belongs_to_many :sections,
+    class_name: Group::Sektion.sti_name,
+    association_foreign_key: :group_id
 
   translates :title, fallbacks_for_empty_translations: true
-  
+
   validates :title, presence: true
   before_destroy :check_associated_sections
 
@@ -37,9 +36,9 @@ class SectionOffering < ApplicationRecord
   def check_associated_sections
     if sections.exists?
       if sections.size == 1
-        errors.add(:base, :'restrict_dependent_destroy.has_one', record: Group::Sektion.model_name.human)
+        errors.add(:base, :"restrict_dependent_destroy.has_one", record: Group::Sektion.model_name.human)
       else
-        errors.add(:base, :'restrict_dependent_destroy.has_many', record: Group::Sektion.model_name.human(count: 2))
+        errors.add(:base, :"restrict_dependent_destroy.has_many", record: Group::Sektion.model_name.human(count: 2))
       end
       throw(:abort)
     end

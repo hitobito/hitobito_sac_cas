@@ -10,10 +10,10 @@ module SacCas::GroupResource
 
   included do
     with_options writable: false do
-      if @object.type == Group::Sektion.sti_name
-        attribute :offerings, :array_of_strings do
-          @object.section_offerings.map(&:title)
-        end
+      attribute :offerings, :array_of_strings do
+        next unless @object.type == Group::Sektion.sti_name
+
+        @object.includes(:section_offerings).section_offerings.map(&:title)
       end
 
       attribute :navision_id, :integer
