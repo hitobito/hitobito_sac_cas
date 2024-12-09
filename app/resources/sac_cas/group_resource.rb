@@ -10,6 +10,10 @@ module SacCas::GroupResource
 
   included do
     with_options writable: false do
+      attribute :offerings, :array_of_strings do
+        @object.section_offerings.map(&:title)
+      end
+      
       attribute :navision_id, :integer
 
       Group.subclasses.flat_map(&:mounted_attr_names).uniq.each do |attr|
