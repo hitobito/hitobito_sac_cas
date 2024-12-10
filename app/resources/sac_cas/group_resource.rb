@@ -13,7 +13,7 @@ module SacCas::GroupResource
       attribute :offerings, :array_of_strings do
         next unless @object.type == Group::Sektion.sti_name
 
-        @object.includes(:section_offerings).section_offerings.map(&:title)
+        @object.section_offerings.map(&:title)
       end
 
       attribute :navision_id, :integer
