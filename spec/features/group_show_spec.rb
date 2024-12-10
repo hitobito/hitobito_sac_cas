@@ -30,8 +30,8 @@ describe "group show page" do
       visit group_path(id: sektion.id)
 
       expect(page).to have_css("dt", text: "Sektionsangebote")
-      expect(page).to have_css("dt", text: "Sektionsangebote")
-      expect(page).to have_css("dt", text: "Sektionsangebote")
+      expect(page).to have_css("dt", text: "Offer 1")
+      expect(page).to have_css("dt", text: "Offer 2")
     end
   end
 end
