@@ -68,7 +68,7 @@ module Memberships
 
     def prepare_roles(person)
       relevant_roles(person).each do |role|
-        role.mark_for_destruction if role.start_on == Time.zone.today 
+        role.mark_for_destruction if role.start_on == Time.zone.today
       end
 
       mark_active_roles(person) + Array(build_future_role(person))
