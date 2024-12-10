@@ -132,6 +132,14 @@ describe Memberships::TerminateSacMembership do
         .and not_change { ended_beguenstigt.reload.end_on }
     end
 
+    it "destroys role only existing since today" do
+      person.roles.update_all(start_on: Time.zone.today)
+
+      expect do
+        expect(termination.save!).to eq true
+      end.to change { person.roles.with_inactive.count }.by(-2)
+    end
+
     context "termination at the end of the year" do
       let(:end_of_year) { Time.zone.now.end_of_year.to_date }
       let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
