@@ -9,7 +9,7 @@ module Invoices
   module Abacus
     class Subject < Entity
       RELEVANT_ATTRIBUTES = %w[first_name last_name email language gender street
-        housenumber zip_code town country].freeze
+        housenumber postbox address_care_of zip_code town country].freeze
 
       SALUTATION_IDS = {
         mister: 1,
@@ -76,6 +76,8 @@ module Invoices
           subject_id: subject_id,
           street: entity.street.to_s[0, 50],
           house_number: entity.housenumber.to_s[0, 9],
+          post_office_box_text: entity.postbox.to_s[0, 20],
+          address_supplement: entity.address_care_of.to_s[0, 60],
           post_code: entity.zip_code[0, 15],
           city: entity.town.to_s[0, 50],
           country_id: entity.country || Countries.default.upcase,

@@ -21,6 +21,8 @@ describe Invoices::Abacus::SubjectInterface do
       street: "Belpstrasse",
       housenumber: "37",
       zip_code: "3007",
+      postbox: "Postfach 23",
+      address_care_of: "c/o Frau Müller",
       town: "Bern",
       gender: "w"
     )
@@ -219,7 +221,17 @@ describe Invoices::Abacus::SubjectInterface do
         request: {
           method: :post,
           path: "Addresses",
-          params: {city: "Thun", country_id: "CH", house_number: "", post_code: "3600", street: "", subject_id: 600002, valid_from: Date.current}
+          params: {
+            address_supplement: "",
+            city: "Thun",
+            country_id: "CH",
+            house_number: "",
+            post_code: "3600",
+            street: "",
+            post_office_box_text: "",
+            subject_id: 600002,
+            valid_from: Date.current
+          }
         }
       )
 
@@ -262,7 +274,7 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def stub_create_address_request
-    body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
+    body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostOfficeBoxText\":\"Postfach 23\",\"AddressSupplement\":\"c/o Frau Müller\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
     stub_simple_request(:post, "Addresses", body)
   end
 
@@ -335,8 +347,8 @@ describe Invoices::Abacus::SubjectInterface do
         "@odata.etag" => "W/\"ea2246585da92c0f2789e718fea4dfb29d56005e7d51c6e27cb5994b8838b5b0\"",
         "Id" => "e65440b5-eb47-9482-21b0-a647a3972e0b", "SubjectId" => person.id, "ValidFrom" => "2024-05-08", "Street" => "Belpstrasse",
         "HouseNumber" => "37", "City" => "Bern", "PostCode" => "3007", "PostCodeSupplement" => 0, "CountryId" => "CH", "State" => "BE",
-        "DwellingNumber" => "", "MunicipalityCode" => "351", "BuildingNumber" => 0, "AddressSupplement" => "", "StreetSupplement" => "",
-        "PostOfficeBoxText" => "", "PostOfficeBoxNumber" => "", "OpenLocationCode" => "", "Coordinates" => nil
+        "DwellingNumber" => "", "MunicipalityCode" => "351", "BuildingNumber" => 0, "AddressSupplement" => "c/o Frau Müller", "StreetSupplement" => "",
+        "PostOfficeBoxText" => "Postfach 23", "PostOfficeBoxNumber" => "", "OpenLocationCode" => "", "Coordinates" => nil
       }],
       "Communications" => [{
         "@odata.etag" => "W/\"f86b82e3bbf253df0eb29c2406cb3619d611d9300d1cd7daa8a3f0403857ad90\"",
@@ -430,7 +442,7 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Name":"Hillary","FirstName":"Edmund","Language":"de","SalutationId":2,"Id":600001,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600001,"ValidFrom":"2024-05-08","Street":"Belpstrasse","HouseNumber":"37","City":"Bern","PostCode":"3007","CountryId":"CH","State":"BE"}],\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600001,"ValidFrom":"2024-05-08","Street":"Belpstrasse","HouseNumber":"37","PostOfficeBoxText":"Postfach 23","PostOfficeBoxNumber":"23","StreetSupplement":"","AddressSupplement":"c/o Frau Müller","City":"Bern","PostCode":"3007","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600001,"Type":"EMail","Value":"e.hillary@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600001,"SubjectId":600001,"Status":"Active"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
@@ -442,7 +454,7 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
@@ -454,7 +466,7 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Name":"Norgay","FirstName":"Nima","Language":"de","SalutationId":1,"Id":600004,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600004,"ValidFrom":"2024-05-08","Street":"","HouseNumber":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600004,"ValidFrom":"2024-05-08","Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
@@ -479,7 +491,7 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"Postfach 23","AddressSupplement":"c/o Frau Müller","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
@@ -618,7 +630,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600001,"Street":"Belpstrasse","HouseNumber":"37","PostCode":"3007","City":"Bern","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600001,"Street":"Belpstrasse","HouseNumber":"37","PostOfficeBoxText":"Postfach 23","AddressSupplement":"c/o Frau Müller","PostCode":"3007","City":"Bern","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -645,7 +657,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -672,7 +684,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -732,7 +744,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -759,7 +771,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
            --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -792,7 +804,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -825,7 +837,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"","AddressSupplement":"","StreetSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
           --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -858,7 +870,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -938,7 +950,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002,"Street":"","HouseNumber":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
