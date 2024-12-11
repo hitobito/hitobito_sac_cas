@@ -16,6 +16,7 @@ module SacCas::RoleAbility
 
   def self_terminatable_own_role
     return false unless her_own
+    return false if abonnent?
     return true unless mitglied_role?
 
     !has_termination_by_section_only_role
@@ -58,4 +59,6 @@ module SacCas::RoleAbility
   def wizard_managed_role?(role = subject)
     SacCas::WIZARD_MANAGED_ROLES.include?(role.class)
   end
+
+  def abonnent? = subject.is_a?(Group::AboMagazin::Abonnent)
 end
