@@ -201,7 +201,7 @@ describe Memberships::TerminateSacMembershipsController do
         end
           .to change(Role, :count).by(-2)
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
-        expect(response).to redirect_to person_path(person, format: :html)
+        expect(response).to redirect_to group_people_path(groups(:bluemlisalp), format: :html)
         expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
       end
     end
