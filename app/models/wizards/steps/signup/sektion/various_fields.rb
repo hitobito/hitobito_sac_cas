@@ -43,7 +43,7 @@ module Wizards::Steps::Signup::Sektion
       date = date_from_string(SacMembershipConfig.active(Time.zone.now).public_send(date_key))
       if date.present?
         date = subtract_one_day ? date - 1.day : date
-        [date, I18n.l(date, format: "%d.%B")]
+        [date, I18n.l(date, format: "%d. %B")]
       end
     end
 

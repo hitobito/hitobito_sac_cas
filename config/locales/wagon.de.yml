@@ -1323,15 +1323,15 @@ de:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
         existing_membership_notice: >-
           Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest,
-          kontaktiere bitte die SAC Geschäftsstelle.
-        existing_family_notice: Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC Geschäftsstelle.
+          kontaktiere bitte die SAC-Geschäftsstelle.
+        existing_family_notice: Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
         signed_up_notice: Deine Anmeldung wurde erfolgreich gespeichert.
 
       agreement_link:
         agb_text: Ich habe die %{link} gelesen und stimme diesen zu
         statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
         sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
-        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesem zu
         data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
 
     self_inscription:
@@ -1799,7 +1799,7 @@ de:
         person_fields_title: Personendaten
         agreement_fields:
           adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
-          newsletter_caption: Ich möchte einen Newsletter abonnieren
+          newsletter_caption: Ich möchte den SAC-Newsletter abonnieren.
         abo_basic_login:
           person_fields:
             next_button: SAC-KONTO ERSTELLEN
@@ -1829,7 +1829,7 @@ de:
               max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
               Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
-              mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC Geschäftsstelle.
+              mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.
           various_fields:
             immediate_entry_date: Eintrittsdatum per sofort
             period_info_1: >-
@@ -1870,10 +1870,10 @@ de:
             immediate_entry_date: "Eintrittsdatum: per sofort"
 
         various_fields:
-          newsletter: Ich möchte einen Newsletter abonnieren
+          newsletter: Ich möchte den SAC-Newsletter abonnieren.
           statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
           sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
-          contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesen zu
+          contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesem zu
           data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
       choose_sektion:
         no_self_service_info_text: >-
