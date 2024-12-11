@@ -1102,6 +1102,10 @@ it:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
   devise:
+    mailer:
+      confirmation_instructions:
+        body:
+          footer: Saluti sportivi
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
