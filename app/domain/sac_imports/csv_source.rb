@@ -16,10 +16,15 @@ class SacImports::CsvSource
     NAV3: Nav3,
     NAV6: Nav6,
     NAV17: Nav17,
-    WSO21: Wso2
+    WSO21: Wso2,
+    CHIMP_1: Chimp,
+    CHIMP_2: Chimp,
+    CHIMP_3: Chimp
   }.freeze
 
   AVAILABLE_SOURCES = SOURCES.keys.freeze
+
+  attr_reader :source_name
 
   def initialize(source_name, source_dir: SOURCE_DIR)
     @source_dir = source_dir
