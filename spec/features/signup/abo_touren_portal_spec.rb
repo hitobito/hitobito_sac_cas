@@ -68,7 +68,7 @@ describe "signup/abo_touren_portal_wizard" do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    check "Ich möchte einen Newsletter abonnieren"
+    check "Ich möchte den SAC-Newsletter abonnieren."
     expect do
       click_on "Registrieren"
       expect(page).to have_css "#error_explanation, #flash > .alert"
@@ -89,7 +89,7 @@ describe "signup/abo_touren_portal_wizard" do
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
     click_on "Weiter"
     complete_main_person_form
-    uncheck "Ich möchte einen Newsletter abonnieren"
+    uncheck "Ich möchte den SAC-Newsletter abonnieren."
     expect do
       click_on "Registrieren"
       expect(page).to have_css "#error_explanation, #flash > .alert"

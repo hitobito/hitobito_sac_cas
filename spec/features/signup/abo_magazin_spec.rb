@@ -89,7 +89,7 @@ describe "self_registration_abo_magazin", js: true do
 
     expect do
       complete_last_page do
-        check "Ich möchte einen Newsletter abonnieren"
+        check "Ich möchte den SAC-Newsletter abonnieren."
       end
     end.to change { Person.count }.by(1)
 
@@ -110,7 +110,7 @@ describe "self_registration_abo_magazin", js: true do
 
     expect do
       complete_last_page do
-        uncheck "Ich möchte einen Newsletter abonnieren"
+        uncheck "Ich möchte den SAC-Newsletter abonnieren."
       end
     end.to change { Person.count }.by(1)
 
