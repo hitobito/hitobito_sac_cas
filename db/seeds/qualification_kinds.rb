@@ -38,7 +38,7 @@ unless QualificationKind.exists?
     {id: 29, tourenchef_may_edit: true})
 
   QualificationKind::Translation.seed_once(:qualification_kind_id, :locale,
-    {qualification_kind_id: 1, locale: "de", label: "Bergführer Aspirant*in"},
+    {qualification_kind_id: 1, locale: "de", label: "Bergführer Aspirant/in"}, # unusual gendering required for import
     {qualification_kind_id: 2, locale: "de", label: "Bergführer*in SBV"},
     {qualification_kind_id: 3, locale: "de", label: "Bikeleiter*in"},
     {qualification_kind_id: 4, locale: "de", label: "Diverse Leiter*in"},
@@ -48,7 +48,7 @@ unless QualificationKind.exists?
     {qualification_kind_id: 8, locale: "de", label: "Kletterlehrer*in SBV"},
     {qualification_kind_id: 9, locale: "de", label: "Leiter*in Familienbergsteigen"},
     {qualification_kind_id: 10, locale: "de", label: "Leiter*in Kinderbergsteigen"},
-    {qualification_kind_id: 11, locale: "de", label: "SAC Tourenleiter - Aspirant*in"},
+    {qualification_kind_id: 11, locale: "de", label: "SAC  Aspirant*in - Tourenleiter*in"},
     {qualification_kind_id: 12, locale: "de", label: "SAC Tourenleiter*in 1 Sommer"},
     {qualification_kind_id: 13, locale: "de", label: "SAC Tourenleiter*in 1 Sommer Senioren"},
     {qualification_kind_id: 14, locale: "de", label: "SAC Tourenleiter*in 1 Winter"},
@@ -58,8 +58,8 @@ unless QualificationKind.exists?
     {qualification_kind_id: 18, locale: "de", label: "SAC Tourenleiter*in 2 Winter"},
     {qualification_kind_id: 19, locale: "de", label: "SAC Tourenleiter*in Alpinwandern"},
     {qualification_kind_id: 20, locale: "de", label: "SAC Tourenleiter*in Bergwandern"},
-    {qualification_kind_id: 21, locale: "de", label: "SAC Tourenleiter*in Mountainbike"},
-    {qualification_kind_id: 22, locale: "de", label: "SAC Tourenleiter*in Sportklettern"},
+    {qualification_kind_id: 21, locale: "de", label: "SAC Tournleiter*in Mountainbike"}, # Typo required for import
+    {qualification_kind_id: 22, locale: "de", label: "SAC Tourenleiter*in Sportklettern *"}, # * required for import
     {qualification_kind_id: 23, locale: "de", label: "Schneeschuhleiter*in bis WT4"},
     {qualification_kind_id: 24, locale: "de", label: "Schneesportlehrer*in"},
     {qualification_kind_id: 25, locale: "de", label: "Swiss Cycling MTB Guide"},
