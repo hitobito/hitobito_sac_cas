@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe People::Neuanmeldungen::Approve do
+  include Households::SpecHelper
   include ActiveJob::TestHelper
 
   let(:neuanmeldung_role_class) { Group::SektionsNeuanmeldungenSektion::Neuanmeldung }
@@ -105,6 +106,51 @@ describe People::Neuanmeldungen::Approve do
 
       expect_role(neuanmeldungen.second, neuanmeldung_role_class, neuanmeldungen_sektion)
       expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
+    end
+
+    describe "#applicable_people" do
+      it "does not include household if neuanmeldungs role is adult" do
+        person = Fabricate(:person, sac_family_main_person: true)
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:matterhorn_mitglieder),
+          person: person,
+          start_on: 2.years.ago.beginning_of_year
+        )
+        create_household(person, Fabricate(:person))
+        create_role(:adult, person: person).tap { |r| r.update_columns(start_on: 1.day.ago) }
+
+        approver = described_class.new(
+          group: neuanmeldungen_sektion,
+          people_ids: [
+            person.id
+          ]
+        )
+
+        expect(approver.applicable_people).to match_array([person])
+      end
+
+      it "includes household if neuanmeldungs role is family" do
+        person = Fabricate(:person, sac_family_main_person: true)
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:matterhorn_mitglieder),
+          person: person,
+          start_on: 2.years.ago.beginning_of_year
+        )
+        create_household(person, Fabricate(:person))
+        create_role(:family, person: person).tap { |r| r.update_columns(start_on: 1.day.ago) }
+
+        approver = described_class.new(
+          group: neuanmeldungen_sektion,
+          people_ids: [
+            person.id
+          ]
+        )
+
+        expect(approver.applicable_people.size).to eq(2)
+        expect(approver.applicable_people).to match_array(person.household.people)
+      end
     end
   end
 

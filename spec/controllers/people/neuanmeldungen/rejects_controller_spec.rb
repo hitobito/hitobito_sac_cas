@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe People::Neuanmeldungen::RejectsController do
+  include Households::SpecHelper
   before { sign_in(people(:admin)) }
 
   context "POST create" do
@@ -39,7 +40,25 @@ describe People::Neuanmeldungen::RejectsController do
     end
 
     context "with family members" do
-      let(:people_ids) { %i[abonnent familienmitglied].map { |p| people(p).id } }
+      let(:people_ids) do
+        family_person = Fabricate(:person, sac_family_main_person: true)
+        Fabricate(
+          Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:matterhorn_mitglieder),
+          person: family_person,
+          start_on: 2.years.ago.beginning_of_year
+        )
+        create_household(family_person, Fabricate(:person), Fabricate(:person, birthday: 15.years.ago))
+        Fabricate(
+          Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name.to_sym,
+          group: group,
+          beitragskategorie: :family,
+          created_at: Time.zone.now.beginning_of_year,
+          person: family_person
+        ).tap { |r| r.update_columns(start_on: 1.day.ago) }
+
+        family_person.household.people.map(&:id) + [people(:abonnent).id]
+      end
 
       it "approves all 3 family members and sets the flash message" do
         send_request
