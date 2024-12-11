@@ -36,4 +36,8 @@ class Group::Sektion < Group
   def sorting_name
     display_name.delete_prefix("SAC ").delete_prefix("CAS ")
   end
+
+  def active_sac_section_membership_config
+    @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
 end

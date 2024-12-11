@@ -25,12 +25,15 @@ describe Invoices::SacMemberships::MembershipManager do
   let(:familienmitglied2_person) { people(:familienmitglied2) }
   let(:familienmitglied_kind_person) { people(:familienmitglied_kind) }
 
+  let(:bluemlisalp) { groups(:bluemlisalp) }
+  let(:matterhorn) { groups(:matterhorn) }
+
   before do
     Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
   it "does not fail if running without any actual work todo" do
-    manager = described_class.new(Fabricate(:person), groups(:bluemlisalp_mitglieder), end_of_next_year.year)
+    manager = described_class.new(Fabricate(:person), bluemlisalp, end_of_next_year.year)
     expect { manager.update_membership_status }.not_to raise_error
   end
 
@@ -47,7 +50,7 @@ describe Invoices::SacMemberships::MembershipManager do
     end
 
     context "adult" do
-      subject { described_class.new(mitglied_person, groups(:bluemlisalp_mitglieder), end_of_next_year.year) }
+      subject { described_class.new(mitglied_person, bluemlisalp, end_of_next_year.year) }
 
       it "updates end_on" do
         expect(updated_roles_count).to eq(2)
@@ -73,7 +76,7 @@ describe Invoices::SacMemberships::MembershipManager do
     end
 
     context "family" do
-      subject { described_class.new(familienmitglied_person, groups(:bluemlisalp_mitglieder), end_of_next_year.year) }
+      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
 
       it "updates end_on for all family member roles" do
         expect(updated_roles_count).to eq(6)
@@ -141,7 +144,7 @@ describe Invoices::SacMemberships::MembershipManager do
           group: groups(:bluemlisalp_neuanmeldungen_nv))
       end
 
-      subject { described_class.new(familienmitglied_person, groups(:bluemlisalp_neuanmeldungen_nv), end_of_next_year.year) }
+      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
 
       it "creates stammsektion role" do
         subject.update_membership_status
@@ -174,13 +177,26 @@ describe Invoices::SacMemberships::MembershipManager do
           group: groups(:matterhorn_neuanmeldungen_nv))
       end
 
-      subject { described_class.new(mitglied_person, groups(:matterhorn_neuanmeldungen_nv), end_of_next_year.year) }
+      subject { described_class.new(mitglied_person, matterhorn, end_of_next_year.year) }
 
       it "creates zusatzsektions role" do
         expect { subject.update_membership_status }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
 
         expect(mitglied_person.roles.count).to eq(2)
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
+      end
+
+      it "only creates zusatzsektion for layer in question if two roles exist" do
+        Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
+          person: mitglied_person,
+          beitragskategorie: :adult,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
+
+        expect { subject.update_membership_status }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
+
+        expect(mitglied_person.roles.count).to eq(3)
+        expect(mitglied_person.sac_membership.zusatzsektion_roles.count).to eq 1
+        expect(mitglied_person.sac_membership.zusatzsektion_roles.first.group.layer_group).to eq matterhorn
       end
     end
 
