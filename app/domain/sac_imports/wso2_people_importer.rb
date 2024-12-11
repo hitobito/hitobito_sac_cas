@@ -19,11 +19,19 @@ module SacImports
       :errors
     ]
 
+    UM_USER_NAME_LOG_HEADERS = [
+      :hitobito_id,
+      :um_user_name,
+      :email
+    ]
+
     def initialize(output: $stdout)
       PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @source_file = CsvSource.new(:WSO21)
       @csv_report = CsvReport.new(:"wso21-1_people", REPORT_HEADERS, output:)
+      @um_user_name_log = CsvReport.new(:"wso21-1_um_user_name_log",
+        UM_USER_NAME_LOG_HEADERS, output:)
       @existing_emails = load_existing_emails
       basic_login_group # warm up to ensure group is present before forking threads
       abo_group # warm up to ensure group is present before forking threads
@@ -71,6 +79,11 @@ module SacImports
       # @output.print(entry.valid? ? " ✅\n" : " ❌ #{entry.error_messages}\n")
       if entry.valid?
         entry.import!
+        @um_user_name_log.add_row(
+          hitobito_id: entry.person.id,
+          um_user_name: row.um_user_name,
+          email: row.email
+        )
         if entry.warning
           @csv_report.add_row({
             navision_id: row.navision_id,
