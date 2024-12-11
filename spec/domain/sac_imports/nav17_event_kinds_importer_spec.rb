@@ -99,8 +99,10 @@ describe SacImports::Nav17EventKindsImporter do
 
     expect(csv_report.size).to eq(3)
     expect(csv_report.first).to eq(report_headers)
-    expect(csv_report[1]).to eq(["S6570", "Alpinwandern", "warning", "kind_category with value 6990 couldn't be found, course_compensation_category with value HON-KAT-X couldn't be found"])
-    expect(csv_report[2]).to eq(["S6570", "Alpinwandern", "error", "Kurskategorie muss ausgefüllt werden, Saison ist kein gültiger Wert"])
+    expect(csv_report[1]).to eq(["S6570", "Alpinwandern", "warning",
+      "kind_category with value '6990' couldn't be found, course_compensation_category with value 'HON-KAT-X' couldn't be found"])
+    expect(csv_report[2]).to eq(["S6570", "Alpinwandern", "error",
+      "Kurskategorie muss ausgefüllt werden, Saison ist kein gültiger Wert"])
 
     File.delete(report_file)
     expect(File.exist?(report_file)).to be_falsey

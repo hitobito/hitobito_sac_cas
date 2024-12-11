@@ -14,7 +14,8 @@ module SacImports
         :maximum_participants, :ideal_class_size, :maximum_class_size, :training_days,
         :season, :accommodation]
       ATTRS_BOOLEAN = [:reserve_accommodation, :section_may_create]
-      ATTRS_BELONGS_TO = [:kind_category, :level, :cost_center, :cost_unit]
+      ATTRS_STRING_BELONGS_TO = [:cost_center, :cost_unit] # foreign key is a string
+      ATTRS_INT_BELONGS_TO = [:kind_category, :level] # foreign key is an int
 
       attr_reader :row, :associations, :warnings
 
@@ -42,7 +43,8 @@ module SacImports
       def build_kind
         kind.attributes = regular_attrs
         kind.attributes = boolean_attrs
-        kind.attributes = belongs_to_attrs
+        kind.attributes = belongs_to_int_attrs
+        kind.attributes = belongs_to_string_attrs
         LOCALES.each do |locale|
           kind.attributes = translated_attrs(locale)
         end
@@ -64,9 +66,15 @@ module SacImports
         end
       end
 
-      def belongs_to_attrs
-        ATTRS_BELONGS_TO.each_with_object({}) do |attr, hash|
+      def belongs_to_string_attrs
+        ATTRS_STRING_BELONGS_TO.each_with_object({}) do |attr, hash|
           hash[:"#{attr}_id"] = association_id(attr, value(attr))
+        end
+      end
+
+      def belongs_to_int_attrs
+        ATTRS_INT_BELONGS_TO.each_with_object({}) do |attr, hash|
+          hash[:"#{attr}_id"] = association_id(attr, value(attr)&.to_i)
         end
       end
 
@@ -74,7 +82,7 @@ module SacImports
         return nil if value.nil?
 
         associations.fetch(attr.to_s.pluralize.to_sym).fetch(value) do
-          @warnings << "#{attr} with value #{value} couldn't be found"
+          @warnings << "#{attr} with value '#{value}' couldn't be found"
           nil
         end
       end

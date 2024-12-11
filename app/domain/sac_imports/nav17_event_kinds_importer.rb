@@ -84,9 +84,9 @@ module SacImports
 
     def associations
       @associations ||= {
-        kind_categories: Event::KindCategory.pluck(:order, :id).to_h.transform_keys(&:to_s),
+        kind_categories: Event::KindCategory.pluck(:order, :id).to_h,
         qualification_kinds: QualificationKind.pluck(:label, :id).to_h,
-        levels: Event::Level.pluck(:code, :id).to_h.transform_keys(&:to_s),
+        levels: Event::Level.pluck(:code, :id).to_h,
         cost_centers: CostCenter.pluck(:code, :id).to_h,
         cost_units: CostUnit.pluck(:code, :id).to_h,
         course_compensation_categories: CourseCompensationCategory.pluck(:short_name, :id).to_h
