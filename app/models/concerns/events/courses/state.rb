@@ -84,6 +84,8 @@ module Events::Courses::State
   private
 
   def assert_valid_state_change
+    return if new_record?
+
     unless available_states(state_was).include?(state.to_sym)
       errors.add(:state, "State cannot be changed from #{state_was} to #{state}")
     end
