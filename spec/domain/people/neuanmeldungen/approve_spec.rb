@@ -108,7 +108,7 @@ describe People::Neuanmeldungen::Approve do
       expect(ExternalInvoice::SacMembership.find_by(person_id: neuanmeldungen.second.id)).to be_nil
     end
 
-    context "#applicable_people" do
+    describe "#applicable_people" do
       it "does not include household if neuanmeldungs role is adult" do
         person = Fabricate(:person, sac_family_main_person: true)
         Fabricate(
