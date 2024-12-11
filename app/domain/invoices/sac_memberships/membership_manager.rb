@@ -58,7 +58,7 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def update_roles_to_zusatzsektion_mitglied(person)
-    role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find_by(group_id: group.id)
+    role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role| role.layer_group == group.layer_group }
     if role
       role.destroy
       create_mitglied_zusatzsektion_role(person)
@@ -95,7 +95,7 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def neuanmeldung_zusatzsektion?
-    person.sac_membership.neuanmeldung_zusatzsektion_roles.first&.layer_group == group.layer_group
+    person.sac_membership.neuanmeldung_zusatzsektion_roles.any? { |role| role.layer_group == group.layer_group }
   end
 
   def family_main_person?
