@@ -29,7 +29,7 @@ describe EventsController do
       end
 
       it "renders unconfirmed column" do
-        get :index, params: params
+        get :index, params: params.merge(sort: :number)
         expect(dom).to have_css "th a", text: "Unbestätigt"
         expect(dom).to have_css "tr:nth-of-type(1) .badge.bg-secondary"
         expect(dom).not_to have_css "tr:nth-of-type(2) .badge.bg-secondary", text: "2"

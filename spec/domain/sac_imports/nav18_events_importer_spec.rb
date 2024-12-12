@@ -28,6 +28,7 @@ describe SacImports::Nav18EventsImporter do
     seed_event_levels
     seed_course_compensation_categories
     create_event_kinds
+    load(HitobitoSacCas::Wagon.root.join("db", "seeds", "event_questions.rb"))
   end
 
   it "creates report for entries in source file" do
@@ -43,11 +44,18 @@ describe SacImports::Nav18EventsImporter do
     expect(output).to receive(:puts).with("Thank you for flying with SAC Imports.")
     expect(output).to receive(:puts).with("Report written to #{report_file}")
 
+    Group.root.update!(course_admin_email: "kurse@example.com")
+
+    questions = Event::Question.global.count
+    expect(questions).to be > 1
+
     travel_to DateTime.new(2024, 1, 23, 10, 42)
 
     expect { report.create }
       .to change { Event::Course.count }.by(4).and \
-        change { Event::Date.count }.by(4)
+        change { Event::Date.count }.by(4).and \
+          change { Event::Question.count }.by(questions * 4).and \
+            change { Delayed::Job.count }.by(0)
 
     course = Event::Course.find_by(number: "2023-1460")
     expect(course.attributes.symbolize_keys).to include(
@@ -105,6 +113,7 @@ describe SacImports::Nav18EventsImporter do
     I18n.with_locale(:it) do
       expect(course.name).to eq("Environnement alpin") # fallback to fr
     end
+    expect(course.questions.count).to eq(questions)
 
     expect(File.exist?(report_file)).to be_truthy
 

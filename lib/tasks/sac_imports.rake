@@ -72,6 +72,7 @@ namespace :sac_imports do
     :update_sac_family_address,
     "nav17-1_event_kinds",
     "nav18-1_events",
+    "nav21-1_event-participations",
     :cleanup,
     :check_data_quality
   ] do
@@ -166,6 +167,12 @@ namespace :sac_imports do
   task "nav18-1_events": :setup do
     SacImports::Nav18EventsImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav18-events")
+  end
+
+  desc "Imports event participations"
+  task "nav21-1_event-participations": :setup do
+    SacImports::Nav21EventParticipationsImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav21-event-participations")
   end
 
   desc "NAV1 Imports subscriptions from Navision"
