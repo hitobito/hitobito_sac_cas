@@ -39,6 +39,7 @@ describe People::DataQualityChecker do
     end
 
     it "clears existing issue if postbox is present" do
+      person.update_columns(street: nil, postbox: "Postfach xy")
       person.data_quality_issues.create!(attr: :street, key: :empty, severity: :error)
       checker.check_data_quality
       expect(person.reload.data_quality_issues.map(&:attr)).not_to include "street"
