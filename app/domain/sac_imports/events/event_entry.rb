@@ -56,7 +56,7 @@ module SacImports
         end
         event.groups = [associations.fetch(:groups).fetch(:root)]
         build_date
-        normalize_event
+        build_questions
       end
 
       def regular_attrs
@@ -102,6 +102,13 @@ module SacImports
         )
       end
 
+      def build_questions
+        event.init_questions
+        (event.application_questions + event.admin_questions).each do |question|
+          question.disclosure = "hidden" if question.disclosure.blank?
+        end
+      end
+
       def canceled_reason
         canceled_reason_value = value(:canceled_reason)
         if canceled_reason_value == "not_applicable"
@@ -109,9 +116,6 @@ module SacImports
         else
           canceled_reason_value
         end
-      end
-
-      def normalize_event
       end
 
       def value(attr)

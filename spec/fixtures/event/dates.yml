@@ -3,7 +3,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-
 first:
   label: Vorbereitung
   event: top_course
@@ -26,3 +25,8 @@ closed:
   label: Event
   event: closed
   start_at: 2024-04-01 00:00:00 +0200
+
+assignment_closed:
+  event: assignment_closed
+  start_at: 2024-03-01 10:00:00 +0200
+  finish_at: 2024-03-08 16:00:00 +0200
