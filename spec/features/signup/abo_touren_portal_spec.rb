@@ -26,7 +26,7 @@ describe "signup/abo_touren_portal_wizard" do
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_zip_code", with: "8000"
     fill_in "wizards_signup_abo_touren_portal_wizard_person_fields_town", with: "Zürich"
     check "Ich habe die Statuten gelesen und stimme diesen zu"
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
   end
 
   def expect_active_step(step_name)

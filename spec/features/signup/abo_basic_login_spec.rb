@@ -27,7 +27,7 @@ describe :self_registration do
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_town", with: "Zürich"
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
   end
 
   def expect_active_step(step_name)

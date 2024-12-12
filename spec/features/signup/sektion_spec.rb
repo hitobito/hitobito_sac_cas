@@ -97,7 +97,7 @@ describe "signup/sektion", :js do
     expect(page).to have_button("Mitgliedschaft beantragen"), "expected to be on last page"
     check "Ich habe die Statuten gelesen und stimme diesen zu"
     check "Ich habe das Beitragsreglement gelesen und stimme diesem zu"
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
 
     yield if block_given?
     if submit
