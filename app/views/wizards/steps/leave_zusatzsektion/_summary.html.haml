@@ -7,8 +7,8 @@
 - if c.model.wizard.family_membership?
   .alert.alert-warning
     = t('.family_warning', family_member_names: c.model.family_member_names)
-.row
-  %p=t('.info_text', terminate_on: c.model.wizard.terminate_on, sektion: c.model.wizard.sektion_name)
+.alert.alert-info
+  %p=t('.info_text', terminate_on: I18n.l(c.model.wizard.terminate_on), sektion: c.model.wizard.sektion_name)
 = c.fields_for do |form|
   = form.labeled(:termination_reason_id) do
     = form.select :termination_reason_id, c.model.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
