@@ -157,7 +157,7 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
             * Neuanmeldung (Stammsektion): []  --  (Group::SektionsNeuanmeldungenNv::Neuanmeldung)
             * Neuanmeldung (Zusatzsektion): []  --  (Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion)
             * Leserecht: [:group_and_below_read]  --  (Group::SektionsNeuanmeldungenNv::Leserecht)
+            * Schreibrecht: [:group_and_below_full]  --  (Group::SektionsNeuanmeldungenNv::Schreibrecht)
        
 (Output of rake app:hitobito:roles)
 <!-- roles:end -->
-        * Schreibrecht: [:group_and_below_full]  --  (Group::SektionsNeuanmeldungenNv::Schreibrecht)
