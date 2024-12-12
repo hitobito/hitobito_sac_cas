@@ -54,5 +54,14 @@ describe RoleAbility do
         expect(ability).to be_able_to(:terminate, role_zusatzsektion)
       end
     end
+
+    context "Abo" do
+      let(:person) { people(:abonnent) }
+      let(:role_abonnent) { roles(:abonnent_alpen) }
+
+      it "is denied when Sektion#mitglied_termination_by_section_only" do
+        expect(ability).not_to be_able_to(:terminate, role_abonnent)
+      end
+    end
   end
 end
