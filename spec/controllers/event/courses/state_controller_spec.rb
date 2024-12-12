@@ -51,6 +51,7 @@ describe Event::Courses::StateController do
 
       it "does not update state if step makes event invalid" do
         course = Fabricate(:sac_course)
+        puts "created"
 
         put :update, params: {group_id: group.id, id: course.id, state: "application_open"}
 

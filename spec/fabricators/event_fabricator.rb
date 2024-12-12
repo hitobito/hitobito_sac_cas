@@ -11,6 +11,7 @@ Fabricator(:sac_course, from: :course) do
 end
 
 Fabricator(:sac_open_course, from: :sac_course) do
+  state { :application_open }
   contact_id { ActiveRecord::FixtureSet.identify(:admin) }
   cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
   cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
@@ -26,11 +27,6 @@ Fabricator(:sac_open_course, from: :sac_course) do
   application_closing_at { Time.zone.tomorrow }
   before_create do |event|
     event.dates.build(start_at: 1.week.from_now) if event.dates.empty?
-  end
-  after_create do |event|
-    # default state for new courses must be created and
-    # can be changed from created to application_open later
-    event.update!(state: :application_open)
   end
 end
 
