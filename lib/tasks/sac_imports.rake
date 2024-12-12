@@ -71,6 +71,7 @@ namespace :sac_imports do
     "chimp-subscriptions",
     :update_sac_family_address,
     "nav17-1_event_kinds",
+    "nav18-1_events",
     :cleanup,
     :check_data_quality
   ] do
@@ -159,6 +160,12 @@ namespace :sac_imports do
   task "nav17-1_event_kinds": :setup do
     SacImports::Nav17EventKindsImporter.new.create
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav17-event-kinds")
+  end
+
+  desc "Imports events"
+  task "nav18-1_events": :setup do
+    SacImports::Nav18EventsImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav18-events")
   end
 
   desc "NAV1 Imports subscriptions from Navision"

@@ -16,7 +16,7 @@ describe "participation edit page", :js do
   before { sign_in(person) }
 
   context "event without prices" do
-    before { event.update!(state: nil, price_member: nil, price_regular: nil) }
+    before { event.update!(price_member: nil, price_regular: nil) }
 
     it "shows empty price option" do
       visit participation_path

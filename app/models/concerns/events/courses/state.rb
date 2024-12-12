@@ -32,7 +32,7 @@ module Events::Courses::State
 
     self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
 
-    validate :assert_valid_state_change, if: :state_changed?
+    validate :assert_valid_state_change, if: :state_changed?, on: :update
 
     before_create :set_default_state
     before_save :adjust_application_state, if: :application_closing_at_changed?
@@ -90,7 +90,8 @@ module Events::Courses::State
   end
 
   def set_default_state
-    self.state = :created
+    # Explicitly call self[:state].blank? because self.state is overridden in youth wagon to return first possible state if nil.
+    self.state = :created if self[:state].blank?
   end
 
   def state_changed_to?(new_state)
