@@ -96,8 +96,8 @@ describe "signup/sektion", :js do
     assert_step "Zusammenfassung"
     expect(page).to have_button("Mitgliedschaft beantragen"), "expected to be on last page"
     check "Ich habe die Statuten gelesen und stimme diesen zu"
-    check "Ich habe das Beitragsreglement gelesen und stimme diesen zu"
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    check "Ich habe das Beitragsreglement gelesen und stimme diesem zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
 
     yield if block_given?
     if submit
@@ -582,7 +582,7 @@ describe "signup/sektion", :js do
 
     it "creates including subscription if newsletter is checked" do
       click_button "Weiter"
-      check "Ich möchte einen Newsletter abonnieren"
+      check "Ich möchte den SAC-Newsletter abonnieren."
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
@@ -826,7 +826,7 @@ describe "signup/sektion", :js do
 
       it "redirects to memberships tab with a flash message" do
         visit group_self_registration_path(group_id: group)
-        expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle.")
+        expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
       end
     end
 

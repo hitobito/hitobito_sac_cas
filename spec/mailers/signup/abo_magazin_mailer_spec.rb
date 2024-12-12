@@ -44,7 +44,7 @@ describe Signup::AboMagazinMailer do
     expect(body).to include('Ich habe die <a href="https://www.sac-cas.ch/de/meta/datenschutz">Datenschutzerklärung</a> ' \
       "gelesen und stimme diesen zu.<br>")
     expect(body).to include("Die Rechnung wird dir in einer separaten E-Mail zugestellt.")
-    expect(body).not_to include "Ich möchte einen Newsletter abonnieren"
+    expect(body).not_to include "Ich möchte den SAC-Newsletter abonnieren."
   end
 
   it "uses person language to localize message" do
@@ -56,12 +56,12 @@ describe Signup::AboMagazinMailer do
   describe "optional newsletter line" do
     it "includes newsletter statement" do
       body = described_class.confirmation(person, group, true).body.to_s
-      expect(body).to include "Ich möchte einen Newsletter abonnieren"
+      expect(body).to include "Ich möchte den SAC-Newsletter abonnieren."
     end
 
     it "excludes newsletter statement" do
       body = described_class.confirmation(person, group, false).body.to_s
-      expect(body).not_to include "Ich möchte einen Newsletter abonnieren"
+      expect(body).not_to include "Ich möchte den SAC-Newsletter abonnieren."
     end
   end
 end

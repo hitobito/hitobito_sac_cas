@@ -47,7 +47,7 @@ describe "self_registration_abo_magazin", js: true do
     expect_active_step "Abo"
     expect_shared_partial
     check "Ich habe die AGB gelesen und stimme diesen zu"
-    check "Ich habe die Datenschutzerklärung gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
     yield if block_given?
     if submit
       click_on "ABO KOSTENPFLICHTIG BESTELLEN"
@@ -89,7 +89,7 @@ describe "self_registration_abo_magazin", js: true do
 
     expect do
       complete_last_page do
-        check "Ich möchte einen Newsletter abonnieren"
+        check "Ich möchte den SAC-Newsletter abonnieren."
       end
     end.to change { Person.count }.by(1)
 
@@ -110,7 +110,7 @@ describe "self_registration_abo_magazin", js: true do
 
     expect do
       complete_last_page do
-        uncheck "Ich möchte einen Newsletter abonnieren"
+        uncheck "Ich möchte den SAC-Newsletter abonnieren."
       end
     end.to change { Person.count }.by(1)
 

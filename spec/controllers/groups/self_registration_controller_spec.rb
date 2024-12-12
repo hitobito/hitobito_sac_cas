@@ -104,7 +104,7 @@ describe Groups::SelfRegistrationController do
         get :show, params: wizard_params
 
         expect(response).to redirect_to(history_group_person_path(group_id: person.primary_group_id, id: person.id))
-        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC Geschäftsstelle."
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
 
@@ -117,7 +117,7 @@ describe Groups::SelfRegistrationController do
         get :show, params: wizard_params
 
         expect(response).to redirect_to(history_group_person_path(group_id: person.primary_group_id, id: person.id))
-        expect(flash[:notice]).to eq "Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC Geschäftsstelle."
+        expect(flash[:notice]).to eq "Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
   end
