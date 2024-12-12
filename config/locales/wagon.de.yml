@@ -1679,7 +1679,7 @@ de:
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
       group/abo_magazin/abonnent:
-        no_permission: “Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an mv@sac-cas.ch."
+        no_permission: "Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an mv@sac-cas.ch."
 
   sac_membership_configs:
     form:
