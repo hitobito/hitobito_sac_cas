@@ -74,3 +74,6 @@ phone_number:
     - Fax
     - Andere
     - Haupt-Telefon
+
+impersonate:
+  notify: false
