@@ -1102,6 +1102,10 @@ fr:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
   devise:
+    mailer:
+      confirmation_instructions:
+        body:
+          footer: Salutations sportives
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
