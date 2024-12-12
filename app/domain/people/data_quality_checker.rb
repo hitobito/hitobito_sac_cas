@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::DataQualityChecker
-  ATTRIBUTES_TO_CHECK = %w[first_name last_name company_name street zip_code town email phone_numbers birthday].freeze
+  ATTRIBUTES_TO_CHECK = %w[first_name last_name company_name street zip_code postbox town email phone_numbers birthday].freeze
 
   attr_reader :person
 
