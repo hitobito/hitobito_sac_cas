@@ -1874,7 +1874,7 @@ de:
           statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
           sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
           contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesem zu
-          data_protection_text: Ich habe die %{link} gelesen und stimme diesen zu
+          data_protection_text: Ich habe die %{link} gelesen und stimme dieser zu
       choose_sektion:
         no_self_service_info_text: >-
           Wir bitten dich den gewünschten
