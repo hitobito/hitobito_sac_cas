@@ -35,6 +35,6 @@ describe :roles_terminations, js: true do
     visit history_group_person_path(group_id: role.group_id, id: role.person_id)
 
     expect(page).to have_css 'button[disabled="disabled"]', text: "Austritt"
-    expect(page).to have_css('div[rel="tooltip"][title="Meldung: “Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an mv@sac-cas.ch.”"]')
+    expect(page).to have_css('div[rel="tooltip"][title="Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an mv@sac-cas.ch.”]')
   end
 end
