@@ -1102,10 +1102,6 @@ fr:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
   devise:
-    mailer:
-      confirmation_instructions:
-        body:
-          footer: Salutations sportives
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
@@ -1339,8 +1335,8 @@ fr:
         agb_text: "J’ai lu et j’accepte les %{link}"
         statutes_text: "J’ai lu et j’accepte les %{link} "
         sektion_statuten_text: "J’ai lu et j’accepte les %{link} "
-        contribution_regulations_text: "J’ai lu et j’accepte les %{link} "
-        data_protection_text: "J’ai lu et j’accepte les %{link} "
+        contribution_regulations_text: ""
+        data_protection_text: ""
 
     self_inscription:
       membership_role_exists: Tu es déjà membre de cette section
@@ -1732,10 +1728,10 @@ fr:
       link_agb: "https://www.sac-cas.ch/fr/meta/cgv-les-alpes/"
       link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_FR.pdf"
+      link_statutes: ""
       link_statutes_title: Statuts
       link_sektion_statuten_title: Statuts de la section
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/Reglement_des_cotisations_AD_2020_-_valable_des_1.1.2021.pdf"
+      link_contribution_regulations: ""
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
@@ -1787,7 +1783,7 @@ fr:
         person_fields_title: Données personnelles
         agreement_fields:
           adult_consent_caption: Je confirme que j’ai au moins 18 ans ou que j’ai l’accord de mes parents ou représentants légaux.
-          newsletter_caption: Je souhaite m’abonner à une newsletter
+          newsletter_caption: ""
         abo_basic_login:
           person_fields:
             next_button: CRÉER UN COMPTE CAS
@@ -1843,11 +1839,11 @@ fr:
             immediate_entry_date: "Date d’entrée: immédiatement"
 
         various_fields:
-          newsletter: Je souhaite m’abonner à une newsletter
+          newsletter: ""
           statutes_text: "J’ai lu et j’accepte les %{link}"
           sektion_statuten_text: "J’ai lu et j’accepte les %{link}"
-          contribution_regulations_text: "J’ai lu et j’accepte les %{link} "
-          data_protection_text: "J’ai lu et j’accepte les %{link}"
+          contribution_regulations_text: ""
+          data_protection_text: ""
       choose_sektion:
         no_self_service_info_text: >-
           Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous

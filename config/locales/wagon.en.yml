@@ -1275,8 +1275,8 @@ en:
         agb_text: ""
         statutes_text: "I have read and agree to the %{link} "
         sektion_statuten_text: "I have read and agree to the %{link} "
-        contribution_regulations_text: "I have read the %{link} and agree with them"
-        data_protection_text: "I have read and agree to the %{link} "
+        contribution_regulations_text: ""
+        data_protection_text: ""
 
     self_inscription:
       membership_role_exists: You are already a member of this section
@@ -1659,10 +1659,10 @@ en:
       link_agb: ""
       link_faqs: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
       link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Statuten-SAC_de.pdf"
+      link_statutes: ""
       link_statutes_title: Statutes
       link_sektion_statuten_title: Section statutes
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement_AV_2020_-_G%C3%BCltig_ab_1.1.2021.pdf"
+      link_contribution_regulations: ""
       link_contribution_regulations_title: Contribution regulations
       link_data_protection: "https://www.sac-cas.ch/en/meta/data-protection/"
       link_data_protection_title: Data protection
@@ -1714,7 +1714,7 @@ en:
         person_fields_title: Personal data
         agreement_fields:
           adult_consent_caption: I confirm that I am at least 18 years old or have the consent of my legal guardian
-          newsletter_caption: I would like to subscribe to a newsletter
+          newsletter_caption: ""
         abo_basic_login:
           person_fields:
             next_button: ""
@@ -1765,11 +1765,11 @@ en:
             immediate_entry_date: ""
 
         various_fields:
-          newsletter: I would like to subscribe to a newsletter
+          newsletter: ""
           statutes_text: "I have read and agree to the %{link} "
           sektion_statuten_text: "I have read and agree to the %{link} "
-          contribution_regulations_text: "I have read the %{link} and agree with them"
-          data_protection_text: "I have read and agree to the %{link} "
+          contribution_regulations_text: ""
+          data_protection_text: ""
       choose_sektion:
         no_self_service_info_text: >-
           We ask you to apply for the desired section change by telephone or e-mail*. Please contact us for this purpose

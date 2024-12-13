@@ -1102,10 +1102,6 @@ it:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
   devise:
-    mailer:
-      confirmation_instructions:
-        body:
-          footer: Saluti sportivi
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
@@ -1339,8 +1335,8 @@ it:
         agb_text: "Ho letto %{link}e acconsento"
         statutes_text: " Ho letto %{link} e acconsento"
         sektion_statuten_text: "Ho letto %{link} e acconsento"
-        contribution_regulations_text: "Ho letto %{link} e acconsento"
-        data_protection_text: "Ho letto %{link} e acconsento"
+        contribution_regulations_text: ""
+        data_protection_text: ""
 
     self_inscription:
       membership_role_exists: Sei già socio di questa sezione
@@ -1732,10 +1728,10 @@ it:
       link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
       link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20230816_SAC_Statuten_A5_IT.pdf"
+      link_statutes: ""
       link_statutes_title: Statuto
       link_sektion_statuten_title: Statuto della sezione
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali_AD_2020_-_valido_dal_1_gennaio_2021_01.pdf"
+      link_contribution_regulations: ""
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati
@@ -1787,7 +1783,7 @@ it:
         person_fields_title: Dati personali
         agreement_fields:
           adult_consent_caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
-          newsletter_caption: Vorrei abbonarmi alla Newsletter
+          newsletter_caption: ""
         abo_basic_login:
           person_fields:
             next_button: CREARE UN ACCOUNT CAS
@@ -1843,11 +1839,11 @@ it:
             immediate_entry_date: "Data di adesione: immediata"
 
         various_fields:
-          newsletter: Vorrei abbonarmi alla Newsletter
+          newsletter: ""
           statutes_text: "Ho letto %{link} e acconsento"
           sektion_statuten_text: "Ho letto %{link} e acconsento"
-          contribution_regulations_text: "Ho letto %{link} e acconsento"
-          data_protection_text: "Ho letto %{link} e acconsento"
+          contribution_regulations_text: ""
+          data_protection_text: ""
       choose_sektion:
         no_self_service_info_text: >-
           La modifica della sezione desiderata va effettuata contattandoci per telefono o per e-mail*.
