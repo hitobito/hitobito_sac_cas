@@ -64,6 +64,7 @@ bluemlisalp:
   lft: 12
   rgt: 35
   name: SAC Blüemlisalp
+  email: bluemlisalp@sac.ch
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   navision_id: 1650

@@ -26,7 +26,7 @@ class Signup::SektionMailer < ApplicationMailer
     @person = person
     @section = section
     @beitragskategorie = beitragskategorie
-    headers[:bcc] = [SacCas::MV_EMAIL, section.email].compact_blank
+    headers[:bcc] = [section.email, SacCas::MV_EMAIL].compact_blank
     locales = [person.language]
 
     compose_multilingual(person, content_key, locales)

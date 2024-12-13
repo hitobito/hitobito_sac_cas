@@ -16,6 +16,8 @@ module Wizards::Memberships
 
     attr_reader :person
 
+    delegate :name, to: :sektion, prefix: true
+
     def initialize(current_step: 0, person: nil, backoffice: nil, **params)
       @person = person
       @backoffice = backoffice
@@ -55,10 +57,6 @@ module Wizards::Memberships
       errors.empty?
     end
 
-    def sektion_name
-      role&.layer_group&.display_name
-    end
-
     def terminate_on
       if step(:termination_choose_date)&.terminate_on == "now"
         Date.current.yesterday
@@ -67,12 +65,10 @@ module Wizards::Memberships
       end
     end
 
-    def role
-      person&.sac_membership&.stammsektion_role
-    end
+    def role = person.sac_membership.stammsektion_role
 
     def mitglied_termination_by_section_only?
-      role&.layer_group&.mitglied_termination_by_section_only ||
+      sektion&.mitglied_termination_by_section_only ||
         person.household.people
           .flat_map { |person| person.sac_membership.zusatzsektion_roles }
           .any? { |role| role.layer_group&.mitglied_termination_by_section_only }
@@ -88,10 +84,12 @@ module Wizards::Memberships
 
     private
 
+    def sektion = @sektion ||= role&.layer_group
+
     def send_confirmation_mail
-      Memberships::TerminateSacMembershipMailer.confirmation(
+      Memberships::TerminateMembershipMailer.terminate_membership(
         person,
-        sektion_name,
+        sektion,
         I18n.l(terminate_on)
       ).deliver_later
     end

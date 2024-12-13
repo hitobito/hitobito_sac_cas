@@ -21,6 +21,7 @@ describe Signup::SektionMailer do
     it "sends confirmation email" do
       expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
       expect(mail.bcc).to include(SacCas::MV_EMAIL)
+      expect(mail.bcc).to include("bluemlisalp@sac.ch")
       expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
       expect(body).to include("Sektion: SAC Blüemlisalp", "Hallo Edmund")
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
@@ -51,6 +52,7 @@ describe Signup::SektionMailer do
     it "sends confirmation email" do
       expect(mail.to).to eq(["t.norgay@hitobito.example.com"])
       expect(mail.bcc).to include(SacCas::MV_EMAIL)
+      expect(mail.bcc).to include("bluemlisalp@sac.ch")
       expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
       expect(body).to include "Teil des grössten Bergsportverbands der Schweiz bist"
       expect(body).to include(person_path(person))
