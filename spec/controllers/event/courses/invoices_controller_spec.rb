@@ -11,7 +11,7 @@ describe Event::Courses::InvoicesController do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course) }
-  let(:participation) { Fabricate(:event_participation, event:, person: participant, price: 10, application_id: -1) }
+  let(:participation) { Fabricate(:event_participation, event:, person: participant, price: 10, price_category: "price_regular", application_id: -1) }
   let(:params) { {group_id: event.group_ids.first, event_id: event.id, id: participation.id} }
 
   describe "POST#create" do

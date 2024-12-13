@@ -78,12 +78,6 @@ describe Event::Participation do
 
     subject(:participation) { Fabricate.build(:event_participation, event: course) }
 
-    def build_role(key, role)
-      group = groups(key)
-      types = group.role_types.collect { |rt| [rt.to_s.demodulize, rt.sti_name] }.to_h
-      participation.person.roles.build(type: types.fetch(role), group: group)
-    end
-
     it "is false when price_subsidized is nil" do
       expect(participation).not_to be_subsidizable
     end
@@ -92,15 +86,9 @@ describe Event::Participation do
       expect(participation).not_to be_subsidizable
     end
 
-    [
-      [:bluemlisalp_mitglieder, "Mitglied"],
-      [:bluemlisalp_neuanmeldungen_nv, "Neuanmeldung"],
-      [:bluemlisalp_neuanmeldungen_sektion, "Neuanmeldung"]
-    ].each do |group, role|
-      it "is true if person has #{role} in #{group}" do
-        build_role(group, role)
-        expect(participation).to be_subsidizable
-      end
+    it "is true if person is member" do
+      participation.person = people(:mitglied)
+      expect(participation).to be_subsidizable
     end
   end
 

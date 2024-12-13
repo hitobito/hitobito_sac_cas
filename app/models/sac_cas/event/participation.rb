@@ -24,6 +24,7 @@ module SacCas::Event::Participation
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 
+    before_validation :clear_price_without_category
     before_save :update_previous_state, if: :state_changed?
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
@@ -37,24 +38,8 @@ module SacCas::Event::Participation
     after_update :send_application_canceled_email, if: :state_changed_to_canceled?
   end
 
-  def subsidy_amount
-    subsidy ? event.price_subsidized : 0
-  end
-
-  def course_pricing
-    price, category = if person.sac_membership_active?
-      subsidy ? [subsidy_amount, :price_subsidized] : [event.price_member, :price_member]
-    else
-      [event.price_regular, :price_regular]
-    end
-
-    {price: price, price_category: category}
-  end
-
   def subsidizable?
-    event.course? && event.price_subsidized.present? && person.roles.any? do |role|
-      role.class.include?(SacCas::Role::MitgliedStammsektion)
-    end
+    event.course? && event.price_subsidized.present? && person.sac_membership_active?
   end
 
   def participant_cancelable?
@@ -87,6 +72,10 @@ module SacCas::Event::Participation
 
   def state_changed_to_canceled?
     saved_change_to_attribute(:state)&.second == "canceled"
+  end
+
+  def clear_price_without_category
+    self.price = nil if price_category.blank?
   end
 
   def send_application_canceled_email

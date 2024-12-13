@@ -304,6 +304,64 @@ describe Event::ParticipationsController do
         end
       end
     end
+
+    describe "pricing" do
+      before { event.update!(price_member: 30, price_regular: 50, price_subsidized: 10) }
+
+      let(:participation) { assigns(:participation) }
+
+      context "member" do
+        let(:user) { people(:mitglied) }
+
+        it "sets subsidized price if requested" do
+          expect do
+            post :create, params: params.merge(event_participation: {subsidy: true})
+          end.to change { Event::Participation.count }.by(1)
+          expect(participation.price).to eq 10
+          expect(participation.price_category).to eq("price_subsidized")
+        end
+
+        it "sets member price if no subsidy requested" do
+          expect do
+            post :create, params: params
+          end.to change { Event::Participation.count }.by(1)
+          expect(participation.price).to eq 30
+          expect(participation.price_category).to eq("price_member")
+        end
+      end
+
+      context "non-member" do
+        let(:user) { people(:abonnent) }
+
+        it "sets regular price if subsidized price is not available" do
+          expect do
+            post :create, params: params.merge(event_participation: {subsidy: true})
+          end.to change { Event::Participation.count }.by(1)
+          expect(participation.price).to eq 50
+          expect(participation.price_category).to eq("price_regular")
+        end
+
+        it "cannot set price or category itself" do
+          expect do
+            post :create, params: params.merge(event_participation: {price_category: "price_member", price: 1})
+          end.to change { Event::Participation.count }.by(1)
+          expect(participation.price).to eq 50
+          expect(participation.price_category).to eq("price_regular")
+        end
+      end
+
+      context "admin" do
+        let(:user) { people(:admin) }
+
+        it "set arbitrary category for someone else" do
+          expect do
+            post :create, params: params.merge(event_participation: {person_id: people(:abonnent).id, price_category: "price_member"})
+          end.to change { Event::Participation.count }.by(1)
+          expect(participation.price).to eq 30
+          expect(participation.price_category).to eq("price_member")
+        end
+      end
+    end
   end
 
   context "state changes" do
@@ -319,7 +377,7 @@ describe Event::ParticipationsController do
     end
 
     it "PUT#summon enqueues invoice if participation price is set" do
-      participation.update!(price: 10)
+      participation.update!(price: 10, price_category: :price_regular)
       expect { put :summon, params: params }
         .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
         .and change { participation.reload.state }.to("summoned")
@@ -327,7 +385,7 @@ describe Event::ParticipationsController do
 
     it "PUT#summon doesn't enqueue same invoice twice" do
       ExternalInvoice::CourseParticipation.create!(person: participation.person, total: 10, link: participation)
-      participation.update!(price: 10)
+      participation.update!(price: 10, price_category: :price_regular)
 
       expect(ExternalInvoice::CourseParticipation).not_to receive(:invoice!)
       expect { put :summon, params: params }
@@ -370,7 +428,7 @@ describe Event::ParticipationsController do
 
     it "PUT#cancel creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
       invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
-      participation.update!(price: 10)
+      participation.update!(price: 10, price_category: :price_regular)
       freeze_time
 
       expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}}) }
@@ -437,6 +495,14 @@ describe Event::ParticipationsController do
                                 event_participation: {price_category: "price_regular"}}
         end.to change { participation.reload.price }.from(20).to(30)
           .and not_change { participation.price_category }
+      end
+
+      it "clears price when removing price_category" do
+        expect do
+          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
+                                event_participation: {price_category: ""}}
+        end.to change { participation.reload.price }.from(20).to(nil)
+          .and change { participation.price_category }.from("price_regular").to(nil)
       end
 
       it "doesn't update price when event#price changed if price_category should still use former price" do

@@ -10,5 +10,7 @@
     = yield
   .col-md
     = turbo_frame_tag :course_signup_aside do
-      = render 'event/participations/course_signup_aside', price: entry.person.sac_membership_active? ? entry.event.price_member : entry.event.price_regular, subsidy: entry.subsidizable? && entry.event.price_subsidized ? entry.subsidy_amount : 0
+      = render 'event/participations/course_signup_aside',
+               price: entry.person.sac_membership_active? ? entry.event.price_member : entry.event.price_regular,
+               subsidy: entry.subsidizable? && entry.subsidy? ? entry.event.price_subsidized : 0
 

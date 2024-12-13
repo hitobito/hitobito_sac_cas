@@ -13,11 +13,10 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category price]
+    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter
-    after_save :update_participation_price
     after_summon :enqueue_invoice_job
     before_cancel :assert_participant_cancelable?
     after_cancel :cancel_invoices
@@ -47,14 +46,36 @@ module SacCas::Event::ParticipationsController
     permitted
   end
 
-  def assign_attributes
-    permitted = permitted_params
-    permitted.delete(:price_category) if keep_former_price?
-    entry.attributes = permitted
+  def permitted_params
+    super.tap do |permitted|
+      calculate_price(permitted)
+    end
   end
 
-  def keep_former_price?
-    permitted_params[:price_category] == "former"
+  def calculate_price(permitted)
+    price_category = permitted[:price_category]
+    if entry.new_record? && !params[:for_someone_else]
+      permitted[:subsidy] = false unless entry.subsidizable?
+      permitted[:price_category] = price_category = determine_price_category(permitted[:subsidy])
+    end
+
+    if price_category == "former"
+      permitted.delete(:price_category)
+    elsif permitted.key?(:price_category)
+      permitted[:price] = price_for_category(price_category)
+    end
+  end
+
+  def determine_price_category(subsidy)
+    if entry.person.sac_membership_active?
+      subsidy ? :price_subsidized : :price_member
+    else
+      :price_regular
+    end
+  end
+
+  def price_for_category(price_category)
+    price_category.blank? ? nil : @event.send(price_category)
   end
 
   def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -157,11 +178,5 @@ module SacCas::Event::ParticipationsController
     end
 
     ExternalInvoice::CourseAnnulation.invoice!(entry)
-  end
-
-  def update_participation_price
-    return if keep_former_price?
-
-    entry.update!(price: entry.price_category.nil? ? nil : @event.send(entry.price_category))
   end
 end

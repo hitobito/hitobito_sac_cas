@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Event::ApplicationConfirmationMailer do
   let(:event) { Fabricate(:sac_open_course, number: 123, application_closing_at: Date.new(2038, 1, 19)) }
-  let(:participation) { event.participations.create!(person: people(:mitglied), price: 12.3) }
+  let(:participation) { event.participations.create!(person: people(:mitglied), price: 12.3, price_category: "price_regular") }
   let(:mail) { described_class.confirmation(participation, described_class::APPLIED) }
 
   before { event.groups.first.update!(course_admin_email: "admin@example.com") }

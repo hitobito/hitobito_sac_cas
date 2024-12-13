@@ -16,14 +16,6 @@
       data: { forwarder_target: :click, turbo_frame: :course_signup_aside },
       hidden: true)
 
-  = button_tag(Event::Participation.human_attribute_name(:subsidy),
-      data: { forwarder_target: :click, turbo_frame: :hidden_price_fields },
-      hidden: true)
-
-  = turbo_frame_tag :hidden_price_fields do
-    = f.hidden_field :price, value: entry.course_pricing[:price]
-    = f.hidden_field :price_category, value: entry.course_pricing[:price_category]
-
 .well
   %h3= t('.detail_info_header')
 
