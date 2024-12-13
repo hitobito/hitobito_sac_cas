@@ -73,7 +73,7 @@ describe SacImports::SacSections::GroupEntry do
       list = MailingList.last
       expect(list.name).to eq("Sektionsbulletin digital")
       expect(list.internal_key).to eq SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY
-      expect(list.subscribable_for).to eq("anyone")
+      expect(list.subscribable_for).to eq("configured")
       expect(list.subscribable_mode).to eq("opt_in")
       expect(list.filter_chain).to be_blank
     end

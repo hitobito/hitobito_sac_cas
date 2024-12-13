@@ -189,7 +189,7 @@ module SacImports
     def setup_bulletin_digital
       internal_key = SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY
       name = "Sektionsbulletin digital"
-      setup_mailing_list(internal_key, name, "anyone", "opt_in")
+      setup_mailing_list(internal_key, name, "configured", "opt_in")
     end
 
     def setup_bulletin_paper
