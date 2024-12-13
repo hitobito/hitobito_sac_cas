@@ -9,13 +9,13 @@ require "spec_helper"
 
 describe "switching stammsektion", js: true do
   before do
-    sign_in(person)
+    sign_in(people(:admin))
     visit group_person_path(group_id: group.id, id: person.id)
 
     Group::SektionsNeuanmeldungenSektion.delete_all # To allow self service
   end
 
-  context "as normal user" do
+  context "on normal user" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:mitglied) }
 
@@ -67,7 +67,7 @@ describe "switching stammsektion", js: true do
     end
   end
 
-  context "as family user" do
+  context "on family user" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:familienmitglied) }
 
