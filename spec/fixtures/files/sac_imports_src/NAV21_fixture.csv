@@ -1,5 +1,5 @@
 600000,10,NULL,NULL,0,NULL,NULL,0,3,NULL,NULL,leader,,1
-600001,10,NULL,,0,,,0,3,NULL,NULL,assistant_leader,Hilfssheriff,0
+600001,10,,,0,,,0,3,NULL,NULL,assistant_leader,Hilfssheriff,NULL
 600002,10,unconfirmed,,0,,,0,,180,price_member,participant,,0
 600003,10,applied,Gerne Vegi,0,,,0,,180,price_member,participant,,0
 600004,10,rejected,,0,,,0,,180,price_member,participant,,0

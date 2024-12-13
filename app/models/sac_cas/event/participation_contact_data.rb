@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationContactData
 
     delegate :salutation_label, to: :person
 
-    delegate :subsidy_amount, :subsidizable?, to: :participation
+    delegate :subsidy?, :subsidizable?, to: :participation
 
     class << self
       delegate :human_attribute_name, to: Wizards::Steps::Signup::PersonFields

@@ -344,8 +344,8 @@ describe Event::Course do
     before do
       @participations = course.participations.create!([
         {person: people(:admin)},
-        {person: people(:mitglied), state: :assigned, price: 10, application: application},
-        {person: people(:familienmitglied), state: :assigned, price: 10}
+        {person: people(:mitglied), state: :assigned, price: 10, price_category: "price_regular", application: application},
+        {person: people(:familienmitglied), state: :assigned, price: 10, price_category: "price_regular"}
       ])
       @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
@@ -551,9 +551,9 @@ describe Event::Course do
     before do
       _p1, p2, p3, p4 = course.participations.create!([
         {person: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
-        {person: people(:mitglied), state: :absent, price: 42},
-        {person: people(:familienmitglied), state: :attended, price: 42},
-        {person: people(:familienmitglied2), state: :absent, price: 42}
+        {person: people(:mitglied), state: :absent, price: 42, price_category: "price_regular"},
+        {person: people(:familienmitglied), state: :attended, price: 42, price_category: "price_regular"},
+        {person: people(:familienmitglied2), state: :absent, price: 42, price_category: "price_regular"}
       ])
       ExternalInvoice::CourseParticipation.create!(person_id: p2.person_id, link: p2, total: p2.price)
       ExternalInvoice::CourseParticipation.create!(person_id: p3.person_id, link: p3, total: p3.price)
