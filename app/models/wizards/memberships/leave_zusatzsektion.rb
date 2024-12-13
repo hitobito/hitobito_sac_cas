@@ -17,9 +17,7 @@ module Wizards::Memberships
 
     attr_reader :person, :role
 
-    def sektion_name
-      role.layer_group.display_name
-    end
+    delegate :name, to: :sektion, prefix: true
 
     def initialize(person:, role:, current_step: 0, backoffice: false, **params)
       @person = person
@@ -62,15 +60,17 @@ module Wizards::Memberships
     end
 
     def family_membership?
-      role&.beitragskategorie&.family?
+      role.beitragskategorie.family?
     end
+
+    def sektion = role.layer_group
 
     private
 
     def send_confirmation_mail
-      Memberships::LeaveZusatzsektionMailer.confirmation(
+      Memberships::TerminateMembershipMailer.leave_zusatzsektion(
         person,
-        sektion_name,
+        sektion,
         I18n.l(terminate_on)
       ).deliver_later
     end

@@ -16,6 +16,8 @@ describe Memberships::SwitchStammsektionMailer do
 
   it "sends confirmation email to person" do
     expect(mail.to).to match_array(["support@hitobito.example.com"])
+    expect(mail.bcc).to include(SacCas::MV_EMAIL)
+    expect(mail.bcc).to include("bluemlisalp@sac.ch")
     expect(mail.subject).to eq "Bestätigung Sektionswechsel"
     expect(mail.body).to match("Hallo Anna Admin")
     expect(mail.body).to match("Der Sektionswechsel zu SAC Blüemlisalp wurde vorgenommen.")

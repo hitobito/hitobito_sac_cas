@@ -12,6 +12,7 @@ class Memberships::SwitchStammsektionMailer < ApplicationMailer
     @person = person
     @section = section
     headers[:cc] = Group::Geschaeftsstelle.first.email
+    headers[:bcc] = [section.email, SacCas::MV_EMAIL].compact_blank
 
     compose(person, CONFIRMATION)
   end

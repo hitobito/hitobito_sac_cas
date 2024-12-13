@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - beitragskategorie = c.model.wizard.human_role_type
-- sektion_name = c.model.wizard.join_operation.join_section.display_name
+- sektion_name = c.model.wizard.join_operation.join_section.name
 - if c.model.wizard.choose_sektion.group.decorate.membership_admission_through_gs?
   %p=t('.admission_through_gs', beitragskategorie:, sektion_name:)
 - else

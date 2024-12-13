@@ -40,7 +40,7 @@ describe "leave zusatzsektion", js: true do
         .to change { person.roles.count }.by(-1)
         .and change { role.end_on }.to(Date.current.yesterday)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
+        .and have_enqueued_mail(Memberships::TerminateMembershipMailer).exactly(:once)
     end
   end
 
@@ -63,7 +63,7 @@ describe "leave zusatzsektion", js: true do
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
         .and change { role.end_on }.to(Date.current.end_of_year)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
+        .and have_enqueued_mail(Memberships::TerminateMembershipMailer).exactly(:once)
     end
   end
 
@@ -86,7 +86,7 @@ describe "leave zusatzsektion", js: true do
         .to not_change { person.roles.count }
         .and change { role.terminated }.to(true)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
-        .and have_enqueued_mail(Memberships::LeaveZusatzsektionMailer).exactly(:once)
+        .and have_enqueued_mail(Memberships::TerminateMembershipMailer).exactly(:once)
     end
   end
 
