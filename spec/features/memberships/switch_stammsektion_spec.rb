@@ -15,9 +15,9 @@ describe "switching stammsektion", js: true do
     Group::SektionsNeuanmeldungenSektion.delete_all # To allow self service
   end
 
-  context "as normal user" do
+  context "as SAC Mitarbeiter" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
-    let(:person) { people(:mitglied) }
+    let(:person) { people(:admin) }
 
     before do
       roles(:mitglied_zweitsektion).destroy
