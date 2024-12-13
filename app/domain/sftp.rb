@@ -19,7 +19,8 @@ class Sftp
 
     handle = connection.open!(file_path, "w")
     connection.write!(handle, 0, data)
-    connection.close(handle)
+    connection.channel.remote_closed!
+    connection.close!(handle)
   end
 
   def create_remote_dir(name)

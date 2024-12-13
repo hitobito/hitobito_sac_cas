@@ -16,6 +16,7 @@ describe Sftp do
       port: 22)
   end
   let(:session) { instance_double("Net::SFTP::Session") }
+  let(:session_channel) { double }
 
   subject(:sftp) { Sftp.new(config) }
 
@@ -76,10 +77,14 @@ describe Sftp do
       expect(sftp).to_not receive(:create_remote_dir).with(folder_path)
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
+
+      expect(session).to receive(:channel).and_return(session_channel)
+      expect(session_channel).to receive(:remote_closed!)
+
       expect(session).to receive(:connect!)
       expect(session).to receive(:open!).with(file_path, "w").and_return("handler")
       expect(session).to receive(:write!).with("handler", 0, "data")
-      expect(session).to receive(:close)
+      expect(session).to receive(:close!)
 
       sftp.upload_file("data", file_path)
     end
