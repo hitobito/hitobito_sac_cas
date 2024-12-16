@@ -1683,6 +1683,12 @@
           "writable": false,
           "description": null
         },
+        "offerings": {
+          "type": "array_of_strings",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "navision_id": {
           "type": "integer",
           "readable": true,
@@ -1827,6 +1833,8 @@
         "updated_at": {
         },
         "deleted_at": {
+        },
+        "offerings": {
         },
         "navision_id": {
         }
@@ -2097,6 +2105,12 @@
             "eq"
           ],
           "single": true
+        },
+        "offerings": {
+          "type": "array_of_strings",
+          "operators": [
+            "eq"
+          ]
         },
         "navision_id": {
           "type": "integer",

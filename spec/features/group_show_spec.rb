@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "person show page" do
+describe "group show page" do
   let(:admin) { people(:admin) }
   let(:sektion) { groups(:bluemlisalp) }
   let(:neuanmeldungen_sektion) { groups(:bluemlisalp_neuanmeldungen_sektion) }
@@ -19,6 +19,19 @@ describe "person show page" do
       visit group_path(id: sektion.id)
 
       expect(page).to have_css("a", text: /http:\/\/.+\/groups\/#{neuanmeldungen_sektion.id}\/self_registration/)
+    end
+  end
+
+  describe "section offering" do
+    before { sign_in(admin) }
+
+    it "shows section offers" do
+      sektion.section_offerings = [SectionOffering.create!(title: "Offer 1"), SectionOffering.create!(title: "Offer 2")]
+      visit group_path(id: sektion.id)
+
+      expect(page).to have_css("dt", text: "Sektionsangebote")
+      expect(page).to have_css("li", text: "Offer 1")
+      expect(page).to have_css("li", text: "Offer 2")
     end
   end
 end
