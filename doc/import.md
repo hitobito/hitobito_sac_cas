@@ -40,8 +40,9 @@ Zuerst werden seed daten von int und prod gelesen (Puzzle Netz oder VPN aktiv)
 Anschliessend erfolgt der Import mittels rake tasks in der folgenden Reihenfolge
 
 1. `rails db:drop db:create db:migrate wagon:migrate` # nicht gleichzeitig mit `seed` ausführen!
-2. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
-3. `rails sac_imports:all`
+2. `rm db/seeds/custom_contents.rb` # Core custom contents löschen
+3. `NO_ENV=true rails db:seed wagon:seed` # !!! **NO_ENV** muss gesetzt sein, sonst werden dev seeds geseedet !!!
+4. `rails sac_imports:all`
 
 Das führt die folgenden rake tasks in der richtigen Reihenfolge aus
 
@@ -103,10 +104,28 @@ Via argo rails und delayed jobs auf 0 skalieren
   zcat tmp/hit_sac_cas_prod.sql.gz | ./bin/with_cluster_db rails dbconsole -p
 ```
 
-## Pods hochskalieren und Abacus Sync starten
+## Secret aktualisieren
 
-Auf dem prod system anmeldungen systen
+Sicherstellen, dass das Abacus Secret korrekt ist! Ggf Secret löschen!
 
 ```
+  oc delete secret abacus-config
+  ./bin/decode_secret abacus_config
+
+```
+
+Auf dem neu gestarteten Rails pod verifizieren
+
+```
+  Invoices::Abacus::Config.username
+  Invoices::Abacus::Config.password
+```
+
+## Pods hochskalieren und Abacus Sync starten
+
+Dann Abacus Adressübermittlung starten, ggf die BackupMitgliederExportJobs nach hinten schieben
+
+```
+  Delayed::Job.where(locked_at: nil).where("handler like '%BackupMitglieder%'").udpate_all(run_at: Time.zone.now.noon)
   Invoices::Abacus::TransmitAllMembersJob.new.enqueue!
 ```
