@@ -46,6 +46,11 @@ oidc:
   use_refresh_token: true
   use_jwt_access_token: true
 
+delayed_jobs:
+  concurrency:
+    jobs:
+      - Export::BackupMitgliederExportJob
+
 people:
   people_managers:
     enabled: false
