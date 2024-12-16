@@ -1299,6 +1299,9 @@ de:
   event/courses/leader_settlement_pdfs:
     export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
 
+  event/participations:
+    pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
+
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
     tour_guides_active: Aktive Tourenleiter
