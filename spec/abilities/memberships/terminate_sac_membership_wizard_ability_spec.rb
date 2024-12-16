@@ -31,7 +31,7 @@ describe Memberships::TerminateSacMembershipWizardAbility do
     end
 
     it "may create termination for even if already terminated" do
-      role.update_column(:terminated, true)
+      mitglied.sac_membership.stammsektion_role.update_column(:terminated, true)
       expect(ability).to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
     end
   end
@@ -50,6 +50,24 @@ describe Memberships::TerminateSacMembershipWizardAbility do
     it "may not create termination for self if already terminated" do
       role.update_column(:terminated, true)
       expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: role.person))
+    end
+  end
+
+  context "as schreibrecht role" do
+    let(:role) { build_role(Group::SektionsMitglieder::Schreibrecht, :bluemlisalp_mitglieder) }
+
+    it "may create termination" do
+      expect(ability).to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
+    end
+
+    it "may not create termination if member not active" do
+      people(:mitglied).sac_membership.stammsektion_role.destroy!
+      expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
+    end
+
+    it "may not create termination if already terminated" do
+      mitglied.sac_membership.stammsektion_role.update_column(:terminated, true)
+      expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
     end
   end
 end
