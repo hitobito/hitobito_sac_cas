@@ -157,6 +157,7 @@ module HitobitoSacCas
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      Event::RegisterController.prepend SacCas::Event::RegisterController
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       GroupsController.permitted_attrs << {section_offering_ids: []}
