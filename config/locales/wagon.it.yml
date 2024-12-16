@@ -1102,6 +1102,10 @@ it:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
   devise:
+    mailer:
+      confirmation_instructions:
+        body:
+          footer: ""
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
@@ -1662,6 +1666,8 @@ it:
     global:
       sac_cas/role/mitglied_common:
         no_permission: Per la disdetta è necessario rivolgersi all’assistenza soci della sezione
+      group/abo_magazin/abonnent:
+        no_permission: ""
 
   sac_membership_configs:
     form:

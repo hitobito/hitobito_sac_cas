@@ -1045,6 +1045,10 @@ en:
       updates_household_address: Address is updated for all family members
 
   devise:
+    mailer:
+      confirmation_instructions:
+        body:
+          footer: ""
     sessions:
       form:
         login_identity: Main e-mail / member no.
@@ -1593,6 +1597,8 @@ en:
     global:
       sac_cas/role/mitglied_common:
         no_permission: "To resign, you must contact the section's membership service"
+      group/abo_magazin/abonnent:
+        no_permission: ""
 
   sac_membership_configs:
     form:

@@ -1102,6 +1102,10 @@ fr:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
   devise:
+    mailer:
+      confirmation_instructions:
+        body:
+          footer: ""
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
@@ -1662,6 +1666,8 @@ fr:
     global:
       sac_cas/role/mitglied_common:
         no_permission: "Pour une résiliation, tu dois t’adresser au service des membres de la section"
+      group/abo_magazin/abonnent:
+        no_permission: ""
 
   sac_membership_configs:
     form:
