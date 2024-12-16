@@ -38,7 +38,7 @@ class SectionOffering < ApplicationRecord
       if sections.size == 1
         errors.add(:base, :"restrict_dependent_destroy.has_one", record: Group::Sektion.model_name.human)
       else
-        errors.add(:base, :"restrict_dependent_destroy.has_many", record: Group::Sektion.model_name.human(count: 2))
+        errors.add(:base, :"restrict_dependent_destroy.has_many", record: Group::Sektion.model_name.human(count: sections.size))
       end
       throw(:abort)
     end
