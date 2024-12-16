@@ -1066,6 +1066,9 @@ de:
       confirmation_instructions:
         body:
           footer: Bergsportliche Grüsse
+      unlock_instructions:
+        body:
+          footer: Bergsportliche Grüsse
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
