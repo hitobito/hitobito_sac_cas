@@ -6,7 +6,7 @@
 .row
   - available_attrs.each do |remark_attr|
     %dl.dl-horizontal.m-0.p-2.border-top
-      %dt.muted.float-start.text-end
+      %dt.muted.float-start.text-end.me-2
         = Person.human_attribute_name remark_attr
       %dd.mb-2
         = render 'remark', remark_attr_name: remark_attr
