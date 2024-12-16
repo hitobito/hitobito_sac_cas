@@ -7,12 +7,22 @@
 
 module Memberships
   module Constraints
+    delegate :mitglied_termination_by_section_only?, to: :subject 
+
     def for_self_if_active_member_or_backoffice
       active_member? && (for_self? || backoffice?)
     end
 
     def for_self_when_not_terminated_if_active_member_or_backoffice
-      active_member? && (for_self? && !terminated? || backoffice?)
+      active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
+    end
+
+    def for_self_and_not_terminated?
+      for_self? && !terminated?
+    end
+
+    def termination_by_section_only_false_and_schreibrecht_and_not_terminated?
+      !mitglied_termination_by_section_only? && schreibrecht_role? && !terminated?
     end
 
     def backoffice?
@@ -29,6 +39,10 @@ module Memberships
 
     def terminated?
       subject.person.sac_membership.terminated?
+    end
+
+    def schreibrecht_role?
+      user_context.user.roles.any? { |role| role.type == Group::SektionsMitglieder::Schreibrecht.sti_name }
     end
   end
 end
