@@ -23,7 +23,9 @@ Reports legen wir in den Folder `csv-logs`. Am besten soll dieser Folder ins erw
 Es wird immmer eine vollständig DB lokal befüllt welche dann als ganzes auf PROD eingespielt werden kann.
 
 ```
-  ln -s ~/Documents/Nextcloud/sac-trans/latest/ sac_imports_src
+ cp -vrp ~/Documents/Nextcloud/sac-trans/latest/* ./tmp/sac_imports_src/
+ ls -lh ./tmp/sac_imports_src
+
 ```
 
 Wir setzen env Variablen analog zur prod (unklar noch wie mit dem DB_SCHEMA)
