@@ -1055,6 +1055,9 @@ en:
       confirmation_instructions:
         body:
           footer: ""
+      unlock_instructions:
+        body:
+          footer: ""
     sessions:
       form:
         login_identity: Main e-mail / member no.

@@ -1112,7 +1112,10 @@ it:
     mailer:
       confirmation_instructions:
         body:
-          footer: ""
+          footer: Saluti sportivi
+      unlock_instructions:
+        body:
+          footer: Saluti sportivi
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
