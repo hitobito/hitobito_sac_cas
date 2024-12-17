@@ -44,10 +44,10 @@ describe SacImports::Wso2::PersonEntry do
 
   subject(:entry) { described_class.new(data, basic_login_group, abo_group, existing_emails) }
 
-  describe "#um_id_tag" do
+  describe "#um_id" do
     it "includes the um_id" do
       expect(row[:um_id]).to be_present
-      expect(entry.um_id_tag).to eq("UM-ID-#{row[:um_id]}")
+      expect(entry.um_id).to eq("UM-ID-#{row[:um_id]}")
     end
   end
 

@@ -71,7 +71,7 @@ module SacImports::Wso2
       (errors.full_messages + [warning]).join(", ")
     end
 
-    def um_id_tag ="UM-ID-#{row.um_id}"
+    def um_id ="UM-ID-#{row.um_id}"
 
     def gender
       GENDERS[row.gender&.to_sym]
@@ -95,7 +95,7 @@ module SacImports::Wso2
       else
         person.correspondence = "print" unless person.confirmed_at?
       end
-      person.um_id = um_id_tag
+      person.um_id = um_id
     end
 
     def assign_existing_person_attributes
