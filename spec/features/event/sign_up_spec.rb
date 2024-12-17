@@ -75,7 +75,7 @@ describe "Event Signup", :js do
       check "Ja, ich erkläre mich mit den AGB einverstanden"
       check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
       click_on "Anmelden"
-      expect(page).to have_content "Es wurde eine Voranmeldung für Teilnahme"
+      expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
     end
 
     context "with role Mitglied" do
@@ -118,7 +118,7 @@ describe "Event Signup", :js do
         end
         check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
         click_on "Anmelden"
-        expect(page).to have_content "Es wurde eine Voranmeldung für Teilnahme"
+        expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
       end
 
       it "rerenders in correct layout when form is invalid" do
