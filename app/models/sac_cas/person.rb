@@ -58,12 +58,12 @@ module SacCas::Person
     delegate :salutation_label, to: :class
 
     scope :with_membership_years, lambda { |selects = "people.*", date = Date.current|
-      subquery_sql = Group::SektionsMitglieder::Mitglied
+      subquery_sql = Role
         .with_inactive
         .with_membership_years("roles.person_id", date)
         .to_sql
 
-      select(*Array.wrap(selects), "membership_years")
+      select(*Array.wrap(selects), "FLOOR(membership_years) AS membership_years")
         .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
     }
 
