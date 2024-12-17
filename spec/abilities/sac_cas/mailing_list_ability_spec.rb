@@ -8,21 +8,46 @@
 require "spec_helper"
 
 describe MailingListAbility do
-  context "manage main group abos" do
-    it "is permitted when member with Schreibrecht" do
+  let(:mitglied_with_schreibrecht) do
+    Fabricate(
+      Group::SektionsMitglieder::Schreibrecht.sti_name.to_sym,
+      group: groups(:bluemlisalp_mitglieder)
+    ).person
+  end
+
+  let(:mitglied_without_schreibrecht) do
+    Fabricate(
+      Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+      group: groups(:bluemlisalp_mitglieder)
+    ).person
+  end
+  let(:mailing_list) { Fabricate(:mailing_list, group: groups(:bluemlisalp)) }
+  let(:mailing_list_in_other_sub_group) { Fabricate(:mailing_list, group: groups(:bluemlisalp_funktionaere)) }
+  let(:mailing_list_in_foreign_group) { Fabricate(:mailing_list, group: groups(:matterhorn)) }
+
+  subject(:ability) { Ability.new(person.reload) }
+
+  context "mitglied with Schreibrecht" do
+    let(:person) { mitglied_with_schreibrecht }
+
+    it "is permitted to manage main group abos" do
+      expect(ability).to be_able_to(:create, mailing_list)
     end
 
-    it "is denied when member without Schreibrecht" do
+    it "is denied to manage sub group abos in same main group" do
+      expect(ability).not_to be_able_to(:create, mailing_list_in_other_sub_group)
+    end
+
+    it "is denied to manage foreign main group abos" do
+      expect(ability).not_to be_able_to(:create, mailing_list_in_foreign_group)
     end
   end
 
-  context "manage sub group abos in same main group" do
-    it "is denied when member with Schreibrecht" do
-    end
-  end
+  context "mitglied without Schreibrecht" do
+    let(:person) { mitglied_without_schreibrecht }
 
-  context "manage foreign main group abos" do
-    it "is denied when member with Schreibrecht" do
+    it "is denied to manage main group abos" do
+      expect(ability).not_to be_able_to(:create, mailing_list)
     end
   end
 end
