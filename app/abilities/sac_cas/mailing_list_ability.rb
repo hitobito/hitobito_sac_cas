@@ -12,15 +12,20 @@ module SacCas::MailingListAbility
 
   prepended do
     on(MailingList) do
-      permission(:group_and_below_full).may(:show, :index_subscriptions).schreibrecht_in_same_group?
-      permission(:group_and_below_full).may(:create, :update, :destroy).schreibrecht_in_same_group?
       permission(:group_and_below_full)
-        .may(:export_subscriptions)
-        .schreibrecht_in_same_group?
+        .may(:show, :index_subscriptions, :create, :update, :destroy, :export_subscriptions)
+        .schreibrecht_in_main_group?
     end
   end
 
-  def schreibrecht_in_same_group?
-    in_same_group_or_below && role_type?(Group::SektionsMitglieder::Schreibrecht)
+  # Checks if a user has a Schreibrecht for the mailing list in the same main group
+  #
+  # For example if users are members of SAC Hitobito and have Schreibrecht, they
+  # can manage the mailing list of SAC Hitobito, but not the mailing lists of
+  # SAC Hitobito subgroups.
+  def schreibrecht_in_main_group?
+    user.roles.any? do
+      |r| r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.id
+    end
   end
 end
