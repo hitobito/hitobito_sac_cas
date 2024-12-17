@@ -10,38 +10,40 @@ module SacCas::Role
     def select_with_membership_years(date = Time.zone.today)
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
-        CASE
-          -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles
-          WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
-          ELSE
-            EXTRACT(YEAR FROM AGE(#{calculated_end_date(date)}, #{calculated_start_date(date)}))::int
-            +
-            CASE
-              -- Check if the month and day are the same to avoid adding fractional year
-              WHEN (
-                EXTRACT(MONTH FROM #{calculated_end_date(date)}) = EXTRACT(MONTH FROM #{calculated_start_date(date)}) AND
-                EXTRACT(DAY FROM #{calculated_end_date(date)}) = EXTRACT(DAY FROM #{calculated_start_date(date)})
-              ) THEN 0
-              ELSE
-                -- Calculate the fractional year
-                (
-                  EXTRACT(DAY FROM (#{calculated_end_date(date)}::date - 
-                    (#{calculated_start_date(date)} 
-                    + (EXTRACT(YEAR FROM AGE(#{calculated_end_date(date)}, #{calculated_start_date(date)}))::int || ' years')::interval)
-                  ))::numeric
-                )
-                /
-                (
-                  -- Determine if the current year is a leap year (366 days) or not (365 days)
-                  CASE 
-                    WHEN (DATE_TRUNC('year', #{calculated_end_date(date)}) + INTERVAL '1 year')::date 
-                      - DATE_TRUNC('year', #{calculated_end_date(date)})::date = 366
-                  THEN 366
-                  ELSE 365
-                  END
-                )::numeric
+        FLOOR(SUM(COALESCE(
+          CASE
+            -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles
+            WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
+            ELSE
+              EXTRACT(YEAR FROM AGE(#{calculated_end_date(date)}, #{calculated_start_date(date)}))::int
+              +
+              CASE
+                -- Check if the month and day are the same to avoid adding fractional year
+                WHEN (
+                  EXTRACT(MONTH FROM #{calculated_end_date(date)}) = EXTRACT(MONTH FROM #{calculated_start_date(date)}) AND
+                  EXTRACT(DAY FROM #{calculated_end_date(date)}) = EXTRACT(DAY FROM #{calculated_start_date(date)})
+                ) THEN 0
+                ELSE
+                  -- Calculate the fractional year
+                  (
+                    EXTRACT(DAY FROM (#{calculated_end_date(date)}::date - 
+                      (#{calculated_start_date(date)} 
+                      + (EXTRACT(YEAR FROM AGE(#{calculated_end_date(date)}, #{calculated_start_date(date)}))::int || ' years')::interval)
+                    ))::numeric
+                  )
+                  /
+                  (
+                    -- Determine if the current year is a leap year (366 days) or not (365 days)
+                    CASE 
+                      WHEN (DATE_TRUNC('year', #{calculated_end_date(date)}) + INTERVAL '1 year')::date 
+                        - DATE_TRUNC('year', #{calculated_end_date(date)})::date = 366
+                    THEN 366
+                    ELSE 365
+                    END
+                  )::numeric
+            END
           END
-        END AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
+        ))) AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
       SQL
     end
 
@@ -71,7 +73,7 @@ module SacCas::Role
     base.class_eval do
       scope :with_membership_years,
         ->(selects = "roles.*", date = Time.zone.today) do
-          select(selects, select_with_membership_years(date))
+          select(selects, select_with_membership_years(date)).group(:person_id)
         end
 
       scope :family, -> {
