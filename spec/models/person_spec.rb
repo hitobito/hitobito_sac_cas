@@ -482,7 +482,7 @@ describe Person do
     end
 
     it "doesn't enqueue the job if an irrelevant attribute changed" do
-      expect { person.update!(company_name: "Abacus") }.not_to change(job, :count)
+      expect { person.update!(additional_information: "Abacus") }.not_to change(job, :count)
     end
 
     it "doesn't enqueue the job without an sac membership invoice" do

@@ -8,7 +8,7 @@
 module Invoices
   module Abacus
     class Subject < Entity
-      RELEVANT_ATTRIBUTES = %w[first_name last_name email language gender street
+      RELEVANT_ATTRIBUTES = %w[first_name last_name company_name company email language gender street
         housenumber postbox address_care_of zip_code town country].freeze
 
       SALUTATION_IDS = {
@@ -61,12 +61,26 @@ module Invoices
       end
 
       def subject_attrs
+        (entity.company? ? organisation_subject_attrs : person_subject_attrs).merge(
+          language: entity.language,
+          salutation_id: SALUTATION_IDS.fetch(GENDER_SALUTATIONS[entity.gender])
+        )
+      end
+
+      def person_subject_attrs
         # limit strings according to Abacus field lengths
         {
           name: entity.last_name.to_s[0, 100],
           first_name: entity.first_name.to_s[0, 50],
-          language: entity.language,
-          salutation_id: SALUTATION_IDS.fetch(GENDER_SALUTATIONS[entity.gender])
+          type: "Person"
+        }
+      end
+
+      def organisation_subject_attrs
+        # limit strings according to Abacus field lengths
+        {
+          name: entity.company_name.to_s[0, 100],
+          type: "Organisation"
         }
       end
 
