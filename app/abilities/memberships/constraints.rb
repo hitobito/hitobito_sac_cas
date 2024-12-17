@@ -7,7 +7,7 @@
 
 module Memberships
   module Constraints
-    delegate :mitglied_termination_by_section_only?, to: :subject 
+    delegate :mitglied_termination_by_section_only?, to: :subject
 
     def for_self_if_active_member_or_backoffice
       active_member? && (for_self? || backoffice?)

@@ -63,6 +63,8 @@ module SacCas::Person
         .with_membership_years("roles.person_id", date)
         .to_sql
 
+      require "pry"; binding.pry # rubocop:disable Style/Semicolon,Lint/Debugger
+
       select(*Array.wrap(selects), "FLOOR(SUM(COALESCE(membership_years, 0))) as membership_years")
         .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
         .group("people.id")
