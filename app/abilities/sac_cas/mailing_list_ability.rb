@@ -24,8 +24,8 @@ module SacCas::MailingListAbility
   # can manage the mailing list of SAC Hitobito, but not the mailing lists of
   # SAC Hitobito subgroups.
   def schreibrecht_in_main_group?
-    user.roles.any? do
-      |r| r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.id
+    user.roles.any? do |r|
+      r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.id
     end
   end
 end
