@@ -114,6 +114,13 @@ describe Wizards::Signup::AboTourenPortalWizard do
       expect(max.subscriptions).to have(1).item
       expect(newsletter.people).to eq [max]
     end
+
+    it "saves role for current_user when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard).to be_valid
+      expect { wizard.save! }.not_to change { Person.count }
+      expect(people(:admin).roles.last.type).to eq Group::AboTourenPortal::Abonnent.sti_name
+    end
   end
 
   describe "steps" do
