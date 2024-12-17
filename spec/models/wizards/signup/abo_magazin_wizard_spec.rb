@@ -129,6 +129,13 @@ describe Wizards::Signup::AboMagazinWizard do
           .with(kind_of(Person), group, true)
       end
     end
+
+    it "saves role for current_user when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard).to be_valid
+      expect { wizard.save! }.not_to change { Person.count }
+      expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Abonnent.sti_name
+    end
   end
 
   describe "#calculate_costs" do

@@ -104,6 +104,13 @@ describe Wizards::Signup::AboBasicLoginWizard do
       expect(max.subscriptions).to be_empty
       expect(newsletter.people).to be_empty
     end
+
+    it "saves role for current_user when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard).to be_valid
+      expect { wizard.save! }.not_to change { Person.count }
+      expect(people(:admin).roles.last.type).to eq Group::AboBasicLogin::BasicLogin.sti_name
+    end
   end
 
   describe "steps" do
