@@ -33,9 +33,8 @@ module Wizards::Signup
 
     def build_person
       if current_user.present?
-        person = current_user.tap do |person|
-          role = person.roles.build(group: group, type: group.self_registration_role_type)
-          yield person, role if block_given?
+        current_user.tap do |person|
+          person.roles.build(group: group, type: group.self_registration_role_type)
         end
       else
         super do |_person, role|
