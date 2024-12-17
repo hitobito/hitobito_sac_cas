@@ -102,4 +102,17 @@ describe :self_registration do
       expect(page).to have_link("Anmelden")
     end
   end
+
+  it "has prefilled form when logged in" do
+    people(:admin).update!(country: "CH")
+    sign_in(people(:admin))
+    visit group_self_registration_path(group_id: group)
+    expect(page).to have_text "SAC-KONTO ERSTELLEN"
+    expect(page).not_to have_text "Weiter"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
+    expect do
+      click_button "SAC-KONTO ERSTELLEN"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
+    end.to change { Role.count }.by(1)
+  end
 end
