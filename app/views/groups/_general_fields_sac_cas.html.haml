@@ -1,1 +1,2 @@
-= f.labeled_input_field :section_offering_ids
+- if entry.is_a?(Group::Sektion)
+  = f.labeled_input_field :section_offering_ids
