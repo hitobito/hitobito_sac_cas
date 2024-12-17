@@ -186,8 +186,6 @@ module HitobitoSacCas
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
       [
         Export::Tabular::People::Households,
-        Export::Tabular::People::ParticipationsFull,
-        Export::Tabular::People::ParticipationsHouseholds,
         Export::Tabular::People::PeopleAddress,
         Export::Tabular::People::PeopleFull
       ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }

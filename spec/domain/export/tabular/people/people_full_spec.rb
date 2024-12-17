@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Export::Tabular::People::PeopleFull do
   let(:person) { people(:mitglied) }
-  subject { described_class.new([person]) }
+  subject { described_class.new(Person.with_membership_years.where(id: person.id)) }
 
   let(:row) { subject.attributes.zip(subject.data_rows.first).to_h }
 
@@ -19,8 +19,7 @@ describe Export::Tabular::People::PeopleFull do
     end
 
     it "has value from person#membership_years" do
-      allow(person).to receive(:membership_years).and_return(42)
-      expect(row[:membership_years]).to eq 42
+      expect(row[:membership_years]).to eq Person.with_membership_years.find(person.id).membership_years
     end
   end
 end

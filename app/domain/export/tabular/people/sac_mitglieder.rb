@@ -57,6 +57,8 @@ module Export::Tabular::People
       ]
     end
 
+    public :list
+
     private
 
     def mitglieder

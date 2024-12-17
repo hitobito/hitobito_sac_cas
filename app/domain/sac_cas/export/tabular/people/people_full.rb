@@ -9,4 +9,10 @@ module SacCas::Export::Tabular::People::PeopleFull
   def person_attributes
     super + [:membership_years]
   end
+
+  private
+
+  def list
+    @list.with_membership_years
+  end
 end
