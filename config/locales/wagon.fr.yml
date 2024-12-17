@@ -404,6 +404,7 @@ fr:
           DE: Allemand
           FR: Français
           IT: Italien
+        section_offerings: ""
         mitglied_termination_by_section_only: Résiliation uniquement par la section
       group/ortsgruppe:
         foundation_year: Année de création
@@ -480,6 +481,8 @@ fr:
         reduction_amount: Montant de la réduction Années de membre/Age
         reduction_required_membership_years: Réduction à partir d’années d’adhésion
         reduction_required_age: Réduction à partir de l’âge
+      section_offering:
+        title: ""
       external_invoice:
         title: Titre
         state: Statut
@@ -589,6 +592,10 @@ fr:
         one: Paramètres pour les factures des membres
         many: Paramètres pour les factures des membres
         other: Paramètres pour les factures des membres
+      section_offering:
+        one: ''
+        many: ''
+        other: ''
       termination_reason:
         one: Motif de sortie prédéfini
         many: Motifs de sortie prédéfinis

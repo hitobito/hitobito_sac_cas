@@ -401,6 +401,7 @@ en:
           DE: German
           FR: French
           IT: Italiano
+        section_offerings: ""
         mitglied_termination_by_section_only: Resignation only through section
       group/ortsgruppe:
         foundation_year: Founding year
@@ -476,6 +477,8 @@ en:
         reduction_amount: Reduction amount Membership years/age
         reduction_required_membership_years: Reduction from years of membership
         reduction_required_age: Reduction from years of age
+      section_offering:
+        title: ""
       external_invoice:
         title: Title
         state: Status
@@ -572,6 +575,9 @@ en:
       sac_section_membership_config:
         one: Parameters for membership invoices
         other: Parameters for membership invoices
+      section_offering:
+        one: ''
+        other: ''
       termination_reason:
         one: Predefined reason for leaving
         other: Predefined reasons for leaving

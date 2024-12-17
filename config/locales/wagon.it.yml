@@ -404,6 +404,7 @@ it:
           DE: Tedesco
           FR: Francese
           IT: Italiano
+        section_offerings: ""
         mitglied_termination_by_section_only: Disdetta solo tramite sezione
       group/ortsgruppe:
         foundation_year: Anno di fondazione
@@ -480,6 +481,8 @@ it:
         reduction_amount: Importo di riduzione anni di affiliazione/età
         reduction_required_membership_years: Riduzione in base agli anni di affiliazione
         reduction_required_age: Riduzione in base all’età
+      section_offering:
+        title: ""
       external_invoice:
         title: Titolo
         state: Stato
@@ -589,6 +592,10 @@ it:
         one: Parametri per le fatture dei soci
         many: Parametri per le fatture dei soci
         other: Parametri per le fatture di affiliazione
+      section_offering:
+        one: ''
+        many: ''
+        other: ''
       termination_reason:
         one: Motivo di abbandono predefinito
         many: Motivi di abbandono predefiniti
