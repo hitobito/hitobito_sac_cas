@@ -173,7 +173,7 @@ describe SacImports::Wso2::PersonEntry do
       end
 
       it "finds the person by tag" do
-        people(:mitglied).update!(tag_list: "UM-ID-42")
+        people(:mitglied).update!(um_id: "UM-ID-42")
         expect(entry.person).to eq(people(:mitglied))
       end
 
@@ -208,8 +208,8 @@ describe SacImports::Wso2::PersonEntry do
         end
 
         it "assigns tag" do
-          expect(people(:mitglied).tag_list).not_to include("UM-ID-42")
-          expect(entry.person.tag_list).to include("UM-ID-42")
+          expect(people(:mitglied).um_id).not_to eq("UM-ID-42")
+          expect(entry.person.um_id).to eq "UM-ID-42"
         end
 
         describe "email" do
@@ -265,7 +265,7 @@ describe SacImports::Wso2::PersonEntry do
         end
 
         it "assigns tag" do
-          expect(entry.person.tag_list).to include("UM-ID-42")
+          expect(entry.person.um_id).to eq "UM-ID-42"
         end
 
         describe "email" do

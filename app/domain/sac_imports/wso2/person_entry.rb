@@ -95,7 +95,7 @@ module SacImports::Wso2
       else
         person.correspondence = "print" unless person.confirmed_at?
       end
-      person.tag_list << um_id_tag
+      person.um_id = um_id_tag
     end
 
     def assign_existing_person_attributes
@@ -218,7 +218,7 @@ module SacImports::Wso2
     def find_person
       person ||= Person.find_by(id: navision_id) if navision_id.present?
       person ||= Person.find_by(email: email) if email.present?
-      person || Person.tagged_with(um_id_tag).first
+      person || Person.where(um_id: um_id).first
     end
 
     def warn(message)
