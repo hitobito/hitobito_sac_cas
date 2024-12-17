@@ -141,4 +141,18 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(wizard.calculated_costs).to eq(76)
     end
   end
+
+  describe "steps" do
+    it "starts at main email field step when not logged in" do
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::PersonFields)
+      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
+    end
+
+    it "starts at person fields step when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::PersonFields)
+      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
+    end
+  end
 end
