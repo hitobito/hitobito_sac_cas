@@ -20,7 +20,7 @@
       %td=person.last_name
     %tr
       %td=t("activemodel.attributes.wizards/steps/signup/main_email_field.email")
-      %td=person.email || wizard.main_email_field.email
+      %td=wizard.email
     %tr
       %td=person.class.human_attribute_name(:birthday)
       %td=person.birthday.strftime("%d.%m.%Y")
