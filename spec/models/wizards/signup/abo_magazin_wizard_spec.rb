@@ -169,6 +169,7 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     it "returns true when user has abonnent role" do
+      Group::AboMagazin::Abonnent.create!(person: people(:mitglied), group: groups(:abo_die_alpen))
       expect(wizard.member_or_applied?).to be_truthy
     end
 

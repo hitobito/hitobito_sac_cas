@@ -135,7 +135,7 @@ describe Wizards::Signup::AboBasicLoginWizard do
     end
 
     it "returns true if user does not have login" do
-      allow(people(:admin)).to receive(:login?).and_return(false)
+      allow(people(:mitglied)).to receive(:login?).and_return(false)
       expect(wizard.member_or_applied?).to be_falsy
     end
   end
