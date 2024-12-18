@@ -129,13 +129,6 @@ describe Wizards::Signup::AboMagazinWizard do
           .with(kind_of(Person), group, true)
       end
     end
-
-    it "saves role for current_user when logged in" do
-      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
-      expect(wizard).to be_valid
-      expect { wizard.save! }.not_to change { Person.count }
-      expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Abonnent.sti_name
-    end
   end
 
   describe "#calculate_costs" do
@@ -146,20 +139,6 @@ describe Wizards::Signup::AboMagazinWizard do
     it "calculates costs for people abroad" do
       required_attrs[:person_fields][:country] = "DE"
       expect(wizard.calculated_costs).to eq(76)
-    end
-  end
-
-  describe "steps" do
-    it "starts at main email field step when not logged in" do
-      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
-      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::PersonFields)
-      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
-    end
-
-    it "starts at person fields step when logged in" do
-      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
-      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::PersonFields)
-      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
     end
   end
 end

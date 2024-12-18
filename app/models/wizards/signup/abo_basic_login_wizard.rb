@@ -20,11 +20,7 @@ module Wizards::Signup
     self.asides = ["aside_abo_basic_login"]
 
     def save!
-      if current_user.present?
-        person.save!
-      else
-        super
-      end
+      super
 
       mailing_list&.subscribe_if(person, newsletter)
     end
@@ -32,14 +28,8 @@ module Wizards::Signup
     private
 
     def build_person
-      if current_user.present?
-        current_user.tap do |person|
-          person.roles.build(group: group, type: group.self_registration_role_type)
-        end
-      else
-        super do |_person, role|
-          role.end_on = Date.current.end_of_year
-        end
+      super do |_person, role|
+        role.end_on = Date.current.end_of_year
       end
     end
 
@@ -47,23 +37,6 @@ module Wizards::Signup
       person_fields
         .person_attributes
         .merge(main_email_field.attributes)
-    end
-
-    def step_after(step_class_or_name)
-      case step_class_or_name
-      when :_start
-        handle_start
-      else
-        super
-      end
-    end
-
-    def handle_start
-      if current_user.present?
-        Wizards::Steps::Signup::AboBasicLogin::PersonFields.step_name
-      else
-        Wizards::Steps::Signup::MainEmailField.step_name
-      end
     end
 
     def mailing_list = MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
