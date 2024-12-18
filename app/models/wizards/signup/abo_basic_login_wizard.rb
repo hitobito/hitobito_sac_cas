@@ -14,13 +14,16 @@ module Wizards::Signup
 
     public :group
 
-    delegate :email, to: :main_email_field
     delegate :newsletter, to: :person_fields
 
     self.asides = ["aside_abo_basic_login"]
 
+    def member_or_applied?
+      current_user.login? #do not allow if person already has a login
+    end
+
     def save!
-      if current_user.present?
+      if current_user
         person.save!
       else
         super
@@ -32,37 +35,20 @@ module Wizards::Signup
     private
 
     def build_person
-      if current_user.present?
-        current_user.tap do |person|
-          person.roles.build(group: group, type: group.self_registration_role_type)
-        end
-      else
-        super do |_person, role|
-          role.end_on = Date.current.end_of_year
-        end
+      super do |_person, role|
+        role.end_on = Date.current.end_of_year
       end
     end
 
     def person_attributes
-      person_fields
-        .person_attributes
-        .merge(main_email_field.attributes)
+      person_fields.person_attributes.merge(email:)
     end
 
     def step_after(step_class_or_name)
-      case step_class_or_name
-      when :_start
-        handle_start
-      else
-        super
-      end
-    end
-
-    def handle_start
-      if current_user.present?
+      if step_class_or_name == :_start && current_user
         Wizards::Steps::Signup::AboBasicLogin::PersonFields.step_name
       else
-        Wizards::Steps::Signup::MainEmailField.step_name
+        super
       end
     end
 
