@@ -114,5 +114,46 @@ describe Wizards::Signup::AboTourenPortalWizard do
       expect(max.subscriptions).to have(1).item
       expect(newsletter.people).to eq [max]
     end
+
+    it "saves role for current_user when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard).to be_valid
+      expect { wizard.save! }.not_to change { Person.count }
+      expect(people(:admin).roles.last.type).to eq Group::AboTourenPortal::Abonnent.sti_name
+    end
+  end
+
+  describe "steps" do
+    it "starts at main email field step when not logged in" do
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboTourenPortal::PersonFields)
+    end
+
+    it "starts at person fields step when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboTourenPortal::PersonFields)
+    end
+  end
+
+  describe "#member_or_applied?" do
+    let(:person) { people(:mitglied) }
+
+    before do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(person)
+    end
+
+    it "returns true when user has abonnent role" do
+      Group::AboTourenPortal::Abonnent.create!(person:, group:)
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true when user has neuanmeldung role" do
+      Group::AboTourenPortal::Neuanmeldung.create!(person:, group:)
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns false if user does not have role" do
+      expect(wizard.member_or_applied?).to be_falsy
+    end
   end
 end

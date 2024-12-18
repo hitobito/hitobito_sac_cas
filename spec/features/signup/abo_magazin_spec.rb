@@ -155,4 +155,26 @@ describe "self_registration_abo_magazin", js: true do
       expect(page).to have_field("Geburtsdatum", with: "03.01.1924")
     end
   end
+
+  it "has prefilled form when logged in" do
+    people(:admin).update!(country: "CH")
+    sign_in(people(:admin))
+    visit group_self_registration_path(group_id: group)
+    expect_active_step "Personendaten"
+    click_button "Weiter"
+    expect(page).to have_text "support@hitobito.example.com"
+    check "Ich habe die AGB gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
+    expect do
+      click_button "ABO KOSTENPFLICHTIG BESTELLEN"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
+    end.to change { Role.count }.by(1)
+  end
+
+  it "redirects if already abonnent of magazin" do
+    sign_in(people(:mitglied))
+    Group::AboMagazin::Abonnent.create!(person: people(:mitglied), group: group)
+    visit group_self_registration_path(group_id: group)
+    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+  end
 end

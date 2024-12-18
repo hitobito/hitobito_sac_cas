@@ -4,4 +4,5 @@
 
 = turbo_frame_tag(partial_name, class: 'col-md') do
   = render "abo_infos", costs: wizard.costs
-  = render(SelfRegistration::InfosComponent.new)
+  - unless current_user
+    = render(SelfRegistration::InfosComponent.new)

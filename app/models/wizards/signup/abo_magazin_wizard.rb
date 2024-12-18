@@ -15,7 +15,17 @@ module Wizards::Signup
 
     self.asides = ["aside_abo"]
 
+    RESTRICTED_ROLES = [
+      Group::AboMagazin::Abonnent.sti_name,
+      Group::AboMagazin::Neuanmeldung.sti_name,
+      Group::AboMagazin::Gratisabonnent.sti_name
+    ].freeze
+
     delegate :newsletter, to: :summary
+
+    def member_or_applied?
+      current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
+    end
 
     def costs = SacCas::ABO_COSTS[:magazin]
 

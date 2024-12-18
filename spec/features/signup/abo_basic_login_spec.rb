@@ -102,4 +102,10 @@ describe :self_registration do
       expect(page).to have_link("Anmelden")
     end
   end
+
+  it "redirects if logged in" do
+    sign_in(people(:admin))
+    visit group_self_registration_path(group_id: group)
+    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+  end
 end

@@ -28,8 +28,9 @@ module Wizards::Signup
 
     public :group
 
-    def email
-      current_user&.email || step(:main_email_field)&.email
+    def member_or_applied?
+      current_user&.sac_membership&.stammsektion_role ||
+        current_user&.sac_membership&.neuanmeldung_stammsektion_role
     end
 
     def save!

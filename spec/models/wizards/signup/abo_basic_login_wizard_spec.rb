@@ -104,5 +104,39 @@ describe Wizards::Signup::AboBasicLoginWizard do
       expect(max.subscriptions).to be_empty
       expect(newsletter.people).to be_empty
     end
+
+    it "saves role for current_user when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard).to be_valid
+      expect { wizard.save! }.not_to change { Person.count }
+      expect(people(:admin).roles.last.type).to eq Group::AboBasicLogin::BasicLogin.sti_name
+    end
+  end
+
+  describe "steps" do
+    it "starts at main email field step when not logged in" do
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+      expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboBasicLogin::PersonFields)
+    end
+
+    it "starts at person fields step when logged in" do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboBasicLogin::PersonFields)
+    end
+  end
+
+  describe "#member_or_applied?" do
+    before do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+    end
+
+    it "returns true when user has login" do
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true if user does not have login" do
+      allow(people(:mitglied)).to receive(:login?).and_return(false)
+      expect(wizard.member_or_applied?).to be_falsy
+    end
   end
 end

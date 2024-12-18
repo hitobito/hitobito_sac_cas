@@ -14,6 +14,15 @@ module Wizards::Signup
 
     self.asides = ["aside_abo"]
 
+    RESTRICTED_ROLES = [
+      Group::AboTourenPortal::Abonnent.sti_name,
+      Group::AboTourenPortal::Neuanmeldung.sti_name
+    ].freeze
+
+    def member_or_applied?
+      current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
+    end
+
     def costs = SacCas::ABO_COSTS[:tourenportal]
   end
 end

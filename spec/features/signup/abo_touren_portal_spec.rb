@@ -114,4 +114,25 @@ describe "signup/abo_touren_portal_wizard" do
       expect(page).to have_text "Person muss 18 Jahre oder älter sein"
     end.not_to change { Person.count }
   end
+
+  it "has prefilled form when logged in" do
+    people(:admin).update!(country: "CH")
+    sign_in(people(:admin))
+    visit group_self_registration_path(group_id: group)
+    expect(page).to have_text "Registrieren"
+    expect(page).not_to have_text "Weiter"
+    check "Ich habe die Statuten gelesen und stimme diesen zu"
+    check "Ich habe die Datenschutzerklärung gelesen und stimme dieser zu"
+    expect do
+      click_button "Registrieren"
+      expect(page).to have_css "#error_explanation, #flash > .alert"
+    end.to change { Role.count }.by(1)
+  end
+
+  it "redirects if already abonnent of touren portal" do
+    sign_in(people(:mitglied))
+    Group::AboTourenPortal::Abonnent.create!(person: people(:mitglied), group: group)
+    visit group_self_registration_path(group_id: group)
+    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+  end
 end
