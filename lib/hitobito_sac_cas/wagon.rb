@@ -36,7 +36,7 @@ module HitobitoSacCas
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
         Export::BackupMitgliederScheduleJob,
-        Qualifications::ExpirationMailerJob,
+        # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
@@ -96,6 +96,7 @@ module HitobitoSacCas
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
+      MailingListAbility.prepend SacCas::MailingListAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
       QualificationAbility.include SacCas::QualificationAbility
