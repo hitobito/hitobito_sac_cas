@@ -72,7 +72,7 @@ module SacCas::Role
 
     base.class_eval do
       scope :with_membership_years,
-        ->(selects = ModelAggregator.new(Role).aggregate_function, date = Time.zone.today) do
+        ->(selects = ModelAggregator.new(Role).aggregated_columns, date = Time.zone.today) do
           select(selects, select_with_membership_years(date)).group(:person_id)
         end
 
