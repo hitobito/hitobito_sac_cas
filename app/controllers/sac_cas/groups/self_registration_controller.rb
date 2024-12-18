@@ -18,18 +18,13 @@ module SacCas::Groups::SelfRegistrationController
 
   def restrict_access
     return redirect_to_login if !signed_in? && email_exists?
-    return redirect_to_memberships_tab if member_or_applied?
+    return redirect_to_memberships_tab if wizard.member_or_applied?
     redirect_to_person_show if family?
   end
 
   def email_exists? = email.present? && Person.exists?(email: email)
 
   def family? = current_user&.household&.present?
-
-  def member_or_applied?
-    current_user&.sac_membership&.stammsektion_role ||
-      current_user&.sac_membership&.neuanmeldung_stammsektion_role
-  end
 
   def model_class
     case group
