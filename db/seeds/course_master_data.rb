@@ -141,7 +141,8 @@ def seed_event_kind_categories
     {order: 8500, cost_center_id: cost_centers.fetch("2100023"), cost_unit_id: cost_units.fetch("A8500")},
     {order: 9000, cost_center_id: cost_centers.fetch("2100027"), cost_unit_id: cost_units.fetch("A9000")},
     {order: 9100, cost_center_id: cost_centers.fetch("2100001"), cost_unit_id: cost_units.fetch("A9100")},
-    {order: 9500, cost_center_id: cost_centers.fetch("2100028"), cost_unit_id: cost_units.fetch("A9500")})
+    {order: 9500, cost_center_id: cost_centers.fetch("2100028"), cost_unit_id: cost_units.fetch("A9500")},
+    {order: 9999, cost_center_id: cost_centers.fetch("10000"), cost_unit_id: cost_units.fetch("A0000")})
 
   kind_categories = Event::KindCategory.pluck(:order, :id).to_h
   Event::KindCategory::Translation.seed_once(:event_kind_category_id, :locale,
@@ -173,7 +174,8 @@ def seed_event_kind_categories
     {event_kind_category_id: kind_categories.fetch(8500), locale: "de", label: "SAC - Tourenangebote Sommer"},
     {event_kind_category_id: kind_categories.fetch(9000), locale: "de", label: "SAC - Hüttenwartsausbildung"},
     {event_kind_category_id: kind_categories.fetch(9100), locale: "de", label: "SAC - Kurskaderausbildung"},
-    {event_kind_category_id: kind_categories.fetch(9500), locale: "de", label: "Sektionen - Angebote"})
+    {event_kind_category_id: kind_categories.fetch(9500), locale: "de", label: "Sektionen - Angebote"},
+    {event_kind_category_id: kind_categories.fetch(9999), locale: "de", label: "Externe Ausbildungen"})
 end
 
 ##### Kursstufen NAV 14
