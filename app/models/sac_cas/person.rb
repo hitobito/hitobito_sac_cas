@@ -63,7 +63,7 @@ module SacCas::Person
         .with_membership_years("roles.person_id", date)
         .to_sql
 
-      select(*Array.wrap(selects), "FLOOR(membership_years) AS membership_years")
+      select(*Array.wrap(selects), "COALESCE(FLOOR(membership_years), 0) AS membership_years")
         .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
     }
 
