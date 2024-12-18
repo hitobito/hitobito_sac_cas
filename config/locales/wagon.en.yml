@@ -1230,7 +1230,7 @@ en:
       cancel_confirmation: >
       cancel_info: >
       inform_participants_caption: ""
-      canceled_reason_label: "" 
+      canceled_reason_label: ""
 
   external_trainings:
     form:
