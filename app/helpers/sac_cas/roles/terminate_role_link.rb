@@ -14,13 +14,13 @@ module SacCas::Roles::TerminateRoleLink
         @view.group_person_role_leave_zusatzsektion_path(
           role_id: @role.id, group_id: @role.group&.id, person_id: @role.person&.id
         ),
-        class: "btn btn-xs float-right")
+        class: "btn btn-sm btn-outline-primary")
     elsif @role.is_a?(Group::SektionsMitglieder::Mitglied)
       link_to(t("roles/terminations.global.title"),
         @view.group_person_terminate_sac_membership_path(
           role_id: @role.id, group_id: @role.group&.id, person_id: @role.person&.id
         ),
-        class: "btn btn-xs float-right")
+        class: "btn btn-sm btn-outline-primary")
     else
       super
     end
