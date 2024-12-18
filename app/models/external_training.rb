@@ -28,15 +28,13 @@
 #  index_external_trainings_on_person_id      (person_id)
 #
 class ExternalTraining < ActiveRecord::Base
-  validates_by_schema
+  attr_accessor :other_people_ids
 
   belongs_to :person
   belongs_to :event_kind, class_name: "Event::Kind"
 
-  attr_accessor :other_people_ids
-
+  validates_by_schema
   validates_date :finish_at, on_or_after: :start_at, allow_blank: true
-
   validates_date :finish_at, on_or_before: lambda { Date.current }
 
   scope :list, -> { order(created_at: :desc) }

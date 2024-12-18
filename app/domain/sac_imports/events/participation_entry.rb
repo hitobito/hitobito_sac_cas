@@ -8,7 +8,6 @@
 module SacImports
   module Events
     class ParticipationEntry
-      LOCALES = [:de, :fr, :it].freeze
       ATTRS_REGULAR = [:person_id, :state, :additional_information, :canceled_at, :cancel_statement, :actual_days, :price]
       ATTRS_BOOLEAN = [:qualified, :subsidy]
       ATTRS_BELONGS_TO = [:event_number]

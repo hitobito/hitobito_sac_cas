@@ -18,6 +18,7 @@ class SacImports::CsvSource
     NAV17: Nav17,
     NAV18: Nav18,
     NAV21: Nav21,
+    NAV22: Nav22,
     WSO21: Wso2,
     CHIMP_1: Chimp,
     CHIMP_2: Chimp,
