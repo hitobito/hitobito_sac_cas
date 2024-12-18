@@ -136,17 +136,19 @@ describe Wizards::Signup::AboTourenPortalWizard do
   end
 
   describe "#member_or_applied?" do
+    let(:person) { people(:mitglied) }
+
     before do
-      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(person)
     end
 
     it "returns true when user has abonnent role" do
-      Group::AboTourenPortal::Abonnent.create!(person: people(:mitglied), group: group)
+      Group::AboTourenPortal::Abonnent.create!(person:, group:)
       expect(wizard.member_or_applied?).to be_truthy
     end
 
     it "returns true when user has neuanmeldung role" do
-      Group::AboTourenPortal::Neuanmeldung.create!(person: people(:mitglied), group: group)
+      Group::AboTourenPortal::Neuanmeldung.create!(person:, group:)
       expect(wizard.member_or_applied?).to be_truthy
     end
 
