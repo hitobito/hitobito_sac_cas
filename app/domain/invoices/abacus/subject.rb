@@ -61,26 +61,26 @@ module Invoices
       end
 
       def subject_attrs
-        (entity.company? ? organisation_subject_attrs : person_subject_attrs).merge(
-          language: entity.language,
-          salutation_id: SALUTATION_IDS.fetch(GENDER_SALUTATIONS[entity.gender])
-        )
+        (entity.company? ? organisation_subject_attrs : person_subject_attrs)
+          .merge(language: entity.language)
       end
 
       def person_subject_attrs
         # limit strings according to Abacus field lengths
         {
+          type: "Person",
           name: entity.last_name.to_s[0, 100],
           first_name: entity.first_name.to_s[0, 50],
-          type: "Person"
+          salutation_id: SALUTATION_IDS.fetch(GENDER_SALUTATIONS[entity.gender])
         }
       end
 
       def organisation_subject_attrs
         # limit strings according to Abacus field lengths
         {
+          type: "Organisation",
           name: entity.company_name.to_s[0, 100],
-          type: "Organisation"
+          salutation_id: SALUTATION_IDS.fetch(:company)
         }
       end
 
