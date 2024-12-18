@@ -7,10 +7,10 @@
 
 module SacCas::Role
   module ClassMethods
-    def select_with_membership_years(date = Time.zone.today)
+    def select_with_membership_years(date = Time.zone.today, grouped)
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
-        SUM(
+        #{grouped ? 'SUM(' : ''}
           CASE
             -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles
             WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
@@ -43,7 +43,7 @@ module SacCas::Role
                   )::numeric
             END
           END
-        ) AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
+        #{grouped ? ')' : ''} AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
       SQL
     end
 
@@ -72,8 +72,11 @@ module SacCas::Role
 
     base.class_eval do
       scope :with_membership_years,
-        ->(selects = ModelAggregator.new(Role).aggregated_columns, date = Time.zone.today) do
-          select(selects, select_with_membership_years(date)).group(:person_id)
+        ->(selects = "roles.*", date = Time.zone.today, grouped: true) do
+          selects = ModelAggregator.new(Role).aggregated_columns if grouped
+          query = select(selects, select_with_membership_years(date, grouped))
+          query = query.group(:person_id) if grouped
+          query
         end
 
       scope :family, -> {

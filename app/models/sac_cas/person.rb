@@ -58,7 +58,7 @@ module SacCas::Person
     delegate :salutation_label, to: :class
 
     scope :with_membership_years, lambda { |selects = "people.*", date = Date.current|
-      subquery_sql = Role
+      subquery_sql = Group::SektionsMitglieder::Mitglied
         .with_inactive
         .with_membership_years("roles.person_id", date)
         .to_sql
