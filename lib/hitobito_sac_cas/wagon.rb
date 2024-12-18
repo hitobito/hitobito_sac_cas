@@ -96,6 +96,7 @@ module HitobitoSacCas
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
+      MailingListAbility.prepend SacCas::MailingListAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
       QualificationAbility.include SacCas::QualificationAbility
