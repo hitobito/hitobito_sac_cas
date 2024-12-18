@@ -7,10 +7,10 @@
 
 module SacCas::Role
   module ClassMethods
-    def select_with_membership_years(date = Time.zone.today, grouped)
+    def select_with_membership_years(date = Time.zone.today, grouped = true)
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
       <<~SQL
-        #{grouped ? 'SUM(' : ''}
+        #{grouped ? "SUM(" : ""}
           CASE
             -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles
             WHEN roles.type != 'Group::SektionsMitglieder::Mitglied' THEN 0
@@ -43,7 +43,7 @@ module SacCas::Role
                   )::numeric
             END
           END
-        #{grouped ? ')' : ''} AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
+        #{grouped ? ")" : ""} AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
       SQL
     end
 
