@@ -134,4 +134,24 @@ describe Wizards::Signup::AboTourenPortalWizard do
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboTourenPortal::PersonFields)
     end
   end
+
+  describe "#member_or_applied?" do
+    before do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+    end
+
+    it "returns true when user has abonnent role" do
+      Group::AboTourenPortal::Abonnent.create!(person: people(:mitglied), group: group)
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true when user has neuanmeldung role" do
+      Group::AboTourenPortal::Neuanmeldung.create!(person: people(:mitglied), group: group)
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns false if user does not have role" do
+      expect(wizard.member_or_applied?).to be_falsy
+    end
+  end
 end

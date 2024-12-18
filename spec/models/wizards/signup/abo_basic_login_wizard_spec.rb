@@ -124,4 +124,19 @@ describe Wizards::Signup::AboBasicLoginWizard do
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboBasicLogin::PersonFields)
     end
   end
+
+  describe "#member_or_applied?" do
+    before do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+    end
+
+    it "returns true when user has login" do
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true if user does not have login" do
+      allow(people(:admin)).to receive(:login?).and_return(false)
+      expect(wizard.member_or_applied?).to be_falsy
+    end
+  end
 end

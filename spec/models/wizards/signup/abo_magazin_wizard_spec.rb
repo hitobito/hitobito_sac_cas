@@ -162,4 +162,28 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
     end
   end
+
+  describe "#member_or_applied?" do
+    before do
+      allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+    end
+
+    it "returns true when user has abonnent role" do
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true when user has neuanmeldung role" do
+      Group::AboMagazin::Neuanmeldung.create!(person: people(:mitglied), group: groups(:abo_die_alpen))
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns true when user has gratis abonnent role" do
+      Group::AboMagazin::Gratisabonnent.create!(person: people(:mitglied), group: groups(:abo_die_alpen))
+      expect(wizard.member_or_applied?).to be_truthy
+    end
+
+    it "returns false if user does not have role" do
+      expect(wizard.member_or_applied?).to be_falsy
+    end
+  end
 end
