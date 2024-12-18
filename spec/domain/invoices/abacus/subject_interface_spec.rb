@@ -65,8 +65,8 @@ describe Invoices::Abacus::SubjectInterface do
 
   it "fails if abacus assigns a different subject key" do
     stub_get_non_existing_subject_request
-    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}"
-    response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"Language\":\"de\",\"SalutationId\":2}"
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
+    response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"SalutationId\":2,\"Language\":\"de\"}"
     stub_simple_request(:post, "Subjects", body, response)
 
     expect { interface.transmit(subject) }.to raise_error("Abacus created subject with id=1234 but person has id=#{person.id}")
@@ -275,20 +275,20 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def stub_create_subject_request
-    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}"
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
     response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_create_organisation_subject_request
-    body = "{\"Name\":\"Puzzle ITC\",\"Type\":\"Organisation\",\"Language\":\"de\",\"SalutationId\":2,\"Id\":#{person.id}}"
-    response = "{\"Id\":#{person.id},\"Name\":\"Puzzle ITC\",\"Type\":\"Organisation\",\"Language\":\"de\",\"SalutationId\":2}"
+    body = "{\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\",\"Id\":#{person.id}}"
+    response = "{\"Id\":#{person.id},\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\"}"
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_update_subject_request
-    body = "{\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"Language\":\"de\",\"SalutationId\":2}"
-    response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\"}"
+    response = "{\"Id\":#{person.id},\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
     stub_simple_request(:patch, "Subjects(Id=#{person.id})", body, response)
   end
 
@@ -460,7 +460,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Hillary","FirstName":"Edmund","Type":"Person","Language":"de","SalutationId":2,"Id":600001,\r
+      {"Type":"Person","Name":"Hillary","FirstName":"Edmund","Language":"de","SalutationId":2,"Id":600001,\r
        "Addresses":[{"Id":"e65440b","SubjectId":600001,"ValidFrom":"2024-05-08","Street":"Belpstrasse","HouseNumber":"37","PostOfficeBoxText":"Postfach 23","PostOfficeBoxNumber":"23","StreetSupplement":"","AddressSupplement":"c/o Frau Müller","City":"Bern","PostCode":"3007","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600001,"Type":"EMail","Value":"e.hillary@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600001,"SubjectId":600001,"Status":"Active"}]}\r
@@ -472,7 +472,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Tenzing","Type":"Person","Language":"de","SalutationId":2,"Id":600002,\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
        "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
@@ -484,7 +484,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":1,"Id":600004,\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","Language":"de","SalutationId":1,"Id":600004,\r
        "Addresses":[{"Id":"e65440b","SubjectId":600004,"ValidFrom":"2024-05-08","Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
@@ -509,7 +509,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Tenzing","Type":"Person","Language":"de","SalutationId":2,"Id":600002,\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
        "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"Postfach 23","AddressSupplement":"c/o Frau Müller","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
        "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
        "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
@@ -535,7 +535,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Hillary","FirstName":"Edmund","Type":"Person","Language":"de","SalutationId":2,"Id":600001}\r
+      {"Type":"Person","Name":"Hillary","FirstName":"Edmund","SalutationId":2,"Language":"de","Id":600001}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -544,7 +544,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Tenzing","Type":"Person","Language":"de","SalutationId":2,"Id":600002}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","SalutationId":2,"Language":"de","Id":600002}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -553,7 +553,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":2,"Id":600004}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","SalutationId":2,"Language":"de","Id":600004}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end
@@ -568,7 +568,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Hillary","FirstName":"Edmund","Type":"Person","Language":"de","SalutationId":2,"Id":600001}\r
+      {"Type":"Person","Name":"Hillary","FirstName":"Edmund","SalutationId":2,"Language":"de","Id":600001}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -577,7 +577,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Tenzing","Type":"Person","Language":"de","SalutationId":2,"Id":600002}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","SalutationId":2,"Language":"de","Id":600002}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -586,7 +586,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":2,"Id":600004}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","SalutationId":2,"Language":"de","Id":600004}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
@@ -601,7 +601,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Hillary","FirstName":"Edmund","Type":"Person","Language":"de","SalutationId":2,"Id":600001}\r
+      {"Type":"Person","Name":"Hillary","FirstName":"Edmund","SalutationId":2,"Language":"de","Id":600001}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -610,7 +610,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":2,"Id":600004}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","SalutationId":2,"Language":"de","Id":600004}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end
@@ -634,7 +634,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":2,"Id":600004}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","SalutationId":2,"Language":"de","Id":600004}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
@@ -907,7 +907,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"Name":"Norgay","FirstName":"Nima","Type":"Person","Language":"de","SalutationId":2}\r
+      {"Type":"Person","Name":"Norgay","FirstName":"Nima","SalutationId":2,"Language":"de"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
