@@ -34,8 +34,8 @@ describe MailingListAbility do
       expect(ability).to be_able_to(:create, mailing_list)
     end
 
-    it "is denied to manage sub group abos in same main group" do
-      expect(ability).not_to be_able_to(:create, mailing_list_in_other_sub_group)
+    it "is permitted to manage sub group abos in same main group" do
+      expect(ability).to be_able_to(:create, mailing_list_in_other_sub_group)
     end
 
     it "is denied to manage foreign main group abos" do

@@ -21,11 +21,10 @@ module SacCas::MailingListAbility
   # Checks if a user has a Schreibrecht for the mailing list in the same main group
   #
   # For example if users are members of SAC Hitobito and have Schreibrecht, they
-  # can manage the mailing list of SAC Hitobito, but not the mailing lists of
-  # SAC Hitobito subgroups.
+  # can manage the mailing list of SAC Hitobito.
   def schreibrecht_in_main_group?
     user.roles.any? do |r|
-      r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.id
+      r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.layer_group_id
     end
   end
 end
