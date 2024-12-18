@@ -36,7 +36,7 @@ module HitobitoSacCas
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
         Export::BackupMitgliederScheduleJob,
-        Qualifications::ExpirationMailerJob,
+        # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
