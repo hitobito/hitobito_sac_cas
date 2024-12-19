@@ -57,8 +57,8 @@ module SacCas::GroupResource
       attr = [prefix, suffix].join("_")
 
       extra_attribute attr.to_sym, :big_decimal, writable: false, sortable: false do
-        next unless @object.respond_to?(:sac_section_membership_configs)
-        @object.active_sac_section_membership_config.send(attr)
+        next unless @object.respond_to?(:active_sac_section_membership_config)
+        @object.active_sac_section_membership_config&.send(attr)
       end
     end
   end
