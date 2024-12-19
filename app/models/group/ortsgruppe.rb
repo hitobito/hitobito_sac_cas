@@ -32,4 +32,8 @@ class Group::Ortsgruppe < Group
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
 
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
+
+  def active_sac_section_membership_config
+    @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
 end
