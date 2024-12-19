@@ -164,6 +164,11 @@ describe Person do
       role.update(end_on: Date.new(2002, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(2)
     end
+
+    it "does not double membership_year values in lists when having multiple roles" do
+      Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied), group: groups(:bluemlisalp_mitglieder))
+      expect(Person.with_membership_years.map(&:membership_years)).to match_array([0, 0, 9, 9, 9, 9, 0, 0])
+    end
   end
 
   describe "#salutation_label" do

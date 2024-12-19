@@ -18,6 +18,6 @@ module SacCas::Person::HistoryController
   private
 
   def roles_scope
-    super.with_membership_years
+    super.with_membership_years(grouped: false)
   end
 end
