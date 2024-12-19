@@ -14,7 +14,7 @@ it:
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
     sac:
       name: "Club Alpino Svizzero CAS"
-      zentralverband: ""
+      zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
       town: "3000 Berna 14"
       postbox: "Casella postale"
@@ -1310,6 +1310,9 @@ it:
   event/courses/leader_settlement_pdfs:
     export_enqueued: ""
 
+  event/participations:
+    pending: ""
+
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
     tour_guides_active: Guide escursionistiche attive
@@ -1744,10 +1747,10 @@ it:
       link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
       link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       link_faqs_title: FAQ
-      link_statutes: ""
+      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/SAC_Statuten_A5_IT.pdf"
       link_statutes_title: Statuto
       link_sektion_statuten_title: Statuto della sezione
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali_AD_2024_-_valido_dal_1_gennaio_2025.pdf"
+      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali.pdf"
       link_contribution_regulations_title: Regolamento delle quote sociali
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati

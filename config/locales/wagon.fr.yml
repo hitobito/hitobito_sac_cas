@@ -115,7 +115,10 @@ fr:
 
     errors:
       messages:
-        youth_not_allowed_in_family: >
+        youth_not_allowed_in_family: >-
+          Les adolescent·e·s âgé·e·s de %{from_age} à %{to_age} ans ne peuvent pas être admis·e·s
+
+          dans une adhésion familiale.
         invalid_date_range: "doit se situer entre %{start_on} et %{end_on} "
 
       models:
@@ -158,7 +161,8 @@ fr:
             less_than_6_years_before_entry: se situe moins de 6 ans avant l’entrée au CAS
 
         wizards/steps/choose_sektion:
-          requires_admin: >
+          requires_admin: >-
+            Nous te prions de demander le changement de section souhaité par téléphone ou par e-mail*. Pour cela, prends contact avec nous
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
@@ -1310,6 +1314,9 @@ fr:
   event/courses/leader_settlement_pdfs:
     export_enqueued: ""
 
+  event/participations:
+    pending: ""
+
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de randonnée
     tour_guides_active: Chef·fe·s de randonnée actif·ves
@@ -1329,7 +1336,12 @@ fr:
         has_account: "As-tu déjà un login CAS?"
         to_login_page: S’inscrire
       abo_issue:
-        issues_from_help: >
+        issues_from_help: >-
+          L’abonnement prend effet à partir du prochain numéro possible.
+
+          Si le magazine doit être livré à une date ultérieure, merci de nous informer du début de la livraison.
+
+          indique-nous à partir de quel numéro nous pouvons commencer la livraison.
       abo_infos:
         annual_price_header: Prix par an
         delivery_country_header: Pays d’expédition
@@ -1349,8 +1361,8 @@ fr:
         agb_text: "J’ai lu et j’accepte les %{link}"
         statutes_text: "J’ai lu et j’accepte les %{link} "
         sektion_statuten_text: "J’ai lu et j’accepte les %{link} "
-        contribution_regulations_text: ""
-        data_protection_text: ""
+        contribution_regulations_text: "J’ai lu et j’accepte les %{link} "
+        data_protection_text: "J’ai lu et j’accepte les %{link} "
 
     self_inscription:
       membership_role_exists: Tu es déjà membre de cette section
@@ -1358,7 +1370,8 @@ fr:
         register_on_info:
           jul: "En cas d’adhésion à partir du 1er juillet, tu bénéficies d’une réduction de 50% sur la cotisation annuelle."
           oct: "En cas d’adhésion à partir du 1er octobre, la cotisation annuelle est supprimée."
-        register_as_info: >
+        register_as_info: >-
+          Tu peux soit adhérer au CAS Blüemlisalp en tant que section supplémentaire, soit la choisir comme nouvelle section de base et quitter ainsi ton ancienne section de base. Remarque pour les familles: le changement de section de base est automatiquement valable pour tous·tes les membres de la famille. En revanche, l’adhésion à une section supplémentaire ne vaut que pour toi.
         inscribe: Rejoindre
       new:
         role_exists: Tu es déjà membre de cette section
@@ -1539,7 +1552,8 @@ fr:
   person:
     history:
       index_notice_sac_cas:
-        sections_info_html: >
+        sections_info_html: >-
+          Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
   people:
     membership:
       verify:
@@ -1744,10 +1758,10 @@ fr:
       link_agb: "https://www.sac-cas.ch/fr/meta/cgv-les-alpes/"
       link_faqs: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       link_faqs_title: FAQ
-      link_statutes: ""
+      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/SAC_Statuten_A5_FR.pdf"
       link_statutes_title: Statuts
       link_sektion_statuten_title: Statuts de la section
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/Reglement_des_cotisations_AD_2024_-_valable_des_1.1.2025.pdf"
+      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/FR/Reglement_des_cotisations.pdf"
       link_contribution_regulations_title: Règlement des cotisations
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
@@ -1799,7 +1813,7 @@ fr:
         person_fields_title: Données personnelles
         agreement_fields:
           adult_consent_caption: Je confirme que j’ai au moins 18 ans ou que j’ai l’accord de mes parents ou représentants légaux.
-          newsletter_caption: ""
+          newsletter_caption: Je souhaite m’abonner à une newsletter
         abo_basic_login:
           person_fields:
             next_button: CRÉER UN COMPTE CAS
@@ -1821,7 +1835,8 @@ fr:
           family_fields_title: Membres de la famille
           family_fields:
             add: Ajouter un·e autre membre de la famille
-            email_taken: >
+            email_taken: >-
+              L’adresse e-mail est déjà enregistrée et cette personne ne peut donc pas être ajoutée à la famille. Merci de contacter le service des membres pour enregistrer ta famille: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >
           various_fields:
             immediate_entry_date: "Date d’entrée: immédiatement"
