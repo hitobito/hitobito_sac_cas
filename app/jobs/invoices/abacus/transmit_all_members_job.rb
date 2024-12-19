@@ -48,7 +48,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   end
 
   def member_ids
-    Person.joins(:roles_unscoped)
+    Person.joins(:roles)
       .where(roles: {type: ROLES_TO_TRANSMIT.map(&:sti_name)})
       .where.not(data_quality: :error)
       .distinct
