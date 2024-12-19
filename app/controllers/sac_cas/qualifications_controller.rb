@@ -20,6 +20,7 @@ module SacCas::QualificationsController
     entry.save context: :qualifications_controller
   rescue PG::Error => e
     Airbrake.notify(e, parameters: params)
+    Raven.capture_exception(e, extra: {params: params})
     logger.error e.message
     false
   end
