@@ -78,12 +78,11 @@ describe SelfRegistration::InfosComponent, type: :component do
     end
 
     it "renders link to statutes" do
-      expect(body).to have_link "Statuten", href: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/20240702_SAC_Statuten_A5_DE__3_.pdf"
+      expect(body).to have_link "Statuten", href: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/SAC_Statuten_A5_DE.pdf"
     end
 
     it "renders link to contributation regulations" do
-      file = CGI.escape("Beitragsreglement_AV_2024_-_Gültig_ab_1.1.2025.pdf")
-      expect(body).to have_link "Beitragsreglement", href: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/#{file}"
+      expect(body).to have_link "Beitragsreglement", href: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement.pdf"
     end
 
     it "renders link to data protection" do
