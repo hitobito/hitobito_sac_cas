@@ -1200,6 +1200,7 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+        assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
       actions_show_sac_cas:
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
