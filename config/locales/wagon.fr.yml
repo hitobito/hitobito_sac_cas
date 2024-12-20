@@ -1428,7 +1428,7 @@ fr:
       positions:
         hut_solidarity_fee: Contribution de solidarité aux cabanes
         sac_entry_fee: Frais d’entrée à l’association centrale
-        sac_fee: Contribution à l’association centrale
+        sac_fee: Cotisation Association centrale
         sac_magazine_postage_abroad: Frais de port Les Alpes à l’association centrale
         sac_magazine: Frais Les Alpes
         section_bulletin_postage_abroad: "Frais de port bulletin %{section}"
