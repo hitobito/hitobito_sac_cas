@@ -21,6 +21,18 @@ module SacCas::Event::ParticipationButtons
 
   private
 
+  def build_button(to_state)
+    return build_assign_button if to_state == :assign
+
+    super
+  end
+
+  def build_assign_button
+    path = :assign_group_event_participation
+
+    action_button(label(:assign), path, :tag, method: :put, data: { confirm: t(".assign_confirm") })
+  end
+
   def build_cancel_button
     return super unless her_own?
 

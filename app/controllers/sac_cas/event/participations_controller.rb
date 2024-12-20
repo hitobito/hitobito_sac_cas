@@ -18,6 +18,7 @@ module SacCas::Event::ParticipationsController
     around_create :proceed_wizard
     after_create :subscribe_newsletter
     after_summon :enqueue_invoice_job
+    after_assign :enqueue_application_confirmation_mail
     before_cancel :assert_participant_cancelable?
     after_cancel :cancel_invoices
   end
@@ -169,6 +170,10 @@ module SacCas::Event::ParticipationsController
 
   def enqueue_invoice_job
     ExternalInvoice::CourseParticipation.invoice!(entry) unless ExternalInvoice::CourseParticipation.exists?(link: entry)
+  end
+
+  def enqueue_application_confirmation_mail
+    Event::ApplicationConfirmationMailer.confirmation(entry, Event::ApplicationConfirmationMailer::ASSIGNED).deliver_later
   end
 
   def cancel_invoices
