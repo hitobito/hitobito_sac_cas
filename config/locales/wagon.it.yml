@@ -1214,7 +1214,7 @@ it:
         title: Richiedere un contributo di sovvenzione
         subsidy_field: "Richiedere un prezzo sovvenzionato di %{amount}"
         subsidy_link_label: Richiesta di sovvenzione
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
@@ -1229,7 +1229,7 @@ it:
           9 - 0 giorni: 100 % del prezzo
         terms_and_conditions_text: " Sì, dichiaro di aver compreso %{link}"
         terms_and_conditions_link_label: CGC
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
+        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
         subscribe_newsletter: "Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS"
       fields_sac_cas:
         former_price_select: "In precedenza %{price_label}"
@@ -1430,7 +1430,7 @@ it:
         hut_solidarity_fee: Contributo di solidarietà alle capanne
         sac_entry_fee: Quota di adesione Associazione centrale
         sac_fee: Contributo Associazione centrale
-        sac_magazine_postage_abroad: Affrancatura Le Alpi Associazione Centrale
+        sac_magazine_postage_abroad: Affrancatura Le Alpi
         sac_magazine: Quota Alpi
         section_bulletin_postage_abroad: "Affrancatura bollettino %{section}"
         section_entry_fee: "Quota di adesione %{section}"

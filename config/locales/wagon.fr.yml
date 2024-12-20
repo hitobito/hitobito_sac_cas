@@ -1214,7 +1214,7 @@ fr:
         title: Demander une subvention
         subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
         general_info: >-
           En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
@@ -1229,7 +1229,7 @@ fr:
           9 - 0 jours: 100% du prix.
         terms_and_conditions_text: "Oui, je suis d’accord avec les %{link} "
         terms_and_conditions_link_label: CGV
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
+        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
         subscribe_newsletter: "Oui, je souhaite être informé·e des nouveautés du Club Alpin Suisse CAS"
       fields_sac_cas:
         former_price_select: "Ancien %{price_label}"
@@ -1429,7 +1429,7 @@ fr:
         hut_solidarity_fee: Contribution de solidarité aux cabanes
         sac_entry_fee: Frais d’entrée à l’association centrale
         sac_fee: Cotisation Association centrale
-        sac_magazine_postage_abroad: Frais de port Les Alpes à l’association centrale
+        sac_magazine_postage_abroad: Frais de port Les Alpes
         sac_magazine: Frais Les Alpes
         section_bulletin_postage_abroad: "Frais de port bulletin %{section}"
         section_entry_fee: "Frais d’entrée %{section}"

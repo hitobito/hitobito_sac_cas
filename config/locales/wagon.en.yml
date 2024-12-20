@@ -1151,7 +1151,7 @@ en:
         title: Apply for a subsidy
         subsidy_field: ""
         subsidy_link_label: Subsidy application
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/2023_Subventionsantrag_de.pdf"
+        subsidy_link_href: ""
         general_info: >-
           As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this.
         detail_info_header: "What do I have to do to apply for a subsidy?"
@@ -1166,7 +1166,7 @@ en:
           9 - 0 days: 100 % of the price
         terms_and_conditions_text: "Yes, I agree to the terms and conditions of %{link} "
         terms_and_conditions_link_label: GTC
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/SAC_Ausbildung-Touren_2023_AGB_DE.pdf"
+        terms_and_conditions_link_href: ""
         subscribe_newsletter: "Yes, I would like to be informed about news from the Swiss Alpine Club SAC"
       fields_sac_cas:
         former_price_select: ""
@@ -1358,7 +1358,7 @@ en:
         hut_solidarity_fee: Cabins Solidarity contribution
         sac_entry_fee: ""
         sac_fee: Contribution Central Association
-        sac_magazine_postage_abroad: Postage The Alps Central Association
+        sac_magazine_postage_abroad: ""
         sac_magazine: Alpine fees
         section_bulletin_postage_abroad: "Porto Bulletin %{section}"
         section_entry_fee: "Entrance fee %{section}"
