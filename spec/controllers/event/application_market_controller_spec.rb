@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::ApplicationMarketController do
+  include ActiveJob::TestHelper
+
   before { sign_in(people(:admin)) }
 
   let(:group) { event.groups.first }
@@ -79,6 +81,26 @@ describe Event::ApplicationMarketController do
         get :index, params: params
         expect(dom).to have_css "tbody#participants tr:nth-of-type(1) td", text: "Aufgeboten"
       end
+    end
+  end
+
+  describe "PUT #add_participant" do
+    let(:appl_prio_1) do
+      p = Fabricate(:event_participation,
+                    event: event,
+                    active: false,
+                    application: Fabricate(:event_application, priority_1: event))
+      Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+      p.reload
+    end
+
+    it "sends confirmation email" do
+      expect do
+        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id}, format: :js
+      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation)
+
+      expect(appl_prio_1.reload.roles.collect(&:type)).to eq([event.participant_types.first.sti_name])
+      expect(appl_prio_1).to be_active
     end
   end
 end

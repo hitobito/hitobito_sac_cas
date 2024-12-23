@@ -515,4 +515,23 @@ describe Event::ParticipationsController do
       end
     end
   end
+
+  context "state changes" do
+    let(:participation) { Fabricate(:event_participation, event: event) }
+
+    it 'PUT assign sets participation state to assigned and sends confirmation mail' do
+      expect do
+      put :assign,
+        params: {
+          group_id: group.id,
+          event_id: event.id,
+          id: participation.id
+        }
+      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation)
+
+      participation.reload
+      expect(participation.active).to be true
+      expect(participation.state).to eq 'assigned'
+    end
+  end
 end
