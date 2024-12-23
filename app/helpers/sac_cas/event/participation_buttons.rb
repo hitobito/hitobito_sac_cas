@@ -30,7 +30,7 @@ module SacCas::Event::ParticipationButtons
   def build_assign_button
     path = :assign_group_event_participation
 
-    action_button(label(:assign), path, :tag, method: :put, data: { confirm: t(".assign_confirm") })
+    action_button(label(:assign), path, :tag, method: :put, data: {confirm: t(".assign_confirm")})
   end
 
   def build_cancel_button

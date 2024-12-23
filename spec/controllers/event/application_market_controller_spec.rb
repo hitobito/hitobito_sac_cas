@@ -87,9 +87,9 @@ describe Event::ApplicationMarketController do
   describe "PUT #add_participant" do
     let(:appl_prio_1) do
       p = Fabricate(:event_participation,
-                    event: event,
-                    active: false,
-                    application: Fabricate(:event_application, priority_1: event))
+        event: event,
+        active: false,
+        application: Fabricate(:event_application, priority_1: event))
       Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
       p.reload
     end
