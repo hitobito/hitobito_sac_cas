@@ -16,4 +16,9 @@ module SacCas::Event::ApplicationMarketController
       load_applications.order(SORT_EXPRESSION)
     )
   end
+
+  def assigner_add_participant
+    super
+    Event::ApplicationConfirmationMailer.confirmation(participation, Event::ApplicationConfirmationMailer::ASSIGNED).deliver_later
+  end
 end
