@@ -1428,12 +1428,12 @@ it:
       title: "Fattura di affiliazione %{year}"
       positions:
         hut_solidarity_fee: Contributo di solidarietà alle capanne
-        sac_entry_fee: Quota di adesione Associazione centrale
+        sac_entry_fee: Tassa ingresso Assoc. Centrale
         sac_fee: Contributo Associazione centrale
         sac_magazine_postage_abroad: Affrancatura Le Alpi
         sac_magazine: Quota Alpi
         section_bulletin_postage_abroad: "Affrancatura bollettino %{section}"
-        section_entry_fee: "Quota di adesione %{section}"
+        section_entry_fee: " Tassa d’ingresso %{section}"
         section_fee: "Contributo Sezione %{section}"
       beitragskategorie:
         adult: Membro individuale
