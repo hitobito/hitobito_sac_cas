@@ -41,7 +41,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           town: user.town,
           country: user.country,
           phone: nil,
-          picture_url: /\/packs(-test)?\/media\/images\/profile-.*\.svg/,
+          picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
           membership_verify_url: nil
         }.deep_stringify_keys)
       end
@@ -96,7 +96,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           primary_group_id: user.primary_group_id,
           language: user.language,
           phone: nil,
-          membership_years: "0.0",
+          membership_years: 0,
           picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
           membership_verify_url: nil,
           roles: [

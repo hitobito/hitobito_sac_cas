@@ -53,9 +53,11 @@ RSpec.describe PersonResource, type: :resource do
 
       it "can be requested" do
         params[:extra_fields] = {people: "membership_years"}
-        render
+        travel_to(Date.new(2024, 12, 3)) do
+          render
+        end
         expect(attributes.keys).to include :membership_years
-        expect(attributes[:membership_years]).not_to be_blank
+        expect(attributes[:membership_years]).to eq 9
       end
 
       context "without membership" do

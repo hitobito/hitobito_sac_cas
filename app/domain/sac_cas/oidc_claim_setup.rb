@@ -66,7 +66,7 @@ module SacCas::OidcClaimSetup
   end
 
   def membership_years(owner)
-    Person.with_membership_years.find_by(id: owner.id).membership_years
+    Person.with_membership_years.find_by(id: owner.id).membership_years.to_i
   end
 
   def user_groups(owner)

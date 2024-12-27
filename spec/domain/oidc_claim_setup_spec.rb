@@ -81,6 +81,16 @@ describe OidcClaimSetup do
       it "is blank when no matching number exists" do
         expect(claims[:membership_years]).to eq 0
       end
+
+      context "mitglied" do
+        let(:owner) { people(:mitglied) }
+
+        it "membership_verify_url is present" do
+          travel_to(Time.zone.local(2024, 12, 1)) do
+            expect(claims[:membership_years]).to eq 9
+          end
+        end
+      end
     end
 
     it_behaves_like "shared claims"

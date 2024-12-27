@@ -13,7 +13,8 @@ module SacCas::PersonResource
       @object.membership_years if @object.sac_membership_anytime?
     end
     on_extra_attribute :membership_years do |scope|
-      scope.with_membership_years
+      # NOTE cannot simply chain with_membership_years as it calculates bad results
+      Person.with_membership_years.where(id: scope.select("people.id"))
     end
 
     with_options writable: false, sortable: false, filterable: false do
