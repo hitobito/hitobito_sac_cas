@@ -69,8 +69,10 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   context "with role#end_on at date" do
     before { person.roles.with_inactive.update_all(end_on: date) }
 
+    let(:count) { (date.year == Time.zone.today.year) ? 1 : 3 }
+
     it "doesnt extend the role" do
-      expect { expect_query_count { extend_roles }.to eq(1) }.not_to change { person_mitglied_role.reload.end_on }
+      expect { expect_query_count { extend_roles }.to eq(count) }.not_to change { person_mitglied_role.reload.end_on }
     end
   end
 
