@@ -24,12 +24,17 @@ module SacCas::RoleAbility
 
   # core: general(:destroy).not_permission_giving
   def not_permission_giving
+    return false if in_neuanmeldungs_group?
     return false if wizard_managed_role?
 
     super
   end
 
   private
+
+  def in_neuanmeldungs_group?
+    subject.group.is_a?(Group::SektionsNeuanmeldungenSektion)
+  end
 
   def has_termination_by_section_only_role
     return mitglied_termination_by_section_only? if mitglied_zusatzsektion_role?
