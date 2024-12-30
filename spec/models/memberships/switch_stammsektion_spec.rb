@@ -50,6 +50,12 @@ describe Memberships::SwitchStammsektion do
       expect(switch).to be_valid
     end
 
+    it "is valid with membership in different section active since today" do
+      create_role(:matterhorn_mitglieder, "Mitglied", start_on: Time.zone.today)
+      expect(switch).to be_valid
+      expect(switch).to be_valid
+    end
+
     describe "existing membership in tree" do
       describe "join section" do
         it "is invalid if person is join_section member" do
@@ -105,6 +111,17 @@ describe Memberships::SwitchStammsektion do
           expect(switch.save).to eq true
         end.not_to(change { person.reload.roles.count })
         expect(bluemlisalp_mitglied.reload.end_on).to eq now.to_date.yesterday
+        expect(matterhorn_mitglied.start_on).to eq now.to_date
+        expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
+        expect(person.primary_group).to eq matterhorn_mitglieder
+      end
+
+      it "creates new role and destroys existing when start_on is today" do
+        bluemlisalp_mitglied.update_column(:start_on, Time.zone.today)
+        expect do
+          expect(switch.save).to eq true
+        end.not_to(change { person.reload.roles.count })
+        expect { bluemlisalp_mitglied.reload }.to raise_error(ActiveRecord::RecordNotFound)
         expect(matterhorn_mitglied.start_on).to eq now.to_date
         expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
