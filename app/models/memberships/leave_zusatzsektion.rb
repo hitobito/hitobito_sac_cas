@@ -55,7 +55,7 @@ module Memberships
     end
 
     def end_on(role)
-      if terminate_on.future?
+      if terminate_on.future? || terminate_on.today?
         [role.end_on, terminate_on].compact.min
       else
         now.to_date.yesterday
