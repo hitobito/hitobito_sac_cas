@@ -27,6 +27,8 @@ module Wizards::Signup
       current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
     end
 
+    def redirection_message = I18n.t("groups.self_registration.create.already_subscribed_to_abo")
+
     def costs = SacCas::ABO_COSTS[:magazin]
 
     def requires_policy_acceptance? = false
