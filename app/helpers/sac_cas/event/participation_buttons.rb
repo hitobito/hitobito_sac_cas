@@ -21,18 +21,6 @@ module SacCas::Event::ParticipationButtons
 
   private
 
-  def build_button(to_state)
-    return build_assign_button if to_state == :assign
-
-    super
-  end
-
-  def build_assign_button
-    path = :assign_group_event_participation
-
-    action_button(label(:assign), path, :tag, method: :put, data: {confirm: t(".assign_confirm")})
-  end
-
   def build_cancel_button
     return super unless her_own?
 
@@ -45,6 +33,10 @@ module SacCas::Event::ParticipationButtons
         bs_placement: :bottom,
         bs_content: popover.to_str
       })
+  end
+
+  def build_assign_button
+    build_action_button(:assign, :tag, data: {confirm: t(".assign_confirm")})
   end
 
   def cancelable?
