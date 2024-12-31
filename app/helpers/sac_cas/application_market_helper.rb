@@ -13,4 +13,12 @@ module SacCas::ApplicationMarketHelper
       method: :put,
       data: {confirm: t(".add_participant_confirm")})
   end
+
+  def application_market_participant_link(p)
+    link_to(icon("arrow-right"),
+      participant_group_event_application_market_path(@group, @event, p), # rubocop:disable Rails/HelperInstanceVariable
+      remote: true,
+      method: :delete,
+      data: {confirm: t(".remove_participant_confirm")})
+  end
 end

@@ -1103,6 +1103,8 @@ de:
     application_market:
       application:
         add_participant_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+      participant:
+        remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     courses:
       key_data_sheets:
         create:
