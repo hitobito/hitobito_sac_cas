@@ -57,10 +57,10 @@ module Memberships
     def end_on(role)
       # when selecting leave zusatzsektion right now, terminate_on will be yesterday, not today!
       # resulting in that case always executing the else block
-      unless terminate_on.past?
-        [role.end_on, terminate_on].compact.min
-      else
+      if terminate_on.past?
         now.to_date.yesterday
+      else
+        [role.end_on, terminate_on].compact.min
       end
     end
 

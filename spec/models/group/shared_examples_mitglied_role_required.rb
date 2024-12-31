@@ -10,7 +10,7 @@ shared_examples "Mitglied role required" do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
   let(:role) { described_class.new(person:, group:, start_on: 1.day.from_now, end_on: 4.days.from_now) }
-  let(:end_of_next_year) { Date.today.next_year.end_of_year }
+  let(:end_of_next_year) { Time.zone.today.next_year.end_of_year }
 
   it "is invalid without Mitglied role in group" do
     expect(role).to_not be_valid
