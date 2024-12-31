@@ -120,5 +120,17 @@ describe Groups::SelfRegistrationController do
         expect(flash[:notice]).to eq "Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
+
+    context "without primary group id" do
+      let(:person) { Fabricate(:person) }
+
+      it "redirects to memberships tab layered under root group with a flash message" do
+        allow_any_instance_of(Wizards::Signup::SektionWizard).to receive(:member_or_applied?).and_return(true)
+        get :show, params: wizard_params
+
+        expect(response).to redirect_to(history_group_person_path(group_id: Group.root.id, id: person.id))
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
+      end
+    end
   end
 end
