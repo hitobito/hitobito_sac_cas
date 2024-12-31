@@ -110,6 +110,12 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
+    it "correctly translates I18N gender nil value" do
+      required_attrs[:person_fields][:gender] = "_nil"
+      wizard.save!
+      expect(max.reload.gender).to be_nil
+    end
+
     describe "newsletter" do
       include ActiveJob::TestHelper
 

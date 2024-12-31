@@ -91,6 +91,12 @@ describe Wizards::Signup::AboBasicLoginWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
+    it "correctly translates I18N gender nil value" do
+      required_attrs[:person_fields][:gender] = "_nil"
+      wizard.save!
+      expect(max.reload.gender).to be_nil
+    end
+
     it "creates newsletter subscription" do
       required_attrs[:person_fields][:newsletter] = "1"
       wizard.save!

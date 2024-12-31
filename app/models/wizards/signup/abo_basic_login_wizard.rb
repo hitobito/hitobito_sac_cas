@@ -35,7 +35,8 @@ module Wizards::Signup
     private
 
     def build_person
-      super do |_person, role|
+      super do |person, role|
+        person.gender = nil if person.gender == I18nEnums::NIL_KEY
         role.end_on = Date.current.end_of_year
       end
     end

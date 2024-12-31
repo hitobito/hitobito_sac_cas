@@ -101,6 +101,12 @@ describe Wizards::Signup::AboTourenPortalWizard do
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
+    it "correctly translates I18N gender nil value" do
+      required_attrs[:person_fields][:gender] = "_nil"
+      wizard.save!
+      expect(max.reload.gender).to be_nil
+    end
+
     it "does not create newsletter subscription" do
       required_attrs[:person_fields][:newsletter] = "0"
       wizard.save!
