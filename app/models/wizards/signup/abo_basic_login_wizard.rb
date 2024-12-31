@@ -22,6 +22,8 @@ module Wizards::Signup
       current_user&.login? # do not allow if person already has a login
     end
 
+    def redirection_message = I18n.t("groups.self_registration.create.can_login_already_notice")
+
     def save!
       if current_user
         person.save!
