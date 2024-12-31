@@ -18,9 +18,13 @@ module HitobitoSacCas
       #{config.root}/app/jobs
     ]
 
-    if Rails.env.development? && config.respond_to?(:view_component)
-      config.view_component.preview_paths << "#{config.root}/spec/components/previews"
-      config.view_component.preview_controller = "WizardsPreviewsController"
+    if Rails.env.development?
+      config.action_mailer.preview_path = config.root.join("spec", "mailers", "previews").to_s
+
+      if config.respond_to?(:view_component)
+        config.view_component.preview_paths << "#{config.root}/spec/components/previews"
+        config.view_component.preview_controller = "WizardsPreviewsController"
+      end
     end
 
     config.before_initialize do |_app|

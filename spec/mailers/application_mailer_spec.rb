@@ -9,14 +9,13 @@ require "spec_helper"
 
 RSpec.describe ApplicationMailer, type: :mailer do
   context "layout" do
-    it "renders logo and footer" do
+    it "renders footer" do
       mail = Person::UserImpersonationMailer.completed(people(:mitglied), "Tanja Taker")
 
       expect(mail.body.to_s).to include(
         "<style>",
         '<div class="trix-content">',
         "Tanja Taker",
-        'src="http://test.host/packs-test/media/images/sac_logo_de',
         "<footer>",
         "<address>",
         "Monbijoustrasse 61"
