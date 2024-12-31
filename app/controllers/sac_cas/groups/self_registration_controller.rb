@@ -79,11 +79,11 @@ module SacCas::Groups::SelfRegistrationController
   def redirection_message
     case model_class
     when Wizards::Signup::SektionWizard
-      return t("groups.self_registration.create.existing_membership_notice")
+      t("groups.self_registration.create.existing_membership_notice")
     when Wizards::Signup::AboBasicLoginWizard
-      return t("groups.self_registration.create.can_login_already_notice")
+      t("groups.self_registration.create.can_login_already_notice")
     when Wizards::Signup::AboTourenPortalWizard
-      return t("groups.self_registration.create.already_member_of_tourenportal")
+      t("groups.self_registration.create.already_member_of_tourenportal")
     end
   end
 
