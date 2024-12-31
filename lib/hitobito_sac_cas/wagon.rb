@@ -135,6 +135,7 @@ module HitobitoSacCas
       Person::NameResource.course_leader_role = Event::Course::Role::Leader
 
       ## Helpers
+      ApplicationMarketHelper.prepend SacCas::ApplicationMarketHelper
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
