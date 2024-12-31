@@ -144,7 +144,7 @@ describe Memberships::LeaveZusatzsektionsController do
           request
           role.reload
         end
-          .to not_change(Role, :count)
+          .to not_change(Role.with_inactive, :count)
           .and change { role.terminated }.to(true)
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
         expect(response).to redirect_to person_path(person, format: :html)
@@ -216,7 +216,7 @@ describe Memberships::LeaveZusatzsektionsController do
           request
           role.reload
         end
-          .to not_change(Role, :count)
+          .to not_change(Role.with_inactive, :count)
           .and change { role.terminated }.to(true)
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
         expect(response).to redirect_to person_path(person, format: :html)
