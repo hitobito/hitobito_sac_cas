@@ -121,7 +121,6 @@ module HitobitoSacCas
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
         "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       )
-      Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
 
