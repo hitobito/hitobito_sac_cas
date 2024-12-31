@@ -76,6 +76,61 @@ describe Groups::SelfRegistrationController do
     end
   end
 
+  describe "redirection messages" do
+    let(:person) { people(:mitglied) }
+  
+    before do
+      sign_in(person)
+      get :show, params: { group_id: group.id }
+    end
+  
+    context "for signup wizard" do  
+      it "shows the correct message" do
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
+      end
+    end
+  
+    context "for abo wizard" do
+      let(:person) { people(:abonnent) }
+      let(:group) do 
+        groups(:abo_die_alpen).tap do |group|
+          group.update!(self_registration_role_type: group.role_types.first)
+        end
+      end
+  
+      it "shows the correct message" do
+        expect(flash[:notice]).to eq "Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen."
+      end
+    end
+  
+    context "for touren portal wizard" do
+      let(:group) do
+        Fabricate.build(Group::AboTourenPortal.sti_name, parent: groups(:abos)).tap do |group|
+          group.self_registration_role_type = Group::AboTourenPortal::Abonnent.sti_name
+          group.save!
+          Group::AboTourenPortal::Neuanmeldung.create!(person:, group:) # create role for person 
+        end
+      end
+  
+      it "shows the correct message" do
+        expect(flash[:notice]).to eq "Du bist bereits Mitglied das SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen."
+      end
+    end
+  
+    context "for basic login wizard" do
+      let(:group) do
+        Fabricate.build(Group::AboBasicLogin.sti_name, parent: groups(:abos)).tap do |grp|
+          grp.self_registration_role_type = Group::AboBasicLogin::BasicLogin.sti_name
+          grp.save!
+        end
+      end
+  
+      it "shows the correct message" do
+        expect(flash[:notice]).to eq "Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen."
+      end
+    end
+  end
+
   context "without email" do
     it "redirects to login page" do
       Person.create!(first_name: "noemail")
