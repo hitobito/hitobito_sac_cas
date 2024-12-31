@@ -55,7 +55,7 @@ module SacCas::Groups::SelfRegistrationController
   end
 
   def redirect_to_memberships_tab
-    flash[:notice] = t("groups.self_registration.create.existing_membership_notice")
+    flash[:notice] = wizard.redirection_message
     redirect_to history_group_person_path(group_id: current_user.primary_group_id || Group.root.id, id: current_user.id)
   end
 
@@ -73,6 +73,17 @@ module SacCas::Groups::SelfRegistrationController
       history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
     else
       new_person_session_path
+    end
+  end
+
+  def redirection_message
+    case model_class
+    when Wizards::Signup::SektionWizard
+      return t("groups.self_registration.create.existing_membership_notice")
+    when Wizards::Signup::AboBasicLoginWizard
+      return t("groups.self_registration.create.can_login_already_notice")
+    when Wizards::Signup::AboTourenPortalWizard
+      return t("groups.self_registration.create.already_member_of_tourenportal")
     end
   end
 
