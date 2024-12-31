@@ -10,10 +10,7 @@ shared_examples "Mitglied role required" do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
   let(:role) { described_class.new(person:, group:, start_on: 1.day.from_now, end_on: 4.days.from_now) }
-
-  before do
-    travel_to Time.zone.local(2024, 6, 6)
-  end
+  let(:end_of_next_year) { Date.today.next_year.end_of_year }
 
   it "is invalid without Mitglied role in group" do
     expect(role).to_not be_valid
@@ -21,14 +18,14 @@ shared_examples "Mitglied role required" do
   end
 
   it "is invalid with Mitglied role in different group" do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, end_on: end_of_next_year)
 
     expect(role).to_not be_valid
     expect(role.errors[:person]).to include("muss Mitglied in der ausgewählten Gruppe sein.")
   end
 
   it "is valid with Mitglied role in group" do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: group, person: person, end_on: end_of_next_year)
     expect(role).to be_valid
   end
 
@@ -38,16 +35,16 @@ shared_examples "Mitglied role required" do
   end
 
   it "is invalid with MitgliedZusatzsektion role in different group" do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), person: person)
-    Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: other_group, person: person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), person: person, end_on: end_of_next_year)
+    Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: other_group, person: person, end_on: end_of_next_year)
 
     expect(role).to_not be_valid
     expect(role.errors[:person]).to include("muss Mitglied in der ausgewählten Gruppe sein.")
   end
 
   it "is valid with MitgliedZusatzsektion role in group" do
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person)
-    Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person)
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person: person, end_on: end_of_next_year)
+    Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group: group, person: person, end_on: end_of_next_year)
 
     expect(role).to be_valid
   end
