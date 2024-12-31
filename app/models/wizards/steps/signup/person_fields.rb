@@ -26,6 +26,8 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
   validates :gender, :street, :housenumber, :town, :zip_code,
     :country, presence: true
 
+  validate :assert_is_valid_swiss_post_code
+
   def initialize(...)
     super
 
@@ -46,6 +48,14 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
       self.phone_number ||= current_user.phone_numbers.find_by(label: Wizards::Steps::Signup::PersonCommon::PHONE_NUMBER_LABEL)&.number
     else
       self.country ||= Settings.addresses.imported_countries.to_a.first
+    end
+  end
+
+  private
+
+  def assert_is_valid_swiss_post_code
+    if zip_code.present? && Countries.swiss?(country) && !zip_code.to_s.match(/\A\d{4}\z/)
+      errors.add(:zip_code)
     end
   end
 end

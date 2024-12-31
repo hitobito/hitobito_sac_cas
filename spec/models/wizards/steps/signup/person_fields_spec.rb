@@ -58,6 +58,19 @@ describe Wizards::Steps::Signup::PersonFields do
         expect(form.errors.full_messages).to eq ["Person muss 6 Jahre oder älter sein"]
       end
     end
+
+    describe "zip_code" do
+      it "validates swiss zip code format" do
+        form.attributes = required_attrs.merge(zip_code: "123")
+        expect(form).not_to be_valid
+        expect(form.errors.full_messages).to eq ["PLZ ist nicht gültig"]
+      end
+
+      it "accepts any format for non-swiss countries" do
+        form.attributes = required_attrs.merge(zip_code: "123", country: "DE")
+        expect(form).to be_valid
+      end
+    end
   end
 
   it "sets country default to ch" do
