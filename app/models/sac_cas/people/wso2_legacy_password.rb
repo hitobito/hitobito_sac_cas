@@ -40,8 +40,11 @@ module SacCas::People::Wso2LegacyPassword
   end
 
   def update_to_devise_password!(new_password)
-    # Avoid validation of password length:
-    update!(encrypted_password: Devise::Encryptor.digest(self.class, new_password))
+    # Avoid person validations to prevent validating invalid records on sign_in
+    update_columns(
+      encrypted_password: Devise::Encryptor.digest(self.class, new_password),
+      correspondence: confirmed_at? ? :digital : :print
+    )
     clear_legacy_password_attributes
   end
 
