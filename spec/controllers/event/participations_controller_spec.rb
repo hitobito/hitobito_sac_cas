@@ -127,6 +127,42 @@ describe Event::ParticipationsController do
       end
     end
 
+    context "with automatic_assignment=true" do
+      before { event.update!(automatic_assignment: true) }
+
+      it "enqueues confirmation job" do
+        expect do
+          post :create,
+            params: {
+              group_id: group.id,
+              event_id: event.id,
+              step: "summary",
+              event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
+            }
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
+          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+      end
+    end
+
+    context "with automatic_assignment=false" do
+      before { event.update!(automatic_assignment: false) }
+
+      it "enqueues confirmation job" do
+        expect do
+          post :create,
+            params: {
+              group_id: group.id,
+              event_id: event.id,
+              step: "summary",
+              event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
+            }
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
+          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+      end
+    end
+
     it "redirects to participation path" do
       expect do
         post :create,
@@ -513,6 +549,25 @@ describe Event::ParticipationsController do
         end.to not_change { participation.reload.price }
           .and not_change { participation.price_category }
       end
+    end
+  end
+
+  context "state changes" do
+    let(:participation) { Fabricate(:event_participation, event: event) }
+
+    it "PUT assign sets participation state to assigned and sends confirmation mail" do
+      expect do
+        put :assign,
+          params: {
+            group_id: group.id,
+            event_id: event.id,
+            id: participation.id
+          }
+      end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+
+      participation.reload
+      expect(participation.active).to be true
+      expect(participation.state).to eq "assigned"
     end
   end
 end

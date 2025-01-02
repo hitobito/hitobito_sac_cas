@@ -35,6 +35,10 @@ module SacCas::Event::ParticipationButtons
       })
   end
 
+  def build_assign_button
+    build_action_button(:assign, :tag, data: {confirm: t(".assign_confirm")})
+  end
+
   def cancelable?
     return can?(:cancel, @participation) unless her_own?
 

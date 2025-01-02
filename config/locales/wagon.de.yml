@@ -1100,6 +1100,11 @@ de:
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
 
   event:
+    application_market:
+      application:
+        add_participant_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+      participant:
+        remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     courses:
       key_data_sheets:
         create:
@@ -1200,6 +1205,7 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       actions_show_youth:
         summon_button: Aufbieten
+        assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
       actions_show_sac_cas:
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen

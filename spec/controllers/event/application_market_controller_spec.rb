@@ -81,4 +81,24 @@ describe Event::ApplicationMarketController do
       end
     end
   end
+
+  describe "PUT #add_participant" do
+    let(:appl_prio_1) do
+      p = Fabricate(:event_participation,
+        event: event,
+        active: false,
+        application: Fabricate(:event_application, priority_1: event))
+      Fabricate(Event::Course::Role::Participant.name.to_sym, participation: p)
+      p.reload
+    end
+
+    it "sends confirmation email" do
+      expect do
+        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id}, format: :js
+      end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+
+      expect(appl_prio_1.reload.roles.collect(&:type)).to eq([event.participant_types.first.sti_name])
+      expect(appl_prio_1).to be_active
+    end
+  end
 end

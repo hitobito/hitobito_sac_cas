@@ -18,6 +18,7 @@ module SacCas::Event::ParticipationsController
     around_create :proceed_wizard
     after_create :subscribe_newsletter
     after_summon :enqueue_invoice_job
+    after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
     before_cancel :assert_participant_cancelable?
     after_cancel :cancel_invoices
   end
@@ -39,6 +40,10 @@ module SacCas::Event::ParticipationsController
   end
 
   private
+
+  def enqueue_confirmation_job
+    Event::ParticipationConfirmationJob.new(entry).enqueue!
+  end
 
   def permitted_attrs
     permitted = self.class.permitted_attrs.dup

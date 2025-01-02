@@ -121,7 +121,6 @@ module HitobitoSacCas
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
         "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       )
-      Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
 
@@ -135,6 +134,7 @@ module HitobitoSacCas
       Person::NameResource.course_leader_role = Event::Course::Role::Leader
 
       ## Helpers
+      ApplicationMarketHelper.prepend SacCas::ApplicationMarketHelper
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
