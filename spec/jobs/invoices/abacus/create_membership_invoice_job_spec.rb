@@ -45,7 +45,7 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
   context "invoice errors" do
     context "without memberships" do
       let(:log_entry) { HitobitoLogEntry.last }
-      let(:reference_date) { 1.year.from_now }
+      let(:reference_date) { roles(:mitglied).end_on + 1.day }
 
       it "creates log, updates invoice state to error" do
         expect do
