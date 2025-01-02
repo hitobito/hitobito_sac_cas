@@ -56,12 +56,12 @@ module SacCas::Groups::SelfRegistrationController
 
   def redirect_to_memberships_tab
     flash[:notice] = t("groups.self_registration.create.existing_membership_notice")
-    redirect_to history_group_person_path(group_id: current_user.primary_group_id, id: current_user.id)
+    redirect_to history_group_person_path(group_id: current_user.primary_group_id || Group.root.id, id: current_user.id)
   end
 
   def redirect_to_person_show
     flash[:notice] = t("groups.self_registration.create.existing_family_notice")
-    redirect_to history_group_person_path(group_id: current_user.primary_group_id, id: current_user.id)
+    redirect_to history_group_person_path(group_id: current_user.primary_group_id || Group.root.id, id: current_user.id)
   end
 
   def redirect_to_group_if_necessary
@@ -70,7 +70,7 @@ module SacCas::Groups::SelfRegistrationController
 
   def redirect_target
     if current_user.present?
-      history_group_person_path(group_id: current_user.reload.primary_group_id, id: current_user.id)
+      history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
     else
       new_person_session_path
     end
