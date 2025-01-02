@@ -31,7 +31,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
   let(:texts) {
     [
-      [70, 776, "SAC Kurse / Touren 2024"],
+      [70, 776, "SAC Kurse / Touren #{year}"],
       [70, 737, "Eckdatenblatt -Kurs-/Tourenleitung"],
       [70, 712, "Hallo Edmund"],
       [70, 688, "Nachfolgend senden wir dir die wichtigsten Informationen:"],

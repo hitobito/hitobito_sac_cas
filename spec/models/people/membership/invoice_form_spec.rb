@@ -14,7 +14,10 @@ describe People::Membership::InvoiceForm do
 
   subject(:form) { described_class.new(person) }
 
-  before { travel_to(now) }
+  before {
+    roles(:mitglied).update!(start_on: now.beginning_of_year, end_on: now.end_of_year)
+    travel_to(now)
+  }
 
   describe "validations" do
     let(:required_attrs) {
@@ -41,6 +44,7 @@ describe People::Membership::InvoiceForm do
       end
 
       it "is invalid if person has no membership chosen sektion at chosen time" do
+        roles(:mitglied).update!(start_on: now.beginning_of_year, end_on: now.end_of_year)
         form.reference_date = 1.year.from_now
         expect(form).not_to be_valid
         expect(form.errors.full_messages).to eq ["Mitgliedschaft ist nicht gültig"]

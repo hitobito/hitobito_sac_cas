@@ -13,6 +13,7 @@ describe "wizards/steps/_termination_choose_date.html.haml" do
   let(:form_builder) { StandardFormBuilder.new(:wizard, wizard, view, {}) }
   let(:iterator) { double(:iterator, index: 0, last?: false) }
   let(:steps_component) { StepsComponent::ContentComponent.new(partial: :partial, partial_iteration: iterator, form: form_builder, step: 0) }
+  let(:end_on) { I18n.l(roles(:mitglied).end_on) }
   let(:dom) {
     render
     Capybara::Node::Simple.new(@rendered)
@@ -26,10 +27,10 @@ describe "wizards/steps/_termination_choose_date.html.haml" do
 
   it "renders warning when role is already terminated" do
     person.sac_membership.stammsektion_role.update_column(:terminated, true)
-    expect(dom).to have_text "Achtung: Die Mitgliedschaft ist bereits gekündigt per 31.12.2024"
+    expect(dom).to have_text "Achtung: Die Mitgliedschaft ist bereits gekündigt per #{end_on}"
   end
 
   it "does not render warning when role is not terminated" do
-    expect(dom).not_to have_text "Achtung: Die Mitgliedschaft ist bereits gekündigt per 31.12.2024"
+    expect(dom).not_to have_text "Achtung: Die Mitgliedschaft ist bereits gekündigt per #{end_on}"
   end
 end
