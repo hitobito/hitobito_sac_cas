@@ -81,8 +81,7 @@ describe RoleAbility do
       ],
       abo_magazine: [
         ::Group::AboMagazin::Abonnent,
-        ::Group::AboMagazin::Neuanmeldung,
-        ::Group::AboMagazin::Gratisabonnent
+        ::Group::AboMagazin::Neuanmeldung
       ],
       abo_touren_portal: [
         ::Group::AboTourenPortal::Abonnent,

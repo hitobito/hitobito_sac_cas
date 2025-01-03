@@ -82,7 +82,6 @@ module SacCas
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
     ::Group::AboMagazin::Abonnent,
     ::Group::AboMagazin::Neuanmeldung,
-    ::Group::AboMagazin::Gratisabonnent,
     ::Group::AboTourenPortal::Abonnent,
     ::Group::AboTourenPortal::Neuanmeldung
   ].freeze
