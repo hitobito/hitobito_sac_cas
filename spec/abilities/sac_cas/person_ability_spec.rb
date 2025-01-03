@@ -184,6 +184,31 @@ describe PersonAbility do
     end
   end
 
+  describe "log" do
+    context "as mitglied" do
+      let(:person) { mitglied }
+
+      it "may not view his own log" do
+        expect(ability).not_to be_able_to(:log, person)
+      end
+
+      it "may view his own log if he has a backoffice role" do
+        Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.sti_name, group: groups(:geschaeftsstelle), person: mitglied)
+        expect(ability).to be_able_to(:log, person)
+      end
+    end
+
+    [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Admin].each do |role_type|
+      context role_type do
+        let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
+
+        it "may view mitglied's log" do
+          expect(ability).to be_able_to(:log, person)
+        end
+      end
+    end
+  end
+
   describe "security" do
     let(:person) { people(:mitglied) }
 

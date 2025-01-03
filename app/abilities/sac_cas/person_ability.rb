@@ -29,10 +29,15 @@ module SacCas::PersonAbility
       permission(:any).may(:show_remarks).if_backoffice_or_functionary
       permission(:any).may(:manage_national_office_remark).if_backoffice
       permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
+      permission(:any).may(:log).if_backoffice_or_backoffice_readonly
     end
 
     def if_backoffice_or_functionary
       if_backoffice || if_section_functionary
+    end
+
+    def if_backoffice_or_backoffice_readonly
+      if_backoffice || role_type?(::Group::Geschaeftsstelle::MitarbeiterLesend)
     end
 
     def if_backoffice
