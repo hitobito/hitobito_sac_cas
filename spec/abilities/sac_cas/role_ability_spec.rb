@@ -64,4 +64,46 @@ describe RoleAbility do
       end
     end
   end
+
+  describe "wizard managed roles" do
+    {
+      bluemslisap_mitglieder: [
+        ::Group::SektionsMitglieder::Mitglied,
+        ::Group::SektionsMitglieder::MitgliedZusatzsektion
+      ],
+      bluemlisalp_neuanmeldungen_nv: [
+        ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+        ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+      ],
+      bluemlisalp_neuanmeldungen_sektion: [
+        ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
+      ],
+      abo_magazine: [
+        ::Group::AboMagazin::Abonnent,
+        ::Group::AboMagazin::Neuanmeldung,
+        ::Group::AboMagazin::Gratisabonnent
+      ],
+      abo_touren_portal: [
+        ::Group::AboTourenPortal::Abonnent,
+        ::Group::AboTourenPortal::Neuanmeldung
+      ]
+    }.each do |group_key, role_types|
+      let(:group) do
+        if group_key == :abo_touren_portal
+          Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
+        else
+          groups(group_key)
+        end
+      end
+
+      role_types.each do |role_type|
+        let(:role) { Fabricate(role_type.sti_name, group: group) }
+
+        it "cannot destroy #{role_type}" do
+          expect(ability).not_to be_able_to(:destroy, role)
+        end
+      end
+    end
+  end
 end

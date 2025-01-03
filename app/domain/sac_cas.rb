@@ -78,6 +78,8 @@ module SacCas
     ::Group::SektionsMitglieder::MitgliedZusatzsektion,
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+    ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+    ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
     ::Group::AboMagazin::Abonnent,
     ::Group::AboMagazin::Neuanmeldung,
     ::Group::AboMagazin::Gratisabonnent,
