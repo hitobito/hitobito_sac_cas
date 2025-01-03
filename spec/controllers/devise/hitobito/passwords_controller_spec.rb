@@ -25,4 +25,16 @@ describe Devise::Hitobito::PasswordsController do
       expect(user.wso2_legacy_password_salt).to be_nil
     end
   end
+
+  describe "#post" do
+    it "does not tell if email exists in db in flash message when it does not exist" do
+      post :create, params: {person: {email: user.email}}
+      expect(flash[:notice]).to eq "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
+    end
+
+    it "does not tell if email exists in db in flash message when it does not exist" do
+      post :create, params: {person: {email: "thisemaildoesnotexistindb@hitobito.com"}}
+      expect(flash[:notice]).to eq "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
+    end
+  end
 end
