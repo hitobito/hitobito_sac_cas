@@ -133,6 +133,6 @@ describe "signup/abo_touren_portal_wizard" do
     sign_in(people(:mitglied))
     Group::AboTourenPortal::Abonnent.create!(person: people(:mitglied), group: group)
     visit group_self_registration_path(group_id: group)
-    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+    expect(page).to have_content("Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.")
   end
 end

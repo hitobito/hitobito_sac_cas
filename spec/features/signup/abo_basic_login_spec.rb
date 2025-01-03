@@ -106,6 +106,6 @@ describe :self_registration do
   it "redirects if logged in" do
     sign_in(people(:admin))
     visit group_self_registration_path(group_id: group)
-    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+    expect(page).to have_content("Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen.")
   end
 end

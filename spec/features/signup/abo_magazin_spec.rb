@@ -174,6 +174,6 @@ describe "self_registration_abo_magazin", js: true do
     sign_in(people(:mitglied))
     Group::AboMagazin::Abonnent.create!(person: people(:mitglied), group: group)
     visit group_self_registration_path(group_id: group)
-    expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
+    expect(page).to have_content("Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.")
   end
 end
