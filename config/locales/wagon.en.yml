@@ -1089,6 +1089,11 @@ en:
     sac_section_membership_configs: Parameters for membership invoices
 
   event:
+    application_market:
+      application:
+        add_participant_confirm: ""
+      participant:
+        remove_participant_confirm: ""
     courses:
       key_data_sheets:
         create:
@@ -1174,6 +1179,7 @@ en:
       summoned_notice: "%{participant} was called up."
       actions_show_youth:
         summon_button: Call up
+        assign_confirm: ""
       actions_show_sac_cas:
         create_invoice_button: ""
         attach_key_data_sheet: ""

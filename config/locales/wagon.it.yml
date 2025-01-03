@@ -1149,6 +1149,11 @@ it:
     sac_section_membership_configs: Parametri per le fatture di affiliazione
 
   event:
+    application_market:
+      application:
+        add_participant_confirm: ""
+      participant:
+        remove_participant_confirm: ""
     courses:
       key_data_sheets:
         create:
@@ -1237,6 +1242,7 @@ it:
       summoned_notice: "%{participant} è stato convocato."
       actions_show_youth:
         summon_button: Convocare
+        assign_confirm: ""
       actions_show_sac_cas:
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento

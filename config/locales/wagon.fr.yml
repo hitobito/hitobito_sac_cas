@@ -1151,6 +1151,11 @@ fr:
     sac_section_membership_configs: Paramètres pour les factures des membres
 
   event:
+    application_market:
+      application:
+        add_participant_confirm: ""
+      participant:
+        remove_participant_confirm: ""
     courses:
       key_data_sheets:
         create:
@@ -1239,6 +1244,7 @@ fr:
       summoned_notice: "%{participant} a été convoqué·e."
       actions_show_youth:
         summon_button: Convocation
+        assign_confirm: ""
       actions_show_sac_cas:
         create_invoice_button: Créer une facture
         attach_key_data_sheet: Créer fiches techniques
