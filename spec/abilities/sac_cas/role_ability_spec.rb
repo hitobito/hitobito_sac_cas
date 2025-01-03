@@ -64,4 +64,22 @@ describe RoleAbility do
       end
     end
   end
+
+  context "as sektions admin" do
+    let(:person) { Fabricate(Group::SektionsFunktionaere::Administration.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+    let(:role_neuanmeldung) { Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name, group: groups(:bluemlisalp_neuanmeldungen_sektion)) }
+    let(:role_leserecht) { Fabricate(Group::SektionsMitglieder::Leserecht.sti_name, group: groups(:bluemlisalp_mitglieder)) }
+
+    it "may not destroy for neuanmeldungs mitglied" do
+      expect(ability).to_not be_able_to(:destroy, role_neuanmeldung)
+    end
+
+    it "may not destroy for wizard managed role" do
+      expect(ability).to_not be_able_to(:destroy, role_stammsektion)
+    end
+
+    it "may destroy for regular role" do
+      expect(ability).to be_able_to(:destroy, role_leserecht)
+    end
+  end
 end
