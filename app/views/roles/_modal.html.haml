@@ -1,0 +1,16 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+- if SacCas::WIZARD_MANAGED_ROLES.include?(entry.type.constantize)
+  = standard_form [group, entry], controller: :roles, action: :update, remote: true  do |f|
+    = f.error_messages
+    = f.labeled(:label) do
+      = f.input_field(:label,
+                      help: t('roles.label.help_optional_label'),
+                      data: { provide: :typeahead, source: entry.klass.available_labels })
+
+    = form_buttons(f, submit_label: ti(:"button.save"), cancel_url: '#')
+- else
+  = render_core_partial "roles/modal", group: entry.group
