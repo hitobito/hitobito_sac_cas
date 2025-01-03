@@ -1062,6 +1062,8 @@ de:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
 
   devise:
+    failure:
+      signin_not_allowed: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     mailer:
       confirmation_instructions:
         body:
@@ -1069,6 +1071,8 @@ de:
       unlock_instructions:
         body:
           footer: Bergsportliche Grüsse
+    passwords:
+      send_instructions: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
