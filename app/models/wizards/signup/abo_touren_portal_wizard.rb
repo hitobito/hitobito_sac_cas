@@ -23,6 +23,8 @@ module Wizards::Signup
       current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
     end
 
+    def redirection_message = I18n.t("groups.self_registration.create.already_member_of_tourenportal")
+
     def costs = SacCas::ABO_COSTS[:tourenportal]
   end
 end
