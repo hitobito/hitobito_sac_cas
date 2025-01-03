@@ -113,7 +113,7 @@ describe Groups::SelfRegistrationController do
       end
 
       it "shows the correct message" do
-        expect(flash[:notice]).to eq "Du bist bereits Mitglied das SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen."
+        expect(flash[:notice]).to eq "Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen."
       end
     end
 
