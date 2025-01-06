@@ -21,6 +21,7 @@ describe "switching stammsektion", js: true do
 
     before do
       roles(:mitglied_zweitsektion).destroy
+      person.data_quality_issues.destroy_all
     end
 
     it "can open wizard via dropdown" do
@@ -76,6 +77,7 @@ describe "switching stammsektion", js: true do
       roles(:familienmitglied2_zweitsektion).destroy
       roles(:familienmitglied_kind_zweitsektion).destroy
       person.update_column(:data_quality, :ok)
+      person.data_quality_issues.destroy_all
     end
 
     it "can switch for all members" do
@@ -99,7 +101,10 @@ describe "switching stammsektion", js: true do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { people(:familienmitglied) }
 
-    before { person.update!(birthday: nil) }
+    before do 
+      person.update!(birthday: nil)
+      person.data_quality_issues.destroy_all
+    end
 
     it "shows an alert info message" do
       click_link "Mitgliedschaft anpassen"

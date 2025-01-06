@@ -29,6 +29,7 @@ describe "joining zusatzsektion", js: true do
 
     before do
       roles(:mitglied_zweitsektion).destroy
+      person.data_quality_issues.destroy_all
     end
 
     it "has dropdown on person show page" do
@@ -69,7 +70,7 @@ describe "joining zusatzsektion", js: true do
     end
 
     it "can apply as youth member" do
-      person.update!(birthday: 20.years.ago)
+      person.update_column(:birthday, 20.years.ago)
       fill_out_form "Jugendmitgliedschaft"
       expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Jugendmitglied beantragt."
       click_on "Kostenpflichtig bestellen"
@@ -85,6 +86,7 @@ describe "joining zusatzsektion", js: true do
       roles(:familienmitglied_zweitsektion).destroy
       Group::SektionsNeuanmeldungenSektion.delete_all
       person.update_column(:data_quality, :ok)
+      person.data_quality_issues.destroy_all
       click_link "Mitgliedschaft anpassen"
       click_link "Zusatzsektion beantragen"
       expect(page).to have_css "li.active", text: "Familienmitgliedschaft"

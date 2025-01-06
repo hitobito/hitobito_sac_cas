@@ -9,7 +9,9 @@ require "spec_helper"
 
 describe Memberships::SwitchStammsektionsController do
   let(:current_user) { people(:admin) }
-  let(:person) { people(:mitglied) }
+  let(:person) do
+    people(:mitglied).tap { |person| person.data_quality_issues.destroy_all }
+  end
   let(:matterhorn) { groups(:matterhorn) }
   let(:stammsektion_role) { person.sac_membership.stammsektion_role }
 
@@ -39,7 +41,9 @@ describe Memberships::SwitchStammsektionsController do
   end
 
   context "family" do
-    let(:person) { people(:familienmitglied) }
+    let(:person) do 
+      people(:familienmitglied).tap { |person| person.data_quality_issues.destroy_all }
+    end
 
     it "sets flash message" do
       roles(:familienmitglied_zweitsektion).destroy
