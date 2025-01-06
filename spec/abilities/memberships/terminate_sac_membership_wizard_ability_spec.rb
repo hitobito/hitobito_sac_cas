@@ -34,6 +34,12 @@ describe Memberships::TerminateSacMembershipWizardAbility do
       mitglied.sac_membership.stammsektion_role.update_column(:terminated, true)
       expect(ability).to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
     end
+
+    it "may not create termination for mitglied with data quality issues" do
+      mitglied.update_column(:birthday, nil)
+      People::DataQualityChecker.new(mitglied).check_data_quality
+      expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
+    end
   end
 
   context "as mitglied" do
@@ -49,6 +55,12 @@ describe Memberships::TerminateSacMembershipWizardAbility do
 
     it "may not create termination for self if already terminated" do
       role.update_column(:terminated, true)
+      expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: role.person))
+    end
+
+    it "may not create termination for self with data quality issues" do
+      role.person.update_column(:birthday, nil)
+      People::DataQualityChecker.new(role.person).check_data_quality
       expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: role.person))
     end
   end
@@ -67,6 +79,12 @@ describe Memberships::TerminateSacMembershipWizardAbility do
 
     it "may not create termination if already terminated" do
       mitglied.sac_membership.stammsektion_role.update_column(:terminated, true)
+      expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
+    end
+
+    it "may not create termination for mitglied with data quality issues" do
+      mitglied.update_column(:birthday, nil)
+      People::DataQualityChecker.new(mitglied).check_data_quality
       expect(ability).not_to be_able_to(:create, Wizards::Memberships::TerminateSacMembershipWizard.new(person: mitglied))
     end
   end

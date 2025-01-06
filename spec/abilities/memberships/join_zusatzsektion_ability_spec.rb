@@ -14,7 +14,6 @@ describe Memberships::JoinZusatzsektionAbility do
     end
   end
 
-  let(:sektion) { groups(:bluemlisalp) }
   let(:group) { groups(:geschaeftsstelle) }
 
   def build_join(person)
@@ -38,6 +37,12 @@ describe Memberships::JoinZusatzsektionAbility do
     it "may not create join for admin as admin has no membership" do
       expect(ability).not_to be_able_to(:create, build_join(:admin))
     end
+
+    it "may not create join for mitglied with data quality issues" do
+      people(:mitglied).update_column(:birthday, nil)
+      People::DataQualityChecker.new(people(:mitglied)).check_data_quality
+      expect(ability).not_to be_able_to(:create, build_join(:mitglied))
+    end
   end
 
   context "as mitarbeiter" do
@@ -55,6 +60,12 @@ describe Memberships::JoinZusatzsektionAbility do
     it "may not create join for admin as admin has no membership" do
       expect(ability).not_to be_able_to(:create, build_join(:admin))
     end
+
+    it "may not create join for mitglied with data quality issues" do
+      people(:mitglied).update_column(:birthday, nil)
+      People::DataQualityChecker.new(people(:mitglied)).check_data_quality
+      expect(ability).not_to be_able_to(:create, build_join(:mitglied))
+    end
   end
 
   context "as person with active membership" do
@@ -70,6 +81,12 @@ describe Memberships::JoinZusatzsektionAbility do
 
     it "may not create join for herself if membership is no longer active" do
       roles(:mitglied).update_columns(end_on: 1.day.ago)
+      expect(ability).not_to be_able_to(:create, build_join(:mitglied))
+    end
+
+    it "may not create join for mitglied with data quality issues" do
+      people(:mitglied).update_column(:birthday, nil)
+      People::DataQualityChecker.new(people(:mitglied)).check_data_quality
       expect(ability).not_to be_able_to(:create, build_join(:mitglied))
     end
   end
