@@ -10,7 +10,7 @@ module Memberships
     include Memberships::Constraints
 
     on(Wizards::Memberships::TerminateSacMembershipWizard) do
-      permission(:any).may(:create).for_self_when_not_terminated_if_active_member_or_backoffice
+      permission(:any).may(:create).for_self_when_not_terminated_if_active_member_or_backoffice_and_no_data_quality_issue
     end
   end
 end

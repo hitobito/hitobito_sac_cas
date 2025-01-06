@@ -9,12 +9,16 @@ module Memberships
   module Constraints
     delegate :mitglied_termination_by_section_only?, to: :subject
 
-    def for_self_if_active_member_or_backoffice
-      active_member? && (for_self? || backoffice?)
+    def for_self_if_active_member_or_backoffice_and_no_data_quality_issue
+      active_member? && (for_self? || backoffice?) && no_data_quality_issue
     end
 
-    def for_self_when_not_terminated_if_active_member_or_backoffice
-      active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
+    def for_self_when_not_terminated_if_active_member_or_backoffice_and_no_data_quality_issue
+      active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?) && no_data_quality_issue
+    end
+
+    def backoffice_and_no_data_quality_issue
+      backoffice? && no_data_quality_issue
     end
 
     def for_self_and_not_terminated?
@@ -43,6 +47,10 @@ module Memberships
 
     def schreibrecht_role?
       user_context.user.roles.any? { |role| role.type == Group::SektionsMitglieder::Schreibrecht.sti_name }
+    end
+
+    def no_data_quality_issue
+      subject.person.data_quality_issues.empty?
     end
   end
 end

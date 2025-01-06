@@ -10,7 +10,7 @@ module Memberships
     include Memberships::Constraints
 
     on(Wizards::Memberships::SwitchStammsektion) do
-      permission(:any).may(:create).backoffice?
+      permission(:any).may(:create).backoffice_and_no_data_quality_issue
     end
   end
 end
