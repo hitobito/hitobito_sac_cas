@@ -12,7 +12,7 @@ describe Groups::SelfInscriptionController do
 
   it "redirects to login" do
     sign_in(people(:mitglied))
-    get :show, params: { group_id: group.id }
+    get :show, params: {group_id: group.id}
     expect(response).to redirect_to group_self_registration_path
   end
 end
