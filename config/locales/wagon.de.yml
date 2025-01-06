@@ -1072,6 +1072,7 @@ de:
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+      data_quality_alert: Das SAC Portal kann aktuell nicht vollständig verwendet werden da deine angegebenen Daten nicht vollständig sind. Bitte ergänze diese, um alle Funktionen verwenden zu können.
 
   doorkeeper:
     scopes:

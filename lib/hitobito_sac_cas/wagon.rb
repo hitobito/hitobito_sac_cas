@@ -155,6 +155,7 @@ module HitobitoSacCas
       ApplicationController.include BasicAuth if Settings.basic_auth
 
       ApplicationController.prepend SacCas::ApplicationController
+      Devise::Hitobito::SessionsController.prepend SacCas::Devise::Hitobito::SessionsController
       EventsController.prepend SacCas::EventsController
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController
