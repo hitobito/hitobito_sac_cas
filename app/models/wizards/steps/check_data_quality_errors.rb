@@ -12,7 +12,7 @@ class Wizards::Steps::CheckDataQualityErrors < Wizards::Step
   private
 
   def check_data_quality_errors
-    return unless person.error? || person.household_people.exists?(data_quality: :error)
+    return unless person.data_quality_error? || person.household_people.exists?(data_quality: :error)
 
     errors.add(:base, :data_quality_error)
   end
