@@ -11,7 +11,7 @@ module SacCas::ChangelogController
   prepended do
     def index
       raise CanCan::AccessDenied unless current_user
-      
+
       authorize!(:index, ChangelogEntry)
     end
   end
