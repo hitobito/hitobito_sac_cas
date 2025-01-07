@@ -28,6 +28,13 @@ describe TableDisplays::ResolvingColumn, type: :helper do
   }
 
   it_behaves_like "table display", {
+    column: :id,
+    header: "Personennummer",
+    value: "600001",
+    permission: :show
+  }
+
+  it_behaves_like "table display", {
     column: :membership_years,
     header: "Anzahl Mitglieder-Jahre",
     value: "3",
