@@ -7,7 +7,7 @@
 
 module SacCas::ChangelogHelper
   def render_changelog_link
-    if current_user && can?(:index, ChangelogEntry)
+    if defined?(current_user) && current_user && can?(:index, ChangelogEntry)
       safe_join([collapse_toggle_link, version_label, detail_info_div])
     else
       safe_join([version_label(display_as_link: false)])
