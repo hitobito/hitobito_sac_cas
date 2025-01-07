@@ -200,6 +200,7 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
         TableDisplays::ResolvingColumn,
         [
+          :id,
           :beitragskategorie,
           :antrag_fuer,
           :antragsdatum,

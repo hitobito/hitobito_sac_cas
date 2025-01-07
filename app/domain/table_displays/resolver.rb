@@ -8,6 +8,7 @@
 module TableDisplays
   class Resolver
     ATTRS = {
+      id: :show,
       membership_years: :show,
       beitragskategorie: :show_full,
       antrag_fuer: :show,
