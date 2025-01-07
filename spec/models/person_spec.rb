@@ -9,11 +9,11 @@ require "spec_helper"
 
 describe Person do
   context "language" do
-    it "is valid with en" do
+    it "is valid with fr" do
       person = Person.new(first_name: "Tyler", language: "invalid")
       expect(person).not_to be_valid
 
-      person.language = "en"
+      person.language = "fr"
       expect(person).to be_valid
     end
   end
