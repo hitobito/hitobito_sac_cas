@@ -8,11 +8,9 @@
 module SacCas::Groups::SelfInscriptionController
   extend ActiveSupport::Concern
 
-  def create
-    if person.years < 6
-      redirect_to group_self_inscription_path(group), alert: I18n.t("groups.self_inscription.must_be_six_years_old")
-    else
-      super
-    end
+  # always redirect to self registration, self inscription is currently not used in the sac wagon
+  # self registration is also possible for logged in users, so there is no need for self inscription
+  def show
+    redirect_to group_self_registration_path
   end
 end

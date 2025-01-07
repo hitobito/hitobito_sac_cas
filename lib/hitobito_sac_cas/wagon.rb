@@ -165,6 +165,7 @@ module HitobitoSacCas
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       GroupsController.permitted_attrs << {section_offering_ids: []}
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
+      Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
