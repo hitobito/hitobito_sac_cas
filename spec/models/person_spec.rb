@@ -166,8 +166,18 @@ describe Person do
     end
 
     it "does not double membership_year values in lists when having multiple roles" do
+      # membership_years on Person are converted to integers, so we do the same here to find out
+      # the expected value for the role
+      expected_years = Role.with_membership_years.find(roles(:mitglied).id).membership_years.to_i
+
+      # the person has only one role, so the membership_years should be the same
+      expect(Person.with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
+
+      # add a non-membership role that does not count towards the membership_years
       Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied), group: groups(:bluemlisalp_mitglieder))
-      expect(Person.with_membership_years.map(&:membership_years)).to match_array([0, 0, 9, 9, 9, 9, 0, 0])
+      # the person has now two roles, so the membership_years should be the same.
+      # this expectation makes sure we don't double the membership_years when joining the roles
+      expect(Person.joins(:roles).with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
     end
   end
 
