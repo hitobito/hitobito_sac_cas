@@ -26,9 +26,9 @@ class People::Membership::InvoiceForm
   validates :discount, inclusion: {in: DISCOUNTS}, allow_blank: true
   validate :assert_active_membership, if: :assert_active_membership?
 
-  delegate :stammsektion_role, :zusatzsektion_roles,
-    :neuanmeldung_nv_zusatzsektion_roles, :select_currently_paying, to:
-    :sac_membership
+  delegate :stammsektion_role, :neuanmeldung_stammsektion_role,
+    :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles,
+    :select_paying, to: :sac_membership
 
   def initialize(person, attrs = {})
     super(attrs)
@@ -36,18 +36,18 @@ class People::Membership::InvoiceForm
   end
 
   def stammsektion
-    select_currently_paying([stammsektion_role]).first&.layer_group
+    select_paying([stammsektion_role, neuanmeldung_stammsektion_role]).first&.layer_group
   end
 
   def zusatzsektionen
-    select_currently_paying(neuanmeldung_nv_zusatzsektion_roles + zusatzsektion_roles).map(&:layer_group)
+    select_paying(neuanmeldung_nv_zusatzsektion_roles + zusatzsektion_roles).map(&:layer_group)
   end
 
   def min_date = today.beginning_of_year
 
   def max_date = today.next_year.end_of_year
 
-  def max_send_date = (!already_member_next_year?) ? today.end_of_year : today.next_year.end_of_year
+  def max_send_date = already_member_next_year? ? today.next_year.end_of_year : today.end_of_year
 
   private
 
@@ -64,7 +64,7 @@ class People::Membership::InvoiceForm
   end
 
   def already_member_next_year?
-    person.sac_membership.stammsektion_role.end_on&.year&.>= today.next_year.year
+    person.sac_membership.active? && (person.sac_membership.stammsektion_role.end_on&.year&.>= today.next_year.year)
   end
 
   def today = Time.zone.today

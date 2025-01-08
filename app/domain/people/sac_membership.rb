@@ -48,7 +48,7 @@ class People::SacMembership
     active_roles_of_type(mitglied_zusatzsektion_types)
   end
 
-  def select_currently_paying(roles)
+  def select_paying(roles)
     roles.compact.select { |role| paying_person?(role.beitragskategorie) }
   end
 

@@ -49,6 +49,13 @@ describe People::Membership::InvoiceForm do
         expect(form).not_to be_valid
         expect(form.errors.full_messages).to eq ["Mitgliedschaft ist nicht gültig"]
       end
+
+      it "is valid if person has neuanmeldung for stammsektion in chose section" do
+        person.roles.destroy_all
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person, group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
+        form.section_id = groups(:bluemlisalp_neuanmeldungen_nv).layer_group.id.to_s
+        expect(form).to be_valid
+      end
     end
 
     describe "send_date" do
@@ -140,6 +147,12 @@ describe People::Membership::InvoiceForm do
     end
 
     it "uses end of this year for max_send_date" do
+      expect(form.max_send_date).to eq Date.new(2024, 12, 31)
+    end
+
+    it "uses end of this year for max_send_date for people with neuanmeldung roles" do
+      person.roles.destroy_all
+      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person, group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
       expect(form.max_send_date).to eq Date.new(2024, 12, 31)
     end
 
