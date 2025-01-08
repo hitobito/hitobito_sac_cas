@@ -36,7 +36,7 @@
           = f.inline_radio_button :new_entry, true, t("global.yes"), true
           = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
 
-      - @invoice_form.zusatzsektionen do |section|
+      - @invoice_form.zusatzsektionen.each do |section|
         %div
           = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false
 
