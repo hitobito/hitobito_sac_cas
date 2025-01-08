@@ -29,7 +29,7 @@
       = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      = f.inline_radio_button :section_id, @person.sac_membership.stammsektion_role.group.layer_group.id, t(".mv_yearly_invoice"), true, checked: true
+      = f.inline_radio_button :section_id, @person.sac_membership.send((@person.sac_membership.stammsektion_role ? :stammsektion_role : :neuanmeldung_stammsektion_role)).group.layer_group.id, t(".mv_yearly_invoice"), true, checked: true
 
       .nested-radio-group
         = f.labeled(:new_entry, class: "ms-3") do
