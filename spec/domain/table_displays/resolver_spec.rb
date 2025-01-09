@@ -55,6 +55,7 @@ describe TableDisplays::Resolver, type: :helper do
       person.roles.build(group_id: 1, start_on: Time.zone.local(2024, 1, 11, 10))
       person.roles.build(group_id: 2, start_on: Time.zone.local(2023, 1, 10, 10))
       person.roles.build(group_id: 1, start_on: Time.zone.local(2024, 1, 10, 10))
+      person.roles.build(group_id: 1, start_on: nil)
 
       expect(resolver.to_s).to eq "10.01.2024"
     end
