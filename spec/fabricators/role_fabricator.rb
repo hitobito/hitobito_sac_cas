@@ -10,6 +10,13 @@
 # in the specs.
 Role.all_types.select { |role| role < SacCas::Role::MitgliedCommon }.each do |role|
   name = role.name.to_sym
+
   Fabrication.manager[name].append_or_update_attribute(:start_on, nil) { Date.current }
   Fabrication.manager[name].append_or_update_attribute(:end_on, nil) { Date.current.end_of_year }
+
+  # Make sure to update the cached membership years after creating a role
+  Fabrication.manager[name].callbacks[:after_create] ||= []
+  Fabrication.manager[name].callbacks[:after_create] << lambda do |r, _transients|
+    Person.with_membership_years.find(r.person_id).update_cached_membership_years!
+  end
 end

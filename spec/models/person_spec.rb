@@ -69,9 +69,15 @@ describe Person do
         **attrs.reverse_merge(start_on: start_on))
     end
 
-    it "raises error when not using scope :with_membership_years" do
-      expect { person.membership_years }
-        .to raise_error(RuntimeError, /use Person scope :with_membership_years/)
+    it "returns cached_membership_years" do
+      person.update!(cached_membership_years: 42)
+      expect(person.membership_years).to eq 42
+    end
+
+    it "returns db calculated value when used with scope :with_membership_years" do
+      person.update!(cached_membership_years: 42)
+      create_role(start_on:, end_on: start_on + 7.years)
+      expect(person_with_membership_years.membership_years).to eq 7
     end
 
     it "is 0 for person without membership role" do
@@ -165,7 +171,7 @@ describe Person do
       expect(person_with_membership_years.membership_years).to eq(2)
     end
 
-    it "does not double membership_year values in lists when having multiple roles" do
+    it "with multiple roles and using .with_membership_years scope calculates correctly" do
       # membership_years on Person are converted to integers, so we do the same here to find out
       # the expected value for the role
       expected_years = Role.with_membership_years.find(roles(:mitglied).id).membership_years.to_i

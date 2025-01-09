@@ -12,10 +12,6 @@ module SacCas::PersonResource
     extra_attribute :membership_years, :integer, sortable: true, filterable: true do
       @object.membership_years if @object.sac_membership_anytime?
     end
-    on_extra_attribute :membership_years do |scope|
-      # NOTE cannot simply chain with_membership_years as it calculates bad results
-      Person.with_membership_years.where(id: scope.select("people.id"))
-    end
 
     with_options writable: false, sortable: false, filterable: false do
       attribute :family_id, :string

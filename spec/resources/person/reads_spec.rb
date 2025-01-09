@@ -57,7 +57,10 @@ RSpec.describe PersonResource, type: :resource do
           render
         end
         expect(attributes.keys).to include :membership_years
-        expect(attributes[:membership_years]).to eq 9
+
+        expected_membership_years = Role.with_membership_years.find(roles(:mitglied).id)
+          .membership_years.to_i
+        expect(attributes[:membership_years]).to eq expected_membership_years
       end
 
       context "without membership" do

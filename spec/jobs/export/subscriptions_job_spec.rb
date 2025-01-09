@@ -56,12 +56,12 @@ describe Export::SubscriptionsJob do
       end
     end
 
-    it "exports row but without membership_years" do
+    it "exports row including membership_years" do
       TableDisplay.create!(person_id: user.id, selected: %w[language membership_years], table_model_class: "Person")
       export_table_display_as_csv do |csv|
         expect(csv.headers).to include "Sprache"
         expect(csv.pluck("Sprache").compact.uniq).to eq %w[de]
-        expect(csv.headers).not_to include "Anzahl Mitglieder-Jahre"
+        expect(csv.headers).to include "Anzahl Mitglieder-Jahre"
       end
     end
   end

@@ -86,9 +86,10 @@ describe OidcClaimSetup do
         let(:owner) { people(:mitglied) }
 
         it "membership_verify_url is present" do
-          travel_to(Time.zone.local(2024, 12, 1)) do
-            expect(claims[:membership_years]).to eq 9
-          end
+          expected_membership_years = Role.with_membership_years.find(roles(:mitglied).id)
+            .membership_years.to_i
+          expect(expected_membership_years).to be >= 9 # make sure we test with a sane value
+          expect(claims[:membership_years]).to eq expected_membership_years
         end
       end
     end

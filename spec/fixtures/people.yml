@@ -19,6 +19,7 @@ admin:
   primary_group: geschaeftsstelle
   birthday: <%= Date.new(2000, 1,1) %>
   language: de
+  cached_membership_years: 0
 
 mitglied:
   id: 600_001
@@ -34,6 +35,7 @@ mitglied:
   primary_group: bluemlisalp_mitglieder
   birthday: <%= Date.new(2000, 1, 1) %>
   language: de
+  cached_membership_years: <%= Date.current.year - 2015 %>
 
 familienmitglied:
   id: 600_002
@@ -49,6 +51,7 @@ familienmitglied:
   language: de
   household_key: 4242
   sac_family_main_person: true
+  cached_membership_years: <%= Date.current.year - 2015 %>
 
 familienmitglied2:
   id: 600_003
@@ -63,6 +66,7 @@ familienmitglied2:
   birthday: <%= 25.years.ago %>
   language: de
   household_key: 4242
+  cached_membership_years: <%= Date.current.year - 2015 %>
 
 familienmitglied_kind:
   id: 600_004
@@ -77,6 +81,7 @@ familienmitglied_kind:
   birthday: <%= 10.years.ago %>
   language: de
   household_key: 4242
+  cached_membership_years: <%= Date.current.year - 2015 %>
 
 abonnent:
   id: 600_005
@@ -91,6 +96,7 @@ abonnent:
   primary_group: abo_die_alpen
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
+  cached_membership_years: 0
 
 tourenchef:
   id: 600_006
@@ -105,3 +111,4 @@ tourenchef:
   primary_group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
+  cached_membership_years: 0

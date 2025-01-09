@@ -11,7 +11,7 @@ module SacCas::Export::SubscriptionsJob
   def data
     return recipients_data if @options[:recipients]
     return recipient_households_data if @options[:recipient_households]
-    return recipient_table_display_without_membership_years if @options[:selection]
+    return recipient_table_display if @options[:selection]
 
     super
   end
@@ -20,10 +20,8 @@ module SacCas::Export::SubscriptionsJob
     super.select("household_key")
   end
 
-  # As adding .with_membership_years entries does not work we ignore membership_years column
-  def recipient_table_display_without_membership_years
+  def recipient_table_display
     table_display = TableDisplay.for(@user_id, Person)
-    table_display.selected -= %w[membership_years]
     Export::Tabular::People::TableDisplays.export(@format, entries, table_display)
   end
 

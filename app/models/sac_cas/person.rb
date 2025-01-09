@@ -91,7 +91,12 @@ module SacCas::Person
   end
 
   def membership_years
-    read_attribute(:membership_years) or raise "use Person scope :with_membership_years"
+    read_attribute(:membership_years) || cached_membership_years
+  end
+
+  def update_cached_membership_years!
+    value = self[:membership_years] or raise "use Person scope :with_membership_years"
+    update_column(:cached_membership_years, value)
   end
 
   def adult?(reference_date: Time.zone.today.end_of_year)
