@@ -9,10 +9,12 @@ class Group::SektionsKommission < ::Group
   ### ROLES
   class Leserecht < ::Role
     self.permissions = [:group_read]
+    self.two_factor_authentication_enforced = true
   end
 
   class Schreibrecht < ::Role
     self.permissions = [:group_full]
+    self.two_factor_authentication_enforced = true
   end
 
   class Mitglied < ::Role
