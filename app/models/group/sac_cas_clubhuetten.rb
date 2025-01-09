@@ -14,6 +14,7 @@ class Group::SacCasClubhuetten < ::Group
 
   class Schreibrecht < ::Role
     self.permissions = [:group_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
   roles Schreibrecht
