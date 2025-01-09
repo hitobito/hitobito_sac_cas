@@ -27,7 +27,7 @@ class People::Membership::InvoiceForm
   validate :assert_active_membership, if: :assert_active_membership?
 
   delegate :stammsektion_role, :neuanmeldung_stammsektion_role,
-    :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles, 
+    :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles,
     :select_currently_paying, to: :sac_membership
 
   def initialize(person, attrs = {})

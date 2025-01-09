@@ -80,10 +80,10 @@ describe People::MembershipInvoicesController do
           post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
         end.to change { ExternalInvoice.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
-  
+
         expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
         expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
-  
+
         job = Delayed::Job.last.payload_object
         expect(job.new_entry).to eq true
         expect(job.discount).to eq 50
