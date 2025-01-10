@@ -26,9 +26,9 @@ class People::Membership::InvoiceForm
   validates :discount, inclusion: {in: DISCOUNTS}, allow_blank: true
   validate :assert_active_membership, if: :assert_active_membership?
 
-  delegate :stammsektion_role, :neuanmeldung_stammsektion_role,
-    :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles,
-    :select_paying, to: :sac_membership
+  delegate :sac_membership, to: :person
+  delegate :stammsektion_role, :neuanmeldung_stammsektion_role, :select_paying, to: :sac_membership
+  delegate :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles, to: :ref_date_sac_membership
 
   def initialize(person, attrs = {})
     super(attrs)
@@ -43,9 +43,9 @@ class People::Membership::InvoiceForm
     select_paying(neuanmeldung_nv_zusatzsektion_roles + zusatzsektion_roles).map(&:layer_group)
   end
 
-  def min_date = today.beginning_of_year
+  def min_date = @min_date ||= today.beginning_of_year
 
-  def max_date = today.next_year.end_of_year
+  def max_date = @max_date ||= today.next_year.end_of_year
 
   def max_send_date = already_member_next_year? ? today.next_year.end_of_year : today.end_of_year
 
@@ -64,12 +64,16 @@ class People::Membership::InvoiceForm
   end
 
   def already_member_next_year?
-    person.sac_membership.active? && (person.sac_membership.stammsektion_role.end_on&.year&.>= today.next_year.year)
+    sac_membership.active? && (stammsektion_role.end_on&.year&.>= today.next_year.year)
   end
 
-  def today = Time.zone.today
+  def today = @today ||= Time.zone.today
 
-  def sac_membership = @sac_membership ||= People::SacMembership.new(person, date: reference_date)
+  def ref_date_sac_membership = @ref_date_sac_membership ||= People::SacMembership.new(person, date: reference_date)
 
-  def active_membership_section_ids = ([stammsektion] + zusatzsektionen).compact.map(&:id)
+  def active_membership_section_ids = ([ref_date_stammsektion] + zusatzsektionen).compact.map(&:id)
+
+  def ref_date_stammsektion
+    select_paying([ref_date_sac_membership.stammsektion_role, ref_date_sac_membership.neuanmeldung_stammsektion_role]).first&.layer_group
+  end
 end

@@ -9,9 +9,8 @@ class People::MembershipInvoicesController < ApplicationController
   def new
     authorize!(:update, external_invoice)
 
-    @invoice_form = invoice_form
-    @invoice_form.invoice_date = today
-    @invoice_form.send_date = today
+    invoice_form.invoice_date = today
+    invoice_form.send_date = today
     @group = group
   end
 
