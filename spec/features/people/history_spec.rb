@@ -36,7 +36,7 @@ describe "person history page" do
   end
 
   context "#membership_years" do
-    let(:membership_years) { Person.with_membership_years.find(mitglied.id).membership_years }
+    let(:membership_years) { Role.with_membership_years.find(roles(:mitglied).id).membership_years }
 
     it "floors membership years" do
       visit history_group_person_path(group_id: mitglieder.id, id: mitglied.id)

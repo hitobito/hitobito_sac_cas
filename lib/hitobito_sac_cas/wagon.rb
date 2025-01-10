@@ -41,6 +41,7 @@ module HitobitoSacCas
         Event::LeaderReminderJob,
         Export::BackupMitgliederScheduleJob,
         # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
+        People::CacheMembershipYearsJob,
         Roles::TerminateTourenleiterJob
       ]
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
@@ -199,7 +200,6 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
         TableDisplays::ResolvingColumn,
         [
-          :membership_years,
           :beitragskategorie,
           :antrag_fuer,
           :antragsdatum,
@@ -209,7 +209,6 @@ module HitobitoSacCas
           :wiedereintritt,
           :self_registration_reason,
           :address_valid,
-          :data_quality,
           :sac_remark_national_office,
           :sac_remark_section_1,
           :sac_remark_section_2,
@@ -217,6 +216,14 @@ module HitobitoSacCas
           :sac_remark_section_4,
           :sac_remark_section_5
         ])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::PublicColumn,
+        :data_quality)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::MembershipYearsColumn,
+        :membership_years)
 
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,

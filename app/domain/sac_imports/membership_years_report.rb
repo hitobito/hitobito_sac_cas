@@ -52,7 +52,7 @@ module SacImports
 
     def fetch_hitobito_people(data)
       people_ids = data.map(&:navision_id).compact
-      @hitobito_people = Person.with_membership_years.where(id: people_ids).index_by(&:id)
+      @hitobito_people = Person.where(id: people_ids).index_by(&:id)
     end
 
     def membership_years_diff(navision_years, hitobito_years)

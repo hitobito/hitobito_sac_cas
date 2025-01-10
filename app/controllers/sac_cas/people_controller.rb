@@ -40,16 +40,8 @@ module SacCas::PeopleController
     lookup_context.prefixes.unshift("people/neuanmeldungen") if registrations_for_approval?
   end
 
-  def find_entry
-    Person.with_membership_years.find(super.id)
-  end
-
-  def model_scope
-    super.with_membership_years
-  end
-
   def filter_entries
-    entries = add_table_display_to_query(person_filter.entries, current_person).with_membership_years
+    entries = add_table_display_to_query(person_filter.entries, current_person)
     sort_by_sort_expression(entries)
   end
 

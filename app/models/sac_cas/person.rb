@@ -57,15 +57,27 @@ module SacCas::Person
 
     delegate :salutation_label, to: :class
 
-    scope :with_membership_years, lambda { |selects = "people.*", date = Date.current|
-      subquery_sql = Group::SektionsMitglieder::Mitglied
+    scope :with_membership_years, lambda { |selects = arel_table[Arel.star], date = Date.current|
+      roles_with_membership_years_sql = Group::SektionsMitglieder::Mitglied
         .with_inactive
         .with_membership_years("roles.person_id", date)
         .to_sql
 
-      select(*Array.wrap(selects), "FLOOR(SUM(COALESCE(membership_years, 0))) as membership_years")
-        .joins("LEFT JOIN (#{subquery_sql}) AS subquery ON people.id = subquery.person_id")
-        .group("people.id")
+      people_with_membership_years_sql = <<~SQL
+        WITH membership_years_per_person AS (
+          SELECT person_id, FLOOR(SUM(membership_years))::int AS membership_years
+          FROM (
+            #{roles_with_membership_years_sql}
+          )
+          GROUP BY person_id
+        )
+        SELECT people.*, COALESCE(membership_years, 0) AS membership_years
+        FROM people
+        LEFT JOIN membership_years_per_person ON people.id = membership_years_per_person.person_id
+      SQL
+
+      # alias the query as "people" so AR can use it instead of the original people table
+      select(selects).from("(#{people_with_membership_years_sql}) AS people")
     }
 
     include SacCas::People::Wso2LegacyPassword
@@ -79,7 +91,12 @@ module SacCas::Person
   end
 
   def membership_years
-    read_attribute(:membership_years) or raise "use Person scope :with_membership_years"
+    read_attribute(:membership_years) || cached_membership_years
+  end
+
+  def update_cached_membership_years!
+    value = self[:membership_years] or raise "use Person scope :with_membership_years"
+    update_column(:cached_membership_years, value)
   end
 
   def adult?(reference_date: Time.zone.today.end_of_year)

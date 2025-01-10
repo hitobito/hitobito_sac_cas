@@ -25,23 +25,23 @@ module SacCas::Role
               ELSE
                 -- Calculate the fractional year
                 (
-                  EXTRACT(DAY FROM (#{calculated_end_date(date)}::date - 
-                    (#{calculated_start_date(date)} 
+                  EXTRACT(DAY FROM (#{calculated_end_date(date)}::date -
+                    (#{calculated_start_date(date)}
                     + (EXTRACT(YEAR FROM AGE(#{calculated_end_date(date)}, #{calculated_start_date(date)}))::int || ' years')::interval)
                   ))::numeric
                 )
                 /
                 (
                   -- Determine if the current year is a leap year (366 days) or not (365 days)
-                  CASE 
-                    WHEN (DATE_TRUNC('year', #{calculated_end_date(date)}) + INTERVAL '1 year')::date 
+                  CASE
+                    WHEN (DATE_TRUNC('year', #{calculated_end_date(date)}) + INTERVAL '1 year')::date
                       - DATE_TRUNC('year', #{calculated_end_date(date)})::date = 366
                   THEN 366
                   ELSE 365
                   END
                 )::numeric
           END
-        END AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate 
+        END AS membership_years, '#{date.strftime("%Y-%m-%d")}'::date AS testdate
       SQL
     end
 
@@ -70,7 +70,7 @@ module SacCas::Role
 
     base.class_eval do
       scope :with_membership_years,
-        ->(selects = "roles.*", date = Time.zone.today) do
+        ->(selects = arel_table[Arel.star], date = Time.zone.today) do
           select(selects, select_with_membership_years(date))
         end
 

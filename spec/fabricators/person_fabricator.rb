@@ -17,3 +17,9 @@ Fabrication.manager[:person].append_or_update_attribute(:zip_code, nil) { "2843"
 Fabrication.manager[:person].append_or_update_attribute(:town, nil) { "Neu Carlscheid" }
 
 Fabrication.manager[:person].append_or_update_attribute(:data_retention_consent, nil) { true }
+
+# Make sure to update the cached membership years after creating a person
+Fabrication.manager[:person].callbacks[:after_create] ||= []
+Fabrication.manager[:person].callbacks[:after_create] << lambda do |person, _transients|
+  Person.with_membership_years.find(person.id).update_cached_membership_years!
+end

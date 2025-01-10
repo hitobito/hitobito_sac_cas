@@ -6,10 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Export::PeopleExportJob
-  def entries
-    super.with_membership_years
-  end
-
   private
 
   def data

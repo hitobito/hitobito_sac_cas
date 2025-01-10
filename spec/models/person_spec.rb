@@ -69,9 +69,15 @@ describe Person do
         **attrs.reverse_merge(start_on: start_on))
     end
 
-    it "raises error when not using scope :with_membership_years" do
-      expect { person.membership_years }
-        .to raise_error(RuntimeError, /use Person scope :with_membership_years/)
+    it "returns cached_membership_years" do
+      person.update!(cached_membership_years: 42)
+      expect(person.membership_years).to eq 42
+    end
+
+    it "returns db calculated value when used with scope :with_membership_years" do
+      person.update!(cached_membership_years: 42)
+      create_role(start_on:, end_on: start_on + 7.years)
+      expect(person_with_membership_years.membership_years).to eq 7
     end
 
     it "is 0 for person without membership role" do
@@ -163,6 +169,21 @@ describe Person do
 
       role.update(end_on: Date.new(2002, 0o7, 19))
       expect(person_with_membership_years.membership_years).to eq(2)
+    end
+
+    it "with multiple roles and using .with_membership_years scope calculates correctly" do
+      # membership_years on Person are converted to integers, so we do the same here to find out
+      # the expected value for the role
+      expected_years = Role.with_membership_years.find(roles(:mitglied).id).membership_years.to_i
+
+      # the person has only one role, so the membership_years should be the same
+      expect(Person.with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
+
+      # add a non-membership role that does not count towards the membership_years
+      Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied), group: groups(:bluemlisalp_mitglieder))
+      # the person has now two roles, so the membership_years should be the same.
+      # this expectation makes sure we don't double the membership_years when joining the roles
+      expect(Person.joins(:roles).with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
     end
   end
 

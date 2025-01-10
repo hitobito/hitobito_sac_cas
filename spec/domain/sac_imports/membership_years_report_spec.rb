@@ -66,10 +66,10 @@ describe SacImports::MembershipYearsReport do
 
     expect(csv_report.size).to eq(12)
     expect(csv_report.first).to eq(report_headers)
-    expect(csv_report.second).to eq(["4200000", "Nachname 1 Vorname 1", "35", "24.0", "11.0", nil])
-    expect(csv_report.third).to eq(["4200001", "Maurer Johannes", "14", "14.0", "0.0", nil])
-    expect(csv_report.fourth).to eq(["4200002", "Potter Harry", nil, "0.0", "0.0", nil])
-    expect(csv_report.fifth).to eq(["4200003", "Cochet Frederique", "8", "8.0", "0.0", nil])
+    expect(csv_report.second).to eq(["4200000", "Nachname 1 Vorname 1", "35", "24", "11", nil])
+    expect(csv_report.third).to eq(["4200001", "Maurer Johannes", "14", "14", "0", nil])
+    expect(csv_report.fourth).to eq(["4200002", "Potter Harry", nil, "0", "0", nil])
+    expect(csv_report.fifth).to eq(["4200003", "Cochet Frederique", "8", "8", "0", nil])
     expect(csv_report.last).to eq(["4200010", nil, "2", nil, nil, "Person not found in hitobito"])
 
     File.delete(report_file)
