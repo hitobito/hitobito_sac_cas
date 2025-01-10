@@ -37,10 +37,6 @@ module Wizards::Signup
       valid? && operations.all?(&:save!)
     end
 
-    def valid?
-      super && operations_valid?
-    end
-
     def birthdays
       read_birthdays
     end
@@ -54,6 +50,10 @@ module Wizards::Signup
     end
 
     private
+
+    # As we might save multiple people we delegate validation to operations
+    # person itself can be invalid as operation handles aspects (e.g role start_on and gender I18nEnum::NIL_KEY)
+    def person_valid? = operations_valid?
 
     def beitragskategorie
       value = if birthdays.none?
