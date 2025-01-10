@@ -88,7 +88,7 @@ module TableDisplays
     end
 
     def beitrittsdatum
-      start_on = group_roles.collect(&:start_on).min
+      start_on = group_roles.collect(&:start_on).compact.min
       I18n.l(start_on) if start_on
     end
 
