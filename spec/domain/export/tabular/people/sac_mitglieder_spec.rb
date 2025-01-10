@@ -38,7 +38,7 @@ describe Export::Tabular::People::SacMitglieder do
         :town,
         :country,
         :birthday,
-        :phone_number_direkt,
+        :phone_number_main,
         :phone_number_privat,
         :empty, # 1 leere Spalte
         :phone_number_mobil,
@@ -68,6 +68,15 @@ describe Export::Tabular::People::SacMitglieder do
       it "are included" do
         expect(tabular.list).to contain_exactly(
           roles(:mitglied).person,
+          roles(:familienmitglied).person,
+          roles(:familienmitglied2).person,
+          roles(:familienmitglied_kind).person
+        )
+      end
+
+      it "former mitglieder are not included" do
+        roles(:mitglied).update!(end_on: 1.day.ago)
+        expect(tabular.list).to contain_exactly(
           roles(:familienmitglied).person,
           roles(:familienmitglied2).person,
           roles(:familienmitglied_kind).person

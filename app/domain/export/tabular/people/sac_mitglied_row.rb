@@ -116,6 +116,10 @@ module Export::Tabular::People
       entry.phone_numbers.find { |p| p.label.downcase == label.to_s }&.number
     end
 
+    def phone_number_main
+      phone_number("haupt-telefon")
+    end
+
     def postfach
       entry.postbox
     end

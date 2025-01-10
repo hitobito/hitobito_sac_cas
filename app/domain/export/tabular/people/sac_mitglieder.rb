@@ -33,7 +33,7 @@ module Export::Tabular::People
         :town,
         :country,
         :birthday,
-        :phone_number_direkt,
+        :phone_number_main,
         :phone_number_privat,
         :empty, # 1 leere Spalte
         :phone_number_mobil,
@@ -65,9 +65,9 @@ module Export::Tabular::People
       Person
         .where(roles: {
           group_id: non_layer_children_ids,
-          type: (SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES).map(&:sti_name)
+          type: SacCas::MITGLIED_ROLES.map(&:sti_name)
         })
-        .joins(:roles_unscoped)
+        .joins(:roles)
         .includes(:phone_numbers, :roles, roles: :group)
         .distinct
     end

@@ -10,9 +10,7 @@ class Export::BackupMitgliederScheduleJob < RecurringJob
 
   ROLE_TYPES_TO_BACKUP = [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)
 
-  # Job is temporarily disabled (https://github.com/hitobito/hitobito_sac_cas/issues/1426)
-  # When re-enabling, also un-skip the corresponding specs.
-  def perform_internal_DISABLED
+  def perform_internal
     relevant_groups.find_each do |group|
       Export::BackupMitgliederExportJob.new(group.id).enqueue!
     end
