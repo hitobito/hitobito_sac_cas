@@ -54,6 +54,14 @@ describe SacCas::Export::MitgliederExportJob do
       expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
       expect(contents).to match(/\$#{person.last_name}\$"#{person.first_name}"\$/)
     end
+
+    it "has quotation marks for strings containing col_sep" do
+      person = people(:mitglied)
+      person.update!(first_name: "Hello$World")
+      Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
+      expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+      expect(contents).to include %($#{person.last_name}$"Hello$World"$)
+    end
   end
 
   it "file name" do

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-xdescribe Export::BackupMitgliederScheduleJob do
+describe Export::BackupMitgliederScheduleJob do
   subject(:job) { described_class.new }
 
   let(:relevant_groups) { Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)) }

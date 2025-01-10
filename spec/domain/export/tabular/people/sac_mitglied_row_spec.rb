@@ -267,6 +267,11 @@ describe Export::Tabular::People::SacMitgliedRow do
     expect(row.phone_number("mobile")).to eq(mobile1.number).or eq(mobile2.number)
   end
 
+  it "#phone_number_main returns number with label Haupt-Telefon" do
+    main = Fabricate(:phone_number, contactable: person, label: "Haupt-Telefon", number: "0311234567")
+    expect(row.phone_number_main).to eq main.number
+  end
+
   it "#phone_number_mobile returns any number with label mobile" do
     mobile = Fabricate(:phone_number, contactable: person, label: "mobile", number: "0781234567")
     expect(row.phone_number_mobile).to eq mobile.number
