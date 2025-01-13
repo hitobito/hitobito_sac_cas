@@ -9,7 +9,7 @@ module SacCas::Export::PeopleExportJob
   private
 
   def entries
-    super.select("*")
+    super.select("people.*")
   end
 
   def data
