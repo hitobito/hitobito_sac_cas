@@ -8,6 +8,10 @@
 module SacCas::Export::PeopleExportJob
   private
 
+  def entries
+    super.select("*")
+  end
+
   def data
     return recipients_data if @options[:recipients]
     return recipient_households_data if @options[:recipient_households]

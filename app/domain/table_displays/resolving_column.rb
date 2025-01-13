@@ -12,7 +12,7 @@ module TableDisplays
     end
 
     def required_model_attrs(_attr)
-      []
+      ["*"]
     end
 
     def label(attr)
