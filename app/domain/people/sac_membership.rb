@@ -116,7 +116,7 @@ class People::SacMembership
   def family_id
     return unless family?
 
-    @person.household_key.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
+    @person.household_key.to_s.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
   end
 
   def paying_person?(beitragskategorie)
