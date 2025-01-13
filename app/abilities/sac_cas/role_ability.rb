@@ -26,9 +26,12 @@ module SacCas::RoleAbility
   # core: general(:destroy).not_permission_giving
   def not_permission_giving
     return false if wizard_managed_role?
-    return true if subject_role_has_admin_permission && if_admin
 
-    super
+    if subject_role_has_admin_permission
+      if_admin
+    else
+      super
+    end
   end
 
   def subject_role_has_admin_permission
