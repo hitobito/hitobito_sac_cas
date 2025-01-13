@@ -34,6 +34,8 @@ module SacCas::RoleAbility
     if subject&.type&.safe_constantize&.permissions&.include?(:admin)
       if_admin
     else
+      return false if wizard_managed_role?
+
       # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
       # other permission checks will handle it
       true
