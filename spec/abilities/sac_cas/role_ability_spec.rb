@@ -85,7 +85,7 @@ describe RoleAbility do
     end
 
     context "as non admin" do
-      let(:person) do 
+      let(:person) do
         role = Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle), person: people(:mitglied))
         role.person
       end

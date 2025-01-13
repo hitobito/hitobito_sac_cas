@@ -33,7 +33,7 @@ module SacCas::RoleAbility
   def modify_admin_permission_only_of_admin_themself
     if subject&.type&.safe_constantize&.permissions&.include?(:admin)
       if_admin
-    else 
+    else
       # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
       # other permission checks will handle it
       true
