@@ -86,6 +86,12 @@ module SacCas
     ::Group::AboTourenPortal::Neuanmeldung
   ].freeze
 
+  SPECIAL_MEMBERSHIP_ROLES = [
+    ::Group::Ehrenmitglieder::Ehrenmitglied,
+    ::Group::SektionsMitglieder::Ehrenmitglied,
+    ::Group::SektionsMitglieder::Beguenstigt
+  ]
+
   ###
 
   MV_EMAIL = "mv@sac-cas.ch"

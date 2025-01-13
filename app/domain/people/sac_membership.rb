@@ -72,6 +72,10 @@ class People::SacMembership
     active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
+  def special_mitglied_roles
+    active_roles_of_type(special_mitglied_role_types)
+  end
+
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
   # If this changes in the future, future_zusatzsektion_roles must be handled in
   # `Memberships::FamilyMutation` as well.
@@ -173,6 +177,8 @@ class People::SacMembership
   def mitglied_zusatzsektion_types = SacCas::MITGLIED_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
+
+  def special_mitglied_role_types = SacCas::SPECIAL_MEMBERSHIP_ROLES.map(&:sti_name)
 
   def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:sti_name)
 
