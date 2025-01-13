@@ -11,6 +11,7 @@ module SacCas::RoleAbility
   prepended do
     on(Role) do
       permission(:any).may(:terminate).self_terminatable_own_role
+      general(:create, :update, :delete).if_admin_only_admin?
     end
   end
 
@@ -27,6 +28,10 @@ module SacCas::RoleAbility
     return false if wizard_managed_role?
 
     super
+  end
+
+  def if_admin_only_admin?
+    subject&.type&.safe_constantize&.permissions&.include?(:admin) ? if_admin : true
   end
 
   private
