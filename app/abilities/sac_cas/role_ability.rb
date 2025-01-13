@@ -30,7 +30,7 @@ module SacCas::RoleAbility
 
     super
   end
-  
+
   def subject_role_has_admin_permission
     subject&.type&.safe_constantize&.permissions&.include?(:admin)
   end
