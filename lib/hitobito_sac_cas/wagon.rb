@@ -136,7 +136,7 @@ module HitobitoSacCas
 
       ## Helpers
       ApplicationMarketHelper.prepend SacCas::ApplicationMarketHelper
-      ChangelogHelper.prepend SacCas::ChangelogHelper
+      Changelogs::FooterLinkBuilder.prepend SacCas::Changelogs::FooterLinkBuilder
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
