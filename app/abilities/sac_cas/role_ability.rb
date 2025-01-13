@@ -12,7 +12,6 @@ module SacCas::RoleAbility
     on(Role) do
       permission(:any).may(:terminate).self_terminatable_own_role
       general(:create, :update).modify_admin_permission_only_of_admin_themself
-      general(:destroy).destroy_admin_permission_only_of_admin_themself
     end
   end
 
@@ -27,15 +26,20 @@ module SacCas::RoleAbility
   # core: general(:destroy).not_permission_giving
   def not_permission_giving
     return false if wizard_managed_role?
+    return true if subject_role_has_admin_permission && if_admin
 
     super
   end
+  
+  def subject_role_has_admin_permission
+    subject&.type&.safe_constantize&.permissions&.include?(:admin)
+  end
 
   def destroy_admin_permission_only_of_admin_themself
-    if subject&.type&.safe_constantize&.permissions&.include?(:admin)
+    if subject_role_has_admin_permission
       if_admin
     else
-      not_permission_giving
+      true
     end
   end
 
