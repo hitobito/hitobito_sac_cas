@@ -39,6 +39,10 @@ module Wizards::Memberships
       @switch_operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
     end
 
+    def previous_sektion
+      @previous_sektion ||= switch_operation.previous_stammsektion_role.group.layer_group
+    end
+
     def backoffice?
       @backoffice
     end
@@ -57,7 +61,7 @@ module Wizards::Memberships
     private
 
     def send_confirmation_mail
-      Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group).deliver_later
+      Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group, previous_sektion).deliver_later
     end
 
     def switch_operation_valid?
