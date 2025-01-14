@@ -38,14 +38,6 @@ module SacCas::RoleAbility
     subject&.type&.safe_constantize&.permissions&.include?(:admin)
   end
 
-  def destroy_admin_permission_only_of_admin_themself
-    if subject_role_has_admin_permission
-      if_admin
-    else
-      true
-    end
-  end
-
   def modify_admin_permission_only_of_admin_themself
     if subject&.type&.safe_constantize&.permissions&.include?(:admin)
       if_admin
