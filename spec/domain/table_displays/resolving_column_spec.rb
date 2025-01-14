@@ -16,32 +16,8 @@ describe TableDisplays::ResolvingColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
   let(:parent) { Group.new(id: 1) }
 
-  subject(:node) { Capybara::Node::Simple.new(table.to_html) }
-
-  shared_examples "table display" do |column:, header:, permission:, value: ""|
-    subject(:display) { described_class.new(ability, table: table, model_class: Person) }
-
-    subject(:node) { Capybara::Node::Simple.new(table.to_html) }
-
-    before do
-      allow(controller).to receive(:current_user).at_most(:once).and_return(person)
-      allow(table).to receive(:template).at_least(:once).and_return(view)
-      allow(view).to receive(:parent).at_least(:once).and_return(parent)
-    end
-
-    it "requires #{permission} as permission" do
-      expect(display.required_permission(column)).to eq permission
-    end
-
-    it "renders #{header} as header" do
-      display.render(column)
-      expect(node).to have_css "th", text: header
-    end
-
-    it "renders #{value} as value" do
-      display.render(column)
-      expect(node).to have_css "td", text: value
-    end
+  before do
+    allow(view).to receive(:parent).at_least(:once).and_return(parent)
   end
 
   it_behaves_like "table display", {

@@ -229,6 +229,8 @@ module HitobitoSacCas
         TableDisplays::ShowFullColumn,
         [:invoice_state])
 
+      TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::LoginStatusColumn
+
       Synchronize::Mailchimp::Synchronizator.member_fields = [
         [:language, ->(p) { p.language }]
       ]

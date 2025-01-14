@@ -16,19 +16,30 @@ describe "people list page", :js do
 
   it "allows showing the membership_years column" do
     visit group_people_path(group_id: group.id)
+    expect(page).to have_no_css('td[data-attribute-name="membership_years"]')
     click_link("Spalten")
     check("Anzahl Mitglieder-Jahre")
     click_link("Spalten")
     expect(page).to have_css('td[data-attribute-name="membership_years"]', count: 4)
   end
 
-  it "allows showing beitragskategorie" do
+  it "allows showing beitragskategorie column" do
     visit group_people_path(group_id: group.id)
+    expect(page).to have_no_css('td[data-attribute-name="beitragskategorie"]')
     click_link("Spalten")
     check("Beitragskategorie")
     click_link("Spalten")
     expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Einzel", count: 1)
     expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Familie", count: 3)
+  end
+
+  it "allows showing login column" do
+    visit group_people_path(group_id: group.id)
+    expect(page).to have_no_css('td[data-attribute-name="login_status"]')
+    click_link("Spalten")
+    check("Login")
+    click_link("Spalten")
+    expect(page).to have_css('td[data-attribute-name="login_status"]', count: 4)
   end
 
   it "shows certain columns only for neuanmeldungen" do
