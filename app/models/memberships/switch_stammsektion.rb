@@ -20,7 +20,7 @@ module Memberships
       # In case we can't locate the old membership role, we calculate the beitragskategorie
       # for the person as a fallback value.
       @previous_stammsektion_role = existing_membership(person)
-      
+
       beitragskategorie = previous_stammsektion_role&.beitragskategorie ||
         SacCas::Beitragskategorie::Calculator.new(person).calculate
       new_stammsektion_role = new_membership(person, beitragskategorie, previous_stammsektion_role&.end_on_was)
