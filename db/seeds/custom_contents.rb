@@ -63,10 +63,10 @@ CustomContent.seed(:key,
   {key: Signup::AboMagazinMailer::CONFIRMATION,
    placeholders_required: "first-name, last-name, birthday, email, address-care-of, street-with-number, postbox, zip-code, town, country, abo-name, language, gender, costs, newsletter-subscribed, agb-link, data-protection-link"},
   {key: Signup::SektionMailer::CONFIRMATION,
-   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details",
+   placeholders_required: "person-ids, first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details",
    placeholders_optional: "profile-url, faq-url"},
   {key: Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION,
-   placeholders_required: "first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details",
+   placeholders_required: "person-ids, first-name, last-name, birthday, email, phone-number, address-care-of, street-with-number, postbox, zip-code, town, country, section-name, membership-category, invoice-details",
    placeholders_optional: "profile-url, faq-url"},
   {key: Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED,
    placeholders_required: "first-name",
@@ -339,6 +339,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "{invoice-details}<br><br>" \
     "<h2>Personendaten</h2><br><br>" \
     "Kontaktperson<br>" \
+    "Mitgliedernummer: {person-ids}<br>" \
     "Vorname: {first-name}<br>" \
     "Name: {last-name}<br>" \
     "Geburtsdatum: {birthday}<br>" \
@@ -373,6 +374,7 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "{invoice-details}<br><br>" \
     "<h2>Personendaten</h2><br><br>" \
     "Kontaktperson<br>" \
+    "Mitgliedernummer: {person-ids}<br>" \
     "Vorname: {first-name}<br>" \
     "Name: {last-name}<br>" \
     "Geburtsdatum: {birthday}<br>" \
