@@ -179,7 +179,7 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         mitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         mitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        mitglied_person.sac_membership.special_mitglied_roles.destroy_all
+        mitglied_person.sac_membership.membership_related_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: mitglied_person,
@@ -216,10 +216,10 @@ describe Invoices::SacMemberships::MembershipManager do
 
         familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied_person.sac_membership.special_mitglied_roles.destroy_all
+        familienmitglied_person.sac_membership.membership_related_roles.destroy_all
         familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied2_person.sac_membership.special_mitglied_roles.destroy_all
+        familienmitglied2_person.sac_membership.membership_related_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: familienmitglied_person,
