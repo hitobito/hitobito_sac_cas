@@ -168,6 +168,7 @@ matterhorn:
   lft: 36
   rgt: 47
   name: SAC Matterhorn
+  email: matterhorn@sac.ch
   type: Group::Sektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
   created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
