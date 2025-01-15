@@ -15,11 +15,13 @@ class Sftp
   end
 
   def upload_file(data, file_path)
-    create_missing_directories(file_path)
+    create_missing_directories(file_path) if create_directories?
 
-    handle = connection.open!(file_path, "w")
-    connection.write!(handle, 0, data)
-    connection.close(handle)
+    Tempfile.open("hitobito-sftp-upload") do |tempfile|
+      tempfile.write(data)
+      tempfile.close
+      connection.upload!(tempfile.path, file_path)
+    end
   end
 
   def create_remote_dir(name)
@@ -33,6 +35,16 @@ class Sftp
   end
 
   private
+
+  def server_version
+    connection.session.transport.server_version.version || "unknown"
+  end
+
+  # On AWS SFTP, directories are created automatically. On other servers,
+  # we need to create them manually.
+  def create_directories?
+    !/AWS_SFTP/.match?(server_version)
+  end
 
   def create_missing_directories(file_path)
     Pathname.new(file_path).dirname.descend do |directory_path|

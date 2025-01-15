@@ -19,6 +19,8 @@ describe Sftp do
 
   subject(:sftp) { Sftp.new(config) }
 
+  before { allow(sftp).to receive(:server_version).and_return("unknown") }
+
   context "with password" do
     before { config.delete_field!(:private_key) }
 
@@ -71,15 +73,12 @@ describe Sftp do
       file_path = "sektionen/1650/Adressen_00001650.csv"
 
       expect(sftp).to receive(:directory?).with(root_folder_path).and_return(true)
-      expect(sftp).to_not receive(:create_remote_dir).with(root_folder_path)
       expect(sftp).to receive(:directory?).with(folder_path).and_return(true)
-      expect(sftp).to_not receive(:create_remote_dir).with(folder_path)
+      expect(sftp).to_not receive(:create_remote_dir)
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
       expect(session).to receive(:connect!)
-      expect(session).to receive(:open!).with(file_path, "w").and_return("handler")
-      expect(session).to receive(:write!).with("handler", 0, "data")
-      expect(session).to receive(:close)
+      expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
 
       sftp.upload_file("data", file_path)
     end
@@ -98,9 +97,21 @@ describe Sftp do
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
       expect(session).to receive(:connect!)
-      expect(session).to receive(:open!).with(file_path, "w").and_return("handler")
-      expect(session).to receive(:write!).with("handler", 0, "data")
-      expect(session).to receive(:close)
+      expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
+
+      sftp.upload_file("data", file_path)
+    end
+
+    it "does not create directories on aws sftp" do
+      allow(sftp).to receive(:server_version).and_return("AWS_SFTP")
+
+      file_path = "sektionen/some/random/subdirs/1650/Adressen_00001650.csv"
+
+      expect(sftp).to_not receive(:create_remote_dir)
+
+      expect(::Net::SFTP).to receive(:start).and_return(session)
+      expect(session).to receive(:connect!)
+      expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
 
       sftp.upload_file("data", file_path)
     end
