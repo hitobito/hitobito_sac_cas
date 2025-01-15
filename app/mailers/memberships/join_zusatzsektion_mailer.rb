@@ -5,12 +5,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Signup::SektionMailer < ApplicationMailer
+class Memberships::JoinZusatzsektionMailer < ApplicationMailer
   include MultilingualMailer
   include CommonMailerPlaceholders
 
-  CONFIRMATION = "sektion_signup_confirmation"
-  APPROVAL_PENDING_CONFIRMATION = "sektion_signup_approval_pending_confirmation"
+  CONFIRMATION = "join_zusatzsektion_confirmation"
+  APPROVAL_PENDING_CONFIRMATION = "join_zusatzsektion_approval_pending_confirmation"
 
   def confirmation(person, section, beitragskategorie)
     send_mail(person, section, beitragskategorie, CONFIRMATION)
@@ -54,7 +54,7 @@ class Signup::SektionMailer < ApplicationMailer
       @section,
       @beitragskategorie,
       @person,
-      main: true
+      main: false
     )
     ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
   end
