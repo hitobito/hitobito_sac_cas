@@ -40,10 +40,13 @@ class Invoices::SacMemberships::MembershipManager
 
     roles_for_update << person.sac_membership.stammsektion_role
     roles_for_update.concat(person.sac_membership.zusatzsektion_roles.reject(&:terminated?))
+    roles_for_update.concat(person.sac_membership.membership_related_roles.reject(&:terminated?))
     if family_main_person?
       roles_for_update.concat(family_memberships.map(&:stammsektion_role))
       roles_for_update.concat(family_memberships.flat_map(&:zusatzsektion_roles)
                       .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
+      roles_for_update.concat(family_memberships.flat_map(&:membership_related_roles)
+                      .select { |membership_related_role| membership_related_role.beitragskategorie == "family" })
     end
 
     roles_for_update.each do |role|

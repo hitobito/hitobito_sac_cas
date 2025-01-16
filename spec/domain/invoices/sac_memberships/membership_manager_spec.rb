@@ -29,6 +29,19 @@ describe Invoices::SacMemberships::MembershipManager do
   let(:matterhorn) { groups(:matterhorn) }
 
   before do
+    ehrenmitglieder_group = Group::Ehrenmitglieder.create!(name: "Ehrenmitglieder", parent: groups(:root))
+    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: mitglied_person)
+    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name, group: groups(:bluemlisalp_mitglieder), person: mitglied_person)
+    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name, group: ehrenmitglieder_group, person: mitglied_person)
+    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name, group: ehrenmitglieder_group, person: familienmitglied_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied2_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied2_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name, group: ehrenmitglieder_group, person: familienmitglied2_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied_kind_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name, group: groups(:bluemlisalp_mitglieder), person: familienmitglied_kind_person, beitragskategorie: :family)
+    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name, group: ehrenmitglieder_group, person: familienmitglied_kind_person, beitragskategorie: :family)
     Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
@@ -53,15 +66,14 @@ describe Invoices::SacMemberships::MembershipManager do
       subject { described_class.new(mitglied_person, bluemlisalp, end_of_next_year.year) }
 
       it "updates end_on" do
-        expect(updated_roles_count).to eq(2)
+        expect(updated_roles_count).to eq(5)
 
-        expect(mitglied.end_on).to eq(end_of_next_year)
-        expect(mitglied_zweitsektion.reload.end_on).to eq(end_of_next_year)
+        expect(mitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
       end
 
       it "doesn't update end_on when role is terminated" do
         mitglied_zweitsektion.update_column(:terminated, true)
-        expect(updated_roles_count).to eq(1)
+        expect(updated_roles_count).to eq(4)
       end
 
       it "doesn't update roles when end_on is already in external invoice year" do
@@ -79,14 +91,11 @@ describe Invoices::SacMemberships::MembershipManager do
       subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
 
       it "updates end_on for all family member roles" do
-        expect(updated_roles_count).to eq(6)
+        expect(updated_roles_count).to eq(15)
 
-        expect(familienmitglied.end_on).to eq(end_of_next_year)
-        expect(familienmitglied_zweitsektion.end_on).to eq(end_of_next_year)
-        expect(familienmitglied2.end_on).to eq(end_of_next_year)
-        expect(familienmitglied2_zweitsektion.end_on).to eq(end_of_next_year)
-        expect(familienmitglied_kind.end_on).to eq(end_of_next_year)
-        expect(familienmitglied_kind_zweitsektion.end_on).to eq(end_of_next_year)
+        expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+        expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+        expect(familienmitglied_kind_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
       end
 
       it "only updates zusatzsektions role of family member when beitragskategorie is family" do
@@ -94,12 +103,12 @@ describe Invoices::SacMemberships::MembershipManager do
         familienmitglied.person.sac_membership.zusatzsektion_roles.destroy_all
         mitglied_zweitsektion.update!(person: familienmitglied.person)
 
-        expect(updated_roles_count).to eq(5)
+        expect(updated_roles_count).to eq(14)
       end
 
       it "only updates own roles when no family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
-        expect(updated_roles_count).to eq(2)
+        expect(updated_roles_count).to eq(5)
       end
     end
   end
@@ -170,6 +179,7 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         mitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         mitglied_person.sac_membership.zusatzsektion_roles.destroy_all
+        mitglied_person.sac_membership.membership_related_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: mitglied_person,
@@ -206,8 +216,10 @@ describe Invoices::SacMemberships::MembershipManager do
 
         familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
+        familienmitglied_person.sac_membership.membership_related_roles.destroy_all
         familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
+        familienmitglied2_person.sac_membership.membership_related_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: familienmitglied_person,
