@@ -33,6 +33,8 @@ module Wizards::Signup
         current_user&.sac_membership&.neuanmeldung_stammsektion_role
     end
 
+    def redirection_message = I18n.t("groups.self_registration.create.existing_membership_notice")
+
     def save!
       valid? && operations.all?(&:save!)
     end
