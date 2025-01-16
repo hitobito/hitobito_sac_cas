@@ -126,6 +126,8 @@ describe Memberships::JoinZusatzsektion do
   end
 
   describe "saving" do
+    include ActiveJob::TestHelper
+
     let(:person) { Fabricate(:person) }
     let(:sektion) { groups(:matterhorn) }
     let(:errors) { join_sektion.errors.full_messages }
@@ -162,6 +164,7 @@ describe Memberships::JoinZusatzsektion do
         it "prefers to create role in NeuanmeldungenSektion group" do
           expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
             .and not_change { ExternalInvoice::SacMembership.count }
+            .and have_enqueued_mail(Memberships::JoinZusatzsektionMailer, :approval_pending_confirmation).exactly(:once)
             .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
           expect(role.group).to eq groups(:matterhorn_neuanmeldungen_sektion)
           expect(role.type).to eq "Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion"
@@ -173,6 +176,7 @@ describe Memberships::JoinZusatzsektion do
           it "falls back to create role in NeuanmeldungenSektionNv group" do
             expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
               .and change { ExternalInvoice::SacMembership.count }.by(1)
+              .and have_enqueued_mail(Memberships::JoinZusatzsektionMailer, :confirmation).exactly(:once)
               .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
             expect(role.group).to eq groups(:matterhorn_neuanmeldungen_nv)
             expect(role.type).to eq "Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion"
@@ -202,6 +206,7 @@ describe Memberships::JoinZusatzsektion do
             parent: sektion)
           expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
             .and not_change { ExternalInvoice::SacMembership.count }
+            .and have_enqueued_mail(Memberships::JoinZusatzsektionMailer, :approval_pending_confirmation).exactly(:once)
             .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
           expect(role.group).to eq neuanmeldungen
           expect(role.type).to eq "Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion"
@@ -210,6 +215,7 @@ describe Memberships::JoinZusatzsektion do
         it "falls back to create role in NeuanmeldungenSektionNv group" do
           expect { join_sektion.save! }.to change { person.reload.roles.count }.by(1)
             .and change { ExternalInvoice::SacMembership.count }.by(1)
+            .and have_enqueued_mail(Memberships::JoinZusatzsektionMailer, :confirmation).exactly(:once)
             .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
           expect(role.group).to eq groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv)
           expect(role.type).to eq "Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion"
