@@ -16,6 +16,7 @@ describe TableDisplays::People::LoginStatusColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
     allow(person).to receive(:login_status_icon).and_return("login_status_icon")
   end
 

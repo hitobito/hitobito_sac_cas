@@ -79,7 +79,7 @@ describe "people list page", :js do
     click_link("Spalten")
 
     within(".dropdown-menu") do
-      expect(page).not_to have_text("Bemerkungen Geschäftsstelle")
+      expect(page).to have_text("Bemerkungen Geschäftsstelle")
       expect(page).to have_text("Bemerkungen Sektion 1")
     end
   end

@@ -15,6 +15,10 @@ describe TableDisplays::People::SelfRegistrationReasonColumn, type: :helper do
   let(:ability) { Ability.new(person) }
   let(:table) { StandardTableBuilder.new([person], self) }
 
+  before do
+    allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+  end
+
   it_behaves_like "table display", {
     column: :self_registration_reason,
     header: "Eintrittsgrund",

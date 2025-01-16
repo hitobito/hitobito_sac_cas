@@ -15,6 +15,10 @@ describe TableDisplays::People::WiedereintrittColumn, type: :helper do
   let(:ability) { Ability.new(person) }
   let(:table) { StandardTableBuilder.new([person], self) }
 
+  before do
+    allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+  end
+
   context "without wiedereintritt" do
     it_behaves_like "table display", {
       column: :wiedereintritt,
