@@ -90,12 +90,24 @@ describe RoleAbility do
         role.person
       end
 
+      it "is able to create role without admin permission" do
+        expect(ability).to be_able_to(:create, roles(:mitglied))
+      end
+
       it "is not able to create role with admin permission" do
         expect(ability).not_to be_able_to(:create, admin_role)
       end
 
+      it "is able to update role without admin permission" do
+        expect(ability).to be_able_to(:update, roles(:mitglied))
+      end
+
       it "is not able to update role with admin permission" do
         expect(ability).not_to be_able_to(:update, admin_role)
+      end
+
+      it "is able to destroy role without admin permission" do
+        expect(ability).to be_able_to(:destroy, roles(:tourenchef_bluemlisalp_ortsgruppe_ausserberg))
       end
 
       it "is not able to destroy role with admin permission" do

@@ -27,25 +27,15 @@ module SacCas::RoleAbility
   def not_permission_giving
     return false if wizard_managed_role?
 
-    if subject_role_has_admin_permission
-      if_admin
-    else
-      super
-    end
+    subject_with_admin_permission? ? if_admin : super
   end
 
-  def subject_role_has_admin_permission
-    subject&.type&.safe_constantize&.permissions&.include?(:admin)
-  end
+  def subject_with_admin_permission? = subject.type&.safe_constantize&.permissions&.include?(:admin)
 
   def modify_admin_permission_only_of_admin_themself
-    if subject&.type&.safe_constantize&.permissions&.include?(:admin)
-      if_admin
-    else
-      # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
-      # other permission checks will handle it
-      true
-    end
+    # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
+    # other permission checks will handle it
+    subject_with_admin_permission? ? if_admin : true
   end
 
   private
