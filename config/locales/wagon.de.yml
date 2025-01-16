@@ -1804,6 +1804,7 @@ de:
   table_displays:
     person:
       antrag_fuer: Antrag für
+      duplicate_exists: Duplikat existiert
       address_valid: Adresse gültig
       confirmed_at: E-Mail bestätigt am
       beitrittsdatum: Beitritt per
