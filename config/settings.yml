@@ -20,10 +20,6 @@ application:
     height: 85
     width: 200
 
-  # non UI languages for assigning to person#language
-  additional_languages:
-    en: English
-
 event:
   participations:
     delete_answers_after_months: 6
