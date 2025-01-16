@@ -13,7 +13,7 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        created_at = person.roles.select { |r| r.group_id == template&.parent.id }.collect(&:created_at).min
+        created_at = person.roles.select { |r| r.group_id == template&.parent&.id }.collect(&:created_at).min
         I18n.l(created_at.to_date) if created_at
       end
     end

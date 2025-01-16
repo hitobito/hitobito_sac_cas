@@ -13,7 +13,7 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        group_roles = person.roles.select { |r| r.group_id == template&.parent.id }
+        group_roles = person.roles.select { |r| r.group_id == template&.parent&.id }
         if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
           I18n.t("groups.sektion_secondary")
         elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }

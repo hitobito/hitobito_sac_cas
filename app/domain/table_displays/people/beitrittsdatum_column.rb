@@ -13,7 +13,7 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        start_on = person.roles.select { |r| r.group_id == template&.parent.id }.collect(&:start_on).compact.min
+        start_on = person.roles.select { |r| r.group_id == template&.parent&.id }.collect(&:start_on).compact.min
         I18n.l(start_on) if start_on
       end
     end
