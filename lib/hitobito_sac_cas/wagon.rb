@@ -136,6 +136,7 @@ module HitobitoSacCas
 
       ## Helpers
       ApplicationMarketHelper.prepend SacCas::ApplicationMarketHelper
+      Changelogs::FooterLinkBuilder.prepend SacCas::Changelogs::FooterLinkBuilder
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
@@ -156,6 +157,7 @@ module HitobitoSacCas
       ApplicationController.include BasicAuth if Settings.basic_auth
 
       ApplicationController.prepend SacCas::ApplicationController
+      ChangelogController.prepend SacCas::ChangelogController
       EventsController.prepend SacCas::EventsController
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController

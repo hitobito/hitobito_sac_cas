@@ -1,3 +1,7 @@
+## unreleased
+
+* Der Changelog ist nur noch für Mitarbeiter der Geschäftsstelle verlinkt und aufrufbar (hitobito_sac_cas#1478)
+
 ## Version 2.3
 
 *  Beim Empfänger-Export auf der Personenliste sind auch die strukturierte Adresse und die Anrede enthalten (hitobito_sac_cas#688)
