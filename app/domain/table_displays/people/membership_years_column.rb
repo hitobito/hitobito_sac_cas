@@ -6,9 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::ResolvingColumn
-    def required_model_attrs(_attr)
+  class MembershipYearsColumn < TableDisplays::PublicColumn
+    def required_model_attrs(attr)
       [:cached_membership_years]
+    end
+
+    def sort_by(attr)
+      nil
     end
   end
 end
