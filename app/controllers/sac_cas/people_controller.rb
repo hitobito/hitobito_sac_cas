@@ -40,11 +40,6 @@ module SacCas::PeopleController
     lookup_context.prefixes.unshift("people/neuanmeldungen") if registrations_for_approval?
   end
 
-  def filter_entries
-    entries = add_table_display_to_query(person_filter.entries, current_person)
-    sort_by_sort_expression(entries)
-  end
-
   def prepare_entries(entries)
     super.includes(:primary_group)
   end
