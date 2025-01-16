@@ -200,7 +200,7 @@ module HitobitoSacCas
 
       TableDisplay.register_column(Person,
         TableDisplays::PublicColumn,
-        :data_quality)
+        [:data_quality, :id])
 
       TableDisplay.register_column(Person,
         TableDisplays::People::BeitragskategorieColumn,
@@ -245,10 +245,10 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
         TableDisplays::People::SacRemarkSectionColumn,
         [:sac_remark_section_1,
-        :sac_remark_section_2,
-        :sac_remark_section_3,
-        :sac_remark_section_4,
-        :sac_remark_section_5])
+          :sac_remark_section_2,
+          :sac_remark_section_3,
+          :sac_remark_section_4,
+          :sac_remark_section_5])
 
       TableDisplay.register_column(Person,
         TableDisplays::People::SacRemarkNationalOfficeColumn,

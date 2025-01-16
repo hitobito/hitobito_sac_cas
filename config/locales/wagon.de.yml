@@ -375,6 +375,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
       person:
+        id: Personennummer
         address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt
