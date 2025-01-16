@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::TableDisplays::LoginStatusColumn
+module SacCas::TableDisplays::People::LoginStatusColumn
   def required_model_attrs(_attr)
     super + [
       :wso2_legacy_password_hash,
