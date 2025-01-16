@@ -21,6 +21,22 @@ describe TableDisplays::People::AntragsdatumColumn, type: :helper do
     Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied), group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: Time.zone.today)
   end
 
+  describe "#exclude_attr?" do
+    subject(:column) { described_class.new(ability, table: table, model_class: Person) }
+
+    it "is false on SektionsNeuanmeldungenSektion group" do
+      expect(column.exclude_attr?(groups(:matterhorn_neuanmeldungen_sektion))).to eq false
+    end
+
+    it "is false on SektionsNeuanmeldungenNv group" do
+      expect(column.exclude_attr?(groups(:matterhorn_neuanmeldungen_nv))).to eq false
+    end
+
+    it "is true on incompatible group" do
+      expect(column.exclude_attr?(groups(:bluemlisalp_funktionaere))).to eq true
+    end
+  end
+
   it_behaves_like "table display", {
     column: :antragsdatum,
     header: "Antragsdatum",
