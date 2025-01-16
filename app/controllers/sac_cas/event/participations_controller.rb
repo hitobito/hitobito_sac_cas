@@ -17,7 +17,7 @@ module SacCas::Event::ParticipationsController
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter
-    after_summon :enqueue_invoice_job
+    after_summon :enqueue_invoice_job, :send_summon_email
     after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
     before_cancel :assert_participant_cancelable?
     after_cancel :cancel_invoices
@@ -174,6 +174,10 @@ module SacCas::Event::ParticipationsController
 
   def enqueue_invoice_job
     ExternalInvoice::CourseParticipation.invoice!(entry) unless ExternalInvoice::CourseParticipation.exists?(link: entry)
+  end
+
+  def send_summon_email
+    Event::ParticipationMailer.summon(entry).deliver_later
   end
 
   def cancel_invoices
