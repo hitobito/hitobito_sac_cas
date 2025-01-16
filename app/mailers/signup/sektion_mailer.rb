@@ -32,6 +32,14 @@ class Signup::SektionMailer < ApplicationMailer
     compose_multilingual(person, content_key, locales)
   end
 
+  def placeholder_person_ids
+    if @person.sac_family_main_person
+      "#{@person.id} (#{@person.household_people.pluck(:id).join(", ")})"
+    else
+      @person.id
+    end
+  end
+
   def placeholder_section_name
     @section.to_s
   end

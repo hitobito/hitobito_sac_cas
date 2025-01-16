@@ -5,17 +5,14 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Group::SacCasPrivathuetten < ::Group
-  self.static_name = true
+module SacCas::ChangelogController
+  extend ActiveSupport::Concern
 
-  children Group::SacCasPrivathuette
+  prepended do
+    def index
+      raise CanCan::AccessDenied unless current_user
 
-  ### ROLES
-
-  class Schreibrecht < ::Role
-    self.permissions = [:group_and_below_full]
-    self.two_factor_authentication_enforced = true
+      authorize!(:index, ChangelogEntry)
+    end
   end
-
-  roles Schreibrecht
 end

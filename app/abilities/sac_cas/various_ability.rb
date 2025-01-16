@@ -13,9 +13,13 @@ module SacCas::VariousAbility
       class_side(:index).if_mitarbeiter_geschaeftsstelle
       permission(:any).may(:show).if_mitarbeiter_geschaeftsstelle
     end
+
+    on(ChangelogEntry) do
+      class_side(:index).if_mitarbeiter_geschaeftsstelle
+    end
   end
 
   def if_mitarbeiter_geschaeftsstelle
-    role_type?(Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Mitarbeiter)
+    role_type?(Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::Admin)
   end
 end

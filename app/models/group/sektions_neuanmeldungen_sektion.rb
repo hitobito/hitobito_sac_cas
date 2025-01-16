@@ -20,10 +20,12 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
 
   class Leserecht < ::Role
     self.permissions = [:group_and_below_read]
+    self.two_factor_authentication_enforced = true
   end
 
   class Schreibrecht < ::Role
     self.permissions = [:group_and_below_full]
+    self.two_factor_authentication_enforced = true
   end
 
   roles Neuanmeldung, NeuanmeldungZusatzsektion, Leserecht, Schreibrecht

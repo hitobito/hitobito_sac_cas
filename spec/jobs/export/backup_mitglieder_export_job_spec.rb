@@ -39,7 +39,6 @@ describe Export::BackupMitgliederExportJob do
       error = Sftp::ConnectionError.new("permission denied")
 
       expect(sftp).to receive(:upload_file).and_raise(error)
-      expect(job).to receive(:error).with(job, error, group: group)
 
       job = subscribe { run_job(subject) }
 
@@ -66,10 +65,11 @@ describe Export::BackupMitgliederExportJob do
         job_name: described_class.name,
         group_id: nil,
         finished_at: an_instance_of(ActiveSupport::TimeWithZone),
-        status: "success",
-        payload: {errors: [[group.id, error]]},
+        status: "error",
+        payload: {error: an_instance_of(Hash)},
         attempt: 0
       )
+      expect(finished_attrs[:payload][:error][:message]).to match(/permission denied/)
     end
   end
 
