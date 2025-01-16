@@ -26,8 +26,8 @@ module TableDisplays::People
       :show
     end
 
-    def exclude_attr?(template)
-      [Group::SektionsNeuanmeldungenSektion, Group::SektionsNeuanmeldungenNv].exclude?(template&.parent.class)
+    def exclude_attr?(group)
+      [Group::SektionsNeuanmeldungenSektion, Group::SektionsNeuanmeldungenNv].exclude?(group.class)
     end
   end
 end
