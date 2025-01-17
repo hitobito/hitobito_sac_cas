@@ -67,6 +67,7 @@ social_account:
 
 phone_number:
   predefined_labels:
+    - Haupt-Telefon
     - Privat
     - Mobil
     - Arbeit
@@ -74,7 +75,6 @@ phone_number:
     - Mutter
     - Fax
     - Andere
-    - Haupt-Telefon
 
 impersonate:
   notify: false
