@@ -64,6 +64,15 @@ describe SacCas::Export::MitgliederExportJob do
     end
   end
 
+  # Core uses CSVSafe which prefix phone numbers starting with the + sign with a single quote.
+  # This export generates a legacy file format which MUST NOT prefix phone numbers.
+  it "does not prefix phone numbers with single quote" do
+    person = people(:mitglied)
+    person.phone_numbers.create!(number: "+41 79 123 45 67", label: "Haupt-Telefon")
+    job.perform
+    expect(contents).to include "$+41 79 123 45 67$"
+  end
+
   it "file name" do
     job.perform
     expect(file.filename).to eq("Adressen_#{group.navision_id_padded}.csv")
