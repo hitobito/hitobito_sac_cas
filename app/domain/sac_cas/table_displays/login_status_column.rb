@@ -7,6 +7,9 @@
 
 module SacCas::TableDisplays::LoginStatusColumn
   def required_model_attrs(_attr)
-    super + [:wso2_legacy_password_hash]
+    super + [
+      :wso2_legacy_password_hash,
+      :wso2_legacy_password_salt
+    ]
   end
 end

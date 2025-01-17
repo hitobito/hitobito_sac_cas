@@ -34,7 +34,12 @@ describe "people list page", :js do
   end
 
   it "allows showing login column" do
+    # make sure we have a person with and a person without legacy password
+    people(:mitglied).update(wso2_legacy_password_hash: "hash", wso2_legacy_password_salt: "salt")
+    expect(people(:familienmitglied).wso2_legacy_password_hash).to be_nil
+
     visit group_people_path(group_id: group.id)
+
     expect(page).to have_no_css('td[data-attribute-name="login_status"]')
     click_link("Spalten")
     check("Login")
