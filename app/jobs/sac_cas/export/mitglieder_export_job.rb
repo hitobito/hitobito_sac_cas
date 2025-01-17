@@ -20,6 +20,7 @@ class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
     tabular = Export::Tabular::People::SacMitglieder.new(group)
     [
       Export::Csv::Generator.new(tabular,
+        csv_handler_class: CSV,
         encoding: ENCODING,
         utf8_bom: false,
         col_sep: "$").call,
