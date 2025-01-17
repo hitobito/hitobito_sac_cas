@@ -64,7 +64,7 @@ describe Event::ParticipationButtons do
         expect(dom).to have_button("Abmelden")
       end
 
-      it "shows button when not participant_cancelable" do
+      it "does not show button when not participant_cancelable" do
         event.applications_cancelable = false
         expect(participation).not_to be_participant_cancelable
         expect(dom).not_to have_button("Abmelden")

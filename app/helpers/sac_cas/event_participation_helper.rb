@@ -13,4 +13,8 @@ module SacCas::EventParticipationHelper
   def format_event_price(attr, price)
     [Event::Course.human_attribute_name(attr), I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
   end
+
+  def event_participation_cancellation_cost(entry)
+    Invoices::Abacus::CourseAnnulationCost.new(entry).position_description_and_amount_cancelled.last
+  end
 end

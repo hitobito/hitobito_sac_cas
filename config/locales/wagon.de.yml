@@ -1241,8 +1241,8 @@ de:
       popover_participant_cancels:
         cancel_info: >-
           Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? Eine Abmeldung
-          kann nicht rückgängig gemacht werden. Mit der Abmeldung werden allfällige Bearbeitungs-
-          und Annullationsgebühren in Rechnung gestellt.
+          kann nicht rückgängig gemacht werden. Mit der Abmeldung werden Bearbeitungs-
+          und Annullationsgebühren in der Höhe von %{cancellation_cost} in Rechnung gestellt.
 
     participation_contact_datas:
       fields:

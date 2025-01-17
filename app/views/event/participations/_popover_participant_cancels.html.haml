@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-%p.well= t('.cancel_info')
+%p.well= t('.cancel_info', cancellation_cost: event_participation_cancellation_cost(entry))
 
 = standard_form(entry,
                 url: cancel_group_event_participation_path(@group, @event, entry),

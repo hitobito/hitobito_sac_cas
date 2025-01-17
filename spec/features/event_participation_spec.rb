@@ -62,7 +62,7 @@ describe :event_participation, js: true do
   describe "canceling participation" do
     let(:group) { groups(:root) }
     let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-    let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application) }
+    let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application, price: 20, price_category: 0) }
     let(:event) { Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
 
     before do
@@ -95,6 +95,27 @@ describe :event_participation, js: true do
         click_button "Abmelden"
         within(".popover-body") { click_on "Abmelden" }
         expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
+      end
+
+      it "shows cancellation cost in hint text" do
+        visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
+        click_button "Abmelden"
+        within(".popover-body") do
+          expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
+                                    "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
+                                    "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von 20.0 in Rechnung gestellt.")
+        end
+      end
+
+      it "shows cancellation cost of zero in hint text if participation does not have a price associated" do
+        participation.update!(price: 0)
+        visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
+        click_button "Abmelden"
+        within(".popover-body") do
+          expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
+                                    "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
+                                    "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von 0.0 in Rechnung gestellt.")
+        end
       end
 
       it "can cancel with reason" do
