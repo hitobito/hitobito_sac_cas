@@ -35,7 +35,7 @@ module Events::Courses::State
     validate :assert_valid_state_change, if: :state_changed?, on: :update
 
     before_create :set_default_state
-    before_save :adjust_application_state, if: :application_closing_at_changed?
+    before_save :adjust_application_state
     after_update :send_application_published_email,
       if: -> { saved_change_to_state?(from: "created", to: "application_open") }
     after_update :summon_assigned_participants,
@@ -179,11 +179,13 @@ module Events::Courses::State
   end
 
   def adjust_application_state
-    if APPLICATION_OPEN_STATES.include?(state) && application_closing_at.try(:past?)
+    return unless application_closing_at_changed? || state_changed?
+
+    if APPLICATION_OPEN_STATES.include?(state) && application_closing_at&.past?
       self.state = "application_closed"
     end
 
-    if application_closed? && %w[today? future?].any? { application_closing_at.try(_1) }
+    if application_closed? && application_closing_at && application_closing_at >= Time.zone.today
       self.state = "application_open"
     end
   end

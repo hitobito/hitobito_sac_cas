@@ -160,9 +160,8 @@ describe Event::Course do
       end
     end
 
-    # does not work as expected, validations are build using states defined in youth wagon
     describe "application_paused" do
-      before { course.update_columns(state: "application_open") }
+      before { course.update_columns(state: "application_paused") }
 
       it "closes course if closing date changes to past" do
         course.update!(application_closing_at: Time.zone.yesterday)
@@ -171,12 +170,12 @@ describe Event::Course do
 
       it "does not change state course if closing date changes to today" do
         course.update!(application_closing_at: Time.zone.today)
-        expect(course.state).to eq "application_open"
+        expect(course.state).to eq "application_paused"
       end
 
       it "does not change state course if closing date changes to future" do
         course.update!(application_closing_at: Time.zone.tomorrow)
-        expect(course.state).to eq "application_open"
+        expect(course.state).to eq "application_paused"
       end
     end
 
@@ -196,6 +195,31 @@ describe Event::Course do
 
       it "opens course for application state if closing date changes to future" do
         course.update!(application_closing_at: Time.zone.tomorrow)
+        expect(course.state).to eq "application_open"
+      end
+    end
+
+    describe "assignment_closed state" do
+      before { course.update_columns(state: "assignment_closed") }
+
+      it "does not change state if closing date changes to past" do
+        course.update_columns(application_closing_at: Time.zone.yesterday)
+        course.update!(state: "application_closed")
+
+        expect(course.state).to eq "application_closed"
+      end
+
+      it "does change state if closing date changes to today" do
+        course.update_columns(application_closing_at: Time.zone.today)
+        course.update!(state: "application_closed")
+
+        expect(course.state).to eq "application_open"
+      end
+
+      it "opens course for application state if closing date changes to future" do
+        course.update_columns(application_closing_at: Time.zone.tomorrow)
+        course.update!(state: "application_closed")
+
         expect(course.state).to eq "application_open"
       end
     end
@@ -460,7 +484,12 @@ describe Event::Course do
   end
 
   describe "when state changes to application_closed" do
-    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
+    let(:course) do
+      Fabricate(:sac_open_course,
+        state: :assignment_closed,
+        application_opening_at: 1.month.ago,
+        application_closing_at: 1.week.ago)
+    end
 
     context "with course admin" do
       before { course.groups.first.update!(course_admin_email: "admin@example.com") }
@@ -482,7 +511,7 @@ describe Event::Course do
   end
 
   describe "when state changes to canceled" do
-    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
+    let(:course) { Fabricate(:sac_open_course, state: :assignment_closed) }
 
     context "with participants" do
       before do
@@ -546,7 +575,7 @@ describe Event::Course do
   end
 
   describe "when state changes to closed" do
-    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :ready) } }
+    let(:course) { Fabricate(:sac_open_course, state: :ready) }
 
     before do
       _p1, p2, p3, p4 = course.participations.create!([
@@ -581,7 +610,7 @@ describe Event::Course do
   end
 
   describe "when state changes from closed" do
-    let(:course) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :closed) } }
+    let(:course) { Fabricate(:sac_open_course, state: :closed) }
 
     before do
       course.participations.create!([
