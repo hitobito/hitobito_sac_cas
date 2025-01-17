@@ -12,9 +12,13 @@ class Event::CloseApplicationsJob < RecurringJob
 
   def perform_internal
     Event::Course
-      .where(state: %w[application_open application_paused])
-      .where(application_closing_at: [...Time.zone.today])
-      .update_all(state: :application_closed)
+      .where(state: Events::Courses::State::APPLICATION_OPEN_STATES)
+      .where(application_closing_at: ...Time.zone.today)
+      .find_each do |course|
+        course.update_column(:state, :application_closed)
+        recipient = course.groups.first.course_admin_email
+        Event::ApplicationClosedMailer.notice(course).deliver_later if recipient.present?
+      end
   end
 
   def next_run
