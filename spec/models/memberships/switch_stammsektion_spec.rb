@@ -52,6 +52,10 @@ describe Memberships::SwitchStammsektion do
 
     it "is valid with membership in different section active since today" do
       create_role(:matterhorn_mitglieder, "Mitglied", start_on: Time.zone.today)
+
+      # This recreates a bug that occured when the valid? method was run twice, resulting in the
+      # @destroyed variable of of the roles_to_destroy roles being true on the second call and thus showing an unexpected error
+      # because that variable impacted the role.delete call
       expect(switch).to be_valid
       expect(switch).to be_valid
     end
