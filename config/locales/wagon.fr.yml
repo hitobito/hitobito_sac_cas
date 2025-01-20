@@ -182,6 +182,17 @@ fr:
 
   activerecord:
     attributes:
+      contact_account:
+        predefined_labels:
+          andere: ""
+          arbeit: ""
+          fax: ""
+          "haupt-telefon": ""
+          mobil: ""
+          mutter: ""
+          privat: ""
+          vater: ""
+          webseite: ""
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours

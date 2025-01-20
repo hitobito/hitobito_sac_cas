@@ -175,6 +175,17 @@ en:
 
   activerecord:
     attributes:
+      contact_account:
+        predefined_labels:
+          andere: ""
+          arbeit: ""
+          fax: ""
+          "haupt-telefon": ""
+          mobil: ""
+          mutter: ""
+          privat: ""
+          vater: ""
+          webseite: ""
       cost_center:
         label: Designation
         event_kind_categories: Course categories
