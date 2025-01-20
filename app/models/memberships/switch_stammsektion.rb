@@ -23,7 +23,7 @@ module Memberships
 
       beitragskategorie = previous_stammsektion_role&.beitragskategorie ||
         SacCas::Beitragskategorie::Calculator.new(person).calculate
-      new_stammsektion_role = new_membership(person, beitragskategorie, previous_stammsektion_role.end_on_was)
+      new_stammsektion_role = new_membership(person, beitragskategorie, previous_stammsektion_role&.end_on_was)
 
       [previous_stammsektion_role, new_stammsektion_role].compact
     end
