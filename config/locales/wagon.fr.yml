@@ -913,8 +913,8 @@ fr:
         one: Chargé·e de la culture
         description: Chargé·e de la culture
       group/sektions_funktionaere/umweltbeauftragter:
-        one: Responsable environnement
-        description: Responsable environnement
+        one: Préposé à l’environnement
+        description: Préposé à l’environnement
       group/sektions_funktionaere/finanzen:
         one: Finances
         description: Finances
@@ -991,11 +991,11 @@ fr:
         one: Autres
         description: Autres
       group/sektions_touren_und_kurse/tourenleiter:
-        one: Chef·fe de randonnée (avec qualification)
-        description: Chef·fe de randonnée (avec qualification)
+        one: Chef de course (avec qualification)
+        description: Chef de course (avec qualification)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: Chef·fe de randonnée (sans qualification)
-        description: Chef·fe de randonnée (sans qualification)
+        one: Chef de course (sans qualification)
+        description: Chef de course (sans qualification)
       group/sektions_touren_und_kurse/kibe_chef:
         one: Chef·fe garde d’enfants
         description: Chef·fe garde d’enfants
@@ -1330,10 +1330,10 @@ fr:
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de randonnée
-    tour_guides_active: Chef·fe·s de randonnée actif·ves
-    tour_guides_stalled: Chef·fe de randonnée suspendu·e
-    tour_guides_inactive: Chef·fe·s de randonnée inactif·ves
-    tour_guides_expired: Chef·fe de randonnée expiré·e
+    tour_guides_active: Chef de course actif·ves
+    tour_guides_stalled: Chef de course suspendu·e
+    tour_guides_inactive: Chef de course inactif·ves
+    tour_guides_expired: Chef de course expiré·e
 
   groups:
     actions_show_sac_cas:
@@ -1366,6 +1366,10 @@ fr:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
         existing_membership_notice: >-
           Tu es déjà membre du CAS. Si tu souhaites adapter ton adhésion, contacte le secrétariat du CAS.
+        can_login_already_notice: ""
+        already_subscribed_to_abo: ""
+        already_member_of_tourenportal: ""
+
         existing_family_notice: Tu es affecté à une famille. Contacte le secrétariat du CAS.
         signed_up_notice: Ton inscription a été enregistrée avec succès.
 
@@ -1571,7 +1575,7 @@ fr:
     membership:
       verify:
         member_details_sac_cas:
-          tour_guide: Chef·fe de randonnée en activité
+          tour_guide: Chef de course en activité
         below_name_sac_cas:
           membership_number: "membre: %{membership_number}"
           membership_years: "Nombre d’années d’adhésion: %{membership_years}"

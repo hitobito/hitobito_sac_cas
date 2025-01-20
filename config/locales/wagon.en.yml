@@ -1290,6 +1290,10 @@ en:
       create:
         redirect_existing_email: There is already a login for this e-mail. Log in here.
         existing_membership_notice: >
+        can_login_already_notice: ""
+        already_subscribed_to_abo: ""
+        already_member_of_tourenportal: ""
+
         existing_family_notice: ""
         signed_up_notice: ""
 

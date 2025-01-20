@@ -1360,6 +1360,10 @@ it:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
         existing_membership_notice: >-
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
+        can_login_already_notice: ""
+        already_subscribed_to_abo: ""
+        already_member_of_tourenportal: ""
+
         existing_family_notice: Sei assegnato a una famiglia. Contatta il Segretariato centrale del CAS.
         signed_up_notice: La tua registrazione è stata salvata con successo.
 
