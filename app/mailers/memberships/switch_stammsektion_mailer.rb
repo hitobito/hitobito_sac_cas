@@ -8,11 +8,11 @@
 class Memberships::SwitchStammsektionMailer < ApplicationMailer
   CONFIRMATION = "memberships_switch_stammsektion_confirmation"
 
-  def confirmation(person, section)
+  def confirmation(person, section, previous_section)
     @person = person
     @section = section
     headers[:cc] = Group::Geschaeftsstelle.first.email
-    headers[:bcc] = [section.email, SacCas::MV_EMAIL].compact_blank
+    headers[:bcc] = [section.email, previous_section.email, SacCas::MV_EMAIL].compact_blank
 
     compose(person, CONFIRMATION)
   end
@@ -25,5 +25,9 @@ class Memberships::SwitchStammsektionMailer < ApplicationMailer
 
   def placeholder_group_name
     @section.to_s
+  end
+
+  def placeholder_person_id
+    @person.id
   end
 end

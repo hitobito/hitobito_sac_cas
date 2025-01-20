@@ -7,6 +7,8 @@
 
 module Memberships
   class SwitchStammsektion < JoinBase
+    attr_reader :previous_stammsektion_role
+
     def initialize(...)
       super
       raise "terminated membership" if sac_membership.stammsektion_role&.terminated?
@@ -15,15 +17,15 @@ module Memberships
     private
 
     def prepare_roles(person)
-      old_role = existing_membership(person)
-
       # In case we can't locate the old membership role, we calculate the beitragskategorie
       # for the person as a fallback value.
-      beitragskategorie = old_role&.beitragskategorie ||
-        SacCas::Beitragskategorie::Calculator.new(person).calculate
-      new_role = new_membership(person, beitragskategorie, old_role&.end_on_was)
+      @previous_stammsektion_role = existing_membership(person)
 
-      [old_role, new_role].compact
+      beitragskategorie = previous_stammsektion_role&.beitragskategorie ||
+        SacCas::Beitragskategorie::Calculator.new(person).calculate
+      new_stammsektion_role = new_membership(person, beitragskategorie, previous_stammsektion_role&.end_on_was)
+
+      [previous_stammsektion_role, new_stammsektion_role].compact
     end
 
     def existing_membership(person)
