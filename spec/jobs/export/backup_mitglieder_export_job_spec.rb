@@ -8,7 +8,11 @@
 require "spec_helper"
 
 describe Export::BackupMitgliederExportJob do
-  subject(:job) { described_class.new(group.id).tap { _1.instance_variable_set(:@sftp, sftp) } }
+  subject(:job) do
+    described_class.new(group.id).tap do
+      allow(_1).to receive(:sftp).and_return(sftp)
+    end
+  end
 
   let(:group) { groups(:bluemlisalp) }
   let(:sftp) { double(:sftp) }
@@ -81,6 +85,28 @@ describe Export::BackupMitgliederExportJob do
       expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
 
       job.perform
+    end
+
+    context "for sektion" do
+      let(:group) { groups(:bluemlisalp) }
+
+      it "writes file to sektion.id folder" do
+        file_path_expectation = start_with("#{group.navision_id}/")
+        expect(sftp).to receive(:upload_file).with(anything, file_path_expectation)
+
+        job.perform
+      end
+    end
+
+    context "for ortsgruppe" do
+      let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
+
+      it "writes file to sektion.id folder" do
+        file_path_expectation = start_with("#{group.parent.navision_id}/")
+        expect(sftp).to receive(:upload_file).with(anything, file_path_expectation)
+
+        job.perform
+      end
     end
   end
 end

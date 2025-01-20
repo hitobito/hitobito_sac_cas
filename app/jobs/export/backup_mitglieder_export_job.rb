@@ -36,7 +36,11 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def file_path
-    "#{group.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+    "#{sektion.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+  end
+
+  def sektion
+    group.is_a?(Group::Ortsgruppe) ? group.parent : group
   end
 
   def group
