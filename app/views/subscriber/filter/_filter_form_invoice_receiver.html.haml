@@ -6,7 +6,7 @@
 - caption = t("people_filters.invoice_receiver.title", group_name: assigns["group"].layer_group.name)
 = render(layout: 'people_filters/filter', locals: { entry: @mailing_list, type: :invoice_receiver, caption: }) do
   - filter_args = entry.filter_chain[:invoice_receiver]&.args
-  = hidden_field_tag('filters[invoice_receiver][group_id]', assigns["group"].id)
+  = hidden_field_tag('filters[invoice_receiver][group_id]', assigns["group"].layer_group_id)
   - Person::Filter::InvoiceReceiver::VISIBLE_ATTRS.each do |attr|
     - id = "filters_invoice_receiver_#{attr}"
     = label_tag(nil, class: 'checkbox ', for: id) do
