@@ -39,11 +39,14 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
-        Export::BackupMitgliederScheduleJob,
         # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
         People::CacheMembershipYearsJob,
         Roles::TerminateTourenleiterJob
       ]
+
+      # only schedule BackupMitgliederScheduleJob if sftp config is present
+      JobManager.wagon_jobs += [BackupMitgliederScheduleJob] if Settings.sftp.config.present?
+
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
       MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
