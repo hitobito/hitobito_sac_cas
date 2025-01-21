@@ -11,11 +11,14 @@ module TableDisplays::People
       []
     end
 
+    def required_model_includes(attr)
+      [:tags]
+    end
+
     def render(attr)
       super do |person|
-        template.f(ActsAsTaggableOn::Tagging.joins(:tag)
-                                            .where(taggable: person, tags: {name: PersonTags::Validation::ADDRESS_INVALID})
-                                            .none?)
+        invalid_tags = person.tags.select { |tag| tag.name == PersonTags::Validation::ADDRESS_INVALID }
+        template.f(invalid_tags.empty?)
       end
     end
 

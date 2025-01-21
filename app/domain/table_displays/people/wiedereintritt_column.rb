@@ -8,13 +8,17 @@
 module TableDisplays::People
   class WiedereintrittColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:confirmed_at]
+      []
+    end
+
+    def required_model_includes(attr)
+      [:roles_unscoped]
     end
 
     def render(attr)
       super do |person|
-        membership_roles = Role.where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name), person_id: person.id)
-        template.f(!membership_roles.exists? && membership_roles.ended.exists?)
+        membership_roles = person.roles_unscoped.select{ |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+        template.f(!membership_roles.present? && membership_roles.select{ |role| role.ended? }.present?)
       end
     end
 
