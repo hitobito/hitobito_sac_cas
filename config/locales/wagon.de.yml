@@ -375,6 +375,7 @@ de:
         created_at: Erstellt
         updated_at: Geändert
       person:
+        id: Personennummer
         address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt
@@ -1804,6 +1805,7 @@ de:
   table_displays:
     person:
       antrag_fuer: Antrag für
+      duplicate_exists: Duplikat existiert
       address_valid: Adresse gültig
       confirmed_at: E-Mail bestätigt am
       beitrittsdatum: Beitritt per

@@ -74,14 +74,26 @@ describe "people list page", :js do
       group: groups(:matterhorn_funktionaere),
       type: Group::SektionsFunktionaere::Administration.sti_name
     )
+    person.update(
+      sac_remark_national_office: "Bemerkung für Geschäftsstelle",
+      sac_remark_section_1: "Bemerkung 1 für Sektion"
+    )
 
     visit group_people_path(group_id: person.groups.first.id)
     click_link("Spalten")
 
     within(".dropdown-menu") do
-      expect(page).not_to have_text("Bemerkungen Geschäftsstelle")
+      expect(page).to have_text("Bemerkungen Geschäftsstelle")
       expect(page).to have_text("Bemerkungen Sektion 1")
     end
+
+    check("Bemerkungen Sektion 1")
+    expect(page).to have_css("td[data-attribute-name=sac_remark_section_1]", text: "Bemerkung 1 für Sektion")
+
+    check("Bemerkungen Geschäftsstelle")
+    expect(page).to have_css("td[data-attribute-name=sac_remark_national_office]", text: "fehlende Berechtigung")
+
+    expect(page).to have_no_text("Bemerkung für Geschäftsstelle")
   end
 
   it "allows showing the data_quality column" do

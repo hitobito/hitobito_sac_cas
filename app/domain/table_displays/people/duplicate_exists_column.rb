@@ -6,13 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::PublicColumn
+  class DuplicateExistsColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:cached_membership_years]
+      []
     end
 
-    def sort_by(attr)
-      nil
+    def render(attr)
+      super do |person|
+        template.f(person.person_duplicates.reject(&:ignore).any?)
+      end
+    end
+
+    def required_permission(attr)
+      :show
     end
   end
 end

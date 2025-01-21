@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe TableDisplays::People::LoginStatusColumn, type: :helper do
+describe TableDisplays::People::MembershipYearsColumn, type: :helper do
   include UtilityHelper
   include FormatHelper
 
@@ -17,13 +17,13 @@ describe TableDisplays::People::LoginStatusColumn, type: :helper do
 
   before do
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
-    allow(person).to receive(:login_status_icon).and_return("login_status_icon")
+    people(:mitglied).update_column(:cached_membership_years, 10)
   end
 
   it_behaves_like "table display", {
-    column: :login_status,
-    header: "Login",
-    value: "login_status_icon",
+    column: :membership_years,
+    header: "Anzahl Mitglieder-Jahre",
+    value: "10",
     permission: :show
   }
 end

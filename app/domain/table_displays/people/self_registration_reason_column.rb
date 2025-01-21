@@ -6,13 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::PublicColumn
+  class SelfRegistrationReasonColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:cached_membership_years]
+      [:self_registration_reason_id]
     end
 
-    def sort_by(attr)
-      nil
+    def render(attr)
+      super do |person|
+        person.self_registration_reason&.text
+      end
+    end
+
+    def required_permission(attr)
+      :show_full
     end
   end
 end

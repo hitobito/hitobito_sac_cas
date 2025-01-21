@@ -6,13 +6,24 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::PublicColumn
+  class AddressValidColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:cached_membership_years]
+      []
     end
 
-    def sort_by(attr)
-      nil
+    def required_model_includes(attr)
+      [:tags]
+    end
+
+    def render(attr)
+      super do |person|
+        invalid_tags = person.tags.select { |tag| tag.name == PersonTags::Validation::ADDRESS_INVALID }
+        template.f(invalid_tags.empty?)
+      end
+    end
+
+    def required_permission(attr)
+      :show
     end
   end
 end

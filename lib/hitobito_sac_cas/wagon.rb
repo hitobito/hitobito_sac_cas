@@ -144,7 +144,6 @@ module HitobitoSacCas
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
-      Dropdown::TableDisplays.prepend SacCas::Dropdown::TableDisplays
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Person.prepend SacCas::Sheet::Person
@@ -200,38 +199,66 @@ module HitobitoSacCas
       ].each { |klass| klass.prepend Export::Tabular::People::WithSacAdditions }
 
       TableDisplay.register_column(Person,
-        TableDisplays::ResolvingColumn,
-        [
-          :beitragskategorie,
-          :antrag_fuer,
-          :antragsdatum,
-          :beitrittsdatum,
-          :confirmed_at,
-          :duplicate_exists,
-          :wiedereintritt,
-          :self_registration_reason,
-          :address_valid,
-          :sac_remark_national_office,
-          :sac_remark_section_1,
-          :sac_remark_section_2,
-          :sac_remark_section_3,
-          :sac_remark_section_4,
-          :sac_remark_section_5
-        ])
+        TableDisplays::PublicColumn,
+        [:data_quality, :id])
 
       TableDisplay.register_column(Person,
-        TableDisplays::PublicColumn,
-        :data_quality)
+        TableDisplays::People::BeitragskategorieColumn,
+        :beitragskategorie)
 
       TableDisplay.register_column(Person,
         TableDisplays::People::MembershipYearsColumn,
         :membership_years)
 
+      TableDisplay.register_column(Person,
+        TableDisplays::People::AntragFuerColumn,
+        :antrag_fuer)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::AntragsdatumColumn,
+        :antragsdatum)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::BeitrittsdatumColumn,
+        :beitrittsdatum)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::ConfirmedAtColumn,
+        :confirmed_at)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::DuplicateExistsColumn,
+        :duplicate_exists)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::WiedereintrittColumn,
+        :wiedereintritt)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::SelfRegistrationReasonColumn,
+        :self_registration_reason)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::AddressValidColumn,
+        :address_valid)
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::SacRemarkSectionColumn,
+        [:sac_remark_section_1,
+          :sac_remark_section_2,
+          :sac_remark_section_3,
+          :sac_remark_section_4,
+          :sac_remark_section_5])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::SacRemarkNationalOfficeColumn,
+        [:sac_remark_national_office])
+
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,
         [:invoice_state])
 
-      TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::LoginStatusColumn
+      TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::People::LoginStatusColumn
 
       Synchronize::Mailchimp::Synchronizator.member_fields = [
         [:language, ->(p) { p.language }]

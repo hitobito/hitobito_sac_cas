@@ -6,13 +6,20 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::PublicColumn
+  class BeitrittsdatumColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:cached_membership_years]
+      ["roles.group_id"]
     end
 
-    def sort_by(attr)
-      nil
+    def render(attr)
+      super do |person|
+        start_on = person.roles.select { |r| r.group_id == template&.parent&.id }.collect(&:start_on).compact.min
+        I18n.l(start_on) if start_on
+      end
+    end
+
+    def required_permission(attr)
+      :show
     end
   end
 end

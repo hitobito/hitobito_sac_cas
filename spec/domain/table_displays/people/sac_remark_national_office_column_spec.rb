@@ -7,23 +7,23 @@
 
 require "spec_helper"
 
-describe TableDisplays::People::LoginStatusColumn, type: :helper do
+describe TableDisplays::People::SacRemarkNationalOfficeColumn, type: :helper do
   include UtilityHelper
   include FormatHelper
 
   let(:person) { people(:mitglied).decorate }
-  let(:ability) { Ability.new(person) }
+  let(:ability) { Ability.new(people(:admin)) }
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
-    allow(person).to receive(:login_status_icon).and_return("login_status_icon")
+    people(:mitglied).update_column(:sac_remark_national_office, "Bemerkung von Geschäfststelle")
   end
 
   it_behaves_like "table display", {
-    column: :login_status,
-    header: "Login",
-    value: "login_status_icon",
-    permission: :show
+    column: :sac_remark_national_office,
+    header: "Bemerkungen Geschäftsstelle",
+    value: "Bemerkung von Geschäfststelle",
+    permission: :manage_national_office_remark
   }
 end

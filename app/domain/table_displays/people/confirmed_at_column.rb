@@ -6,13 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class MembershipYearsColumn < TableDisplays::PublicColumn
+  class ConfirmedAtColumn < TableDisplays::Column
     def required_model_attrs(attr)
-      [:cached_membership_years]
+      [:confirmed_at]
     end
 
-    def sort_by(attr)
-      nil
+    def render(attr)
+      super do |person|
+        I18n.l(person.confirmed_at.to_date) if person.confirmed_at
+      end
+    end
+
+    def required_permission(attr)
+      :show_full
     end
   end
 end

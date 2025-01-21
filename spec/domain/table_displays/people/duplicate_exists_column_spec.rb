@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe TableDisplays::People::LoginStatusColumn, type: :helper do
+describe TableDisplays::People::DuplicateExistsColumn, type: :helper do
   include UtilityHelper
   include FormatHelper
 
@@ -17,13 +17,27 @@ describe TableDisplays::People::LoginStatusColumn, type: :helper do
 
   before do
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
-    allow(person).to receive(:login_status_icon).and_return("login_status_icon")
   end
 
-  it_behaves_like "table display", {
-    column: :login_status,
-    header: "Login",
-    value: "login_status_icon",
-    permission: :show
-  }
+  context "has person duplicate" do
+    before do
+      PersonDuplicate.create!(person_1: people(:admin), person_2: people(:mitglied))
+    end
+
+    it_behaves_like "table display", {
+      column: :duplicate_exists,
+      header: "Duplikat existiert",
+      value: "ja",
+      permission: :show
+    }
+  end
+
+  context "does not have person duplicate" do
+    it_behaves_like "table display", {
+      column: :duplicate_exists,
+      header: "Duplikat existiert",
+      value: "nein",
+      permission: :show
+    }
+  end
 end
