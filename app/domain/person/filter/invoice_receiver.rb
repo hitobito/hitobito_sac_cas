@@ -9,6 +9,8 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
   VISIBLE_ATTRS = [:stammsektion, :zusatzsektion].freeze
   self.permitted_args = [*VISIBLE_ATTRS, :group_id]
 
+  def self.root_group_id = @root_group_id ||= Group.root.id
+
   def apply(scope)
     return scope if blank?
 
@@ -25,11 +27,6 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
 
   def group_id = args[:group_id].presence
 
-  def group
-    raise "Group ID is required" if args[:group_id].blank?
-    Group.find(group_id)
-  end
-
   def role_types
     [].tap do |role_types|
       role_types << Group::SektionsMitglieder::Mitglied.sti_name if stammsektion
@@ -38,9 +35,10 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
   end
 
   def base_scope
-    Person.joins(:roles).where(roles: {type: role_types}).then do |scope|
-      group.layer_group.is_a?(Group::SacCas) ? scope : scope.in_layer(group)
-    end
+    Person
+      .joins(roles: :group)
+      .where(roles: {type: role_types})
+      .then { |scope| root_group? ? scope : scope.where(groups: {layer_group_id: group_id}) }
   end
 
   def invoice_receiver_scope
@@ -48,4 +46,6 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
       .where.not(roles: {beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY})
       .or(base_scope.where(sac_family_main_person: true))
   end
+
+  def root_group? = group_id.to_i == self.class.root_group_id
 end

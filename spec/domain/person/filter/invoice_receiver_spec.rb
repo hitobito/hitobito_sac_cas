@@ -34,7 +34,7 @@ describe Person::Filter::InvoiceReceiver do
   end
 
   context "with group_id in root layer" do
-    let(:group_id) { groups(:abo_die_alpen).id }
+    let(:group_id) { groups(:abo_die_alpen).layer_group_id }
 
     context "arg only stammsektion" do
       let(:filter_args) { {stammsektion: true, zusatzsektion: false, group_id:} }
