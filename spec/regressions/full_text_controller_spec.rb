@@ -17,7 +17,10 @@ describe FullTextController, type: :controller do
 
     let(:user) { Fabricate(Group::Geschaeftsstelle::Admin.name.to_sym, group: group).person }
 
-    before { sign_in(user) }
+    before do
+      sign_in(user)
+      allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
+    end
 
     it "renders membership_number column" do
       get :index, params: {q: Person.first.first_name}
