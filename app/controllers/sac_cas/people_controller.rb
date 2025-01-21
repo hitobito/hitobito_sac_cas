@@ -40,10 +40,6 @@ module SacCas::PeopleController
     lookup_context.prefixes.unshift("people/neuanmeldungen") if registrations_for_approval?
   end
 
-  def prepare_entries(entries)
-    super.includes(:primary_group)
-  end
-
   def tabular_params(**)
     super.merge(params.slice(:recipients, :recipient_households).permit!)
   end

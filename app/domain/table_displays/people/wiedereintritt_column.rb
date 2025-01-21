@@ -18,7 +18,7 @@ module TableDisplays::People
     def render(attr)
       super do |person|
         membership_roles = person.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
-        template.f(membership_roles.blank? && membership_roles.select(&:ended?).present?)
+        template.f(membership_roles.select(&:active?).blank? && membership_roles.select(&:ended?).present?)
       end
     end
 
