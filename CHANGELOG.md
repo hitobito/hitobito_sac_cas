@@ -1,6 +1,7 @@
 ## Version 2.4
 
 * Der Changelog ist nur noch für Mitarbeiter der Geschäftsstelle verlinkt und aufrufbar (hitobito_sac_cas#1478)
+* Rollen mit Admin Berechtigungen können nur noch von Personen mit Admin Berechtigung bearbeitet, erstellt und gelöscht werden (hitobito#3127)
 
 ## Version 2.3
 

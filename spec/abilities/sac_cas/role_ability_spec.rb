@@ -65,6 +65,57 @@ describe RoleAbility do
     end
   end
 
+  context "managing admin roles" do
+    let(:admin_role) { Fabricate(Group::Geschaeftsstelle::Admin.name.to_sym, group: groups(:geschaeftsstelle)) }
+
+    context "as admin" do
+      let(:person) { people(:admin) }
+
+      it "is able to create role with admin permission" do
+        expect(ability).to be_able_to(:create, admin_role)
+      end
+
+      it "is able to update role with admin permission" do
+        expect(ability).to be_able_to(:update, admin_role)
+      end
+
+      it "is able to destroy role with admin permission" do
+        expect(ability).to be_able_to(:destroy, admin_role)
+      end
+    end
+
+    context "as non admin" do
+      let(:person) do
+        role = Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle), person: people(:mitglied))
+        role.person
+      end
+
+      it "is able to create role without admin permission" do
+        expect(ability).to be_able_to(:create, roles(:mitglied))
+      end
+
+      it "is not able to create role with admin permission" do
+        expect(ability).not_to be_able_to(:create, admin_role)
+      end
+
+      it "is able to update role without admin permission" do
+        expect(ability).to be_able_to(:update, roles(:mitglied))
+      end
+
+      it "is not able to update role with admin permission" do
+        expect(ability).not_to be_able_to(:update, admin_role)
+      end
+
+      it "is able to destroy role without admin permission" do
+        expect(ability).to be_able_to(:destroy, roles(:tourenchef_bluemlisalp_ortsgruppe_ausserberg))
+      end
+
+      it "is not able to destroy role with admin permission" do
+        expect(ability).not_to be_able_to(:destroy, admin_role)
+      end
+    end
+  end
+
   describe "wizard managed roles" do
     {
       bluemslisap_mitglieder: [
