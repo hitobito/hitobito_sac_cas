@@ -372,6 +372,7 @@ fr:
         created_at: Créé
         updated_at: Modifié
       person:
+        id: ""
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé
@@ -1002,20 +1003,20 @@ fr:
         one: Autres
         description: Autres
       group/sektions_touren_und_kurse/tourenleiter:
-        one: Chef de course (avec qualification)
-        description: Chef de course (avec qualification)
+        one: Chef·fe de course (avec qualification)
+        description: Chef·fe de course (avec qualification)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: Chef de course (sans qualification)
-        description: Chef de course (sans qualification)
+        one: Chef·fe de course (sans qualification)
+        description: Chef·fe de course (sans qualification)
       group/sektions_touren_und_kurse/kibe_chef:
-        one: Chef·fe garde d’enfants
-        description: Chef·fe garde d’enfants
+        one: Chef·fe AJ
+        description: Chef·fe AJ
       group/sektions_touren_und_kurse/fabe_chef:
         one: Chef·fe éducateur·rice spécialisé·e
         description: Chef·fe éducateur·rice spécialisé·e
       group/sektions_touren_und_kurse/jo_chef:
-        one: Responsable JO
-        description: Responsable JO
+        one: Chef·fe JO
+        description: Chef·fe JO
       group/sektions_touren_und_kurse/js_coach:
         one: Coach J+S
         description: Coach J+S
@@ -1341,10 +1342,10 @@ fr:
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de randonnée
-    tour_guides_active: Chef de course actif·ves
-    tour_guides_stalled: Chef de course suspendu·e
-    tour_guides_inactive: Chef de course inactif·ves
-    tour_guides_expired: Chef de course expiré·e
+    tour_guides_active: Chef·fe de course actif·ves
+    tour_guides_stalled: Chef·fe de course suspendu·e
+    tour_guides_inactive: Chef·fe de course inactif·ves
+    tour_guides_expired: Chef·fe de course expiré·e
 
   groups:
     actions_show_sac_cas:
@@ -1586,7 +1587,7 @@ fr:
     membership:
       verify:
         member_details_sac_cas:
-          tour_guide: Chef de course en activité
+          tour_guide: Chef·fe de course en activité
         below_name_sac_cas:
           membership_number: "membre: %{membership_number}"
           membership_years: "Nombre d’années d’adhésion: %{membership_years}"
@@ -1807,6 +1808,7 @@ fr:
   table_displays:
     person:
       antrag_fuer: Demande de
+      duplicate_exists: ""
       address_valid: Adresse valide
       confirmed_at: E-mail confirmé le
       beitrittsdatum: Adhésion au

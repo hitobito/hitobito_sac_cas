@@ -370,6 +370,7 @@ it:
         created_at: Creato
         updated_at: Modificato
       person:
+        id: ""
         address_care_of: Complemento di indirizzo
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
@@ -1801,6 +1802,7 @@ it:
   table_displays:
     person:
       antrag_fuer: Richiesta per
+      duplicate_exists: ""
       address_valid: Indirizzo valido
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal

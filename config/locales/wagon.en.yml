@@ -365,6 +365,7 @@ en:
         created_at: Created
         updated_at: Changed
       person:
+        id: ""
         address_care_of: ""
         correspondence: Membership card & invoicing
         confirmed_at: ""
@@ -1719,6 +1720,7 @@ en:
   table_displays:
     person:
       antrag_fuer: Application for
+      duplicate_exists: ""
       address_valid: Address valid
       confirmed_at: E-mail confirmed on
       beitrittsdatum: Joining per
