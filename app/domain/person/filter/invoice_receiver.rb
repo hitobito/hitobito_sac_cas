@@ -14,7 +14,7 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
   def apply(scope)
     return scope if blank?
 
-    scope.where(id: invoice_receiver_scope)
+    scope.where(id: invoice_receiver_scope(scope))
   end
 
   def blank? = !(stammsektion || zusatzsektion) || group_id.blank?
@@ -34,17 +34,17 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
     end
   end
 
-  def base_scope
-    Person
+  def base_scope(scope)
+    scope
       .joins(roles: :group)
       .where(roles: {type: role_types})
       .then { |scope| root_group? ? scope : scope.where(groups: {layer_group_id: group_id}) }
   end
 
-  def invoice_receiver_scope
-    base_scope
+  def invoice_receiver_scope(scope)
+    base_scope(scope)
       .where.not(roles: {beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY})
-      .or(base_scope.where(sac_family_main_person: true))
+      .or(base_scope(scope).where(sac_family_main_person: true))
   end
 
   def root_group? = group_id.to_i == self.class.root_group_id
