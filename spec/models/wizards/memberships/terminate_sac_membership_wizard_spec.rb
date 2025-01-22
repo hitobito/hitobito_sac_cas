@@ -114,6 +114,23 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
           wizard.save!
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(person, bluemlisalp, I18n.l(Date.yesterday))
+      end
+    end
+
+    context "role already terminated" do
+      let(:backoffice) { true }
+      let(:current_step) { 1 }
+
+      before do
+        role.update_column(:terminated, true)
+        params[:termination_choose_date] = {terminate_on: "now"}
+      end
+
+      it "does deliver TerminateSacMembership::terminate_membership email" do
+        expect do
+          wizard.save!
+        end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(person, bluemlisalp, I18n.l(Date.yesterday))
       end
     end
   end
