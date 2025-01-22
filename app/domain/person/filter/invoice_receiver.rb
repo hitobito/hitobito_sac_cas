@@ -14,7 +14,7 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
   def apply(scope)
     return scope if blank?
 
-    scope.where(id: invoice_receiver_scope(scope))
+    invoice_receiver_scope(scope.select(:id))
   end
 
   def blank? = !(stammsektion || zusatzsektion) || group_id.blank?
