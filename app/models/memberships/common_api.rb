@@ -40,7 +40,7 @@ module Memberships::CommonApi
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction(requires_new: true) do
       roles_to_destroy, roles_to_update = roles.partition(&:marked_for_destruction?)
-      roles_to_destroy.each { |role| role.delete }
+      roles_to_destroy.each { |role| role.really_destroy! }
       roles_to_update.each { |role| save_role_without_validations(role) }
       roles_to_update.each { |role| validate_role(role) }
       raise ActiveRecord::Rollback
