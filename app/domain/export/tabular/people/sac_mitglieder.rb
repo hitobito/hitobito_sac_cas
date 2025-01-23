@@ -68,7 +68,7 @@ module Export::Tabular::People
           type: SacCas::MITGLIED_ROLES.map(&:sti_name)
         })
         .joins(:roles)
-        .includes(:phone_numbers, :roles, roles: :group)
+        .includes(:phone_numbers, :roles_unscoped, roles: :group)
         .distinct
     end
 

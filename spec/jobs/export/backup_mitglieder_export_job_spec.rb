@@ -79,10 +79,10 @@ describe Export::BackupMitgliederExportJob do
 
   context "perform" do
     it "tries to upload csv for group" do
-      csv_expectation = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
+      csv_data = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
       file_path_expectation = "1650/Adressen_00001650.csv"
 
-      expect(sftp).to receive(:upload_file).with(csv_expectation, file_path_expectation)
+      expect(sftp).to receive(:upload_file).with(csv_data, file_path_expectation)
 
       job.perform
     end
@@ -91,8 +91,9 @@ describe Export::BackupMitgliederExportJob do
       let(:group) { groups(:bluemlisalp) }
 
       it "writes file to sektion.id folder" do
-        file_path_expectation = start_with("#{group.navision_id}/")
-        expect(sftp).to receive(:upload_file).with(anything, file_path_expectation)
+        expect(sftp).to receive(:upload_file) do |_payload, path|
+          expect(path).to start_with("#{group.navision_id}/")
+        end
 
         job.perform
       end
@@ -101,9 +102,14 @@ describe Export::BackupMitgliederExportJob do
     context "for ortsgruppe" do
       let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
 
-      it "writes file to sektion.id folder" do
-        file_path_expectation = start_with("#{group.parent.navision_id}/")
-        expect(sftp).to receive(:upload_file).with(anything, file_path_expectation)
+      it "writes file to sektion.id and ortsgruppe.id folder" do
+        expect(sftp).to receive(:upload_file) do |_payload, path|
+          expect(path).to start_with("#{group.parent.navision_id}/")
+        end
+
+        expect(sftp).to receive(:upload_file) do |_payload, path|
+          expect(path).to start_with("#{group.navision_id}/")
+        end
 
         job.perform
       end
