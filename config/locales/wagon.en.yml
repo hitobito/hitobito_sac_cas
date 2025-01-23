@@ -1204,8 +1204,7 @@ en:
       invoice_not_created_alert: ""
 
       popover_participant_cancels:
-        cancel_info: >-
-          Are you sure you want to continue with the deregistration? Deregistration cannot be canceled. Any processing and cancellation fees will be charged at the time of deregistration.
+        cancel_info: >
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-

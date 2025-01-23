@@ -1270,8 +1270,7 @@ fr:
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
       popover_participant_cancels:
-        cancel_info: >-
-          Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Les éventuels frais de traitement et d’annulation sont facturés avec la désinscription.
+        cancel_info: >
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-

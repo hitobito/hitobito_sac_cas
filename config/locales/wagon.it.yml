@@ -1268,8 +1268,7 @@ it:
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
 
       popover_participant_cancels:
-        cancel_info: >-
-          Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento della cancellazione saranno addebitate le spese di elaborazione e cancellazione.
+        cancel_info: >
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-
