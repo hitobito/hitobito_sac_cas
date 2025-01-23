@@ -106,8 +106,8 @@ class People::SacMembership
       (@person.sac_family_main_person? || individual_membership?)
   end
 
-  def abonnent?
-    active_roles_of_type(Group::AboMagazin::Abonnent.sti_name).present?
+  def abonnent_magazin?
+    active_roles_of_type(abonnent_magazin_types).present?
   end
 
   def family?(consider_neuanmeldung: false)
@@ -187,6 +187,8 @@ class People::SacMembership
   def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
   def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+
+  def abonnent_magazin_types = SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
 
   def invoicable_types
     mitglied_stammsektion_types +
