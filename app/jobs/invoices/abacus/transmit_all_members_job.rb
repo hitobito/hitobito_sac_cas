@@ -15,7 +15,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   ROLES_TO_TRANSMIT = [
     Group::SektionsMitglieder::Mitglied,
     Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-    Group::AboMagazin::Abonnent
+    *SacCas::ABONNENT_MAGAZIN_ROLES
   ].freeze
 
   self.max_run_time = 12.hours

@@ -67,8 +67,13 @@ module SacCas
     ::Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
   ].freeze
 
-  ABONNENT_ROLES = [
+  ABONNENT_MAGAZIN_ROLES = [
     ::Group::AboMagazin::Abonnent,
+    ::Group::AboMagazin::Gratisabonnent,
+    ::Group::AboMagazin::Neuanmeldung
+  ].freeze
+
+  ABONNENT_TOUREN_PORTAL_ROLES = [
     ::Group::AboTourenPortal::Abonnent
   ].freeze
 

@@ -33,7 +33,7 @@ describe Invoices::Abacus::TransmitAllMembersJob do
     Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)) # other role
     Group::SektionsMitglieder::Mitglied.create!(person: Fabricate(:person), group: groups(:bluemlisalp_mitglieder), start_on: 60.years.ago, end_on: 5.years.ago) # old member
     Group::AboMagazin::Abonnent.create!(person: Fabricate(:person), group: groups(:abo_die_alpen), start_on: 5.years.ago, end_on: 2.years.ago) # old abonnent
-    Group::AboMagazin::Neuanmeldung.create!(person: Fabricate(:person), group: groups(:abo_die_alpen))
+    Group::AboMagazin::Andere.create!(person: Fabricate(:person), group: groups(:abo_die_alpen))
   end
 
   def create_mix_of_people

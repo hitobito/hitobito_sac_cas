@@ -11,6 +11,7 @@ class Group::SektionsMitglieder < ::Group
   ### ROLES
   class Mitglied < ::Role
     include SacCas::Role::MitgliedStammsektion
+    include Roles::AbacusTransmittable
 
     self.terminatable = true
 
@@ -18,7 +19,6 @@ class Group::SektionsMitglieder < ::Group
 
     attr_readonly :family_id
 
-    after_create_commit :transmit_data_to_abacus
     before_validation :set_family_id, if: -> { beitragskategorie&.family? && family_id.blank? }
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
@@ -27,12 +27,6 @@ class Group::SektionsMitglieder < ::Group
     def destroy_household
       person.update_columns(sac_family_main_person: false)
       Household.new(person, maintain_sac_family: false).destroy
-    end
-
-    def transmit_data_to_abacus
-      Invoices::Abacus::TransmitPersonJob.new(person).enqueue! if
-        person.abacus_subject_key.blank? &&
-          person.data_quality != "error"
     end
 
     def set_family_id
