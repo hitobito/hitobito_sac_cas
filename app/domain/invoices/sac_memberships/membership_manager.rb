@@ -20,15 +20,14 @@ class Invoices::SacMemberships::MembershipManager
 
   def update_membership_status
     ActiveRecord::Base.transaction do
-      if stammsektion?
+      if member_already?
         extend_membership_duration
-      elsif neuanmeldung_stammsektion?
-        set_confirmed_at
-        update_role_to_stammsektion_mitglied(person)
-        update_family_roles_to_stammsektion_mitglied if family_main_person?
+      elsif member_in_past_year?
+        create_new_membership_roles
+      elsif neuanmeldung_for_stammsektion?
+        create_stammsektion_membership_from_neuanmeldung
       elsif neuanmeldung_zusatzsektion?
-        update_roles_to_zusatzsektion_mitglied(person)
-        update_family_roles_to_zusatzsektion_mitglied if family_main_person?
+        create_zusatzsektion_membership_from_neuanmeldung
       end
     end
   end
@@ -36,35 +35,62 @@ class Invoices::SacMemberships::MembershipManager
   private
 
   def extend_membership_duration
-    roles_for_update = []
-
-    roles_for_update << person.sac_membership.stammsektion_role
-    roles_for_update.concat(person.sac_membership.zusatzsektion_roles.reject(&:terminated?))
-    roles_for_update.concat(person.sac_membership.membership_related_roles.reject(&:terminated?))
-    if family_main_person?
-      roles_for_update.concat(family_memberships.map(&:stammsektion_role))
-      roles_for_update.concat(family_memberships.flat_map(&:zusatzsektion_roles)
-                      .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
-      roles_for_update.concat(family_memberships.flat_map(&:membership_related_roles)
-                      .select { |membership_related_role| membership_related_role.beitragskategorie == "family" })
-    end
-
-    roles_for_update.each do |role|
+    relevant_roles_for(person.sac_membership.stammsektion_role).each do |role|
       role.update!(end_on: [Date.new(year).end_of_year, role.end_on].max)
     end
   end
 
+  def create_new_membership_roles
+    relevant_roles_for(expired_stammsektion_role).each do |previous_role|
+      create_new_role(previous_role.person, previous_role.type.constantize, previous_role.group)
+    end
+  end
+
+  def relevant_roles_for(stammsektion_role)
+    membership = People::SacMembership.new(person, date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
+
+    relevant_roles = []
+    relevant_roles << membership.stammsektion_role
+    relevant_roles.concat(membership.zusatzsektion_roles.reject(&:terminated?))
+    relevant_roles.concat(membership.membership_prolongable_roles.reject(&:terminated?))
+
+    if family_main_person?
+      person.household_people.each do |family_member|
+        family_member_membership = People::SacMembership.new(family_member, date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
+
+        relevant_roles << family_member_membership.stammsektion_role
+        relevant_roles.concat(family_member_membership.zusatzsektion_roles.reject(&:terminated?)
+          .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
+        relevant_roles.concat(family_member_membership.membership_prolongable_roles
+          .select { |membership_related_role| membership_related_role.beitragskategorie.family? })
+      end
+    end
+
+    relevant_roles
+  end
+
+  def create_stammsektion_membership_from_neuanmeldung
+    set_confirmed_at
+    update_role_to_stammsektion_mitglied(person)
+    update_family_roles_to_stammsektion_mitglied if family_main_person?
+  end
+
   def update_role_to_stammsektion_mitglied(person)
     person.sac_membership.neuanmeldung_stammsektion_role.destroy
-    create_mitglied_role(person)
+    create_new_role(person, Group::SektionsMitglieder::Mitglied)
     Invoices::SacMembershipsMailer.confirmation(person).deliver_later if person.email.present?
+  end
+
+  def create_zusatzsektion_membership_from_neuanmeldung
+    update_roles_to_zusatzsektion_mitglied(person)
+    update_family_roles_to_zusatzsektion_mitglied if family_main_person?
   end
 
   def update_roles_to_zusatzsektion_mitglied(person)
     role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role| role.layer_group == group.layer_group }
     if role
       role.destroy
-      create_mitglied_zusatzsektion_role(person)
+      create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion)
       Invoices::SacMembershipsMailer.confirmation(person).deliver_later if person.email.present?
     end
   end
@@ -77,23 +103,23 @@ class Invoices::SacMemberships::MembershipManager
     person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) }
   end
 
-  def create_mitglied_role(person)
-    Group::SektionsMitglieder::Mitglied.create!(person: person, group: mitglieder_sektion, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
-  end
-
-  def create_mitglied_zusatzsektion_role(person)
-    Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person: person, group: mitglieder_sektion, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
+  def create_new_role(person, role_type, group = mitglieder_sektion)
+    role_type.create!(person: person, group: group, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
   end
 
   def mitglieder_sektion
     @mitglieder_sektion ||= group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
   end
 
-  def stammsektion?
+  def member_already?
     person.sac_membership.active? && person.sac_membership.stammsektion_role.layer_group == group.layer_group
   end
 
-  def neuanmeldung_stammsektion?
+  def member_in_past_year?
+    !person.sac_membership.active? && expired_stammsektion_role&.layer_group == group.layer_group
+  end
+
+  def neuanmeldung_for_stammsektion?
     person.sac_membership.neuanmeldung_stammsektion_role&.layer_group == group.layer_group
   end
 
@@ -105,11 +131,16 @@ class Invoices::SacMemberships::MembershipManager
     person.sac_family_main_person?
   end
 
-  def family_memberships
-    member.family_members.map(&:sac_membership)
-  end
-
   def set_confirmed_at
     person.update_column(:confirmed_at, Time.zone.now) if person.confirmed_at.blank?
+  end
+
+  # used to get non active stammsektion role of last year, in case a invoice is payed too late, this case can occur
+  def expired_stammsektion_role
+    @person.roles.with_inactive
+      .where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name), end_on: [Date.new(year - 1)..])
+      .order(:end_on)
+      .reject(&:terminated?)
+      .last
   end
 end

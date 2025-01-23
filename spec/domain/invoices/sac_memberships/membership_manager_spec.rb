@@ -27,6 +27,7 @@ describe Invoices::SacMemberships::MembershipManager do
 
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:matterhorn) { groups(:matterhorn) }
+  let(:sac_membership) { subject.person.sac_membership }
 
   before do
     ehrenmitglieder_group = Group::Ehrenmitglieder.create!(name: "Ehrenmitglieder", parent: groups(:root))
@@ -113,6 +114,117 @@ describe Invoices::SacMemberships::MembershipManager do
     end
   end
 
+  context "person has expired stammsektions role" do
+    def check_new_membership_role_dates_and_groups(person)
+      expect(sac_membership.active?).to be_truthy
+      expect(sac_membership.stammsektion_role.start_on).to eq Time.zone.today
+      expect(sac_membership.stammsektion_role.end_on).to eq end_of_next_year
+      expect(sac_membership.zusatzsektion_roles.first.start_on).to eq Time.zone.today
+      expect(sac_membership.zusatzsektion_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.first.start_on).to eq Time.zone.today
+      expect(sac_membership.membership_prolongable_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.second.start_on).to eq Time.zone.today
+      expect(sac_membership.membership_prolongable_roles.second.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.third.start_on).to eq Time.zone.today
+      expect(sac_membership.membership_prolongable_roles.third.end_on).to eq end_of_next_year
+    end
+
+    context "adult" do
+      subject { described_class.new(mitglied_person, bluemlisalp, end_of_next_year.year) }
+
+      before do
+        mitglied.update_column(:end_on, Time.zone.today.yesterday)
+        mitglied_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
+        mitglied_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
+      end
+
+      it "creates new stammsektion role for person starting today" do
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(5)
+
+        check_new_membership_role_dates_and_groups(mitglied_person)
+      end
+
+      it "does not create any role if stammsektion role is terminated" do
+        mitglied.update_column(:terminated, true)
+        expect do
+          subject.update_membership_status
+        end.not_to change { Role.count }
+      end
+
+      it "does not create new zusatzsektion role if zusatzsektion is terminated" do
+        mitglied_zweitsektion.update_column(:terminated, true)
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(4)
+        expect(mitglied_person.sac_membership.zusatzsektion_roles).to be_empty
+      end
+
+      it "does not create new zusatzsektion role when it ended earlier than stammsektion role" do
+        mitglied_zweitsektion.update_column(:end_on, 2.years.ago)
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(4)
+        expect(mitglied_person.sac_membership.zusatzsektion_roles).to be_empty
+      end
+
+      it "does not create any role if membership roles ended 1 year ago" do
+        mitglied.update_column(:end_on, 1.year.ago)
+        expect do
+          subject.update_membership_status
+        end.not_to change { Role.count }
+      end
+    end
+
+    context "family" do
+      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
+
+      before do
+        familienmitglied.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
+        familienmitglied2.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied2_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied2_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
+        familienmitglied_kind.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied_kind_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
+        familienmitglied_kind_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
+      end
+
+      it "creates new stammsektion role for person starting today" do
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(15)
+
+        check_new_membership_role_dates_and_groups(familienmitglied_person)
+        check_new_membership_role_dates_and_groups(familienmitglied2_person)
+        check_new_membership_role_dates_and_groups(familienmitglied_kind_person)
+      end
+
+      it "does not create zusatzsektion roles for family members when only main person is in zusatzsektionen" do
+        familienmitglied2_zweitsektion.destroy!
+        familienmitglied_kind_zweitsektion.destroy!
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(13)
+          .and change { familienmitglied2_person.sac_membership.zusatzsektion_roles.count }.by(0)
+          .and change { familienmitglied_kind_person.sac_membership.zusatzsektion_roles.count }.by(0)
+      end
+
+      it "only creates zusatzsektions role of family member when beitragskategorie is family" do
+        # add role with adult beitragskategorie to family mitglied
+        People::SacMembership.new(familienmitglied2_person, date: Time.zone.today.yesterday).zusatzsektion_roles.destroy_all
+        mitglied_zweitsektion.update!(person: familienmitglied2.person, end_on: Time.zone.today.yesterday)
+
+        expect do
+          subject.update_membership_status
+        end.to change { Role.count }.by(14)
+          .and change { familienmitglied2_person.sac_membership.zusatzsektion_roles.count }.by(0)
+      end
+    end
+  end
+
   context "person has just a neuanmeldung role" do
     context "adult" do
       let(:new_member) do
@@ -185,7 +297,7 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         mitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         mitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        mitglied_person.sac_membership.membership_related_roles.destroy_all
+        mitglied_person.sac_membership.membership_prolongable_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: mitglied_person,
@@ -228,10 +340,10 @@ describe Invoices::SacMemberships::MembershipManager do
 
         familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied_person.sac_membership.membership_related_roles.destroy_all
+        familienmitglied_person.sac_membership.membership_prolongable_roles.destroy_all
         familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
         familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied2_person.sac_membership.membership_related_roles.destroy_all
+        familienmitglied2_person.sac_membership.membership_prolongable_roles.destroy_all
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: familienmitglied_person,

@@ -72,8 +72,8 @@ class People::SacMembership
     active_roles_of_type(neuanmeldung_nv_zusatzsektion_types)
   end
 
-  def membership_related_roles
-    active_roles_of_type(membership_related_role_types)
+  def membership_prolongable_roles
+    active_roles_of_type(membership_prolongable_role_types)
   end
 
   # Here for documentation purposes only as there is no such thing as future zusatzsektion roles.
@@ -178,7 +178,7 @@ class People::SacMembership
 
   def mitglied_and_neuanmeldung_types = SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name)
 
-  def membership_related_role_types = SacCas::MEMBERSHIP_RELATED_ROLES.map(&:sti_name)
+  def membership_prolongable_role_types = SacCas::MEMBERSHIP_PROLONGABLE_ROLES.map(&:sti_name)
 
   def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:sti_name)
 
