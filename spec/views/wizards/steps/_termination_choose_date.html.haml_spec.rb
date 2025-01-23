@@ -23,6 +23,7 @@ describe "wizards/steps/_termination_choose_date.html.haml" do
     allow_any_instance_of(StepsComponent::ContentComponent).to receive(:fields_for).and_return([])
     allow(view).to receive_messages(c: steps_component)
     allow(view).to receive_messages(wizard: wizard)
+    wizard.instance_variable_set(:@role, nil)
   end
 
   it "renders warning when role is already terminated" do

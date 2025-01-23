@@ -65,7 +65,9 @@ module Wizards::Memberships
       end
     end
 
-    def role = person.sac_membership.stammsektion_role
+    def role
+      @role ||= person.sac_membership.stammsektion_role
+    end
 
     def mitglied_termination_by_section_only?
       sektion&.mitglied_termination_by_section_only ||
