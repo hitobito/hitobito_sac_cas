@@ -207,7 +207,7 @@ describe MailingList do
       expect(fundraising).not_to be_present
       MailingListSeeder.seed!
       expect(fundraising).to be_present
-      expect(fundraising.subscribable_for).to eq("anyone")
+      expect(fundraising.subscribable_for).to eq("nobody")
       expect(fundraising.subscribable_mode).to eq("opt_in")
       expect(fundraising.filter_chain.to_hash).to be_blank
     end

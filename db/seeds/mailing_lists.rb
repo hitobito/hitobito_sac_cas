@@ -121,7 +121,7 @@ seed_subscription(die_alpen_digital_list,
 fundraising_list = seed_list(
   SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY,
   "Spendenaufrufe",
-  subscribable_for: "anyone"
+  subscribable_for: "nobody"
 )
 
 # Set the mailing list ID attrs on the root group.
