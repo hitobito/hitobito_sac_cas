@@ -19,7 +19,7 @@ class Group::SektionsMitglieder < ::Group
 
     attr_readonly :family_id
 
-    before_validation :set_family_id, if: -> { beitragskategorie&.family? && family_id.blank? }
+    before_validation :set_family_id, if: -> { family? && family_id.blank? }
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
 
     private

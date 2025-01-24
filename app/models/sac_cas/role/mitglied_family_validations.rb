@@ -40,7 +40,7 @@ module SacCas::Role::MitgliedFamilyValidations
   def assert_adult_family_mitglieder_count
     # We do not need to validate this if the current role has a beitragskategorie other than family
     # or if the person of the current role is not an adult.
-    return unless beitragskategorie&.family? && AGE_RANGE_ADULT.cover?(person.years)
+    return unless family? && AGE_RANGE_ADULT.cover?(person.years)
 
     # Including current person, we can not have more than MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT adults.
     return unless adult_family_mitglieder_count > MAXIMUM_ADULT_FAMILY_MEMBERS_COUNT
@@ -54,7 +54,7 @@ module SacCas::Role::MitgliedFamilyValidations
     return unless person.persisted?
 
     # We do not need to validate this if the current role has a beitragskategorie other than family.
-    return unless beitragskategorie&.family?
+    return unless family?
 
     # We skip if we are deleted or scheduled to delete as other members will probably be gone.
     return if terminated?

@@ -114,7 +114,7 @@ class People::SacMembership
     [
       stammsektion_role,
       (neuanmeldung_stammsektion_role if consider_neuanmeldung)
-    ].compact.any? { |role| role.beitragskategorie.family? }
+    ].compact.any?(&:family?)
   end
 
   def family_id
@@ -124,14 +124,14 @@ class People::SacMembership
   end
 
   def paying_person?(beitragskategorie)
-    !beitragskategorie.family? || @person.sac_family_main_person?
+    @person.sac_family_main_person? || !beitragskategorie.family?
   end
 
   private
 
   def individual_membership?
     if in_memory?
-      invoicable_roles.any? { |r| !r.beitragskategorie.family? }
+      invoicable_roles.any? { |r| !r.family? }
     else
       invoicable_roles.where.not(beitragskategorie: :family).exists?
     end

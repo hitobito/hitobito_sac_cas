@@ -53,7 +53,7 @@ module Export::Tabular::People
       return @beitragskategorie if defined?(@beitragskategorie)
 
       role = role_in_layer(*(SacCas::MITGLIED_ROLES - SacCas::NEUANMELDUNG_ROLES))
-      @beitragskategorie = BEITRAGSKATEGORIEN[role&.beitragskategorie&.to_s]
+      @beitragskategorie = BEITRAGSKATEGORIEN[role&.beitragskategorie.to_s]
     end
 
     # Bemerkungen (Zusätzliche Daten, Person#additional_information)
