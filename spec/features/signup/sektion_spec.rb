@@ -65,7 +65,7 @@ describe "signup/sektion", :js do
     fill_in "wizards_signup_sektion_wizard_person_fields_housenumber", with: "42"
     fill_in "Geburtsdatum", with: "01.01.1980"
     fill_in "Telefon", with: "+41 79 123 45 56"
-    fill_in "wizards_signup_sektion_wizard_person_fields_zip_code", with: "8000"
+    fill_in "wizards_signup_sektion_wizard_person_fields_zip_code", with: "40202"
     fill_in "wizards_signup_sektion_wizard_person_fields_town", with: "Zürich"
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
@@ -164,7 +164,7 @@ describe "signup/sektion", :js do
       expect(person.first_name).to eq "Max"
       expect(person.last_name).to eq "Muster"
       expect(person.address).to eq "Musterplatz 42"
-      expect(person.zip_code).to eq "8000"
+      expect(person.zip_code).to eq "40202"
       expect(person.town).to eq "Zürich"
       expect(person.country).to eq "US"
       expect(person.birthday).to eq Date.new(1980, 1, 1)
@@ -840,6 +840,7 @@ describe "signup/sektion", :js do
         fill_in "Vorname", with: "Test"
         fill_in "Telefon", with: "+41 79 123 45 56"
         find(:label, "Land").click
+        fill_in "wizards_signup_sektion_wizard_person_fields_zip_code", with: "40202"
         find(:option, text: "Vereinigte Staaten").click
         click_button "Weiter"
         click_button "Weiter als Einzelmitglied"

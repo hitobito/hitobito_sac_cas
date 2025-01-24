@@ -19,7 +19,7 @@ describe "Event Signup", :js do
     fill_in "event_participation_contact_data_housenumber", with: "42"
     fill_in "Geburtsdatum", with: "01.01.1980"
     fill_in "Telefon", with: "+41 79 123 45 56"
-    fill_in "event_participation_contact_data_zip_code", with: "8000"
+    fill_in "event_participation_contact_data_zip_code", with: "40202"
     fill_in "event_participation_contact_data_town", with: "Zürich"
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
@@ -39,7 +39,7 @@ describe "Event Signup", :js do
       expect(page).to have_content "Teilnahme von Anna Admin in Eventus wurde erfolgreich erstellt"
       expect(admin.reload.address).to eq "Musterplatz 42"
       expect(admin.gender).to eq "m"
-      expect(admin.zip_code).to eq "8000"
+      expect(admin.zip_code).to eq "40202"
       expect(admin.town).to eq "Zürich"
       expect(admin.country).to eq "US"
       expect(admin.birthday).to eq Date.new(1980, 1, 1)
