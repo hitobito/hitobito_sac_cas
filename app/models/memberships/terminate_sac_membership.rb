@@ -156,7 +156,7 @@ module Memberships
     end
 
     def assert_main_person_if_family
-      if @role.beitragskategorie&.family? && !@role.person.sac_family_main_person
+      if @role.family? && !@role.person.sac_family_main_person
         raise "not family main person"
       end
     end

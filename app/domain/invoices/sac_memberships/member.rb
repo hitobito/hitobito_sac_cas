@@ -7,7 +7,9 @@
 
 module Invoices
   module SacMemberships
-    Membership = Data.define(:section, :beitragskategorie, :main)
+    Membership = Data.define(:section, :beitragskategorie, :main) do
+      delegate :family?, :youth?, :adult?, to: :beitragskategorie
+    end
 
     class Member
       attr_reader :person, :context, :sac_membership

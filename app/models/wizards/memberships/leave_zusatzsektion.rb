@@ -60,7 +60,7 @@ module Wizards::Memberships
     end
 
     def family_membership?
-      role.beitragskategorie.family?
+      role.family?
     end
 
     def sektion = role.layer_group

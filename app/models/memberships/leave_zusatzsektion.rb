@@ -79,7 +79,7 @@ module Memberships
     end
 
     def bad_family?
-      role.beitragskategorie&.family? && !person.sac_family_main_person
+      role.family? && !person.sac_family_main_person
     end
 
     def assert_terminate_on

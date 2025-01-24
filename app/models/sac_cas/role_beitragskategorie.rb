@@ -18,6 +18,8 @@ module ::SacCas::RoleBeitragskategorie
 
     before_validation :set_beitragskategorie
 
+    delegate :family?, :adult?, :youth?, to: :beitragskategorie, allow_nil: true
+
     before_save :ensure_beitragskategorie, if: :validate_beitragskategorie?
 
     ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN.each do |category|
