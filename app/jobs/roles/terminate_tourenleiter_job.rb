@@ -12,9 +12,13 @@ class Roles::TerminateTourenleiterJob < RecurringJob
 
   def perform_internal
     Group::SektionsTourenUndKurse::Tourenleiter
-      .left_joins(person: :qualifications)
-      .where(qualifications: {finish_at: [nil, [...Time.zone.today]]})
-      .update_all(end_on: Time.zone.yesterday.end_of_day)
+      .where(
+        "NOT EXISTS (SELECT 1 FROM qualifications " \
+        "WHERE qualifications.person_id = roles.person_id " \
+        "AND qualifications.finish_at IS NULL OR qualifications.finish_at >= :date)",
+        date: Time.zone.today
+      )
+      .update_all(end_on: Time.zone.yesterday)
   end
 
   def next_run
