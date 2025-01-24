@@ -23,8 +23,6 @@ class Group::AboMagazin < ::Group
   end
 
   class Gratisabonnent < ::Role
-    include Roles::AbacusTransmittable
-
     self.permissions = []
     self.basic_permissions_only = true
   end

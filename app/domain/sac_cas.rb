@@ -69,7 +69,6 @@ module SacCas
 
   ABONNENT_MAGAZIN_ROLES = [
     ::Group::AboMagazin::Abonnent,
-    ::Group::AboMagazin::Gratisabonnent,
     ::Group::AboMagazin::Neuanmeldung
   ].freeze
 
