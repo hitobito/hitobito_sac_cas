@@ -45,7 +45,7 @@ module HitobitoSacCas
       ]
 
       # only schedule BackupMitgliederScheduleJob if sftp config is present
-      JobManager.wagon_jobs += [BackupMitgliederScheduleJob] if Settings.sftp.config.present?
+      JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
 
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
