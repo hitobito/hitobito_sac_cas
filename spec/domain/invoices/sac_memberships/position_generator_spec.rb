@@ -175,7 +175,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
   context "living abroad" do
     before do
-      person.update!(country: "DE")
+      person.update!(country: "DE", zip_code: 80000)
       context.fetch_section(additional_section).bulletin_postage_abroad = 0
     end
 
@@ -725,7 +725,7 @@ describe Invoices::SacMemberships::PositionGenerator do
     end
 
     context "with neuanmeldung" do
-      let(:person) { Fabricate(:person) }
+      let(:person) { Fabricate(:person, country: "CH", zip_code: 3000) }
 
       before do
         Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
@@ -843,7 +843,7 @@ describe Invoices::SacMemberships::PositionGenerator do
 
       context "living abroad" do
         before do
-          person.update!(country: "DE")
+          person.update!(country: "DE", zip_code: 80000)
         end
 
         it "generates positions" do
@@ -922,7 +922,7 @@ describe Invoices::SacMemberships::PositionGenerator do
     context "living abroad" do
       before do
         create_neuanmeldung_zusatzsektion
-        person.update!(country: "DE")
+        person.update!(country: "DE", zip_code: 80000)
         context.fetch_section(additional_section).bulletin_postage_abroad = 0
       end
 

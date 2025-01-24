@@ -165,7 +165,7 @@ describe Export::Pdf::Passes::Membership do
 
   context "country" do
     before do
-      member.update!(country: "DE")
+      member.update!(country: "DE", zip_code: 80000)
     end
 
     it "does include the countries name in full" do
@@ -179,7 +179,7 @@ describe Export::Pdf::Passes::Membership do
     end
 
     it "does not include Switzerland" do
-      member.update!(country: "CH")
+      member.update!(country: "CH", zip_code: 3000)
       texts = text_with_position(analyzer).flatten
       expect(texts).not_to include "Schweiz"
       expect(texts).not_to include "CH"
