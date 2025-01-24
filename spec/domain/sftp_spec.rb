@@ -15,7 +15,7 @@ describe Sftp do
       private_key: "private key",
       port: 22)
   end
-  let(:session) { instance_double("Net::SFTP::Session") }
+  let(:session) { instance_double("Net::SFTP::Session", connect!: true) }
 
   subject(:sftp) { Sftp.new(config) }
 
@@ -30,7 +30,6 @@ describe Sftp do
                                                            non_interactive: true,
                                                            port: 22})
         .and_return(session)
-      expect(session).to receive(:connect!)
 
       subject.send(:connection)
     end
@@ -45,7 +44,6 @@ describe Sftp do
                                                           non_interactive: true,
                                                           port: 22})
         .and_return(session)
-      expect(session).to receive(:connect!)
 
       subject.send(:connection)
     end
@@ -58,7 +56,6 @@ describe Sftp do
                                                            non_interactive: true,
                                                            port: 22})
         .and_return(session)
-      expect(session).to receive(:connect!)
 
       subject.send(:connection)
     end
@@ -77,7 +74,6 @@ describe Sftp do
       expect(sftp).to_not receive(:create_remote_dir)
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
-      expect(session).to receive(:connect!)
       expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
 
       sftp.upload_file("data", file_path)
@@ -96,7 +92,6 @@ describe Sftp do
       expect(sftp).to receive(:create_remote_dir).with(folder_path)
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
-      expect(session).to receive(:connect!)
       expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
 
       sftp.upload_file("data", file_path)
@@ -110,10 +105,22 @@ describe Sftp do
       expect(sftp).to_not receive(:create_remote_dir)
 
       expect(::Net::SFTP).to receive(:start).and_return(session)
-      expect(session).to receive(:connect!)
       expect(session).to receive(:upload!).with(be_a(String), file_path).and_return("handler")
 
       sftp.upload_file("data", file_path)
+    end
+
+    it "does not change encoding of data" do
+      allow(sftp).to receive(:create_directories?).and_return(false)
+      expect(::Net::SFTP).to receive(:start).and_return(session)
+
+      original_payload = "thîs îs a ßtrïng în ISO-8859-1 énçødîñg".encode("ISO-8859-1")
+
+      expect(session).to receive(:upload!) do |local_file_path, _remote_file_path|
+        expect(File.binread(local_file_path).bytes).to eq original_payload.bytes
+      end
+
+      sftp.upload_file(original_payload, "/file/path")
     end
   end
 end

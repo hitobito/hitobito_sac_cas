@@ -124,4 +124,21 @@ describe Export::Tabular::People::SacMitglieder do
       end
     end
   end
+
+  describe "#data_rows" do
+    it "does not do N+1" do
+      # Expected 7 queries:
+      # - 1 for loading the group
+      # - 1 for loading the groups children
+      # - 1 for loading all people
+      # - 1 for loading their phone numbers
+      # - 1 for loading the people's roles_unscoped
+      # - 1 for loading the people's roles
+      # - 1 for loading the people's roles' groups
+      expect_query_count do
+        # make sure we have more than one row for the test to be meaningful
+        expect(tabular.data_rows.to_a).to have_at_least(2).items
+      end.to eq 7
+    end
+  end
 end
