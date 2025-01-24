@@ -40,6 +40,12 @@ describe Roles::TerminateTourenleiterJob do
       expect { job.perform }.to not_change { person.roles.count }
     end
 
+    it "noops if at least one active qualification exists" do
+      Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:snowboard_leader), start_at: 2.years.ago, finish_at: 1.year.ago)
+      qualification.update!(finish_at: 1.week.from_now)
+      expect { job.perform }.to not_change { person.roles.count }
+    end
+
     it "terminates role if qualification expired yesterday" do
       qualification.update!(finish_at: Time.zone.yesterday)
       expect { job.perform }.to change { person.roles.count }.by(-1)
