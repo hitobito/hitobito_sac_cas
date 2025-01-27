@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe :self_registration do
+describe :self_registration, js: true do
   let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abos)) }
 
   before do
