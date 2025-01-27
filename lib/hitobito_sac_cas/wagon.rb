@@ -39,7 +39,7 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
-        # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
+        Qualifications::ExpirationMailerJob,
         People::CacheMembershipYearsJob,
         Roles::TerminateTourenleiterJob
       ]
