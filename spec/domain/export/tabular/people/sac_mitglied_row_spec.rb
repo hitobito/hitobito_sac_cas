@@ -148,7 +148,7 @@ describe Export::Tabular::People::SacMitgliedRow do
 
   describe "#country" do
     it "returns country code for non-CH country" do
-      person.update(country: "DE")
+      person.update!(country: "DE", zip_code: "80000")
       expect(row.country).to eq("DE")
     end
 

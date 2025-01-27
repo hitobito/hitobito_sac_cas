@@ -13,6 +13,7 @@ Fabrication.manager[:person].append_or_update_attribute(:nickname, nil)
 # Mitglied roles in SAC are required to have a street, housenumber, zip_code and town
 Fabrication.manager[:person].append_or_update_attribute(:street, nil) { "Ophovenerstrasse" }
 Fabrication.manager[:person].append_or_update_attribute(:housenumber, nil) { "79a" }
+Fabrication.manager[:person].append_or_update_attribute(:country, nil) { "CH" }
 Fabrication.manager[:person].append_or_update_attribute(:zip_code, nil) { "2843" }
 Fabrication.manager[:person].append_or_update_attribute(:town, nil) { "Neu Carlscheid" }
 
