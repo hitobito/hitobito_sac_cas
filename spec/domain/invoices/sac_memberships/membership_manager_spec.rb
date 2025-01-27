@@ -332,6 +332,26 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(mitglied_person.sac_membership.zusatzsektion_roles.count).to eq 1
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.group.layer_group).to eq matterhorn
       end
+
+      context "with stammsektions only partially covering year" do
+        let(:stammsektion_end_on) { Date.new(2025, 5, 1) }
+
+        before { mitglied.update_columns(end_on: stammsektion_end_on) }
+
+        it "creates zusatzsektion role from today to end of stammsektion role" do
+          travel_to(Date.new(2025, 1, 3)) { subject.update_membership_status }
+          expect(mitglied_person.sac_membership.zusatzsektion_roles.first.start_on).to eq Date.new(2025, 1, 3)
+          expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq stammsektion_end_on
+        end
+
+        it "creates inactive role if run on after stammsektion expires" do
+          travel_to(Date.new(2025, 5, 1)) { subject.update_membership_status }
+          expect(mitglied_person.sac_membership.zusatzsektion_roles).to be_empty
+          inactive_role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
+          expect(inactive_role.start_on).to eq stammsektion_end_on
+          expect(inactive_role.end_on).to eq stammsektion_end_on
+        end
+      end
     end
 
     context "family" do

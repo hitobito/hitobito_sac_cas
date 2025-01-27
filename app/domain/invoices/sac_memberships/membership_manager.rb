@@ -7,14 +7,16 @@
 
 # Creates/extends sac memberships after membership invoice has been paid.
 class Invoices::SacMemberships::MembershipManager
-  attr_reader :person, :group, :year, :member
+  attr_reader :person, :group, :year, :member, :today, :end_of_year
 
   def initialize(person, group, year)
     @person = person
     @group = group
     @year = year
+    @end_of_year = Date.new(year).end_of_year
+    @today = Time.zone.today
 
-    context = Invoices::SacMemberships::Context.new(Time.zone.today)
+    context = Invoices::SacMemberships::Context.new(today)
     @member ||= Invoices::SacMemberships::Member.new(person, context)
   end
 
@@ -90,7 +92,10 @@ class Invoices::SacMemberships::MembershipManager
     role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role| role.layer_group == group.layer_group }
     if role
       role.destroy
-      create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion)
+      end_on = [person.sac_membership.stammsektion_role.end_on, end_of_year].min
+      start_on = end_on.past? ? end_on : today
+      create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on)
+
       Invoices::SacMembershipsMailer.confirmation(person).deliver_later if person.email.present?
     end
   end
@@ -103,8 +108,8 @@ class Invoices::SacMemberships::MembershipManager
     person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) }
   end
 
-  def create_new_role(person, role_type, group = mitglieder_sektion)
-    role_type.create!(person: person, group: group, end_on: Date.new(year).end_of_year, start_on: Time.zone.now)
+  def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today, end_on: end_of_year)
+    role_type.create!(group: group, person:, end_on:, start_on:)
   end
 
   def mitglieder_sektion
