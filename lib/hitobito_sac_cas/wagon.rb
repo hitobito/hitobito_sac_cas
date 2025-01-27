@@ -196,6 +196,7 @@ module HitobitoSacCas
 
       ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
+      Export::Tabular::People::PersonRow.prepend SacCas::Export::Tabular::People::PersonRow
       [
         Export::Tabular::People::Households,
         Export::Tabular::People::PeopleAddress,
@@ -257,6 +258,14 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
         TableDisplays::People::SacRemarkNationalOfficeColumn,
         [:sac_remark_national_office])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::TerminateOnColumn,
+        [:terminate_on])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::TerminationReasonColumn,
+        [:termination_reason])
 
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,
