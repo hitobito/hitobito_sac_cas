@@ -184,14 +184,14 @@ fr:
     attributes:
       contact_account:
         predefined_labels:
-          andere: ""
-          arbeit: ""
-          fax: ""
-          "haupt-telefon": ""
-          mobil: ""
-          mutter: ""
-          privat: ""
-          vater: ""
+          andere: Autre
+          arbeit: Professionnel
+          fax: Fax
+          "haupt-telefon": Tél. principal
+          mobil: Mobile
+          mutter: Mère
+          privat: Privé
+          vater: Père
           webseite: ""
       cost_center:
         label: Désignation

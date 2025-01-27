@@ -182,14 +182,14 @@ it:
     attributes:
       contact_account:
         predefined_labels:
-          andere: ""
-          arbeit: ""
-          fax: ""
-          "haupt-telefon": ""
-          mobil: ""
-          mutter: ""
-          privat: ""
-          vater: ""
+          andere: Altro
+          arbeit: Ufficio
+          fax: Fax
+          "haupt-telefon": Tel. principale
+          mobil: Cellulare
+          mutter: Madre
+          privat: Privato
+          vater: Padre
           webseite: ""
       cost_center:
         label: Denominazione
