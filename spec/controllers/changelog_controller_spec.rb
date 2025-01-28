@@ -17,7 +17,7 @@ describe ChangelogController do
       it "is authorized" do
         expect do
           get :index
-        end.not_to raise_error(CanCan::AccessDenied)
+        end.not_to raise_error
       end
     end
 
