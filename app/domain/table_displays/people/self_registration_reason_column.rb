@@ -13,12 +13,22 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        person.self_registration_reason&.text
+        self_registration_reason(person)
       end
     end
 
     def required_permission(attr)
       :show_full
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      self_registration_reason(target)
+    end
+
+    def self_registration_reason(person)
+      person.self_registration_reason&.text
     end
   end
 end

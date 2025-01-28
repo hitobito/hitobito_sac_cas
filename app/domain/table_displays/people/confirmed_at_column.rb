@@ -13,12 +13,22 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        I18n.l(person.confirmed_at.to_date) if person.confirmed_at
+        confirmed_at(person)
       end
     end
 
     def required_permission(attr)
       :show_full
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      confirmed_at(target)
+    end
+
+    def confirmed_at(person)
+      I18n.l(person.confirmed_at.to_date) if person.confirmed_at
     end
   end
 end

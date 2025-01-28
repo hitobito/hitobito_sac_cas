@@ -16,6 +16,7 @@ describe TableDisplays::People::AntragsdatumColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    allow(table).to receive(:template).at_least(:once).and_return(view)
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_neuanmeldungen_nv))
     people(:mitglied).roles.destroy_all
     Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied), group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: Time.zone.today)

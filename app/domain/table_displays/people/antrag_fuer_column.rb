@@ -13,12 +13,7 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        group_roles = person.roles.select { |r| r.group_id == template&.parent&.id }
-        if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
-          I18n.t("groups.sektion_secondary")
-        elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }
-          I18n.t("groups.sektion_primary")
-        end
+        antrag_fuer(person)
       end
     end
 
@@ -28,6 +23,21 @@ module TableDisplays::People
 
     def exclude_attr?(group)
       [Group::SektionsNeuanmeldungenSektion, Group::SektionsNeuanmeldungenNv].exclude?(group.class)
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      antrag_fuer(target)
+    end
+
+    def antrag_fuer(person)
+      group_roles = person.roles.select { |r| r.group_id == template&.parent&.id }
+      if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
+        I18n.t("groups.sektion_secondary")
+      elsif group_roles.any? { |r| SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.include?(r.class) }
+        I18n.t("groups.sektion_primary")
+      end
     end
   end
 end

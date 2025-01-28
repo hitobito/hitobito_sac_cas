@@ -13,13 +13,23 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        start_on = person.roles.select { |r| r.group_id == template&.parent&.id }.collect(&:start_on).compact.min
-        I18n.l(start_on) if start_on
+        beitrittsdatum(person)
       end
     end
 
     def required_permission(attr)
       :show
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      beitrittsdatum(target)
+    end
+
+    def beitrittsdatum(person)
+      start_on = person.roles.select { |r| r.group_id == template&.parent&.id }.collect(&:start_on).compact.min
+      I18n.l(start_on) if start_on
     end
   end
 end

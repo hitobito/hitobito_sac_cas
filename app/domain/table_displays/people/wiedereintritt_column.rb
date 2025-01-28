@@ -17,13 +17,23 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        membership_roles = person.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
-        template.f(membership_roles.select(&:active?).blank? && membership_roles.select(&:ended?).present?)
+        wiedereintritt(person)
       end
     end
 
     def required_permission(attr)
       :show
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      wiedereintritt(target)
+    end
+
+    def wiedereintritt(person)
+      membership_roles = person.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+      (membership_roles.select(&:active?).blank? && membership_roles.select(&:ended?).present?) ? I18n.t(:"global.yes") : I18n.t(:"global.no")
     end
   end
 end
