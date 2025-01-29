@@ -176,6 +176,7 @@ module HitobitoSacCas
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
+      Person::SubscriptionsController.prepend SacCas::Person::SubscriptionsController
       Person::QueryController.prepend SacCas::Person::QueryController
       Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
