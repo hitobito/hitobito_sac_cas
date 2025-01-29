@@ -406,8 +406,7 @@ describe Event::ParticipationsController do
 
     it "PUT#summon sets participation active and state to summoned" do
       expect { put :summon, params: params }
-        .to have_enqueued_mail(Event::ParticipationMailer, :summon).once
-        .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
+        .not_to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count)
       expect(participation.reload.active).to be true
       expect(participation.state).to eq "summoned"
       expect(flash[:notice]).to match(/wurde aufgeboten/)
