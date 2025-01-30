@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::Participation, :js do
+  include ActiveJob::TestHelper
+
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course) }
@@ -19,6 +21,16 @@ describe Event::Participation, :js do
     it "doesn't show invoice button" do
       visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
       expect(page).not_to have_button("Rechnung erstellen")
+    end
+
+    it "does not display checkbox option to not send email" do
+      event.update_columns(applications_cancelable: true, state: "application_open")
+      event.dates.first.update_column(:start_at, 10.days.from_now)
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      within(".btn-toolbar") do
+        click_on "Abmelden"
+      end
+      expect(page).not_to have_text "E-Mail an Teilnehmer/in senden"
     end
   end
 
@@ -37,16 +49,59 @@ describe Event::Participation, :js do
       expect(page).not_to have_css(".alert")
     end
 
-    it "can cancel participation and supply a reason in popover" do
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
-      within(".btn-toolbar") do
-        click_on "Abmelden"
+    context "cancel" do
+      before do
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+        within(".btn-toolbar") do
+          click_on "Abmelden"
+        end
+        within(".popover") do
+          fill_in "Begründung", with: "Some Reason"
+        end
       end
-      within(".popover") do
-        fill_in "Begründung", with: "Some Reason"
-        click_on "Abmelden"
+
+      it "can cancel participation and supply a reason in popover" do
+        expect do
+          within(".popover") do
+            click_on "Abmelden"
+          end
+          expect(page).to have_content "Edmund Hillary wurde abgemeldet."
+        end.to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
       end
-      expect(page).to have_content "Edmund Hillary wurde abgemeldet."
+
+      it "can cancel participation without sending email" do
+        expect do
+          within(".popover") do
+            uncheck "E-Mail an Teilnehmer/in senden"
+            click_on "Abmelden"
+          end
+          expect(page).to have_content "Edmund Hillary wurde abgemeldet."
+        end.not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+      end
+    end
+
+    context "summon" do
+      before do
+        event.update_column(:state, :ready)
+        participation.update_column(:state, :assigned)
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+        click_on "Aufbieten"
+        expect(page).to have_text "Willst du diese/n Teilnehmer/in wirklich aufbieten?"
+      end
+
+      it "does send mail when selecting send email true" do
+        expect do
+          click_on "Aufbieten und E-Mail senden"
+          expect(page).to have_text "Edmund Hillary wurde aufgeboten."
+        end.to have_enqueued_mail(Event::ParticipationMailer, :summon).once
+      end
+
+      it "does not send mail when selecting send email false" do
+        expect do
+          click_on "Aufbieten ohne E-Mail"
+          expect(page).to have_text "Edmund Hillary wurde aufgeboten."
+        end.not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
+      end
     end
   end
 end
