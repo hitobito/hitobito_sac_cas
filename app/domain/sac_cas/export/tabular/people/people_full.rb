@@ -7,6 +7,6 @@
 
 module SacCas::Export::Tabular::People::PeopleFull
   def person_attributes
-    super + [:membership_years]
+    super + [:membership_years, :terminate_on, :termination_reason]
   end
 end
