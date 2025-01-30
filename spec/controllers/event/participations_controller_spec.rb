@@ -481,6 +481,15 @@ describe Event::ParticipationsController do
       expect(invoice.state).to eq("draft")
       expect(invoice.year).to eq(event.dates.first.start_at.year)
     end
+
+    it "PUT#cancel does not create course annulation invoice when participation state is applied" do
+      participation.update!(price: 10, price_category: :price_regular)
+      participation.update_column(:state, :applied)
+
+      expect do
+        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
+      end.not_to change { ExternalInvoice::CourseAnnulation.count }
+    end
   end
 
   describe "PUT#update" do
