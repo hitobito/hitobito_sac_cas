@@ -27,10 +27,12 @@ module SacCas::Event::ParticipationsController
     entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
     entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
     entry.canceled_at = Time.zone.today if participant_cancels?
+    send_application_canceled_email if send_email? || participant_cancels?
     change_state("canceled", "cancel")
   end
 
   def summon
+    send_application_summoned_email if send_email?
     change_state("summoned", "summon")
   end
 
@@ -43,6 +45,14 @@ module SacCas::Event::ParticipationsController
 
   def enqueue_confirmation_job
     Event::ParticipationConfirmationJob.new(entry).enqueue!
+  end
+
+  def send_application_canceled_email
+    Event::ParticipationCanceledMailer.confirmation(entry).deliver_later
+  end
+
+  def send_application_summoned_email
+    Event::ParticipationMailer.summon(entry).deliver_later
   end
 
   def permitted_attrs

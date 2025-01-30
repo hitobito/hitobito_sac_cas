@@ -114,14 +114,4 @@ describe Event::Participation do
       end
     end
   end
-
-  describe "canceled" do
-    let(:event) { Fabricate(:sac_open_course) }
-    let(:participation) { event.participations.create!(person: people(:mitglied)) }
-
-    it "sends a confirmation email" do
-      expect { participation.update(state: :canceled, canceled_at: Time.zone.today) }
-        .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
-    end
-  end
 end
