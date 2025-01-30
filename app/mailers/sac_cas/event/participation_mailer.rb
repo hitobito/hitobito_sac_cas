@@ -20,6 +20,10 @@ module SacCas::Event::ParticipationMailer
     compose_email(participation, REJECT_REJECTED_PARTICIPATION)
   end
 
+  def reject_unconfirmed(participation)
+    compose_email(participation, REJECT_APPLIED_PARTICIPATION)
+  end
+
   def summon(participation)
     compose_email(participation, SUMMONED_PARTICIPATION)
   end

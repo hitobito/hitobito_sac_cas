@@ -105,7 +105,7 @@ module Events::Courses::State
   end
 
   def rejected_participants
-    participations.where(state: %i[applied rejected])
+    participations.where(state: %i[applied rejected unconfirmed])
   end
 
   def summon_assigned_participants

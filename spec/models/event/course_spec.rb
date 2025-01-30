@@ -349,11 +349,13 @@ describe Event::Course do
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
     let!(:applied_participation) { Fabricate(:event_participation, event: course, application:, state: :applied) }
     let!(:rejected_participation) { Fabricate(:event_participation, event: course, application:, state: :rejected) }
+    let!(:unconfirmed_participation) { Fabricate(:event_participation, event: course, application:, state: :unconfirmed) }
 
     it "queues job to notify rejected and applied participants" do
       expect { course.update!(state: :assignment_closed) }
         .to have_enqueued_mail(Event::ParticipationMailer, :reject_applied).once
         .and have_enqueued_mail(Event::ParticipationMailer, :reject_rejected).once
+        .and have_enqueued_mail(Event::ParticipationMailer, :reject_unconfirmed).once
     end
   end
 
