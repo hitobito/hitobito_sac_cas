@@ -1063,6 +1063,8 @@ en:
       updates_household_address: Address is updated for all family members
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1070,6 +1072,8 @@ en:
       unlock_instructions:
         body:
           footer: ""
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: Main e-mail / member no.

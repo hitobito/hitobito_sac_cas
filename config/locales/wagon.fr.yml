@@ -1125,6 +1125,8 @@ fr:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1132,6 +1134,8 @@ fr:
       unlock_instructions:
         body:
           footer: Salutations sportives
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: E-mail principal / N° de membre

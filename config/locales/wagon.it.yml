@@ -1123,6 +1123,8 @@ it:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1130,6 +1132,8 @@ it:
       unlock_instructions:
         body:
           footer: Saluti sportivi
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
