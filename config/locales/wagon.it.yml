@@ -390,6 +390,8 @@ it:
           _nil: diversa
         birthday: Data di nascita
         membership_years: Numero di anni di affiliazione
+        terminate_on: ""
+        termination_reason: ""
         membership_number: Socio n.
         navision_id: Navision n.
         salutations:
@@ -1809,6 +1811,8 @@ it:
       address_valid: Indirizzo valido
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:

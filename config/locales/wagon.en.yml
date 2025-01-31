@@ -385,6 +385,8 @@ en:
           _nil: ""
         birthday: ""
         membership_years: Number of member-years
+        terminate_on: ""
+        termination_reason: ""
         membership_number: Member no.
         navision_id: Navision no.
         salutations:
@@ -1727,6 +1729,8 @@ en:
       address_valid: Address valid
       confirmed_at: E-mail confirmed on
       beitrittsdatum: Joining per
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:

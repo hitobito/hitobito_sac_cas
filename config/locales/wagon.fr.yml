@@ -392,6 +392,8 @@ fr:
           _nil: Divers
         birthday: Date de naissance
         membership_years: Nombre de membres-années
+        terminate_on: ""
+        termination_reason: ""
         membership_number: N° de membre
         navision_id: N° Navision
         salutations:
@@ -1815,6 +1817,8 @@ fr:
       address_valid: Adresse valide
       confirmed_at: E-mail confirmé le
       beitrittsdatum: Adhésion au
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:
