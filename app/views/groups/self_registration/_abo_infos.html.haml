@@ -9,14 +9,13 @@
       %thead
         %tr
           %th=t('.annual_price_header')
-          - if costs.first.country
+          - if wizard.shipping_abroad?
             %th=t('.delivery_country_header')
       %tbody
-        - costs.each do |cost|
-          %tr
-            %td=t('.price_with_vat', amount: format("%2.f", cost.amount))
-            - if cost.country
-              %td=t(".#{cost.country}")
+        %tr
+          %td=t('.price_with_vat', amount: format("%2.f", wizard.calculated_costs))
+          - if wizard.shipping_abroad?
+            %td=wizard.shipping_country
 
     %b=t('.duration_title')
     %p.mb-3=t('.duration_text')

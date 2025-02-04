@@ -25,6 +25,8 @@ module Wizards::Signup
 
     def redirection_message = I18n.t("groups.self_registration.create.already_member_of_tourenportal")
 
-    def costs = SacCas::ABO_COSTS[:tourenportal]
+    def calculated_costs = Group.root.abo_touren_portal_fee
+
+    def shipping_abroad? = false
   end
 end

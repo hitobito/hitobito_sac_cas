@@ -29,23 +29,36 @@ module Wizards::Signup
 
     def redirection_message = I18n.t("groups.self_registration.create.already_subscribed_to_abo")
 
-    def costs = SacCas::ABO_COSTS[:magazin]
-
     def requires_policy_acceptance? = false
 
     def calculated_costs
-      case step("person_fields").country
-      when "CH"
-        costs.find { |cost| cost.country == :switzerland }.amount
+      if person.living_abroad?
+        annual_fee + abroad_fee
       else
-        costs.find { |cost| cost.country == :international }.amount
+        annual_fee
       end
     end
+
+    def shipping_country
+      if person.living_abroad?
+        I18n.t("groups.self_registration.abo_infos.international")
+      else
+        I18n.t("groups.self_registration.abo_infos.switzerland")
+      end
+    end
+
+    def shipping_abroad? = true
 
     def enqueue_notification_email
       Signup::AboMagazinMailer
         .confirmation(person, group, newsletter)
         .deliver_later
     end
+
+    private
+
+    def annual_fee = Group.root.abo_alpen_fee
+
+    def abroad_fee = Group.root.abo_alpen_postage_abroad
   end
 end

@@ -15,7 +15,10 @@ describe Signup::AboMagazinMailer do
   let(:mail) { described_class.confirmation(person, group, false) }
   let(:custom_content) { CustomContent.get(Signup::AboMagazinMailer::CONFIRMATION) }
 
-  before { person.update(address_care_of: "1A", postbox: "123") }
+  before do
+    person.update(address_care_of: "1A", postbox: "123")
+    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16)
+  end
 
   it "sends confirmation email" do
     expect(mail.to).to eq(["e.hillary@hitobito.example.com"])
