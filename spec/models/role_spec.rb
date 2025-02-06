@@ -430,4 +430,16 @@ describe Role do
       expect(role.termination_reason_text).to eq "Sonstiger Grund"
     end
   end
+
+  context "#beitragskategorie" do
+    it "returns beitragskategorie as string active support string inquirer" do
+      role = roles(:mitglied)
+      expect(role.beitragskategorie.class).to eq(ActiveSupport::StringInquirer)
+    end
+
+    it "returns empty string if beitragskategorie is nil" do
+      role = roles(:abonnent_alpen)
+      expect(role.beitragskategorie).to be_nil
+    end
+  end
 end

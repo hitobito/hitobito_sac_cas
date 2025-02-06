@@ -91,6 +91,6 @@ module SacCas::Role
   end
 
   def beitragskategorie
-    ActiveSupport::StringInquirer.new(super)
+    ActiveSupport::StringInquirer.new(super) if super
   end
 end
