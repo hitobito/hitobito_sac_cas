@@ -42,6 +42,8 @@ module SacCas::Event::Participations::MailDispatchesController
 
   def send_course_application_confirmation_applied_mail = Event::ApplicationConfirmationMailer.confirmation(participation, mail_type).deliver_later
 
+  def send_event_participant_reminder_mail = Event::ParticipantReminderMailer.reminder(participation).deliver_later
+
   def send_event_published_notice_mail = Event::PublishedMailer.notice(event, participation.person).deliver_later
 
   def send_event_leader_reminder_next_week_mail = Event::LeaderReminderMailer.reminder(participation, mail_type).deliver_later

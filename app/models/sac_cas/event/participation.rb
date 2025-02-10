@@ -24,6 +24,7 @@ module SacCas::Event::Participation
       Event::ApplicationConfirmationMailer::ASSIGNED,
       Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION,
       Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION,
+      Event::ParticipantReminderMailer::REMINDER,
       Event::SurveyMailer::SURVEY,
       Event::ApplicationConfirmationMailer::UNCONFIRMED,
       Event::ApplicationConfirmationMailer::APPLIED

@@ -124,6 +124,13 @@ describe Event::Participations::MailDispatchesController do
         expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
       end
 
+      it "sends participation reminder email" do
+        expect do
+          post :create, params: {group_id: group, event_id: course, participation_id: participation, mail_type: :event_participant_reminder}
+        end.to have_enqueued_mail(Event::ParticipantReminderMailer, :reminder).with(participation).exactly(1).times
+        expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
+      end
+
       it "sends application published notice email" do
         Event::Course::Role::Leader.create!(participation: participation)
         expect do
