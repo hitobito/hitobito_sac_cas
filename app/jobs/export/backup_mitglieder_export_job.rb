@@ -15,7 +15,10 @@ class Export::BackupMitgliederExportJob < BaseJob
   end
 
   def perform
-    sftp.upload_file(csv, file_path)
+    # upload the file to all file_paths
+    file_paths.each do |file_path|
+      sftp.upload_file(csv, file_path)
+    end
   end
 
   private
@@ -35,8 +38,12 @@ class Export::BackupMitgliederExportJob < BaseJob
     Settings.sftp.config
   end
 
-  def file_path
-    "#{sektion.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+  # returns both paths in group directory AND sektion directory unless they are identical
+  def file_paths
+    [
+      "#{sektion.navision_id}/Adressen_#{group.navision_id_padded}.csv",
+      "#{group.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+    ].uniq
   end
 
   def sektion

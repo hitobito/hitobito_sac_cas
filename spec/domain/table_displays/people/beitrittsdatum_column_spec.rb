@@ -16,6 +16,7 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    allow(table).to receive(:template).at_least(:once).and_return(view)
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
   end
 

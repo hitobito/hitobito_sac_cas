@@ -15,6 +15,10 @@ describe TableDisplays::People::AntragFuerColumn, type: :helper do
   let(:ability) { Ability.new(person) }
   let(:table) { StandardTableBuilder.new([person], self) }
 
+  before do
+    allow(table).to receive(:template).at_least(:once).and_return(view)
+  end
+
   describe "#exclude_attr?" do
     subject(:column) { described_class.new(ability, table: table, model_class: Person) }
 

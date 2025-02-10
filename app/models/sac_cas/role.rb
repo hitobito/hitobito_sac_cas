@@ -89,4 +89,8 @@ module SacCas::Role
   def membership_years
     read_attribute(:membership_years) or raise "use Role scope :with_membership_years"
   end
+
+  def beitragskategorie
+    ActiveSupport::StringInquirer.new(super) if super
+  end
 end

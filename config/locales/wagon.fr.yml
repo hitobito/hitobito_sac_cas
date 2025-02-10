@@ -184,14 +184,14 @@ fr:
     attributes:
       contact_account:
         predefined_labels:
-          andere: ""
-          arbeit: ""
-          fax: ""
-          "haupt-telefon": ""
-          mobil: ""
-          mutter: ""
-          privat: ""
-          vater: ""
+          andere: Autre
+          arbeit: Professionnel
+          fax: Fax
+          "haupt-telefon": Tél. principal
+          mobil: Mobile
+          mutter: Mère
+          privat: Privé
+          vater: Père
           webseite: ""
       cost_center:
         label: Désignation
@@ -392,6 +392,8 @@ fr:
           _nil: Divers
         birthday: Date de naissance
         membership_years: Nombre de membres-années
+        terminate_on: ""
+        termination_reason: ""
         membership_number: N° de membre
         navision_id: N° Navision
         salutations:
@@ -1125,6 +1127,8 @@ fr:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1132,6 +1136,8 @@ fr:
       unlock_instructions:
         body:
           footer: Salutations sportives
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
@@ -1811,6 +1817,8 @@ fr:
       address_valid: Adresse valide
       confirmed_at: E-mail confirmé le
       beitrittsdatum: Adhésion au
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:

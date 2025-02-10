@@ -13,14 +13,24 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        person.roles.collect(&:beitragskategorie).compact.sort.uniq.collect do |value|
-          I18n.t(value, scope: "roles.beitragskategorie")
-        end.join(", ").presence
+        beitragskategorie(target)
       end
     end
 
     def required_permission(attr)
       :show_full
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      beitragskategorie(target)
+    end
+
+    def beitragskategorie(person)
+      person.roles.collect(&:beitragskategorie).compact.sort.uniq.collect do |value|
+        I18n.t(value, scope: "roles.beitragskategorie")
+      end.join(", ").presence
     end
   end
 end

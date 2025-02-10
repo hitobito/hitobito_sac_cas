@@ -385,6 +385,8 @@ en:
           _nil: ""
         birthday: ""
         membership_years: Number of member-years
+        terminate_on: ""
+        termination_reason: ""
         membership_number: Member no.
         navision_id: Navision no.
         salutations:
@@ -1063,6 +1065,8 @@ en:
       updates_household_address: Address is updated for all family members
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1070,6 +1074,8 @@ en:
       unlock_instructions:
         body:
           footer: ""
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: Main e-mail / member no.
@@ -1723,6 +1729,8 @@ en:
       address_valid: Address valid
       confirmed_at: E-mail confirmed on
       beitrittsdatum: Joining per
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:

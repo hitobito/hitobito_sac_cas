@@ -39,13 +39,13 @@ module HitobitoSacCas
         Event::CloseApplicationsJob,
         Event::ParticipantReminderJob,
         Event::LeaderReminderJob,
-        # Qualifications::ExpirationMailerJob, # add this mailer back in https://github.com/hitobito/hitobito_sac_cas/issues/1429
+        Qualifications::ExpirationMailerJob,
         People::CacheMembershipYearsJob,
         Roles::TerminateTourenleiterJob
       ]
 
       # only schedule BackupMitgliederScheduleJob if sftp config is present
-      JobManager.wagon_jobs += [BackupMitgliederScheduleJob] if Settings.sftp.config.present?
+      JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
 
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
@@ -176,6 +176,7 @@ module HitobitoSacCas
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
+      Person::SubscriptionsController.prepend SacCas::Person::SubscriptionsController
       Person::QueryController.prepend SacCas::Person::QueryController
       Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
       Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
@@ -195,6 +196,7 @@ module HitobitoSacCas
 
       ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull
+      Export::Tabular::People::PersonRow.prepend SacCas::Export::Tabular::People::PersonRow
       [
         Export::Tabular::People::Households,
         Export::Tabular::People::PeopleAddress,
@@ -256,6 +258,14 @@ module HitobitoSacCas
       TableDisplay.register_column(Person,
         TableDisplays::People::SacRemarkNationalOfficeColumn,
         [:sac_remark_national_office])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::TerminateOnColumn,
+        [:terminate_on])
+
+      TableDisplay.register_column(Person,
+        TableDisplays::People::TerminationReasonColumn,
+        [:termination_reason])
 
       TableDisplay.register_column(Event::Participation,
         TableDisplays::ShowFullColumn,

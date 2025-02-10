@@ -17,13 +17,23 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        invalid_tags = person.tags.select { |tag| tag.name == PersonTags::Validation::ADDRESS_INVALID }
-        template.f(invalid_tags.empty?)
+        address_valid(person)
       end
     end
 
     def required_permission(attr)
       :show
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      address_valid(target)
+    end
+
+    def address_valid(person)
+      invalid_tags = person.tags.select { |tag| tag.name == PersonTags::Validation::ADDRESS_INVALID }
+      invalid_tags.empty? ? I18n.t(:"global.yes") : I18n.t(:"global.no")
     end
   end
 end

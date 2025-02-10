@@ -13,12 +13,22 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
-        template.f(person.person_duplicates.reject(&:ignore).any?)
+        duplicate_exists(person)
       end
     end
 
     def required_permission(attr)
       :show
+    end
+
+    private
+
+    def allowed_value_for(target, target_attr, &block)
+      duplicate_exists(target)
+    end
+
+    def duplicate_exists(person)
+      person.person_duplicates.reject(&:ignore).any? ? I18n.t(:"global.yes") : I18n.t(:"global.no")
     end
   end
 end

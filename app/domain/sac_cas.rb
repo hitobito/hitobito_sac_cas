@@ -69,7 +69,6 @@ module SacCas
 
   ABONNENT_MAGAZIN_ROLES = [
     ::Group::AboMagazin::Abonnent,
-    ::Group::AboMagazin::Gratisabonnent,
     ::Group::AboMagazin::Neuanmeldung
   ].freeze
 
@@ -91,7 +90,7 @@ module SacCas
     ::Group::AboTourenPortal::Neuanmeldung
   ].freeze
 
-  MEMBERSHIP_RELATED_ROLES = [
+  MEMBERSHIP_PROLONGABLE_ROLES = [
     ::Group::Ehrenmitglieder::Ehrenmitglied,
     ::Group::SektionsMitglieder::Ehrenmitglied,
     ::Group::SektionsMitglieder::Beguenstigt

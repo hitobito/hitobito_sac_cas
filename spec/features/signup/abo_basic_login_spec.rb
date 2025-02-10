@@ -7,8 +7,9 @@
 
 require "spec_helper"
 
-describe :self_registration do
+describe :self_registration, js: true do
   let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abos)) }
+  let(:newsletter) { mailing_lists(:newsletter) }
 
   before do
     group.update!(self_registration_role_type: group.role_types.first)
@@ -23,7 +24,7 @@ describe :self_registration do
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_street", with: "Musterplatz"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_housenumber", with: "42"
     fill_in "Telefon", with: "+41 79 123 45 56"
-    fill_in "wizards_signup_abo_basic_login_wizard_person_fields_zip_code", with: "8000"
+    fill_in "wizards_signup_abo_basic_login_wizard_person_fields_zip_code", with: "40202"
     fill_in "wizards_signup_abo_basic_login_wizard_person_fields_town", with: "Zürich"
     find(:label, "Land").click
     find(:option, text: "Vereinigte Staaten").click
@@ -74,13 +75,7 @@ describe :self_registration do
       click_button "SAC-KONTO ERSTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
-
-    sign_in(people(:admin))
-    person = Person.last
-    visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
-    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link("Abmelden")
-    end
+      .and change { newsletter.reload.subscriptions.including.count }.by(1)
   end
 
   it "opts out of mailinglist" do
@@ -98,7 +93,7 @@ describe :self_registration do
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
-    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
+    within("tr#mailing_list_#{newsletter.id}") do
       expect(page).to have_link("Anmelden")
     end
   end

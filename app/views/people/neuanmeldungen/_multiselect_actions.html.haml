@@ -5,10 +5,12 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-.d-none
-  .multiselect
-    .count
-    = ti('selected')
+
+%template#multiselectActions
+  %th.multiselect(colspan="6")
+    %span
+      .count
+      = ti('selected')
     .actions
       = action_button(t('.accept'),
         new_group_people_neuanmeldungen_approves_path(group_id: @group),

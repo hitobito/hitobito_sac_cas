@@ -9,6 +9,7 @@ require "spec_helper"
 
 describe "self_registration_abo_magazin", js: true do
   let(:group) { groups(:abo_die_alpen) }
+  let(:newsletter) { mailing_lists(:newsletter) }
 
   before do
     group.update!(self_registration_role_type: group.role_types.first)
@@ -92,13 +93,7 @@ describe "self_registration_abo_magazin", js: true do
         check "Ich möchte den SAC-Newsletter abonnieren."
       end
     end.to change { Person.count }.by(1)
-
-    sign_in(people(:admin))
-    person = Person.last
-    visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
-    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
-      expect(page).to have_link("Abmelden")
-    end
+      .and change { newsletter.reload.subscriptions.including.count }.by(1)
   end
 
   it "opts out of mailinglist" do
@@ -117,7 +112,7 @@ describe "self_registration_abo_magazin", js: true do
     sign_in(people(:admin))
     person = Person.last
     visit group_person_subscriptions_path(group_id: person.primary_group_id, person_id: person.id)
-    within("tr#mailing_list_#{mailing_lists(:newsletter).id}") do
+    within("tr#mailing_list_#{newsletter.id}") do
       expect(page).to have_link("Anmelden")
     end
   end

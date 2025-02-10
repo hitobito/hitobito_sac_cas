@@ -395,6 +395,8 @@ de:
           _nil: divers
         birthday: Geburtsdatum
         membership_years: Anzahl Mitglieder-Jahre
+        terminate_on: Austrittsdatum
+        termination_reason: Austrittsgrund
         membership_number: Mitglied-Nr
         navision_id: Navision-Nr.
         salutations:
@@ -1074,6 +1076,8 @@ de:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
 
   devise:
+    failure:
+      signin_not_allowed: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     mailer:
       confirmation_instructions:
         body:
@@ -1081,6 +1085,8 @@ de:
       unlock_instructions:
         body:
           footer: Bergsportliche Grüsse
+    passwords:
+      send_instructions: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
@@ -1809,6 +1815,8 @@ de:
       address_valid: Adresse gültig
       confirmed_at: E-Mail bestätigt am
       beitrittsdatum: Beitritt per
+      terminate_on: Austrittsdatum
+      termination_reason: Austrittsgrund
 
   termination_reasons:
     destroy:

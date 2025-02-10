@@ -47,8 +47,7 @@ module Invoices
       # No invoices are created for members that appear on another invoice,
       # e.g. family members without additional memberships.
       def invoice?
-        member.sac_family_main_person? ||
-          memberships.any? { |m| !m.beitragskategorie.family? }
+        member.sac_family_main_person? || memberships.any? { |m| !m.family? }
       end
 
       def membership_cards?

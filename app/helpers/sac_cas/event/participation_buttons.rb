@@ -15,7 +15,7 @@ module SacCas::Event::ParticipationButtons
       summon: [:assigned, if: -> { @event.state == "ready" }],
       absent: [:assigned, :summoned, :attended],
       attend: [:absent, if: -> { @event.closed? }],
-      assign: [:unconfirmed, :applied, :absent, if: -> { !@event.closed? }]
+      assign: [:applied, :absent, if: -> { !@event.closed? }]
     }
   end
 

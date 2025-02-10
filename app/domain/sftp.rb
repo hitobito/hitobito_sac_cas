@@ -17,7 +17,7 @@ class Sftp
   def upload_file(data, file_path)
     create_missing_directories(file_path) if create_directories?
 
-    Tempfile.open("hitobito-sftp-upload") do |tempfile|
+    Tempfile.open("hitobito-sftp-upload", binmode: true) do |tempfile|
       tempfile.write(data)
       tempfile.close
       connection.upload!(tempfile.path, file_path)

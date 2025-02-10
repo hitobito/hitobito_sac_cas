@@ -182,14 +182,14 @@ it:
     attributes:
       contact_account:
         predefined_labels:
-          andere: ""
-          arbeit: ""
-          fax: ""
-          "haupt-telefon": ""
-          mobil: ""
-          mutter: ""
-          privat: ""
-          vater: ""
+          andere: Altro
+          arbeit: Ufficio
+          fax: Fax
+          "haupt-telefon": Tel. principale
+          mobil: Cellulare
+          mutter: Madre
+          privat: Privato
+          vater: Padre
           webseite: ""
       cost_center:
         label: Denominazione
@@ -390,6 +390,8 @@ it:
           _nil: diversa
         birthday: Data di nascita
         membership_years: Numero di anni di affiliazione
+        terminate_on: ""
+        termination_reason: ""
         membership_number: Socio n.
         navision_id: Navision n.
         salutations:
@@ -1123,6 +1125,8 @@ it:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
   devise:
+    failure:
+      signin_not_allowed: ""
     mailer:
       confirmation_instructions:
         body:
@@ -1130,6 +1134,8 @@ it:
       unlock_instructions:
         body:
           footer: Saluti sportivi
+    passwords:
+      send_instructions: ""
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
@@ -1805,6 +1811,8 @@ it:
       address_valid: Indirizzo valido
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal
+      terminate_on: ""
+      termination_reason: ""
 
   termination_reasons:
     destroy:

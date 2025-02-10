@@ -20,9 +20,8 @@ module SacCas::Sheet::Person
       "people.tabs.external_invoices",
       :external_invoices_group_person_path,
       if: ->(view, group, person) do
-        return false unless person.roles.map(&:group_id).include?(group.id)
-
-        view.can?(:index_external_invoices, person)
+        view.can?(:index_external_invoices, person) &&
+          (person.roles.map(&:group_id).include?(group.id) || person.root?)
       end
     ))
 
