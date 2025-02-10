@@ -86,6 +86,12 @@ describe Invoices::SacMemberships::MembershipManager do
         Role.update_all(end_on: end_of_next_year + 5.years)
         expect(updated_roles_count).to eq(0)
       end
+
+      it "does not raise error when current stammsektion role does not have end_on defined" do
+        mitglied.update_column(:end_on, nil)
+        expect { subject.update_membership_status }.not_to raise_error
+        expect(mitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+      end
     end
 
     context "family" do

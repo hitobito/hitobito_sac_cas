@@ -38,7 +38,7 @@ class Invoices::SacMemberships::MembershipManager
 
   def extend_membership_duration
     relevant_roles_for(person.sac_membership.stammsektion_role).each do |role|
-      role.update!(end_on: [Date.new(year).end_of_year, role.end_on].max)
+      role.update!(end_on: [Date.new(year).end_of_year, role.end_on].compact.max)
     end
   end
 
