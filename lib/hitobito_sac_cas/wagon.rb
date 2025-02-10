@@ -63,12 +63,14 @@ module HitobitoSacCas
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
       Event::Participation.prepend SacCas::Event::Participation
       Event::Answer.include SacCas::Event::Answer
+      Group.prepend SacPhoneNumbers
       Group.include SacCas::Group
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
       MailingList.include SacCas::MailingList
       Person.prepend SacCas::Person
+      Person.prepend SacPhoneNumbers
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
@@ -78,6 +80,11 @@ module HitobitoSacCas
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
+      PhoneNumber.predefined_labels.each do |label|
+        PeopleController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+        GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+      end
+
       Wizards::Steps::NewUserForm.support_company = false
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
@@ -171,6 +178,7 @@ module HitobitoSacCas
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       GroupsController.permitted_attrs << {section_offering_ids: []}
+      GroupsController.prepend SacCas::GroupsController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController

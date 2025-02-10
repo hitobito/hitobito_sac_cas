@@ -102,7 +102,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
       .except(:phone_number)
       .merge(
         birthday: Date.new(2000, 1, 1),
-        phone_numbers_attributes: [{label: "Mobil", number: "0791234567"}]
+        phone_number_mobile_attributes: {id: nil, number: "0791234567"}
       )
   end
 end

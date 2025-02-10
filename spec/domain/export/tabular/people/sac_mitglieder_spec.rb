@@ -38,11 +38,11 @@ describe Export::Tabular::People::SacMitglieder do
         :town,
         :country,
         :birthday,
-        :phone_number_main,
-        :phone_number_privat,
         :empty, # 1 leere Spalte
-        :phone_number_mobil,
-        :phone_number_fax,
+        :phone_number_landline,
+        :empty, # 1 leere Spalte
+        :phone_number_mobile,
+        :empty, # 1 leere Spalte
         :email,
         :gender,
         :empty, # 1 leere Spalte
@@ -131,14 +131,15 @@ describe Export::Tabular::People::SacMitglieder do
       # - 1 for loading the group
       # - 1 for loading the groups children
       # - 1 for loading all people
-      # - 1 for loading their phone numbers
+      # - 1 for loading phone_number_landline
+      # - 1 for loading phone_number_mobile
       # - 1 for loading the people's roles_unscoped
       # - 1 for loading the people's roles
       # - 1 for loading the people's roles' groups
       expect_query_count do
         # make sure we have more than one row for the test to be meaningful
         expect(tabular.data_rows.to_a).to have_at_least(2).items
-      end.to eq 7
+      end.to eq 8
     end
   end
 end

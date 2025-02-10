@@ -187,15 +187,8 @@ de:
     attributes:
       contact_account:
         predefined_labels:
-          andere: Andere
-          arbeit: Arbeit
-          fax: Fax
-          "haupt-telefon": Haupt-Telefon
-          mobil: Mobil
-          mutter: Mutter
-          privat: Privat
-          vater: Vater
-          webseite: Webseite
+          landline: Festnetz
+          mobile: Mobil
       cost_center:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
@@ -407,6 +400,10 @@ de:
           m: Herr
           w: Frau
         additional_information: Bemerkungen (z.B. Beruf)
+      person/phone_number_mobile:
+        number: Mobiltelefon
+      person/phone_number_landline:
+        number: Festnetztelefon
       group:
         type: Gruppentyp technisch
         group_id: Gruppen-ID

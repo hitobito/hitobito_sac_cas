@@ -68,7 +68,7 @@ describe SacCas::Export::MitgliederExportJob do
   # This export generates a legacy file format which MUST NOT prefix phone numbers.
   it "does not prefix phone numbers with single quote" do
     person = people(:mitglied)
-    person.phone_numbers.create!(number: "+41 79 123 45 67", label: "Haupt-Telefon")
+    person.create_phone_number_mobile!(number: "+41 79 123 45 67")
     job.perform
     expect(contents).to include "$+41 79 123 45 67$"
   end

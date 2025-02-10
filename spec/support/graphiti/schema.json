@@ -1708,6 +1708,26 @@
           "readable": true,
           "description": null
         },
+        "foundation_year": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "section_canton": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "mitglied_termination_by_section_only": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "course_admin_email": {
           "type": "string",
           "readable": true,
@@ -1749,26 +1769,6 @@
           "description": null
         },
         "abo_alpen_postage_abroad_article_number": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "foundation_year": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "section_canton": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "language": {
-          "type": "string",
-          "readable": true,
-          "description": null
-        },
-        "mitglied_termination_by_section_only": {
           "type": "string",
           "readable": true,
           "description": null

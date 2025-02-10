@@ -121,9 +121,8 @@ describe PeopleController do
 
       expect do
         put :update, params: {id: admin.id, group_id: admin.groups.first.id, person: {
-          first_name: nil, phone_numbers_attributes: {"0": {
-            number: "+41 77 123 45 66", translated_label: "Privat", public: "1"
-          }}
+          first_name: nil,
+          phone_number_landline_attributes: {number: "+41 77 123 45 66"}
         }}
       end.to change { admin.phone_numbers.count }.by(1)
       expect(data_quality_checker).to have_received(:check_data_quality).once
@@ -215,6 +214,33 @@ describe PeopleController do
         sign_in(member)
         expect { request }.not_to change { member.reload.email }
       end
+    end
+
+    it "can update phone_numbers" do
+      expect do
+        put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                              person: {
+                                phone_number_landline_attributes: {number: "+41 77 123 45 66"},
+                                phone_number_mobile_attributes: {number: "+41 77 123 45 67"}
+                              }}
+      end.to change { admin.reload.phone_numbers.count }.by(2)
+        .and change { admin.phone_number_landline&.number }.to("+41 77 123 45 66")
+        .and change { admin.phone_number_mobile&.number }.to("+41 77 123 45 67")
+    end
+
+    it "can remove phone_numbers" do
+      admin.create_phone_number_landline(number: "+41 77 123 45 66")
+
+      expect do
+        put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                              person: {
+                                phone_number_landline_attributes: {
+                                  id: admin.phone_number_landline.id,
+                                  number: ""
+                                }
+                              }}
+      end.to change { admin.reload.phone_numbers.count }.by(-1)
+        .and change { admin.phone_number_landline&.number }.from("+41 77 123 45 66").to(nil)
     end
   end
 end

@@ -8,7 +8,17 @@
 require "spec_helper"
 
 describe Person do
-  context "family_id" do
+  context "associations" do
+    %w[landline mobile].each do |label|
+      it "#phone_number_#{label} returns the number with label #{label.inspect}" do
+        person = people(:mitglied)
+        phone_number = person.phone_numbers.create!(number: "+41791234567", label: label)
+        expect(person.send(:"phone_number_#{label}")).to eq(phone_number)
+      end
+    end
+  end
+
+  context "#family_id" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { Fabricate(:person, household_key: "1234ABCD", birthday: 25.years.ago) }
 

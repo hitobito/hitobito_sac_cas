@@ -33,11 +33,11 @@ module Export::Tabular::People
         :town,
         :country,
         :birthday,
-        :phone_number_main,
-        :phone_number_privat,
         :empty, # 1 leere Spalte
-        :phone_number_mobil,
-        :phone_number_fax,
+        :phone_number_landline,
+        :empty, # 1 leere Spalte
+        :phone_number_mobile,
+        :empty, # 1 leere Spalte
         :email,
         :gender,
         :empty, # 1 leere Spalte
@@ -68,7 +68,7 @@ module Export::Tabular::People
           type: SacCas::MITGLIED_ROLES.map(&:sti_name)
         })
         .joins(:roles)
-        .includes(:phone_numbers, :roles_unscoped, roles: :group)
+        .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped, roles: :group)
         .distinct
     end
 

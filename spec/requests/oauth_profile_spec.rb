@@ -49,7 +49,8 @@ RSpec.describe "GET oauth/profile", type: :request do
         country: user.country,
         picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
         membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
-        phone: nil
+        phone_number_landline: nil,
+        phone_number_mobile: nil
       }.deep_stringify_keys)
     end
   end
@@ -81,7 +82,8 @@ RSpec.describe "GET oauth/profile", type: :request do
         language: user.language,
         picture_url: "http://www.example.com/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg",
         membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
-        phone: nil,
+        phone_number_landline: nil,
+        phone_number_mobile: nil,
         membership_years: user.membership_years,
         roles: [{
           group_id: user.roles.first.group_id,

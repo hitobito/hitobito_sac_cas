@@ -111,14 +111,9 @@ module Export::Tabular::People
       group.navision_id_padded
     end
 
-    # Beliebige Telefonnummer mit dem angegebenen Label.
-    def phone_number(label)
-      entry.phone_numbers.find { |p| p.label.downcase == label.to_s }&.number
-    end
+    def phone_number_landline = entry.phone_number_landline&.number
 
-    def phone_number_main
-      phone_number("haupt-telefon")
-    end
+    def phone_number_mobile = entry.phone_number_mobile&.number
 
     def postfach
       entry.postbox
@@ -143,14 +138,6 @@ module Export::Tabular::People
     # Used for empty cells.
     def empty
       nil
-    end
-
-    def method_missing(method, *args)
-      (method.to_s =~ /^phone_number_(\w+)$/) ? phone_number(::Regexp.last_match(1)) : super
-    end
-
-    def respond_to_missing?(method, include_private = false)
-      method.to_s.start_with?("phone_number_") || super
     end
 
     private

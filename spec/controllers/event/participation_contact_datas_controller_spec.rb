@@ -38,7 +38,7 @@ describe Event::ParticipationContactDatasController do
 
     it "stores attributes on person if valid" do
       course.update(required_contact_attrs: %w[phone_numbers])
-      number = person.phone_numbers.create!(label: "dummy", number: "+41790000000")
+      number = person.create_phone_number_mobile!(label: "mobile", number: "+41790000000")
       patch :update, params: {
         group_id: group.id,
         event_id: course.id,
@@ -53,8 +53,9 @@ describe Event::ParticipationContactDatasController do
           town: "Zürich",
           country: "CH",
           last_name: "NewName",
-          phone_numbers_attributes: {
-            "1" => {id: number.id, label: number.label, number: "+41791111111", _destroy: false}
+          phone_number_mobile_attributes: {
+            id: number.id,
+            number: "+41791111111"
           }
         },
         event_role: {

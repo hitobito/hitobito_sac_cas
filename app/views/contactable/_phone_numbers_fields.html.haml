@@ -1,0 +1,11 @@
+- #  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+= f.labeled :phone_numbers do
+  - PhoneNumber.predefined_labels.each do |label|
+    - assoc = "phone_number_#{label}"
+    - number = entry.send(assoc) || entry.send("build_#{assoc}")
+    = f.fields_for assoc, number do |fields|
+      - render 'contactable/phone_number_fields', f: fields
