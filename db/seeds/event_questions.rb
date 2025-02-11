@@ -8,7 +8,7 @@
 # recreate default event questions
 
 Event::Question.seed_global({
-  disclosure: :optional,
+  disclosure: :required,
   event_type: Event::Course.sti_name,
   translation_attributes: [
     {locale: :de, question: "Notfallkontakt 1 - Name und Telefonnummer"},
