@@ -1433,6 +1433,8 @@ de:
     cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
 
   invoices:
+    abo_magazin:
+      title: Rechnung Die Alpen %{year}
     errors:
       data_quality_error: "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
       create_subject_failed: "Probleme beim Übermitteln der Personendaten"
