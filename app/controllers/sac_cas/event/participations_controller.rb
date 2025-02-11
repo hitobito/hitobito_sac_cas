@@ -20,10 +20,10 @@ module SacCas::Event::ParticipationsController
     after_summon :enqueue_invoice_job
     after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
     before_cancel :assert_participant_cancelable?
-    after_cancel :cancel_invoices
   end
 
   def cancel
+    cancel_invoices
     entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
     entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
     entry.canceled_at = Time.zone.today if participant_cancels?
@@ -182,6 +182,6 @@ module SacCas::Event::ParticipationsController
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
 
-    ExternalInvoice::CourseAnnulation.invoice!(entry)
+    ExternalInvoice::CourseAnnulation.invoice!(entry) unless entry.state == "applied"
   end
 end
