@@ -8,7 +8,28 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
+  MANUALLY_SENDABLE_LEADERSHIP_MAILS = [
+    Event::PublishedMailer::NOTICE,
+    Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
+    Event::LeaderReminderMailer::REMINDER_8_WEEKS
+  ]
+
   prepended do
+    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+      Event::ParticipationCanceledMailer::CONFIRMATION,
+      Event::CanceledMailer::NO_LEADER,
+      Event::CanceledMailer::MINIMUM_PARTICIPANTS,
+      Event::CanceledMailer::WEATHER,
+      Event::ParticipationMailer::SUMMONED_PARTICIPATION,
+      Event::ApplicationConfirmationMailer::ASSIGNED,
+      Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION,
+      Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION,
+      Event::ParticipantReminderMailer::REMINDER,
+      Event::SurveyMailer::SURVEY,
+      Event::ApplicationConfirmationMailer::UNCONFIRMED,
+      Event::ApplicationConfirmationMailer::APPLIED
+    ]
+
     include I18nEnums
     include CapitalizedDependentErrors
 

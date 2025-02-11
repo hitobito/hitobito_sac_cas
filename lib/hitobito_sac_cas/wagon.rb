@@ -57,11 +57,11 @@ module HitobitoSacCas
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
-      Event::Participation.prepend SacCas::Event::Participation
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
+      Event::Participation.prepend SacCas::Event::Participation
       Event::Answer.include SacCas::Event::Answer
       Group.include SacCas::Group
       Household.prepend SacCas::Household
@@ -148,6 +148,7 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
+      Dropdown::Event::Participation::MailDispatch.prepend SacCas::Dropdown::Event::Participation::MailDispatch
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Person.prepend SacCas::Sheet::Person
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
@@ -165,6 +166,7 @@ module HitobitoSacCas
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      Event::Participations::MailDispatchesController.prepend SacCas::Event::Participations::MailDispatchesController
       Event::RegisterController.prepend SacCas::Event::RegisterController
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
