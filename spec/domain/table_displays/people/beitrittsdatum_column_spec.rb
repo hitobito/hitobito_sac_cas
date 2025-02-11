@@ -25,5 +25,23 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
     header: "Beitritt per",
     value: "01.01.2015",
     permission: :show
-  }
+  } do
+    it "reads value from MitgliedZusatzsektion role" do
+      Role.where(id: roles(:mitglied).id).update_all(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name)
+      display.render(:beitrittsdatum)
+      expect(node).to have_css "td", text: "01.01.2015"
+    end
+
+    it "ignores value of other role types" do
+      Role.where(id: roles(:mitglied).id).update_all(type: Group::SektionsMitglieder::Ehrenmitglied)
+      display.render(:beitrittsdatum)
+      expect(node).to have_css "td", text: ""
+    end
+
+    it "renders nothing when roles doe not match group" do
+      allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:root))
+      display.render(:beitrittsdatum)
+      expect(node).to have_css "td", text: ""
+    end
+  end
 end
