@@ -11,6 +11,7 @@
     %span
       .count
       = ti('selected')
+    = extended_all_checkbox(@people)
     .actions
       = action_button(t('.accept'),
         new_group_people_neuanmeldungen_approves_path(group_id: @group),
