@@ -50,6 +50,15 @@ describe Memberships::FamilyMutation do
           .to change { original_role.reload.end_on }.to(Date.yesterday)
       end
 
+      it "destroys exsitisting stammsektion role when starting today" do
+        stammsektion_role.update!(start_on: Time.zone.today, end_on: 5.days.from_now)
+        original_role = stammsektion_role
+
+        expect { mutation.join!(reference_person) }
+          .to change { Role.count }.by(1)
+        expect { original_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
       it "creates new family stammsektion role per today" do
         # reference_person has stammsektion in bluemlisalp_mitglieder
         expect { mutation.join!(reference_person) }
@@ -113,6 +122,17 @@ describe Memberships::FamilyMutation do
         expect { mutation.join!(reference_person) }
           .to raise_error("not allowed with terminated sac membership")
       end
+
+      it "destroys new family stammsektion role when joining and leaving the family in the same day" do
+        expect { mutation.join!(reference_person) }
+          .to change { stammsektion_role.id }
+
+        stammsektion_role_in_family = stammsektion_role
+
+        expect { mutation.leave! }
+          .to change { stammsektion_role.id }
+        expect { stammsektion_role_in_family.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
     context "as a non-member person" do
@@ -148,6 +168,15 @@ describe Memberships::FamilyMutation do
 
       expect { mutation.leave! }
         .to change { original_role.reload.end_on }.to(Date.current.yesterday)
+    end
+
+    it "ends exististing family stammsektion role when start on is today" do
+      stammsektion_role.update!(start_on: Time.zone.today, end_on: 5.days.from_now)
+      original_role = stammsektion_role
+
+      expect { mutation.join!(reference_person) }
+        .to change { stammsektion_role.id }
+      expect { original_role.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "creates new non-family stammsektion role per today" do
@@ -205,6 +234,17 @@ describe Memberships::FamilyMutation do
       Role.where(person_id: roles(:familienmitglied).id).delete_all
       mutation = described_class.new(people(:familienmitglied))
       expect { mutation.leave! }.not_to raise_error
+    end
+
+    it "destroys new stammsektion role when leaving and joining new family in the same day" do
+      expect { mutation.leave! }
+        .to change { stammsektion_role.id }
+
+      stammsektion_role_after_family = stammsektion_role
+
+      expect { mutation.join!(reference_person) }
+        .to change { stammsektion_role.id }
+      expect { stammsektion_role_after_family.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
