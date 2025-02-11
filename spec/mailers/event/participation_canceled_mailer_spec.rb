@@ -8,11 +8,13 @@
 require "spec_helper"
 
 describe Event::ParticipationCanceledMailer do
-  let(:event) { Fabricate(:sac_open_course) }
+  let(:event) { Fabricate(:sac_open_course, groups: [groups(:bluemlisalp)]) }
   let(:participation) { event.participations.create!(person: people(:mitglied)) }
   let(:mail) { described_class.confirmation(participation) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before do
+    Group.root.update!(course_admin_email: "admin@example.com")
+  end
 
   it "sends to email addresses of participant" do
     expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
