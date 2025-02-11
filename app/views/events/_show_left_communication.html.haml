@@ -17,3 +17,6 @@
     - if entry.program?
       = labeled(Event::Course.human_attribute_name(:program)) do
         %p.multiline= safe_auto_link(entry.program, html: { target: '_blank' })
+    - if entry.link_external_site?
+      = labeled(Event::Course.human_attribute_name(:link_external_site)) do
+        %p.multiline= safe_auto_link(entry.link_external_site, html: { target: '_blank' })

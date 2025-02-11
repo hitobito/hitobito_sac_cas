@@ -16,6 +16,8 @@
         = f.labeled_input_field(:program)
 
     = field_set_tag do
+      - entry.used?(:link_external_site) do
+        = f.labeled_input_field(:link_external_site)
       - entry.used?(:link_participants) do
         = f.labeled_input_field(:link_participants)
       - entry.used?(:link_leaders) do

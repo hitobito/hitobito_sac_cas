@@ -353,6 +353,12 @@
           "writable": false,
           "description": null
         },
+        "link_external_site": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "price_member": {
           "type": "float",
           "readable": true,
@@ -420,6 +426,8 @@
         "similar_tours": {
         },
         "program": {
+        },
+        "link_external_site": {
         },
         "price_member": {
         },

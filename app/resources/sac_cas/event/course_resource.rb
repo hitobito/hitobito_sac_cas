@@ -24,6 +24,7 @@ module SacCas::Event::CourseResource
       attribute :specialities, :string
       attribute :similar_tours, :string
       attribute :program, :string
+      attribute :link_external_site, :string
 
       attribute :price_member, :float
       attribute :price_regular, :float
