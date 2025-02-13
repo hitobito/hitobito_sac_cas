@@ -1368,6 +1368,8 @@ en:
     cannot_set_main_person: Contact the office to change the family invoice recipient
 
   invoices:
+    abo_magazin:
+      title: ""
     errors:
       data_quality_error: ""
       create_subject_failed: ""

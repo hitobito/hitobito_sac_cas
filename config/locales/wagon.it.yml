@@ -1440,6 +1440,8 @@ it:
     cannot_set_main_person: Contatta il Segretariato centrale per far cambiare il destinatario di fatturazione per la famiglia.
 
   invoices:
+    abo_magazin:
+      title: ""
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"

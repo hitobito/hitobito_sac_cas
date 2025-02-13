@@ -1446,6 +1446,8 @@ fr:
     cannot_set_main_person: Contacte le secrétariat pour modifier le destinataire des factures familiales
 
   invoices:
+    abo_magazin:
+      title: ""
     errors:
       data_quality_error: "La personne a des problèmes de qualité des données, c’est pourquoi aucune facture n’a été créée."
       create_subject_failed: "Problèmes lors de la transmission des données personnelles"
