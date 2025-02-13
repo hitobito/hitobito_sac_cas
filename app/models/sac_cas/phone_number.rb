@@ -11,6 +11,11 @@ module SacCas::PhoneNumber
   included do
     after_create :check_data_quality
     after_destroy :check_data_quality
+
+    validates :label,
+      inclusion: {in: PhoneNumber.predefined_labels},
+      uniqueness: {scope: [:contactable_type, :contactable_id]},
+      allow_blank: false
   end
 
   private

@@ -7,11 +7,15 @@
 
 module SacCas::Event::ParticipationContactData
   extend ActiveSupport::Concern
+  include AssignsSacPhoneNumbers
 
   prepended do
     attr_reader :event
 
     delegate :salutation_label, to: :person
+    delegate :phone_number_mobile, :build_phone_number_mobile,
+      :phone_number_landline, :build_phone_number_landline,
+      to: :person
 
     delegate :subsidy?, :subsidizable?, to: :participation
 
@@ -19,11 +23,17 @@ module SacCas::Event::ParticipationContactData
       delegate :human_attribute_name, to: Wizards::Steps::Signup::PersonFields
     end
 
-    self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street, :housenumber,
-      :postbox, :zip_code, :town, :country, :gender, :birthday, :phone_numbers]
+    self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street,
+      :housenumber, :postbox, :zip_code, :town, :country, :gender, :birthday,
+      :phone_number_mobile, :phone_number_landline]
 
     self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :street,
       :housenumber, :zip_code, :town, :country]
+  end
+
+  def initialize(event, person, model_params = {})
+    super
+    mark_phone_numbers_for_destroy(person)
   end
 
   private
@@ -33,13 +43,15 @@ module SacCas::Event::ParticipationContactData
   end
 
   def assert_required_contact_attrs_valid
-    super.tap do
-      person.phone_numbers.first.valid?
+    super
 
-      message = [
-        Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number), t("errors.messages.blank")
-      ].join(" ")
-      errors.add(:base, message) if person.phone_numbers.first.number.blank?
-    end
+    # Ensure that at least one phone number is present
+    return if PhoneNumber.predefined_labels
+      .map { |label| person.send(:"phone_number_#{label}") }
+      .select { |phone_number| !phone_number&.marked_for_destruction? }
+      .any?
+
+    message = [PhoneNumber.model_name.human, t("errors.messages.blank")].join(" ")
+    errors.add(:base, message)
   end
 end

@@ -18,7 +18,8 @@ describe "Event Signup", :js do
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "42"
     fill_in "Geburtsdatum", with: "01.01.1980"
-    fill_in "Telefon", with: "+41 79 123 45 56"
+    fill_in "Mobil",
+      with: "+41 79 123 45 56"
     fill_in "event_participation_contact_data_zip_code", with: "40202"
     fill_in "event_participation_contact_data_town", with: "Zürich"
     find(:label, "Land").click
@@ -43,8 +44,9 @@ describe "Event Signup", :js do
       expect(admin.town).to eq "Zürich"
       expect(admin.country).to eq "US"
       expect(admin.birthday).to eq Date.new(1980, 1, 1)
+      expect(admin.phone_numbers).to have(1).item
       expect(admin.phone_numbers.first.number).to eq "+41 79 123 45 56"
-      expect(admin.phone_numbers.first.label).to eq "Mobile"
+      expect(admin.phone_numbers.first.label).to eq "mobile"
     end
   end
 
@@ -95,7 +97,7 @@ describe "Event Signup", :js do
         expect(page).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Subventionsbeitrag"
-        expect(page).not_to have_text "- Subvention"
+        expect(page).to have_no_text "- Subvention"
         check "Subventionierten Preis von CHF 6.00 beantragen"
         expect(page).to have_text "- Subvention"
         expect(page).to have_text "CHF 6"
@@ -105,11 +107,11 @@ describe "Event Signup", :js do
         first(:button, "Zurück").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Subventionsbeitrag"
         uncheck "Subventionierten Preis von CHF 6.00 beantragen"
-        expect(page).not_to have_text "- Subvention"
+        expect(page).to have_no_text "- Subvention"
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
         expect(page).to have_text admin.to_s
-        expect(page).not_to have_text "- Subvention"
+        expect(page).to have_no_text "- Subvention"
         click_on "Anmelden"
         expect(page).to have_text "AGB muss akzeptiert werden"
         with_retries do

@@ -25,9 +25,7 @@ describe Wizards::Signup::SektionOperation do
       zip_code: "8000",
       birthday: "1.1.2000",
       country: "CH",
-      phone_numbers_attributes: [
-        {number: "0791234567", label: "Mobil"}
-      ]
+      phone_number_mobile_attributes: {number: "0791234567"}
     }
   }
 
@@ -80,7 +78,8 @@ describe Wizards::Signup::SektionOperation do
 
       expect(max.roles.first.type).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
       expect(max.roles.first.group).to eq group
-      expect(max.phone_numbers.first.label).to eq "Mobil"
+      expect(max.phone_numbers).to have(1).item
+      expect(max.phone_numbers.first.label).to eq "mobile"
       expect(max.phone_numbers.first.number).to eq "+41 79 123 45 67"
     end
 
@@ -201,7 +200,7 @@ describe Wizards::Signup::SektionOperation do
 
         expect(person.roles.last.type).to eq "Group::SektionsNeuanmeldungenSektion::Neuanmeldung"
         expect(person.roles.last.group).to eq group
-        expect(person.phone_numbers.first.label).to eq "Mobil"
+        expect(person.phone_numbers.first.label).to eq "mobile"
         expect(person.phone_numbers.first.number).to eq "+41 79 123 45 67"
         expect(mailing_lists(:newsletter).people).to eq [person]
       end
@@ -212,8 +211,8 @@ describe Wizards::Signup::SektionOperation do
       end
 
       it "does not duplicate phone_number when id is set" do
-        number = person.phone_numbers.create!(label: "Mobil", number: "+41 79 123 45 67")
-        person_attrs[:phone_numbers_attributes][0][:id] = number.id
+        number = person.phone_numbers.create!(label: "mobile", number: "+41 79 123 45 67")
+        person_attrs[:phone_number_mobile_attributes][:id] = number.id
 
         expect { operation.save! }
           .to change { person.roles.count }

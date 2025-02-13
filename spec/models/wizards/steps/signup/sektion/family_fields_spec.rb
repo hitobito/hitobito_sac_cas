@@ -31,7 +31,7 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
     expect(form.members[0].person_attributes).to eq(required_attrs
       .merge(birthday: Date.new(2000, 1, 1))
       .except(:phone_number)
-      .merge(phone_numbers_attributes: [{label: "Mobil", number: "0791234567"}]))
+      .merge(phone_number_mobile_attributes: {id: nil, number: "0791234567"}))
   end
 
   describe "validations" do

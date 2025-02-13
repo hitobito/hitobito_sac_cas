@@ -67,14 +67,9 @@ social_account:
 
 phone_number:
   predefined_labels:
-    - Haupt-Telefon
-    - Privat
-    - Mobil
-    - Arbeit
-    - Vater
-    - Mutter
-    - Fax
-    - Andere
+    - --
+    - landline
+    - mobile
 
 impersonate:
   notify: false
