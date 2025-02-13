@@ -26,6 +26,11 @@ class Group::SacCas < Group
   mounted_attr :sac_newsletter_mailing_list_id, :integer
   mounted_attr :sac_magazine_mailing_list_id, :integer
   mounted_attr :sac_fundraising_mailing_list_id, :integer
+  mounted_attr :abo_alpen_fee, :decimal, precision: 10, scale: 2
+  mounted_attr :abo_alpen_postage_abroad, :decimal, precision: 10, scale: 2
+  mounted_attr :abo_touren_portal_fee, :decimal, precision: 10, scale: 2
+  mounted_attr :abo_alpen_fee_article_number, :string
+  mounted_attr :abo_alpen_postage_abroad_article_number, :string
 
   validate :assert_valid_course_admin_email
   validate :assert_mounted_mailing_list_attrs

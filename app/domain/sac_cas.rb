@@ -112,17 +112,6 @@ module SacCas
     .select { |c| c.to_s =~ /MAILING_LIST_.*INTERNAL_KEY/ }
     .map { |c| const_get(c) }
 
-  AboCost = Data.define(:amount, :country)
-  ABO_COSTS = {
-    magazin: [
-      AboCost.new(amount: 60, country: :switzerland),
-      AboCost.new(amount: 76, country: :international)
-    ],
-    tourenportal: [
-      AboCost.new(amount: 45, country: nil)
-    ]
-  }
-
   MEMBERSHIP_OPERATIONS_GROUP_TYPES = [::Group::Sektion.sti_name, ::Group::Ortsgruppe.sti_name].freeze
   MEMBERSHIP_OPERATIONS_EXCLUDED_IDS = [
     2900, 3700, 2249, 2330, 2601, 3030, 3251,

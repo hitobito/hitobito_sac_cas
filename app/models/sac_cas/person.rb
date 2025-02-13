@@ -107,6 +107,11 @@ module SacCas::Person
     SacCas::Beitragskategorie::Calculator.new(self, reference_date: reference_date).youth?
   end
 
+  # Liechtenstein is counted as not abroad, extra fees should not apply
+  def living_abroad?
+    !(swiss? || country.downcase == "li")
+  end
+
   def picture_profile_default
     "profile.svg" # default image for profile variant
   end

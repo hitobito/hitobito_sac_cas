@@ -14,6 +14,7 @@ describe "self_registration_abo_magazin", js: true do
   before do
     group.update!(self_registration_role_type: group.role_types.first)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
+    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16)
   end
 
   def expect_active_step(step_name)

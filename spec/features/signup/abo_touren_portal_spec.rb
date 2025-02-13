@@ -14,6 +14,7 @@ describe "signup/abo_touren_portal_wizard" do
   before do
     group.update!(self_registration_role_type: group.role_types.first)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
+    Group.root.update!(abo_touren_portal_fee: 20)
   end
 
   def complete_main_person_form
