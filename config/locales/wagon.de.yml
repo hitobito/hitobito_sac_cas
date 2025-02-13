@@ -674,42 +674,15 @@ de:
       group/ortsgruppe:
         one: Ortsgruppe
         other: Ortsgruppen
-      group/sektions_mitglieder:
-        one: Mitglieder
-        other: Mitglieder
-      group/sektions_neuanmeldungen_nv:
-        one: Neuanmeldungen
-        other: Neuanmeldungen
-      group/sektions_neuanmeldungen_sektion:
-        one: Neuanmeldungen (zur Freigabe)
-        other: Neuanmeldungen (zur Freigabe)
-      group/sektions_funktionaere:
-        one: Sektionsfunktionäre
-        other: Sektionsfunktionäre
-      group/sektions_vorstand:
-        one: Vorstand
-        other: Vorstand
-      group/sektions_touren_und_kurse:
-        one: Touren und Kurse
-        other: Touren und Kurse
-      group/sektions_touren_und_kurse_sommer:
-        one: Touren und Kurse Sommer
-        other: Touren und Kurse Sommer
-      group/sektions_touren_und_kurse_winter:
-        one: Touren und Kurse Winter
-        other: Touren und Kurse Winter
+      group/sektions_clubhuette:
+        one: Clubhütte
+        other: Clubhütten
       group/sektions_clubhuetten:
         one: Clubhütten
         other: Clubhütten
-      group/sektions_clubhuette:
-        one: Clubhuette
-        other: Clubhuetten
-      group/sektionshuetten:
-        one: Sektionshütten
-        other: Sektionshütten
-      group/sektionshuette:
-        one: Sektionshütte
-        other: Sektionshütten
+      group/sektions_funktionaere:
+        one: Sektionsfunktionäre
+        other: Sektionsfunktionäre
       group/sektions_kommissionen:
         one: Kommissionen
         other: Kommissionen
@@ -725,9 +698,36 @@ de:
       group/sektions_kommission_umwelt_und_kultur:
         one: Kommission Umwelt und Kultur
         other: Kommissionen Umwelt und Kultur
-      group/sektions_touren_und_kurse_allgemein:
+      group/sektions_mitglieder:
+        one: Mitglieder
+        other: Mitglieder
+      group/sektions_neuanmeldungen_nv:
+        one: Neuanmeldungen
+        other: Neuanmeldungen
+      group/sektions_neuanmeldungen_sektion:
+        one: Neuanmeldungen (zur Freigabe)
+        other: Neuanmeldungen (zur Freigabe)
+      group/sektions_touren_und_kurse:
         one: Touren und Kurse
         other: Touren und Kurse
+      group/sektions_touren_und_kurse_allgemein:
+        one: Touren und Kurse Allgemein
+        other: Touren und Kurse Allgemein
+      group/sektions_touren_und_kurse_sommer:
+        one: Touren und Kurse Sommer
+        other: Touren und Kurse Sommer
+      group/sektions_touren_und_kurse_winter:
+        one: Touren und Kurse Winter
+        other: Touren und Kurse Winter
+      group/sektions_vorstand:
+        one: Vorstand
+        other: Vorstand
+      group/sektionshuetten:
+        one: Sektionshütten
+        other: Sektionshütten
+      group/sektionshuette:
+        one: Sektionshütte
+        other: Sektionshütten
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
