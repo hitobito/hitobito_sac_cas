@@ -18,7 +18,7 @@ describe "Event Signup", :js do
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "42"
     fill_in "Geburtsdatum", with: "01.01.1980"
-    fill_in "event_participation_contact_data_phone_number_mobile_attributes_number",
+    fill_in "Mobil",
       with: "+41 79 123 45 56"
     fill_in "event_participation_contact_data_zip_code", with: "40202"
     fill_in "event_participation_contact_data_town", with: "Zürich"

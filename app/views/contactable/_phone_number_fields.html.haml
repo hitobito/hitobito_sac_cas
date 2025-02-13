@@ -7,4 +7,4 @@
   %div.col-11.col-md-5.me-3.mb-1
     = f.input_field(:number, placeholder: PhoneNumber.human_attribute_name(:number))
   %div.col-11.col-md-4.d-flex.flex-row.me-3
-    = f.object.translated_label
+    = f.label(:number, f.object.translated_label)

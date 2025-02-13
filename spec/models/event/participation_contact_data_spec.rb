@@ -53,32 +53,47 @@ describe Event::ParticipationContactData do
     end
   end
 
-  it "can handle deletion and mutation of phone-number" do
-    attrs.delete(:phone_number_mobile_attributes)
-    existing_number = person.create_phone_number_landline(number: "044 112 00 00")
-    expect(person.phone_numbers.count).to eq 1
+  context "phone_number" do
+    it "can be added" do
+      expect(person.phone_numbers).to be_empty
 
-    contact_data = build(attrs.merge(
-      # remove the single existing number
-      phone_number_landline_attributes: {id: existing_number.id, number: ""}
-    ))
-    expect(contact_data).not_to be_valid
+      contact_data = build(attrs)
+      expect(contact_data).to be_valid
 
-    contact_data = build(attrs.merge(
-      # remove the existing number, add another one
-      phone_number_landline_attributes: {id: existing_number.id, number: ""},
-      phone_number_mobile_attributes: {id: nil, number: "079 123 45 67"}
-    ))
-    expect(contact_data).to be_valid
+      expect { contact_data.save }
+        .to change { person.phone_numbers.count }.by(1)
+      expect(person.phone_number_mobile.number).to eq "+41 79 123 45 56"
+    end
 
-    contact_data = build(attrs.merge(
-      # add another number besides the existing one
-      phone_number_mobile_attributes: {id: nil, number: "079 123 45 67"}
-    ))
-    expect(contact_data).to be_valid
+    it "can be removed" do
+      existing_number = person.create_phone_number_landline(number: "044 112 00 00")
+      expect(person.phone_numbers.count).to eq 1
+
+      contact_data = build(attrs.merge(
+        # remove the single existing number
+        phone_number_landline_attributes: {id: existing_number.id, number: ""}
+      ))
+      expect(contact_data).to be_valid
+
+      expect { contact_data.save }
+        .to change { person.reload.phone_number_landline }.to(nil)
+    end
+
+    it "can be updated" do
+      existing_number = person.create_phone_number_landline!(number: "044 112 00 00")
+      expect(person.phone_numbers.count).to eq 1
+
+      contact_data = build(attrs.merge(
+        phone_number_landline_attributes: {id: existing_number.id, number: "044 112 00 01"}
+      ))
+      expect(contact_data).to be_valid
+
+      expect { contact_data.save }
+        .to change { person.reload.phone_number_landline.number }.to("+41 44 112 00 01")
+    end
   end
 
   def build(attributes)
-    Event::ParticipationContactData.new(event, person, attributes)
+    Event::ParticipationContactData.new(event.clone, person.clone, attributes)
   end
 end

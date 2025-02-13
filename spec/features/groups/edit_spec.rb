@@ -18,8 +18,8 @@ describe "group edit page" do
       expect do
         visit edit_group_path(id: group.id)
         click_link "Kontaktangaben"
-        fill_in "group[phone_number_landline_attributes][number]", with: "0441234567"
-        fill_in "group[phone_number_mobile_attributes][number]", with: "0791234567"
+        fill_in "Festnetz", with: "0441234567"
+        fill_in "Mobil", with: "0791234567"
         click_button "Speichern"
         expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(2)
@@ -34,9 +34,9 @@ describe "group edit page" do
       expect do
         visit edit_group_path(id: group.id)
         click_link "Kontaktangaben"
-        expect(page).to have_field("group[phone_number_landline_attributes][number]",
+        expect(page).to have_field("Festnetz",
           with: "+41 44 123 45 67")
-        fill_in "group[phone_number_landline_attributes][number]", with: "+41 44 765 43 21"
+        fill_in "Festnetz", with: "+41 44 765 43 21"
         click_button "Speichern", match: :first
         expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(0)
@@ -50,12 +50,12 @@ describe "group edit page" do
       expect do
         visit edit_group_path(id: group.id)
         click_link "Kontaktangaben"
-        expect(page).to have_field("group[phone_number_landline_attributes][number]",
+        expect(page).to have_field("Festnetz",
           with: "+41 44 123 45 67")
-        expect(page).to have_field("group[phone_number_mobile_attributes][number]",
+        expect(page).to have_field("Mobil",
           with: "+41 79 123 45 67")
-        fill_in "group[phone_number_landline_attributes][number]", with: ""
-        fill_in "group[phone_number_mobile_attributes][number]", with: ""
+        fill_in "Festnetz", with: ""
+        fill_in "Mobil", with: ""
         click_button "Speichern", match: :first
         expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(-2)
