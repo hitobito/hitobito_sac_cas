@@ -57,8 +57,8 @@ module Wizards::Signup
 
     private
 
-    def annual_fee = Group.root.abo_alpen_fee
+    def annual_fee = Group.root.abo_alpen_fee || 0
 
-    def abroad_fee = Group.root.abo_alpen_postage_abroad
+    def abroad_fee = Group.root.abo_alpen_postage_abroad || 0
   end
 end
