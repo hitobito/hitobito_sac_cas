@@ -1,9 +1,9 @@
 #external_trainings
-  %h2
-    .mt-4=ExternalTraining.model_name.human(count: 2)
+  %h2.mt-4
+    =ExternalTraining.model_name.human(count: 2)
     - if can?(:new, @person.external_trainings.build)
       %span.float-end= button_action_add(new_group_person_external_training_path(@group, @person))
 
-  = table(@external_trainings, class: 'table table-striped table-fixed') do |t|
+  = table(@external_trainings, class: 'table table-striped') do |t|
     - t.attrs(:event_kind, :name, :provider, :start_at, :finish_at, :training_days, :link, :remarks)
     - action_col_destroy(t) { |e| group_person_external_training_path(@group, @person, e) }
