@@ -182,15 +182,8 @@ it:
     attributes:
       contact_account:
         predefined_labels:
-          andere: Altro
-          arbeit: Ufficio
-          fax: Fax
-          "haupt-telefon": Tel. principale
-          mobil: Cellulare
-          mutter: Madre
-          privat: Privato
-          vater: Padre
-          webseite: ""
+          landline: ""
+          mobile: ""
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -402,6 +395,10 @@ it:
           m: Signor
           w: Signora
         additional_information: Osservazioni (ad es. professione)
+      person/phone_number_mobile:
+        number: ""
+      person/phone_number_landline:
+        number: ""
       group:
         type: Tipo di gruppo tecnico
         group_id: ID gruppo
@@ -412,6 +409,11 @@ it:
         sac_magazine_mailing_list_id: ID abbonamento Le Alpi
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
+        abo_alpen_fee: ""
+        abo_alpen_postage_abroad: ""
+        abo_touren_portal_fee: ""
+        abo_alpen_fee_article_number: ""
+        abo_alpen_postage_abroad_article_number: ""
       group/sektion:
         foundation_year: Anno di fondazione
         section_canton: Cantone

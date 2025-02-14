@@ -177,15 +177,8 @@ en:
     attributes:
       contact_account:
         predefined_labels:
-          andere: ""
-          arbeit: ""
-          fax: ""
-          "haupt-telefon": ""
-          mobil: ""
-          mutter: ""
-          privat: ""
-          vater: ""
-          webseite: ""
+          landline: ""
+          mobile: ""
       cost_center:
         label: Designation
         event_kind_categories: Course categories
@@ -397,6 +390,10 @@ en:
           m: Mr.
           w: Woman
         additional_information: Remarks (e.g. profession)
+      person/phone_number_mobile:
+        number: ""
+      person/phone_number_landline:
+        number: ""
       group:
         type: ""
         group_id: Group ID
@@ -407,6 +404,11 @@ en:
         sac_magazine_mailing_list_id: The Alps subscription ID
         sac_fundraising_mailing_list_id: Appeal for donations Subscription ID
         course_admin_email: E-mail course administration
+        abo_alpen_fee: ""
+        abo_alpen_postage_abroad: ""
+        abo_touren_portal_fee: ""
+        abo_alpen_fee_article_number: ""
+        abo_alpen_postage_abroad_article_number: ""
       group/sektion:
         foundation_year: Founding year
         section_canton: Canton
