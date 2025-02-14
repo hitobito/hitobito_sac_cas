@@ -72,7 +72,13 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
     end
 
     say_with_time("apply the effects of some Role#after_destroy callbacks which might have been circumvented (may take up to an hour!)") do
-      Person.find_each do |person|
+      connection = ActiveRecord::Base.connection
+      sql = <<-SQL
+        SELECT * FROM people
+      SQL
+      people = connection.execute(sql)
+
+      for person in people do
         role = person.roles.first
         next unless role
 
