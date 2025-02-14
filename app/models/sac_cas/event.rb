@@ -21,6 +21,7 @@
 #  hidden_contact_attrs             :text(65535)
 #  language                         :string(255)
 #  link_leaders                     :string(255)
+#  link_external_site               :string(255)
 #  link_participants                :string(255)
 #  link_survey                      :string(255)
 #  location                         :text(65535)
