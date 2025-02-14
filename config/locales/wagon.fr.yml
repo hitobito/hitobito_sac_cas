@@ -184,8 +184,8 @@ fr:
     attributes:
       contact_account:
         predefined_labels:
-          landline: ""
-          mobile: ""
+          landline: Ligne fixe
+          mobile: Mobile
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours
@@ -271,6 +271,7 @@ fr:
           fr: Français
           it: Italien
         link_leaders: Lien cadre du cours
+        link_external_site: ""
         link_participants: Lien Participant·e·s
         link_survey: Lien Sondage
         meals: Restauration
@@ -398,9 +399,9 @@ fr:
           w: Madame
         additional_information: Remarques (p. ex. profession)
       person/phone_number_mobile:
-        number: ""
+        number: Téléphone mobile
       person/phone_number_landline:
-        number: ""
+        number: Téléphone fixe
       group:
         type: Type de groupe technique
         group_id: ID du groupe

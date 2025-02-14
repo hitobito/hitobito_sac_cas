@@ -264,6 +264,7 @@ en:
           fr: French
           it: Italian
         link_leaders: Link course squad
+        link_external_site: ""
         link_participants: Link participants
         link_survey: Link Survey
         meals: Catering
