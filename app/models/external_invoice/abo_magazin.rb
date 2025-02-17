@@ -35,6 +35,10 @@ class ExternalInvoice::AboMagazin < ExternalInvoice
     I18n.t("invoices.sac_memberships.title", year: year)
   end
 
+  def invoice_kind
+    :sac_magazine
+  end
+
   private
 
   def handle_state_change_to_payed
