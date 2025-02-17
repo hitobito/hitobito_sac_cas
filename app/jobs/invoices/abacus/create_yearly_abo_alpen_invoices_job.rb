@@ -17,16 +17,6 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
     Time.zone.tomorrow.at_beginning_of_day.change(hour: 2, minute: 18).in_time_zone
   end
 
-  def active_abonnenten
-    Role.joins(:person)
-      .left_joins(person: :external_invoices)
-      .where.not(people: {abacus_subject_key: nil})
-      .where(type: Group::AboMagazin::Abonnent.sti_name, terminated: false)
-      .where(end_on: Time.zone.today..62.days.from_now)
-      .where("external_invoices.id IS NULL OR external_invoices.year != EXTRACT(YEAR FROM roles.end_on + INTERVAL '1 day')")
-      .distinct
-  end
-
   def error(job, exception)
     create_error_log_entry("stapelverarbeitung", "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. " \
               "Es erfolgt ein weiterer Versuch.", exception.message)
@@ -38,12 +28,18 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
 
   private
 
-  def process_invoices
-    sales_orders = []
+  def active_abonnenten
+    Role.joins(:person)
+      .left_joins(person: :external_invoices)
+      .where.not(people: {abacus_subject_key: nil})
+      .where(type: Group::AboMagazin::Abonnent.sti_name, terminated: false)
+      .where(end_on: Time.zone.today..62.days.from_now)
+      .where("external_invoices.id IS NULL OR external_invoices.year != EXTRACT(YEAR FROM roles.end_on + INTERVAL '1 day')")
+      .distinct
+  end
 
-    active_abonnenten.each do |abonnent_role|
-      sales_orders << create_invoice(abonnent_role)
-    end
+  def process_invoices
+    sales_orders = active_abonnenten.map { |abonnent_role| create_invoice(abonnent_role) }
 
     parts = submit_sales_orders(sales_orders)
     log_error_parts(parts)

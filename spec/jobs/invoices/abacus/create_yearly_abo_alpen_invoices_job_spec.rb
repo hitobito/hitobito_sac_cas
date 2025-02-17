@@ -63,32 +63,36 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
 
   describe "#active_abonnenten" do
     it "includes every abonnent role where role end in next 62 days" do
-      expect(subject.active_abonnenten).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
-    it "does no unclude abonnent where role ends in more than 62 days" do
+    it "does not include abonnent where role ends in more than 62 days" do
       abonnent_role.update_column(:end_on, 70.days.from_now)
-      expect(subject.active_abonnenten).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include roles when role is terminated" do
       abonnent_role.update_column(:terminated, true)
-      expect(subject.active_abonnenten).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include roles where person does not have a abacus subject key" do
       abonnent.update_column(:abacus_subject_key, nil)
-      expect(subject.active_abonnenten).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include roles with person who already has external invoice abo magazin in this year" do
       ExternalInvoice::AboMagazin.create!(person: abonnent, year: (abonnent_role.end_on + 1.day).year)
-      expect(subject.active_abonnenten).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does include roles with person who already has external invoice but not in this year" do
       ExternalInvoice::AboMagazin.create!(person: abonnent, year: 3.years.ago.year)
-      expect(subject.active_abonnenten).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
   end
 
