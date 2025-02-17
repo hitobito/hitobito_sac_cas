@@ -8,7 +8,7 @@
 class Export::BackupMitgliederScheduleJob < RecurringJob
   run_every 1.day
 
-  ROLE_TYPES_TO_BACKUP = [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)
+  ROLE_TYPES_TO_BACKUP = %w[Group::Sektion Group::Ortsgruppe]
 
   def perform_internal
     relevant_groups.find_each do |group|
