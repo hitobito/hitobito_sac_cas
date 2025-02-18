@@ -6,12 +6,14 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::EventParticipationHelper
+  include EventsHelper
+
   def format_event_participation_price(entry)
-    format_event_price(entry.price_category, entry.price) if entry.price.present?
+    format_event_price(entry.price_category, entry.price, entry.event) if entry.price.present?
   end
 
-  def format_event_price(attr, price)
-    [Event::Course.human_attribute_name(attr), I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
+  def format_event_price(attr, price, event)
+    [price_category_label(event, attr), I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
   end
 
   def event_participation_cancellation_cost(entry)
