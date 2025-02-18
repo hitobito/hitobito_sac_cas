@@ -8,6 +8,8 @@
 module Invoices
   module Abacus
     class CourseParticipationInvoice
+      include EventsHelper
+
       attr_reader :participation
 
       delegate :event, to: :participation
@@ -63,7 +65,7 @@ module Invoices
       end
 
       def position_description_and_amount
-        description = participation.price_category? ? Event::Course.human_attribute_name(participation.price_category) : nil
+        description = participation.price_category? ? price_category_label(event, participation.price_category) : nil
         [description, participation.price]
       end
     end
