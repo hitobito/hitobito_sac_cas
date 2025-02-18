@@ -353,6 +353,12 @@
           "writable": false,
           "description": null
         },
+        "link_external_site": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "price_member": {
           "type": "float",
           "readable": true,
@@ -420,6 +426,8 @@
         "similar_tours": {
         },
         "program": {
+        },
+        "link_external_site": {
         },
         "price_member": {
         },
@@ -1708,6 +1716,26 @@
           "readable": true,
           "description": null
         },
+        "foundation_year": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "section_canton": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "mitglied_termination_by_section_only": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "course_admin_email": {
           "type": "string",
           "readable": true,
@@ -1728,22 +1756,27 @@
           "readable": true,
           "description": null
         },
-        "foundation_year": {
+        "abo_alpen_fee": {
           "type": "string",
           "readable": true,
           "description": null
         },
-        "section_canton": {
+        "abo_alpen_postage_abroad": {
           "type": "string",
           "readable": true,
           "description": null
         },
-        "language": {
+        "abo_touren_portal_fee": {
           "type": "string",
           "readable": true,
           "description": null
         },
-        "mitglied_termination_by_section_only": {
+        "abo_alpen_fee_article_number": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "abo_alpen_postage_abroad_article_number": {
           "type": "string",
           "readable": true,
           "description": null

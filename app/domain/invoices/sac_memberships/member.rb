@@ -14,7 +14,7 @@ module Invoices
     class Member
       attr_reader :person, :context, :sac_membership
 
-      delegate :id, :to_s, :language, :sac_family_main_person?, to: :person
+      delegate :id, :to_s, :language, :sac_family_main_person?, :living_abroad?, to: :person
       delegate :date, :sac_magazine_mailing_list, to: :context
       delegate :zusatzsektion_roles,
         :neuanmeldung_nv_stammsektion_roles, :neuanmeldung_nv_zusatzsektion_roles,
@@ -66,10 +66,6 @@ module Invoices
         return @sac_ehrenmitglied if defined?(@sac_ehrenmitglied)
 
         @sac_ehrenmitglied = sac_membership.sac_ehrenmitglied?
-      end
-
-      def living_abroad?
-        !(person.swiss? || person.country.downcase == "li")
       end
 
       def sac_magazine?

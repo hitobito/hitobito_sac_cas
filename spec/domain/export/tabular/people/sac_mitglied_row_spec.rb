@@ -261,20 +261,14 @@ describe Export::Tabular::People::SacMitgliedRow do
     expect(row.layer_navision_id_padded).to eq(group.navision_id_padded)
   end
 
-  it "#phone_number returns any number for given label" do
-    mobile1 = Fabricate(:phone_number, contactable: person, label: "mobile", number: "0781234567")
-    mobile2 = Fabricate(:phone_number, contactable: person, label: "mobile", number: "0782345678")
-    expect(row.phone_number("mobile")).to eq(mobile1.number).or eq(mobile2.number)
-  end
-
-  it "#phone_number_main returns number with label Haupt-Telefon" do
-    main = Fabricate(:phone_number, contactable: person, label: "Haupt-Telefon", number: "0311234567")
-    expect(row.phone_number_main).to eq main.number
+  it "#phone_number_landline returns number with label landline" do
+    main = Fabricate(:phone_number, contactable: person, label: "landline", number: "0311234567")
+    expect(row.fetch(:phone_number_landline)).to eq main.number
   end
 
   it "#phone_number_mobile returns any number with label mobile" do
     mobile = Fabricate(:phone_number, contactable: person, label: "mobile", number: "0781234567")
-    expect(row.phone_number_mobile).to eq mobile.number
+    expect(row.fetch(:phone_number_mobile)).to eq mobile.number
   end
 
   it "#postfach returns postbox for now" do

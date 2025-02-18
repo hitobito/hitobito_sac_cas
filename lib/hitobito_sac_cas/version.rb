@@ -6,5 +6,5 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module HitobitoSacCas
-  VERSION = "2.4.9"
+  VERSION = "2.4.14"
 end

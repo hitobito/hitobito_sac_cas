@@ -43,9 +43,12 @@ module SacCas::OidcClaimSetup
   def run
     super
 
-    add_claim(:picture_url, scope: [:name, :with_roles])
-    add_claim(:membership_verify_url, scope: [:name, :with_roles])
-    add_claim(:phone, scope: [:name, :with_roles])
+    with_options(scope: [:name, :with_roles]) do
+      add_claim(:picture_url)
+      add_claim(:membership_verify_url)
+      add_claim(:phone_number_landline)
+      add_claim(:phone_number_mobile)
+    end
 
     add_claim(:membership_years, scope: :with_roles)
     add_claim(:user_groups, scope: :user_groups)
@@ -61,9 +64,9 @@ module SacCas::OidcClaimSetup
     People::Membership::VerificationQrCode.new(owner).verify_url if owner.sac_membership_anytime?
   end
 
-  def phone(owner)
-    owner.phone_numbers.order(:id).find_by(label: SacCas.main_phone_label)&.number
-  end
+  def phone_number_landline(owner) = owner.phone_number_landline&.number
+
+  def phone_number_mobile(owner) = owner.phone_number_mobile&.number
 
   def membership_years(owner)
     owner.membership_years

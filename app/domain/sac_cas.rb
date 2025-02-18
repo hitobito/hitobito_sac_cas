@@ -123,15 +123,9 @@ module SacCas
     ]
   }
 
-  MEMBERSHIP_OPERATIONS_GROUP_TYPES = [::Group::Sektion.sti_name, ::Group::Ortsgruppe.sti_name].freeze
+  MEMBERSHIP_OPERATIONS_GROUP_TYPES = %w[Group::Sektion Group::Ortsgruppe].freeze
   MEMBERSHIP_OPERATIONS_EXCLUDED_IDS = [
     2900, 3700, 2249, 2330, 2601, 3030, 3251,
     3730, 3952, 3953, 3954, 4530, 4851, 5401
   ]
-
-  def main_phone_label
-    Settings.phone_number.predefined_labels.find { |l| l =~ /Haupt/ }
-  end
-
-  module_function :main_phone_label
 end

@@ -184,15 +184,8 @@ fr:
     attributes:
       contact_account:
         predefined_labels:
-          andere: Autre
-          arbeit: Professionnel
-          fax: Fax
-          "haupt-telefon": Tél. principal
-          mobil: Mobile
-          mutter: Mère
-          privat: Privé
-          vater: Père
-          webseite: ""
+          landline: Ligne fixe
+          mobile: Mobile
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours
@@ -278,6 +271,7 @@ fr:
           fr: Français
           it: Italien
         link_leaders: Lien cadre du cours
+        link_external_site: ""
         link_participants: Lien Participant·e·s
         link_survey: Lien Sondage
         meals: Restauration
@@ -372,7 +366,7 @@ fr:
         created_at: Créé
         updated_at: Modifié
       person:
-        id: ""
+        id: Numéro de personne
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé
@@ -392,8 +386,8 @@ fr:
           _nil: Divers
         birthday: Date de naissance
         membership_years: Nombre de membres-années
-        terminate_on: ""
-        termination_reason: ""
+        terminate_on: Date de sortie
+        termination_reason: Motif de sortie
         membership_number: N° de membre
         navision_id: N° Navision
         salutations:
@@ -404,6 +398,10 @@ fr:
           m: Monsieur
           w: Madame
         additional_information: Remarques (p. ex. profession)
+      person/phone_number_mobile:
+        number: Téléphone mobile
+      person/phone_number_landline:
+        number: Téléphone fixe
       group:
         type: Type de groupe technique
         group_id: ID du groupe
@@ -414,6 +412,11 @@ fr:
         sac_magazine_mailing_list_id: ID d’abonnement Les Alpes
         sac_fundraising_mailing_list_id: ID d’abonnement appels aux dons
         course_admin_email: E-mail administration des cours
+        abo_alpen_fee: ""
+        abo_alpen_postage_abroad: ""
+        abo_touren_portal_fee: ""
+        abo_alpen_fee_article_number: ""
+        abo_alpen_postage_abroad_article_number: ""
       group/sektion:
         foundation_year: Année de création
         section_canton: Canton
@@ -1446,6 +1449,8 @@ fr:
     cannot_set_main_person: Contacte le secrétariat pour modifier le destinataire des factures familiales
 
   invoices:
+    abo_magazin:
+      title: "Facture Les Alpes %{year}"
     errors:
       data_quality_error: "La personne a des problèmes de qualité des données, c’est pourquoi aucune facture n’a été créée."
       create_subject_failed: "Problèmes lors de la transmission des données personnelles"
@@ -1813,12 +1818,12 @@ fr:
   table_displays:
     person:
       antrag_fuer: Demande de
-      duplicate_exists: ""
+      duplicate_exists: Le duplicata existe
       address_valid: Adresse valide
       confirmed_at: E-mail confirmé le
       beitrittsdatum: Adhésion au
-      terminate_on: ""
-      termination_reason: ""
+      terminate_on: Date de sortie
+      termination_reason: Motif de sortie
 
   termination_reasons:
     destroy:

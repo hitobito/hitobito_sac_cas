@@ -32,12 +32,8 @@ describe Event::RegisterController do
       town: "Zürich",
       country: "CH",
       birthday: "01.01.1980",
-      phone_numbers_attributes: {
-        "0": {
-          number: "+41 79 123 45 56",
-          public: true,
-          translated_label: "Mobile"
-        }
+      phone_number_mobile_attributes: {
+        number: "+41 79 123 45 56"
       }
     }.with_indifferent_access
   }
@@ -60,6 +56,16 @@ describe Event::RegisterController do
         expect(person.roles.first.type).to eq(Group::AboBasicLogin::BasicLogin.sti_name)
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
         expect(flash[:notice]).to include "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben"
+      end
+    end
+
+    context "without any phone number" do
+      it "does not create person" do
+        attrs.delete(:phone_number_mobile_attributes)
+
+        expect do
+          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: attrs}
+        end.not_to change { Person.count }
       end
     end
   end

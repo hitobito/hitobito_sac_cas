@@ -182,15 +182,8 @@ it:
     attributes:
       contact_account:
         predefined_labels:
-          andere: Altro
-          arbeit: Ufficio
-          fax: Fax
-          "haupt-telefon": Tel. principale
-          mobil: Cellulare
-          mutter: Madre
-          privat: Privato
-          vater: Padre
-          webseite: ""
+          landline: Linea fissa
+          mobile: Mobile
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -276,6 +269,7 @@ it:
           fr: Francese
           it: Italiano
         link_leaders: Link al quadro del corso
+        link_external_site: Collegamento a pagina esterna
         link_participants: Link partecipanti
         link_survey: Link sondaggio
         meals: Vitto
@@ -370,7 +364,7 @@ it:
         created_at: Creato
         updated_at: Modificato
       person:
-        id: ""
+        id: Numero personale
         address_care_of: Complemento di indirizzo
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
@@ -390,8 +384,8 @@ it:
           _nil: diversa
         birthday: Data di nascita
         membership_years: Numero di anni di affiliazione
-        terminate_on: ""
-        termination_reason: ""
+        terminate_on: Data di partenza
+        termination_reason: Motivo della partenza
         membership_number: Socio n.
         navision_id: Navision n.
         salutations:
@@ -402,6 +396,10 @@ it:
           m: Signor
           w: Signora
         additional_information: Osservazioni (ad es. professione)
+      person/phone_number_mobile:
+        number: Telefono cellulare
+      person/phone_number_landline:
+        number: Telefono fisso
       group:
         type: Tipo di gruppo tecnico
         group_id: ID gruppo
@@ -412,6 +410,11 @@ it:
         sac_magazine_mailing_list_id: ID abbonamento Le Alpi
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
+        abo_alpen_fee: ""
+        abo_alpen_postage_abroad: ""
+        abo_touren_portal_fee: ""
+        abo_alpen_fee_article_number: ""
+        abo_alpen_postage_abroad_article_number: ""
       group/sektion:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -1377,7 +1380,7 @@ it:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
         existing_membership_notice: >-
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
-        can_login_already_notice: ""
+        can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo login SAC/CAS.
         already_subscribed_to_abo: ""
         already_member_of_tourenportal: ""
 
@@ -1440,6 +1443,8 @@ it:
     cannot_set_main_person: Contatta il Segretariato centrale per far cambiare il destinatario di fatturazione per la famiglia.
 
   invoices:
+    abo_magazin:
+      title: ""
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"
@@ -1807,12 +1812,12 @@ it:
   table_displays:
     person:
       antrag_fuer: Richiesta per
-      duplicate_exists: ""
+      duplicate_exists: Esiste un duplicato
       address_valid: Indirizzo valido
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal
-      terminate_on: ""
-      termination_reason: ""
+      terminate_on: Data di partenza
+      termination_reason: Motivo della partenza
 
   termination_reasons:
     destroy:

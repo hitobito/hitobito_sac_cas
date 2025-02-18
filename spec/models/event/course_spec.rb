@@ -56,6 +56,7 @@ describe Event::Course do
         :cost_center_id,
         :cost_unit_id,
         :language,
+        :link_external_site,
         :link_leaders,
         :link_participants,
         :link_survey,

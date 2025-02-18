@@ -24,12 +24,9 @@ class Signup::AboMagazinMailer < ApplicationMailer
   private
 
   def placeholder_costs
-    cost = if @person.country == "CH"
-      SacCas::ABO_COSTS[:magazin].find { |cost| cost.country == :switzerland }
-    else
-      SacCas::ABO_COSTS[:magazin].find { |cost| cost.country == :international }
-    end
-    formatted_value = number_with_precision(cost.amount,
+    cost = Group.root.abo_alpen_fee
+    cost += Group.root.abo_alpen_postage_abroad if @person.living_abroad?
+    formatted_value = number_with_precision(cost,
       precision: I18n.t("number.currency.format.precision"),
       delimiter: I18n.t("number.currency.format.delimiter"))
 

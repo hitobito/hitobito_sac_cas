@@ -187,15 +187,8 @@ de:
     attributes:
       contact_account:
         predefined_labels:
-          andere: Andere
-          arbeit: Arbeit
-          fax: Fax
-          "haupt-telefon": Haupt-Telefon
-          mobil: Mobil
-          mutter: Mutter
-          privat: Privat
-          vater: Vater
-          webseite: Webseite
+          landline: Festnetz
+          mobile: Mobil
       cost_center:
         label: Bezeichnung
         event_kind_categories: Kurskategorien
@@ -281,6 +274,7 @@ de:
           fr: Französisch
           it: Italienisch
         link_leaders: Link Kurskader
+        link_external_site: Link Externe Seite
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
         meals: Verpflegung
@@ -407,6 +401,10 @@ de:
           m: Herr
           w: Frau
         additional_information: Bemerkungen (z.B. Beruf)
+      person/phone_number_mobile:
+        number: Mobiltelefon
+      person/phone_number_landline:
+        number: Festnetztelefon
       group:
         type: Gruppentyp technisch
         group_id: Gruppen-ID
@@ -417,6 +415,11 @@ de:
         sac_magazine_mailing_list_id: Die Alpen Abo ID
         sac_fundraising_mailing_list_id: Spendenaufruf Abo ID
         course_admin_email: E-Mail Kursadministration
+        abo_alpen_fee: Betrag Abonnent Die Alpen
+        abo_alpen_postage_abroad: Betrag Auslandporto Die Alpen
+        abo_touren_portal_fee: Betrag Abonnent Tourenportal
+        abo_alpen_fee_article_number: Artikelnummer Abonnent Die Alpen
+        abo_alpen_postage_abroad_article_number: Artiklenummer Auslandporto Die Alpen
       group/sektion:
         foundation_year: Gründungsjahr
         section_canton: Kanton
@@ -1433,6 +1436,8 @@ de:
     cannot_set_main_person: Melde dich bei der Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen
 
   invoices:
+    abo_magazin:
+      title: Rechnung Die Alpen %{year}
     errors:
       data_quality_error: "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
       create_subject_failed: "Probleme beim Übermitteln der Personendaten"

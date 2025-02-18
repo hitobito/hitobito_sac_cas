@@ -37,7 +37,7 @@ class ExternalTraining < ActiveRecord::Base
   validates_date :finish_at, on_or_after: :start_at, allow_blank: true
   validates_date :finish_at, on_or_before: lambda { Date.current }
 
-  scope :list, -> { order(created_at: :desc) }
+  scope :list, -> { order(finish_at: :desc) }
 
   after_destroy :revoke_qualifications
   after_save :issue_qualifications

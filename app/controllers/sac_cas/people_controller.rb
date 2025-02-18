@@ -7,6 +7,7 @@
 
 module SacCas::PeopleController
   extend ActiveSupport::Concern
+  prepend AssignsSacPhoneNumbers
 
   LOOKUP_PREFIX = "people/neuanmeldungen"
 

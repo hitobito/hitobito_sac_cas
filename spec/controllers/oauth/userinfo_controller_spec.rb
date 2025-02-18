@@ -40,7 +40,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           zip_code: user.zip_code,
           town: user.town,
           country: user.country,
-          phone: nil,
+          phone_number_landline: nil,
+          phone_number_mobile: nil,
           picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
           membership_verify_url: nil
         }.deep_stringify_keys)
@@ -95,7 +96,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
           birthday: user.birthday.to_s.presence,
           primary_group_id: user.primary_group_id,
           language: user.language,
-          phone: nil,
+          phone_number_landline: nil,
+          phone_number_mobile: nil,
           membership_years: 0,
           picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
           membership_verify_url: nil,

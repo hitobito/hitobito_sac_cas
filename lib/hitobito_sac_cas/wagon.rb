@@ -57,18 +57,20 @@ module HitobitoSacCas
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
       Event::KindCategory.prepend SacCas::Event::KindCategory
-      Event::Participation.prepend SacCas::Event::Participation
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
       Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
+      Event::Participation.prepend SacCas::Event::Participation
       Event::Answer.include SacCas::Event::Answer
+      Group.prepend SacPhoneNumbers
       Group.include SacCas::Group
       Household.prepend SacCas::Household
       HouseholdMember.prepend SacCas::HouseholdMember
       Households::MemberValidator.prepend SacCas::Households::MemberValidator
       MailingList.include SacCas::MailingList
       Person.prepend SacCas::Person
+      Person.prepend SacPhoneNumbers
       Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
@@ -78,6 +80,11 @@ module HitobitoSacCas
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
       Contactable.prepend SacCas::Contactable
+      PhoneNumber.predefined_labels.each do |label|
+        PeopleController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+        GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+      end
+
       Wizards::Steps::NewUserForm.support_company = false
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
@@ -148,6 +155,7 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
+      Dropdown::Event::Participation::MailDispatch.prepend SacCas::Dropdown::Event::Participation::MailDispatch
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Person.prepend SacCas::Sheet::Person
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
@@ -165,10 +173,12 @@ module HitobitoSacCas
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      Event::Participations::MailDispatchesController.prepend SacCas::Event::Participations::MailDispatchesController
       Event::RegisterController.prepend SacCas::Event::RegisterController
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
       GroupsController.permitted_attrs << {section_offering_ids: []}
+      GroupsController.prepend SacCas::GroupsController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController

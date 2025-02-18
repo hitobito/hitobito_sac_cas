@@ -25,6 +25,7 @@
 #  hidden_contact_attrs             :text(65535)
 #  language                         :string(255)
 #  link_leaders                     :string(255)
+#  link_external_site               :string(255)
 #  link_participants                :string(255)
 #  link_survey                      :string(255)
 #  location                         :text(65535)
@@ -112,6 +113,7 @@ module SacCas::Event::Course
       :cost_center_id,
       :cost_unit_id,
       :annual,
+      :link_external_site,
       :link_participants,
       :link_leaders,
       :link_survey,

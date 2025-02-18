@@ -145,6 +145,10 @@ describe Wizards::Signup::AboMagazinWizard do
   end
 
   describe "#calculate_costs" do
+    before do
+      Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16)
+    end
+
     it "calculates costs for swiss people" do
       expect(wizard.calculated_costs).to eq(60)
     end

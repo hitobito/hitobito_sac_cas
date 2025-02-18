@@ -114,9 +114,9 @@ describe Wizards::Steps::Signup::PersonFields do
     end
 
     it "reads phone_number if present" do
-      number = person.phone_numbers.create!(label: "Mobil", number: "0791234567")
+      number = person.phone_numbers.create!(label: "mobile", number: "0791234567")
       expect(form.phone_number).to eq "+41 79 123 45 67"
-      expect(form.person_attributes[:phone_numbers_attributes][0][:id]).to eq number.id
+      expect(form.person_attributes[:phone_number_mobile_attributes][:id]).to eq number.id
     end
 
     it "params override values read from person" do

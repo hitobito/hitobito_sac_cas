@@ -22,14 +22,17 @@ describe OidcClaimSetup do
 
   shared_examples "shared claims" do
     describe "phone" do
-      it "is blank when no matching number exists" do
-        expect(claim_keys).to include("phone")
+      it "is blank when no number exists" do
+        expect(claims).to include(phone_number_mobile: nil)
+        expect(claims).to include(phone_number_landline: nil)
       end
 
-      it "returns first number with matching label" do
-        owner.phone_numbers.create!(label: "Haupt-Telefon", number: "0791234560")
-        owner.phone_numbers.create!(label: "Haupt-Telefon", number: "0791234561")
-        expect(claims[:phone]).to eq "+41 79 123 45 60"
+      it "returns number with matching label" do
+        owner.phone_numbers.create!(label: "mobile", number: "0791234560")
+        owner.phone_numbers.create!(label: "landline", number: "0311234560")
+
+        expect(claims[:phone_number_mobile]).to eq "+41 79 123 45 60"
+        expect(claims[:phone_number_landline]).to eq "+41 31 123 45 60"
       end
     end
   end

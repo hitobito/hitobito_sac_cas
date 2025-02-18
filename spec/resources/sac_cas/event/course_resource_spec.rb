@@ -18,6 +18,7 @@ describe Event::CourseResource, type: :resource do
       :season,
       :start_point_of_time,
       :minimum_age,
+      :link_external_site,
 
       :brief_description,
       :specialities,

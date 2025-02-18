@@ -8,7 +8,7 @@
 module Wizards::Steps::Signup::PersonCommon
   extend ActiveSupport::Concern
 
-  PHONE_NUMBER_LABEL = "Mobil"
+  PHONE_NUMBER_LABEL = "mobile"
 
   included do
     class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
@@ -35,7 +35,7 @@ module Wizards::Steps::Signup::PersonCommon
     attributes.compact.symbolize_keys.except(:phone_number).then do |attrs|
       next attrs if phone_number.blank?
 
-      attrs.merge(phone_numbers_attributes: [{label: PHONE_NUMBER_LABEL, number: phone_number, id: phone_number_id}.compact])
+      attrs.merge(phone_number_mobile_attributes: {number: phone_number, id: phone_number_id})
     end
   end
 
