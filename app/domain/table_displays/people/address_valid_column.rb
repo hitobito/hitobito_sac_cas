@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class AddressValidColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      []
-    end
-
     def required_model_includes(attr)
       [:tags]
     end

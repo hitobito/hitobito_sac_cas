@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class BeitrittsdatumColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      ["roles.group_id"]
-    end
-
     def render(attr)
       super do |person|
         beitrittsdatum(person)
