@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class BeitragskategorieColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      ["roles.beitragskategorie"]
-    end
-
     def render(attr)
       super do |person|
         beitragskategorie(target)

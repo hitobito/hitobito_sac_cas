@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class WiedereintrittColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      []
-    end
-
     def required_model_includes(attr)
       [:roles_unscoped]
     end

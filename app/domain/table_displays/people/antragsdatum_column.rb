@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class AntragsdatumColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      ["roles.group_id"]
-    end
-
     def render(attr)
       super do |person|
         antragsdatum(person)
