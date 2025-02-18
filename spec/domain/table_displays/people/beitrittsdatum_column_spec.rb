@@ -38,7 +38,7 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
       expect(node).to have_css "td", text: ""
     end
 
-    it "renders nothing when roles doe not match group" do
+    it "renders nothing when roles do not match group" do
       allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:root))
       display.render(:beitrittsdatum)
       expect(node).to have_css "td", text: ""
