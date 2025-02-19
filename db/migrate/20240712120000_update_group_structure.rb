@@ -13,11 +13,11 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
     say_with_time("deleting groups and roles of outdated types") do
       if outdated_group_ids.present?
         # We need to overwrite the type column, because the outdated value in it will otherwise confuse Rails
-        execute("UPDATE groups SET type='Group', name='temp' WHERE id IN (#{outdated_group_ids.join(', ')})")
+        execute("UPDATE groups SET type='Group', name='temp' WHERE id IN (#{outdated_group_ids.join(", ")})")
         # Some roles already have to be deleted, otherwise they'll cause problems later
-        execute("DELETE FROM roles WHERE group_id IN (#{outdated_group_ids.join(', ')})")
+        execute("DELETE FROM roles WHERE group_id IN (#{outdated_group_ids.join(", ")})")
       end
-      execute("DELETE FROM roles WHERE type IN ('#{force_delete_role_types.join('\', \'')}')")
+      execute("DELETE FROM roles WHERE type IN ('#{force_delete_role_types.join("', '")}')")
 
       outdated_group_ids.each do |id|
         hard_destroy_group(id)
@@ -25,13 +25,13 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
     end
 
     say_with_time("deleting any people filters referencing the outdated group types") do
-      PeopleFilter.where("filter_chain LIKE '%Group::SektionsExterneKontakte%'").
-        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuettenkommission%'")).
-        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuette%'")).
-        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsKommission%'")).
-        or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsTourenkommission%'")).
-        to_a.
-        map(&:destroy!)
+      PeopleFilter.where("filter_chain LIKE '%Group::SektionsExterneKontakte%'")
+        .or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuettenkommission%'"))
+        .or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsHuette%'"))
+        .or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsKommission%'"))
+        .or(PeopleFilter.where("filter_chain LIKE '%Group::SektionsTourenkommission%'"))
+        .to_a
+        .map(&:destroy!)
     end
 
     say_with_time("creating missing default_children of Sektion and Ortsgruppe groups") do
@@ -70,20 +70,6 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
         end
       end
     end
-
-    say_with_time("apply the effects of some Role#after_destroy callbacks which might have been circumvented (may take up to an hour!)") do
-      Person.find_each do |person|
-        role = person.roles.first
-        next unless role
-
-        # Role#reset_contact_data_visible
-        contact_data = person.roles.collect(&:permissions).flatten.include?(:contact_data)
-        person.update_column :contact_data_visible, contact_data
-
-        # Role#reset_primary_group
-        person.update_column :primary_group_id, person.roles.order(updated_at: :desc).first.try(:group_id)
-      end
-    end
   end
 
   def hard_destroy_group(group_id)
@@ -91,7 +77,7 @@ class UpdateGroupStructure < ActiveRecord::Migration[6.1]
     relations = [
       Person::AddRequest::IgnoredApprover,
       BackgroundJobLogEntry,
-      SacSectionMembershipConfig,
+      SacSectionMembershipConfig
     ]
     related = relations.flat_map { |clazz| clazz.where(group_id: group_id).to_a }
 
