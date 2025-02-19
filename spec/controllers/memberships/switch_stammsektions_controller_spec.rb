@@ -28,7 +28,7 @@ describe Memberships::SwitchStammsektionsController do
 
     it "response with 422 when flash message" do
       post :create, params: wizard_params(choose_sektion: {group_id: groups(:root).id})
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
     end
 
     it "sets flash message" do

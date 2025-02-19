@@ -44,7 +44,7 @@ describe People::YearlyMembershipInvoicesController do
       expect do
         post :create, params: params.deep_merge(people_yearly_membership_invoice_form: {invoice_year: today + 3.years})
       end.not_to change { Delayed::Job.count }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
     end
 
     it "does not schedule a second job if one is already running" do

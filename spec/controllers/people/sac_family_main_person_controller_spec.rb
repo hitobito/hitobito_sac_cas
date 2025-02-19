@@ -46,7 +46,7 @@ describe People::SacFamilyMainPersonController, type: :controller do
 
       it "returns a 422 status with an error message" do
         put :update, params: {id: adult.id}
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(422)
         expect(response.body).to eq("Person is not associated with any household")
       end
     end

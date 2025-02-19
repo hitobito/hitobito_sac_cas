@@ -48,7 +48,7 @@ describe People::MembershipInvoicesController do
       expect do
         post :create, params: params.deep_merge(people_membership_invoice_form: {send_date: ""})
       end.not_to change { ExternalInvoice.count }
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(422)
     end
 
     context "data quality errors" do
