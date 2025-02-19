@@ -46,7 +46,7 @@ describe OidcClaimSetup do
     end
 
     it "has redirect url to store image" do
-      expect(owner.picture.attach(Rack::Test::UploadedFile.new(logo))).to eq true
+      expect(owner.picture.attach(Rack::Test::UploadedFile.new(logo))).to be_truthy
       expect(claims[:picture_url]).to start_with "http://test.host/rails/active_storage/blobs/redirect"
     end
 

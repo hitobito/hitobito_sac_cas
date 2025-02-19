@@ -19,7 +19,7 @@ require File.join(ENV.fetch("APP_ROOT", nil), "spec", "spec_helper.rb")
 Dir[HitobitoSacCas::Wagon.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 RSpec.configure do |config|
-  config.fixture_path = File.expand_path("fixtures", __dir__)
+  config.fixture_paths = [File.expand_path("fixtures", __dir__)]
 
   # disable 2FA for admins in test env since login is used in feature specs
   config.before do
