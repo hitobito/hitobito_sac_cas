@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class AntragFuerColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      ["roles.group_id"]
-    end
-
     def render(attr)
       super do |person|
         antrag_fuer(person)

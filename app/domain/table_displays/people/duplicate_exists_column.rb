@@ -7,10 +7,6 @@
 
 module TableDisplays::People
   class DuplicateExistsColumn < TableDisplays::Column
-    def required_model_attrs(attr)
-      []
-    end
-
     def render(attr)
       super do |person|
         duplicate_exists(person)
