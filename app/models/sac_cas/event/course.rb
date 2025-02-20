@@ -96,8 +96,7 @@ module SacCas::Event::Course
     :reserve_accommodation, :accommodation, :cost_center_id, :cost_unit_id
   ]
 
-  PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_js_active_member
-    price_js_active_regular price_js_passive_member price_js_passive_regular]
+  PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 
   prepended do # rubocop:disable Metrics/BlockLength
     include I18nEnums

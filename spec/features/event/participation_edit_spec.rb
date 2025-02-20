@@ -85,5 +85,14 @@ describe "participation edit page", :js do
         expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(15)
     end
+
+    it "shows j_s price labels for j_s courses" do
+      event.kind.kind_category.update_column(:j_s_course, true)
+      visit participation_path
+      within "#event_participation_price_category" do
+        expect(page).to have_css("option", text: "J&S P-Mitgliederpreis CHF 10.00")
+        expect(page).to have_css("option", text: "J&S P-Normalpreis CHF 20.00")
+      end
+    end
   end
 end

@@ -37,10 +37,7 @@ module SacCas::Event::Participation
       price_member: 0,
       price_regular: 1,
       price_subsidized: 2,
-      price_js_active_member: 3,
-      price_js_active_regular: 4,
-      price_js_passive_member: 5,
-      price_js_passive_regular: 6
+      price_special: 3
     }
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
