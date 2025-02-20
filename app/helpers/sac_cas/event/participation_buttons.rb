@@ -40,7 +40,7 @@ module SacCas::Event::ParticipationButtons
       nil,
       :tag,
       onclick: "event.preventDefault();
-                $('#summon-confirmation').modal('show');")
+                $('#email-confirmation-modal').modal('show');")
   end
 
   def build_assign_button

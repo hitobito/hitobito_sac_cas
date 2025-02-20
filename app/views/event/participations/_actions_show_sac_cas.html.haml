@@ -18,4 +18,4 @@
                 data: { bs_toggle: 'popover', bs_title: t('.create_course_leader_invoice_button'), bs_placement: 'bottom', bs_content: render('popover_create_course_leader_settlement', entry: Event::Courses::LeaderSettlementForm.new(actual_days: entry.actual_days)).to_str })
 
 :javascript
-  $('#modal-placeholder').html("#{j render(partial: 'modal_form', locals: { group: @group, event: @event, participation: entry })}");
+  $('#modal-placeholder').html("#{j render(partial: 'shared/email_confirmation_modal', locals: { send_email_route: summon_group_event_participation_path(@group, @event, entry, send_email: true), send_no_email_route: summon_group_event_participation_path(@group, @event, entry, send_email: false), method: :put, modal_title: t('.modal_title'), send_email_label: t('.summon_and_send_mail'), send_no_email_label: t('.summon_and_send_no_mail') })}");
