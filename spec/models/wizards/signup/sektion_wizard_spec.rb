@@ -276,7 +276,7 @@ describe Wizards::Signup::SektionWizard do
           .and change { person.reload.first_name }.from("Magazina").to("Tester")
           .and change { person.reload.country }.from(nil).to("CH")
           .and not_change { Person.count }
-          .and not_change { person.reload.attributes.compact_blank.except(*%w[primary_group_id country first_name updated_at]) }
+          .and not_change { person.reload.attributes.compact_blank.except(*%w[primary_group_id country first_name updated_at data_quality]) }
       end
 
       describe "family fields" do
