@@ -22,6 +22,17 @@ class SacEventSeeder < EventSeeder
     )
   end
 
+  def seed_questions(event)
+    event.init_questions
+    event.application_questions.map do |question|
+      if question.question == "Notfallkontakt 1 - Name und Telefonnummer"
+        question.update(disclosure: :required)
+      else
+        question.update(disclosure: :optional)
+      end
+    end
+  end
+
   def current_year
     @current_year ||= Time.zone.today.year
   end
