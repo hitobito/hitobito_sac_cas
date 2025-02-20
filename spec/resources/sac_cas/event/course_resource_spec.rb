@@ -27,10 +27,7 @@ describe Event::CourseResource, type: :resource do
       :price_member,
       :price_regular,
       :price_subsidized,
-      :price_js_active_member,
-      :price_js_active_regular,
-      :price_js_passive_member,
-      :price_js_passive_regular
+      :price_special
     ]
   end
 

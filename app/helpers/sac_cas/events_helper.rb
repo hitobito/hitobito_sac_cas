@@ -17,4 +17,12 @@ module SacCas::EventsHelper
       badge(event.unconfirmed_count, :secondary)
     end
   end
+
+  def price_category_label(entry, attr)
+    if entry&.kind&.kind_category&.j_s_course
+      I18n.t("activerecord.attributes.event/course.j_s_#{attr}")
+    else
+      I18n.t("activerecord.attributes.event/course.#{attr}")
+    end
+  end
 end

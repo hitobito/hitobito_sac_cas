@@ -9,7 +9,7 @@ module SacCas::Event::KindCategoriesController
   extend ActiveSupport::Concern
 
   prepended do
-    self.permitted_attrs += [:cost_center_id, :cost_unit_id]
+    self.permitted_attrs += [:cost_center_id, :cost_unit_id, :j_s_course]
   end
 
   def push_down

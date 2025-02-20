@@ -43,6 +43,11 @@ describe Invoices::Abacus::CourseParticipationInvoice do
       expect(position.cost_center).to eq("kurs-1")
       expect(position.cost_unit).to eq("ski-1")
     end
+
+    it "displays j_s price labels for j_s courses" do
+      course.kind.kind_category.update_column(:j_s_course, true)
+      expect(position.name).to eq "J&S P-Normalpreis - Einstiegskurs"
+    end
   end
 
   context "#additional_user_fields" do

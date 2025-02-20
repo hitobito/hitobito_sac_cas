@@ -377,25 +377,7 @@
           "writable": false,
           "description": null
         },
-        "price_js_active_member": {
-          "type": "float",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "price_js_active_regular": {
-          "type": "float",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "price_js_passive_member": {
-          "type": "float",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "price_js_passive_regular": {
+        "price_special": {
           "type": "float",
           "readable": true,
           "writable": false,
@@ -435,13 +417,7 @@
         },
         "price_subsidized": {
         },
-        "price_js_active_member": {
-        },
-        "price_js_active_regular": {
-        },
-        "price_js_passive_member": {
-        },
-        "price_js_passive_regular": {
+        "price_special": {
         }
       },
       "filters": {

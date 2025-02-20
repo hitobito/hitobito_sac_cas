@@ -29,10 +29,7 @@ module SacCas::Event::CourseResource
       attribute :price_member, :float
       attribute :price_regular, :float
       attribute :price_subsidized, :float
-      attribute :price_js_active_member, :float
-      attribute :price_js_active_regular, :float
-      attribute :price_js_passive_member, :float
-      attribute :price_js_passive_regular, :float
+      attribute :price_special, :float
     end
   end
 end

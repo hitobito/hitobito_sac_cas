@@ -16,11 +16,23 @@ describe Event::Participation, :js do
   let(:participation) { Fabricate(:event_participation, event:, person: participant, price_category: "price_member", price: 10, application_id: -1) }
 
   context "as participant" do
-    before { sign_in(participant) }
+    before do
+      sign_in(participant)
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+    end
 
     it "doesn't show invoice button" do
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
       expect(page).not_to have_button("Rechnung erstellen")
+    end
+
+    it "does show price information" do
+      expect(page).to have_text("Mitgliederpreis")
+    end
+
+    it "does show j_s price information for j_s course" do
+      event.kind.kind_category.update_column(:j_s_course, true)
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      expect(page).to have_text("J&S P-Mitgliederpreis")
     end
 
     it "does not display checkbox option to not send email" do
