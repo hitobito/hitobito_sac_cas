@@ -103,6 +103,8 @@ module Memberships
 
     def end_role(role)
       if role.start_on >= Date.current
+        role.skip_destroy_dependent_roles = true
+        role.try(:skip_destroy_household=, true) # only available on stammsektion roles
         role.really_destroy!
       else
         Role.where(id: role.id).update_all(end_on: replaced_role_end_on)

@@ -20,11 +20,15 @@ class Group::SektionsMitglieder < ::Group
     attr_readonly :family_id
 
     before_validation :set_family_id, if: -> { family? && family_id.blank? }
+
     after_destroy :destroy_household, if: -> { person.sac_family_main_person }
+    attr_accessor :skip_destroy_household
 
     private
 
     def destroy_household
+      return if skip_destroy_household
+
       person.update_columns(sac_family_main_person: false)
       Household.new(person, maintain_sac_family: false).destroy
     end
