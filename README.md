@@ -110,11 +110,11 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsTourenUndKurse::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsTourenUndKurse::Schreibrecht)
       * Touren und Kurse Sommer
-        * Tourenchef*in: [:group_read]  --  (Group::SektionsTourenUndKurseSommer::Tourenchef)
+        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseSommer::Tourenchef)
       * Touren und Kurse Winter
-        * Tourenchef*in: [:group_read]  --  (Group::SektionsTourenUndKurseWinter::Tourenchef)
+        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseWinter::Tourenchef)
       * Touren und Kurse Allgemein
-        * Tourenchef*in: [:group_read]  --  (Group::SektionsTourenUndKurseAllgemein::Tourenchef)
+        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseAllgemein::Tourenchef)
       * Clubhütten
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsClubhuetten::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsClubhuetten::Schreibrecht)

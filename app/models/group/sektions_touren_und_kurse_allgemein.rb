@@ -9,7 +9,7 @@ class Group::SektionsTourenUndKurseAllgemein < Group
   ### ROLES
 
   class Tourenchef < ::Role
-    self.permissions = [:group_read]
+    self.permissions = [:layer_and_below_read]
   end
 
   roles Tourenchef
