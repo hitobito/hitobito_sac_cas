@@ -95,4 +95,8 @@ describe "FilterNavigation::People" do
   describe Group::Sektion do
     it_behaves_like "having Tourenleiter filters"
   end
+
+  describe Group::Ortsgruppe do
+    it_behaves_like "having Tourenleiter filters"
+  end
 end

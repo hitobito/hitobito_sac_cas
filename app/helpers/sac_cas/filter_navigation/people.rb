@@ -14,6 +14,11 @@ module SacCas::FilterNavigation::People
     tour_guides_expired: {qualification: :only_expired}
   }.freeze
 
+  GROUPS_WITH_TOURENLEITER_FILTERS = [
+    Group::Sektion,
+    Group::Ortsgruppe
+  ]
+
   def initialize(*args)
     super
 
@@ -27,7 +32,7 @@ module SacCas::FilterNavigation::People
 
   def add_people_filter_links
     super.tap do
-      next unless group.root? || group.is_a?(Group::Sektion)
+      next unless group.root? || GROUPS_WITH_TOURENLEITER_FILTERS.any? { |klass| group.is_a?(klass) }
 
       TOURENLEITER_FILTERS.each do |key, config|
         add_tourenleiter_filter(translate(key), **config)
