@@ -41,7 +41,8 @@ module HitobitoSacCas
         Event::LeaderReminderJob,
         Qualifications::ExpirationMailerJob,
         People::CacheMembershipYearsJob,
-        Roles::TerminateTourenleiterJob
+        Roles::TerminateTourenleiterJob,
+        Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob
       ]
 
       # only schedule BackupMitgliederScheduleJob if sftp config is present
