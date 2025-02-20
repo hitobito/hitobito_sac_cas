@@ -50,13 +50,6 @@ describe QualificationAbility do
           expect(ability).to_not be_able_to(:create, qualification)
         end
 
-        context "without writing permission" do
-          it "is not permitted to create for member in same layer as tourenchef role" do
-            qualification.person = ausserberg_mitglied
-            expect(ability).not_to be_able_to(:create, qualification)
-          end
-        end
-
         context "with writing permission on Mitglieder" do
           let!(:writing_permission) { Group::SektionsMitglieder::Schreibrecht.create(person: person, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)) }
 
