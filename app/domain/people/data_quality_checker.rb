@@ -17,10 +17,10 @@ class People::DataQualityChecker
   def check_data_quality
     check_blank(:first_name, !person.company?)
     check_blank(:last_name, !person.company?)
-    check_blank(:street, membership_invoice? && check_street?)
-    check_blank(:zip_code, membership_invoice?)
-    check_blank(:town, membership_invoice?)
-    check_blank(:email, membership_invoice?, :warning)
+    check_blank(:street, abacus_transmittable? && check_street?)
+    check_blank(:zip_code, abacus_transmittable?)
+    check_blank(:town, abacus_transmittable?)
+    check_blank(:email, abacus_transmittable?, :warning)
     check_phone_numbers
     check_birthday
 
@@ -36,7 +36,7 @@ class People::DataQualityChecker
   private
 
   def check_phone_numbers
-    invalid = membership_invoice? && !@person.phone_numbers.any?
+    invalid = abacus_transmittable? && !@person.phone_numbers.any?
     create_or_destroy(invalid, attr: :phone_numbers, severity: :warning)
   end
 
@@ -77,10 +77,10 @@ class People::DataQualityChecker
     @sac_membership ||= People::SacMembership.new(@person, in_memory: true)
   end
 
-  def membership_invoice?
-    return @membership_invoice if defined?(@membership_invoice)
+  def abacus_transmittable?
+    return @abacus_transmittable if defined?(@abacus_transmittable)
 
-    @membership_invoice = sac_membership.invoice?
+    @abacus_transmittable = sac_membership.invoice? || sac_membership.abonnent_magazin?
   end
 
   def check_street?
