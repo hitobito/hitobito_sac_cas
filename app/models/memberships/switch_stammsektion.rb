@@ -34,6 +34,8 @@ module Memberships
 
       if role.start_on.today?
         role.mark_for_destruction
+        role.skip_destroy_dependent_roles = true
+        role.skip_destroy_household = true
       else
         role.end_on = now.to_date - 1.day
       end

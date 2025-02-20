@@ -40,7 +40,7 @@ module Memberships::CommonApi
     # But this method should not save the roles, so we must roll back after checking the validity.
     Role.transaction(requires_new: true) do
       roles_to_destroy, roles_to_update = roles.partition(&:marked_for_destruction?)
-      roles_to_destroy.each { |role| Role.find(role.id).really_destroy! }
+      destroy_respecting_skips(roles_to_destroy)
       roles_to_update.each { |role| save_role_without_validations(role) }
       roles_to_update.each { |role| validate_role(role) }
       raise ActiveRecord::Rollback
@@ -75,10 +75,23 @@ module Memberships::CommonApi
     # See comments on #validate_roles for more details.
     Role.transaction do
       destroy_roles, update_roles = roles.partition(&:marked_for_destruction?)
-      destroy_roles.each { |r| Role.with_inactive.find_by(id: r.id)&.really_destroy! }
+      destroy_respecting_skips(destroy_roles)
       update_roles.each { |role| role.save(validate: false) }
       update_roles.each(&:save!)
     end
     true
+  end
+
+  def destroy_respecting_skips(roles)
+    roles.each do |role|
+      skip_destroy_dependent_roles = role.skip_destroy_dependent_roles
+      skip_destroy_household = role.try(:skip_destroy_household)
+
+      role = Role.unscoped.find_by(id: role.id) or next
+      role.skip_destroy_dependent_roles = skip_destroy_dependent_roles
+      role.try(:skip_destroy_household=, skip_destroy_household)
+
+      role.really_destroy!
+    end
   end
 end
