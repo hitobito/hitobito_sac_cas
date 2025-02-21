@@ -26,7 +26,7 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
   validates :gender, :street, :housenumber, :town, :zip_code,
     :country, presence: true
 
-  validate :assert_is_valid_swiss_post_code
+  validates :zip_code, zipcode: {country_code_attribute: :country}
 
   def initialize(...)
     super

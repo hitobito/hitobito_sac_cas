@@ -66,8 +66,11 @@ describe Wizards::Steps::Signup::PersonFields do
         expect(form.errors.full_messages).to eq ["PLZ ist nicht gültig"]
       end
 
-      it "accepts any format for non-swiss countries" do
-        form.attributes = required_attrs.merge(zip_code: "123", country: "DE")
+      it "validates other zip code formats" do
+        form.attributes = required_attrs.merge(zip_code: "123", country: "US")
+        expect(form).not_to be_valid
+        expect(form.errors.full_messages).to eq ["PLZ ist nicht gültig"]
+        form.zip_code = 90210
         expect(form).to be_valid
       end
     end
