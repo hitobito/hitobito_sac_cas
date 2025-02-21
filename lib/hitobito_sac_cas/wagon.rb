@@ -134,6 +134,7 @@ module HitobitoSacCas
       )
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
+      Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
 
       ## Resources
       GroupResource.include SacCas::GroupResource
