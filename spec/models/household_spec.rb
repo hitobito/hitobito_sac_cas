@@ -224,6 +224,26 @@ describe Household do
         end
           .to change { original_main_person.reload.sac_family_main_person }.from(true).to(false)
       end
+
+      it "can create and dissolve family on the same day repeatedly" do
+        person = people(:mitglied)
+        housemate = Fabricate(:person)
+
+        expect { Household.new(person, maintain_sac_family: true).add(housemate).save! }
+          .to change { person.reload.household_key }.from(nil)
+          .and change { person.sac_family_main_person }.to(true)
+          .and change { housemate.reload.household_key }.from(nil)
+
+        expect { person.household.destroy }
+          .to change { person.reload.household_key }.to(nil)
+          .and change { person.sac_family_main_person }.to(false)
+          .and change { housemate.reload.household_key }.to(nil)
+
+        expect { Household.new(person, maintain_sac_family: true).add(housemate).save! }
+          .to change { person.reload.household_key }.from(nil)
+          .and change { person.sac_family_main_person }.to(true)
+          .and change { housemate.reload.household_key }.from(nil)
+      end
     end
 
     context "when disabled" do

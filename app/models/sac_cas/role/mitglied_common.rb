@@ -24,10 +24,14 @@ module SacCas::Role::MitgliedCommon
     validates :start_on, presence: true
 
     after_create :check_data_quality
+
     after_destroy :destroy_dependant_roles, :check_data_quality
+    attr_accessor :skip_destroy_dependent_roles
   end
 
   def destroy_dependant_roles
+    return if skip_destroy_dependent_roles
+
     if destroyed?
       dependant_roles.each { _1.really_destroy! }
     else
