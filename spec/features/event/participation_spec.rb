@@ -30,7 +30,7 @@ describe Event::Participation, :js do
       within(".btn-toolbar") do
         click_on "Abmelden"
       end
-      expect(page).not_to have_text "E-Mail an Teilnehmer/in senden"
+      expect(page).to have_no_text "E-Mail an Teilnehmer/in senden"
     end
   end
 
