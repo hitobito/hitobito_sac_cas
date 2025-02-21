@@ -91,7 +91,7 @@ module Memberships
     end
 
     def apply_role_changes(role)
-      role.write_attribute(:terminated, true)
+      role.write_attribute(:terminated, true) if role.terminatable?
       role.termination_reason_id = termination_reason_id
 
       role.end_on = membership_end_on
