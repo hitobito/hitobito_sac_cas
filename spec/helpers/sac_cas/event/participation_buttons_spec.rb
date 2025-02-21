@@ -30,6 +30,7 @@ describe Event::ParticipationButtons do
     allow(self).to receive(:can?).and_return(true)
     allow(view).to receive(:entry).and_return(participation)
     allow(self).to receive(:current_user).and_return(person)
+    allow(view).to receive(:current_user).and_return(person)
   end
 
   shared_examples "conditional action" do |label, states:, condition: nil, assert: :link|
@@ -76,8 +77,8 @@ describe Event::ParticipationButtons do
   it_behaves_like "conditional action", "Nicht erschienen", states: %w[assigned attended summoned]
 
   describe "Aufgeboten" do
-    it_behaves_like "conditional action", "Aufbieten", states: []
-    it_behaves_like "conditional action", "Aufbieten", states: %w[assigned] do
+    it_behaves_like "conditional action", "Aufbieten", states: [], assert: :button
+    it_behaves_like "conditional action", "Aufbieten", states: %w[assigned], assert: :button do
       before { event.state = "ready" }
     end
   end

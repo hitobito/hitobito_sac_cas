@@ -428,6 +428,16 @@ describe Event::ParticipationsController do
         .not_to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count)
     end
 
+    it "PUT#summon sends summon email when send_email is true" do
+      expect { put :summon, params: params.merge(send_email: true) }
+        .to have_enqueued_mail(Event::ParticipationMailer, :summon).once
+    end
+
+    it "PUT#summon does not send summon email when send_email is false" do
+      expect { put :summon, params: params.merge(send_email: false) }
+        .not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
+    end
+
     it "PUT#cancel sets statement and default canceled_at" do
       freeze_time
       put :cancel, params: params.merge({event_participation: {cancel_statement: "next time!"}})
@@ -489,6 +499,22 @@ describe Event::ParticipationsController do
       expect do
         put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
       end.not_to change { ExternalInvoice::CourseAnnulation.count }
+    end
+
+    it "PUT#cancel sends application canceled email when send_email is true" do
+      expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, send_email: true}) }
+        .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+    end
+
+    it "PUT#cancel does not send application canceled email when send_email is false" do
+      expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, send_email: false}) }
+        .not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+    end
+
+    it "PUT#cancel always sends email when canceling own participation" do
+      participation.update!(person: people(:admin))
+      expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}}) }
+        .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
     end
   end
 

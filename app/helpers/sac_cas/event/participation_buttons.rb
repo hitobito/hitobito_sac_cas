@@ -35,6 +35,14 @@ module SacCas::Event::ParticipationButtons
       })
   end
 
+  def build_summon_button
+    action_button(t(".summon_button"),
+      nil,
+      :tag,
+      onclick: "event.preventDefault();
+                $('#email-confirmation-modal').modal('show');")
+  end
+
   def build_assign_button
     build_action_button(:assign, :tag, data: {confirm: t(".assign_confirm")})
   end
