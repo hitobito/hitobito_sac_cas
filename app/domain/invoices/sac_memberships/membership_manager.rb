@@ -63,8 +63,7 @@ class Invoices::SacMemberships::MembershipManager
         relevant_roles << family_member_membership.stammsektion_role
         relevant_roles.concat(family_member_membership.zusatzsektion_roles.reject(&:terminated?)
           .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
-        relevant_roles.concat(family_member_membership.membership_prolongable_roles
-          .select { |membership_related_role| membership_related_role.beitragskategorie.family? })
+        relevant_roles.concat(family_member_membership.membership_prolongable_roles)
       end
     end
 

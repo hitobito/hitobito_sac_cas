@@ -331,13 +331,14 @@ describe Memberships::TerminateSacMembership do
           ]
         end
 
-        it "terminates tourenleiter role" do
-          create_tourenleiter
+        it "terminates tourenleiter role without setting terminated flag" do
+          tourenleiter = create_tourenleiter
           expect do
             expect(termination.save!).to eq true
           end
             .to change { person.roles.count }.by(-3)
             .and not_change { person.roles.with_inactive.count }
+          expect(tourenleiter.reload).not_to be_terminated
         end
 
         it "deletes future tourenleiter role" do
