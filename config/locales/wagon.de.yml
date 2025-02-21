@@ -1159,7 +1159,7 @@ de:
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
 
-    participations:
+    participations:       
       missing_information: >-
         Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen.
         Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
@@ -1177,6 +1177,8 @@ de:
         contact_text: |
           Du erreichst uns zu unseren Geschäftszeiten
           Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
+      popover_cancel_sac_cas:
+        send_email: E-Mail an Teilnehmer/in senden
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1228,6 +1230,9 @@ de:
         summon_button: Aufbieten
         assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
       actions_show_sac_cas:
+        modal_title: Willst du diese/n Teilnehmer/in wirklich aufbieten?
+        summon_and_send_mail: Aufbieten und E-Mail senden
+        summon_and_send_no_mail: Aufbieten ohne E-Mail
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
