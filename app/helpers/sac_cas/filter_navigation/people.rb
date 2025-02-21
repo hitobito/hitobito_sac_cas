@@ -7,16 +7,22 @@
 #
 module SacCas::FilterNavigation::People
   TOURENLEITER_FILTERS = {
-    tour_guides_active: {role: :active},
+    tour_guides_active: {role: :active_today},
     tour_guides_stalled: {qualification: :not_active_but_reactivateable},
     tour_guides_inactive: {role: :inactive, qualification: :active},
     tour_guides_none: {qualification: :none},
-    tour_guides_expired: {qualification: :only_expired}
+    tour_guides_expired: {role: :active, qualification: :only_expired} # role active at any time, not only today
   }.freeze
 
   GROUPS_WITH_TOURENLEITER_FILTERS = [
+    Group::SacCas,
     Group::Sektion,
     Group::Ortsgruppe
+  ]
+
+  TOURENLEITER_ROLES = [
+    Group::SektionsTourenUndKurse::Tourenleiter,
+    Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
   ]
 
   def initialize(*args)
@@ -32,7 +38,7 @@ module SacCas::FilterNavigation::People
 
   def add_people_filter_links
     super.tap do
-      next unless group.root? || GROUPS_WITH_TOURENLEITER_FILTERS.any? { |klass| group.is_a?(klass) }
+      next unless GROUPS_WITH_TOURENLEITER_FILTERS.any? { |klass| group.is_a?(klass) }
 
       TOURENLEITER_FILTERS.each do |key, config|
         add_tourenleiter_filter(translate(key), **config)
@@ -58,7 +64,7 @@ module SacCas::FilterNavigation::People
   def role_filter(role_kind)
     if role_kind
       {
-        role_type_ids: Group::SektionsTourenUndKurse::Tourenleiter.id,
+        role_type_ids: TOURENLEITER_ROLES.map(&:id).join("-"),
         kind: role_kind
       }.compact
     end

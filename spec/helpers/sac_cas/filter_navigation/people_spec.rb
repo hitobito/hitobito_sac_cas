@@ -27,7 +27,7 @@ describe "FilterNavigation::People" do
   end
 
   shared_examples "having Tourenleiter filters" do
-    let(:tourenleiter_id) { Group::SektionsTourenUndKurse::Tourenleiter.id.to_s }
+    let(:tourenleiter_ids) { SacCas::FilterNavigation::People::TOURENLEITER_ROLES.map(&:id).join("-") }
     let(:kind_ids) { QualificationKind.pluck(:id).map(&:to_s) }
 
     def parse_link_query(link)
@@ -50,8 +50,8 @@ describe "FilterNavigation::People" do
 
     it "Aktive Tourenleiter filters for role only" do
       query = parse_link_query("Aktive Tourenleiter")
-      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_id
-      expect(query["filters[role][kind]"]).to eq "active"
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "active_today"
     end
 
     it "Sistierte Tourenleiter filters for not_active_but_reactivateable qualifications only" do
@@ -63,7 +63,7 @@ describe "FilterNavigation::People" do
 
     it "Inaktive Tourenleiter filters for role and active qualifications" do
       query = parse_link_query("Inaktive Tourenleiter")
-      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_id
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
       expect(query["filters[role][kind]"]).to eq "inactive"
       expect(query["filters[qualification][validity]"]).to eq "active"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
