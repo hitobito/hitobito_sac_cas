@@ -707,54 +707,18 @@ fr:
         one: Groupe local
         many: Groupes locaux
         other: Groupes locaux
-      group/sektions_mitglieder:
-        one: Membres
-        many: Membres
-        other: Membres
-      group/sektions_neuanmeldungen_nv:
-        one: Nouvelles inscriptions
-        many: Nouvelles inscriptions
-        other: Nouvelles inscriptions
-      group/sektions_neuanmeldungen_sektion:
-        one: Nouvelles inscriptions (pour validation)
-        many: Nouvelles inscriptions (pour validation)
-        other: Nouvelles inscriptions (pour validation)
-      group/sektions_funktionaere:
-        one: Fonctionnaires de section
-        many: Fonctionnaires de section
-        other: Fonctionnaires de section
-      group/sektions_vorstand:
-        one: Comité
-        many: Comité
-        other: Comité
-      group/sektions_touren_und_kurse:
-        one: Randonnées et cours
-        many: Randonnées et cours
-        other: Randonnées et cours
-      group/sektions_touren_und_kurse_sommer:
-        one: Randonnées  et cours été
-        many: Randonnées et cours été
-        other: Randonnées et cours été
-      group/sektions_touren_und_kurse_winter:
-        one: Randonnées et cours hiver
-        many: Randonnées et cours hiver
-        other: Randonnées et cours hiver
+      group/sektions_clubhuette:
+        one: ''
+        many: ''
+        other: ''
       group/sektions_clubhuetten:
         one: Cabanes de club
         many: Cabanes de club
         other: Cabanes de club
-      group/sektions_clubhuette:
-        one: Cabane de club
-        many: Cabanes de club
-        other: Cabanes de club
-      group/sektionshuetten:
-        one: Cabanes de la section
-        many: Cabanes de la section
-        other: Cabanes de la section
-      group/sektionshuette:
-        one: Cabane de la section
-        many: Cabanes de la section
-        other: Cabanes de la section
+      group/sektions_funktionaere:
+        one: Fonctionnaires de section
+        many: Fonctionnaires de section
+        other: Fonctionnaires de section
       group/sektions_kommissionen:
         one: Commissions
         many: Commissions
@@ -775,10 +739,46 @@ fr:
         one: Commission Environnement et culture
         many: Commissions Environnement et Culture
         other: Commissions Environnement et Culture
-      group/sektions_touren_und_kurse_allgemein:
-        one: Randonnée et cours
+      group/sektions_mitglieder:
+        one: Membres
+        many: Membres
+        other: Membres
+      group/sektions_neuanmeldungen_nv:
+        one: Nouvelles inscriptions
+        many: Nouvelles inscriptions
+        other: Nouvelles inscriptions
+      group/sektions_neuanmeldungen_sektion:
+        one: Nouvelles inscriptions (pour validation)
+        many: Nouvelles inscriptions (pour validation)
+        other: Nouvelles inscriptions (pour validation)
+      group/sektions_touren_und_kurse:
+        one: Randonnées et cours
         many: Randonnées et cours
         other: Randonnées et cours
+      group/sektions_touren_und_kurse_allgemein:
+        one: ''
+        many: ''
+        other: ''
+      group/sektions_touren_und_kurse_sommer:
+        one: Randonnées  et cours été
+        many: Randonnées et cours été
+        other: Randonnées et cours été
+      group/sektions_touren_und_kurse_winter:
+        one: Randonnées et cours hiver
+        many: Randonnées et cours hiver
+        other: Randonnées et cours hiver
+      group/sektions_vorstand:
+        one: Comité
+        many: Comité
+        other: Comité
+      group/sektionshuetten:
+        one: Cabanes de la section
+        many: Cabanes de la section
+        other: Cabanes de la section
+      group/sektionshuette:
+        one: Cabane de la section
+        many: Cabanes de la section
+        other: Cabanes de la section
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:

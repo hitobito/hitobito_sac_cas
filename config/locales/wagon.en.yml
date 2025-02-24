@@ -663,42 +663,15 @@ en:
       group/ortsgruppe:
         one: Local group
         other: Local groups
-      group/sektions_mitglieder:
-        one: Members
-        other: Members
-      group/sektions_neuanmeldungen_nv:
-        one: New registrations
-        other: New registrations
-      group/sektions_neuanmeldungen_sektion:
-        one: New registrations (for release)
-        other: New registrations (for release)
-      group/sektions_funktionaere:
-        one: Section functionaries
-        other: Section functionaries
-      group/sektions_vorstand:
-        one: Management Board
-        other: Management Board
-      group/sektions_touren_und_kurse:
-        one: Tours and courses
-        other: Tours and courses
-      group/sektions_touren_und_kurse_sommer:
-        one: Summer tours and courses
-        other: Summer tours and courses
-      group/sektions_touren_und_kurse_winter:
-        one: Winter tours and courses
-        other: Winter tours and courses
+      group/sektions_clubhuette:
+        one: ''
+        other: ''
       group/sektions_clubhuetten:
         one: Club huts
         other: Club huts
-      group/sektions_clubhuette:
-        one: Club hut
-        other: Clubhouses
-      group/sektionshuetten:
-        one: Section huts
-        other: Section huts
-      group/sektionshuette:
-        one: Section hut
-        other: Section huts
+      group/sektions_funktionaere:
+        one: Section functionaries
+        other: Section functionaries
       group/sektions_kommissionen:
         one: Commissions
         other: Commissions
@@ -714,9 +687,36 @@ en:
       group/sektions_kommission_umwelt_und_kultur:
         one: Environment and Culture Commission
         other: Environment and Culture Commissions
+      group/sektions_mitglieder:
+        one: Members
+        other: Members
+      group/sektions_neuanmeldungen_nv:
+        one: New registrations
+        other: New registrations
+      group/sektions_neuanmeldungen_sektion:
+        one: New registrations (for release)
+        other: New registrations (for release)
+      group/sektions_touren_und_kurse:
+        one: Tours and courses
+        other: Tours and courses
       group/sektions_touren_und_kurse_allgemein:
         one: ''
         other: ''
+      group/sektions_touren_und_kurse_sommer:
+        one: Summer tours and courses
+        other: Summer tours and courses
+      group/sektions_touren_und_kurse_winter:
+        one: Winter tours and courses
+        other: Winter tours and courses
+      group/sektions_vorstand:
+        one: Management Board
+        other: Management Board
+      group/sektionshuetten:
+        one: Section huts
+        other: Section huts
+      group/sektionshuette:
+        one: Section hut
+        other: Section huts
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:

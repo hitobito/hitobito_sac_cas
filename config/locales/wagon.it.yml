@@ -705,54 +705,18 @@ it:
         one: Gruppo locale
         many: Gruppi locali
         other: Gruppi locali
-      group/sektions_mitglieder:
-        one: Membri
-        many: Membri
-        other: Soci
-      group/sektions_neuanmeldungen_nv:
-        one: Nuove registrazioni
-        many: Nuove registrazioni
-        other: Nuove registrazioni
-      group/sektions_neuanmeldungen_sektion:
-        one: Nuove registrazioni (per il rilascio)
-        many: Nuove registrazioni (per il rilascio)
-        other: Nuove registrazioni (per l’approvazione)
-      group/sektions_funktionaere:
-        one: Funzionari di sezione
-        many: Funzionari di sezione
-        other: Funzionari di sezione
-      group/sektions_vorstand:
-        one: Consiglio di amministrazione
-        many: Consiglio di amministrazione
-        other: Associazione
-      group/sektions_touren_und_kurse:
-        one: Visite e corsi
-        many: Visite e corsi
-        other: Escursioni e corsi
-      group/sektions_touren_und_kurse_sommer:
-        one: Tour e corsi estivi
-        many: Tour e corsi estivi
-        other: Escursioni e corsi estivi
-      group/sektions_touren_und_kurse_winter:
-        one: Tour e corsi invernali
-        many: Tour e corsi invernali
-        other: Escursioni e corsi invernali
+      group/sektions_clubhuette:
+        one: ''
+        many: ''
+        other: ''
       group/sektions_clubhuetten:
         one: Capanne del club
         many: Capanne del club
         other: Capanne del club
-      group/sektions_clubhuette:
-        one: Capanna del club
-        many: Clubhouse
-        other: Capanne del club
-      group/sektionshuetten:
-        one: Capanne di sezione
-        many: Capanne di sezione
-        other: Capanne di sezione
-      group/sektionshuette:
-        one: Capanna di sezione
-        many: Capanne di sezione
-        other: Capanne di sezione
+      group/sektions_funktionaere:
+        one: Funzionari di sezione
+        many: Funzionari di sezione
+        other: Funzionari di sezione
       group/sektions_kommissionen:
         one: Commissioni
         many: Commissioni
@@ -773,10 +737,46 @@ it:
         one: Commissione Ambiente e Cultura
         many: Commissioni Ambiente e Cultura
         other: Commissioni Ambiente e Cultura
-      group/sektions_touren_und_kurse_allgemein:
-        one: Escursioni e corsi
-        many: Escursioni e corsi
+      group/sektions_mitglieder:
+        one: Membri
+        many: Membri
+        other: Soci
+      group/sektions_neuanmeldungen_nv:
+        one: Nuove registrazioni
+        many: Nuove registrazioni
+        other: Nuove registrazioni
+      group/sektions_neuanmeldungen_sektion:
+        one: Nuove registrazioni (per il rilascio)
+        many: Nuove registrazioni (per il rilascio)
+        other: Nuove registrazioni (per l’approvazione)
+      group/sektions_touren_und_kurse:
+        one: Visite e corsi
+        many: Visite e corsi
         other: Escursioni e corsi
+      group/sektions_touren_und_kurse_allgemein:
+        one: ''
+        many: ''
+        other: ''
+      group/sektions_touren_und_kurse_sommer:
+        one: Tour e corsi estivi
+        many: Tour e corsi estivi
+        other: Escursioni e corsi estivi
+      group/sektions_touren_und_kurse_winter:
+        one: Tour e corsi invernali
+        many: Tour e corsi invernali
+        other: Escursioni e corsi invernali
+      group/sektions_vorstand:
+        one: Consiglio di amministrazione
+        many: Consiglio di amministrazione
+        other: Associazione
+      group/sektionshuetten:
+        one: Capanne di sezione
+        many: Capanne di sezione
+        other: Capanne di sezione
+      group/sektionshuette:
+        one: Capanna di sezione
+        many: Capanne di sezione
+        other: Capanne di sezione
 
       ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
