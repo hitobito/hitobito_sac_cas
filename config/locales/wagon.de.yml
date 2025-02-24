@@ -1443,6 +1443,9 @@ de:
   invoices:
     abo_magazin:
       title: Rechnung Die Alpen %{year}
+      positions:
+        abo_fee: Abonnement %{group} %{time_period}
+        abroad_fee: Porto %{group}
     errors:
       data_quality_error: "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
       create_subject_failed: "Probleme beim Übermitteln der Personendaten"
