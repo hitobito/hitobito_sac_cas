@@ -109,11 +109,9 @@ module SacCas::Household
   end
 
   def mutate_memberships!(new_people, removed_people)
-    new_people
-      # main person must be processed first
-      .partition(&:sac_family_main_person)
-      .flatten
-      .each do |p|
+    # main person must be processed first
+    with_main, without_main = new_people.partition(&:sac_family_main_person)
+    (with_main + without_main).each do |p|
       Memberships::FamilyMutation.new(p.reload).join!(reference_person)
     end
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }

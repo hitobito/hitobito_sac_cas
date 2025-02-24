@@ -48,12 +48,12 @@ describe Memberships::SwitchStammsektion do
     context "with membership in different section" do
       let(:other_section) { groups(:matterhorn_mitglieder) }
 
-      it "is valid when active since before today" do
+      it "is valid if active since before today" do
         create_role(other_section, "Mitglied", start_on: 1.year.ago)
         expect(switch).to be_valid
       end
 
-      it "is valid when active since today" do
+      it "is valid if active since today" do
         create_role(other_section, "Mitglied", start_on: Time.zone.today)
 
         # This recreates a bug that occured when the valid? method was run twice, resulting in the
@@ -63,7 +63,7 @@ describe Memberships::SwitchStammsektion do
         expect(switch).to be_valid
       end
 
-      it "is valid when family membership and active since today" do
+      it "is valid if family membership and active since today" do
         person.update!(sac_family_main_person: true, household_key: "family")
         other = Fabricate(:person, household_key: "family")
 
