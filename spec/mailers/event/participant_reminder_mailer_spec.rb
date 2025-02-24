@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Event::ParticipantReminderMailer do
-  let(:event) { Fabricate(:sac_open_course) }
+  let(:event) { Fabricate(:sac_open_course, groups: [groups(:bluemlisalp)]) }
   let!(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied)) }
   let(:mail) { described_class.reminder(participation) }
 
@@ -18,7 +18,7 @@ describe Event::ParticipantReminderMailer do
     end
     event.questions.second.answers.update_all(answer: "no")
     event.questions.third.answers.update_all(answer: "yes")
-    event.groups.first.update!(course_admin_email: "admin@example.com")
+    Group.root.update!(course_admin_email: "admin@example.com")
   end
 
   it "sends email to participants with missing answers" do
