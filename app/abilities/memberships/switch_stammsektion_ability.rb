@@ -10,7 +10,9 @@ module Memberships
     include Memberships::Constraints
 
     on(Wizards::Memberships::SwitchStammsektion) do
-      permission(:any).may(:create).backoffice?
+      permission(:any).may(:create).backoffice_and_active_membership?
     end
+
+    def backoffice_and_active_membership? = backoffice? && subject.person.sac_membership.stammsektion_role.present?
   end
 end
