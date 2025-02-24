@@ -14,6 +14,14 @@ shared_examples "Mitglied dependant destroy" do
   let(:other_group) { groups(:matterhorn_mitglieder) }
   let!(:role) { described_class.new(person:, group:, start_on: 1.year.ago, end_on: mitglied_role.end_on).tap(&:save!) }
 
+  shared_examples "stays untouched with skip_destroy_dependent_roles set" do
+    it do
+      mitglied_role.skip_destroy_dependent_roles = true
+      expect { mitglied_role.destroy(always_soft_destroy: true) }
+        .not_to change { role.reload.end_on }
+    end
+  end
+
   context "with Mitglied role" do
     it "gets ended if it is old enough" do
       role.update!(created_at: Settings.role.minimum_days_to_archive.days.ago)
@@ -37,6 +45,8 @@ shared_examples "Mitglied dependant destroy" do
 
       expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it_behaves_like "stays untouched with skip_destroy_dependent_roles set"
   end
 
   context "with MitgliedZusatzsektion role" do
@@ -67,5 +77,7 @@ shared_examples "Mitglied dependant destroy" do
 
       expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
+
+    it_behaves_like "stays untouched with skip_destroy_dependent_roles set"
   end
 end

@@ -43,19 +43,33 @@ describe Group::SektionsMitglieder::Mitglied do
     let(:familienmitglied) { roles(:familienmitglied) }
     let(:familienmitglied2) { roles(:familienmitglied2) }
 
-    it "does destroy household if main person" do
-      expect do
-        familienmitglied.destroy
-      end.to change { familienmitglied.person.reload.sac_family_main_person }.from(true).to(false)
-        .and change { Household.new(familienmitglied.person).empty? }.from(false).to(true)
-        .and change { familienmitglied.person.reload.primary_group }.from(groups(:bluemlisalp_mitglieder)).to(groups(:matterhorn_mitglieder))
+    context "as main person" do
+      it "destroys household" do
+        expect { familienmitglied.destroy }.to change { familienmitglied.person.reload.sac_family_main_person }.from(true).to(false)
+          .and change { familienmitglied.person.reload.primary_group }.from(groups(:bluemlisalp_mitglieder)).to(groups(:matterhorn_mitglieder))
+      end
+
+      it "does not destroy household when skip_destroy_household is set" do
+        familienmitglied.skip_destroy_household = true
+
+        expect { familienmitglied.destroy }.to not_change { familienmitglied.person.reload.sac_family_main_person }
+          .and not_change { familienmitglied.person.household_key }
+      end
     end
 
-    it "leaves household as as if not main person" do
-      expect do
-        familienmitglied2.destroy
-      end.to not_change { familienmitglied.person.reload.sac_family_main_person }
-        .and not_change { Household.new(familienmitglied.person).empty? }
+    context "as not main person" do
+      it "leaves household" do
+        expect { familienmitglied2.destroy }
+          .to not_change { familienmitglied.person.reload.sac_family_main_person }
+          .and not_change { Household.new(familienmitglied.person).empty? }
+      end
+
+      it "does not leave household when skip_destroy_household is set" do
+        familienmitglied2.skip_destroy_household = true
+        expect { familienmitglied2.destroy }
+          .to not_change { familienmitglied.person.reload.sac_family_main_person }
+          .and not_change { familienmitglied.person.household_key }
+      end
     end
   end
 

@@ -109,13 +109,19 @@ module SacCas::Household
   end
 
   def mutate_memberships!(new_people, removed_people)
+    # main person must be processed first
     with_main, without_main = new_people.partition(&:sac_family_main_person)
-    (with_main + without_main).each { |p| Memberships::FamilyMutation.new(p.reload).join!(reference_person) }
+    (with_main + without_main).each do |p|
+      Memberships::FamilyMutation.new(p.reload).join!(reference_person)
+    end
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
   def update_main_person!(new_household)
-    new_main_person = main_person || ((new_household && candidates.include?(reference_person)) ? reference_person : nil) || oldest_person # may be nil when destroying
+    new_main_person = main_person ||
+      reference_person_as_main_in_new_household(new_household) ||
+      oldest_person # may be nil when destroying
+
     others = people - [new_main_person]
     Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
     new_main_person&.update_columns(sac_family_main_person: true)
@@ -161,6 +167,10 @@ module SacCas::Household
   end
 
   def oldest_person = candidates.max_by(&:years)
+
+  def reference_person_as_main_in_new_household(new_household)
+    reference_person if new_household && candidates.include?(reference_person)
+  end
 
   def candidates = adults.select(&:email?)
 
