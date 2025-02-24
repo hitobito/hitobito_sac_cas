@@ -48,10 +48,7 @@ describe :events, js: true do
       fill_in "Mitgliederpreis", with: "100.05"
       fill_in "Normalpreis", with: "100.15"
       fill_in "Subventionierter Preis", with: "90.05"
-      fill_in "J&S A-Mitgliederpreis", with: "89.05"
-      fill_in "J&S A-Normalpreis", with: "90.15"
-      fill_in "J&S P-Mitgliederpreis", with: "82.05"
-      fill_in "J&S P-Normalpreis", with: "89.15"
+      fill_in "Spezialpreis", with: "89.05"
 
       expect do
         click_button("Speichern", match: :first)
@@ -61,23 +58,39 @@ describe :events, js: true do
         .to change { event.price_member }.to(100.05)
         .and change { event.price_regular }.to(100.15)
         .and change { event.price_subsidized }.to(90.05)
-        .and change { event.price_js_active_member }.to(89.05)
-        .and change { event.price_js_active_regular }.to(90.15)
-        .and change { event.price_js_passive_member }.to(82.05)
-        .and change { event.price_js_passive_regular }.to(89.15)
+        .and change { event.price_special }.to(89.05)
 
       price_selector = "#main article"
       find(price_selector).assert_text("Mitgliederpreis CHF 100.05")
       find(price_selector).assert_text("Normalpreis CHF 100.15")
       find(price_selector).assert_text("Subventionierter Preis CHF 90.05")
-      find(price_selector).assert_text("J&S A-Mitgliederpreis CHF 89.05")
-      find(price_selector).assert_text("J&S A-Normalpreis CHF 90.15")
-      find(price_selector).assert_text("J&S P-Mitgliederpreis CHF 82.05")
-      find(price_selector).assert_text("J&S P-Normalpreis CHF 89.15")
+      find(price_selector).assert_text("Spezialpreis CHF 89.05")
+    end
+
+    it "displays j_s price labels in form when course is a j_s course" do
+      event.kind.kind_category.update_column(:j_s_course, true)
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_tab "Preise"
+
+      expect(page).to have_content "J&S P-Mitgliederpreis"
+      expect(page).to have_content "J&S P-Normalpreis"
+      expect(page).to have_content "J&S A-Mitgliederpreis"
+      expect(page).to have_content "J&S A-Normalpreis"
+    end
+
+    it "displays j_s price labels in show when course is a j_s course" do
+      event.kind.kind_category.update_column(:j_s_course, true)
+      event.update_columns(price_member: 10, price_regular: 20, price_subsidized: 5, price_special: 3)
+      visit group_event_path(group_id: group.id, id: event.id)
+
+      expect(page).to have_content "J&S P-Mitgliederpreis"
+      expect(page).to have_content "J&S P-Normalpreis"
+      expect(page).to have_content "J&S A-Mitgliederpreis"
+      expect(page).to have_content "J&S A-Normalpreis"
     end
   end
 
-  describe "attendents" do
+  context "attendents" do
     let(:event) { events(:top_course) }
 
     it "Allows to add new leaders" do

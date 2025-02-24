@@ -6,4 +6,5 @@
 - if entry.is_a?(Event::Course)
   #prices.tab-pane
     = field_set_tag do
-      = f.labeled_input_fields(*entry.used_attributes(*Event::Course::PRICE_ATTRIBUTES), addon: t('global.currency'), type: 'number', step: 0.01)
+      - entry.used_attributes(*Event::Course::PRICE_ATTRIBUTES).each do |price_attribute|
+        = f.labeled_input_field(price_attribute, label: price_category_label(entry, price_attribute), addon: t('global.currency'), type: 'number', step: 0.01)
