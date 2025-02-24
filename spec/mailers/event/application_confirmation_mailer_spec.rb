@@ -12,7 +12,7 @@ describe Event::ApplicationConfirmationMailer do
   let(:participation) { event.participations.create!(person: people(:mitglied), price: 12.3, price_category: "price_regular") }
   let(:mail) { described_class.confirmation(participation, described_class::APPLIED) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before { Group.root.update!(course_admin_email: "admin@example.com") }
 
   context "applied" do
     it "sends email to participant" do

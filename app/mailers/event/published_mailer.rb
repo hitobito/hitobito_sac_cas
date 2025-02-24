@@ -14,7 +14,7 @@ class Event::PublishedMailer < ApplicationMailer
   def notice(course, leader)
     @course = course
     @person = leader
-    headers[:bcc] = course.groups.first.course_admin_email
+    headers[:bcc] = Group.root.course_admin_email
     locales = course.language.split("_")
 
     compose_multilingual(leader, NOTICE, locales)

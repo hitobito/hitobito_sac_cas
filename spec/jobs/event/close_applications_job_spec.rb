@@ -23,7 +23,7 @@ describe Event::CloseApplicationsJob do
   context "application_open" do
     let(:course) { Fabricate(:sac_open_course) }
 
-    before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+    before { Group.root.update!(course_admin_email: "admin@example.com") }
 
     it "updates course state when application_closing_at is in the past" do
       travel_to(course.application_closing_at + 1.day) do
@@ -42,7 +42,7 @@ describe Event::CloseApplicationsJob do
   context "application_paused" do
     let(:course) { Fabricate(:sac_open_course, state: :application_paused) }
 
-    before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+    before { Group.root.update!(course_admin_email: "admin@example.com") }
 
     it "updates course state when application_closing_at is in the past" do
       travel_to(course.application_closing_at + 1.day) do

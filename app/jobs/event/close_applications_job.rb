@@ -16,7 +16,7 @@ class Event::CloseApplicationsJob < RecurringJob
       .where(application_closing_at: ...Time.zone.today)
       .find_each do |course|
         course.update_column(:state, :application_closed)
-        recipient = course.groups.first.course_admin_email
+        recipient = Group.root.course_admin_email
         Event::ApplicationClosedMailer.notice(course).deliver_later if recipient.present?
       end
   end

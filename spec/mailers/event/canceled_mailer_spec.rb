@@ -11,7 +11,7 @@ describe Event::CanceledMailer do
   let(:event) { Fabricate(:sac_open_course, number: 123).tap { |c| c.update_attribute(:state, :canceled) } }
   let(:participation) { event.participations.create!(person: people(:mitglied)) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before { Group.root.update!(course_admin_email: "admin@example.com") }
 
   [["minimum_participants", "Grund dafür ist eine zu geringe Teilnehmerzahl."],
     ["no_leader", "Grund dafür ist der Ausfall der Kursleitung."],

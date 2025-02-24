@@ -11,7 +11,7 @@ describe Event::ApplicationClosedMailer do
   let(:event) { Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) } }
   let(:mail) { described_class.notice(event) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before { Group.root.update!(course_admin_email: "admin@example.com") }
 
   it "sends to email addresses of course admin" do
     expect(mail.to).to match_array(["admin@example.com"])

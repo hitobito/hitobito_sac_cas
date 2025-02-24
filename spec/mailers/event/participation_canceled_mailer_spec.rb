@@ -12,7 +12,7 @@ describe Event::ParticipationCanceledMailer do
   let(:participation) { event.participations.create!(person: people(:mitglied)) }
   let(:mail) { described_class.confirmation(participation) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before { Group.root.update!(course_admin_email: "admin@example.com") }
 
   it "sends to email addresses of participant" do
     expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
