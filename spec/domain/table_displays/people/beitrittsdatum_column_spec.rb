@@ -38,10 +38,11 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
       expect(node).to have_css "td", text: ""
     end
 
-    it "renders nothing when roles do not match group" do
+    it "uses min start date when no multiple roles match" do
       allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:root))
       display.render(:beitrittsdatum)
-      expect(node).to have_css "td", text: ""
+      roles(:mitglied_zweitsektion).update!(start_on: Date.new(2015, 3, 1))
+      expect(node).to have_css "td", text: "01.01.2015"
     end
   end
 end

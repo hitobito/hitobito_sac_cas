@@ -25,11 +25,13 @@ module TableDisplays::People
 
     def beitrittsdatum(person)
       start_on = person.roles
-        .select { |r| r.group_id == template.parent.id }
         .select { |r| SacCas::MITGLIED_ROLES.include?(r.type.constantize) }
+        .select { |r| hierarchy.cover?(r.group.lft) && hierarchy.cover?(r.group.rgt) }
         .collect(&:start_on)
         .compact.min
       I18n.l(start_on) if start_on
     end
+
+    def hierarchy = (template.parent.lft..template.parent.rgt)
   end
 end
