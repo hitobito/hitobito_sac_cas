@@ -1143,7 +1143,7 @@ en:
         push_down_button: Transfer data to course types
         push_down_button_confirm: >-
           Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten.
-    participations:
+    participations:       
       missing_information: >-
         The following certificates are required for participation in this course. Please submit these if you have not already done so.
       answers_step:
@@ -1158,6 +1158,8 @@ en:
       contact_data_aside:
         contact_title: ""
         contact_text: |
+      popover_cancel_sac_cas:
+        send_email: ""
       states:
         absent: No participation in this course.
         annulled: This course has been canceled.
@@ -1202,6 +1204,9 @@ en:
         summon_button: Call up
         assign_confirm: ""
       actions_show_sac_cas:
+        modal_title: ""
+        summon_and_send_mail: ""
+        summon_and_send_no_mail: ""
         create_invoice_button: ""
         attach_key_data_sheet: ""
         create_invoice_confirmation: ""

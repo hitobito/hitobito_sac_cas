@@ -1204,7 +1204,7 @@ it:
         push_down_button: Trasferire i dati ai tipi di corso
         push_down_button_confirm: >-
           Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali.
-    participations:
+    participations:       
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
       answers_step:
@@ -1221,6 +1221,8 @@ it:
         contact_text: |
           Siamo raggiungibili durante i nostri orari di lavoro
           Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
+      popover_cancel_sac_cas:
+        send_email: ""
       states:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1265,6 +1267,9 @@ it:
         summon_button: Convocare
         assign_confirm: ""
       actions_show_sac_cas:
+        modal_title: ""
+        summon_and_send_mail: ""
+        summon_and_send_no_mail: ""
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.

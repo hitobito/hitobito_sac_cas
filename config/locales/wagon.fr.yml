@@ -1206,7 +1206,7 @@ fr:
         push_down_button: Transférer des données vers des types de cours
         push_down_button_confirm: >-
           Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
-    participations:
+    participations:       
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
       answers_step:
@@ -1223,6 +1223,8 @@ fr:
         contact_text: |
           Tu peux nous joindre pendant nos heures de bureau
           du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
+      popover_cancel_sac_cas:
+        send_email: ""
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1267,6 +1269,9 @@ fr:
         summon_button: Convocation
         assign_confirm: ""
       actions_show_sac_cas:
+        modal_title: ""
+        summon_and_send_mail: ""
+        summon_and_send_no_mail: ""
         create_invoice_button: Créer une facture
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
