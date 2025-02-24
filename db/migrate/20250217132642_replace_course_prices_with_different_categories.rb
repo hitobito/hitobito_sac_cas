@@ -53,7 +53,7 @@ class ReplaceCoursePricesWithDifferentCategories < ActiveRecord::Migration[7.0]
       t.remove :price_js_active_member, :price_js_active_regular, :price_js_passive_member, :price_js_passive_regular
     end
 
-    add_column :event_kind_categories, :j_s_course, :boolean, default: :false
+    add_column :event_kind_categories, :j_s_course, :boolean, default: :false, null: false
   end
 
   def down
