@@ -12,8 +12,6 @@ module Invoices
 
       delegate :person, to: :abonnent_role
 
-      ARTICLE_NUMBER = "APG"
-
       def initialize(abonnent_role)
         @abonnent_role = abonnent_role
       end
@@ -38,7 +36,7 @@ module Invoices
         Invoices::Abacus::InvoicePosition.new(
           name: fee_position_name,
           grouping: fee_position_name,
-          article_number: ARTICLE_NUMBER,
+          article_number: Group.root.abo_alpen_fee_article_number,
           amount: Group.root.abo_alpen_fee,
           count: 1
         )
@@ -47,6 +45,8 @@ module Invoices
       def abroad_fee_position
         Invoices::Abacus::InvoicePosition.new(
           name: abroad_fee_position_name,
+          grouping: abroad_fee_position_name,
+          article_number: Group.root.abo_alpen_fee_article_number,
           amount: Group.root.abo_alpen_postage_abroad,
           count: 1
         )

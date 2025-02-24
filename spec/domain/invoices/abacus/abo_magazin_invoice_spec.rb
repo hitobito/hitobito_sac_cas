@@ -14,7 +14,7 @@ describe Invoices::Abacus::AboMagazinInvoice do
   subject { described_class.new(abonnent_alpen) }
 
   before do
-    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16)
+    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16, abo_alpen_fee_article_number: "APG")
   end
 
   describe "#positions" do
@@ -48,7 +48,10 @@ describe Invoices::Abacus::AboMagazinInvoice do
         position = subject.positions.second
         expect(subject.positions.count).to eq 2
         expect(position.name).to eq "Porto Die Alpen DE"
+        expect(position.grouping).to eq "Porto Die Alpen DE"
         expect(position.amount).to eq 16
+        expect(position.count).to eq 1
+        expect(position.article_number).to eq "APG"
       end
     end
   end
