@@ -73,3 +73,7 @@ phone_number:
 
 impersonate:
   notify: false
+
+hitobito_log:
+  recipient_emails:
+    - it@sac-cas.ch
