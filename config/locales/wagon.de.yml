@@ -154,6 +154,12 @@ de:
               must_not_be_join_section_member: >-
                 ist bereits Mitglied der Sektion oder hat ein offenes Beitrittsgesuch
               must_be_family_main_person: muss Hauptperson der Familie sein
+        memberships/undo_termination:
+          mutation_not_found: kann nicht gefunden werden
+          role_changed: "%{group_with_parent}: %{role} von %{person} wurde seit der Kündigung verändert"
+          role_not_terminated: Rolle ist nicht gekündigt
+          role_invalid: "%{group_with_parent}: %{role} von %{person}: %{error_message}"
+          household_changed: "%{person} wurde seit der Kündigung einer anderen Familie zugeordnet"
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -1158,7 +1164,7 @@ de:
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
 
-    participations:       
+    participations:
       missing_information: >-
         Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen.
         Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
