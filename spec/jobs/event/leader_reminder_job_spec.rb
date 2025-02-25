@@ -36,7 +36,7 @@ describe Event::LeaderReminderJob do
     end
 
     context "with course admin email" do
-      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+      before { Group.root.update!(course_admin_email: "admin@example.com") }
 
       it "mails a bcc to the admin" do
         expect { job.perform }.to change(ActionMailer::Base.deliveries, :count).by(2)

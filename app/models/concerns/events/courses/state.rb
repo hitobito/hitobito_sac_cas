@@ -195,6 +195,6 @@ module Events::Courses::State
   end
 
   def course_admin_email?
-    groups.first.course_admin_email.present?
+    Group.root.course_admin_email.present?
   end
 end

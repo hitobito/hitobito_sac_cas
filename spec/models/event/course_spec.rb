@@ -416,7 +416,7 @@ describe Event::Course do
   describe "when state changes to application_open" do
     let(:course) { Fabricate(:sac_open_course, contact_id: people(:admin).id) }
 
-    before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+    before { Group.root.update!(course_admin_email: "admin@example.com") }
 
     context "from created" do
       before do
@@ -468,7 +468,7 @@ describe Event::Course do
     let(:course) { Fabricate(:sac_open_course, language: "fr") }
 
     context "with course admin" do
-      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+      before { Group.root.update!(course_admin_email: "admin@example.com") }
 
       it "sends an email to the course admin" do
         expect { course.update!(state: :application_paused) }
@@ -477,7 +477,7 @@ describe Event::Course do
     end
 
     context "without course admin" do
-      before { course.groups.first.update!(course_admin_email: nil) }
+      before { Group.root.update!(course_admin_email: nil) }
 
       it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_paused) }
@@ -495,7 +495,7 @@ describe Event::Course do
     end
 
     context "with course admin" do
-      before { course.groups.first.update!(course_admin_email: "admin@example.com") }
+      before { Group.root.update!(course_admin_email: "admin@example.com") }
 
       it "sends an email to the course admin" do
         expect { course.update!(state: :application_closed) }
@@ -504,7 +504,7 @@ describe Event::Course do
     end
 
     context "without course admin" do
-      before { course.groups.first.update!(course_admin_email: nil) }
+      before { Group.root.update!(course_admin_email: nil) }
 
       it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_closed) }

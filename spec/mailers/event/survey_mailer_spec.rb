@@ -17,7 +17,7 @@ describe Event::SurveyMailer do
   let(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied), state: :attended) }
   let(:mail) { described_class.survey(participation) }
 
-  before { event.groups.first.update!(course_admin_email: "admin@example.com") }
+  before { Group.root.update!(course_admin_email: "admin@example.com") }
 
   it "sends email to participant" do
     expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])

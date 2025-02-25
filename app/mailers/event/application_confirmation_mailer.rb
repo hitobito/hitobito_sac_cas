@@ -17,7 +17,7 @@ class Event::ApplicationConfirmationMailer < ApplicationMailer
     @participation = participation
     @person = participation.person
     @course = participation.event
-    headers[:bcc] = @course.groups.first.course_admin_email
+    headers[:bcc] = Group.root.course_admin_email
     locales = @course.language.split("_")
 
     compose_multilingual(@person, content_key, locales)

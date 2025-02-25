@@ -31,7 +31,7 @@ class Event::CanceledMailer < ApplicationMailer
     @participation = participation
     @course = participation.event
     @person = participation.person
-    headers[:bcc] = @course.groups.first.course_admin_email
+    headers[:bcc] = Group.root.course_admin_email
     locales = @course.language.split("_")
 
     compose_multilingual(@person, content_key, locales)

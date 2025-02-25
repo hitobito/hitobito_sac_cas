@@ -18,7 +18,7 @@ describe Event::ParticipationMailer do
 
   before do
     Fabricate(:phone_number, contactable: person, public: true)
-    event.groups.first.course_admin_email = "kurse@sac-cas.ch"
+    Group.root.update!(course_admin_email: "kurse@sac-cas.ch")
   end
 
   describe "#confirmation" do

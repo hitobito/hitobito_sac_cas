@@ -16,6 +16,6 @@ class Event::ApplicationClosedMailer < ApplicationMailer
     @person = course.contact
     locales = course.language.split("_")
 
-    compose_multilingual(course.groups.first.course_admin_email, NOTICE, locales)
+    compose_multilingual(Group.root.course_admin_email, NOTICE, locales)
   end
 end
