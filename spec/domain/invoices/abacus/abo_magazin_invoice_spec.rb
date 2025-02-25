@@ -34,7 +34,12 @@ describe Invoices::Abacus::AboMagazinInvoice do
       end
 
       it "position uses language of person as locale" do
-        abonnent.update_column(:language, "it")
+        abonnent.update_column(:language, :it)
+        allow(I18n).to receive(:t).and_call_original
+        allow(I18n).to receive(:t)
+          .with("invoices.abo_magazin.positions.abo_fee", group: abonnent_alpen.group, time_period: subject.send(:new_role_period), locale: "it")
+          .and_return("Abbonamento Die Alpen DE 01.01.2026 - 31.12.2026")
+
         expect(subject.positions.first.name).to eq "Abbonamento Die Alpen DE 01.01.2026 - 31.12.2026"
       end
     end
