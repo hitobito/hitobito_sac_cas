@@ -1450,9 +1450,6 @@ it:
   invoices:
     abo_magazin:
       title: ""
-      positions:
-        abo_fee: Abbonamento %{group} %{time_period}
-        abroad_fee: Porto %{group}
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"
