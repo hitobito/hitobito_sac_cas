@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   language_scope do
     # Define wagon routes here
 
+    resources :groups do
+      resources :roles do
+        resources :undo_terminations, module: :memberships, only: [:new, :create]
+      end
+    end
+
     get "/people/:id/membership" => "people/membership#show", :as => "membership"
     put "/people/:id/sac_family_main_person" => "people/sac_family_main_person#update", :as => "sac_family_main_person"
 
