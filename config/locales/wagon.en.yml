@@ -302,13 +302,15 @@ en:
         price_member: ""
         price_regular: ""
         price_subsidized: ""
-        price_js_active_member: ""
-        price_js_active_regular: ""
-        price_js_passive_member: ""
-        price_js_passive_regular: ""
+        price_special: ""
+        j_s_price_member: ""
+        j_s_price_regular: ""
+        j_s_price_subsidized: ""
+        j_s_price_special: ""
       event/kind_category:
         cost_center_id: Cost center
         cost_unit_id: Cost unit
+        j_s_course: ""
       event/level:
         label: Designation
         code: Code
@@ -329,10 +331,7 @@ en:
           price_member: ""
           price_regular: ""
           price_subsidized: ""
-          price_js_active_member: ""
-          price_js_active_regular: ""
-          price_js_passive_member: ""
-          price_js_passive_regular: ""
+          price_special: ""
         invoice_state: ""
         invoice_states:
           _nil: ""
@@ -1378,6 +1377,9 @@ en:
   invoices:
     abo_magazin:
       title: ""
+      positions:
+        abo_fee: ""
+        abroad_fee: ""
     errors:
       data_quality_error: ""
       create_subject_failed: ""

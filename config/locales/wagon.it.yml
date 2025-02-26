@@ -307,13 +307,15 @@ it:
         price_member: "Prezzo per i soci"
         price_regular: "Prezzo normale"
         price_subsidized: "Prezzo sovvenzionato"
-        price_js_active_member: "Prezzo per i soci G+S - A"
-        price_js_active_regular: "Prezzo normale G+S - A"
-        price_js_passive_member: "Prezzo per i soci G+S - P"
-        price_js_passive_regular: "Prezzo normale G+S - P"
+        price_special: ""
+        j_s_price_member: ""
+        j_s_price_regular: ""
+        j_s_price_subsidized: ""
+        j_s_price_special: ""
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
+        j_s_course: ""
       event/level:
         label: Denominazione
         code: Codice
@@ -334,10 +336,7 @@ it:
           price_member: "Prezzo per i soci"
           price_regular: "Prezzo normale"
           price_subsidized: "Prezzo sovvenzionato"
-          price_js_active_member: "Prezzo per i soci G+S - A"
-          price_js_active_regular: "Prezzo normale G+S - A"
-          price_js_passive_member: "Prezzo per i soci G+S - P"
-          price_js_passive_regular: "Prezzo normale G+S - P"
+          price_special: ""
         invoice_state: Fattura
         invoice_states:
           _nil: Non fatturato
@@ -1450,6 +1449,9 @@ it:
   invoices:
     abo_magazin:
       title: ""
+      positions:
+        abo_fee: ""
+        abroad_fee: ""
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"

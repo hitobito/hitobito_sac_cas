@@ -309,13 +309,15 @@ fr:
         price_member: "Prix pour les membres"
         price_regular: "Prix normal"
         price_subsidized: "Prix subventionné"
-        price_js_active_member: "Prix pour les membres A J+S"
-        price_js_active_regular: "Prix normal A J+S"
-        price_js_passive_member: "Prix pour les membres P J+S"
-        price_js_passive_regular: "Prix normal P J+S"
+        price_special: ""
+        j_s_price_member: ""
+        j_s_price_regular: ""
+        j_s_price_subsidized: ""
+        j_s_price_special: ""
       event/kind_category:
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
+        j_s_course: ""
       event/level:
         label: Désignation
         code: Code
@@ -336,10 +338,7 @@ fr:
           price_member: "Prix pour les membres"
           price_regular: "Prix normal"
           price_subsidized: "Prix subventionné"
-          price_js_active_member: "Prix pour les membres A J+S"
-          price_js_active_regular: "Prix normal A J+S"
-          price_js_passive_member: "Prix pour les membres P J+S"
-          price_js_passive_regular: "Prix normal P J+S"
+          price_special: ""
         invoice_state: Facture
         invoice_states:
           _nil: Non facturé
@@ -1456,6 +1455,9 @@ fr:
   invoices:
     abo_magazin:
       title: "Facture Les Alpes %{year}"
+      positions:
+        abo_fee: ""
+        abroad_fee: ""
     errors:
       data_quality_error: "La personne a des problèmes de qualité des données, c’est pourquoi aucune facture n’a été créée."
       create_subject_failed: "Problèmes lors de la transmission des données personnelles"
