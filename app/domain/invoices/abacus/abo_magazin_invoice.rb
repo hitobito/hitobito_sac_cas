@@ -24,6 +24,16 @@ module Invoices
         positions.sum(&:amount)
       end
 
+      def additional_user_fields
+        {}
+      end
+
+      def invoice?
+        sac_cas_group.abo_alpen_fee_article_number &&
+          sac_cas_group.abo_alpen_fee &&
+          sac_cas_group.abo_alpen_postage_abroad
+      end
+
       private
 
       def build_positions
@@ -36,8 +46,8 @@ module Invoices
         Invoices::Abacus::InvoicePosition.new(
           name: fee_position_name,
           grouping: fee_position_name,
-          article_number: Group.root.abo_alpen_fee_article_number,
-          amount: Group.root.abo_alpen_fee,
+          article_number: sac_cas_group.abo_alpen_fee_article_number,
+          amount: sac_cas_group.abo_alpen_fee,
           count: 1
         )
       end
@@ -46,8 +56,8 @@ module Invoices
         Invoices::Abacus::InvoicePosition.new(
           name: abroad_fee_position_name,
           grouping: abroad_fee_position_name,
-          article_number: Group.root.abo_alpen_fee_article_number,
-          amount: Group.root.abo_alpen_postage_abroad,
+          article_number: sac_cas_group.abo_alpen_fee_article_number,
+          amount: sac_cas_group.abo_alpen_postage_abroad,
           count: 1
         )
       end
@@ -70,6 +80,8 @@ module Invoices
         end_date = abonnent_role.end_on + 1.year
         "#{I18n.l(start_date)} - #{I18n.l(end_date)}"
       end
+
+      def sac_cas_group = @sac_cas_group = Group.root
     end
   end
 end

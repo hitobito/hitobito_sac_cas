@@ -82,4 +82,17 @@ describe Invoices::Abacus::AboMagazinInvoice do
       end
     end
   end
+
+  describe "#invoice?" do
+    it "is true when all required values are defined" do
+      expect(subject.invoice?).to be_truthy
+    end
+
+    [:abo_alpen_fee_article_number, :abo_alpen_fee, :abo_alpen_postage_abroad].each do |attr|
+      it "is false when #{attr} is not defined" do
+        Group.root.update!(attr => nil)
+        expect(subject.invoice?).to be_falsey
+      end
+    end
+  end
 end

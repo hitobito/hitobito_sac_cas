@@ -10,7 +10,7 @@ require "spec_helper"
 describe Wizards::Signup::AboMagazinWizard do
   let(:group) do
     Fabricate.build(Group::AboMagazin.sti_name, parent: groups(:abo_magazine)).tap do |group|
-      group.self_registration_role_type = Group::AboMagazin::Abonnent.sti_name
+      group.self_registration_role_type = Group::AboMagazin::Neuanmeldung.sti_name
     end
   end
 
@@ -101,12 +101,15 @@ describe Wizards::Signup::AboMagazinWizard do
       @current_step = 1
     }
 
-    it "creates single person" do
+    it "creates single person and generates invoice" do
       expect(wizard).to be_valid
       expect { wizard.save! }.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
-      expect(max.roles.last.type).to eq Group::AboMagazin::Abonnent.sti_name
-      expect(max.roles.last.end_on).to eq Time.zone.now.end_of_year.to_date
+        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
+        .and change { ExternalInvoice::AboMagazin.count }.by(1)
+      expect(max.roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
+      expect(max.roles.last.start_on).to eq Date.current
+      expect(max.roles.last.end_on).to eq 31.days.from_now.to_date
       expect(max.privacy_policy_accepted_at).to be_nil
     end
 
@@ -140,7 +143,7 @@ describe Wizards::Signup::AboMagazinWizard do
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
       expect(wizard).to be_valid
       expect { wizard.save! }.not_to change { Person.count }
-      expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Abonnent.sti_name
+      expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
     end
   end
 
