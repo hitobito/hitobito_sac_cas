@@ -145,6 +145,14 @@ describe Wizards::Signup::AboMagazinWizard do
       expect { wizard.save! }.not_to change { Person.count }
       expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
     end
+
+    context "automatic_invoice_disabled is true" do
+      it "does nothing" do
+        Settings.invoicing.abo_magazin.automatic_invoice_disabled = true
+        expect(wizard).not_to receive(:generate_invoice)
+        wizard.save!
+      end
+    end
   end
 
   describe "#calculate_costs" do

@@ -77,3 +77,8 @@ impersonate:
 hitobito_log:
   recipient_emails:
     - it@sac-cas.ch
+
+invoicing:
+  abo_magazin:
+    # Wenn true, dann wird für Abo Magazine bei der Neuanmeldung und beim Jahresinkasso CreateYearlyAboAlpenInvoicesJob keine Rechnung ausgelöst.
+    automatic_invoice_disabled: false

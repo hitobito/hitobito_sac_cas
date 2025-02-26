@@ -61,6 +61,14 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
     end
   end
 
+  describe "automatic_invoice_disabled true" do
+    it "does nothing" do
+      Settings.invoicing.abo_magazin.automatic_invoice_disabled = true
+      expect(subject).not_to receive(:process_invoices)
+      subject.perform
+    end
+  end
+
   describe "#active_abonnenten" do
     it "includes every abonnent role where role end in next 62 days" do
       expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
