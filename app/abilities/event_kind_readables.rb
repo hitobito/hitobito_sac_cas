@@ -29,5 +29,5 @@ class EventKindReadables
     end
   end
 
-  def permissions_to_check = %w[layer_full layer_and_below_full group_full group_and_below_full]
+  def permissions_to_check = %i[layer_full layer_and_below_full group_full group_and_below_full]
 end
