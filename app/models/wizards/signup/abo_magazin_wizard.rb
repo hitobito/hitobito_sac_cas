@@ -27,6 +27,14 @@ module Wizards::Signup
       current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
     end
 
+    def save!
+      super.then do
+        new_abonnent_role = person.roles.where(group: group, type: Group::AboMagazin::Neuanmeldung.sti_name).first
+        new_abonnent_role.update!(start_on: Time.zone.today, end_on: 31.days.from_now)
+        generate_invoice(new_abonnent_role)
+      end
+    end
+
     def redirection_message = I18n.t("groups.self_registration.create.already_subscribed_to_abo")
 
     def requires_policy_acceptance? = false
@@ -56,6 +64,18 @@ module Wizards::Signup
     end
 
     private
+
+    def generate_invoice(role)
+      invoice = ExternalInvoice::AboMagazin.create!(
+        person: role.person,
+        state: :draft,
+        year: Date.current.year,
+        issued_at: Date.current,
+        sent_at: Date.current,
+        link: role.group
+      )
+      Invoices::Abacus::CreateAboMagazinInvoiceJob.new(invoice, role.id).enqueue!
+    end
 
     def annual_fee = Group.root.abo_alpen_fee || 0
 

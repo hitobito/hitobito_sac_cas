@@ -12,7 +12,7 @@ describe "self_registration_abo_magazin", js: true do
   let(:newsletter) { mailing_lists(:newsletter) }
 
   before do
-    group.update!(self_registration_role_type: group.role_types.first)
+    group.update!(self_registration_role_type: Group::AboMagazin::Neuanmeldung)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
     Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16)
   end
@@ -56,6 +56,7 @@ describe "self_registration_abo_magazin", js: true do
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end
   end
+
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)

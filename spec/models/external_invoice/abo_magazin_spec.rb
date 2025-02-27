@@ -55,4 +55,12 @@ describe ExternalInvoice::AboMagazin do
       end.to change { Delayed::Job.where("handler like '%Invoices::AboMagazin::InvoicePayedJob%'").count }
     end
   end
+
+  describe "title" do
+    let(:external_invoice) { ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group, year: 2025) }
+
+    it "shows title with invoice year" do
+      expect(external_invoice.title).to eq "Rechnung Die Alpen 2025"
+    end
+  end
 end
