@@ -1115,6 +1115,7 @@ de:
     switch_stammsektion_link: Sektionswechsel beantragen
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
     terminate_sac_membership_wizard_terminated_link: SAC Austritt anpassen
+    undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1734,6 +1735,7 @@ de:
 
   roles/terminations:
     global:
+      undo: Reaktivieren
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
       group/abo_magazin/abonnent:

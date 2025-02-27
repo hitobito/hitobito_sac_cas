@@ -51,6 +51,7 @@ Rails.application.routes.draw do
         resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
         resources :roles, only: [] do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
+          resource :undo_termination, module: :memberships, only: [:new, :create]
         end
         member do
           get "external_invoices" => "people/external_invoices#index"

@@ -9,4 +9,10 @@ module SacCas::RolesHelper
   def format_role_membership_years(role)
     f(role.membership_years.floor) if role.is_a?(Group::SektionsMitglieder::Mitglied)
   end
+
+  def terminate_role_link(role)
+    return super unless role.terminated?
+
+    Roles::UndoTerminateRoleLink.new(role, self).render if role.terminated?
+  end
 end

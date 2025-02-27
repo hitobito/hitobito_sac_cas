@@ -44,6 +44,12 @@ class People::SacMembership
     active_roles_of_type(mitglied_stammsektion_types).first
   end
 
+  def latest_stammsektion_role
+    all_roles_of_type(mitglied_stammsektion_types)
+      .order(start_on: :desc)
+      .first
+  end
+
   def zusatzsektion_roles
     active_roles_of_type(mitglied_zusatzsektion_types)
   end
@@ -141,6 +147,10 @@ class People::SacMembership
     active_roles_of_type(invoicable_types)
   end
 
+  def all_roles
+    @person.roles_unscoped
+  end
+
   def active_roles
     if in_memory?
       @person.roles.select { |r| r.active_period.cover?(@date) }
@@ -156,6 +166,10 @@ class People::SacMembership
     else
       active_roles.where(type: types)
     end
+  end
+
+  def all_roles_of_type(types)
+    @person.roles_unscoped.where(type: types)
   end
 
   def in_memory?
