@@ -10,13 +10,6 @@ Rails.application.routes.draw do
 
   language_scope do
     # Define wagon routes here
-
-    resources :groups do
-      resources :roles do
-        resources :undo_terminations, module: :memberships, only: [:new, :create]
-      end
-    end
-
     get "/people/:id/membership" => "people/membership#show", :as => "membership"
     put "/people/:id/sac_family_main_person" => "people/sac_family_main_person#update", :as => "sac_family_main_person"
 
@@ -57,6 +50,7 @@ Rails.application.routes.draw do
         resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
         resources :roles, only: [] do
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
+          resource :undo_termination, module: :memberships, only: [:new, :create]
         end
         member do
           get "external_invoices" => "people/external_invoices#index"
