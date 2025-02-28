@@ -31,7 +31,7 @@ module Wizards::Signup
       super.then do
         new_abonnent_role = person.roles.where(group: group, type: Group::AboMagazin::Neuanmeldung.sti_name).first
         new_abonnent_role.update!(start_on: Time.zone.today, end_on: 31.days.from_now)
-        generate_invoice(new_abonnent_role) if Settings.invoicing.abo_magazin.automatic_invoice_enabled
+        generate_invoice(new_abonnent_role) if Settings.invoicing&.abo_magazin&.automatic_invoice_enabled
       end
     end
 
