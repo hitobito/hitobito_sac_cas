@@ -38,7 +38,7 @@ Rails.application.routes.draw do
             post :invoice, on: :member, controller: "courses/invoices", action: :create
           end
 
-          put "state" => "courses/state#update", on: :member
+          put "state" => "courses/state#update", :on => :member
         end
       end
 
