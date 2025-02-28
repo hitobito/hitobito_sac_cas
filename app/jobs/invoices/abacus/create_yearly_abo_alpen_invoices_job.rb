@@ -9,7 +9,7 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
   SLICE_SIZE = 25  # number of people/invoices transmitted per abacus batch request
 
   def perform_internal
-    process_invoices
+    process_invoices if Settings.invoicing.abo_magazin.automatic_invoice_enabled
   end
 
   def next_run
