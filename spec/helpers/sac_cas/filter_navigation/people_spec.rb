@@ -56,7 +56,8 @@ describe "FilterNavigation::People" do
 
     it "Sistierte Tourenleiter filters for not_active_but_reactivateable qualifications only" do
       query = parse_link_query("Sistierte Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "active"
       expect(query["filters[qualification][validity]"]).to eq "not_active_but_reactivateable"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
@@ -64,21 +65,23 @@ describe "FilterNavigation::People" do
     it "Inaktive Tourenleiter filters for role and active qualifications" do
       query = parse_link_query("Inaktive Tourenleiter")
       expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
-      expect(query["filters[role][kind]"]).to eq "inactive"
+      expect(query["filters[role][kind]"]).to eq "inactive_but_existing"
       expect(query["filters[qualification][validity]"]).to eq "active"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
 
     it "Keine Tourenleiter filters for none qualifications only" do
       query = parse_link_query("Keine Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "inactive"
       expect(query["filters[qualification][validity]"]).to eq "none"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
 
     it "Abgelaufene Tourenleiter filters for only_expired qualifications only" do
       query = parse_link_query("Abgelaufene Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "active"
       expect(query["filters[qualification][validity]"]).to eq "only_expired"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
