@@ -61,9 +61,9 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
     end
   end
 
-  describe "automatic_invoice_disabled true" do
+  describe "automatic_invoice_enabled false" do
     it "does nothing" do
-      allow(Settings.invoicing.abo_magazin).to receive(:automatic_invoice_disabled).and_return(true)
+      allow(Settings.invoicing.abo_magazin).to receive(:automatic_invoice_enabled).and_return(false)
 
       expect(subject).not_to receive(:process_invoices)
       subject.perform

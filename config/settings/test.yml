@@ -1,2 +1,6 @@
+invoicing:
+  abo_magazin:
+    automatic_invoice_enabled: true
+
 oidc:
   use_jwt_access_token: false

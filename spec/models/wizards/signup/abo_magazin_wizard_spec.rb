@@ -146,10 +146,10 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
     end
 
-    context "automatic_invoice_disabled is true" do
+    context "automatic_invoice_enabled is false" do
       it "does nothing" do
-        allow(Settings.invoicing.abo_magazin).to receive(:automatic_invoice_disabled).and_return(true)
-        
+        allow(Settings.invoicing.abo_magazin).to receive(:automatic_invoice_enabled).and_return(false)
+
         expect(wizard).not_to receive(:generate_invoice)
         wizard.save!
       end
