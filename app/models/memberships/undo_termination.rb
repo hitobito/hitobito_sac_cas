@@ -41,10 +41,15 @@ module Memberships
       # we don't handle roles created with this mutation yet. If we want to support this,
       # we should include event: "create" in the query, but instead of reify we need to mark
       # them for deletion in #restored_roles and handle them correspondingly in #save!
+      # We also need to handle the case where one role was updated multiple times in the same
+      # mutation (request/job run). In that case we have to restore the role to the state before
+      # the first change with that mutation_id, so we order by item_id and id and with
+      # SELECT DISTINCT ON (item_id) * we get the first change for each role.
       @role_versions ||= PaperTrail::Version
         .where(mutation_id: mutation_id, item_type: "Role")
         .where.not(event: "create")
-        .includes(item: :versions)
+        .order(:item_id, :id)
+        .select("DISTINCT ON (item_id) *")
     end
 
     # return all roles changed by the termination with their original values
@@ -88,7 +93,7 @@ module Memberships
     def validate_roles_unchanged
       role_versions.each do |version|
         role = version.item || Role.unscoped.find(version.item_id)
-        next if role.versions.order(created_at: :desc).first == version
+        next if role.versions.reorder(created_at: :desc).first == version
 
         group_with_parent = role.group.decorate.label_with_parent
         person = role.person
@@ -127,11 +132,11 @@ module Memberships
       end
     end
 
-    def membership_role? = role.is_a?(SacCas::Role::MitgliedCommon)
+    def membership_role? = SacCas::MITGLIED_ROLES.include?(role.class)
 
     def affected_family_people
       family_roles = restored_roles.select do |r|
-        r.is_a?(SacCas::Role::MitgliedCommon) && r.family?
+        SacCas::MITGLIED_ROLES.include?(role.class) && r.family?
       end
       Person.unscoped.where(id: family_roles.map(&:person_id).uniq)
     end

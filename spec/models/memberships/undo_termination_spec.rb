@@ -112,6 +112,20 @@ describe Memberships::UndoTermination, versioning: true do
 
       expect(subject.role_versions).to be_empty
     end
+
+    it "returns the first version with matching mutation_id when multiple exist" do
+      with_mutation_id("multiple versions with same mutation id") do
+        role.update!(end_on: 10.years.from_now)
+        expect(role.versions).to have(1).item
+        expected_version = role.versions.last
+
+        role.update!(end_on: 20.years.from_now)
+        update_terminated!(role, true)
+        expect(role.versions).to have(3).items
+
+        expect(subject.role_versions).to eq [expected_version]
+      end
+    end
   end
 
   describe "#restored_roles" do
@@ -137,6 +151,19 @@ describe Memberships::UndoTermination, versioning: true do
       # so we must ignore it here
       expect(restored_role.attributes.except("updated_at"))
         .to eq original_attributes.except("updated_at")
+    end
+
+    it "returns the role with its original values when role was updated multiple times in the same mutation" do
+      with_mutation_id("multiple versions with same mutation id") do
+        original_end_on = role.end_on
+        role.update!(end_on: 10.years.from_now)
+        update_terminated!(role, true)
+        role.update!(end_on: 20.years.from_now)
+        expect(role.versions).to have(3).items
+
+        expect(subject.restored_roles).to match_array [role]
+        expect(subject.restored_roles.first.end_on).to eq original_end_on
+      end
     end
   end
 
