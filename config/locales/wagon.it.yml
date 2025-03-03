@@ -150,6 +150,12 @@ it:
               must_not_be_join_section_member: >-
                 è già membro della sezione o ha una richiesta di adesione aperta
               must_be_family_main_person: deve essere la persona di riferimento per la famiglia
+        memberships/undo_termination:
+          mutation_not_found: ""
+          role_changed: ""
+          role_not_terminated: ""
+          role_invalid: ""
+          household_changed: ""
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -1203,7 +1209,7 @@ it:
         push_down_button: Trasferire i dati ai tipi di corso
         push_down_button_confirm: >-
           Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali.
-    participations:       
+    participations:
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
       answers_step:

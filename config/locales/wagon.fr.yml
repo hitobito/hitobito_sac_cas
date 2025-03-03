@@ -152,6 +152,12 @@ fr:
               must_not_be_join_section_member: >-
                 est déjà membre de la section ou a une demande d’adhésion ouverte
               must_be_family_main_person: doit être la personne principale de la famille
+        memberships/undo_termination:
+          mutation_not_found: ""
+          role_changed: ""
+          role_not_terminated: ""
+          role_invalid: ""
+          household_changed: ""
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -1205,7 +1211,7 @@ fr:
         push_down_button: Transférer des données vers des types de cours
         push_down_button_confirm: >-
           Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
-    participations:       
+    participations:
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
       answers_step:

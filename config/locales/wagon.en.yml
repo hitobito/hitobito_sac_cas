@@ -149,6 +149,12 @@ en:
               must_not_be_join_section_member: >-
                 is already a member of the section or has an open application for membership
               must_be_family_main_person: must be the main person in the family
+        memberships/undo_termination:
+          mutation_not_found: ""
+          role_changed: ""
+          role_not_terminated: ""
+          role_invalid: ""
+          household_changed: ""
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -1142,7 +1148,7 @@ en:
         push_down_button: Transfer data to course types
         push_down_button_confirm: >-
           Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten.
-    participations:       
+    participations:
       missing_information: >-
         The following certificates are required for participation in this course. Please submit these if you have not already done so.
       answers_step:
