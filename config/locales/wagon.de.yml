@@ -1510,6 +1510,10 @@ de:
         success:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
           other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
+    undo_terminations:
+      new:
+        info_text: "Folgende Rollen und Attribute werden auf den Stand vor der Kündigung zurückgestellt:"
+        family_number: "Familiennummer: %{number}"
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1823,6 +1827,8 @@ de:
     title: Stammsektion wechseln
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
+  sheet/memberships/undo_termination:
+    title: SAC Mitgliedschaft reaktivieren
 
   table_displays:
     person:

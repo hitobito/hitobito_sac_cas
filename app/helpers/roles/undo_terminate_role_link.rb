@@ -16,16 +16,20 @@ module Roles
 
     def render
       return unless @role.terminated? &&
-        role.is_a?(SacCas::Role::MitgliedCommon) &&
-        # TODO: only render link if terminated role is the latest role in the role.group
-        can?(:create, UndoTermination)
+        SacCas::MITGLIED_ROLES.include?(@role.class) &&
+        latest_role_in_group? &&
+        can?(:create, Memberships::UndoTermination)
+
 
       link_to(t("roles/terminations.global.undo"),
-        @view.new_group_role_undo_termination_path(role_id: @role.id,
-          group_id: @role.group_id,
+        @view.new_group_person_role_undo_termination_path(role_id: @role.id,
+                                                          group_id: @view.params[:group_id], # ansonsten wird man bei einer Person ohne Rollen auf die Gruppe der damaligen Mitgliedsrolle redirected. Dadurch werden dann die anderen Personenlinks (Info, Bemerkungen, etc.) mit der falschen group id gebaut und es entsteht ein 404
           person_id: @role.person_id),
-        class: "btn btn-sm btn-outline-primary",
-        remote: true)
+        class: "btn btn-sm btn-outline-primary")
+    end
+
+    def latest_role_in_group?
+      Role.with_inactive.where(group: @role.group, person: @role.person).reorder(end_on: :desc).first.id == @role.id
     end
   end
 end

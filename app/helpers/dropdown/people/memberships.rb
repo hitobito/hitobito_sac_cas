@@ -36,7 +36,7 @@ module Dropdown
       WIZARDS.each do |wizard_class, path|
         add_wizard(wizard_class, path) if current_ability.can?(:create, build(wizard_class))
       end
-      add_undo_termination_link if current_ability.can?(:create, UndoTermination)
+      add_undo_termination_link if current_ability.can?(:create, ::Memberships::UndoTermination)
     end
 
     def add_wizard(wizard_class, path)
@@ -48,12 +48,12 @@ module Dropdown
     def add_undo_termination_link
       latest_membership = person.sac_membership.stammsektion_role ||
         person.sac_membership.latest_stammsektion_role
-      return unless latest_membership.terminated?
+      return unless latest_membership&.terminated?
 
       add_item(dropdown_option_name("undo_termination"),
                template.new_group_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
                                                              group_id: person.sac_membership.latest_stammsektion_role.group_id,
-                                                             person_id: person.id),
+                                                             person_id: person.id))
     end
 
     def build(wizard_class)
@@ -63,9 +63,9 @@ module Dropdown
       )
     end
 
-    # def t(key)
-    #   I18n.t(key, scope: "dropdowns.memberships")
-    # end
+#     def t(key)
+#       I18n.t(key, scope: "dropdowns.memberships")
+#     end
 
     def dropdown_option_name(wizard_name)
       suffix = "_terminated" if person.sac_membership.terminated? && wizard_name == "terminate_sac_membership_wizard"

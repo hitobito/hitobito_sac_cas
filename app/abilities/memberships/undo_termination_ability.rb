@@ -9,7 +9,7 @@ module Memberships
   class UndoTerminationAbility < AbilityDsl::Base
     include Memberships::Constraints
 
-    on(UndoTermination) do
+    on(Memberships::UndoTermination) do
       permission(:any).may(:manage).backoffice?
     end
   end

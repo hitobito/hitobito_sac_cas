@@ -7,7 +7,7 @@
 
 module Memberships
   class UndoTerminationsController < ApplicationController
-    before_action :authorize, :role
+    before_action :authorize, :role, :person, :group
 
     def new
       @undo_termination = UndoTermination.new(role).tap(&:validate)
@@ -31,6 +31,14 @@ module Memberships
 
     def role
       @role ||= Role.with_inactive.find(params[:role_id])
+    end
+
+    def person
+      @person ||= Person.find(params[:person_id])
+    end
+
+    def group
+      @group ||= Group.find(params[:group_id])
     end
   end
 end

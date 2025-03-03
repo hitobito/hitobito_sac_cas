@@ -153,6 +153,7 @@ module HitobitoSacCas
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
       PeopleHelper.prepend SacCas::PeopleHelper
+      RolesHelper.prepend SacCas::RolesHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport

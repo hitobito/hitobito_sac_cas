@@ -31,7 +31,6 @@ module Memberships
         version.changeset.include?("terminated") && version.changeset.dig("terminated", 1)
       end&.mutation_id
     end
-    memoize_method :mutation_id
 
     # returns the versions of all roles changed by the termination
     def role_versions
