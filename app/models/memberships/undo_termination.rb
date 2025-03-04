@@ -8,7 +8,7 @@
 module Memberships
   class UndoTermination
     include ActiveModel::Validations
-    include Memoizer
+    include MethodMemoizer
 
     attr_accessor :role
 
@@ -27,12 +27,11 @@ module Memberships
     # We find the mutation id by looking for the latest version of the role where the `terminated`
     # flag changed to `true`.
     def mutation_id
-      memoized do
-        role&.versions&.reorder(created_at: :desc)&.find do |version|
-          version.changeset.include?("terminated") && version.changeset.dig("terminated", 1)
-        end&.mutation_id
-      end
+      role&.versions&.reorder(created_at: :desc)&.find do |version|
+        version.changeset.include?("terminated") && version.changeset.dig("terminated", 1)
+      end&.mutation_id
     end
+    memoize_method :mutation_id
 
     # returns the versions of all roles changed by the termination
     def role_versions
@@ -52,20 +51,28 @@ module Memberships
         .select("DISTINCT ON (item_id) *")
     end
 
-    # return all roles changed by the termination with their original values
+    # return all roles changed by the termination with their original values except for the
+    # `end_on` attribute which is set to the current value of the role. This is necessary as
+    # the person might have paid the membership fee after the termination so after reverting
+    # the termination the role should be valid until the end of the paid period.
     def restored_roles
-      @restored_roles ||= role_versions.map(&:reify)
+      @restored_roles ||= role_versions.map do |version|
+        version.reify.tap do |role|
+          role.end_on = [role.end_on, from_db(role).end_on].compact.max
+        end
+      end
     end
 
-    # return all people changed by the termination with their original `household_key` value.
+    # return all people whose roles have been changed by the termination, with their original
+    # `household_key` value.
     # The only relevant change on people is on the attribute `household_key`. This will get
     # cleared eventually when dissolving the family/household after the SAC Membership
     # is terminated.
     def restored_people
-      @restored_people ||= affected_family_people.map do |person|
+      @restored_people ||= restored_roles.map(&:person).uniq.map do |person|
         person.household_key = original_household_key
         person
-      end.select(&:changed?)
+      end
     end
 
     # save the restored roles and people
@@ -77,7 +84,7 @@ module Memberships
 
       Role.transaction(requires_new: true) do
         restored_roles.each { _1.save(validate: false) }
-        restored_people.each { _1.save(validate: false) }
+        restored_people.each { _1.save(validate: false) if _1.changed? }
       end
     end
 
@@ -91,14 +98,31 @@ module Memberships
     # This is the case when the role version created by the termination is the latest version
     # of the role.
     def validate_roles_unchanged
-      role_versions.each do |version|
-        role = version.item || Role.unscoped.find(version.item_id)
-        next if role.versions.reorder(created_at: :desc).first == version
+      restored_roles.each do |role|
+        next if role_unchanged?(role)
 
         group_with_parent = role.group.decorate.label_with_parent
         person = role.person
-        errors.add(:base, :role_changed, role: version.item, group_with_parent:, person:)
+        errors.add(:base, :role_changed, role:, group_with_parent:, person:)
       end
+    end
+
+    def roles_from_db
+      @roles_latest_version ||= Role.unscoped.where(id: role_versions.map(&:item_id))
+    end
+
+    def from_db(role)
+      roles_from_db.find { |r| role == r }
+    end
+
+    # check if the role has been changed since the termination
+    # The role is considered unchanged if the role is terminated and the attributes are the same
+    # as the attributes of the role version created by the termination, with the exception of the
+    # `end_on` attribute which might have been changed after the termination, e.g. by paying the
+    # membership fee which extends the membership.
+    def role_unchanged?(role)
+      role.attributes.except("created_at", "updated_at", "end_on", "terminated") ==
+        from_db(role).attributes.except("created_at", "updated_at", "end_on", "terminated")
     end
 
     # Role validations depend on other roles persisted in the database. We need to validate
@@ -142,9 +166,8 @@ module Memberships
     end
 
     def original_household_key
-      memoized do
-        restored_roles.find { |r| r.id == role.id }&.family_id
-      end
+      restored_roles.find { |r| r.id == role.id }&.family_id
     end
+    memoize_method :original_household_key
   end
 end

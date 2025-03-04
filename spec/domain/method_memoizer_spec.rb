@@ -7,29 +7,31 @@
 
 require "spec_helper"
 
-describe Memoizer do
+describe MethodMemoizer do
   before do
     stub_const("TestMemoizer", Class.new do
-      include Memoizer
+      include MethodMemoizer
 
       def work_method_a = "value a"
 
       def memoized_method_a
-        memoized { work_method_a }
+        work_method_a
       end
+      memoize_method :memoized_method_a
 
       def work_method_b = "value b"
 
       def memoized_method_b
-        memoized { work_method_b }
+        work_method_b
       end
+      memoize_method :memoized_method_b
     end)
   end
 
   subject(:instance) { TestMemoizer.new }
 
-  it "memoized is private" do
-    expect { TestMemoizer.new.memoized }.to raise_error(NoMethodError)
+  it "memoized_method is private" do
+    expect { TestMemoizer.new.memoized_method }.to raise_error(NoMethodError)
   end
 
   it "returns the result of the block" do
