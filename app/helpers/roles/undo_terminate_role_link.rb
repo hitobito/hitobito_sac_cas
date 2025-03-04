@@ -20,10 +20,9 @@ module Roles
         latest_role_in_group? &&
         can?(:create, Memberships::UndoTermination)
 
-
       link_to(t("roles/terminations.global.undo"),
         @view.new_group_person_role_undo_termination_path(role_id: @role.id,
-                                                          group_id: @view.params[:group_id], # ansonsten wird man bei einer Person ohne Rollen auf die Gruppe der damaligen Mitgliedsrolle redirected. Dadurch werden dann die anderen Personenlinks (Info, Bemerkungen, etc.) mit der falschen group id gebaut und es entsteht ein 404
+          group_id: @view.params[:group_id], # ansonsten wird man bei einer Person ohne Rollen auf die Gruppe der damaligen Mitgliedsrolle redirected. Dadurch werden dann die anderen Personenlinks (Info, Bemerkungen, etc.) mit der falschen group id gebaut und es entsteht ein 404
           person_id: @role.person_id),
         class: "btn btn-sm btn-outline-primary")
     end

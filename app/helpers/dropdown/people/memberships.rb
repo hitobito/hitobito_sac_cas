@@ -51,9 +51,9 @@ module Dropdown
       return unless latest_membership&.terminated?
 
       add_item(dropdown_option_name("undo_termination"),
-               template.new_group_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
-                                                             group_id: person.sac_membership.latest_stammsektion_role.group_id,
-                                                             person_id: person.id))
+        template.new_group_person_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
+          group_id: person.sac_membership.latest_stammsektion_role.group_id,
+          person_id: person.id))
     end
 
     def build(wizard_class)
@@ -63,9 +63,9 @@ module Dropdown
       )
     end
 
-#     def t(key)
-#       I18n.t(key, scope: "dropdowns.memberships")
-#     end
+    #     def t(key)
+    #       I18n.t(key, scope: "dropdowns.memberships")
+    #     end
 
     def dropdown_option_name(wizard_name)
       suffix = "_terminated" if person.sac_membership.terminated? && wizard_name == "terminate_sac_membership_wizard"

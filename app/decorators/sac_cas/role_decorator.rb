@@ -17,6 +17,6 @@ module SacCas::RoleDecorator
   end
 
   def name_with_group_and_layer
-    "#{role.group.layer_group.to_s} / #{role.group.to_s}: #{role.to_s}"
+    "#{role.group.layer_group} / #{role.group}: #{role}"
   end
 end
