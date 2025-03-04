@@ -19,6 +19,42 @@ class Group::SacCasKurskader < ::Group
     self.basic_permissions_only = true
   end
 
+  class KursleiterAspirant < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class KlassenlehrerAspirant < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Kurskader1 < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Kurskader2 < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Kurskader3 < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class Kurskader4 < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
   roles Kursleiter,
-    Klassenlehrer
+    Klassenlehrer,
+    KursleiterAspirant,
+    KlassenlehrerAspirant,
+    Kurskader1,
+    Kurskader2,
+    Kurskader3,
+    Kurskader4
 end
