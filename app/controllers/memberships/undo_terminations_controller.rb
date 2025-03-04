@@ -10,14 +10,13 @@ module Memberships
     before_action :authorize, :role, :person, :group
 
     def new
-      @undo_termination = UndoTermination.new(role).tap(&:validate)
+      undo_termination.validate
     end
 
     def create
-      @undo_termination = UndoTermination.new(role)
-      if @undo_termination.valid?
-        @undo_termination.save!
-        redirect_to group_person_path(role.person, group_id: role.group_id)
+      if undo_termination.valid?
+        undo_termination.save!
+        redirect_to group_person_path(role.person, group_id: role.group_id), notice: t(".success")
       else
         render :new
       end
@@ -27,6 +26,10 @@ module Memberships
 
     def authorize
       authorize!(:create, UndoTermination)
+    end
+
+    def undo_termination
+      @undo_termination ||= UndoTermination.new(role)
     end
 
     def role

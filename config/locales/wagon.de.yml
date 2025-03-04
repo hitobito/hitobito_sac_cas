@@ -1511,6 +1511,8 @@ de:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
           other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
     undo_terminations:
+      create:
+        success: "Rollen wurden erfolgreich reaktiviert."
       new:
         info_text: "Folgende Rollen und Attribute werden auf den Stand vor der Kündigung zurückgestellt:"
         family_number: "Familiennummer: %{number}"
