@@ -1456,7 +1456,7 @@ it:
     abo_magazin:
       title: ""
       positions:
-        abo_fee: ""
+        abo_fee: "Abbonamento %{group} %{time_period}"
         abroad_fee: ""
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
