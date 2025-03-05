@@ -1665,10 +1665,6 @@ de:
         flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
       list:
         create_membership_invoice: Mitgliedschaftsrechnung erstellen
-        create_membership_invoice_confirmation: |
-          Dies generiert eine neue Mitgliedschaftsrechnung und sendet diese an Abacus. Diese Aktion kann bis zu einer Minute dauern.
-
-          Sind Sie sicher, dass sie fortfahren wollen?
 
     yearly_membership_invoices:
       job_scheduling_info: "Der Jahresinkassolauf wurde erfolgreich gestartet."

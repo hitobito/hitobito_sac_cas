@@ -1663,10 +1663,7 @@ it:
         flash: "La fattura %{invoice} (n. d’ordine %{abacus_sales_order_key}) viene stornata"
       list:
         create_membership_invoice: Creare la fattura di affiliazione
-        create_membership_invoice_confirmation: |
-          Questo genera una nuova fattura di affiliazione e la invia ad Abacus. Questa azione può richiedere qualche minuto.
 
-          Sicuro di voler continuare?
     yearly_membership_invoices:
       job_scheduling_info: "L’iter di incasso annuale è stato avviato con successo."
       new:
