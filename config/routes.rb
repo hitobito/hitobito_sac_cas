@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
         resources :membership_invoices, only: [:create, :new], module: :people
+        resources :abo_magazin_invoices, only: [:create, :new], module: :people
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
         resource :switch_stammsektion, module: :memberships, only: [:show, :create]

@@ -3,9 +3,22 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if @person.sac_membership_invoice? && can?(:create_membership_invoice, @person)
-  = action_button(t('.create_membership_invoice'),
-                  new_group_person_membership_invoice_path(@group, @person),
-                  :envelope,
-                  method: :get)
-= render "table"
+- title @person.to_s
+
+.pagination-bar
+  = paginate @external_invoices
+
+= crud_table(data: { checkable: true }) do |t|
+  - t.col(t.attr_header(:title)) do |invoice|
+    %strong= invoice.title
+  - t.sortable_attrs(:state, :abacus_sales_order_key, :total, :issued_at, :created_at, :updated_at)
+  - t.col('') do |invoice|
+    - if invoice.cancellable?
+      = action_button(t('.cancel_invoice'),
+                  cancel_external_invoices_group_people_group_person_path(@group, @person, invoice),
+                  :ban,
+                  class: 'btn-sm',
+                  method: :post,
+                  data: { confirm: t('.cancel_invoice_confirmation') })
+
+= paginate @external_invoices

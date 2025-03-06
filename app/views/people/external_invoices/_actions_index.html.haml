@@ -1,0 +1,16 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if @person.sac_membership_invoice? && can?(:create_membership_invoice, @person)
+  = action_button(t('.create_membership_invoice'),
+                  new_group_person_membership_invoice_path(@group, @person),
+                  :envelope,
+                  method: :get)
+
+- if abo_magazin_invoice_possible?(@person)
+  = action_button(t('.create_abo_magazin_invoice'),
+                    new_group_person_abo_magazin_invoice_path(@group, @person),
+                    :envelope,
+                    method: :get)
