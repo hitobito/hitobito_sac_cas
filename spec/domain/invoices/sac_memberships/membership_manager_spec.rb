@@ -121,22 +121,24 @@ describe Invoices::SacMemberships::MembershipManager do
   end
 
   context "person has expired stammsektions role" do
+    let(:end_of_year) { Date.current.end_of_year }
+
     def check_new_membership_role_dates_and_groups(person)
       expect(sac_membership.active?).to be_truthy
       expect(sac_membership.stammsektion_role.start_on).to eq Time.zone.today
-      expect(sac_membership.stammsektion_role.end_on).to eq end_of_next_year
+      expect(sac_membership.stammsektion_role.end_on).to eq end_of_year
       expect(sac_membership.zusatzsektion_roles.first.start_on).to eq Time.zone.today
-      expect(sac_membership.zusatzsektion_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.zusatzsektion_roles.first.end_on).to eq end_of_year
       expect(sac_membership.membership_prolongable_roles.first.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.first.end_on).to eq end_of_year
       expect(sac_membership.membership_prolongable_roles.second.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.second.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.second.end_on).to eq end_of_year
       expect(sac_membership.membership_prolongable_roles.third.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.third.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.third.end_on).to eq end_of_year
     end
 
     context "adult" do
-      subject { described_class.new(mitglied_person, bluemlisalp, end_of_next_year.year) }
+      subject { described_class.new(mitglied_person, bluemlisalp, end_of_year.year) }
 
       before do
         mitglied.update_column(:end_on, Time.zone.today.yesterday)
@@ -184,7 +186,7 @@ describe Invoices::SacMemberships::MembershipManager do
     end
 
     context "family" do
-      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
+      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_year.year) }
 
       before do
         familienmitglied.update_column(:end_on, Time.zone.today.yesterday)
