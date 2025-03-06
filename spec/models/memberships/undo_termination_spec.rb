@@ -10,7 +10,7 @@ require "spec_helper"
 describe Memberships::UndoTermination, versioning: true do
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
-  def with_mutation_id(mutation_id = Random.uuid)
+  def mutation(mutation_id = Random.uuid)
     PaperTrail.request(controller_info: {mutation_id: mutation_id}) { yield }
   end
 
@@ -49,11 +49,11 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns the mutation_id from version where terminated flag changed to true" do
-      with_mutation_id("expected mutation id") do
+      mutation("expected mutation id") do
         update_terminated!(role, true)
       end
 
-      with_mutation_id("not the one where terminated flag was set") do
+      mutation("not the one where terminated flag was set") do
         role.update!(start_on: 10.years.ago)
       end
 
@@ -61,9 +61,9 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns the mutation_id of the latest termination" do
-      with_mutation_id("earlier termination") { update_terminated!(role, true) }
-      with_mutation_id("role restored") { update_terminated!(role, false) }
-      with_mutation_id("latest termination") { update_terminated!(role, true) }
+      mutation("earlier termination") { update_terminated!(role, true) }
+      mutation("role restored") { update_terminated!(role, false) }
+      mutation("latest termination") { update_terminated!(role, true) }
 
       expect(subject.mutation_id).to eq("latest termination")
     end
@@ -78,7 +78,7 @@ describe Memberships::UndoTermination, versioning: true do
 
   describe "#role_versions" do
     it "returns all versions of roles with matching mutation_id" do
-      with_mutation_id("relevant mutations") do
+      mutation("relevant mutations") do
         update_terminated!(role, true) # mark role as terminated
 
         # update roles and random other model instances with  the same mutation_id
@@ -91,7 +91,7 @@ describe Memberships::UndoTermination, versioning: true do
       end
 
       # update another role with an unrelated mutation_id
-      with_mutation_id("unrelated mutations") do
+      mutation("unrelated mutations") do
         roles(:familienmitglied).update!(end_on: 10.years.from_now)
       end
 
@@ -105,7 +105,7 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns an empty array if mutation_id is nil" do
-      with_mutation_id(nil) do # versions get created with blank mutation_id
+      mutation(nil) do # versions get created with blank mutation_id
         update_terminated!(role, true)
         update_terminated!(:familienmitglied_kind, true)
       end
@@ -114,7 +114,7 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns the first version with matching mutation_id when multiple exist" do
-      with_mutation_id("multiple versions with same mutation id") do
+      mutation("multiple versions with same mutation id") do
         role.update!(end_on: 10.years.from_now)
         expect(role.versions).to have(1).item
         expected_version = role.versions.last
@@ -136,7 +136,7 @@ describe Memberships::UndoTermination, versioning: true do
       original_attributes = changed_role.attributes
       changed_role.update!(
         start_on: 10.years.ago,
-        end_on: 10.years.from_now,
+        end_on: 5.days.ago,
         label: "new label",
         group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)
       )
@@ -154,16 +154,48 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns the role with its original values when role was updated multiple times in the same mutation" do
-      with_mutation_id("multiple versions with same mutation id") do
-        original_end_on = role.end_on
-        role.update!(end_on: 10.years.from_now)
+      mutation("multiple versions with same mutation id") do
+        original_start_on = role.start_on
+        role.update!(start_on: original_start_on - 10.years)
         update_terminated!(role, true)
-        role.update!(end_on: 20.years.from_now)
+        role.update!(start_on: original_start_on - 5.years)
         expect(role.versions).to have(3).items
 
         expect(subject.restored_roles).to match_array [role]
-        expect(subject.restored_roles.first.end_on).to eq original_end_on
+        expect(subject.restored_roles.first.start_on).to eq original_start_on
       end
+    end
+
+    it "returns the role with its original end_to if it was shorted in a later mutation" do
+      original_end_on = role.end_on
+
+      mutation do
+        update_terminated!(role, true)
+        role.update!(end_on: 1.day.ago)
+      end
+
+      mutation do
+        role.update!(end_on: 1.week.ago) # <- shorted after termination
+      end
+
+      expect(subject.restored_roles).to match_array [role]
+      expect(subject.restored_roles.first.end_on).to eq original_end_on
+    end
+
+    it "returns the role with the current end_on if it was extended in a later mutation" do
+      extended_end_on = 10.years.from_now.to_date
+
+      mutation do
+        update_terminated!(role, true)
+        role.update!(end_on: 1.day.ago)
+      end
+
+      mutation do
+        role.update!(end_on: extended_end_on) # <- extended after termination
+      end
+
+      expect(subject.restored_roles).to match_array [role]
+      expect(subject.restored_roles.first.end_on).to eq extended_end_on
     end
   end
 
@@ -198,8 +230,6 @@ describe Memberships::UndoTermination, versioning: true do
   end
 
   context "validations" do
-    before { update_terminated!(role, true) }
-
     # make sure our setup is valid
     it "is valid" do
       update_terminated!(role, true)
@@ -207,6 +237,8 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     describe "#mutation_id" do
+      before { update_terminated!(role, true) }
+
       it "is valid if mutation_id is present" do
         allow(subject).to receive(:mutation_id).and_return("some mutation id")
         expect(subject).to be_valid
@@ -221,12 +253,13 @@ describe Memberships::UndoTermination, versioning: true do
 
     describe "#validate_role_is_terminated" do
       it "is valid if role is terminated" do
-        expect(role).to be_terminated
+        update_terminated!(role, true)
         expect(subject).to be_valid
       end
 
       it "is invalid if role is not terminated" do
-        update_terminated!(role, false)
+        expect(role).not_to be_terminated
+
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages).to include "Rolle ist nicht gekündigt"
       end
@@ -234,16 +267,31 @@ describe Memberships::UndoTermination, versioning: true do
 
     describe "#validate_roles_unchanged" do
       it "is valid if roles are unchanged since termination" do
-        expect(role.versions).to have(1).item
+        mutation do
+          role.update!(start_on: role.start_on - 1.day)
+        end
+
+        mutation do
+          update_terminated!(role, true) # <- termination is the latest mutation
+        end
+
+        expect(role.versions).to have(2).items
         expect(role.versions.last.changeset).to eq("terminated" => [false, true])
 
         expect(subject).to be_valid
       end
 
       it "is invalid if roles are changed since termination" do
-        role.update!(end_on: 10.years.from_now)
-        expect(role.versions).to have(2).items
+        mutation do
+          update_terminated!(role, true)
+        end
 
+        mutation do
+          role.update!(start_on: role.start_on - 1.day) # <- mutation after termination
+        end
+
+        expect(role.versions).to have(2).items
+        expect(role.versions.last.changeset.keys).not_to include("terminated")
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
           .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von Edmund Hillary wurde seit der Kündigung verändert"]
@@ -251,9 +299,7 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     describe "#validate_restored_roles" do
-      # modify the terminated role by yesterday (use update_column as not to trigger papertrail).
-      # the restored role will have the original validity again.
-      before { role.update_column(:end_on, Date.yesterday) }
+      before { update_terminated!(role, true) }
 
       it "is valid if restored roles are valid" do
         # the role will still be valid with the original validity
@@ -261,6 +307,8 @@ describe Memberships::UndoTermination, versioning: true do
       end
 
       it "is invalid if restored roles are invalid" do
+        role.update_column(:end_on, 1.day.ago)
+
         # we create a Neuanmeldung role for the person valid from today. This causes the restored
         # role with the original validity to be invalid as it overlaps with the Neuanmeldung role.
         new_role = Group::SektionsNeuanmeldungenNv::Neuanmeldung.create!(
