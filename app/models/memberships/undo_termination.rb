@@ -31,7 +31,6 @@ module Memberships
         version.changeset.include?("terminated") && version.changeset.dig("terminated", 1)
       end&.mutation_id
     end
-    memoize_method :mutation_id
 
     # returns the versions of all roles changed by the termination
     def role_versions
@@ -90,6 +89,9 @@ module Memberships
 
     private
 
+    ATTRS_ALLOWED_TO_CHANGE =
+      %w[created_at updated_at end_on terminated termination_reason_id].freeze
+
     def validate_role_is_terminated
       errors.add(:base, :role_not_terminated) unless role.terminated?
     end
@@ -121,8 +123,8 @@ module Memberships
     # `end_on` attribute which might have been changed after the termination, e.g. by paying the
     # membership fee which extends the membership.
     def role_unchanged?(role)
-      role.attributes.except("created_at", "updated_at", "end_on", "terminated") ==
-        from_db(role).attributes.except("created_at", "updated_at", "end_on", "terminated")
+      role.attributes.except(*ATTRS_ALLOWED_TO_CHANGE) ==
+        from_db(role).attributes.except(*ATTRS_ALLOWED_TO_CHANGE)
     end
 
     # Role validations depend on other roles persisted in the database. We need to validate

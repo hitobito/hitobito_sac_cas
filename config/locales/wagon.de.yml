@@ -1114,7 +1114,7 @@ de:
     join_zusatzsektion_link: Zusatzsektion beantragen
     switch_stammsektion_link: Sektionswechsel beantragen
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
-    terminate_sac_membership_wizard_terminated_link: SAC Austritt anpassen
+    undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1509,6 +1509,12 @@ de:
         success:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
           other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
+    undo_terminations:
+      create:
+        success: "Rollen wurden erfolgreich reaktiviert."
+      new:
+        info_text: "Folgende Rollen und Attribute werden auf den Stand vor der Kündigung zurückgestellt:"
+        family_number: "Familiennummer: %{number}"
 
   mitglieder_exports:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
@@ -1734,6 +1740,7 @@ de:
 
   roles/terminations:
     global:
+      undo: Reaktivieren
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
       group/abo_magazin/abonnent:
@@ -1821,6 +1828,8 @@ de:
     title: Stammsektion wechseln
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
+  sheet/memberships/undo_termination:
+    title: SAC Mitgliedschaft reaktivieren
 
   table_displays:
     person:
@@ -1994,7 +2003,6 @@ de:
         warning_termination_by_section_only: >-
           Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für
           das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
-        membership_already_terminated: "Achtung: Die Mitgliedschaft ist bereits gekündigt per %{end_on}"
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:

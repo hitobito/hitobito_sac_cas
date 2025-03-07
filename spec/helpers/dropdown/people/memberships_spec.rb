@@ -38,6 +38,7 @@ describe Dropdown::People::Memberships do
     before do
       stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
       stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -55,6 +56,7 @@ describe Dropdown::People::Memberships do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
       stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -72,6 +74,7 @@ describe Dropdown::People::Memberships do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
       stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -83,11 +86,30 @@ describe Dropdown::People::Memberships do
       stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
       expect(menu).to have_link "SAC-Mitgliedschaft beenden"
     end
+  end
 
-    it "contains correct dropdown option name when role terminated" do
+  context "UndoTermination" do
+    before do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, true)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+    end
+
+    it "does not contain link if person is not permitted" do
       person.sac_membership.stammsektion_role.update_column(:terminated, true)
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
-      expect(menu).to have_link "SAC Austritt anpassen"
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+      expect(menu).to have_no_link "SAC-Mitgliedschaft reaktivieren"
+    end
+
+    it "does not contain link if membership stammsektion role is not terminated" do
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+      expect(menu).to have_no_link "SAC-Mitgliedschaft reaktivieren"
+    end
+
+    it "is contains link if person is permitted" do
+      person.sac_membership.stammsektion_role.update_column(:terminated, true)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(true)
+      expect(menu).to have_link "SAC-Mitgliedschaft reaktivieren"
     end
   end
 end

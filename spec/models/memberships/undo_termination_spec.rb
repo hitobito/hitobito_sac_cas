@@ -14,13 +14,21 @@ describe Memberships::UndoTermination, versioning: true do
     PaperTrail.request(controller_info: {mutation_id: mutation_id}) { yield }
   end
 
-  def update_terminated!(role, value)
-    # monkey dance required because directly assigning terminated intentionally raises error
+  def terminate(role, terminate_on: Date.current.yesterday)
     role = roles(role) if role.is_a?(Symbol)
-    role.tap { _1.write_attribute(:terminated, value) }.save!
+    termination = Memberships::TerminateSacMembership.new(
+      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id
+    )
+    expect(termination).to be_valid
+    termination.save!
+    role.reload
   end
 
-  let(:role) { roles(:mitglied) }
+  let(:person) { Fabricate(:person) }
+  let(:role) {
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+      person: person, group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago)
+  }
 
   subject { described_class.new(role) }
 
@@ -43,14 +51,17 @@ describe Memberships::UndoTermination, versioning: true do
   end
 
   describe "#mutation_id" do
+    let(:role) { roles(:mitglied) }
+
     it "returns the mutation_id from version" do
-      update_terminated!(role, true)
+      terminate(role)
+
       expect(subject.mutation_id).to eq(role.versions.last.mutation_id)
     end
 
     it "returns the mutation_id from version where terminated flag changed to true" do
       mutation("expected mutation id") do
-        update_terminated!(role, true)
+        terminate(role)
       end
 
       mutation("not the one where terminated flag was set") do
@@ -61,9 +72,9 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     it "returns the mutation_id of the latest termination" do
-      mutation("earlier termination") { update_terminated!(role, true) }
-      mutation("role restored") { update_terminated!(role, false) }
-      mutation("latest termination") { update_terminated!(role, true) }
+      mutation("earlier termination") { terminate(role, terminate_on: Date.current.end_of_year) }
+      mutation("role restored") { described_class.new(role).save! }
+      mutation("latest termination") { terminate(role.reload) }
 
       expect(subject.mutation_id).to eq("latest termination")
     end
@@ -79,14 +90,12 @@ describe Memberships::UndoTermination, versioning: true do
   describe "#role_versions" do
     it "returns all versions of roles with matching mutation_id" do
       mutation("relevant mutations") do
-        update_terminated!(role, true) # mark role as terminated
+        terminate(role)
 
         # update roles and random other model instances with  the same mutation_id
         roles(:familienmitglied_kind, :abonnent_alpen).each do |r|
           r.update!(end_on: 10.years.from_now)
         end
-        mailing_lists(:newsletter).update!(name: "PeakUpdates")
-        events(:top_course).update!(number: "123abc")
         people(:tourenchef).update!(language: "fr")
       end
 
@@ -99,15 +108,15 @@ describe Memberships::UndoTermination, versioning: true do
       expect(subject.mutation_id).to eq("relevant mutations")
 
       expect(subject.role_versions).to all have_attributes(mutation_id: "relevant mutations")
-      expect(subject.role_versions.map(&:item)).to match_array [
+      expect(subject.role_versions.map(&:reify)).to match_array [
         role, roles(:familienmitglied_kind), roles(:abonnent_alpen)
       ]
     end
 
     it "returns an empty array if mutation_id is nil" do
       mutation(nil) do # versions get created with blank mutation_id
-        update_terminated!(role, true)
-        update_terminated!(:familienmitglied_kind, true)
+        terminate(role)
+        terminate(:familienmitglied)
       end
 
       expect(subject.role_versions).to be_empty
@@ -115,13 +124,14 @@ describe Memberships::UndoTermination, versioning: true do
 
     it "returns the first version with matching mutation_id when multiple exist" do
       mutation("multiple versions with same mutation id") do
-        role.update!(end_on: 10.years.from_now)
         expect(role.versions).to have(1).item
+        role.update!(end_on: 10.years.from_now)
+        expect(role.versions).to have(2).item
         expected_version = role.versions.last
 
         role.update!(end_on: 20.years.from_now)
-        update_terminated!(role, true)
-        expect(role.versions).to have(3).items
+        terminate(role)
+        expect(role.versions).to have(4).items
 
         expect(subject.role_versions).to eq [expected_version]
       end
@@ -130,7 +140,7 @@ describe Memberships::UndoTermination, versioning: true do
 
   describe "#restored_roles" do
     it "returns the roles with their original values" do
-      update_terminated!(role, true)
+      terminate(role)
 
       changed_role = roles(:familienmitglied_kind)
       original_attributes = changed_role.attributes
@@ -155,11 +165,12 @@ describe Memberships::UndoTermination, versioning: true do
 
     it "returns the role with its original values when role was updated multiple times in the same mutation" do
       mutation("multiple versions with same mutation id") do
+        expect(role.versions).to have(1).item
         original_start_on = role.start_on
         role.update!(start_on: original_start_on - 10.years)
-        update_terminated!(role, true)
+        terminate(role)
         role.update!(start_on: original_start_on - 5.years)
-        expect(role.versions).to have(3).items
+        expect(role.versions).to have(4).items
 
         expect(subject.restored_roles).to match_array [role]
         expect(subject.restored_roles.first.start_on).to eq original_start_on
@@ -169,30 +180,19 @@ describe Memberships::UndoTermination, versioning: true do
     it "returns the role with its original end_to if it was shorted in a later mutation" do
       original_end_on = role.end_on
 
-      mutation do
-        update_terminated!(role, true)
-        role.update!(end_on: 1.day.ago)
-      end
-
-      mutation do
-        role.update!(end_on: 1.week.ago) # <- shorted after termination
-      end
+      mutation { terminate(role, terminate_on: 1.day.ago) }
+      mutation { role.update!(end_on: 1.week.ago) } # <- shorted after termination
 
       expect(subject.restored_roles).to match_array [role]
-      expect(subject.restored_roles.first.end_on).to eq original_end_on
+      restored_role = subject.restored_roles.find { _1 == role }
+      expect(restored_role.end_on).to eq original_end_on
     end
 
     it "returns the role with the current end_on if it was extended in a later mutation" do
       extended_end_on = 10.years.from_now.to_date
 
-      mutation do
-        update_terminated!(role, true)
-        role.update!(end_on: 1.day.ago)
-      end
-
-      mutation do
-        role.update!(end_on: extended_end_on) # <- extended after termination
-      end
+      mutation { terminate(role, terminate_on: 1.day.ago) }
+      mutation { role.update!(end_on: extended_end_on) } # <- extended after termination
 
       expect(subject.restored_roles).to match_array [role]
       expect(subject.restored_roles.first.end_on).to eq extended_end_on
@@ -204,20 +204,19 @@ describe Memberships::UndoTermination, versioning: true do
 
     it "returns people with current attrs but original household_key" do
       original_household_key = role.person.household_key
-
       mitglied_original_language = role.person.language
-      update_terminated!(role, true)
-      role.person.update!(household_key: "familie_new_key", language: "fr")
-
       kind_original_birthday = roles(:familienmitglied_kind).person.birthday
-      update_terminated!(:familienmitglied_kind, true)
+
+      terminate(role) # terminates all family members roles
+
+      role.person.update!(household_key: "familie_new_key", language: "fr")
       roles(:familienmitglied_kind).person.update!(
         household_key: "familie_new_key",
         birthday: 100.years.ago
       )
 
       expect(subject.restored_people)
-        .to match_array [role.person, roles(:familienmitglied_kind).person]
+        .to include role.person, roles(:familienmitglied_kind).person
 
       mitglied = subject.restored_people.find { _1 == role.person }
       expect(mitglied.household_key).to eq original_household_key
@@ -232,12 +231,12 @@ describe Memberships::UndoTermination, versioning: true do
   context "validations" do
     # make sure our setup is valid
     it "is valid" do
-      update_terminated!(role, true)
+      terminate(role)
       expect(subject).to be_valid
     end
 
     describe "#mutation_id" do
-      before { update_terminated!(role, true) }
+      before { terminate(role) }
 
       it "is valid if mutation_id is present" do
         allow(subject).to receive(:mutation_id).and_return("some mutation id")
@@ -253,7 +252,7 @@ describe Memberships::UndoTermination, versioning: true do
 
     describe "#validate_role_is_terminated" do
       it "is valid if role is terminated" do
-        update_terminated!(role, true)
+        terminate(role)
         expect(subject).to be_valid
       end
 
@@ -272,34 +271,38 @@ describe Memberships::UndoTermination, versioning: true do
         end
 
         mutation do
-          update_terminated!(role, true) # <- termination is the latest mutation
+          terminate(role) # <- termination is the latest mutation
         end
 
-        expect(role.versions).to have(2).items
-        expect(role.versions.last.changeset).to eq("terminated" => [false, true])
+        expect(role.versions).to have(3).items
+        expect(role.versions.last.changeset).to eq(
+          "terminated" => [false, true],
+          "termination_reason_id" => [nil, termination_reasons(:deceased).id],
+          "end_on" => [Date.current.end_of_year, Date.current.yesterday]
+        )
 
         expect(subject).to be_valid
       end
 
       it "is invalid if roles are changed since termination" do
         mutation do
-          update_terminated!(role, true)
+          terminate(role)
         end
 
         mutation do
           role.update!(start_on: role.start_on - 1.day) # <- mutation after termination
         end
 
-        expect(role.versions).to have(2).items
+        expect(role.versions).to have(3).items
         expect(role.versions.last.changeset.keys).not_to include("terminated")
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
-          .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von Edmund Hillary wurde seit der Kündigung verändert"]
+          .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von #{role.person} wurde seit der Kündigung verändert"]
       end
     end
 
     describe "#validate_restored_roles" do
-      before { update_terminated!(role, true) }
+      before { terminate(role) }
 
       it "is valid if restored roles are valid" do
         # the role will still be valid with the original validity
@@ -319,7 +322,7 @@ describe Memberships::UndoTermination, versioning: true do
 
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
-          .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von Edmund Hillary: Person hat bereits eine Neuanmeldung (von #{I18n.l(new_role.start_on)} bis )."]
+          .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von #{role.person}: Person hat bereits eine Neuanmeldung (von #{I18n.l(new_role.start_on)} bis )."]
       end
     end
 
@@ -329,7 +332,7 @@ describe Memberships::UndoTermination, versioning: true do
       it "is valid if current household keys are blank" do
         expect do
           role.person.update!(household_key: nil)
-          update_terminated!(role, true)
+          terminate(role)
         end.to change { role.person.reload.household_key }.to(nil)
 
         expect(subject).to be_valid
@@ -337,7 +340,7 @@ describe Memberships::UndoTermination, versioning: true do
 
       it "is valid if current household keys are same as restored" do
         expect do
-          update_terminated!(role, true)
+          terminate(role)
         end.not_to change { role.person.reload.household_key }
 
         expect(subject).to be_valid
@@ -346,7 +349,7 @@ describe Memberships::UndoTermination, versioning: true do
       it "is invalid if current household keys are different from restored" do
         expect do
           role.person.update!(household_key: "new_key")
-          update_terminated!(role, true)
+          terminate(role)
         end.to change { role.person.reload.household_key }.to("new_key")
 
         expect(subject).not_to be_valid

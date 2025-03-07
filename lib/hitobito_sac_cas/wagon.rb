@@ -108,6 +108,7 @@ module HitobitoSacCas
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       Ability.store.register Memberships::TerminateSacMembershipWizardAbility
+      Ability.store.register Memberships::UndoTerminationAbility
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       GroupAbility.prepend SacCas::GroupAbility
@@ -152,6 +153,7 @@ module HitobitoSacCas
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
       PeopleHelper.prepend SacCas::PeopleHelper
+      RolesHelper.prepend SacCas::RolesHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport

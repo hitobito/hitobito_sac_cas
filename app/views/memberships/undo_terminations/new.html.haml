@@ -1,0 +1,20 @@
+= render "shared/error_messages", errors: @undo_termination.errors
+
+%p= t(".info_text")
+
+- @undo_termination.restored_people.each do |person|
+  %h2= person.full_name
+  %ul.p-2
+    - if @undo_termination.original_household_key.present?
+      %li= t(".family_number", number: @undo_termination.original_household_key)
+    - @undo_termination.restored_roles.filter { _1.person_id == person.id }.each do |role|
+      %li
+        = role.decorate.name_with_group_and_layer
+        = role.formatted_start_date if role.start_on
+        = role.formatted_delete_date if role.end_on
+
+= action_button(ti(:"button.next"),
+                group_person_role_undo_termination_path(@group, @person, @role),
+                nil,
+                method: :post, class: "btn btn-sm btn-primary", disabled: @undo_termination.errors.full_messages.presence)
+= link_to(ti(:"button.cancel"), history_group_person_path(@group, @person), class: "link cancel")
