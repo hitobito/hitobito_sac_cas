@@ -13,6 +13,6 @@ module SacCas::RolesHelper
   def terminate_role_link(role)
     return super unless role.terminated?
 
-    Roles::UndoTerminateRoleLink.new(role, self).render if role.terminated?
+    Roles::UndoTerminateRoleLink.new(role, self).render
   end
 end
