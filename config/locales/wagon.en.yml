@@ -1585,10 +1585,7 @@ en:
         flash: "The invoice %{invoice} (order no. %{abacus_sales_order_key}) is canceled"
       list:
         create_membership_invoice: Create membership invoice
-        create_membership_invoice_confirmation: |
-          This generates a new membership invoice and sends it to Abacus. This action can take up to one minute.
 
-          Are you sure you want to continue?
     yearly_membership_invoices:
       job_scheduling_info: "The annual collection run was successfully launched."
       new:

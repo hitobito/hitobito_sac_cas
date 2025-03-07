@@ -1669,10 +1669,7 @@ fr:
         flash: "La facture %{invoice} (n° de commande %{abacus_sales_order_key}) est annulée"
       list:
         create_membership_invoice: Créer une facture d’adhésion
-        create_membership_invoice_confirmation: |
-          Cela génère une nouvelle facture d’adhésion et l’envoie à Abacus. Cette action peut prendre jusqu’à une minute.
 
-          Etes-vous sûr·e de vouloir continuer?
     yearly_membership_invoices:
       job_scheduling_info: "La procédure d’encaissement annuel a été lancée avec succès."
       new:
