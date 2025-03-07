@@ -142,7 +142,7 @@ class Invoices::SacMemberships::MembershipManager
   # used to get non active stammsektion role of last year, in case a invoice is payed too late, this case can occur
   def expired_stammsektion_role
     @person.roles.with_inactive
-      .where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name), end_on: [Date.new(year - 1)..])
+      .where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name), end_on: [Date.new(year)..])
       .order(:end_on)
       .reject(&:terminated?)
       .last
