@@ -32,7 +32,7 @@ class ExternalInvoice::AboMagazin < ExternalInvoice
   after_update :handle_state_change_to_payed
 
   def title
-    I18n.t("invoices.abo_magazin.title", year: year)
+    I18n.t("invoices.abo_magazin.title", group: link.name, year: year)
   end
 
   def invoice_kind

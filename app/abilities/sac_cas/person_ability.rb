@@ -20,7 +20,7 @@ module SacCas::PersonAbility
         .if_backoffice
 
       permission(:layer_and_below_full)
-        .may(:index_external_invoices, :create_membership_invoice, :cancel_external_invoice, :security)
+        .may(:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security)
         .if_backoffice
       permission(:any).may(:index_invoices, :security).none
       permission(:any)
