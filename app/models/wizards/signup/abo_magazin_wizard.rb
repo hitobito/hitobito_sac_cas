@@ -24,7 +24,7 @@ module Wizards::Signup
     delegate :newsletter, to: :summary
 
     def member_or_applied?
-      current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
+      current_user&.roles&.where(group: group)&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
     end
 
     def save!

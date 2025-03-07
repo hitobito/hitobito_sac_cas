@@ -186,26 +186,47 @@ describe Wizards::Signup::AboMagazinWizard do
   end
 
   describe "#member_or_applied?" do
-    let(:person) { people(:mitglied) }
     let(:group) { groups(:abo_die_alpen) }
+    let(:person) { people(:mitglied) }
 
     before do
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(person)
     end
 
-    it "returns true when user has abonnent role" do
-      Group::AboMagazin::Abonnent.create!(person:, group:)
-      expect(wizard.member_or_applied?).to be_truthy
+    context "role in same abo group" do
+      it "returns true when user has abonnent role" do
+        Group::AboMagazin::Abonnent.create!(person:, group:)
+        expect(wizard.member_or_applied?).to be_truthy
+      end
+
+      it "returns true when user has neuanmeldung role" do
+        Group::AboMagazin::Neuanmeldung.create!(person:, group:)
+        expect(wizard.member_or_applied?).to be_truthy
+      end
+
+      it "returns true when user has gratis abonnent role" do
+        Group::AboMagazin::Gratisabonnent.create!(person:, group:)
+        expect(wizard.member_or_applied?).to be_truthy
+      end
     end
 
-    it "returns true when user has neuanmeldung role" do
-      Group::AboMagazin::Neuanmeldung.create!(person:, group:)
-      expect(wizard.member_or_applied?).to be_truthy
-    end
+    context "role in different abo group" do
+      let(:different_abo_group) { Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine), name: "Les Alpes FR") }
 
-    it "returns true when user has gratis abonnent role" do
-      Group::AboMagazin::Gratisabonnent.create!(person:, group:)
-      expect(wizard.member_or_applied?).to be_truthy
+      it "returns false when user has abonnent role" do
+        Group::AboMagazin::Abonnent.create!(person:, group: different_abo_group)
+        expect(wizard.member_or_applied?).to be_falsy
+      end
+
+      it "returns false when user has neuanmeldung role" do
+        Group::AboMagazin::Neuanmeldung.create!(person:, group: different_abo_group)
+        expect(wizard.member_or_applied?).to be_falsy
+      end
+
+      it "returns false when user has gratis abonnent role" do
+        Group::AboMagazin::Gratisabonnent.create!(person:, group: different_abo_group)
+        expect(wizard.member_or_applied?).to be_falsy
+      end
     end
 
     it "returns false if user does not have role" do
