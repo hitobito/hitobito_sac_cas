@@ -1114,7 +1114,6 @@ de:
     join_zusatzsektion_link: Zusatzsektion beantragen
     switch_stammsektion_link: Sektionswechsel beantragen
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
-    terminate_sac_membership_wizard_terminated_link: SAC Austritt anpassen
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
   dropdown/people_export:
@@ -2004,7 +2003,6 @@ de:
         warning_termination_by_section_only: >-
           Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für
           das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
-        membership_already_terminated: "Achtung: Die Mitgliedschaft ist bereits gekündigt per %{end_on}"
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:

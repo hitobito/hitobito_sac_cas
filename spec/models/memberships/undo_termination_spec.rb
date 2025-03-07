@@ -17,7 +17,7 @@ describe Memberships::UndoTermination, versioning: true do
   def terminate(role, terminate_on: Date.current.yesterday)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on, backoffice: true, termination_reason_id: termination_reasons(:deceased).id
+      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id
     )
     expect(termination).to be_valid
     termination.save!
@@ -74,7 +74,7 @@ describe Memberships::UndoTermination, versioning: true do
     it "returns the mutation_id of the latest termination" do
       mutation("earlier termination") { terminate(role, terminate_on: Date.current.end_of_year) }
       mutation("role restored") { described_class.new(role).save! }
-      mutation("latest termination") { terminate(role) }
+      mutation("latest termination") { terminate(role.reload) }
 
       expect(subject.mutation_id).to eq("latest termination")
     end

@@ -14,7 +14,7 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
   def terminate(role, terminate_on: Date.current.yesterday)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on, backoffice: true, termination_reason_id: termination_reasons(:deceased).id
+      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id
     )
     expect(termination).to be_valid
     termination.save!
@@ -51,7 +51,7 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
 
       expect(dom).to have_selector("#error_explanation ul")
       within("#error_explanation") do |alert|
-        expect(alert).to have_text /Person ist bereits Mitglied/
+        expect(alert).to have_text(/Person ist bereits Mitglied/)
       end
     end
   end

@@ -15,7 +15,7 @@ module Dropdown
       [Wizards::Memberships::TerminateSacMembershipWizard, :group_person_terminate_sac_membership_path]
     ].freeze
 
-    delegate :t, :current_ability, :current_user, :group_person_join_zusatzsektion_path,
+    delegate :current_ability, :current_user, :group_person_join_zusatzsektion_path,
       :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path, to: :template
 
     def initialize(template, person, group)
@@ -42,7 +42,8 @@ module Dropdown
     def add_wizard(wizard_class, path)
       wizard_name = wizard_class.to_s.demodulize.to_s.underscore
       target_url = send(path, group_id: @group.id, person_id: @person.id)
-      add_item(dropdown_option_name(wizard_name), target_url, method: :get)
+      link_name = translate("#{wizard_name}_link")
+      add_item(link_name, target_url, method: :get)
     end
 
     def add_undo_termination_link
@@ -50,7 +51,7 @@ module Dropdown
         person.sac_membership.latest_stammsektion_role
       return unless latest_membership&.terminated?
 
-      add_item(dropdown_option_name("undo_termination"),
+      add_item(translate("undo_termination_link"),
         template.new_group_person_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
           group_id: person.sac_membership.latest_stammsektion_role.group_id,
           person_id: person.id))
@@ -61,11 +62,6 @@ module Dropdown
         person: @person,
         backoffice: current_user.backoffice?
       )
-    end
-
-    def dropdown_option_name(wizard_name)
-      suffix = "_terminated" if person.sac_membership.terminated? && wizard_name == "terminate_sac_membership_wizard"
-      translate("#{wizard_name}#{suffix}_link")
     end
   end
 end

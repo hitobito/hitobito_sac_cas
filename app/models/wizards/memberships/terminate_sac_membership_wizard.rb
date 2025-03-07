@@ -8,6 +8,7 @@
 module Wizards::Memberships
   class TerminateSacMembershipWizard < Wizards::Base
     self.steps = [
+      Wizards::Steps::MembershipTerminatedInfo,
       Wizards::Steps::AskFamilyMainPerson,
       Wizards::Steps::TerminationNoSelfService,
       Wizards::Steps::TerminationChooseDate,
@@ -37,7 +38,6 @@ module Wizards::Memberships
         Memberships::TerminateSacMembership.new(
           role,
           terminate_on,
-          backoffice: backoffice?,
           subscribe_newsletter: step(:summary)&.subscribe_newsletter,
           subscribe_fundraising_list: step(:summary)&.subscribe_fundraising_list,
           data_retention_consent: step(:summary)&.data_retention_consent,
@@ -113,7 +113,7 @@ module Wizards::Memberships
 
     def handle_start
       if person.sac_membership.terminated?
-        Wizards::Steps::TerminationChooseDate.step_name
+        Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif family_membership? && !family_main_person?
         Wizards::Steps::AskFamilyMainPerson.step_name
       elsif mitglied_termination_by_section_only? && !backoffice?

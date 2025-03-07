@@ -15,7 +15,7 @@ describe Memberships::UndoTerminationsController, versioning: true do
 
   let(:terminated_role) do
     Memberships::TerminateSacMembership.new(
-      role, Date.current.yesterday, backoffice: true, termination_reason_id: termination_reasons(:deceased).id
+      role, Date.current.yesterday, termination_reason_id: termination_reasons(:deceased).id
     ).save!
     role.reload
   end
