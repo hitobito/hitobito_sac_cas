@@ -14,9 +14,10 @@ describe Memberships::UndoTerminationsController, versioning: true do
   let(:role) { roles(:familienmitglied) }
 
   let(:terminated_role) do
-    # monkey dance required because directly assigning terminated intentionally raises error
-    role.tap { _1.write_attribute(:terminated, true) }.save!
-    role
+    Memberships::TerminateSacMembership.new(
+      role, Date.current.yesterday, backoffice: true, termination_reason_id: termination_reasons(:deceased).id
+    ).save!
+    role.reload
   end
 
   before { sign_in(current_user) }
@@ -49,13 +50,28 @@ describe Memberships::UndoTerminationsController, versioning: true do
 
       it "is authorized" do
         expect(terminated_role).to be_terminated
-        get :create, params: params
+        post :create, params: params
 
         terminated_role.reload
         expect(terminated_role).to_not be_terminated
 
         expect(response).to have_http_status(302)
         expect(flash[:notice]).to eq("Rollen wurden erfolgreich reaktiviert.")
+      end
+
+      it "with validation errors" do
+        # create new role starting today so undoing the termination will be invalid (date collision)
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+          person: terminated_role.person,
+          group: terminated_role.group,
+          start_on: Date.current)
+
+        expect do
+          post :create, params: params
+
+          expect(response).to have_http_status(200)
+          expect(response).to render_template(:new)
+        end.not_to change { terminated_role.reload.terminated? }.from(true)
       end
     end
 
@@ -64,7 +80,7 @@ describe Memberships::UndoTerminationsController, versioning: true do
 
       it "is unauthorized" do
         expect do
-          get :create, params: params
+          post :create, params: params
         end.to raise_error(CanCan::AccessDenied)
       end
     end

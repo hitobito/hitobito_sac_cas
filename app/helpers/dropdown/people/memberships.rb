@@ -63,10 +63,6 @@ module Dropdown
       )
     end
 
-    #     def t(key)
-    #       I18n.t(key, scope: "dropdowns.memberships")
-    #     end
-
     def dropdown_option_name(wizard_name)
       suffix = "_terminated" if person.sac_membership.terminated? && wizard_name == "terminate_sac_membership_wizard"
       translate("#{wizard_name}#{suffix}_link")

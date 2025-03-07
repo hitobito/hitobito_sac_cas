@@ -11,10 +11,14 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
   include FormatHelper
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
-  def update_terminated!(role, value)
-    # monkey dance required because directly assigning terminated intentionally raises error
+  def terminate(role, terminate_on: Date.current.yesterday)
     role = roles(role) if role.is_a?(Symbol)
-    role.tap { _1.write_attribute(:terminated, value) }.save!
+    termination = Memberships::TerminateSacMembership.new(
+      role, terminate_on, backoffice: true, termination_reason_id: termination_reasons(:deceased).id
+    )
+    expect(termination).to be_valid
+    termination.save!
+    role.reload
   end
 
   let(:undo_termination) { Memberships::UndoTermination.new(role) }
@@ -29,21 +33,41 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
     assign(:role, role)
     assign(:group, role.group)
     assign(:person, role.person)
-    # allow(view).to receive_messages(entry: kind, )
+  end
+
+  context "with validation errors" do
+    let(:role) { roles(:mitglied) }
+
+    it "renders error messages" do
+      terminate(role) # terminates role per yesterday
+      # create new role starting today so undoing the termination will be invalid (date collision)
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+        person: role.person,
+        group: role.group,
+        start_on: Date.current)
+
+      expect(undo_termination).not_to be_valid
+      render
+
+      expect(dom).to have_selector("#error_explanation ul")
+      within("#error_explanation") do |alert|
+        expect(alert).to have_text /Person ist bereits Mitglied/
+      end
+    end
   end
 
   context "for single adult memberhsip" do
     let(:role) { roles(:mitglied) }
 
     it "shows role to be restored" do
-      update_terminated!(role, true)
+      terminate(role)
 
       expect(dom).to have_text role.person.full_name
       expect(dom).to have_text role.decorate.name_with_group_and_layer
     end
 
     it "does not show household key" do
-      update_terminated!(role, true)
+      terminate(role)
 
       expect(dom).to have_no_text "Familiennummer"
     end
@@ -54,8 +78,7 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
     let(:kind_role) { roles(:familienmitglied_kind) }
 
     it "shows all family roles to be restored" do
-      update_terminated!(role, true)
-      update_terminated!(kind_role, true)
+      terminate(role)
 
       expect(dom).to have_text role.person.full_name
       expect(dom).to have_text role.decorate.name_with_group_and_layer
@@ -66,8 +89,7 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
 
     it "shows household key" do
       original_household_key = role.person.household_key
-      update_terminated!(role, true)
-      update_terminated!(kind_role, true)
+      terminate(role)
 
       expect(dom).to have_text "Familiennummer"
       expect(dom).to have_text original_household_key
