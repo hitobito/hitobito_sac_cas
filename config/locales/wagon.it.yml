@@ -416,7 +416,7 @@ it:
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
         abo_alpen_fee: ""
-        abo_alpen_postage_abroad: ""
+        abo_alpen_postage_abroad: Importo Affrancatura estera Le Alpi
         abo_touren_portal_fee: ""
         abo_alpen_fee_article_number: ""
         abo_alpen_postage_abroad_article_number: ""
@@ -1457,7 +1457,7 @@ it:
       title: ""
       positions:
         abo_fee: "Abbonamento %{group} %{time_period}"
-        abroad_fee: ""
+        abroad_fee: "Affrancatura %{group}"
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"
