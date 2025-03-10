@@ -7,11 +7,14 @@
 #
 module SacCas::FilterNavigation::People
   TOURENLEITER_FILTERS = {
+    # `role: :active` without date range includes roles at any time, not only today
+    # `role: :active_today` is a workaround to fallback on the default filter behavior
+    #                       that only includes today's active roles.
     tour_guides_active: {role: :active_today},
-    tour_guides_stalled: {qualification: :not_active_but_reactivateable},
-    tour_guides_inactive: {role: :inactive, qualification: :active},
-    tour_guides_none: {qualification: :none},
-    tour_guides_expired: {role: :active, qualification: :only_expired} # role active at any time, not only today
+    tour_guides_stalled: {role: :active, qualification: :not_active_but_reactivateable},
+    tour_guides_inactive: {role: :inactive_but_existing, qualification: :active},
+    tour_guides_none: {role: :inactive, qualification: :none},
+    tour_guides_expired: {role: :active, qualification: :only_expired}
   }.freeze
 
   GROUPS_WITH_TOURENLEITER_FILTERS = [
