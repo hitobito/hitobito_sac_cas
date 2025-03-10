@@ -1103,7 +1103,7 @@ en:
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
     terminate_sac_membership_wizard_link: Terminate SAC membership
-    terminate_sac_membership_wizard_terminated_link: ""
+    undo_termination_link: ""
 
   dropdown/people_export:
     recipients: ""
@@ -1444,6 +1444,12 @@ en:
         success:
           one: ""
           other: ""
+    undo_terminations:
+      create:
+        success: ""
+      new:
+        info_text: ""
+        family_number: ""
 
   mitglieder_exports:
     export_enqueued: "Export is started in the background and downloaded after completion."
@@ -1649,6 +1655,7 @@ en:
 
   roles/terminations:
     global:
+      undo: ""
       sac_cas/role/mitglied_common:
         no_permission: "To resign, you must contact the section's membership service"
       group/abo_magazin/abonnent:
@@ -1736,6 +1743,8 @@ en:
     title: Change trunk section
   sheet/memberships/terminate_sac_membership:
     title: Terminate SAC membership
+  sheet/memberships/undo_termination:
+    title: ""
 
   table_displays:
     person:
@@ -1863,7 +1872,6 @@ en:
         info_text: "When should the exit take place?"
         warning_termination_by_section_only: >-
           Please note: the resignation takes place at a section where the resignation function is deactivated for the member. If necessary, you must clarify the resignation with the section in advance.
-        membership_already_terminated: ""
       termination_no_self_service:
         info_text: "We ask you to apply for withdrawal by telephone or e-mail. Please contact us for this purpose."
       ask_family_main_person:

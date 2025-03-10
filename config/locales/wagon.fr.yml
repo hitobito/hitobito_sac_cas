@@ -1165,7 +1165,7 @@ fr:
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
     terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
-    terminate_sac_membership_wizard_terminated_link: Adapter la résiliation du CAS
+    undo_termination_link: ""
 
   dropdown/people_export:
     recipients: Destinataire – personne individuelle
@@ -1526,6 +1526,12 @@ fr:
           one: "Ton adhésion au CAS a été résiliée."
           many: "Vos %{count} adhésions au CAS ont été résiliées."
           other: "Vos %{count} adhésions au CAS ont été résiliées."
+    undo_terminations:
+      create:
+        success: ""
+      new:
+        info_text: ""
+        family_number: ""
 
   mitglieder_exports:
     export_enqueued: "L’exportation est lancée en arrière-plan et sera téléchargée une fois terminée."
@@ -1737,6 +1743,7 @@ fr:
 
   roles/terminations:
     global:
+      undo: ""
       sac_cas/role/mitglied_common:
         no_permission: "Pour une résiliation, tu dois t’adresser au service des membres de la section"
       group/abo_magazin/abonnent:
@@ -1824,6 +1831,8 @@ fr:
     title: Changer de section de base
   sheet/memberships/terminate_sac_membership:
     title: Mettre fin à l’adhésion au CAS
+  sheet/memberships/undo_termination:
+    title: ""
 
   table_displays:
     person:
@@ -1964,7 +1973,6 @@ fr:
         info_text: "Quand la sortie doit-elle avoir lieu?"
         warning_termination_by_section_only: >-
           Attention: la démission a lieu dans une section où la fonction de démission est désactivée pour le membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section.
-        membership_already_terminated: "Attention: l'adhésion est déjà résiliée au %{end_on}"
       termination_no_self_service:
         info_text: "Nous te prions de demander ta démission par téléphone ou par e-mail. Pour ce faire, prends contact avec nous."
       ask_family_main_person:
