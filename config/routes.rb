@@ -35,7 +35,11 @@ Rails.application.routes.draw do
           resource :leader_settlement_pdfs, only: [:create], module: :courses
           resources :participations, only: [] do
             put :summon, on: :member
-            post :invoice, on: :member, controller: "courses/invoices", action: :create
+            resources :invoices, only: [:new, :create], module: :courses do
+              collection do
+                get :recalculate
+              end
+            end
           end
 
           put "state" => "courses/state#update", :on => :member
