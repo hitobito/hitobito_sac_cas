@@ -108,6 +108,15 @@ describe :event_participation, js: true do
         end
       end
 
+      it "does not show cancellation cost for participation with status applied" do
+        participation.update!(state: :applied)
+        visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
+        click_button "Abmelden"
+        within(".popover-body") do
+          expect(page).to have_no_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest?")
+        end
+      end
+
       it "shows cancellation cost of zero in hint text if participation does not have a price associated" do
         participation.update!(price: 0)
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
