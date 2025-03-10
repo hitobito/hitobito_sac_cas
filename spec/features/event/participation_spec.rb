@@ -7,12 +7,12 @@
 
 require "spec_helper"
 
-describe Event::Participation, :js do
+describe Event::Participation, js: true do
   include ActiveJob::TestHelper
 
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
-  let(:event) { Fabricate(:sac_open_course) }
+  let(:event) { Fabricate(:sac_open_course, price_regular: 20, price_member: 10) }
   let(:participation) { Fabricate(:event_participation, event:, person: participant, price_category: "price_member", price: 10, application_id: -1) }
 
   context "as participant" do
@@ -61,16 +61,12 @@ describe Event::Participation, :js do
   context "as admin" do
     before { sign_in(admin) }
 
-    it "creates invoice after accepting confirm alert" do
+    it "creates invoice when filling out form" do
       visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
-      accept_confirm { click_on("Rechnung erstellen") }
+      click_on("Rechnung erstellen")
+      expect(page).to have_text("Kursteilnehmerrechnung erstellen")
+      click_button("Kursteilnehmerrechnung erstellen")
       expect(page).to have_css(".alert", text: "Rechnung wurde erfolgreich erstellt.")
-    end
-
-    it "doesn't create invoice when rejecting confirm alert" do
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
-      dismiss_confirm { click_on("Rechnung erstellen") }
-      expect(page).not_to have_css(".alert")
     end
 
     context "cancel" do

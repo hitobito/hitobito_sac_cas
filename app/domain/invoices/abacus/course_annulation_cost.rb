@@ -21,6 +21,15 @@ module Invoices
         @custom_price = custom_price
       end
 
+      def amount_cancelled
+        days_until_start = (course_start_date - cancelled_at).to_i
+        range = CANCELLATION_COST_FACTORS.keys.find { |range| range.include?(days_until_start) }
+        return CANCELLATION_PROCESSING_FEE unless range
+
+        factor = CANCELLATION_COST_FACTORS.fetch(range)
+        cancellation_costs(factor)
+      end
+
       def position_description_and_amount_cancelled
         return custom_price_position if @custom_price
 
@@ -29,9 +38,9 @@ module Invoices
         range = CANCELLATION_COST_FACTORS.keys.find { |range| range.include?(days_until_start) }
         if range
           factor = CANCELLATION_COST_FACTORS.fetch(range)
-          [t("cancellation_costs", percentage: (factor * 100).round), cancellation_costs(factor)]
+          [t("cancellation_costs", percentage: (factor * 100).round), amount_cancelled]
         else
-          [t("processing_fee"), CANCELLATION_PROCESSING_FEE]
+          [t("processing_fee"), amount_cancelled]
         end
       end
 

@@ -43,6 +43,12 @@ de:
       event/courses/leader_settlement_form:
         actual_days: Effektive Tage
         iban: IBAN
+      event/participation/invoice_form:
+        reference_date: "Stichtag"
+        invoice_date: "Buchungsdatum"
+        send_date: "Versand- und Rechnungsdatum"
+        price_category: "Preiskategorie"
+        price: "Preis"
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -1133,6 +1139,10 @@ de:
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     courses:
+      invoices:
+        new:
+          create_course_participation_invoice: Kursteilnehmerrechnung erstellen
+          create_course_annulation_invoice: Annullationskostenrechnung erstellen
       key_data_sheets:
         create:
           success: Das Eckdatenblatt / Die Eckdatenblätter wurden erzeugt und dem Kurs als Anhang hinzugefügt.

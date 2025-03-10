@@ -10,9 +10,74 @@ require "spec_helper"
 describe Event::Courses::InvoicesController do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
-  let(:event) { Fabricate(:sac_open_course) }
+  let(:event) { Fabricate(:sac_open_course, price_member: 5, price_regular: 10) }
   let(:participation) { Fabricate(:event_participation, event:, person: participant, price: 10, price_category: "price_regular", application_id: -1) }
-  let(:params) { {group_id: event.group_ids.first, event_id: event.id, id: participation.id} }
+  let(:params) { {group_id: event.group_ids.first, event_id: event.id, participation_id: participation.id} }
+
+  describe "GET#new" do
+    context "as participant" do
+      before { sign_in(participant) }
+
+      it "is unauthorized" do
+        expect { get :new, params: }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as admin" do
+      before { sign_in(admin) }
+
+      it "renders form with date fields set to today" do
+        get :new, params: params
+        expect(assigns(:invoice_form).reference_date).to eq Time.zone.today
+        expect(assigns(:invoice_form).invoice_date).to eq Time.zone.today
+        expect(assigns(:invoice_form).send_date).to eq Time.zone.today
+      end
+    end
+  end
+
+  describe "GET#recalculate" do
+    context "as participant" do
+      before { sign_in(participant) }
+
+      it "is unauthorized" do
+        expect { get :recalculate, params: }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as admin" do
+      before { sign_in(admin) }
+
+      it "recalculates price when price_category changed" do
+        params[:event_participation_invoice_form] = {price_category: "price_member"}
+        get :recalculate, params: params
+        expect(JSON.parse(response.body)["updatedValue"]).to eq "5.0"
+      end
+
+      it "returns unprocessable_entity when invalid price_category is passed" do
+        params[:event_participation_invoice_form] = {price_category: "this_price_category_doesnt_exist"}
+        get :recalculate, params: params
+        expect(response.status).to eq 422
+      end
+
+      it "recalculates price when reference_date changed" do
+        params[:event_participation_invoice_form] = {reference_date: "12.12.2025"}
+        get :recalculate, params: params
+        expect(JSON.parse(response.body)["updatedValue"]).to eq "10.0"
+      end
+
+      it "returns unprocessable_entity when invalid reference_date is passed" do
+        params[:event_participation_invoice_form] = {reference_date: "12.12"}
+        get :recalculate, params: params
+        expect(response.status).to eq 422
+      end
+
+      it "returns not found when unknown query param is passed" do
+        params[:event_participation_invoice_form] = {unknown_query_param: "price_member"}
+        get :recalculate, params: params
+        expect(response.status).to eq 400
+      end
+    end
+  end
 
   describe "POST#create" do
     context "as participant" do
@@ -24,20 +89,31 @@ describe Event::Courses::InvoicesController do
     end
 
     context "as admin" do
-      before { sign_in(admin) }
-
-      it "enqueues invoice job" do
-        expect { post :create, params: }
-          .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
-        expect(response).to redirect_to(group_event_participation_path(params))
-        expect(flash[:notice]).to eq("Rechnung wurde erfolgreich erstellt.")
+      before do
+        sign_in(admin)
+        params[:event_participation_invoice_form] = {
+          reference_date: "12.12.2025",
+          invoice_date: "12.12.2025",
+          send_date: "12.12.2025",
+          price_category: "price_member",
+          price: 4000
+        }
       end
 
-      it "doesn't enqueue invoice job if participation price is missing" do
-        participation.update(price: nil)
+      it "enqueues invoice job and updates price and price_category on participation" do
+        expect { post :create, params: }
+          .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+          .and change(ExternalInvoice, :count).by(1)
+        expect(flash[:notice]).to eq("Rechnung wurde erfolgreich erstellt.")
+        expect(participation.reload.price_category).to eq "price_member"
+        expect(participation.reload.price).to eq 4000
+        expect(ExternalInvoice.last.issued_at).to eq Date.new(2025, 12, 12)
+        expect(ExternalInvoice.last.sent_at).to eq Date.new(2025, 12, 12)
+      end
 
+      it "doesn't enqueue invoice job if invoice_form is invalid" do
+        params[:event_participation_invoice_form][:reference_date] = nil
         expect { post :create, params: }.not_to change(Delayed::Job, :count)
-        expect(flash[:alert]).to eq("Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.")
       end
     end
   end
