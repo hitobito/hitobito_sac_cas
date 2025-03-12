@@ -7,6 +7,8 @@
 
 module TableDisplays::People
   class MembershipYearsColumn < TableDisplays::PublicColumn
+    prepend TableDisplays::People::SektionMemberAdminVisible
+
     def required_model_attrs(attr)
       [:cached_membership_years]
     end

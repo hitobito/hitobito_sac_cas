@@ -7,6 +7,8 @@
 
 module TableDisplays::People
   class BeitrittsdatumColumn < TableDisplays::Column
+    prepend TableDisplays::People::SektionMemberAdminVisible
+
     def render(attr)
       super do |person|
         beitrittsdatum(person)
