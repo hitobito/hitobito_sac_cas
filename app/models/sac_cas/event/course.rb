@@ -88,7 +88,14 @@ module SacCas::Event::Course
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
-  LEADER_ROLES = [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map(&:sti_name)
+  LEADER_ROLES = [Event::Course::Role::Leader,
+    Event::Course::Role::AssistantLeader,
+    Event::Course::Role::LeaderAspirant,
+    Event::Course::Role::AssistantLeaderAspirant,
+    Event::Course::Role::Leadership1,
+    Event::Course::Role::Leadership2,
+    Event::Course::Role::Leadership3,
+    Event::Course::Role::Leadership4].map(&:sti_name)
 
   INHERITED_ATTRIBUTES = [
     :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
