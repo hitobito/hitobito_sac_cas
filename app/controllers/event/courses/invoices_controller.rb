@@ -87,7 +87,11 @@ class Event::Courses::InvoicesController < ApplicationController
       .permit(:reference_date, :invoice_date, :send_date, :price_category, :price)
   end
 
-  def authorize_class = authorize!(:summon, participation)
+  def authorize_class
+    raise CanCan::AccessDenied if participation.roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
+
+    authorize!(:summon, participation)
+  end
 
   def group = @group ||= Group.find(params[:group_id])
 
