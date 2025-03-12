@@ -26,6 +26,11 @@ describe Event::Courses::InvoicesController do
     context "as admin" do
       before { sign_in(admin) }
 
+      it "is unauthorized for leader participations" do
+        Fabricate(Event::Course::Role::Leader.name.to_sym, participation: participation)
+        expect { get :new, params: }.to raise_error(CanCan::AccessDenied)
+      end
+
       it "renders form with date fields set to today" do
         get :new, params: params
         expect(assigns(:invoice_form).reference_date).to eq Time.zone.today
@@ -46,6 +51,11 @@ describe Event::Courses::InvoicesController do
 
     context "as admin" do
       before { sign_in(admin) }
+
+      it "is unauthorized for leader participations" do
+        Fabricate(Event::Course::Role::Leader.name.to_sym, participation: participation)
+        expect { get :recalculate, params: }.to raise_error(CanCan::AccessDenied)
+      end
 
       it "recalculates price when price_category changed" do
         params[:event_participation_invoice_form] = {price_category: "price_member"}
@@ -98,6 +108,11 @@ describe Event::Courses::InvoicesController do
           price_category: "price_member",
           price: 4000
         }
+      end
+
+      it "is unauthorized for leader participations" do
+        Fabricate(Event::Course::Role::Leader.name.to_sym, participation: participation)
+        expect { post :create, params: }.to raise_error(CanCan::AccessDenied)
       end
 
       it "enqueues invoice job and updates price and price_category on participation" do
