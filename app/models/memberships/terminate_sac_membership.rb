@@ -70,7 +70,7 @@ module Memberships
         role.mark_for_destruction if role.start_on == Time.zone.today
       end
 
-      mark_active_roles(person) + Array(build_future_role(person))
+      mark_active_roles(person) + Array(build_basic_login_role(person))
     end
 
     def mark_active_roles(person)
@@ -96,7 +96,7 @@ module Memberships
       role.end_on = membership_end_on
     end
 
-    def build_future_role(person)
+    def build_basic_login_role(person)
       return unless data_retention_consent && basic_login_group
 
       person.roles.build(
