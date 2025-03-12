@@ -62,6 +62,11 @@ module SacCas
     ::Group::SektionsFunktionaere::Mitgliederverwaltung
   ].freeze
 
+  SAC_SECTION_MEMBER_ADMIN_ROLE_TYPES = [
+    ::Group::SektionsMitglieder::Schreibrecht,
+    ::Group::SektionsFunktionaere::Mitgliederverwaltung
+  ].freeze
+
   TOUR_GUIDE_ROLES = [
     ::Group::SektionsTourenUndKurse::Tourenleiter,
     ::Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
