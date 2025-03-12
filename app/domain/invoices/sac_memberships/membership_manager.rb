@@ -78,8 +78,8 @@ class Invoices::SacMemberships::MembershipManager
 
   def update_role_to_stammsektion_mitglied(person)
     person.sac_membership.neuanmeldung_stammsektion_role.destroy
-    create_new_role(person, Group::SektionsMitglieder::Mitglied)
-    Invoices::SacMembershipsMailer.confirmation(person).deliver_later if person.email.present?
+    new_role = create_new_role(person, Group::SektionsMitglieder::Mitglied)
+    send_confirmation_mail(person, new_role)
   end
 
   def create_zusatzsektion_membership_from_neuanmeldung
@@ -93,10 +93,14 @@ class Invoices::SacMemberships::MembershipManager
       role.destroy
       end_on = [person.sac_membership.stammsektion_role.end_on, end_of_year].min
       start_on = end_on.past? ? end_on : today
-      create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on)
+      new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on)
 
-      Invoices::SacMembershipsMailer.confirmation(person).deliver_later if person.email.present?
+      send_confirmation_mail(person, new_role)
     end
+  end
+
+  def send_confirmation_mail(person, role)
+    Invoices::SacMembershipsMailer.confirmation(person, role.group.parent, role.beitragskategorie).deliver_later if person.email.present?
   end
 
   def update_family_roles_to_stammsektion_mitglied
