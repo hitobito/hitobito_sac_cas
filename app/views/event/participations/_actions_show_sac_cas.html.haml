@@ -3,10 +3,10 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if can?(:summon, entry.model)
+- if can?(:summon, entry.model) && !entry.roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
   = action_button(t('.create_invoice_button'),
-                  invoice_group_event_participation_path(@group, @event, entry), :plus,
-                  data: {method: :post, confirm: t('.create_invoice_confirmation'), in_button_group: true})
+                  new_group_event_participation_invoice_path(@group, @event, entry), :plus,
+                  data: {in_button_group: true})
 
 - if @event.course? && can?(:create, @event) && entry.roles.map(&:class).any?(&:leader?)
   = action_button(t(".attach_key_data_sheet"), group_event_key_data_sheets_path(@group, @event, {participation_ids: entry.id}), :file_pdf, method: :post)
