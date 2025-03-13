@@ -17,6 +17,8 @@ module Invoices
       private
 
       def position_description_and_amount
+        return [I18n.t("cancellation_costs", scope: "invoices.course_annulation", percentage: 100), @invoice_total] if @invoice_total
+
         case participation.state
         when "canceled" then course_annulation_cost.position_description_and_amount_cancelled
         when "absent" then course_annulation_cost.position_description_and_amount_absent
