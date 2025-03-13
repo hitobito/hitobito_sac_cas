@@ -35,8 +35,8 @@ class ExternalInvoice::CourseParticipation < ExternalInvoice
   after_save :update_participation_invoice_state
 
   class << self
-    def invoice!(participation)
-      return if participation.price.to_i.zero?
+    def invoice!(participation, invoice_total: nil)
+      return if participation.price.to_i.zero? && invoice_total.nil?
 
       external_invoice = create!(
         person: participation.person,
@@ -47,7 +47,7 @@ class ExternalInvoice::CourseParticipation < ExternalInvoice
         year: participation.event.dates.first.start_at.year
       )
 
-      Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice).enqueue!
+      Invoices::Abacus::CreateCourseInvoiceJob.new(external_invoice, invoice_total).enqueue!
     end
   end
 

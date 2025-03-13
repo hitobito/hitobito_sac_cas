@@ -14,8 +14,9 @@ module Invoices
 
       delegate :event, to: :participation
 
-      def initialize(participation)
+      def initialize(participation, invoice_total = nil)
         @participation = participation
+        @invoice_total = invoice_total
       end
 
       def positions

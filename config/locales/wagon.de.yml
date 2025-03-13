@@ -1185,6 +1185,11 @@ de:
           Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
       popover_cancel_sac_cas:
         send_email: E-Mail an Teilnehmer/in senden
+        invoice_option: Rechnung
+        standard: Annullationskostenrechnung gem. Reglement
+        custom: Annullationskostenrechnung mit einem benutzerdefinierten Betrag
+        no_invoice: Keine Annullationskostenrechnung
+        invoice_total: Betrag
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
