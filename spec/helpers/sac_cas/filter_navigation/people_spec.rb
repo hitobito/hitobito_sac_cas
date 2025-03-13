@@ -32,8 +32,7 @@ describe "FilterNavigation::People" do
 
     def parse_link_query(link)
       link = dom.find_link(link)
-      CGI.parse(URI.parse(link[:href]).query)
-        .transform_values { |v| v.one? ? v.first : v }
+      Rack::Utils.parse_query(URI.parse(link[:href]).query)
     end
 
     it "has common shared filter attributes" do
@@ -56,7 +55,8 @@ describe "FilterNavigation::People" do
 
     it "Sistierte Tourenleiter filters for not_active_but_reactivateable qualifications only" do
       query = parse_link_query("Sistierte Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "active"
       expect(query["filters[qualification][validity]"]).to eq "not_active_but_reactivateable"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
@@ -64,21 +64,23 @@ describe "FilterNavigation::People" do
     it "Inaktive Tourenleiter filters for role and active qualifications" do
       query = parse_link_query("Inaktive Tourenleiter")
       expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
-      expect(query["filters[role][kind]"]).to eq "inactive"
+      expect(query["filters[role][kind]"]).to eq "inactive_but_existing"
       expect(query["filters[qualification][validity]"]).to eq "active"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
 
     it "Keine Tourenleiter filters for none qualifications only" do
       query = parse_link_query("Keine Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "inactive"
       expect(query["filters[qualification][validity]"]).to eq "none"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
 
     it "Abgelaufene Tourenleiter filters for only_expired qualifications only" do
       query = parse_link_query("Abgelaufene Tourenleiter")
-      expect(query["filters[role]"]).to be_nil
+      expect(query["filters[role][role_type_ids]"]).to eq tourenleiter_ids
+      expect(query["filters[role][kind]"]).to eq "active"
       expect(query["filters[qualification][validity]"]).to eq "only_expired"
       expect(query["filters[qualification][qualification_kind_ids]"].split("-")).to match_array(kind_ids)
     end
@@ -98,5 +100,79 @@ describe "FilterNavigation::People" do
 
   describe Group::Ortsgruppe do
     it_behaves_like "having Tourenleiter filters"
+  end
+
+  describe "full cycle" do
+    let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg).decorate }
+    let(:user) { people(:tourenchef) }
+    let(:touren_group) { groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse) }
+    let(:mitglieder) { groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder) }
+    let(:quali_kind) { qualification_kinds(:ski_leader) }
+    let(:today) { Time.zone.today }
+
+    def entries(label)
+      link = dom.find_link(label)
+      params = Rack::Utils.parse_nested_query(URI.parse(link[:href]).query).with_indifferent_access
+      Person::Filter::List.new(group, user, params).entries
+    end
+
+    def create_person(name, tl_start: nil, tl_end: nil, quali_start: tl_start, member_start: tl_start, member_end: nil)
+      person = Fabricate(:person, last_name: name)
+      person.qualifications.create!(qualification_kind: quali_kind, start_at: quali_start) if quali_start
+      if tl_start
+        role = quali_start ? Group::SektionsTourenUndKurse::Tourenleiter : Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation
+        Fabricate(role.name.to_sym, person: person, group: touren_group, start_on: tl_start, end_on: tl_end)
+      end
+      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, person: person, group: mitglieder, start_on: member_start, end_on: member_end || today.end_of_year)
+      person
+    end
+
+    before do
+      quali_kind.update!(validity: 6, reactivateable: 4)
+
+      @tl_with_quali = create_person("tl with quali", tl_start: 1.year.ago)
+      @tl_without_quali = create_person("tl without quali", tl_start: 1.year.ago, quali_start: nil)
+      @old_tl_without_quali = create_person("old tl without quali", tl_start: 5.years.ago, tl_end: 1.year.ago, quali_start: nil)
+      @old_tl_without_quali_without_membership = create_person("old tl without quali without_membership", tl_start: 5.years.ago, tl_end: 1.year.ago, quali_start: nil, member_end: 1.year.ago)
+      @old_tl_with_quali = create_person("old tl with quali", tl_start: 3.years.ago, tl_end: 1.year.ago)
+      @old_tl_with_quali_without_membership = create_person("old tl with quali without membership", tl_start: 3.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @tl_with_stalled_quali = create_person("tl with stalled quali", tl_start: 8.years.ago)
+      @old_tl_with_stalled_quali = create_person("old tl with stalled quali", tl_start: 8.years.ago, tl_end: 1.year.ago)
+      @old_tl_with_stalled_quali_without_membership = create_person("old tl with stalled quali without membership", tl_start: 8.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @tl_with_expired_quali = create_person("tl with expired quali", tl_start: 20.years.ago)
+      @old_tl_with_expired_quali = create_person("old tl with expired quali", tl_start: 20.years.ago, tl_end: 1.year.ago)
+      @old_tl_with_expired_quali_without_membership = create_person("old tl with expired quali without membership", tl_start: 20.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @no_tl_with_quali = create_person("no tl with quali", tl_start: nil, quali_start: 1.year.ago, member_start: 1.year.ago)
+      @no_tl_without_quali = create_person("no tl without quali", tl_start: nil, member_start: 1.year.ago)
+      @no_tl_with_stalled_quali = create_person("no tl with stalled quali", tl_start: nil, quali_start: 8.years.ago, member_start: 8.years.ago)
+      @no_tl_with_expired_quali = create_person("no tl with expired quali", tl_start: nil, quali_start: 20.years.ago, member_start: 20.years.ago)
+      @no_tl_with_quali_without_membership = create_person("no tl with quali without_membership", tl_start: nil, quali_start: 1.year.ago, member_start: 8.years.ago, member_end: 1.year.ago)
+      @no_tl_without_quali_without_membership = create_person("no tl without quali without_membership", tl_start: nil, member_start: 8.years.ago, member_end: 1.year.ago)
+    end
+
+    it "filters Aktive Tourenleiter" do
+      list = entries("Aktive Tourenleiter")
+      expect(list.map(&:last_name)).to match_array([@tl_with_quali, @tl_without_quali, @tl_with_stalled_quali, @tl_with_expired_quali].map(&:last_name))
+    end
+
+    it "filters Sistierte Tourenleiter" do
+      list = entries("Sistierte Tourenleiter")
+      expect(list.map(&:last_name)).to match_array([@tl_with_stalled_quali, @old_tl_with_stalled_quali].map(&:last_name))
+    end
+
+    it "filters Inaktive Tourenleiter" do
+      list = entries("Inaktive Tourenleiter")
+      expect(list.map(&:last_name)).to match_array([@old_tl_with_quali].map(&:last_name))
+    end
+
+    it "filters Abgelaufene Tourenleiter" do
+      list = entries("Abgelaufene Tourenleiter")
+      expect(list.map(&:last_name)).to match_array([@tl_with_expired_quali, @old_tl_with_expired_quali].map(&:last_name))
+    end
+
+    it "filters Keine Tourenleiter" do
+      list = entries("Keine Tourenleiter")
+      expect(list.map(&:last_name)).to match_array([@no_tl_without_quali, @old_tl_without_quali, people(:tourenchef)].map(&:last_name))
+    end
   end
 end
