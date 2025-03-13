@@ -110,6 +110,15 @@ class SacPersonSeeder < PersonSeeder
     end
   end
 
+  def update_abonnent_role_dates
+    Group::AboMagazin::Abonnent.find_each do |r|
+      r.update!(end_on: 1.year.from_now)
+    end
+    Group::AboMagazin::Neuanmeldung.find_each do |r|
+      r.update!(start_on: Date.current)
+    end
+  end
+
   def seed_some_ehrenmitglieder_beguenstigt_roles
     return unless Group::SektionsMitglieder::Ehrenmitglied.count.zero?
 

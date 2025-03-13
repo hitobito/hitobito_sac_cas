@@ -1,0 +1,38 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- title t(".title")
+- if @person.data_quality == "error"
+  .alert.alert-danger
+    = t(".alert_error")
+    %ul
+      - @person.data_quality_issues.where(severity: :error).each do |issue|
+        %li= issue.message
+  = cancel_link(external_invoices_group_person_path(@group, @person))
+
+- elsif @abo_magazin_roles.empty?
+  .alert.alert-warning= t(".alert_warning")
+  = cancel_link(external_invoices_group_person_path(@group, @person))
+
+- else
+  .alert.alert-info= t(".alert_info")
+
+  = standard_form(entry, url: group_person_abo_magazin_invoices_path(@group, @person), method: :post) do |f|
+    = f.error_messages
+    = f.labeled(:issued_at) do
+      = f.date_field(:issued_at, value: I18n.l(@abo_magazin_roles.first.then { _1.type == Group::AboMagazin::Neuanmeldung.sti_name ? _1.start_on : _1.end_on&.next_day }), disabled: true)
+      // disabled fields are not submitted with the form, adding readonly true disables the field to be edited, but does not
+      // display the field any different, which could leave users confused
+      = f.hidden_field(:issued_at, value: (@abo_magazin_roles.first.then { _1.type == Group::AboMagazin::Neuanmeldung.sti_name ? _1.start_on : _1.end_on&.next_day }))
+    = f.labeled(:sent_at) do
+      = f.date_field(:sent_at, value: I18n.l(Date.current))
+    = f.labeled(t(".abo_group")) do
+      - @abo_magazin_roles.each_with_index do |role, index|
+        = f.inline_radio_button :link_id, role.group.id, role.group.name, false, checked: (index == 0), onchange: "document.querySelectorAll('[id=external_invoice_issued_at]').forEach(element => {element.value = '#{I18n.l(role.then { _1.type == Group::AboMagazin::Neuanmeldung.sti_name ? _1.start_on : _1.end_on&.next_day })}'; });"
+
+
+    = f.indented do
+      = submit_button(f, t(".create_invoice"))
+      = cancel_link(external_invoices_group_person_path(@group, @person))

@@ -82,22 +82,22 @@ describe People::ExternalInvoicesController do
         end
 
         it "renders the external invoice" do
-          Capybara.string(response.body).find("#main").tap do |main|
-            expect(main).to have_selector("a", text: "Mitgliedschaftsrechnung erstellen")
-            expect(main).to have_selector("th", text: "Titel")
-            expect(main).to have_selector("th", text: "Status")
-            expect(main).to have_selector("th", text: "Abacus Nummer")
-            expect(main).to have_selector("th", text: "Total")
-            expect(main).to have_selector("th", text: "Rechnungsdatum")
-            expect(main).to have_selector("th", text: "Erstellt")
-            expect(main).to have_selector("th", text: "Aktualisiert")
+          Capybara.string(response.body).tap do |page|
+            expect(page).to have_selector("a", text: "Mitgliedschaftsrechnung erstellen")
+            expect(page).to have_selector("th", text: "Titel")
+            expect(page).to have_selector("th", text: "Status")
+            expect(page).to have_selector("th", text: "Abacus Nummer")
+            expect(page).to have_selector("th", text: "Total")
+            expect(page).to have_selector("th", text: "Rechnungsdatum")
+            expect(page).to have_selector("th", text: "Erstellt")
+            expect(page).to have_selector("th", text: "Aktualisiert")
 
-            expect(main).to have_selector("td", text: "Offen")
-            expect(main).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
-            expect(main).to have_selector("td", text: invoice.total.to_s)
-            expect(main).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
-            expect(main).to have_selector("td", text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
-            expect(main).to have_selector("td", text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
+            expect(page).to have_selector("td", text: "Offen")
+            expect(page).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
+            expect(page).to have_selector("td", text: invoice.total.to_s)
+            expect(page).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
+            expect(page).to have_selector("td", text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
+            expect(page).to have_selector("td", text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
           end
         end
       end
