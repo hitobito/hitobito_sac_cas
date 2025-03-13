@@ -25,7 +25,7 @@ class Group::SektionsTourenUndKurse < Group
     private
 
     def assert_active_qualification
-      unless person.qualifications.active(created_at || Time.zone.today).exists?
+      unless person.qualifications.active(start_on || created_at || Time.zone.today).exists?
         errors.add(:base, :requires_active_qualification)
       end
     end
