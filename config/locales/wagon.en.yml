@@ -507,6 +507,7 @@ en:
         abacus_sales_order_key: Abacus number
         total: Total
         issued_at: Invoice date
+        sent_at: ""
         created_at: Created
         updated_at: Updated
         states:
@@ -1528,7 +1529,21 @@ en:
     history:
       index_notice_sac_cas:
         sections_info_html: >
+  abo_magazin_invoices:
+    create:
+        flash:
+          success: ""
+
   people:
+    abo_magazin_invoices:
+      new:
+        title: ""
+        abo_group: ""
+        alert_info: >
+        alert_warning: >
+        alert_error: ""
+        create_invoice: ""
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1583,14 +1598,14 @@ en:
       download_pdf: Download membership card
 
     external_invoices:
-      table:
-        cancel_invoice: Cancel
-        cancel_invoice_confirmation: >-
-          Do you really want to cancel this invoice? This action cannot be reversed.
+      list:
+        cancel_invoice: ""
+        cancel_invoice_confirmation: >
       cancel:
         flash: "The invoice %{invoice} (order no. %{abacus_sales_order_key}) is canceled"
-      list:
-        create_membership_invoice: Create membership invoice
+      actions_index:
+        create_abo_magazin_invoice: ""
+        create_membership_invoice: ""
 
     yearly_membership_invoices:
       job_scheduling_info: "The annual collection run was successfully launched."

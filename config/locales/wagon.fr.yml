@@ -515,6 +515,7 @@ fr:
         abacus_sales_order_key: Numéro Abacus
         total: Total
         issued_at: Date de la facture
+        sent_at: ""
         created_at: Créé
         updated_at: Actualisé
         states:
@@ -1460,7 +1461,7 @@ fr:
 
   invoices:
     abo_magazin:
-      title: "Facture Les Alpes %{year}"
+      title: ""
       positions:
         abo_fee: "Abonnement %{group} %{time_period}"
         abroad_fee: "Frais de port %{group}"
@@ -1612,7 +1613,21 @@ fr:
       index_notice_sac_cas:
         sections_info_html: >-
           Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
+  abo_magazin_invoices:
+    create:
+        flash:
+          success: ""
+
   people:
+    abo_magazin_invoices:
+      new:
+        title: ""
+        abo_group: ""
+        alert_info: >
+        alert_warning: >
+        alert_error: ""
+        create_invoice: ""
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1667,14 +1682,14 @@ fr:
       download_pdf: Télécharger la carte de membre
 
     external_invoices:
-      table:
-        cancel_invoice: Annuler
-        cancel_invoice_confirmation: >-
-          Voulez-vous vraiment annuler cette facture? Cette action ne peut pas être annulée.
+      list:
+        cancel_invoice: ""
+        cancel_invoice_confirmation: >
       cancel:
         flash: "La facture %{invoice} (n° de commande %{abacus_sales_order_key}) est annulée"
-      list:
-        create_membership_invoice: Créer une facture d’adhésion
+      actions_index:
+        create_abo_magazin_invoice: ""
+        create_membership_invoice: ""
 
     yearly_membership_invoices:
       job_scheduling_info: "La procédure d’encaissement annuel a été lancée avec succès."
