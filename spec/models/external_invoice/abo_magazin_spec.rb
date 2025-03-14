@@ -60,7 +60,7 @@ describe ExternalInvoice::AboMagazin do
     let(:external_invoice) { ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group, year: 2025) }
 
     it "shows title with invoice year" do
-      expect(external_invoice.title).to eq "Rechnung Die Alpen 2025"
+      expect(external_invoice.title).to eq "Rechnung Die Alpen DE 2025"
     end
   end
 end

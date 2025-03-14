@@ -517,6 +517,7 @@ de:
         abacus_sales_order_key: Abacus Nummer
         total: Total
         issued_at: Rechnungsdatum
+        sent_at: Versand- und Rechnungsdatum
         created_at: Erstellt
         updated_at: Aktualisiert
         states:
@@ -1447,7 +1448,7 @@ de:
 
   invoices:
     abo_magazin:
-      title: Rechnung Die Alpen %{year}
+      title: Rechnung %{group} %{year}
       positions:
         abo_fee: Abonnement %{group} %{time_period}
         abroad_fee: Porto %{group}
@@ -1600,7 +1601,27 @@ de:
           Informationen zu den verschiedenen SAC Sektionen findest du unter
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
 
+  abo_magazin_invoices:
+    create:
+        flash:
+          success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
+
   people:
+    abo_magazin_invoices:
+      new:
+        title: Die Alpen Rechnung erstellen
+        abo_group: Magazin
+        alert_info: >-
+          Nach Bestätigung dieses Dialogs wird eine Rechnung für das “Die Alpen”-Abonnent
+          erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung,
+          ob bereits Die Alpen Rechnung existieren oder in welchem Status sich diese befinden.
+          Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen
+          vorgenommen.
+        alert_warning: >-
+          Diese Person ist kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.
+        alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Die Alpen Rechnung:"
+        create_invoice: Rechnung erstellen
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1662,14 +1683,15 @@ de:
       download_pdf: Mitgliederausweis herunterladen
 
     external_invoices:
-      table:
+      list:
         cancel_invoice: Stornieren
         cancel_invoice_confirmation: >-
           Wollen Sie diese Rechnung wirklich stornieren?
           Diese Aktion kann nicht rückgängig gemacht werden.
       cancel:
         flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
-      list:
+      actions_index:
+        create_abo_magazin_invoice: Die Alpen Rechnung erstellen
         create_membership_invoice: Mitgliedschaftsrechnung erstellen
 
     yearly_membership_invoices:

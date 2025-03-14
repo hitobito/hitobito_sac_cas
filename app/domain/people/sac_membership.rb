@@ -112,6 +112,10 @@ class People::SacMembership
       (@person.sac_family_main_person? || individual_membership?)
   end
 
+  def recent_abonnent_magazin_roles
+    @person.roles.with_inactive.where(type: [Group::AboMagazin::Abonnent.sti_name, Group::AboMagazin::Neuanmeldung.sti_name]).where("end_on >= ? OR end_on IS NULL", 11.months.ago.to_date).joins(:group).order("roles.end_on, groups.name DESC")
+  end
+
   def abonnent_magazin?
     active_roles_of_type(abonnent_magazin_types).present?
   end
