@@ -7,6 +7,6 @@
 
 module ExternalInvoiceHelper
   def abo_magazin_invoice_possible?(person)
-    (person.roles.with_inactive.where(type: Group::AboMagazin::Abonnent.sti_name).where("end_on >= ? OR end_on IS NULL", 11.months.ago.to_date).present? || person.roles.where(type: Group::AboMagazin::Neuanmeldung.sti_name).present?) && can?(:create_abo_magazin_invoice, person)
+    person.sac_membership.recent_abonnent_magazin_roles.exists? && can?(:create_abo_magazin_invoice, person)
   end
 end

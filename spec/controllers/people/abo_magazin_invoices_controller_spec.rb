@@ -19,7 +19,6 @@ describe People::AboMagazinInvoicesController do
       group_id: group.id,
       person_id: person.id,
       external_invoice: {
-        issued_at: roles(:abonnent_alpen).end_on + 1.day,
         sent_at: today,
         link_id: group.id
       }
@@ -35,6 +34,23 @@ describe People::AboMagazinInvoicesController do
 
       expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
       expect(ExternalInvoice.last.link).to eq group
+      expect(ExternalInvoice.last.issued_at).to eq roles(:abonnent_alpen).end_on + 1.day
+      expect(ExternalInvoice.last.sent_at).to eq today
+    end
+
+    it "creates external invoice and enqueues job with multiple mailing lists available" do
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago)
+      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago)
+
+      expect do
+        post :create, params: params
+      end.to change { ExternalInvoice.count }.by(1)
+        .and change { Delayed::Job.where("handler like '%CreateAboMagazinInvoiceJob%'").count }
+
+      expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
+      expect(ExternalInvoice.last.link).to eq group
+      expect(ExternalInvoice.last.issued_at).to eq roles(:abonnent_alpen).end_on + 1.day
+      expect(ExternalInvoice.last.sent_at).to eq today
     end
 
     it "logs and marks invoice as error if person has data quality errors" do
@@ -46,26 +62,6 @@ describe People::AboMagazinInvoicesController do
 
       expect(response).to redirect_to(external_invoices_group_person_path(group.id, person.id))
       expect(flash[:alert]).to eq "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
-    end
-
-    it "redirects to list with alert when issued at is not abo_magazin_role end_on + 1.day when selected role is abonnent" do
-      params[:external_invoice][:issued_at] = today
-      expect { post :create, params: }
-        .not_to change { ExternalInvoice.count }
-
-      expect(response).to redirect_to(external_invoices_group_person_path(group.id, person.id))
-      expect(flash[:alert]).to eq "Das eingegbene Rechnungsdatum ist nicht gültig"
-    end
-
-    it "redirects to list when link_id is neuanmeldungs role and issued_at is still end_on of abonnent role" do
-      abo_group_fr = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine), name: "Les Alpes FR")
-      neuanmeldung_role = Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, group: abo_group_fr, person: person)
-      params[:external_invoice][:link_id] = neuanmeldung_role.group.id
-      expect { post :create, params: }
-        .not_to change { ExternalInvoice.count }
-
-      expect(response).to redirect_to(external_invoices_group_person_path(group.id, person.id))
-      expect(flash[:alert]).to eq "Das eingegbene Rechnungsdatum ist nicht gültig"
     end
   end
 end

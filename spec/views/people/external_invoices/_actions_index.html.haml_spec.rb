@@ -15,6 +15,7 @@ describe "people/external_invoices/_actions_index.html.haml" do
       assign(:group, groups(:bluemlisalp_mitglieder))
       assign(:person, people(:mitglied))
       allow(view).to receive(:can?).with(:create_membership_invoice, people(:mitglied)).and_return(true)
+      allow(view).to receive(:can?).with(:create_abo_magazin_invoice, people(:mitglied)).and_return(true)
       allow(people(:mitglied)).to receive(:sac_membership_invoice?).and_return(true)
     end
 

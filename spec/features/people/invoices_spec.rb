@@ -114,7 +114,7 @@ describe "people invoices page", js: true do
 
       it "shows an alert message" do
         visit new_group_person_abo_magazin_invoice_path(group_id: group, person_id: person.id)
-        expect(page).to have_css(".alert-warning", text: "Diese Person ist kein Abonnent eines Magazin, daher kann keine Abo Rechnung erstellt werden.")
+        expect(page).to have_css(".alert-warning", text: "Diese Person ist kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.")
       end
     end
   end

@@ -9,7 +9,7 @@ class People::AboMagazinInvoicesController < CrudController
   skip_authorize_resource
   before_action :authorize_action
 
-  self.permitted_attrs = [:issued_at, :sent_at, :link_id]
+  self.permitted_attrs = [:sent_at, :link_id]
 
   def new
     @group = group
@@ -18,18 +18,15 @@ class People::AboMagazinInvoicesController < CrudController
   end
 
   def create
-    if valid_issued_at?
-      if person.data_quality != "error"
-        entry.link_type = Group
-        entry.year = role_of_selected_magazin.then { (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day }&.year
-        super.then do
-          Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry, role_of_selected_magazin.id).enqueue!
-        end
-      else
-        mark_with_error_and_redirect
+    if person.data_quality != "error"
+      entry.link_type = Group
+      entry.issued_at = role_of_selected_magazin.then { (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day }
+      entry.year = entry.issued_at&.year
+      super.then do
+        Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry, role_of_selected_magazin.id).enqueue!
       end
     else
-      handle_invalid_issued_at
+      mark_with_error_and_redirect
     end
   end
 
@@ -58,23 +55,13 @@ class People::AboMagazinInvoicesController < CrudController
     redirect_to external_invoices_group_person_path(group, person), alert: t("invoices.errors.data_quality_error")
   end
 
-  def valid_issued_at?
-    role_date = role_of_selected_magazin&.then { (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day }
-    permitted_params[:issued_at].to_date == role_date
-  end
-
-  def handle_invalid_issued_at
-    redirect_to external_invoices_group_person_path(group, person), alert: t("people.abo_magazin_invoices.errors.invalid_issued_at")
-  end
-
   def person = @person ||= Person.find(params[:person_id])
 
   def group = @group ||= Group.find(params[:group_id])
 
-  def role_of_selected_magazin = @role_of_selected_magazin ||= Role.unscoped.find_by(person_id: person.id, group_id: permitted_params[:link_id])
+  def role_of_selected_magazin = @role_of_selected_magazin ||= abo_magazin_roles.where(group_id: permitted_params[:link_id]).first
 
   def abo_magazin_roles
-    @abo_magazin_roles ||= person.roles.with_inactive.where(type: Group::AboMagazin::Abonnent.sti_name).where("end_on >= ? OR end_on IS NULL", 11.months.ago.to_date) +
-      person.roles.where(type: Group::AboMagazin::Neuanmeldung.sti_name)
+    @abo_magazin_roles ||= person.sac_membership.recent_abonnent_magazin_roles
   end
 end

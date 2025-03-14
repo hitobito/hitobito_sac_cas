@@ -517,7 +517,7 @@ de:
         abacus_sales_order_key: Abacus Nummer
         total: Total
         issued_at: Rechnungsdatum
-        sent_at: Versand- und Rechnungsdatum 
+        sent_at: Versand- und Rechnungsdatum
         created_at: Erstellt
         updated_at: Aktualisiert
         states:
@@ -1608,8 +1608,6 @@ de:
 
   people:
     abo_magazin_invoices:
-      errors:
-        invalid_issued_at: Das eingegbene Rechnungsdatum ist nicht gültig
       new:
         title: Die Alpen Rechnung erstellen
         abo_group: Magazin
@@ -1620,7 +1618,7 @@ de:
           Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen
           vorgenommen.
         alert_warning: >-
-          Diese Person ist kein Abonnent eines Magazin, daher kann keine Abo Rechnung erstellt werden.
+          Diese Person ist kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Die Alpen Rechnung:"
         create_invoice: Rechnung erstellen
 
