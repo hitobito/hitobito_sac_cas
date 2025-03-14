@@ -93,7 +93,7 @@ describe HouseholdAsideMemberComponent, type: :component do
       roles(:familienmitglied2).destroy!
       r1 = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: familienmitglied, group: group)
       r2 = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: familienmitglied2, group: group)
-      key = Sequence.increment!(SacCas::Person::Household::HOUSEHOLD_KEY_SEQUENCE)
+      key = Sequence.increment!(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE)
       Person.where(id: [familienmitglied.id, familienmitglied2.id]).update_all(household_key: key)
       familienmitglied.update!(sac_family_main_person: true)
       Role.where(id: [r1.id, r2.id]).update_all(beitragskategorie: :family)

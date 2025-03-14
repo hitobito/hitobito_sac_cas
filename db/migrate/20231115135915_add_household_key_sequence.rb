@@ -16,6 +16,6 @@ class AddHouseholdKeySequence < ActiveRecord::Migration[6.1]
   end
 
   def down
-    execute "DELETE FROM sequences WHERE name = '#{SacCas::Person::HOUSEHOLD_KEY_SEQUENCE}'"
+    execute "DELETE FROM sequences WHERE name = '#{SacCas::Household::HOUSEHOLD_KEY_SEQUENCE}'"
   end
 end
