@@ -1,0 +1,27 @@
+-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- stimulus_ctrl = 'field-remote-update'
+-title @invoice_type == ExternalInvoice::CourseParticipation ? t(".create_course_participation_invoice") : t(".create_course_annulation_invoice")
+
+= standard_form(@invoice_form, url: group_event_participation_invoices_path(@group, @event, @participation), method: :post, data: { controller: stimulus_ctrl, url: recalculate_group_event_participation_invoices_path(@group, @event, @participation) }) do |f|
+  = f.error_messages
+  = f.labeled(:reference_date) do
+    = f.date_field :reference_date, data: { action: (@invoice_type == ExternalInvoice::CourseAnnulation) ? "change->#{stimulus_ctrl}#sourceChanged" : "" }
+  = f.labeled(:invoice_date) do
+    = f.date_field(:invoice_date)
+  = f.labeled(:send_date) do
+    = f.date_field(:send_date)
+  - if @invoice_type == ExternalInvoice::CourseParticipation
+    = f.labeled(:price_category) do
+      = f.select(:price_category, *@participation.possible_event_prices_for_invoice,
+                                  value: @participation.price_category,
+                                  class: "form-select form-select-sm",
+                                  data: { action: "change->#{stimulus_ctrl}#sourceChanged" })
+  = f.labeled_input_field(:price, value: @participation.price, data: { field_remote_update_target: "field" })
+
+  = f.indented do
+    = submit_button(f, @invoice_type ? t(".create_course_participation_invoice") : t(".create_course_annulation_invoice"))
+    = cancel_link(group_event_participation_path(@group, @event, @participation))

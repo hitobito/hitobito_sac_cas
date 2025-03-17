@@ -21,6 +21,10 @@ module Invoices
         @custom_price = custom_price
       end
 
+      def amount_cancelled
+        position_description_and_amount_cancelled.last
+      end
+
       def position_description_and_amount_cancelled
         return custom_price_position if @custom_price
 

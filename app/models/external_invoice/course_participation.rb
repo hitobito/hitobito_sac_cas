@@ -35,13 +35,13 @@ class ExternalInvoice::CourseParticipation < ExternalInvoice
   after_save :update_participation_invoice_state
 
   class << self
-    def invoice!(participation, custom_price: nil)
+    def invoice!(participation, issued_at: Date.current, sent_at: Date.current, custom_price: nil)
       return if participation.price.to_i.zero? && custom_price.nil?
 
       external_invoice = create!(
         person: participation.person,
-        issued_at: Date.current,
-        sent_at: Date.current,
+        issued_at: issued_at,
+        sent_at: sent_at,
         state: :draft,
         link: participation,
         year: participation.event.dates.first.start_at.year

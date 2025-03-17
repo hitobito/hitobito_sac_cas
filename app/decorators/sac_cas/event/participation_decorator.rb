@@ -13,12 +13,20 @@ module SacCas::Event::ParticipationDecorator
     to_s_without_state(*)
   end
 
-  def event_prices
+  def formatted_event_prices(include_former: false, selected_category: nil)
     prices = present_event_prices.map { |attr, price| [format_event_price(attr, price, event), attr] }
-    prices.unshift(former_price_select_option) if event_price_changed?
+    prices.unshift(former_price_select_option) if include_former && event_price_changed?
     prices << [t("no_price_select"), nil] if present_event_prices.empty? || event_leader?
 
-    [prices, event_price_changed? ? {selected: "former"} : {}]
+    [prices, selected_category ? {selected: selected_category} : {}]
+  end
+
+  def event_prices
+    formatted_event_prices(include_former: true, selected_category: event_price_changed? ? "former" : nil)
+  end
+
+  def possible_event_prices_for_invoice
+    formatted_event_prices(selected_category: price_category)
   end
 
   private
