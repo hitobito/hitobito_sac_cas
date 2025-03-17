@@ -60,7 +60,7 @@ describe Event::Courses::InvoicesController do
       it "recalculates price when price_category changed" do
         params[:event_participation_invoice_form] = {price_category: "price_member"}
         get :recalculate, params: params
-        expect(JSON.parse(response.body)["updatedValue"]).to eq "5.0"
+        expect(JSON.parse(response.body)["value"]).to eq "5.0"
       end
 
       it "returns unprocessable_entity when invalid price_category is passed" do
@@ -72,7 +72,7 @@ describe Event::Courses::InvoicesController do
       it "recalculates price when reference_date changed" do
         params[:event_participation_invoice_form] = {reference_date: "12.12.2025"}
         get :recalculate, params: params
-        expect(JSON.parse(response.body)["updatedValue"]).to eq "10.0"
+        expect(JSON.parse(response.body)["value"]).to eq "10.0"
       end
 
       it "returns unprocessable_entity when invalid reference_date is passed" do
@@ -124,6 +124,13 @@ describe Event::Courses::InvoicesController do
         expect(participation.reload.price).to eq 4000
         expect(ExternalInvoice.last.issued_at).to eq Date.new(2025, 12, 12)
         expect(ExternalInvoice.last.sent_at).to eq Date.new(2025, 12, 12)
+      end
+
+      it "does not update price and price_category when participation state is absent" do
+        participation.update_column(:state, "absent")
+        post :create, params: params
+        expect(participation.reload.price_category).not_to eq "price_member"
+        expect(participation.reload.price).not_to eq 4000
       end
 
       it "doesn't enqueue invoice job if invoice_form is invalid" do

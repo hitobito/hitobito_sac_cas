@@ -6,13 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Courses::InvoicesController < ApplicationController
-  before_action :authorize_class
+  before_action :authorize_action
 
   def create
     assign_attributes
 
     if invoice_form.valid?
-      @participation.update!(price: invoice_form_params[:price], price_category: invoice_form_params[:price_category])
+      @participation.update!(price: invoice_form_params[:price], price_category: invoice_form_params[:price_category]) if invoice_type == ExternalInvoice::CourseParticipation
       create_invoice
       redirect_to group_event_participation_path(params[:group_id], params[:event_id], params[:participation_id])
     else
@@ -28,10 +28,11 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def recalculate
+    assign_attributes
     if invoice_form_params[:reference_date]
-      process_parameter(:reference_date) { render json: {updatedValue: calculate_annulation_price} }
+      process_parameter(:reference_date) { render json: {value: calculate_annulation_price} }
     elsif invoice_form_params[:price_category]
-      process_parameter(:price_category) { render json: {updatedValue: calculate_participation_price} }
+      process_parameter(:price_category) { render json: {value: calculate_participation_price} }
     else
       render json: {error: "Invalid query param", status: :bad_request}, status: :bad_request
     end
@@ -87,7 +88,7 @@ class Event::Courses::InvoicesController < ApplicationController
       .permit(:reference_date, :invoice_date, :send_date, :price_category, :price)
   end
 
-  def authorize_class
+  def authorize_action
     raise CanCan::AccessDenied if participation.roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
 
     authorize!(:summon, participation)
@@ -95,9 +96,9 @@ class Event::Courses::InvoicesController < ApplicationController
 
   def group = @group ||= Group.find(params[:group_id])
 
-  def event = @event ||= EventDecorator.new(Event::Course.find(params[:event_id]))
+  def event = @event ||= Event::Course.find(params[:event_id]).decorate
 
-  def participation = @participation ||= Event::ParticipationDecorator.new(Event::Participation.find(params[:participation_id]))
+  def participation = @participation ||= Event::Participation.find(params[:participation_id]).decorate
 
   def invoice_form = @invoice_form ||= Event::Participation::InvoiceForm.new(participation)
 

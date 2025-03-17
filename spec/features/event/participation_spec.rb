@@ -69,6 +69,25 @@ describe Event::Participation, js: true do
       expect(page).to have_css(".alert", text: "Rechnung wurde erfolgreich erstellt.")
     end
 
+    it "updates price based on price_category" do
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      click_on("Rechnung erstellen")
+      find("#event_participation_invoice_form_price_category").find("option", text: "Normalpreis").click
+      sleep(3)
+      expect(find("#event_participation_invoice_form_price").value).to eq "20.0"
+    end
+
+    it "updates price based on reference_date" do
+      allow_any_instance_of(Event::Courses::InvoicesController).to receive(:invoice_type).and_return(ExternalInvoice::CourseAnnulation)
+      allow_any_instance_of(Event::Courses::InvoicesController).to receive(:calculate_annulation_price).and_return(400)
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      click_on("Rechnung erstellen")
+      find("#event_participation_invoice_form_reference_date").set("01.01.2023")
+      find("#event_participation_invoice_form_reference_date").native.send_keys :tab
+      sleep(3)
+      expect(find("#event_participation_invoice_form_price").value).to eq "400"
+    end
+
     context "cancel" do
       before do
         visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)

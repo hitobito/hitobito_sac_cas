@@ -26,7 +26,7 @@ module SacCas::Event::ParticipationDecorator
   end
 
   def possible_event_prices_for_invoice
-    formatted_event_prices(selected_category: price_category? ? price_category : nil)
+    formatted_event_prices(selected_category: price_category)
   end
 
   private
