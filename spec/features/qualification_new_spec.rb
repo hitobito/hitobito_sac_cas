@@ -18,7 +18,7 @@ describe "qualification new", js: true do
 
     visit new_group_person_qualification_path(group_id: person.primary_group_id, person_id: person.id)
 
-    expect(page).to_not have_field "qualification_finish_at"
+    expect(page).to have_no_field "qualification_finish_at"
 
     select qualification_kind_without_validity.label, from: "qualification_qualification_kind_id"
     expect(page).to have_select("qualification_qualification_kind_id", selected: qualification_kind_without_validity.label)
@@ -28,6 +28,6 @@ describe "qualification new", js: true do
     select qualification_kind_with_validity.label, from: "qualification_qualification_kind_id"
     expect(page).to have_select("qualification_qualification_kind_id", selected: qualification_kind_with_validity.label)
 
-    expect(page).to_not have_field "qualification_finish_at"
+    expect(page).to have_no_field "qualification_finish_at"
   end
 end
