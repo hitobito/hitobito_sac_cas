@@ -17,8 +17,11 @@ class Invoices::SacMembershipsMailer < ApplicationMailer
     @beitragskategorie = beitragskategorie
     locales = [person.language]
 
-    headers[:cc] = [section.email].compact_blank
-    headers[:bcc] = [SacCas::MV_EMAIL]
+    headers[:bcc] = [
+      section.email,
+      SacCas::MV_EMAIL
+    ].compact_blank
+
     compose_multilingual(person, MEMBERSHIP_ACTIVATED, locales)
   end
 end

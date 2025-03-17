@@ -24,9 +24,8 @@ describe Invoices::SacMembershipsMailer do
     expect(mail.body.to_s).to include("Bonjour")
   end
 
-  it "includes sektion in cc MV in bcc" do
-    expect(mail.cc).to eq ["bluemlisalp@sac.ch"]
-    expect(mail.bcc).to eq ["mv@sac-cas.ch"]
+  it "includes sektion and MV in bcc" do
+    expect(mail.bcc).to match_array ["bluemlisalp@sac.ch", "mv@sac-cas.ch"]
   end
 
   it "includes additional placeholders" do
