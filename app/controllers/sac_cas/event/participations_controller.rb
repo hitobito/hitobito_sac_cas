@@ -195,7 +195,7 @@ module SacCas::Event::ParticipationsController
     if params.dig(:invoice_option) == "standard"
       ExternalInvoice::CourseAnnulation.invoice!(entry)
     elsif params.dig(:invoice_option) == "custom"
-      ExternalInvoice::CourseAnnulation.invoice!(entry, invoice_total: params.dig(:invoice_total).to_i)
+      ExternalInvoice::CourseAnnulation.invoice!(entry, custom_price: params.dig(:custom_price).to_i)
     end
   end
 end

@@ -93,9 +93,11 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
     end
 
     context "with custom invoice amount" do
+      before { participation.update!(state: :absent) }
+
       it "creates position with 100% cancellation costs" do
-        subject.instance_variable_set(:@invoice_total, 500)
-        expect(position.name).to eq("100% Annullationskosten - Einstiegskurs")
+        subject.instance_variable_set(:@custom_price, 500)
+        expect(position.name).to eq("Annulationskosten - Einstiegskurs")
         expect(position.amount).to eq(500)
       end
     end

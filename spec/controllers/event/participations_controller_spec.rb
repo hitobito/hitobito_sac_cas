@@ -496,13 +496,13 @@ describe Event::ParticipationsController do
 
     context "invoice_option custom" do
       it "PUT#cancel creates course annulation invoice with custom amount" do
-        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, invoice_total: 400)
-        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", invoice_total: "400"})
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 400)
+        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: "400"})
       end
 
       it "PUT#cancel custom amount is zero when no amount passed" do
-        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, invoice_total: 0)
-        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", invoice_total: ""})
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 0)
+        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: ""})
       end
     end
 

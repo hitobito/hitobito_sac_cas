@@ -52,7 +52,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
     participation.update_column(:state, "absent")
     external_invoice.update_column(:type, ExternalInvoice::CourseAnnulation.sti_name)
     external_invoice.reload
-    job.instance_variable_set(:@invoice_total, 500)
+    job.instance_variable_set(:@custom_price, 500)
 
     expect do
       job.perform

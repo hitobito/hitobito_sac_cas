@@ -16,11 +16,14 @@ module Invoices
       }
       CANCELLATION_PROCESSING_FEE = 80.0
 
-      def initialize(participation)
+      def initialize(participation, custom_price = nil)
         @participation = participation
+        @custom_price = custom_price
       end
 
       def position_description_and_amount_cancelled
+        return custom_price_position if @custom_price
+
         days_until_start = (course_start_date - cancelled_at).to_i
 
         range = CANCELLATION_COST_FACTORS.keys.find { |range| range.include?(days_until_start) }
@@ -33,10 +36,16 @@ module Invoices
       end
 
       def position_description_and_amount_absent
+        return custom_price_position if @custom_price
+
         [t("cancellation_costs", percentage: 100), @participation.price]
       end
 
       private
+
+      def custom_price_position
+        [t("custom_cancellation_costs"), @custom_price]
+      end
 
       def cancellation_costs(factor)
         return 0 unless @participation.price

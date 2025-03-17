@@ -5,23 +5,24 @@
 
 = f.labeled_input_field(:cancel_statement, label_class: 'col-md-3 col-xl-3 pb-1 required', required: true)
 
-.row.mb-2
-	= label_tag("invoice_option", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
-		= t(".invoice_option")
-	.labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch
-		= radio_button_tag :invoice_option, :standard, true, class: "form-check-input align-label", onchange: "document.getElementById('invoice_total_field').classList.add('d-none');"
-		= label_tag :invoice_option_standard, t(".standard"), class: "radio w-90 mt-2 form-check-label"
-		= radio_button_tag :invoice_option, :custom, false, class: "form-check-input align-label", onchange: "document.getElementById('invoice_total_field').classList.remove('d-none');"
-		= label_tag :invoice_option_custom, t(".custom"), class: "radio w-90 mt-2 form-check-label"
-		= radio_button_tag :invoice_option, :no_invoice, false, class: "form-check-input align-label", onchange: "document.getElementById('invoice_total_field').classList.add('d-none');"
-		= label_tag :invoice_option_no_invoice, t(".no_invoice"), class: "radio w-90 mt-2 form-check-label"
-
-.row.mb-2.d-none#invoice_total_field
-	= label_tag("invoice_total", t(".invoice_total"), class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end")
-	.col-md-9.col-lg-8.col-xl-8.mw-63ch
-		= text_field_tag :invoice_total, nil, class: "form-control form-control-sm", type: "number"
-
 - if entry.id != current_user.id
+	%div{data: { controller: 'form-field-toggle' }}
+		.row.mb-2
+			= label_tag("invoice_option", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
+				= t(".invoice_option")
+			.labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch
+				= radio_button_tag :invoice_option, :standard, true, class: "form-check-input align-label", data: { action: 'form-field-toggle#untoggle', 'form-field-toggle-target': 'select' }
+				= label_tag :invoice_option_standard, t(".standard"), class: "radio w-90 mt-2 form-check-label"
+				= radio_button_tag :invoice_option, :custom, false, class: "form-check-input align-label", data: { action: 'form-field-toggle#toggle', 'form-field-toggle-target': 'select' }
+				= label_tag :invoice_option_custom, t(".custom"), class: "radio w-90 mt-2 form-check-label"
+				= radio_button_tag :invoice_option, :no_invoice, false, class: "form-check-input align-label", data: { action: 'form-field-toggle#untoggle', 'form-field-toggle-target': 'select' }
+				= label_tag :invoice_option_no_invoice, t(".no_invoice"), class: "radio w-90 mt-2 form-check-label"
+
+		.row.mb-2.hidden{data: { 'form-field-toggle-target': 'toggle' }}
+			= label_tag("custom_price", t(".custom_price"), class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end")
+			.col-md-9.col-lg-8.col-xl-8.mw-63ch
+				= text_field_tag :custom_price, nil, class: "form-control form-control-sm", type: "number"
+
 	.row.mb-2
 		= label_tag("send_email", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
 			= t(".send_email")

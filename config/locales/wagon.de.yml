@@ -1189,7 +1189,7 @@ de:
         standard: Annullationskostenrechnung gem. Reglement
         custom: Annullationskostenrechnung mit einem benutzerdefinierten Betrag
         no_invoice: Keine Annullationskostenrechnung
-        invoice_total: Betrag
+        custom_price: Betrag
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.
@@ -1468,6 +1468,7 @@ de:
       title: Annulationskostenrechnung
       processing_fee: Bearbeitungsgebühr
       cancellation_costs: "%{percentage}% Annullationskosten"
+      custom_cancellation_costs: Annulationskosten
     sac_memberships:
       title: Mitgliedschaftsrechnung %{year}
       positions:
