@@ -121,7 +121,7 @@ module SacCas::Person
   end
 
   def backoffice?
-    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
+    roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name)) || root?
   end
 
   def sac_membership
