@@ -25,7 +25,7 @@ module Invoices
       end
 
       def course_annulation_cost
-        @course_annulation_cost ||= CourseAnnulationCost.new(participation)
+        @course_annulation_cost ||= CourseAnnulationCost.new(participation, @custom_price)
       end
 
       def replaced_abacus_key

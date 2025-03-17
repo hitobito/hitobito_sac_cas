@@ -192,6 +192,10 @@ module SacCas::Event::ParticipationsController
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
 
-    ExternalInvoice::CourseAnnulation.invoice!(entry) unless entry.state == "applied"
+    if params.dig(:invoice_option) == "standard"
+      ExternalInvoice::CourseAnnulation.invoice!(entry)
+    elsif params.dig(:invoice_option) == "custom"
+      ExternalInvoice::CourseAnnulation.invoice!(entry, custom_price: params.dig(:custom_price).to_i)
+    end
   end
 end

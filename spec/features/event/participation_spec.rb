@@ -44,6 +44,18 @@ describe Event::Participation, :js do
       end
       expect(page).to have_no_text "E-Mail an Teilnehmer/in senden"
     end
+
+    it "does not display radio buttons for annulation invoice" do
+      event.update_columns(applications_cancelable: true, state: "application_open")
+      event.dates.first.update_column(:start_at, 10.days.from_now)
+      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+      within(".btn-toolbar") do
+        click_on "Abmelden"
+      end
+      expect(page).to have_no_text "Annullationskostenrechnung gem. Reglement"
+      expect(page).to have_no_text "Annullationskostenrechnung mit einem benutzerdefinierten Betrag"
+      expect(page).to have_no_text "Keine Annullationskostenrechnung"
+    end
   end
 
   context "as admin" do

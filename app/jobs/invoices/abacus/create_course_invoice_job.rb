@@ -6,14 +6,15 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Invoices::Abacus::CreateCourseInvoiceJob < Invoices::Abacus::CreateInvoiceJob
-  def initialize(external_invoice)
-    super
+  def initialize(external_invoice, custom_price = nil)
+    super(external_invoice)
+    @custom_price = custom_price
   end
 
   def invoice_data
     @invoice_data ||=
       external_invoice.is_a?(ExternalInvoice::CourseAnnulation) ?
-      Invoices::Abacus::CourseAnnulationInvoice.new(external_invoice.link) :
+      Invoices::Abacus::CourseAnnulationInvoice.new(external_invoice.link, @custom_price) :
       Invoices::Abacus::CourseParticipationInvoice.new(external_invoice.link)
   end
 

@@ -472,33 +472,47 @@ describe Event::ParticipationsController do
       expect(flash[:alert]).to eq ["ist nicht gültig"]
     end
 
-    it "PUT#cancel creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
-      invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
-      participation.update!(price: 10, price_category: :price_regular)
-      freeze_time
+    context "invoice_option standard" do
+      it "PUT#cancel creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
+        invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
+        participation.update!(price: 10, price_category: :price_regular)
+        freeze_time
 
-      expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}}) }
-        .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
-        .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
-        .and change { invoice.reload.state }.to("cancelled")
-        .and change { participation.reload.state }.to("canceled")
-        .and change { ExternalInvoice::CourseAnnulation.count }.by(1)
+        expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "standard"}) }
+          .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+          .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
+          .and change { invoice.reload.state }.to("cancelled")
+          .and change { participation.reload.state }.to("canceled")
+          .and change { ExternalInvoice::CourseAnnulation.count }.by(1)
 
-      invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation, person: participation.person)
-      expect(invoice).to be_present
-      expect(invoice.issued_at).to eq(Date.current)
-      expect(invoice.sent_at).to eq(Date.current)
-      expect(invoice.state).to eq("draft")
-      expect(invoice.year).to eq(event.dates.first.start_at.year)
+        invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation, person: participation.person)
+        expect(invoice).to be_present
+        expect(invoice.issued_at).to eq(Date.current)
+        expect(invoice.sent_at).to eq(Date.current)
+        expect(invoice.state).to eq("draft")
+        expect(invoice.year).to eq(event.dates.first.start_at.year)
+      end
     end
 
-    it "PUT#cancel does not create course annulation invoice when participation state is applied" do
-      participation.update!(price: 10, price_category: :price_regular)
-      participation.update_column(:state, :applied)
+    context "invoice_option custom" do
+      it "PUT#cancel creates course annulation invoice with custom amount" do
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 400)
+        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: "400"})
+      end
 
-      expect do
-        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
-      end.not_to change { ExternalInvoice::CourseAnnulation.count }
+      it "PUT#cancel custom amount is zero when no amount passed" do
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 0)
+        put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: ""})
+      end
+    end
+
+    context "invoice_option no_invoice" do
+      it "PUT#cancel creates course annulation invoice with custom amount" do
+        expect(ExternalInvoice::CourseAnnulation).not_to receive(:invoice!)
+        expect do
+          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "no_invoice"})
+        end.not_to change { ExternalInvoice::CourseAnnulation.count }
+      end
     end
 
     it "PUT#cancel sends application canceled email when send_email is true" do

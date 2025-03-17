@@ -46,6 +46,20 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
     expect(external_invoice.total).to eq(20)
   end
 
+  it "transmits subject and updates invoice total to custom amount parameter" do
+    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
+    allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
+    participation.update_column(:state, "absent")
+    external_invoice.update_column(:type, ExternalInvoice::CourseAnnulation.sti_name)
+    external_invoice.reload
+    job.instance_variable_set(:@custom_price, 500)
+
+    expect do
+      job.perform
+    end.to change { external_invoice.reload.total }
+    expect(external_invoice.total).to eq(500)
+  end
+
   context "invoice errors" do
     context "without course prices" do
       let(:log_entry) { HitobitoLogEntry.last }
