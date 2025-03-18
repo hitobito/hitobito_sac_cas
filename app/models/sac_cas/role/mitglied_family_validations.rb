@@ -15,7 +15,7 @@ module SacCas::Role::MitgliedFamilyValidations
     # Explicitely run validation on create and update. This allows us to skip this validation
     # on a case by case basis by setting the context to something other than :create or :update.
     # This is used by the memberships_importer and the selfreg workflow to skip these validations.
-    with_options(on: [:create, :update]) do
+    with_options(on: [:create, :update], if: :active?) do
       validate :assert_adult_family_mitglieder_count
       validate :assert_single_family_main_person
     end

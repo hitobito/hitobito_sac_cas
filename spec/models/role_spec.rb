@@ -115,13 +115,15 @@ describe Role do
         let(:role_type) { role_type }
         let(:group) { group }
 
-        def build_role(age: 23, beitragskategorie: :family, household_key: "household42", family_main_person: false)
+        def build_role(age: 23, beitragskategorie: :family, household_key: "household42",
+          family_main_person: false, **opts)
           person = Fabricate.build(:person,
             birthday: age.years.ago,
             household_key: household_key,
             sac_family_main_person: family_main_person).tap(&:save!)
           role = Fabricate.build(role_type.name, person: person, group: groups(group),
-            beitragskategorie: beitragskategorie)
+            beitragskategorie: beitragskategorie,
+                                 **opts)
           person.primary_group = role.group
           role
         end
@@ -251,6 +253,22 @@ describe Role do
               role = build_role(family_main_person: false)
               expect(role).to be_invalid
               expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+            end
+
+            context "does not validate when role has ended" do
+              it "without any main person" do
+                role = build_role(family_main_person: false, start_on: 1.year.ago, end_on: Date.yesterday).tap(&:save!)
+                _other_role = build_role(family_main_person: false, start_on: 1.year.ago, end_on: Date.yesterday).save!
+
+                expect(role).to be_valid
+              end
+
+              it "with multiple main people" do
+                role = build_role(family_main_person: true, start_on: 1.year.ago, end_on: Date.yesterday).tap(&:save!)
+                _other_role = build_role(family_main_person: true, start_on: 1.year.ago, end_on: Date.yesterday).save!
+
+                expect(role).to be_valid
+              end
             end
           end
 
