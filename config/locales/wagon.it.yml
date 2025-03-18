@@ -42,6 +42,12 @@ it:
       event/courses/leader_settlement_form:
         actual_days: Giorni effettivi
         iban: IBAN
+      event/participation/invoice_form:
+        reference_date: ""
+        invoice_date: ""
+        send_date: ""
+        price_category: ""
+        price: ""
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di prenotazione"
@@ -1182,6 +1188,10 @@ it:
       participant:
         remove_participant_confirm: ""
     courses:
+      invoices:
+        new:
+          create_course_participation_invoice: ""
+          create_course_annulation_invoice: ""
       key_data_sheets:
         create:
           success: Le schede dei dati di riferimento sono state create e aggiunte al corso come allegato.

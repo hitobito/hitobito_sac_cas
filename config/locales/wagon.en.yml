@@ -42,6 +42,12 @@ en:
       event/courses/leader_settlement_form:
         actual_days: ""
         iban: ""
+      event/participation/invoice_form:
+        reference_date: ""
+        invoice_date: ""
+        send_date: ""
+        price_category: ""
+        price: ""
       people/membership/invoice_form:
         reference_date: "Deadline"
         invoice_date: ""
@@ -1122,6 +1128,10 @@ en:
       participant:
         remove_participant_confirm: ""
     courses:
+      invoices:
+        new:
+          create_course_participation_invoice: ""
+          create_course_annulation_invoice: ""
       key_data_sheets:
         create:
           success: ""
