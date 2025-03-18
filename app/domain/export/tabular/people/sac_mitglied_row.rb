@@ -107,8 +107,8 @@ module Export::Tabular::People
     end
 
     # Navision ID des exportierten Layers als Zahl, mit Zero-Padding
-    def layer_navision_id_padded
-      group.navision_id_padded
+    def layer_id_padded
+      group.id_padded
     end
 
     def phone_number_landline = entry.phone_number_landline&.number

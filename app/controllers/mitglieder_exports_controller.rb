@@ -24,6 +24,6 @@ class MitgliederExportsController < ApplicationController
   end
 
   def filename
-    "Adressen_#{group.navision_id_padded}"
+    "Adressen_#{group.id_padded}"
   end
 end

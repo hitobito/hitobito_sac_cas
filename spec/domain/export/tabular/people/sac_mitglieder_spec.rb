@@ -28,7 +28,7 @@ describe Export::Tabular::People::SacMitglieder do
     expect(tabular.attributes).to eq(
       [
         :id,
-        :layer_navision_id_padded,
+        :layer_id_padded,
         :last_name,
         :first_name,
         :adresszusatz,

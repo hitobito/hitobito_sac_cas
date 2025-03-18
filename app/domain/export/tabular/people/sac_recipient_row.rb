@@ -30,8 +30,8 @@ module Export::Tabular::People
     end
 
     # Navision ID des exportierten Layers als Zahl, ohne Zero-Padding
-    def layer_navision_id
-      group.layer_group.navision_id
+    def layer_id
+      group.layer_group.id
     end
 
     def salutation
