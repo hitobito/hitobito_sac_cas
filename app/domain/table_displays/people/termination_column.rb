@@ -7,6 +7,8 @@
 
 module TableDisplays::People
   class TerminationColumn < TableDisplays::Column
+    prepend TableDisplays::People::SektionMemberAdminVisible
+
     def required_model_attrs(attr)
       []
     end

@@ -7,6 +7,8 @@
 
 module TableDisplays::People
   class WiedereintrittColumn < TableDisplays::Column
+    prepend TableDisplays::People::SektionMemberAdminVisible
+
     def required_model_includes(attr)
       [:roles_unscoped]
     end
