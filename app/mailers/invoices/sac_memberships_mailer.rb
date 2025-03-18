@@ -7,23 +7,21 @@
 
 class Invoices::SacMembershipsMailer < ApplicationMailer
   include MultilingualMailer
+  include CommonMailerPlaceholders
 
   MEMBERSHIP_ACTIVATED = "invoices_sac_membership_activated"
 
-  def confirmation(person)
+  def confirmation(person, section, beitragskategorie)
     @person = person
+    @section = section
+    @beitragskategorie = beitragskategorie
     locales = [person.language]
 
+    headers[:bcc] = [
+      section.email,
+      SacCas::MV_EMAIL
+    ].compact_blank
+
     compose_multilingual(person, MEMBERSHIP_ACTIVATED, locales)
-  end
-
-  private
-
-  def placeholder_first_name
-    @person.first_name
-  end
-
-  def placeholder_profile_url
-    group_person_url(@person.default_group_id, @person.id)
   end
 end
