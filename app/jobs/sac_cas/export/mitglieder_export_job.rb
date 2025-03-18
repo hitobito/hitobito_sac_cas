@@ -12,7 +12,7 @@ class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
 
   def initialize(user_id, group_id, **)
     @group_id = group_id
-    filename = "Adressen_#{group.navision_id_padded}"
+    filename = "Adressen_#{group.id_padded}"
     super(:csv, user_id, filename: filename, encoding: ENCODING, **)
   end
 
@@ -35,7 +35,7 @@ class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
   end
 
   def summary_line(tabular)
-    navision_id = group.navision_id_padded
+    navision_id = group.id_padded
     count = tabular.list.size
     date = I18n.l(Time.zone.now.to_date, format: "%d.%m.%Y")
     time = Time.zone.now.strftime("%H:%M")

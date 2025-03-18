@@ -28,7 +28,7 @@ describe Export::Tabular::People::SacRecipients do
       zip_code: "PLZ",
       town: "Ort",
       country: "Land",
-      layer_navision_id: "Sektion",
+      layer_id: "Sektion",
       anzahl: "Anzahl",
       email: "E-Mail"
     )

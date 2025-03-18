@@ -27,8 +27,8 @@ module SacCas::Group
     end
   end
 
-  def navision_id_padded
-    navision_id&.to_s&.rjust(8, "0")
+  def id_padded
+    id&.to_s&.rjust(8, "0")
   end
 
   def sektion_or_ortsgruppe?

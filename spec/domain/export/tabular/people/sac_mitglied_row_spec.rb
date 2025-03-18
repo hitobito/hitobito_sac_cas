@@ -257,8 +257,8 @@ describe Export::Tabular::People::SacMitgliedRow do
     end
   end
 
-  it "#layer_navision_id returns group#navision_id_padded" do
-    expect(row.layer_navision_id_padded).to eq(group.navision_id_padded)
+  it "#layer_id returns group#id_padded" do
+    expect(row.layer_id_padded).to eq(group.id_padded)
   end
 
   it "#phone_number_landline returns number with label landline" do

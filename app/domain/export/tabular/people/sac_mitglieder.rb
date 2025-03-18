@@ -23,7 +23,7 @@ module Export::Tabular::People
     def attributes # rubocop:disable Metrics/MethodLength
       [
         :id,
-        :layer_navision_id_padded,
+        :layer_id_padded,
         :last_name,
         :first_name,
         :adresszusatz,
