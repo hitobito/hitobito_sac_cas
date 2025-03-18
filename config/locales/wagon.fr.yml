@@ -1231,6 +1231,11 @@ fr:
           du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
       popover_cancel_sac_cas:
         send_email: ""
+        invoice_option: ""
+        standard: ""
+        custom: ""
+        no_invoice: ""
+        custom_price: ""
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1476,6 +1481,7 @@ fr:
       title: Calcul des frais d’annulation
       processing_fee: Frais de traitement
       cancellation_costs: "%{percentage}% de frais d’annulation"
+      custom_cancellation_costs: ""
     sac_memberships:
       title: "Facture d’adhésion %{year}"
       positions:

@@ -1229,6 +1229,11 @@ it:
           Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
       popover_cancel_sac_cas:
         send_email: ""
+        invoice_option: ""
+        standard: ""
+        custom: ""
+        no_invoice: ""
+        custom_price: ""
       states:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1470,6 +1475,7 @@ it:
       title: Fattura per i costi di cancellazione
       processing_fee: Quota di elaborazione
       cancellation_costs: "%{percentage}% costi di cancellazione"
+      custom_cancellation_costs: ""
     sac_memberships:
       title: "Fattura di affiliazione %{year}"
       positions:

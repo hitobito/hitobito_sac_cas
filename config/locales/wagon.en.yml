@@ -1166,6 +1166,11 @@ en:
         contact_text: |
       popover_cancel_sac_cas:
         send_email: ""
+        invoice_option: ""
+        standard: ""
+        custom: ""
+        no_invoice: ""
+        custom_price: ""
       states:
         absent: No participation in this course.
         annulled: This course has been canceled.
@@ -1398,6 +1403,7 @@ en:
       title: ""
       processing_fee: ""
       cancellation_costs: ""
+      custom_cancellation_costs: ""
     sac_memberships:
       title: "Membership invoice %{year}"
       positions:
