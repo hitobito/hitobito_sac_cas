@@ -77,8 +77,9 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def update_role_to_stammsektion_mitglied(person)
-    person.sac_membership.neuanmeldung_stammsektion_role.destroy
-    new_role = create_new_role(person, Group::SektionsMitglieder::Mitglied)
+    neuanmeldung_role = person.sac_membership.neuanmeldung_stammsektion_role
+    neuanmeldung_role.destroy
+    new_role = create_new_role(person, Group::SektionsMitglieder::Mitglied, beitragskategorie: neuanmeldung_role.beitragskategorie)
     send_confirmation_mail(person, new_role)
   end
 
@@ -93,7 +94,7 @@ class Invoices::SacMemberships::MembershipManager
       role.destroy
       end_on = [person.sac_membership.stammsektion_role.end_on, end_of_year].min
       start_on = end_on.past? ? end_on : today
-      new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on)
+      new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on, beitragskategorie: role.beitragskategorie)
 
       send_confirmation_mail(person, new_role)
     end
@@ -111,8 +112,10 @@ class Invoices::SacMemberships::MembershipManager
     person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) }
   end
 
-  def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today, end_on: end_of_year)
-    role_type.create!(group: group, person:, end_on:, start_on:)
+  def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today, end_on: end_of_year, beitragskategorie: nil)
+    attributes = {group: group, person: person, end_on: end_on, start_on: start_on}
+    attributes[:beitragskategorie] = beitragskategorie if beitragskategorie
+    role_type.create!(attributes)
   end
 
   def mitglieder_sektion
