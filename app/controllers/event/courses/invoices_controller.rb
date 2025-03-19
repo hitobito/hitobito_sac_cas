@@ -102,7 +102,7 @@ class Event::Courses::InvoicesController < ApplicationController
 
   def participation = @participation ||= Event::Participation.find(params[:participation_id]).decorate
 
-  def invoice_form = @invoice_form ||= Event::Participation::InvoiceForm.new(participation)
+  def invoice_form = @invoice_form ||= Event::Participation::InvoiceForm.new(participation, annulation: invoice_type == ExternalInvoice::CourseAnnulation)
 
   def invoice_type = @invoice_type ||= participation.state.in?(%w[canceled absent]) ? ExternalInvoice::CourseAnnulation : ExternalInvoice::CourseParticipation
 
