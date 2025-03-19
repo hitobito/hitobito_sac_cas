@@ -14,13 +14,17 @@ module Invoices
         super.merge(user_field22: replaced_abacus_key)
       end
 
+      def invoice?
+        @custom_price.present? ? !@custom_price.zero? : super
+      end
+
       private
 
       def position_description_and_amount
         case participation.state
         when "canceled" then course_annulation_cost.position_description_and_amount_cancelled
         when "absent" then course_annulation_cost.position_description_and_amount_absent
-        else raise InvalidArgumentError, "participation must be canceled or absent for annulation invoice"
+        else raise ArgumentError, "participation must be canceled or absent for annulation invoice"
         end
       end
 

@@ -29,6 +29,17 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
 
       expect(subject.invoice?).to be(false)
     end
+
+    it "is true when custom price is present" do
+      participation.update!(price: 0)
+      subject.instance_variable_set(:@custom_price, 500)
+      expect(subject.invoice?).to be(true)
+    end
+
+    it "is false when custom price is zero" do
+      subject.instance_variable_set(:@custom_price, 0)
+      expect(subject.invoice?).to be(false)
+    end
   end
 
   context "#position" do
