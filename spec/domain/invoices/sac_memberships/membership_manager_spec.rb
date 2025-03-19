@@ -286,6 +286,8 @@ describe Invoices::SacMemberships::MembershipManager do
 
         expect(familienmitglied_person.sac_membership.active?).to eq(true)
         expect(familienmitglied2_person.sac_membership.active?).to eq(true)
+        expect(familienmitglied_person.sac_membership.stammsektion_role.beitragskategorie).to eq "family"
+        expect(familienmitglied2_person.sac_membership.stammsektion_role.beitragskategorie).to eq "family"
         expect(familienmitglied_person.roles.count).to eq(1)
         expect(familienmitglied2_person.roles.count).to eq(1)
         expect(familienmitglied_person.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
@@ -391,6 +393,7 @@ describe Invoices::SacMemberships::MembershipManager do
 
         expect(familienmitglied2_person.roles.count).to eq(2)
         expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
+        expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.beitragskategorie).to eq "adult"
       end
 
       it "doesn't create role for family members when person is not family main person" do
