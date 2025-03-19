@@ -60,7 +60,9 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def create_invoice
-    invoice = invoice_type.invoice!(participation, issued_at: invoice_form.invoice_date, sent_at: invoice_form.send_date)
+    invoice = invoice_type.invoice!(participation, issued_at: invoice_form.invoice_date,
+      sent_at: invoice_form.send_date,
+      custom_price: invoice_form.price)
     flash[:notice] = if invoice
       t("event.participations.invoice_created_notice")
     else
