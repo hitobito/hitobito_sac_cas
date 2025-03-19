@@ -126,7 +126,8 @@ describe Event::Courses::InvoicesController do
         expect(ExternalInvoice.last.sent_at).to eq Date.new(2025, 12, 12)
       end
 
-      it "does not update price and price_category when participation state is absent" do
+      it "does not update price and price_category when participation state is absent but enqueses job with passed price" do
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, hash_including(custom_price: 4000))
         participation.update_column(:state, "absent")
         post :create, params: params
         expect(participation.reload.price_category).not_to eq "price_member"
