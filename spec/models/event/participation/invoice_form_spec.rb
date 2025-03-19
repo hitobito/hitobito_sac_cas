@@ -49,5 +49,19 @@ describe Event::Participation::InvoiceForm do
       form.price_category = "this_price_category_does_not_exist"
       expect(form).not_to be_valid
     end
+
+    context "annulation invoice" do
+      before { form.instance_variable_set(:@annulation, true) }
+
+      it "does not validate presence of price_category" do
+        form.price_category = nil
+        expect(form).to be_valid
+      end
+
+      it "does not validate price_category to exist" do
+        form.price_category = "this_price_category_does_not_exist"
+        expect(form).to be_valid
+      end
+    end
   end
 end

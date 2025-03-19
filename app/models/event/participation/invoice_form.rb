@@ -15,15 +15,17 @@ class Event::Participation::InvoiceForm
   attribute :price_category, :string
   attribute :price, :decimal
 
-  validates :reference_date, :invoice_date, :send_date, :price_category, :price, presence: true
+  validates :reference_date, :invoice_date, :send_date, :price, presence: true
 
-  validate :price_category_must_be_valid_participation_category
+  validates :price_category, presence: true, unless: :annulation
+  validate :price_category_must_be_valid_participation_category, unless: :annulation
 
-  attr_reader :participation
+  attr_reader :participation, :annulation
 
-  def initialize(participation, attrs = {})
+  def initialize(participation, attrs = {}, annulation: false)
     super(attrs)
     @participation = participation
+    @annulation = annulation
   end
 
   def price_category_must_be_valid_participation_category
