@@ -12,7 +12,7 @@ class Event::Courses::InvoicesController < ApplicationController
     assign_attributes
 
     if invoice_form.valid?
-      @participation.update!(price: invoice_form_params[:price], price_category: invoice_form_params[:price_category]) if invoice_type == ExternalInvoice::CourseParticipation
+      @participation.update!(price: invoice_form.price, price_category: invoice_form.price_category) if invoice_type == ExternalInvoice::CourseParticipation
       create_invoice
       redirect_to group_event_participation_path(params[:group_id], params[:event_id], params[:participation_id])
     else
@@ -28,7 +28,6 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def recalculate
-    assign_attributes
     if invoice_form_params[:reference_date]
       process_parameter(:reference_date) { render json: {value: calculate_annulation_price} }
     elsif invoice_form_params[:price_category]
