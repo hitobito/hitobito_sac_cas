@@ -133,21 +133,22 @@ describe "FilterNavigation::People" do
       @tl_with_quali = create_person("tl with quali", tl_start: 1.year.ago)
       @tl_without_quali = create_person("tl without quali", tl_start: 1.year.ago, quali_start: nil)
       @old_tl_without_quali = create_person("old tl without quali", tl_start: 5.years.ago, tl_end: 1.year.ago, quali_start: nil)
-      @old_tl_without_quali_without_membership = create_person("old tl without quali without_membership", tl_start: 5.years.ago, tl_end: 1.year.ago, quali_start: nil, member_end: 1.year.ago)
+      @old_tl_without_quali_without_membership = create_person("old tl without quali without membership", tl_start: 5.years.ago, tl_end: 2.year.ago, quali_start: nil, member_end: 2.years.ago)
+      @old_tl_without_quali_with_recently_ended_membership = create_person("old tl without quali with recently ended membership", tl_start: 5.years.ago, tl_end: 1.year.ago, quali_start: nil, member_end: 1.month.ago)
       @old_tl_with_quali = create_person("old tl with quali", tl_start: 3.years.ago, tl_end: 1.year.ago)
-      @old_tl_with_quali_without_membership = create_person("old tl with quali without membership", tl_start: 3.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @old_tl_with_quali_without_membership = create_person("old tl with quali without membership", tl_start: 3.years.ago, tl_end: 2.year.ago, member_end: 2.years.ago)
       @tl_with_stalled_quali = create_person("tl with stalled quali", tl_start: 8.years.ago)
       @old_tl_with_stalled_quali = create_person("old tl with stalled quali", tl_start: 8.years.ago, tl_end: 1.year.ago)
-      @old_tl_with_stalled_quali_without_membership = create_person("old tl with stalled quali without membership", tl_start: 8.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @old_tl_with_stalled_quali_without_membership = create_person("old tl with stalled quali without membership", tl_start: 8.years.ago, tl_end: 2.year.ago, member_end: 2.years.ago)
       @tl_with_expired_quali = create_person("tl with expired quali", tl_start: 20.years.ago)
       @old_tl_with_expired_quali = create_person("old tl with expired quali", tl_start: 20.years.ago, tl_end: 1.year.ago)
-      @old_tl_with_expired_quali_without_membership = create_person("old tl with expired quali without membership", tl_start: 20.years.ago, tl_end: 1.year.ago, member_end: 1.year.ago)
+      @old_tl_with_expired_quali_without_membership = create_person("old tl with expired quali without membership", tl_start: 20.years.ago, tl_end: 2.year.ago, member_end: 2.years.ago)
       @no_tl_with_quali = create_person("no tl with quali", tl_start: nil, quali_start: 1.year.ago, member_start: 1.year.ago)
       @no_tl_without_quali = create_person("no tl without quali", tl_start: nil, member_start: 1.year.ago)
       @no_tl_with_stalled_quali = create_person("no tl with stalled quali", tl_start: nil, quali_start: 8.years.ago, member_start: 8.years.ago)
       @no_tl_with_expired_quali = create_person("no tl with expired quali", tl_start: nil, quali_start: 20.years.ago, member_start: 20.years.ago)
-      @no_tl_with_quali_without_membership = create_person("no tl with quali without_membership", tl_start: nil, quali_start: 1.year.ago, member_start: 8.years.ago, member_end: 1.year.ago)
-      @no_tl_without_quali_without_membership = create_person("no tl without quali without_membership", tl_start: nil, member_start: 8.years.ago, member_end: 1.year.ago)
+      @no_tl_with_quali_without_membership = create_person("no tl with quali without membership", tl_start: nil, quali_start: 1.year.ago, member_start: 8.years.ago, member_end: 2.years.ago)
+      @no_tl_without_quali_without_membership = create_person("no tl without quali without membership", tl_start: nil, member_start: 8.years.ago, member_end: 2.years.ago)
     end
 
     it "filters Aktive Tourenleiter" do
@@ -172,7 +173,8 @@ describe "FilterNavigation::People" do
 
     it "filters Keine Tourenleiter" do
       list = entries("Keine Tourenleiter")
-      expect(list.map(&:last_name)).to match_array([@no_tl_without_quali, @old_tl_without_quali, people(:tourenchef)].map(&:last_name))
+      # @old_tl_without_quali_with_recently_ended_membership is included because of Settings.person.ended_roles_readable_for = 1.year
+      expect(list.map(&:last_name)).to match_array([@no_tl_without_quali, @old_tl_without_quali, @old_tl_without_quali_with_recently_ended_membership, people(:tourenchef)].map(&:last_name))
     end
   end
 end

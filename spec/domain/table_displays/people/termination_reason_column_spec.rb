@@ -41,9 +41,9 @@ describe TableDisplays::People::TerminationReasonColumn, type: :helper do
     }
   end
 
-  context "with ended roles" do
+  context "with recently ended roles" do
     before do
-      create_membership_role(2.years.ago, 1.years.ago)
+      create_membership_role(2.years.ago, 11.months.ago)
     end
 
     it_behaves_like "table display", {
@@ -54,10 +54,23 @@ describe TableDisplays::People::TerminationReasonColumn, type: :helper do
     }
   end
 
+  context "with long ago ended roles" do
+    before do
+      create_membership_role(20.years.ago, 5.years.ago)
+    end
+
+    it_behaves_like "table display", {
+      column: :terminate_on,
+      header: "Austrittsdatum",
+      value: "",
+      permission: :show_full
+    }
+  end
+
   context "with multiple ended roles" do
     before do
       create_membership_role(11.years.ago, 10.years.ago)
-      create_membership_role(6.years.ago, 5.years.ago)
+      create_membership_role(6.years.ago, 5.months.ago)
     end
 
     it_behaves_like "table display", {

@@ -11,6 +11,9 @@ describe People::Membership::VerifyController do
   let(:person) { people(:mitglied) }
   let!(:token) { person.membership_verify_token }
 
+  # Do not raise server errors to avoid "No route matches [GET] /favicon.ico" in requests without user
+  before { Capybara.raise_server_errors = false }
+
   it "shows invalid token information" do
     visit "/verify_membership/nOnExistentTOOKen"
     expect(page).to have_text "Ungültiger Verifikationscode"
@@ -27,27 +30,25 @@ describe People::Membership::VerifyController do
     end
 
     context "check output structure" do
-      subject(:content) { page }
-
       it "shows valid membership information" do
         visit "/verify_membership/#{person.membership_verify_token}"
-        expect(content).to have_text full_name
-        expect(content).to have_text "Mitglied (Stammsektion) (Einzel)\nSAC Blüemlisalp"
-        expect(content).to have_text "Mitglied (Zusatzsektion) (Einzel)\nSAC Matterhorn"
-        expect(content).to have_css(".alert-success", text: "Mitgliedschaft gültig")
-        expect(content).not_to have_text "Aktive/r Tourenleiter/in"
+        expect(page).to have_text full_name
+        expect(page).to have_text "Mitglied (Stammsektion) (Einzel)\nSAC Blüemlisalp"
+        expect(page).to have_text "Mitglied (Zusatzsektion) (Einzel)\nSAC Matterhorn"
+        expect(page).to have_css(".alert-success", text: "Mitgliedschaft gültig")
+        expect(page).not_to have_text "Aktive/r Tourenleiter/in"
       end
 
       it "has sponsor information" do
         visit "/verify_membership/#{person.membership_verify_token}"
-        expect(content).to have_css("#details #sponsors")
-        expect(content).to have_css("#details #logo-reciprocate")
+        expect(page).to have_css("#details #sponsors")
+        expect(page).to have_css("#details #logo-reciprocate")
       end
 
       it "has name and member info before the alert" do
         visit "/verify_membership/#{person.membership_verify_token}"
-        expect(content.body.index(full_name)).to be < content.body.index("Mitgliedschaft gültig")
-        expect(content.body.index("Mitglied (Stammsektion) (Einzel")).to be > content.body.index("Mitgliedschaft gültig")
+        expect(page.body.index(full_name)).to be < page.body.index("Mitgliedschaft gültig")
+        expect(page.body.index("Mitglied (Stammsektion) (Einzel")).to be > page.body.index("Mitgliedschaft gültig")
       end
     end
 
