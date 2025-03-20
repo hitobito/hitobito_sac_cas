@@ -41,8 +41,8 @@ class Export::BackupMitgliederExportJob < BaseJob
   # returns both paths in group directory AND sektion directory unless they are identical
   def file_paths
     [
-      "#{sektion.navision_id}/Adressen_#{group.navision_id_padded}.csv",
-      "#{group.navision_id}/Adressen_#{group.navision_id_padded}.csv"
+      "#{sektion.navision_id}/Adressen_#{group.id_padded}.csv",
+      "#{group.navision_id}/Adressen_#{group.id_padded}.csv"
     ].uniq
   end
 
