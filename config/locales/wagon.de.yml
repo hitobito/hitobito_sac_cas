@@ -1302,7 +1302,7 @@ de:
         closed: Abschliessen
         closed_confirm_text: >-
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen.
-          Für alle Anmeldungen im Status Nicht erschienen wird eine Annulationskostenrechnung 100% erzeugt.
+          Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
       state_back_buttons:
         assignment_closed: Zurück zur Zuteilung
@@ -1475,10 +1475,10 @@ de:
     course_participation:
       no_invoice_possible: "Diese/r Teilnehmer/in erhält keine Rechnung."
     course_annulation:
-      title: Annulationskostenrechnung
+      title: Annullationskostenrechnung
       processing_fee: Bearbeitungsgebühr
       cancellation_costs: "%{percentage}% Annullationskosten"
-      custom_cancellation_costs: Annulationskosten
+      custom_cancellation_costs: Annullationskosten
     sac_memberships:
       title: Mitgliedschaftsrechnung %{year}
       positions:
