@@ -18,7 +18,7 @@ module TableDisplays::People
     end
 
     def required_model_includes(attr)
-      [:roles_unscoped]
+      [:roles_with_ended_readable]
     end
 
     def render(attr)
@@ -38,7 +38,7 @@ module TableDisplays::People
     end
 
     def membership_roles(person)
-      person.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+      person.roles_with_ended_readable.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
     end
 
     def terminated_role(person)

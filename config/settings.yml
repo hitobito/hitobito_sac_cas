@@ -54,6 +54,7 @@ people:
       enabled: false
   family_members:
     enabled: false
+  ended_roles_readable_for: <%= 1.year %>
 
 social_account:
   predefined_labels:
@@ -64,6 +65,7 @@ social_account:
     - Webseite
     - Webseite Jugend
     - Andere
+
 
 phone_number:
   predefined_labels:

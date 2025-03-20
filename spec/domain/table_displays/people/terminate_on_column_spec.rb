@@ -40,15 +40,28 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
     }
   end
 
-  context "with ended roles" do
+  context "with recently ended roles" do
     before do
-      create_membership_role(2.years.ago, 1.years.ago)
+      create_membership_role(2.years.ago, 11.months.ago)
     end
 
     it_behaves_like "table display", {
       column: :terminate_on,
       header: "Austrittsdatum",
-      value: I18n.l(1.year.ago.to_date),
+      value: I18n.l(11.months.ago.to_date),
+      permission: :show_full
+    }
+  end
+
+  context "with long ago ended roles" do
+    before do
+      create_membership_role(10.years.ago, 5.years.ago)
+    end
+
+    it_behaves_like "table display", {
+      column: :terminate_on,
+      header: "Austrittsdatum",
+      value: "",
       permission: :show_full
     }
   end
@@ -56,13 +69,13 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
   context "with multiple ended roles" do
     before do
       create_membership_role(11.years.ago, 10.years.ago)
-      create_membership_role(6.years.ago, 5.years.ago)
+      create_membership_role(6.years.ago, 5.months.ago)
     end
 
     it_behaves_like "table display", {
       column: :terminate_on,
       header: "Austrittsdatum",
-      value: I18n.l(5.year.ago.to_date),
+      value: I18n.l(5.months.ago.to_date),
       permission: :show_full
     }
   end
