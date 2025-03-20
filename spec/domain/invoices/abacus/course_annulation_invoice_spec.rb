@@ -108,7 +108,7 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
 
       it "creates position with 100% cancellation costs" do
         subject.instance_variable_set(:@custom_price, 500)
-        expect(position.name).to eq("Annulationskosten - Einstiegskurs")
+        expect(position.name).to eq("Annullationskosten - Einstiegskurs")
         expect(position.amount).to eq(500)
       end
     end
