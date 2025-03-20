@@ -52,7 +52,7 @@ class Event::Courses::MailDispatchesController < ApplicationController
   def leader_participations
     @leader_participations ||= course.participations
       .joins(:roles)
-      .where(roles: {type: Event::Course::Role::Leader.sti_name})
+      .where(roles: {type: Event::Course::LEADER_ROLES})
       .distinct_on(:id)
   end
 
