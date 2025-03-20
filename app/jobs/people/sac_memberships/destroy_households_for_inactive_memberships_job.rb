@@ -9,7 +9,7 @@ module People
   module SacMemberships
     class DestroyHouseholdsForInactiveMembershipsJob < RecurringJob
       def next_run
-        Time.current.tomorrow.change(hour: 0, min: 8)
+        Time.current.tomorrow.at_beginning_of_day.change(hour: 0, min: 8).in_time_zone
       end
 
       def perform_internal
