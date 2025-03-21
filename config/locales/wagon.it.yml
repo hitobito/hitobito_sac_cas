@@ -1323,8 +1323,7 @@ it:
         assignment_closed: Finalizzare l’assegnazione
         ready: Pronto per lo svolgimento
         closed: Finalizzare
-        closed_confirm_text: >-
-          Con la finalizzazione, tutte le registrazioni con stato Convocato passano allo stato Partecipato. Per tutte le registrazioni con stato Nullo viene emessa una fattura per i costi di cancellazione al 100%.
+        closed_confirm_text: >
         canceled: Cancellazioni
       state_back_buttons:
         assignment_closed: Tornare all’assegnazione
@@ -1482,7 +1481,7 @@ it:
     course_participation:
       no_invoice_possible: "Questo/a partecipante non riceve alcuna fattura."
     course_annulation:
-      title: Fattura per i costi di cancellazione
+      title: ""
       processing_fee: Quota di elaborazione
       cancellation_costs: "%{percentage}% costi di cancellazione"
       custom_cancellation_costs: ""

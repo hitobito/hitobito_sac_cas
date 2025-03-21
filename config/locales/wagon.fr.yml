@@ -1325,8 +1325,7 @@ fr:
         assignment_closed: Finaliser l’attribution
         ready: Prêt pour la réalisation
         closed: Finaliser
-        closed_confirm_text: >-
-          La finalisation fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d’annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
+        closed_confirm_text: >
         canceled: Annulations
       state_back_buttons:
         assignment_closed: Retour à l’attribution
@@ -1488,7 +1487,7 @@ fr:
     course_participation:
       no_invoice_possible: "Ce·tte participant·e ne reçoit pas de facture."
     course_annulation:
-      title: Calcul des frais d’annulation
+      title: ""
       processing_fee: Frais de traitement
       cancellation_costs: "%{percentage}% de frais d’annulation"
       custom_cancellation_costs: ""
