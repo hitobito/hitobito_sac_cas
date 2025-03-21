@@ -113,8 +113,7 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today, end_on: end_of_year, beitragskategorie: nil)
-    attributes = {group: group, person: person, end_on: end_on, start_on: start_on}
-    attributes[:beitragskategorie] = beitragskategorie if beitragskategorie
+    attributes = {group: group, person: person, end_on: end_on, start_on: start_on, beitragskategorie: beitragskategorie}.compact
     role_type.create!(attributes)
   end
 
