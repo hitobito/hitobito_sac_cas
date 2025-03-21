@@ -48,8 +48,8 @@ describe Event::Courses::MailDispatchesController do
       it "sends leader reminder emails only to leader roles" do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :leader_reminder}
-        end.to have_enqueued_mail(Event::LeaderReminderMailer, :reminder).exactly(1).times
-        expect(flash[:notice]).to eq("Es wurde eine E-Mail verschickt.")
+        end.to have_enqueued_mail(Event::LeaderReminderMailer, :reminder).exactly(2).times
+        expect(flash[:notice]).to eq("Es wurden 2 E-Mails verschickt.")
       end
 
       [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :closed, :canceled].each do |state|
