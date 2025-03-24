@@ -32,7 +32,7 @@ describe SacCas::Export::MitgliederExportJob do
 
     expect(summary_line).to eq(
       "* * * Dateiende * * * / " \
-      "#{group.navision_id_padded} / " \
+      "#{group.id_padded} / " \
       "Anzahl Datensätze: 4 / " \
       "#{Time.zone.now.strftime("%d.%m.%Y")} / " \
       "#{Time.zone.now.strftime("%H:%M")}".encode("ISO-8859-1")
@@ -75,6 +75,6 @@ describe SacCas::Export::MitgliederExportJob do
 
   it "file name" do
     job.perform
-    expect(file.filename).to eq("Adressen_#{group.navision_id_padded}.csv")
+    expect(file.filename).to eq("Adressen_#{group.id_padded}.csv")
   end
 end

@@ -37,8 +37,8 @@ describe Export::Tabular::People::SacRecipientRow do
   it("zip_code") { expect(value(:zip_code)).to eq "4242" }
   it("town") { expect(value(:town)).to eq "Musterhausen" }
   it("email") { expect(value(:email)).to eq "hans.muster@example.com" }
-  it("layer_navision_id") do
-    expect(value(:layer_navision_id)).to eq groups(:bluemlisalp).navision_id
+  it("layer_id") do
+    expect(value(:layer_id)).to eq groups(:bluemlisalp).id
   end
 
   describe "#country" do
