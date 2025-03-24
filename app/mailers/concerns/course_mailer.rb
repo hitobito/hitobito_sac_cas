@@ -56,6 +56,18 @@ module CourseMailer
       group_event_url(group_id: @course.group_ids.first, id: @course.id))
   end
 
+  def placeholder_event_start
+    I18n.l(@course.start_at.to_date)
+  end
+
+  def placeholder_event_finish
+    I18n.l(@course.finish_at.to_date)
+  end
+
+  def placeholder_participation_additional_information
+    @participation.additional_information
+  end
+
   # See https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112
   def placeholder_event_details
     info = []

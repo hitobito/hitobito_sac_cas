@@ -208,6 +208,10 @@ module SacCas::Event::Course
     dates.first.start_at
   end
 
+  def finish_at
+    dates.last.finish_at
+  end
+
   def minimum_age
     read_attribute(:minimum_age)
   end
