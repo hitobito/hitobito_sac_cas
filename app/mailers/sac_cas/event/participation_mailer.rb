@@ -13,6 +13,12 @@ module SacCas::Event::ParticipationMailer
   REJECT_REJECTED_PARTICIPATION = "event_participation_reject_rejected"
   SUMMONED_PARTICIPATION = "event_participation_summon"
 
+  def confirmation(participation)
+    @course = participation.event
+
+    super
+  end
+
   def reject_applied(participation)
     compose_email(participation, REJECT_APPLIED_PARTICIPATION)
   end

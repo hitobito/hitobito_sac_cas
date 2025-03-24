@@ -57,11 +57,11 @@ module CourseMailer
   end
 
   def placeholder_event_start
-    I18n.l(@course.start_at.to_date)
+    @course.start_at&.to_date&.then { |date| I18n.l(date) }
   end
 
   def placeholder_event_finish
-    I18n.l(@course.finish_at.to_date)
+    @course.finish_at&.to_date&.then { |date| I18n.l(date) }
   end
 
   def placeholder_participation_additional_information
@@ -71,6 +71,7 @@ module CourseMailer
   # See https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112
   def placeholder_event_details
     info = []
+    info << @course.name
     info << labeled(:dates) { join_lines(@course.dates.map(&:to_s)) }
     info << labeled(:motto)
     info << labeled(:cost)
