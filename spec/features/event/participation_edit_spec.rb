@@ -10,7 +10,7 @@ require "spec_helper"
 describe "participation edit page", :js do
   let(:person) { people(:admin) }
   let(:event) { Fabricate(:sac_open_course, state: nil) }
-  let(:participation) { Fabricate(:event_participation, event:, person:, application_id: -1) }
+  let(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied), application_id: -1) }
   let(:participation_path) { edit_group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id) }
 
   before { sign_in(person) }
@@ -39,7 +39,7 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(nil)
     end
 
@@ -53,7 +53,7 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(20)
     end
 
@@ -68,7 +68,7 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.not_to change { participation.reload.price }
     end
 
@@ -82,7 +82,7 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Anna Admin in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(15)
     end
 
@@ -93,6 +93,15 @@ describe "participation edit page", :js do
         expect(page).to have_css("option", text: "J&S P-Mitgliederpreis CHF 10.00")
         expect(page).to have_css("option", text: "J&S P-Normalpreis CHF 20.00")
       end
+    end
+  end
+
+  context "edit her own participation" do
+    let(:person) { people(:mitglied) }
+
+    it "does not show price field" do
+      visit participation_path
+      expect(page).to have_no_text "Preis"
     end
   end
 end

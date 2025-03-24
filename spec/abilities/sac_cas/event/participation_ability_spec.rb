@@ -164,6 +164,17 @@ describe Event::ParticipationAbility do
       end
     end
 
+    describe "update" do
+      it "may not update others" do
+        expect(subject).not_to be_able_to(:update, participation)
+      end
+
+      it "may update her own" do
+        participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
+        expect(subject).to be_able_to(:update, participation)
+      end
+    end
+
     describe "destroy" do
       it "may not destroy others" do
         expect(subject).not_to be_able_to(:destroy, participation)

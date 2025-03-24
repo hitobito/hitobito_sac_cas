@@ -12,7 +12,7 @@ module SacCas::Event::ParticipationAbility
     on(Event::Participation) do
       permission(:any).may(:edit_actual_days).for_participations_full_events
 
-      permission(:any).may(:cancel).her_own
+      permission(:any).may(:cancel, :update).her_own
       permission(:any).may(:assign, :summon).none
       permission(:any).may(:absent, :attend).for_participations_full_events
 
