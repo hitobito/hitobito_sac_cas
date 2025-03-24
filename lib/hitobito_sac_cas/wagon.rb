@@ -112,6 +112,7 @@ module HitobitoSacCas
       Ability.store.register Memberships::UndoTerminationAbility
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
+      EventAbility.prepend SacCas::EventAbility
       GroupAbility.prepend SacCas::GroupAbility
       MailingListAbility.prepend SacCas::MailingListAbility
       PersonAbility.prepend SacCas::PersonAbility
