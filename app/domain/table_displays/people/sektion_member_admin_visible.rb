@@ -9,8 +9,15 @@ module TableDisplays::People
   module SektionMemberAdminVisible
     # Allow Sektions Admin to view tables even though person no longer
     # has an active role in that sektion
+    #
+    # Since https://github.com/hitobito/hitobito/commit/80aa972cd6f8f26342d0318099b034c592462145
+    # this could in theory also be achieved using standard ability checks (as ended roles are taken
+    # into account) but as Group::SektionsFunktionaere::Mitgliederverwaltung has no permissions at
+    # all we stick with this solution
+
+    # this required_model_includes could be removed if we relied solely on our abilities
     def required_model_includes(_attr)
-      super + [roles_unscoped: :group]
+      super + ((@model_class == Person) ? [roles_unscoped: :group] : [person: {roles_unscoped: :group}])
     end
 
     private
