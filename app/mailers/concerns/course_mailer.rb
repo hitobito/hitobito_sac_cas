@@ -57,11 +57,17 @@ module CourseMailer
   end
 
   def placeholder_event_start
-    @course.start_at&.to_date&.then { |date| I18n.l(date) }
+    format_date(@course.start_at)
   end
 
   def placeholder_event_finish
-    @course.finish_at&.to_date&.then { |date| I18n.l(date) }
+    format_date(@course.finish_at)
+  end
+
+  def format_date(date)
+    return unless date
+
+    I18n.l(date.to_date)
   end
 
   def placeholder_participation_additional_information
