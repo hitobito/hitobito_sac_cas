@@ -22,6 +22,8 @@ module SacCas::Event::ParticipationBanner
   end
 
   def can_destroy?
+    return super if stateless?
+
     can?(:cancel, @user_participation) && @user_participation.participant_cancelable? &&
       Event::ParticipationButtons.conditions[:cancel].include?(@user_participation.state.to_sym)
   end
@@ -32,10 +34,14 @@ module SacCas::Event::ParticipationBanner
   end
 
   def status_text
+    return super if stateless?
+
     t(@user_participation.state, scope: "event.participations.states")
   end
 
   def status_class
+    return super if stateless?
+
     alert_class = {
       assigned: :success,
       attended: :success,
@@ -50,4 +56,6 @@ module SacCas::Event::ParticipationBanner
 
     "alert alert-#{alert_class}"
   end
+
+  def stateless? = @user_participation.state.blank?
 end
