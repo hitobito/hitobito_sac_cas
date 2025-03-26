@@ -413,7 +413,7 @@ describe Event::ParticipationsController do
           id: participation.id,
           event_participation: {price_category: "price_regular"}
         }
-      end.to raise_error(CanCan::AccessDenied)
+      end.not_to change(participation, :price)
     end
   end
 
