@@ -20,12 +20,6 @@ module SacCas::Event::ParticipationsController
     after_summon :enqueue_invoice_job
     after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
     before_cancel :assert_participant_cancelable?
-
-    def update
-      raise CanCan::AccessDenied if permitted_params[:price_category].present? && entry.person_id == current_user.id
-
-      super
-    end
   end
 
   def cancel
@@ -74,6 +68,8 @@ module SacCas::Event::ParticipationsController
   end
 
   def calculate_price(permitted)
+    permitted.delete(:price_category) if entry.person_id == current_user.id
+
     price_category = permitted[:price_category]
     if entry.new_record? && !params[:for_someone_else]
       permitted[:subsidy] = false unless entry.subsidizable?
