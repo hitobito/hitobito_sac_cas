@@ -149,9 +149,8 @@ describe Wizards::Signup::SektionOperation do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
       let(:invoice) { ExternalInvoice::SacMembership.last }
 
-      before { groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy! }
-
       it "does not create invoice but enqueues job and confirmation email" do
+        groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
@@ -167,7 +166,14 @@ describe Wizards::Signup::SektionOperation do
         expect(invoice.year).to eq(Date.current.year)
       end
 
+      it "does send confirmation mail when layer has deleted group requiring approval" do
+        groups(:bluemlisalp_neuanmeldungen_sektion).destroy!
+        expect { operation.save! }
+          .to have_enqueued_mail(Signup::SektionMailer, :confirmation).exactly(:once)
+      end
+
       it "#save! creates invoice and starts job" do
+        groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
         travel_to(Date.new(2024, 6, 20)) do
           operation.save!
           expect(invoice.issued_at).to eq(Date.current)
