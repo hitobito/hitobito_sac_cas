@@ -400,6 +400,23 @@ describe Event::ParticipationsController do
     end
   end
 
+  context "PUT #update" do
+    let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+
+    before { sign_in(user) }
+
+    it "raises access denied when trying to update own price" do
+      expect do
+        put :update, params: {
+          group_id: event.groups.first.id,
+          event_id: event.id,
+          id: participation.id,
+          event_participation: {price_category: "price_regular"}
+        }
+      end.to raise_error(CanCan::AccessDenied)
+    end
+  end
+
   context "state changes" do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:params) { {group_id: group.id, event_id: event.id, id: participation.id} }

@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
 
-- if @event.course?
+- if entry.person != current_person && @event.course?
   = f.labeled(Event::Participation.human_attribute_name(:price)) do
     = f.select(:price_category, *entry.event_prices, {class: 'form-select form-select-sm'})
 
