@@ -44,7 +44,7 @@ module SacCas::Event::ParticipationDecorator
   end
 
   def event_leader?
-    roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
+    roles.exists?(type: Event::Course::LEADER_ROLES)
   end
 
   def t(key, **)
