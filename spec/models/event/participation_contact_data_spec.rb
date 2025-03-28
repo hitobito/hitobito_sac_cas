@@ -38,7 +38,7 @@ describe Event::ParticipationContactData do
       contact_data = build(attrs)
       expect(contact_data).not_to be_valid
       expect(contact_data.errors.full_messages).to eq [
-        "Telefonnummer muss ausgefüllt werden"
+        "Mindestens eine Telefonnummer muss aufgefüllt werden"
       ]
     end
 
