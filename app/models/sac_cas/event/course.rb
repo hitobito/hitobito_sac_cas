@@ -175,25 +175,12 @@ module SacCas::Event::Course
     validates :canceled_reason, presence: {if: -> { state_changed_to?(:canceled) }}
 
     delegate :level, to: :kind, allow_nil: true
+  end
 
-    def total_event_days
-      @total_event_days ||= begin
-        total_event_days = dates.map(&:duration).sum(&:days)
-        total_event_days -= 0.5 if start_point_of_time.to_sym == :evening
-        total_event_days
-      end
-    end
-
-    private
-
-    def update_attended_participants_state
-      participations.where(state: :summoned).find_each do |participation|
-        participation.update(state: :attended)
-      end
-    end
-
-    def update_assigned_participants_state
-      # do nothing
+  # This would be defined in Events::State, but is required again here because this module is prepended.
+  module ClassMethods
+    def possible_states
+      @possible_states ||= state_transitions.keys.map(&:to_s)
     end
   end
 
@@ -217,14 +204,36 @@ module SacCas::Event::Course
   end
 
   def default_participation_state(participation, for_someone_else = false)
-    return "unconfirmed" if super == "applied" && (places_available? && !automatic_assignment?)
+    if participation.application.blank? || for_someone_else
+      "assigned"
+    elsif places_available? && !automatic_assignment?
+      "unconfirmed"
+    else
+      "applied"
+    end
+  end
 
-    super
+  def total_event_days
+    @total_event_days ||= begin
+      total_event_days = dates.map(&:duration).sum(&:days)
+      total_event_days -= 0.5 if start_point_of_time.to_sym == :evening
+      total_event_days
+    end
   end
 
   private
 
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)
+  end
+
+  def update_attended_participants_state
+    participations.where(state: :summoned).find_each do |participation|
+      participation.update(state: :attended)
+    end
+  end
+
+  def update_assigned_participants_state
+    # do nothing
   end
 end

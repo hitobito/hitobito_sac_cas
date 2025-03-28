@@ -29,6 +29,9 @@ Rails.application.routes.draw do
       resources :yearly_membership_invoices, only: [:create, :new], module: :people
 
       resources :events, only: [] do
+        collection do
+          get 'tour' => 'events#index', type: 'Event::Tour'
+        end
         scope module: "event" do
           resource :key_data_sheets, only: [:create], module: :courses
           resource :mail_dispatch, only: [:create], module: :courses

@@ -64,7 +64,7 @@ module SacCas::Event::ParticipationsController
 
   def permitted_params
     super.tap do |permitted|
-      calculate_price(permitted)
+      calculate_price(permitted) if @event.course?
     end
   end
 

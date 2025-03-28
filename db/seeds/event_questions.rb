@@ -26,3 +26,23 @@ Event::Question.seed_global({
     {locale: :it, question: "Contatto di emergenza 2 - Nome e numero di telefono"}
   ]
 })
+
+Event::Question.seed_global({
+  disclosure: :required,
+  event_type: Event::Tour.sti_name,
+  translation_attributes: [
+    {locale: :de, question: "Notfallkontakt 1 - Name und Telefonnummer"},
+    {locale: :fr, question: "Contact d'urgence 1 - Nom et Numéro de téléphone"},
+    {locale: :it, question: "Contatto di emergenza 1 - Nome e numero di telefono"}
+  ]
+})
+
+Event::Question.seed_global({
+  disclosure: :optional,
+  event_type: Event::Tour.sti_name,
+  translation_attributes: [
+    {locale: :de, question: "Notfallkontakt 2 - Name und Telefonnummer"},
+    {locale: :fr, question: "Contact d'urgence 2 - Nom et Numéro de téléphone"},
+    {locale: :it, question: "Contatto di emergenza 2 - Nome e numero di telefono"}
+  ]
+})

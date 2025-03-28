@@ -8,6 +8,48 @@
 require Rails.root.join("db", "seeds", "support", "event_seeder")
 
 class SacEventSeeder < EventSeeder
+  def seed_event(group_id, type)
+    values = event_values(group_id)
+    case type
+    when :course then seed_course(values)
+    when :tour then seed_tour(values)
+    when :base then seed_base_event(values)
+    end
+  end
+
+  def seed_tour(values)
+    attrs = tour_attributes(values)
+    event = Event::Tour
+      .joins(:groups)
+      .where(groups: {id: values[:group_ids]})
+      .find_or_initialize_by(name: attrs[:name])
+    event.attributes = attrs
+    event.save(validate: false)
+
+    date = values[:application_opening_at] + rand(180).days
+    Event::Date.seed(:event_id, :start_at, {
+      event_id: event.id,
+      start_at: date,
+      finish_at: date + rand(2).days
+    })
+    seed_questions(event)
+    seed_leaders(event)
+    seed_participants(event)
+
+    event
+  end
+
+  def tour_attributes(values)
+    values.merge({
+      name: Faker::Mountain.name,
+      state: Event::Tour.possible_states.sample,
+      automatic_assignment: true,
+      priorization: false,
+      requires_approval: false,
+      external_applications: true
+    })
+  end
+
   def course_attributes(values)
     super.merge(
       cost_center: CostCenter.first,
@@ -15,6 +57,9 @@ class SacEventSeeder < EventSeeder
       language: :de,
       season: Event::Kind::SEASONS.sample,
       start_point_of_time: :day,
+      automatic_assignment: true,
+      priorization: false,
+      requires_approval: false,
       contact_id: Person.last.id,
       price_member: 10,
       price_regular: 20,
@@ -30,6 +75,14 @@ class SacEventSeeder < EventSeeder
       else
         question.update(disclosure: :optional)
       end
+    end
+  end
+
+  def seed_participation(event)
+    super.tap do |participation|
+      attrs = {state: event.possible_participation_states.sample}
+      attrs[:canceled_at] = rand(100).days.ago if attrs[:state] == "canceled"
+      participation.update!(attrs)
     end
   end
 

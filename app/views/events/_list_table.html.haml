@@ -3,10 +3,14 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito.
 
+- if params[:type] == "Event::Tour"
+  .alert.alert-warning
+    Die Touren befinden sich noch in Entwicklung und dürfen nur von geschulten Benutzer*innen verwendet werden.
+
 = crud_table do |t|
   - t.col(t.sort_header(:name)) do |e|
     %strong= link_to e.name, group_event_path(e.groups.first, e)
-  - t.sortable_attr(:number)
+  - t.sortable_attr(:number) if params[:type] == "Event::Course"
   - t.sortable_attr(:dates_full)
   - t.sortable_attr(:state)
   - t.attr(:description_short, t.attr_header(:description))

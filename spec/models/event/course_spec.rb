@@ -361,7 +361,7 @@ describe Event::Course do
   end
 
   describe "when state changes to ready" do
-    let(:course) { events(:assignment_closed) }
+    let(:course) { events(:closed).tap { |c| c.update!(state: :assignment_closed) } }
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
     let(:leader) { @participations.first }
     let(:participant) { @participations.second }
