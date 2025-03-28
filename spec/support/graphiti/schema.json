@@ -1712,6 +1712,11 @@
           "readable": true,
           "description": null
         },
+        "tours_enabled": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
         "course_admin_email": {
           "type": "string",
           "readable": true,
