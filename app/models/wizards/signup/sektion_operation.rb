@@ -116,7 +116,7 @@ module Wizards::Signup
 
     def new_record? = person_attrs[:id].blank?
 
-    def no_approval_needed? = Group::SektionsNeuanmeldungenSektion.where(layer_group_id: role.group.layer_group_id).none?
+    def no_approval_needed? = role.group.layer_group.decorate.membership_admission_through_gs?
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!
