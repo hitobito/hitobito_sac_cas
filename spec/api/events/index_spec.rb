@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-RSpec.describe "event_levels#index", type: :request do
+RSpec.describe "events#index", type: :request do
   it_behaves_like "jsonapi authorized requests" do
     let!(:token) { service_tokens(:permitted_root_layer_token).token }
     let(:params) { {} }
@@ -52,9 +52,9 @@ RSpec.describe "event_levels#index", type: :request do
 
         expect(response.status).to eq(200), response.body
 
-        expect(json["data"].first["id"]).to eq(course.id.to_s)
-        expect(json["data"].first["relationships"]["leaders"]["data"].size).to eq(1)
-        expect(json["data"].first["relationships"]["leaders"]["data"].first["id"]).to eq(leader.id.to_s)
+        data = json["data"].find { |attrs| attrs["id"] == course.id.to_s }
+        expect(data["relationships"]["leaders"]["data"].size).to eq(1)
+        expect(data["relationships"]["leaders"]["data"].first["id"]).to eq(leader.id.to_s)
         expect(json["included"].first["id"]).to eq(leader.id.to_s)
       end
     end

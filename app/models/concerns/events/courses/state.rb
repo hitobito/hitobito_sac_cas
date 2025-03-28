@@ -8,17 +8,7 @@
 module Events::Courses::State
   extend ActiveSupport::Concern
 
-  # key: current state
-  # value: possible next state
-  SAC_COURSE_STATES =
-    {created: [:application_open],
-     application_open: [:application_paused, :created, :canceled],
-     application_paused: [:application_open],
-     application_closed: [:assignment_closed, :canceled],
-     assignment_closed: [:ready, :application_closed, :canceled],
-     ready: [:closed, :assignment_closed, :canceled],
-     canceled: [:application_open], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
-     closed: [:ready]}.freeze
+  include Events::State
 
   APPLICATION_OPEN_STATES = %w[application_open application_paused].freeze
 
@@ -30,11 +20,19 @@ module Events::Courses::State
   included do
     attr_accessor :inform_participants
 
-    self.possible_states = SAC_COURSE_STATES.keys.collect(&:to_s)
+    # key: current state
+    # value: array of possible next states
+    self.state_transitions = {
+      created: [:application_open],
+      application_open: [:application_paused, :created, :canceled],
+      application_paused: [:application_open],
+      application_closed: [:assignment_closed, :canceled],
+      assignment_closed: [:ready, :application_closed, :canceled],
+      ready: [:closed, :assignment_closed, :canceled],
+      canceled: [:application_open], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
+      closed: [:ready]
+    }.freeze
 
-    validate :assert_valid_state_change, if: :state_changed?, on: :update
-
-    before_create :set_default_state
     before_save :adjust_application_state
     after_update :send_application_published_email,
       if: -> { saved_change_to_state?(from: "created", to: "application_open") }
@@ -46,19 +44,6 @@ module Events::Courses::State
     after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
     after_update :send_canceled_email, if: -> { state_changed_to?(:canceled) && inform_participants? }
     after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
-  end
-
-  def available_states(state = self.state)
-    SAC_COURSE_STATES[state.to_sym]
-  end
-
-  def state_comes_before?(state1, state2)
-    states = SAC_COURSE_STATES.keys
-    states.index(state1.to_sym) < states.index(state2.to_sym)
-  end
-
-  def state_possible?(new_state)
-    available_states.any?(new_state.to_sym)
   end
 
   def send_canceled_email
@@ -82,21 +67,6 @@ module Events::Courses::State
   end
 
   private
-
-  def assert_valid_state_change
-    unless available_states(state_was).include?(state.to_sym)
-      errors.add(:state, "State cannot be changed from #{state_was} to #{state}")
-    end
-  end
-
-  def set_default_state
-    # Explicitly call self[:state].blank? because self.state is overridden in youth wagon to return first possible state if nil.
-    self.state = :created if self[:state].blank?
-  end
-
-  def state_changed_to?(new_state)
-    saved_change_to_state?(to: new_state.to_s)
-  end
 
   def notify_rejected_participants
     rejected_participants.each do |participation|

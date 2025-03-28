@@ -42,3 +42,7 @@ Fabricator(:sac_event_kind_category, from: :event_kind_category) do
   cost_center_id { ActiveRecord::FixtureSet.identify(:tour) }
   cost_unit_id { ActiveRecord::FixtureSet.identify(:ski) }
 end
+
+Fabricator(:sac_tour, from: :event, class_name: :"Event::Tour") do
+  groups { [Group.all_types.detect { |t| t.event_types.include?(Event::Tour) }.first] }
+end

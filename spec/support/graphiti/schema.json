@@ -1097,6 +1097,269 @@
       }
     },
     {
+      "name": "Event::TourResource",
+      "type": "tours",
+      "graphql_entrypoint": "tours",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "group_ids": {
+          "type": "array_of_integers",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "type": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "kind_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "name": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_conditions": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "motto": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "cost": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "location": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_opening_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_closing_at": {
+          "type": "date",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "application_contact_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "external_application_link": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "maximum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "created_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "updated_at": {
+          "type": "datetime",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "state": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "applicant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "participant_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_participants": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "teamer_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+      },
+      "sorts": {
+        "id": {
+        }
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "kind_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "updated_at": {
+          "type": "datetime",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "operators": [
+            "eq"
+          ]
+        },
+        "group_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
+        },
+        "before_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "after_or_on": {
+          "type": "date",
+          "operators": [
+            "eq"
+          ],
+          "single": true
+        },
+        "kind_category_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "level_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq"
+          ]
+        },
+        "state": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        }
+      },
+      "relationships": {
+        "contact": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "PersonResource"
+        },
+        "kind": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::KindResource"
+        },
+        "dates": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::DateResource"
+        },
+        "leaders": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Person::NameResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "EventResource",
       "type": "events",
       "graphql_entrypoint": "events",
@@ -1311,7 +1574,8 @@
       "polymorphic": true,
       "children": [
         "EventResource",
-        "Event::CourseResource"
+        "Event::CourseResource",
+        "Event::TourResource"
       ]
     },
     {
@@ -1708,6 +1972,11 @@
           "description": null
         },
         "mitglied_termination_by_section_only": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        },
+        "tours_enabled": {
           "type": "string",
           "readable": true,
           "description": null
