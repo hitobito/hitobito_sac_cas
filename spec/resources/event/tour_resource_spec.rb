@@ -8,45 +8,25 @@
 
 require "spec_helper"
 
-describe Event::CourseResource, type: :resource do
-  let(:event) { events(:top_course) }
+describe Event::TourResource, type: :resource do
+  let(:event) { events(:section_tour) }
   let(:person) { people(:admin) }
-  let(:additional_attrs) do
-    [
-      :language,
-      :accommodation,
-      :season,
-      :start_point_of_time,
-      :minimum_age,
-      :link_external_site,
-      :brief_description,
-      :specialities,
-      :similar_tours,
-      :program,
-      :price_member,
-      :price_regular,
-      :price_subsidized,
-      :price_special
-    ]
-  end
 
-  it "includes additional attributes" do
+  it "includes attributes" do
     render
     data = jsonapi_data[0]
-    attrs = data.attributes.symbolize_keys
-    additional_attrs.each do |attr|
-      expect(attrs).to have_key(attr)
-    end
+    expect(data["name"]).to eq("Bundstock")
+    expect(data["state"]).to eq("published")
   end
 
   it "includes leaders" do
     leader = people(:tourenchef)
     participation = event.participations.create!(person: leader, active: true)
-    Event::Course::Role::Leader.create!(participation: participation)
+    Event::Role::Leader.create!(participation: participation)
 
     params[:include] = "leaders"
     render
-    data = jsonapi_data[1]
+    data = jsonapi_data[0]
     leaders = data.sideload(:leaders)
     expect(leaders.size).to eq(1)
     expect(leaders.first.id).to eq(leader.id)

@@ -9,5 +9,6 @@ SeedFu.quiet = true
 
 SeedFu.seed [
   Rails.root.join("db", "seeds"),
+  HitobitoYouth::Wagon.root.join("db", "seeds"),
   HitobitoSacCas::Wagon.root.join("db", "seeds")
 ]

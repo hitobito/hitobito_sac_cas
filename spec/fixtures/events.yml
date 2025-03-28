@@ -15,7 +15,7 @@ top_course:
   language: de
   external_applications: true
 
-closed: &closed
+closed:
   groups: root
   type: Event::Course
   kind: ski_course
@@ -34,7 +34,8 @@ closed: &closed
   price_member: 10
   price_regular: 20
 
-assignment_closed:
-  <<: *closed
-  number: 102
-  state: assignment_closed
+section_tour:
+  groups: bluemlisalp
+  type: Event::Tour
+  state: published
+  external_applications: true

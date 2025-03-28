@@ -5,7 +5,9 @@
 
 - entry.used?(:minimum_age) do
   = f.labeled_input_field(:minimum_age)
-
-= f.labeled_input_field(:maximum_age)
-= f.labeled_input_field(:ideal_class_size)
-= f.labeled_input_field(:maximum_class_size)
+- entry.used?(:maximum_age) do
+  = f.labeled_input_field(:maximum_age)
+- entry.used?(:ideal_class_size) do
+  = f.labeled_input_field(:ideal_class_size)
+- entry.used?(:maximum_class_size) do
+  = f.labeled_input_field(:maximum_class_size)

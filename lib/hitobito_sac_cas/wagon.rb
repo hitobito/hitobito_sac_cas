@@ -147,7 +147,7 @@ module HitobitoSacCas
       RoleResource.include SacCas::RoleResource
       Event::CourseResource.include SacCas::Event::CourseResource
       Event::KindResource.include SacCas::Event::KindResource
-      Person::NameResource.course_leader_roles = [Event::Course::Role::Leader]
+      Person::NameResource.course_leader_roles = [Event::Role::Leader, Event::Course::Role::Leader]
 
       ## Helpers
       Changelogs::FooterLinkBuilder.prepend SacCas::Changelogs::FooterLinkBuilder
@@ -162,6 +162,7 @@ module HitobitoSacCas
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
       Dropdown::Event::Participation::MailDispatch.prepend SacCas::Dropdown::Event::Participation::MailDispatch
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
+      Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 

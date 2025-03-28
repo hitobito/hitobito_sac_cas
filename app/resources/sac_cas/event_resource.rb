@@ -9,6 +9,12 @@ module SacCas::EventResource
   extend ActiveSupport::Concern
 
   included do
+    self.polymorphic = [
+      "EventResource",
+      "Event::CourseResource",
+      "Event::TourResource"
+    ]
+
     filter :level_id, :integer, only: [:eq, :not_eq] do
       eq { |scope, level_ids| scope.select("events.*").joins(:kind).where(kind: {level_id: level_ids}) }
       not_eq { |scope, level_ids| scope.select("events.*").joins(:kind).where.not(kind: {level_id: level_ids}) }

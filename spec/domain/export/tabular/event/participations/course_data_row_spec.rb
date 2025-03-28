@@ -31,8 +31,8 @@ describe Export::Tabular::Event::Participations::CourseDataRow do
 
   it("event_number") { expect(value(:event_number)).to eq "10" }
   it("event_dates_locations") { expect(value(:event_dates_locations)).to eq "Bern, Zurich" }
-  it("event_first_date") { expect(value(:event_first_date)).to eq event_dates(:first).start_at.strftime("%d.%m.%Y %H:%M") }
-  it("event_last_date") { expect(value(:event_last_date)).to eq event_dates(:first_two).finish_at.strftime("%d.%m.%Y %H:%M") }
+  it("event_first_date") { expect(value(:event_first_date)).to eq event_dates(:top_course_first).start_at.strftime("%d.%m.%Y %H:%M") }
+  it("event_last_date") { expect(value(:event_last_date)).to eq event_dates(:top_course_second).finish_at.strftime("%d.%m.%Y %H:%M") }
   it("person_id") { expect(value(:person_id)).to eq 600001 }
   it("person_gender") { expect(value(:person_gender)).to eq "weiblich" }
   it("person_last_name") { expect(value(:person_last_name)).to eq "Hillary" }

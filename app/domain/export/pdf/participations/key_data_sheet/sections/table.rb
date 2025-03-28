@@ -10,6 +10,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
   ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS = [50, 70]
 
+  delegate :event, :person, :roles, to: :@model
+
   def render
     table(table_data)
   end
@@ -56,7 +58,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def event_dates_durations
-    event_dates.map do |date|
+    event.dates.map do |date|
       [localize_date(date.start_at.to_date), localize_date(date.finish_at&.to_date)].join(" - ")
     end.join("\n")
   end
@@ -70,7 +72,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     table_width = bounds.width - FIRST_COLUMN_WIDTH
 
     column_widths = [table_width - COMPENSATION_SUBTABLE_COLUMN_WIDTHS.sum] + COMPENSATION_SUBTABLE_COLUMN_WIDTHS
-    event_days = (rate.course_compensation_category.kind == :day) ? total_event_days : 1
+    event_days = (rate.course_compensation_category.kind == :day) ? event.total_event_days : 1
     ["",
       make_subtable([[compensation_category_name(rate),
         event_days,
@@ -115,7 +117,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def event_dates_locations
-    event_dates.pluck(:location).join("\n")
+    event.dates.pluck(:location).join("\n")
   end
 
   def accommodation
@@ -125,35 +127,11 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def participation_leader_type
-    if @model.roles.any? { _1.is_a?(Event::Course::Role::Leader) }
+    if roles.any? { _1.is_a?(Event::Course::Role::Leader) }
       :leader
     else
       :assistant_leader
     end
-  end
-
-  def event_dates
-    @event_dates ||= event.dates.order(start_at: :asc)
-  end
-
-  def total_event_days
-    @total_event_days ||= begin
-      total_event_days = event.dates.sum { _1.duration.days }
-      total_event_days -= 0.5 if event.start_point_of_time == :evening
-      total_event_days
-    end
-  end
-
-  def event_start_at
-    @event_start_at ||= event.dates.order(start_at: :asc).first.start_at
-  end
-
-  def event
-    @event ||= @model.event
-  end
-
-  def person
-    @person ||= @model.person
   end
 
   def t(key, options = {})

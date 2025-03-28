@@ -23,6 +23,7 @@ de:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
+    title_event/tour: Tour
 
   settings:
     email:
@@ -365,6 +366,24 @@ de:
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Selbständig erwerbend
+      event/tour:
+        state_translated: Status
+        states:
+          draft: Entwurf
+          approved: Freigeben
+          published: Publiziert
+          closed: Abgeschlossen
+          canceled: Abgesagt
+        participation_states:
+          tentative: Provisorisch
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          annulled: Annulliert
+          rejected: Abgelehnt
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       external_training:
         person: Person
         event_kind: Kursart
@@ -441,6 +460,7 @@ de:
           IT: Italiano
         section_offerings: Sektionsangebote
         mitglied_termination_by_section_only: Austritt nur durch Sektion
+        tours_enabled: Touren-Angebot für diese Sektion aktivieren
       group/ortsgruppe:
         foundation_year: Gründungsjahr
         section_canton: Kanton
@@ -449,6 +469,7 @@ de:
           DE: Deutsch
           FR: Français
           IT: Italiano
+        tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
       role:
         membership_years: Mitglieder-Jahre
         class:
@@ -591,18 +612,18 @@ de:
       event/level:
         one: Kursstufe
         other: Kursstufen
-      event/role/leader:
-        one: Kursleitung
-        other: Kursleitung
       event/role/assistant_leader:
-        one: Klassenleitung
-        other: Klassenleitung
+        one: Hilfsleitung
+        other: Hilfsleitung
       event/course/role/leader:
         one: Kursleitung
         other: Kursleitung
       event/course/role/assistant_leader:
         one: Klassenleitung
         other: Klassenleitung
+      event/tour:
+        one: Tour
+        other: Touren
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen
@@ -1317,7 +1338,13 @@ de:
         Folgende Felder werden übernommen: Beschreibung,
         Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
         Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger
+
+    global:
+      link:
+        add_event/tour: Tour erstellen
+
     maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
+
     roles:
       self_employed: selbständig erwerbend
       not_self_employed: unselbständig erwerbend
@@ -1614,8 +1641,8 @@ de:
 
   abo_magazin_invoices:
     create:
-        flash:
-          success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
+      flash:
+        success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
 
   people:
     abo_magazin_invoices:

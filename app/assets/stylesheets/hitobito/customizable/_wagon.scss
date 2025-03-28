@@ -12,6 +12,10 @@
   border-bottom: none !important;
 }
 
+.level + .nav-sub .active a {
+  font-weight: 500;
+}
+
 #membership-verify {
   header {
     flex-direction: row-reverse;
@@ -69,7 +73,7 @@
   .inner {
     padding: 5px;
     border: 1px solid #c6c7c8;
-    border-radius: 10px;  
+    border-radius: 10px;
   }
 }
 

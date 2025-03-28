@@ -30,11 +30,11 @@ closed_de:
   name: Tourenleiter/in 1 Winter
   description: Tourenleiter/in 1 Winter
 
-assignment_closed_de:
-  event_id: <%= ActiveRecord::FixtureSet.identify(:assignment_closed) %>
+section_tour_de:
+  event_id: <%= ActiveRecord::FixtureSet.identify(:section_tour) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
   updated_at: 2023-05-09 13:28:24 +0200
 
-  name: Tourenleiter/in 1 Winter
-  description: Tourenleiter/in 1 Winter
+  name: Bundstock
+  description: Winterzauber im wunderschönen Kiental

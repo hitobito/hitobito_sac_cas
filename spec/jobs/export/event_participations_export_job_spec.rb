@@ -6,7 +6,7 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp), params.merge(filename: filename)) }
+  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp).id, params.merge(filename: filename)) }
 
   let!(:participation) { event_participations(:top_mitglied) }
   let(:user) { participation.person }

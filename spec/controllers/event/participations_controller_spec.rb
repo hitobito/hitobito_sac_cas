@@ -116,7 +116,7 @@ describe Event::ParticipationsController do
     let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
     let(:newsletter) { MailingList.find(Group.root.sac_newsletter_mailing_list_id) }
 
-    context "event" do
+    context "regular event" do
       let(:event) { Fabricate(:event) }
 
       it "redirects to participation path" do
@@ -264,6 +264,62 @@ describe Event::ParticipationsController do
       end
     end
 
+    context "answers" do
+      before do
+        event.init_questions
+        event.application_questions.find { |q| q.question == "AHV-Nummer?" }.disclosure = "required"
+        event.save!
+      end
+
+      it "displays validation error if required answers are missing" do
+        post :create, params: params.merge(
+          step: "answers",
+          event_participation: {answers_attributes: {
+            "0" => {"question_id" => event.application_questions.first.id, "answer" => ""},
+            "1" => {"question_id" => event.application_questions.second.id, "answer" => ""},
+            "2" => {"question_id" => event.application_questions.third.id, "answer" => ""}
+          }}
+        )
+
+        expect(response).to render_template("new")
+        expect(dom).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
+        expect(dom).to have_text "Antwort muss ausgefüllt werden"
+      end
+
+      it "proceeds to next step if required answers are given" do
+        post :create, params: params.merge(
+          step: "answers",
+          event_participation: {answers_attributes: {
+            "0" => {"question_id" => event.application_questions.first.id, "answer" => "756.1234.5678.97"},
+            "1" => {"question_id" => event.application_questions.second.id, "answer" => "Henä"},
+            "2" => {"question_id" => event.application_questions.third.id, "answer" => "Fränä"}
+          }}
+        )
+
+        expect(response).to render_template("new")
+        expect(dom).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
+      end
+
+      context "as admin" do
+        let(:user) { people(:admin) }
+
+        it "saves participation even if required answers are empty" do
+          expect do
+            post :create, params: params.merge(
+              event_participation: {
+                person_id: people(:mitglied).id,
+                for_someone_else: true,
+                answers_attributes: {
+                  "0" => {"question_id" => event.application_questions.first.id, "answer" => "756.1234.5678.97"}
+                }
+              }
+            )
+          end.to change { Event::Participation.count }.by(1)
+          expect(response).to redirect_to(participation_path)
+        end
+      end
+    end
+
     context "not subsidizable" do
       let(:user) { people(:admin) }
 
@@ -404,18 +460,6 @@ describe Event::ParticipationsController do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:participation_path) { group_event_participation_path(id: participation.id) }
 
-    it "raises access denied when trying to update own price" do
-      sign_in(participation.person)
-      expect do
-        put :update, params: {
-          group_id: event.groups.first.id,
-          event_id: event.id,
-          id: participation.id,
-          event_participation: {price_category: "price_regular"}
-        }
-      end.not_to change(participation, :price)
-    end
-
     it "allows to edit actual_days with participations_full in event" do
       own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
       Event::Course::Role::Leader.create!(participation: own_participation)
@@ -477,6 +521,26 @@ describe Event::ParticipationsController do
                                 event_participation: {price_category: "former"}}
         end.to not_change { participation.reload.price }
           .and not_change { participation.price_category }
+      end
+
+      context "for user participation" do
+        let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+
+        it "can update answers, but not price" do
+          event.update!(price_special: 12)
+          put :update, params: {
+            group_id: event.groups.first.id,
+            event_id: event.id,
+            id: participation.id,
+            event_participation: {price_category: "price_special", additional_information: "Bla bla"}
+          }
+          expect(response).to redirect_to(participation_path)
+
+          participation.reload
+          expect(participation.price).to eq(20.0)
+          expect(participation.price_category).to eq("price_regular")
+          expect(participation.additional_information).to eq("Bla bla")
+        end
       end
     end
   end
