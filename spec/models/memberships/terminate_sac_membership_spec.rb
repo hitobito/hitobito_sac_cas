@@ -351,6 +351,30 @@ describe Memberships::TerminateSacMembership do
         end.to change { person.roles.count }.by(-2)
           .and change { Role.count }.by(-6)
       end
+
+      it "with terminate_on=yesterday it destroys the household" do
+        termination.terminate_on = Date.current.yesterday
+
+        household_people = person.household.people
+        expect(household_people).to have(3).items
+
+        expect do
+          expect(termination).to be_valid
+          expect(termination.save!).to eq true
+        end.to change { household_people.map(&:reload).map(&:household_key) }.to([nil, nil, nil])
+      end
+
+      it "does not destroy the household with terminate_on=end_of_year" do
+        termination.terminate_on = Time.zone.now.end_of_year.to_date
+
+        household_people = person.household.people
+        expect(household_people).to have(3).items
+
+        expect do
+          expect(termination).to be_valid
+          expect(termination.save!).to eq true
+        end.not_to change { household_people.map(&:reload).map(&:household_key) }
+      end
     end
   end
 end

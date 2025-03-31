@@ -60,6 +60,7 @@ module Memberships
         destroy_future_roles
         save_roles
         save_people
+        destroy_household unless terminate_on.future?
       end
     end
 
@@ -129,6 +130,8 @@ module Memberships
         Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
       end
     end
+
+    def destroy_household = person.household.destroy
 
     def basic_login_group
       @basic_login_group ||= Group::AboBasicLogin.find_by(layer_group_id: Group.root.id)
