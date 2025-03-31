@@ -41,7 +41,6 @@ module HitobitoSacCas
         Event::LeaderReminderJob,
         Qualifications::ExpirationMailerJob,
         People::CacheMembershipYearsJob,
-        People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob,
         Roles::TerminateTourenleiterJob,
         Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob
       ]
