@@ -24,10 +24,11 @@ module SacCas::Household
     @validate_members = validate_members
   end
 
-  def save(context: :update)
+  def save(context: :update, &)
     Person.transaction do
       new_household = new_record? # remember value before persisting
       super do |new_people, removed_people|
+        yield new_people, removed_people if block_given?
         clear_people_managers(removed_people)
         create_missing_people_managers
 
@@ -35,14 +36,6 @@ module SacCas::Household
           update_main_person!(new_household)
           mutate_memberships!(new_people, removed_people)
         end
-      end
-    end
-  end
-
-  def destroy
-    Person.transaction do
-      super do |people|
-        clear_people_managers(people)
       end
     end
   end
@@ -123,8 +116,10 @@ module SacCas::Household
       oldest_person # may be nil when destroying
 
     others = people - [new_main_person]
-    Person.where(id: others + removed_people).update_all(sac_family_main_person: false)
-    new_main_person&.update_columns(sac_family_main_person: true)
+    (others + removed_people).select(&:sac_family_main_person).each do |person|
+      person.update!(sac_family_main_person: false)
+    end
+    new_main_person&.update!(sac_family_main_person: true)
   end
 
   def next_key
