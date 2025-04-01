@@ -20,12 +20,21 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       .in_time_zone)
   end
 
-  describe "#affected_families" do
+  describe "#affected_family_people" do
     context "with ended stammsektion roles" do
-      before { family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago) }
-
       it "includes the family" do
-        expect(subject.send(:affected_families)).to eq [family_member]
+        family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
+        expect(subject.affected_family_people).to eq [family_member]
+      end
+
+      it "does not include the family person when having active roles as well" do
+        old_membership = family_member.sac_membership.stammsektion_role
+        old_membership.update!(end_on: 10.days.ago)
+        active_membership = old_membership.dup
+        active_membership.assign_attributes(start_on: 9.days.ago, end_on: 30.days.from_now)
+        active_membership.save!
+
+        expect(subject.affected_family_people).not_to include(family_member)
       end
     end
 
@@ -42,7 +51,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "includes the family" do
-        expect(subject.send(:affected_families)).to eq [family_member]
+        expect(subject.affected_family_people).to eq [family_member]
       end
     end
 
@@ -59,7 +68,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "includes the family" do
-        expect(subject.send(:affected_families)).to eq [family_member]
+        expect(subject.affected_family_people).to eq [family_member]
       end
     end
 
@@ -67,7 +76,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       before { family_member.sac_membership.zusatzsektion_roles.first.update!(end_on: 10.days.ago) }
 
       it "does not include the family" do
-        expect(subject.send(:affected_families)).to be_empty
+        expect(subject.affected_family_people).to be_empty
       end
     end
 
@@ -78,7 +87,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "does not include the family" do
-        expect(subject.send(:affected_families)).to be_empty
+        expect(subject.affected_family_people).to be_empty
       end
     end
 
@@ -91,14 +100,14 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "returns distinct families based on household key" do
-        expect(subject.send(:affected_families).size).to eq 1
+        expect(subject.affected_family_people.size).to eq 1
       end
     end
   end
 
   context "when performing job" do
     it "calls household destroy for each family" do
-      allow(job).to receive(:affected_families).and_return([family_member, people(:familienmitglied2)])
+      allow(job).to receive(:affected_family_people).and_return([family_member, people(:familienmitglied2)])
       expect(family_member.household).to receive(:destroy).exactly(:once)
       expect(people(:familienmitglied2).household).to receive(:destroy).exactly(:once)
       job.perform
