@@ -23,6 +23,10 @@ module Memberships
     validate :validate_restored_roles
     validate :validate_household_keys_compatible
 
+    def inspect
+      "#<#{self.class.name}:#{object_id} role: #{role.id} - #{role.decorate}>"
+    end
+
     # return the `mutation_id` for all entries changed by the termination
     # We find the mutation id by looking for the latest version of the role where the `terminated`
     # flag changed to `true`.
@@ -68,8 +72,9 @@ module Memberships
     # cleared eventually when dissolving the family/household after the SAC Membership
     # is terminated.
     def restored_people
-      @restored_people ||= restored_roles.map(&:person).uniq.map do |person|
+      @restored_people ||= restored_roles_people.map do |person|
         person.household_key = original_household_key
+        person.sac_family_main_person = original_main_person == person
         person
       end
     end
@@ -134,8 +139,8 @@ module Memberships
     # the transaction to revert all changes.
     def validate_restored_roles
       Role.transaction(requires_new: true) do
-        restored_roles.each { _1.save(validate: false) }
         restored_people.each { _1.save(validate: false) }
+        restored_roles.each { _1.save(validate: false) }
 
         restored_roles.each do |role|
           next if role.valid?
@@ -160,16 +165,20 @@ module Memberships
 
     def membership_role? = SacCas::MITGLIED_ROLES.include?(role.class)
 
-    def affected_family_people
-      family_roles = restored_roles.select do |r|
-        SacCas::MITGLIED_ROLES.include?(role.class) && r.family?
-      end
-      Person.unscoped.where(id: family_roles.map(&:person_id).uniq)
-    end
-
     def original_household_key
       restored_roles.find { |r| r.id == role.id }&.family_id
     end
     memoize_method :original_household_key
+
+    def restored_roles_people = restored_roles.map(&:person).uniq
+
+    def original_main_person
+      restored_roles_people.find do |person|
+        person.versions.where(mutation_id:).select do |version|
+          version.changeset.dig("sac_family_main_person", 1) == false
+        end
+      end
+    end
+    memoize_method :original_main_person
   end
 end

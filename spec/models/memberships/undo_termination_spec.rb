@@ -331,26 +331,26 @@ describe Memberships::UndoTermination, versioning: true do
 
       it "is valid if current household keys are blank" do
         expect do
-          role.person.update!(household_key: nil)
+          # instant termination clears the household
           terminate(role)
         end.to change { role.person.reload.household_key }.to(nil)
-
         expect(subject).to be_valid
       end
 
       it "is valid if current household keys are same as restored" do
         expect do
-          terminate(role)
+          # future termination keeps the household intact
+          terminate(role, terminate_on: Date.current.end_of_year)
         end.not_to change { role.person.reload.household_key }
 
         expect(subject).to be_valid
       end
 
       it "is invalid if current household keys are different from restored" do
-        expect do
-          role.person.update!(household_key: "new_key")
-          terminate(role)
-        end.to change { role.person.reload.household_key }.to("new_key")
+        expect { terminate(role) }.to change { role.person.reload.household_key }.to(nil)
+
+        # simulate that the person has joined another family in the meantime
+        mutation { role.person.update!(household_key: "new-family") }
 
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
