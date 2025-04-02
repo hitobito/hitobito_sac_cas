@@ -7,7 +7,7 @@
 
 shared_examples "validates Neuanmeldung timestamps" do
   it "start_on is required" do
-    role = described_class.new(person: people(:mitglied))
+    role = described_class.new(person: people(:mitglied), start_on: nil)
     role.validate
     expect(role.errors[:start_on]).to include("muss ausgefüllt werden")
 

@@ -24,7 +24,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   context "with multiple people and roles" do
     let!(:person_ehrenmitglied_role) do
-      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago, end_on: 1.day.ago,
+      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago, end_on: 1.day.ago, start_on: nil,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
     end
     let(:other_person) { people(:familienmitglied) }

@@ -39,8 +39,8 @@ describe People::AboMagazinInvoicesController do
     end
 
     it "creates external invoice and enqueues job with multiple mailing lists available" do
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago)
-      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago)
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
+      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
 
       expect do
         post :create, params: params
