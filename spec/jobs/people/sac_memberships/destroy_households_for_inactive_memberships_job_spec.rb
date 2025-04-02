@@ -21,6 +21,10 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
   end
 
   describe "#affected_family_people" do
+    it "makes only 1 query" do
+      expect_query_count { subject.affected_family_people.to_a }.to eq 1
+    end
+
     context "with ended stammsektion roles" do
       it "includes the family" do
         family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
