@@ -19,14 +19,14 @@ module People
       def affected_family_people
         family_role_types = (SacCas::MITGLIED_STAMMSEKTION_ROLES + SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES).map(&:sti_name)
 
-        people_ids = Role.select(:person_id).where(
+        people_with_active_family_roles_ids = Role.select(:person_id).where(
           type: family_role_types,
           beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
         )
 
         Person.where.not(household_key: "")
           .where("id NOT IN (:people_ids)", # rubocop:disable Rails/WhereNot
-            people_ids:)
+            people_ids: people_with_active_family_roles_ids)
           .distinct_on(:household_key)
       end
     end
