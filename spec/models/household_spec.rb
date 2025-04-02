@@ -244,6 +244,39 @@ describe Household do
           .and change { person.sac_family_main_person }.to(true)
           .and change { housemate.reload.household_key }.from(nil)
       end
+
+      context "creates papertrail versions for changes of main person flag", versioning: true do
+        # count the versions of the person where the main person flag was changed to the given value
+        def main_person_versions_count(person, target_value = true)
+          person.versions.count do |v|
+            v.object_changes.start_with?("---") &&
+              v.changeset.dig("sac_family_main_person", 1) == target_value
+          end
+        end
+
+        it "when creating household" do
+          expect { household.add(child).save! }
+            .to change { person.reload.sac_family_main_person }.from(false).to(true)
+            .and change { main_person_versions_count(person) }.from(0).to(1)
+        end
+
+        it "when removing main person from household" do
+          person.household.add(adult).add(child).save!
+
+          expect { person.household.remove(person).save! }
+            .to change { person.reload.sac_family_main_person }.from(true).to(false)
+            .and change { main_person_versions_count(person, false) }.from(0).to(1)
+        end
+
+        it "when adding new main person to household" do
+          person.household.add(child).save!
+          new_main_person = adult
+
+          expect { child.household.remove(person).add(new_main_person).save! }
+            .to change { new_main_person.reload.sac_family_main_person }.from(false).to(true)
+            .and change { main_person_versions_count(new_main_person) }.from(0).to(1)
+        end
+      end
     end
 
     context "when disabled" do
