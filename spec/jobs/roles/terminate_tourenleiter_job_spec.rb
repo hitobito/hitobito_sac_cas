@@ -24,7 +24,7 @@ describe Roles::TerminateTourenleiterJob do
     let(:yesterday) { Date.current.yesterday }
 
     let(:person) { qualification.person }
-    let!(:role) { Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.sti_name, person: person, group: group) }
+    let!(:role) { Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.sti_name, person: person, group: group, start_on: nil) }
 
     it "noops if qualification is active" do
       expect { job.perform }.to not_change { person.roles.count }

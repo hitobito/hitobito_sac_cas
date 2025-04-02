@@ -281,7 +281,8 @@ describe Memberships::TerminateSacMembership do
           Fabricate(
             Group::SektionsTourenUndKurse::Tourenleiter.sti_name,
             person: person,
-            group: groups(:matterhorn_touren_und_kurse)
+            group: groups(:matterhorn_touren_und_kurse),
+            start_on: nil
           )
         end
 

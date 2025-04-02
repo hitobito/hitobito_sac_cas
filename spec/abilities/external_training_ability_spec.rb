@@ -69,6 +69,7 @@ describe ExternalTrainingAbility do
       let(:person) {
         Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.name.to_sym,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse),
+          start_on: nil,
           person: Fabricate(:person, qualifications: [Fabricate(:qualification)])).person
       }
 
