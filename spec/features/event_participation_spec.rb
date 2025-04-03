@@ -32,8 +32,6 @@ describe :event_participation, js: true do
   end
 
   it "creates an event participation" do
-    # pending('Event participations are not implemented yet for SAC'); raise NotImplementedError
-
     visit group_event_path(group_id: group, id: event)
 
     click_link("Anmelden")
@@ -58,6 +56,20 @@ describe :event_participation, js: true do
     participation = Event::Participation.find_by(event: event, person: person)
 
     expect(participation).to be_present
+  end
+
+  it "shows phone number validation error if none are filled" do
+    visit group_event_path(group_id: group, id: event)
+
+    click_link("Anmelden")
+
+    complete_contact_data
+
+    fill_in "Mobil", with: ""
+
+    first(:button, "Weiter").click
+
+    expect(page).to have_text("Mindestens eine Telefonnummer muss aufgefüllt werden")
   end
 
   describe "canceling participation" do
