@@ -87,6 +87,17 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
     context "without household key" do
       before do
         family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
+        family_member.update!(household_key: nil)
+      end
+
+      it "does not include the family" do
+        expect(subject.affected_family_people).to be_empty
+      end
+    end
+
+    context "with empty household key" do
+      before do
+        family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
         family_member.update!(household_key: "")
       end
 
