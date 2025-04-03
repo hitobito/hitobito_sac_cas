@@ -14,11 +14,12 @@ module TTY
     class PromoteNeuanmeldung
       include TTY::Helpers::Format
 
-      attr_reader :neuanmeldung
+      attr_reader :neuanmeldung, :end_date
 
       def initialize
         puts light_yellow "Promote Neuanmeldung to Membership"
         @neuanmeldung = ask_for_neuanmeldung_role
+        @end_date = ask_for_end_date
       end
 
       def run
@@ -47,6 +48,28 @@ module TTY
 
         puts "Found #{neuanmeldung.type} in #{neuanmeldung.group.layer_group} for person #{neuanmeldung.person_id} #{neuanmeldung.person}"
         neuanmeldung
+      end
+
+      # ask for the date formatted as DD.MM.YYYY
+      # use default date Date.current.end_of_year if no date is given
+      # parse the date and return it, ask again if the date is invalid
+      def ask_for_end_date
+        print "Please enter the end date for the membership (DD.MM.YYYY) or leave empty for default (#{Date.current.end_of_year.strftime("%d.%m.%Y")}): "
+        end_date = gets.chomp
+
+        if end_date.empty?
+          puts "Using default end date: #{Date.current.end_of_year}"
+          return Date.current.end_of_year
+        end
+
+        parsed_date = Date.strptime(end_date, "%d.%m.%Y") rescue nil
+
+        unless parsed_date
+          puts error "Invalid date format. Please enter a valid date (DD.MM.YYYY)."
+          return ask_for_end_date
+        end
+
+        parsed_date
       end
 
       def mitglied_role_type
@@ -82,8 +105,8 @@ module TTY
         mitglied_role_type.create!(
           person: person,
           group: mitglied_group,
-          start_on: Date.current,
-          end_on: Date.current.end_of_year
+          start_on: [Date.current, end_date].min,
+          end_on: end_date
         )
       end
 
