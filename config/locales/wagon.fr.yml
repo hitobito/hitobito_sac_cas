@@ -43,11 +43,11 @@ fr:
         actual_days: Jours effectifs
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: ""
-        invoice_date: ""
-        send_date: ""
-        price_category: ""
-        price: ""
+        reference_date: "Date de référence"
+        invoice_date: "Date de réservation"
+        send_date: "Date d’envoi et de facturation"
+        price_category: "Catégorie de prix"
+        price: "Prix"
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -159,11 +159,11 @@ fr:
                 est déjà membre de la section ou a une demande d’adhésion ouverte
               must_be_family_main_person: doit être la personne principale de la famille
         memberships/undo_termination:
-          mutation_not_found: ""
-          role_changed: ""
-          role_not_terminated: ""
-          role_invalid: ""
-          household_changed: ""
+          mutation_not_found: ne peut pas être trouvé
+          role_changed: "%{group_with_parent}: %{role} de %{person} a été modifié depuis la résiliation"
+          role_not_terminated: Le rôle n’est pas résilié
+          role_invalid: "%{group_with_parent}: %{role} de %{person}: %{error_message}"
+          household_changed: "%{person_name} a été attribué·e à une autre famille depuis la résiliation"
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -283,7 +283,7 @@ fr:
           fr: Français
           it: Italien
         link_leaders: Lien cadre du cours
-        link_external_site: ""
+        link_external_site: Lien page externe
         link_participants: Lien Participant·e·s
         link_survey: Lien Sondage
         meals: Restauration
@@ -321,15 +321,15 @@ fr:
         price_member: "Prix pour les membres"
         price_regular: "Prix normal"
         price_subsidized: "Prix subventionné"
-        price_special: ""
-        j_s_price_member: ""
-        j_s_price_regular: ""
-        j_s_price_subsidized: ""
-        j_s_price_special: ""
+        price_special: Prix spécial
+        j_s_price_member: Prix pour les membres P J+S
+        j_s_price_regular: Prix normal P J+S
+        j_s_price_subsidized: Prix pour les membres A J+S
+        j_s_price_special: Prix normal A J+S
       event/kind_category:
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
-        j_s_course: ""
+        j_s_course: Cours J+S
       event/level:
         label: Désignation
         code: Code
@@ -350,7 +350,7 @@ fr:
           price_member: "Prix pour les membres"
           price_regular: "Prix normal"
           price_subsidized: "Prix subventionné"
-          price_special: ""
+          price_special: Prix spécial
         invoice_state: Facture
         invoice_states:
           _nil: Non facturé
@@ -423,11 +423,11 @@ fr:
         sac_magazine_mailing_list_id: ID d’abonnement Les Alpes
         sac_fundraising_mailing_list_id: ID d’abonnement appels aux dons
         course_admin_email: E-mail administration des cours
-        abo_alpen_fee: ""
+        abo_alpen_fee: Montant de l’abonnement Les Alpes
         abo_alpen_postage_abroad: Montant frais de port Les Alpes
-        abo_touren_portal_fee: ""
-        abo_alpen_fee_article_number: ""
-        abo_alpen_postage_abroad_article_number: ""
+        abo_touren_portal_fee: Montant de l’abonnement au portail de randonnées du CAS
+        abo_alpen_fee_article_number: N° d’article abonnement Les Alpes
+        abo_alpen_postage_abroad_article_number: N° d’article frais de port à l’étranger Les Alpes
       group/sektion:
         foundation_year: Année de création
         section_canton: Canton
@@ -521,7 +521,7 @@ fr:
         abacus_sales_order_key: Numéro Abacus
         total: Total
         issued_at: Date de la facture
-        sent_at: ""
+        sent_at: Date d’envoi et de facturation
         created_at: Créé
         updated_at: Actualisé
         states:
@@ -720,9 +720,9 @@ fr:
         many: Groupes locaux
         other: Groupes locaux
       group/sektions_clubhuette:
-        one: ''
-        many: ''
-        other: ''
+        one: Cabane de club
+        many: Cabanes de club
+        other: Cabanes de club
       group/sektions_clubhuetten:
         one: Cabanes de club
         many: Cabanes de club
@@ -768,9 +768,9 @@ fr:
         many: Randonnées et cours
         other: Randonnées et cours
       group/sektions_touren_und_kurse_allgemein:
-        one: ''
-        many: ''
-        other: ''
+        one: Randonnée et cours - général
+        many: Randonnées et cours - général
+        other: Randonnées et cours - général
       group/sektions_touren_und_kurse_sommer:
         one: Randonnées  et cours été
         many: Randonnées et cours été
@@ -1143,7 +1143,7 @@ fr:
 
   devise:
     failure:
-      signin_not_allowed: ""
+      signin_not_allowed: "Si nous connaissons l’adresse e-mail que tu as indiquée, tu devrais recevoir dans les prochaines minutes un e-mail te permettant de réinitialiser ton mot de passe (vérifie aussi dans ton dossier spam)."
     mailer:
       confirmation_instructions:
         body:
@@ -1152,7 +1152,7 @@ fr:
         body:
           footer: Salutations sportives
     passwords:
-      send_instructions: ""
+      send_instructions: "Si nous connaissons l’adresse e-mail que tu as indiquée, tu devrais recevoir dans les prochaines minutes un e-mail te permettant de réinitialiser ton mot de passe (vérifie aussi dans ton dossier spam)."
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
@@ -1172,7 +1172,7 @@ fr:
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
     terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
-    undo_termination_link: ""
+    undo_termination_link: Réactiver l’adhésion au CAS
 
   dropdown/people_export:
     recipients: Destinataire – personne individuelle
@@ -1186,14 +1186,14 @@ fr:
   event:
     application_market:
       application:
-        add_participant_confirm: ""
+        add_participant_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
       participant:
-        remove_participant_confirm: ""
+        remove_participant_confirm: "Voulez-vous vraiment supprimer cette inscription? Un e-mail sera envoyé à la personne participante."
     courses:
       invoices:
         new:
-          create_course_participation_invoice: ""
-          create_course_annulation_invoice: ""
+          create_course_participation_invoice: Créer une facture de participant·e de cours
+          create_course_annulation_invoice: Créer une facture des frais d’annulation
       key_data_sheets:
         create:
           success: La/les fiche(s) technique(s) a/ont été générée(s) et ajoutée(s) au cours en tant qu’annexe.
@@ -1240,12 +1240,12 @@ fr:
           Tu peux nous joindre pendant nos heures de bureau
           du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
       popover_cancel_sac_cas:
-        send_email: ""
-        invoice_option: ""
-        standard: ""
-        custom: ""
-        no_invoice: ""
-        custom_price: ""
+        send_email: Envoyer un e-mail au ou à la participant·e
+        invoice_option: Facture
+        standard: Facture des frais d’annulation selon le règlement
+        custom: Facture des frais d’annulation avec un montant défini par l’utilisateur
+        no_invoice: Pas de facture des frais d’annulation
+        custom_price: Montant
       states:
         absent: Pas de participation à ce cours.
         annulled: Ce cours a été annulé.
@@ -1288,11 +1288,11 @@ fr:
       summoned_notice: "%{participant} a été convoqué·e."
       actions_show_youth:
         summon_button: Convocation
-        assign_confirm: ""
+        assign_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
       actions_show_sac_cas:
-        modal_title: ""
-        summon_and_send_mail: ""
-        summon_and_send_no_mail: ""
+        modal_title: "Veux-tu vraiment inviter ce·tte participant·e?"
+        summon_and_send_mail: Inviter et envoyer un e-mail
+        summon_and_send_no_mail: Invitation sans e-mail
         create_invoice_button: Créer une facture
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
@@ -1305,7 +1305,8 @@ fr:
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
 
       popover_participant_cancels:
-        cancel_info: >
+        cancel_info: >-
+          Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Des frais de traitement et d’annulation d’un montant de CHF %{cancellation_cost} sont facturés avec l’annulation.
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-
@@ -1325,7 +1326,8 @@ fr:
         assignment_closed: Finaliser l’attribution
         ready: Prêt pour la réalisation
         closed: Finaliser
-        closed_confirm_text: >
+        closed_confirm_text: >-
+          La finalisation fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d’annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: Annulations
       state_back_buttons:
         assignment_closed: Retour à l’attribution
@@ -1411,9 +1413,9 @@ fr:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
         existing_membership_notice: >-
           Tu es déjà membre du CAS. Si tu souhaites adapter ton adhésion, contacte le secrétariat du CAS.
-        can_login_already_notice: ""
-        already_subscribed_to_abo: ""
-        already_member_of_tourenportal: ""
+        can_login_already_notice: Tu as déjà un login. Tu ne peux donc pas créer un nouveau login SAC/CAS.
+        already_subscribed_to_abo: Tu es déjà destinataire de ce magazine. Tu ne peux donc pas commander le magazine une deuxième fois.
+        already_member_of_tourenportal: Tu es déjà membre du Portail de randonnées du CAS. Tu ne peux donc pas créer une autre adhésion.
 
         existing_family_notice: Tu es affecté à une famille. Contacte le secrétariat du CAS.
         signed_up_notice: Ton inscription a été enregistrée avec succès.
@@ -1475,7 +1477,7 @@ fr:
 
   invoices:
     abo_magazin:
-      title: ""
+      title: "Facture %{group} %{year}"
       positions:
         abo_fee: "Abonnement %{group} %{time_period}"
         abroad_fee: "Frais de port %{group}"
@@ -1487,10 +1489,10 @@ fr:
     course_participation:
       no_invoice_possible: "Ce·tte participant·e ne reçoit pas de facture."
     course_annulation:
-      title: ""
+      title: Facture des frais d’annulation
       processing_fee: Frais de traitement
       cancellation_costs: "%{percentage}% de frais d’annulation"
-      custom_cancellation_costs: ""
+      custom_cancellation_costs: Frais d’annulation
     sac_memberships:
       title: "Facture d’adhésion %{year}"
       positions:
@@ -1544,10 +1546,10 @@ fr:
           other: "Vos %{count} adhésions au CAS ont été résiliées."
     undo_terminations:
       create:
-        success: ""
+        success: "Les rôles ont été réactivés avec succès."
       new:
-        info_text: ""
-        family_number: ""
+        info_text: "Les rôles et attributs suivants sont rétablis à leur état antérieur à la résiliation:"
+        family_number: "Numéro de famille: %{number}"
 
   mitglieder_exports:
     export_enqueued: "L’exportation est lancée en arrière-plan et sera téléchargée une fois terminée."
@@ -1631,17 +1633,19 @@ fr:
   abo_magazin_invoices:
     create:
         flash:
-          success: ""
+          success: "La facture souhaitée est générée et transmise à Abacus"
 
   people:
     abo_magazin_invoices:
       new:
-        title: ""
-        abo_group: ""
-        alert_info: >
-        alert_warning: >
-        alert_error: ""
-        create_invoice: ""
+        title: Créer une facture Les Alpes
+        abo_group: Magazine
+        alert_info: >-
+          Après confirmation de ce dialogue, une facture pour l’abonné Les Alpes est créée et envoyée au membre par e-mail ou par courrier. Il n’est pas procédé à une vérification pour savoir s’il existe déjà des factures Les Alpes ou dans quel statut elles se trouvent. Dans tous les cas, une nouvelle facture est émise. Aucune mutation ou prolongation de rôle n’est effectuée.
+        alert_warning: >-
+          Cette personne n’est pas abonné·e à un magazine, aucune facture d’abonnement ne peut donc être établie.
+        alert_error: "Les contrôles de qualité des données suivants empêchent la création d’une facture Les Alpes:"
+        create_invoice: Créer une facture
 
     membership:
       verify:
@@ -1698,13 +1702,14 @@ fr:
 
     external_invoices:
       list:
-        cancel_invoice: ""
-        cancel_invoice_confirmation: >
+        cancel_invoice: Annuler
+        cancel_invoice_confirmation: >-
+          Voulez-vous vraiment annuler cette facture? Cette action ne peut pas être annulée.
       cancel:
         flash: "La facture %{invoice} (n° de commande %{abacus_sales_order_key}) est annulée"
       actions_index:
-        create_abo_magazin_invoice: ""
-        create_membership_invoice: ""
+        create_abo_magazin_invoice: Créer une facture Les Alpes
+        create_membership_invoice: Créer une facture d’adhésion
 
     yearly_membership_invoices:
       job_scheduling_info: "La procédure d’encaissement annuel a été lancée avec succès."
@@ -1773,7 +1778,7 @@ fr:
 
   roles/terminations:
     global:
-      undo: ""
+      undo: Réactiver
       sac_cas/role/mitglied_common:
         no_permission: "Pour une résiliation, tu dois t’adresser au service des membres de la section"
       group/abo_magazin/abonnent:
@@ -1862,7 +1867,7 @@ fr:
   sheet/memberships/terminate_sac_membership:
     title: Mettre fin à l’adhésion au CAS
   sheet/memberships/undo_termination:
-    title: ""
+    title: Réactiver l’adhésion au CAS
 
   table_displays:
     person:

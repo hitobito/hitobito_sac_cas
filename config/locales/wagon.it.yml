@@ -43,11 +43,11 @@ it:
         actual_days: Giorni effettivi
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: ""
-        invoice_date: ""
-        send_date: ""
-        price_category: ""
-        price: ""
+        reference_date: "Data di riferimento"
+        invoice_date: "Data di prenotazione"
+        send_date: "Data di spedizione e fatturazione"
+        price_category: "Categoria di prezzo"
+        price: "Prezzo"
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di prenotazione"
@@ -157,11 +157,11 @@ it:
                 è già membro della sezione o ha una richiesta di adesione aperta
               must_be_family_main_person: deve essere la persona di riferimento per la famiglia
         memberships/undo_termination:
-          mutation_not_found: ""
-          role_changed: ""
-          role_not_terminated: ""
-          role_invalid: ""
-          household_changed: ""
+          mutation_not_found: non può essere trovato
+          role_changed: "%{group_with_parent}: %{role} di %{person} è stato modificato a partire dalla disdetta"
+          role_not_terminated: Il ruolo non è stato disdetto
+          role_invalid: "%{group_with_parent}: %{role} di %{person}: %{error_message}"
+          household_changed: "A partire dalla disdetta, %{person} è stato assegnato a un’altra famiglia"
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
@@ -319,15 +319,15 @@ it:
         price_member: "Prezzo per i soci"
         price_regular: "Prezzo normale"
         price_subsidized: "Prezzo sovvenzionato"
-        price_special: ""
-        j_s_price_member: ""
-        j_s_price_regular: ""
-        j_s_price_subsidized: ""
-        j_s_price_special: ""
+        price_special: Prezzo speciale
+        j_s_price_member: Prezzo per i soci G+S - P
+        j_s_price_regular: Prezzo normale G+S - P
+        j_s_price_subsidized: Prezzo per i soci G+S - A
+        j_s_price_special: Prezzo normale G+S - A
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
-        j_s_course: ""
+        j_s_course: Corso G+S
       event/level:
         label: Denominazione
         code: Codice
@@ -348,7 +348,7 @@ it:
           price_member: "Prezzo per i soci"
           price_regular: "Prezzo normale"
           price_subsidized: "Prezzo sovvenzionato"
-          price_special: ""
+          price_special: Prezzo speciale
         invoice_state: Fattura
         invoice_states:
           _nil: Non fatturato
@@ -421,11 +421,11 @@ it:
         sac_magazine_mailing_list_id: ID abbonamento Le Alpi
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
-        abo_alpen_fee: ""
+        abo_alpen_fee: Importo Abbonamento Le Alpi
         abo_alpen_postage_abroad: Importo Affrancatura estera Le Alpi
-        abo_touren_portal_fee: ""
-        abo_alpen_fee_article_number: ""
-        abo_alpen_postage_abroad_article_number: ""
+        abo_touren_portal_fee: Importo Abbonamento Portale escursionistico
+        abo_alpen_fee_article_number: Codice articolo Abbonamento Le Alpi
+        abo_alpen_postage_abroad_article_number: Codice articolo Affrancatura estera Le Alpi
       group/sektion:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -519,7 +519,7 @@ it:
         abacus_sales_order_key: Numero Abacus
         total: Totale
         issued_at: Data della fattura
-        sent_at: ""
+        sent_at: Data di spedizione e fatturazione
         created_at: Creata
         updated_at: Aggiornata
         states:
@@ -718,9 +718,9 @@ it:
         many: Gruppi locali
         other: Gruppi locali
       group/sektions_clubhuette:
-        one: ''
-        many: ''
-        other: ''
+        one: Capanna del club
+        many: Capanne del club
+        other: Capanne del club
       group/sektions_clubhuetten:
         one: Capanne del club
         many: Capanne del club
@@ -766,9 +766,9 @@ it:
         many: Visite e corsi
         other: Escursioni e corsi
       group/sektions_touren_und_kurse_allgemein:
-        one: ''
-        many: ''
-        other: ''
+        one: Escursioni e corsi Generale
+        many: Escursioni e corsi Generale
+        other: Escursioni e corsi Generale
       group/sektions_touren_und_kurse_sommer:
         one: Tour e corsi estivi
         many: Tour e corsi estivi
