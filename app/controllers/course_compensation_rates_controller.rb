@@ -7,10 +7,16 @@
 
 class CourseCompensationRatesController < SimpleCrudController
   self.permitted_attrs = [
+    :course_compensation_category_id,
     :valid_from,
     :valid_to,
     :rate_leader,
     :rate_assistant_leader,
-    :course_compensation_category_id
+    :rate_leader_aspirant,
+    :rate_assistant_leader_aspirant,
+    :rate_leadership1,
+    :rate_leadership2,
+    :rate_leadership3,
+    :rate_leadership4
   ]
 end
