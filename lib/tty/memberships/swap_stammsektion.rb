@@ -7,12 +7,14 @@
 
 require_relative "../helpers/format"
 require_relative "../helpers/cli_menu"
+require_relative "../helpers/paper_trailed"
 
 module TTY
   module Memberships
     class SwapStammsektion
-      include TTY::Helpers::Format
       include Rails.application.routes.url_helpers
+      include TTY::Helpers::Format
+      include TTY::Helpers::PaperTrailed
 
       attr_reader :person, :old_stammsektion_role, :old_zusatzsektion_role
 
@@ -24,6 +26,7 @@ module TTY
       end
 
       def run
+        set_papertrail_metadata
         swap! if confirm?
       end
 
