@@ -8,27 +8,25 @@
 # rubocop:disable Rails/Output, Rails/Exit
 
 require "io/console"
+require_relative "helpers/cli_menu"
 require_relative "helpers/format"
 require_relative "helpers/sac_logo"
 require_relative "memberships/promote_neuanmeldung"
+require_relative "memberships/swap_stammsektion"
 
 module TTY
   class ManageMemberships
     include Helpers::Format
     extend Helpers::Format
 
-    QUIT = Class.new(StandardError)
-
     MENU_ACTIONS = {
       "p" => {
         description: "Promote Neuanmeldung to Membership " + gray("(Stammsektion or Zusatzsektion)"),
         action: -> { Memberships::PromoteNeuanmeldung.new.run }
       },
-      # Add more actions here as needed
-      # { description: "Another Task", action: -> { AnotherTask.new.run } },
-      "q" => {
-        description: "Exit",
-        action: -> { Process.kill("INT", Process.pid) } # send SIGINT to self to break the loop
+      "s" => {
+        description: "Swap Stammsektion ",
+        action: -> { Memberships::SwapStammsektion.new.run }
       }
     }.freeze
 
@@ -38,19 +36,13 @@ module TTY
       trap_ctrl_c
       Helpers::SacLogo.new.print
       print_welcome_message
-      main_loop
+
+      CliMenu.new(menu_actions: MENU_ACTIONS).run
+
       print_byebye
     end
 
     private
-
-    def main_loop
-      loop do
-        print_main_menu
-        print "\nPlease choose an option: "
-        handle_choice(read_single_char)
-      end
-    end
 
     def trap_ctrl_c
       Signal.trap("INT") do
@@ -68,29 +60,6 @@ module TTY
 
     def print_byebye
       puts light_yellow "\nHave a great day, happy to assist you next time!"
-    end
-
-    def print_main_menu
-      puts "\nHow can I help you today?"
-      MENU_ACTIONS.each do |key, args|
-        args in { description:, action: }
-        puts "#{key}) #{description}"
-      end
-    end
-
-    # Reads a single character from standard input
-    def read_single_char
-      $stdin.getch.tap do
-        puts # Echo newline after getch
-      end
-    end
-
-    # Handles the user's choice based on the mapping
-    def handle_choice(choice)
-      return puts red "Invalid choice '#{choice}'. Please try again." unless MENU_ACTIONS.key?(choice)
-
-      MENU_ACTIONS[choice] in { description:, action: }
-      action.call # Execute the action associated with the choice
     end
   end
 end
