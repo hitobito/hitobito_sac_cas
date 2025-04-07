@@ -253,6 +253,13 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
       end
 
       it "Creates the invoices" do
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role, abonnent_role.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_2, abonnent_role_2.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_3, abonnent_role_3.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_4, abonnent_role_4.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_5, abonnent_role_5.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_6, abonnent_role_6.end_on + 1.day).and_call_original
+
         expect { subject.perform }
           .to change(ExternalInvoice, :count).by(6)
 

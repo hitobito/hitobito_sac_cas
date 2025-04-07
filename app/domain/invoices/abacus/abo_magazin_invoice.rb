@@ -8,12 +8,13 @@
 module Invoices
   module Abacus
     class AboMagazinInvoice
-      attr_reader :abonnent_role
+      attr_reader :abonnent_role, :issued_at
 
       delegate :person, to: :abonnent_role
 
-      def initialize(abonnent_role)
+      def initialize(abonnent_role, issued_at)
         @abonnent_role = abonnent_role
+        @issued_at = issued_at
       end
 
       def positions
@@ -76,8 +77,8 @@ module Invoices
       end
 
       def new_role_period
-        start_date = abonnent_role.end_on + 1.day
-        end_date = abonnent_role.end_on + 1.year
+        start_date = issued_at
+        end_date = issued_at + 1.year - 1.day
         "#{I18n.l(start_date)} - #{I18n.l(end_date)}"
       end
 

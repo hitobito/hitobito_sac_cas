@@ -35,6 +35,7 @@ describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
   it "transmits subject, updates invoice total and transmit_sales_order" do
     allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
     allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
+    expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(neuanmeldung_abonnent_role, external_invoice.issued_at).and_call_original
     expect do
       job.perform
     end.to change { external_invoice.reload.total }

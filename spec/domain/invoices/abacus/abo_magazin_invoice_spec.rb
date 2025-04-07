@@ -11,7 +11,7 @@ describe Invoices::Abacus::AboMagazinInvoice do
   let(:abonnent_alpen) { roles(:abonnent_alpen) }
   let(:abonnent) { people(:abonnent) }
 
-  subject { described_class.new(abonnent_alpen) }
+  subject { described_class.new(abonnent_alpen, Date.new(2026, 1, 1)) }
 
   before do
     Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16, abo_alpen_fee_article_number: "APG")

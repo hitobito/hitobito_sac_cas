@@ -105,7 +105,7 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
     create_error_log_entry("rechnungen", "Jahresrechnung Abo Magazin Die Alpen konnte nicht in Abacus erstellt werden", part.error_payload, part.context_object.entity)
   end
 
-  def build_abo_magazin_invoice(abonnent_role) = Invoices::Abacus::AboMagazinInvoice.new(abonnent_role)
+  def build_abo_magazin_invoice(abonnent_role) = Invoices::Abacus::AboMagazinInvoice.new(abonnent_role, abonnent_role.end_on + 1.day)
 
   def create_sales_order(invoice, abo_magazin_invoice) = Invoices::Abacus::SalesOrder.new(invoice, abo_magazin_invoice.positions)
 
