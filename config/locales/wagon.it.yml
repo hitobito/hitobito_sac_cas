@@ -1141,7 +1141,7 @@ it:
 
   devise:
     failure:
-      signin_not_allowed: ""
+      signin_not_allowed: "Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)"
     mailer:
       confirmation_instructions:
         body:
@@ -1150,7 +1150,7 @@ it:
         body:
           footer: Saluti sportivi
     passwords:
-      send_instructions: ""
+      send_instructions: "Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)"
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
@@ -1170,7 +1170,7 @@ it:
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
-    undo_termination_link: ""
+    undo_termination_link: Riattivare l’affiliazione al CAS
 
   dropdown/people_export:
     recipients: Destinatari individuali
@@ -1184,14 +1184,14 @@ it:
   event:
     application_market:
       application:
-        add_participant_confirm: ""
+        add_participant_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
       participant:
-        remove_participant_confirm: ""
+        remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
     courses:
       invoices:
         new:
-          create_course_participation_invoice: ""
-          create_course_annulation_invoice: ""
+          create_course_participation_invoice: Creare la fattura di partecipazione al corso
+          create_course_annulation_invoice: Creare la fattura dei costi di cancellazione
       key_data_sheets:
         create:
           success: Le schede dei dati di riferimento sono state create e aggiunte al corso come allegato.
@@ -1238,12 +1238,12 @@ it:
           Siamo raggiungibili durante i nostri orari di lavoro
           Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
       popover_cancel_sac_cas:
-        send_email: ""
-        invoice_option: ""
-        standard: ""
-        custom: ""
-        no_invoice: ""
-        custom_price: ""
+        send_email: Inviare l’e-mail al/alla partecipante
+        invoice_option: Fattura
+        standard: Calcolo dei costi di cancellazione ai sensi del regolamento
+        custom: Calcolo dei costi di cancellazione con un importo definito dall’utente
+        no_invoice: Nessuna fattura dei costi di cancellazione
+        custom_price: Importo
       states:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1286,11 +1286,11 @@ it:
       summoned_notice: "%{participant} è stato convocato."
       actions_show_youth:
         summon_button: Convocare
-        assign_confirm: ""
+        assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
       actions_show_sac_cas:
-        modal_title: ""
-        summon_and_send_mail: ""
-        summon_and_send_no_mail: ""
+        modal_title: "Desideri davvero convocare questa/o partecipante?"
+        summon_and_send_mail: Convocare e inviare l’e-mail
+        summon_and_send_no_mail: Convocare senza e-mail
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
@@ -1303,7 +1303,8 @@ it:
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
 
       popover_participant_cancels:
-        cancel_info: >
+        cancel_info: >-
+          Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento del ritiro sarà addebitato un importo pari a CHF %{cancellation_cost} per le spese di elaborazione e cancellazione.
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-
@@ -1323,7 +1324,8 @@ it:
         assignment_closed: Finalizzare l’assegnazione
         ready: Pronto per lo svolgimento
         closed: Finalizzare
-        closed_confirm_text: >
+        closed_confirm_text: >-
+          Con la finalizzazione, tutte le registrazioni con stato Convocato passano allo stato Partecipato. Per tutte le registrazioni con stato Nullo viene emessa una fattura per i costi di cancellazione al 100%.
         canceled: Cancellazioni
       state_back_buttons:
         assignment_closed: Tornare all’assegnazione
@@ -1406,8 +1408,8 @@ it:
         existing_membership_notice: >-
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
         can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo login SAC/CAS.
-        already_subscribed_to_abo: ""
-        already_member_of_tourenportal: ""
+        already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
+        already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
         existing_family_notice: Sei assegnato a una famiglia. Contatta il Segretariato centrale del CAS.
         signed_up_notice: La tua registrazione è stata salvata con successo.
@@ -1469,7 +1471,7 @@ it:
 
   invoices:
     abo_magazin:
-      title: ""
+      title: "Fattura %{group} %{year}"
       positions:
         abo_fee: "Abbonamento %{group} %{time_period}"
         abroad_fee: "Affrancatura %{group}"
@@ -1481,10 +1483,10 @@ it:
     course_participation:
       no_invoice_possible: "Questo/a partecipante non riceve alcuna fattura."
     course_annulation:
-      title: ""
+      title: Fattura dei costi di cancellazione
       processing_fee: Quota di elaborazione
       cancellation_costs: "%{percentage}% costi di cancellazione"
-      custom_cancellation_costs: ""
+      custom_cancellation_costs: Costi di cancellazione
     sac_memberships:
       title: "Fattura di affiliazione %{year}"
       positions:
@@ -1538,10 +1540,10 @@ it:
           other: " Le vostre %{count} affiliazioni CAS sono state condivise."
     undo_terminations:
       create:
-        success: ""
+        success: "I ruoli sono stati riattivati con successo."
       new:
-        info_text: ""
-        family_number: ""
+        info_text: "I seguenti ruoli e attributi sono stati ripristinati allo stato precedente alla disdetta:"
+        family_number: "Numero di famiglie: %{number}"
 
   mitglieder_exports:
     export_enqueued: "L’esportazione viene avviata in background e scaricata una volta pronta."
@@ -1625,17 +1627,19 @@ it:
   abo_magazin_invoices:
     create:
         flash:
-          success: ""
+          success: "La fattura desiderata viene creata e inviata ad Abacus"
 
   people:
     abo_magazin_invoices:
       new:
-        title: ""
-        abo_group: ""
-        alert_info: >
-        alert_warning: >
-        alert_error: ""
-        create_invoice: ""
+        title: Creare la fattura per Le Alpi
+        abo_group: Rivista
+        alert_info: >-
+          Una volta confermato questo dialogo viene creata una fattura per l’abbonamento a «Le Alpi» che sarà inviata al socio tramite e-mail o posta. Non viene verificato se le fatture per Le Alpi esistono già né quale sia il loro stato. Una nuova fattura sarà creata in ogni caso. Non si effettuano modifiche o estensioni di ruolo.
+        alert_warning: >-
+          Questa persona non è abbonata ad alcuna rivista, pertanto non è possibile creare nessuna fattura di abbonamento.
+        alert_error: "I seguenti controlli di qualità dei dati impediscono la creazione di una fattura per Le Alpi:"
+        create_invoice: Creare la fattura
 
     membership:
       verify:
@@ -1692,13 +1696,14 @@ it:
 
     external_invoices:
       list:
-        cancel_invoice: ""
-        cancel_invoice_confirmation: >
+        cancel_invoice: Stornare
+        cancel_invoice_confirmation: >-
+          Desidera davvero stornare questa fattura? Questa azione non può essere annullata.
       cancel:
         flash: "La fattura %{invoice} (n. d’ordine %{abacus_sales_order_key}) viene stornata"
       actions_index:
-        create_abo_magazin_invoice: ""
-        create_membership_invoice: ""
+        create_abo_magazin_invoice: Creare la fattura per Le Alpi
+        create_membership_invoice: Creare la fattura di affiliazione
 
     yearly_membership_invoices:
       job_scheduling_info: "L’iter di incasso annuale è stato avviato con successo."
@@ -1767,7 +1772,7 @@ it:
 
   roles/terminations:
     global:
-      undo: ""
+      undo: Riattivare
       sac_cas/role/mitglied_common:
         no_permission: Per la disdetta è necessario rivolgersi all’assistenza soci della sezione
       group/abo_magazin/abonnent:
@@ -1856,7 +1861,7 @@ it:
   sheet/memberships/terminate_sac_membership:
     title: Disdire l’affiliazione al CAS
   sheet/memberships/undo_termination:
-    title: ""
+    title: Riattivare l’affiliazione al CAS
 
   table_displays:
     person:
