@@ -68,9 +68,11 @@ module TTY
         define_method(color_name) do |text|
           format_text(text, color: color_name)
         end
-        # Defines methods like bold_red(text), bold_green(text) etc.
-        define_method(:"bold_#{color_name}") do |text|
-          format_text(text, color: color_name, style: :bold)
+
+        STYLES.each_key do |style_name|
+          define_method("#{style_name}_#{color_name}") do |text|
+            format_text(text, color: color_name, style: style_name)
+          end
         end
       end
 
