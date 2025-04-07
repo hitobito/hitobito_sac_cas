@@ -13,6 +13,7 @@ module TTY
   module Memberships
     class PromoteNeuanmeldung
       include TTY::Helpers::Format
+      include TTY::Helpers::PaperTrailed
 
       attr_reader :neuanmeldung, :end_on
 
@@ -23,6 +24,7 @@ module TTY
       end
 
       def run
+        set_papertrail_metadata
         promote if confirm?
       end
 
