@@ -20,3 +20,17 @@ fundraising:
   name: Fundraising
   subscribable_for: configured
   subscribable_mode: opt_in
+
+section_bulletin_bluemlisalp:
+  group: bluemlisalp
+  name: Sektionsbulletin physisch
+  subscribable_for: configured
+  subscribable_mode: opt_out
+  internal_key: sektionsbulletin_paper
+
+section_bulletin_bluemlisalp_ortsgruppe_ausserberg:
+  group: bluemlisalp_ortsgruppe_ausserberg
+  name: Sektionsbulletin physisch
+  subscribable_for: configured
+  subscribable_mode: opt_out
+  internal_key: sektionsbulletin_paper

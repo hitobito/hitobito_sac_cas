@@ -16,6 +16,7 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:new_entry) { false }
   let(:positions) { described_class.new(member).generate(memberships, new_entry: new_entry) }
   let(:magazine_list) { mailing_lists(:sac_magazine) }
+  let(:section_bulletin_bluemlisalp) { mailing_lists(:section_bulletin_bluemlisalp) }
 
   before do
     SacMembershipConfig.update_all(valid_from: 2020)
@@ -227,11 +228,44 @@ describe Invoices::SacMemberships::PositionGenerator do
           expect(positions[3].label).to eq("Beitrag Sektion SAC Blüemlisalp")
           expect(positions[3].amount).to eq(84.0)
           expect(positions[4].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[4].label).to eq("Porto Bulletin SAC Blüemlisalp")
           expect(positions[4].amount).to eq(13.0)
           expect(positions[5].name).to eq("section_fee")
           expect(positions[5].label).to eq("Beitrag Sektion SAC Blüemlisalp Ausserberg")
           expect(positions[5].amount).to eq(40.0)
           expect(positions[6].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[6].label).to eq("Porto Bulletin SAC Blüemlisalp Ausserberg")
+          expect(positions[6].amount).to eq(10.0)
+          expect(positions[7].name).to eq("section_fee")
+          expect(positions[7].label).to eq("Beitrag Sektion SAC Matterhorn")
+          expect(positions[7].amount).to eq(88.0)
+        end
+      end
+
+      context "without section bulletin subscription in bluemlisalp" do
+        before do
+          section_bulletin_bluemlisalp.subscriptions.create!(subscriber: person, excluded: true)
+        end
+
+        it "generates positions" do
+          expect(positions.size).to eq(8)
+
+          expect(positions[0].name).to eq("sac_fee")
+          expect(positions[0].amount).to eq(50.0)
+          expect(positions[1].name).to eq("hut_solidarity_fee")
+          expect(positions[1].amount).to eq(20.0)
+          expect(positions[2].name).to eq("sac_magazine")
+          expect(positions[2].amount).to eq(25.0)
+          expect(positions[3].name).to eq("sac_magazine_postage_abroad")
+          expect(positions[3].amount).to eq(10.0)
+          expect(positions[4].name).to eq("section_fee")
+          expect(positions[4].label).to eq("Beitrag Sektion SAC Blüemlisalp")
+          expect(positions[4].amount).to eq(84.0)
+          expect(positions[5].name).to eq("section_fee")
+          expect(positions[5].label).to eq("Beitrag Sektion SAC Blüemlisalp Ausserberg")
+          expect(positions[5].amount).to eq(40.0)
+          expect(positions[6].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[6].label).to eq("Porto Bulletin SAC Blüemlisalp Ausserberg")
           expect(positions[6].amount).to eq(10.0)
           expect(positions[7].name).to eq("section_fee")
           expect(positions[7].label).to eq("Beitrag Sektion SAC Matterhorn")
@@ -249,6 +283,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[0].name).to eq("section_fee")
         expect(positions[0].amount).to eq(20.0)
         expect(positions[1].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[1].label).to eq("Porto Bulletin SAC Blüemlisalp Ausserberg")
         expect(positions[1].amount).to eq(10.0)
       end
     end
@@ -276,11 +311,13 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[4].label).to eq("Beitrag Sektion SAC Blüemlisalp")
         expect(positions[4].amount).to eq(42.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[5].label).to eq("Porto Bulletin SAC Blüemlisalp")
         expect(positions[5].amount).to eq(6.5)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].label).to eq("Beitrag Sektion SAC Blüemlisalp Ausserberg")
         expect(positions[6].amount).to eq(20.0)
         expect(positions[7].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[7].label).to eq("Porto Bulletin SAC Blüemlisalp Ausserberg")
         expect(positions[7].amount).to eq(5.0)
         expect(positions[8].name).to eq("section_fee")
         expect(positions[8].label).to eq("Beitrag Sektion SAC Matterhorn")
@@ -311,11 +348,13 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[4].label).to eq("Beitrag Sektion SAC Blüemlisalp")
         expect(positions[4].amount).to eq(0.0)
         expect(positions[5].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[5].label).to eq("Porto Bulletin SAC Blüemlisalp")
         expect(positions[5].amount).to eq(0.0)
         expect(positions[6].name).to eq("section_fee")
         expect(positions[6].label).to eq("Beitrag Sektion SAC Blüemlisalp Ausserberg")
         expect(positions[6].amount).to eq(0.0)
         expect(positions[7].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[7].label).to eq("Porto Bulletin SAC Blüemlisalp Ausserberg")
         expect(positions[7].amount).to eq(0.0)
         expect(positions[8].name).to eq("section_fee")
         expect(positions[8].label).to eq("Beitrag Sektion SAC Matterhorn")
@@ -861,6 +900,7 @@ describe Invoices::SacMemberships::PositionGenerator do
           expect(positions[4].name).to eq("section_fee")
           expect(positions[4].amount).to eq(42.0)
           expect(positions[5].name).to eq("section_bulletin_postage_abroad")
+          expect(positions[5].label).to eq("Porto Bulletin SAC Blüemlisalp")
           expect(positions[5].amount).to eq(13.0)
 
           expect(positions[6].name).to eq("sac_entry_fee")
@@ -932,6 +972,7 @@ describe Invoices::SacMemberships::PositionGenerator do
         expect(positions[0].name).to eq("section_fee")
         expect(positions[0].amount).to eq(42.0)
         expect(positions[1].name).to eq("section_bulletin_postage_abroad")
+        expect(positions[1].label).to eq("Porto Bulletin SAC Blüemlisalp")
         expect(positions[1].amount).to eq(13.0)
       end
     end
