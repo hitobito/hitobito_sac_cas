@@ -10,13 +10,14 @@ module SacCas::QualificationAbility
 
   TOURENCHEF_ROLE_TYPES = [
     Group::SektionsTourenUndKurseSommer::Tourenchef,
-    Group::SektionsTourenUndKurseWinter::Tourenchef
+    Group::SektionsTourenUndKurseWinter::Tourenchef,
+    Group::SektionsFunktionaere::Administration
   ].map(&:sti_name)
 
   included do
     on(Qualification) do
       permission(:any).may(:create, :destroy).for_tourenchef_qualification_as_tourenchef_in_layer
-      permission(:layer_and_below_full).may(:create, :destroy).in_course_layer_or_below
+      permission(:layer_and_below_full).may(:create, :destroy).permission_in_top_layer
     end
   end
 
@@ -35,6 +36,10 @@ module SacCas::QualificationAbility
   def tourenchef_layer_group_ids
     user.roles.where(type: TOURENCHEF_ROLE_TYPES)
       .includes(:group).collect { _1.group.layer_group_id }.uniq
+  end
+
+  def permission_in_top_layer
+    permission_in_layer?(Group.root.id)
   end
 
   def can_show_person?
