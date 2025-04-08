@@ -11,9 +11,6 @@ module Wizards::Steps::Signup::AboMagazin
 
     include Wizards::Steps::Signup::AgreementFields
 
-    attribute :issues_from, :date, default: -> { Time.zone.today }
-    validates :issues_from, timeliness: {on_or_after: -> { Time.zone.today }, type: :date}
-
     def requires_adult_consent? = false
   end
 end

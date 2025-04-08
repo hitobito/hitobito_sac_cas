@@ -1373,11 +1373,6 @@ de:
       form:
         has_account: Hast du bereits ein SAC-Login?
         to_login_page: Anmelden
-      abo_issue:
-        issues_from_help: >-
-          Das Abonnement läuft ab der nächstenmöglichen Ausgabe.
-          Wenn die Zeitschrift zu einem späteren Zeitpunkt geliefert werden soll teile uns bitte
-          mit, ab welcher Ausgabe wir mit der Auslieferung beginnen dürfen.
       abo_infos:
         annual_price_header: Preis pro Jahr
         delivery_country_header: Versandsland
