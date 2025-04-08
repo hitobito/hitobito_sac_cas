@@ -24,6 +24,7 @@ describe QualificationAbility do
   }
   let(:ausserberg_tourenchef) { people(:tourenchef) }
   let(:person) { ausserberg_tourenchef }
+  let(:bluemlisalp_mitglied) { people(:mitglied) }
 
   subject(:ability) { Ability.new(person) }
 
@@ -116,13 +117,8 @@ describe QualificationAbility do
   end
 
   describe "with layer_and_below_full" do
-    let(:bluemlisalp_mitglied) { people(:mitglied) }
     let(:qualification_kind) { qualification_kinds(:ski_leader) }
     let(:qualification) { Fabricate(:qualification, qualification_kind: qualification_kind, person: bluemlisalp_mitglied) }
-
-    def create_funktionaer(role)
-      Fabricate(role.sti_name, group: groups(:bluemlisalp_funktionaere))
-    end
 
     context "layer_and_below_full in top layer" do
       let(:person) { people(:admin) }
@@ -141,9 +137,9 @@ describe QualificationAbility do
     describe Group::SektionsFunktionaere::Administration do
       let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person.reload }
 
-      it "is permitted to create and destroy" do
-        expect(ability).to be_able_to(:create, qualification)
-        expect(ability).to be_able_to(:destroy, qualification)
+      it "is not permitted to create and destroy" do
+        expect(ability).to_not be_able_to(:create, qualification)
+        expect(ability).to_not be_able_to(:destroy, qualification)
       end
     end
 
@@ -162,5 +158,41 @@ describe QualificationAbility do
         expect(ability).to be_able_to(:destroy, qualification)
       end
     end
+  end
+
+  describe "as sektionsfunktionaere administrator" do
+    let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person.reload }
+
+    context "regarding qualification_kind with tourenchef_may_edit true" do
+      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind, person: bluemlisalp_mitglied) }
+
+      it "is permitted to create in same layer as administrator role" do
+        expect(ability).to be_able_to(:create, qualification)
+      end
+
+      it "is not permitted to create in different layer than administrator role" do
+        fabricate_readonly_role(matterhorn_funktionaere)
+        qualification.person = matterhorn_mitglied
+        expect(ability).to_not be_able_to(:create, qualification)
+      end
+    end
+
+    context "regarding qualification_kind with tourenchef_may_edit false" do
+      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind, person: bluemlisalp_mitglied) }
+
+      it "is not permitted to create in same layer as administrator role" do
+        expect(ability).to_not be_able_to(:create, qualification)
+      end
+
+      it "is not permitted to create in different layer than administrator role" do
+        fabricate_readonly_role(matterhorn_funktionaere)
+        qualification.person = matterhorn_mitglied
+        expect(ability).to_not be_able_to(:create, qualification)
+      end
+    end
+  end
+
+  def create_funktionaer(role)
+    Fabricate(role.sti_name, group: groups(:bluemlisalp_funktionaere))
   end
 end
