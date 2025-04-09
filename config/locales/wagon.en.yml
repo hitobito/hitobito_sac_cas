@@ -1323,6 +1323,8 @@ en:
       form:
         has_account: ""
         to_login_page: ""
+      abo_issue:
+        issues_from_help: >
       abo_infos:
         annual_price_header: Price per year
         delivery_country_header: Country of dispatch

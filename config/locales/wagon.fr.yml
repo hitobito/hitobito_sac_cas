@@ -1393,6 +1393,13 @@ fr:
       form:
         has_account: "As-tu déjà un login CAS?"
         to_login_page: S’inscrire
+      abo_issue:
+        issues_from_help: >-
+          L’abonnement prend effet à partir du prochain numéro possible.
+
+          Si le magazine doit être livré à une date ultérieure, merci de nous informer du début de la livraison.
+
+          indique-nous à partir de quel numéro nous pouvons commencer la livraison.
       abo_infos:
         annual_price_header: Prix par an
         delivery_country_header: Pays d’expédition
