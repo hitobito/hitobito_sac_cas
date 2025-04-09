@@ -51,7 +51,7 @@ module SacCas::Person
       validates_with Person::AddressValidator
     end
 
-    before_save :set_digital_correspondence, if: :password_initialized?
+    before_save :set_digital_correspondence
     after_save :check_data_quality
     after_save_commit :transmit_data_to_abacus
 
@@ -136,11 +136,9 @@ module SacCas::Person
   private
 
   def set_digital_correspondence
-    self.correspondence = "digital"
-  end
+    return unless confirmed_at.present? && encrypted_password.present? && encrypted_password_was.blank? && wso2_legacy_password_hash_was.blank? && !versions.exists?(event: :password_override)
 
-  def password_initialized?
-    confirmed_at.present? && encrypted_password_changed? && encrypted_password.present? && encrypted_password_was.blank?
+    self.correspondence = "digital"
   end
 
   def check_data_quality
