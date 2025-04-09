@@ -432,7 +432,6 @@ en:
         sac_cas_self_registration_url: SAC self-registration
       group/sac_cas:
         sac_newsletter_mailing_list_id: SAC Newsletter Subscription ID
-        sac_magazine_mailing_list_id: The Alps subscription ID
         sac_fundraising_mailing_list_id: Appeal for donations Subscription ID
         course_admin_email: E-mail course administration
         abo_alpen_fee: ""

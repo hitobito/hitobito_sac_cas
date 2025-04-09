@@ -24,7 +24,6 @@ class Group::SacCas < Group
 
   mounted_attr :course_admin_email, :string
   mounted_attr :sac_newsletter_mailing_list_id, :integer
-  mounted_attr :sac_magazine_mailing_list_id, :integer
   mounted_attr :sac_fundraising_mailing_list_id, :integer
   mounted_attr :abo_alpen_fee, :decimal, precision: 10, scale: 2
   mounted_attr :abo_alpen_postage_abroad, :decimal, precision: 10, scale: 2
@@ -41,7 +40,6 @@ class Group::SacCas < Group
 
   def assert_mounted_mailing_list_attrs
     assert_mounted_mailing_list_attr(:sac_newsletter_mailing_list_id)
-    assert_mounted_mailing_list_attr(:sac_magazine_mailing_list_id)
     assert_mounted_mailing_list_attr(:sac_fundraising_mailing_list_id)
   end
 

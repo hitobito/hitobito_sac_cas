@@ -30,25 +30,6 @@ describe Group::SacCas do
       end
     end
 
-    context "sac_magazine_mailing_list_id" do
-      it "allows empty value" do
-        expect(group).to be_valid
-      end
-
-      it "allows value of group mailing_list" do
-        list = Fabricate(:mailing_list, group: group)
-        group.sac_magazine_mailing_list_id = list.id
-        expect(group).to be_valid
-      end
-
-      it "does not allow value from other groups" do
-        list = Fabricate(:mailing_list, group: groups(:geschaeftsstelle))
-        group.sac_magazine_mailing_list_id = list.id
-        expect(group).not_to be_valid
-        expect(group).to have(1).error_on("sac_magazine_mailing_list_id")
-      end
-    end
-
     context "sac_fundraising_mailing_list_id" do
       it "allows empty value" do
         expect(group).to be_valid

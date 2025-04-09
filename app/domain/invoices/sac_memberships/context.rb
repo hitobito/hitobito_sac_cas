@@ -29,7 +29,7 @@ module Invoices
       end
 
       def sac_magazine_mailing_list
-        @sac_magazine_mailing_list ||= MailingList.find(sac.sac_magazine_mailing_list_id)
+        @sac_magazine_mailing_list ||= MailingList.find_by(internal_key: SacCas::MAILING_LIST_DIE_ALPEN_PAPER_INTERNAL_KEY)
       end
 
       def people_with_membership_years
