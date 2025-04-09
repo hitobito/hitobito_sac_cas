@@ -14,6 +14,7 @@ sac_magazine:
   name: Die Alpen
   subscribable_for: configured
   subscribable_mode: opt_out
+  internal_key: die_alpen_paper
 
 fundraising:
   group: root

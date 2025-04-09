@@ -127,6 +127,5 @@ fundraising_list = seed_list(
 # Set the mailing list ID attrs on the root group.
 Group.root.update!(
   sac_newsletter_mailing_list_id: sac_newsletter_list.id,
-  sac_magazine_mailing_list_id: die_alpen_paper_list.id,
   sac_fundraising_mailing_list_id: fundraising_list.id
 )
