@@ -16,8 +16,6 @@ unless magazine_list.subscriptions.exists?
   magazine_list.subscriptions.create!(subscriber: root, role_types: [Group::SektionsMitglieder::Mitglied])
 end
 
-root.update!(sac_magazine_mailing_list_id: magazine_list.id)
-
 Group::Sektion.all.find_each do |sektion|
   sektion_bulletin = MailingList.seed(:name, :group_id, :internal_key, {
     name: "Sektionsbulletin physisch",
