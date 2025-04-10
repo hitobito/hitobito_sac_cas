@@ -108,6 +108,20 @@ RSpec.describe "events#index", type: :request do
           jsonapi_get "/api/events"
         end
       end
+
+      it "does execute query again if event dates changed" do
+        expect(EventResource).to receive(:all).and_call_original.twice
+        jsonapi_get "/api/events"
+        Event.first.dates.first.update!(start_at: 50.days.ago)
+        jsonapi_get "/api/events"
+      end
+
+      it "does execute query again if event date is deleted" do
+        expect(EventResource).to receive(:all).and_call_original.twice
+        jsonapi_get "/api/events"
+        Event.first.dates.first.destroy!
+        jsonapi_get "/api/events"
+      end
     end
   end
 end
