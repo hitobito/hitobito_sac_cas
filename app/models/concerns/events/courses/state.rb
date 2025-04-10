@@ -81,7 +81,7 @@ module Events::Courses::State
   def summon_assigned_participants
     assigned_participants.each do |participation|
       Event::ParticipationMailer.summon(participation).deliver_later
-      unless ExternalInvoice::CourseParticipation.exists?(link: participation)
+      if !ExternalInvoice::CourseParticipation.exists?(link: participation) && groups.first.root?
         ExternalInvoice::CourseParticipation.invoice!(participation)
       end
     end
@@ -140,6 +140,8 @@ module Events::Courses::State
   end
 
   def send_absent_invoices
+    return unless groups.first.root?
+
     participations.where(state: :absent).find_each do |participation|
       unless ExternalInvoice::CourseAnnulation.exists?(link: participation, total: participation.price)
         cancel_invoices(participation.external_invoices)

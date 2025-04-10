@@ -591,7 +591,7 @@ describe Event::ParticipationsController do
 
         it "sets default canceled_at and statement" do
           freeze_time
-          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago, cancel_statement: "next time!"}})
+          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date, cancel_statement: "next time!"}})
           expect(participation.reload.state).to eq "canceled"
           expect(participation.canceled_at).to eq Time.zone.today
           expect(participation.cancel_statement).to eq("next time!")
@@ -645,6 +645,29 @@ describe Event::ParticipationsController do
           expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation)
           put :cancel, params: params.merge({invoice_option: "custom", custom_price: "5.0"})
         end
+
+        context "for tour" do
+          let(:event) do
+            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)], applications_cancelable: true).tap do |c|
+              c.dates.first.update_columns(start_at: 1.day.from_now, finish_at: 1.week.from_now)
+            end
+          end
+
+          it "cancels participations, generates no invoice" do
+            freeze_time
+
+            expect do
+              expect do
+                put :cancel, params: params
+              end.to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+            end
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
+              .and change { participation.reload.state }.to("canceled")
+              .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
+
+            expect(participation.canceled_at).to eq(Time.zone.today)
+          end
+        end
       end
 
       context "as admin" do
@@ -658,20 +681,41 @@ describe Event::ParticipationsController do
 
         it "can override canceled_at" do
           freeze_time
-          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}})
+          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}})
           expect(participation.reload.state).to eq "canceled"
           expect(participation.canceled_at).to eq 1.day.ago.to_date
           expect(participation.cancel_statement).to be_nil
         end
 
         it "sends application canceled email when send_email is true" do
-          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, send_email: true}) }
+          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, send_email: true}) }
             .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
         end
 
         it "does not send application canceled email when send_email is false" do
-          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, send_email: false}) }
+          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, send_email: false}) }
             .not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+        end
+
+        context "for tour" do
+          let(:event) do
+            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)])
+          end
+
+          it "cancels participations, generates no invoice but sends email" do
+            freeze_time
+
+            expect do
+              expect do
+                put :cancel, params: params.merge({event_participation: {canceled_at: 5.days.ago.to_date}, send_email: false, invoice_option: "standard"})
+              end.not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+            end
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
+              .and change { participation.reload.state }.to("canceled")
+              .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
+
+            expect(participation.canceled_at).to eq(5.days.ago.to_date)
+          end
         end
 
         context "invoice_option standard" do
@@ -680,7 +724,7 @@ describe Event::ParticipationsController do
             participation.update!(price: 10, price_category: :price_regular)
             freeze_time
 
-            expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "standard"}) }
+            expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "standard"}) }
               .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
               .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
               .and change { invoice.reload.state }.to("cancelled")
@@ -699,12 +743,12 @@ describe Event::ParticipationsController do
         context "invoice_option custom" do
           it "creates course annulation invoice with custom amount" do
             expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 400.50)
-            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: "400.50"})
+            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "custom", custom_price: "400.50"})
           end
 
           it "custom amount is zero when no amount passed" do
             expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 0)
-            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "custom", custom_price: ""})
+            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "custom", custom_price: ""})
           end
         end
 
@@ -712,7 +756,7 @@ describe Event::ParticipationsController do
           it "creates course annulation invoice with custom amount" do
             expect(ExternalInvoice::CourseAnnulation).not_to receive(:invoice!)
             expect do
-              put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago}, invoice_option: "no_invoice"})
+              put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "no_invoice"})
             end.not_to change { ExternalInvoice::CourseAnnulation.count }
           end
         end

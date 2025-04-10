@@ -3,11 +3,11 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-- unless entry.state == "applied" # sac "Warteliste"
+- if entry.state != "applied" && @group.root? && @event.course? # sac "Warteliste"
   %p.well= t('.cancel_info', cancellation_cost: event_participation_cancellation_cost(entry))
 
 = standard_form(entry,
                 url: cancel_group_event_participation_path(@group, @event, entry),
                 method: :put) do |f|
   = f.labeled_input_field(:cancel_statement, label_class: 'col-md-3 col-xl-3 pb-1 required', required: true)
-  = form_buttons(f, submit_label: t('event.participations.actions_show_youth.cancel_button'), cancel_url: '#')
+  = form_buttons(f, submit_label: t('event.participations.actions_show_youth.cancel_button'), cancel_url: '#', toolbar_class: 'offset-xl-3')
