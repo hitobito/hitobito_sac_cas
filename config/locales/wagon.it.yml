@@ -1391,9 +1391,6 @@ it:
       form:
         has_account: "Hai già un login CAS?"
         to_login_page: Registrare
-      abo_issue:
-        issues_from_help: >-
-          L’abbonamento decorre dal primo numero successivo possibile. Se si desidera ricevere la rivista a partire da un altro momento, si prega di comunicare da quale numero cominciare la consegna.
       abo_infos:
         annual_price_header: Prezzo all'anno
         delivery_country_header: Paese di spedizione
