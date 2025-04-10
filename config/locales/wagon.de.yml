@@ -1273,6 +1273,7 @@ de:
         former_price_select: Bisheriger %{price_label}
         no_price_select: Keine Kosten
       summoned_notice: "%{participant} wurde aufgeboten."
+      reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
         summon_button: Aufbieten
         assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
@@ -1284,6 +1285,7 @@ de:
         attach_key_data_sheet: Eckdatenblatt erzeugen
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
         create_course_leader_invoice_button: Kurskaderabrechnung erstellen
+        reactivate: Reaktivieren
       popover_create_course_leader_settlement:
         create_invoice: Abrechnung erstellen
         info_text_html: >-
