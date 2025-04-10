@@ -24,6 +24,7 @@ module SacCas::Event::ParticipationsController
 
   def cancel
     cancel_invoices
+    create_annulation_invoice
     entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
     entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
     entry.canceled_at = Time.zone.today if participant_cancels?
@@ -193,11 +194,16 @@ module SacCas::Event::ParticipationsController
       invoice.update!(state: :cancelled)
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
+  end
 
-    if params.dig(:invoice_option) == "standard"
+  def create_annulation_invoice
+    return if participant_cancels? && %w[applied unconfirmed].include?(entry.state)
+
+    option = params[:invoice_option]
+    if participant_cancels? || option == "standard"
       ExternalInvoice::CourseAnnulation.invoice!(entry)
-    elsif params.dig(:invoice_option) == "custom"
-      ExternalInvoice::CourseAnnulation.invoice!(entry, custom_price: params.dig(:custom_price).to_i)
+    elsif option == "custom"
+      ExternalInvoice::CourseAnnulation.invoice!(entry, custom_price: params[:custom_price].to_f)
     end
   end
 end
