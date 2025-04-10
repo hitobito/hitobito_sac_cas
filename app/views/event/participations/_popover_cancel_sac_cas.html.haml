@@ -5,7 +5,7 @@
 
 = f.labeled_input_field(:cancel_statement, label_class: 'col-md-3 col-xl-3 pb-1 required', required: true)
 
-- if entry.id != current_user.id
+- if @event.course? && @group.root? && entry.id != current_user.id
 	%div{data: { controller: 'form-field-toggle' }}
 		.row.mb-2
 			= label_tag("invoice_option", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
@@ -23,9 +23,8 @@
 			.col-md-9.col-lg-8.col-xl-8.mw-63ch
 				= text_field_tag :custom_price, nil, class: "form-control form-control-sm", type: "number"
 
+- if entry.id != current_user.id
 	.row.mb-2
-		= label_tag("send_email", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
-			= t(".send_email")
-		.labeled.col-md-9.col-lg-8.col-xl-8.mw-63ch
-			.mt-1.ps-0
-				= check_box_tag("send_email", true, class: "form-check-input", checked: true)
+		%label.checkbox.col-md-9.offset-md-3.col-lg-8.col-xl-8.mw-63ch.mt-1
+			= check_box_tag("send_email", true, class: "form-check-input", checked: true)
+			%span.ms-1= t(".send_email")

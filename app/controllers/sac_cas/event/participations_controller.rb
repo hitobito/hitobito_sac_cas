@@ -23,8 +23,7 @@ module SacCas::Event::ParticipationsController
   end
 
   def cancel
-    cancel_invoices
-    create_annulation_invoice
+    invoice_cancelled
     entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
     entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
     entry.canceled_at = Time.zone.today if participant_cancels?
@@ -44,16 +43,10 @@ module SacCas::Event::ParticipationsController
 
   private
 
-  def enqueue_confirmation_job
-    Event::ParticipationConfirmationJob.new(entry).enqueue!
-  end
-
-  def send_application_canceled_email
-    Event::ParticipationCanceledMailer.confirmation(entry).deliver_later
-  end
-
-  def send_application_summoned_email
-    Event::ParticipationMailer.summon(entry).deliver_later
+  def build_entry
+    super.tap do |e|
+      e.newsletter = true if subscribe_newsletter?
+    end
   end
 
   def permitted_attrs
@@ -162,8 +155,7 @@ module SacCas::Event::ParticipationsController
   end
 
   def subscribe_newsletter?
-    event.course? &&
-      group.root? &&
+    root_course? &&
       group.sac_newsletter_mailing_list_id &&
       !params[:for_someone_else]
   end
@@ -175,21 +167,32 @@ module SacCas::Event::ParticipationsController
     end
   end
 
-  def participant_cancels?
-    entry.person == current_user
+  def enqueue_confirmation_job
+    Event::ParticipationConfirmationJob.new(entry).enqueue!
   end
 
-  def build_entry
-    super.tap do |e|
-      e.newsletter = true if subscribe_newsletter?
-    end
+  def send_application_canceled_email
+    Event::ParticipationCanceledMailer.confirmation(entry).deliver_later
+  end
+
+  def send_application_summoned_email
+    Event::ParticipationMailer.summon(entry).deliver_later
   end
 
   def enqueue_invoice_job
-    ExternalInvoice::CourseParticipation.invoice!(entry) unless ExternalInvoice::CourseParticipation.exists?(link: entry)
+    return if !root_course? || ExternalInvoice::CourseParticipation.exists?(link: entry)
+
+    ExternalInvoice::CourseParticipation.invoice!(entry)
   end
 
-  def cancel_invoices
+  def invoice_cancelled
+    return unless root_course?
+
+    cancel_participation_invoices
+    create_annulation_invoice
+  end
+
+  def cancel_participation_invoices
     entry.person.external_invoices.where(link: entry).find_each do |invoice|
       invoice.update!(state: :cancelled)
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
@@ -205,5 +208,13 @@ module SacCas::Event::ParticipationsController
     elsif option == "custom"
       ExternalInvoice::CourseAnnulation.invoice!(entry, custom_price: params[:custom_price].to_f)
     end
+  end
+
+  def participant_cancels?
+    entry.person == current_user
+  end
+
+  def root_course?
+    event.course? && group.root?
   end
 end
