@@ -12,5 +12,9 @@ module SacCas::EventAbility
     on(Event) do
       permission(:any).may(:manage_attachments).for_participations_full_events
     end
+
+    on(Event::Tour) do
+      class_side(:list_available).everybody
+    end
   end
 end

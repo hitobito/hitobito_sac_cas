@@ -98,6 +98,8 @@ Rails.application.routes.draw do
       put :push_down, on: :member
     end
 
+    get 'list_tours' => 'event/lists#tours', as: :list_tours
+
     scope path: ApplicationResource.endpoint_namespace, module: :json_api,
       constraints: {format: "jsonapi"}, defaults: {format: "jsonapi"} do
       resources :external_invoices, only: [:index, :show, :update]
