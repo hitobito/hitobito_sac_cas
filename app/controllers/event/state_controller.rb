@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::Courses::StateController < ApplicationController
+class Event::StateController < ApplicationController
   def update
     authorize!(:update, entry)
 
@@ -18,12 +18,7 @@ class Event::Courses::StateController < ApplicationController
 
   def save_next_state
     entry.state = next_state
-    if next_state&.to_sym == :canceled
-      entry.canceled_reason = params.dig(:event, :canceled_reason)
-      entry.inform_participants = params.dig(:event, :inform_participants)
-    elsif next_state&.to_sym == :application_open
-      reset_canceled_reason
-    end
+    set_course_attrs if entry.course?
 
     if entry.save
       set_success_notice
@@ -32,8 +27,17 @@ class Event::Courses::StateController < ApplicationController
     end
   end
 
+  def set_course_attrs
+    if next_state&.to_sym == :canceled
+      entry.canceled_reason = params.dig(:event, :canceled_reason)
+      entry.inform_participants = params.dig(:event, :inform_participants)
+    elsif next_state&.to_sym == :application_open
+      reset_canceled_reason
+    end
+  end
+
   def set_success_notice
-    flash.now[:notice] = t("events/courses/state.flash.success",
+    flash.now[:notice] = t("events/state.flash.success",
       state: entry.decorate.state_translated)
   end
 
@@ -58,6 +62,6 @@ class Event::Courses::StateController < ApplicationController
   end
 
   def entry
-    @entry ||= Event::Course.find(params[:id])
+    @entry ||= Event.find(params[:id])
   end
 end

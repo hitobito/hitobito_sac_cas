@@ -11,13 +11,16 @@ describe "event state transitions", js: true do
   include ActiveJob::TestHelper
 
   let!(:event) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course))
-      .tap { |e| e.update_column(:state, :application_open) }
-      .tap { |e| e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago) }
+    Fabricate(:sac_course, kind: event_kinds(:ski_course)).tap do |e|
+      e.update_column(:state, :application_open)
+      e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+    end
   end
 
   let!(:participation) do
-    Fabricate(Event::Course::Role::Participant.sti_name, participation: Fabricate(:event_participation, event:, person:)).participation.tap { _1.reload }
+    Fabricate(:event_participation, event:, person:).tap do |participation|
+      Fabricate(Event::Course::Role::Participant.sti_name, participation:)
+    end.reload
   end
 
   let(:person) { people(:admin) }

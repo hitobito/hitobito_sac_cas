@@ -25,7 +25,7 @@ class Event::Tour < Event
   # value: array of possible next states
   self.state_transitions = {
     draft: [:approved, :canceled],
-    approved: [:published, :canceled],
+    approved: [:draft, :published, :canceled],
     published: [:approved, :canceled, :closed],
     canceled: [:draft, :approved, :published], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
     closed: [:published]
