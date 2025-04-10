@@ -84,4 +84,8 @@ module SacCas::Event
   def total_duration_days
     dates.sum { _1.duration.days }
   end
+
+  def states?
+    is_a?(Events::State)
+  end
 end

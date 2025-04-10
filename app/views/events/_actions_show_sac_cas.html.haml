@@ -3,8 +3,8 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas
 
-- if entry.course? && can?(:update, entry)
-  = Dropdown::Events::Courses::State.new(self, entry)
+- if entry.states? && can?(:update, entry)
+  = Dropdown::Events::State.new(self, entry)
 -if entry.course? && can?(:create, entry) && entry.any_email_possible?
   = Dropdown::Events::Courses::MailDispatch.new(self, entry, @group)
 - if entry.course? && can?(:create, entry)

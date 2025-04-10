@@ -45,7 +45,7 @@ Rails.application.routes.draw do
             end
           end
 
-          put "state" => "courses/state#update", :on => :member
+          put "state" => "state#update", :on => :member
         end
       end
 

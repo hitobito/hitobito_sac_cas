@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::Courses::StateController do
+describe Event::StateController do
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:group) { groups(:root) }

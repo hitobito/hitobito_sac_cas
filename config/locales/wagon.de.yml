@@ -1318,7 +1318,8 @@ de:
   events:
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
-      state_buttons:
+    state_buttons:
+      event/course:
         created: Zurück als Entwurf
         application_open: Publizieren
         application_paused: Anmeldung pausieren
@@ -1330,9 +1331,16 @@ de:
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen.
           Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
-      state_back_buttons:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
+      event/tour:
+        draft: Zurück als Entwurf
+        approved: Freigeben
+        published: Publizieren
+        closed: Abschliessen
+        canceled: Absagen
+    state_back_buttons:
+      assignment_closed: Zurück zur Zuteilung
+      application_closed: Zurück zur abgeschlossenen Anmeldung
+      approved: Zurück zur Freigabe
 
     form_tabs:
       communication: Kommunikation
@@ -1373,7 +1381,7 @@ de:
       flash:
         success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
-  events/courses/state:
+  events/state:
     flash:
       success: Status wurde auf %{state} gesetzt.
 
