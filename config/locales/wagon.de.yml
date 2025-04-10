@@ -1195,7 +1195,12 @@ de:
           Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
-
+    lists:
+      nav_left_tours:
+        tours: Touren
+      tours:
+        title: Demnächst stattfindende Touren
+        explanation: Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion.
     participations:
       missing_information: >-
         Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen.
@@ -1566,6 +1571,9 @@ de:
         default: Sektions Attribute
       group/ortsgruppe:
         default: Ortsgruppen Attribute
+
+  navigation:
+    tours: Touren
 
   participations:
     key_data_sheet:

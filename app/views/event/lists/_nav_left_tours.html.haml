@@ -1,0 +1,10 @@
+- #  Copyright (c) 2025, SAC CAS. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+%ul.nav-left-list
+  - @tours.keys.collect(&:split).group_by(&:last).each do |year, months|
+    %li.divider= year
+    - months.each do |month, year|
+      %li= link_to(month, "##{"#{month} #{year}".parameterize}", data: { turbo: false })

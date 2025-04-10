@@ -128,6 +128,7 @@ module HitobitoSacCas
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
       Event::RoleDecorator.prepend SacCas::Event::RoleDecorator
+      EventDecorator.icons["Event::Tour"] = :mountain
 
       ## Domain
       People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
@@ -166,8 +167,29 @@ module HitobitoSacCas
       Sheet::Person.prepend SacCas::Sheet::Person
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
+      # Navigation
+      course_index = NavigationHelper::MAIN.index { |opts| opts[:label] == :courses }
+      NavigationHelper::MAIN.insert(
+        course_index,
+        label: :tours,
+        icon_name: :mountain,
+        url: :list_tours_path,
+        active_for: %w[list_tours],
+        if: lambda do |_|
+          MountedAttribute.exists?(key: "tours_enabled", value: true) && can?(:list_available, Event::Tour)
+        end
+      )
+
       admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[cost_centers cost_units event_levels termination_reasons section_offerings course_compensation_categories course_compensation_rates]
+      admin_item[:active_for] += %w[
+        cost_centers
+        cost_units
+        event_levels
+        termination_reasons
+        section_offerings
+        course_compensation_categories
+        course_compensation_rates
+      ]
 
       ## Controllers
       ApplicationController.include BasicAuth if Settings.basic_auth
@@ -178,6 +200,7 @@ module HitobitoSacCas
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
+      Event::ListsController.prepend SacCas::Event::ListsController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       Event::Participations::MailDispatchesController.prepend SacCas::Event::Participations::MailDispatchesController
       Event::RegisterController.prepend SacCas::Event::RegisterController
