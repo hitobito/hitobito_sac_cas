@@ -153,6 +153,29 @@ describe Event::ParticipationAbility do
       end
     end
 
+    describe "reactivate" do
+      let(:top_course) { events(:top_course) }
+      let(:role) { build_role(:bluemlisalp_mitglieder, "Mitglied") }
+      let(:participation) { build(:bluemlisalp_mitglieder, event: top_course, person: role.person) }
+
+      it "may not reactivate participation as non course admin" do
+        expect(subject).not_to be_able_to(:reactivate, participation)
+      end
+
+      context "layer and below full" do
+        let(:role) { roles(:admin) }
+
+        before do
+          participation.save!
+          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+        end
+
+        it "may reactivate on any participations" do
+          expect(subject).to be_able_to(:reactivate, participation)
+        end
+      end
+    end
+
     describe "cancel" do
       it "may not cancel others" do
         expect(subject).not_to be_able_to(:cancel, participation)
