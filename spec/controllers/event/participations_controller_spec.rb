@@ -455,6 +455,25 @@ describe Event::ParticipationsController do
         .not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
     end
 
+    context "reactivate" do
+      before { participation.update!(state: :canceled, cancel_statement: "Keine Lust", canceled_at: Date.current) }
+
+      it "PUT#reactivate sets particpation to applied when maximum participants is reached" do
+        allow_any_instance_of(Event).to receive(:maximum_participants_reached?).and_return(true)
+        put :reactivate, params: params
+        expect(participation.reload.state).to eq "applied"
+        expect(participation.reload.cancel_statement).to be_nil
+        expect(participation.reload.canceled_at).to be_nil
+      end
+
+      it "PUT#reactivate sets particpation to assigned when maximum participants has not been reached" do
+        put :reactivate, params: params
+        expect(participation.reload.state).to eq "assigned"
+        expect(participation.reload.cancel_statement).to be_nil
+        expect(participation.reload.canceled_at).to be_nil
+      end
+    end
+
     it "PUT#cancel sets statement and default canceled_at" do
       freeze_time
       put :cancel, params: params.merge({event_participation: {cancel_statement: "next time!"}})

@@ -15,6 +15,9 @@ module SacCas::Event::ParticipationAbility
       permission(:any).may(:cancel, :update).her_own
       permission(:any).may(:assign, :summon).none
       permission(:any).may(:absent, :attend).for_participations_full_events
+      permission(:any).may(:reactivate).for_leaded_events
+
+      permission(:layer_and_below_full).may(:reactivate).in_same_layer_or_below_if_active
 
       permission(:group_full).may(:summon).in_same_group
       permission(:layer_and_below_full).may(:summon).in_same_layer

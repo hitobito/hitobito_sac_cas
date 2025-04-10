@@ -142,5 +142,20 @@ describe Event::Participation, js: true do
         end.not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
       end
     end
+
+    context "reactivate" do
+      before do
+        event.update_column(:state, :ready)
+        participation.update!(state: :canceled, cancel_statement: "Keine Lust", canceled_at: Date.current)
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
+        expect(page).to have_text "Keine Lust"
+      end
+
+      it "does show flash message after reactivating participation" do
+        click_on "Reaktivieren"
+        expect(page).to have_text "Edmund Hillary wurde reaktiviert."
+        expect(page).to have_no_text "Keine Lust"
+      end
+    end
   end
 end
