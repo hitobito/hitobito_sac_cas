@@ -10,7 +10,7 @@ module Invoices
     module Positions
       class SectionBulletinPostageAbroad < Base
         def active?
-          member.living_abroad? && section.bulletin_postage_abroad.to_i.positive? && paying_person?
+          member.living_abroad? && section_bulletin? && positive_porto_amount? && paying_person?
         end
 
         def gross_amount
@@ -22,6 +22,14 @@ module Invoices
         def creditor
           section
         end
+
+        private
+
+        def positive_porto_amount? = section.bulletin_postage_abroad.to_i.positive?
+
+        def section_bulletin? = section_bulletin_mailing_list && !section_bulletin_mailing_list&.subscriptions&.exists?(subscriber: member.person, excluded: true)
+
+        def section_bulletin_mailing_list = MailingList.find_by(internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY, group_id: section.id)
       end
     end
   end
