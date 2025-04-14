@@ -8,6 +8,7 @@
 # rubocop:disable Rails/Output
 
 require_relative "../helpers/format"
+require_relative "../helpers/paper_trailed"
 
 module TTY
   module Memberships
@@ -26,6 +27,7 @@ module TTY
       def run
         set_papertrail_metadata
         promote if confirm?
+        self.class.new
       end
 
       private
