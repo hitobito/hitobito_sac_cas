@@ -23,6 +23,7 @@ en:
       email: ""
       email_mv: ""
       website: ""
+    title_event/tour: ""
 
   settings:
     email:
@@ -355,6 +356,24 @@ en:
         external_invoices: "" # uses include CapitalizedDependentErrors
       event/role:
         self_employed: ""
+      event/tour:
+        state_translated: ""
+        states:
+          draft: ""
+          approved: ""
+          published: ""
+          closed: ""
+          canceled: ""
+        participation_states:
+          tentative: ""
+          unconfirmed: ""
+          applied: ""
+          assigned: ""
+          annulled: ""
+          rejected: ""
+          canceled: ""
+          attended: ""
+          absent: ""
       external_training:
         person: Person
         event_kind: Course type
@@ -431,6 +450,7 @@ en:
           IT: Italiano
         section_offerings: ""
         mitglied_termination_by_section_only: Resignation only through section
+        tours_enabled: ""
       group/ortsgruppe:
         foundation_year: Founding year
         section_canton: Canton
@@ -439,6 +459,7 @@ en:
           DE: German
           FR: French
           IT: Italiano
+        tours_enabled: ""
       role:
         membership_years: Member years
         class:
@@ -580,9 +601,6 @@ en:
       event/level:
         one: Course level
         other: Course levels
-      event/role/leader:
-        one: ''
-        other: ''
       event/role/assistant_leader:
         one: ''
         other: ''
@@ -590,6 +608,9 @@ en:
         one: ''
         other: ''
       event/course/role/assistant_leader:
+        one: ''
+        other: ''
+      event/tour:
         one: ''
         other: ''
       external_training:
@@ -1159,6 +1180,12 @@ en:
         push_down_button: Transfer data to course types
         push_down_button_confirm: >-
           Do you really want to transfer the saved data (cost center and cost unit) to all course types? The current values will be overwritten.
+    lists:
+      nav_left_tours:
+        tours: ""
+      tours:
+        title: ""
+        explanation: ""
     participations:
       missing_information: >-
         The following certificates are required for participation in this course. Please submit these if you have not already done so.
@@ -1251,19 +1278,27 @@ en:
   events:
     actions_show_sac_cas:
       attach_key_data_sheets: ""
-      state_buttons:
-        created: Back as draft
-        application_open: Publish
-        application_paused: Pause registration
-        application_closed: Complete registration
-        assignment_closed: Finalize allocation
-        ready: Ready for implementation
-        closed: Finalize
+    state_buttons:
+      event/course:
+        created: ""
+        application_open: ""
+        application_paused: ""
+        application_closed: ""
+        assignment_closed: ""
+        ready: ""
+        closed: ""
         closed_confirm_text: >
-        canceled: Cancel
-      state_back_buttons:
-        assignment_closed: Back to the allocation
-        application_closed: Back to the completed registration
+        canceled: ""
+      event/tour:
+        draft: ""
+        approved: ""
+        published: ""
+        closed: ""
+        canceled: ""
+    state_back_buttons:
+      assignment_closed: ""
+      application_closed: ""
+      approved: ""
 
     form_tabs:
       communication: Communication
@@ -1272,7 +1307,12 @@ en:
     general_fields:
       kind_overrides_link_title: >-
         The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit
+    global:
+      link:
+        add_event/tour: ""
+
     maximum_age_with_years: "%{maximum_age} Years (vintage)"
+
     roles:
       self_employed: ""
       not_self_employed: ""
@@ -1291,9 +1331,9 @@ en:
       flash:
         success_multiple: "%{model} was successfully created for %{names}."
 
-  events/courses/state:
+  events/state:
     flash:
-      success: "Status has been set to %{state}."
+      success: ""
 
   event/levels:
     new:
@@ -1478,6 +1518,9 @@ en:
       group/ortsgruppe:
         default: Local group attributes
 
+  navigation:
+    tours: ""
+
   participations:
     key_data_sheet:
       file_name_prefix: ""
@@ -1545,8 +1588,8 @@ en:
         sections_info_html: >
   abo_magazin_invoices:
     create:
-        flash:
-          success: ""
+      flash:
+        success: ""
 
   people:
     abo_magazin_invoices:

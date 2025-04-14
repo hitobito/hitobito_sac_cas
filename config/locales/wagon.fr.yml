@@ -23,6 +23,7 @@ fr:
       email: "alpin@sac-cas.ch"
       email_mv: "info@sac-cas.ch"
       website: "https://www.sac-cas.ch"
+    title_event/tour: ""
 
   settings:
     email:
@@ -362,6 +363,24 @@ fr:
         external_invoices: Factures # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Travailleur·se indépendant·e
+      event/tour:
+        state_translated: ""
+        states:
+          draft: ""
+          approved: ""
+          published: ""
+          closed: ""
+          canceled: ""
+        participation_states:
+          tentative: ""
+          unconfirmed: ""
+          applied: ""
+          assigned: ""
+          annulled: ""
+          rejected: ""
+          canceled: ""
+          attended: ""
+          absent: ""
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -438,6 +457,7 @@ fr:
           IT: Italien
         section_offerings: Offres de la section
         mitglied_termination_by_section_only: Résiliation uniquement par la section
+        tours_enabled: ""
       group/ortsgruppe:
         foundation_year: Année de création
         section_canton: Canton
@@ -446,6 +466,7 @@ fr:
           DE: Allemand
           FR: Français
           IT: Italien
+        tours_enabled: ""
       role:
         membership_years: Années-membres
         class:
@@ -593,14 +614,10 @@ fr:
         one: Niveau de cours
         many: Niveaux de cours
         other: Niveaux de cours
-      event/role/leader:
-        one: Responsable du cours
-        many: Responsable du cours
-        other: Responsable du cours
       event/role/assistant_leader:
-        one: Responsable de classe
-        many: Responsable de classe
-        other: Chef·fe de classe
+        one: ''
+        many: ''
+        other: ''
       event/course/role/leader:
         one: Responsable du cours
         many: Responsables du cours
@@ -609,6 +626,10 @@ fr:
         one: Chef·fe de classe
         many: Chef·fes de classe
         other: Chef·fe de classe
+      event/tour:
+        one: ''
+        many: ''
+        other: ''
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1222,6 +1243,12 @@ fr:
         push_down_button: Transférer des données vers des types de cours
         push_down_button_confirm: >-
           Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
+    lists:
+      nav_left_tours:
+        tours: ""
+      tours:
+        title: ""
+        explanation: ""
     participations:
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
@@ -1318,20 +1345,27 @@ fr:
   events:
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
-      state_buttons:
-        created: Revenir en tant que projet
-        application_open: Publier
-        application_paused: Mettre en pause l’inscription
-        application_closed: Finaliser l’inscription
-        assignment_closed: Finaliser l’attribution
-        ready: Prêt pour la réalisation
-        closed: Finaliser
-        closed_confirm_text: >-
-          La finalisation fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d’annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
-        canceled: Annulations
-      state_back_buttons:
-        assignment_closed: Retour à l’attribution
-        application_closed: Retour à l’inscription clôturée
+    state_buttons:
+      event/course:
+        created: ""
+        application_open: ""
+        application_paused: ""
+        application_closed: ""
+        assignment_closed: ""
+        ready: ""
+        closed: ""
+        closed_confirm_text: >
+        canceled: ""
+      event/tour:
+        draft: ""
+        approved: ""
+        published: ""
+        closed: ""
+        canceled: ""
+    state_back_buttons:
+      assignment_closed: ""
+      application_closed: ""
+      approved: ""
 
     form_tabs:
       communication: Communication
@@ -1340,7 +1374,12 @@ fr:
     general_fields:
       kind_overrides_link_title: >-
         Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
+    global:
+      link:
+        add_event/tour: ""
+
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
+
     roles:
       self_employed: travailleur·se indépendant·e
       not_self_employed: salarié·e
@@ -1361,9 +1400,9 @@ fr:
       flash:
         success_multiple: "%{model} a été créé avec succès pour %{names} "
 
-  events/courses/state:
+  events/state:
     flash:
-      success: "Le statut a été défini sur %{state} "
+      success: ""
 
   event/levels:
     new:
@@ -1556,6 +1595,9 @@ fr:
       group/ortsgruppe:
         default: Attributs des groupes locaux
 
+  navigation:
+    tours: ""
+
   participations:
     key_data_sheet:
       file_name_prefix: Fiche technique
@@ -1625,8 +1667,8 @@ fr:
           Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
   abo_magazin_invoices:
     create:
-        flash:
-          success: "La facture souhaitée est générée et transmise à Abacus"
+      flash:
+        success: "La facture souhaitée est générée et transmise à Abacus"
 
   people:
     abo_magazin_invoices:
