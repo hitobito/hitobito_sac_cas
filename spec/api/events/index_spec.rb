@@ -20,7 +20,7 @@ RSpec.describe "events#index", type: :request do
 
       before do
         kind.update!(level:)
-        Event.first.update!(kind:)
+        Event.first.update!(kind:, created_at: 1.week.ago, updated_at: 1.day.ago)
       end
 
       it "only fetches events with specified kind_category_id" do
@@ -107,6 +107,20 @@ RSpec.describe "events#index", type: :request do
         travel_to(3.hours.from_now + 1.minute) do
           jsonapi_get "/api/events"
         end
+      end
+
+      it "does execute query again if event dates changed" do
+        expect(EventResource).to receive(:all).and_call_original.twice
+        jsonapi_get "/api/events"
+        Event.first.dates.first.update!(start_at: 50.days.ago)
+        jsonapi_get "/api/events"
+      end
+
+      it "does execute query again if event date is deleted" do
+        expect(EventResource).to receive(:all).and_call_original.twice
+        jsonapi_get "/api/events"
+        Event.first.dates.first.destroy!
+        jsonapi_get "/api/events"
       end
     end
   end
