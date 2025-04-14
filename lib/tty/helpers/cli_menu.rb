@@ -17,7 +17,6 @@ module TTY
 
     class AskAgain < StandardError; end
 
-
     # --- Configuration ---
     # @param menu_actions [Hash] Hash defining menu options.
     #   Keys are the characters to press.
@@ -53,11 +52,11 @@ module TTY
     # Determines if single-char or multi-char input should be used
     def determine_input_mode
       # If ANY key is longer than 1 character, switch to multi-character mode
-      @menu_actions.keys.any? { |key| key.to_s.length > 1 } ? :multi_char : :single_char
+      (@menu_actions.keys.any? { |key| key.to_s.length > 1 }) ? :multi_char : :single_char
     end
 
     def quit_action
-      {description: "Quit", action: -> { quit }}
+      {description: "Quit", action: -> { quit }, style: :dim}
     end
 
     # Prints the available menu options.
@@ -67,13 +66,15 @@ module TTY
       keys_length = @menu_actions.keys.map { _1.length }.max
 
       @menu_actions.each do |key, args|
-        args in { description:, action: } # Pattern matching for clarity
+        args in { description:, action:, **format } # Pattern matching for clarity
         # Format the key part (e.g., "p)" or "promote-all)")
         key_part = "#{key})"
         # Left-justify the key part using the calculated width
         padded_key_part = key_part.ljust(keys_length)
         # Print the padded key part followed by the description
-        puts "#{padded_key_part} #{description}"
+        puts format_text("#{padded_key_part} #{description}",
+          color: format[:color],
+          style: format[:style])
       end
     end
 

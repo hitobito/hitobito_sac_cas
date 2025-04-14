@@ -23,7 +23,7 @@ module TTY
         blue: 34,
         magenta: 35,
         cyan: 36,
-        white: 37,
+        light_gray: 37,
         gray: 90,
         light_red: 91,
         light_green: 92,
@@ -31,7 +31,7 @@ module TTY
         light_blue: 94,
         light_magenta: 95,
         light_cyan: 96,
-        light_white: 97
+        white: 97
       }.freeze
 
       # Basic style codes

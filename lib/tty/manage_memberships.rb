@@ -37,8 +37,10 @@ module TTY
       Helpers::SacLogo.new.print
       print_welcome_message
 
-      CliMenu.new(menu_actions: MENU_ACTIONS).run
-
+      loop do
+        CliMenu.new(menu_actions: MENU_ACTIONS).run
+      end
+    ensure
       print_byebye
     end
 
@@ -46,7 +48,6 @@ module TTY
 
     def trap_ctrl_c
       Signal.trap("INT") do
-        print_byebye
         exit(1)
       end
     end
