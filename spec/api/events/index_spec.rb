@@ -20,7 +20,7 @@ RSpec.describe "events#index", type: :request do
 
       before do
         kind.update!(level:)
-        Event.first.update!(kind:)
+        Event.first.update!(kind:, created_at: 1.week.ago, updated_at: 1.day.ago)
       end
 
       it "only fetches events with specified kind_category_id" do
