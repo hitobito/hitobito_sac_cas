@@ -364,7 +364,7 @@ fr:
       event/role:
         self_employed: Travailleur·se indépendant·e
       event/tour:
-        state_translated: ""
+        state_translated: Statut
         states:
           draft: ""
           approved: ""
