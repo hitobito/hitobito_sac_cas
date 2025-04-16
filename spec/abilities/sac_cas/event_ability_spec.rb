@@ -27,4 +27,28 @@ describe EventAbility do
       expect(ability).not_to be_able_to(:manage_attachments, events(:top_course))
     end
   end
+
+  describe "layer_events_full" do
+    let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+
+    before do
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: person)
+    end
+
+    it "is able to create tours in section" do
+      expect(ability).to be_able_to(:create, Event::Tour.new(groups: [groups(:bluemlisalp)]))
+    end
+
+    it "is not able to create events in group" do
+      expect(ability).not_to be_able_to(:create, Event.new(groups: [touren_group]))
+    end
+
+    it "is not able to create tours in ortsgruppe" do
+      expect(ability).not_to be_able_to(:create, Event::Tour.new(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)]))
+    end
+
+    it "is not able to create tours in other section" do
+      expect(ability).not_to be_able_to(:create, Event::Tour.new(groups: [groups(:matterhorn)]))
+    end
+  end
 end

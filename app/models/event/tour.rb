@@ -20,6 +20,7 @@ class Event::Tour < Event
   ]
 
   self.supports_applications = true
+  self.supports_invitations = false
 
   # key: current state
   # value: array of possible next states

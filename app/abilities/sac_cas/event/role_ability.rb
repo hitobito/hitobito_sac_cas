@@ -8,10 +8,14 @@
 module SacCas::Event::RoleAbility
   extend ActiveSupport::Concern
 
+  include SacCas::AbilityDsl::Constraints::Event
+
   prepended do
     on(::Event::Role) do
       permission(:any).may(:show, :create, :update).for_participations_full_events_except_courses
       permission(:any).may(:destroy).for_participations_full_events_except_courses
+
+      permission(:layer_events_full).may(:manage).in_same_layer_group_if_active
     end
   end
 
