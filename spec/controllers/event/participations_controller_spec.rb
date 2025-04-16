@@ -361,7 +361,7 @@ describe Event::ParticipationsController do
       end
     end
 
-    describe "default states" do
+    context "default states" do
       let(:mitglied) { people(:mitglied) }
       let(:participation) { assigns(:participation) }
 
@@ -397,7 +397,7 @@ describe Event::ParticipationsController do
       end
     end
 
-    describe "pricing" do
+    context "pricing" do
       before { event.update!(price_member: 30, price_regular: 50, price_subsidized: 10) }
 
       let(:participation) { assigns(:participation) }
@@ -452,6 +452,52 @@ describe Event::ParticipationsController do
           expect(participation.price).to eq 30
           expect(participation.price_category).to eq("price_member")
         end
+      end
+    end
+
+    context "as layer_events_full" do
+      let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+      let(:user) { Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: Fabricate(:person)).person }
+      let(:event) { events(:section_tour) }
+
+      before do
+        groups(:bluemlisalp).update!(require_person_add_requests: true)
+        groups(:matterhorn).update!(require_person_add_requests: true)
+      end
+
+      it "creates participation for person in same layer" do
+        person = people(:mitglied)
+        expect do
+          post :create, params: {
+            group_id: group.id,
+            event_id: event.id,
+            event_participation: {person_id: person.id},
+            event_role: {type: "Event::Tour::Role::Participant"}
+          }
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
+          .and change { Person::AddRequest::Event.count }.by(0)
+
+        expect(assigns(:participation).person).to eq person
+      end
+
+      it "requests approval for person in other layer" do
+        person = Group::SektionsMitglieder::Mitglied.create!(
+          person: Fabricate(:person),
+          group: groups(:matterhorn_mitglieder),
+          start_on: 1.year.ago,
+          end_on: Date.current.end_of_year
+        ).person
+        expect do
+          post :create, params: {
+            group_id: group.id,
+            event_id: event.id,
+            event_participation: {person_id: person.id},
+            event_role: {type: "Event::Tour::Role::Participant"}
+          }
+          expect(response).to redirect_to(group_event_participations_path)
+        end.to change { Event::Participation.count }.by(0)
+          .and change { Person::AddRequest::Event.count }.by(1)
       end
     end
   end

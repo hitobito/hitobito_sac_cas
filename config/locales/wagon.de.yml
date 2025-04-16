@@ -370,7 +370,7 @@ de:
         state_translated: Status
         states:
           draft: Entwurf
-          approved: Freigeben
+          approved: Freigegeben
           published: Publiziert
           closed: Abgeschlossen
           canceled: Abgesagt

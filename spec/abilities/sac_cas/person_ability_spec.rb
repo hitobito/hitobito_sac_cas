@@ -251,4 +251,18 @@ describe PersonAbility do
       end
     end
   end
+
+  describe "query" do
+    let(:person) { mitglied }
+    let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+
+    it "is not allowed for regular mitglied" do
+      expect(ability).not_to be_able_to(:query, Person)
+    end
+
+    it "is allowed with layer_events_full permission" do
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: person)
+      expect(ability).to be_able_to(:query, Person)
+    end
+  end
 end
