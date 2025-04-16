@@ -36,6 +36,16 @@ module SacCas::Event::ParticipationsController
     change_state("summoned", "summon")
   end
 
+  def reactivate
+    entry.update!(
+      cancel_statement: nil,
+      canceled_at: nil,
+      state: event.maximum_participants_reached? ? :applied : :assigned
+    )
+
+    redirect_to group_event_participation_path(group, event, entry), notice: t("event.participations.reactivated_notice", participant: entry.person)
+  end
+
   def new
     @step = "answers" if event.course?
     super
