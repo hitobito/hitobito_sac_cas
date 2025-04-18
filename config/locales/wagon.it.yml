@@ -437,7 +437,6 @@ it:
         sac_cas_self_registration_url: Autoregistrazione CAS
       group/sac_cas:
         sac_newsletter_mailing_list_id: ID abbonamento Newsletter CAS
-        sac_magazine_mailing_list_id: ID abbonamento Le Alpi
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
         abo_alpen_fee: Importo Abbonamento Le Alpi

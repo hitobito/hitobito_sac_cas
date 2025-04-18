@@ -149,6 +149,7 @@ describe MailingList do
     end
 
     it "has die alpen papier mailing list" do
+      mailing_lists(:sac_magazine).destroy!
       expect(die_alpen_papier).not_to be_present
       MailingListSeeder.seed!
       expect(die_alpen_papier).to be_present
@@ -221,12 +222,6 @@ describe MailingList do
       expect { MailingListSeeder.seed! }
         .to change { Group.root.reload.sac_newsletter_mailing_list_id }
       expect(Group.root.sac_newsletter_mailing_list_id).to eq(newsletter.id)
-    end
-
-    it "updates Group.root#sac_magazine_mailing_list_id" do
-      expect { MailingListSeeder.seed! }
-        .to change { Group.root.reload.sac_magazine_mailing_list_id }
-      expect(Group.root.sac_magazine_mailing_list_id).to eq(die_alpen_papier.id)
     end
 
     it "updates Group.root#sac_fundraising_mailing_list_id" do

@@ -9,12 +9,6 @@ list_sac_newsletter:
   entry_type: Group
   entry: root
 
-list_sac_magazine:
-  key: sac_magazine_mailing_list_id
-  value: <%= ActiveRecord::FixtureSet.identify(:sac_magazine) %>
-  entry_type: Group
-  entry: root
-
 list_fundraising:
   key: sac_fundraising_mailing_list_id
   value: <%= ActiveRecord::FixtureSet.identify(:fundraising) %>
