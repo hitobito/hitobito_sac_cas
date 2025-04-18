@@ -1311,6 +1311,7 @@ it:
         former_price_select: "In precedenza %{price_label}"
         no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
+      reactivated_notice: ""
       actions_show_youth:
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
@@ -1322,6 +1323,7 @@ it:
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
         create_course_leader_invoice_button: Generare conteggio quadro del corso
+        reactivate: ""
       popover_create_course_leader_settlement:
         create_invoice: Generare conteggio
         info_text_html: >-

@@ -1248,6 +1248,7 @@ en:
         former_price_select: ""
         no_price_select: ""
       summoned_notice: "%{participant} was called up."
+      reactivated_notice: ""
       actions_show_youth:
         summon_button: Call up
         assign_confirm: ""
@@ -1259,6 +1260,7 @@ en:
         attach_key_data_sheet: ""
         create_invoice_confirmation: ""
         create_course_leader_invoice_button: ""
+        reactivate: ""
       popover_create_course_leader_settlement:
         create_invoice: ""
         info_text_html: >

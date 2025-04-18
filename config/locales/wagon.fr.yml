@@ -1313,6 +1313,7 @@ fr:
         former_price_select: "Ancien %{price_label}"
         no_price_select: Pas de frais
       summoned_notice: "%{participant} a été convoqué·e."
+      reactivated_notice: ""
       actions_show_youth:
         summon_button: Convocation
         assign_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
@@ -1324,6 +1325,7 @@ fr:
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
         create_course_leader_invoice_button: Créer une facture de cadre de cours
+        reactivate: ""
       popover_create_course_leader_settlement:
         create_invoice: Créer une facture
         info_text_html: >-
