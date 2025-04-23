@@ -544,7 +544,7 @@ describe Person do
   describe "#login_status" do
     let(:person) { people(:mitglied) }
 
-    it "does return wso2_legacy_password when wso2_legacy_password ist set" do
+    it "does return wso2_legacy_password when wso2_legacy_password is set" do
       person.wso2_legacy_password_hash = "hfg76sdgfg689gsdf"
       person.wso2_legacy_password_salt = "fklsdf71k12123kj9"
       expect(person.login_status).to eq :wso2_legacy_password
