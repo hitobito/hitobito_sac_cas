@@ -11,6 +11,7 @@ module SacCas::Person
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
   REQUIRED_FIELDS_ROLES = [*SacCas::ABONNENT_MAGAZIN_ROLES, *SacCas::ABONNENT_TOUREN_PORTAL_ROLES, *SacCas::MITGLIED_STAMMSEKTION_ROLES].map(&:sti_name)
+  PAPER_TRAIL_PASSWORD_OVERRIDE_EVENT = :password_override
 
   prepended do
     Person::SEARCHABLE_ATTRS << :id
@@ -136,7 +137,11 @@ module SacCas::Person
   private
 
   def set_digital_correspondence
-    return unless confirmed_at.present? && encrypted_password.present? && encrypted_password_was.blank? && wso2_legacy_password_hash_was.blank? && !versions.exists?(event: :password_override)
+    return unless confirmed_at.present? &&
+      encrypted_password.present? &&
+      encrypted_password_was.blank? &&
+      wso2_legacy_password_hash_was.blank? &&
+      !versions.exists?(event: PAPER_TRAIL_PASSWORD_OVERRIDE_EVENT)
 
     self.correspondence = "digital"
   end
