@@ -22,7 +22,7 @@ module SacCas::Person
 
     Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
 
-    paper_trail_options[:skip] += Person::SAC_REMARKS
+    paper_trail_options[:skip] += [*Person::SAC_REMARKS, "wso2_legacy_password_hash", "wso2_legacy_password_salt"]
     devise_login_id_attrs << :membership_number
 
     Person.used_attributes.delete(:nickname)

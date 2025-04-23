@@ -18,6 +18,30 @@ describe Person do
     end
   end
 
+  context "paper trail", versioning: true do
+    let(:person) { people(:admin) }
+
+    it "does not track remark attrs" do
+      [
+        :sac_remark_section_1,
+        :sac_remark_section_2,
+        :sac_remark_section_3,
+        :sac_remark_section_4,
+        :sac_remark_section_5,
+        :sac_remark_national_office
+      ].each do |attr|
+        person.send(:"#{attr}=", attr)
+      end
+      expect { person.save! }.not_to change { person.versions.count }
+    end
+
+    it "does not track wso2 password attrs" do
+      person.wso2_legacy_password_hash = "password-hash"
+      person.wso2_legacy_password_salt = "password-salt"
+      expect { person.save! }.not_to change { person.versions.count }
+    end
+  end
+
   context "#family_id" do
     let(:group) { groups(:bluemlisalp_mitglieder) }
     let(:person) { Fabricate(:person, household_key: "1234ABCD", birthday: 25.years.ago) }
@@ -350,21 +374,6 @@ describe Person do
         expect(person).to be_backoffice
       end
     end
-  end
-
-  it "does not track remark attrs", versioning: true do
-    person = people(:admin)
-    [
-      :sac_remark_section_1,
-      :sac_remark_section_2,
-      :sac_remark_section_3,
-      :sac_remark_section_4,
-      :sac_remark_section_5,
-      :sac_remark_national_office
-    ].each do |attr|
-      person.send(:"#{attr}=", attr)
-    end
-    expect { person.save! }.not_to change { person.versions.count }
   end
 
   describe "#data_quality" do
