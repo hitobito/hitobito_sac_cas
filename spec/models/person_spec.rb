@@ -293,6 +293,22 @@ describe Person do
       expect(person.correspondence).to eq("print")
     end
 
+    it "does not set to digital if password was reset to nil" do
+      password = "verysafepasswordfortesting"
+      person = Fabricate(:person, correspondence: "print")
+      expect(person.correspondence).to eq("print")
+
+      # create paper trail version for password reset
+      PaperTrail::Version.create(main: person,
+        item: person,
+        event: :password_override)
+
+      person.password = person.password_confirmation = password
+      person.save!
+
+      expect(person.correspondence).to eq("print")
+    end
+
     context "with wso2 legacy password" do
       let(:salt) { "salt" }
       let(:hash) { generate_wso2_legacy_password_hash(password, salt) }
@@ -522,6 +538,16 @@ describe Person do
 
     it "doesn't enqueue the job if data quality errors exist" do
       expect { person.update!(birthday: nil) }.not_to change(job, :count)
+    end
+  end
+
+  describe "#login_status" do
+    let(:person) { people(:mitglied) }
+
+    it "does return wso2_legacy_password when wso2_legacy_password is set" do
+      person.wso2_legacy_password_hash = "hfg76sdgfg689gsdf"
+      person.wso2_legacy_password_salt = "fklsdf71k12123kj9"
+      expect(person.login_status).to eq :wso2_legacy_password
     end
   end
 end
