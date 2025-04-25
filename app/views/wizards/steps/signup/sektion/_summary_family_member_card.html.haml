@@ -8,6 +8,6 @@
   .mb-3.fw-bold= "#{person.first_name} #{person.last_name}"
   .col-xxl-6
     = labeled(person.class.human_attribute_name(:gender), person.gender_label)
-    = labeled(person.class.human_attribute_name(:birthday), person.birthday.strftime("%d.%m.%Y"), no_value_hide_label: true)
+    = labeled(person.class.human_attribute_name(:birthday), person.birthday&.strftime("%d.%m.%Y"), no_value_hide_label: true)
     = labeled(person.class.human_attribute_name(:phone_number), person.phone_number, no_value_hide_label: true)
     = labeled(person.class.human_attribute_name(:email), person.email, no_value_hide_label: true)
