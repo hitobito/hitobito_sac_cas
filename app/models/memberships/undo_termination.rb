@@ -84,18 +84,24 @@ module Memberships
       end
     end
 
-    # save the restored roles and people
+    # Save the restored roles and people, raises an error if the validation fails.
     # Roles can only be validated after saving (see #validate_restored_roles for explanation).
     # The roles validity is already ensured by calling #valid? before saving, so we can safely
     # skip the validations on save.
     def save!
-      raise "Validation failed: #{errors.full_messages.join(", ")}" unless valid?
+      raise "Validation failed: #{errors.full_messages.join(", ")}" unless save
+    end
+
+    # Save the restored roles and people even when invalid. USE WITH CAUTION!
+    def save(validate: true)
+      return false unless !validate || valid?
 
       Role.transaction(requires_new: true) do
         restored_people.each { _1.save(validate: false) if _1.changed? }
         restored_roles.each { _1.save(validate: false) }
         roles_to_destroy.each(&:destroy)
       end
+      true
     end
 
     private
