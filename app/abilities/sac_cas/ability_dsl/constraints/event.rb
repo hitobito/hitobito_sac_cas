@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2021, Jungwacht Blauring Schweiz. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
+#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::AbilityDsl::Constraints
   module Event
     def in_same_layer_group
-      layer_ids = event.groups.filter { |group| group.id == group.layer_group_id }.map(&:layer_group_id)
+      layer_ids = event.groups.filter_map { |g| g.layer_group_id if g.id == g.layer_group_id }
       permission_in_layers?(layer_ids)
     end
 
