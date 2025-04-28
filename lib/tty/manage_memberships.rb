@@ -13,21 +13,20 @@ require_relative "helpers/format"
 require_relative "helpers/sac_logo"
 require_relative "memberships/promote_neuanmeldung"
 require_relative "memberships/swap_stammsektion"
+require_relative "memberships/undo_termination"
 
 module TTY
   class ManageMemberships
     include Helpers::Format
-    extend Helpers::Format
 
     MENU_ACTIONS = {
-      "p" => {
-        description: "Promote Neuanmeldung to Membership " + gray("(Stammsektion or Zusatzsektion)"),
-        action: -> { Memberships::PromoteNeuanmeldung.new.run }
+      "h" => {
+        description: "Print 'hello world'",
+        action: -> { puts [red("hello"), green("world")].join(" ") }
       },
-      "s" => {
-        description: "Swap Stammsektion ",
-        action: -> { Memberships::SwapStammsektion.new.run }
-      }
+      "p" => TTY::Memberships::PromoteNeuanmeldung,
+      "s" => TTY::Memberships::SwapStammsektion,
+      "u" => TTY::Memberships::UndoTermination
     }.freeze
 
     def self.run = new.run
