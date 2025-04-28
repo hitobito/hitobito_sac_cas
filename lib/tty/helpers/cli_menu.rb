@@ -66,7 +66,7 @@ module TTY
       keys_length = @menu_actions.keys.map { _1.length }.max
 
       @menu_actions.each do |key, args|
-        args in { description:, action:, **format } # Pattern matching for clarity
+        args in { description:, action:, **format }
         # Format the key part (e.g., "p)" or "promote-all)")
         key_part = "#{key})"
         # Left-justify the key part using the calculated width
@@ -139,10 +139,11 @@ module TTY
         unless key.to_s.present?
           raise ArgumentError, "Menu action keys must be non-empty Strings (got #{key.class.name} #{key.inspect})"
         end
-        unless config.is_a?(Hash) && config.key?(:description) && config.key?(:action)
+        config_hash = config.deconstruct_keys(nil)
+        unless config_hash.key?(:description) && config_hash.key?(:action)
           raise ArgumentError, "Menu action for key '#{key}' must be a Hash with :description and :action keys"
         end
-        unless config[:description].is_a?(String)
+        unless config_hash[:description].is_a?(String)
           raise ArgumentError, "Description for key '#{key}' must be a String"
         end
       end

@@ -7,25 +7,23 @@
 
 # rubocop:disable Rails/Output
 
-require_relative "../helpers/format"
-require_relative "../helpers/paper_trailed"
+require_relative "../command"
 
 module TTY
   module Memberships
     class PromoteNeuanmeldung
-      include TTY::Helpers::Format
-      include TTY::Helpers::PaperTrailed
+      prepend TTY::Command
+
+      self.description = "Promote Neuanmeldung to Membership #{gray("(Stammsektion or Zusatzsektion)")}"
 
       attr_reader :neuanmeldung, :end_on
 
       def initialize
-        puts light_yellow "Promote Neuanmeldung to Membership"
         @neuanmeldung = ask_for_neuanmeldung_role
         @end_on = ask_for_end_on
       end
 
       def run
-        set_papertrail_metadata
         promote if confirm?
         self.class.new
       end
