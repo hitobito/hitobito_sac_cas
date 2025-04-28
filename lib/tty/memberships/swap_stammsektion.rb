@@ -5,21 +5,18 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require_relative "../helpers/format"
-require_relative "../helpers/cli_menu"
-require_relative "../helpers/paper_trailed"
-
 module TTY
   module Memberships
     class SwapStammsektion
+      prepend TTY::Command
+
       include Rails.application.routes.url_helpers
-      include TTY::Helpers::Format
-      include TTY::Helpers::PaperTrailed
+
+      self.description = "Swap Stammsektion"
 
       attr_reader :person, :old_stammsektion_role, :old_zusatzsektion_role
 
       def initialize
-        puts light_yellow "Swap Stammsektion"
         @person = ask_for_person
         puts green "Found #{affected_people.map { |p| "#{p} (#{p.id})" }.join(", ")}"
         @old_stammsektion_role = person.sac_membership.stammsektion_role
@@ -27,7 +24,6 @@ module TTY
       end
 
       def run
-        set_papertrail_metadata
         swap! if confirm?
       end
 
