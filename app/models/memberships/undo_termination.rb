@@ -74,7 +74,7 @@ module Memberships
     def restored_people
       @restored_people ||= restored_roles_people.map do |person|
         person.household_key = original_household_key
-        person.sac_family_main_person = true if original_main_person?(person)
+        person.sac_family_main_person = true if original_family_main_person?(person)
         person
       end
     end
@@ -182,6 +182,6 @@ module Memberships
     end
     memoize_method :restored_main_person
 
-    def original_main_person?(person) = restored_main_person == person
+    def original_family_main_person?(person) = restored_main_person == person
   end
 end
