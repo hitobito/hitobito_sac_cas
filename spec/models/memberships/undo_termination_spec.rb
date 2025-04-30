@@ -226,6 +226,15 @@ describe Memberships::UndoTermination, versioning: true do
       expect(kind.household_key).to eq original_household_key
       expect(kind.birthday).not_to eq kind_original_birthday
     end
+
+    it "reassigns the original sac_family_main_person" do
+      expect(role.person).to be_sac_family_main_person
+      terminate(role)
+      expect(role.person).not_to be_sac_family_main_person
+
+      restored_person = subject.restored_people.find { |p| p.id == role.person.id }
+      expect(restored_person).to be_sac_family_main_person
+    end
   end
 
   context "validations" do
@@ -384,6 +393,25 @@ describe Memberships::UndoTermination, versioning: true do
 
       expect(new_person).to be_persisted
       expect(new_role).to be_persisted
+    end
+
+    context "for family membership" do
+      let(:role) { roles(:familienmitglied) }
+
+      it "saves restored family" do
+        original_household_key = role.person.household_key
+        original_household_people = role.person.household.people
+
+        terminate(role)
+        expect(role).to be_terminated
+        expect(role.person.household_key).to eq(nil)
+
+        subject.save!
+
+        expect(role.reload).not_to be_terminated
+        expect(role.person.household_key).to eq original_household_key
+        expect(role.person.household.people).to match_array original_household_people
+      end
     end
   end
 end

@@ -74,7 +74,7 @@ module Memberships
     def restored_people
       @restored_people ||= restored_roles_people.map do |person|
         person.household_key = original_household_key
-        person.sac_family_main_person = original_main_person == person
+        person.sac_family_main_person = true if original_family_main_person?(person)
         person
       end
     end
@@ -87,8 +87,8 @@ module Memberships
       raise "Validation failed: #{errors.full_messages.join(", ")}" unless valid?
 
       Role.transaction(requires_new: true) do
-        restored_roles.each { _1.save(validate: false) }
         restored_people.each { _1.save(validate: false) if _1.changed? }
+        restored_roles.each { _1.save(validate: false) }
       end
     end
 
@@ -172,13 +172,16 @@ module Memberships
 
     def restored_roles_people = restored_roles.map(&:person).uniq
 
-    def original_main_person
+    def restored_main_person
       restored_roles_people.find do |person|
-        person.versions.where(mutation_id:).select do |version|
-          version.changeset.dig("sac_family_main_person", 1) == false
+        person.versions.any? do |version|
+          version.changeset.present? &&
+            version.changeset.dig("sac_family_main_person", 1) == false
         end
       end
     end
-    memoize_method :original_main_person
+    memoize_method :restored_main_person
+
+    def original_family_main_person?(person) = restored_main_person == person
   end
 end
