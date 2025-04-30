@@ -370,7 +370,7 @@ de:
         state_translated: Status
         states:
           draft: Entwurf
-          approved: Freigeben
+          approved: Freigegeben
           published: Publiziert
           closed: Abgeschlossen
           canceled: Abgesagt
@@ -479,6 +479,7 @@ de:
           permission:
             description:
               read_all_people: Lesen von allen Personen.
+              layer_events_full: Verwalten von Events auf der Sektion.
       qualification_kind:
         tourenchef_may_edit: Von Tourenchef bearbeitbar
       qualification:

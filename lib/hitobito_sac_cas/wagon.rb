@@ -93,7 +93,10 @@ module HitobitoSacCas
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
 
       ## Abilities
-      Role::Types::Permissions << :read_all_people
+      Role::Types::Permissions << :read_all_people << :layer_events_full
+      AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
+      AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
+
       Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
@@ -117,6 +120,7 @@ module HitobitoSacCas
       MailingListAbility.prepend SacCas::MailingListAbility
       PersonAbility.prepend SacCas::PersonAbility
       PersonReadables.prepend SacCas::PersonReadables
+      Person::AddRequestAbility.prepend SacCas::Person::AddRequestAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
       TokenAbility.prepend SacCas::TokenAbility

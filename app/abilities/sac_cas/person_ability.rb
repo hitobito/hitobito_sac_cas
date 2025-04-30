@@ -31,35 +31,41 @@ module SacCas::PersonAbility
       permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
       permission(:any).may(:log).if_backoffice_or_backoffice_readonly
     end
+  end
 
-    def if_backoffice_or_functionary
-      if_backoffice || if_section_functionary
+  def if_any_writing_permissions
+    writing_permissions = [:group_full, :group_and_below_full,
+      :layer_full, :layer_and_below_full, :layer_events_full]
+    contains_any?(writing_permissions, user_context.all_permissions)
+  end
+
+  def if_backoffice_or_functionary
+    if_backoffice || if_section_functionary
+  end
+
+  def if_backoffice_or_backoffice_readonly
+    if_backoffice || role_type?(::Group::Geschaeftsstelle::MitarbeiterLesend)
+  end
+
+  def if_backoffice
+    SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
+  end
+
+  def if_section_functionary
+    SacCas::SAC_SECTION_FUNCTIONARY_ROLES.any? { |r| role_type?(r) }
+  end
+
+  def if_person_is_adult_and_has_email_and_all_household_members_writable
+    return false unless person.household.exists?
+    return false unless person.adult?
+    return false if person.email.blank?
+
+    [person, *person.household_people].all? do |household_person|
+      can_update_household_person?(household_person)
     end
+  end
 
-    def if_backoffice_or_backoffice_readonly
-      if_backoffice || role_type?(::Group::Geschaeftsstelle::MitarbeiterLesend)
-    end
-
-    def if_backoffice
-      SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
-    end
-
-    def if_section_functionary
-      SacCas::SAC_SECTION_FUNCTIONARY_ROLES.any? { |r| role_type?(r) }
-    end
-
-    def if_person_is_adult_and_has_email_and_all_household_members_writable
-      return false unless person.household.exists?
-      return false unless person.adult?
-      return false if person.email.blank?
-
-      [person, *person.household_people].all? do |household_person|
-        can_update_household_person?(household_person)
-      end
-    end
-
-    def can_update_household_person?(household_person)
-      Ability.new(user).can?(:update, household_person)
-    end
+  def can_update_household_person?(household_person)
+    Ability.new(user).can?(:update, household_person)
   end
 end

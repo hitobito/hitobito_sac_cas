@@ -8,11 +8,11 @@
 class Group::SektionsKommissionTouren < ::Group
   ### ROLES
   class Mitglied < ::Role
-    self.permissions = [:group_read]
+    self.permissions = [:group_read, :layer_events_full]
   end
 
   class Praesidium < ::Role
-    self.permissions = [:group_read]
+    self.permissions = [:group_read, :layer_events_full]
   end
 
   class Andere < ::Role
