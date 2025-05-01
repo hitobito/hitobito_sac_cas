@@ -23,7 +23,7 @@ fr:
       email: "alpin@sac-cas.ch"
       email_mv: "info@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-    title_event/tour: ""
+    title_event/tour: course
 
   settings:
     email:
@@ -315,8 +315,8 @@ fr:
           application_open: Publié
           application_paused: Inscription en pause
           application_closed: Inscription terminée
-          assignment_closed: Allocation terminée
-          ready: Prêt pour la réalisation
+          assignment_closed: Attribution terminée
+          ready: Prêt à débuter
           closed: Terminé
           canceled: Annulé
         price_member: "Prix pour les membres"
@@ -366,18 +366,18 @@ fr:
       event/tour:
         state_translated: Statut
         states:
-          draft: ""
+          draft: projet
           approved: ""
-          published: ""
-          closed: ""
-          canceled: ""
+          published: publié
+          closed: terminé
+          canceled: annulé
         participation_states:
-          tentative: ""
-          unconfirmed: ""
-          applied: ""
-          assigned: ""
-          annulled: ""
-          rejected: ""
+          tentative: provisoire
+          unconfirmed: pas confirmé
+          applied: liste d'attente
+          assigned: confirmé
+          annulled: annulé
+          rejected: refusé
           canceled: ""
           attended: ""
           absent: ""
@@ -439,12 +439,11 @@ fr:
         sac_cas_self_registration_url: Auto-enregistrement CAS
       group/sac_cas:
         sac_newsletter_mailing_list_id: ID d’abonnement newsletter du CAS
-        sac_magazine_mailing_list_id: ID d’abonnement Les Alpes
         sac_fundraising_mailing_list_id: ID d’abonnement appels aux dons
         course_admin_email: E-mail administration des cours
         abo_alpen_fee: Montant de l’abonnement Les Alpes
         abo_alpen_postage_abroad: Montant frais de port Les Alpes
-        abo_touren_portal_fee: Montant de l’abonnement au portail de randonnées du CAS
+        abo_touren_portal_fee: Montant de l’abonnement au portail des courses du CAS
         abo_alpen_fee_article_number: N° d’article abonnement Les Alpes
         abo_alpen_postage_abroad_article_number: N° d’article frais de port à l’étranger Les Alpes
       group/sektion:
@@ -479,7 +478,7 @@ fr:
             description:
               read_all_people: Lecture de toutes les personnes.
       qualification_kind:
-        tourenchef_may_edit: Editable par le·la chef·fe de randonnée
+        tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:
         finish_at: Jusqu’à
       sac_membership_config:
@@ -699,7 +698,7 @@ fr:
       group/abo_touren_portal:
         one: Portail de randonnées du CAS
         many: Portail de randonnées du CAS
-        other: Portail de randonnées du CAS
+        other: Portail des courses du CAS
       group/abo_basic_login:
         one: Login SAC/CAS
         many: Login SAC/CAS
@@ -767,7 +766,7 @@ fr:
       group/sektions_kommission_touren:
         one: Commission des randonnées
         many: Commissions des randonnées
-        other: Commissions des randonnées
+        other: Commissions des courses
       group/sektions_kommission_umwelt_und_kultur:
         one: Commission Environnement et culture
         many: Commissions Environnement et Culture
@@ -787,19 +786,19 @@ fr:
       group/sektions_touren_und_kurse:
         one: Randonnées et cours
         many: Randonnées et cours
-        other: Randonnées et cours
+        other: Courses et cours
       group/sektions_touren_und_kurse_allgemein:
         one: Randonnée et cours - général
         many: Randonnées et cours - général
-        other: Randonnées et cours - général
+        other: Courses et cours - général
       group/sektions_touren_und_kurse_sommer:
         one: Randonnées  et cours été
         many: Randonnées et cours été
-        other: Randonnées et cours été
+        other: Courses et cours été
       group/sektions_touren_und_kurse_winter:
         one: Randonnées et cours hiver
         many: Randonnées et cours hiver
-        other: Randonnées et cours hiver
+        other: Courses et cours hiver
       group/sektions_vorstand:
         one: Comité
         many: Comité
@@ -1050,11 +1049,11 @@ fr:
         one: Chef·fe AJ
         description: Chef·fe AJ
       group/sektions_touren_und_kurse/fabe_chef:
-        one: Chef·fe éducateur·rice spécialisé·e
-        description: Chef·fe éducateur·rice spécialisé·e
+        one: Chef·fe Alfa
+        description: Chef·fe Alfa
       group/sektions_touren_und_kurse/jo_chef:
-        one: Chef·fe JO
-        description: Chef·fe JO
+        one: Chef·fe OJ
+        description: Chef·fe OJ
       group/sektions_touren_und_kurse/js_coach:
         one: Coach J+S
         description: Coach J+S
@@ -1065,14 +1064,14 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: Chef·fe de randonnée
-        description: Chef·fe de randonnée
+        one: Préposé·e aux courses
+        description: Préposé·e aux courses
       group/sektions_touren_und_kurse_sommer/tourenchef:
-        one: Chef·fe de randonnée
-        description: Chef·fe de randonnée
+        one: Préposé·e aux courses
+        description: Préposé·e aux courses
       group/sektions_touren_und_kurse_winter/tourenchef:
-        one: Chef·fe de randonnée
-        description: Chef·fe de randonnée
+        one: Préposé·e aux courses
+        description: Préposé·e aux courses
       group/sektions_clubhuetten/leserecht:
         one: Droit de lecture
         description: Droit de lecture
@@ -1080,8 +1079,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_clubhuette/huettenchef:
-        one: Chef·fe de cabane
-        description: Chef·fe de cabane
+        one: Préposé·e aux cabanes
+        description: Préposé·e aux cabanes
       group/sektions_clubhuette/huettenwart:
         one: Gardien·ne de cabane
         description: Gardien·ne de cabane
@@ -1097,8 +1096,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektionshuette/huettenchef:
-        one: Chef·fe de cabane
-        description: Chef·fe de cabane
+        one: Préposé·e aux cabanes
+        description: Préposé·e aux cabanes
       group/sektionshuette/huettenwart:
         one: Gardien·ne de cabane
         description: Gardien·ne de cabane
@@ -1247,7 +1246,7 @@ fr:
       nav_left_tours:
         tours: ""
       tours:
-        title: ""
+        title: Courses ayant lieu prochainement
         explanation: ""
     participations:
       missing_information: >-
@@ -1297,7 +1296,7 @@ fr:
           En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
         detail_info_text: >-
-          Une inscription signée par le·la chef·fe de randonnée ou la cheffe de randonnée confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>.
+          Une inscription signée par le·la préposé·e aux courses confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>.
       summary_step:
         annulation_remarks: |
           Il est recommandé de souscrire une assurance pour frais d’annulation. Les frais d’annulation suivants seraient assumés par le client/la cliente en cas d’annulation avant le début du cours:
@@ -1353,20 +1352,20 @@ fr:
         application_open: ""
         application_paused: ""
         application_closed: ""
-        assignment_closed: ""
-        ready: ""
+        assignment_closed: Clôre l'attribution
+        ready: Prêt à débuter
         closed: ""
         closed_confirm_text: >
-        canceled: ""
+        canceled: annuler
       event/tour:
         draft: ""
         approved: ""
         published: ""
         closed: ""
-        canceled: ""
+        canceled: annuler
     state_back_buttons:
       assignment_closed: ""
-      application_closed: ""
+      application_closed: Retour vers l'inscription terminée
       approved: ""
 
     form_tabs:
@@ -1417,7 +1416,7 @@ fr:
     pending: "Une notification préalable a été établie. Celle-ci n'est pas encore définitive et doit être confirmée par l'administration du cours."
 
   filter_navigation/people:
-    tour_guides_none: Pas de chef·fe de randonnée
+    tour_guides_none: Pas de chef·fe de course
     tour_guides_active: Chef·fe de course actif·ves
     tour_guides_stalled: Chef·fe de course suspendu·e
     tour_guides_inactive: Chef·fe de course inactif·ves
@@ -1449,7 +1448,7 @@ fr:
           Tu es déjà membre du CAS. Si tu souhaites adapter ton adhésion, contacte le secrétariat du CAS.
         can_login_already_notice: Tu as déjà un login. Tu ne peux donc pas créer un nouveau login SAC/CAS.
         already_subscribed_to_abo: Tu es déjà destinataire de ce magazine. Tu ne peux donc pas commander le magazine une deuxième fois.
-        already_member_of_tourenportal: Tu es déjà membre du Portail de randonnées du CAS. Tu ne peux donc pas créer une autre adhésion.
+        already_member_of_tourenportal: Tu es déjà membre du Portail des courses du CAS. Tu ne peux donc pas créer une autre adhésion.
 
         existing_family_notice: Tu es affecté à une famille. Contacte le secrétariat du CAS.
         signed_up_notice: Ton inscription a été enregistrée avec succès.
@@ -1598,7 +1597,7 @@ fr:
         default: Attributs des groupes locaux
 
   navigation:
-    tours: ""
+    tours: courses
 
   participations:
     key_data_sheet:
