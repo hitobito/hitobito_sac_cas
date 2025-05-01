@@ -354,12 +354,11 @@ describe Invoices::SacMemberships::MembershipManager do
           expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq stammsektion_end_on
         end
 
-        it "creates inactive role if run on after stammsektion expires" do
+        it "creates role starting and ending on stammsektion end_on if run on after stammsektion expires" do
           travel_to(Date.new(2025, 5, 1)) { subject.update_membership_status }
-          expect(mitglied_person.sac_membership.zusatzsektion_roles).to be_empty
-          inactive_role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
-          expect(inactive_role.start_on).to eq stammsektion_end_on
-          expect(inactive_role.end_on).to eq stammsektion_end_on
+          role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
+          expect(role.start_on).to eq stammsektion_end_on
+          expect(role.end_on).to eq stammsektion_end_on
         end
       end
     end
