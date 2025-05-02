@@ -101,6 +101,15 @@ module SacCas
     ::Group::SektionsMitglieder::Beguenstigt
   ]
 
+  BACKOFFICE_DESTROYABLE_ROLES = [
+    ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
+    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+    ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+    ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
+    ::Group::AboMagazin::Neuanmeldung,
+    ::Group::AboTourenPortal::Neuanmeldung
+  ]
+
   ###
 
   MV_EMAIL = "mv@sac-cas.ch"
