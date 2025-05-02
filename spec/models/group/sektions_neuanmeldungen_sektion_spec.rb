@@ -14,6 +14,8 @@ describe Group::SektionsNeuanmeldungenSektion do
     let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
     it_behaves_like "validates Neuanmeldung timestamps"
+    it_behaves_like "after destroy hook"
+    it_behaves_like "after destroy hook for common"
 
     subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }
 
@@ -41,5 +43,12 @@ describe Group::SektionsNeuanmeldungenSektion do
 
       expect(neuanmeldungen_sektion.self_registration_require_adult_consent).to eq(true)
     end
+  end
+
+  describe Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion do
+    let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder)).person }
+    let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
+
+    it_behaves_like "after destroy hook"
   end
 end

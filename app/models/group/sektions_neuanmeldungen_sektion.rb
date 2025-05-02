@@ -12,10 +12,13 @@ class Group::SektionsNeuanmeldungenSektion < ::Group
   class Neuanmeldung < ::Role
     include SacCas::Role::MitgliedStammsektion
     include SacCas::Role::HardDestroy
+    include SacCas::Role::NeuanmeldungCommon
+    include SacCas::Role::NeuanmeldungStammsektion
   end
 
   class NeuanmeldungZusatzsektion < ::Role
     include SacCas::Role::MitgliedZusatzsektion
+    include SacCas::Role::NeuanmeldungCommon
   end
 
   class Leserecht < ::Role
