@@ -10,6 +10,8 @@ require "spec_helper"
 describe Invoices::SacMemberships::MembershipManager do
   include ActiveJob::TestHelper
 
+  before { travel_to(Time.current.change(day: 15, month: 4)) }
+
   let(:end_of_next_year) { Time.zone.today.next_year.end_of_year }
   let(:mitglied) { roles(:mitglied) }
   let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
@@ -27,7 +29,8 @@ describe Invoices::SacMemberships::MembershipManager do
 
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:matterhorn) { groups(:matterhorn) }
-  let(:sac_membership) { subject.person.sac_membership }
+
+  def sac_membership = subject.person.sac_membership
 
   before do
     ehrenmitglieder_group = Group::Ehrenmitglieder.create!(name: "Ehrenmitglieder", parent: groups(:root))
@@ -305,10 +308,13 @@ describe Invoices::SacMemberships::MembershipManager do
   context "person has just a neuanmeldung zusatzsektion_roles role" do
     context "adult" do
       before do
-        mitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        mitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        mitglied_person.sac_membership.membership_prolongable_roles.destroy_all
+        membership = People::SacMembership.new(mitglied_person)
+        membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
+        membership.zusatzsektion_roles.destroy_all
+        membership.membership_prolongable_roles.destroy_all
+      end
 
+      let!(:neuanmeldung) do
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: mitglied_person,
           beitragskategorie: :adult,
@@ -346,19 +352,28 @@ describe Invoices::SacMemberships::MembershipManager do
       context "with stammsektions only partially covering year" do
         let(:stammsektion_end_on) { Date.new(2025, 5, 1) }
 
-        before { mitglied.update_columns(end_on: stammsektion_end_on) }
+        before do
+          neuanmeldung.update!(start_on: Date.new(2025, 2, 1))
+          mitglied.update!(end_on: stammsektion_end_on)
+        end
 
         it "creates zusatzsektion role from today to end of stammsektion role" do
-          travel_to(Date.new(2025, 1, 3)) { subject.update_membership_status }
-          expect(mitglied_person.sac_membership.zusatzsektion_roles.first.start_on).to eq Date.new(2025, 1, 3)
-          expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq stammsektion_end_on
+          travel_to(Date.new(2025, 3, 1)) do
+            subject.update_membership_status
+
+            expect(mitglied_person.sac_membership.zusatzsektion_roles.first.start_on).to eq Date.new(2025, 3, 1)
+            expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq stammsektion_end_on
+          end
         end
 
         it "creates role starting and ending on stammsektion end_on if run on after stammsektion expires" do
-          travel_to(Date.new(2025, 5, 1)) { subject.update_membership_status }
-          role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
-          expect(role.start_on).to eq stammsektion_end_on
-          expect(role.end_on).to eq stammsektion_end_on
+          travel_to(Date.new(2025, 5, 2)) do
+            subject.update_membership_status
+
+            role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
+            expect(role.start_on).to eq stammsektion_end_on
+            expect(role.end_on).to eq stammsektion_end_on
+          end
         end
       end
     end

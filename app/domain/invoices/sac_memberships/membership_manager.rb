@@ -92,7 +92,7 @@ class Invoices::SacMemberships::MembershipManager
     role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role| role.layer_group == group.layer_group }
     if role
       role.destroy
-      end_on = [person.sac_membership.stammsektion_role.end_on, end_of_year].min
+      end_on = [person.sac_membership.latest_stammsektion_role.end_on, end_of_year].min
       start_on = end_on.past? ? end_on : today
       new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on, beitragskategorie: role.beitragskategorie)
 

@@ -126,7 +126,7 @@ module SacCas::Person
   end
 
   def sac_membership
-    @sac_membership ||= People::SacMembership.new(self)
+    People::SacMembership.new(self)
   end
 
   def login_status
