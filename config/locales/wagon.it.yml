@@ -475,6 +475,7 @@ it:
           permission:
             description:
               read_all_people: Letto da tutte le persone.
+              layer_events_full: ""
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:

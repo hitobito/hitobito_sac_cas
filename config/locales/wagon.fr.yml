@@ -477,6 +477,7 @@ fr:
           permission:
             description:
               read_all_people: Lecture de toutes les personnes.
+              layer_events_full: ""
       qualification_kind:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:

@@ -469,6 +469,7 @@ en:
           permission:
             description:
               read_all_people: Read by all persons.
+              layer_events_full: ""
       qualification_kind:
         tourenchef_may_edit: Editable by tour manager
       qualification:
