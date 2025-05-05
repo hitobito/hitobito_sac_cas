@@ -12,10 +12,12 @@ module SacCas::Person::Address
   end
 
   def address_with_multilanguage_country
+    ignored_country = addressable.country.to_s.squish.eql?(default_country)
+
     [
       @person.address.to_s.strip,
       [@person.zip_code, @person.town].compact.join(" ").squish,
-      Country.new(country).name
+      (Country.new(country_string(:country)).name unless ignored_country)
     ]
   end
 end
