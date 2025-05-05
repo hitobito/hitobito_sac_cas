@@ -9,37 +9,21 @@ module Memberships
   module Constraints
     delegate :mitglied_termination_by_section_only?, to: :subject
 
-    def for_self_if_active_member_or_backoffice
-      active_member? && (for_self? || backoffice?)
+    def for_active_member_if_self_or_backoffice_or_schreibrecht
+      return false unless active_member?
+
+      backoffice? || for_self? || schreibrecht_role?
     end
 
-    def for_self_when_not_terminated_if_active_member_or_backoffice
-      active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
-    end
+    def backoffice? = user_context.user.backoffice?
 
-    def for_self_and_not_terminated?
-      for_self? && !terminated?
-    end
+    def for_self? = subject.person == user_context.user
 
-    def termination_by_section_only_false_and_schreibrecht_and_not_terminated?
-      !mitglied_termination_by_section_only? && schreibrecht_role? && !terminated?
-    end
+    def sac_membership = @sac_membership ||= subject.person.sac_membership
 
-    def backoffice?
-      user_context.user.backoffice?
-    end
+    def active_member? = sac_membership.active?
 
-    def for_self?
-      subject.person == user_context.user
-    end
-
-    def active_member?
-      People::SacMembership.new(subject.person).active?
-    end
-
-    def terminated?
-      subject.person.sac_membership.terminated?
-    end
+    def terminated? = sac_membership.terminated?
 
     def schreibrecht_role?
       user_context.user.roles.any? { |role| role.type == Group::SektionsMitglieder::Schreibrecht.sti_name }

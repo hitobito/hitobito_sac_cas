@@ -15,7 +15,7 @@ module Memberships
     private
 
     def authorize
-      authorize!(:terminate, wizard.role)
+      authorize!(:create, wizard)
     end
 
     def wizard

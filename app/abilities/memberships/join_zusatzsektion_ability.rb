@@ -10,7 +10,7 @@ module Memberships
     include Memberships::Constraints
 
     on(Wizards::Memberships::JoinZusatzsektion) do
-      permission(:any).may(:create).for_self_if_active_member_or_backoffice
+      permission(:any).may(:create).for_active_member_if_self_or_backoffice_or_schreibrecht
     end
   end
 end
