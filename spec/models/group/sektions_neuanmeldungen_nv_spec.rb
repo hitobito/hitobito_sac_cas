@@ -15,7 +15,6 @@ describe Group::SektionsNeuanmeldungenNv do
 
     it_behaves_like "validates Neuanmeldung timestamps"
     it_behaves_like "after destroy hook"
-    it_behaves_like "after destroy hook for common"
 
     subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }
 

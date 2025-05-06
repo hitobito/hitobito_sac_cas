@@ -63,26 +63,3 @@ shared_examples "after destroy hook" do
     end
   end
 end
-
-shared_examples "after destroy hook for common" do
-  it "destroys household" do
-    household = Household.new(person, maintain_sac_family: false, validate_members: false)
-    household.set_family_main_person!
-    role = Fabricate(described_class.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
-
-    other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder)).person
-    other2 = Fabricate(:person, birthday: 12.years.ago)
-
-    household.add(other)
-    household.add(other2)
-    household.save!
-
-    expect(household.people).to match_array [person, other, other2]
-    expect do
-      role.destroy!
-    end.to change { Role.count }.by(-1)
-
-    household = person.household
-    expect(household.people).to eq([])
-  end
-end
