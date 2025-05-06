@@ -81,7 +81,6 @@ module HitobitoSacCas
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
-      Contactable.prepend SacCas::Contactable
       PhoneNumber.predefined_labels.each do |label|
         PeopleController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
         GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
