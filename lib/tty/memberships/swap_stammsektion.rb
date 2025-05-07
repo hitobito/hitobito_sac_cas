@@ -20,6 +20,7 @@ module TTY
         @person = ask_for_person
         puts green "Found #{affected_people.map { |p| "#{p} (#{p.id})" }.join(", ")}"
         @old_stammsektion_role = person.sac_membership.stammsektion_role
+        puts light_green "Current Stammsektion: #{old_stammsektion_role.group.layer_group}"
         @old_zusatzsektion_role = ask_for_new_stammsektion
       end
 
