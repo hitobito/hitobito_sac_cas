@@ -25,7 +25,7 @@ module TTY
 
       def run
         promote if confirm?
-        self.class.new
+        # self.class.new
       end
 
       private
@@ -72,7 +72,7 @@ module TTY
           end
 
           begin
-            return Date.strptime(end_on, "%d.%m.%Y")
+            return Date.strptime(end_on_input, "%d.%m.%Y")
           rescue ArgumentError
             puts error "Invalid date format. Please enter a valid date (DD.MM.YYYY)."
           end
