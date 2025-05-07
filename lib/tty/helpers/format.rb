@@ -76,6 +76,18 @@ module TTY
         end
       end
 
+      def info(text)
+        bold(light_blue(text))
+      end
+
+      def success(text)
+        bold(green(text))
+      end
+
+      def warning(text)
+        bold(yellow(text))
+      end
+
       def error(text)
         bold(red(text))
       end
