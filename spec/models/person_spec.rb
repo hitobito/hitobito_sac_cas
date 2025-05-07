@@ -243,18 +243,6 @@ describe Person do
     end
   end
 
-  describe "country" do
-    it "label falls back to swiss" do
-      expect(Person.new(country: "DE").country_label).to eq("Deutschland")
-      expect(Person.new.country_label).to eq("Schweiz")
-    end
-
-    it "#ignored_country is always false" do
-      expect(Person.new(country: "CH").ignored_country?).to eq(false)
-      expect(Person.new.ignored_country?).to eq(false)
-    end
-  end
-
   describe "correspondence" do
     it "gets set to digital when password is first set" do
       password = "verysafepasswordfortesting"

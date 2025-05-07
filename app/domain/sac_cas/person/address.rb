@@ -15,7 +15,7 @@ module SacCas::Person::Address
     [
       @person.address.to_s.strip,
       [@person.zip_code, @person.town].compact.join(" ").squish,
-      Country.new(country).name
+      country_string(:country_label)
     ]
   end
 end
