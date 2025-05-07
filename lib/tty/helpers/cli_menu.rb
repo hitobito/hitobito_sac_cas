@@ -70,7 +70,7 @@ module TTY
         # Format the key part (e.g., "p)" or "promote-all)")
         key_part = "#{key})"
         # Left-justify the key part using the calculated width
-        padded_key_part = key_part.ljust(keys_length)
+        padded_key_part = key_part.ljust(keys_length + 1)
         # Print the padded key part followed by the description
         puts format_text("#{padded_key_part} #{description}",
           color: format[:color],
@@ -109,8 +109,6 @@ module TTY
     # Executes the action or prints an error message.
     # Actions can raise CliMenu::ExitMenu to stop the menu loop.
     def handle_choice(choice)
-      quit if choice == "q" # Handle quit option
-
       action_config = @menu_actions[choice]
 
       unless action_config
