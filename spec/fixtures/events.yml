@@ -6,7 +6,6 @@
 ---
 top_event:
   groups: root
-  visible_contact_attributes: ["all"]
 
 top_course:
   groups: root
@@ -15,7 +14,6 @@ top_course:
   number: 10
   language: de
   external_applications: true
-  visible_contact_attributes: ["all"]
 
 closed:
   groups: root
@@ -35,11 +33,9 @@ closed:
   cost_unit: ski
   price_member: 10
   price_regular: 20
-  visible_contact_attributes: ["all"]
 
 section_tour:
   groups: bluemlisalp
   type: Event::Tour
   state: published
   external_applications: true
-  visible_contact_attributes: ["all"]
