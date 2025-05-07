@@ -9,7 +9,7 @@ module TTY
   module Helpers
     class SacLogo
       def print
-        puts File.read(File.join(File.dirname(__FILE__), "sac_logo.ascii"))
+        puts File.read(File.expand_path("sac_logo.ascii", __dir__))
       end
     end
   end
