@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         resource :switch_stammsektion, module: :memberships, only: [:show, :create]
         resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
         resources :roles, only: [] do
+          resource :change_zusatzsektion_to_family, module: :memberships, only: [:create]
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
           resource :undo_termination, module: :memberships, only: [:new, :create]
         end
