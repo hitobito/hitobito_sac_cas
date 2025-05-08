@@ -1789,6 +1789,8 @@ fr:
   people_filters:
     invoice_receiver:
       title: "Destinataire de la facture dans %{group_name}"
+
+  layouts:
     filter:
       invoice_receiver:
         stammsektion: Destinataire de la facture Membre du CAS

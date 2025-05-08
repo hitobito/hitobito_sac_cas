@@ -9,4 +9,4 @@
   - Person::Filter::InvoiceReceiver::VISIBLE_ATTRS.each do |attr|
     - if filter_args&.dig(attr)
       %li
-        = t("people_filters.filter.invoice_receiver.#{attr}")
+        = t("layouts.filter.invoice_receiver.#{attr}")

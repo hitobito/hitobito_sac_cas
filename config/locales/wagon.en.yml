@@ -1703,6 +1703,8 @@ en:
   people_filters:
     invoice_receiver:
       title: ""
+
+  layouts:
     filter:
       invoice_receiver:
         stammsektion: ""

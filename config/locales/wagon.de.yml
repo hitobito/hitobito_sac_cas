@@ -1792,6 +1792,8 @@ de:
   people_filters:
     invoice_receiver:
       title: Rechnungsempfänger in %{group_name}
+
+  layouts:
     filter:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
