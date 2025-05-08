@@ -7,8 +7,6 @@
 
 # rubocop:disable Rails/Output
 
-require_relative "../command"
-
 module TTY
   module Memberships
     class PromoteNeuanmeldung
@@ -25,7 +23,6 @@ module TTY
 
       def run
         promote if confirm?
-        # self.class.new
       end
 
       private
