@@ -362,7 +362,7 @@ fr:
           error: Erreur
         external_invoices: Factures # uses include CapitalizedDependentErrors
       event/role:
-        self_employed: Travailleur·se indépendant·e
+        self_employed: Activité indépendante
       event/tour:
         state_translated: Statut
         states:
@@ -1383,7 +1383,7 @@ fr:
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
 
     roles:
-      self_employed: travailleur·se indépendant·e
+      self_employed: Activité indépendante
       not_self_employed: salarié·e
 
     popover_canceled_reason:
