@@ -7,40 +7,23 @@
 
 # rubocop:disable Rails/Output, Rails/Exit
 
-require "io/console"
-require_relative "helpers/cli_menu"
-require_relative "helpers/format"
-require_relative "helpers/sac_logo"
-require_relative "memberships/promote_neuanmeldung"
-require_relative "memberships/swap_stammsektion"
-require_relative "memberships/undo_termination"
-
 module TTY
   class ManageMemberships
+    prepend TTY::Command
     include Helpers::Format
 
+    self.description = "Manage memberships"
+
     MENU_ACTIONS = {
-      "h" => {
-        description: "Print 'hello world'",
-        action: -> { puts [red("hello"), green("world")].join(" ") }
-      },
       "p" => TTY::Memberships::PromoteNeuanmeldung,
       "s" => TTY::Memberships::SwapStammsektion,
-      "u" => TTY::Memberships::UndoTermination
+      "u" => TTY::Memberships::UndoTermination,
     }.freeze
 
-    def self.run = new.run
-
     def run
-      trap_ctrl_c
-      Helpers::SacLogo.new.print
-      print_welcome_message
-
       loop do
-        CliMenu.new(menu_actions: MENU_ACTIONS).run
+        break unless CliMenu.new(menu_actions: MENU_ACTIONS).run
       end
-    ensure
-      print_byebye
     end
 
     private
