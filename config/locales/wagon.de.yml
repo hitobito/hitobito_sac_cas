@@ -1543,6 +1543,9 @@ de:
           youth: Jugendmitgliedschaft
 
   memberships:
+    change_zusatzsektion_to_families:
+      create:
+        success: "Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert."
     join_zusatzsektions:
       create:
         success:
@@ -1816,6 +1819,8 @@ de:
       youth: Jugend
       family: Familie
 
+  roles/change_zusatzsektion_to_family:
+    link: Wechsel Familie
   roles/terminations:
     global:
       undo: Reaktivieren

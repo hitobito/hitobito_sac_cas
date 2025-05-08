@@ -11,8 +11,9 @@ module SacCas::RolesHelper
   end
 
   def terminate_role_link(role)
-    return super unless role.terminated?
+    return Roles::UndoTerminateRoleLink.new(role, self).render if role.terminated?
 
-    Roles::UndoTerminateRoleLink.new(role, self).render
+    buttons = [Roles::ChangeZusatzsektionToFamilyLink.new(role, self).render, super]
+    content_tag(:div, class: "btn-group", role: "group") { buttons.compact.reduce(:+) }
   end
 end
