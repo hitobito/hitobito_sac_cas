@@ -102,7 +102,7 @@ module SacCas
   ]
 
   BACKOFFICE_DESTROYABLE_ROLES = [
-    MITGLIED_ROLES,
+    NEUANMELDUNG_ROLES,
     ::Group::AboMagazin::Neuanmeldung,
     ::Group::AboTourenPortal::Neuanmeldung
   ].flatten.freeze
