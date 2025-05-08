@@ -17,13 +17,9 @@ module People::Neuanmeldungen
   #
   class Approve < Base
     def call
-      relevant_roles = applicable_roles
-      Role.transaction do
-        relevant_roles.each do |role|
+      applicable_roles.each do |role|
+        Role.transaction do
           role.destroy!
-        end
-
-        relevant_roles.each do |role|
           next unless create_approved_role?(role)
 
           create_approved_role(role)
