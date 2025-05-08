@@ -5,9 +5,6 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require_relative "../command"
-require_relative "../helpers/cli_menu"
-
 module TTY
   module MailingLists
     class CreateSektionsbulletin
@@ -40,6 +37,7 @@ module TTY
 
           create_bulletin
         end
+        true
       end
 
       private
