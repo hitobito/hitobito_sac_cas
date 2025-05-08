@@ -13,6 +13,16 @@ module SacCas::RoleAbility
       permission(:any).may(:terminate).self_terminatable_own_role
       general(:create, :update).modify_admin_permission_only_of_admin_themself
     end
+
+    SacCas::BACKOFFICE_DESTROYABLE_ROLES.each do |role_class|
+      on(role_class) do
+        permission(:any).may(:destroy).if_backoffice
+      end
+    end
+  end
+
+  def if_backoffice
+    SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
   end
 
   def self_terminatable_own_role
