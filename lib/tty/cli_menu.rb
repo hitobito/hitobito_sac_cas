@@ -5,12 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-require "io/console"
-require_relative "format"
-
 module TTY
   class CliMenu
-    include Helpers::Format
+    include TTY::Helpers::Format
 
     # Error class for signaling to exit the menu loop gracefully
     class ExitMenu < StandardError; end
@@ -24,7 +21,7 @@ module TTY
     # @param prompt [String] The prompt message shown before input.
     # @param invalid_choice_message [String] Message for invalid input.
     def initialize(menu_actions:, prompt: "\nPlease choose an option", invalid_choice_message: "Invalid choice '%s'. Please try again.")
-      @menu_actions = menu_actions.merge("q" => quit_action)
+      @menu_actions = add_quit_option(menu_actions)
       @prompt = prompt
       @invalid_choice_message = invalid_choice_message
       @input_mode = determine_input_mode # :single_char or :multi_char
@@ -42,12 +39,16 @@ module TTY
         return handle_choice(choice)
       rescue AskAgain
         next # Continue the loop if an action raises AskAgain
-      rescue ExitMenu
-        break # Exit the loop gracefully when an action raises ExitMenu
       end
+    rescue ExitMenu
+      # Do nothing
     end
 
     private
+
+    def add_quit_option(menu_actions)
+      menu_actions.key?("q") ? menu_actions : menu_actions.merge("q" => quit_action)
+    end
 
     # Determines if single-char or multi-char input should be used
     def determine_input_mode
@@ -56,7 +57,7 @@ module TTY
     end
 
     def quit_action
-      {description: "Quit", action: -> { quit }, style: :dim}
+      {description: "Exit menu", action: -> { raise ExitMenu }, style: :dim}
     end
 
     # Prints the available menu options.
@@ -116,6 +117,8 @@ module TTY
         raise AskAgain
       end
 
+      puts
+
       if action_config[:action].respond_to?(:call)
         # Execute the action associated with the choice
         action_config[:action].call
@@ -124,8 +127,6 @@ module TTY
         action_config[:action]
       end
     end
-
-    def quit = Process.kill("INT", Process.pid)
 
     # Validates the structure of the menu_actions hash during initialization.
     def validate_menu_actions!
