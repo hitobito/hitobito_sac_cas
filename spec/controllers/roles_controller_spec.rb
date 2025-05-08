@@ -11,12 +11,35 @@ describe RolesController do
   let(:person) { Fabricate(:person) }
 
   describe "DELETE destroy" do
+    let!(:household) do
+      household = Household.new(person, maintain_sac_family: false, validate_members: false)
+      household.set_family_main_person!
+      household
+    end
+
+    def build_depending_roles_and_family(beitragskategorie: :family)
+      [
+        [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, false],
+        [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion, false],
+        [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, true],
+        [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion, true]
+      ].map do |role_class, group, add_membership_role|
+        build_depending_role_and_add_to_family(role_class, group, add_membership_role:, beitragskategorie:)
+      end
+    end
+
+    def build_depending_role_and_add_to_family(role_class, group, add_membership_role: false, beitragskategorie: :family)
+      p = Fabricate(:person, birthday: 12.years.ago)
+      household.add(p)
+      household.save!
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder), person: p) if add_membership_role
+      Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie:, person: p)
+    end
+
     context "for family neuanmeldungs role" do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
       it "destroys household" do
-        household = Household.new(person, maintain_sac_family: false, validate_members: false)
-        household.set_family_main_person!
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
 
         other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder)).person
@@ -36,34 +59,10 @@ describe RolesController do
       end
 
       it "destroys family neuanmeldung roles" do
-        household = Household.new(person, maintain_sac_family: false, validate_members: false)
         household.add(people(:mitglied))
-        household.set_family_main_person!
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
 
-        depending_roles = []
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :family, person: p)
-          r
-        end
-
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder), person: p)
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :family, person: p)
-          r
-        end
+        depending_roles = build_depending_roles_and_family
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
@@ -77,34 +76,10 @@ describe RolesController do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
       it "does not destroy family neuanmeldung roles" do
-        household = Household.new(person, maintain_sac_family: false, validate_members: false)
         household.add(people(:mitglied))
-        household.set_family_main_person!
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :adult, person: person)
 
-        depending_roles = []
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :adult, person: p)
-          r
-        end
-
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder), person: p)
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :adult, person: p)
-          r
-        end
+        depending_roles = build_depending_roles_and_family(beitragskategorie: :adult)
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
@@ -118,8 +93,6 @@ describe RolesController do
       let(:group) { groups(:abo_die_alpen) }
 
       it "does not destroy household" do
-        household = Household.new(person, maintain_sac_family: false, validate_members: false)
-        household.set_family_main_person!
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :family, person: person)
         role = Fabricate(Group::AboMagazin::Andere.sti_name.to_sym, group: group)
 
@@ -140,35 +113,11 @@ describe RolesController do
       end
 
       it "does not destroy family neuanmeldung roles" do
-        household = Household.new(person, maintain_sac_family: false, validate_members: false)
         household.add(people(:mitglied))
-        household.set_family_main_person!
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :adult, person: person)
         role = Fabricate(Group::AboMagazin::Andere.sti_name.to_sym, group: group)
 
-        depending_roles = []
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :adult, person: p)
-          r
-        end
-
-        depending_roles += [
-          [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv],
-          [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion]
-        ].map do |role_class, group|
-          p = Fabricate(:person, birthday: 12.years.ago)
-          household.add(p)
-          household.save!
-          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder), person: p)
-          r = Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie: :adult, person: p)
-          r
-        end
+        depending_roles = build_depending_roles_and_family
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
