@@ -78,7 +78,7 @@ module Memberships
     # timestamp of the blueprint role.
     # The old role is ended with a deleted_at timestamp at the end of the previous day.
     def replace_role!(role, blueprint_role = role, beitragskategorie: category_family)
-      raise "cannot replace with future role" if blueprint_role.start_on.future?
+      raise "cannot replace with future role" if blueprint_role.start_on&.future?
 
       # terminate old role, skip validations as it might be a family membership which
       # is not valid anymore as the person just left the household

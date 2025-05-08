@@ -111,6 +111,12 @@ describe Memberships::FamilyMutation do
         expect(zusatzsektion_roles.map(&:group_id)).to eq [groups(:matterhorn_mitglieder).id]
       end
 
+      it "does not raise if blueprint_role start_on is nil" do
+        reference_person.sac_membership.stammsektion_role.update_columns(start_on: nil)
+        expect { mutation.join!(reference_person) }
+          .not_to raise_error
+      end
+
       it "raises if person has terminated membership" do
         Role.where(id: stammsektion_role).update_all(terminated: true)
         expect { mutation.join!(reference_person) }
