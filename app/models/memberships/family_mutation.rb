@@ -45,6 +45,12 @@ module Memberships
       sac_membership.neuanmeldung_zusatzsektion_roles.family.each { end_role(_1) }
     end
 
+    def change_zusatzsektion_to_family!(role)
+      if !person.roles.include?(role) || !person.sac_family_main_person || role.terminated? || role.family? || !role.person.sac_membership.family?
+        raise "not able to change zusatzsektion to family"
+      end
+    end
+
     private
 
     def join_stammsektion!(reference_person)
