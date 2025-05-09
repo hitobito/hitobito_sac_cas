@@ -13,6 +13,7 @@ module TTY
       include TTY::Helpers::Format
       extend TTY::Helpers::Format
       include TTY::Helpers::PaperTrailed
+      include Rails.application.routes.url_helpers
 
       class_attribute :description
     end
