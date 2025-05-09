@@ -16,8 +16,8 @@ module TTY
         description: "Print 'hello world'",
         action: -> { puts [red("hello"), green("world")].join(" ") }
       },
-      "1" => TTY::ManageMemberships,
-      "2" => TTY::ManageMailingLists,
+      "m" => TTY::ManageMemberships,
+      "l" => TTY::ManageMailingLists,
       "q" => {description: "Quit", action: -> { quit }, style: :dim}
     }.freeze
 

@@ -15,10 +15,6 @@ module TTY
     self.description = "Manage mailing lists"
 
     MENU_ACTIONS = {
-      "h" => {
-        description: "Print 'hello world'",
-        action: -> { puts [red("hello"), green("world")].join(" ") }
-      },
       "1" => TTY::MailingLists::CreateSektionsbulletin,
       "2" => TTY::MailingLists::MigratePaperBulletinToDigital
     }.freeze
@@ -27,25 +23,6 @@ module TTY
       loop do
         break unless CliMenu.new(menu_actions: MENU_ACTIONS).run
       end
-    end
-
-    private
-
-    def trap_ctrl_c
-      Signal.trap("INT") do
-        exit(1)
-      end
-    end
-
-    def print_welcome_message
-      puts bold(light_yellow("Welcome to the ")) +
-        light_red("SAC ") +
-        light_cyan("Mailing Lists Management ") +
-        light_yellow("CLI!")
-    end
-
-    def print_byebye
-      puts light_yellow "\nHave a great day, happy to assist you next time!"
     end
   end
 end
