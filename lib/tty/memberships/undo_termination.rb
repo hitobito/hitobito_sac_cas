@@ -16,12 +16,13 @@ module TTY
 
       def initialize
         @role = ask_for_role
-        @undo = ::Memberships::UndoTermination.new(role)
+        load_undo
       end
 
       def run
         undo.save(validate: false) if confirm?
         puts green "Undo completed"
+        true
       end
 
       private
@@ -74,26 +75,100 @@ module TTY
         end
 
         puts red "!!! The undo is invalid !!!" unless undo.valid?
-        print yellow "Do you want to execute the undo? (y/n) or open pry to edit (e): "
+        puts yellow "The mutation_id is missing." unless terminating_version.mutation_id.present?
 
-        loop do
-          choice = $stdin.getch.tap { puts } # Read a single character and print a newline
-
-          case choice
-          when "y"
+        CliMenu.new(menu_actions: {
+          "y" => {description: "Yes, undo the termination", action: -> {
             puts "Performing undo..."
-            return true
-          when "n"
+            true
+          }},
+          "n" => {description: "No, do not undo the termination", action: -> {
             puts light_red "Undo canceled."
-            return false
-          when "e"
-            puts "Opening pry console to edit the undo..."
-            binding.pry
-            return confirm?
-          else
-            puts error "Invalid choice. Please enter 'y' or 'n'."
-          end
+            false
+          }},
+          "r" => {description: "Revert start_on changes", action: -> {
+            revert_start_on
+            confirm?
+          }, color: :yellow},
+          "m" => {description: "Set mutation_id", action: -> {
+            set_mutation_id
+            reload!
+            confirm?
+          }, color: :yellow},
+          "p" => {description: "Open person history", action: -> {
+            open_profile
+            confirm?
+          }},
+          "`" => {description: "Open pry shell", action: -> {
+            pry_console
+            confirm?
+          }, style: :dim}
+        }).run
+      end
+
+      def load_undo
+        @undo = ::Memberships::UndoTermination.new(role)
+        nil
+      end
+
+      def terminating_version(r = role)
+        r.versions.order(id: :desc).find { |v| v.object_changes.include?("terminated:\n- false\n- true") }
+      end
+
+      def open_profile
+        url = group_person_path(
+          host: "portal.sac-cas.ch",
+          protocol: "https",
+          group_id: person.primary_group_id,
+          id: role.person.id
+        )
+        system("xdg-open", url, out: "/dev/null")
+      end
+
+      ## methods used interactively in pry console
+
+      alias_method :reload!, :load_undo
+
+      def revert_start_on
+        undo.restored_roles.each do |role|
+          next unless role.changes["start_on"]
+
+          role.start_on = role.changes["start_on"].first
         end
+        nil
+      end
+
+      def set_mutation_id
+        return puts(error("This is a family role, manual intervention is required.")) if undo.role.family?
+        version = terminating_version
+        return puts(warn("Role already has a mutation_id")) if version.mutation_id.present?
+
+        version.update!(mutation_id: SecureRandom.uuid)
+      end
+
+      def pry_console
+        binding.pry
+      end
+
+      def family_roles
+        return [] unless role.family_id
+
+        Role.with_inactive.where(family_id: role.family_id, end_on: role.end_on)
+      end
+
+      def family_terminating_versions
+        family_roles.map do |role|
+          terminating_version(role)
+        end.then do |versions|
+          PaperTrail::Version.where(id: versions.map(&:id))
+        end
+      end
+
+      def set_family_mutation_id
+        return puts(warn("Role already has a mutation_id")) if terminating_version.mutation_id.present?
+
+        family_terminating_versions.update_all(mutation_id: SecureRandom.uuid)
+        reload!
       end
     end
   end

@@ -26,24 +26,6 @@ module TTY
       end
     end
 
-    private
-
-    def trap_ctrl_c
-      Signal.trap("INT") do
-        exit(1)
-      end
-    end
-
-    def print_welcome_message
-      puts bold(light_yellow("Welcome to the ")) +
-        light_red("SAC ") +
-        light_cyan("Membership Management ") +
-        light_yellow("CLI!")
-    end
-
-    def print_byebye
-      puts light_yellow "\nHave a great day, happy to assist you next time!"
-    end
   end
 end
 
