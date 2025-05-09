@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 desc "SAC CLI"
-task cli: [:environment, "cli:setup"] do
+task cli: ["cli:setup", :environment] do
   require "tty/cli"
   TTY::Cli.new.run
 end
@@ -17,13 +17,9 @@ namespace :cli do
     # As we don't want to manually require files, we add /lib to the autoload_paths.
     # We do this here as to not pollute the environment of the regular application context.
     ActiveSupport::Inflector.inflections { |i| i.acronym("TTY") }
-    loader = Rails.autoloaders.main
-    lib_path = File.expand_path("..", __dir__)
 
-    unless loader.dirs.include?(lib_path)
-      # If 'lib' is not already a root, add it.
-      loader.push_dir(lib_path)
-      loader.reload
-    end
+    # loader = Rails.autoloaders.main
+    lib_path = File.expand_path("..", __dir__)
+    Rails.application.config.autoload_paths << lib_path
   end
 end

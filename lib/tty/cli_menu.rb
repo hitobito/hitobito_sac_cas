@@ -21,7 +21,7 @@ module TTY
     # @param prompt [String] The prompt message shown before input.
     # @param invalid_choice_message [String] Message for invalid input.
     def initialize(menu_actions:, prompt: "\nPlease choose an option", invalid_choice_message: "Invalid choice '%s'. Please try again.")
-      @menu_actions = add_quit_option(menu_actions)
+      @menu_actions = add_default_options(menu_actions)
       @prompt = prompt
       @invalid_choice_message = invalid_choice_message
       @input_mode = determine_input_mode # :single_char or :multi_char
@@ -46,18 +46,25 @@ module TTY
 
     private
 
-    def add_quit_option(menu_actions)
-      menu_actions.key?("q") ? menu_actions : menu_actions.merge("q" => quit_action)
+    def add_default_options(menu_actions)
+      menu_actions.dup.tap do |opts|
+        opts["q"] ||= quit_action
+        opts["`"] ||= pry_action
+      end
+    end
+
+    def quit_action
+      {description: "Exit menu", action: -> { raise ExitMenu }, style: :dim}
+    end
+
+    def pry_action
+      {description: "Open pry shell", action: -> { Pry.start }, style: :dim}
     end
 
     # Determines if single-char or multi-char input should be used
     def determine_input_mode
       # If ANY key is longer than 1 character, switch to multi-character mode
       (@menu_actions.keys.any? { |key| key.to_s.length > 1 }) ? :multi_char : :single_char
-    end
-
-    def quit_action
-      {description: "Exit menu", action: -> { raise ExitMenu }, style: :dim}
     end
 
     # Prints the available menu options.
@@ -92,7 +99,7 @@ module TTY
     def read_single_char_input
       $stdin.getch.tap do |char|
         if char == "\u0003" # Check for Ctrl+C explicitly in getch
-          quit
+          Cli.quit
         end
         # Provide visual feedback by echoing the character or a newline
         # If char is a control char it might not print well, so just newline
