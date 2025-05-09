@@ -27,11 +27,16 @@ module TTY
       end
 
       def run
-        ensure_all_bulletin_lists_exist || return
-        before_stats = subscribers_stats
-        migrate_subscribers
-        print_stats "Before migration", before_stats
-        print_stats "After migration", subscribers_stats
+        return true unless ensure_all_bulletin_lists_exist
+
+        if confirm?
+          before_stats = subscribers_stats
+
+          migrate_subscribers
+
+          print_stats "Before migration", before_stats
+          print_stats "After migration", subscribers_stats
+        end
         true
       end
 
@@ -67,6 +72,25 @@ module TTY
         bulletin_paper.present? && bulletin_digital.present?
       end
 
+      def confirm?
+        print yellow "Do you want to execute the subscriber migration? (y/n): "
+
+        loop do
+          choice = $stdin.getch.tap { puts } # Read a single character and print a newline
+
+          case choice
+          when "y"
+            puts "Starting migration..."
+            return true
+          when "n"
+            puts light_red "Migration canceled."
+            return false
+          else
+            puts error "Invalid choice. Please enter 'y' or 'n'."
+          end
+        end
+      end
+
       def subscribers_stats
         [
           "  * Paper people: #{paper_people.to_a.size}",
@@ -77,10 +101,10 @@ module TTY
         ]
       end
 
-      def paper_people = MailingLists::Subscribers.new(bulletin_paper).people
+      def paper_people = ::MailingLists::Subscribers.new(bulletin_paper).people
 
       def paper_people_confirmed_email
-        MailingLists::Subscribers.new(bulletin_paper,
+        ::MailingLists::Subscribers.new(bulletin_paper,
           Person.where.not(
             confirmed_at: nil, email: nil, last_sign_in_at: nil
           )).people
@@ -88,7 +112,7 @@ module TTY
 
       def paper_subscriptions = bulletin_paper.subscriptions.where(subscriber_type: "Person")
 
-      def digital_people = MailingLists::Subscribers.new(bulletin_digital).people
+      def digital_people = ::MailingLists::Subscribers.new(bulletin_digital).people
 
       def digital_subscriptions = bulletin_digital.subscriptions.where(subscriber_type: "Person")
 
@@ -104,10 +128,10 @@ module TTY
 
       def subscribe_to_digital
         puts info "Subscribing paper people with confirmed email to digital list"
-        current_paper_people = paper_people.to_a
-        current_paper_people.each_with_index do |paper_person, index|
+        current_paper_people_confirmed_email = paper_people_confirmed_email.to_a
+        current_paper_people_confirmed_email.each_with_index do |paper_person, index|
           print "\r"
-          print "Subscribing person #{index + 1} of #{current_paper_people.size} to digital list"
+          print "Subscribing person #{index + 1} of #{current_paper_people_confirmed_email.size} to digital list"
           Person::Subscriptions.new(paper_person).create(bulletin_digital)
         end
         puts
@@ -118,7 +142,7 @@ module TTY
         current_digital_people = digital_people.to_a
         current_digital_people.each_with_index do |digital_person, index|
           print "\r"
-          puts "Removing person #{index + 1} of #{current_digital_people.size} from paper list"
+          print "Removing person #{index + 1} of #{current_digital_people.size} from paper list"
           Person::Subscriptions.new(digital_person).destroy(bulletin_paper)
         end
         puts
