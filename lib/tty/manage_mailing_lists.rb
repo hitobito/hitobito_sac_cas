@@ -19,7 +19,8 @@ module TTY
         description: "Print 'hello world'",
         action: -> { puts [red("hello"), green("world")].join(" ") }
       },
-      "s" => TTY::MailingLists::CreateSektionsbulletin
+      "1" => TTY::MailingLists::CreateSektionsbulletin,
+      "2" => TTY::MailingLists::MigratePaperBulletinToDigital
     }.freeze
 
     def run
@@ -38,9 +39,9 @@ module TTY
 
     def print_welcome_message
       puts bold(light_yellow("Welcome to the ")) +
-             light_red("SAC ") +
-             light_cyan("Mailing Lists Management ") +
-             light_yellow("CLI!")
+        light_red("SAC ") +
+        light_cyan("Mailing Lists Management ") +
+        light_yellow("CLI!")
     end
 
     def print_byebye

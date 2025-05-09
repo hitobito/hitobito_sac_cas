@@ -14,7 +14,7 @@ module TTY
 
       self.description = "Create Sektionsbulletin"
 
-      OPTIONS = [
+      BULLETIN_TYPES = [
         SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY,
         SacCas::MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY
       ]
@@ -69,7 +69,7 @@ module TTY
       end
 
       def all_bulletin_lists_exist?
-        OPTIONS & existing_lists_internal_keys == OPTIONS
+        BULLETIN_TYPES & existing_lists_internal_keys == BULLETIN_TYPES
       end
 
       def existing_lists_internal_keys
@@ -79,7 +79,7 @@ module TTY
       def list_existing_bulletins
         puts "Existing bulletins for #{group}:"
 
-        bulletins = group.mailing_lists.where(internal_key: OPTIONS)
+        bulletins = group.mailing_lists.where(internal_key: BULLETIN_TYPES)
 
         bulletins.each do |bulletin|
           puts "- #{bulletin.name} (#{bulletin.internal_key})"
@@ -88,7 +88,7 @@ module TTY
       end
 
       def create_bulletin
-        missing_bulletin_types = OPTIONS - existing_lists_internal_keys
+        missing_bulletin_types = BULLETIN_TYPES - existing_lists_internal_keys
         options = missing_bulletin_types.map do |type|
           label = type_to_label(type)
           key = label.downcase[0]
