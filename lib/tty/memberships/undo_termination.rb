@@ -61,7 +61,7 @@ module TTY
         puts
         undo.restored_people.each do |person|
           puts "* #{person} #{person.id}:"
-          puts "  #{person.changes.inspect}"
+          puts "  #{person.changes.except("updated_at").inspect}"
           puts
           undo.restored_roles.select { |r| r.person_id == person.id }.each do |role|
             changes = role.changes.except("updated_at")
@@ -116,10 +116,10 @@ module TTY
       end
 
       def open_profile
-        url = group_person_path(
+        url = group_person_url(
           host: "portal.sac-cas.ch",
           protocol: "https",
-          group_id: person.primary_group_id,
+          group_id: role.person.primary_group_id,
           id: role.person.id
         )
         system("xdg-open", url, out: "/dev/null")
