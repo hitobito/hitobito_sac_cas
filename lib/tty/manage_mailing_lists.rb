@@ -16,7 +16,8 @@ module TTY
 
     MENU_ACTIONS = {
       "1" => TTY::MailingLists::CreateSektionsbulletin,
-      "2" => TTY::MailingLists::MigratePaperBulletinToDigital
+      "2" => TTY::MailingLists::MigratePaperBulletinToDigital,
+      "3" => TTY::MailingLists::CleanupPaperBulletinSubscribers,
     }.freeze
 
     def run
