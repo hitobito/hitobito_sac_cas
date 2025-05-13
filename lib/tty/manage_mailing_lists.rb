@@ -18,6 +18,7 @@ module TTY
       "1" => TTY::MailingLists::CreateSektionsbulletin,
       "2" => TTY::MailingLists::MigratePaperBulletinToDigital,
       "3" => TTY::MailingLists::CleanupPaperBulletinSubscribers,
+      "4" => TTY::MailingLists::DigitalBulletinSubscribersWithoutEmail
     }.freeze
 
     def run
