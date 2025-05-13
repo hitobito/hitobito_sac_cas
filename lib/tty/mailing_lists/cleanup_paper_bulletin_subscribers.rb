@@ -60,7 +60,7 @@ module TTY
         end
 
         def unsubscribe_from_paper
-          surplus_people = digital_people & paper_people
+          surplus_people = digital_people & paper_people_with_email
           return log(gray("Nothing to do...")) if surplus_people.empty?
 
           surplus_people.each_with_index do |surplus_person, index|
@@ -74,6 +74,9 @@ module TTY
         def digital_people = ::MailingLists::Subscribers.new(bulletin_digital).people
 
         def paper_people = ::MailingLists::Subscribers.new(bulletin_paper).people
+
+        def paper_people_with_email = ::MailingLists::Subscribers.new(bulletin_paper).people
+          .where.not(email: "")
       end
 
       def run
@@ -105,8 +108,8 @@ module TTY
 
       def confirm?
         CliMenu.new(prompt: "Do you want to execute the paper subscriber cleanup?", menu_actions: {
-          "y" => {description: "Yes, undo the termination", action: true},
-          "n" => {description: "No, do not undo the termination", action: false}
+          "y" => {description: "Yes", action: true},
+          "n" => {description: "No", action: false}
         }).run
       end
 
