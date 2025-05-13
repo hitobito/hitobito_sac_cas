@@ -10,7 +10,7 @@ module TTY
     class CleanupPaperBulletinSubscribers
       prepend TTY::Command
 
-      self.description = "Remove digital bulletin subscribers from paper bulletin"
+      self.description = "Remove digital bulletin subscribers from paper bulletin HIT-1000"
 
       BULLETIN_TYPES = [
         SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY,
