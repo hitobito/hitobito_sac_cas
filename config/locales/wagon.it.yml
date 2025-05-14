@@ -1,8 +1,3 @@
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
-#  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
-
 it:
   global:
     date_field_placeholder: GG.MM.AAAA
@@ -10,8 +5,8 @@ it:
     currency: CHF
     years: anni
     links:
-      faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
-      membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
+      faq: https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/
+      membership: https://www.sac-cas.ch/it/affiliazione/diventasocio
     sac:
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
@@ -23,21 +18,17 @@ it:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-    title_event/tour: ""
-
   settings:
     email:
-      sender: "Club Alpino Svizzero CAS <noreply@%{mail_domain}>"
-
+      sender: Club Alpino Svizzero CAS <noreply@%{mail_domain}>
   errors:
     messages:
-      assert_old_enough: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
-      too_young: "deve avere almeno %{minimum_years} anni"
-      assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
+      assert_old_enough: deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni
+      too_young: deve avere almeno %{minimum_years} anni
+      assert_old_enough_with_age: deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
       total_event_days_exceeded: non deve superare i giorni totali del corso
-
   activemodel:
     attributes:
       event/courses/leader_settlement_form:
@@ -87,7 +78,7 @@ it:
         data_protection: Protezione dei dati
         statutes: Statuto
       wizards/steps/choose_membership:
-        register_as: "A chi si applica l’affiliazione aggiuntiva?"
+        register_as: A chi si applica l’affiliazione aggiuntiva?
         family: per tutta la famiglia
         myself: per me stesso
       wizards/steps/switch_stammsektion:
@@ -106,7 +97,6 @@ it:
         register_as_options:
           extra: Sezione aggiuntiva
           replace: Nuova sezione base (sostituisce la precedente)
-
       wizards/steps/choose_sektion:
         group_id: Selezionare la sezione
       wizards/steps/main_email:
@@ -119,13 +109,11 @@ it:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
         termination_reason_id: "Motivo della disdetta"
-
     errors:
       messages:
         youth_not_allowed_in_family: >-
           I giovani di età compresa tra %{from_age} e %{to_age} anni non possono essere inseriti in un’affiliazione famigliare.
         invalid_date_range: "deve essere compreso tra il %{start_on} e il  %{end_on} "
-
       models:
         household:
           attributes:
@@ -170,7 +158,6 @@ it:
           messages:
             empty: è vuoto
             less_than_6_years_before_entry: Mancano meno di 6 anni all’adesione al CAS
-
         wizards/steps/choose_sektion:
           requires_admin: >-
             Per richiedere il cambio di sezione ti preghiamo di contattarci tramite telefono o e-mail.
@@ -190,13 +177,8 @@ it:
         one: Rifiutare la registrazione
         many: Rifiuto delle domande
         other: Rifiutare le registrazioni
-
   activerecord:
     attributes:
-      contact_account:
-        predefined_labels:
-          landline: Linea fissa
-          mobile: Mobile
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -221,7 +203,7 @@ it:
         description: Descrizione
         name_leader: Denominazione Direzione del corso
         name_assistant_leader: Denominazione Direzione della classe
-        course_compensation_rates: Tassi di retribuzione # uses include CapitalizedDependentErrors
+        course_compensation_rates: Tassi di retribuzione
         updated_at: Modificato
         created_at: Creato
       course_compensation_rate:
@@ -282,7 +264,6 @@ it:
           fr: Francese
           it: Italiano
         link_leaders: Link al quadro del corso
-        link_external_site: Collegamento a pagina esterna
         link_participants: Link partecipanti
         link_survey: Link sondaggio
         meals: Vitto
@@ -358,27 +339,9 @@ it:
           payed: Saldata
           cancelled: Stornata
           error: Errore
-        external_invoices: Fatture # uses include CapitalizedDependentErrors
+        external_invoices: Fatture
       event/role:
         self_employed: Lavoratore autonomo
-      event/tour:
-        state_translated: ""
-        states:
-          draft: ""
-          approved: ""
-          published: ""
-          closed: ""
-          canceled: ""
-        participation_states:
-          tentative: ""
-          unconfirmed: ""
-          applied: ""
-          assigned: ""
-          annulled: ""
-          rejected: ""
-          canceled: ""
-          attended: ""
-          absent: ""
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -394,7 +357,6 @@ it:
         created_at: Creato
         updated_at: Modificato
       person:
-        id: Numero personale
         address_care_of: Complemento di indirizzo
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
@@ -414,8 +376,6 @@ it:
           _nil: diversa
         birthday: Data di nascita
         membership_years: Numero di anni di affiliazione
-        terminate_on: Data di partenza
-        termination_reason: Motivo della partenza
         membership_number: Socio n.
         navision_id: Navision n.
         salutations:
@@ -426,10 +386,6 @@ it:
           m: Signor
           w: Signora
         additional_information: Osservazioni (ad es. professione)
-      person/phone_number_mobile:
-        number: Telefono cellulare
-      person/phone_number_landline:
-        number: Telefono fisso
       group:
         type: Tipo di gruppo tecnico
         group_id: ID gruppo
@@ -440,7 +396,6 @@ it:
         sac_fundraising_mailing_list_id: ID abbonamento appello di donazione
         course_admin_email: E-mail Amministrazione dei corsi
         abo_alpen_fee: Importo Abbonamento Le Alpi
-        abo_alpen_postage_abroad: Importo Affrancatura estera Le Alpi
         abo_touren_portal_fee: Importo Abbonamento Portale escursionistico
         abo_alpen_fee_article_number: Codice articolo Abbonamento Le Alpi
         abo_alpen_postage_abroad_article_number: Codice articolo Affrancatura estera Le Alpi
@@ -454,7 +409,6 @@ it:
           IT: Italiano
         section_offerings: Offerte della sezione
         mitglied_termination_by_section_only: Disdetta solo tramite sezione
-        tours_enabled: ""
       group/ortsgruppe:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -463,7 +417,6 @@ it:
           DE: Tedesco
           FR: Francese
           IT: Italiano
-        tours_enabled: ""
       role:
         membership_years: Anni di affiliazione
         class:
@@ -475,28 +428,27 @@ it:
           permission:
             description:
               read_all_people: Letto da tutte le persone.
-              layer_events_full: ""
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
         finish_at: Fino al
       sac_membership_config:
         valid_from: Valido dall’anno
-        sac_fee_adult: "Contributo Associazione centrale, affiliazione individuale"
-        sac_fee_family: "Contributo Associazione centrale, affiliazione famigliare"
-        sac_fee_youth: "Contributo Associazione centrale, affiliazione giovani"
-        entry_fee_adult: "Quota di adesione, affiliazione individuale"
-        entry_fee_family: "Quota di adesione, affiliazione famigliare"
-        entry_fee_youth: "Quota di adesione, affiliazione giovani"
-        hut_solidarity_fee_with_hut_adult: "Contributo di solidarietà alle capanne per sezione con capanne, affilazione individuale"
-        hut_solidarity_fee_with_hut_family: "Contributo di solidarietà alle capanne per sezione con capanne, affiliazione famigliare"
-        hut_solidarity_fee_with_hut_youth: "Contributo di solidarietà alle capanne per sezione con capanne, affiliazione giovani"
-        hut_solidarity_fee_without_hut_adult: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione individuale"
-        hut_solidarity_fee_without_hut_family: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione famigliare"
-        hut_solidarity_fee_without_hut_youth: "Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione giovani"
-        magazine_fee_adult: "Quota di abbonamento alla rivista CAS, affiliazione individuale"
-        magazine_fee_family: "Quota di abbonamento alla rivista CAS, affiliazione famigliare"
-        magazine_fee_youth: "Quota di abbonamento alla rivista CAS, affiliazione giovani"
+        sac_fee_adult: Contributo Associazione centrale, affiliazione individuale
+        sac_fee_family: Contributo Associazione centrale, affiliazione famigliare
+        sac_fee_youth: Contributo Associazione centrale, affiliazione giovani
+        entry_fee_adult: Quota di adesione, affiliazione individuale
+        entry_fee_family: Quota di adesione, affiliazione famigliare
+        entry_fee_youth: Quota di adesione, affiliazione giovani
+        hut_solidarity_fee_with_hut_adult: Contributo di solidarietà alle capanne per sezione con capanne, affilazione individuale
+        hut_solidarity_fee_with_hut_family: Contributo di solidarietà alle capanne per sezione con capanne, affiliazione famigliare
+        hut_solidarity_fee_with_hut_youth: Contributo di solidarietà alle capanne per sezione con capanne, affiliazione giovani
+        hut_solidarity_fee_without_hut_adult: Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione individuale
+        hut_solidarity_fee_without_hut_family: Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione famigliare
+        hut_solidarity_fee_without_hut_youth: Contributo di solidarietà alle capanne per sezione senza capanne, affiliazione giovani
+        magazine_fee_adult: Quota di abbonamento alla rivista CAS, affiliazione individuale
+        magazine_fee_family: Quota di abbonamento alla rivista CAS, affiliazione famigliare
+        magazine_fee_youth: Quota di abbonamento alla rivista CAS, affiliazione giovani
         service_fee: Quota di servizio
         magazine_postage_abroad: Affrancatura per l’estero rivista CAS
         reduction_amount: Importo di riduzione
@@ -518,12 +470,12 @@ it:
         discount_percent_3: Percentuale di sconto 3
       sac_section_membership_config:
         valid_from: Valido dall’anno
-        section_fee_adult: "Contributo di sezione, affiliazione individuale"
-        section_fee_family: "Contributo di sezione, affiliazione famigliare"
-        section_fee_youth: "Contributo di sezione, affiliazione giovani"
-        section_entry_fee_adult: "Quota di adesione, affiliazione individuale"
-        section_entry_fee_family: "Quota di adesione, affiliazione famigliare"
-        section_entry_fee_youth: "Quota di adesione, affiliazione giovani"
+        section_fee_adult: Contributo di sezione, affiliazione individuale
+        section_fee_family: Contributo di sezione, affiliazione famigliare
+        section_fee_youth: Contributo di sezione, affiliazione giovani
+        section_entry_fee_adult: Quota di adesione, affiliazione individuale
+        section_entry_fee_family: Quota di adesione, affiliazione famigliare
+        section_entry_fee_youth: Quota di adesione, affiliazione giovani
         bulletin_postage_abroad: Affrancatura per l’estero bollettino di sezione
         sac_fee_exemption_for_honorary_members: Esonero dalla quota destinata all’Associazione centrale per i soci onorari
         section_fee_exemption_for_honorary_members: Esonero dalla quota destinata alla sezione per i soci onorari
@@ -549,32 +501,27 @@ it:
           payed: Saldata
           cancelled: Stornata
           error: Errore
-
     errors:
       messages:
-        already_has_mitglied_role: "è già socio (dal %{start_on} al %{end_on})."
-        already_has_neuanmeldung_role: "ha già una nuova registrazione (dal %{start_on} al %{end_on})."
+        already_has_mitglied_role: è già socio (dal %{start_on} al %{end_on}).
+        already_has_neuanmeldung_role: ha già una nuova registrazione (dal %{start_on} al %{end_on}).
         too_many_adults_in_family: "L’affiliazione famigliare comprende un massimo di %{max_adults} adulti."
         only_one_mitglied_role_allowed_at_a_time: "ha già un’affiliazione con validità sovrapposta."
         must_be_in_past: deve essere nel passato
         must_have_mitglied_role: "deve essere socio per l’intero periodo di validità della sezione aggiuntiva."
         must_have_mitglied_role_in_group: "deve essere socio del gruppo selezionato."
         must_have_one_family_main_person_in_family: "Per ogni affiliazione famigliare deve essere indicato un desinatario per le fatture."
-
       models:
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: può referenziare solo un tasso di retribuzione per periodo di validità.
-
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
-
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La persona deve avere almeno una qualifica attiva.
-
         people_manager:
           in_different_household: >-
             %{name} è assegnato a un altro nucleo e quindi non può essere aggiunto a questo nucleo.
@@ -584,13 +531,12 @@ it:
             %{name} ha %{age} anni e quindi non può essere aggiunto come amministratore.
         person:
           birthday:
-            must_be_before: "deve essere prima del %{date}."
-            must_be_after: "deve essere dopo il %{date}."
+            must_be_before: deve essere prima del %{date}.
+            must_be_after: deve essere dopo il %{date}.
         qualification:
           attributes:
             finish_at:
               not_after_start: "deve essere successivo alla data indicata come \"dal\""
-
     models:
       cost_center:
         one: Centro di costo
@@ -612,10 +558,6 @@ it:
         one: Livello del corso
         many: Livelli del corso
         other: Livelli del corso
-      event/role/assistant_leader:
-        one: ''
-        many: ''
-        other: ''
       event/course/role/leader:
         one: Direzione del corso
         many: Direzione del corso
@@ -624,10 +566,6 @@ it:
         one: Direzione della classe
         many: Direzione della classe
         other: Direzione della classe
-      event/tour:
-        one: ''
-        many: ''
-        other: ''
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -652,8 +590,6 @@ it:
         one: Motivo di abbandono predefinito
         many: Motivi di abbandono predefiniti
         other: Motivi di disdetta predefiniti
-
-      ### GROUPS
       group/sac_cas:
         one: Club Alpino Svizzero CAS
         many: Club Alpino Svizzero CAS
@@ -810,8 +746,6 @@ it:
         one: Capanna di sezione
         many: Capanne di sezione
         other: Capanne di sezione
-
-      ### ROLES
       group/ehrenmitglieder/ehrenmitglied:
         one: Socio onorario
         description: Socio onorario
@@ -1153,16 +1087,12 @@ it:
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Altro
         description: Altro
-
-  # sort top level keys alphabetically from here on
-
   contactable:
     address_fields:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
-
   devise:
     failure:
-      signin_not_allowed: "Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)"
+      signin_not_allowed: Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)
     mailer:
       confirmation_instructions:
         body:
@@ -1171,37 +1101,31 @@ it:
         body:
           footer: Saluti sportivi
     passwords:
-      send_instructions: "Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)"
+      send_instructions: Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
-
   doorkeeper:
     scopes:
-      user_groups: "Leggere i gruppi, i ruoli e i campi calcolati."
-
+      user_groups: Leggere i gruppi, i ruoli e i campi calcolati.
   dropdown/events/courses/mail_dispatch:
     title: Invio mail
     leader_reminder: "Direzione del corso: finalizzare la preparazione"
     survey: "Partecipanti: sondaggio"
-    confirmation: "Sei sicuro di voler inviare queste mail?"
-
+    confirmation: Sei sicuro di voler inviare queste mail?
   dropdown/people/memberships:
     title: Modificare l’affiliazione
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
     undo_termination_link: Riattivare l’affiliazione al CAS
-
   dropdown/people_export:
     recipients: Destinatari individuali
     recipient_households: Destinatari famiglie
     course_data: Elenco indirizzi e dati del corso
-
   dropdown/group_edit:
     sac_membership_configs: Parametri per le fatture di affiliazione
     sac_section_membership_configs: Parametri per le fatture di affiliazione
-
   event:
     application_market:
       application:
@@ -1241,12 +1165,6 @@ it:
         push_down_button: Trasferire i dati ai tipi di corso
         push_down_button_confirm: >-
           Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali.
-    lists:
-      nav_left_tours:
-        tours: ""
-      tours:
-        title: ""
-        explanation: ""
     participations:
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
@@ -1278,7 +1196,7 @@ it:
         assigned: La registrazione a questo corso è confermata.
         attended: Hai partecipato a questo corso.
         canceled: Sei stato cancellato da questo corso.
-        rejected: "I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua registrazione."
+        rejected: I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua registrazione.
         summoned: Sei convocato per questo corso.
         unconfirmed: >-
           Sei pre-iscritto a questo corso. La registrazione non è ancora definitiva e deve essere confermata dall’amministrazione del corso.
@@ -1290,10 +1208,10 @@ it:
         title: Richiedere un contributo di sovvenzione
         subsidy_field: "Richiedere un prezzo sovvenzionato di %{amount}"
         subsidy_link_label: Richiesta di sovvenzione
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
+        subsidy_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
-        detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
+        detail_info_header: Cosa devo fare per richiedere una sovvenzione?
         detail_info_text: >-
           La registrazione con la firma del responsabile delle escursioni conferma la tariffa per le guide CAS attiva o futura e ti dà diritto al prezzo sovvenzionato del corso. Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>.
       summary_step:
@@ -1303,34 +1221,31 @@ it:
           30 - 20 giorni: 50 % del prezzo
           19 - 10 giorni: 75 % del prezzo
           9 - 0 giorni: 100 % del prezzo
-        terms_and_conditions_text: " Sì, dichiaro di aver compreso %{link}"
+        terms_and_conditions_text: ' Sì, dichiaro di aver compreso %{link}'
         terms_and_conditions_link_label: CGC
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
-        subscribe_newsletter: "Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS"
+        terms_and_conditions_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf
+        subscribe_newsletter: Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS
       fields_sac_cas:
-        former_price_select: "In precedenza %{price_label}"
+        former_price_select: In precedenza %{price_label}
         no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
-      reactivated_notice: ""
       actions_show_youth:
         summon_button: Convocare
-        assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
+        assign_confirm: Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante.
       actions_show_sac_cas:
-        modal_title: "Desideri davvero convocare questa/o partecipante?"
+        modal_title: Desideri davvero convocare questa/o partecipante?
         summon_and_send_mail: Convocare e inviare l’e-mail
         summon_and_send_no_mail: Convocare senza e-mail
         create_invoice_button: Creare la fattura
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
         create_course_leader_invoice_button: Generare conteggio quadro del corso
-        reactivate: ""
       popover_create_course_leader_settlement:
         create_invoice: Generare conteggio
         info_text_html: >-
           Se chi riveste il ruolo di direzione del corso o della classe non è la persona titolare dell’IBAN indicato, la fattura deve essere emessa a parte e non è possibile utilizzare il generatore di fatture QR qui predisposto. <p>– <p>Se la persona o l’istituzione che emette la fattura è soggetta all’IVA è necessario generare a parte una fattura conforme all’IVA e non è possibile utilizzare il generatore di fatture QR qui predisposto.</p> – <p>Se il CAS non ha ancora ricevuto alcuna conferma AVS valida per l’anno in corso, questa deve essere consegnata al più tardi insieme all’emissione della fattura.</p> – <p>Inviare le fatture per mail all’indirizzo: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>– 
       invoice_created_notice: La fattura è stata creata con successo.
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
-
       popover_participant_cancels:
         cancel_info: >-
           Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento del ritiro sarà addebitato un importo pari a CHF %{cancellation_cost} per le spese di elaborazione e cancellazione.
@@ -1338,52 +1253,19 @@ it:
       fields:
         overrides_person_data_info: >-
           Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
-    register:
-      email_check:
-        enter_email: "" # to not display in sac wagon
-
   events:
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
-    state_buttons:
-      event/course:
-        created: ""
-        application_open: ""
-        application_paused: ""
-        application_closed: ""
-        assignment_closed: ""
-        ready: ""
-        closed: ""
-        closed_confirm_text: >
-        canceled: ""
-      event/tour:
-        draft: ""
-        approved: ""
-        published: ""
-        closed: ""
-        canceled: ""
-    state_back_buttons:
-      assignment_closed: ""
-      application_closed: ""
-      approved: ""
-
     form_tabs:
       communication: Comunicazione
       prices: Prezzi
-
     general_fields:
       kind_overrides_link_title: >-
         Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
-    global:
-      link:
-        add_event/tour: ""
-
     maximum_age_with_years: "%{maximum_age} anni (anno)"
-
     roles:
       self_employed: lavoratore autonomo
       not_self_employed: lavoratore dipendente
-
     popover_canceled_reason:
       cancel_button: Cancellare definitivamente
       cancel_confirmation: >-
@@ -1392,50 +1274,39 @@ it:
         Cancella il corso %{name} (%{number}) e annulla tutte le partecipazioni. In questo modo tutte le eventuali fatture saranno stornate e gli jmporti già versati saranno rimborsati. Questa operazione non può essere annullata.
       inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
       canceled_reason_label: Motivazione
-
   external_trainings:
     form:
       help_other_people: Altre persone per le quali deve essere inclusa la formazione esterna.
     create:
       flash:
         success_multiple: "%{model} è stato creato con successo per %{names}."
-
-  events/state:
-    flash:
-      success: ""
-
   event/levels:
     new:
       title: Creare il livello del corso
-
   event/courses/leader_settlement_pdfs:
     export_enqueued: Il conteggio del quadro del corso viene generato in background.
-
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
-
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
     tour_guides_active: Guide escursionistiche attive
     tour_guides_stalled: Guide escursionistiche sospese
     tour_guides_inactive: Guide escursionistiche non attive
     tour_guides_expired: Guide escursionistiche precedenti
-
   groups:
     actions_show_sac_cas:
       export_mitglieder: Soci CSV
       create_yearly_membership_invoice: Incasso annuale AS
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
-
     self_registration:
       form:
-        has_account: "Hai già un login CAS?"
+        has_account: Hai già un login CAS?
         to_login_page: Registrare
       abo_infos:
         annual_price_header: Prezzo all'anno
         delivery_country_header: Paese di spedizione
-        price_with_vat: "CHF %{amount} incl. IVA."
+        price_with_vat: CHF %{amount} incl. IVA.
         switzerland: Svizzera
         international: In tutto il mondo
         duration_title: Durata e rinnovo dell’abbonamento
@@ -1445,26 +1316,22 @@ it:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
         existing_membership_notice: >-
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
-        can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo login SAC/CAS.
-        already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
-        already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
-
+        already_subscribed_to_abo: Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta.
+        already_member_of_tourenportal: Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione.
         existing_family_notice: Sei assegnato a una famiglia. Contatta il Segretariato centrale del CAS.
         signed_up_notice: La tua registrazione è stata salvata con successo.
-
       agreement_link:
-        agb_text: "Ho letto %{link}e acconsento"
-        statutes_text: " Ho letto %{link} e acconsento"
-        sektion_statuten_text: "Ho letto %{link} e acconsento"
-        contribution_regulations_text: "Ho letto %{link} e acconsento"
-        data_protection_text: "Ho letto %{link} e acconsento"
-
+        agb_text: Ho letto %{link}e acconsento
+        statutes_text: ' Ho letto %{link} e acconsento'
+        sektion_statuten_text: Ho letto %{link} e acconsento
+        contribution_regulations_text: Ho letto %{link} e acconsento
+        data_protection_text: Ho letto %{link} e acconsento
     self_inscription:
       membership_role_exists: Sei già socio di questa sezione
       form:
         register_on_info:
           jul: Aderendo a partire dal 1° luglio ricevi uno sconto del 50% sul contributo annuale.
-          oct: "Aderendo a partire dal 1° ottobre, il contributo annuale non è dovuto."
+          oct: Aderendo a partire dal 1° ottobre, il contributo annuale non è dovuto.
         register_as_info: >2-
            Puoi aderire al CAS Blüemlisalp come sezione aggiuntiva oppure selezionarlo come nuova sezione base, abbandonando così quella precedente. Nota per le famiglie: il cambio della sezione base si applica automaticamente a tutti i membri della famiglia. L’adesione a una sezione aggiuntiva, invece, vale solo per te.
         inscribe: Aderire
@@ -1475,11 +1342,9 @@ it:
         information_text: >-
           Si prega di confermare l’adesione alla sezione %{sektion}. Questa procedura non può essere annullata.
         submit_button: Richiedere adesione
-
   groups/self_inscription:
     new:
-      details: " Aderisci con la categoria di contributo %{beitragskategorie}."
-
+      details: ' Aderisci con la categoria di contributo %{beitragskategorie}.'
   groups/self_registration:
     global:
       main_email_title: E-mail
@@ -1491,7 +1356,6 @@ it:
       household_title: Membri della famiglia
       main_title: Membri della famiglia
       supplements_title: Dati aggiuntivi
-
   households:
     edit:
       title: Gestire la famiglia
@@ -1506,13 +1370,9 @@ it:
     set_main_person: Rendere destinatario di fatturazione per la famiglia
     missing_email: La persona non ha un indirizzo e-mail pertanto non può essere indicata come destinatario di fatturazione per la famiglia.
     cannot_set_main_person: Contatta il Segretariato centrale per far cambiare il destinatario di fatturazione per la famiglia.
-
   invoices:
     abo_magazin:
-      title: "Fattura %{group} %{year}"
-      positions:
-        abo_fee: "Abbonamento %{group} %{time_period}"
-        abroad_fee: "Affrancatura %{group}"
+      title: Fattura %{group} %{year}
     errors:
       data_quality_error: "La persona ha dei problemi nella qualità dei dati, pertanto non è stata creata alcuna fattura."
       create_subject_failed: "Problemi durante il trasferimento dei dati personali"
@@ -1526,16 +1386,16 @@ it:
       cancellation_costs: "%{percentage}% costi di cancellazione"
       custom_cancellation_costs: Costi di cancellazione
     sac_memberships:
-      title: "Fattura di affiliazione %{year}"
+      title: Fattura di affiliazione %{year}
       positions:
         hut_solidarity_fee: Contributo di solidarietà alle capanne
         sac_entry_fee: Tassa ingresso Assoc. Centrale
         sac_fee: Contributo Associazione centrale
         sac_magazine_postage_abroad: Affrancatura Le Alpi
         sac_magazine: Quota Alpi
-        section_bulletin_postage_abroad: "Affrancatura bollettino %{section}"
-        section_entry_fee: " Tassa d’ingresso %{section}"
-        section_fee: "Contributo Sezione %{section}"
+        section_bulletin_postage_abroad: Affrancatura bollettino %{section}
+        section_entry_fee:  Tassa d’ingresso %{section}
+        section_fee: Contributo Sezione %{section}
       beitragskategorie:
         adult: Membro individuale
         family: Membro famiglia
@@ -1550,42 +1410,39 @@ it:
           adult: Affiliazione individuale
           family: Affiliazione famigliare
           youth: Affiliazione giovani
-
   memberships:
     join_zusatzsektions:
       create:
         success:
-          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata creata."
-          many: "%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create."
-          other: " Le vostre %{count} affiliazioni aggiuntive a<i>%{group_name}</i> sono state create."
+          one: L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata creata.
+          many: '%{count} Le vostre iscrizioni aggiuntive a<i>%{group_name}</i> sono state create.'
+          other: ' Le vostre %{count} affiliazioni aggiuntive a<i>%{group_name}</i> sono state create.'
     leave_zusatzsektions:
       create:
         success:
-          one: "L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata annullata."
-          many: "%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
-          other: " Le vostre %{count} affiliazioni aggiuntive a<i>%{group_name}</i> sono state cancellate."
+          one: L'iscrizione aggiuntiva a <i>%{group_name}</i> è stata annullata.
+          many: '%{count} Le sue iscrizioni aggiuntive a<i>%{group_name}</i> sono state cancellate.'
+          other: ' Le vostre %{count} affiliazioni aggiuntive a<i>%{group_name}</i> sono state cancellate.'
     switch_stammsektions:
       create:
         success:
-          one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
-          many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
-          other: "I vostri %{count} cambi di sezione a %{group_name}</i> sono stati effettuati."
+          one: La modifica della sezione a <i>%{group_name}</i> è stata effettuata.
+          many: '%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate.'
+          other: I vostri %{count} cambi di sezione a %{group_name}</i> sono stati effettuati.
     terminate_sac_memberships:
       create:
         success:
-          one: "Le vos"
-          many: "Le vostre %{count} SAC-Mitgliedschaften wurden gekündet."
-          other: " Le vostre %{count} affiliazioni CAS sono state condivise."
+          one: Le vos
+          many: Le vostre %{count} SAC-Mitgliedschaften wurden gekündet.
+          other: ' Le vostre %{count} affiliazioni CAS sono state condivise.'
     undo_terminations:
       create:
         success: "I ruoli sono stati riattivati con successo."
       new:
         info_text: "I seguenti ruoli e attributi sono stati ripristinati allo stato precedente alla disdetta:"
         family_number: "Numero di famiglie: %{number}"
-
   mitglieder_exports:
     export_enqueued: "L’esportazione viene avviata in background e scaricata una volta pronta."
-
   mounted_attributes:
     form_tabs:
       group/sac_cas:
@@ -1594,16 +1451,12 @@ it:
         default: Attributi della sezione
       group/ortsgruppe:
         default: Attributi dei gruppi locali
-
-  navigation:
-    tours: ""
-
   participations:
     key_data_sheet:
       file_name_prefix: Scheda dei dati di riferimento
       leader_file_prefix: Capocorso
       assistant_leader_file_prefix: Capoclasse
-      year_title: "Corsi / Escursioni CAS %{year}"
+      year_title: Corsi / Escursioni CAS %{year}
       title: Scheda dei dati di riferimento direzione corso/escursioni
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
       table:
@@ -1639,7 +1492,7 @@ it:
         minimum_participants: Numero minimo di partecipanti
         maximum_participants: Numero massimo di partecipanti
         participation_yes_no:
-          label: "Svolgimento - sì/no?"
+          label: Svolgimento - sì/no?
           text: La decizione viene presa congiuntamente in base al numero di registrazioni effettuate al momento della chiusura delle registrazioni
         participation_cancellation:
           label: Svolgimento – Cancellazione
@@ -1659,7 +1512,6 @@ it:
       sponsor_url: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
       emergency_number: "Numero di emergenza"
       emergency_contact: "Contatto di emergenza"
-
   person:
     history:
       index_notice_sac_cas:
@@ -1669,7 +1521,6 @@ it:
     create:
       flash:
         success: "La fattura desiderata viene creata e inviata ad Abacus"
-
   people:
     abo_magazin_invoices:
       new:
@@ -1681,7 +1532,6 @@ it:
           Questa persona non è abbonata ad alcuna rivista, pertanto non è possibile creare nessuna fattura di abbonamento.
         alert_error: "I seguenti controlli di qualità dei dati impediscono la creazione di una fattura per Le Alpi:"
         create_invoice: Creare la fattura
-
     membership:
       verify:
         member_details_sac_cas:
@@ -1689,7 +1539,6 @@ it:
         below_name_sac_cas:
           membership_number: "Socio: %{membership_number}"
           membership_years: "Numero anni di affiliazione: %{membership_years}"
-
     membership_invoices:
       no_invoice_possible: >-
         Non risultano quote di affiliazione per la persona e la sezione desiderate oppure sono già coperte da altre fatture.
@@ -1706,35 +1555,29 @@ it:
         create_invoice: "Creare la fattura"
         mv_yearly_invoice: "Bilancio annuale AS"
         zusatzsektion_eintrittsrechnung: "Fattura di adesione alla sezione aggiuntiva"
-
     neuanmeldungen:
       multiselect_actions:
         accept: Trasferire
         reject: Rifiutare
     login_status:
       wso2_legacy_password: "Vecchia password CAS (WSO2)"
-
     roles:
       roles_aside:
         stammsektion: Sezione base
         set_stammsektion: Impostare la sezione base
-
     tabs:
       history: Affiliazioni / Cronologia
       sac_remarks: Osservazioni
       external_invoices: Fatture
-
     data_quality:
       ok: OK
       info: Info
       warning: Avviso
       error: Errore
-
     show_right_z_sac_cas:
       section_sac_membership: Soci del CAS
       qr_code_hint: Scansione per verificare l’affiiazione
       download_pdf: Scaricare la tessera soci
-
     external_invoices:
       list:
         cancel_invoice: Stornare
@@ -1745,7 +1588,6 @@ it:
       actions_index:
         create_abo_magazin_invoice: Creare la fattura per Le Alpi
         create_membership_invoice: Creare la fattura di affiliazione
-
     yearly_membership_invoices:
       job_scheduling_info: "L’iter di incasso annuale è stato avviato con successo."
       new:
@@ -1760,57 +1602,52 @@ it:
   people/neuanmeldungen/approves:
     new:
       text:
-        one: "Confermare il trasferimento dell'applicazione selezionata:"
-        many: "Si prega di confermare il trasferimento delle registrazioni selezionate:"
-        other: "Si prega di confermare il trasferimento delle registrazioni selezionate:"
+        one: 'Confermare il trasferimento dell''applicazione selezionata:'
+        many: 'Si prega di confermare il trasferimento delle registrazioni selezionate:'
+        other: 'Si prega di confermare il trasferimento delle registrazioni selezionate:'
       submit: "%{count} Trasferire"
     create:
       success:
         one: La registrazione è stata rilevata
-        many: "%{count} Le iscrizioni sono state accettate"
-        other: "%{count} registrazioni sono state trasferite"
-
+        many: '%{count} Le iscrizioni sono state accettate'
+        other: '%{count} registrazioni sono state trasferite'
   people/neuanmeldungen/rejects:
     new:
       note_placeholder: opzionale
       text:
-        one: "Si prega di confermare il rifiuto della domanda selezionata:"
-        many: "Si prega di confermare il rifiuto delle candidature selezionate:"
-        other: "Si prega di confermare il rifiuto delle registrazioni selezionate:"
+        one: 'Si prega di confermare il rifiuto della domanda selezionata:'
+        many: 'Si prega di confermare il rifiuto delle candidature selezionate:'
+        other: 'Si prega di confermare il rifiuto delle registrazioni selezionate:'
       submit: "%{count} Rifiutare"
     create:
       success:
         one: La domanda è stata respinta
-        many: "%{count} Le domande sono state respinte"
-        other: "%{count} registrazioni sono state rifiutate"
-
+        many: '%{count} Le domande sono state respinte'
+        other: '%{count} registrazioni sono state rifiutate'
   people_filters:
     invoice_receiver:
-      title: "Destinatario fatture per %{group_name}"
+      title: Destinatario fatture per %{group_name}
     filter:
       invoice_receiver:
         stammsektion: Destinatario fatture affiliazione CAS
         zusatzsektion: Destinatario fatture sezione aggiuntiva
-
   public_events:
     show:
       login_to_participate: Registrati per partecipare al corso
       with_sac_account: con il tuo account CAS
       is_sac_account_active: "Per i soci CAS: il tuo account CAS personale non è ancora attivo?"
       login_questions: Domande e risposte sul login
-      link_fag_sac_account: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/"
-      first_time_here: "Qui per la prima volta?"
+      link_fag_sac_account: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/
+      first_time_here: Qui per la prima volta?
       create_account_now: Crea ora il tuo account CAS gratuito
-      wanna_be_a_member: "Desideri diventare socio del CAS?"
+      wanna_be_a_member: Desideri diventare socio del CAS?
       request_sac_membership: Richiedere l’affiliazione al CAS
-      request_sac_membership_link: "https://www.sac-cas.ch/it/affiliazione/diventasocio/"
-
+      request_sac_membership_link: https://www.sac-cas.ch/it/affiliazione/diventasocio/
   roles:
     beitragskategorie:
       adult: Individuale
       youth: Giovani
       family: Famiglia
-
   roles/terminations:
     global:
       undo: Riattivare
@@ -1818,7 +1655,6 @@ it:
         no_permission: Per la disdetta è necessario rivolgersi all’assistenza soci della sezione
       group/abo_magazin/abonnent:
         no_permission: "La disdetta può avvenire solo tramite l’assistenza membri del CAS. Scrivi un’e-mail a mv@sac-cas.ch indicando nome, cognome e il termine di disdetta desiderato."
-
   sac_membership_configs:
     form:
       fees: Quote
@@ -1849,7 +1685,6 @@ it:
     global:
       link:
         add: Nuovo
-
   sac_section_membership_configs:
     form:
       fees: Quote
@@ -1872,27 +1707,25 @@ it:
     global:
       link:
         add: Nuovo
-
   self_registration:
     infos_component:
-      title_questions: "Domande sull’affiliazione?"
+      title_questions: Domande sull’affiliazione?
       title_contact: Contatto
-      title_membership: "Desideri diventare socio del CAS?"
+      title_membership: Desideri diventare socio del CAS?
       title_documents: Documenti
-      additional_infos: "Trovi maggiori informazioni nelle %{link}."
+      additional_infos: Trovi maggiori informazioni nelle %{link}.
       link_agb_title: CGC
-      link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
-      link_faqs: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
+      link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
+      link_faqs: https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/
       link_faqs_title: FAQ
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/SAC_Statuten_A5_IT.pdf"
+      link_statutes: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/SAC_Statuten_A5_IT.pdf
       link_statutes_title: Statuto
       link_sektion_statuten_title: Statuto della sezione
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali.pdf"
+      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/IT/Regolamento_delle_quote_sociali.pdf
       link_contribution_regulations_title: Regolamento delle quote sociali
-      link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
+      link_data_protection: https://www.sac-cas.ch/it/datenschutz/
       link_data_protection_title: Protezione dei dati
       link_membership_title: Richiedere ora l’affiliazione
-
   sheet/memberships/join_zusatzsektion:
     title: Aderire a una sezione aggiuntiva
   sheet/memberships/leave_zusatzsektion:
@@ -1903,32 +1736,24 @@ it:
     title: Disdire l’affiliazione al CAS
   sheet/memberships/undo_termination:
     title: Riattivare l’affiliazione al CAS
-
   table_displays:
     person:
       antrag_fuer: Richiesta per
-      duplicate_exists: Esiste un duplicato
       address_valid: Indirizzo valido
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal
-      terminate_on: Data di partenza
-      termination_reason: Motivo della partenza
-
   termination_reasons:
     destroy:
-      foreign_key_error: "Questo motivo di disdetta risulta in uso da parte di alcune persone, pertanto la cancellazione non è possibile."
-
+      foreign_key_error: Questo motivo di disdetta risulta in uso da parte di alcune persone, pertanto la cancellazione non è possibile.
   verify_membership:
     title: Verifica dell’affiliazione al SAC-CAS
     not_found: Codice di verifica non valido
     status_valid: Affiliazione valida
     status_invalid: Affiliazione non valida
-
   wizards:
     signup:
       section_fee_summary:
-        title: "Categorie di contributo %{section}"
-
+        title: Categorie di contributo %{section}
     steps:
       choose_sektion_title: Selezionare la sezione
       summary_title: Conferma
@@ -1938,7 +1763,6 @@ it:
       termination_choose_date_title: Data di disdetta
       ask_family_main_person_title: Affiliazione famigliare
       choose_date_title: Selezione della data
-
       signup:
         main_email_field_title: E-mail
         person_fields_title: Dati personali
@@ -1961,7 +1785,6 @@ it:
           summary:
             info_text: Al termine dell’ordine riceverai la fattura tramite e-mail.
             next_button: ORDINARE ABBONAMENTO A PAGAMENTO
-
         sektion:
           family_fields_title: Membri della famiglia
           family_fields:
@@ -1983,7 +1806,6 @@ it:
           family_buttons:
             next_as_single_link: Continuare come membro individuale
             next_as_household_link: Continuare come affiliazione famigliare
-
           various_fields_title: Dati aggiuntivi
           summary_fields_title: Riepilogo
           summary_fields:
@@ -2002,13 +1824,12 @@ it:
             child: "Bambino"
           summary_entry_fee_card:
             immediate_entry_date: "Data di adesione: immediata"
-
         various_fields:
           newsletter: Desidero iscrivermi alla newsletter del CAS.
-          statutes_text: "Ho letto %{link} e acconsento"
-          sektion_statuten_text: "Ho letto %{link} e acconsento"
-          contribution_regulations_text: "Ho letto %{link} e acconsento"
-          data_protection_text: "Ho letto %{link} e acconsento"
+          statutes_text: Ho letto %{link} e acconsento
+          sektion_statuten_text: Ho letto %{link} e acconsento
+          contribution_regulations_text: Ho letto %{link} e acconsento
+          data_protection_text: Ho letto %{link} e acconsento
       choose_sektion:
         no_self_service_info_text: >-
           Per richiedere il cambio di sezione ti preghiamo di contattarci tramite telefono o e-mail*.
@@ -2022,7 +1843,7 @@ it:
           family_membership_info_text: >-
             Attenzione: il cambio della sezione base è richiesto per l’intera affiliazione famigliare. Pertanto riguarda: %{family_names}
         choose_date:
-          info_text: "Quando dovrebbe avvenire il cambio di sezione?"
+          info_text: Quando dovrebbe avvenire il cambio di sezione?
         summary:
           info_text: >-
             L’affiliazione a %{sektion}come sezione base viene richiesta come %{beitragskategorie}. La sezione prevede una procedura di approvazione non automatica. Si prega di chiarire in anticipo con %{sektion} la richiesta di affiliazione. Se è necessario emettere una nuova fattura, si prega di procedere alla fatturazione dopo l’ordine. L’affiliazione alla nuova sezione base è valida sin da subito.
