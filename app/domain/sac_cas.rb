@@ -130,7 +130,18 @@ module SacCas
 
   MEMBERSHIP_OPERATIONS_GROUP_TYPES = %w[Group::Sektion Group::Ortsgruppe].freeze
   MEMBERSHIP_OPERATIONS_EXCLUDED_IDS = [
-    2900, 3700, 2249, 2330, 2601, 3030, 3251,
-    3730, 3952, 3953, 3954, 4530, 4851, 5401
+    3700, # CAS Monte Rosa
+    2249, # CAS Diablerets
+    2330, # SAC Drei Tannen (archiviert)
+    2601, # SAC Gotthard Frauen (archiviert)
+    3030, # CAS Jorat (Frauen-Biel) (archiviert)
+    3251, # SAC Laegern Zurzach (archiviert)
+    3730, # CAS Mont-Soleil (archiviert)
+    3952, # SAC O'aargau H'buchsWang. (archiviert)
+    3953, # Oberaargau Herzogenbuchs (archiviert)
+    3954, # SAC Oberaargau Langenthal (archiviert)
+    4530, # CAS Raimeux (archiviert)
+    4851, # SAC Seeland Erlach (archiviert)
+    5401  # CAS Val-De-Joux dames (archiviert)
   ]
 end
