@@ -11,10 +11,10 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
   include FormatHelper
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
-  def terminate(role, terminate_on: Date.current.yesterday)
+  def terminate(role, terminate_on: Date.current.yesterday, **opts)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id
+      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id, **opts
     )
     expect(termination).to be_valid
     termination.save!
@@ -27,6 +27,8 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
     render
     Capybara::Node::Simple.new(@rendered)
   }
+
+  def basic_login_class = Group::AboBasicLogin::BasicLogin
 
   before do
     assign(:undo_termination, undo_termination)
@@ -66,6 +68,17 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
       expect(dom).to have_text role.decorate.name_with_group_and_layer
     end
 
+    it "shows role to delete" do
+      # terminate creates a BasicLogin role if data_retention_consent is set to true
+      expect do
+        terminate(role, data_retention_consent: true)
+      end.to change { basic_login_class.count }.by(1)
+
+      expect(dom).to have_selector(
+        "##{dom_id(role.person)} del", text: basic_login_class.label
+      )
+    end
+
     it "does not show household key" do
       terminate(role)
 
@@ -85,6 +98,20 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
 
       expect(dom).to have_text kind_role.person.full_name
       expect(dom).to have_text kind_role.decorate.name_with_group_and_layer
+    end
+
+    it "shows all family roles to delete" do
+      # terminate creates a BasicLogin role if data_retention_consent is set to true
+      expect do
+        terminate(role, data_retention_consent: true)
+      end.to change { basic_login_class.count }.by(3) # for two adults and one child
+
+      expect(dom).to have_selector(
+        "##{dom_id(role.person)} del", text: basic_login_class.label
+      )
+      expect(dom).to have_selector(
+        "##{dom_id(kind_role.person)} del", text: basic_login_class.label
+      )
     end
 
     it "shows household key" do
