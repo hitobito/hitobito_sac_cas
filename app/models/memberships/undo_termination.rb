@@ -37,33 +37,38 @@ module Memberships
     end
 
     # returns the versions of all roles changed by the termination
-    def role_versions
+    def updated_role_versions
       return [] unless mutation_id
 
-      # we don't handle roles created with this mutation yet. If we want to support this,
-      # we should include event: "create" in the query, but instead of reify we need to mark
-      # them for deletion in #restored_roles and handle them correspondingly in #save!
-      # We also need to handle the case where one role was updated multiple times in the same
-      # mutation (request/job run). In that case we have to restore the role to the state before
-      # the first change with that mutation_id, so we order by item_id and id and with
-      # SELECT DISTINCT ON (item_id) * we get the first change for each role.
-      @role_versions ||= PaperTrail::Version
-        .where(mutation_id: mutation_id, item_type: "Role")
+      @updated_role_versions ||= role_versions_for_mutation
         .where.not(event: "create")
-        .order(:item_id, :id)
-        .select("DISTINCT ON (item_id) *")
     end
 
-    # return all roles changed by the termination with their original values except for the
-    # `end_on` attribute which is set to the current value of the role. This is necessary as
-    # the person might have paid the membership fee after the termination so after reverting
-    # the termination the role should be valid until the end of the paid period.
+    def created_role_versions
+      return [] unless mutation_id
+      @created_role_versions ||= role_versions_for_mutation
+        .where(event: "create")
+    end
+
+    # return all roles changed by the termination with their original values except for:
+    # * the `end_on` attribute which is set to the current value of the role. This is necessary as
+    #   the person might have paid the membership fee after the termination so after reverting
+    #   the termination the role should be valid until the end of the paid period.
+    # * the `start_on` attribute. This should usually never change, but when correcting the
+    #   membership_years after the migration, it was changed for many roles. We want to keep
+    #   the corrected `start_on` value, so we overwrite the value on the reified role.
     def restored_roles
-      @restored_roles ||= role_versions.map do |version|
+      @restored_roles ||= updated_role_versions.map do |version|
         version.reify.tap do |role|
+          role.start_on = from_db(role).start_on
           role.end_on = [role.end_on, from_db(role).end_on].compact.max
         end
       end
+    end
+
+    # return all roles created by the termination
+    def roles_to_destroy
+      @roles_to_destroy ||= created_role_versions.map(&:item)
     end
 
     # return all people whose roles have been changed by the termination, with their original
@@ -89,6 +94,7 @@ module Memberships
       Role.transaction(requires_new: true) do
         restored_people.each { _1.save(validate: false) if _1.changed? }
         restored_roles.each { _1.save(validate: false) }
+        roles_to_destroy.each(&:destroy)
       end
     end
 
@@ -96,6 +102,17 @@ module Memberships
 
     ATTRS_ALLOWED_TO_CHANGE =
       %w[created_at updated_at end_on terminated termination_reason_id].freeze
+
+    # We need to handle the case where one role was updated multiple times in the same
+    # mutation (request/job run). In that case we have to restore the role to the state before
+    # the first change with that mutation_id, so we order by item_id and id and with
+    # SELECT DISTINCT ON (item_id) * we get the first change for each role.
+    def role_versions_for_mutation
+      PaperTrail::Version
+        .where(mutation_id: mutation_id, item_type: "Role")
+        .order(:item_id, :id)
+        .select("DISTINCT ON (item_id) *")
+    end
 
     def validate_role_is_terminated
       errors.add(:base, :role_not_terminated) unless role.terminated?
@@ -115,7 +132,7 @@ module Memberships
     end
 
     def roles_from_db
-      @roles_latest_version ||= Role.unscoped.where(id: role_versions.map(&:item_id))
+      @roles_latest_version ||= Role.unscoped.where(id: updated_role_versions.map(&:item_id))
     end
 
     def from_db(role)
