@@ -75,7 +75,7 @@ module TTY
         end
 
         puts red "!!! The undo is invalid !!!" unless undo.valid?
-        puts yellow "The mutation_id is missing." unless terminating_version.mutation_id.present?
+        puts yellow "The mutation_id is missing." unless terminating_version&.mutation_id&.present?
 
         CliMenu.new(menu_actions: {
           "y" => {description: "Yes, undo the termination", action: -> {
@@ -139,6 +139,7 @@ module TTY
       end
 
       def set_mutation_id
+        return puts(error("Terminating version not found")) unless terminating_version
         return puts(error("This is a family role, manual intervention is required.")) if undo.role.family?
         version = terminating_version
         return puts(warn("Role already has a mutation_id")) if version.mutation_id.present?
