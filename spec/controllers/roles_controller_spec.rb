@@ -19,9 +19,9 @@ describe RolesController do
 
     def build_depending_roles_and_family(beitragskategorie: :family)
       [
-        [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, false],
+        [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv, false],
         [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion, false],
-        [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv, true],
+        [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_nv, true],
         [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion, true]
       ].map do |role_class, group, add_membership_role|
         build_depending_role_and_add_to_family(role_class, group, add_membership_role:, beitragskategorie:)
@@ -58,7 +58,7 @@ describe RolesController do
         expect(household.people).to match_array([person])
       end
 
-      it "destroys family neuanmeldung roles" do
+      it "destroys family neuanmeldung roles in same layer" do
         household.add(people(:mitglied))
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
 
@@ -69,6 +69,17 @@ describe RolesController do
         depending_roles.each do |depending_role|
           expect(Role.where(id: depending_role.id)).to_not be_present
         end
+      end
+
+      it "does not destroy family neuanmeldung roles in other layer" do
+        household.add(people(:mitglied))
+        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
+
+        depending_role = build_depending_role_and_add_to_family(Group::SektionsNeuanmeldungenNv::Neuanmeldung, :matterhorn_neuanmeldungen_nv)
+
+        delete :destroy, params: {group_id: group.id, id: role.id}
+
+        expect(Role.where(id: depending_role.id)).to be_present
       end
     end
 
@@ -112,7 +123,7 @@ describe RolesController do
         expect(household.people).to match_array([person, other, other2])
       end
 
-      it "does not destroy family neuanmeldung roles" do
+      it "does not destroy family neuanmeldung roles in same layer" do
         household.add(people(:mitglied))
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :adult, person: person)
         role = Fabricate(Group::AboMagazin::Andere.sti_name.to_sym, group: group)

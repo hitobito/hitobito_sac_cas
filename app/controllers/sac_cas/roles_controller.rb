@@ -33,7 +33,8 @@ module SacCas::RolesController
 
   def destroy_family_neuanmeldungen
     Role.where(type: SacCas::NEUANMELDUNG_ROLES.map(&:sti_name),
-      person_id: family_mitglieder.pluck(:id)).destroy_all
+      person_id: family_mitglieder.pluck(:id),
+      group_id: group.groups_in_same_layer.pluck(:id)).destroy_all
   end
 
   def family_mitglieder
