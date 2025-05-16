@@ -18,6 +18,37 @@ describe RoleAbility do
     role.group.parent.update!(mitglied_termination_by_section_only: value)
   end
 
+  describe "destroying neuanmeldung roles" do
+    let(:backoffice_destroyable_roles) do
+      [
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv)),
+        Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:matterhorn_mitglieder)).person),
+        Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_sektion)),
+        Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_sektion), person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:matterhorn_mitglieder)).person),
+        Fabricate(Group::AboMagazin::Neuanmeldung.name.to_sym, group: groups(:abo_die_alpen)),
+        Fabricate(Group::AboTourenPortal::Neuanmeldung.name.to_sym, group: Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos)))
+      ]
+    end
+
+    context "as backoffice" do
+      let(:person) { Fabricate(Group::Geschaeftsstelle::Admin.name.to_sym, group: groups(:geschaeftsstelle)).person }
+
+      it "is allowed to destroy" do
+        backoffice_destroyable_roles.each do |to_destroy|
+          expect(ability).to be_able_to(:destroy, to_destroy)
+        end
+      end
+    end
+
+    context "as mitglied" do
+      it "is not allowed to destroy" do
+        backoffice_destroyable_roles.each do |to_destroy|
+          expect(ability).to_not be_able_to(:destroy, to_destroy)
+        end
+      end
+    end
+  end
+
   context "terminating own role" do
     context "Stammsektion" do
       it "is permitted when not Sektion#mitglied_termination_by_section_only" do
