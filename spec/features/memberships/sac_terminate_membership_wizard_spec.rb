@@ -38,7 +38,8 @@ describe "terminate sac membership wizard", js: true do
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
         role.reload
       end
-        .to change { person.roles.count }.by(-2)
+        # ends Mitglied, MitgliedZusatzsektion roles, creates BasicLogin role
+        .to change { person.roles.count }.by(-1)
         .and change { role.terminated }.to(true)
         .and change { role.end_on }.to(Date.current.yesterday)
         .and change { role.termination_reason }.from(nil).to(termination_reason)
