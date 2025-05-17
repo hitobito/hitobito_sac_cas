@@ -25,9 +25,7 @@ module Wizards::Memberships
       super(current_step: current_step, **params)
     end
 
-    def valid?
-      super && terminate_operation_valid?
-    end
+    validate :validate_terminate_operation, if: :last_step?
 
     def save!
       super && terminate_operation.save! && send_confirmation_mail
@@ -45,16 +43,12 @@ module Wizards::Memberships
         )
     end
 
-    def terminate_operation_valid?
-      return true unless last_step?
-
-      terminate_operation.valid?.tap do
+    def validate_terminate_operation
+      unless terminate_operation.valid?
         terminate_operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
       end
-
-      errors.empty?
     end
 
     def terminate_on
