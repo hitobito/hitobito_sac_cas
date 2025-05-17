@@ -188,9 +188,7 @@ describe Memberships::TerminateSacMembership do
 
       describe "data_retention" do
         let(:abonnenten) { groups(:abos) }
-        let!(:basic) do
-          Fabricate(:group, type: Group::AboBasicLogin.sti_name, parent: abonnenten)
-        end
+        let!(:basic) { Group::AboBasicLogin.first }
         let(:basic_login) { basic.roles.find_by(person: person) }
 
         before { params[:data_retention_consent] = true }
