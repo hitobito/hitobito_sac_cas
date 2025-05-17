@@ -14,12 +14,6 @@ describe Event::RegisterController do
     end
   end
   let(:group) { event.groups.first }
-  before do
-    Group::AboBasicLogin.create!(
-      parent: groups(:abos),
-      self_registration_role_type: "Group::AboBasicLogin::BasicLogin"
-    )
-  end
 
   let(:attrs) {
     {
