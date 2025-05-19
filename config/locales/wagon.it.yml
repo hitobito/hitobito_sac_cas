@@ -23,7 +23,7 @@ it:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-    title_event/tour: ""
+    title_event/tour: Tour
 
   settings:
     email:
@@ -362,23 +362,23 @@ it:
       event/role:
         self_employed: Lavoratore autonomo
       event/tour:
-        state_translated: ""
+        state_translated: Status
         states:
-          draft: ""
-          approved: ""
-          published: ""
-          closed: ""
-          canceled: ""
+          draft: Entwurf
+          approved: Freigegeben
+          published: Publiziert
+          closed: Abgeschlossen
+          canceled: Abgesagt
         participation_states:
-          tentative: ""
-          unconfirmed: ""
-          applied: ""
-          assigned: ""
-          annulled: ""
-          rejected: ""
-          canceled: ""
-          attended: ""
-          absent: ""
+          tentative: Provisorisch
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          annulled: Annulliert
+          rejected: Abgelehnt
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -454,7 +454,7 @@ it:
           IT: Italiano
         section_offerings: Offerte della sezione
         mitglied_termination_by_section_only: Disdetta solo tramite sezione
-        tours_enabled: ""
+        tours_enabled: Touren-Angebot für diese Sektion aktivieren
       group/ortsgruppe:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -463,7 +463,7 @@ it:
           DE: Tedesco
           FR: Francese
           IT: Italiano
-        tours_enabled: ""
+        tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
       role:
         membership_years: Anni di affiliazione
         class:
@@ -475,7 +475,7 @@ it:
           permission:
             description:
               read_all_people: Letto da tutte le persone.
-              layer_events_full: ""
+              layer_events_full: Verwalten von Events auf der Sektion.
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
@@ -613,9 +613,8 @@ it:
         many: Livelli del corso
         other: Livelli del corso
       event/role/assistant_leader:
-        one: ''
-        many: ''
-        other: ''
+        one: Hilfsleitung
+        other: Hilfsleitung
       event/course/role/leader:
         one: Direzione del corso
         many: Direzione del corso
@@ -625,9 +624,8 @@ it:
         many: Direzione della classe
         other: Direzione della classe
       event/tour:
-        one: ''
-        many: ''
-        other: ''
+        one: Tour
+        other: Touren
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -1243,10 +1241,10 @@ it:
           Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali.
     lists:
       nav_left_tours:
-        tours: ""
+        tours: Touren
       tours:
-        title: ""
-        explanation: ""
+        title: Demnächst stattfindende Touren
+        explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
     participations:
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
@@ -1311,7 +1309,7 @@ it:
         former_price_select: "In precedenza %{price_label}"
         no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
-      reactivated_notice: ""
+      reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
@@ -1323,7 +1321,7 @@ it:
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
         create_course_leader_invoice_button: Generare conteggio quadro del corso
-        reactivate: ""
+        reactivate: Reaktivieren
       popover_create_course_leader_settlement:
         create_invoice: Generare conteggio
         info_text_html: >-
@@ -1347,25 +1345,26 @@ it:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
     state_buttons:
       event/course:
-        created: ""
-        application_open: ""
-        application_paused: ""
-        application_closed: ""
-        assignment_closed: ""
-        ready: ""
-        closed: ""
-        closed_confirm_text: >
-        canceled: ""
+        created: Zurück als Entwurf
+        application_open: Publizieren
+        application_paused: Anmeldung pausieren
+        application_closed: Anmeldung abschliessen
+        assignment_closed: Zuteilung abschliessen
+        ready: Bereit zur Durchführung
+        closed: Abschliessen
+        closed_confirm_text: >-
+          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
+        canceled: Absagen
       event/tour:
-        draft: ""
-        approved: ""
-        published: ""
-        closed: ""
-        canceled: ""
+        draft: Zurück als Entwurf
+        approved: Freigeben
+        published: Publizieren
+        closed: Abschliessen
+        canceled: Absagen
     state_back_buttons:
-      assignment_closed: ""
-      application_closed: ""
-      approved: ""
+      assignment_closed: Zurück zur Zuteilung
+      application_closed: Zurück zur abgeschlossenen Anmeldung
+      approved: Zurück zur Freigabe
 
     form_tabs:
       communication: Comunicazione
@@ -1376,7 +1375,7 @@ it:
         Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
     global:
       link:
-        add_event/tour: ""
+        add_event/tour: Tour erstellen
 
     maximum_age_with_years: "%{maximum_age} anni (anno)"
 
@@ -1402,7 +1401,7 @@ it:
 
   events/state:
     flash:
-      success: ""
+      success: "Status wurde auf %{state} gesetzt."
 
   event/levels:
     new:
@@ -1596,7 +1595,7 @@ it:
         default: Attributi dei gruppi locali
 
   navigation:
-    tours: ""
+    tours: Touren
 
   participations:
     key_data_sheet:

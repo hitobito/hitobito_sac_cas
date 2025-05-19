@@ -367,7 +367,7 @@ fr:
         state_translated: Statut
         states:
           draft: projet
-          approved: ""
+          approved: Freigegeben
           published: publié
           closed: terminé
           canceled: annulé
@@ -378,9 +378,9 @@ fr:
           assigned: confirmé
           annulled: annulé
           rejected: refusé
-          canceled: ""
-          attended: ""
-          absent: ""
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -456,7 +456,7 @@ fr:
           IT: Italien
         section_offerings: Offres de la section
         mitglied_termination_by_section_only: Résiliation uniquement par la section
-        tours_enabled: ""
+        tours_enabled: Touren-Angebot für diese Sektion aktivieren
       group/ortsgruppe:
         foundation_year: Année de création
         section_canton: Canton
@@ -465,7 +465,7 @@ fr:
           DE: Allemand
           FR: Français
           IT: Italien
-        tours_enabled: ""
+        tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
       role:
         membership_years: Années-membres
         class:
@@ -477,7 +477,7 @@ fr:
           permission:
             description:
               read_all_people: Lecture de toutes les personnes.
-              layer_events_full: ""
+              layer_events_full: Verwalten von Events auf der Sektion.
       qualification_kind:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:
@@ -615,9 +615,8 @@ fr:
         many: Niveaux de cours
         other: Niveaux de cours
       event/role/assistant_leader:
-        one: ''
-        many: ''
-        other: ''
+        one: Hilfsleitung
+        other: Hilfsleitung
       event/course/role/leader:
         one: Responsable du cours
         many: Responsables du cours
@@ -627,9 +626,8 @@ fr:
         many: Chef·fes de classe
         other: Chef·fe de classe
       event/tour:
-        one: ''
-        many: ''
-        other: ''
+        one: Tour
+        other: Touren
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1245,10 +1243,10 @@ fr:
           Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
     lists:
       nav_left_tours:
-        tours: ""
+        tours: Touren
       tours:
         title: Courses ayant lieu prochainement
-        explanation: ""
+        explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
     participations:
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
@@ -1313,7 +1311,7 @@ fr:
         former_price_select: "Ancien %{price_label}"
         no_price_select: Pas de frais
       summoned_notice: "%{participant} a été convoqué·e."
-      reactivated_notice: ""
+      reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
         summon_button: Convocation
         assign_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
@@ -1325,7 +1323,7 @@ fr:
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
         create_course_leader_invoice_button: Créer une facture de cadre de cours
-        reactivate: ""
+        reactivate: Reaktivieren
       popover_create_course_leader_settlement:
         create_invoice: Créer une facture
         info_text_html: >-
@@ -1349,25 +1347,26 @@ fr:
       attach_key_data_sheets: Créer toutes les fiches techniques
     state_buttons:
       event/course:
-        created: ""
-        application_open: ""
-        application_paused: ""
-        application_closed: ""
+        created: Zurück als Entwurf
+        application_open: Publizieren
+        application_paused: Anmeldung pausieren
+        application_closed: Anmeldung abschliessen
         assignment_closed: Clôre l'attribution
         ready: Prêt à débuter
-        closed: ""
-        closed_confirm_text: >
+        closed: Abschliessen
+        closed_confirm_text: >-
+          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: annuler
       event/tour:
-        draft: ""
-        approved: ""
-        published: ""
-        closed: ""
+        draft: Zurück als Entwurf
+        approved: Freigeben
+        published: Publizieren
+        closed: Abschliessen
         canceled: annuler
     state_back_buttons:
-      assignment_closed: ""
+      assignment_closed: Zurück zur Zuteilung
       application_closed: Retour vers l'inscription terminée
-      approved: ""
+      approved: Zurück zur Freigabe
 
     form_tabs:
       communication: Communication
@@ -1378,7 +1377,7 @@ fr:
         Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
     global:
       link:
-        add_event/tour: ""
+        add_event/tour: Tour erstellen
 
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
 
@@ -1404,7 +1403,7 @@ fr:
 
   events/state:
     flash:
-      success: ""
+      success: "Status wurde auf %{state} gesetzt."
 
   event/levels:
     new:
