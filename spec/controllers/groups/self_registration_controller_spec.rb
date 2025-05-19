@@ -118,12 +118,7 @@ describe Groups::SelfRegistrationController do
     end
 
     context "for basic login wizard" do
-      let(:group) do
-        Fabricate.build(Group::AboBasicLogin.sti_name, parent: groups(:abos)).tap do |grp|
-          grp.self_registration_role_type = Group::AboBasicLogin::BasicLogin.sti_name
-          grp.save!
-        end
-      end
+      let(:group) { Group::AboBasicLogin.first }
 
       it "shows the correct message" do
         expect(flash[:notice]).to eq "Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen."

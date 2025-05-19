@@ -8,11 +8,10 @@
 require "spec_helper"
 
 describe :self_registration, js: true do
-  let(:group) { Fabricate(Group::AboBasicLogin.sti_name, parent: groups(:abos)) }
+  let(:group) { Group::AboBasicLogin.first }
   let(:newsletter) { mailing_lists(:newsletter) }
 
   before do
-    group.update!(self_registration_role_type: group.role_types.first)
     allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
