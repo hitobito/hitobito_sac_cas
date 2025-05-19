@@ -70,7 +70,7 @@ module Wizards::Signup
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|
-        SektionOperation.new(person_attrs:, group:, newsletter:)
+        SektionOperation.new(person_attrs:, group:, newsletter:, skip_confirmation_mail:, skip_invoice:)
       end
     end
 
@@ -112,6 +112,10 @@ module Wizards::Signup
     def read_birthdays
       members.map(&:birthday).unshift(birthday).compact_blank.map { |birthday| I18n.l(birthday) }.shuffle
     end
+
+    def skip_confirmation_mail = current_user&.backoffice? && step(:summary_fields).skip_confirmation_mail
+
+    def skip_invoice = current_user&.backoffice? && step(:summary_fields).skip_invoice
 
     def step_after(step_name_or_class)
       if step_name_or_class == :_start && current_user

@@ -20,6 +20,8 @@ module Wizards::Steps::Signup::Sektion
     end
 
     attribute :contribution_regulations, :boolean, default: false
+    attribute :skip_confirmation_mail, :boolean
+    attribute :skip_invoice, :boolean
 
     validates :contribution_regulations, acceptance: true
 

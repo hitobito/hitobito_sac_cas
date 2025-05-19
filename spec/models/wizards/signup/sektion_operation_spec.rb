@@ -30,8 +30,10 @@ describe Wizards::Signup::SektionOperation do
   }
 
   let(:newsletter) { true }
+  let(:skip_confirmation_mail) { false }
+  let(:skip_invoice) { false }
 
-  subject(:operation) { described_class.new(person_attrs: person_attrs, group:, newsletter:) }
+  subject(:operation) { described_class.new(person_attrs: person_attrs, group:, newsletter:, skip_confirmation_mail:, skip_invoice:) }
 
   describe "validations" do
     it "is valid" do
@@ -127,6 +129,38 @@ describe Wizards::Signup::SektionOperation do
           "Groups::SelfRegistrationNotificationMailer", "self_registration_notification", "deliver_now",
           args: ["hello@example.com", anything]
         )
+      end
+    end
+
+    context "skip_confirmation_mail=true" do
+      let(:skip_confirmation_mail) { true }
+
+      it "does not enqueue confirmation mail" do
+        expect { operation.save! }.not_to have_enqueued_mail(Signup::SektionMailer)
+      end
+
+      context "sektion not requiring approval" do
+        let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
+        let(:invoice) { ExternalInvoice::SacMembership.last }
+
+        it "does not enqueue approval pending confirmation email" do
+          groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
+          expect { operation.save! }
+            .to_not have_enqueued_mail(Signup::SektionMailer, :approval_pending_confirmation).exactly(:once)
+        end
+      end
+    end
+
+    context "skip_invoice=true" do
+      let(:skip_invoice) { true }
+
+      it "does not generate invoice and directly assigns sac membership" do
+        expect { operation.save! }
+          .to not_change { ExternalInvoice::SacMembership.count }
+
+        max = Person.find_by(first_name: "Max")
+        expect(max.sac_membership).to be_active
+        expect(max.sac_membership.stammsektion_role.group).to eq(groups(:bluemlisalp_mitglieder))
       end
     end
 

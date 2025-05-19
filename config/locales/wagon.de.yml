@@ -2017,6 +2017,8 @@ de:
               per E-Mail zugestellt.
             entry_per: "Eintritt per:"
             next_button: Mitgliedschaft beantragen
+            skip_confirmation_mail_caption: Keine E-Mail auslösen
+            skip_invoice_caption: Keine Rechnung auslösen (Mitgliedschaft sofort aktivieren)
           summary_person_card:
             contact_person: "Kontaktperson"
           summary_family_member_card:

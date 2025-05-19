@@ -9,11 +9,13 @@ module Wizards::Signup
   class SektionOperation
     include ActiveModel::Model
 
-    def initialize(group:, person_attrs:, newsletter:)
+    def initialize(group:, person_attrs:, newsletter:, skip_confirmation_mail:, skip_invoice:)
       @group = group
       person_attrs[:gender] = nil if person_attrs[:gender] == I18nEnums::NIL_KEY
       @person_attrs = person_attrs
       @newsletter = newsletter
+      @skip_confirmation_mail = skip_confirmation_mail
+      @skip_invoice = skip_invoice
     end
 
     def valid?
@@ -74,16 +76,20 @@ module Wizards::Signup
     end
 
     def build_role
+      g = generate_invoice? ? group : group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
+      e = generate_invoice? ? (today unless neuanmeldung?) : Date.current.end_of_year
       Role.new(
         person: person,
-        group: group,
+        group: g,
         type: role_type,
         start_on: today,
-        end_on: (today unless neuanmeldung?)
+        end_on: e
       )
     end
 
     def generate_invoice
+      return unless generate_invoice?
+
       invoice = ExternalInvoice::SacMembership.create!(
         person: person,
         state: :draft,
@@ -96,10 +102,14 @@ module Wizards::Signup
     end
 
     def enqueue_confirmation_mail
+      return if @skip_confirmation_mail
+
       Signup::SektionMailer.confirmation(person, group.layer_group, role.beitragskategorie).deliver_later
     end
 
     def enqueue_approval_pending_confirmation_mail
+      return if @skip_confirmation_mail
+
       Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group, role.beitragskategorie).deliver_later
     end
 
@@ -110,13 +120,15 @@ module Wizards::Signup
 
     def today = @today ||= Date.current
 
-    def role_type = group.self_registration_role_type
+    def role_type = generate_invoice? ? group.self_registration_role_type : Group::SektionsMitglieder::Mitglied
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
 
     def new_record? = person_attrs[:id].blank?
 
     def no_approval_needed? = role.group.layer_group.decorate.membership_admission_through_gs?
+
+    def generate_invoice? = !@skip_invoice
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!
