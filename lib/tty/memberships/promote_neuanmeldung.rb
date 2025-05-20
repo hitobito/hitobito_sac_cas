@@ -115,7 +115,8 @@ module TTY
           person: person,
           group: mitglied_group,
           start_on:,
-          end_on:
+          end_on:,
+          beitragskategorie: neuanmeldung.beitragskategorie
         )
       end
 
