@@ -46,9 +46,7 @@ module Memberships
     end
 
     def change_zusatzsektion_to_family!(role)
-      if !person.roles.include?(role) || !person.sac_family_main_person || role.terminated? || role.family? || !role.person.sac_membership.family?
-        raise "not able to change zusatzsektion to family"
-      end
+      ensure_can_change_zusatzsektion_to_family(role)
 
       person.household.people.each do |family_member|
         conflicting_role = find_zusatzsektion_role(role.group.layer_group_id, person: family_member) ||
@@ -62,6 +60,17 @@ module Memberships
     end
 
     private
+
+    def ensure_can_change_zusatzsektion_to_family(role)
+      person.roles.include?(role) &&
+        person.sac_family_main_person &&
+        role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
+        role.active? &&
+        !role.terminated? &&
+        !role.family? &&
+        role.person.sac_membership.family? ||
+        raise("not able to change zusatzsektion to family")
+    end
 
     def join_stammsektion!(reference_person)
       if sac_membership.stammsektion_role

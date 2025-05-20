@@ -50,6 +50,16 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
           .to match(/Wechsel Familie/)
       end
 
+      it "does not render for ended role" do
+        expect(view).to receive(:can?).with(:manage, Memberships::ChangeZusatzsektionToFamily).and_return(true)
+
+        role = zusatzsektion_role
+        role.end_on = Date.current.yesterday
+
+        expect(described_class.new(role, view).render)
+          .to be_nil
+      end
+
       it "does not render if cannot manage ChangeZusatzsektionToFamily" do
         expect(view).to receive(:can?).with(:manage, Memberships::ChangeZusatzsektionToFamily).and_return(false)
 

@@ -62,6 +62,14 @@ describe Memberships::FamilyMutation do
         .to raise_error("not able to change zusatzsektion to family")
     end
 
+    it "raises if role has ended" do
+      zusatzsektion_role = zusatzsektion_roles.first
+      zusatzsektion_role.update!(end_on: Time.zone.yesterday)
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
     it "raises if role is terminated" do
       zusatzsektion_role = zusatzsektion_roles.first
 

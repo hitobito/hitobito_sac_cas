@@ -15,7 +15,7 @@ module Roles
     end
 
     def render
-      return unless can?(:manage, Memberships::ChangeZusatzsektionToFamily) && @role.beitragskategorie != "family" && @role.person.sac_membership.family? && @role.person.sac_family_main_person?
+      return unless render?
 
       link_to(safe_join([icon(:"exchange-alt"), t("roles/change_zusatzsektion_to_family.link")], " "),
         @view.group_person_role_change_zusatzsektion_to_family_path(role_id: @role.id,
@@ -23,6 +23,16 @@ module Roles
           person_id: @role.person_id),
         class: "btn btn-sm btn-outline-primary",
         method: :post)
+    end
+
+    private
+
+    def render?
+      can?(:manage, Memberships::ChangeZusatzsektionToFamily) &&
+        @role.active? &&
+        @role.beitragskategorie != "family" &&
+        @role.person.sac_membership.family? &&
+        @role.person.sac_family_main_person?
     end
   end
 end
