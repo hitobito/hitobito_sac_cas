@@ -7,7 +7,7 @@
 
 module Memberships
   class ChangeZusatzsektionToFamiliesController < ApplicationController
-    before_action :authorize, :role, :person, :group
+    before_action :authorize
 
     def create
       Memberships::ChangeZusatzsektionToFamily.new(role).save!
@@ -27,14 +27,6 @@ module Memberships
 
     def role
       @role ||= Role.with_inactive.find(params[:role_id])
-    end
-
-    def person
-      @person ||= Person.find(params[:person_id])
-    end
-
-    def group
-      @group ||= Group.find(params[:group_id])
     end
   end
 end

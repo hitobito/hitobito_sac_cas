@@ -65,7 +65,8 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
 
         role = Group::SektionsMitglieder::Ehrenmitglied.create!(
           person: person,
-          group: groups(:bluemlisalp_mitglieder))
+          group: groups(:bluemlisalp_mitglieder)
+        )
 
         expect(described_class.new(role, view).render)
           .to be_nil
