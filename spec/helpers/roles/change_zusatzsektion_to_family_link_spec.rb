@@ -60,6 +60,17 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
           .to be_nil
       end
 
+      it "does not render for non-Zusatzsektion role" do
+        expect(view).to receive(:can?).with(:manage, Memberships::ChangeZusatzsektionToFamily).and_return(true)
+
+        role = Group::SektionsMitglieder::Ehrenmitglied.create!(
+          person: person,
+          group: groups(:bluemlisalp_mitglieder))
+
+        expect(described_class.new(role, view).render)
+          .to be_nil
+      end
+
       it "does not render if cannot manage ChangeZusatzsektionToFamily" do
         expect(view).to receive(:can?).with(:manage, Memberships::ChangeZusatzsektionToFamily).and_return(false)
 

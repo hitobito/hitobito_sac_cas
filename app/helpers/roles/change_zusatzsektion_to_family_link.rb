@@ -29,6 +29,7 @@ module Roles
 
     def render?
       can?(:manage, Memberships::ChangeZusatzsektionToFamily) &&
+        @role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
         @role.active? &&
         @role.beitragskategorie != "family" &&
         @role.person.sac_membership.family? &&
