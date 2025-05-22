@@ -39,6 +39,109 @@ describe Memberships::FamilyMutation do
     )
   end
 
+  describe "#change_zusatzsektion_to_family" do
+    let(:household_key) { SecureRandom.uuid }
+
+    let(:household) { person.household }
+
+    before do
+      household.set_family_main_person!
+      create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder))
+      create_role!(zusatzsektion_class, groups(:matterhorn_mitglieder), beitragskategorie: :adult)
+    end
+
+    it "raises when person is not family main person" do
+      other = Fabricate(:person, birthday: 13.years.ago)
+      household.add(other)
+      household.set_family_main_person!(other)
+      household.save!
+
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
+    it "raises if role has ended" do
+      zusatzsektion_role = zusatzsektion_roles.first
+      zusatzsektion_role.update!(end_on: Time.zone.yesterday)
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
+    it "raises if role is terminated" do
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      Roles::Termination.new(role: zusatzsektion_role, terminate_on: Time.zone.yesterday, validate_terminate_on: false).call
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
+    it "raises if role is already family" do
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to change { zusatzsektion_roles.first.reload.beitragskategorie }.from("adult").to("family")
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
+    it "raises if person is not in a family membership" do
+      stammsektion_role.delete
+      create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder), beitragskategorie: :adult)
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to raise_error("not able to change zusatzsektion to family")
+    end
+
+    it "replaces adult zusatzsektion role" do
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to change { zusatzsektion_roles.first.reload.beitragskategorie }.from("adult").to("family")
+    end
+
+    it "adds zusatzsektion role for all family members" do
+      other = Fabricate(:person, birthday: 13.years.ago)
+      other2 = Fabricate(:person, birthday: 13.years.ago)
+      household.add(other)
+      household.add(other2)
+      household.save!
+      zusatzsektion_role = zusatzsektion_roles.first
+
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to change { zusatzsektion_roles.first.reload.beitragskategorie }.from("adult").to("family")
+
+      [other, other2].each do |family_member|
+        created_role = family_member.roles.last
+
+        expect(created_role.type).to eq(zusatzsektion_class.sti_name)
+        expect(created_role.beitragskategorie).to eq("family")
+        expect(created_role.start_on).to eq(zusatzsektion_roles.first.reload.start_on)
+        expect(created_role.end_on).to eq(zusatzsektion_roles.first.reload.end_on)
+      end
+    end
+
+    it "replaces neuanmeldungs role for family member" do
+      other = Fabricate(:person, birthday: 13.years.ago)
+      other2 = Fabricate(:person, birthday: 13.years.ago)
+      household.add(other)
+      household.add(other2)
+      household.save!
+      neuanmeldung_role = create_role!(neuanmeldung_zusatzsektion_class, groups(:matterhorn_neuanmeldungen_nv), beitragskategorie: :adult, person: other, start_on: other.roles.first.start_on)
+
+      zusatzsektion_role = zusatzsektion_roles.first
+      expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
+        .to change { zusatzsektion_roles.first.reload.beitragskategorie }.from("adult").to("family")
+
+      expect(Role.where(id: neuanmeldung_role.id)).to eq([])
+    end
+  end
+
   describe "#join!" do
     context "as a member" do
       before { create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder)) }

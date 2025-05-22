@@ -45,7 +45,32 @@ module Memberships
       sac_membership.neuanmeldung_zusatzsektion_roles.family.each { end_role(_1) }
     end
 
+    def change_zusatzsektion_to_family!(role)
+      ensure_can_change_zusatzsektion_to_family(role)
+
+      person.household.people.each do |family_member|
+        conflicting_role = find_zusatzsektion_role(role.group.layer_group_id, person: family_member) ||
+          find_neuanmeldung_zusatzsektion_role(role.group.layer_group_id, person: family_member)
+        if conflicting_role
+          replace_role!(conflicting_role, role, beitragskategorie: category_family)
+        else
+          create_role!(family_member, role, beitragskategorie: category_family)
+        end
+      end
+    end
+
     private
+
+    def ensure_can_change_zusatzsektion_to_family(role)
+      person.roles.include?(role) &&
+        person.sac_family_main_person &&
+        role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
+        role.active? &&
+        !role.terminated? &&
+        !role.family? &&
+        role.person.sac_membership.family? ||
+        raise("not able to change zusatzsektion to family")
+    end
 
     def join_stammsektion!(reference_person)
       if sac_membership.stammsektion_role
@@ -111,8 +136,13 @@ module Memberships
       end
     end
 
-    def find_zusatzsektion_role(layer_group_id)
-      sac_membership.zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
+    def find_zusatzsektion_role(layer_group_id, person: @person)
+      person.sac_membership.zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
+    end
+
+    def find_neuanmeldung_zusatzsektion_role(layer_group_id, person: @person)
+      person.sac_membership.neuanmeldung_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:}) ||
+        person.sac_membership.neuanmeldung_nv_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
     end
 
     def raise_if_terminated(*roles)
