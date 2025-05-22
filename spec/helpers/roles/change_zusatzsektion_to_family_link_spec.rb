@@ -99,9 +99,8 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
 
       it "does not render if person is not family main person" do
         other = Fabricate(:person, birthday: 13.years.ago)
-        household.add(other)
+        household.add(other).save!
         household.set_family_main_person!(other)
-        household.save!
         expect(view).to receive(:can?).with(:manage, Memberships::ChangeZusatzsektionToFamily).and_return(true)
 
         expect(described_class.new(zusatzsektion_role, view).render)
