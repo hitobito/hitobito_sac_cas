@@ -33,7 +33,7 @@ module SacCas::Household
         create_missing_people_managers
 
         if maintain_sac_family?
-          update_main_person!(new_household)
+          update_main_person!(new_household:)
           mutate_memberships!(new_people, removed_people)
         end
       end
@@ -51,11 +51,8 @@ module SacCas::Household
 
   # Sets the reference_person as the main person of the family.
   def set_family_main_person!(person = reference_person)
-    ActiveRecord::Base.transaction do
-      Person.where(id: people.map(&:id)).where(sac_family_main_person: true)
-        .update_all(sac_family_main_person: false)
-      person.update!(sac_family_main_person: true)
-    end
+    update_main_person!(person)
+    reload
   end
 
   def main_person
@@ -110,16 +107,20 @@ module SacCas::Household
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
-  def update_main_person!(new_household)
-    new_main_person = main_person ||
+  def update_main_person!(person = nil, new_household: false)
+    raise "invalid main person" if person && people.exclude?(person)
+    new_main_person = person ||
+      main_person ||
       reference_person_as_main_in_new_household(new_household) ||
       oldest_person # may be nil when destroying
-
     others = people - [new_main_person]
-    (others + removed_people).select(&:sac_family_main_person).each do |person|
-      person.update!(sac_family_main_person: false)
+
+    ActiveRecord::Base.transaction do
+      (others + removed_people).select(&:sac_family_main_person).each do |person|
+        person.update!(sac_family_main_person: false)
+      end
+      new_main_person&.update!(sac_family_main_person: true)
     end
-    new_main_person&.update!(sac_family_main_person: true)
   end
 
   def next_key
