@@ -52,9 +52,8 @@ describe Memberships::FamilyMutation do
 
     it "raises when person is not family main person" do
       other = Fabricate(:person, birthday: 13.years.ago)
-      household.add(other)
+      household.add(other).save!
       household.set_family_main_person!(other)
-      household.save!
 
       zusatzsektion_role = zusatzsektion_roles.first
 
