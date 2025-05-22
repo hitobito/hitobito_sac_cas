@@ -19,7 +19,7 @@ module Roles
 
       link_to(safe_join([icon(:"exchange-alt"), t("roles/change_zusatzsektion_to_family.link")], " "),
         @view.group_person_role_change_zusatzsektion_to_family_path(role_id: @role.id,
-          group_id: params[:group_id], # ansonsten wird man bei einer Person ohne Rollen auf die Gruppe der damaligen Mitgliedsrolle redirected. Dadurch werden dann die anderen Personenlinks (Info, Bemerkungen, etc.) mit der falschen group id gebaut und es entsteht ein 404
+          group_id: params[:group_id],
           person_id: @role.person_id),
         class: "btn btn-sm btn-outline-primary",
         method: :post)

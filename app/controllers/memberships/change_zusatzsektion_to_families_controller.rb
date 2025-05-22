@@ -12,7 +12,7 @@ module Memberships
     def create
       Memberships::ChangeZusatzsektionToFamily.new(role).save!
 
-      redirect_to group_person_path(role.person, group_id: role.group_id), notice: t(".success")
+      redirect_to group_person_path(role.person, group_id: params[:group_id]), notice: t(".success")
     end
 
     private
