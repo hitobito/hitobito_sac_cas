@@ -1551,6 +1551,9 @@ it:
           youth: Affiliazione giovani
 
   memberships:
+    change_zusatzsektion_to_families:
+      create:
+        success: "Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert."
     join_zusatzsektions:
       create:
         success:
@@ -1810,6 +1813,8 @@ it:
       youth: Giovani
       family: Famiglia
 
+  roles/change_zusatzsektion_to_family:
+    link: Wechsel Familie
   roles/terminations:
     global:
       undo: Riattivare

@@ -1553,6 +1553,9 @@ fr:
           youth: Adhésion jeunesse
 
   memberships:
+    change_zusatzsektion_to_families:
+      create:
+        success: "Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert."
     join_zusatzsektions:
       create:
         success:
@@ -1812,6 +1815,8 @@ fr:
       youth: Jeunesse
       family: Famille
 
+  roles/change_zusatzsektion_to_family:
+    link: Wechsel Familie
   roles/terminations:
     global:
       undo: Réactiver
