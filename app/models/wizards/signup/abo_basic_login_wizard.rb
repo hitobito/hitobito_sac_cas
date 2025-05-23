@@ -39,7 +39,8 @@ module Wizards::Signup
     def build_person
       super do |person, role|
         person.gender = nil if person.gender == I18nEnums::NIL_KEY
-        role.end_on = Date.current.end_of_year
+
+        yield person, role if block_given?
       end
     end
 
