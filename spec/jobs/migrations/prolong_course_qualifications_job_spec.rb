@@ -68,9 +68,9 @@ describe Migrations::ProlongCourseQualificationsJob do
   end
 
   it "prolongs qualifications in correct order" do
-    expect(job).to receive(:prolong_qualifications).with(@p1, [@et1])
-    expect(job).to receive(:prolong_qualifications).with(@p2, [course])
-    expect(job).to receive(:prolong_qualifications).with(@p3, [@et3, course])
+    expect(job).to receive(:prolong_qualifications).with(@p1, [@et1]).ordered
+    expect(job).to receive(:prolong_qualifications).with(@p2, [course]).ordered
+    expect(job).to receive(:prolong_qualifications).with(@p3, [@et3, course]).ordered
 
     job.perform
   end
