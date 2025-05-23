@@ -61,7 +61,7 @@ describe :self_registration, js: true do
       click_button "SAC-KONTO ERSTELLEN"
       expect(page).to have_css "#error_explanation, #flash > .alert"
     end.to change { Person.count }.by(1)
-    expect(Person.last.roles.last.end_on).not_to be_nil
+    expect(Person.last.roles.last.end_on).to be_nil
   end
 
   it "subscribes to mailinglist" do
