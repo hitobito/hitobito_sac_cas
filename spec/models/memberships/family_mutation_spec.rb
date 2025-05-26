@@ -152,6 +152,19 @@ describe Memberships::FamilyMutation do
           .to change { original_role.reload.end_on }.to(Date.yesterday)
       end
 
+      it "ends existing neuanmeldung stammsektion role per end of yesterday" do
+        person.roles.destroy_all
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv),
+          person:,
+          start_on: 10.days.ago,
+          end_on: 10.days.from_now)
+
+        original_role = person.roles.first
+
+        expect { mutation.join!(reference_person) }
+          .to change { original_role.reload.end_on }.to(Date.yesterday)
+      end
+
       it "destroys exsitisting stammsektion role when starting today" do
         stammsektion_role.update!(start_on: Time.zone.today, end_on: 5.days.from_now)
         original_role = stammsektion_role

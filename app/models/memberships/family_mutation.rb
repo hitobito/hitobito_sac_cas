@@ -24,7 +24,7 @@ module Memberships
     #   reference_zusatzsektion_roles.
     # * Create missing zusatzsektion roles from reference_zusatzsektion_roles.
     def join!(reference_person)
-      raise_if_terminated(sac_membership.stammsektion_role,
+      raise_if_terminated(currently_relevant_role,
         reference_person.sac_membership.stammsektion_role)
 
       join_stammsektion!(reference_person)
@@ -33,13 +33,13 @@ module Memberships
 
     # Replace all family membership roles with corresponding adult/youth roles
     def leave!
-      raise_if_terminated(sac_membership.stammsektion_role)
+      raise_if_terminated(currently_relevant_role)
 
       beitragskategorie = SacCas::Beitragskategorie::Calculator
         .new(person).calculate(for_sac_family: false)
 
-      if sac_membership.stammsektion_role
-        replace_role!(sac_membership.stammsektion_role, beitragskategorie:)
+      if currently_relevant_role
+        replace_role!(currently_relevant_role, beitragskategorie:)
       end
       sac_membership.zusatzsektion_roles.family.each { replace_role!(_1, beitragskategorie:) }
       sac_membership.neuanmeldung_zusatzsektion_roles.family.each { end_role(_1) }
@@ -73,8 +73,8 @@ module Memberships
     end
 
     def join_stammsektion!(reference_person)
-      if sac_membership.stammsektion_role
-        replace_role!(sac_membership.stammsektion_role,
+      if currently_relevant_role
+        replace_role!(currently_relevant_role,
           reference_person.sac_membership.stammsektion_role)
       else
         create_role!(person,
@@ -147,6 +147,10 @@ module Memberships
 
     def raise_if_terminated(*roles)
       raise "not allowed with terminated sac membership" if roles.compact.any?(&:terminated?)
+    end
+
+    def currently_relevant_role
+      sac_membership.stammsektion_role || sac_membership.neuanmeldung_stammsektion_role
     end
   end
 end
