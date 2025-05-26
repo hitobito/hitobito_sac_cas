@@ -21,7 +21,7 @@ describe Household do
   let(:second_child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
   let(:second_adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
 
-  subject!(:household) { Household.new(person, maintain_sac_family: false) }
+  subject!(:household) { Household.new(person) }
 
   def sequence = Sequence.by_name(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE)
 
@@ -410,6 +410,64 @@ describe Household do
       person.update!(street: "Langweilige Strasse")
       expect { household.save!(context: :update_address) }.not_to raise_error
       expect(household.members.map(&:person).map(&:street)).to all(eq("Langweilige Strasse"))
+    end
+  end
+
+  describe "#set_family_main_person!" do
+    before { household.add(adult).add(child).save! }
+
+    it "changes main person" do
+      expect(household.main_person).to eq person
+
+      expect { household.set_family_main_person!(adult) }
+        .to change { Household.new(person).main_person }.from(person).to(adult)
+        .and change { person.reload.sac_family_main_person }.from(true).to(false)
+        .and change { adult.reload.sac_family_main_person }.from(false).to(true)
+    end
+
+    context "paper trail", versioning: true do
+      it "is recorded" do
+        expect { household.set_family_main_person!(adult) }
+          .to change { PaperTrail::Version.count }.by(2)
+          .and change { person.reload.versions.count }.by(1)
+          .and change { adult.reload.versions.count }.by(1)
+          .and not_change { child.reload.versions.count }
+
+        old_main_person_version = person.versions.reorder(:id).last
+        expect(old_main_person_version.event).to eq "update"
+        expect(old_main_person_version.changeset["sac_family_main_person"]).to eq [true, false]
+
+        new_main_person_version = adult.versions.reorder(:id).last
+        expect(new_main_person_version.event).to eq "update"
+        expect(new_main_person_version.changeset["sac_family_main_person"]).to eq [false, true]
+      end
+
+      it "is not recorded if already main person" do
+        expect { household.set_family_main_person!(person) }
+          .not_to change { PaperTrail::Version.count }
+      end
+    end
+  end
+
+  describe "#destroy" do
+    before { household.add(adult).add(child).save! }
+
+    it "clears sac_family_main_person" do
+      expect { household.destroy }
+        .to change { person.reload.sac_family_main_person }.from(true).to(false)
+    end
+
+    context "paper trail", versioning: true do
+      it "is recorded for main person flag" do
+        expect { household.destroy }
+          .to change { PaperTrail::Version.where(item_type: "Person").count }.by(4)
+          .and change { person.reload.versions.count }.by(2)
+          .and change { adult.reload.versions.count }.by(1)
+          .and change { child.reload.versions.count }.by(1)
+
+        main_person_version = person.versions.where(event: "update").reorder(:id).last
+        expect(main_person_version.changeset["sac_family_main_person"]).to eq [true, false]
+      end
     end
   end
 end
