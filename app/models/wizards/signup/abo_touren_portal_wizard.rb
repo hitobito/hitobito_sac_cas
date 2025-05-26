@@ -28,5 +28,13 @@ module Wizards::Signup
     def calculated_costs = Group.root.abo_touren_portal_fee
 
     def shipping_abroad? = false
+
+    private
+
+    def build_person
+      super do |person, role|
+        role.end_on = Date.current.end_of_year
+      end
+    end
   end
 end
