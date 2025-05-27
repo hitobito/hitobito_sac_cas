@@ -12,9 +12,11 @@ module Wizards::Steps::Signup::PersonCommon
 
   included do
     class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
+    class_attribute :maximum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.end
     validate :assert_valid_phone_number
-    validate :assert_minimum_age
     validates :gender, :first_name, :last_name, :birthday, presence: true
+    validate :assert_minimum_age
+    validate :assert_maximum_age
 
     attribute :id, :integer # for when dealing with persisted users
 
@@ -54,6 +56,12 @@ module Wizards::Steps::Signup::PersonCommon
   def assert_minimum_age
     if minimum_age && birthday && Person.new(birthday: birthday).years < minimum_age
       errors.add(:person, :too_young, minimum_years: minimum_age)
+    end
+  end
+
+  def assert_maximum_age
+    if maximum_age && birthday && Person.new(birthday: birthday).years > maximum_age
+      errors.add(:person, :too_old, maximum_years: maximum_age)
     end
   end
 end
