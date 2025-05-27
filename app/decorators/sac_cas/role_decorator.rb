@@ -19,4 +19,9 @@ module SacCas::RoleDecorator
   def name_with_group_and_layer
     "#{role.group.layer_group} / #{role.group}: #{role}"
   end
+
+  def name_with_group_and_period
+    "#{role.group} #{formatted_name(strong: true, show_end_on: true, show_start_on: true)}"
+      .html_safe
+  end
 end
