@@ -57,6 +57,14 @@ describe Wizards::Steps::Signup::PersonFields do
         expect(form).not_to be_valid
         expect(form.errors.full_messages).to eq ["Person muss 6 Jahre oder älter sein"]
       end
+
+      it "validates user is not too old" do
+        travel_to(Date.new(2025, 5, 27)) do
+          form.attributes = required_attrs.merge(birthday: "01.01.1622")
+          expect(form).not_to be_valid
+          expect(form.errors.full_messages).to eq ["Person muss 199 Jahre oder jünger sein"]
+        end
+      end
     end
 
     describe "zip_code" do
