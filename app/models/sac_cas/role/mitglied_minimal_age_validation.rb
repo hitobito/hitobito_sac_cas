@@ -11,7 +11,7 @@ module SacCas::Role::MitgliedMinimalAgeValidation
   MINIMUM_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
 
   included do
-    validate :assert_old_enough
+    validate :assert_old_enough, on: [:create, :update]
   end
 
   private

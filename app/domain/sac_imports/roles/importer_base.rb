@@ -14,6 +14,7 @@ module SacImports::Roles
       @csv_report.log("The file contains #{@data.size} rows.")
       progress = SacImports::Progress.new(@data.size, title: title)
 
+      # @data.each do |row|
       Parallel.map(@data, in_threads: nr_of_threads) do |row|
         progress.step
         process_row(row)
@@ -23,7 +24,7 @@ module SacImports::Roles
     private
 
     def process_row(row)
-      return unless dates_valid?(row)
+      # return unless dates_valid?(row)
       person = fetch_person(row)
       return unless person
 
@@ -46,6 +47,8 @@ module SacImports::Roles
 
       report_person_not_found(row)
       nil
+    rescue ActiveRecord::ConnectionTimeoutError
+      retry
     end
 
     def dates_valid?(row)
@@ -83,12 +86,14 @@ module SacImports::Roles
       details = error || message || warning
       status = if error.present?
         "error"
+      elsif warning.present?
+        "warning"
       else
-        warning.present? ? "warning" : "success"
+        "success"
       end
 
       @output.puts("#{message_prefix}: #{symbol} #{details}") if error.present?
-      return unless error.present? || warning.present?
+      # return unless error.present? || warning.present?
 
       add_report_row(row, status, message: message, warning: warning, error: error)
     end

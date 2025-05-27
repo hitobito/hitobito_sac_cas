@@ -47,5 +47,17 @@ class SacImports::CsvSource
 
       Date.parse(valid_until) < REFERENCE_DATE
     end
+
+    def end_on = Date.parse(valid_until)
+
+    def start_on
+      [parse_date(valid_from) || end_on, end_on].min
+    end
+
+    def parse_date(date_string)
+      return nil if date_string.blank?
+
+      Date.parse(date_string)
+    end
   end
 end

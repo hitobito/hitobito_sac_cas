@@ -12,7 +12,7 @@ module SacImports
     def filter ={role: /\AMitglied \(Stammsektion\) \(Familie\)\z/, valid_until: "2024-12-31"}
 
     def initialize(output: $stdout)
-      PaperTrail.enabled = false # disable versioning for imports
+      # PaperTrail.enabled = false # disable versioning for imports
       @output = output
       @data = SacImports::CsvSource.new(:NAV2a).rows(filter:)
       @csv_report = SacImports::CsvReport.new("nav2a2-set-family-main-person", [], output:)

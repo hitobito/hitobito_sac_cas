@@ -26,9 +26,9 @@ module SacImports
     class_attribute :report_name
 
     def initialize(output: $stdout)
-      PaperTrail.enabled = false # disable versioning for imports
+      # PaperTrail.enabled = false # disable versioning for imports
       @output = output
-      @source_file = SacImports::CsvSource.new(source_file)
+      @source_file = SacImports::CsvSource.new(source_file, source_dir: Pathname.new("/home/dilli/nextcloud-puzzle/projects/hitobito/hit-sac-cas"))
       @csv_report = SacImports::CsvReport.new(report_name, REPORT_HEADERS, output:)
     end
 

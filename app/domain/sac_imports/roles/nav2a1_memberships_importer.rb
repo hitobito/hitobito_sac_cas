@@ -15,8 +15,8 @@ module SacImports::Roles
       role = Group::SektionsMitglieder::Mitglied.unscoped.where(
         group: membership_group,
         person: person,
-        start_on: row.valid_from,
-        end_on: row.valid_until
+        start_on: row.start_on,
+        end_on: row.end_on
       ).first_or_initialize(
         beitragskategorie: beitragskategorie,
         family_id: row.family_id

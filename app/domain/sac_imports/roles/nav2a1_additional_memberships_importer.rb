@@ -16,8 +16,8 @@ module SacImports::Roles
         group: membership_group,
         person: person,
         beitragskategorie: beitragskategorie,
-        start_on: row.valid_from,
-        end_on: row.valid_until
+        start_on: row.start_on,
+        end_on: row.end_on
       ).first_or_initialize(
         beitragskategorie: beitragskategorie
       )
