@@ -128,6 +128,12 @@ namespace :sac_imports do
     Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2a3-families")
   end
 
+  desc "NAV2a Import former members history"
+  task "nav2a-4_former_members_history": :setup do
+    SacImports::Nav2a4FormerMembersHistoryImporter.new.create
+    Rake::Task["sac_imports:dump_database"].execute(dump_name: "nav2a1-roles-membership")
+  end
+
   desc "Update family addresses to be the same as the main person"
   task update_sac_family_address: :setup do
     SacImports::FamilyAddressUpdater.new.update

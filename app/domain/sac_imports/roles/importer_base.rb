@@ -46,6 +46,8 @@ module SacImports::Roles
 
       report_person_not_found(row)
       nil
+    rescue ActiveRecord::ConnectionTimeoutError
+      retry
     end
 
     def dates_valid?(row)
