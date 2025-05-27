@@ -71,7 +71,7 @@ describe RolesController do
         end
       end
 
-      it "does not destroy family neuanmeldung roles in other layer" do
+      it "replaces family neuanmeldung roles in other layer with new beitragskategorie" do
         household.add(people(:mitglied))
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
 
@@ -79,7 +79,11 @@ describe RolesController do
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
-        expect(Role.where(id: depending_role.id)).to be_present
+        expect(Role.where(id: depending_role.id)).not_to be_present
+        new_role = Role.find_by(person_id: depending_role.person_id)
+        expect(new_role).to be_present
+        expect(new_role.beitragskategorie).to eq "youth"
+        expect(new_role.group).to eq depending_role.group
       end
     end
 
@@ -95,7 +99,12 @@ describe RolesController do
         delete :destroy, params: {group_id: group.id, id: role.id}
 
         depending_roles.each do |depending_role|
-          expect(Role.where(id: depending_role.id)).to be_present
+          if depending_role.beitragskategorie == "family"
+            expect(Role.where(id: depending_role.id)).not_to be_present
+          end
+          new_role = Role.find_by(person_id: depending_role.person_id)
+          expect(new_role).to be_present
+          expect(new_role.group).to eq depending_role.group
         end
       end
     end
