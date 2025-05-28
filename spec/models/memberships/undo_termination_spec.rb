@@ -10,24 +10,29 @@ require "spec_helper"
 describe Memberships::UndoTermination, versioning: true do
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
+  # run the block with a distinct random or specified mutation_id
   def mutation(mutation_id = Random.uuid)
     PaperTrail.request(controller_info: {mutation_id: mutation_id}) { yield }
   end
 
-  def terminate(role, terminate_on: Date.current.yesterday)
+  def terminate(role, terminate_on: Date.current.yesterday, **opts)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id
+      role, terminate_on,
+      termination_reason_id: termination_reasons(:deceased).id,
+      **opts
     )
     expect(termination).to be_valid
     termination.save!
     role.reload
   end
 
-  let(:person) { Fabricate(:person) }
-  let(:role) {
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-      person: person, group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago)
+  let!(:person) { Fabricate(:person) }
+  let!(:role) {
+    mutation do # ensure we have mutation_id distinct from the one of the subject
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+        person: person, group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago)
+    end
   }
 
   subject { described_class.new(role) }
@@ -87,8 +92,8 @@ describe Memberships::UndoTermination, versioning: true do
     end
   end
 
-  describe "#role_versions" do
-    it "returns all versions of roles with matching mutation_id" do
+  describe "#updated_role_versions" do
+    it "returns all updated versions of roles with matching mutation_id" do
       mutation("relevant mutations") do
         terminate(role)
 
@@ -107,8 +112,8 @@ describe Memberships::UndoTermination, versioning: true do
       # make sure our setup is correct and mutation_id returns the expected value
       expect(subject.mutation_id).to eq("relevant mutations")
 
-      expect(subject.role_versions).to all have_attributes(mutation_id: "relevant mutations")
-      expect(subject.role_versions.map(&:reify)).to match_array [
+      expect(subject.updated_roles_versions).to all have_attributes(mutation_id: "relevant mutations")
+      expect(subject.updated_roles_versions.map(&:reify)).to match_array [
         role, roles(:familienmitglied_kind), roles(:abonnent_alpen)
       ]
     end
@@ -119,7 +124,7 @@ describe Memberships::UndoTermination, versioning: true do
         terminate(:familienmitglied)
       end
 
-      expect(subject.role_versions).to be_empty
+      expect(subject.updated_roles_versions).to be_empty
     end
 
     it "returns the first version with matching mutation_id when multiple exist" do
@@ -133,8 +138,29 @@ describe Memberships::UndoTermination, versioning: true do
         terminate(role)
         expect(role.versions).to have(4).items
 
-        expect(subject.role_versions).to eq [expected_version]
+        expect(subject.updated_roles_versions).to eq [expected_version]
       end
+    end
+  end
+
+  describe "#created_role_versions" do
+    it "returns all versions of created roles with matching mutation_id" do
+      mutation("relevant mutations") do
+        # instant termination with data_retention_consent creates a BasicLogin role:
+        terminate(role, data_retention_consent: true)
+        # lets create another role with the same mutation_id:
+        Group::ExterneKontakte::Kontakt.create!(
+          person: role.person,
+          group: groups(:externe_kontakte)
+        )
+      end
+
+      expect(subject.created_roles_versions).to have(2).items
+      expect(subject.created_roles_versions.map { _1.item&.class&.sti_name })
+        .to contain_exactly(
+          "Group::ExterneKontakte::Kontakt",
+          "Group::AboBasicLogin::BasicLogin"
+        )
     end
   end
 
@@ -159,21 +185,22 @@ describe Memberships::UndoTermination, versioning: true do
 
       # paper_trail #reify is used behind-the-scenes and it clears the `updated_at` timestamp,
       # so we must ignore it here
-      expect(restored_role.attributes.except("updated_at"))
-        .to eq original_attributes.except("updated_at")
+      expect(restored_role.attributes.except("updated_at", "start_on"))
+        .to eq original_attributes.except("updated_at", "start_on")
     end
 
     it "returns the role with its original values when role was updated multiple times in the same mutation" do
+      role.update!(label: "original label")
+      expect(role.versions).to have(2).item
+
       mutation("multiple versions with same mutation id") do
-        expect(role.versions).to have(1).item
-        original_start_on = role.start_on
-        role.update!(start_on: original_start_on - 10.years)
+        role.update!(label: "fresh label")
         terminate(role)
-        role.update!(start_on: original_start_on - 5.years)
-        expect(role.versions).to have(4).items
+        role.update!(label: "final label")
+        expect(role.versions).to have(5).items
 
         expect(subject.restored_roles).to match_array [role]
-        expect(subject.restored_roles.first.start_on).to eq original_start_on
+        expect(subject.restored_roles.first.label).to eq "original label"
       end
     end
 
@@ -196,6 +223,17 @@ describe Memberships::UndoTermination, versioning: true do
 
       expect(subject.restored_roles).to match_array [role]
       expect(subject.restored_roles.first.end_on).to eq extended_end_on
+    end
+
+    it "returns the role with current start_on if it was changed in a later mutation" do
+      new_start_on = 10.years.ago.to_date
+
+      mutation { terminate(role, terminate_on: 1.day.ago) }
+      mutation { role.update!(start_on: new_start_on) } # <- changed after termination
+
+      expect(subject.restored_roles).to match_array [role]
+      restored_role = subject.restored_roles.find { _1 == role }
+      expect(restored_role.start_on).to eq new_start_on
     end
   end
 
@@ -234,6 +272,27 @@ describe Memberships::UndoTermination, versioning: true do
 
       restored_person = subject.restored_people.find { |p| p.id == role.person.id }
       expect(restored_person).to be_sac_family_main_person
+    end
+  end
+
+  describe "#roles_to_destroy" do
+    it "returns the roles created by the termination" do
+      other_created_role = nil
+      mutation("relevant mutations") do
+        # instant termination with data_retention_consent creates a BasicLogin role:
+        terminate(role, data_retention_consent: true)
+        # lets create another role with the same mutation_id:
+        other_created_role = Group::ExterneKontakte::Kontakt.create!(
+          person: role.person,
+          group: groups(:externe_kontakte)
+        )
+      end
+
+      expect(subject.roles_to_destroy).to have(2).items
+      expect(subject.roles_to_destroy).to contain_exactly(
+        other_created_role,
+        be_a(Group::AboBasicLogin::BasicLogin)
+      )
     end
   end
 
@@ -299,7 +358,7 @@ describe Memberships::UndoTermination, versioning: true do
         end
 
         mutation do
-          role.update!(start_on: role.start_on - 1.day) # <- mutation after termination
+          role.update!(label: "new label") # <- mutation after termination
         end
 
         expect(role.versions).to have(3).items
@@ -393,6 +452,18 @@ describe Memberships::UndoTermination, versioning: true do
 
       expect(new_person).to be_persisted
       expect(new_role).to be_persisted
+    end
+
+    it "destroys #roles_to_destroy" do
+      # instant termination with data_retention_consent creates a BasicLogin role:
+      expect { terminate(role, data_retention_consent: true) }
+        .to change { Group::AboBasicLogin::BasicLogin.count }.by(1)
+      created_role = Group::AboBasicLogin::BasicLogin.last
+      expect(subject.roles_to_destroy).to contain_exactly created_role
+
+      subject.save!
+
+      expect { Role.unscoped.find(created_role.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     context "for family membership" do
