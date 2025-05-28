@@ -10,6 +10,7 @@ require "spec_helper"
 describe Memberships::UndoTermination, versioning: true do
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
+  # run the block with a distinct random or specified mutation_id
   def mutation(mutation_id = Random.uuid)
     PaperTrail.request(controller_info: {mutation_id: mutation_id}) { yield }
   end
@@ -28,8 +29,10 @@ describe Memberships::UndoTermination, versioning: true do
 
   let!(:person) { Fabricate(:person) }
   let!(:role) {
-    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
-      person: person, group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago)
+    mutation do # ensure we have mutation_id distinct from the one of the subject
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+        person: person, group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago)
+    end
   }
 
   subject { described_class.new(role) }
@@ -449,6 +452,18 @@ describe Memberships::UndoTermination, versioning: true do
 
       expect(new_person).to be_persisted
       expect(new_role).to be_persisted
+    end
+
+    it "destroys #roles_to_destroy" do
+      # instant termination with data_retention_consent creates a BasicLogin role:
+      expect { terminate(role, data_retention_consent: true) }
+        .to change { Group::AboBasicLogin::BasicLogin.count }.by(1)
+      created_role = Group::AboBasicLogin::BasicLogin.last
+      expect(subject.roles_to_destroy).to contain_exactly created_role
+
+      subject.save!
+
+      expect { Role.unscoped.find(created_role.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     context "for family membership" do
