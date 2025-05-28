@@ -29,7 +29,7 @@
       = f.date_field(:sent_at, value: I18n.l(entry.sent_at || Date.current))
     = f.labeled(t(".abo_group")) do
       - @abo_magazin_roles.each_with_index do |role, index|
-        - label = role.decorate.name_with_group_and_period
+        - label = "#{role.group}: #{role.to_s(:short)} (#{l(role.created_at.to_date)} - #{l(role.end_on)})"
         = f.inline_radio_button :link_id, role.id, label, false, checked: (index == 0), onchange: "document.querySelectorAll('[id=external_invoice_issued_at]').forEach(element => {element.value = '#{I18n.l((role.type == Group::AboMagazin::Neuanmeldung.sti_name ? role.start_on : role.end_on&.next_day) || Date.current)}'; });"
 
     = f.indented do

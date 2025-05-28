@@ -19,12 +19,11 @@ class People::AboMagazinInvoicesController < CrudController
 
   def create
     if person.data_quality != "error"
-      entry.link_type = Group
-      entry.issued_at = role_of_selected_magazin.then { (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day }
-      entry.year = entry.issued_at&.year
-      super.then do
-        Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry, role_of_selected_magazin.id).enqueue!
-      end
+      entry.link_type = Role
+      entry.issued_at = issued_at
+      entry.year = issued_at.year
+      super
+      Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry, role.id).enqueue!
     else
       mark_with_error_and_redirect
     end
@@ -59,7 +58,13 @@ class People::AboMagazinInvoicesController < CrudController
 
   def group = @group ||= Group.find(params[:group_id])
 
-  def role_of_selected_magazin = @role_of_selected_magazin ||= abo_magazin_roles.where(group_id: permitted_params[:link_id]).first
+  def role = @role ||= Role.find(permitted_params[:link_id])
+
+  def issued_at
+    return role.start_on if role.is_a?(Group::AboMagazin::Neuanmeldung)
+
+    role.end_on&.next_day || Date.current
+  end
 
   def abo_magazin_roles
     @abo_magazin_roles ||= person.sac_membership.recent_abonnent_magazin_roles
