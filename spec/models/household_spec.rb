@@ -25,10 +25,6 @@ describe Household do
 
   def sequence = Sequence.by_name(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE)
 
-  before do
-    travel_to(Date.new(2024, 5, 31))
-  end
-
   def add_and_save(*members)
     members.each { |member| household.add(member) }
     expect(household.save).to eq(true), household.errors.full_messages.join(", ")
