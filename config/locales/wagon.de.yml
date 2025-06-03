@@ -33,6 +33,7 @@ de:
     messages:
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
       too_young: muss %{minimum_years} Jahre oder älter sein
+      too_old: muss %{maximum_years} Jahre oder jünger sein
       assert_old_enough_with_age: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
       conflicting_family_membership: >-
         %{name} hat bereits eine Familienmitgliedschaft und kann daher
