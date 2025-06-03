@@ -45,7 +45,7 @@ module SacCas::GroupDecorator
     end
   end
 
-  def possible_roles(action = nil, person = nil)
+  def possible_roles(*)
     super.select do |type|
       SacCas::WIZARD_MANAGED_ROLES.exclude?(type)
     end
