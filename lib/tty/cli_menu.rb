@@ -71,7 +71,7 @@ module TTY
     def print_menu
       puts # Ensure a blank line before the menu
 
-      keys_length = @menu_actions.keys.map { _1.length }.max
+      keys_length = @menu_actions.keys.map { _1.to_s.length }.max
 
       @menu_actions.each do |key, args|
         args in { description:, action:, **format }
@@ -117,7 +117,7 @@ module TTY
     # Executes the action or prints an error message.
     # Actions can raise CliMenu::ExitMenu to stop the menu loop.
     def handle_choice(choice)
-      action_config = @menu_actions[choice]
+      action_config = @menu_actions.transform_keys { _1.to_s }[choice]
 
       unless action_config
         puts red(format(@invalid_choice_message, choice))
