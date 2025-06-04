@@ -90,32 +90,33 @@ describe Invoices::Abacus::SubjectInterface do
 
   it "creates address and customer if missing in abacus" do
     person.abacus_subject_key = person.id
-    stub_request(:get, "#{host}/api/entity/v1/mandants/#{mandant}/Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers")
-      .with(
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
-      .to_return(status: 200, body: {
-        "@odata.context" => "#{host}/api/entity/v1/mandants/#{mandant}/$metadata#Subjects(Addresses,Communications,Customers)/$entity",
-        "@odata.etag" => "W/\"2fdc485e7234e20bd9df6f58270f957ca5ca9d44507b20b9ffeac5dd58d29962\"",
-        "Id" => person.id, "FirstName" => "Emma", "Name" => "Hillary", "Title" => "", "NameSupplement" => "", "Language" => "de",
-        "ChangeInformation" => {"CreatedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "CreatedOn" => "2024-05-08T16:31:08.669+02:00",
-                                "ChangedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "ChangedOn" => "2024-05-08T16:31:08.669+02:00"},
-        "Status" => "Active", "Remark" => "", "Key" => "6c4b3c5c-91c2-c212-9538-a6a253da66c8", "RegisteredCompanyUid" => "",
-        "Type" => "Person", "TaxIdSwitzerland" => "", "TaxIdEuropeanUnion" => "", "NogaCodeId" => "", "DateOfBirth" => nil,
-        "Source" => "", "NamePrefix" => "", "NameSuffix" => "", "Salutation" => "Sehr geehrte Frau", "SalutationId" => 2,
-        "UserFields" => {"UserField1" => ""},
-        "Addresses" => [],
-        "Communications" => [{
-          "@odata.etag" => "W/\"f86b82e3bbf253df0eb29c2406cb3619d611d9300d1cd7daa8a3f0403857ad90\"",
-          "Id" => "ef83129d-470d-ef01-1ff3-001dd8b72ba4", "SubjectId" => person.id, "LinkId" => nil, "Type" => "EMail",
-          "Value" => "emma.hillary@hitobito.example.com", "Standard" => true, "Category" => "Private", "Note" => "", "Purpose" => []
-        }],
-        "Customers" => []
-      }.to_json)
+    subject_response = get_subject_response
+    subject_response["FirstName"] = "Emma"
+    subject_response["Addresses"] = []
+    subject_response["Communications"].first["Value"] = "emma.hillary@hitobito.example.com"
+    subject_response["Customers"] = []
+    path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
+    stub_simple_request(:get, path, nil, subject_response.to_json)
     stub_update_subject_request
     stub_create_address_request
     stub_update_communication_request("ef83129d-470d-ef01-1ff3-001dd8b72ba4")
     stub_create_customer_request
+
+    interface.transmit(subject)
+  end
+
+  it "updates address and deletes email" do
+    person.abacus_subject_key = person.id
+    person.email = ""
+
+    subject_response = get_subject_response
+    subject_response["Addresses"].first["City"] = "Thun"
+    subject_response["Addresses"].first["PostCode"] = "3600"
+    subject_response["Addresses"].first["PostOfficeBoxText"] = ""
+    path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
+    stub_simple_request(:get, path, nil, subject_response.to_json)
+    stub_create_address_request
+    stub_simple_request(:delete, "Communications(Id=ef83129d-470d-ef01-1ff3-001dd8b72ba4)", nil)
 
     interface.transmit(subject)
   end
@@ -314,7 +315,7 @@ describe Invoices::Abacus::SubjectInterface do
 
   def stub_get_subject_request
     path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
-    stub_simple_request(:get, path, nil, get_subject_response)
+    stub_simple_request(:get, path, nil, get_subject_response.to_json)
   end
 
   def stub_get_non_existing_subject_request
@@ -385,7 +386,7 @@ describe Invoices::Abacus::SubjectInterface do
                                "SendAccountStatement" => false, "BlockedReasonId" => 0, "DispatchType" => "Letter", "GracePeriodDays" => 0},
         "CustomerNote" => []
       }]
-    }.to_json
+    }
   end
 
   def fetch_batch_body
