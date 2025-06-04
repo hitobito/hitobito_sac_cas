@@ -80,6 +80,7 @@ module Invoices
         update_subject(subject, remote)
         update_address(subject, remote[:addresses])
         update_communications(subject, remote[:communications])
+        delete_missing_communications(subject, remote[:communications])
         update_customer(subject, remote[:customers])
       end
 
@@ -160,6 +161,13 @@ module Invoices
             client.create(:communication, attrs)
           end
         end
+      end
+
+      def delete_missing_communications(subject, communications)
+        types = subject.communication_attrs.pluck(:type).uniq
+        communications
+          .reject { |c| types.include?(c.fetch(:type)) }
+          .each { |c| client.delete(:communication, c.fetch(:id)) }
       end
 
       def create_customer(subject)
