@@ -18,6 +18,7 @@ module TTY
       "p" => TTY::Memberships::PromoteNeuanmeldung,
       "s" => TTY::Memberships::SwapStammsektion,
       "u" => TTY::Memberships::UndoTermination,
+      "e" => TTY::Memberships::EditRole
     }.freeze
 
     def run
@@ -25,7 +26,6 @@ module TTY
         break unless CliMenu.new(menu_actions: MENU_ACTIONS).run
       end
     end
-
   end
 end
 
