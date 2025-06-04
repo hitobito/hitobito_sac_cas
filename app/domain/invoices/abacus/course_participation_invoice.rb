@@ -62,7 +62,8 @@ module Invoices
       end
 
       def article_number
-        SacMembershipConfig.active(course_start_date).course_fee_article_number
+        [SacMembershipConfig.active(course_start_date).course_fee_article_number,
+          event.kind.cost_center.code].join
       end
 
       def position_description_and_amount

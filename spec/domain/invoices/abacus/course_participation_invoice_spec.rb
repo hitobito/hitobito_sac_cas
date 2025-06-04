@@ -39,7 +39,7 @@ describe Invoices::Abacus::CourseParticipationInvoice do
       expect(position.grouping).to eq("Normalpreis - Einstiegskurs")
       expect(position.amount).to eq(20)
       expect(position.count).to eq(1)
-      expect(position.article_number).to eq("49")
+      expect(position.article_number).to eq("49kurs-1")
       expect(position.cost_center).to eq("kurs-1")
       expect(position.cost_unit).to eq("ski-1")
     end

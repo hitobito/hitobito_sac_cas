@@ -22,7 +22,6 @@ describe Invoices::Abacus::MembershipInvoiceGenerator do
   context "for mitglied" do
     let(:person) { people(:mitglied) }
 
-    # TODO - smells wrong, shouldnt we only be billing stammsektion here?
     it "returns both stammsektion and zusatzsektion memberships" do
       invoice = generator.build
       expect(invoice.memberships).to have(2).items

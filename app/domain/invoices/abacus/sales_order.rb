@@ -89,9 +89,18 @@ module Invoices
           # sales_order_backlog_id: BACKLOG_ID,
           position_number: index,
           type: TYPE,
-          pricing: {price_after_finding: position.amount.to_f.round(2)},
-          quantity: {ordered: position.count, charged: position.count, delivered: position.count},
-          product: {description: position.name, product_number: position.article_number.to_s},
+          pricing: {
+            price_after_finding: position.amount.to_f.round(2)
+          },
+          quantity: {
+            ordered: position.count,
+            charged: position.count,
+            delivered: position.count
+          },
+          product: {
+            description: position.name.to_s[0, 100],
+            product_number: position.article_number.to_s[0, 100]
+          },
           accounts: position_accounts_fields(position),
           user_fields: position_user_fields(position)
         }
