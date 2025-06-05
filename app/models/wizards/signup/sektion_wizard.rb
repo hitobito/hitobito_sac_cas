@@ -53,6 +53,17 @@ module Wizards::Signup
 
     private
 
+    def build_person
+      super unless current_user&.backoffice?
+
+      Person.new(person_attributes).tap do |person|
+        person.language = I18n.locale
+        person.primary_group = group
+        role = person.roles.build(group: group, type: group.self_registration_role_type)
+        yield person, role if block_given?
+      end
+    end
+
     # As we might save multiple people we delegate validation to operations
     # person itself can be invalid as operation handles aspects (e.g role start_on and gender I18nEnum::NIL_KEY)
     def person_valid? = operations_valid?
@@ -70,7 +81,7 @@ module Wizards::Signup
 
     def operations
       @operation ||= people_attrs.map do |person_attrs|
-        SektionOperation.new(person_attrs:, group:, newsletter:)
+        SektionOperation.new(person_attrs:, group:, newsletter:, skip_confirmation_mail:, skip_invoice:)
       end
     end
 
@@ -112,6 +123,10 @@ module Wizards::Signup
     def read_birthdays
       members.map(&:birthday).unshift(birthday).compact_blank.map { |birthday| I18n.l(birthday) }.shuffle
     end
+
+    def skip_confirmation_mail = current_user&.backoffice? && step(:summary_fields).skip_confirmation_mail
+
+    def skip_invoice = current_user&.backoffice? && step(:summary_fields).skip_invoice
 
     def step_after(step_name_or_class)
       if step_name_or_class == :_start && current_user

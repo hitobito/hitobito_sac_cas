@@ -15,3 +15,11 @@
     = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?
 
     = content_tag(:div, form.object.info_alert_text, class: "alert alert-info mt-3")
+
+    - if current_user&.backoffice?
+      = form.label(:skip_confirmation_mail, class: 'd-block mt-2') do
+        = form.check_box :skip_confirmation_mail
+        = t('.skip_confirmation_mail_caption')
+      = form.label(:skip_invoice, class: 'd-block mt-2') do
+        = form.check_box :skip_invoice
+        = t('.skip_invoice_caption')
