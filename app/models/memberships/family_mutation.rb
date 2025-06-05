@@ -59,16 +59,24 @@ module Memberships
       end
     end
 
-    private
-
-    def ensure_can_change_zusatzsektion_to_family(role)
-      person.roles.include?(role) &&
-        person.sac_family_main_person &&
-        role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
+    def can_change_zusatzsektion_to_family?(role)
+      zusatzsektion_role?(role) &&
         role.active? &&
         !role.terminated? &&
         !role.family? &&
-        role.person.sac_membership.family? ||
+        role.person.sac_membership.family? &&
+        person.sac_family_main_person &&
+        person.roles.include?(role)
+    end
+
+    private
+
+    def zusatzsektion_role?(role)
+      ZUSATZSEKTION_ROLES.include?(role.class)
+    end
+
+    def ensure_can_change_zusatzsektion_to_family(role)
+      can_change_zusatzsektion_to_family?(role) ||
         raise("not able to change zusatzsektion to family")
     end
 
