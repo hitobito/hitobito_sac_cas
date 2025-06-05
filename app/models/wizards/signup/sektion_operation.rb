@@ -11,6 +11,8 @@ module Wizards::Signup
 
     def initialize(group:, person_attrs:, newsletter:, skip_confirmation_mail:, skip_invoice:)
       @group = group
+      raise "Group must be a Sektion Neuanmeldungen Group" unless sektions_neuanmeldung?
+
       person_attrs[:gender] = nil if person_attrs[:gender] == I18nEnums::NIL_KEY
       @person_attrs = person_attrs
       @newsletter = newsletter
@@ -76,15 +78,31 @@ module Wizards::Signup
     end
 
     def build_role
-      g = generate_invoice? ? group : group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
-      e = generate_invoice? ? (today unless neuanmeldung?) : Date.current.end_of_year
       Role.new(
-        person: person,
-        group: g,
+        person:,
+        group: role_group,
         type: role_type,
         start_on: today,
-        end_on: e
+        end_on:
       )
+    end
+
+    def neuanmeldungen_group = group
+
+    def mitglieder_group = group.siblings.find_by(type: Group::SektionsMitglieder.sti_name)
+
+    def role_group = activate_immediately? ? mitglieder_group : neuanmeldungen_group
+
+    def end_on = activate_immediately? ? Date.current.end_of_year : nil
+
+    def person_attrs
+      @person_attrs ||= {}
+    end
+
+    def person
+      @person ||= build_or_find_person.tap do |p|
+        p.attributes = person_attrs
+      end
     end
 
     def generate_invoice
@@ -113,22 +131,24 @@ module Wizards::Signup
       Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group, role.beitragskategorie).deliver_later
     end
 
-    def neuanmeldung?
+    def sektions_neuanmeldung?
       group.is_a?(Group::SektionsNeuanmeldungenSektion) ||
         group.is_a?(Group::SektionsNeuanmeldungenNv)
     end
 
     def today = @today ||= Date.current
 
-    def role_type = generate_invoice? ? group.self_registration_role_type : Group::SektionsMitglieder::Mitglied
+    def role_type = activate_immediately? ? Group::SektionsMitglieder::Mitglied : group.self_registration_role_type
 
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
 
-    def new_record? = person_attrs[:id].blank?
+    def new_record? = person_attrs[:id].blank? || backoffice?
 
     def no_approval_needed? = role.group.layer_group.decorate.membership_admission_through_gs?
 
-    def generate_invoice? = !@skip_invoice
+    def activate_immediately? = !!@skip_invoice
+
+    def generate_invoice? = !activate_immediately?
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!
