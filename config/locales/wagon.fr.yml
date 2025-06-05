@@ -33,6 +33,7 @@ fr:
     messages:
       assert_old_enough: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       too_young: "doit être âgé·e de %{minimum_years} ans ou plus"
+      too_old: "muss %{maximum_years} Jahre oder jünger sein"
       assert_old_enough_with_age: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       conflicting_family_membership: >-
         %{name} a déjà une adhésion familiale et ne peut donc pas être ajouté·e à un ménage familial.

@@ -33,6 +33,7 @@ it:
     messages:
       assert_old_enough: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       too_young: "deve avere almeno %{minimum_years} anni"
+      too_old: "muss %{maximum_years} Jahre oder jünger sein"
       assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
