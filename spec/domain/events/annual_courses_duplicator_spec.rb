@@ -29,21 +29,17 @@ describe SacCas::Events::AnnualCoursesDuplicator do
   end
 
   context "#courses_to_duplicate" do
-    it "finds courses with annual in source year" do
-      courses_to_duplicate = duplicator.send(:courses_to_duplicate)
+    let(:courses_to_duplicate) { duplicator.send(:courses_to_duplicate) }
 
+    it "finds courses with annual in source year" do
       expect(courses_to_duplicate).to match_array(annual_courses_in_source_year)
     end
 
     it "does not find courses without annual in source year" do
-      courses_to_duplicate = duplicator.send(:courses_to_duplicate)
-
       expect(courses_to_duplicate).to_not include(non_annual_courses_in_source_year)
     end
 
     it "does not find courses with annual in other year" do
-      courses_to_duplicate = duplicator.send(:courses_to_duplicate)
-
       expect(courses_to_duplicate).to_not include(annual_courses_in_other_year)
     end
   end

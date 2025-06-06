@@ -14,8 +14,7 @@ class SacCas::Events::AnnualCoursesDuplicator
   def run
     Event::Course.transaction do
       courses_to_duplicate.find_each do |course|
-        duplicate = SacCas::Events::AnnualCourseDuplicateBuilder.new(course, @target_year).build
-        duplicate.save!
+        SacCas::Events::AnnualCourseDuplicateBuilder.new(course, @target_year).create!
       end
     end
   end
