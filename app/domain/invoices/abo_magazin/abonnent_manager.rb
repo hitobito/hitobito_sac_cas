@@ -6,15 +6,19 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Invoices::AboMagazin::AbonnentManager
-  attr_reader :person, :group
+  attr_reader :person, :group_or_role
 
   ABONNENT_ROLE_TYPE = Group::AboMagazin::Abonnent
   NEUANMELDUNG_ABONNENT_ROLE_TYPE = Group::AboMagazin::Neuanmeldung
 
-  def initialize(person, group)
+  def initialize(person, group_or_role)
     @person = person
-    @group = group
+    @group_or_role = group_or_role
   end
+
+  def group = group_or_role.is_a?(Group) ? group_or_role : group_or_role.group
+
+  def role = group_or_role.is_a?(Role) ? group_or_role : nil
 
   def update_abonnent_status
     ActiveRecord::Base.transaction do
@@ -33,13 +37,26 @@ class Invoices::AboMagazin::AbonnentManager
 
   private
 
-  def abonnent_role = @abonnent_role ||= person.roles.where(type: ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  def abonnent_role = @abonnent_role ||= find_role(ABONNENT_ROLE_TYPE, :active?)
 
-  def expired_abonnent_role = @expired_abonnent_role ||= person.roles.with_inactive.where(type: ABONNENT_ROLE_TYPE.sti_name, group: group, end_on: 1.year.ago..Time.zone.today).first
+  def expired_abonnent_role = @expired_abonnent_role ||= find_role(ABONNENT_ROLE_TYPE, :ended?, 1.year.ago..Time.zone.today)
 
-  def neuanmeldung_abonnent_role = @neuanmeldung_abonnent_role ||= person.roles.where(type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  def neuanmeldung_abonnent_role = @neuanmeldung_abonnent_role ||= find_role(NEUANMELDUNG_ABONNENT_ROLE_TYPE, :active?)
 
-  def expired_neuanmeldung_abonnent_role = @expired_neuanmeldung_abonnent_role ||= person.roles.with_inactive.where(type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  def expired_neuanmeldung_abonnent_role = @expired_neuanmeldung_abonnent_role ||= find_role(NEUANMELDUNG_ABONNENT_ROLE_TYPE, :ended?)
+
+  def find_role(role_type, status, date_range = nil)
+    role_matches?(role, status) ? role : role_by_type(role_type, status, date_range)
+  end
+
+  def role_matches?(role, status) = role.is_a?(role_type) && role.public_send(status)
+
+  def role_by_type(role_type, status, date_range)
+    query = person.roles.where(type: role_type.sti_name, group: group)
+    query = query.with_inactive if status == :ended?
+    query = query.where(end_on: date_range) if date_range
+    query.first
+  end
 
   def extend_role_by_one_year(role)
     role.update!(end_on: role.end_on + 1.year)
