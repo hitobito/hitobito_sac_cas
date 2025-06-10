@@ -8,13 +8,14 @@
 module SacCas::QualificationAbility
   extend ActiveSupport::Concern
 
-  TOURENCHEF_ROLE_TYPES = [
-    Group::SektionsTourenUndKurseSommer::Tourenchef,
-    Group::SektionsTourenUndKurseWinter::Tourenchef,
+  PERMISSION_GIVING_ROLE_TYPES = [
+    *SacCas::TOURENCHEF_ROLES,
     Group::SektionsFunktionaere::Administration
-  ].map(&:sti_name)
+  ]
 
   included do
+    prepend SacCas::AbilityDsl::Constraints::MatchingRoles
+
     on(Qualification) do
       permission(:any).may(:create, :destroy).for_tourenchef_qualification_as_tourenchef_in_layer
       permission(:layer_and_below_full).may(:create, :destroy).permission_in_top_layer
@@ -23,26 +24,10 @@ module SacCas::QualificationAbility
 
   def for_tourenchef_qualification_as_tourenchef_in_layer
     (subject.qualification_kind.nil? || subject.qualification_kind.tourenchef_may_edit?) &&
-      as_tourenchef_in_layer
-  end
-
-  def as_tourenchef_in_layer
-    return unless can_show_person?
-
-    contains_any?(tourenchef_layer_group_ids,
-      subject.person.layer_group_ids)
-  end
-
-  def tourenchef_layer_group_ids
-    user.roles.where(type: TOURENCHEF_ROLE_TYPES)
-      .includes(:group).collect { _1.group.layer_group_id }.uniq
+      matching_roles_in_same_layer(user_role_types: PERMISSION_GIVING_ROLE_TYPES)
   end
 
   def permission_in_top_layer
     permission_in_layer?(Group.root.id)
-  end
-
-  def can_show_person?
-    Ability.new(user).can?(:show_full, subject.person)
   end
 end
