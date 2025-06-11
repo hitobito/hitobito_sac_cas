@@ -33,6 +33,12 @@ module SacCas::Event::KindsController
     redirect_to edit_event_kind_path(entry), flash: {notice: t(".success")}
   end
 
+  def push_down_field
+    authorize!(:update, entry)
+    entry.push_down_inherited_attribute!(params[:field])
+    render json: {notice: t(".success", field: Event::Kind.human_attribute_name(params[:field]))}
+  end
+
   private
 
   def load_assocations

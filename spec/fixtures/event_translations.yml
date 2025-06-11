@@ -9,7 +9,6 @@ top_event_de:
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
   updated_at: 2023-05-09 13:28:24 +0200
-
   name: Top Event
 
 top_course_de:
@@ -17,16 +16,14 @@ top_course_de:
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
   updated_at: 2023-05-09 13:28:24 +0200
-
   name: Tourenleiter/in 1 Sommer
   description: Tourenleiter/in 1 Sommer
 
-closed_de:
-  event_id: <%= ActiveRecord::FixtureSet.identify(:closed) %>
+application_closed_de:
+  event_id: <%= ActiveRecord::FixtureSet.identify(:application_closed) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
   updated_at: 2023-05-09 13:28:24 +0200
-
   name: Tourenleiter/in 1 Winter
   description: Tourenleiter/in 1 Winter
 
@@ -35,6 +32,5 @@ section_tour_de:
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
   updated_at: 2023-05-09 13:28:24 +0200
-
   name: Bundstock
   description: Winterzauber im wunderschönen Kiental
