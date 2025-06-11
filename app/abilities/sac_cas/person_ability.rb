@@ -8,8 +8,10 @@
 
 module SacCas::PersonAbility
   extend ActiveSupport::Concern
+  prepend SacCas::AbilityDsl::Constraints::MatchingRoles
 
   prepended do
+
     on(Person) do
       class_side(:create_households).if_backoffice
       permission(:read_all_people)
@@ -26,6 +28,7 @@ module SacCas::PersonAbility
       permission(:any)
         .may(:set_sac_family_main_person)
         .if_person_is_adult_and_has_email_and_all_household_members_writable
+      permission(:any).may(:update).if_user_is_tourenchef_and_subject_is_mitglied
       permission(:any).may(:show_remarks).if_backoffice_or_functionary
       permission(:any).may(:manage_national_office_remark).if_backoffice
       permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
@@ -53,6 +56,13 @@ module SacCas::PersonAbility
 
   def if_section_functionary
     SacCas::SAC_SECTION_FUNCTIONARY_ROLES.any? { |r| role_type?(r) }
+  end
+
+  def if_user_is_tourenchef_and_subject_is_mitglied
+    matching_roles_in_same_layer(
+      user_role_types: SacCas::TOURENCHEF_ROLES,
+      subject_role_types: SacCas::MITGLIED_ROLES
+    )
   end
 
   def if_person_is_adult_and_has_email_and_all_household_members_writable
