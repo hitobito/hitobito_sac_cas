@@ -68,7 +68,7 @@ module Memberships
 
     # return all roles created by the termination
     def roles_to_destroy
-      @roles_to_destroy ||= created_roles_versions.map(&:item)
+      @roles_to_destroy ||= Role.unscoped.where(id: created_roles_versions.map(&:item_id))
     end
 
     # return all people whose roles have been changed by the termination, with their original
