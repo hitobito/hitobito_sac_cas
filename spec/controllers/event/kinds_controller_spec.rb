@@ -39,7 +39,7 @@ describe Event::KindsController do
       get :edit, params: {id: kind.id}
       expect(response).to be_ok
 
-      link = dom.find_link "Daten auf Kurse übertragen"
+      link = dom.find_link "Werte auf Kurse übertragen"
       expect(link[:href]).to eq "/de/event_kinds/#{kind.id}/push_down"
       expect(link[:"data-method"]).to eq "put"
     end
@@ -60,15 +60,29 @@ describe Event::KindsController do
     end.to change { Event::Kind.count }.by(1)
   end
 
-  it "PUT#push_down updates cost models on associated event_kinds" do
+  it "PUT#push_down updates cost models on associated events" do
     course = events(:top_course)
     kind.update(maximum_participants: 10, minimum_participants: 0)
     course.update_columns(state: :created, kind_id: kind.id, minimum_age: 12)
 
     expect do
       put :push_down, params: {id: kind.id}
+      expect(response).to redirect_to(edit_event_kind_path(kind))
     end.to change { course.reload.maximum_participants }.from(nil).to(10)
       .and change { course.minimum_age }
+  end
+
+  it "PUT#push_down_field updates single field on associated events" do
+    course = events(:top_course)
+    kind.update(maximum_participants: 10)
+    course.update_columns(state: :created, kind_id: kind.id)
+
+    expect do
+      put :push_down_field, params: {id: kind.id, field: "maximum_participants"}
+      expect(response).to be_ok
+    end.to change { course.reload.maximum_participants }.from(nil).to(10)
+    json = JSON.parse(response.body)
+    expect(json["notice"]).to eq("Maximale Teilnehmerzahl wurde auf alle aktiven Kurse übertragen.")
   end
 
   context "unauthorized" do

@@ -9,6 +9,8 @@ de:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Jahre
+    link:
+      push_down: Wert auf Kurse übertragen
     links:
       faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
       membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
@@ -1175,25 +1177,35 @@ de:
             other: Es wurden %{count} E-Mails verschickt.
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
-      push_down:
-        success: Die gespeicherten Daten wurden auf alle aktiven Kurse übertragen.
       actions_edit:
-        push_down_button: Daten auf Kurse übertragen
+        push_down_button: Werte auf Kurse übertragen
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Daten auf alle aktiven Kurse
+          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse
           übertragen? Dabei werden die aktuellen Werte überschrieben.
+      form:
+        field_push_down:
+          confirm: >-
+            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse
+            übertragen? Dabei werden die aktuellen Werte überschrieben.
+          alert_unsaved: >-
+            Dieser Wert ist noch nicht gespeichert.
+            Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
       kind_category_field:
         category_overrides_link_title: >-
           Folgende Felder werden übernommen: Kostenstelle, Kostenträger
+      push_down:
+        success: Die gespeicherten Werte wurden auf alle aktiven Kurse übertragen.
+      push_down_field:
+        success: "%{field} wurde auf alle aktiven Kurse übertragen."
     kind_categories:
       push_down:
         success: >-
           Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle
           zugeordneten Kursarten übertragen.
       actions_edit:
-        push_down_button: Daten auf Kursarten übertragen
+        push_down_button: Werte auf Kursarten übertragen
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Daten (Kostenstelle und
+          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und
           Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
           überschrieben.
     lists:
