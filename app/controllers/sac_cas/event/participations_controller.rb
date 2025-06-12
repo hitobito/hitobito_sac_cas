@@ -43,6 +43,7 @@ module SacCas::Event::ParticipationsController
       state: event.maximum_participants_reached? ? :applied : :assigned
     )
 
+    refresh_participant_counts
     redirect_to group_event_participation_path(group, event, entry), notice: t("event.participations.reactivated_notice", participant: entry.person)
   end
 

@@ -593,6 +593,7 @@ describe Event::ParticipationsController do
 
   context "state changes" do
     let(:participation) { Fabricate(:event_participation, event: event) }
+    let!(:event_role) { Event::Course::Role::Participant.create!(participation: participation) }
     let(:params) { {group_id: group.id, event_id: event.id, id: participation.id} }
 
     context "PUT#summon" do
@@ -634,12 +635,19 @@ describe Event::ParticipationsController do
     context "reactivate" do
       before { participation.update!(state: :canceled, cancel_statement: "Keine Lust", canceled_at: Date.current) }
 
-      it "PUT#reactivate sets particpation to applied when maximum participants is reached" do
+      it "PUT#reactivate sets participation to applied when maximum participants is reached" do
         allow_any_instance_of(Event).to receive(:maximum_participants_reached?).and_return(true)
         put :reactivate, params: params
         expect(participation.reload.state).to eq "applied"
         expect(participation.reload.cancel_statement).to be_nil
         expect(participation.reload.canceled_at).to be_nil
+      end
+
+      it "refreshes event participant_count" do
+        event.refresh_participant_counts!
+        expect do
+          put :reactivate, params: params
+        end.to change { event.reload.participant_count }.by(1)
       end
 
       it "PUT#reactivate sets particpation to assigned when maximum participants has not been reached" do
