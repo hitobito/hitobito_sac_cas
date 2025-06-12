@@ -276,11 +276,31 @@ describe Memberships::UndoTermination, versioning: true do
   end
 
   describe "#roles_to_destroy" do
-    it "returns the roles created by the termination" do
+    it "returns the roles created by the termination mutation" do
       other_created_role = nil
       mutation("relevant mutations") do
         # instant termination with data_retention_consent creates a BasicLogin role:
         terminate(role, data_retention_consent: true)
+        # lets create another role with the same mutation_id:
+        other_created_role = Group::ExterneKontakte::Kontakt.create!(
+          person: role.person,
+          group: groups(:externe_kontakte)
+        )
+      end
+
+      expect(subject.roles_to_destroy).to have(2).items
+      expect(subject.roles_to_destroy).to contain_exactly(
+        other_created_role,
+        be_a(Group::AboBasicLogin::BasicLogin)
+      )
+    end
+
+    it "returns created roles with start_on in the future" do
+      other_created_role = nil
+      mutation("relevant mutations") do
+        # termination with data_retention_consent in the future creates a BasicLogin role
+        # with start_on in the future:
+        terminate(role, data_retention_consent: true, terminate_on: Date.current.end_of_year)
         # lets create another role with the same mutation_id:
         other_created_role = Group::ExterneKontakte::Kontakt.create!(
           person: role.person,
