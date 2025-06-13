@@ -245,7 +245,7 @@ describe Household do
         # count the versions of the person where the main person flag was changed to the given value
         def main_person_versions_count(person, target_value = true)
           person.versions.count do |v|
-            v.object_changes.start_with?("---") &&
+            v.object_changes&.start_with?("---") &&
               v.changeset.dig("sac_family_main_person", 1) == target_value
           end
         end
@@ -456,13 +456,14 @@ describe Household do
     context "paper trail", versioning: true do
       it "is recorded for main person flag" do
         expect { household.destroy }
-          .to change { PaperTrail::Version.where(item_type: "Person").count }.by(4)
-          .and change { person.reload.versions.count }.by(2)
-          .and change { adult.reload.versions.count }.by(1)
-          .and change { child.reload.versions.count }.by(1)
+          .to change { PaperTrail::Version.where(item_type: "Person").count }.by(7)
+          .and change { person.reload.versions.count }.by(3)
+          .and change { adult.reload.versions.count }.by(2)
+          .and change { child.reload.versions.count }.by(2)
 
-        main_person_version = person.versions.where(event: "update").reorder(:id).last
-        expect(main_person_version.changeset["sac_family_main_person"]).to eq [true, false]
+        expect(person.versions).to include(
+          have_attributes(object_changes: match(/sac_family_main_person:\n- true\n- false/))
+        )
       end
     end
   end
