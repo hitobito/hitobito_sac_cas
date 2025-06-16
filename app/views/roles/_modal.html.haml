@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-- if SacCas::WIZARD_MANAGED_ROLES.include?(entry.type.constantize)
+- if SacCas::WIZARD_MANAGED_ROLES.include?(entry.type&.constantize)
   = standard_form [group, entry], controller: :roles, action: :update, remote: true  do |f|
     = f.error_messages
     = f.labeled(:label) do
