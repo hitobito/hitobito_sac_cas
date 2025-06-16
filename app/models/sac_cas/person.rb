@@ -48,7 +48,8 @@ module SacCas::Person
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     with_options if: :roles_require_name_and_address?, on: [:create, :update] do
-      validates :first_name, :last_name, :zip_code, :town, presence: true
+      validates :first_name, :last_name, presence: true, unless: :company?
+      validates :zip_code, :town, presence: true
       validates_with Person::AddressValidator
     end
 

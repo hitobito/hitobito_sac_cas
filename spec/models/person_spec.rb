@@ -8,6 +8,57 @@
 require "spec_helper"
 
 describe Person do
+  context "validations" do
+    describe "first_name and last_name" do
+      it "are not required" do
+        person = Person.new.tap(&:validate)
+
+        expect(person.errors[:first_name]).to be_empty
+        expect(person.errors[:last_name]).to be_empty
+      end
+
+      it "are not required for company persons" do
+        person = Person.new(company: true).tap(&:validate)
+
+        expect(person.errors[:first_name]).to be_empty
+        expect(person.errors[:last_name]).to be_empty
+      end
+
+      it "are required when having role from SacCas::Person::REQUIRED_FIELDS_ROLES" do
+        person = Person.create!(nickname: "dummy")
+        role_class = Group::AboMagazin::Abonnent
+        expect(SacCas::Person::REQUIRED_FIELDS_ROLES).to include(role_class.sti_name)
+        role_class.create!(person:, group: groups(:abo_die_alpen))
+        person.validate
+
+        expect(person.errors[:first_name]).to include("muss ausgefüllt werden")
+        expect(person.errors[:last_name]).to include("muss ausgefüllt werden")
+      end
+
+      it "are not required when having role other than from REQUIRED_FIELDS_ROLES" do
+        person = Person.create!(nickname: "dummy")
+        role_class = Group::SektionsFunktionaere::Kulturbeauftragter
+        expect(SacCas::Person::REQUIRED_FIELDS_ROLES).not_to include(role_class.sti_name)
+        role_class.create!(person:, group: groups(:bluemlisalp_funktionaere))
+        person.validate
+
+        expect(person.errors[:first_name]).to be_empty
+        expect(person.errors[:last_name]).to be_empty
+      end
+
+      it "are not required for company person having role from REQUIRED_FIELDS_ROLES" do
+        person = Person.create!(nickname: "dummy", company: true, company_name: "Dummy AG")
+        role_class = Group::AboMagazin::Abonnent
+        expect(SacCas::Person::REQUIRED_FIELDS_ROLES).to include(role_class.sti_name)
+        role_class.create!(person:, group: groups(:abo_die_alpen))
+        person.validate
+
+        expect(person.errors[:first_name]).to be_empty
+        expect(person.errors[:last_name]).to be_empty
+      end
+    end
+  end
+
   context "associations" do
     %w[landline mobile].each do |label|
       it "#phone_number_#{label} returns the number with label #{label.inspect}" do
