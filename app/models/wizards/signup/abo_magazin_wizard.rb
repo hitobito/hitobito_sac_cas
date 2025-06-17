@@ -75,6 +75,12 @@ module Wizards::Signup
         link: role.group
       )
       Invoices::Abacus::CreateAboMagazinInvoiceJob.new(invoice, role.id).enqueue!
+      # The TransmitPersonJob is enqueued with the creation of the new role.
+      # Because the CreateAboMagazinInvoiceJob also transmits the person, this
+      # would lead to race conditions. Therefore, destroy this job again.
+      # Because the wizard is saved in a transaction, the job should not yet
+      # be visible to the delayed job process.
+      Invoices::Abacus::TransmitPersonJob.new(role.person).delayed_jobs.destroy_all
     end
 
     def annual_fee = Group.root.abo_alpen_fee || 0
