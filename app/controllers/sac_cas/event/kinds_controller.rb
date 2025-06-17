@@ -23,6 +23,11 @@ module SacCas::Event::KindsController
       :reserve_accommodation,
       :accommodation,
       :section_may_create,
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :seo_text,
       course_compensation_category_ids: []
     ]
   end

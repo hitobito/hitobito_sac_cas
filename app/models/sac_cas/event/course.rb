@@ -144,8 +144,6 @@ module SacCas::Event::Course
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
 
-    translates :brief_description, :specialities, :similar_tours, :program
-
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"
     i18n_enum :meals, MEALS, i18n_prefix: "activerecord.attributes.event/course.meals_options"

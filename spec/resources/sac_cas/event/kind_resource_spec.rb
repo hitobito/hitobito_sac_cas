@@ -17,7 +17,12 @@ describe Event::KindResource, type: :resource do
       :minimum_participants,
       :training_days,
       :season,
-      :accommodation
+      :accommodation,
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :seo_text
     ]
   end
 

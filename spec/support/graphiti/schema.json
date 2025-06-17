@@ -860,6 +860,36 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "brief_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "specialities": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "similar_tours": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "program": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "seo_text": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {
@@ -876,6 +906,16 @@
         "season": {
         },
         "accommodation": {
+        },
+        "brief_description": {
+        },
+        "specialities": {
+        },
+        "similar_tours": {
+        },
+        "program": {
+        },
+        "seo_text": {
         }
       },
       "filters": {
@@ -939,6 +979,81 @@
           ]
         },
         "accommodation": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "brief_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "specialities": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "similar_tours": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "program": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "seo_text": {
           "type": "string",
           "operators": [
             "eq",

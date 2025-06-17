@@ -79,6 +79,8 @@ module SacCas::Event
       :required_contact_attrs,
       :hidden_contact_attrs
     ]
+
+    translates :brief_description, :specialities, :similar_tours, :program
   end
 
   def total_duration_days

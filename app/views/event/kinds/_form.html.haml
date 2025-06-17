@@ -53,4 +53,12 @@
 
   = f.labeled_check_box :section_may_create, class: "mt-2"
 
+  = labeled_push_down_fields(f,
+    :brief_description,
+    :specialities,
+    :similar_tours,
+    :program)
+
+  = f.labeled_input_field :seo_text
+
   = render 'qualification_fields', f: f
