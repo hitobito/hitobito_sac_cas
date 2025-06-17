@@ -31,7 +31,7 @@ describe Event::KindCategoriesController do
       get :edit, params: {id: category.id}
       expect(response).to be_ok
 
-      link = dom.find_link "Daten auf Kursarten übertragen"
+      link = dom.find_link "Werte auf Kursarten übertragen"
       expect(link[:href]).to eq "/de/event_kind_categories/#{category.id}/push_down"
       expect(link[:"data-method"]).to eq "put"
     end

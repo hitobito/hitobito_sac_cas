@@ -6,6 +6,25 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::EventKindsHelper
+  def labeled_push_down_fields(form, *fields)
+    push_down_link = if form.object.persisted?
+      content_tag(:div, field_push_down_link, class: "form-text")
+    else
+      "".html_safe
+    end
+
+    safe_join(fields.map do |field|
+      form.labeled(field) do
+        form.input_field(field) + push_down_link
+      end
+    end)
+  end
+
+  def field_push_down_link
+    link_to(t("global.link.push_down"), "#",
+      data: {action: "sac--form-field-push-down#pushDown"}, role: :button)
+  end
+
   def labeled_compensation_categories_field(form, collection, title)
     selected = entry.course_compensation_categories
 

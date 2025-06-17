@@ -1,0 +1,56 @@
+-#  Copyright (c) 2012-2013, Jungwacht Blauring Schweiz. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+- data = {}
+- if entry.persisted?
+  - data = { controller: 'sac--form-field-push-down',
+             'sac--form-field-push-down-url-value': push_down_event_kind_path(entry),
+             'sac--form-field-push-down-confirm-value': t('.field_push_down.confirm'),
+             'sac--form-field-push-down-alert-unsaved-value': t('.field_push_down.alert_unsaved') }
+= entry_form(data: data) do |f|
+
+  = f.labeled_input_fields :label, :short_name
+
+  = render 'kind_category_field', f: f
+
+  = f.labeled(:minimum_age) do
+    = f.input_field(:minimum_age)
+    .form-text
+      = t('.help_minimum_age')
+      - if entry.persisted?
+        %br
+        = field_push_down_link
+
+  = labeled_push_down_fields(f, :general_information, :application_conditions)
+
+  = f.labeled_input_field :level_id
+
+  = labeled_push_down_fields(f, :cost_center_id, :cost_unit_id)
+
+  = labeled_compensation_categories_field(f, @course_compensation_categories, Event::Kind.human_attribute_name(:course_compensation_categories))
+
+  = labeled_push_down_fields(f,
+      :maximum_participants,
+      :minimum_participants,
+      :maximum_age,
+      :ideal_class_size,
+      :maximum_class_size,
+      :training_days)
+
+  = f.labeled(:season) do
+    = f.i18n_enum_field(:season, Event::Kind.season_labels)
+    - if entry.persisted?
+      .form-text= field_push_down_link
+
+  = labeled_push_down_fields(f, :reserve_accommodation)
+
+  = f.labeled(:accommodation) do
+    = f.i18n_enum_field(:accommodation, Event::Kind.accommodation_labels)
+    - if entry.persisted?
+      .form-text= field_push_down_link
+
+  = f.labeled_check_box :section_may_create, class: "mt-2"
+
+  = render 'qualification_fields', f: f

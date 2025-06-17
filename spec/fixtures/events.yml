@@ -15,7 +15,7 @@ top_course:
   language: de
   external_applications: true
 
-closed:
+application_closed:
   groups: root
   type: Event::Course
   kind: ski_course

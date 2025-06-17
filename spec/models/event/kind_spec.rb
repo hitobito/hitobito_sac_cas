@@ -81,7 +81,7 @@ describe Event::Kind do
   end
 
   describe "#push_down_inherited_attributes!" do
-    let(:course) { events(:closed) }
+    let(:course) { events(:application_closed) }
     let(:kind) { event_kinds(:ski_course) }
     let(:kind_attrs) {
       {
@@ -177,6 +177,106 @@ describe Event::Kind do
           I18n.with_locale("fr") { expect(course.application_conditions).to be_blank }
         end
       end
+    end
+  end
+
+  describe "#push_down_inherited_attribute!" do
+    let(:course) { events(:application_closed) }
+    let(:kind) { event_kinds(:ski_course) }
+    let(:kind_attrs) {
+      {
+        application_conditions: "test",
+        minimum_age: 1,
+        maximum_age: 2,
+        ideal_class_size: 1,
+        maximum_class_size: 2,
+        minimum_participants: 2,
+        maximum_participants: 3,
+        training_days: 4,
+        season: "summer",
+        accommodation: "hut",
+        reserve_accommodation: false,
+        cost_center_id: 1,
+        cost_unit_id: 1
+      }
+    }
+
+    before do
+      kind.update!(kind_attrs)
+    end
+
+    def read_course_attrs
+      course.reload.attributes.symbolize_keys.slice(*kind_attrs.keys)
+    end
+
+    def with_locales(locales = %w[de fr])
+      locales.each { |l| I18n.with_locale(l) { yield(l) } }
+    end
+
+    it "updates course integer attribute" do
+      expect do
+        kind.push_down_inherited_attribute!("maximum_participants")
+      end.to change { course.reload.maximum_participants }.to(kind_attrs[:maximum_participants])
+    end
+
+    it "updates course belongs_to attribute" do
+      expect do
+        kind.push_down_inherited_attribute!("cost_center_id")
+      end.to change { course.reload.cost_center_id }.to(kind_attrs[:cost_center_id])
+    end
+
+    it "updates course boolean attribute" do
+      expect do
+        kind.push_down_inherited_attribute!("reserve_accommodation")
+      end.to change { course.reload.reserve_accommodation }.to(kind_attrs[:reserve_accommodation])
+    end
+
+    it "updates course enum attribute" do
+      expect do
+        kind.push_down_inherited_attribute!("season")
+      end.to change { course.reload.season }.to(kind_attrs[:season])
+    end
+
+    it "updates translated application_conditions column" do
+      with_locales do |l|
+        kind.label = l
+        kind.application_conditions = l
+      end
+      kind.save!
+      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change { course.translations.count }.by(1)
+      I18n.with_locale("de") { expect(course.application_conditions).to eq "de" }
+      I18n.with_locale("fr") { expect(course.application_conditions).to eq "fr" }
+    end
+
+    it "updates translated application_conditions column with blanks" do
+      with_locales do |l|
+        kind.label = l
+        kind.application_conditions = nil
+      end
+      kind.save!
+      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change { course.translations.count }.by(1)
+      I18n.with_locale("de") { expect(course.application_conditions).to be_nil }
+      I18n.with_locale("fr") { expect(course.application_conditions).to be_nil }
+    end
+
+    it "updates translated general_information/description column" do
+      with_locales do |l|
+        kind.label = l
+        kind.general_information = l
+      end
+      kind.save!
+      expect { kind.push_down_inherited_attribute!("general_information") }.to change { course.translations.count }.by(1)
+      I18n.with_locale("de") { expect(course.description).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
+    end
+
+    it "overrides existing values with blanks" do
+      kind.update!(minimum_age: nil)
+      course.update!(minimum_age: 12)
+
+      expect do
+        kind.push_down_inherited_attribute!("minimum_age")
+      end.to change { course.reload.minimum_age }.from(12).to(nil)
     end
   end
 end

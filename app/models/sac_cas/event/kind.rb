@@ -42,6 +42,15 @@
 module SacCas::Event::Kind
   extend ActiveSupport::Concern
 
+  INHERITABLE_ATTRIBUTES = %w[
+    minimum_participants maximum_participants minimum_age
+    maximum_age ideal_class_size maximum_class_size season training_days
+    reserve_accommodation accommodation cost_center_id cost_unit_id
+  ].freeze
+
+  INHERITABLE_TRANSLATED_ATTRIBUTES =
+    %w[general_information application_conditions].freeze
+
   prepended do
     include I18nEnums
     has_and_belongs_to_many :course_compensation_categories, foreign_key: :event_kind_id, inverse_of: :course_compensation_category_id
@@ -67,26 +76,38 @@ module SacCas::Event::Kind
   end
 
   def push_down_inherited_attributes!
-    attrs = Event::Course::INHERITED_ATTRIBUTES.collect { |attr| [attr, send(attr)] }.to_h
     Event::Kind.transaction do
-      push_down_events.update_all(attrs.except(:application_conditions))
-      push_down_application_conditions!
+      attrs = INHERITABLE_ATTRIBUTES.index_with { |attr| send(attr) }
+      push_down_events.update_all(attrs)
+      push_down_translated_attributes!
+    end
+  end
+
+  def push_down_inherited_attribute!(field)
+    if INHERITABLE_TRANSLATED_ATTRIBUTES.include?(field)
+      push_down_translated_attributes!(field)
+    elsif INHERITABLE_ATTRIBUTES.include?(field)
+      push_down_events.update_all(field => send(field))
     end
   end
 
   private
 
-  def push_down_application_conditions!
+  def push_down_translated_attributes!(attr = nil)
+    event_ids = push_down_events.pluck(:id)
+    return if event_ids.blank?
+
     translations.each do |t|
-      columns = %w[general_information application_conditions locale created_at updated_at]
-      kind_attrs = t.attributes.slice(*columns).transform_keys! do |key|
-        (key == "general_information") ? "description" : key
-      end
-      event_attrs = push_down_events.map { |e| kind_attrs.merge(event_id: e.id) }
-      if event_attrs.present?
-        Event::Translation.upsert_all(event_attrs,
-          unique_by: [:event_id, :locale])
-      end
+      fields = attr ? [attr] : INHERITABLE_TRANSLATED_ATTRIBUTES
+      attrs = t.attributes.slice("locale", *fields)
+      attrs["description"] = attrs.delete("general_information") if attrs.key?("general_information")
+
+      translation_attrs = event_ids.map { |id| attrs.merge(event_id: id) }
+      Event::Translation.upsert_all(
+        translation_attrs,
+        unique_by: [:event_id, :locale],
+        returning: false
+      )
     end
   end
 
