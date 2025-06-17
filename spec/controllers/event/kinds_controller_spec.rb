@@ -26,6 +26,11 @@ describe Event::KindsController do
       :season,
       :reserve_accommodation,
       :accommodation,
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :seo_text,
       course_compensation_category_ids: []
     )
   end
