@@ -106,6 +106,7 @@ describe Wizards::Signup::AboMagazinWizard do
       expect { wizard.save! }.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
+        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count }.by(0)
         .and change { ExternalInvoice::AboMagazin.count }.by(1)
       expect(max.roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
       expect(max.roles.last.start_on).to eq Date.current
