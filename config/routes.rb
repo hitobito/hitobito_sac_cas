@@ -97,6 +97,7 @@ Rails.application.routes.draw do
 
     resources :event_kinds, module: "event", controller: "kinds", only: [] do
       put :push_down, on: :member
+      put 'push_down/:field' => :push_down_field, on: :member
     end
 
     resources :event_kind_categories, module: "event", controller: "kind_categories", only: [] do

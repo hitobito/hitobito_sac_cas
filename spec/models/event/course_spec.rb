@@ -140,7 +140,7 @@ describe Event::Course do
   end
 
   describe "application_closing_at dependent state transitions" do
-    let(:course) { events(:closed) }
+    let(:course) { events(:application_closed) }
 
     describe "application_open" do
       before { course.update_columns(state: "application_open") }
@@ -280,7 +280,7 @@ describe Event::Course do
   end
 
   describe "#available_states" do
-    let(:course) { events(:closed) }
+    let(:course) { events(:application_closed) }
 
     it "lists available states for state :created" do
       expect(course).to receive(:state).and_return(:created)
@@ -324,7 +324,7 @@ describe Event::Course do
   end
 
   describe "state change validation" do
-    let(:course) { events(:closed) }
+    let(:course) { events(:application_closed) }
 
     it "state cannot be changed from closed to created" do
       expect(course).to be_valid
@@ -344,7 +344,7 @@ describe Event::Course do
   end
 
   describe "when state changes to assignment_closed" do
-    let(:course) { events(:closed) }
+    let(:course) { events(:application_closed) }
 
     # set up participants who have been rejected
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
@@ -361,7 +361,7 @@ describe Event::Course do
   end
 
   describe "when state changes to ready" do
-    let(:course) { events(:closed).tap { |c| c.update!(state: :assignment_closed) } }
+    let(:course) { events(:application_closed).tap { |c| c.update!(state: :assignment_closed) } }
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
     let(:leader) { @participations.first }
     let(:participant) { @participations.second }

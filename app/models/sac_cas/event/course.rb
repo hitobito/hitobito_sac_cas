@@ -90,12 +90,6 @@ module SacCas::Event::Course
 
   LEADER_ROLES = [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map(&:sti_name)
 
-  INHERITED_ATTRIBUTES = [
-    :application_conditions, :minimum_participants, :maximum_participants, :minimum_age,
-    :maximum_age, :ideal_class_size, :maximum_class_size, :season, :training_days,
-    :reserve_accommodation, :accommodation, :cost_center_id, :cost_unit_id
-  ]
-
   PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 
   prepended do # rubocop:disable Metrics/BlockLength

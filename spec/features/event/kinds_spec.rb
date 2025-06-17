@@ -41,4 +41,54 @@ describe :"event/kinds", js: true do
       expect(page).to have_select "Kostenträger", selected: "ski-1 - Ski Technik"
     end
   end
+
+  context "push down field" do
+    let(:kind) { event_kinds(:ski_course) }
+
+    it "asks for confirmation and shows flash notice" do
+      kind.update!(minimum_participants: 10)
+      visit edit_event_kind_path(id: kind.id)
+      accept_confirm do
+        find("#event_kind_minimum_participants + .form-text a").click
+      end
+      expect(page).to have_selector(".alert-success",
+        text: "Minimale Teilnehmerzahl wurde auf alle aktiven Kurse übertragen.")
+      expect(events(:application_closed).minimum_participants).to eq(10)
+    end
+
+    it "is prevented if select is changed" do
+      visit edit_event_kind_path(id: kind.id)
+      select("board-2", from: "event_kind_cost_unit_id")
+      accept_alert(/nicht gespeichert/) do
+        find("#event_kind_cost_unit_id + .form-text a").click
+      end
+    end
+
+    it "is prevented if input is changed" do
+      visit edit_event_kind_path(id: kind.id)
+      fill_in "event_kind_minimum_participants", with: "5"
+      accept_alert(/nicht gespeichert/) do
+        find("#event_kind_minimum_participants + .form-text a").click
+      end
+    end
+
+    it "is prevented if textarea is changed" do
+      visit edit_event_kind_path(id: kind.id)
+      fill_in "event_kind_application_conditions", with: "Skifahren"
+      accept_alert(/nicht gespeichert/) do
+        find("#event_kind_application_conditions + .form-text a").click
+      end
+    end
+
+    it "is prevented if checkbox is changed" do
+      visit edit_event_kind_path(id: kind.id)
+      uncheck "event_kind_reserve_accommodation"
+      accept_alert(/nicht gespeichert/) do
+        find("#event_kind_reserve_accommodation")
+          .first(:xpath, ".//..")
+          .first(:xpath, ".//..")
+          .find(".form-text a").click
+      end
+    end
+  end
 end
