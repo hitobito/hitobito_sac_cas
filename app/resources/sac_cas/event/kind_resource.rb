@@ -16,6 +16,11 @@ module SacCas::Event::KindResource
       attribute :training_days, :integer
       attribute :season, :string
       attribute :accommodation, :string
+      attribute :brief_description, :string
+      attribute :specialities, :string
+      attribute :similar_tours, :string
+      attribute :program, :string
+      attribute :seo_text, :string
     end
 
     belongs_to :level, resource: Event::LevelResource
