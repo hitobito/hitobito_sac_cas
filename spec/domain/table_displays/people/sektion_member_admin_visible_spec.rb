@@ -126,4 +126,30 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
       end
     end
   end
+
+  describe TableDisplays::ShowFullColumn do
+    let(:column) { described_class.new(ability, model_class:) }
+    let(:participation) { Fabricate(:event_participation) }
+
+    context "Event::Participation" do
+      let(:model_class) { Event::Participation }
+
+      context "with permission" do
+        let(:ability) { Ability.new(people(:admin)) }
+
+        it "returns values as permission check succeeds" do
+          expect(column.value_for(participation, :invoice_state)).to eq [participation, :invoice_state]
+        end
+      end
+
+      context "without permission" do
+        let(:ability) { Ability.new(people(:abonnent)) }
+
+        it "hides value" do
+          participation = Fabricate(:event_participation, invoice_state: :draft)
+          expect(column.value_for(participation, :invoice_state)).to eq "fehlende Berechtigung"
+        end
+      end
+    end
+  end
 end

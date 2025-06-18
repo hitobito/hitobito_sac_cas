@@ -27,7 +27,7 @@ module TableDisplays::People
     end
 
     def object_membership_layer_ids(object)
-      object.roles_unscoped.select do |role|
+      roles_unscoped(object).select do |role|
         SacCas::MITGLIED_ROLES.include?(role.class)
       end.map { |role| role.group.layer_group_id }
     end
@@ -36,6 +36,14 @@ module TableDisplays::People
       ability.user.roles.includes(:group).select do |role|
         SacCas::SAC_SECTION_MEMBER_ADMIN_ROLE_TYPES.include?(role.class)
       end.map { |role| role.group.layer_group_id }
+    end
+
+    def roles_unscoped(object)
+      case object
+      when Person then object.roles_unscoped
+      when Event::Participation then object.person.roles_unscoped
+      else []
+      end
     end
   end
 end
