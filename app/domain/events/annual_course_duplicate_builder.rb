@@ -5,10 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class SacCas::Events::AnnualCourseDuplicateBuilder
-  def initialize(source_course, target_year)
+class Events::AnnualCourseDuplicateBuilder
+  def initialize(source_course, target_year, years_diff)
     @source_course = source_course
     @target_year = target_year
+    @years_diff = years_diff
   end
 
   def create!
@@ -29,7 +30,7 @@ class SacCas::Events::AnnualCourseDuplicateBuilder
   def build
     course = @source_course.dup
 
-    course.state = :created
+    reset_state(course)
     course.number = determine_next_number(@source_course)
     course.groups = @source_course.groups
 
@@ -41,6 +42,16 @@ class SacCas::Events::AnnualCourseDuplicateBuilder
   end
 
   private
+
+  def reset_state(course)
+    course.state = :created
+    course.applicant_count = 0
+    course.participant_count = 0
+    course.unconfirmed_count = 0
+    course.teamer_count = 0
+    course.created_at = nil
+    course.updated_at = nil
+  end
 
   def build_dates(course)
     course.application_opening_at = determine_next_datetime(@source_course.application_opening_at&.to_datetime)
@@ -73,11 +84,15 @@ class SacCas::Events::AnnualCourseDuplicateBuilder
   def determine_next_datetime(original_datetime)
     return unless original_datetime
 
-    original_week_number = original_datetime.cweek
-    original_weekday_number = original_datetime.cwday
-
-    DateTime.commercial(@target_year, original_week_number, original_weekday_number,
-      original_datetime.hour, original_datetime.minute, original_datetime.second, original_datetime.offset)
+    DateTime.commercial(
+      original_datetime.year + @years_diff,
+      original_datetime.cweek,
+      original_datetime.cwday,
+      original_datetime.hour,
+      original_datetime.minute,
+      original_datetime.second,
+      original_datetime.offset
+    )
   end
 
   def determine_next_number(course)
