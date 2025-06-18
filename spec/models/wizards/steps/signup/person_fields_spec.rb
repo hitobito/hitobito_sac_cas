@@ -43,6 +43,14 @@ describe Wizards::Steps::Signup::PersonFields do
       end
     end
 
+    describe "gender" do
+      it "accepts _nil gender" do
+        form.attributes = required_attrs.merge(gender: "_nil")
+        expect(form).to be_valid
+        expect(form.gender_label).to eq "divers"
+      end
+    end
+
     describe "phone_number" do
       it "must be have a valid format" do
         form.phone_number = "test"
@@ -92,12 +100,20 @@ describe Wizards::Steps::Signup::PersonFields do
     expect(form.country).to eq "CH"
   end
 
-  it "attributes builds with nested phone_number attributes" do
-    form.attributes = required_attrs
+  describe "#person_attributes" do
+    it "builds with nested phone_number attributes" do
+      form.attributes = required_attrs
 
-    expect(form.person_attributes).to eq required_attrs
-      .except(:phone_number)
-      .merge(country: "CH", birthday: Date.new(2000, 1, 1))
+      expect(form.person_attributes).to eq required_attrs
+        .except(:phone_number)
+        .merge(country: "CH", birthday: Date.new(2000, 1, 1))
+    end
+
+    it "converts gender value of '_nil' to nil" do
+      form.attributes = required_attrs.merge(gender: "_nil")
+
+      expect(form.person_attributes[:gender]).to be_nil
+    end
   end
 
   context "with current user" do
@@ -122,6 +138,11 @@ describe Wizards::Steps::Signup::PersonFields do
       expect(form.town).to eq "Neu Carlscheid"
       expect(form.country).to eq "US"
       expect(form.phone_number).to be_blank
+    end
+
+    it "reads nil gender into I18nEnum::NIL_KEY" do
+      person.gender = nil
+      expect(form.gender).to eq "_nil"
     end
 
     it "reads phone_number if present" do
