@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class SacCas::Events::AnnualCoursesDuplicator
+class Events::AnnualCoursesDuplicator
   def initialize(source_year, target_year)
     @source_year = source_year
     @target_year = target_year
@@ -14,7 +14,9 @@ class SacCas::Events::AnnualCoursesDuplicator
   def run
     Event::Course.transaction do
       courses_to_duplicate.find_each do |course|
-        SacCas::Events::AnnualCourseDuplicateBuilder.new(course, @target_year).create!
+        Events::AnnualCourseDuplicateBuilder
+          .new(course, @target_year, @target_year - @source_year)
+          .create!
       end
     end
   end

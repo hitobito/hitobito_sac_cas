@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-describe SacCas::Events::AnnualCourseDuplicateBuilder do
-  let(:builder) { described_class.new(source_course, 2026) }
+describe Events::AnnualCourseDuplicateBuilder do
+  let(:builder) { described_class.new(source_course, 2026, 1) }
   let(:duplicate) { builder.build }
 
   let(:source_application_opening_at) { Date.new(2025, 5, 26) } # Monday of calendar week 22 (attribute is a date in db)
@@ -39,6 +39,11 @@ describe SacCas::Events::AnnualCourseDuplicateBuilder do
       end
     end
 
+    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation, event: course))
+    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation, event: course))
+    Event::Course::Role::Leader.create!(participation: Fabricate(:event_participation, event: course))
+
+    course.refresh_participant_counts!
     course.reload
   end
 
@@ -59,6 +64,8 @@ describe SacCas::Events::AnnualCourseDuplicateBuilder do
     it "builds duplicate" do
       expect(duplicate.state).to eq("created")
       expect(duplicate.number).to eq("2026-1000")
+      expect(duplicate.participant_count).to eq(0)
+      expect(duplicate.teamer_count).to eq(0)
 
       expect(duplicate.application_opening_at).to eq(Date.new(2026, 5, 25)) # Monday of calendar week 22
       expect(duplicate.application_closing_at).to eq(Date.new(2026, 6, 5)) # Friday of calendar week 23
@@ -95,12 +102,17 @@ describe SacCas::Events::AnnualCourseDuplicateBuilder do
   context "#create" do
     it "creates course, dates, questions and translations" do
       source_course # create source before expect block
-      expect { builder.create! }.to \
+      duplicate = nil
+      expect { duplicate = builder.create! }.to \
         change { Event::Course.count }.by(1).and \
           change { Event::Date.count }.by(1).and \
             change { Event::Translation.count }.by(3).and \
               change { Event::Question.count }.by(3).and \
-                change { Event::Question::Translation.count }.by(9)
+                change { Event::Question::Translation.count }.by(9).and \
+                  change { Event::Participation.count }.by(0).and \
+                    change { Event::Role.count }.by(0)
+
+      expect(duplicate.created_at).to be_present
     end
   end
 end

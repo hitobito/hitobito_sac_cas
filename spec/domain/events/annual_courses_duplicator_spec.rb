@@ -7,8 +7,8 @@
 
 require "spec_helper"
 
-describe SacCas::Events::AnnualCoursesDuplicator do
-  let(:duplicator) { SacCas::Events::AnnualCoursesDuplicator.new(2025, 2026) }
+describe Events::AnnualCoursesDuplicator do
+  let(:duplicator) { described_class.new(2025, 2026) }
 
   let!(:annual_courses_in_source_year) do
     (1..10).map do |i|
