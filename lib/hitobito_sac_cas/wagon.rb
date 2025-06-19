@@ -93,9 +93,13 @@ module HitobitoSacCas
 
       ## Abilities
       Role::Types::Permissions << :read_all_people << :layer_events_full
+      Role::Types::PermissionImplicationsForGroups[:layer_mitglieder_full] =
+        {group_and_below_full: Group::SektionsMitglieder}
+      Role::Types::PermissionImplicationsForGroups[:layer_touren_und_kurse_full] =
+        {group_and_below_full: Group::SektionsTourenUndKurse}
+
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
-      AbilityDsl::UserContext.prepend SacCas::AbilityDsl::UserContext
 
       Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
