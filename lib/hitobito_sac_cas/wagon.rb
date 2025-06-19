@@ -95,6 +95,7 @@ module HitobitoSacCas
       Role::Types::Permissions << :read_all_people << :layer_events_full
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
+      AbilityDsl::UserContext.prepend SacCas::AbilityDsl::UserContext
 
       Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility

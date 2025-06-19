@@ -9,7 +9,13 @@ class Group::SektionsTourenUndKurseWinter < Group
   ### ROLES
 
   class Tourenchef < ::Role
-    self.permissions = [:layer_and_below_read, :layer_events_full]
+    self.two_factor_authentication_enforced = true
+    self.permissions = [
+      :layer_and_below_read,
+      :layer_events_full,
+      :layer_mitglieder_full,
+      :layer_touren_und_kurse_full
+    ]
   end
 
   roles Tourenchef
