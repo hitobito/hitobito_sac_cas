@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -41,6 +41,10 @@ module SacCas::Groups::SelfRegistrationController
     end
   end
 
+  def model_params
+    super.merge(completion_redirect_path: params[:completion_redirect_path])
+  end
+
   def redirect_to_login
     person = Person.find_by(email: email)
     store_location_for(person, group_self_registration_path(group))
@@ -54,14 +58,21 @@ module SacCas::Groups::SelfRegistrationController
     render js: "window.location='#{path}';"
   end
 
+  def history_path
+    history_group_person_path(
+      group_id: current_user.primary_group_id || Group.root.id,
+      id: current_user.id
+    )
+  end
+
   def redirect_to_memberships_tab
     flash[:notice] = wizard.redirection_message
-    redirect_to history_group_person_path(group_id: current_user.primary_group_id || Group.root.id, id: current_user.id)
+    redirect_to history_path
   end
 
   def redirect_to_person_show
     flash[:notice] = t("groups.self_registration.create.existing_family_notice")
-    redirect_to history_group_person_path(group_id: current_user.primary_group_id || Group.root.id, id: current_user.id)
+    redirect_to history_path
   end
 
   def redirect_to_group_if_necessary
@@ -69,11 +80,10 @@ module SacCas::Groups::SelfRegistrationController
   end
 
   def redirect_target
-    if current_user.present?
-      history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
-    else
-      new_person_session_path
-    end
+    return new_person_session_path if current_user.blank?
+
+    wizard.completion_redirect_path.presence ||
+      history_path
   end
 
   def redirection_message
