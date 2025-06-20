@@ -270,6 +270,11 @@ de:
         ideal_class_size: Ideale Klassengrösse
         maximum_class_size: Maximale Klassengrösse
         training_days: Ausbildungstage
+        brief_description: Kurzbeschreibung
+        specialities: Besonderes
+        similar_tours: Vergleichstouren
+        program: Programm
+        seo_text: SEO Text
       event/course:
         accommodation: Unterkunft
         annual: Jährlich wiederkehrend

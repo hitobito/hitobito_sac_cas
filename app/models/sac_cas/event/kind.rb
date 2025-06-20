@@ -48,8 +48,14 @@ module SacCas::Event::Kind
     reserve_accommodation accommodation cost_center_id cost_unit_id
   ].freeze
 
-  INHERITABLE_TRANSLATED_ATTRIBUTES =
-    %w[general_information application_conditions].freeze
+  INHERITABLE_TRANSLATED_ATTRIBUTES = %w[
+    general_information
+    application_conditions
+    brief_description
+    specialities
+    similar_tours
+    program
+  ].freeze
 
   prepended do
     include I18nEnums
@@ -57,12 +63,14 @@ module SacCas::Event::Kind
     belongs_to :cost_center
     belongs_to :cost_unit
     belongs_to :level
+    translates :brief_description, :specialities, :similar_tours, :program, :seo_text
 
     # NOTE: When running via rake spec:features presence validations (which
     # probably come from validates_by_schema) are missing
     validates :cost_center_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
     validates :cost_unit_id, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
 
+    validates :seo_text, length: {allow_nil: true, maximum: 160}
     validates :kind_category, presence: true
     validates :short_name, presence: true
 
