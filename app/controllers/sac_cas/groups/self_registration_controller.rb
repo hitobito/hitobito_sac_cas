@@ -69,10 +69,12 @@ module SacCas::Groups::SelfRegistrationController
   end
 
   def redirect_target
-    if current_user.present?
-      history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
+    return new_person_session_path unless current_user.present?
+
+    if action_name == "create" && session[:wizard_completed_redirect].present?
+      session.delete(:wizard_completed_redirect)
     else
-      new_person_session_path
+      history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
     end
   end
 
