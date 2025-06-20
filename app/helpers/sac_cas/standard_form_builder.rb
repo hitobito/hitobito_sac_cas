@@ -13,10 +13,10 @@ module SacCas::StandardFormBuilder
   end
 
   def labeled_gender_inline_radio_buttons
-    checked = object.attributes["gender"].nil? ? {checked: false} : {}
     radios = (Person::GENDERS + [I18nEnums::NIL_KEY]).map do |key|
-      inline_radio_button(:gender, key, Person.salutation_label(key), true, checked)
+      inline_radio_button(:gender, key, Person.new(gender: key).gender_label)
     end
+
     labeled(:gender, safe_join(radios))
   end
 

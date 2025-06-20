@@ -23,7 +23,7 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
   attribute :country, :string
   attribute :phone_number, :string
 
-  validates :gender, :street, :housenumber, :town, :zip_code,
+  validates :street, :housenumber, :town, :zip_code,
     :country, presence: true
 
   validates :zip_code, zipcode: {country_code_attribute: :country}
@@ -33,7 +33,7 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
 
     if current_user
       self.id = current_user.id
-      self.gender ||= current_user.gender
+      self.gender ||= current_user.gender.presence || I18nEnums::NIL_KEY
       self.first_name ||= current_user.first_name
       self.last_name ||= current_user.last_name
       self.birthday ||= current_user.birthday
