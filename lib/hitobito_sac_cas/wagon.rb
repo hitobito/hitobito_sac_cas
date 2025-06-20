@@ -49,6 +49,8 @@ module HitobitoSacCas
       # only schedule BackupMitgliederScheduleJob if sftp config is present
       JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
 
+      Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
+
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
       MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver

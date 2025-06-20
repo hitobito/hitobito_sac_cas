@@ -19,7 +19,7 @@ module Wizards::Signup
     self.asides = ["aside_abo_basic_login"]
 
     def member_or_applied?
-      current_user&.login? # do not allow if person already has a login
+      current_user&.roles.present? # do not allow if person already has a login
     end
 
     def redirection_message = I18n.t("groups.self_registration.create.can_login_already_notice")
