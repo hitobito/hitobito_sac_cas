@@ -9,6 +9,8 @@ fr:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: Années
+    link:
+      push_down: Wert auf Kurse übertragen
     links:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       membership: "https://www.sac-cas.ch/fr/affiliation/devenir-membre/"
@@ -1225,23 +1227,31 @@ fr:
             other: '%{count} e-mails ont été envoyés.'
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
     kinds:
-      push_down:
-        success: Les données enregistrées ont été transférées à tous les cours actifs.
       actions_edit:
-        push_down_button: Transférer des données vers des cours
+        push_down_button: Werte auf Kurse übertragen
         push_down_button_confirm: >-
-          Voulez-vous vraiment transférer les données enregistrées à tous les cours actifs? Ce faisant, les valeurs actuelles seront écrasées.
+          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+      form:
+        field_push_down:
+          confirm: >-
+            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+          alert_unsaved: >-
+            Dieser Wert ist noch nicht gespeichert. Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
       kind_category_field:
         category_overrides_link_title: >-
           Les champs suivants sont repris: Centre de coûts, Support de coûts
+      push_down:
+        success: Die gespeicherten Werte wurden auf alle aktiven Kurse übertragen.
+      push_down_field:
+        success: "%{field} wurde auf alle aktiven Kurse übertragen."
     kind_categories:
       push_down:
         success: >-
           Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés.
       actions_edit:
-        push_down_button: Transférer des données vers des types de cours
+        push_down_button: Werte auf Kursarten übertragen
         push_down_button_confirm: >-
-          Voulez-vous vraiment transférer les données enregistrées (centre de coûts et support de coûts) à tous les types de cours? Ce faisant, les valeurs actuelles seront écrasées.
+          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte überschrieben.
     lists:
       nav_left_tours:
         tours: Touren

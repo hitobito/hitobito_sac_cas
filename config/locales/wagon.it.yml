@@ -9,6 +9,8 @@ it:
     phone_placeholder: +41 77 123 45 67
     currency: CHF
     years: anni
+    link:
+      push_down: Wert auf Kurse übertragen
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
@@ -1223,23 +1225,31 @@ it:
             other: Sono state inviate %{count} e-mail.
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
     kinds:
-      push_down:
-        success: I dati salvati sono stati trasferiti a tutti i corsi attivi.
       actions_edit:
-        push_down_button: Trasferire i dati ai corsi
+        push_down_button: Werte auf Kurse übertragen
         push_down_button_confirm: >-
-          Desidera davvero trasferire i dati salvati a tutti i corsi attivi? In questo modo si sovrascriveranno i valori attuali.
+          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+      form:
+        field_push_down:
+          confirm: >-
+            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+          alert_unsaved: >-
+            Dieser Wert ist noch nicht gespeichert. Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
       kind_category_field:
         category_overrides_link_title: >-
           Vengono trasferiti i seguenti campi: centro di costo, unità di costo
+      push_down:
+        success: Die gespeicherten Werte wurden auf alle aktiven Kurse übertragen.
+      push_down_field:
+        success: "%{field} wurde auf alle aktiven Kurse übertragen."
     kind_categories:
       push_down:
         success: >-
           Il centro di costo (%{cost_center}) e l'unità di costo (%{cost_unit}) sono stati trasferiti a tutti i tipi di corso assegnati.
       actions_edit:
-        push_down_button: Trasferire i dati ai tipi di corso
+        push_down_button: Werte auf Kursarten übertragen
         push_down_button_confirm: >-
-          Desidera davvero trasferire i dati salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascriveranno i valori attuali.
+          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte überschrieben.
     lists:
       nav_left_tours:
         tours: Touren
