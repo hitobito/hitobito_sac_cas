@@ -81,6 +81,7 @@ describe Wizards::Steps::Signup::Sektion::PersonFields do
       .merge(
         country: "CH",
         birthday: Date.new(2000, 1, 1),
+        gender: nil,
         phone_number_mobile_attributes: {id: nil, number: "0791234567"}
       )
   end
