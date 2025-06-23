@@ -49,5 +49,30 @@ RSpec.describe "people#show", type: :request do
         expect(d.sac_remark_section_1).to eq("Remark")
       end
     end
+
+    describe "viewing person without roles" do
+      let(:other) { Fabricate(:person) }
+
+      subject(:make_request) { jsonapi_get "/api/people/#{other.id}" }
+
+      context "as logged in user" do
+        let(:token) { nil }
+
+        it "returns 404" do
+          sign_in(person)
+          make_request
+          expect(response.status).to eq(404)
+          expect(json["errors"]).to include(include("code" => "not_found"))
+        end
+      end
+
+      context "as service token" do
+        it "returns 404" do
+          make_request
+          expect(response.status).to eq(404)
+          expect(json["errors"]).to include(include("code" => "not_found"))
+        end
+      end
+    end
   end
 end
