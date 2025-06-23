@@ -4,11 +4,14 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 - caption = t("people_filters.invoice_receiver.title", group_name: assigns["group"].layer_group.name)
-= render(layout: 'people_filters/filter', locals: { entry: @mailing_list, type: :invoice_receiver, caption: }) do
+
+.well{id: "#invoice-configuration"}
+  .d-flex.flex-row.align-items-center
+    %h3.col-11.mb-3=caption
   - filter_args = entry.filter_chain[:invoice_receiver]&.args
   = hidden_field_tag('filters[invoice_receiver][group_id]', assigns["group"].layer_group_id)
   - Person::Filter::InvoiceReceiver::VISIBLE_ATTRS.each do |attr|
     - id = "filters_invoice_receiver_#{attr}"
     = label_tag(nil, class: 'checkbox ', for: id) do
       = check_box_tag("filters[invoice_receiver][#{attr}]", true, filter_args&.dig(attr), id: id)
-      = t(".invoice_receiver.#{attr}")
+      = t("people_filters.filter.invoice_receiver.#{attr}")
