@@ -13,8 +13,10 @@ module Wizards::Steps::Signup::PersonCommon
   included do
     class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
     class_attribute :maximum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.end
-    validate :assert_valid_phone_number
+
     validates :gender, :first_name, :last_name, :birthday, presence: true
+
+    validate :assert_valid_phone_number
     validate :assert_minimum_age
     validate :assert_maximum_age
 
@@ -35,6 +37,7 @@ module Wizards::Steps::Signup::PersonCommon
 
   def person_attributes
     attributes.compact.symbolize_keys.except(:phone_number).then do |attrs|
+      attrs[:gender] = nil if attrs[:gender] == I18nEnums::NIL_KEY
       next attrs if phone_number.blank?
 
       attrs.merge(phone_number_mobile_attributes: {number: phone_number, id: phone_number_id})
