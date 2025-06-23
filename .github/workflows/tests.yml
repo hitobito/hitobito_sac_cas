@@ -2,9 +2,9 @@ name: "Lint and test"
 
 on:
   push:
-    branches:
-      - master # create pull request to run actions on other branches
-      - sac-master # create pull request to run actions on other branches
+    branches: # for all other branches, create a pull request to run the tests
+      - master
+      - sac-master
     paths-ignore:
       - "doc/**"
       - "**.md"
@@ -15,13 +15,17 @@ on:
   workflow_dispatch: # Allow triggering manually
     inputs:
       core_ref:
-        description: Use a specific version of the core for the workflow run. Defaults to sac-master.
+        description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
         type: string
         default: "sac-master"
       wagon_dependency_ref:
-        description: Use a specific version of the wagon dependency for the workflow run. Defaults to sac-master.
+        description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
         type: string
         default: "sac-master"
+      distinct_id:
+        description: An optional identifier which is simply output again, in order to identify the workflow run when triggered from another repo
+        type: string
+        default: ''
 
 jobs:
   wagon_tests:
