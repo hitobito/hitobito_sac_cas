@@ -2129,12 +2129,13 @@ de:
             es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest,
             dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden,
             musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+          data_retention_consent: >-
+            Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
           entry_fee_info_text: >-
             Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt
             oder gelöscht wurden.
           entry_fee_consent: >-
-            Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden.
-          data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
+            Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
           next_button: "Austritt beantragen"
