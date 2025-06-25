@@ -8,17 +8,20 @@ module Wizards
     module Termination
       class Summary < Step
         attribute :termination_reason_id, :integer
-        validates :termination_reason_id, presence: true
+        attribute :entry_fee_consent, :boolean
         attribute :data_retention_consent, :boolean
         attribute :subscribe_newsletter, :boolean
         attribute :subscribe_fundraising_list, :boolean
+
+        validates :termination_reason_id, presence: true
+        validates :entry_fee_consent, acceptance: true
 
         def family_member_names
           wizard.person.household.members.map { |m| m.person.full_name }.to_sentence
         end
 
         def termination_reason_options
-          TerminationReason.all.map { |r| [r.text, r.id] }
+          TerminationReason.includes(:translations).all.map { |r| [r.text, r.id] }
         end
 
         def family_membership?
