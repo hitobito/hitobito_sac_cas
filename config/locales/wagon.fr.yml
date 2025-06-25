@@ -2092,8 +2092,19 @@ fr:
           family_warning: "Attention: la résiliation est demandée pour l’ensemble des membres de la famille. Sont concerné·e·s: %{family_member_names}."
           data_retention_info_title: "Conservation de vos données "
           data_retention_info_text: >-
-            Après ta sortie, nous conservons tes données pendant 12 mois avant de les supprimer définitivement. Les conséquences de cette suppression sont les suivantes: si, plus tard, tu souhaites adhérer de nouveau au CAS, ton nombre d’années d’adhésion sera remis à zéro. Si tu as obtenu des qualifications et suivi des formations (y compris heures de formation continue), celles-ci seront effacées. Ton login CAS sera supprimé, et tu ne pourras plus l’utiliser à d’autres fins (p. ex. pour l’application SAC-CAS et HutReservation). Si tu souhaites que les éventuelles qualifications obtenues et formations suivies soient conservées, tu dois nous autoriser ici à conserver tes données après ta sortie.
-          data_retention_consent: "Je souhaite que mes données soient conservées après ma sortie du CAS. (facultatif)"
+            Après ta sortie, nous conservons tes données pendant 12 mois avant de les supprimer définitivement. Les
+            conséquences de cette suppression sont les suivantes: si, plus tard, tu souhaites adhérer de nouveau au CAS,
+            ton nombre d’années d’adhésion sera remis à zéro. Si tu as obtenu des qualifications et suivi des formations
+            (y compris heures de formation continue), celles-ci seront effacées. Ton login CAS sera supprimé, et tu ne
+            pourras plus l’utiliser à d’autres fins (p. ex. pour l’application SAC-CAS et HutReservation). Si tu souhaites
+            que les éventuelles qualifications obtenues et formations suivies soient conservées, tu dois nous autoriser
+            ici à conserver tes données après ta sortie.
+          data_retention_consent: >-
+            Je souhaite que mes données soient conservées après ma sortie du CAS. (facultatif)
+          entry_fee_info_text: >-
+            La taxe d’entrée est due à chaque ré-adhésion. Peu importe que tes données aient été conservées ou supprimées.
+          entry_fee_consent: >-
+            J’ai compris qu’en cas de ré-affiliation, la taxe d’entrée sera systématiquement facturée. (champ obligatoire)
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."
           next_button: "Demander une résiliation"
