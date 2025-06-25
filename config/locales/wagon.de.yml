@@ -2130,21 +2130,25 @@ de:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
           termination_by_section_only: >-
-            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austritsfunktion
+            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion
             für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
           family_warning: "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}."
           data_retention_info_title: "Aufbewahrung deiner Daten"
           data_retention_info_text: >-
-            Nach deinem Austritt bewahren wir deine Daten noch zwölf Monate lang auf,
-            bevor wir diese endgültig löschen. Die Löschung hat für dich die folgenden Konsequenzen:
-            Falls du später dem SAC wieder beitreten möchtest, musst du die Eintrittsgebühr erneut
-            bezahlen und deine Anzahl Mitgliederjahre beginnen bei null.
-            Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen
-            (inklusive Fortbildungsstunden) gelöscht.
-            Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke verwenden,
-            wie z B. für die SAC App).
-            Falls du dies nicht möchtest, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
-          data_retention_consent: "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben."
+            Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen.
+            Die Löschung hat für dich folgende Konsequenzen: Falls du später dem SAC wieder beitreten möchtest, beginnen
+            deine Anzahl Mitgliederjahre wieder bei null. Sofern vorhanden werden erlangte Qualifikationen und absolvierte
+            Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst
+            es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest,
+            dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden,
+            musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+          data_retention_consent: >-
+            Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
+          entry_fee_info_text: >-
+            Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt
+            oder gelöscht wurden.
+          entry_fee_consent: >-
+            Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
           next_button: "Austritt beantragen"
