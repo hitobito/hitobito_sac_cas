@@ -46,7 +46,7 @@ module Wizards::Memberships
     def validate_terminate_operation
       unless terminate_operation.valid?
         terminate_operation.errors.full_messages.each do |msg|
-          errors.add(:base, msg)
+          # errors.add(:base, msg)
         end
       end
     end
