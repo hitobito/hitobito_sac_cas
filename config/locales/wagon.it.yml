@@ -2075,10 +2075,10 @@ it:
           termination_by_section_only: >-
             Attenzione: la disdetta riguarda una sezione in cui non è attiva la funzione di disdetta per il socio. Potrebbe essere necessario chiarire in anticipo la disdetta con la sezione.
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
-          data_retention_info_title: "Conservare i dati"
+          data_retention_info_title: " Conservazione dei dati personali"
           data_retention_info_text: >-
-            Dopo la disdetta conserveremo i tuoi dati per dodici mesi prima di cancellarli definitivamente. La cancellazione comporta le seguenti conseguenze: se desideri aderire nuovamente al CAS in un secondo momento, dovrai pagare ancora la quota di adesione e il tuo numero di anni di affiliazione ripartirà da zero. Le qualifiche ottenute e i corsi di formazione e aggiornamento completati (comprese le ore di perfezionamento) saranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altri scopi (ad esempio per l’app del CAS). Se non desideri che ciò avvenga, devi autorizzarci a conservare i tuoi dati anche dopo la disdetta.
-          data_retention_consent: "Desidero che i miei dati vengano conservati anche dopo aver lasciato il CAS."
+            Dopo la tua uscita dall’associazione, i tuoi dati personali verranno conservati per un periodo di 12 mesi, trascorso il quale saranno definitivamente cancellati. La cancellazione comporta le seguenti conseguenze: qualora in futuro desiderassi riaffiliarti al CAS, il conteggio degli anni di affiliazione ripartirà da zero. Eventuali qualifiche ottenute, corsi di formazione e perfezionamento frequentati (incluse le ore di formazione continua) verranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altre finalità (quali ad esempio l’app SAC-CAS o il servizio di prenotazione delle capanne HutReservation). Se desideri che le tue eventuali qualifiche ottenute e i corsi di formazione e perfezionamento completati vengano conservati dovrai fornire il consenso alla conservazione dei dati dopo la tua uscita dall’associazione.
+          data_retention_consent: "Desidero che i miei dati personali vengano conservati anche dopo la mia uscita dal CAS. (facoltativo)"
           subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
           subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
           next_button: "Richiedere disdetta"
