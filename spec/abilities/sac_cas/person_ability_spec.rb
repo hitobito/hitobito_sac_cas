@@ -254,7 +254,7 @@ describe PersonAbility do
 
   describe "query" do
     let(:person) { mitglied }
-    let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+    let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
 
     it "is not allowed for regular mitglied" do
       expect(ability).not_to be_able_to(:query, Person)

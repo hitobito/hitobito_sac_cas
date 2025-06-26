@@ -8,20 +8,47 @@
 require "spec_helper"
 
 shared_examples "Tourenchef" do
+  let(:person) { Fabricate(:person) }
+  let(:touren_und_kurse_group) { groups(:bluemlisalp_touren_und_kurse) }
+
+  before do
+    group_class = role_class.module_parent
+    group = Fabricate(group_class.sti_name.to_sym, parent: touren_und_kurse_group)
+    Fabricate(role_class.sti_name.to_sym, person: person, group:)
+  end
+
+  def group_and_below_full_groups
+    AbilityDsl::UserContext.new(person).permission_group_ids(:group_and_below_full)
+  end
+
   it "declares permissions" do
-    expect(role_class.permissions).to contain_exactly(
+    expect(role_class.permissions).to include(
       :layer_and_below_read,
-      :layer_events_full,
-      :layer_mitglieder_full,
-      :layer_touren_und_kurse_full
+      :layer_events_full
     )
   end
 
-  it "has group_and_below_full permission on touren_und_kurse"
+  it "has group_and_below_full permission on touren_und_kurse" do
+    expect(group_and_below_full_groups).to include(touren_und_kurse_group.id)
+  end
 
-  it "has group_and_below_full permission on mitglieder"
+  it "does not have group_and_below_full permission on other layers touren_und_kurse" do
+    expect(group_and_below_full_groups)
+      .not_to include(groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse).id)
+  end
 
-  it "has two_factor_authentication_enforced"
+  it "has group_and_below_full permission on mitglieder" do
+    expect(group_and_below_full_groups).to include(groups(:bluemlisalp_mitglieder).id)
+  end
+
+  it "does not have group_and_below_full permission on other layers mitglieder" do
+    expect(group_and_below_full_groups)
+      .not_to include(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder).id)
+  end
+
+  it "has two_factor_authentication_enforced" do
+    expect(role_class).to be_two_factor_authentication_enforced
+  end
 end
 
 [

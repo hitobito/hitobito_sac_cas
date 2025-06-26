@@ -29,7 +29,7 @@ describe EventAbility do
   end
 
   describe "layer_events_full" do
-    let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+    let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
 
     before do
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: person)

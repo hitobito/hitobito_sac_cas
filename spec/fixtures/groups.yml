@@ -6,7 +6,7 @@
 root:
   parent:
   lft: 1
-  rgt: 50
+  rgt: 52
   name: SAC/CAS
   type: Group::SacCas
   email: root@example.net
@@ -15,6 +15,7 @@ root:
   zip_code: 2843
   town: Neu Carlscheid
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
+
 geschaeftsstelle:
   parent: root
   lft: 2
@@ -64,7 +65,7 @@ externe_kontakte:
 bluemlisalp:
   parent: root
   lft: 14
-  rgt: 37
+  rgt: 39
   name: SAC Blüemlisalp
   email: bluemlisalp@sac.ch
   type: Group::Sektion
@@ -74,28 +75,35 @@ bluemlisalp:
 bluemlisalp_funktionaere:
   parent: bluemlisalp
   lft: 29
-  rgt: 30
+  rgt: 32
   type: Group::SektionsFunktionaere
+  layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
+
+bluemlisalp_touren_und_kurse:
+  parent: bluemlisalp_funktionaere
+  lft: 30
+  rgt: 31
+  type: Group::SektionsTourenUndKurse
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
 bluemlisalp_mitglieder:
   parent: bluemlisalp
-  lft: 31
-  rgt: 32
+  lft: 33
+  rgt: 34
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
 bluemlisalp_neuanmeldungen_nv:
   parent: bluemlisalp
-  lft: 33
-  rgt: 34
+  lft: 35
+  rgt: 36
   type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
 
 bluemlisalp_neuanmeldungen_sektion:
   parent: bluemlisalp
-  lft: 35
-  rgt: 36
+  lft: 37
+  rgt: 38
   type: Group::SektionsNeuanmeldungenSektion
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:bluemlisalp) %>
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
@@ -155,8 +163,8 @@ bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_winter:
 
 matterhorn:
   parent: root
-  lft: 38
-  rgt: 49
+  lft: 40
+  rgt: 51
   name: SAC Matterhorn
   email: matterhorn@sac.ch
   type: Group::Sektion
@@ -164,36 +172,36 @@ matterhorn:
 
 matterhorn_funktionaere:
   parent: matterhorn
-  lft: 39
-  rgt: 40
+  lft: 41
+  rgt: 44
   type: Group::SektionsFunktionaere
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_mitglieder:
   parent: matterhorn
-  lft: 41
-  rgt: 42
+  lft: 45
+  rgt: 46
   type: Group::SektionsMitglieder
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_neuanmeldungen_nv:
   parent: matterhorn
-  lft: 43
-  rgt: 44
+  lft: 47
+  rgt: 48
   type: Group::SektionsNeuanmeldungenNv
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_neuanmeldungen_sektion:
   parent: matterhorn
-  lft: 45
-  rgt: 46
+  lft: 49
+  rgt: 50
   type: Group::SektionsNeuanmeldungenSektion
   self_registration_role_type: Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
 
 matterhorn_touren_und_kurse:
-  parent: matterhorn
-  lft: 47
-  rgt: 48
+  parent: matterhorn_funktionaere
+  lft: 42
+  rgt: 43
   type: Group::SektionsTourenUndKurse
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:matterhorn) %>
