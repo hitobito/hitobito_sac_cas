@@ -13,7 +13,7 @@ describe Person::AddRequestAbility do
   subject(:ability) { Ability.new(user) }
 
   describe "layer_events_full" do
-    let(:touren_group) { Group::SektionsTourenUndKurse.create!(name: "Touren und Kurse", parent: groups(:bluemlisalp_funktionaere)) }
+    let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
     let(:event) { events(:section_tour) }
 
     before do
