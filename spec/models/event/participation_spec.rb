@@ -112,6 +112,18 @@ describe Event::Participation do
         participation.actual_days = 0
         expect(participation).to be_valid
       end
+
+      it "is rounded to 0.5" do
+        participation.actual_days = 1.7
+        expect(participation).to be_valid
+        expect(participation.actual_days).to eq(1.5)
+      end
+
+      it "is initialized to training days" do
+        event.training_days = 6
+        expect(participation).to be_valid
+        expect(participation.actual_days).to eq(6)
+      end
     end
   end
 end

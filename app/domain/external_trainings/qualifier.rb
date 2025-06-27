@@ -44,7 +44,10 @@ module ExternalTrainings
     end
 
     def sorted_later_events
-      (courses_loader.load - [@event]).sort_by(&:qualification_date)
+      courses_loader
+        .load
+        .reject { |c| c.id == @event.id && c.qualification_date == @event.qualification_date }
+        .sort_by(&:qualification_date)
     end
 
     def courses_loader

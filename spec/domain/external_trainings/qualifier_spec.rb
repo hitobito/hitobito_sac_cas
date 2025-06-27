@@ -47,6 +47,12 @@ describe ExternalTrainings::Qualifier do
       training = create_external_training(start_at: today, training_days: 1)
       expect { issue(training) }.to change { Qualification.count }
     end
+    it "noops when earlier participation does not have enough actual days" do
+      create_qualification(start_at: today - 2.years)
+      create_course_participation(start_at: today, qualified: true, training_days: 1, actual_days: 0.5)
+      training = create_external_training(start_at: today, training_days: 1)
+      expect { issue(training) }.not_to change { Qualification.count }
+    end
 
     context "with existing qualifications" do
       before do
@@ -191,7 +197,7 @@ describe ExternalTrainings::Qualifier do
       expect { revoke(training) }.to change { Qualification.count }.by(-2)
     end
 
-    context "with mulitple existing qualifications" do
+    context "with multiple existing qualifications" do
       before do
         create_qualification(start_at: today - 2.years)
         create_qualification(start_at: today - 1.year)
@@ -312,11 +318,11 @@ describe ExternalTrainings::Qualifier do
     )
   end
 
-  def create_course_participation(start_at:, kind: ski_course, training_days: 2, qualified: true)
+  def create_course_participation(start_at:, kind: ski_course, training_days: 2, qualified: true, actual_days: nil)
     course = Fabricate.build(:sac_course, kind: kind, training_days: training_days)
-    course.dates.build(start_at: start_at)
+    course.dates.build(start_at: start_at - (training_days - 1).days, finish_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, person: mitglied, qualified: qualified)
+    Fabricate(:event_participation, event: course, person: mitglied, qualified: qualified, actual_days: actual_days)
   end
 
   def create_qualification(start_at:, qualified_at: start_at, kind: ski_leader)
