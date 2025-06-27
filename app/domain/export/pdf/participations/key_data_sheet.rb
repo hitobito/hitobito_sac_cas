@@ -7,6 +7,10 @@
 
 class Export::Pdf::Participations::KeyDataSheet
   FONT_SIZE = 9
+  # Explicitely use the default values of prawn for margin and font to keep the current layout after changing the code
+  # to use `Export::Pdf::Document` which sets those values to something else.
+  FONT = "Helvetica"
+  MARGIN = [45, 45, 55, 70].freeze
 
   def initialize(participation)
     @participation = participation
@@ -14,6 +18,7 @@ class Export::Pdf::Participations::KeyDataSheet
 
   def render
     I18n.with_locale(course_locale) do
+      pdf.font FONT
       pdf.font_size = FONT_SIZE
       sections.each do |section|
         section.render
@@ -23,7 +28,7 @@ class Export::Pdf::Participations::KeyDataSheet
   end
 
   def pdf
-    @pdf ||= Prawn::Document.new(render_options)
+    @pdf ||= Export::Pdf::Document.new(margin: MARGIN).pdf
   end
 
   def filename
@@ -35,14 +40,6 @@ class Export::Pdf::Participations::KeyDataSheet
   end
 
   private
-
-  def render_options
-    @options.to_h.merge(
-      page_size: "A4",
-      page_layout: :portrait,
-      margin: [45, 45, 55, 70]
-    )
-  end
 
   def sections
     @sections ||=
