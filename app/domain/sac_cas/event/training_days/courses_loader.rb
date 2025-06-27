@@ -6,11 +6,44 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Event::TrainingDays::CoursesLoader
+  CourseRecord = Data.define(:id, :kind, :start_date, :qualification_date, :training_days)
+
+  COURSE_COLUMNS = %w[
+    events.id
+    events.kind_id
+    events.training_days
+    event_participations.actual_days
+  ].freeze
+
   def load
-    super + load_external_trainings
+    load_courses(super) + load_external_trainings
+  end
+
+  def load_courses(scope)
+    scope.select(COURSE_COLUMNS).map do |event|
+      CourseRecord.new(
+        event.id,
+        event.kind,
+        event.start_date,
+        event.qualification_date,
+        event.actual_days || event.training_days
+      )
+    end
   end
 
   def load_external_trainings
+    fetch_external_trainings.map do |training|
+      CourseRecord.new(
+        training.id,
+        training.event_kind,
+        training.start_at,
+        training.qualification_date,
+        training.training_days
+      )
+    end
+  end
+
+  def fetch_external_trainings
     ExternalTraining.between(@start_date, @end_date)
       .where(person: @person_id)
       .includes(event_kind: {event_kind_qualification_kinds: :qualification_kind})
