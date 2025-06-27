@@ -30,7 +30,6 @@ describe "Mailing list edit page", js: true do
       click_link "Abonnenten"
 
       find("h2", text: "Globale Bedingungen").click_link
-      click_link "Rechnungsempfänger"
       check "Rechnungsempfänger SAC Mitgliedschaft"
       click_button "Speichern"
       expect(page).to have_text "Rechnungsempfänger SAC Mitgliedschaft"
