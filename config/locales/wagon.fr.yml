@@ -267,6 +267,11 @@ fr:
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
         training_days: Journées de formation
+        brief_description: Kurzbeschreibung
+        specialities: Besonderes
+        similar_tours: Vergleichstouren
+        program: Programm
+        seo_text: SEO Text
       event/course:
         accommodation: Hébergement
         annual: Récurrent chaque année
@@ -481,6 +486,8 @@ fr:
             description:
               read_all_people: Lecture de toutes les personnes.
               layer_events_full: Verwalten von Events auf der Sektion.
+              layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
+              layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
       qualification_kind:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:

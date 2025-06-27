@@ -265,6 +265,11 @@ it:
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
         training_days: Giornate di formazione
+        brief_description: Kurzbeschreibung
+        specialities: Besonderes
+        similar_tours: Vergleichstouren
+        program: Programm
+        seo_text: SEO Text
       event/course:
         accommodation: Alloggio
         annual: Annuale
@@ -479,6 +484,8 @@ it:
             description:
               read_all_people: Letto da tutte le persone.
               layer_events_full: Verwalten von Events auf der Sektion.
+              layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
+              layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
