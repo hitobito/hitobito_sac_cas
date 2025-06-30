@@ -7,8 +7,6 @@
 
 module Memberships
   class SwitchStammsektion < JoinBase
-    attr_reader :previous_stammsektion_role
-
     def initialize(...)
       super
       raise "terminated membership" if sac_membership.stammsektion_role&.terminated?
@@ -17,42 +15,45 @@ module Memberships
     private
 
     def prepare_roles(person)
-      # In case we can't locate the old membership role, we calculate the beitragskategorie
-      # for the person as a fallback value.
-      @previous_stammsektion_role = existing_membership(person)
+      previous_stammsektion_role = People::SacMembership.new(person).stammsektion_role
+      mark_for_termination(previous_stammsektion_role) if previous_stammsektion_role
 
-      beitragskategorie = previous_stammsektion_role&.beitragskategorie ||
-        SacCas::Beitragskategorie::Calculator.new(person).calculate
-      new_stammsektion_role = new_membership(person, beitragskategorie, previous_stammsektion_role&.end_on_was)
+      new_stammsektion_role = build_role(
+        membership_group,
+        Group::SektionsMitglieder::Mitglied.sti_name,
+        person,
+        previous_stammsektion_role&.beitragskategorie || calculate_beitrags_kategorie(person),
+        previous_stammsektion_role&.end_on_was
+      )
 
-      [previous_stammsektion_role, new_stammsektion_role].compact
+      roles = [previous_stammsektion_role, new_stammsektion_role]
+      roles += yield(previous_stammsektion_role) if block_given?
+      roles.compact
     end
 
-    def existing_membership(person)
-      role = People::SacMembership.new(person).stammsektion_role
-      return unless role
-
+    def mark_for_termination(role)
       if role.start_on.today?
         role.mark_for_destruction
-        role.skip_destroy_dependent_roles = true
-        role.skip_destroy_household = true
+        if role.is_a?(Group::SektionsMitglieder::Mitglied)
+          role.skip_destroy_dependent_roles = true
+          role.skip_destroy_household = true
+        end
       else
         role.end_on = now.to_date - 1.day
       end
-      role
     end
 
-    def new_membership(person, beitragskategorie, end_on)
-      membership_group.roles.build({
-        type: role_type,
-        start_on: now.to_date,
-        end_on: end_on || now.to_date.end_of_year,
+    def build_role(group, type, person, beitragskategorie, end_on)
+      group.roles.build({
+        type:,
         person:,
         # `Role#set_beitragskategorie` gets called in a before_validation callback, but
         # `Memberships::CommonApi#validate_roles` and `Memberships::CommonApi#save_roles`
         # first save the roles with `validate: false` to make the role validations working which
         # depend on persisted values. So we need to set the beitragskategorie here manually.
-        beitragskategorie:
+        beitragskategorie:,
+        start_on: now.to_date,
+        end_on: end_on || now.to_date.end_of_year
       })
     end
 
@@ -64,8 +65,8 @@ module Memberships
       @membership_group ||= join_section.children.find_by(type: Group::SektionsMitglieder.sti_name)
     end
 
-    def role_type
-      Group::SektionsMitglieder::Mitglied
+    def calculate_beitrags_kategorie(person)
+      SacCas::Beitragskategorie::Calculator.new(person).calculate
     end
   end
 end

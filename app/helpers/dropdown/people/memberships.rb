@@ -12,6 +12,7 @@ module Dropdown
     WIZARDS = [
       [Wizards::Memberships::JoinZusatzsektion, :group_person_join_zusatzsektion_path],
       [Wizards::Memberships::SwitchStammsektion, :group_person_switch_stammsektion_path],
+      [Wizards::Memberships::SwitchStammZusatzsektion, :group_person_switch_stammsektion_path, {kind: :zusatzsektion}],
       [Wizards::Memberships::TerminateSacMembershipWizard, :group_person_terminate_sac_membership_path]
     ].freeze
 
@@ -33,15 +34,15 @@ module Dropdown
     private
 
     def init_items
-      WIZARDS.each do |wizard_class, path|
-        add_wizard(wizard_class, path) if current_ability.can?(:create, build(wizard_class))
+      WIZARDS.each do |wizard_class, path, params|
+        add_wizard(wizard_class, path, params) if current_ability.can?(:create, build(wizard_class))
       end
       add_undo_termination_link if current_ability.can?(:create, ::Memberships::UndoTermination)
     end
 
-    def add_wizard(wizard_class, path)
+    def add_wizard(wizard_class, path, params)
       wizard_name = wizard_class.to_s.demodulize.to_s.underscore
-      target_url = send(path, group_id: @group.id, person_id: @person.id)
+      target_url = send(path, params.to_h.merge(group_id: @group.id, person_id: @person.id))
       link_name = translate("#{wizard_name}_link")
       add_item(link_name, target_url, method: :get)
     end
