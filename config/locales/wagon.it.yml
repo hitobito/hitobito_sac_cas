@@ -265,10 +265,10 @@ it:
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
         training_days: Giornate di formazione
-        brief_description: Kurzbeschreibung
-        specialities: Besonderes
-        similar_tours: Vergleichstouren
-        program: Programm
+        brief_description: Breve descrizione
+        specialities: Particolarità
+        similar_tours: Escursioni a confronto
+        program: Programma
         seo_text: SEO Text
       event/course:
         accommodation: Alloggio

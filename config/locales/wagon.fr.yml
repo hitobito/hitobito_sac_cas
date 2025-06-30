@@ -267,9 +267,9 @@ fr:
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
         training_days: Journées de formation
-        brief_description: Kurzbeschreibung
-        specialities: Besonderes
-        similar_tours: Vergleichstouren
+        brief_description: Brève description
+        specialities: Spécial
+        similar_tours: Randonnées comparables
         program: Programm
         seo_text: SEO Text
       event/course:
