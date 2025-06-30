@@ -30,7 +30,7 @@ describe Dropdown::People::Memberships do
   def menu = subject.find(".btn-group > ul.dropdown-menu")
 
   def stub_can_create(wizard_class, value)
-    expect(ability).to receive(:can?).with(:create,
+    allow(ability).to receive(:can?).with(:create,
       kind_of(wizard_class)).and_return(value)
   end
 

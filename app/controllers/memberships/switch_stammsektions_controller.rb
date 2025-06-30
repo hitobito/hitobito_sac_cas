@@ -28,7 +28,11 @@ module Memberships
     end
 
     def model_class
-      Wizards::Memberships::SwitchStammsektion
+      if params[:kind] == "zusatzsektion"
+        Wizards::Memberships::SwitchStammZusatzsektion
+      else
+        Wizards::Memberships::SwitchStammsektion
+      end
     end
 
     def success_message
