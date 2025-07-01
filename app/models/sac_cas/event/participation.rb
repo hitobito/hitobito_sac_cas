@@ -15,7 +15,8 @@ module SacCas::Event::Participation
   ]
 
   prepended do
-    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.clear
+    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.concat([
       Event::ParticipationCanceledMailer::CONFIRMATION,
       Event::CanceledMailer::NO_LEADER,
       Event::CanceledMailer::MINIMUM_PARTICIPANTS,
@@ -28,7 +29,7 @@ module SacCas::Event::Participation
       Event::SurveyMailer::SURVEY,
       Event::ApplicationConfirmationMailer::UNCONFIRMED,
       Event::ApplicationConfirmationMailer::APPLIED
-    ]
+    ])
 
     include I18nEnums
     include CapitalizedDependentErrors
@@ -43,6 +44,7 @@ module SacCas::Event::Participation
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 
     before_validation :clear_price_without_category
+    before_validation :round_actual_days
     before_save :update_previous_state, if: :state_changed?
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
@@ -71,6 +73,14 @@ module SacCas::Event::Participation
   end
 
   private
+
+  def round_actual_days
+    if new_record? && roles.any? { |r| r.class.participant? }
+      self.actual_days ||= event.training_days
+    end
+
+    self.actual_days = (actual_days * 2).round / 2.0 if actual_days
+  end
 
   def assert_actual_days_size
     return if actual_days.blank?

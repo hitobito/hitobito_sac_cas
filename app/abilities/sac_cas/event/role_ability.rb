@@ -20,7 +20,6 @@ module SacCas::Event::RoleAbility
   end
 
   def for_participations_full_events_except_courses
-    for_participations_full_events &&
-      event.type != Event::Course.sti_name
+    for_participations_full_events && !event.course?
   end
 end

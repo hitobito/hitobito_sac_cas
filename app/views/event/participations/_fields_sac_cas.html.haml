@@ -3,9 +3,8 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
 
-- if entry.person != current_person && @event.course?
+- if @event.course? && can?(:update_full, entry)
   = f.labeled(Event::Participation.human_attribute_name(:price)) do
     = f.select(:price_category, *entry.event_prices, {class: 'form-select form-select-sm'})
 
-- if @event.course? && can?(:edit_actual_days, entry)
   = f.labeled_input_field(:actual_days, help: t("event.participations.answers_step.total_duration_days_help", total_days: @event.total_duration_days))

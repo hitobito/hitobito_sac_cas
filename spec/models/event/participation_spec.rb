@@ -95,7 +95,7 @@ describe Event::Participation do
   describe "validations" do
     let(:event) { events(:top_course) }
 
-    subject(:participation) { Fabricate(:event_participation, event: event) }
+    subject(:participation) { Fabricate.build(:event_participation, event: event) }
 
     context "actual_days" do
       it "has to be a positive number" do
@@ -111,6 +111,26 @@ describe Event::Participation do
       it "can be zero" do
         participation.actual_days = 0
         expect(participation).to be_valid
+      end
+
+      it "is rounded to 0.5" do
+        participation.actual_days = 1.7
+        expect(participation).to be_valid
+        expect(participation.actual_days).to eq(1.5)
+      end
+
+      it "is initialized to training days for participants" do
+        event.training_days = 6
+        participation.roles.build(type: Event::Course::Role::Participant)
+        expect(participation).to be_valid
+        expect(participation.actual_days).to eq(6)
+      end
+
+      it "is not initialized for leaders" do
+        event.training_days = 6
+        participation.roles.build(type: Event::Course::Role::Leader)
+        expect(participation).to be_valid
+        expect(participation.actual_days).to be_nil
       end
     end
   end
