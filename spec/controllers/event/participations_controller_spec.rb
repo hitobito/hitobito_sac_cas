@@ -164,6 +164,7 @@ describe Event::ParticipationsController do
     end
 
     it "redirects to participation path" do
+      event.update!(training_days: 3)
       expect do
         post :create,
           params: {
@@ -174,6 +175,7 @@ describe Event::ParticipationsController do
           }
         expect(response).to redirect_to(participation_path)
       end.to change { Event::Participation.count }.by(1)
+      expect(assigns(:participation).actual_days).to eq(3)
     end
 
     it "checks conditions for root courses" do
@@ -506,21 +508,7 @@ describe Event::ParticipationsController do
     let(:participation) { Fabricate(:event_participation, event: event) }
     let(:participation_path) { group_event_participation_path(id: participation.id) }
 
-    it "allows to edit actual_days with participations_full in event" do
-      own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
-      Event::Course::Role::Leader.create!(participation: own_participation)
-      patch :update,
-        params: {
-          group_id: group.id,
-          event_id: event.id,
-          id: participation.id,
-          event_participation: {actual_days: "2", person_id: participation.person.id}
-        }
-      expect(response).to redirect_to(participation_path)
-      expect(participation.reload.actual_days).to eq(2)
-    end
-
-    it "does not allow to edit actual_days without participations_full in event" do
+    it "can edit actual_days" do
       patch :update,
         params: {
           group_id: group.id,
@@ -529,10 +517,44 @@ describe Event::ParticipationsController do
           event_participation: {actual_days: 2}
         }
       expect(response).to redirect_to(participation_path)
-      expect(participation.reload.actual_days).to be_nil
+      expect(participation.reload.actual_days).to eq(2)
     end
 
-    describe "#price_category" do
+    context "as any person" do
+      let(:user) { participation.person }
+
+      it "cannot edit own actual_days" do
+        patch :update,
+          params: {
+            group_id: group.id,
+            event_id: event.id,
+            id: participation.id,
+            event_participation: {actual_days: 2}
+          }
+        expect(response).to redirect_to(participation_path)
+        expect(participation.reload.actual_days).to be_nil
+      end
+    end
+
+    context "as course leader" do
+      let(:user) { people(:mitglied) }
+
+      it "can edit actual_days" do
+        own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
+        Event::Course::Role::Leader.create!(participation: own_participation)
+        patch :update,
+          params: {
+            group_id: group.id,
+            event_id: event.id,
+            id: participation.id,
+            event_participation: {actual_days: "2", person_id: participation.person.id}
+          }
+        expect(response).to redirect_to(participation_path)
+        expect(participation.reload.actual_days).to eq(2)
+      end
+    end
+
+    context "#price_category" do
       before { participation.update!(price: 20, price_category: "price_regular") }
 
       it "updates price when changing price_category" do
@@ -570,7 +592,7 @@ describe Event::ParticipationsController do
       end
 
       context "for user participation" do
-        let(:participation) { Fabricate(:event_participation, event: event, person: user) }
+        let(:user) { participation.person }
 
         it "can update answers, but not price" do
           event.update!(price_special: 12)

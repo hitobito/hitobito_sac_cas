@@ -147,6 +147,7 @@ module HitobitoSacCas
         "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
         "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       )
+      Event::Qualifier::StartAtCalculator.prepend SacCas::Event::Qualifier::StartAtCalculator
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber

@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationsController
   prepended do
     define_model_callbacks :summon
 
-    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter price_category]
+    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter
@@ -62,7 +62,7 @@ module SacCas::Event::ParticipationsController
 
   def permitted_attrs
     permitted = self.class.permitted_attrs.dup
-    permitted << :actual_days if can?(:edit_actual_days, entry)
+    permitted << :actual_days << :price_category if can?(:update_full, entry)
     permitted
   end
 
@@ -73,8 +73,6 @@ module SacCas::Event::ParticipationsController
   end
 
   def calculate_price(permitted)
-    permitted.delete(:price_category) if entry.person_id == current_user.id
-
     price_category = permitted[:price_category]
     if entry.new_record? && !params[:for_someone_else]
       permitted[:subsidy] = false unless entry.subsidizable?

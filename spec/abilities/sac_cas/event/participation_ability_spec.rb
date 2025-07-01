@@ -38,6 +38,14 @@ describe Event::ParticipationAbility do
         build_participation_role(role.person, role_type)
       end
 
+      it "can update" do
+        expect(subject).to be_able_to(:update, participation)
+      end
+
+      it "can update_full" do
+        expect(subject).to be_able_to(:update_full, participation)
+      end
+
       it "cannot assign" do
         expect(subject).not_to be_able_to(:assign, participation)
       end
@@ -209,7 +217,7 @@ describe Event::ParticipationAbility do
       end
     end
 
-    describe "edit_actual_days" do
+    describe "update_full" do
       context "with participations_full event role" do
         let(:own_participation) { build(:bluemlisalp_funktionaere, event: top_course, person: role.person) }
 
@@ -217,23 +225,23 @@ describe Event::ParticipationAbility do
           Event::Course::Role::Leader.create!(participation: own_participation)
         end
 
-        it "may edit_actual_days others" do
-          expect(subject).to be_able_to(:edit_actual_days, participation)
+        it "may update_full others" do
+          expect(subject).to be_able_to(:update_full, participation)
         end
 
-        it "may edit_actual_days own" do
-          expect(subject).to be_able_to(:edit_actual_days, own_participation)
+        it "may update_full own" do
+          expect(subject).to be_able_to(:update_full, own_participation)
         end
       end
 
       context "without participations_full event role" do
-        it "may not edit_actual_days others" do
-          expect(subject).not_to be_able_to(:edit_actual_days, participation)
+        it "may not update_full others" do
+          expect(subject).not_to be_able_to(:update_full, participation)
         end
 
-        it "may not edit_actual_days own" do
+        it "may not update_full own" do
           participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
-          expect(subject).not_to be_able_to(:edit_actual_days, participation)
+          expect(subject).not_to be_able_to(:update_full, participation)
         end
       end
     end
