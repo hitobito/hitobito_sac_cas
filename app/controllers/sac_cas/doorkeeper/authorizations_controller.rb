@@ -8,6 +8,7 @@
 module SacCas::Doorkeeper
   module AuthorizationsController
     extend ActiveSupport::Concern
+    include SelfRegistrationRedirect
 
     OAUTH_PARAMS_NO_ROLES_KEY = :oauth_params_no_roles
 
@@ -24,8 +25,7 @@ module SacCas::Doorkeeper
       return super unless current_user.roles.empty?
 
       remember_oauth_params
-      session[:wizard_completed_redirect] = oauth_authorization_path
-      redirect_to self_registration_path
+      redirect_to_self_registration(self_registration_group.id, oauth_authorization_path)
     end
 
     private
@@ -39,8 +39,6 @@ module SacCas::Doorkeeper
       request.parameters.merge!(session.delete(OAUTH_PARAMS_NO_ROLES_KEY) || {})
     end
 
-    def self_registration_path
-      group_self_registration_path(group_id: Group::AboBasicLogin.first.id)
-    end
+    def self_registration_group = Group::AboBasicLogin.first
   end
 end

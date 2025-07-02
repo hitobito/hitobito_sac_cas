@@ -7,6 +7,7 @@
 
 module SacCas::Groups::SelfRegistrationController
   extend ActiveSupport::Concern
+  include SelfRegistrationRedirect
 
   delegate :email, to: :wizard
 
@@ -71,11 +72,7 @@ module SacCas::Groups::SelfRegistrationController
   def redirect_target
     return new_person_session_path unless current_user.present?
 
-    if action_name == "create" && session[:wizard_completed_redirect].present?
-      session.delete(:wizard_completed_redirect)
-    else
-      history_group_person_path(group_id: current_user.reload.primary_group_id || Group.root.id, id: current_user.id)
-    end
+    self_registration_completed_redirect_target
   end
 
   def redirection_message
