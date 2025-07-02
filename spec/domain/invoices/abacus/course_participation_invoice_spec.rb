@@ -59,4 +59,23 @@ describe Invoices::Abacus::CourseParticipationInvoice do
       expect(additional_user_fields[:user_field10]).to eq("01.01.2024 - 31.01.2024, 01.03.2024 - 31.03.2024")
     end
   end
+
+  context "user language" do
+    before do
+      member.language = "fr"
+      I18n.with_locale("fr") do
+        course.update!(name: "Evenement")
+        course.kind.level.update!(label: "Cours de base")
+      end
+    end
+
+    it "is used for labels" do
+      position = subject.positions.first
+      expect(position.name).to eq("Prix normal - Cours de base")
+
+      additional_user_fields = subject.additional_user_fields
+      expect(additional_user_fields[:user_field8]).to eq(course.number)
+      expect(additional_user_fields[:user_field9]).to eq("Evenement")
+    end
+  end
 end
