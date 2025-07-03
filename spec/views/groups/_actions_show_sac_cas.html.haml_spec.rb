@@ -23,11 +23,27 @@ describe "groups/_actions_show_sac_cas.html.haml" do
     expect(dom).to have_link "CSV Mitglieder", href: "/de/groups/578575972/mitglieder_exports"
   end
 
+  it "renders statistics download button" do
+    expect(dom).to have_button "Mitgliederstatistik"
+  end
+
   context "member" do
     let(:person) { people(:mitglied) }
 
     it "hides export link" do
       expect(dom).not_to have_link "CSV Mitglieder"
+    end
+
+    it "hides statistics download button" do
+      expect(dom).not_to have_button "Mitgliederstatistik"
+    end
+  end
+
+  context "Mitglieder group" do
+    let(:group) { groups(:bluemlisalp_mitglieder) }
+
+    it "hides statistics download button" do
+      expect(dom).not_to have_button "Mitgliederstatistik"
     end
   end
 end

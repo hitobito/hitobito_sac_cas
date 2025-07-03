@@ -2,6 +2,9 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
+# We'd normally use stimulus but since this is very sac-specific behaviour
+# and creating new stimulus controllers in wagons currently does not work we opted to use javascript
+require './download_statistics.js'
 
 -#  Handles conditional buttons when adding people to household during signup
 document.addEventListener 'click', (e) ->

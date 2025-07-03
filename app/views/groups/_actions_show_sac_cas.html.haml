@@ -11,3 +11,6 @@
                   new_group_yearly_membership_invoice_path(@group),
                   :envelope,
                   method: :get)
+
+- if can?(:download_statistics, entry) && entry.layer?
+  = build_download_statistics_button(entry)

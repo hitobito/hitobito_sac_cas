@@ -1,0 +1,15 @@
+- #  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+%h2= t(".title")
+
+.row
+  .col-6
+    = direct_filter_date(:download_statistics_from, t(".from"), mindate: "01.01.2025")
+  .col-6
+    = direct_filter_date(:download_statistics_to, t(".to"), mindate: "01.01.2025")
+.mt-3
+  = action_button t(".download"), "#{Settings.groups.membership_statistics_download_url}?section_id=#{@group.id}", nil, id: "download_statistics_link", target: "_blank"
+  = cancel_link("#")
