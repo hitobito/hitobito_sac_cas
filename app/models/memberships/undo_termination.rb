@@ -155,20 +155,40 @@ module Memberships
     # persist all roles without validations and validate them afterwards, finally we roll back
     # the transaction to revert all changes.
     def validate_restored_roles
-      Role.transaction(requires_new: true) do
-        restored_people.each { _1.save(validate: false) }
-        restored_roles.each { _1.save(validate: false) }
+      preserve_restored_people_changes do
+        Role.transaction(requires_new: true) do
+          restored_people.each { _1.save(validate: false) }
+          restored_roles.each { _1.save(validate: false) }
 
-        restored_roles.each do |role|
-          next if role.valid?
+          restored_roles.each do |role|
+            next if role.valid?
 
-          group_with_parent = role.group.decorate.label_with_parent
-          person = role.person
-          role.errors.full_messages.each do |error_message|
-            errors.add(:base, :role_invalid, role:, group_with_parent:, person:, error_message:)
+            group_with_parent = role.group.decorate.label_with_parent
+            person = role.person
+            role.errors.full_messages.each do |error_message|
+              errors.add(:base, :role_invalid, role:, group_with_parent:, person:, error_message:)
+            end
           end
+          raise ActiveRecord::Rollback # revert all changes
         end
-        raise ActiveRecord::Rollback # revert all changes
+      end
+    end
+
+    def preserve_restored_people_changes
+      person_changes = restored_people.each_with_object({}) do |person, hash|
+        next unless person.changed?
+
+        hash[person.id] = person.changes
+      end
+      yield
+    ensure
+      restored_people.each do |person|
+        person.reload
+        next unless person_changes.key?(person.id)
+
+        person_changes[person.id].each do |attr, (from, to)|
+          person.send(:"#{attr}=", to)
+        end
       end
     end
 
