@@ -29,4 +29,19 @@ describe GroupAbility do
         groups(:bluemlisalp))
     end
   end
+
+  describe "download_statistics" do
+    it "as admin it is permitted on top layer" do
+      expect(Ability.new(people(:admin))).to be_able_to(:download_statistics, groups(:root))
+    end
+
+    it "as admin it is permitted on lower layer" do
+      expect(Ability.new(people(:admin))).to be_able_to(:download_statistics, groups(:bluemlisalp))
+    end
+
+    it "as mitglied it is denied" do
+      expect(Ability.new(people(:mitglied))).not_to be_able_to(:download_statistics,
+        groups(:bluemlisalp))
+    end
+  end
 end

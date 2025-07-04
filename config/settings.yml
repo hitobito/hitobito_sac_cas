@@ -25,6 +25,9 @@ event:
     delete_answers_after_months: 6
     delete_additional_information_after_months: 6
 
+groups:
+  membership_statistics_download_url: https://stats.portal.sac-cas.ch/download
+
 # The person with this email has root access to everything
 # This person should only be used by the operators of the application,
 # not the customers.

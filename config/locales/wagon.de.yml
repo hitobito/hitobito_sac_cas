@@ -1428,8 +1428,14 @@ de:
     actions_show_sac_cas:
       export_mitglieder: CSV Mitglieder
       create_yearly_membership_invoice: MV Jahresinkasso
+      download_statistics_button: Mitgliederstatistik
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
+    popover_download_statistics:
+      title: Mitgliederstatistik herunterladen
+      from: Von
+      to: Bis
+      download: Herunterladen
 
     self_registration:
       form:
