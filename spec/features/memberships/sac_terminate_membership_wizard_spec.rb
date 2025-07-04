@@ -33,6 +33,7 @@ describe "terminate sac membership wizard", js: true do
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
       check "über Spendenaktionen vom SAC informiert werden"
+      check "Wiedereintritt die Eintrittsgebühr"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -58,6 +59,7 @@ describe "terminate sac membership wizard", js: true do
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
       check "über Spendenaktionen vom SAC informiert werden"
+      check "Wiedereintritt die Eintrittsgebühr"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -127,6 +129,7 @@ describe "terminate sac membership wizard", js: true do
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach dem SAC Austritt erhalten bleiben"
       check "über Spendenaktionen vom SAC informiert werden"
+      check "Wiedereintritt die Eintrittsgebühr"
       expect do
         click_button "Austritt beantragen"
         expect(page).to have_content "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -205,6 +208,7 @@ describe "terminate sac membership wizard", js: true do
       select termination_reason.text
       expect do
         expect(page).to have_content "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt"
+        check "Wiedereintritt die Eintrittsgebühr"
         click_button "Austritt beantragen"
         expect(page).to have_content "Eure 3 SAC-Mitgliedschaften wurden gekündet."
         role.reload

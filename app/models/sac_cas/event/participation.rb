@@ -15,6 +15,8 @@ module SacCas::Event::Participation
   ]
 
   prepended do
+    # Maybe better done via class_variable
+    ::Event::Participation.send(:remove_const, :MANUALLY_SENDABLE_PARTICIPANT_MAILS)
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
       Event::ParticipationCanceledMailer::CONFIRMATION,
       Event::CanceledMailer::NO_LEADER,
