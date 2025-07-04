@@ -23,8 +23,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
       [t("level"), event.kind.level.label],
       [t("leaders"), leaders],
       *compensation_table,
-      [t("event_dates_durations"), event_dates_durations],
-      [t("event_dates_locations"), event_dates_locations],
+      [t("dates"), dates],
+      [t("location"), event.location],
       [t("accommodation"), accommodation],
       [t("accommodation_budget.label"), t("accommodation_budget.text")],
       *accommodation_budget_table,
@@ -57,7 +57,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     end.map { _1.person.full_name }.join(", ")
   end
 
-  def event_dates_durations
+  def dates
     event.dates.map do |date|
       [localize_date(date.start_at.to_date), localize_date(date.finish_at&.to_date)].join(" - ")
     end.join("\n")
@@ -114,10 +114,6 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
 
   def make_subtable(data, options = {})
     pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH, cell_style: {border_width: 0.5}))
-  end
-
-  def event_dates_locations
-    event.dates.pluck(:location).join("\n")
   end
 
   def accommodation
