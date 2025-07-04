@@ -5,6 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
+# Sends emails with custom content in potentially multiple languages.
+# This is primarly used for multilingual course emails.
+# To send an email in a single specific language, use `I18n.with_locale { compose(...) }`
 module MultilingualMailer
   extend ActiveSupport::Concern
 
