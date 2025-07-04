@@ -27,7 +27,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
   subject { described_class.new(participation) }
 
-  before { travel_to(now) }
+  before do
+    event.update!(location: "Berghotel Schwarenbach\n3752 Kandersteg")
+    travel_to(now)
+  end
 
   let(:texts) {
     [
@@ -47,8 +50,8 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [195, 575, "01.03.2023 - "],
       [195, 564, "03.04.2023 - 10.04.2023"],
       [75, 544, "Durchführungsort"],
-      [195, 544, "Bern"],
-      [195, 533, "Zurich"],
+      [195, 544, "Berghotel Schwarenbach"],
+      [195, 533, "3752 Kandersteg"],
       [75, 513, "Unterkunft"],
       [195, 513, "Wird reserviert durch SAC"],
       [75, 493, "Unterkunft Budget"],

@@ -1628,8 +1628,8 @@ de:
         level: Angebot / Stufe
         leaders: Leitung
         compensation: Tageshonorar
-        event_dates_durations: Durchführungsdatum
-        event_dates_locations: Durchführungsort
+        dates: Durchführungsdatum
+        location: Durchführungsort
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget
