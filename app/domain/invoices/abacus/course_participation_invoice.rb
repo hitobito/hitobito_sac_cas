@@ -22,25 +22,34 @@ module Invoices
       def positions
         return [] unless invoice?
 
-        description, amount = position_description_and_amount
-        name = [description, event.kind.level].compact_blank.join(" - ")
-        @positions ||= [Invoices::Abacus::InvoicePosition.new(
-          name: name, grouping: name, amount: amount, count: 1,
-          article_number: article_number,
-          cost_center: event.kind.cost_center.code,
-          cost_unit: event.kind.cost_unit.code
-        )]
+        @positions ||= [build_course_position]
+      end
+
+      def build_course_position
+        I18n.with_locale(participation.person.language) do
+          description, amount = position_description_and_amount
+          name = [description, event.kind.level].compact_blank.join(" - ")
+          Invoices::Abacus::InvoicePosition.new(
+            name: name, grouping: name, amount: amount, count: 1,
+            article_number: article_number,
+            cost_center: event.kind.cost_center.code,
+            cost_unit: event.kind.cost_unit.code
+          )
+        end
       end
 
       def additional_user_fields
         return {} unless invoice?
 
         # limit strings according to Abacus field lengths
-        {
-          user_field8: event.number.to_s[0, 50],
-          user_field9: event.name.to_s[0, 100],
-          user_field10: event_dates_label[0, 100]
-        }
+
+        I18n.with_locale(participation.person.language) do
+          {
+            user_field8: event.number.to_s[0, 50],
+            user_field9: event.name.to_s[0, 100],
+            user_field10: event_dates_label[0, 100]
+          }
+        end
       end
 
       def total

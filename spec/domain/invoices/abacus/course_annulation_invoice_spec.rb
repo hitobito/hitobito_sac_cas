@@ -130,4 +130,24 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
       expect(subject.additional_user_fields[:user_field22]).to eq(1234)
     end
   end
+
+  context "user language" do
+    before do
+      member.language = "fr"
+      I18n.with_locale("fr") do
+        course.update!(name: "Evenement")
+        course.kind.level.update!(label: "Cours de base")
+      end
+      participation.update!(state: :canceled, canceled_at: Date.new(2023, 12, 10))
+    end
+
+    it "is used for labels" do
+      position = subject.positions.first
+      expect(position.name).to eq("50% de frais d’annulation - Cours de base")
+
+      additional_user_fields = subject.additional_user_fields
+      expect(additional_user_fields[:user_field8]).to eq(course.number)
+      expect(additional_user_fields[:user_field9]).to eq("Evenement")
+    end
+  end
 end
