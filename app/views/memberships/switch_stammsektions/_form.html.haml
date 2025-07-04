@@ -6,6 +6,7 @@
 - @sheet = Sheet::Memberships::SwitchStammsektion.new(self, nil, group)
 
 = standard_form(wizard, url: group_person_switch_stammsektion_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f|
+  = hidden_field_tag :kind, params[:kind]
   = render StepsComponent.new(partials: wizard.partials, step: wizard.current_step, form: f) do |c|
     = c.with_aside do
       .col-md
