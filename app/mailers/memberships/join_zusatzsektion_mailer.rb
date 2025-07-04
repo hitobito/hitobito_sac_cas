@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Memberships::JoinZusatzsektionMailer < ApplicationMailer
-  include MultilingualMailer
   include CommonMailerPlaceholders
 
   CONFIRMATION = "join_zusatzsektion_confirmation"
@@ -27,8 +26,9 @@ class Memberships::JoinZusatzsektionMailer < ApplicationMailer
     @section = section
     @beitragskategorie = beitragskategorie
     headers[:bcc] = [section.email, SacCas::MV_EMAIL].compact_blank
-    locales = [person.language]
 
-    compose_multilingual(person, content_key, locales)
+    I18n.with_locale(person.language) do
+      compose(person, content_key)
+    end
   end
 end

@@ -22,11 +22,13 @@ class Memberships::TerminateMembershipMailer < ApplicationMailer
   def send_confirmation(key, person, sektion, terminate_on)
     @person = person
     @sektion = sektion
-    @terminate_on = terminate_on
     headers[:cc] = Group::Geschaeftsstelle.first.email
     headers[:bcc] = [sektion.email, SacCas::MV_EMAIL].compact_blank
 
-    compose(person, key)
+    I18n.with_locale(person.language) do
+      @terminate_on = I18n.l(terminate_on)
+      compose(person, key)
+    end
   end
 
   def placeholder_person_name

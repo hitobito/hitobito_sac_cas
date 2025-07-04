@@ -86,7 +86,7 @@ module Wizards::Memberships
       Memberships::TerminateMembershipMailer.terminate_membership(
         person,
         sektion,
-        I18n.l(terminate_on)
+        terminate_on
       ).deliver_later
     end
 
