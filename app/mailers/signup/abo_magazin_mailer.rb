@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Signup::AboMagazinMailer < ApplicationMailer
-  include MultilingualMailer
   include CommonMailerPlaceholders
   include ActionView::Helpers::NumberHelper
 
@@ -16,9 +15,10 @@ class Signup::AboMagazinMailer < ApplicationMailer
     @person = person
     @group = group
     @newsletter_subscribed = newsletter_subscribed
-    locales = [person.language]
 
-    compose_multilingual(person, CONFIRMATION, locales)
+    I18n.with_locale(person.language) do
+      compose(person, CONFIRMATION)
+    end
   end
 
   private

@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::NeuanmeldungenMailer < ApplicationMailer
-  include MultilingualMailer
-
   APPROVED = "people_registration_approved"
   REJECTED = "people_registration_rejected"
   REJECTED_PERSON_ATTRS = %w[first_name email language primary_group_id]
@@ -27,9 +25,10 @@ class People::NeuanmeldungenMailer < ApplicationMailer
     @person = person
     @section = section
     headers[:bcc] = [SacCas::MV_EMAIL, section.email].compact_blank
-    locales = [person.language]
 
-    compose_multilingual(person.email, content_key, locales)
+    I18n.with_locale(person.language) do
+      compose(person.email, content_key)
+    end
   end
 
   def placeholder_first_name

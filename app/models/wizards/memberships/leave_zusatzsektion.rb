@@ -71,7 +71,7 @@ module Wizards::Memberships
       Memberships::TerminateMembershipMailer.leave_zusatzsektion(
         person,
         sektion,
-        I18n.l(terminate_on)
+        terminate_on
       ).deliver_later
     end
 

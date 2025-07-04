@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Invoices::SacMembershipsMailer < ApplicationMailer
-  include MultilingualMailer
   include CommonMailerPlaceholders
 
   MEMBERSHIP_ACTIVATED = "invoices_sac_membership_activated"
@@ -15,13 +14,14 @@ class Invoices::SacMembershipsMailer < ApplicationMailer
     @person = person
     @section = section
     @beitragskategorie = beitragskategorie
-    locales = [person.language]
 
     headers[:bcc] = [
       section.email,
       SacCas::MV_EMAIL
     ].compact_blank
 
-    compose_multilingual(person, MEMBERSHIP_ACTIVATED, locales)
+    I18n.with_locale(person.language) do
+      compose(person, MEMBERSHIP_ACTIVATED)
+    end
   end
 end

@@ -14,7 +14,9 @@ class Memberships::SwitchStammsektionMailer < ApplicationMailer
     headers[:cc] = Group::Geschaeftsstelle.first.email
     headers[:bcc] = [section.email, previous_section.email, SacCas::MV_EMAIL].compact_blank
 
-    compose(person, CONFIRMATION)
+    I18n.with_locale(person.language) do
+      compose(person, CONFIRMATION)
+    end
   end
 
   private
