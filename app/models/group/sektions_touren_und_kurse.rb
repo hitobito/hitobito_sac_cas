@@ -19,12 +19,13 @@ class Group::SektionsTourenUndKurse < Group
   end
 
   class Tourenleiter < TourenleiterOhneQualifikation
-    before_validation :assert_active_qualification
+    validate :assert_active_qualification
 
     private
 
     def assert_active_qualification
-      unless person.qualifications.active(start_on || created_at || Time.zone.today).exists?
+      if (start_on_changed? || new_record?) &&
+          !person.qualifications.active(start_on || created_at || Time.zone.today).exists?
         errors.add(:base, :requires_active_qualification)
       end
     end

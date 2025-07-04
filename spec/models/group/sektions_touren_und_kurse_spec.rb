@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Group::SektionsTourenUndKurse do
-  let(:group) { Fabricate.build(Group::SektionsTourenUndKurse.sti_name) }
+  let(:group) { groups(:bluemlisalp_touren_und_kurse) }
 
   describe Group::SektionsTourenUndKurse::Tourenleiter do
     let(:person) { people(:tourenchef) }
@@ -40,6 +40,15 @@ describe Group::SektionsTourenUndKurse do
 
     it "is valid with active expiring qualification" do
       person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago, finish_at: 1.day.from_now)
+      expect(role).to be_valid
+    end
+
+    it "is valid without qualification if only end_on changes" do
+      quali = person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago, finish_at: 1.day.from_now)
+      role.save!
+      quali.destroy!
+      role.reload
+      role.end_on = 1.day.from_now
       expect(role).to be_valid
     end
   end
