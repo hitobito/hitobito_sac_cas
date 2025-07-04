@@ -101,7 +101,8 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
     it "does deliver TerminateSacMembership::terminate_membership email" do
       expect do
         wizard.save!
-      end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(person, bluemlisalp, I18n.l(end_of_year))
+      end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
+        .with(person, bluemlisalp, end_of_year)
     end
 
     context "backoffice" do
@@ -114,7 +115,8 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
           wizard.save!
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
-          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(person, bluemlisalp, I18n.l(Date.yesterday))
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
+          .with(person, bluemlisalp, Date.yesterday)
       end
     end
   end

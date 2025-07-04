@@ -103,7 +103,8 @@ describe Wizards::Memberships::LeaveZusatzsektion do
     it "does deliver TerminateSacMembership::leave_zusatzsektion email" do
       expect do
         wizard.save!
-      end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion).with(person, matterhorn, I18n.l(end_of_year))
+      end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion)
+        .with(person, matterhorn, end_of_year)
     end
 
     context "backoffice" do

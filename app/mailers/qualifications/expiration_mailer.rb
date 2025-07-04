@@ -14,7 +14,10 @@ class Qualifications::ExpirationMailer < ApplicationMailer
   def reminder(moment, person_id)
     return unless MOMENTS.include?(moment)
 
-    compose(Person.find(person_id), content_key(moment))
+    person = Person.find(person_id)
+    I18n.with_locale(person.language) do
+      compose(person, content_key(moment))
+    end
   end
 
   private
