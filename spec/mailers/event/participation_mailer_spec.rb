@@ -121,8 +121,8 @@ describe Event::ParticipationMailer do
     context "course languages that don't have custom content" do
       before { event.update!(language: "it") }
 
-      it "sends in default language" do
-        expect(mail.subject).to eq("Kurs: E-Mail Aufgebot")
+      it "sends in fallback language" do
+        expect(mail.subject).to eq("Convocation au cours")
         expect(mail.body).not_to include("<div id='content'></div>")
       end
     end
