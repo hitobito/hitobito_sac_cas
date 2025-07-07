@@ -1386,8 +1386,14 @@ en:
     actions_show_sac_cas:
       export_mitglieder: CSV members
       create_yearly_membership_invoice: MV Annual collection
+      download_statistics_button: Mitgliederstatistik
     sektion_primary: Core section
     sektion_secondary: Additional section
+    popover_download_statistics:
+      title: Mitgliederstatistik herunterladen
+      from: Von
+      to: Bis
+      download: Herunterladen
 
     self_registration:
       form:
@@ -1572,8 +1578,8 @@ en:
         level: Angebot / Stufe
         leaders: Leitung
         compensation: Tageshonorar
-        event_dates_durations: Durchführungsdatum
-        event_dates_locations: Durchführungsort
+        dates: Durchführungsdatum
+        location: Durchführungsort
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget

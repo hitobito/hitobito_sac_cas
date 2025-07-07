@@ -1442,8 +1442,14 @@ it:
     actions_show_sac_cas:
       export_mitglieder: Soci CSV
       create_yearly_membership_invoice: Incasso annuale AS
+      download_statistics_button: Mitgliederstatistik
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
+    popover_download_statistics:
+      title: Mitgliederstatistik herunterladen
+      from: Von
+      to: Bis
+      download: Herunterladen
 
     self_registration:
       form:
@@ -1632,8 +1638,8 @@ it:
         level: Offerta / Livello
         leaders: Direzione
         compensation: Onorario giornaliero
-        event_dates_durations: Data di svolgimento
-        event_dates_locations: Luogo di svolgimento
+        dates: Durchführungsdatum
+        location: Durchführungsort
         accommodation: Alloggio
         accommodation_budget:
           label: Budget alloggio

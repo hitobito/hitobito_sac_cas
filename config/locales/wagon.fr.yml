@@ -1444,8 +1444,14 @@ fr:
     actions_show_sac_cas:
       export_mitglieder: Membres CSV
       create_yearly_membership_invoice: Encaissement annuel du service des membres
+      download_statistics_button: Mitgliederstatistik
     sektion_primary: Section de base
     sektion_secondary: Section supplémentaire
+    popover_download_statistics:
+      title: Mitgliederstatistik herunterladen
+      from: Von
+      to: Bis
+      download: Herunterladen
 
     self_registration:
       form:
@@ -1634,8 +1640,8 @@ fr:
         level: Offre / catégorie
         leaders: Responsabilité
         compensation: Tarif journalier
-        event_dates_durations: Date de réalisation
-        event_dates_locations: Lieu de réalisation
+        dates: Durchführungsdatum
+        location: Durchführungsort
         accommodation: Hébergement
         accommodation_budget:
           label: Budget pour l’hébergement
