@@ -222,6 +222,7 @@ module HitobitoSacCas
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController
+      JsonApi::PeopleController.prepend SacCas::JsonApi::PeopleController
       MailingListsController.prepend SacCas::MailingListsController
       PeopleController.permitted_attrs << :correspondence
       PeopleController.prepend SacCas::PeopleController
