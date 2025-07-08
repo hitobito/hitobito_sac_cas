@@ -5,16 +5,17 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-require_relative "membership/person"
-require_relative "membership/footer"
-
 module Export::Pdf::Passes
   class Membership
+    FONT = "Helvetica"
+    MARGIN = [0, 0, 0, 0].freeze
+
     def initialize(person)
       @person = person
     end
 
     def render
+      pdf.font FONT
       sections.each do |section|
         section.render
       end
@@ -22,7 +23,7 @@ module Export::Pdf::Passes
     end
 
     def pdf
-      @pdf ||= Prawn::Document.new(render_options)
+      @pdf ||= Export::Pdf::Document.new(margin: MARGIN).pdf
     end
 
     def filename
@@ -33,14 +34,6 @@ module Export::Pdf::Passes
     end
 
     private
-
-    def render_options
-      @options.to_h.merge(
-        page_size: "A4",
-        page_layout: :portrait,
-        margin: [0, 0, 0, 0]
-      )
-    end
 
     def sections
       @sections ||=
