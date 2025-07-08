@@ -1,3 +1,7 @@
+## unreleased
+
+* Geschäftsstelle kann Stamm und Zusatzsektion tauschen (#1885)
+
 ## Version 2.4
 
 * Der Changelog ist nur noch für Mitarbeiter der Geschäftsstelle verlinkt und aufrufbar (hitobito_sac_cas#1478)
