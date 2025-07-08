@@ -1200,6 +1200,7 @@ it:
     title: Modificare l’affiliazione
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
+    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
     undo_termination_link: Riattivare l’affiliazione al CAS
 

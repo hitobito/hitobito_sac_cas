@@ -1202,6 +1202,7 @@ fr:
     title: Adapter l’adhésion
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
+    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
     terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
     undo_termination_link: Réactiver l’adhésion au CAS
 

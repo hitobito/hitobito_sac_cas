@@ -1143,6 +1143,7 @@ en:
     title: Customize membership
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
+    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
     terminate_sac_membership_wizard_link: Terminate SAC membership
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
