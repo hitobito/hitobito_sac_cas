@@ -2090,9 +2090,9 @@ it:
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
           data_retention_info_title: " Conservazione dei dati personali"
           data_retention_info_text: >-
-            Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich folgende Konsequenzen: Falls du später dem SAC wieder beitreten möchtest, beginnen deine Anzahl Mitgliederjahre wieder bei null. Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest, dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+            Dopo la tua uscita dall’associazione, i tuoi dati personali verranno conservati per un periodo di 12 mesi, trascorso il quale saranno definitivamente cancellati. La cancellazione comporta le seguenti conseguenze: qualora in futuro desiderassi riaffiliarti al CAS, il conteggio degli anni di affiliazione ripartirà da zero. Eventuali qualifiche ottenute, corsi di formazione e perfezionamento frequentati (incluse le ore di formazione continua) verranno cancellati. Il tuo login CAS sarà cancellato e non potrà più essere utilizzato per altre finalità (quali ad esempio l’app SAC-CAS o il servizio di prenotazione delle capanne HutReservation). Se desideri che le tue eventuali qualifiche ottenute e i corsi di formazione e perfezionamento completati vengano conservati dovrai fornire il consenso alla conservazione dei dati dopo la tua uscita dall’associazione.
           data_retention_consent: >-
-            Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
+            Desidero che i miei dati personali vengano conservati anche dopo la mia uscita dal CAS. (facoltativo)
           entry_fee_info_text: >-
             La quota d’adesione è dovuta a ogni nuova riaffiliazione, indipendentemente dal fatto che i dati personali siano stati conservati o cancellati.
           entry_fee_consent: >-
