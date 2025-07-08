@@ -1,4 +1,4 @@
-## unreleased
+## Version 2.6
 
 * Geschäftsstelle kann Stamm und Zusatzsektion tauschen (#1885)
 
