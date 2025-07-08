@@ -49,7 +49,7 @@ describe Memberships::SwitchStammsektionsController do
     it "switches stammsektion with zusatzsektion without sending email" do
       expect do
         post :create, params: wizard_params(kind: :zusatzsektion, step: 1, choose_sektion: {group_id: matterhorn.id})
-      end.not_to have_enqueued_mail(Memberships::SwitchStammsektionMailer, :confirmation)
+      end.not_to have_enqueued_mail
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(response).to redirect_to(person_path(person, format: :html))
       expect(flash[:notice]).to eq "Dein Sektionswechsel zu <i>SAC Matterhorn</i> wurde vorgenommen."
