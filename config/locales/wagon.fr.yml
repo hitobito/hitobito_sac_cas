@@ -2088,12 +2088,17 @@ fr:
         summary:
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
           termination_by_section_only: >-
-            Attention: la résiliation concerne une section où la fonction de démission est désactivée pour le·la membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section.
+            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
           family_warning: "Attention: la résiliation est demandée pour l’ensemble des membres de la famille. Sont concerné·e·s: %{family_member_names}."
           data_retention_info_title: "Conservation de vos données "
           data_retention_info_text: >-
-            Après ta sortie, nous conservons tes données pendant 12 mois avant de les supprimer définitivement. Les conséquences de cette suppression sont les suivantes: si, plus tard, tu souhaites adhérer de nouveau au CAS, ton nombre d’années d’adhésion sera remis à zéro. Si tu as obtenu des qualifications et suivi des formations (y compris heures de formation continue), celles-ci seront effacées. Ton login CAS sera supprimé, et tu ne pourras plus l’utiliser à d’autres fins (p. ex. pour l’application SAC-CAS et HutReservation). Si tu souhaites que les éventuelles qualifications obtenues et formations suivies soient conservées, tu dois nous autoriser ici à conserver tes données après ta sortie.
-          data_retention_consent: "Je souhaite que mes données soient conservées après ma sortie du CAS. (facultatif)"
+            Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich folgende Konsequenzen: Falls du später dem SAC wieder beitreten möchtest, beginnen deine Anzahl Mitgliederjahre wieder bei null. Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest, dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+          data_retention_consent: >-
+            Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
+          entry_fee_info_text: >-
+            La taxe d’entrée est due à chaque ré-adhésion. Peu importe que tes données aient été conservées ou supprimées.
+          entry_fee_consent: >-
+            J’ai compris qu’en cas de ré-affiliation, la taxe d’entrée sera systématiquement facturée. (champ obligatoire)
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."
           next_button: "Demander une résiliation"
