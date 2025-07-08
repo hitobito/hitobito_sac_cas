@@ -36,7 +36,7 @@ module Memberships
     end
 
     def success_message
-      roles_count = wizard.switch_operation.affected_people.count
+      roles_count = wizard.operation.affected_people.count
       t(".success", count: roles_count, group_name: wizard.choose_sektion.group.to_s)
     end
 
