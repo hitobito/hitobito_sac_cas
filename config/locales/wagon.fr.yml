@@ -10,7 +10,7 @@ fr:
     currency: CHF
     years: Années
     link:
-      push_down: Wert auf Kurse übertragen
+      push_down: Transférer la valeur aux cours
     links:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       membership: "https://www.sac-cas.ch/fr/affiliation/devenir-membre/"
@@ -35,7 +35,7 @@ fr:
     messages:
       assert_old_enough: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       too_young: "doit être âgé·e de %{minimum_years} ans ou plus"
-      too_old: "muss %{maximum_years} Jahre oder jünger sein"
+      too_old: "doit être âgé de %{maximum_years} ans ou moins"
       assert_old_enough_with_age: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       conflicting_family_membership: >-
         %{name} a déjà une adhésion familiale et ne peut donc pas être ajouté·e à un ménage familial.
@@ -271,7 +271,7 @@ fr:
         specialities: Spécial
         similar_tours: Randonnées comparables
         program: Programm
-        seo_text: SEO Text
+        seo_text: Texte SEO
       event/course:
         accommodation: Hébergement
         annual: Récurrent chaque année
@@ -375,7 +375,7 @@ fr:
         state_translated: Statut
         states:
           draft: projet
-          approved: Freigegeben
+          approved: Libéré
           published: publié
           closed: terminé
           canceled: annulé
@@ -386,9 +386,9 @@ fr:
           assigned: confirmé
           annulled: annulé
           rejected: refusé
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
+          canceled: Déconnecté
+          attended: Participé
+          absent: Non paru
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -464,7 +464,7 @@ fr:
           IT: Italien
         section_offerings: Offres de la section
         mitglied_termination_by_section_only: Résiliation uniquement par la section
-        tours_enabled: Touren-Angebot für diese Sektion aktivieren
+        tours_enabled: Activer l'offre d'excursions pour cette section
       group/ortsgruppe:
         foundation_year: Année de création
         section_canton: Canton
@@ -473,7 +473,7 @@ fr:
           DE: Allemand
           FR: Français
           IT: Italien
-        tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
+        tours_enabled: Activer l'offre de tours pour cette section locale
       role:
         membership_years: Années-membres
         class:
@@ -485,9 +485,9 @@ fr:
           permission:
             description:
               read_all_people: Lecture de toutes les personnes.
-              layer_events_full: Verwalten von Events auf der Sektion.
-              layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
-              layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
+              layer_events_full: Gérer les événements sur la section.
+              layer_mitglieder_full: Gérer les personnes dans le groupe de membres de la section/du groupe local.
+              layer_touren_und_kurse_full: Gérer les personnes dans le groupe Tours et cours de la section/du groupe local.
       qualification_kind:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:
@@ -625,8 +625,9 @@ fr:
         many: Niveaux de cours
         other: Niveaux de cours
       event/role/assistant_leader:
-        one: Hilfsleitung
-        other: Hilfsleitung
+        one: Ligne auxiliaire
+        many: Ligne auxiliaire
+        other: Ligne auxiliaire
       event/course/role/leader:
         one: Responsable du cours
         many: Responsables du cours
@@ -637,7 +638,8 @@ fr:
         other: Chef·fe de classe
       event/tour:
         one: Tour
-        other: Touren
+        many: Tours
+        other: Tours
       external_training:
         one: Formation externe
         many: Formations externes
@@ -1235,36 +1237,36 @@ fr:
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
     kinds:
       actions_edit:
-        push_down_button: Werte auf Kurse übertragen
+        push_down_button: Transférer les valeurs aux cours
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Voulez-vous vraiment transférer les valeurs enregistrées à tous les cours actifs ? Les valeurs actuelles seront alors écrasées.
       form:
         field_push_down:
           confirm: >-
-            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+            Voulez-vous vraiment appliquer cette valeur à tous les cours actifs ? Les valeurs actuelles seront alors écrasées.
           alert_unsaved: >-
-            Dieser Wert ist noch nicht gespeichert. Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
+            Cette valeur n'est pas encore enregistrée. Veuillez enregistrer le formulaire avant de transférer la valeur à des cours.
       kind_category_field:
         category_overrides_link_title: >-
           Les champs suivants sont repris: Centre de coûts, Support de coûts
       push_down:
-        success: Die gespeicherten Werte wurden auf alle aktiven Kurse übertragen.
+        success: Les valeurs enregistrées ont été transférées à tous les cours actifs.
       push_down_field:
-        success: "%{field} wurde auf alle aktiven Kurse übertragen."
+        success: "%{field} a été appliquée à tous les cours actifs."
     kind_categories:
       push_down:
         success: >-
           Le centre de coûts (%{cost_center}) et le support de coûts (%{cost_unit}) ont été transférés à tous les types de cours affectés.
       actions_edit:
-        push_down_button: Werte auf Kursarten übertragen
+        push_down_button: Transférer des valeurs aux types de cours
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Voulez-vous vraiment transférer les valeurs enregistrées (centre de coûts et objet de coûts) à tous les types de cours ? Ce faisant, les valeurs actuelles seront écrasées.
     lists:
       nav_left_tours:
-        tours: Touren
+        tours: Tours
       tours:
         title: Courses ayant lieu prochainement
-        explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
+        explanation: Ici sont affichées les randonnées des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
     participations:
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
@@ -1329,7 +1331,7 @@ fr:
         former_price_select: "Ancien %{price_label}"
         no_price_select: Pas de frais
       summoned_notice: "%{participant} a été convoqué·e."
-      reactivated_notice: "%{participant} wurde reaktiviert."
+      reactivated_notice: "%{participant} a été réactivé."
       actions_show_youth:
         summon_button: Convocation
         assign_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
@@ -1341,7 +1343,7 @@ fr:
         attach_key_data_sheet: Créer fiches techniques
         create_invoice_confirmation: Merci de confirmer la création de la facture.
         create_course_leader_invoice_button: Créer une facture de cadre de cours
-        reactivate: Reaktivieren
+        reactivate: Réactiver
       popover_create_course_leader_settlement:
         create_invoice: Créer une facture
         info_text_html: >-
@@ -1365,26 +1367,26 @@ fr:
       attach_key_data_sheets: Créer toutes les fiches techniques
     state_buttons:
       event/course:
-        created: Zurück als Entwurf
-        application_open: Publizieren
-        application_paused: Anmeldung pausieren
-        application_closed: Anmeldung abschliessen
+        created: Retour en tant que projet
+        application_open: Publier
+        application_paused: Mettre en pause l'inscription
+        application_closed: Terminer l'inscription
         assignment_closed: Clôre l'attribution
         ready: Prêt à débuter
-        closed: Abschliessen
+        closed: Fermer
         closed_confirm_text: >-
-          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
+          La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: annuler
       event/tour:
-        draft: Zurück als Entwurf
-        approved: Freigeben
-        published: Publizieren
-        closed: Abschliessen
+        draft: Retour en tant que projet
+        approved: Partager
+        published: Publier
+        closed: Fermer
         canceled: annuler
     state_back_buttons:
-      assignment_closed: Zurück zur Zuteilung
+      assignment_closed: Retour à l'allocation
       application_closed: Retour vers l'inscription terminée
-      approved: Zurück zur Freigabe
+      approved: Retour à la validation
 
     form_tabs:
       communication: Communication
@@ -1395,7 +1397,7 @@ fr:
         Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
     global:
       link:
-        add_event/tour: Tour erstellen
+        add_event/tour: Créer un tour
 
     maximum_age_with_years: "%{maximum_age} Années (millésime)"
 
@@ -1421,7 +1423,7 @@ fr:
 
   events/state:
     flash:
-      success: "Status wurde auf %{state} gesetzt."
+      success: "Le statut a été défini sur %{state} "
 
   event/levels:
     new:
@@ -1449,9 +1451,9 @@ fr:
     sektion_secondary: Section supplémentaire
     popover_download_statistics:
       title: Télécharger les statistiques des membres
-      from: Von
-      to: Bis
-      download: Herunterladen
+      from: De
+      to: Jusqu'à
+      download: Télécharger
 
     self_registration:
       form:
@@ -1579,7 +1581,7 @@ fr:
   memberships:
     change_zusatzsektion_to_families:
       create:
-        success: "Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert."
+        success: "Le rôle a été modifié avec succès en une adhésion familiale."
     join_zusatzsektions:
       create:
         success:
@@ -1640,8 +1642,8 @@ fr:
         level: Offre / catégorie
         leaders: Responsabilité
         compensation: Tarif journalier
-        dates: Durchführungsdatum
-        location: Durchführungsort
+        dates: Date de mise en œuvre
+        location: Lieu de mise en œuvre
         accommodation: Hébergement
         accommodation_budget:
           label: Budget pour l’hébergement
@@ -1840,7 +1842,7 @@ fr:
       family: Famille
 
   roles/change_zusatzsektion_to_family:
-    link: Wechsel Familie
+    link: Changement de famille
   roles/terminations:
     global:
       undo: Réactiver
@@ -2088,7 +2090,7 @@ fr:
         summary:
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
           termination_by_section_only: >-
-            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
+            Attention : la démission a lieu dans une section où la fonction de démission est désactivée pour le membre. Le cas échéant, tu dois clarifier la démission au préalable avec la section.
           family_warning: "Attention: la résiliation est demandée pour l’ensemble des membres de la famille. Sont concerné·e·s: %{family_member_names}."
           data_retention_info_title: "Conservation de vos données "
           data_retention_info_text: >-

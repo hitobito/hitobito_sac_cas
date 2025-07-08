@@ -10,7 +10,7 @@ it:
     currency: CHF
     years: anni
     link:
-      push_down: Wert auf Kurse übertragen
+      push_down: Valore di trasferimento ai corsi
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
@@ -35,7 +35,7 @@ it:
     messages:
       assert_old_enough: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       too_young: "deve avere almeno %{minimum_years} anni"
-      too_old: "muss %{maximum_years} Jahre oder jünger sein"
+      too_old: "deve avere %{maximum_years} anni o meno"
       assert_old_enough_with_age: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
@@ -269,7 +269,7 @@ it:
         specialities: Particolarità
         similar_tours: Escursioni a confronto
         program: Programma
-        seo_text: SEO Text
+        seo_text: Testo SEO
       event/course:
         accommodation: Alloggio
         annual: Annuale
@@ -370,23 +370,23 @@ it:
       event/role:
         self_employed: Lavoratore autonomo
       event/tour:
-        state_translated: Status
+        state_translated: Stato
         states:
-          draft: Entwurf
-          approved: Freigegeben
-          published: Publiziert
-          closed: Abgeschlossen
-          canceled: Abgesagt
+          draft: Bozza
+          approved: Rilasciato
+          published: Pubblicato
+          closed: Completato
+          canceled: Annullato
         participation_states:
-          tentative: Provisorisch
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          annulled: Annulliert
-          rejected: Abgelehnt
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
+          tentative: Provvisorio
+          unconfirmed: Non confermato
+          applied: Lista d'attesa
+          assigned: Confermato
+          annulled: Annullato
+          rejected: Rifiutato
+          canceled: Annullato
+          attended: Partecipato
+          absent: Non pubblicato
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -462,7 +462,7 @@ it:
           IT: Italiano
         section_offerings: Offerte della sezione
         mitglied_termination_by_section_only: Disdetta solo tramite sezione
-        tours_enabled: Touren-Angebot für diese Sektion aktivieren
+        tours_enabled: Attivare l'offerta turistica per questa sezione
       group/ortsgruppe:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -471,7 +471,7 @@ it:
           DE: Tedesco
           FR: Francese
           IT: Italiano
-        tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
+        tours_enabled: Attivare l'offerta di tour per questo gruppo locale
       role:
         membership_years: Anni di affiliazione
         class:
@@ -483,9 +483,9 @@ it:
           permission:
             description:
               read_all_people: Letto da tutte le persone.
-              layer_events_full: Verwalten von Events auf der Sektion.
-              layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
-              layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
+              layer_events_full: Gestire gli eventi nella sezione.
+              layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.
+              layer_touren_und_kurse_full: Gestire le persone del gruppo gite e corsi della sezione/gruppo locale.
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
@@ -623,8 +623,9 @@ it:
         many: Livelli del corso
         other: Livelli del corso
       event/role/assistant_leader:
-        one: Hilfsleitung
-        other: Hilfsleitung
+        one: Linea ausiliaria
+        many: Linea ausiliaria
+        other: Linea ausiliaria
       event/course/role/leader:
         one: Direzione del corso
         many: Direzione del corso
@@ -635,7 +636,8 @@ it:
         other: Direzione della classe
       event/tour:
         one: Tour
-        other: Touren
+        many: Tour
+        other: Tour
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -1233,36 +1235,36 @@ it:
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
     kinds:
       actions_edit:
-        push_down_button: Werte auf Kurse übertragen
+        push_down_button: Valori di trasferimento ai corsi
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Si desidera davvero trasferire i valori salvati a tutti i corsi attivi? In questo modo si sovrascriveranno i valori attuali.
       form:
         field_push_down:
           confirm: >-
-            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+            Si vuole davvero trasferire questo valore a tutti i corsi attivi? In questo modo si sovrascriveranno i valori attuali.
           alert_unsaved: >-
-            Dieser Wert ist noch nicht gespeichert. Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
+            Questo valore non è ancora stato salvato. Si prega di salvare il modulo prima che il valore venga trasferito ai corsi.
       kind_category_field:
         category_overrides_link_title: >-
           Vengono trasferiti i seguenti campi: centro di costo, unità di costo
       push_down:
-        success: Die gespeicherten Werte wurden auf alle aktiven Kurse übertragen.
+        success: I valori salvati sono stati trasferiti a tutti i corsi attivi.
       push_down_field:
-        success: "%{field} wurde auf alle aktiven Kurse übertragen."
+        success: "%{field} è stato trasferito a tutti i corsi attivi."
     kind_categories:
       push_down:
         success: >-
           Il centro di costo (%{cost_center}) e l'unità di costo (%{cost_unit}) sono stati trasferiti a tutti i tipi di corso assegnati.
       actions_edit:
-        push_down_button: Werte auf Kursarten übertragen
+        push_down_button: Trasferire i valori ai tipi di corso
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Si desidera davvero trasferire i valori salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascrivono i valori attuali.
     lists:
       nav_left_tours:
-        tours: Touren
+        tours: Tour
       tours:
-        title: Demnächst stattfindende Touren
-        explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
+        title: Prossimi tour
+        explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
@@ -1327,7 +1329,7 @@ it:
         former_price_select: "In precedenza %{price_label}"
         no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
-      reactivated_notice: "%{participant} wurde reaktiviert."
+      reactivated_notice: "%{participant} è stato riattivato."
       actions_show_youth:
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
@@ -1339,7 +1341,7 @@ it:
         attach_key_data_sheet: Creare la scheda dei dati di riferimento
         create_invoice_confirmation: Si prega di confermare la creazione della fattura.
         create_course_leader_invoice_button: Generare conteggio quadro del corso
-        reactivate: Reaktivieren
+        reactivate: Riattivare
       popover_create_course_leader_settlement:
         create_invoice: Generare conteggio
         info_text_html: >-
@@ -1363,26 +1365,26 @@ it:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
     state_buttons:
       event/course:
-        created: Zurück als Entwurf
-        application_open: Publizieren
-        application_paused: Anmeldung pausieren
-        application_closed: Anmeldung abschliessen
-        assignment_closed: Zuteilung abschliessen
-        ready: Bereit zur Durchführung
-        closed: Abschliessen
+        created: Indietro come bozza
+        application_open: Pubblicare
+        application_paused: Pausa registrazione
+        application_closed: Completare la registrazione
+        assignment_closed: Finalizzare l'assegnazione
+        ready: Pronti per l'implementazione
+        closed: Finalizzare
         closed_confirm_text: >-
-          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
-        canceled: Absagen
+          Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
+        canceled: Cancellazioni
       event/tour:
-        draft: Zurück als Entwurf
-        approved: Freigeben
-        published: Publizieren
-        closed: Abschliessen
-        canceled: Absagen
+        draft: Indietro come bozza
+        approved: Rilascio
+        published: Pubblicare
+        closed: Finalizzare
+        canceled: Cancellazioni
     state_back_buttons:
-      assignment_closed: Zurück zur Zuteilung
-      application_closed: Zurück zur abgeschlossenen Anmeldung
-      approved: Zurück zur Freigabe
+      assignment_closed: Torna all'assegnazione
+      application_closed: Torna alla registrazione completata
+      approved: Torna alla pubblicazione
 
     form_tabs:
       communication: Comunicazione
@@ -1393,7 +1395,7 @@ it:
         Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
     global:
       link:
-        add_event/tour: Tour erstellen
+        add_event/tour: Crea tour
 
     maximum_age_with_years: "%{maximum_age} anni (anno)"
 
@@ -1419,7 +1421,7 @@ it:
 
   events/state:
     flash:
-      success: "Status wurde auf %{state} gesetzt."
+      success: "Lo stato è stato impostato su %{state}."
 
   event/levels:
     new:
@@ -1447,9 +1449,9 @@ it:
     sektion_secondary: Sezione aggiuntiva
     popover_download_statistics:
       title: Scarica le statistiche dei membri
-      from: Von
-      to: Bis
-      download: Herunterladen
+      from: Da
+      to: Fino a quando
+      download: Scarica
 
     self_registration:
       form:
@@ -1577,7 +1579,7 @@ it:
   memberships:
     change_zusatzsektion_to_families:
       create:
-        success: "Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert."
+        success: "Il ruolo è stato modificato con successo in un membro della famiglia."
     join_zusatzsektions:
       create:
         success:
@@ -1622,7 +1624,7 @@ it:
         default: Attributi dei gruppi locali
 
   navigation:
-    tours: Touren
+    tours: Tour
 
   participations:
     key_data_sheet:
@@ -1638,8 +1640,8 @@ it:
         level: Offerta / Livello
         leaders: Direzione
         compensation: Onorario giornaliero
-        dates: Durchführungsdatum
-        location: Durchführungsort
+        dates: Data di attuazione
+        location: Luogo di realizzazione
         accommodation: Alloggio
         accommodation_budget:
           label: Budget alloggio
@@ -1838,7 +1840,7 @@ it:
       family: Famiglia
 
   roles/change_zusatzsektion_to_family:
-    link: Wechsel Familie
+    link: Cambiare famiglia
   roles/terminations:
     global:
       undo: Riattivare
@@ -2086,7 +2088,7 @@ it:
         summary:
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
           termination_by_section_only: >-
-            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
+            Attenzione: le dimissioni avvengono in una sezione in cui la funzione di dimissioni è disattivata per il socio. Se necessario, è necessario chiarire in anticipo le dimissioni con la sezione.
           family_warning: "Attenzione: la disdetta è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}."
           data_retention_info_title: " Conservazione dei dati personali"
           data_retention_info_text: >-
