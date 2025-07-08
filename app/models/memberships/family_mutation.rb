@@ -13,8 +13,11 @@ module Memberships
 
     delegate :sac_membership, to: :person
 
-    def initialize(person)
+    def initialize(person, new_role_end_on: nil, new_role_start_on: Date.current, replaced_role_end_on: Date.current.yesterday)
       @person = person
+      @new_role_start_on = new_role_start_on
+      @new_role_end_on = new_role_end_on
+      @replaced_role_end_on = replaced_role_end_on
     end
 
     # Call this method after a person has been added to a household. The household_key must already
@@ -94,10 +97,6 @@ module Memberships
 
     def category_family = SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
 
-    def replaced_role_end_on = Date.current.yesterday
-
-    def new_role_start_on = Date.current
-
     # Replace the role with the blueprint role in the same group. The new role is created with a
     # created_at timestamp at the beginning of the current day, but not before the created_at
     # timestamp of the blueprint role.
@@ -121,8 +120,8 @@ module Memberships
         person:,
         beitragskategorie:,
         group: blueprint_role.group,
-        start_on: new_role_start_on,
-        end_on: blueprint_role.end_on
+        start_on: @new_role_start_on,
+        end_on: @new_role_end_on || blueprint_role.end_on
       )
     end
 
@@ -132,7 +131,7 @@ module Memberships
         role.try(:skip_destroy_household=, true) # only available on stammsektion roles
         role.really_destroy!
       else
-        Role.where(id: role.id).update_all(end_on: replaced_role_end_on)
+        Role.where(id: role.id).update_all(end_on: @replaced_role_end_on)
       end
     end
 
