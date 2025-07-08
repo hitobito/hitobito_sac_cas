@@ -16,8 +16,8 @@ module Memberships
       permission(:any).may(:create).on_active_member_if_backoffice?
     end
 
-    on(Wizards::Memberships::SwitchStammZusatzsektion) do
-      permission(:any).may(:create).on_main_person_with_zusatzsektion_if_backoffice?
+    on(Wizards::Memberships::SwapStammZusatzsektion) do
+      permission(:any).may(:create).on_active_member_with_zusatzsektion_if_backoffice?
     end
 
     # NOTE: as inheritance is respected by cancancan (SwitchStammZusatzsektion.is_a?(SwitchStammsektion))
@@ -28,8 +28,8 @@ module Memberships
       end
     end
 
-    def on_main_person_with_zusatzsektion_if_backoffice?
-      if subject.instance_of?(Wizards::Memberships::SwitchStammZusatzsektion)
+    def on_active_member_with_zusatzsektion_if_backoffice?
+      if subject.instance_of?(Wizards::Memberships::SwapStammZusatzsektion)
         backoffice? && sac_membership.stammsektion_role.present? && sac_membership.zusatzsektion_roles.any?
       end
     end

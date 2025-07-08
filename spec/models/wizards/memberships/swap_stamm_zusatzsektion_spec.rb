@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Wizards::Memberships::SwitchStammZusatzsektion do
+describe Wizards::Memberships::SwapStammZusatzsektion do
   include ActiveJob::TestHelper
   let(:backoffice) { false }
   let(:matterhorn) { groups(:matterhorn) }

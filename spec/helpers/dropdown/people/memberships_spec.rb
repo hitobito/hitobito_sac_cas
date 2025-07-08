@@ -70,6 +70,25 @@ describe Dropdown::People::Memberships do
     end
   end
 
+  context "SwapStammZusatzsektion" do
+    before do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+    end
+
+    it "is empty when person is not permitted" do
+      stub_can_create(Wizards::Memberships::SwapStammZusatzsektion, false)
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains links if person is permitted" do
+      stub_can_create(Wizards::Memberships::SwapStammZusatzsektion, true)
+      expect(menu).to have_link "Stamm- und Zusatzsektion tauschen"
+    end
+  end
+
   context "TerminateSacMembershipWizard" do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)

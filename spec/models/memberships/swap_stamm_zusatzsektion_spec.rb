@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Memberships::SwitchStammZusatzsektion do
+describe Memberships::SwapStammZusatzsektion do
   before { travel_to(now) }
 
   let(:now) { Time.zone.local(2024, 6, 19, 15, 33) }

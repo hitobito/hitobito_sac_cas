@@ -75,8 +75,8 @@ describe Memberships::SwitchStammsektionAbility do
     end
   end
 
-  describe Wizards::Memberships::SwitchStammZusatzsektion do
-    let(:wizard_class) { Wizards::Memberships::SwitchStammZusatzsektion }
+  describe "Wizards::Memberships::SwapStammZusatzsektion" do
+    let(:wizard_class) { Wizards::Memberships::SwapStammZusatzsektion }
 
     context "as backoffice" do
       let(:role) { build_role(Group::Geschaeftsstelle::Admin, :geschaeftsstelle) }

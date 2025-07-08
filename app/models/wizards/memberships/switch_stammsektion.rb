@@ -24,20 +24,20 @@ module Wizards::Memberships
     end
 
     def valid?
-      super && switch_operation_valid?
+      super && operation_valid?
     end
 
     def save!
       super
       previous_sektion = person.sac_membership.stammsektion_role.group
 
-      switch_operation.save!.tap do
+      operation.save!.tap do
         send_confirmation_mail(previous_sektion)
       end
     end
 
-    def switch_operation
-      @switch_operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
+    def operation
+      @operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
     end
 
     def backoffice?
@@ -70,11 +70,11 @@ module Wizards::Memberships
       Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group, previous_sektion).deliver_later
     end
 
-    def switch_operation_valid?
+    def operation_valid?
       return true unless last_step?
 
-      switch_operation.valid?.tap do
-        switch_operation.errors.full_messages.each do |msg|
+      operation.valid?.tap do
+        operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
       end

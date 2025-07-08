@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Memberships
-  class SwitchStammZusatzsektion < SwitchStammsektion
+  class SwapStammZusatzsektion < SwitchStammsektion
     private
 
     def prepare_roles(person)

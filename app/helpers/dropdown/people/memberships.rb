@@ -12,7 +12,7 @@ module Dropdown
     WIZARDS = [
       [Wizards::Memberships::JoinZusatzsektion, :group_person_join_zusatzsektion_path],
       [Wizards::Memberships::SwitchStammsektion, :group_person_switch_stammsektion_path],
-      [Wizards::Memberships::SwitchStammZusatzsektion, :group_person_switch_stammsektion_path, {kind: :zusatzsektion}],
+      [Wizards::Memberships::SwapStammZusatzsektion, :group_person_switch_stammsektion_path, {kind: :zusatzsektion}],
       [Wizards::Memberships::TerminateSacMembershipWizard, :group_person_terminate_sac_membership_path]
     ].freeze
 
