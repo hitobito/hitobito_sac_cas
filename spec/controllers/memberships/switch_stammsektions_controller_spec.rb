@@ -17,8 +17,11 @@ describe Memberships::SwitchStammsektionsController do
   let(:stammsektion_role) { person.sac_membership.stammsektion_role }
 
   def wizard_params(step: 0, kind: nil, **attrs)
-    key = "wizards_memberships_switch_stammsektion"
-    key = key.gsub("stammsektion", "stamm_zusatzsektion") if /zusatzsektion/.match?(kind)
+    key = if /zusatzsektion/.match?(kind)
+      "wizards_memberships_swap_stamm_zusatzsektion"
+    else
+      "wizards_memberships_switch_stammsektion"
+    end
 
     {
       group_id: stammsektion_role.group_id,

@@ -86,8 +86,6 @@ describe Event::ParticipationBanner do
     it "does not fail if state is blank as it is for non courses" do
       participation.state = nil
       dom = Capybara::Node::Simple.new(banner.render)
-      puts dom.native
-
       expect(dom).to have_text "Du bist für diesen Anlass"
     end
   end
