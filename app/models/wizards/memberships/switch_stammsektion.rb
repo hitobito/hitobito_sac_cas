@@ -24,23 +24,20 @@ module Wizards::Memberships
     end
 
     def valid?
-      super && switch_operation_valid?
+      super && operation_valid?
     end
 
     def save!
       super
+      previous_sektion = person.sac_membership.stammsektion_role.group
 
-      switch_operation.save!.tap do
-        send_confirmation_mail
+      operation.save!.tap do
+        send_confirmation_mail(previous_sektion)
       end
     end
 
-    def switch_operation
-      @switch_operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
-    end
-
-    def previous_sektion
-      @previous_sektion ||= switch_operation.previous_stammsektion_role.group.layer_group
+    def operation
+      @operation ||= Memberships::SwitchStammsektion.new(choose_sektion.group, person)
     end
 
     def backoffice?
@@ -58,17 +55,26 @@ module Wizards::Memberships
       )
     end
 
+    def groups
+      membership_roles = person.roles.where(type: SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name))
+      Group
+        .where(type: SacCas::MEMBERSHIP_OPERATIONS_GROUP_TYPES)
+        .where.not(id: SacCas::MEMBERSHIP_OPERATIONS_EXCLUDED_IDS)
+        .where.not(id: membership_roles.joins(:group).pluck("groups.layer_group_id"))
+        .select(:id, :name)
+    end
+
     private
 
-    def send_confirmation_mail
+    def send_confirmation_mail(previous_sektion)
       Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group, previous_sektion).deliver_later
     end
 
-    def switch_operation_valid?
+    def operation_valid?
       return true unless last_step?
 
-      switch_operation.valid?.tap do
-        switch_operation.errors.full_messages.each do |msg|
+      operation.valid?.tap do
+        operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
       end

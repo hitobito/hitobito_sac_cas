@@ -7,7 +7,7 @@ module Wizards
   module Steps
     module SwitchStammsektion
       class ChooseSektion < Wizards::Steps::ChooseSektion
-        delegate :person, to: :wizard
+        delegate :groups, :person, to: :wizard
         delegate :sac_membership_family?, :household, to: :person
 
         def family_names

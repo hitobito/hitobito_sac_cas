@@ -28,11 +28,15 @@ module Memberships
     end
 
     def model_class
-      Wizards::Memberships::SwitchStammsektion
+      if params[:kind] == "zusatzsektion"
+        Wizards::Memberships::SwapStammZusatzsektion
+      else
+        Wizards::Memberships::SwitchStammsektion
+      end
     end
 
     def success_message
-      roles_count = wizard.switch_operation.affected_people.count
+      roles_count = wizard.operation.affected_people.count
       t(".success", count: roles_count, group_name: wizard.choose_sektion.group.to_s)
     end
 

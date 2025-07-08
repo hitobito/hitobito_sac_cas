@@ -1151,6 +1151,7 @@ de:
     title: Mitgliedschaft anpassen
     join_zusatzsektion_link: Zusatzsektion beantragen
     switch_stammsektion_link: Sektionswechsel beantragen
+    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
     terminate_sac_membership_wizard_link: SAC-Mitgliedschaft beenden
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
 

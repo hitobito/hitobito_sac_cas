@@ -30,7 +30,7 @@ describe Dropdown::People::Memberships do
   def menu = subject.find(".btn-group > ul.dropdown-menu")
 
   def stub_can_create(wizard_class, value)
-    expect(ability).to receive(:can?).with(:create,
+    allow(ability).to receive(:can?).with(:create,
       kind_of(wizard_class)).and_return(value)
   end
 
@@ -67,6 +67,25 @@ describe Dropdown::People::Memberships do
     it "is contains links if person is permitted" do
       stub_can_create(Wizards::Memberships::SwitchStammsektion, true)
       expect(menu).to have_link "Sektionswechsel beantragen"
+    end
+  end
+
+  context "SwapStammZusatzsektion" do
+    before do
+      stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
+      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+    end
+
+    it "is empty when person is not permitted" do
+      stub_can_create(Wizards::Memberships::SwapStammZusatzsektion, false)
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains links if person is permitted" do
+      stub_can_create(Wizards::Memberships::SwapStammZusatzsektion, true)
+      expect(menu).to have_link "Stamm- und Zusatzsektion tauschen"
     end
   end
 
