@@ -112,3 +112,8 @@ tourenchef:
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
   cached_membership_years: 0
+
+roleless:
+  first_name: John
+  last_name: Doe
+  language: de

@@ -22,12 +22,12 @@ class Group::SektionsFunktionaere < ::Group
 
   ### ROLES
   class Praesidium < ::Role
-    self.permissions = []
+    self.permissions = [:download_member_statistics]
     self.basic_permissions_only = true
   end
 
   class Mitgliederverwaltung < ::Role
-    self.permissions = []
+    self.permissions = [:download_member_statistics]
     self.basic_permissions_only = true
   end
 
@@ -47,7 +47,7 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   class Finanzen < ::Role
-    self.permissions = []
+    self.permissions = [:download_member_statistics]
     self.basic_permissions_only = true
   end
 
