@@ -27,6 +27,10 @@ de:
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
 
+  layouts:
+    unauthorized:
+      main_self_registration: Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen
+
   settings:
     email:
       sender: Schweizer Alpen-Club SAC <noreply@%{mail_domain}>
@@ -1832,12 +1836,6 @@ de:
     show:
       login_to_participate: Melde dich an, um an diesem Kurs teilzunehmen
       with_sac_account: mit deinem SAC-Konto
-      is_sac_account_active: "Für SAC-Mitglieder: Ist dein persönliches SAC-Konto noch nicht aktiviert?"
-      login_questions: Fragen und Antworten zum Login
-      link_fag_sac_account: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/
-      first_time_here: Zum ersten Mal hier?
-      create_account_now: Jetzt dein kostenloses SAC-Konto erstellen
-      wanna_be_a_member: Möchtest du SAC-Mitglied werden?
       request_sac_membership: SAC Mitgliedschaft beantragen
       request_sac_membership_link: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
