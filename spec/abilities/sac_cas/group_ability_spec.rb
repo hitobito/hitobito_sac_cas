@@ -43,9 +43,9 @@ describe GroupAbility do
       create_role_with_permission(nil)
       ability = Ability.new(person)
       expect(ability.user_context.all_permissions).to be_empty
-      expect(Ability.new(person)).not_to be_able_to(:download_statistics, groups(:bluemlisalp))
-      expect(Ability.new(person)).not_to be_able_to(:download_statistics, groups(:root))
-      expect(Ability.new(person)).not_to be_able_to(:download_statistics, groups(:bluemlisalp_ortsgruppe_ausserberg))
+      expect(ability).not_to be_able_to(:download_statistics, groups(:bluemlisalp))
+      expect(ability).not_to be_able_to(:download_statistics, groups(:root))
+      expect(ability).not_to be_able_to(:download_statistics, groups(:bluemlisalp_ortsgruppe_ausserberg))
     end
 
     [:layer_read, :layer_and_below_read, :download_member_statistics].each do |permission|
