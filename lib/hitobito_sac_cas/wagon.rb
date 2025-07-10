@@ -53,6 +53,11 @@ module HitobitoSacCas
 
       MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
 
+      ChangelogEntry.regex_substitutions.merge!(
+        /\b(HIT-\d+)\b/ =>
+          ChangelogEntry.markdown_link(label: '\1', url: 'https://saccas.atlassian.net/browse/\1')
+      )
+
       # extend application classes here
       CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event

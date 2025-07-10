@@ -1,15 +1,33 @@
+## unreleased
+
+* Personen mit Sektionsfunktionär-Rollen "Präsidium", "Mitgliederverwaltung" und "Finanzen" können neu auch die Mitgliederstatistik herunterladen HIT-1245 (hitobito_sac_cas#1912)
+
 ## Version 2.6
 
-* Geschäftsstelle kann Stamm und Zusatzsektion tauschen (#1885)
+* Geschäftsstelle kann Stamm und Zusatzsektion tauschen HIT-1220 (hitobito_sac_cas#1885)
+* JSON:API gibt 404 zurück für Personen ohne aktive Rolle HIT-1190 (hitobito_sac_cas#1858)
+* Mitgliederausweis kann neu auch mit Osteuropäischen Zeichen gedruckt werden HIT-1189 (hitobito_sac_cas#1870)
+* Mails an Mitglied werden in der Sprache des Mitglieds versendet HIT-1095, HIT-1112 (hitobito_sac_cas#1892, hitobito_sac_cas#1893)
+* Effektive Ausbildungstage für Kursteilnehmende bearbeitbar HIT-1175 (hitobito_sac_cas#1886)
+* Beim SAC Austritt wird keine Qualifikationsprüfung mehr durchgeführt HIT-1211 (hitobito_sac_cas#1894)
+* Kurs Durchführungsort wird im Eckdatenblatt ausgegeben HIT-1068 (hitobito_sac_cas#1887)
+* Kursrechnung Texte werden in der Sprache des Teilnehmenden an Abacus übermittelt HIT-1165 (hitobito_sac_cas#1896)
+* Neuer Button "Mitgliederstatistik" auf Sektion/Ortsgruppe/SacCas HIT-1231 (hitobito_sac_cas#1900)
+
+## Version 2.5
+
+* Tourenchef Rollen erhalten neu implizit Schreibrecht auf Mitglieder Gruppe HIT-1206 (hitobito_sac_cas#1854)
+* Jährlich wiederkehrende Kurse können kopiert werden HIT-1148 (hitobito_sac_cas#1799)
 
 ## Version 2.4
 
-* Der Changelog ist nur noch für Mitarbeiter der Geschäftsstelle verlinkt und aufrufbar (hitobito_sac_cas#1478)
+* Der Changelog ist nur noch für Mitarbeiter der Geschäftsstelle verlinkt und aufrufbar HIT-773 (hitobito_sac_cas#1478)
 * Rollen mit Admin Berechtigungen können nur noch von Personen mit Admin Berechtigung bearbeitet, erstellt und gelöscht werden (hitobito#3127)
+* Gekündigte Mitgliedschaften können reaktiviert werden HIT-1034 (hitobito_sac_cas#1691)
 
 ## Version 2.3
 
-*  Beim Empfänger-Export auf der Personenliste sind auch die strukturierte Adresse und die Anrede enthalten (hitobito_sac_cas#688)
+* Beim Empfänger-Export auf der Personenliste sind auch die strukturierte Adresse und die Anrede enthalten (hitobito_sac_cas#688)
 * Neuer Personen-Export "Empfänger Familien" für den physischen Versand des Sektionsbulletins
 * Eigene Berechtigung für Tab "Sicherheit" auf der Personenseite
 * Für Personen mit aktiven Rollen "Mitglied (Stammsektion)" oder "Abonnent" werden Haupt-E-Mail, Namens- und Adress-Felder als Pflichtfelder definiert
