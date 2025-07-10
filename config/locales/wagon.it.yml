@@ -482,6 +482,7 @@ it:
               other: Nuove registrazioni
           permission:
             description:
+              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
               read_all_people: Letto da tutte le persone.
               layer_events_full: Gestire gli eventi nella sezione.
               layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.

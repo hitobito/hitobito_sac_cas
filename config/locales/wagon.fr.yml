@@ -484,6 +484,7 @@ fr:
               other: Nouvelles inscriptions
           permission:
             description:
+              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
               read_all_people: Lecture de toutes les personnes.
               layer_events_full: Gérer les événements sur la section.
               layer_mitglieder_full: Gérer les personnes dans le groupe de membres de la section/du groupe local.
