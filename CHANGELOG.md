@@ -1,4 +1,4 @@
-## unreleased
+## Version 2.6
 
 * Personen mit Sektionsfunktionär-Rollen "Präsidium", "Mitgliederverwaltung" und "Finanzen" können neu auch die Mitgliederstatistik herunterladen HIT-1245 (hitobito_sac_cas#1912)
 
