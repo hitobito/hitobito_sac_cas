@@ -111,12 +111,24 @@ describe Wizards::Memberships::LeaveZusatzsektion do
       let(:backoffice) { true }
       let(:current_step) { 1 }
 
-      it "supports immediate role termination" do
+      before do
         params[:termination_choose_date] = {terminate_on: "now"}
+      end
+
+      it "supports immediate role termination" do
         expect do
-          wizard.save!
+          expect(wizard.save!).to eq true
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion)
+          .with(person, matterhorn, Time.zone.yesterday)
+      end
+
+      it "skips TerminateSacMembership::leave_zusatzsektion email if inform_via_email is set to false" do
+        params[:summary][:inform_via_email] = false
+        expect do
+          expect(wizard.save!).to eq true
+        end.not_to have_enqueued_mail
       end
     end
   end

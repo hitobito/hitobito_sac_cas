@@ -12,6 +12,7 @@ module Wizards
         attribute :data_retention_consent, :boolean
         attribute :subscribe_newsletter, :boolean
         attribute :subscribe_fundraising_list, :boolean
+        attribute :inform_via_email, :boolean, default: true
 
         validates :termination_reason_id, presence: true
         validates :entry_fee_consent, acceptance: true
