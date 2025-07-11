@@ -31,17 +31,11 @@
             .col
               = form.check_box :entry_fee_consent, class: 'align-middle', data: { action: "disable-toggle#toggle" }
               = t('.entry_fee_consent')
-    = form.label(:subscribe_newsletter,  class: 'row mb-2') do
-      .col-md-3.col-xl-2.pb-1
-      .col-md-9
-        = form.check_box :subscribe_newsletter, {prompt: true, class: 'align-middle', data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
-        = t('.subscribe_newsletter')
 
-    = form.label(:subscribe_fundraising_list, class: 'row mb-2') do
-      .col-md-3.col-xl-2.pb-1
-      .col-md-9
-        = form.check_box :subscribe_fundraising_list, {prompt: true, class: 'align-middle', data: { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" }}
-        = t('.subscribe_fundraising_list')
+    = render 'wizards/shared/inline_checkbox', label: t(".subscribe_newsletter"), key: :subscribe_newsletter, form:, stimulus_ctrl:
+    = render 'wizards/shared/inline_checkbox', label: t(".subscribe_fundraising_list"), key: :subscribe_fundraising_list, form:, stimulus_ctrl:
+    - if wizard.backoffice?
+      = render 'wizards/shared/inline_checkbox', label: t(".inform_via_email"), key: :inform_via_email, form:
 
     .btn-toolbar.align-with-form
       = c.next_button(nil, {disabled: !c.model.entry_fee_consent, data: { "disable-toggle-target" => "toggled"}})
