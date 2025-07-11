@@ -8,6 +8,8 @@ module Wizards
     module LeaveZusatzsektion
       class Summary < Step
         attribute :termination_reason_id, :integer
+        attribute :inform_via_email, :boolean, default: true
+
         validates :termination_reason_id, presence: true
 
         def family_member_names
