@@ -1186,6 +1186,11 @@ it:
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
+      create:
+        confirm_email_before_logging_in: >
+          Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma. Se il
+          vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di
+          contattare <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a> indicando il proprio indirizzo e-mail.
 
   doorkeeper:
     scopes:
