@@ -207,6 +207,7 @@ module HitobitoSacCas
 
       ## Controllers
       ApplicationController.include BasicAuth if Settings.basic_auth
+      Devise::Hitobito::SessionsController.prepend SacCas::Devise::Hitobito::SessionsController
 
       ApplicationController.prepend SacCas::ApplicationController
       ChangelogController.prepend SacCas::ChangelogController
