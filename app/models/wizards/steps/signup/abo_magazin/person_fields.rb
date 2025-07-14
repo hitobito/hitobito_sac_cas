@@ -7,7 +7,14 @@
 
 module Wizards::Steps::Signup::AboMagazin
   class PersonFields < Wizards::Steps::Signup::PersonFields
+    attribute :company, :boolean, default: false
+    attribute :company_name, :string
+
+    validates :gender, :birthday, presence: true, unless: :company
+
+    validates :company_name, presence: true, if: :company
+
     self.minimum_age = 0
-    self.partial = "wizards/steps/signup/person_fields"
+    self.partial = "wizards/steps/signup/abo_magazin/person_fields"
   end
 end

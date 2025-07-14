@@ -8,6 +8,7 @@
 module Wizards::Steps::Signup::Sektion
   class PersonFields < Wizards::Steps::Signup::PersonFields
     self.partial = "wizards/steps/signup/person_fields"
+    validates :gender, :birthday, presence: true
     validates :phone_number, presence: true
   end
 end

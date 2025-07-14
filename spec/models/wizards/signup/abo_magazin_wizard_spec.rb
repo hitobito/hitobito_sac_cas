@@ -120,6 +120,14 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(max.reload.gender).to be_nil
     end
 
+    it "does save company flag" do
+      required_attrs[:person_fields][:company] = true
+      required_attrs[:person_fields][:company_name] = "Dummy, Inc."
+      wizard.save!
+      expect(max.reload).to be_company
+      expect(max.company_name).to eq "Dummy, Inc."
+    end
+
     describe "newsletter" do
       include ActiveJob::TestHelper
 

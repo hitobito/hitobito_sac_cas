@@ -12,6 +12,8 @@ module Wizards::Steps::Signup::AboTourenPortal
     self.minimum_age = 18
     self.partial = "wizards/steps/signup/person_fields"
 
+    validates :gender, :birthday, presence: true
+
     def requires_adult_consent? = false
 
     def person_attributes

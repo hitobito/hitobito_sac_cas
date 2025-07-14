@@ -14,7 +14,7 @@ module Wizards::Steps::Signup::PersonCommon
     class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
     class_attribute :maximum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.end
 
-    validates :gender, :first_name, :last_name, :birthday, presence: true
+    validates :first_name, :last_name, presence: true
 
     validate :assert_valid_phone_number
     validate :assert_minimum_age

@@ -18,12 +18,16 @@
     %tr
       %td=person.class.human_attribute_name(:last_name)
       %td=person.last_name
+    - if person.company
+      %tr
+        %td=person.class.human_attribute_name(:company_name)
+        %td=person.company_name
     %tr
       %td=t("activemodel.attributes.wizards/steps/signup/main_email_field.email")
       %td=wizard.email
     %tr
       %td=person.class.human_attribute_name(:birthday)
-      %td=person.birthday.strftime("%d.%m.%Y")
+      %td=person.birthday.strftime("%d.%m.%Y") if person.birthday
     %tr
       %td=person.class.human_attribute_name(:address_care_of)
       %td=person.address_care_of

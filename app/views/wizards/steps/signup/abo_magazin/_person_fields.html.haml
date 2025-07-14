@@ -1,0 +1,16 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= c.fields_for() do |form|
+  %div{data: { controller: 'form-field-toggle'}}
+    = form.labeled_gender_inline_radio_buttons
+    = form.labeled_input_field :first_name
+    = form.labeled_input_field :last_name
+    = form.labeled_boolean_field :company, data: { action: 'form-field-toggle#toggle' }
+    %div{data: { 'form-field-toggle-target': 'toggle' }, class: form.object.company ? "" : "hidden"}
+      = form.labeled_input_field :company_name
+    = form.labeled_date_field :birthday, placeholder: t('global.date_field_placeholder'), yearRange: '-100:+0', data: { action: 'focusout->forwarder#click' }
+    = render 'contactable/address_fields', f: form, country_data: { action: 'forwarder#click' }
+    = form.labeled_input_field :phone_number, placeholder: t('global.phone_placeholder')
