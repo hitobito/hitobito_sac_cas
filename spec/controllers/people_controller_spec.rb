@@ -242,5 +242,11 @@ describe PeopleController do
       end.to change { admin.reload.phone_numbers.count }.by(-1)
         .and change { admin.phone_number_landline&.number }.from("+41 77 123 45 66").to(nil)
     end
+
+    it "can update advertising" do
+      expect do
+        put :update, params: {id: admin.id, group_id: admin.groups.first.id, person: {advertising: false}}
+      end.to change { admin.reload.advertising }.from(true).to(false)
+    end
   end
 end

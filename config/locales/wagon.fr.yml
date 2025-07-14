@@ -409,6 +409,7 @@ fr:
         updated_at: Modifié
       person:
         id: Numéro de personne
+        advertising: Envoi de publicité
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé

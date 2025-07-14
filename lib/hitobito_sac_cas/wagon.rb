@@ -228,7 +228,8 @@ module HitobitoSacCas
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController
       JsonApi::PeopleController.prepend SacCas::JsonApi::PeopleController
       MailingListsController.prepend SacCas::MailingListsController
-      PeopleController.permitted_attrs << :correspondence
+
+      PeopleController.permitted_attrs << :correspondence << :advertising
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Person::SubscriptionsController.prepend SacCas::Person::SubscriptionsController
@@ -261,7 +262,7 @@ module HitobitoSacCas
 
       TableDisplay.register_column(Person,
         TableDisplays::PublicColumn,
-        [:data_quality, :id])
+        [:data_quality, :id, :advertising])
 
       TableDisplay.register_column(Person,
         TableDisplays::People::BeitragskategorieColumn,
