@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Event::StateController do
+  include ActiveJob::TestHelper
+
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:group) { groups(:root) }
@@ -58,6 +60,30 @@ describe Event::StateController do
 
         expect(course.state).to eq("created")
         expect(response).to redirect_to(group_event_path(group, course))
+      end
+
+      describe "skipping emails" do
+        before do
+          course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}, {person: people(:familienmitglied)}])
+          course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+          course.participations.second.roles.create!(type: Event::Course::Role::AssistantLeader)
+          course.participations.third.roles.create!(type: Event::Course::Role::Participant)
+          course.update!(state: :created)
+        end
+
+        it "does send email" do
+          expect do
+            put :update, params: {group_id: group.id, id: course.id, state: :application_open}
+          end.to change { course.reload.state }.from("created").to("application_open")
+            .and have_enqueued_mail(Event::PublishedMailer, :notice).twice
+        end
+
+        it "skips sending emails when told to do so" do
+          expect do
+            put :update, params: {group_id: group.id, id: course.id, state: :application_open, skip_emails: true}
+          end.to change { course.reload.state }.from("created").to("application_open")
+            .and not_have_enqueued_mail
+        end
       end
     end
   end
