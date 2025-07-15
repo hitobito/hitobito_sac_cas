@@ -52,7 +52,7 @@ abo_basic_login:
   type: Group::AboBasicLogin
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
   self_registration_role_type: "Group::AboBasicLogin::BasicLogin"
-  created_at: 2023-05-09 13:28:00 # set manually because Group::Types#create_default_children HACK
+  main_self_registration_group: true
 
 externe_kontakte:
   parent: root

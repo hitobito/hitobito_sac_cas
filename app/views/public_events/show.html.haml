@@ -9,14 +9,3 @@
     %h2=t(".with_sac_account")
 
   = render 'devise/sessions/form', autofocus_login: false
-  .align-with-form.mt-4
-    .mb-1=t(".is_sac_account_active")
-    = link_to t('.login_questions'), t(".link_fag_sac_account")
-
-    %h2.mt-5=t(".first_time_here")
-    .mb-2=t(".create_account_now")
-  = render 'event/register/email_check'
-
-  .align-with-form.mt-5
-    %h2=t(".wanna_be_a_member")
-    = link_to t('.request_sac_membership'), t(".request_sac_membership_link")
