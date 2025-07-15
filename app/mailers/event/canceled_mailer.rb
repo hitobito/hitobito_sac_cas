@@ -13,24 +13,25 @@ class Event::CanceledMailer < ApplicationMailer
   NO_LEADER = "event_canceled_no_leader"
   WEATHER = "event_canceled_weather"
 
-  def minimum_participants(participation)
-    send_mail(participation, MINIMUM_PARTICIPANTS)
+  def minimum_participants(participation, leader_emails)
+    send_mail(MINIMUM_PARTICIPANTS, participation, leader_emails)
   end
 
-  def no_leader(participation)
-    send_mail(participation, NO_LEADER)
+  def no_leader(participation, leader_emails)
+    send_mail(NO_LEADER, participation, leader_emails)
   end
 
-  def weather(participation)
-    send_mail(participation, WEATHER)
+  def weather(participation, leader_emails)
+    send_mail(WEATHER, participation, leader_emails)
   end
 
   private
 
-  def send_mail(participation, content_key)
+  def send_mail(content_key, participation, leader_emails)
     @participation = participation
     @course = participation.event
     @person = participation.person
+    headers[:cc] = leader_emails
     headers[:bcc] = Group.root.course_admin_email
     locales = @course.language.split("_")
 
