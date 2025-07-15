@@ -18,7 +18,7 @@ module Events::Courses::State
   }
 
   included do
-    attr_accessor :inform_participants
+    attr_accessor :inform_participants, :skip_emails
 
     # key: current state
     # value: array of possible next states
@@ -34,16 +34,18 @@ module Events::Courses::State
     }.freeze
 
     before_save :adjust_application_state
-    after_update :send_application_published_email,
-      if: -> { saved_change_to_state?(from: "created", to: "application_open") }
-    after_update :summon_assigned_participants,
-      if: -> { saved_change_to_state?(from: "assignment_closed", to: "ready") }
-    after_update :send_application_paused_email, if: -> { state_changed_to?(:application_paused) }
-    after_update :send_application_closed_email, if: -> { state_changed_to?(:application_closed) }
-    after_update :notify_rejected_participants, if: -> { state_changed_to?(:assignment_closed) }
-    after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
-    after_update :send_canceled_email, if: -> { state_changed_to?(:canceled) && inform_participants? }
-    after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
+    with_options unless: :skip_emails do
+      after_update :send_application_published_email,
+        if: -> { saved_change_to_state?(from: "created", to: "application_open") }
+      after_update :summon_assigned_participants,
+        if: -> { saved_change_to_state?(from: "assignment_closed", to: "ready") }
+      after_update :send_application_paused_email, if: -> { state_changed_to?(:application_paused) }
+      after_update :send_application_closed_email, if: -> { state_changed_to?(:application_closed) }
+      after_update :notify_rejected_participants, if: -> { state_changed_to?(:assignment_closed) }
+      after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
+      after_update :send_canceled_email, if: -> { state_changed_to?(:canceled) && inform_participants? }
+      after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
+    end
   end
 
   def send_canceled_email
