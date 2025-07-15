@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Course::Role::AssistantLeader < Event::Role
-  self.permissions = [:participations_full, :qualify]
+  self.permissions = [:participations_full]
 
   self.kind = :leader
 end
