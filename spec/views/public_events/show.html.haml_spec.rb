@@ -12,7 +12,6 @@ describe "public_events/show.html.haml" do
   subject(:dom) { Capybara::Node::Simple.new(raw(rendered)) }
 
   before do
-    group.update!(main_self_registration_group: true)
     allow(view).to receive(:resource).and_return(Person.new)
   end
 

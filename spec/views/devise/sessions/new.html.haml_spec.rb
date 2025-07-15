@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -11,7 +11,6 @@ describe "devise/sessions/new.html.haml" do
   let(:group) { groups(:abo_basic_login) }
 
   before do
-    group.update!(main_self_registration_group: true)
     allow(view).to receive(:resource).and_return(Person.new)
   end
 
