@@ -1,3 +1,7 @@
+## unreleased
+
+* Beim Login mit einer unbestätigten E-Mail-Adresse wird das Bestätigungsemail automatisch erneut versendet HIT-1201 (hitobito_sac_cas#1910)
+
 ## Version 2.6
 
 * Personen mit Sektionsfunktionär-Rollen "Präsidium", "Mitgliederverwaltung" und "Finanzen" können neu auch die Mitgliederstatistik herunterladen HIT-1245 (hitobito_sac_cas#1912)
