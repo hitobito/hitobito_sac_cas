@@ -24,17 +24,23 @@ describe Devise::Hitobito::SessionsController do
       expect(flash.alert.strip).to eq "Ungültige Anmeldedaten."
     end
 
-    it "informs and sends confirmation email" do
-      expect do
-        post :create, params: {person: {login_identity: person.email, password:}}
-      end.to change { ActionMailer::Base.deliveries.count }.by(1)
-      expect(response).to redirect_to new_person_session_path
-      expect(ActionMailer::Base.deliveries.last.subject).to eq "Anleitung zur Bestätigung Deiner E-Mail-Adresse"
-      expect(flash.alert.strip).to eq <<~TEXT.tr("\n", " ").strip
-        Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.
-        Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast:
-        Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
-      TEXT
+    shared_examples "informs and sends confirmation email" do |login_attribute|
+      it "when logging in with #{login_attribute} informs and sends confirmation email" do
+        expect do
+          post :create, params: {person: {login_identity: person.email, password:}}
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(response).to redirect_to new_person_session_path
+        expect(ActionMailer::Base.deliveries.last.subject).to eq "Anleitung zur Bestätigung Deiner E-Mail-Adresse"
+        expect(flash.alert.strip).to eq <<~TEXT.tr("\n", " ").strip
+          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/>
+          Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast:
+          Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+        TEXT
+      end
+    end
+
+    Person.devise_login_id_attrs.each do |attr|
+      it_behaves_like "informs and sends confirmation email", attr
     end
   end
 end
