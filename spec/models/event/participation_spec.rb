@@ -102,10 +102,19 @@ describe Event::Participation do
         participation.actual_days = -1
         expect(participation).to_not be_valid
         expect(participation.errors.full_messages).to match_array(["Effektive Tage muss grösser oder gleich 0 sein"])
+      end
 
+      it "must be not greater than event total_duration_days" do
         participation.actual_days = event.total_duration_days + 1
         expect(participation).to_not be_valid
         expect(participation.errors.full_messages).to match_array(["Effektive Tage darf nicht länger als geplante Kursdauer sein."])
+      end
+
+      it "is not validated if actual_days did not change" do
+        participation.save!
+        participation.update_column(:actual_days, event.total_duration_days + 1)
+        participation.state = "summoned"
+        expect(participation).to be_valid
       end
 
       it "can be zero" do
