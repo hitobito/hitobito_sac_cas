@@ -22,6 +22,7 @@ class Event::LeaderReminderJob < RecurringJob
 
   def leader_participations_of_events_starting_at(start_at)
     Event::Participation.joins(:roles, :event, event: :dates)
+      .merge(Event.receiving_reminders)
       .where(roles: {type: Event::Course::LEADER_ROLES})
       .where(event_dates: {start_at: start_at.all_day})
       .distinct

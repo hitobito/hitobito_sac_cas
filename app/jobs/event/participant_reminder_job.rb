@@ -18,6 +18,7 @@ class Event::ParticipantReminderJob < RecurringJob
 
   def participations_with_missing_answers
     Event::Participation.active.joins(:answers, answers: :question, event: :dates)
+      .merge(Event.receiving_reminders)
       .where(event_dates: {start_at: 6.weeks.from_now.all_day})
       .where(event_questions: {admin: true})
       .where(event_answers: {answer: Event::Answer::MISSING})

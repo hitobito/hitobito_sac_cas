@@ -97,4 +97,23 @@ describe Event::LeaderReminderJob do
       end
     end
   end
+
+  context "states" do
+    subject!(:course) do
+      Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: 8.weeks.from_now)]).tap do |course|
+        course.participations.create!(person: people(:admin))
+        course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+      end
+    end
+
+    it "doesn't send an email in closed state" do
+      course.update_column(:state, :closed)
+      expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+    end
+
+    it "doesn't send an email in canceled state" do
+      course.update_column(:state, :canceled)
+      expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+    end
+  end
 end

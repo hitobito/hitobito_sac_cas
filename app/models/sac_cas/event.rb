@@ -83,6 +83,10 @@ module SacCas::Event
     translates :brief_description, :specialities, :similar_tours, :program
   end
 
+  module ClassMethods
+    def receiving_reminders = where.not(state: [:closed, :canceled])
+  end
+
   def total_duration_days
     dates.sum { _1.duration.days }
   end

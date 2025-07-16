@@ -78,4 +78,16 @@ describe Event::ParticipantReminderJob do
       expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
     end
   end
+
+  context "states" do
+    it "doesn't send an email in closed state" do
+      event.update_column(:state, :closed)
+      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+    end
+
+    it "doesn't send an email in canceled state" do
+      event.update_column(:state, :canceled)
+      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+    end
+  end
 end
