@@ -196,7 +196,7 @@ module SacCas::Event::Course
   end
 
   def default_participation_state(participation, for_someone_else = false)
-    if participation.application.blank? || for_someone_else
+    if participation.application.blank? || (for_someone_else && places_available?)
       "assigned"
     elsif places_available? && !automatic_assignment?
       "unconfirmed"
