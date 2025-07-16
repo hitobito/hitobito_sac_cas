@@ -69,6 +69,32 @@ describe Person do
     end
   end
 
+  context "scopes" do
+    describe "where_login_matches" do
+      let(:person) { people(:mitglied) }
+
+      it "returns person with email" do
+        expect(Person.where_login_matches(person.email)).to eq([person])
+      end
+
+      it "returns person with membership_number" do
+        expect(Person.where_login_matches(person.membership_number)).to eq([person])
+      end
+
+      it "returns empty for non-matching login" do
+        expect(Person.where_login_matches("nonexisting")).to be_empty
+      end
+
+      it "can be chained with other scopes" do
+        expect(Person.where_login_matches(person.email).where(confirmed_at: nil)).to be_empty
+        expect(Person.where_login_matches(person.email).where.not(confirmed_at: nil)).to eq([person])
+
+        expect(Person.where(confirmed_at: nil).where_login_matches(person.email)).to be_empty
+        expect(Person.where.not(confirmed_at: nil).where_login_matches(person.email)).to eq([person])
+      end
+    end
+  end
+
   context "paper trail", versioning: true do
     let(:person) { people(:admin) }
 

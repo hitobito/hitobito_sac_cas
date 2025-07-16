@@ -1188,6 +1188,11 @@ fr:
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
+      create:
+        confirm_email_before_logging_in: >
+          Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation.<br/> Si ton
+          adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à
+          <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a> en indiquant ton adresse e-mail stp.
 
   doorkeeper:
     scopes:

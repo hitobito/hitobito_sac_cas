@@ -82,6 +82,13 @@ module SacCas::Person
       select(selects).from("(#{people_with_membership_years_sql}) AS people")
     }
 
+    scope :where_login_matches, ->(value) {
+      matching = Person.devise_login_id_attrs.reduce(Person.none) do |scope, attr|
+        scope.or(Person.where(attr => value))
+      end
+      merge(matching)
+    }
+
     include SacCas::People::Wso2LegacyPassword
   end
 
