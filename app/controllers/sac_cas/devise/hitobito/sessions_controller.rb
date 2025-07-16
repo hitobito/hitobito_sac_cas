@@ -9,12 +9,12 @@ module SacCas::Devise::Hitobito::SessionsController
   extend ActiveSupport::Concern
 
   prepended do
-    prepend_before_action :redirect_unless_confirmed, only: :create # rubocop:disable Rails/LexicallyScopedActionFilter
+    prepend_before_action :redirect_if_unconfirmed, only: :create # rubocop:disable Rails/LexicallyScopedActionFilter
   end
 
   private
 
-  def redirect_unless_confirmed
+  def redirect_if_unconfirmed
     unconfirmed_people = Person.where(confirmed_at: nil)
     login_identity = params.dig(:person, :login_identity)
 
