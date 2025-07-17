@@ -1,5 +1,6 @@
 ## unreleased
 
+* Bei Kursabsagen sind neu die Kursleitenden im CC der Absage E-Mails HIT-1240 (hitobito_sac_cas#1925)
 * Bei abgesagten Kursen ist das Bestätigen/Stornieren von Teilnahmen deaktiviert HIT-1067 (hitobito_sac_cas#1922)
 * Das "Die Alpen" Onboarding kann neu auch für Firmen durchgeführt werden HIT-1243 (hitobito_sac_cas#1924)
 * Beim Login mit einer unbestätigten E-Mail-Adresse wird das Bestätigungsemail automatisch erneut versendet HIT-1201 (hitobito_sac_cas#1910)

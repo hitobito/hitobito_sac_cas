@@ -48,9 +48,10 @@ module Events::Courses::State
 
   def send_canceled_email
     return if canceled_reason.nil?
+    leader_emails = all_leaders.map(&:email)
 
     all_participants.each do |participation|
-      Event::CanceledMailer.send(canceled_reason, participation).deliver_later
+      Event::CanceledMailer.send(canceled_reason, participation, leader_emails).deliver_later
     end
   end
 
