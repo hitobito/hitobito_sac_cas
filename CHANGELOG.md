@@ -4,15 +4,12 @@
 * Bei abgesagten Kursen ist das Bestätigen/Stornieren von Teilnahmen deaktiviert HIT-1067 (hitobito_sac_cas#1922)
 * Das "Die Alpen" Onboarding kann neu auch für Firmen durchgeführt werden HIT-1243 (hitobito_sac_cas#1924)
 * Beim Login mit einer unbestätigten E-Mail-Adresse wird das Bestätigungsemail automatisch erneut versendet HIT-1201 (hitobito_sac_cas#1910)
-
-## Version 2.6
-
 * Bei Austritt eines Mitglieds aus SAC oder Zusatzsektion durch die Geschäftsstelle kann der Benutzer wählen ob Mitglied und Sektion per Email informiert werden soll HIT-1116 (hitobito_sac_cas#1911)
 * Auf der Person gibt es neu das Attribut "Werbesendungen", kann in Tabellen angezeigt und exportiert werden HIT-1228 (hitobito_sac_cas#1909)
-* Personen mit Sektionsfunktionär-Rollen "Präsidium", "Mitgliederverwaltung" und "Finanzen" können neu auch die Mitgliederstatistik herunterladen HIT-1245 (hitobito_sac_cas#1912)
 
 ## Version 2.6
 
+* Personen mit Sektionsfunktionär-Rollen "Präsidium", "Mitgliederverwaltung" und "Finanzen" können neu auch die Mitgliederstatistik herunterladen HIT-1245 (hitobito_sac_cas#1912)
 * Geschäftsstelle kann Stamm und Zusatzsektion tauschen HIT-1220 (hitobito_sac_cas#1885)
 * JSON:API gibt 404 zurück für Personen ohne aktive Rolle HIT-1190 (hitobito_sac_cas#1858)
 * Mitgliederausweis kann neu auch mit Osteuropäischen Zeichen gedruckt werden HIT-1189 (hitobito_sac_cas#1870)
