@@ -65,6 +65,12 @@ describe Event::ApplicationMarketController do
         expect(dom).not_to have_css "tbody#applications tr:nth-of-type(1) td", text: "Warteliste"
         expect(dom).not_to have_css "tbody#participants tr:nth-of-type(1) td", text: "Bestätigt"
       end
+
+      it "shows warning when event is canceled" do
+        event.update_columns(state: :canceled)
+        get :index, params: params
+        expect(dom).to have_css "div.alert-warning", text: "Dieser Anlass ist abgesagt"
+      end
     end
 
     describe "summoned" do
