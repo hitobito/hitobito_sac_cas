@@ -27,7 +27,17 @@ describe Export::Tabular::People::WithSacAdditions do
     let(:row) { subject.attributes.zip(subject.data_rows.first).to_h }
 
     it "has the additonal sac headers" do
-      expect(subject.attributes).to include :membership_number, :family_id
+      expect(subject.attributes).to include :membership_number, :family_id, :advertising
+    end
+
+    context "advertising" do
+      it "has the correct label" do
+        expect(subject.attribute_labels[:advertising]).to eq "Werbesendungen"
+      end
+
+      it "has the correct value" do
+        expect(row[:advertising]).to eq "ja"
+      end
     end
 
     context "membership_number" do

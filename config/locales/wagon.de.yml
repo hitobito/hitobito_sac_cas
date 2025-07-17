@@ -412,6 +412,7 @@ de:
         updated_at: Geändert
       person:
         id: Personennummer
+        advertising: Werbesendungen
         address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt
