@@ -263,6 +263,19 @@ describe Event::Course do
         course.participant_count = 2
         expect(state).to eq "applied"
       end
+
+      context "for someone else" do
+        subject(:state) { course.default_participation_state(participation, true) }
+
+        it "returns assigned if places are available" do
+          expect(state).to eq "assigned"
+        end
+
+        it "returns applied if course has no places available" do
+          course.participant_count = 2
+          expect(state).to eq "applied"
+        end
+      end
     end
 
     context "with automatic_assignment" do
@@ -275,6 +288,19 @@ describe Event::Course do
       it "returns applied if course has no places available" do
         course.participant_count = 2
         expect(state).to eq "applied"
+      end
+
+      context "for someone else" do
+        subject(:state) { course.default_participation_state(participation, true) }
+
+        it "returns assigned if places are available" do
+          expect(state).to eq "assigned"
+        end
+
+        it "returns applied if course has no places available" do
+          course.participant_count = 2
+          expect(state).to eq "applied"
+        end
       end
     end
   end
