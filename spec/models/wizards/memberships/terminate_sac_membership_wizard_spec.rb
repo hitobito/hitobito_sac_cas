@@ -109,14 +109,25 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
       let(:backoffice) { true }
       let(:current_step) { 1 }
 
-      it "supports immediate role termination" do
+      before do
         params[:termination_choose_date] = {terminate_on: "now"}
+      end
+
+      it "supports immediate role termination" do
         expect do
           wizard.save!
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
           .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
           .with(person, bluemlisalp, Date.yesterday)
+      end
+
+      it "skips TerminateSacMembership::terminate_membership email if inform_via_email is set to false" do
+        params[:summary][:inform_via_email] = false
+        expect do
+          wizard.save!
+        end.to change { role.reload.terminated }.from(false).to(true)
+          .and not_have_enqueued_mail
       end
     end
   end
