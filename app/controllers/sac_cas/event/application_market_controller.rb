@@ -10,10 +10,20 @@ module SacCas::Event::ApplicationMarketController
 
   SORT_EXPRESSION = "event_participations.created_at ASC"
 
+  prepended do
+    delegate :canceled?, to: :event, prefix: true
+
+    before_action :set_canceled_flash, only: :index, if: :event_canceled?
+  end
+
   def index
     @participants = load_participants.reorder(SORT_EXPRESSION)
     @applications = Event::ParticipationDecorator.decorate_collection(
       load_applications.order(SORT_EXPRESSION)
     )
   end
+
+  private
+
+  def set_canceled_flash = flash.now[:warning] = t(".event_canceled")
 end
