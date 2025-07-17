@@ -27,6 +27,10 @@ it:
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
 
+  layouts:
+    unauthorized:
+      main_self_registration: "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen"
+
   settings:
     email:
       sender: "Club Alpino Svizzero CAS <noreply@%{mail_domain}>"
@@ -1186,11 +1190,6 @@ it:
     sessions:
       form:
         login_identity: E-mail principale / Socio n.
-      create:
-        confirm_email_before_logging_in: >
-          Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.<br/> Se il
-          vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di
-          contattare <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a> indicando il proprio indirizzo e-mail.
 
   doorkeeper:
     scopes:
@@ -1831,12 +1830,6 @@ it:
     show:
       login_to_participate: Registrati per partecipare al corso
       with_sac_account: con il tuo account CAS
-      is_sac_account_active: "Per i soci CAS: il tuo account CAS personale non è ancora attivo?"
-      login_questions: Domande e risposte sul login
-      link_fag_sac_account: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto/"
-      first_time_here: "Qui per la prima volta?"
-      create_account_now: Crea ora il tuo account CAS gratuito
-      wanna_be_a_member: "Desideri diventare socio del CAS?"
       request_sac_membership: Richiedere l’affiliazione al CAS
       request_sac_membership_link: "https://www.sac-cas.ch/it/affiliazione/diventasocio/"
 
