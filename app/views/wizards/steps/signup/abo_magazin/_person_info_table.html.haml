@@ -18,7 +18,7 @@
     %tr
       %td=person.class.human_attribute_name(:last_name)
       %td=person.last_name
-    - if person.company
+    - if person.company_name.present?
       %tr
         %td=person.class.human_attribute_name(:company_name)
         %td=person.company_name
