@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= render_attrs(entry, :correspondence, :confirmed_at, :advertising)
+= render_attrs(entry, :correspondence, :advertising, :confirmed_at)
 - if entry.family_id.present?
   = render_attrs(entry, :family_id, :sac_family_main_person)
 - if entry.sac_membership_anytime?
