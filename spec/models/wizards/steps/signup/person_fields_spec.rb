@@ -13,10 +13,8 @@ describe Wizards::Steps::Signup::PersonFields do
 
   let(:required_attrs) {
     {
-      gender: "m",
       first_name: "Max",
       last_name: "Muster",
-      birthday: "01.01.2000",
       street: "Musterplatz",
       housenumber: "23",
       town: "Zurich",
@@ -106,7 +104,7 @@ describe Wizards::Steps::Signup::PersonFields do
 
       expect(form.person_attributes).to eq required_attrs
         .except(:phone_number)
-        .merge(country: "CH", birthday: Date.new(2000, 1, 1))
+        .merge(country: "CH")
     end
 
     it "converts gender value of '_nil' to nil" do

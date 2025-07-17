@@ -62,4 +62,21 @@ describe "wizards/steps/signup/abo_magazin/_person_info_table.html.haml" do
     expect(dom).to have_text "Land"
     expect(dom).to have_text "Schweiz"
   end
+
+  it "still renders if birthday is nil" do
+    person.attributes = attributes.merge(birthday: nil)
+    expect(dom).to have_text "Max"
+  end
+
+  describe "company" do
+    it "does not render company name for normal person" do
+      expect(dom).not_to have_text "Firmenname"
+    end
+
+    it "does render company name for company person" do
+      person.attributes = attributes.merge(company: true, company_name: "Dummy, Inc.")
+      expect(dom).to have_text "Firmenname"
+      expect(dom).to have_text "Dummy, Inc."
+    end
+  end
 end
