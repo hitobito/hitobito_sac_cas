@@ -575,6 +575,12 @@ describe Event::Course do
           .to have_enqueued_mail(Event::CanceledMailer, :weather).twice
       end
 
+      it "does not sends an email when participant is canceled" do
+        course.participations.update_all(state: :canceled)
+        expect { course.update!(state: :canceled, canceled_reason: :weather) }
+          .not_to have_enqueued_mail
+      end
+
       it "does not sends an emails when inform_participants=0" do
         course.inform_participants = 0
         expect { course.update!(state: :canceled, canceled_reason: :weather) }

@@ -20,7 +20,9 @@ describe Event::LeaderReminderJob do
 
   context "with course leaders" do
     let!(:course) do
-      Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: 8.weeks.from_now)])
+      Fabricate(:sac_open_course, dates: [
+        Fabricate.build(:event_date, start_at: 8.weeks.from_now)
+      ])
     end
 
     before do
@@ -46,7 +48,9 @@ describe Event::LeaderReminderJob do
 
     context "with a course that starts next week and a course that starts in 8 weeks" do
       let(:course_next_week) do
-        Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: 1.week.from_now)])
+        Fabricate(:sac_open_course, dates: [
+          Fabricate.build(:event_date, start_at: 1.week.from_now)
+        ])
       end
 
       before do
@@ -64,7 +68,9 @@ describe Event::LeaderReminderJob do
 
   context "without course leader" do
     before do
-      Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: 1.week.from_now)])
+      Fabricate(:sac_open_course, dates: [
+        Fabricate.build(:event_date, start_at: 1.week.from_now)
+      ])
     end
 
     it "doesn't mail a reminder" do
@@ -74,7 +80,9 @@ describe Event::LeaderReminderJob do
 
   context "course doesn't start next week or in 8 weeks" do
     subject(:course) do
-      course = Fabricate(:sac_open_course, dates: [Fabricate(:event_date, start_at: start_at)])
+      course = Fabricate(:sac_open_course, dates: [
+        Fabricate.build(:event_date, start_at: start_at)
+      ])
       course.participations.create!(person: people(:admin))
       course.participations.first.roles.create!(type: Event::Course::Role::Leader)
     end
@@ -95,6 +103,27 @@ describe Event::LeaderReminderJob do
         course
         expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
       end
+    end
+  end
+
+  context "states" do
+    subject!(:course) do
+      Fabricate(:sac_open_course, dates: [
+        Fabricate.build(:event_date, start_at: 8.weeks.from_now)
+      ]).tap do |course|
+        course.participations.create!(person: people(:admin))
+        course.participations.first.roles.create!(type: Event::Course::Role::Leader)
+      end
+    end
+
+    it "doesn't send an email in closed state" do
+      course.update_column(:state, :closed)
+      expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+    end
+
+    it "doesn't send an email in canceled state" do
+      course.update_column(:state, :canceled)
+      expect { job.perform }.not_to change(ActionMailer::Base.deliveries, :count)
     end
   end
 end

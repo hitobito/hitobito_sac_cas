@@ -33,9 +33,12 @@ describe Export::EventParticipationsExportJob do
       subject.perform
 
       lines = file.read.lines
-      expect(lines.size).to eq(2)
+      expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Veranstaltungsnummer;Kursortname;Kursbezeichnung;Anfangsdatum;Enddatum;Teilnehmernummer;Geschlecht;Familienname;Vorname;Sprachcode;Adresse;PLZ;Ort;Sektionsname;Geburtsdatum;Haupt-E-Mail.*/)
-      expect(lines[1]).to match(/10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600001;weiblich;Hillary;Edmund.*/)
+      expect(lines[1..]).to match_array([
+        /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600001;weiblich;Hillary;Edmund/,
+        /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600002;divers;Norgay;Tenzing/
+      ])
     end
 
     context "creates an Excel-Export" do

@@ -27,6 +27,7 @@ describe Event::ApplicationMarketController do
 
   describe "GET#index" do
     it "sorts participants oldest first" do
+      event.participations.delete_all
       older = create_participation(created_at: 2.days.ago)
       newer = create_participation(created_at: 1.day.ago)
       oldest = create_participation(created_at: 5.days.ago)
@@ -78,6 +79,7 @@ describe Event::ApplicationMarketController do
       subject(:dom) { Capybara::Node::Simple.new(response.body) }
 
       before do
+        event.participations.delete_all
         create_application.tap { |p| p.update_columns(active: true, state: :summoned) }
       end
 

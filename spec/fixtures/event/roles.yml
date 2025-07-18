@@ -5,4 +5,8 @@
 
 top_mitglied:
   participation: top_mitglied
-  type: Event::Role::Participant
+  type: Event::Course::Role::Participant
+
+top_familienmitglied:
+  participation: top_familienmitglied
+  type: Event::Course::Role::Participant

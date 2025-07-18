@@ -8,8 +8,10 @@ top_mitglied:
   event: top_course
   person_id: 600_001
   active: true
+  state: assigned
 
 top_familienmitglied:
   event: top_course
   person_id: 600_002
   active: true
+  state: assigned
