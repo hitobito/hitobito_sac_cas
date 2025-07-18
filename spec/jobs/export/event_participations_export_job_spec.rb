@@ -31,11 +31,11 @@ describe Export::EventParticipationsExportJob do
 
     it "and saves it" do
       subject.perform
-      
+
       lines = file.read.lines
       expect(lines.size).to eq(3)
       expect(lines[0]).to match(/Veranstaltungsnummer;Kursortname;Kursbezeichnung;Anfangsdatum;Enddatum;Teilnehmernummer;Geschlecht;Familienname;Vorname;Sprachcode;Adresse;PLZ;Ort;Sektionsname;Geburtsdatum;Haupt-E-Mail.*/)
-      expect(lines[1..-1]).to match_array([
+      expect(lines[1..]).to match_array([
         /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600001;weiblich;Hillary;Edmund/,
         /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600002;divers;Norgay;Tenzing/
       ])
