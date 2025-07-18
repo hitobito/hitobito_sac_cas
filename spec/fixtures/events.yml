@@ -15,6 +15,16 @@ top_course:
   number: 10
   language: de
   external_applications: true
+  contact: admin
+  location: On top
+  application_opening_at: <%= 10.days.ago %>
+  application_closing_at: <%= 2.months.from_now %>
+  season: winter
+  start_point_of_time: day
+  cost_center: tour
+  cost_unit: ski
+  price_member: 10
+  price_regular: 20
 
 application_closed:
   groups: root
