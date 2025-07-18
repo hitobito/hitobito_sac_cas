@@ -11,6 +11,7 @@ top_course:
   groups: root
   type: Event::Course
   kind: ski_course
+  state: application_open
   number: 10
   language: de
   external_applications: true
