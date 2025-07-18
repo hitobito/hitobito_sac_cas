@@ -18,6 +18,8 @@ class Event::StateController < ApplicationController
 
   def save_next_state
     entry.state = next_state
+    entry.skip_emails = params[:skip_emails]
+
     set_course_attrs if entry.course?
 
     if entry.save

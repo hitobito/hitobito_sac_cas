@@ -1397,6 +1397,10 @@ de:
       self_employed: selbständig erwerbend
       not_self_employed: unselbständig erwerbend
 
+    popover_emails_optional:
+      prompt_email_choice: Sollen E-Mails verschickt werden?
+      submit_with_emails: E-Mails verschicken
+      submit_without_emails: Keine E-Mails verschicken
     popover_canceled_reason:
       cancel_button: Definitiv Absagen
       cancel_confirmation: >-
