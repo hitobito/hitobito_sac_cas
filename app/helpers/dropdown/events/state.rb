@@ -15,12 +15,6 @@ module Dropdown::Events
 
     ID = "event-state-dropdown"
 
-    EMAIL_OPTIONAL_TRANSITIONS = %w[
-      application_open
-      assignment_closed
-      ready
-    ]
-
     def initialize(template, event)
       @event = event
       @template = template
@@ -36,6 +30,10 @@ module Dropdown::Events
 
     private
 
+    def optional_email_popover?(transition_to)
+      event.state_transition_emails_skippable.fetch(event.state.to_sym, []).include?(transition_to.to_sym)
+    end
+
     def current_state_label
       t("activerecord.attributes.#{event.klass.model_name.i18n_key}.states.#{event.state}")
     end
@@ -47,7 +45,7 @@ module Dropdown::Events
         custom_method = :"state_item_#{event.klass.name.demodulize.downcase}_#{state}"
         if respond_to?(custom_method, true)
           send(custom_method, label, link)
-        elsif EMAIL_OPTIONAL_TRANSITIONS.include?(state.to_s)
+        elsif optional_email_popover?(state)
           add_item_with_popover(label, template.render("events/popover_emails_optional", state:, label:))
         else
           add_item(label, link, method: :put, "data-confirm": confirm_text_for(state))

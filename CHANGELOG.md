@@ -8,6 +8,7 @@
 * Beim Login mit einer unbestätigten E-Mail-Adresse wird das Bestätigungsemail automatisch erneut versendet HIT-1201 (hitobito_sac_cas#1910)
 * Bei Austritt eines Mitglieds aus SAC oder Zusatzsektion durch die Geschäftsstelle kann der Benutzer wählen ob Mitglied und Sektion per Email informiert werden soll HIT-1116 (hitobito_sac_cas#1911)
 * Auf der Person gibt es neu das Attribut "Werbesendungen", kann in Tabellen angezeigt und exportiert werden HIT-1228 (hitobito_sac_cas#1909)
+* Falls beim Kurszustandswechsel E-Mails ausgelöst werdern, müssen diese jetzt explizt bestätigt werden HIT-1237 (hitobito_sac_cas#1921)
 
 ## Version 2.6
 
