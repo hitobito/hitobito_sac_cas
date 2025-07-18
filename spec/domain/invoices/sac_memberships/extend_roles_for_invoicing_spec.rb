@@ -8,11 +8,14 @@
 require "spec_helper"
 
 describe Invoices::SacMemberships::ExtendRolesForInvoicing do
-  subject(:extend_roles) { described_class.new(date).extend_roles }
+  include Households::SpecHelper
+  subject(:extend_roles) { described_class.new(date, reference_date).extend_roles }
 
   let(:person) { people(:mitglied) }
   let(:person_mitglied_role) { roles(:mitglied) }
   let(:date) { 1.week.from_now.to_date }
+  let(:reference_date) { Time.zone.now.to_date }
+  let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
 
   before { set_end_on_for_all_roles(person) }
 
@@ -105,6 +108,143 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
     it "extends the role" do
       expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(date)
+    end
+  end
+
+  describe "convert roles to youth" do
+    let!(:person_turned_youth) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", beitragskategorie: :family, email: "dad@hitobito.example.com", confirmed_at: Time.current, sac_family_main_person: true, end_on: 1.year.ago) }
+
+    context "stammsektion role" do
+      it "creates youth role for family with reference age equal 18" do
+        person_turned_youth.update!(birthday: reference_date - 18.years)
+
+        expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
+
+        new_role = person_turned_youth.roles.with_inactive.last
+        expect(new_role.start_on).to eq(reference_date)
+        expect(new_role.end_on).to eq(date)
+        expect(new_role.beitragskategorie).to eq("youth")
+      end
+
+      it "creates youth role for family with reference age above 18" do
+        person_turned_youth.update!(birthday: reference_date - 18.years - 1.day)
+
+        expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
+
+        new_role = person_turned_youth.roles.with_inactive.last
+        expect(new_role.start_on).to eq(reference_date)
+        expect(new_role.end_on).to eq(date)
+        expect(new_role.beitragskategorie).to eq("youth")
+      end
+
+      it "does not create youth role for family with reference age below 18" do
+        person_turned_youth.update!(birthday: reference_date - 18.years + 1.day)
+
+        expect { extend_roles }.to_not change { person_turned_youth.roles.with_inactive.count }
+      end
+    end
+
+    context "zusatzsektion role" do
+      it "creates role for family zusatzsektion role" do
+        person_turned_youth.update!(birthday: reference_date - 23.years)
+        Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: person_turned_youth, start_on: 1.year.ago, end_on: 1.year.ago, beitragskategorie: :family)
+
+        expect { extend_roles }.to change { person_turned_youth.sac_membership.zusatzsektion_roles.with_inactive.count }.by(1)
+
+        zusatzsektion_role = person_turned_youth.roles.with_inactive.where(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, beitragskategorie: :youth).last
+        expect(zusatzsektion_role).to be_present
+        expect(zusatzsektion_role.start_on).to eq(reference_date)
+        expect(zusatzsektion_role.end_on).to eq(date)
+        expect(zusatzsektion_role.beitragskategorie).to eq("youth")
+      end
+
+      it "does not create role for adult zusatzsektion role" do
+        person_turned_youth.update!(birthday: reference_date - 23.years)
+        Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: person_turned_youth, start_on: 1.year.ago, end_on: 1.year.ago, beitragskategorie: :adult)
+
+        expect { extend_roles }.to change { person_turned_youth.sac_membership.zusatzsektion_roles.with_inactive.count }.by(0)
+      end
+    end
+
+    context "dissolving household" do
+      let!(:person_turned_youth) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", beitragskategorie: :adult, email: "dad@hitobito.example.com", confirmed_at: Time.current, sac_family_main_person: true) }
+      let!(:other) { Fabricate(:person, birthday: 24.years.ago) }
+
+      before do
+        create_household(person_turned_youth, other)
+        membership_roles = Group::SektionsMitglieder::Mitglied.where(person: [person_turned_youth, other], beitragskategorie: :family)
+        membership_roles.update_all(end_on: 1.year.ago)
+      end
+
+      it "replaces family membership role for other with adult membership" do
+        person_turned_youth.update!(birthday: reference_date - 18.years)
+
+        expect { extend_roles }.to change { other.roles.with_inactive.count }.by(1)
+      end
+    end
+  end
+
+  describe "convert roles to adult" do
+    let!(:person_turned_adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", beitragskategorie: :youth, email: "dad@hitobito.example.com", confirmed_at: Time.current, end_on: 1.year.ago) }
+
+    context "stammsektion role" do
+      it "creates adult role for youth with reference age equal 23" do
+        person_turned_adult.update!(birthday: reference_date - 23.years)
+
+        expect { extend_roles }.to change { person_turned_adult.roles.with_inactive.count }.by(1)
+
+        new_role = person_turned_adult.roles.with_inactive.last
+        expect(new_role.start_on).to eq(reference_date)
+        expect(new_role.end_on).to eq(date)
+        expect(new_role.beitragskategorie).to eq("adult")
+      end
+
+      it "creates adult role for youth with reference age above 23" do
+        person_turned_adult.update!(birthday: reference_date - 23.years - 1.day)
+
+        expect { extend_roles }.to change { person_turned_adult.roles.with_inactive.count }.by(1)
+
+        new_role = person_turned_adult.roles.with_inactive.last
+        expect(new_role.start_on).to eq(reference_date)
+        expect(new_role.end_on).to eq(date)
+        expect(new_role.beitragskategorie).to eq("adult")
+      end
+
+      it "does not create adult role for youth with reference age below 23" do
+        person_turned_adult.update!(birthday: reference_date - 23.years + 1.day)
+
+        expect { extend_roles }.to_not change { person_turned_adult.roles.with_inactive.count }
+      end
+    end
+
+    context "zusatzsektion role" do
+      it "creates role for youth zusatzsektion role" do
+        person_turned_adult.update!(birthday: reference_date - 23.years)
+        Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: person_turned_adult, start_on: 1.year.ago, end_on: 1.year.ago, beitragskategorie: :youth)
+
+        expect { extend_roles }.to change { person_turned_adult.sac_membership.zusatzsektion_roles.with_inactive.count }.by(1)
+
+        zusatzsektion_role = person_turned_adult.roles.with_inactive.where(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, beitragskategorie: :adult).last
+        expect(zusatzsektion_role).to be_present
+        expect(zusatzsektion_role.start_on).to eq(reference_date)
+        expect(zusatzsektion_role.end_on).to eq(date)
+        expect(zusatzsektion_role.beitragskategorie).to eq("adult")
+      end
+
+      it "does not create role for adult zusatzsektion role" do
+        person_turned_adult.update!(birthday: reference_date - 23.years)
+        Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: person_turned_adult, start_on: 1.year.ago, end_on: 1.year.ago, beitragskategorie: :adult)
+
+        expect { extend_roles }.to change { person_turned_adult.sac_membership.zusatzsektion_roles.with_inactive.count }.by(0)
+      end
     end
   end
 
