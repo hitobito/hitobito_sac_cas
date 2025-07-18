@@ -13,6 +13,10 @@ module Events::State
     # value: array of possible next states
     class_attribute :state_transitions
 
+    # key: current state
+    # value: array of possible next states
+    class_attribute :state_transition_emails_skippable, default: {}
+
     validate :assert_valid_state_change, if: :state_changed?, on: :update
 
     before_create :set_default_state
