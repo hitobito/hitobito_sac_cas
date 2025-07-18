@@ -409,7 +409,6 @@ fr:
         updated_at: Modifié
       person:
         id: Numéro de personne
-        advertising: Envoi de publicité
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé
@@ -1193,7 +1192,9 @@ fr:
     sessions:
       form:
         login_identity: E-mail principal / N° de membre
-
+      create:
+        confirm_email_before_logging_in: >
+          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
   doorkeeper:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
