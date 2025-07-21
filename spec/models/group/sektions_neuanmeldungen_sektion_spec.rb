@@ -17,8 +17,8 @@ describe Group::SektionsNeuanmeldungenSektion do
 
     subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }
 
-    it "#destroy hard destroys role even though it is old enough to archive" do
-      expect(role.send(:old_enough_to_archive?)).to eq true
+    it "#destroy hard destroys role even though it is old enough to soft destroy" do
+      expect(role.send(:old_enough_to_soft_destroy?)).to eq true
       expect { role.destroy }.to change { Role.with_inactive.count }.by(-1)
     end
   end
