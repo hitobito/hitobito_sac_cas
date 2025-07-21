@@ -461,6 +461,11 @@ describe Event::Course do
           expect { course.update!(state: :application_open) }
             .to have_enqueued_mail(Event::PublishedMailer, :notice).twice
         end
+
+        it "skips email if told to do so" do
+          course.skip_emails = true
+          expect { course.update!(state: :application_open) }.not_to have_enqueued_mail
+        end
       end
 
       context "with course assistant leader" do

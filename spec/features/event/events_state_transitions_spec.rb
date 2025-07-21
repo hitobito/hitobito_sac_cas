@@ -11,8 +11,7 @@ describe "event state transitions", js: true do
   include ActiveJob::TestHelper
 
   let!(:event) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course)).tap do |e|
-      e.update_column(:state, :application_open)
+    Fabricate(:sac_open_course, kind: event_kinds(:ski_course)).tap do |e|
       e.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
     end
   end
@@ -24,10 +23,9 @@ describe "event state transitions", js: true do
   end
 
   let(:person) { people(:admin) }
+  let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
 
   describe "canceling event" do
-    let(:event_path) { group_event_path(group_id: event.group_ids.first, id: event.id) }
-
     before do
       sign_in(person)
       visit event_path
@@ -51,6 +49,34 @@ describe "event state transitions", js: true do
         accept_confirm
         expect(page).to have_content "Absagegrund\nWetterrisiko"
       end.to have_enqueued_mail(Event::CanceledMailer).once
+    end
+  end
+
+  describe "transitioning to application open with and without emails" do
+    before do
+      event.participations.first.roles.create!(type: Event::Course::Role::Leader)
+      event.update!(state: :created)
+
+      sign_in(person)
+      visit event_path
+      click_on "Entwurf" # open dropdown
+      click_on "Publizieren"
+    end
+
+    it "may transition with sending emails" do
+      expect do
+        click_on "E-Mails verschicken"
+        expect(page).to have_link "Publiziert"
+      end.to change { event.reload.state }.from("created").to("application_open")
+        .and have_enqueued_mail(Event::PublishedMailer, :notice)
+    end
+
+    it "may transition without sending emails" do
+      expect do
+        click_on "Keine E-Mails verschicken"
+        expect(page).to have_link "Publiziert"
+      end.to change { event.reload.state }.from("created").to("application_open")
+        .and not_have_enqueued_mail
     end
   end
 end
