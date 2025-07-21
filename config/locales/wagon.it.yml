@@ -407,6 +407,7 @@ it:
         updated_at: Modificato
       person:
         id: Numero personale
+        advertising: Werbesendungen
         address_care_of: Complemento di indirizzo
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
@@ -1224,6 +1225,7 @@ it:
     application_market:
       application:
         add_participant_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
+      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
       participant:
         remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
     courses:
@@ -2085,6 +2087,7 @@ it:
           family_warning: >-
             Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Richiedere disdetta"
       termination:
         summary:
@@ -2103,4 +2106,5 @@ it:
             Dichiaro di aver compreso che, in caso di futura riaffiliazione, la quota d’adesione sarà addebitata in ogni caso. (campo obbligatorio)
           subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
           subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Richiedere disdetta"

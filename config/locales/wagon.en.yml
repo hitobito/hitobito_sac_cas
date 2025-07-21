@@ -405,6 +405,7 @@ en:
         updated_at: Changed
       person:
         id: Personennummer
+        advertising: Werbesendungen
         address_care_of: Adresszusatz
         correspondence: Membership card & invoicing
         confirmed_at: E-Mail bestätigt
@@ -1167,6 +1168,7 @@ en:
     application_market:
       application:
         add_participant_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     courses:
@@ -2019,6 +2021,7 @@ en:
           family_warning: >-
             Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}.
           info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Request resignation"
       termination:
         summary:
@@ -2037,4 +2040,5 @@ en:
             Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "I would like to stay informed about news from the SAC and continue to receive the SAC newsletter."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Request resignation"

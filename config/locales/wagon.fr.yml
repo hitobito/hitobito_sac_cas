@@ -409,6 +409,7 @@ fr:
         updated_at: Modifié
       person:
         id: Numéro de personne
+        advertising: Werbesendungen
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé
@@ -1226,6 +1227,7 @@ fr:
     application_market:
       application:
         add_participant_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
+      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
       participant:
         remove_participant_confirm: "Voulez-vous vraiment supprimer cette inscription? Un e-mail sera envoyé à la personne participante."
     courses:
@@ -2087,6 +2089,7 @@ fr:
           family_warning: >-
             Attention: la sortie de la section supplémentaire est demandée pour l’ensemble de l’adhésion familiale. Sont concerné·e·s: %{family_member_names}.
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Demander une résiliation"
       termination:
         summary:
@@ -2105,4 +2108,5 @@ fr:
             J’ai compris qu’en cas de ré-affiliation, la taxe d’entrée sera systématiquement facturée. (champ obligatoire)
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Demander une résiliation"
