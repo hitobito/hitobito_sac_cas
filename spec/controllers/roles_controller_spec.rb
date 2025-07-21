@@ -90,7 +90,7 @@ describe RolesController do
     context "for adult neuanmeldungs role" do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
-      it "does not destroy family neuanmeldung roles" do
+      it "does not destroy depending adult neuanmeldung roles" do
         household.add(people(:mitglied))
         role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :adult, person: person)
 
@@ -99,12 +99,7 @@ describe RolesController do
         delete :destroy, params: {group_id: group.id, id: role.id}
 
         depending_roles.each do |depending_role|
-          if depending_role.beitragskategorie == "family"
-            expect(Role.where(id: depending_role.id)).not_to be_present
-          end
-          new_role = Role.find_by(person_id: depending_role.person_id)
-          expect(new_role).to be_present
-          expect(new_role.group).to eq depending_role.group
+          expect(Role.find_by(person_id: depending_role.person_id, group_id: depending_role.group_id)).to be_present
         end
       end
     end
