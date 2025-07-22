@@ -19,12 +19,10 @@ describe Event::CanceledMailer do
     reason, reason_text = canceled_reason
 
     context reason do
-      let(:leader_emails) { %w[leader@example.com assistant@example.com] }
-      let(:mail) { described_class.public_send(reason, participation, leader_emails) }
+      let(:mail) { described_class.public_send(reason, participation) }
 
       it "sends email to course leader" do
         expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-        expect(mail.cc).to match_array(%w[leader@example.com assistant@example.com])
         expect(mail.bcc).to match_array(["admin@example.com"])
         expect(mail.body.to_s).to include(
           "Hallo Edmund,",
