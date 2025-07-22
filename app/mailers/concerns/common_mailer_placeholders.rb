@@ -15,7 +15,7 @@ module CommonMailerPlaceholders
   end
 
   def placeholder_birthday
-    l(@person.birthday)
+    l(@person.birthday) if @person.birthday
   end
 
   def placeholder_email
