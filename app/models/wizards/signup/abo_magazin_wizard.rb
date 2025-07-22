@@ -29,9 +29,8 @@ module Wizards::Signup
 
     def save!
       super.then do
-        new_abonnent_role = person.roles.where(group: group, type: Group::AboMagazin::Neuanmeldung.sti_name).first
-        new_abonnent_role.update!(start_on: Time.zone.today, end_on: 31.days.from_now)
-        generate_invoice(new_abonnent_role) if Settings.invoicing&.abo_magazin&.automatic_invoice_enabled
+        role.update!(start_on: Time.zone.today, end_on: 31.days.from_now)
+        generate_invoice if Settings.invoicing&.abo_magazin&.automatic_invoice_enabled
       end
     end
 
@@ -65,22 +64,25 @@ module Wizards::Signup
 
     private
 
-    def generate_invoice(role)
+    def generate_invoice
       invoice = ExternalInvoice::AboMagazin.create!(
-        person: role.person,
+        person: person,
         state: :draft,
         year: Date.current.year,
         issued_at: Date.current,
         sent_at: Date.current,
-        link: role.group
+        link: group
       )
       Invoices::Abacus::CreateAboMagazinInvoiceJob.new(invoice, role.id).enqueue!
+    end
+
+    def build_role(person)
       # The TransmitPersonJob is enqueued with the creation of the new role.
       # Because the CreateAboMagazinInvoiceJob also transmits the person, this
-      # would lead to race conditions. Therefore, destroy this job again.
-      # Because the wizard is saved in a transaction, the job should not yet
-      # be visible to the delayed job process.
-      Invoices::Abacus::TransmitPersonJob.new(role.person).delayed_jobs.destroy_all
+      # would lead to race conditions. Hence skip the TransmitPersonJob.
+      super.tap do |role|
+        role.skip_transmit_to_abacus = true
+      end
     end
 
     def annual_fee = Group.root.abo_alpen_fee || 0
