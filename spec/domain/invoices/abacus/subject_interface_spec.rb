@@ -56,11 +56,40 @@ describe Invoices::Abacus::SubjectInterface do
     expect(person.abacus_subject_key).to eq(person.id)
   end
 
-  it "returns false if subject key is already taken in abacus" do
+  it "persists subject key if it already exists with same name and email in abacus" do
+    stub_get_subject_request
+
+    expect(interface.transmit(subject)).to be(true)
+    expect(person.abacus_subject_key).to eq(person.id)
+  end
+
+  it "returns false if subject key is already taken in abacus with different name" do
+    person.last_name = "Müller"
     stub_get_subject_request
 
     expect(interface.transmit(subject)).to be(false)
     expect(subject.errors).to eq({abacus_subject_key: :taken})
+    expect(person.abacus_subject_key).to be_nil
+  end
+
+  it "returns false if subject key is already taken in abacus with different email" do
+    person.email = "edy.h@hitobito.example.com"
+    stub_get_subject_request
+
+    expect(interface.transmit(subject)).to be(false)
+    expect(subject.errors).to eq({abacus_subject_key: :taken})
+    expect(person.abacus_subject_key).to be_nil
+  end
+
+  it "persists subject key if it already exists with same name but without email in abacus" do
+    person.email = ""
+    path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
+    response = get_subject_response
+    response["Communications"] = []
+    stub_simple_request(:get, path, nil, response.to_json)
+
+    expect(interface.transmit(subject)).to be(true)
+    expect(person.abacus_subject_key).to eq(person.id)
   end
 
   it "fails if abacus assigns a different subject key" do
