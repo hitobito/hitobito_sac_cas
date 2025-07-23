@@ -409,7 +409,7 @@ fr:
         updated_at: Modifié
       person:
         id: Numéro de personne
-        advertising: Werbesendungen
+        advertising: Envoi de publicité
         address_care_of: Complément d’adresse
         correspondence: Carte de membre et facturation
         confirmed_at: E-mail confirmé
@@ -1415,6 +1415,10 @@ fr:
       self_employed: Activité indépendante
       not_self_employed: salarié·e
 
+    popover_emails_optional:
+      prompt_email_choice: "Sollen E-Mails verschickt werden?"
+      submit_with_emails: E-Mails verschicken
+      submit_without_emails: Keine E-Mails verschicken
     popover_canceled_reason:
       cancel_button: Refus définitif
       cancel_confirmation: >-

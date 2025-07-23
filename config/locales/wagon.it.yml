@@ -407,7 +407,7 @@ it:
         updated_at: Modificato
       person:
         id: Numero personale
-        advertising: Werbesendungen
+        advertising: Invio di pubblicità
         address_care_of: Complemento di indirizzo
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
@@ -1413,6 +1413,10 @@ it:
       self_employed: lavoratore autonomo
       not_self_employed: lavoratore dipendente
 
+    popover_emails_optional:
+      prompt_email_choice: "Sollen E-Mails verschickt werden?"
+      submit_with_emails: E-Mails verschicken
+      submit_without_emails: Keine E-Mails verschicken
     popover_canceled_reason:
       cancel_button: Cancellare definitivamente
       cancel_confirmation: >-
