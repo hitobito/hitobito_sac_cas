@@ -10,6 +10,7 @@ module Wizards::Steps::Signup::AboMagazin
     attribute :company, :boolean, default: false
     attribute :company_name, :string
 
+    validates :first_name, :last_name, presence: true, unless: :company
     validates :gender, :birthday, presence: true, unless: :company
 
     validates :company_name, presence: true, if: :company

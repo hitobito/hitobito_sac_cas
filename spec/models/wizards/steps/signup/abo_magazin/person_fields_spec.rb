@@ -41,6 +41,16 @@ describe Wizards::Steps::Signup::AboMagazin::PersonFields do
         expect(step).to be_valid
       end
 
+      it "is valid with nil first_name" do
+        step.first_name = nil
+        expect(step).to be_valid
+      end
+
+      it "is valid with nil last_name" do
+        step.last_name = nil
+        expect(step).to be_valid
+      end
+
       it "is valid with nil gender" do
         step.gender = nil
         expect(step).to be_valid

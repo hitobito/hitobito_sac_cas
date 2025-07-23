@@ -83,6 +83,38 @@ describe "self_registration_abo_magazin", js: true do
     end.to change { Person.count }.by(1)
   end
 
+  def find_label(text) = find(:xpath, "//label[contains(text(), '#{text}')]")
+
+  it "creates person with company flag" do
+    visit group_self_registration_path(group_id: group.id)
+    expect_active_step "E-Mail"
+    expect_shared_partial
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
+    complete_main_person_form
+
+    expect(find_label("Vorname")["class"]).to match "required"
+    expect(find_label("Nachname")["class"]).to match "required"
+    expect(find_label("Geburtsdatum")["class"]).to match "required"
+
+    check "Firma"
+
+    expect(find_label("Firmenname")["class"]).to match "required"
+    expect(find_label("Vorname")["class"]).not_to match "required"
+    expect(find_label("Nachname")["class"]).not_to match "required"
+    expect(find_label("Geburtsdatum")["class"]).not_to match "required"
+    fill_in "Vorname", with: ""
+    fill_in "Nachname", with: ""
+    fill_in "Geburtsdatum", with: ""
+    fill_in "Firmenname", with: "Dummy, Inc."
+
+    click_on "Weiter"
+
+    expect do
+      complete_last_page
+    end.to change { Person.where(company: true).count }.by(1)
+  end
+
   it "subscribes to mailinglist" do
     visit group_self_registration_path(group_id: group.id)
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
