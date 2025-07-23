@@ -181,10 +181,36 @@ module Invoices
       end
 
       def check_subject_key_taken(subject, remote)
-        return false unless remote && subject.subject_id.zero?
+        if remote && subject.subject_id.zero?
+          if same_person?(subject, remote)
+            subject.assign_subject_key(remote)
+            false
+          else
+            subject.errors[:abacus_subject_key] = :taken
+            true
+          end
+        else
+          false
+        end
+      end
 
-        subject.errors[:abacus_subject_key] = :taken
-        true
+      def same_person?(subject, remote)
+        same_name?(subject, remote) && same_email?(subject, remote)
+      end
+
+      def same_name?(subject, remote)
+        person_attrs = subject.person_subject_attrs.slice(:name, :first_name)
+        remote.slice(*person_attrs.keys) == person_attrs
+      end
+
+      def same_email?(subject, remote)
+        email_attrs = subject.primary_email_attrs
+        return true if email_attrs.blank? && remote[:communications].blank?
+
+        remote[:communications].any? do |c|
+          c.fetch(:type) == email_attrs.fetch(:type) &&
+            c.fetch(:value) == email_attrs.fetch(:value)
+        end
       end
 
       def client
