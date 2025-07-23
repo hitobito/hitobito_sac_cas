@@ -17,7 +17,7 @@ class Invoices::SacMemberships::MembershipManager
     @today = Time.zone.today
 
     context = Invoices::SacMemberships::Context.new(today)
-    @member ||= Invoices::SacMemberships::Member.new(person, context)
+    @member = Invoices::SacMemberships::Member.new(person, context)
   end
 
   def update_membership_status
@@ -30,6 +30,8 @@ class Invoices::SacMemberships::MembershipManager
         create_stammsektion_membership_from_neuanmeldung
       elsif neuanmeldung_zusatzsektion?
         create_zusatzsektion_membership_from_neuanmeldung
+      else
+        log_missing_membership
       end
     end
   end
@@ -152,5 +154,15 @@ class Invoices::SacMemberships::MembershipManager
       .order(:end_on)
       .reject(&:terminated?)
       .last
+  end
+
+  def log_missing_membership
+    HitobitoLogEntry.create!(
+      category: "rechnungen",
+      level: :warn,
+      subject: person,
+      message: "Eingegangene Zahlung der Mitgliedschaftsrechnung #{year} für " \
+               "#{group.layer_group} konnte keiner Mitgliedschaft zugeordnet werden."
+    )
   end
 end

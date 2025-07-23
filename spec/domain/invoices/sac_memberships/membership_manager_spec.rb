@@ -49,9 +49,9 @@ describe Invoices::SacMemberships::MembershipManager do
     Role.update_all(end_on: Time.zone.today.end_of_year)
   end
 
-  it "does not fail if running without any actual work todo" do
+  it "creates log entry if running without any actual work todo" do
     manager = described_class.new(Fabricate(:person), bluemlisalp, end_of_next_year.year)
-    expect { manager.update_membership_status }.not_to raise_error
+    expect { manager.update_membership_status }.to change { HitobitoLogEntry.count }.by(1)
   end
 
   context "person has stammsektions role" do
