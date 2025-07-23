@@ -164,7 +164,7 @@ describe Event::ParticipationsController do
     end
 
     it "redirects to participation path" do
-      event.update!(training_days: 3)
+      event.update!(training_days: 1)
       expect do
         post :create,
           params: {
@@ -175,7 +175,7 @@ describe Event::ParticipationsController do
           }
         expect(response).to redirect_to(participation_path)
       end.to change { Event::Participation.count }.by(1)
-      expect(assigns(:participation).actual_days).to eq(3)
+      expect(assigns(:participation).actual_days).to eq(1)
     end
 
     it "checks conditions for root courses" do
