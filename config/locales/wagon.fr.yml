@@ -489,7 +489,7 @@ fr:
               other: Nouvelles inscriptions
           permission:
             description:
-              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
+              download_member_statistics: Téléchargement des statistiques sur les membres.
               read_all_people: Lecture de toutes les personnes.
               layer_events_full: Gérer les événements sur la section.
               layer_mitglieder_full: Gérer les personnes dans le groupe de membres de la section/du groupe local.
@@ -1195,7 +1195,7 @@ fr:
         login_identity: E-mail principal / N° de membre
       create:
         confirm_email_before_logging_in: >
-          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+          Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.
   doorkeeper:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
@@ -1210,7 +1210,7 @@ fr:
     title: Adapter l’adhésion
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
-    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
+    swap_stamm_zusatzsektion_link: Echanger la section principale et la section supplémentaire
     terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
     undo_termination_link: Réactiver l’adhésion au CAS
 
@@ -1227,7 +1227,7 @@ fr:
     application_market:
       application:
         add_participant_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
-      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
+      event_canceled: "Cet événement est annulé, les inscriptions ne peuvent plus être traitées."
       participant:
         remove_participant_confirm: "Voulez-vous vraiment supprimer cette inscription? Un e-mail sera envoyé à la personne participante."
     courses:
@@ -1416,9 +1416,9 @@ fr:
       not_self_employed: salarié·e
 
     popover_emails_optional:
-      prompt_email_choice: "Sollen E-Mails verschickt werden?"
-      submit_with_emails: E-Mails verschicken
-      submit_without_emails: Keine E-Mails verschicken
+      prompt_email_choice: "Faut-il envoyer des e-mails ?"
+      submit_with_emails: Envoyer des e-mails
+      submit_without_emails: Ne pas envoyer d'e-mails
     popover_canceled_reason:
       cancel_button: Refus définitif
       cancel_confirmation: >-
@@ -2093,7 +2093,7 @@ fr:
           family_warning: >-
             Attention: la sortie de la section supplémentaire est demandée pour l’ensemble de l’adhésion familiale. Sont concerné·e·s: %{family_member_names}.
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: "Informer le membre et la section par e-mail ?"
           next_button: "Demander une résiliation"
       termination:
         summary:
@@ -2112,5 +2112,5 @@ fr:
             J’ai compris qu’en cas de ré-affiliation, la taxe d’entrée sera systématiquement facturée. (champ obligatoire)
           subscribe_newsletter: "Je souhaite rester informé-e des nouveautés du CAS et continuer à recevoir la newsletter du CAS."
           subscribe_fundraising_list: "Je souhaite continuer à recevoir le courrier des cabanes du CAS et être informé-e des actions de dons du CAS."
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: "Informer le membre et la section par e-mail ?"
           next_button: "Demander une résiliation"

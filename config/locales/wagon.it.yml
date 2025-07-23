@@ -487,7 +487,7 @@ it:
               other: Nuove registrazioni
           permission:
             description:
-              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
+              download_member_statistics: Scarica le statistiche dei membri.
               read_all_people: Letto da tutte le persone.
               layer_events_full: Gestire gli eventi nella sezione.
               layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.
@@ -1193,7 +1193,7 @@ it:
         login_identity: E-mail principale / Socio n.
       create:
         confirm_email_before_logging_in: >
-          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+          Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.Se il vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di contattare mv@sac-cas.ch indicando il proprio indirizzo e-mail.
   doorkeeper:
     scopes:
       user_groups: "Leggere i gruppi, i ruoli e i campi calcolati."
@@ -1208,7 +1208,7 @@ it:
     title: Modificare l’affiliazione
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
-    swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
+    swap_stamm_zusatzsektion_link: Scambiare la sezione principale e quella aggiuntiva
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
     undo_termination_link: Riattivare l’affiliazione al CAS
 
@@ -1225,7 +1225,7 @@ it:
     application_market:
       application:
         add_participant_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
-      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
+      event_canceled: "Questo evento è stato cancellato, le iscrizioni non possono più essere elaborate."
       participant:
         remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
     courses:
@@ -1414,9 +1414,9 @@ it:
       not_self_employed: lavoratore dipendente
 
     popover_emails_optional:
-      prompt_email_choice: "Sollen E-Mails verschickt werden?"
-      submit_with_emails: E-Mails verschicken
-      submit_without_emails: Keine E-Mails verschicken
+      prompt_email_choice: "È opportuno inviare e-mail?"
+      submit_with_emails: Invio di e-mail
+      submit_without_emails: Non inviare e-mail
     popover_canceled_reason:
       cancel_button: Cancellare definitivamente
       cancel_confirmation: >-
@@ -2091,7 +2091,7 @@ it:
           family_warning: >-
             Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: "Informare i soci e la sezione via e-mail?"
           next_button: "Richiedere disdetta"
       termination:
         summary:
@@ -2110,5 +2110,5 @@ it:
             Dichiaro di aver compreso che, in caso di futura riaffiliazione, la quota d’adesione sarà addebitata in ogni caso. (campo obbligatorio)
           subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
           subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: "Informare i soci e la sezione via e-mail?"
           next_button: "Richiedere disdetta"
