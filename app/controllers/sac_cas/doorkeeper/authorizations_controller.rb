@@ -9,6 +9,10 @@ module SacCas::Doorkeeper
   module AuthorizationsController
     extend ActiveSupport::Concern
 
+    prepended do
+      prepend_before_action :store_oauth_request_uri
+    end
+
     # In the SAC wagon, we require the user to have at least one active role.
     # If the user has no roles, redirect them to the BasicLogin self-registration page.
     # Once the user has registered, they will be redirected back to the OAuth authorization page.
@@ -16,16 +20,19 @@ module SacCas::Doorkeeper
     # back with the correct query params of the original request after completing the onboarding.
     def new
       return super if current_user.nil? || current_user.root? || current_user.roles.any?
-
       redirect_to self_registration_path
     end
 
     private
 
+    def store_oauth_request_uri
+      session[:oauth_request_uri] = URI.parse(request.url).request_uri
+    end
+
     def self_registration_path
       group_self_registration_path(
         group_id: Group::AboBasicLogin.first,
-        completion_redirect_path: URI.parse(request.url).request_uri
+        completion_redirect_path: session[:oauth_request_uri]
       )
     end
   end
