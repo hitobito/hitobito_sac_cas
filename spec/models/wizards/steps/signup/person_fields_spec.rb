@@ -13,8 +13,6 @@ describe Wizards::Steps::Signup::PersonFields do
 
   let(:required_attrs) {
     {
-      first_name: "Max",
-      last_name: "Muster",
       street: "Musterplatz",
       housenumber: "23",
       town: "Zurich",

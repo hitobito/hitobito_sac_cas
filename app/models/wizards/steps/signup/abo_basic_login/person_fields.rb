@@ -9,7 +9,7 @@ module Wizards::Steps::Signup::AboBasicLogin
   class PersonFields < Wizards::Steps::Signup::PersonFields
     def self.agreements = [:data_protection]
 
-    validates :gender, :birthday, presence: true
+    validates :first_name, :last_name, :gender, :birthday, presence: true
     include Wizards::Steps::Signup::AgreementFields
 
     NON_ASSIGNABLE_ATTRS = Wizards::Steps::Signup::AgreementFields::AGREEMENTS + [:newsletter]
