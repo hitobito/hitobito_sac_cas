@@ -565,25 +565,28 @@ describe Event::Course do
         expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
       end
 
-      it "sends an email to all participants if canceled because of minimum participants" do
+      it "sends an email to all leaders and participants if canceled because of minimum participants" do
         expect { course.update!(state: :canceled, canceled_reason: :minimum_participants) }
-          .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).twice
+          .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).thrice
       end
 
-      it "sends an email to all participants if canceled because of no_leader" do
+      it "sends an email to all leaders and participants if canceled because of no_leader" do
         expect { course.update!(state: :canceled, canceled_reason: :no_leader) }
-          .to have_enqueued_mail(Event::CanceledMailer, :no_leader).twice
+          .to have_enqueued_mail(Event::CanceledMailer, :no_leader).thrice
       end
 
-      it "sends an email to all participants if canceled because of weather" do
+      it "sends an email to all leaders and participants if canceled because of weather" do
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
-          .to have_enqueued_mail(Event::CanceledMailer, :weather).twice
+          .to have_enqueued_mail(Event::CanceledMailer, :weather).thrice
       end
 
-      it "does not sends an email when participant is canceled" do
-        course.participations.update_all(state: :canceled)
+      it "does not send email to cancele when participant is canceled" do
+        course.participations.joins(:roles)
+          .where(event_roles: {type: course.participant_types.collect(&:sti_name)})
+          .first.update!(state: :canceled, canceled_at: Time.zone.today) # cancel one of the participants
+
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
-          .not_to have_enqueued_mail
+          .to have_enqueued_mail.twice
       end
 
       it "does not sends an emails when inform_participants=0" do

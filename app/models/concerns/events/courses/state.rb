@@ -57,7 +57,8 @@ module Events::Courses::State
   def send_canceled_email
     return if canceled_reason.nil?
 
-    all_participants.where.not(previous_state: :canceled).find_each do |participation|
+    participations.find_each do |participation|
+      next if participation.previous_state == "canceled"
       Event::CanceledMailer.send(canceled_reason, participation).deliver_later
     end
   end
