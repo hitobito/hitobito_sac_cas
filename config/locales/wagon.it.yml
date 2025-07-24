@@ -29,7 +29,7 @@ it:
 
   layouts:
     unauthorized:
-      main_self_registration: "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen"
+      main_self_registration: "Non sei un membro del SAC? Aprite un conto SAC gratuito"
 
   settings:
     email:
