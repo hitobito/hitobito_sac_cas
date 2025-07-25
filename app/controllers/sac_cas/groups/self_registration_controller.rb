@@ -42,7 +42,7 @@ module SacCas::Groups::SelfRegistrationController
   end
 
   def model_params
-    super.merge(completion_redirect_path: params[:completion_redirect_path])
+    super.merge(completion_redirect_path: params[:completion_redirect_path] || session[:oauth_request_uri])
   end
 
   def redirect_to_login
