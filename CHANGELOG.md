@@ -1,4 +1,4 @@
-## unreleased
+## Version 2.6
 
 * Max. Kursteilnehmer wird berücksichtigt beim manuellen Anmelden von Teilnehmenden HIT-1235 (hitobito_sac_cas#1928)
 * Bei Kursabsagen erhalten neu die Kursleitenden eine Absage E-Mail HIT-1240 (hitobito_sac_cas#1925)
