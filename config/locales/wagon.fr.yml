@@ -29,7 +29,7 @@ fr:
 
   layouts:
     unauthorized:
-      main_self_registration: "Vous n'êtes pas membre du CAS? Ouvrir un compte CAS gratuit"
+      main_self_registration: "Tu n'ês pas membre du CAS? Ouvre dès maintenant ton compte du CAS gratuit."
 
   settings:
     email:
