@@ -59,13 +59,31 @@ describe Doorkeeper::AuthorizationsController do
     context "without any roles" do
       before { Role.delete_all }
 
-      it_behaves_like "redirects to basic login self-registration"
+      it_behaves_like "redirects to basic login self-registration" do
+        it "strips out login prompt" do
+          get :new, params: authorize_params.merge(prompt: :login)
+          expect(response).to have_http_status(:redirect)
+
+          actual_location = URI.parse(response.location)
+          query = CGI.parse(CGI.parse(actual_location.query)["completion_redirect_path"][0])
+          expect(query).not_to have_key("prompt")
+        end
+      end
     end
 
     context "with no active roles" do
       before { user.roles.update_all(end_on: 1.day.ago) }
 
-      it_behaves_like "redirects to basic login self-registration"
+      it_behaves_like "redirects to basic login self-registration" do
+        it "strips out login prompt" do
+          get :new, params: authorize_params.merge(prompt: :login)
+          expect(response).to have_http_status(:redirect)
+
+          actual_location = URI.parse(response.location)
+          query = CGI.parse(CGI.parse(actual_location.query)["completion_redirect_path"][0])
+          expect(query).not_to have_key("prompt")
+        end
+      end
     end
   end
 end

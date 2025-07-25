@@ -46,9 +46,9 @@ describe Devise::Hitobito::SessionsController do
   shared_examples "redirects to basic login onboarding" do
     it do
       post :create, params: {person: {login_identity: person.email, password:}}
-
       expect(response).to redirect_to(
-        group_self_registration_path(group_id: Group::AboBasicLogin.first!)
+        group_self_registration_path(group_id: Group::AboBasicLogin.first!,
+          completion_redirect_path: root_path)
       )
     end
   end

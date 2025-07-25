@@ -114,6 +114,7 @@ tourenchef:
   cached_membership_years: 0
 
 roleless:
+  email: john@example.com
   first_name: John
   last_name: Doe
   language: de

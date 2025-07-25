@@ -2,7 +2,7 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito.
 
-= standard_form(wizard, url: group_self_registration_path, data: { controller: "forwarder", forwarder_delay_value: 150 }) do |f|
+= standard_form(wizard, url: group_self_registration_path, data: { controller: "forwarder", forwarder_delay_value: 150, turbo: submit_via_turbo? }) do |f|
   = hidden_field_tag :completion_redirect_path, wizard.completion_redirect_path
   = f.honeypot(:verification)
 

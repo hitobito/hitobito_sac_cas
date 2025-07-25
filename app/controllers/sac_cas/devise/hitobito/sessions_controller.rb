@@ -27,6 +27,6 @@ module SacCas::Devise::Hitobito::SessionsController
   def after_sign_in_path_for(resource)
     return super if current_user.root? || current_user.roles.any?
 
-    group_self_registration_path(group_id: Group::AboBasicLogin.first.id)
+    group_self_registration_path(group_id: Group::AboBasicLogin.first.id, completion_redirect_path: super)
   end
 end
