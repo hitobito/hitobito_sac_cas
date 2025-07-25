@@ -43,8 +43,10 @@ describe "OauthWorkflow" do
     expect(page).to have_field redirect_field_id, type: :hidden
 
     redirect_path = find("##{redirect_field_id}", visible: false).value
-
     expect(redirect_path).to eq authorize_path
+
+    form = page.find("form#new_wizards_signup_abo_basic_login_wizard")
+    expect(form.native["data-turbo"]).to eq "false"
   end
 
   it "for user without active role redirects back to authorize after completing self-reg" do
