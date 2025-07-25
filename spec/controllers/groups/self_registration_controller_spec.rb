@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -55,23 +55,38 @@ describe Groups::SelfRegistrationController do
     end
 
     context "when logged in" do
-      let(:abonnent) { people(:abonnent) }
+      let(:user) { people(:abonnent) }
 
-      before { sign_in(abonnent) }
+      before { sign_in(user) }
 
-      it "redirects to history_group_person_path" do
-        post :create, params: required_params.merge(step: 3)
-        expect(response).to redirect_to history_group_person_path(group, abonnent)
-        expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
+      shared_examples "wizard completion redirects" do
+        it "redirects to history_group_person_path" do
+          user.roles.update_all(end_on: 1.week.ago)
+
+          post :create, params: required_params.merge(step: 3)
+
+          expect(response).to redirect_to history_group_person_path(user.primary_group, user)
+          expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
+        end
+
+        it "redirects to completion_redirect_path param if present" do
+          completion_redirect_path = "/wizard-completed-redirect"
+          post :create, params: required_params.merge(step: 3, completion_redirect_path:)
+
+          expect(response).to redirect_to completion_redirect_path
+        end
+      end
+
+      context "with active role" do
+        before { expect(user.roles).to be_present }
+
+        it_behaves_like "wizard completion redirects"
       end
 
       context "without active role" do
-        it "redirects to history_group_person_path" do
-          abonnent.roles.update_all(end_on: 1.week.ago)
-          post :create, params: required_params.merge(step: 3)
-          expect(response).to redirect_to history_group_person_path(group, abonnent)
-          expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
-        end
+        before { user.roles.update_all(end_on: 1.week.ago) }
+
+        it_behaves_like "wizard completion redirects"
       end
     end
   end
