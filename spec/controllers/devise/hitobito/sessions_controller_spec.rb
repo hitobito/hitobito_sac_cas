@@ -12,12 +12,11 @@ describe Devise::Hitobito::SessionsController do
     request.env["devise.mapping"] = Devise.mappings[:person]
   end
 
-  let(:person) { people(:mitglied) }
+  let(:password) { "a" * 12 }
+  let(:person) { people(:mitglied).tap { _1.update!(password:, password_confirmation: password) } }
 
   describe "#create with unconfirmed email" do
-    let(:password) { "a" * 12 }
-
-    before { person.update!(confirmed_at: nil, password:, password_confirmation: password) }
+    before { person.update!(confirmed_at: nil) }
 
     it "responds with standard message if password does not match" do
       post :create, params: {person: {login_identity: person.email, password: "test"}}
@@ -25,7 +24,7 @@ describe Devise::Hitobito::SessionsController do
     end
 
     shared_examples "informs and sends confirmation email" do |login_attribute|
-      it "when logging in with #{login_attribute} informs and sends confirmation email" do
+      it "when logging in with #{login_attribute}" do
         expect do
           post :create, params: {person: {login_identity: person.email, password:}}
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -42,5 +41,27 @@ describe Devise::Hitobito::SessionsController do
     Person.devise_login_id_attrs.each do |attr|
       it_behaves_like "informs and sends confirmation email", attr
     end
+  end
+
+  shared_examples "redirects to basic login onboarding" do
+    it do
+      post :create, params: {person: {login_identity: person.email, password:}}
+
+      expect(response).to redirect_to(
+        group_self_registration_path(group_id: Group::AboBasicLogin.first!)
+      )
+    end
+  end
+
+  context "#create as user without roles" do
+    before { Role.delete_all }
+
+    it_behaves_like "redirects to basic login onboarding"
+  end
+
+  context "#create as user with ended roles" do
+    before { person.roles.update_all(end_on: 1.day.ago) }
+
+    it_behaves_like "redirects to basic login onboarding"
   end
 end
