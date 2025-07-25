@@ -17,16 +17,19 @@ module SacCas::Doorkeeper
     def new
       return super if current_user.nil? || current_user.root? || current_user.roles.any?
 
-      redirect_to self_registration_path
+      redirect_to group_self_registration_path(
+        group_id: Group::AboBasicLogin.first,
+        completion_redirect_path: authorization_path_without_prompt
+      )
     end
 
     private
 
-    def self_registration_path
-      group_self_registration_path(
-        group_id: Group::AboBasicLogin.first,
-        completion_redirect_path: URI.parse(request.url).request_uri
-      )
+    def authorization_path_without_prompt
+      uri = URI.parse(request.url)
+      query = Rack::Utils.parse_query(uri.query)
+      uri.query = Rack::Utils.build_query(query.except("prompt"))
+      uri.request_uri
     end
   end
 end

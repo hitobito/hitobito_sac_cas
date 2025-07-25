@@ -11,10 +11,17 @@ module SacCas::Groups::SelfRegistrationController
   delegate :email, to: :wizard
 
   prepended do
+    helper_method :submit_via_turbo?
     before_action :restrict_access
   end
 
   private
+
+  # If wizard is injected into Oauth authorization flow, last step
+  # needs to be a regular (e.g. not XHR submit) for CORS to work
+  def submit_via_turbo?
+    !(wizard.completion_redirect_path.present? && wizard.last_step?)
+  end
 
   def restrict_access
     return redirect_to_login if !signed_in? && email_exists?

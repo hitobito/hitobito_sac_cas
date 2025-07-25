@@ -250,25 +250,25 @@
   :wagon: sac_cas
   :source_file: hitobito/app/controllers/groups/self_registration_controller.rb
   :patch_file: hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb
-  :patch_file_line: 29
+  :patch_file_line: 36
 - :method: :redirect_target
   :constant: Groups::SelfRegistrationController
   :wagon: sac_cas
   :source_file: hitobito/app/controllers/groups/self_registration_controller.rb
   :patch_file: hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb
-  :patch_file_line: 71
+  :patch_file_line: 89
 - :method: :redirect_to_group_if_necessary
   :constant: Groups::SelfRegistrationController
   :wagon: sac_cas
   :source_file: hitobito/app/controllers/groups/self_registration_controller.rb
   :patch_file: hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb
-  :patch_file_line: 67
+  :patch_file_line: 85
 - :method: :success_message
   :constant: Groups::SelfRegistrationController
   :wagon: sac_cas
   :source_file: hitobito/app/controllers/groups/self_registration_controller.rb
   :patch_file: hitobito_sac_cas/app/controllers/sac_cas/groups/self_registration_controller.rb
-  :patch_file_line: 90
+  :patch_file_line: 107
 - :method: :validate
   :constant: Households::MemberValidator
   :wagon: sac_cas
