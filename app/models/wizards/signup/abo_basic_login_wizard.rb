@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -19,7 +19,7 @@ module Wizards::Signup
     self.asides = ["aside_abo_basic_login"]
 
     def member_or_applied?
-      current_user&.roles.present? # do not allow if person already has an active role
+      current_user&.login? # do not allow if person already has a login
     end
 
     def redirection_message = I18n.t("groups.self_registration.create.can_login_already_notice")
