@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -132,12 +132,13 @@ describe Wizards::Signup::AboBasicLoginWizard do
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
     end
 
-    it "returns true when user has login" do
+    it "returns true when user has an active role" do
+      expect(people(:mitglied).roles).to be_present
       expect(wizard.member_or_applied?).to be_truthy
     end
 
-    it "returns true if user does not have login" do
-      allow(people(:mitglied)).to receive(:login?).and_return(false)
+    it "returns false if user does not have login" do
+      people(:mitglied).roles.update_all(end_on: 1.day.ago)
       expect(wizard.member_or_applied?).to be_falsy
     end
   end

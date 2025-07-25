@@ -23,4 +23,10 @@ module SacCas::Devise::Hitobito::SessionsController
       redirect_to new_session_path(:person), alert: t("devise.sessions.create.confirm_email_before_logging_in")
     end
   end
+
+  def after_sign_in_path_for(resource)
+    return super if current_user.root? || current_user.roles.any?
+
+    group_self_registration_path(group_id: Group::AboBasicLogin.first.id)
+  end
 end
