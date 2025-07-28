@@ -10,6 +10,8 @@ module Roles::AbacusTransmittable
 
   included do
     after_create_commit :transmit_data_to_abacus
+
+    attr_accessor :skip_transmit_to_abacus
   end
 
   private
@@ -17,6 +19,7 @@ module Roles::AbacusTransmittable
   def transmit_data_to_abacus
     Invoices::Abacus::TransmitPersonJob.new(person).enqueue! if
       person.abacus_subject_key.blank? &&
+        !skip_transmit_to_abacus &&
         person.data_quality != "error"
   end
 end

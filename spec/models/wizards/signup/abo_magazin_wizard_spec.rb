@@ -103,7 +103,8 @@ describe Wizards::Signup::AboMagazinWizard do
 
     it "creates single person and generates invoice" do
       expect(wizard).to be_valid
-      expect { wizard.save! }.to change { Person.count }.by(1)
+      expect { wizard.save! }
+        .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
         .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count }.by(0)
@@ -112,6 +113,16 @@ describe Wizards::Signup::AboMagazinWizard do
       expect(max.roles.last.start_on).to eq Date.current
       expect(max.roles.last.end_on).to eq 31.days.from_now.to_date
       expect(max.privacy_policy_accepted_at).to be_nil
+    end
+
+    it "skips transmit to abacus job even if run in transaction" do
+      expect(wizard).to be_valid
+      expect { ApplicationRecord.transaction { wizard.save! } }
+        .to change { Person.count }.by(1)
+        .and change { Role.count }.by(1)
+        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
+        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count }.by(0)
+        .and change { ExternalInvoice::AboMagazin.count }.by(1)
     end
 
     it "correctly translates I18N gender nil value" do

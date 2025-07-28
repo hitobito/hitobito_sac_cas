@@ -44,6 +44,7 @@ abo_die_alpen:
   name: Die Alpen DE
   type: Group::AboMagazin
   layer_group_id: <%= ActiveRecord::FixtureSet.identify(:root) %>
+  self_registration_role_type: Group::AboMagazin::Neuanmeldung
 
 abo_basic_login:
   parent: abos
