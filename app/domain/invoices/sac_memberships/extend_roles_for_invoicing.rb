@@ -36,7 +36,7 @@ module Invoices::SacMemberships
     end
 
     def convert_roles_to_youth
-      roles_to_turn_youth.includes(:person, :group).find_each do |role|
+      roles_to_turn_youth.includes(:group, person: :roles).find_each do |role|
         if role.person.household.members.count == 2
           dissolve_two_person_household(role.person, role.group)
         end
@@ -57,7 +57,8 @@ module Invoices::SacMemberships
 
     def dissolve_two_person_household(person, group)
       other = (person.household.people - [person]).first
-      person.household.destroy
+      household = Household.new(person, maintain_sac_family: false)
+      household.destroy
 
       create_mitglied_role(other, group, :adult)
       other.sac_membership.zusatzsektion_roles.with_inactive.where(beitragskategorie: :family).find_each do |zusatzsektion_role|
