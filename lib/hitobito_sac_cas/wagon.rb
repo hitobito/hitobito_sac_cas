@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -49,6 +49,8 @@ module HitobitoSacCas
       # only schedule BackupMitgliederScheduleJob if sftp config is present
       JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
 
+      Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
+
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
       MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
@@ -89,6 +91,7 @@ module HitobitoSacCas
         GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
       end
 
+      Wizards::Base.prepend SacCas::Wizards::Base
       Wizards::Steps::NewUserForm.support_company = false
 
       HouseholdAsideComponent.prepend SacCas::HouseholdAsideComponent
