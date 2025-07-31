@@ -5,6 +5,8 @@ Fabricator(:person_with_role, from: :person_with_address_and_phone) do
   transient :group
   transient :role
   transient :beitragskategorie
+  transient :start_on
+  transient :end_on
 
   after_create do |person, transients|
     group = transients[:group]
@@ -16,8 +18,8 @@ Fabricator(:person_with_role, from: :person_with_address_and_phone) do
       group:,
       person:,
       beitragskategorie:,
-      start_on: 1.year.ago,
-      end_on: Date.current.end_of_year
+      start_on: transients[:start_on] || 1.year.ago,
+      end_on: transients[:end_on] || Date.current.end_of_year
     )
   end
 end
