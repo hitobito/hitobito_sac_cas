@@ -17,5 +17,14 @@ module Wizards::Steps::Signup::AboMagazin
 
     self.minimum_age = 0
     self.partial = "wizards/steps/signup/abo_magazin/person_fields"
+
+    def initialize(...)
+      super
+
+      if current_user
+        self.company = current_user.company
+        self.company_name = current_user.company_name
+      end
+    end
   end
 end
