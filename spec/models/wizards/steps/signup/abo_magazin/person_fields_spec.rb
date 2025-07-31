@@ -8,7 +8,8 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::AboMagazin::PersonFields do
-  let(:wizard) { instance_double(Wizards::Signup::AboMagazinWizard, current_user: nil) }
+  let(:current_user) { nil }
+  let(:wizard) { instance_double(Wizards::Signup::AboMagazinWizard, current_user:) }
   subject(:step) { described_class.new(wizard) }
 
   let(:required_attrs) {
@@ -66,6 +67,15 @@ describe Wizards::Steps::Signup::AboMagazin::PersonFields do
         expect(step).not_to be_valid
         expect(step.errors.full_messages).to eq ["Firmenname muss ausgefüllt werden"]
       end
+    end
+  end
+
+  context "with current user" do
+    let(:current_user) { Fabricate(:person, company: true, company_name: "Puzzle ITC") }
+
+    it "reads attributes from current_user" do
+      expect(step.company).to eq true
+      expect(step.company_name).to eq "Puzzle ITC"
     end
   end
 end
