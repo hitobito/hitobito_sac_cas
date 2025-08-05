@@ -496,6 +496,7 @@ it:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
         finish_at: Fino al
+        open_training_days: Giorni di formazione da completare
       sac_membership_config:
         valid_from: Valido dall’anno
         sac_fee_adult: "Contributo Associazione centrale, affiliazione individuale"
@@ -1840,6 +1841,11 @@ it:
       with_sac_account: con il tuo account CAS
       request_sac_membership: Richiedere l’affiliazione al CAS
       request_sac_membership_link: "https://www.sac-cas.ch/it/affiliazione/diventasocio/"
+
+  qualification_decorator:
+    open_training_days_active:
+      Per garantire che la vostra qualifica non scada il %{finish_at}, vi chiediamo di completare %{days}
+      giorni di formazione supplementare prima di tale data.
 
   roles:
     beitragskategorie:

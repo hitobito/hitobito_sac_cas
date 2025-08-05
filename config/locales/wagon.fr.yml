@@ -498,6 +498,7 @@ fr:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:
         finish_at: Jusqu’à
+        open_training_days: Jours de formation à effectuer
       sac_membership_config:
         valid_from: Valable à partir de l’année
         sac_fee_adult: "Cotisation à l’association centrale, adhésion individuelle"
@@ -1842,6 +1843,11 @@ fr:
       with_sac_account: avec ton compte CAS
       request_sac_membership: Demander l'adhésion au CAS
       request_sac_membership_link: "https://www.sac-cas.ch/fr/affiliation/devenir-membre/"
+
+  qualification_decorator:
+    open_training_days_active:
+      Pour que la qualification n'expire pas le %{finish_at}, nous te prions d'effectuer %{days}
+      jours de formation continue avant cette date.
 
   roles:
     beitragskategorie:
