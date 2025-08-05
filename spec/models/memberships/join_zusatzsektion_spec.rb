@@ -8,11 +8,13 @@
 require "spec_helper"
 
 describe Memberships::JoinZusatzsektion do
+  before { travel_to(Date.new(2024, 8, 1)) }
+
   def create_role(key, role, owner: person, **attrs)
     group = key.is_a?(Group) ? key : groups(key)
     role_type = group.class.const_get(role)
     Fabricate(role_type.sti_name, group: group, person: owner,
-      start_on: 1.year.ago, end_on: Date.current.end_of_year, **attrs)
+      start_on: Date.new(2024, 7, 1), end_on: Date.new(2024, 12, 31), **attrs)
   end
 
   it "initialization fails if no neuanmeldungen subgroup exists" do
@@ -188,10 +190,8 @@ describe Memberships::JoinZusatzsektion do
             it "does update external invoice via job" do
               expect_any_instance_of(Invoices::Abacus::CreateInvoiceJob).to receive(:transmit_subject).and_return(true)
               expect_any_instance_of(Invoices::Abacus::CreateInvoiceJob).to receive(:transmit_sales_order).and_return(true)
-              travel_to(Date.new(2024, 8, 1)) do
-                join_sektion.save!
-                expect { job.perform }.to change { person.external_invoices.last.total }.from(0).to(28)
-              end
+              join_sektion.save!
+              expect { job.perform }.to change { person.external_invoices.last.total }.from(0).to(28)
             end
           end
         end
