@@ -1292,13 +1292,13 @@ it:
         contact_text: |
           Siamo raggiungibili durante i nostri orari di lavoro
           Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
-      popover_cancel_dav:
-        send_email: E-Mail an Teilnehmer/in senden
-        invoice_option: Rechnung
-        standard: Annullationskostenrechnung gem. Reglement
-        custom: Annullationskostenrechnung mit einem benutzerdefinierten Betrag
-        no_invoice: Keine Annullationskostenrechnung
-        custom_price: Betrag
+      popover_cancel_sac_cas:
+        send_email: Inviare l’e-mail al/alla partecipante
+        invoice_option: Fattura
+        standard: Calcolo dei costi di cancellazione ai sensi del regolamento
+        custom: Calcolo dei costi di cancellazione con un importo definito dall’utente
+        no_invoice: Nessuna fattura dei costi di cancellazione
+        custom_price: Importo
       states:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
@@ -1335,23 +1335,23 @@ it:
         terms_and_conditions_link_label: CGC
         terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
         subscribe_newsletter: "Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS"
-      fields_dav:
-        former_price_select: "Bisheriger %{price_label}"
-        no_price_select: Keine Kosten
+      fields_sac_cas:
+        former_price_select: "In precedenza %{price_label}"
+        no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
       reactivated_notice: "%{participant} è stato riattivato."
       actions_show_youth:
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
-      actions_show_dav:
-        modal_title: "Willst du diese/n Teilnehmer/in wirklich aufbieten?"
-        summon_and_send_mail: Aufbieten und E-Mail senden
-        summon_and_send_no_mail: Aufbieten ohne E-Mail
-        create_invoice_button: Rechnung erstellen
-        attach_key_data_sheet: Eckdatenblatt erzeugen
-        create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
-        create_course_leader_invoice_button: Kurskaderabrechnung erstellen
-        reactivate: Reaktivieren
+      actions_show_sac_cas:
+        modal_title: "Desideri davvero convocare questa/o partecipante?"
+        summon_and_send_mail: Convocare e inviare l’e-mail
+        summon_and_send_no_mail: Convocare senza e-mail
+        create_invoice_button: Creare la fattura
+        attach_key_data_sheet: Creare la scheda dei dati di riferimento
+        create_invoice_confirmation: Si prega di confermare la creazione della fattura.
+        create_course_leader_invoice_button: Generare conteggio quadro del corso
+        reactivate: Riattivare
       popover_create_course_leader_settlement:
         create_invoice: Generare conteggio
         info_text_html: >-
@@ -1371,8 +1371,8 @@ it:
         enter_email: "" # to not display in sac wagon
 
   events:
-    actions_show_dav:
-      attach_key_data_sheets: Alle Eckdatenblätter erzeugen
+    actions_show_sac_cas:
+      attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
     state_buttons:
       event/course:
         created: Indietro come bozza
@@ -1455,10 +1455,10 @@ it:
     tour_guides_expired: Guide escursionistiche precedenti
 
   groups:
-    actions_show_dav:
-      export_mitglieder: CSV Mitglieder
-      create_yearly_membership_invoice: MV Jahresinkasso
-      download_statistics_button: Mitgliederstatistik
+    actions_show_sac_cas:
+      export_mitglieder: Soci CSV
+      create_yearly_membership_invoice: Incasso annuale AS
+      download_statistics_button: Statistiche dei membri
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
     popover_download_statistics:
@@ -1704,9 +1704,9 @@ it:
 
   person:
     history:
-      index_notice_dav:
+      index_notice_sac_cas:
         sections_info_html: >-
-          Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
+          Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
   abo_magazin_invoices:
     create:
       flash:
@@ -1726,11 +1726,11 @@ it:
 
     membership:
       verify:
-        member_details_dav:
-          tour_guide: Aktive/r Tourenleiter/in
-        below_name_dav:
-          membership_number: "Mitglied: %{membership_number}"
-          membership_years: "Anzahl Mitgliedsjahre: %{membership_years}"
+        member_details_sac_cas:
+          tour_guide: Guida escursionistica attiva
+        below_name_sac_cas:
+          membership_number: "Socio: %{membership_number}"
+          membership_years: "Numero anni di affiliazione: %{membership_years}"
 
     membership_invoices:
       no_invoice_possible: >-
@@ -1772,10 +1772,10 @@ it:
       warning: Avviso
       error: Errore
 
-    show_right_z_dav:
-      section_sac_membership: SAC Mitgliedschaft
-      qr_code_hint: Scannen um Mitgliedschaft zu verifizieren
-      download_pdf: Mitgliederausweis herunterladen
+    show_right_z_sac_cas:
+      section_sac_membership: Soci del CAS
+      qr_code_hint: Scansione per verificare l’affiiazione
+      download_pdf: Scaricare la tessera soci
 
     external_invoices:
       list:
