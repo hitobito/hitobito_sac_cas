@@ -485,7 +485,7 @@ en:
           permission:
             description:
               download_member_statistics: Herunterladen von Mitglieder-Statistiken.
-              read_all_people: Read by all persons.
+              read_all_people: Read all people.
               layer_events_full: Verwalten von Events auf der Sektion.
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
               layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
