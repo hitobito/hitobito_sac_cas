@@ -1,5 +1,5 @@
 [main]
-host = https://app.transifex.com
+host = https://www.transifex.com
 
 [o:hitobito:p:hitobito_sac_cas:r:wagon]
 file_filter = config/locales/wagon.<lang>.yml
