@@ -72,3 +72,13 @@ Ein Mitglied hat die Möglichkeit unter Person / Verlauf seine Mitgliedschaft zu
 ## Abacus
 
 [Schnittstellen Dokumentation Abacus](./abacus.md)
+
+## Mehrsprachigkeit / I18n
+
+Grundsätzlich gelten die [Guidelines aus dem Core Projekt](https://github.com/hitobito/hitobito/blob/master/doc/developer/guidelines.md#mehrsprachigkeit--i18n).
+
+Als Spezialität ist es im SAC Wagon möglich, die deutschen Texte ebenfalls in Transifex zu übersetzen.  
+Dazu ist im SAC Tranifex Projekt als source language `gsw` definiert. `gsw` ist in der Applikation nicht wählbar, sondern wird nur für die Fallback Texte verwendet für keys welche in keiner anderen Sprache übersetzt sind.
+Der Inhalt der `de` locale files wird (anders als beim Core und den anderen Wagons) beim Release Prozess mit den Übersetzungen aus Transifex ersetzt.
+
+**Im SAC Wagon müssen neue keys zwingend im `wagon.gsw.yml` definiert werden.**

@@ -1,3 +1,7 @@
+## unreleased
+
+* Deutsche Übersetzungen der Wagon Texte sind neu durch SAC selber übersetzbar auf transifex HIT-1227 (hitobito_sac_cas#1889)
+
 ## Version 2.6
 
 * Max. Kursteilnehmer wird berücksichtigt beim manuellen Anmelden von Teilnehmenden HIT-1235 (hitobito_sac_cas#1928)

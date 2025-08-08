@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-de:
+gsw:
   global:
     date_field_placeholder: DD.MM.YYYY
     phone_placeholder: +41 77 123 45 67
@@ -12,8 +12,8 @@ de:
     link:
       push_down: Wert auf Kurse übertragen
     links:
-      faq: "https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/"
-      membership: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
+      faq: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/
+      membership: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
     sac:
       name: "Schweizer Alpen-Club SAC"
       zentralverband: "Zentralverband"
@@ -29,20 +29,21 @@ de:
 
   layouts:
     unauthorized:
-      main_self_registration: "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen"
+      main_self_registration: Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen
 
   settings:
     email:
-      sender: "Schweizer Alpen-Club SAC <noreply@%{mail_domain}>"
+      sender: Schweizer Alpen-Club SAC <noreply@%{mail_domain}>
 
   errors:
     messages:
-      assert_old_enough: "muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein"
-      too_young: "muss %{minimum_years} Jahre oder älter sein"
-      too_old: "muss %{maximum_years} Jahre oder jünger sein"
-      assert_old_enough_with_age: "muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein"
+      assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
+      too_young: muss %{minimum_years} Jahre oder älter sein
+      too_old: muss %{maximum_years} Jahre oder jünger sein
+      assert_old_enough_with_age: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
       conflicting_family_membership: >-
-        %{name} hat bereits eine Familienmitgliedschaft und kann daher nicht einem Familienhaushalt hinzugefügt werden.
+        %{name} hat bereits eine Familienmitgliedschaft und kann daher
+        nicht einem Familienhaushalt hinzugefügt werden.
       total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
 
   activemodel:
@@ -94,7 +95,7 @@ de:
         data_protection: Datenschutzerklärung
         statutes: Statuten
       wizards/steps/choose_membership:
-        register_as: "Für wen soll die Zusatzmitgliedschaft gelten?"
+        register_as: Für wen soll die Zusatzmitgliedschaft gelten?
         family: für die ganze Familie
         myself: für mich selbst
       wizards/steps/switch_stammsektion:
@@ -130,7 +131,8 @@ de:
     errors:
       messages:
         youth_not_allowed_in_family: >-
-          Jugendliche im Alter von %{from_age} bis %{to_age} Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden.
+          Jugendliche im Alter von %{from_age} bis %{to_age} Jahren können nicht
+          in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
 
       models:
@@ -150,9 +152,11 @@ de:
             base:
               birthday_missing: "%{person_name} hat kein Geburtsdatum."
               family_age_range_not_fulfilled: >-
-                %{person_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren.
+                %{person_name} kann nicht hinzugefügt werden.
+                Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren.
               in_other_household_present: >-
-                %{person_name} kann nicht hinzugefügt werden, da die Person bereits einer anderen Familie zugeordnet ist.
+                %{person_name} kann nicht hinzugefügt werden,
+                da die Person bereits einer anderen Familie zugeordnet ist.
               membership_in_other_section: >-
                 %{person_name} besitzt bereits eine Mitgliedschaft in einer anderen Sektion.
               no_email: "%{person_name} hat keine bestätigte E-Mail Adresse."
@@ -180,14 +184,17 @@ de:
 
         wizards/steps/choose_sektion:
           requires_admin: >-
-            Wir bitten dich den gewünschten Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf.
+            Wir bitten dich den gewünschten Sektionswechsel
+            telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt
+            mit uns auf.
         wizards/steps/signup/sektion/family_fields/member:
           attributes:
             email:
               taken: ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person.
         wizards/steps/check_data_quality_errors:
           data_quality_error: >-
-            Die Aktion kann wegen ungültigen Daten nicht durchgeführt werden. Bitte nach dem Korrigieren der Daten die Aktion nochmals starten.
+            Die Aktion kann wegen ungültigen Daten nicht durchgeführt werden.
+            Bitte nach dem Korrigieren der Daten die Aktion nochmals starten.
     models:
       people/neuanmeldungen/approve:
         one: Anmeldung übernehmen
@@ -495,21 +502,21 @@ de:
         finish_at: Bis
       sac_membership_config:
         valid_from: Gültig ab Jahr
-        sac_fee_adult: "Zentralverbandsbeitrag, Mitgliedschaft Einzel"
-        sac_fee_family: "Zentralverbandsbeitrag, Mitgliedschaft Familie"
-        sac_fee_youth: "Zentralverbandsbeitrag, Mitgliedschaft Jugend"
-        entry_fee_adult: "Eintrittsgebühr, Mitgliedschaft Einzel"
-        entry_fee_family: "Eintrittsgebühr, Mitgliedschaft Familie"
-        entry_fee_youth: "Eintrittsgebühr, Mitgliedschaft Jugend"
-        hut_solidarity_fee_with_hut_adult: "Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Einzel"
-        hut_solidarity_fee_with_hut_family: "Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Familie"
-        hut_solidarity_fee_with_hut_youth: "Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Jugend"
-        hut_solidarity_fee_without_hut_adult: "Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Einzel"
-        hut_solidarity_fee_without_hut_family: "Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Familie"
-        hut_solidarity_fee_without_hut_youth: "Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Jugend"
-        magazine_fee_adult: "Abogebühr SAC Magazin, Mitgliedschaft Einzel"
-        magazine_fee_family: "Abogebühr SAC Magazin, Mitgliedschaft Familie"
-        magazine_fee_youth: "Abogebühr SAC Magazin, Mitgliedschaft Jugend"
+        sac_fee_adult: Zentralverbandsbeitrag, Mitgliedschaft Einzel
+        sac_fee_family: Zentralverbandsbeitrag, Mitgliedschaft Familie
+        sac_fee_youth: Zentralverbandsbeitrag, Mitgliedschaft Jugend
+        entry_fee_adult: Eintrittsgebühr, Mitgliedschaft Einzel
+        entry_fee_family: Eintrittsgebühr, Mitgliedschaft Familie
+        entry_fee_youth: Eintrittsgebühr, Mitgliedschaft Jugend
+        hut_solidarity_fee_with_hut_adult: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Einzel
+        hut_solidarity_fee_with_hut_family: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Familie
+        hut_solidarity_fee_with_hut_youth: Hüttensolidaritätsbeitrag Sektion mit Hütten, Mitgliedschaft Jugend
+        hut_solidarity_fee_without_hut_adult: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Einzel
+        hut_solidarity_fee_without_hut_family: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Familie
+        hut_solidarity_fee_without_hut_youth: Hüttensolidaritätsbeitrag Sektion ohne Hütten, Mitgliedschaft Jugend
+        magazine_fee_adult: Abogebühr SAC Magazin, Mitgliedschaft Einzel
+        magazine_fee_family: Abogebühr SAC Magazin, Mitgliedschaft Familie
+        magazine_fee_youth: Abogebühr SAC Magazin, Mitgliedschaft Jugend
         service_fee: Dienstleistungsgebühr
         magazine_postage_abroad: Porto Ausland SAC Magazin
         reduction_amount: Reduktionsbetrag
@@ -531,12 +538,12 @@ de:
         discount_percent_3: Rabattprozent 3
       sac_section_membership_config:
         valid_from: Gültig ab Jahr
-        section_fee_adult: "Sektionsbeitrag, Mitgliedschaft Einzel"
-        section_fee_family: "Sektionsbeitrag, Mitgliedschaft Familie"
-        section_fee_youth: "Sektionsbeitrag, Mitgliedschaft Jugend"
-        section_entry_fee_adult: "Eintrittsgebühr, Mitgliedschaft Einzel"
-        section_entry_fee_family: "Eintrittsgebühr, Mitgliedschaft Familie"
-        section_entry_fee_youth: "Eintrittsgebühr, Mitgliedschaft Jugend"
+        section_fee_adult: Sektionsbeitrag, Mitgliedschaft Einzel
+        section_fee_family: Sektionsbeitrag, Mitgliedschaft Familie
+        section_fee_youth: Sektionsbeitrag, Mitgliedschaft Jugend
+        section_entry_fee_adult: Eintrittsgebühr, Mitgliedschaft Einzel
+        section_entry_fee_family: Eintrittsgebühr, Mitgliedschaft Familie
+        section_entry_fee_youth: Eintrittsgebühr, Mitgliedschaft Jugend
         bulletin_postage_abroad: Porto Ausland Sektionsbulletin
         sac_fee_exemption_for_honorary_members: Zentralverbandsgebührenerlass für Ehrenmitglieder
         section_fee_exemption_for_honorary_members: Sektionsgebührenerlass für Ehrenmitglieder
@@ -565,8 +572,8 @@ de:
 
     errors:
       messages:
-        already_has_mitglied_role: "ist bereits Mitglied (von %{start_on} bis %{end_on})."
-        already_has_neuanmeldung_role: "hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on})."
+        already_has_mitglied_role: ist bereits Mitglied (von %{start_on} bis %{end_on}).
+        already_has_neuanmeldung_role: hat bereits eine Neuanmeldung (von %{start_on} bis %{end_on}).
         too_many_adults_in_family: "In einer Familienmitgliedschaft sind maximal %{max_adults} Erwachsene inbegriffen."
         only_one_mitglied_role_allowed_at_a_time: "hat bereits eine Mitgliedschaft mit überschneidender Gültigkeit."
         must_be_in_past: muss in der Vergangenheit liegen
@@ -590,15 +597,16 @@ de:
 
         people_manager:
           in_different_household: >-
-            %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht diesem Haushalt hinzugefügt werden.
+            %{name} ist einem anderen Haushalt zugeordnet und kann daher nicht
+            diesem Haushalt hinzugefügt werden.
           managed_is_not_child: >-
             %{name} ist %{age} Jahre alt und kann daher nicht als Kind hinzugefügt werden.
           manager_is_not_adult: >-
             %{name} ist %{age} Jahre alt und kann daher nicht als Verwalter*in hinzugefügt werden.
         person:
           birthday:
-            must_be_before: "muss vor dem %{date} liegen."
-            must_be_after: "muss nach dem %{date} liegen."
+            must_be_before: muss vor dem %{date} liegen.
+            must_be_after: muss nach dem %{date} liegen.
         qualification:
           attributes:
             finish_at:
@@ -1121,7 +1129,7 @@ de:
 
   devise:
     failure:
-      signin_not_allowed: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
+      signin_not_allowed: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     mailer:
       confirmation_instructions:
         body:
@@ -1130,22 +1138,25 @@ de:
         body:
           footer: Bergsportliche Grüsse
     passwords:
-      send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
+      send_instructions: Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)
     sessions:
       form:
         login_identity: Haupt‑E‑Mail / Mitglied‑Nr
       create:
         confirm_email_before_logging_in: >
-          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail
+          geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten
+          hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+
   doorkeeper:
     scopes:
-      user_groups: "Lesen deiner Gruppen, Rollen und berechneter Felder."
+      user_groups: Lesen deiner Gruppen, Rollen und berechneter Felder.
 
   dropdown/events/courses/mail_dispatch:
     title: Mailversand
     leader_reminder: "Kursleitung: Vorbereitung abschliessen"
     survey: "Teilnehmende: Umfrage"
-    confirmation: "Bist du sicher, dass du diese Mails versenden willst?"
+    confirmation: Bist du sicher, dass du diese Mails versenden willst?
 
   dropdown/people/memberships:
     title: Mitgliedschaft anpassen
@@ -1168,7 +1179,7 @@ de:
     application_market:
       application:
         add_participant_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
-      event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
+      event_canceled: Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden.
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     courses:
@@ -1184,18 +1195,21 @@ de:
           success:
             one: Es wurde eine E-Mail verschickt.
             other: Es wurden %{count} E-Mails verschickt.
-          warning: "Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde."
+          warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Wollen Sie wirklich die gespeicherten Werte auf alle aktiven Kurse
+          übertragen? Dabei werden die aktuellen Werte überschrieben.
       form:
         field_push_down:
           confirm: >-
-            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse übertragen? Dabei werden die aktuellen Werte überschrieben.
+            Wollen Sie wirklich diesen Wert auf alle aktiven Kurse
+            übertragen? Dabei werden die aktuellen Werte überschrieben.
           alert_unsaved: >-
-            Dieser Wert ist noch nicht gespeichert. Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
+            Dieser Wert ist noch nicht gespeichert.
+            Bitte speichere das Formular, bevor der Wert auf Kurse übertragen wird.
       kind_category_field:
         category_overrides_link_title: >-
           Folgende Felder werden übernommen: Kostenstelle, Kostenträger
@@ -1206,20 +1220,24 @@ de:
     kind_categories:
       push_down:
         success: >-
-          Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle zugeordneten Kursarten übertragen.
+          Kostenstelle (%{cost_center}) und Kostenträger (%{cost_unit}) wurden auf alle
+          zugeordneten Kursarten übertragen.
       actions_edit:
         push_down_button: Werte auf Kursarten übertragen
         push_down_button_confirm: >-
-          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte überschrieben.
+          Wollen Sie wirklich die gespeicherten Werte (Kostenstelle und
+          Kostenträger) auf alle Kursarten übertragen? Dabei werden die aktuellen Werte
+          überschrieben.
     lists:
       nav_left_tours:
         tours: Touren
       tours:
         title: Demnächst stattfindende Touren
-        explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
+        explanation: Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion.
     participations:
       missing_information: >-
-        Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen. Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
+        Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen.
+        Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
       answers_step:
         total_duration_days_help: "Geplante Kursdauer: %{total_days} Tage"
       edit:
@@ -1251,7 +1269,8 @@ de:
         rejected: Die Aufnahmekriterien sind nicht erfüllt. Deshalb mussten wir deine Anmeldung leider ablehnen.
         summoned: Du bist für diesen Kurs aufgeboten.
         unconfirmed: >-
-          Du bist für diesen Kurs vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden.
+          Du bist für diesen Kurs vorangemeldet. Die Anmeldung ist noch nicht definitiv und muss
+          von der Kursverwaltung bestätigt werden.
       step_wizard:
         answers_title: Zusatzdaten
         subsidy_title: Subventionsbeitrag
@@ -1260,12 +1279,18 @@ de:
         title: Subventionsbeitrag beantragen
         subsidy_field: "Subventionierten Preis von %{amount} beantragen"
         subsidy_link_label: Subventionsantrag
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
+        subsidy_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf
         general_info: >-
-          Für diesen Kurs gibt es die Möglichkeit, als SAC-Mitglied einen Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen möchtest.
-        detail_info_header: "Was muss ich tun um einen Subventionsantrag zu stellen?"
+          Für diesen Kurs gibt es die Möglichkeit, als SAC-Mitglied einen
+          Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen
+          möchtest.
+        detail_info_header: Was muss ich tun um einen Subventionsantrag zu stellen?
         detail_info_text: >-
-          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätig den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis. Wir bitten dich, gegenbenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
+          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin
+          bestätig den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum
+          subventionierten Kurspreis. Wir bitten dich, gegenbenenfalls das Formular %{link}
+          auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor
+          Kursbeginn zu retournieren</b>.
       summary_step:
         annulation_remarks: |
           Der Abschluss einer Annullationskostenversicherung wird empfohlen. Folgende Rücktrittskosten würden bei Abmeldung vor Kursbeginn durch den Kunden/die Kundin getragen:
@@ -1273,20 +1298,20 @@ de:
           30 - 20 Tage: 50 % des Preises
           19 - 10 Tage: 75 % des Preises
           9 - 0 Tage: 100 % des Preises
-        terms_and_conditions_text: "Ja, ich erkläre mich mit den %{link} einverstanden"
+        terms_and_conditions_text: Ja, ich erkläre mich mit den %{link} einverstanden
         terms_and_conditions_link_label: AGB
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/AGBs_Kurse_SAC.pdf"
-        subscribe_newsletter: "Ja, ich möchte über Neuigkeiten des Schweizer Alpen-Club SAC informiert werden"
+        terms_and_conditions_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/AGBs_Kurse_SAC.pdf
+        subscribe_newsletter: Ja, ich möchte über Neuigkeiten des Schweizer Alpen-Club SAC informiert werden
       fields_sac_cas:
-        former_price_select: "Bisheriger %{price_label}"
+        former_price_select: Bisheriger %{price_label}
         no_price_select: Keine Kosten
       summoned_notice: "%{participant} wurde aufgeboten."
       reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
         summon_button: Aufbieten
-        assign_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+        assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
       actions_show_sac_cas:
-        modal_title: "Willst du diese/n Teilnehmer/in wirklich aufbieten?"
+        modal_title: Willst du diese/n Teilnehmer/in wirklich aufbieten?
         summon_and_send_mail: Aufbieten und E-Mail senden
         summon_and_send_no_mail: Aufbieten ohne E-Mail
         create_invoice_button: Rechnung erstellen
@@ -1297,17 +1322,30 @@ de:
       popover_create_course_leader_settlement:
         create_invoice: Abrechnung erstellen
         info_text_html: >-
-          <p>Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Falls die rechnungsstellende Person bzw. Institution MWST-pflichtig ist, muss eine MWST-konforme Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Wurde dem SAC noch keine fürs aktuelle Jahr gültige AHV-Bestätigung zugestellt, so muss diese spätestens mit der Rechnungsstellung zugestellt werden.</p>- <p>Rechnungen per Mail senden an: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>-
+          <p>Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der
+          angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier
+          bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>-
+          <p>Falls die rechnungsstellende Person bzw. Institution MWST-pflichtig ist, muss eine
+          MWST-konforme Rechnung eigenständig erstellt werden und der hier bereitgestellte
+          QR-Rechnungsgenerator darf nicht verwendet werden.</p>-
+          <p>Wurde dem SAC noch keine fürs aktuelle Jahr gültige AHV-Bestätigung zugestellt,
+          so muss diese spätestens mit der Rechnungsstellung zugestellt werden.</p>-
+          <p>Rechnungen per Mail senden an: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>-
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
 
       popover_participant_cancels:
         cancel_info: >-
-          Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? Eine Abmeldung kann nicht rückgängig gemacht werden. Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF %{cancellation_cost} in Rechnung gestellt.
+          Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? Eine Abmeldung
+          kann nicht rückgängig gemacht werden. Mit der Abmeldung werden Bearbeitungs-
+          und Annullationsgebühren in der Höhe von CHF %{cancellation_cost} in Rechnung gestellt.
+
     participation_contact_datas:
       fields:
         overrides_person_data_info: >-
-          Bitte beachte, dass die hier eingegebenen Anpassungen in dein Profil übernommen werden.
+          Bitte beachte, dass die hier eingegebenen Anpassungen in dein
+          Profil übernommen werden.
+
     register:
       email_check:
         enter_email: "" # to not display in sac wagon
@@ -1325,7 +1363,8 @@ de:
         ready: Bereit zur Durchführung
         closed: Abschliessen
         closed_confirm_text: >-
-          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
+          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen.
+          Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
       event/tour:
         draft: Zurück als Entwurf
@@ -1344,7 +1383,10 @@ de:
 
     general_fields:
       kind_overrides_link_title: >-
-        Folgende Felder werden übernommen: Beschreibung, Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison, Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger
+        Folgende Felder werden übernommen: Beschreibung,
+        Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison,
+        Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger
+
     global:
       link:
         add_event/tour: Tour erstellen
@@ -1356,15 +1398,18 @@ de:
       not_self_employed: unselbständig erwerbend
 
     popover_emails_optional:
-      prompt_email_choice: "Sollen E-Mails verschickt werden?"
+      prompt_email_choice: Sollen E-Mails verschickt werden?
       submit_with_emails: E-Mails verschicken
       submit_without_emails: Keine E-Mails verschicken
     popover_canceled_reason:
       cancel_button: Definitiv Absagen
       cancel_confirmation: >-
-        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden.
+        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen?
+        Diese Aktion kann nicht rückgängig gemacht werden.
       cancel_info: >-
-        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
+        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden
+        allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet.
+        Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
 
@@ -1377,7 +1422,7 @@ de:
 
   events/state:
     flash:
-      success: "Status wurde auf %{state} gesetzt."
+      success: Status wurde auf %{state} gesetzt.
 
   event/levels:
     new:
@@ -1411,21 +1456,23 @@ de:
 
     self_registration:
       form:
-        has_account: "Hast du bereits ein SAC-Login?"
+        has_account: Hast du bereits ein SAC-Login?
         to_login_page: Anmelden
       abo_infos:
         annual_price_header: Preis pro Jahr
         delivery_country_header: Versandsland
-        price_with_vat: "CHF %{amount} inkl. MwSt."
+        price_with_vat: CHF %{amount} inkl. MwSt.
         switzerland: Schweiz
         international: Weltweit
         duration_title: Dauer und Erneuerung des Abonnements
         duration_text: >-
-          Du erhältst eine jährliche Rechnung im Voraus. Das Abonnement kann jederzeit zum Ende der laufenden Periode gekündigt werden.
+          Du erhältst eine jährliche Rechnung im Voraus. Das Abonnement kann jederzeit zum Ende
+          der laufenden Periode gekündigt werden.
       create:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
         existing_membership_notice: >-
-          Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.
+          Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest,
+          kontaktiere bitte die SAC-Geschäftsstelle.
         can_login_already_notice: Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen.
         already_subscribed_to_abo: Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.
         already_member_of_tourenportal: Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.
@@ -1434,11 +1481,11 @@ de:
         signed_up_notice: Deine Anmeldung wurde erfolgreich gespeichert.
 
       agreement_link:
-        agb_text: "Ich habe die %{link} gelesen und stimme diesen zu"
-        statutes_text: "Ich habe die %{link} gelesen und stimme diesen zu"
-        sektion_statuten_text: "Ich habe die %{link} gelesen und stimme diesen zu"
-        contribution_regulations_text: "Ich habe das %{link} gelesen und stimme diesem zu"
-        data_protection_text: "Ich habe die %{link} gelesen und stimme dieser zu"
+        agb_text: Ich habe die %{link} gelesen und stimme diesen zu
+        statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+        sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
+        contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesem zu
+        data_protection_text: Ich habe die %{link} gelesen und stimme dieser zu
 
     self_inscription:
       membership_role_exists: Du bist bereits Mitglied dieser Sektion
@@ -1447,19 +1494,23 @@ de:
           jul: Bei Eintritt ab 01. Juli erhaltest du 50% Rabatt auf den jährlichen Beitrag.
           oct: Bei Eintritt ab 01. Oktober entfällt der jährliche Beitrag.
         register_as_info: >-
-          Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten. Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich.
+          Du kannst dem SAC Blüemlisalp entweder als Zusatzsektion beitreten oder du kannst sie als
+          deine neue Stammsektion auswählen und damit aus deiner bisherigen Stammsektion austreten.
+          Hinweis für Familien: Der Wechsel der Stammsektion gilt automatisch auch für alle
+          Familienmitglieder. Der Beitritt zu einer Zusatzsektion gilt hingegen nur für dich.
         inscribe: Beitreten
       new:
         role_exists: Du bist bereits Mitglied dieser Sektion
       confirm:
         title: Beitritt bestätigen
         information_text: >-
-          Bitte bestätigen Sie den Beitritt in die Sektion %{sektion}. Dieser Vorgang kann nicht rückgängig gemacht werden.
+          Bitte bestätigen Sie den Beitritt in die Sektion %{sektion}.
+          Dieser Vorgang kann nicht rückgängig gemacht werden.
         submit_button: Beitritt beantragen
 
   groups/self_inscription:
     new:
-      details: "Du trittst mit Beitragskategorie %{beitragskategorie} bei."
+      details: Du trittst mit Beitragskategorie %{beitragskategorie} bei.
 
   groups/self_registration:
     global:
@@ -1479,7 +1530,9 @@ de:
       shared_address_info: Alle Familienmitglieder teilen sich dieselbe Adresse.
     members_table_row:
       unconfirmed_email_info: >-
-        Die E-Mail Adresse muss bestätigt werden, bevor die Person aus der Familie entfernt werden kann.
+        Die E-Mail Adresse muss bestätigt werden, bevor
+        die Person aus der Familie entfernt werden kann.
+
   household_aside_component:
     section_name: Familie
   household_aside_member_component:
@@ -1490,10 +1543,10 @@ de:
 
   invoices:
     abo_magazin:
-      title: "Rechnung %{group} %{year}"
+      title: Rechnung %{group} %{year}
       positions:
-        abo_fee: "Abonnement %{group} %{time_period}"
-        abroad_fee: "Porto %{group}"
+        abo_fee: Abonnement %{group} %{time_period}
+        abroad_fee: Porto %{group}
     errors:
       data_quality_error: "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
       create_subject_failed: "Probleme beim Übermitteln der Personendaten"
@@ -1507,16 +1560,16 @@ de:
       cancellation_costs: "%{percentage}% Annullationskosten"
       custom_cancellation_costs: Annullationskosten
     sac_memberships:
-      title: "Mitgliedschaftsrechnung %{year}"
+      title: Mitgliedschaftsrechnung %{year}
       positions:
         hut_solidarity_fee: Hütten Solidaritätsbeitrag
         sac_entry_fee: Eintrittsgebühr Zentralverband
         sac_fee: Beitrag Zentralverband
         sac_magazine_postage_abroad: Porto Die Alpen
         sac_magazine: Alpengebühren
-        section_bulletin_postage_abroad: "Porto Bulletin %{section}"
-        section_entry_fee: "Eintrittsgebühr %{section}"
-        section_fee: "Beitrag Sektion %{section}"
+        section_bulletin_postage_abroad: Porto Bulletin %{section}
+        section_entry_fee: Eintrittsgebühr %{section}
+        section_fee: Beitrag Sektion %{section}
       beitragskategorie:
         adult: Einzelmitglied
         family: Familienmitglied
@@ -1583,7 +1636,7 @@ de:
       file_name_prefix: Eckdatenblatt
       leader_file_prefix: Kursleiter
       assistant_leader_file_prefix: Klassenleiter
-      year_title: "SAC Kurse / Touren %{year}"
+      year_title: SAC Kurse / Touren %{year}
       title: Eckdatenblatt -Kurs-/Tourenleitung
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
@@ -1619,7 +1672,7 @@ de:
         minimum_participants: Minimale Teilnehmerzahl
         maximum_participants: Maximale Teilnehmerzahl
         participation_yes_no:
-          label: "Durchführung - ja/nein?"
+          label: Durchführung - ja/nein?
           text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt
         participation_cancellation:
           label: Durchführung – Absage
@@ -1629,7 +1682,9 @@ de:
         class_teacher:
           label: Klassenlehrer
           text: >-
-            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
+            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer -
+            bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
+
   passes:
     membership:
       file_name_prefix: SAC-Mitgliederausweis
@@ -1644,7 +1699,10 @@ de:
     history:
       index_notice_sac_cas:
         sections_info_html: >-
-          Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
+          Hier kannst du deine Mitgliedschaften verwalten.
+          Informationen zu den verschiedenen SAC Sektionen findest du unter
+          <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
+
   abo_magazin_invoices:
     create:
       flash:
@@ -1656,7 +1714,11 @@ de:
         title: Die Alpen Rechnung erstellen
         abo_group: Magazin
         alert_info: >-
-          Nach Bestätigung dieses Dialogs wird eine Rechnung für das “Die Alpen”-Abonnent erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Die Alpen Rechnung existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen.
+          Nach Bestätigung dieses Dialogs wird eine Rechnung für das “Die Alpen”-Abonnent
+          erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung,
+          ob bereits Die Alpen Rechnung existieren oder in welchem Status sich diese befinden.
+          Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen
+          vorgenommen.
         alert_warning: >-
           Diese Person ist kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Die Alpen Rechnung:"
@@ -1672,16 +1734,23 @@ de:
 
     membership_invoices:
       no_invoice_possible: >-
-        Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt.
+        Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an,
+        oder diese sind bereits über andere Rechnungen abgedeckt.
       no_memberships: >-
-        Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt.
+        Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft.
+        Es wurde entsprechend keine Rechnung erstellt.
       success_notice: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
       new:
         title: "Mitgliedschaftsrechnung erstellen"
         alert_info: >-
-          Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden. Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine Rollenmutationen oder -verlängerungen vorgenommen.
+          Nach Bestätigung dieses Dialogs wird eine Mitgliedschaftsrechnung erstellt und per
+          E-Mail oder Post an das Mitglied versandt. Es erfolgt keine Überprüfung, ob bereits
+          Mitgliedschaftsrechnungen existieren oder in welchem Status sich diese befinden.
+          Es wird in jedem Fall eine neue Rechnung ausgestellt. Es werden keine
+          Rollenmutationen oder -verlängerungen vorgenommen.
         alert_warning: >-
-          Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.
+          Diese Person verfügt über keine eigene Mitgliedschaftsrechnung.
+          Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Mitgliedschaftsrechnung:"
         create_invoice: "Rechnung erstellen"
         mv_yearly_invoice: "MV-Jahresrechnung"
@@ -1719,7 +1788,8 @@ de:
       list:
         cancel_invoice: Stornieren
         cancel_invoice_confirmation: >-
-          Wollen Sie diese Rechnung wirklich stornieren? Diese Aktion kann nicht rückgängig gemacht werden.
+          Wollen Sie diese Rechnung wirklich stornieren?
+          Diese Aktion kann nicht rückgängig gemacht werden.
       cancel:
         flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
       actions_index:
@@ -1731,12 +1801,17 @@ de:
       new:
         title: "Start MV-Jahresinkassolauf"
         schedule_info_alert: >-
-          Beim Absenden dieses Dialogs wird der Jahresinkassolauf für alle Mitglieder gestartet und die Daten an Abacus übermittelt. Der Jahresinkassolauf kann nicht abgebrochen werden und dauert mehrere Stunden. Die Mitgliedschaftsrollen werden hiermit verlängert.
+          Beim Absenden dieses Dialogs wird der Jahresinkassolauf für alle Mitglieder gestartet
+          und die Daten an Abacus übermittelt. Der Jahresinkassolauf kann nicht abgebrochen
+          werden und dauert mehrere Stunden. Die Mitgliedschaftsrollen werden hiermit verlängert.
         job_already_scheduled_alert: >-
-          Es läuft bereits ein Jahresinkassolauf. Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden.
+          Es läuft bereits ein Jahresinkassolauf. Erst wenn dieser Lauf abgeschlossen ist,
+          kann ein neuer gestartet werden.
         create_invoice: "Starten"
         submit_confirmation: >-
-          Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden.
+          Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten?
+          Dieser Lauf kann nicht abgebrochen werden.
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1762,7 +1837,7 @@ de:
 
   people_filters:
     invoice_receiver:
-      title: "Rechnungsempfänger in %{group_name}"
+      title: Rechnungsempfänger in %{group_name}
     filter:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
@@ -1770,10 +1845,10 @@ de:
 
   public_events:
     show:
-      login_to_participate: "Melde dich an, um an diesem Kurs teilzunehmen"
+      login_to_participate: Melde dich an, um an diesem Kurs teilzunehmen
       with_sac_account: mit deinem SAC-Konto
       request_sac_membership: SAC Mitgliedschaft beantragen
-      request_sac_membership_link: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
+      request_sac_membership_link: https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/
 
   roles:
     beitragskategorie:
@@ -1847,21 +1922,21 @@ de:
 
   self_registration:
     infos_component:
-      title_questions: "Fragen zur Mitgliedschaft?"
+      title_questions: Fragen zur Mitgliedschaft?
       title_contact: Kontakt
-      title_membership: "Möchtest du SAC-Mitglied werden?"
+      title_membership: Möchtest du SAC-Mitglied werden?
       title_documents: Dokumente
-      additional_infos: "Mehr Informationen findest du unter den %{link}."
+      additional_infos: Mehr Informationen findest du unter den %{link}.
       link_agb_title: AGB
-      link_agb: "https://www.sac-cas.ch/de/meta/agb/die-alpen/"
-      link_faqs: "https://www.sac-cas.ch/de/meta/faq/mitgliedschaft"
+      link_agb: https://www.sac-cas.ch/de/meta/agb/die-alpen/
+      link_faqs: https://www.sac-cas.ch/de/meta/faq/mitgliedschaft
       link_faqs_title: FAQs
-      link_statutes: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/SAC_Statuten_A5_DE.pdf"
+      link_statutes: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/SAC_Statuten_A5_DE.pdf
       link_statutes_title: Statuten
       link_sektion_statuten_title: Sektionsstatuten
-      link_contribution_regulations: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement.pdf"
+      link_contribution_regulations: https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/Beitragsreglement.pdf
       link_contribution_regulations_title: Beitragsreglement
-      link_data_protection: "https://www.sac-cas.ch/de/meta/datenschutz"
+      link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
       link_membership_title: Jetzt Mitgliedschaft beantragen
 
@@ -1888,7 +1963,7 @@ de:
 
   termination_reasons:
     destroy:
-      foreign_key_error: "Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich."
+      foreign_key_error: Es gibt Personen, die diesen Austrittsgrund verwenden, löschen ist daher nicht möglich.
 
   verify_membership:
     title: Verifizierung SAC CAS Mitgliedschaft
@@ -1899,7 +1974,7 @@ de:
   wizards:
     signup:
       section_fee_summary:
-        title: "Beitragskategorien %{section}"
+        title: Beitragskategorien %{section}
 
     steps:
       choose_sektion_title: Sektion wählen
@@ -1915,7 +1990,7 @@ de:
         main_email_field_title: E-Mail
         person_fields_title: Personendaten
         agreement_fields:
-          adult_consent_caption: "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
+          adult_consent_caption: Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe
           newsletter_caption: Ich möchte den SAC-Newsletter abonnieren.
         abo_basic_login:
           person_fields:
@@ -1939,19 +2014,27 @@ de:
           family_fields:
             add: Weiteres Familienmitglied hinzufügen
             email_taken: >-
-              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
+              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt
+              werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
             membership_info_box: >-
-              Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
+              Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für
+              max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 
-              Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.
+              Die Familienmitgliedschaft ist auch für Paare ohne Kinder möglich. Falls du eine Familienmitgliedschaft
+              mit einem bereits bestehenden Mitglied gründen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.
           various_fields:
             immediate_entry_date: Eintrittsdatum per sofort
             period_info_1: >-
-              Bis %{date_to} ist der volle Beitrag des laufenden Jahres geschuldet. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+              Bis %{date_to} ist der volle Beitrag des laufenden Jahres geschuldet.
+              Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
             period_info_2: >-
-              Bei Eintritt zwischen dem %{date_from} und dem %{date_to} erhältst du %{discount}% Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+              Bei Eintritt zwischen dem %{date_from} und dem %{date_to} erhältst du %{discount}%
+              Rabatt auf den jährlichen Beitrag des laufenden Jahres. Es können noch weitere
+              Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
             period_info_3: >-
-              Bei Eintritt ab dem %{date_from} entfällt der jährliche Beitrag des laufenden Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse im Ausland registriert ist.
+              Bei Eintritt ab dem %{date_from} entfällt der jährliche Beitrag des laufenden
+              Jahres. Es können noch weitere Gebühren anfallen, falls die Korrespondenzadresse
+              im Ausland registriert ist.
           family_buttons:
             next_as_single_link: Weiter als Einzelmitglied
             next_as_household_link: Weiter als Familienmitgliedschaft
@@ -1962,9 +2045,12 @@ de:
             my_membership: "Meine Mitgliedschaft"
             family_members: "Familienmitglieder"
             info_alert_neuanmeldungen_sektion: >-
-              Dein verbindlicher Antrag wird an die Sektion %{name} weitergeleitet. Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist.
+              Dein verbindlicher Antrag wird an die Sektion %{name} weitergeleitet. Über die
+              Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert,
+              sobald der Entscheid gefällt ist.
             info_alert_neuanmeldungen_nv: >-
-              Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt.
+              Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung
+              per E-Mail zugestellt.
             entry_per: "Eintritt per:"
             next_button: Mitgliedschaft beantragen
           summary_person_card:
@@ -1977,72 +2063,105 @@ de:
 
         various_fields:
           newsletter: Ich möchte den SAC-Newsletter abonnieren.
-          statutes_text: "Ich habe die %{link} gelesen und stimme diesen zu"
-          sektion_statuten_text: "Ich habe die %{link} gelesen und stimme diesen zu"
-          contribution_regulations_text: "Ich habe das %{link} gelesen und stimme diesem zu"
-          data_protection_text: "Ich habe die %{link} gelesen und stimme dieser zu"
+          statutes_text: Ich habe die %{link} gelesen und stimme diesen zu
+          sektion_statuten_text: Ich habe die %{link} gelesen und stimme diesen zu
+          contribution_regulations_text: Ich habe das %{link} gelesen und stimme diesem zu
+          data_protection_text: Ich habe die %{link} gelesen und stimme dieser zu
       choose_sektion:
         no_self_service_info_text: >-
-          Wir bitten dich den gewünschten Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf
+          Wir bitten dich den gewünschten
+          Sektionswechsel telefonisch oder per E-Mail* zu beantragen. Nimm dazu
+          bitte Kontakt mit uns auf
         backoffice_no_self_service_info_text: >-
-          Achtung: der Wechsel findet zu einer Sektion statt, die die Mitgliederaufnahme selbständig vornehmen. Allenfalls musst du diesen Wechsel vorgängig mit der Sektion abklären
+          Achtung: der Wechsel findet zu einer
+          Sektion statt, die die Mitgliederaufnahme selbständig vornehmen.
+          Allenfalls musst du diesen Wechsel vorgängig mit der Sektion abklären
       choose_membership:
         not_main_family_person_info_text: >-
-          Du kannst als Einzelperson eine Zusatzmitgliedschaft abschliessen. Falls die Zusatzmitgliedschaft für die ganze Familie gelten soll, muss die Familienhauptperson diese abschliessen. Wende dich dafür an %{name}.
+          Du kannst als Einzelperson eine Zusatzmitgliedschaft abschliessen.
+          Falls die Zusatzmitgliedschaft für die ganze Familie gelten soll,
+          muss die Familienhauptperson diese abschliessen. Wende dich dafür an
+          %{name}.
       switch_stammsektion:
         choose_sektion:
           family_membership_info_text: >-
-            Achtung: Der Stammsektionsektionswechsel wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_names}
+            Achtung: Der Stammsektionsektionswechsel wird für die gesamte Familienmitgliedschaft
+            beantragt. Davon betroffen sind: %{family_names}
         choose_date:
-          info_text: "Wann soll der Sektionswechsel stattfinden?"
+          info_text: Wann soll der Sektionswechsel stattfinden?
         summary:
           info_text: >-
-            Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Kläre bitte vorgängig die Mitgliederaufnahme mit %{sektion} ab. Nimm die Fakturierung bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültigt.
+            Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt.
+            Die Sektion umfasst einen manuellen Freigabeprozess. Kläre bitte vorgängig die
+            Mitgliederaufnahme mit %{sektion} ab. Nimm die Fakturierung bitte nach nach dem
+            Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft
+            in der neuen Stammsektion ist per sofort gültigt.
           info_text_no_confirmation: >-
-            Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt. Hiermit wird keine Rechnung ausgelöst. Nimm die Fakturierung bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültig.
+            Die Stammmitgliedschaft bei %{sektion} wird als %{beitragskategorie} beantragt.
+            Hiermit wird keine Rechnung ausgelöst. Nimm die Fakturierung bitte nach nach dem
+            Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft
+            in der neuen Stammsektion ist per sofort gültig.
           next_button: Kostenpflichtig bestellen
       join_zusatzsektion:
         summary:
           admission: >-
-            Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+            Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt.
+            Die Sektion umfasst einen manuellen Freigabeprozess. Hiermit wird noch keine Rechnung
+            ausgelöst, erst mit erteilter Freigabe. Die Zusatzmitgliedschaft wird nach Begleichung
+            der Rechnung aktiviert.
           admission_through_gs: >-
-            Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt. Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung der Rechnung aktiviert.
+            Die Zusatzmitgliedschaft bei %{sektion_name} wird als %{beitragskategorie} beantragt.
+            Hiermit wird eine Rechnung ausgelöst. Die Zusatzmitgliedschaft wird nach Begleichung
+            der Rechnung aktiviert.
           next_button: Kostenpflichtig bestellen
       membership_terminated_info:
         info: >-
-          Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder aktivieren möchtest, besuche bitte die SAC Webseite.
+          Deine Mitgliedschaft ist gekündigt per %{date}. Falls du deine Mitgliedschaft wieder
+          aktivieren möchtest, besuche bitte die SAC Webseite.
       termination_choose_date:
         info_text: "Wann soll der Austritt stattfinden?"
         warning_termination_by_section_only: >-
-          Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
+          Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für
+          das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
       termination_no_self_service:
         info_text: "Wir bitten dich den Austritt telefonisch oder per E-Mail zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
       ask_family_main_person:
         info_text: >-
-          Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt werden. Bitte wende dich an %{family_main_person}.
+          Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft
+          beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt
+          werden. Bitte wende dich an %{family_main_person}.
       leave_zusatzsektion:
         summary:
           family_warning: >-
-            Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}.
+            Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte
+            Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}.
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: Mitglied und Sektion via E-Mail informieren?
           next_button: "Austritt beantragen"
       termination:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
           termination_by_section_only: >-
-            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
+            Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion
+            für das Mitglied deaktiviert ist. Allenfalls musst du den Austritt vorgängig mit der Sektion abklären.
           family_warning: "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}."
           data_retention_info_title: "Aufbewahrung deiner Daten"
           data_retention_info_text: >-
-            Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich folgende Konsequenzen: Falls du später dem SAC wieder beitreten möchtest, beginnen deine Anzahl Mitgliederjahre wieder bei null. Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest, dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+            Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen.
+            Die Löschung hat für dich folgende Konsequenzen: Falls du später dem SAC wieder beitreten möchtest, beginnen
+            deine Anzahl Mitgliederjahre wieder bei null. Sofern vorhanden werden erlangte Qualifikationen und absolvierte
+            Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst
+            es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest,
+            dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden,
+            musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
           data_retention_consent: >-
             Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
           entry_fee_info_text: >-
-            Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt oder gelöscht wurden.
+            Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt
+            oder gelöscht wurden.
           entry_fee_consent: >-
             Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_via_email: Mitglied und Sektion via E-Mail informieren?
           next_button: "Austritt beantragen"
