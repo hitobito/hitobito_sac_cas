@@ -37,8 +37,8 @@ module HitobitoSacCas
         # In the development and test environment, we want to use the "original" locale
         # for i18n fallback. In the deployed application, transifex will include the fallback
         # translations in the regular locale files.
-        app.config.i18n.available_locales << :original
-        app.config.i18n.fallbacks = [:original, app.config.i18n.fallbacks.extract_options!]
+        app.config.i18n.available_locales << :gsw
+        app.config.i18n.fallbacks = [:gsw, app.config.i18n.fallbacks.extract_options!]
       end
     end
 
