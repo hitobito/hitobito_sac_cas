@@ -78,7 +78,7 @@ describe SelfRegistration::InfosComponent, type: :component do
     end
 
     it "renders link to statutes" do
-      expect(body).to have_link "Statuten", href: "https://www.sac-cas.ch/fileadmin/Spezial/SAC-Mitgliedschaft/DE/SAC_Statuten_A5_DE.pdf"
+      expect(body).to have_link "Statuten", href: "https://www.sac-cas.ch/fileadmin/Der_SAC/Statuten/SAC_Statuten_A5_DE.pdf"
     end
 
     it "renders link to contributation regulations" do
