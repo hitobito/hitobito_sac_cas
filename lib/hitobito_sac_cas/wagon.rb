@@ -258,6 +258,49 @@ module HitobitoSacCas
       People::Membership::VerifyController.include Localizable
 
       ## Jobs
+      # configured zips (INT) total to 1337 people, adjust batch to 251 from 1000
+      AddressSynchronizationJob.batch_size = 250 # default 1000
+      AddressSynchronizationJob.role_types = %w[
+        Group::SektionsMitglieder::Mitglied
+        Group::AboMagazin::Abonnent
+      ]
+      AddressSynchronizationJob.person_constraints = {
+        country: :CH,
+        zip_code: %w[
+          2502
+          2503
+          2504
+          2505
+          3333
+          4322
+          4324
+          4325
+          4332
+          4333
+          4334
+          5026
+          5027
+          5028
+          5070
+          5072
+          5073
+          5074
+          5075
+          5076
+          5077
+          5078
+          5082
+          5083
+          5085
+          5225
+          5237
+          5272
+          5277
+          6614
+          8154
+          8165
+        ]
+      }
       Event::ParticipationConfirmationJob.prepend SacCas::Event::ParticipationConfirmationJob
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
