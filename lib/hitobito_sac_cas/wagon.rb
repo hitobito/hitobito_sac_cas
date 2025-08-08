@@ -27,11 +27,19 @@ module HitobitoSacCas
       end
     end
 
-    config.before_initialize do |_app|
+    config.before_initialize do |app|
       Settings.add_source!(File.join(paths["config"].existent, "settings.yml"))
       Settings.add_source!(File.join(paths["config"].existent, "settings.local.yml"))
       Settings.add_source!(File.join(paths["config"].existent, "settings", "#{Rails.env}.yml"))
       Settings.reload!
+
+      unless Rails.env.production?
+        # In the development and test environment, we want to use the "original" locale
+        # for i18n fallback. In the deployed application, transifex will include the fallback
+        # translations in the regular locale files.
+        app.config.i18n.available_locales << :original
+        app.config.i18n.fallbacks = [:original, app.config.i18n.fallbacks.extract_options!]
+      end
     end
 
     config.to_prepare do # rubocop:disable Metrics/BlockLength
