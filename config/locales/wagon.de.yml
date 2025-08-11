@@ -29,7 +29,7 @@ de:
 
   layouts:
     unauthorized:
-      main_self_registration: "Kein SAC Mitglied? Kostenloses SAC-Konto eröffnen"
+      main_self_registration: "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen"
 
   settings:
     email:
