@@ -6,7 +6,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if can?(:update, entry) && entry.sac_membership_anytime?
+- if can?(:update, entry) && entry.sac_membership_active?
   %section.sac-membership.row
     %h2.col-md-8
       = t('.section_sac_membership')
