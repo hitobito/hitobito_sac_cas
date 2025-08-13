@@ -159,7 +159,7 @@ class Invoices::SacMemberships::MembershipManager
   def log_missing_membership
     HitobitoLogEntry.create!(
       category: "rechnungen",
-      level: :warn,
+      level: :error,
       subject: person,
       message: "Eingegangene Zahlung der Mitgliedschaftsrechnung #{year} für " \
                "#{group.layer_group} konnte keiner Mitgliedschaft zugeordnet werden."
