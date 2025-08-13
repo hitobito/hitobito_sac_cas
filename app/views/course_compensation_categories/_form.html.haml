@@ -6,4 +6,8 @@
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_field :short_name
   = f.labeled_i18n_enum_field :kind, CourseCompensationCategory.kind_labels
-  = f.labeled_input_fields :description, :name_leader, :name_assistant_leader
+  = f.labeled_input_fields :description,
+                           :name_leader,
+                           :name_assistant_leader,
+                           :name_leader_aspirant,
+                           :name_assistant_leader_aspirant

@@ -33,7 +33,7 @@ class Export::Pdf::Participations::KeyDataSheet
 
   def filename
     parts = [t(:file_name_prefix)]
-    parts << leader_type_file_prefix
+    parts << t(:"#{highest_leader_role_type}_file_prefix")
     parts << person.full_name.parameterize(separator: "_", preserve_case: true)
     parts << Time.zone.now.strftime("%Y_%m_%d_%H%M")
     [parts.join("_"), :pdf].join(".")
@@ -69,11 +69,9 @@ class Export::Pdf::Participations::KeyDataSheet
     }[event.language.to_sym] || :de
   end
 
-  def leader_type_file_prefix
-    if @participation.roles.any? { _1.is_a?(Event::Course::Role::Leader) }
-      t(:leader_file_prefix)
-    else
-      t(:assistant_leader_file_prefix)
-    end
+  def highest_leader_role_type
+    Event::Course::LEADER_ROLES.find do |type|
+      @participation.roles.any? { |role| role.type == type }
+    end.demodulize.underscore
   end
 end

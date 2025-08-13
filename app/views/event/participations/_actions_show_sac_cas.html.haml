@@ -7,7 +7,7 @@
   = action_button(t(".reactivate"), reactivate_group_event_participation_path(@group, @event, entry.id), :undo_alt, method: :put)
 
 - if @event.course?
-  - if @group.root? && can?(:summon, entry.model) && !entry.roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
+  - if @group.root? && can?(:summon, entry.model) && !entry.roles.exists?(type: Event::Course::LEADER_ROLES)
     = action_button(t('.create_invoice_button'),
                     new_group_event_participation_invoice_path(@group, @event, entry), :plus,
                     data: {in_button_group: true})

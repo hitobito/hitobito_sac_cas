@@ -88,7 +88,12 @@ module SacCas::Event::Course
 
   I18N_KIND = "activerecord.attributes.event/kind"
 
-  LEADER_ROLES = [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map(&:sti_name)
+  LEADER_ROLES = [
+    Event::Course::Role::Leader,
+    Event::Course::Role::AssistantLeader,
+    Event::Course::Role::LeaderAspirant,
+    Event::Course::Role::AssistantLeaderAspirant
+  ].map(&:sti_name)
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 

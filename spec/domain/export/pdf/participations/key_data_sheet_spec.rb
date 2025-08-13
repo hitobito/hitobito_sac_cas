@@ -100,17 +100,53 @@ describe Export::Pdf::Participations::KeyDataSheet do
   context "course compensation categories of kind day and flat" do
     before do
       event_start_at = event.dates.order(start_at: :asc).first.start_at
-      day_category = event.kind.course_compensation_categories.create!(kind: :day, short_name: "Tageshonorar", name_leader: "Tageshonorar Kursleiter", name_assistant_leader: "Tageshonorar Klassenleiter")
-      day_category.course_compensation_rates.create!(rate_leader: 100, rate_assistant_leader: 50, valid_from: event_start_at - 10.days)
+      day_category = event.kind.course_compensation_categories.create!(
+        kind: :day,
+        short_name: "Tageshonorar",
+        name_leader: "Tageshonorar Kursleiter",
+        name_assistant_leader: "Tageshonorar Klassenleiter"
+      )
+      day_category.course_compensation_rates.create!(
+        rate_leader: 100,
+        rate_assistant_leader: 50,
+        valid_from: event_start_at - 10.days
+      )
 
-      flat_category = event.kind.course_compensation_categories.create!(kind: :flat, short_name: "Kurspauschale", name_leader: "Pauschale Kursleiter", name_assistant_leader: "Pauschale Klassenleiter")
-      flat_category.course_compensation_rates.create!(rate_leader: 60, rate_assistant_leader: 40, valid_from: event_start_at - 10.days)
+      flat_category = event.kind.course_compensation_categories.create!(
+        kind: :flat,
+        short_name: "Kurspauschale",
+        name_leader: "Pauschale Kursleiter",
+        name_assistant_leader: "Pauschale Klassenleiter"
+      )
+      flat_category.course_compensation_rates.create!(
+        rate_leader: 60,
+        rate_assistant_leader: 40,
+        valid_from: event_start_at - 10.days
+      )
 
-      day_category_without_valid_rate = event.kind.course_compensation_categories.create!(kind: :day, short_name: "Tageshonorar ohne validen Ansatz", name_leader: "Tageshonorar ohne validen Ansatz Kursleiter", name_assistant_leader: "Tageshonorar ohne validen Ansatz Klassenleiter")
-      day_category_without_valid_rate.course_compensation_rates.create!(rate_leader: 100, rate_assistant_leader: 50, valid_from: event_start_at + 10.days)
+      day_category_without_valid_rate = event.kind.course_compensation_categories.create!(
+        kind: :day,
+        short_name: "Tageshonorar ohne validen Ansatz",
+        name_leader: "Tageshonorar ohne validen Ansatz Kursleiter",
+        name_assistant_leader: "Tageshonorar ohne validen Ansatz Klassenleiter"
+      )
+      day_category_without_valid_rate.course_compensation_rates.create!(
+        rate_leader: 100,
+        rate_assistant_leader: 50,
+        valid_from: event_start_at + 10.days
+      )
 
-      flat_category_without_valid_rate = event.kind.course_compensation_categories.create!(kind: :flat, short_name: "Kurspauschale ohne validen Ansatz", name_leader: "Pauschale ohne validen Ansatz Kursleiter", name_assistant_leader: "Pauschale ohne validen Ansatz Klassenleiter")
-      flat_category_without_valid_rate.course_compensation_rates.create!(rate_leader: 60, rate_assistant_leader: 40, valid_from: event_start_at + 10.days)
+      flat_category_without_valid_rate = event.kind.course_compensation_categories.create!(
+        kind: :flat,
+        short_name: "Kurspauschale ohne validen Ansatz",
+        name_leader: "Pauschale ohne validen Ansatz Kursleiter",
+        name_assistant_leader: "Pauschale ohne validen Ansatz Klassenleiter"
+      )
+      flat_category_without_valid_rate.course_compensation_rates.create!(
+        rate_leader: 60,
+        rate_assistant_leader: 40,
+        valid_from: event_start_at + 10.days
+      )
     end
 
     context "as leader" do
@@ -169,11 +205,29 @@ describe Export::Pdf::Participations::KeyDataSheet do
   context "course compensation categories of kind budget" do
     before do
       event_start_at = event.dates.order(start_at: :asc).first.start_at
-      budget_category = event.kind.course_compensation_categories.create!(kind: :budget, short_name: "Anreise", name_leader: "Anreise Kursleiter", name_assistant_leader: "Anreise Klassenleiter")
-      budget_category.course_compensation_rates.create!(rate_leader: 30, rate_assistant_leader: 50, valid_from: event_start_at - 10.days)
+      budget_category = event.kind.course_compensation_categories.create!(
+        kind: :budget,
+        short_name: "Anreise",
+        name_leader: "Anreise Kursleiter",
+        name_assistant_leader: "Anreise Klassenleiter"
+      )
+      budget_category.course_compensation_rates.create!(
+        rate_leader: 30,
+        rate_assistant_leader: 50,
+        valid_from: event_start_at - 10.days
+      )
 
-      budget_category_without_valid_rate = event.kind.course_compensation_categories.create!(kind: :budget, short_name: "Anreise ohne validen Ansatz", name_leader: "Anreise Kursleiter ohne validen Ansatz", name_assistant_leader: "Anreise Klassenleiter ohne validen Ansatz")
-      budget_category_without_valid_rate.course_compensation_rates.create!(rate_leader: 30, rate_assistant_leader: 50, valid_from: event_start_at + 10.days)
+      budget_category_without_valid_rate = event.kind.course_compensation_categories.create!(
+        kind: :budget,
+        short_name: "Anreise ohne validen Ansatz",
+        name_leader: "Anreise Kursleiter ohne validen Ansatz",
+        name_assistant_leader: "Anreise Klassenleiter ohne validen Ansatz"
+      )
+      budget_category_without_valid_rate.course_compensation_rates.create!(
+        rate_leader: 30,
+        rate_assistant_leader: 50,
+        valid_from: event_start_at + 10.days
+      )
     end
 
     context "as leader" do
@@ -221,7 +275,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     let(:event_role_type) { Event::Course::Role::Leader }
 
     it "sanitizes filename" do
-      expect(subject.filename).to eq "Eckdatenblatt_Kursleiter_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
+      expect(subject.filename).to eq "Eckdatenblatt_Kursleitung_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
     end
 
     context "text" do
@@ -281,7 +335,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
     let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
     it "sanitizes filename" do
-      expect(subject.filename).to eq "Eckdatenblatt_Klassenleiter_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
+      expect(subject.filename).to eq "Eckdatenblatt_Klassenleitung_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
     end
 
     context "text" do

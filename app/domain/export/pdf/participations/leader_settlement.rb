@@ -81,7 +81,13 @@ module Export::Pdf::Participations
     end
 
     def role_type
-      @role_type ||= participation.roles.find { |r| Event::Course::LEADER_ROLES.include?(r.type) }.type.demodulize.underscore
+      @role_type ||= find_highest_role_type.demodulize.underscore
+    end
+
+    def find_highest_role_type
+      Event::Course::LEADER_ROLES.find do |type|
+        participation.roles.any? { |role| role.type == type }
+      end
     end
   end
 end
