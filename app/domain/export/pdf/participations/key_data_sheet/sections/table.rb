@@ -104,12 +104,12 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_category_name(rate)
-    rate.course_compensation_category.send(:"name_#{participation_leader_type}").presence ||
+    rate.course_compensation_category.send(:"name_#{highest_leader_role_type}").presence ||
       rate.course_compensation_category.short_name
   end
 
   def compensation_rate(rate)
-    rate.send(:"rate_#{participation_leader_type}")
+    rate.send(:"rate_#{highest_leader_role_type}")
   end
 
   def make_subtable(data, options = {})
@@ -122,12 +122,11 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     t("accommodations.#{key}")
   end
 
-  def participation_leader_type
-    if roles.any? { _1.is_a?(Event::Course::Role::Leader) }
-      :leader
-    else
-      :assistant_leader
-    end
+  def highest_leader_role_type
+    @highest_leader_role_type ||=
+      Event::Course::LEADER_ROLES.find do |type|
+        roles.any? { |role| role.type == type }
+      end.demodulize.underscore
   end
 
   def t(key, options = {})
