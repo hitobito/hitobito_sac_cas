@@ -206,6 +206,11 @@ gsw:
 
   activerecord:
     attributes:
+      account_completion:
+        email: E-Mail
+        password: Passwort
+        email_confirmation: E-Mail Bestätigung
+        password_confirmation: Passwort Bestätigung
       contact_account:
         predefined_labels:
           landline: Festnetz
@@ -1743,6 +1748,13 @@ gsw:
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Die Alpen Rechnung:"
         create_invoice: Rechnung erstellen
 
+    account_completions:
+      show:
+        token_expired: Das verwendete Token ist nicht mehr gültig.
+        password_requirements: Passwort muss mindestens 12 Zeichen lang sein.
+        explain_confirmation_email: >-
+          Nachdem du deine E-Mail Adresse und dein Passwort hier gesetzt hast schicken wir dir ein E-Mail. Sobald du
+          deine E-Mail Adresse gemäss den Anwesungen im E-Mail bestätigt hast, ist dein Login aktiv.
     membership:
       verify:
         member_details_sac_cas:
