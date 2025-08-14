@@ -48,7 +48,8 @@ class People::MembershipInvoicesController < ApplicationController
       external_invoice,
       invoice_form.reference_date,
       discount: invoice_form.discount,
-      new_entry: invoice_form.new_entry
+      new_entry: invoice_form.new_entry,
+      dont_send: invoice_form.dont_send
     ).enqueue!
 
     redirect_to external_invoices_group_person_path(group, person),
@@ -69,7 +70,8 @@ class People::MembershipInvoicesController < ApplicationController
   def invoice_form_params
     params
       .require(:people_membership_invoice_form)
-      .permit(:reference_date, :invoice_date, :send_date, :section_id, :new_entry, :discount)
+      .permit(:reference_date, :invoice_date, :send_date,
+        :section_id, :new_entry, :discount, :dont_send)
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)

@@ -40,6 +40,7 @@ describe People::MembershipInvoicesController do
 
       job = Delayed::Job.last.payload_object
       expect(job.new_entry).to eq true
+      expect(job.dont_send).to eq nil
       expect(job.discount).to eq 50
       expect(job.reference_date).to eq today
     end
@@ -77,7 +78,7 @@ describe People::MembershipInvoicesController do
 
       it "creates external invoice and enqueues job" do
         expect do
-          post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
+          post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true, dont_send: true})
         end.to change { ExternalInvoice.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
@@ -86,6 +87,7 @@ describe People::MembershipInvoicesController do
 
         job = Delayed::Job.last.payload_object
         expect(job.new_entry).to eq true
+        expect(job.dont_send).to eq true
         expect(job.discount).to eq 50
         expect(job.reference_date).to eq today
       end
