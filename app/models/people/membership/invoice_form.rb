@@ -14,6 +14,7 @@ class People::Membership::InvoiceForm
   attribute :reference_date, :date
   attribute :invoice_date, :date
   attribute :send_date, :date
+  attribute :dont_send, :boolean
   attribute :discount, :integer
   attribute :new_entry, :boolean
   attribute :section_id, :integer

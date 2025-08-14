@@ -14,12 +14,14 @@ module Invoices
       DOCUMENT_CODES = {
         sac_membership_yearly: "R",
         sac_membership: "R",
+        sac_membership_not_sent: "R",
         course: "RK",
         sac_magazine: "RA"
       }.with_indifferent_access.freeze
       PROCESS_FLOW_NUMBERS = {
         sac_membership_yearly: 1, # membership invoice created by the yearly batch job
         sac_membership: 3, # membership invoice created individually
+        sac_membership_not_sent: 6, # membership invoice created individually, without sending it to member
         course: 2,
         sac_magazine: 4
       }.with_indifferent_access.freeze

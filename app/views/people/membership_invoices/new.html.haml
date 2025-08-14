@@ -40,6 +40,10 @@
         %div
           = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false
 
+    = f.labeled(:dont_send) do
+      = f.inline_radio_button :dont_send, false, t("global.yes"), true, checked: true
+      = f.inline_radio_button :dont_send, true, t("global.no"), true
+
     = f.labeled(:discount) do
       = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
       = f.inline_radio_button :discount, 50, "50%", true

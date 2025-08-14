@@ -29,17 +29,38 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
   let(:discount) { nil }
   let(:new_entry) { false }
+  let(:dont_send) { false }
 
-  subject(:job) { described_class.new(external_invoice, reference_date, discount: discount, new_entry: new_entry) }
+  subject(:job) do
+    described_class.new(
+      external_invoice,
+      reference_date,
+      discount: discount,
+      new_entry: new_entry,
+      dont_send: dont_send
+    )
+  end
 
   before { allow(job).to receive(:client).and_return(client) }
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
+    order = satisfy { |o| o.full_attrs[:process_flow_number] == 3 }
     allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
-    allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
+    allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create).with(order)
     expect do
       job.perform
     end.to change { external_invoice.reload.total }
+  end
+
+  context "without send_invoice" do
+    let(:dont_send) { true }
+
+    it "uses special process flow number if invoice should not be sent" do
+      order = satisfy { |o| o.full_attrs[:process_flow_number] == 6 }
+      allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
+      allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create).with(order)
+      job.perform
+    end
   end
 
   context "invoice errors" do

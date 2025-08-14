@@ -6,15 +6,16 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInvoiceJob
-  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry]
+  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry, :dont_send]
 
-  attr_reader :reference_date, :discount, :new_entry
+  attr_reader :reference_date, :discount, :new_entry, :dont_send
 
-  def initialize(external_invoice, reference_date, discount: nil, new_entry: false)
+  def initialize(external_invoice, reference_date, discount: nil, new_entry: false, dont_send: false)
     super(external_invoice)
     @reference_date = reference_date
     @discount = discount
     @new_entry = new_entry
+    @dont_send = dont_send
   end
 
   private
@@ -23,6 +24,11 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
     @invoice_data ||= Invoices::Abacus::MembershipInvoiceGenerator
       .new(external_invoice.person_id, external_invoice.link, reference_date, custom_discount: discount)
       .build(new_entry: new_entry)
+  end
+
+  def transmit_sales_order
+    external_invoice.invoice_kind = :sac_membership_not_sent if dont_send
+    super
   end
 
   def default_invoice_error_message

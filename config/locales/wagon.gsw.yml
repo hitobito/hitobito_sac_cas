@@ -63,6 +63,7 @@ gsw:
         send_date: "Versand- und Rechnungsdatum"
         discount: "Rabatt"
         new_entry: "Eintrittsgebühr"
+        dont_send: Rechnung versenden
         section_id: "Mitgliedschaft"
       people/yearly_membership/invoice_form:
         invoice_year: "Rechnungsjahr"
