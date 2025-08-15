@@ -74,6 +74,8 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
       * SAC Kurskader
         * Kursleiter*in: []  --  (Group::SacCasKurskader::Kursleiter)
         * Klassenlehrer*in: []  --  (Group::SacCasKurskader::Klassenlehrer)
+        * Kursleiter*in (Aspirant): []  --  (Group::SacCasKurskader::KursleiterAspirant)
+        * Klassenlehrer*in (Aspirant): []  --  (Group::SacCasKurskader::KlassenlehrerAspirant)
       * Verband & Organisation
         * Präsidium: []  --  (Group::SacCasVerband::Praesidium)
         * Mitglied: []  --  (Group::SacCasVerband::Mitglied)
