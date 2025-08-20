@@ -22,6 +22,7 @@ module People
 
     def update
       account_completion.attributes = model_params
+      return redirect_to(account_completion_path(token: params[:token])) if account_completion.expired?
 
       if account_completion.valid? && update_person && person.send_confirmation_instructions
         redirect_to person_path(account_completion.person), notice: t("devise.confirmations.send_instructions")

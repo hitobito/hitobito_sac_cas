@@ -8,8 +8,19 @@
 require "spec_helper"
 
 describe AccountCompletion do
+  let(:mitglied) { people(:mitglied) }
+
   describe "::validations" do
     let(:model) { described_class.new }
+    let(:model_params) {
+      {
+        person: mitglied,
+        email: "test@example.com",
+        email_confirmation: "test@example.com",
+        password: "testtesttest",
+        password_confirmation: "testtesttest"
+      }
+    }
 
     it "is invalid without person" do
       expect(model).not_to be_valid
@@ -18,7 +29,7 @@ describe AccountCompletion do
 
     context "update context" do
       it "is invalid with blank attrs" do
-        model.person = people(:mitglied)
+        model.person = mitglied
         expect(model.valid?).to eq true
         expect(model.valid?(:update)).to eq false
         expect(model.errors.full_messages).to eq [
@@ -28,25 +39,40 @@ describe AccountCompletion do
           "Passwort Bestätigung muss ausgefüllt werden"
         ]
       end
+
       it "is valid if attrs are set correctly" do
-        model.person = people(:mitglied)
-        model.email = "test@example.com"
-        model.email_confirmation = "test@example.com"
-        model.password = "testtesttest"
-        model.password_confirmation = "testtesttest"
+        model.attributes = model_params
         expect(model.valid?(:update)).to eq true
       end
 
       it "requires confirmations to match related attrs" do
-        model.person = people(:mitglied)
-        model.email = "test@example.com"
+        model.attributes = model_params
         model.email_confirmation = "test1@example.com"
-        model.password = "testtesttest"
         model.password_confirmation = "testtesttest1"
         expect(model.valid?(:update)).to eq false
         expect(model.errors.full_messages).to eq [
           "E-Mail Bestätigung stimmt nicht mit E-Mail überein",
           "Passwort Bestätigung stimmt nicht mit Passwort überein"
+        ]
+      end
+
+      it "is invalid if email address is invalid", :with_truemail_validation do
+        model.attributes = model_params
+        model.email = "test"
+        model.email_confirmation = "test"
+        expect(model.valid?(:update)).to eq false
+        expect(model.errors.full_messages).to eq [
+          "E-Mail ist nicht gültig"
+        ]
+      end
+
+      it "is invalid if email address is taken" do
+        model.attributes = model_params
+        model.email = mitglied.email
+        model.email_confirmation = mitglied.email
+        expect(model.valid?(:update)).to eq false
+        expect(model.errors.full_messages).to eq [
+          "E-Mail ist bereits vergeben"
         ]
       end
     end

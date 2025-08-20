@@ -45,6 +45,12 @@ describe People::AccountCompletionsController do
   end
 
   describe "PUT#update" do
+    it "raises when trying to complete an expired model" do
+      account_completion.update_columns(created_at: 4.months.ago)
+      patch :update, params: {token: account_completion.token}
+      expect(response).to redirect_to(account_completion_path(token: account_completion.token))
+    end
+
     it "validates model" do
       patch :update, params: {token: account_completion.token, account_completion: {
         email: "test@example.com",

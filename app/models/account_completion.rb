@@ -14,14 +14,15 @@ class AccountCompletion < ActiveRecord::Base
   attribute :password
 
   validates_by_schema
+  has_secure_token
 
   with_options on: :update do
     validates :email, :password, confirmation: true, presence: true
     validates :email_confirmation, :password_confirmation, presence: true
     validates :password, length: {in: Devise.password_length}, allow_blank: true
-  end
 
-  before_create :compute_token
+    validate :assert_email_valid_and_available, if: -> { email.present? }
+  end
 
   def self.generate(people, host:)
     CSV.generate do |csv|
@@ -38,7 +39,12 @@ class AccountCompletion < ActiveRecord::Base
 
   private
 
-  def compute_token
-    self.token = Devise.token_generator.generate(AccountCompletion, :token)[0]
+  def assert_email_valid_and_available
+    unless Truemail.valid?(email)
+      errors.add(:email, :invalid)
+    end
+    if Person.exists?(email: email)
+      errors.add(:email, :taken)
+    end
   end
 end
