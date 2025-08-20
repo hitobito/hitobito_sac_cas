@@ -1661,7 +1661,7 @@ fr:
         accommodation: Hébergement
         accommodation_budget:
           label: Budget pour l’hébergement
-          text: Par personne / nuit avec demi-pension
+          text: "Cabanes 85 CHF\nPension/auberge de montagne 125 CHF\nPar personne/nuit en demi-pension"
         accommodations:
           sac: Réservation par le CAS
           event_specific: Réservation par le ou la responsable du cours
@@ -1675,10 +1675,10 @@ fr:
           text: Selon l’annonce des cours / randonnées du CAS
         participant_program_course:
           label: Programme détaillé des cours pour les participant·e·s
-          text: Est demandé par le secrétariat auprès de la direction 8 semaines avant le début par e-mail / via le cloud
+          text: Est demandé par le secrétariat auprès de la direction 8 semaines avant le début par e-mail.
         participant_program_tour:
           label: Programme détaillé des randonnées pour les participant·e·s
-          text: Est créé par le secrétariat et déposé dans le cloud du CAS au plus tard 6 semaines avant le début
+          text: Est créé par le secrétariat et déposé au plus tard 6 semaines avant le début.
         application_closing_at: Date limite d’inscription
         minimum_participants: Nombre minimal de participant·e·s
         maximum_participants: Nombre maximal de participant·e·s

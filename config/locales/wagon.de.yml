@@ -29,7 +29,7 @@ de:
 
   layouts:
     unauthorized:
-      main_self_registration: "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen"
+      main_self_registration: "Kein SAC-Mitglied? Jetzt dein kostenloses SAC-Konto erstellen."
 
   settings:
     email:
@@ -1430,7 +1430,7 @@ de:
         already_subscribed_to_abo: Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.
         already_member_of_tourenportal: Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.
 
-        existing_family_notice: Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
+        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
         signed_up_notice: Deine Anmeldung wurde erfolgreich gespeichert.
 
       agreement_link:
@@ -1584,7 +1584,7 @@ de:
       leader_file_prefix: Kursleiter
       assistant_leader_file_prefix: Klassenleiter
       year_title: "SAC Kurse / Touren %{year}"
-      title: Eckdatenblatt -Kurs-/Tourenleitung
+      title: Eckdatenblatt
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
         number: Veranstaltungs-Nr.
@@ -1597,7 +1597,7 @@ de:
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget
-          text: Pro Person / Nacht mit Halbpension
+          text: "Hütten 85 CHF\nPension, Berggasthaus 125 CHF\nPro Person / Nacht mit Halbpension"
         accommodations:
           sac: Wird reserviert durch SAC
           event_specific: Wird reserviert durch Kursleitung
@@ -1611,10 +1611,10 @@ de:
           text: Gemäss Ausschreibung SAC Kurse / Touren 2024
         participant_program_course:
           label: Detailprogramm Teilnehmer Kurse
-          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung eingefordert
+          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
         participant_program_tour:
           label: Detailprogramm Teilnehmer Touren
-          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-Cloud hinterlegt
+          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
         application_closing_at: Anmeldeschluss
         minimum_participants: Minimale Teilnehmerzahl
         maximum_participants: Maximale Teilnehmerzahl
