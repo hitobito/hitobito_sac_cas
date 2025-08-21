@@ -104,6 +104,8 @@ module SacCas::Event::Course
 
     self.role_types = [Event::Course::Role::Leader,
       Event::Course::Role::AssistantLeader,
+      Event::Course::Role::LeaderAspirant,
+      Event::Course::Role::AssistantLeaderAspirant,
       Event::Course::Role::Participant]
 
     self.used_attributes += [
