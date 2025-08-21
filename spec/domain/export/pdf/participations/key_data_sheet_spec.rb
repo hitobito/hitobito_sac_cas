@@ -35,7 +35,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
   let(:texts) {
     [
       [70, 776, "SAC Kurse / Touren #{year}"],
-      [70, 737, "Eckdatenblatt -Kurs-/Tourenleitung"],
+      [70, 737, "Eckdatenblatt"],
       [70, 712, "Hallo Edmund"],
       [70, 688, "Nachfolgend senden wir dir die wichtigsten Informationen:"],
       [75, 656, "Veranstaltungs-Nr."],
@@ -55,37 +55,41 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 513, "Unterkunft"],
       [195, 513, "Wird reserviert durch SAC"],
       [75, 493, "Unterkunft Budget"],
-      [195, 493, "Pro Person / Nacht mit Halbpension"],
-      [75, 472, "Unterkunft Kategorie"],
-      [195, 472, "ohne Übernachtung"],
-      [75, 452, "Durchführungssprache"],
-      [195, 452, "Deutsch"],
-      [75, 431, "Inhalt / Programm"],
-      [195, 431, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 411, "Teilnehmeranforderungen"],
-      [195, 411, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
-      [75, 391, "Detailprogramm Teilnehmer"],
-      [75, 380, "Kurse"],
-      [195, 391, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung"],
-      [195, 380, "eingefordert"],
-      [75, 360, "Detailprogramm Teilnehmer"],
-      [75, 349, "Touren"],
-      [195, 360, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-"],
-      [195, 349, "Cloud hinterlegt"],
-      [75, 329, "Anmeldeschluss"],
-      [75, 309, "Minimale Teilnehmerzahl"],
-      [75, 288, "Maximale Teilnehmerzahl"],
-      [75, 268, "Durchführung - ja/nein?"],
-      [195, 268, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 257, "gefällt"],
-      [75, 237, "Durchführung – Absage"],
-      [195, 237, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 216, "Ideale Klassengrösse"],
-      [75, 196, "Maximale Klassengrösse"],
-      [75, 176, "Klassenlehrer"],
-      [195, 176, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 165, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
-      [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
+      [195, 493, "Hütten 85 CHF"],
+      [195, 482, "Pension, Berggasthaus 125 CHF"],
+      [195, 472, "Pro Person / Nacht mit Halbpension"],
+      [75, 451, "Unterkunft Kategorie"],
+      [195, 451, "ohne Übernachtung"],
+      [75, 431, "Durchführungssprache"],
+      [195, 431, "Deutsch"],
+      [75, 411, "Inhalt / Programm"],
+      [195, 411, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 390, "Teilnehmeranforderungen"],
+      [195, 390, "Gemäss Ausschreibung SAC Kurse / Touren 2024"],
+      [75, 370, "Detailprogramm Teilnehmer"],
+      [75, 359, "Kurse"],
+      [195, 370, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung"],
+      [195, 359, "eingefordert."],
+      [75, 339, "Detailprogramm Teilnehmer"],
+      [75, 329, "Touren"],
+      [195, 339, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
+      [75, 308, "Anmeldeschluss"],
+      [195, 308, "21.10.2025"],
+      [75, 288, "Minimale Teilnehmerzahl"],
+      [75, 267, "Maximale Teilnehmerzahl"],
+      [75, 247, "Durchführung - ja/nein?"],
+      [195, 247, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 236, "gefällt"],
+      [75, 216, "Durchführung – Absage"],
+      [195, 216, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 196, "Ideale Klassengrösse"],
+      [75, 175, "Maximale Klassengrösse"],
+      [75, 155, "Klassenlehrer"],
+      [195, 155, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 144, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [70,
+        40,
+        "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
 
@@ -178,10 +182,12 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         expect(text_with_position(analyzer)).to include(
           [75, 493, "Unterkunft Budget"],
-          [195, 493, "Pro Person / Nacht mit Halbpension"],
-          [195, 472, "Anreise Kursleiter"],
-          [435, 472, "CHF"],
-          [485, 472, "30.0"]
+          [195, 493, "Hütten 85 CHF"],
+          [195, 482, "Pension, Berggasthaus 125 CHF"],
+          [195, 472, "Pro Person / Nacht mit Halbpension"],
+          [195, 451, "Anreise Kursleiter"],
+          [435, 451, "CHF"],
+          [485, 451, "30.0"]
         )
       end
 
@@ -196,10 +202,12 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         expect(text_with_position(analyzer)).to include(
           [75, 493, "Unterkunft Budget"],
-          [195, 493, "Pro Person / Nacht mit Halbpension"],
-          [195, 472, "Anreise Klassenleiter"],
-          [435, 472, "CHF"],
-          [485, 472, "50.0"]
+          [195, 493, "Hütten 85 CHF"],
+          [195, 482, "Pension, Berggasthaus 125 CHF"],
+          [195, 472, "Pro Person / Nacht mit Halbpension"],
+          [195, 451, "Anreise Klassenleiter"],
+          [435, 451, "CHF"],
+          [485, 451, "50.0"]
         )
       end
 
