@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::Section
+  include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
+
   FIRST_COLUMN_WIDTH = 120
   COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
   ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS = [50, 70]
@@ -104,12 +106,12 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_category_name(rate)
-    rate.course_compensation_category.send(:"name_#{highest_leader_role_type}").presence ||
+    rate.course_compensation_category.send(:"name_#{highest_leader_role_type(roles)}").presence ||
       rate.course_compensation_category.short_name
   end
 
   def compensation_rate(rate)
-    rate.send(:"rate_#{highest_leader_role_type}")
+    rate.send(:"rate_#{highest_leader_role_type(roles)}")
   end
 
   def make_subtable(data, options = {})
@@ -120,13 +122,6 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     key = event.reserve_accommodation? ? "sac" : "event_specific"
 
     t("accommodations.#{key}")
-  end
-
-  def highest_leader_role_type
-    @highest_leader_role_type ||=
-      Event::Course::LEADER_ROLES.find do |type|
-        roles.any? { |role| role.type == type }
-      end.demodulize.underscore
   end
 
   def t(key, options = {})

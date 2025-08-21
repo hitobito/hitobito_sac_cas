@@ -5,6 +5,8 @@
 
 module Export::Pdf::Participations
   class LeaderSettlement
+    include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
+
     def initialize(participation, iban, options = {})
       @participation = participation
       @iban = iban
@@ -81,13 +83,7 @@ module Export::Pdf::Participations
     end
 
     def role_type
-      @role_type ||= find_highest_role_type.demodulize.underscore
-    end
-
-    def find_highest_role_type
-      Event::Course::LEADER_ROLES.find do |type|
-        participation.roles.any? { |role| role.type == type }
-      end
+      @role_type ||= highest_leader_role_type(participation.roles)
     end
   end
 end

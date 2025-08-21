@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Export::Pdf::Participations::KeyDataSheet
+  include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
+
   FONT_SIZE = 9
   # Explicitely use the default values of prawn for margin and font to keep the current layout after changing the code
   # to use `Export::Pdf::Document` which sets those values to something else.
@@ -33,7 +35,7 @@ class Export::Pdf::Participations::KeyDataSheet
 
   def filename
     parts = [t(:file_name_prefix)]
-    parts << t(:"#{highest_leader_role_type}_file_prefix")
+    parts << t(:"#{highest_leader_role_type(@participation.roles)}_file_prefix")
     parts << person.full_name.parameterize(separator: "_", preserve_case: true)
     parts << Time.zone.now.strftime("%Y_%m_%d_%H%M")
     [parts.join("_"), :pdf].join(".")
@@ -67,11 +69,5 @@ class Export::Pdf::Participations::KeyDataSheet
       fr: :fr,
       it: :it
     }[event.language.to_sym] || :de
-  end
-
-  def highest_leader_role_type
-    Event::Course::LEADER_ROLES.find do |type|
-      @participation.roles.any? { |role| role.type == type }
-    end.demodulize.underscore
   end
 end
