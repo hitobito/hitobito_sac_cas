@@ -31,9 +31,7 @@ describe Event::ParticipationAbility do
     let(:participation) { build(:bluemlisalp_funktionaere, event: top_course) }
     let(:role) { build_role(:bluemlisalp_funktionaere, "Andere") }
 
-    context "leader" do
-      let(:role_type) { Event::Course::Role::Leader.sti_name }
-
+    shared_examples "leader role" do |role_type:|
       before do
         build_participation_role(role.person, role_type)
       end
@@ -63,28 +61,20 @@ describe Event::ParticipationAbility do
       end
     end
 
+    context "leader" do
+      it_behaves_like "leader role", role_type: Event::Course::Role::Leader.sti_name
+    end
+
     context "assistant leader" do
-      let(:role_type) { Event::Course::Role::AssistantLeader.sti_name }
+      it_behaves_like "leader role", role_type: Event::Course::Role::AssistantLeader.sti_name
+    end
 
-      before do
-        build_participation_role(role.person, role_type)
-      end
+    context "leader aspirant" do
+      it_behaves_like "leader role", role_type: Event::Course::Role::LeaderAspirant.sti_name
+    end
 
-      it "cannot assign" do
-        expect(subject).not_to be_able_to(:assign, participation)
-      end
-
-      it "can be absent" do
-        expect(subject).to be_able_to(:absent, participation)
-      end
-
-      it "can attend" do
-        expect(subject).to be_able_to(:attend, participation)
-      end
-
-      it "cannot summon" do
-        expect(subject).not_to be_able_to(:summon, participation)
-      end
+    context "assistant leader aspirant" do
+      it_behaves_like "leader role", role_type: Event::Course::Role::AssistantLeaderAspirant.sti_name
     end
 
     context "participant" do

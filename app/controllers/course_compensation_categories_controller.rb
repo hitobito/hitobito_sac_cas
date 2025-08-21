@@ -6,5 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class CourseCompensationCategoriesController < SimpleCrudController
-  self.permitted_attrs = [:short_name, :kind, :description, :name_leader, :name_assistant_leader]
+  self.permitted_attrs = [:short_name,
+    :kind,
+    :description,
+    :name_leader,
+    :name_assistant_leader,
+    :name_leader_aspirant,
+    :name_assistant_leader_aspirant]
 end

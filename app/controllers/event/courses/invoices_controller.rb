@@ -12,9 +12,18 @@ class Event::Courses::InvoicesController < ApplicationController
     assign_attributes
 
     if invoice_form.valid?
-      @participation.update!(price: invoice_form.price, price_category: invoice_form.price_category) if invoice_type == ExternalInvoice::CourseParticipation
+      if invoice_type == ExternalInvoice::CourseParticipation
+        @participation.update!(
+          price: invoice_form.price,
+          price_category: invoice_form.price_category
+        )
+      end
       create_invoice
-      redirect_to group_event_participation_path(params[:group_id], params[:event_id], params[:participation_id])
+      redirect_to group_event_participation_path(
+        params[:group_id],
+        params[:event_id],
+        params[:participation_id]
+      )
     else
       render_invoice_form(response_status: :unprocessable_entity)
     end
@@ -47,7 +56,8 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def render_validation_error(attribute)
-    render json: {errors: {attribute => invoice_form.errors[attribute].first}}, status: :unprocessable_entity
+    render json: {errors: {attribute => invoice_form.errors[attribute].first}},
+      status: :unprocessable_entity
   end
 
   def render_invoice_form(response_status: :ok)
@@ -90,20 +100,39 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def authorize_action
-    raise CanCan::AccessDenied if participation.roles.exists?(type: SacCas::EVENT_LEADER_ROLES.map(&:sti_name))
+    raise CanCan::AccessDenied if participation.roles.exists?(type: Event::Course::LEADER_ROLES)
 
     authorize!(:summon, participation)
   end
 
-  def group = @group ||= Group.find(params[:group_id])
+  def group
+    @group ||= Group.find(params[:group_id])
+  end
 
-  def event = @event ||= Event::Course.find(params[:event_id]).decorate
+  def event
+    @event ||= Event::Course.find(params[:event_id]).decorate
+  end
 
-  def participation = @participation ||= Event::Participation.find(params[:participation_id]).decorate
+  def participation
+    @participation ||= Event::Participation.find(params[:participation_id]).decorate
+  end
 
-  def invoice_form = @invoice_form ||= Event::Participation::InvoiceForm.new(participation, annulation: invoice_type == ExternalInvoice::CourseAnnulation)
+  def invoice_form
+    @invoice_form ||=
+      Event::Participation::InvoiceForm.new(
+        participation,
+        annulation: invoice_type == ExternalInvoice::CourseAnnulation
+      )
+  end
 
-  def invoice_type = @invoice_type ||= participation.state.in?(%w[canceled absent]) ? ExternalInvoice::CourseAnnulation : ExternalInvoice::CourseParticipation
+  def invoice_type
+    @invoice_type ||=
+      participation.state.in?(%w[canceled absent]) ?
+      ExternalInvoice::CourseAnnulation :
+      ExternalInvoice::CourseParticipation
+  end
 
-  def today = @today ||= Time.zone.today
+  def today
+    @today ||= Time.zone.today
+  end
 end
