@@ -62,6 +62,7 @@ en:
         send_date: "Versand- und Rechnungsdatum"
         discount: "Discount"
         new_entry: "Entrance fee"
+        dont_send: Rechnung versenden
         section_id: "Membership"
       people/yearly_membership/invoice_form:
         invoice_year: "Financial year"

@@ -62,6 +62,7 @@ fr:
         send_date: "Date d’envoi et de facturation"
         discount: "Réduction"
         new_entry: "Frais d’entrée"
+        dont_send: Rechnung versenden
         section_id: "Adhésion"
       people/yearly_membership/invoice_form:
         invoice_year: "Exercice comptable"

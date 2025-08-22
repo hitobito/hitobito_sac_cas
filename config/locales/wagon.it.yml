@@ -62,6 +62,7 @@ it:
         send_date: "Data di spedizione e fatturazione"
         discount: "Sconto"
         new_entry: "Quota di adesione"
+        dont_send: Rechnung versenden
         section_id: "Affiliazione"
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
