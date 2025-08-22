@@ -14,11 +14,14 @@ describe Dropdown::PeopleExport do
   include UtilityHelper
 
   let(:user) { people(:admin) }
+  let(:params) { {controller: "people", group_id: groups(:bluemlisalp_mitglieder).id} }
+  let(:options) { {} }
   let(:dropdown) do
     Dropdown::PeopleExport.new(
       self,
       user,
-      {controller: "people", group_id: groups(:bluemlisalp_mitglieder).id}
+      params,
+      options
     )
   end
 
@@ -32,10 +35,92 @@ describe Dropdown::PeopleExport do
     menu.all("> li > a:contains('#{name}') ~ ul > li > a").map(&:text)
   end
 
-  it "renders dropdown" do
-    is_expected.to have_content "Export"
+  context "people" do
+    it "renders dropdown for people" do
+      is_expected.to have_content "Export"
 
-    expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
-    expect(submenu_entries("CSV")).to match_array ["Spaltenauswahl", "Adressliste", "Empfänger Einzelpersonen", "Empfänger Familien"]
+      expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
+      expect(submenu_entries("CSV")).to match_array([
+        "Spaltenauswahl",
+        "Adressliste",
+        "Empfänger Einzelpersonen",
+        "Empfänger Familien"
+      ])
+      expect(submenu_entries("PDF")).to match_array []
+    end
+  end
+
+  context "event participants" do
+    let(:event) { events(:section_tour) }
+    let(:params) do
+      {controller: "event/participations", group_id: groups(:bluemlisalp).id, event_id: event.id}
+    end
+    let(:options) { {details: true} }
+
+    def entry
+      Event::Participation.new(event: event)
+    end
+
+    it "renders dropdown" do
+      is_expected.to have_content "Export"
+
+      expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
+      expect(submenu_entries("CSV")).to match_array([
+        "Adressliste",
+        "Alle Angaben",
+        "Empfänger Einzelpersonen",
+        "Empfänger Familien",
+        "NDS-Lager",
+        "Spaltenauswahl"
+      ])
+      expect(submenu_entries("PDF")).to match_array []
+    end
+
+    context "course" do
+      let(:event) { events(:top_course) }
+      let(:params) do
+        {controller: "event/participations", group_id: groups(:root).id, event_id: event.id}
+      end
+
+      it "renders dropdown with pdf options" do
+        is_expected.to have_content "Export"
+
+        expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
+        expect(submenu_entries("CSV")).to match_array(
+          ["Adressliste",
+            "Adressliste und Kursdaten",
+            "Alle Angaben",
+            "Empfänger Einzelpersonen",
+            "Empfänger Familien",
+            "NDS-Kurs",
+            "NDS-Lager",
+            "SLRG-Kurs",
+            "Spaltenauswahl"]
+        )
+        expect(submenu_entries("PDF")).to match_array([
+          "Adressliste",
+          "Liste für Teilnehmende",
+          "Liste für Kurskader"
+        ])
+      end
+
+      context "as participant" do
+        let(:user) { people(:mitglied) }
+        let(:options) { {details: false} }
+
+        it "renders dropdown with pdf options" do
+          is_expected.to have_content "Export"
+
+          expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
+          expect(submenu_entries("CSV")).to match_array(
+            ["Adressliste",
+              "Empfänger Einzelpersonen",
+              "Empfänger Familien",
+              "Spaltenauswahl"]
+          )
+          expect(submenu_entries("PDF")).to match_array([])
+        end
+      end
+    end
   end
 end

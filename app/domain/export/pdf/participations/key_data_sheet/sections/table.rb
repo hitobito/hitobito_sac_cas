@@ -6,14 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::Section
-  include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
   include ActionView::Helpers::NumberHelper
 
   FIRST_COLUMN_WIDTH = 120
   COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
   ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS = [50, 70]
 
-  delegate :event, :person, :roles, to: :@model
+  delegate :event, :person, :roles, :highest_leader_role_type, to: :@model
 
   def render
     table(table_data)
@@ -102,12 +101,12 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_category_name(rate)
-    rate.course_compensation_category.send(:"name_#{highest_leader_role_type(roles)}").presence ||
+    rate.course_compensation_category.send(:"name_#{highest_leader_role_type}").presence ||
       rate.course_compensation_category.short_name
   end
 
   def compensation_rate(rate)
-    number_to_currency(rate.send(:"rate_#{highest_leader_role_type(roles)}"), unit: "")
+    number_to_currency(rate.send(:"rate_#{highest_leader_role_type}"), unit: "")
   end
 
   def make_subtable(data, options = {})

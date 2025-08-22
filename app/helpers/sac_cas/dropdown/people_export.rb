@@ -30,4 +30,44 @@ module SacCas::Dropdown::PeopleExport
       path.merge(course_data: true),
       data: {checkable: true})
   end
+
+  def pdf_link
+    if participation_lists?
+      item = add_item(translate(:pdf), "#")
+      item.sub_items <<
+        adresslist_pdf_item <<
+        list_for_participants_pdf_item <<
+        list_for_leaders_pdf_item
+      item
+    else
+      super
+    end
+  end
+
+  def adresslist_pdf_item
+    pdf_item(:adress_list)
+  end
+
+  def list_for_participants_pdf_item
+    pdf_item(:list_for_participants, list_kind: "for_participants")
+  end
+
+  def list_for_leaders_pdf_item
+    pdf_item(:list_for_leaders, list_kind: "for_leaders")
+  end
+
+  def pdf_item(label_key, additional_params = {})
+    Dropdown::Item.new(
+      translate(label_key),
+      params.merge(additional_params).merge(format: :pdf),
+      data: {checkable: true},
+      target: :_blank
+    )
+  end
+
+  def participation_lists?
+    @details &&
+      params[:controller] == "event/participations" &&
+      template.entry.event.course?
+  end
 end

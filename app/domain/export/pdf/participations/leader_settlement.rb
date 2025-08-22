@@ -5,8 +5,6 @@
 
 module Export::Pdf::Participations
   class LeaderSettlement
-    include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
-
     def initialize(participation, iban, options = {})
       @participation = participation
       @iban = iban
@@ -67,6 +65,7 @@ module Export::Pdf::Participations
     end
 
     def build_items(kind, count)
+      role_type = participation.highest_leader_role_type
       compensations_by_kind.fetch(kind, []).map do |compensation|
         category = compensation.course_compensation_category
         name = category.send(:"name_#{role_type}").presence || category.short_name
@@ -80,10 +79,6 @@ module Export::Pdf::Participations
         event.compensation_rates
           .includes(:course_compensation_category)
           .group_by { |rate| rate.course_compensation_category.kind.to_sym }
-    end
-
-    def role_type
-      @role_type ||= highest_leader_role_type(participation.roles)
     end
   end
 end
