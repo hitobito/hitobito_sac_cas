@@ -8,70 +8,67 @@
 require "spec_helper"
 
 describe People::AccountCompletionsController do
-  let(:person) { Fabricate(:person, email: nil) }
-  let(:account_completion) { AccountCompletion.create!(person:) }
-
-  it "raises 404 if token does not exist" do
-    expect do
-      get :show, params: {token: "asdf"}
-    end.to raise_error(ActiveRecord::RecordNotFound)
-  end
-
-  it "raises 404 if email for that token has been confirmed" do
-    person.update(email: "test@example.com")
-    expect do
-      get :show, params: {token: account_completion.token}
-    end.to raise_error(ActiveRecord::RecordNotFound)
-  end
+  let!(:person) { Fabricate(:person, email: nil) }
+  let!(:token) { person.generate_token_for(:account_completion) }
 
   describe "GET#show" do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-    it "renders form with token as hidden field" do
-      get :show, params: {token: account_completion.token}
-      expect(dom).to have_css("form")
-      hidden_token_field = dom.find("input[name=token]", visible: false)
-      expect(hidden_token_field["value"]).to eq account_completion.token
+    it "redirects if token does not exist" do
+      get :show, params: {token: "asdf"}
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq "Das verwendete Token ist nicht gültig."
     end
 
-    it "shows flash instead of form if token expired" do
-      account_completion.update_columns(created_at: 4.months.ago)
-      get :show, params: {token: account_completion.token}
-      expect(dom).not_to have_css("form")
-      expect(dom).to have_css(".alert-danger", text: "Das verwendete Token ist nicht mehr gültig.")
-      expect(flash.now[:alert]).to eq "Das verwendete Token ist nicht mehr gültig."
+    it "redirects if token is expired" do
+      travel_to(4.months.from_now) do
+        get :show, params: {token:}
+      end
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq "Das verwendete Token ist nicht gültig."
+    end
+
+    it "renders form with token as hidden field" do
+      get :show, params: {token:}
+      expect(dom).to have_css("form")
+      hidden_token_field = dom.find("input[name=token]", visible: false)
+      expect(hidden_token_field["value"]).to eq token
     end
   end
 
   describe "PUT#update" do
-    it "raises when trying to complete an expired model" do
-      account_completion.update_columns(created_at: 4.months.ago)
-      patch :update, params: {token: account_completion.token}
-      expect(response).to redirect_to(account_completion_path(token: account_completion.token))
+    it "redirects if trying to update with invalid token" do
+      patch :update, params: {token: "asdf"}
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq "Das verwendete Token ist nicht gültig."
     end
 
-    it "validates model" do
-      patch :update, params: {token: account_completion.token, account_completion: {
-        email: "test@example.com",
-        email_confirmation: "test1@example.com",
-        password: "testtesttest",
+    it "validates email and password" do
+      patch :update, params: {token:, person: {
+        unconfirmed_email: "",
+        password: "testtest",
         password_confirmation: "testtesttest1"
       }}
       expect(response.status).to eq 422
+      expect(assigns(:person).errors.to_a).to eq [
+        "Passwort Bestätigung stimmt nicht mit Passwort überein",
+        "Passwort ist zu kurz (weniger als 12 Zeichen)"
+      ]
     end
 
     it "updates person sends email and redirects on success" do
       expect do
-        patch :update, params: {token: account_completion.token, account_completion: {
-          email: "test@example.com",
-          email_confirmation: "test@example.com",
+        patch :update, params: {token:, person: {
+          unconfirmed_email: "test@example.com",
           password: "testtesttest",
           password_confirmation: "testtesttest"
         }}
-        expect(response).to redirect_to(person_path(person))
-        expect(flash[:notice]).to eq "Du erhältst in wenigen Minuten eine E-Mail, mit der Du " \
-          "Deine E-Mail-Adresse bestätigen kannst."
+        expect(response).to redirect_to(new_person_session_path)
+        expect(flash[:notice]).to eq [
+          "Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst.",
+          "Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden."
+        ]
       end.to change(ActionMailer::Base.deliveries, :count).by(1)
         .and change { person.reload.unconfirmed_email }.from(nil).to("test@example.com")
     end
