@@ -1,6 +1,7 @@
 ## Version 2.6
 
 * Deutsche Übersetzungen der Wagon Texte sind neu durch SAC selber übersetzbar auf transifex HIT-1227 (hitobito_sac_cas#1889)
+* Automatischer Beitragskategoriewechsel bei zutreffenden Mitgliedern im Rahmen des Jahresinkasso Jobs (hitobito_sac_cas#1890)
 
 ## Version 2.6
 
