@@ -45,6 +45,14 @@ describe Event::ParticipationsController do
         expect(dom).not_to have_css "td", text: "Bestätigt"
       end
     end
+
+    context "list pdf" do
+      it "renders pdf" do
+        expect_any_instance_of(Export::Pdf::Participations::ParticipantList).to receive(:render)
+        get :index, params: params.merge(format: :pdf, list_kind: "for_participants")
+        expect(@response.media_type).to eq("application/pdf")
+      end
+    end
   end
 
   context "GET#new" do

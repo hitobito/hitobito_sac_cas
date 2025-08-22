@@ -226,4 +226,13 @@ module SacCas::Event::ParticipationsController
   def root_course?
     event.course? && group.root?
   end
+
+  def generate_pdf(people, group)
+    if params[:list_kind].present?
+      authorize!(:index_full_participations, event)
+      Export::Pdf::Participations::ParticipantList.new(event, params[:list_kind], request.host).render
+    else
+      super
+    end
+  end
 end

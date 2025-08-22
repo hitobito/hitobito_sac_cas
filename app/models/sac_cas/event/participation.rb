@@ -72,6 +72,12 @@ module SacCas::Event::Participation
     self.check_root_conditions = true
   end
 
+  def highest_leader_role_type
+    @highest_leader_role_type ||= Event::Course::LEADER_ROLES.find do |type|
+      roles.any? { |role| role.type == type }
+    end&.demodulize&.underscore
+  end
+
   private
 
   def round_actual_days

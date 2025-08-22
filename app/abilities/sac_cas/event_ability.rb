@@ -11,13 +11,21 @@ module SacCas::EventAbility
 
   prepended do
     on(Event) do
-      permission(:any).may(:manage_attachments).for_participations_full_events
+      permission(:any)
+        .may(:manage_attachments, :index_full_participations)
+        .for_participations_full_events
+
+      permission(:group_full).may(:index_full_participations).in_same_group
+      permission(:group_and_below_full).may(:index_full_participations).in_same_group_or_below
+      permission(:layer_full).may(:index_full_participations).in_same_layer
+      permission(:layer_and_below_full).may(:index_full_participations).in_same_layer_or_below
 
       permission(:layer_events_full)
-        .may(:index_participations, :qualifications_read, :show)
+        .may(:index_participations, :index_full_participations, :qualifications_read, :show)
         .in_same_layer_group
       permission(:layer_events_full)
-        .may(:create, :update, :destroy, :application_market, :qualify, :manage_tags, :manage_attachments)
+        .may(:create, :update, :destroy, :application_market, :qualify,
+          :manage_tags, :manage_attachments)
         .in_same_layer_group_if_active
     end
 
