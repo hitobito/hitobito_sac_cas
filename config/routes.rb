@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   language_scope do
     # Define wagon routes here
+    #
+    resource :account_completion, module: :people, only: [:show, :update]
 
     get "/people/:id/membership" => "people/membership#show", :as => "membership"
     put "/people/:id/sac_family_main_person" => "people/sac_family_main_person#update", :as => "sac_family_main_person"

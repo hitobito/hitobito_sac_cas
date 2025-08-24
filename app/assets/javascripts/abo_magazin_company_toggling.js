@@ -21,10 +21,12 @@
   // as forms are submitted as streams we listen on turbo:render instead of turbo:load
   $(document).on("turbo:render", function () {
     const elem = $("#wizards_signup_abo_magazin_wizard_person_fields_company");
-    toggleRequired(elem[0].checked);
-
-    elem.on("change", function() {
+    if(elem) {
       toggleRequired(elem[0].checked);
-    });
+
+      elem.on("change", function() {
+        toggleRequired(elem[0].checked);
+      });
+    }
   })
 }).call(this);

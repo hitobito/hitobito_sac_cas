@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Person do
-  context "validations" do
+  context "::validations" do
     describe "first_name and last_name" do
       it "are not required" do
         person = Person.new.tap(&:validate)
@@ -55,6 +55,38 @@ describe Person do
 
         expect(person.errors[:first_name]).to be_empty
         expect(person.errors[:last_name]).to be_empty
+      end
+    end
+
+    describe "unconfirmed email", :with_truemail_validation do
+      let(:person) { people(:mitglied) }
+
+      it "is valid when blank" do
+        person.unconfirmed_email = ""
+        expect(person).to be_valid
+      end
+
+      it "is invalid for invalid formatted email" do
+        person.unconfirmed_email = "test"
+        expect(person).not_to be_valid
+        expect(person.errors.to_a).to eq ["E-Mail ist nicht gültig"]
+      end
+
+      it "is invalid for non existing domain" do
+        person.unconfirmed_email = "test@missing.hitobito.ch"
+        expect(person).not_to be_valid
+        expect(person.errors.to_a).to eq ["E-Mail ist nicht gültig"]
+      end
+
+      it "is invalid if email is already taken" do
+        person.unconfirmed_email = people(:admin).email
+        expect(person).not_to be_valid
+        expect(person.errors.to_a).to eq ["E-Mail ist nicht gültig"]
+      end
+
+      it "is valid if format is valid and no other email exists" do
+        person.unconfirmed_email = "test@example.com"
+        expect(person).to be_valid
       end
     end
   end

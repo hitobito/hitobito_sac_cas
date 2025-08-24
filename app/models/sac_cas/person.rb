@@ -89,6 +89,9 @@ module SacCas::Person
       merge(matching)
     }
 
+    generates_token_for(:account_completion, expires_in: 3.months)
+    validate :assert_unconfirmed_email_is_valid, if: -> { unconfirmed_email.present? }
+
     include SacCas::People::Wso2LegacyPassword
   end
 
@@ -176,5 +179,11 @@ module SacCas::Person
 
   def roles_require_name_and_address?
     roles.exists?(type: REQUIRED_FIELDS_ROLES)
+  end
+
+  def assert_unconfirmed_email_is_valid
+    if !Truemail.valid?(unconfirmed_email) || Person.where(email: unconfirmed_email).exists?
+      errors.add(:unconfirmed_email, :invalid)
+    end
   end
 end
