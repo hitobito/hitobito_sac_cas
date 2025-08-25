@@ -85,6 +85,11 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
   end
 
+  it "does extend role if another person has a future extendable role after reference date" do
+    Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: bluemlisalp_mitglieder, start_on: reference_date + 2.months, end_on: prolongation_date)
+    expect { extend_roles }.to change { person_mitglied_role.reload.end_on }
+  end
+
   it "extends role if person has a future extendable role before reference date" do
     Fabricate(Group::AboMagazin::Abonnent.sti_name, person: person, group: groups(:abo_die_alpen), start_on: reference_date - 1.months, end_on: 1.year.from_now)
     expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(prolongation_date)
