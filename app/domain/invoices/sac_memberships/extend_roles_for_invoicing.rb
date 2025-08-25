@@ -72,14 +72,14 @@ module Invoices::SacMemberships
     end
 
     def roles_to_extend
-      Role.with_inactive.where(type: ROLES_TO_EXTEND, terminated: false, end_on: old_role_end_on..@prolongation_date, person_id: person_ids)
+      Role.with_inactive.where(type: ROLES_TO_EXTEND, terminated: false, end_on: old_role_end_on...@prolongation_date, person_id: person_ids)
     end
 
     def person_ids
       Person.joins(:roles_unscoped)
-        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, end_on: ..@prolongation_date})
+        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, end_on: old_role_end_on..@prolongation_date})
         .where.not(id: ExternalInvoice::SacMembership.where(year: @prolongation_date.year).select(:person_id))
-        .where.not(Role.with_inactive.where(type: ROLES_TO_EXTEND, start_on: @reference_date..).arel.exists)
+        .where.not("people.id IN (?)", Role.with_inactive.where(type: ROLES_TO_EXTEND, start_on: @reference_date..).select(:person_id))
         .where.not(data_quality: :error)
         .select(:id)
     end
@@ -92,9 +92,16 @@ module Invoices::SacMemberships
       Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person_id:, group_id:, beitragskategorie:, start_on: new_role_start_on, end_on: @prolongation_date)
     end
 
-    def turned_adult_reference_age = ..(@reference_date - SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin.years)
+    def turned_adult_reference_age
+      ..(@reference_date - SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin.years)
+    end
 
-    def turned_youth_reference_age = (@reference_date - SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH.end.years)..(@reference_date - (SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.end + 1).years)
+    def turned_youth_reference_age
+      first = @reference_date - SacCas::Beitragskategorie::Calculator::AGE_RANGE_YOUTH.end.years
+      last = @reference_date - (SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.end + 1).years
+
+      first..last
+    end
 
     def new_role_start_on = @reference_date
 
