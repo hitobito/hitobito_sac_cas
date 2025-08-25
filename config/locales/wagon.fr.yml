@@ -231,6 +231,8 @@ fr:
         description: Description
         name_leader: Désignation du ou de la responsable du cours
         name_assistant_leader: Désignation du ou de la chef·fe de classe
+        name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
+        name_assistant_leader_aspirant: Bezeichnung Klassenleitung (Aspirant)
         course_compensation_rates: Taux de rémunération # uses include CapitalizedDependentErrors
         updated_at: Modifié
         created_at: Créé
@@ -239,6 +241,8 @@ fr:
         valid_to: Valable jusqu’au
         rate_leader: Taux du ou de la responsable du cours
         rate_assistant_leader: Taux du ou de la chef·fe de classe
+        rate_leader_aspirant: Ansatz Kursleitung (Aspirant)
+        rate_assistant_leader_aspirant: Ansatz Klassenleitung (Aspirant)
         course_compensation_category_id: Catégorie de rémunération
         updated_at: Modifié
         created_at: Créé
@@ -643,6 +647,12 @@ fr:
         one: Chef·fe de classe
         many: Chef·fes de classe
         other: Chef·fe de classe
+      event/course/role/leader_aspirant:
+        one: Kursleitung (Aspirant)
+        other: Kursleitung (Aspirant)
+      event/course/role/assistant_leader_aspirant:
+        one: Klassenleitung (Aspirant)
+        other: Klassenleitung (Aspirant)
       event/tour:
         one: Tour
         many: Tours
@@ -941,6 +951,12 @@ fr:
       group/sac_cas_kurskader/klassenlehrer:
         one: Enseignant·e
         description: Enseignant·e
+      group/sac_cas_kurskader/kursleiter_aspirant:
+        one: Kursleiter*in (Aspirant)
+        description: Kursleiter*in (Aspirant)
+      group/sac_cas_kurskader/klassenlehrer_aspirant:
+        one: Klassenlehrer*in (Aspirant)
+        description: Klassenlehrer*in (Aspirant)
       group/sac_cas_privathuetten/schreibrecht:
         one: Droit d’écriture
         description: Droit d’écriture
@@ -1646,8 +1662,10 @@ fr:
   participations:
     key_data_sheet:
       file_name_prefix: Fiche technique
-      leader_file_prefix: Responsable du cours
-      assistant_leader_file_prefix: Chef·fe de classe
+      leader_file_prefix: Kursleitung
+      assistant_leader_file_prefix: Klassenleitung
+      leader_aspirant_file_prefix: Kursleitung_Aspirant
+      assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Cours / randonnées du CAS %{year}"
       title: Fiche technique – direction du cours / de la randonnée
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"

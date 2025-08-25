@@ -229,6 +229,8 @@ it:
         description: Descrizione
         name_leader: Denominazione Direzione del corso
         name_assistant_leader: Denominazione Direzione della classe
+        name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
+        name_assistant_leader_aspirant: Bezeichnung Klassenleitung (Aspirant)
         course_compensation_rates: Tassi di retribuzione # uses include CapitalizedDependentErrors
         updated_at: Modificato
         created_at: Creato
@@ -237,6 +239,8 @@ it:
         valid_to: Valido fino al
         rate_leader: Aliquota di costo Direzione del corso
         rate_assistant_leader: Aliquota di costo Direzione della classe
+        rate_leader_aspirant: Ansatz Kursleitung (Aspirant)
+        rate_assistant_leader_aspirant: Ansatz Klassenleitung (Aspirant)
         course_compensation_category_id: Categoria di retribuzione
         updated_at: Modificato
         created_at: Creato
@@ -641,6 +645,12 @@ it:
         one: Direzione della classe
         many: Direzione della classe
         other: Direzione della classe
+      event/course/role/leader_aspirant:
+        one: Kursleitung (Aspirant)
+        other: Kursleitung (Aspirant)
+      event/course/role/assistant_leader_aspirant:
+        one: Klassenleitung (Aspirant)
+        other: Klassenleitung (Aspirant)
       event/tour:
         one: Tour
         many: Tour
@@ -939,6 +949,12 @@ it:
       group/sac_cas_kurskader/klassenlehrer:
         one: Docente
         description: Docente
+      group/sac_cas_kurskader/kursleiter_aspirant:
+        one: Kursleiter*in (Aspirant)
+        description: Kursleiter*in (Aspirant)
+      group/sac_cas_kurskader/klassenlehrer_aspirant:
+        one: Klassenlehrer*in (Aspirant)
+        description: Klassenlehrer*in (Aspirant)
       group/sac_cas_privathuetten/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
@@ -1644,8 +1660,10 @@ it:
   participations:
     key_data_sheet:
       file_name_prefix: Scheda dei dati di riferimento
-      leader_file_prefix: Capocorso
-      assistant_leader_file_prefix: Capoclasse
+      leader_file_prefix: Kursleitung
+      assistant_leader_file_prefix: Klassenleitung
+      leader_aspirant_file_prefix: Kursleitung_Aspirant
+      assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Corsi / Escursioni CAS %{year}"
       title: Scheda dei dati di riferimento direzione corso/escursioni
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
