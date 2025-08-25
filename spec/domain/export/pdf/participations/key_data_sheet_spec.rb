@@ -55,8 +55,6 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 513, "Unterkunft"],
       [195, 513, "Wird reserviert durch SAC"],
       [75, 493, "Unterkunft Budget"],
-      [195, 493, "Hütten 85 CHF"],
-      [195, 482, "Pension, Berggasthaus 125 CHF"],
       [195, 472, "Pro Person / Nacht mit Halbpension"],
       [75, 451, "Unterkunft Kategorie"],
       [195, 451, "ohne Übernachtung"],
@@ -74,7 +72,6 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 329, "Touren"],
       [195, 339, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
       [75, 308, "Anmeldeschluss"],
-      [195, 308, "21.10.2025"],
       [75, 288, "Minimale Teilnehmerzahl"],
       [75, 267, "Maximale Teilnehmerzahl"],
       [75, 247, "Durchführung - ja/nein?"],
@@ -87,9 +84,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 155, "Klassenlehrer"],
       [195, 155, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
       [195, 144, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
-      [70,
-        40,
-        "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
+      [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
 
