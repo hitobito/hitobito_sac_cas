@@ -26,6 +26,7 @@ it:
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
+    token_invalid: Das verwendete Token ist nicht gültig.
 
   layouts:
     unauthorized:
@@ -201,6 +202,11 @@ it:
 
   activerecord:
     attributes:
+      account_completion:
+        email: E-Mail
+        password: Passwort
+        email_confirmation: E-Mail Bestätigung
+        password_confirmation: Passwort Bestätigung
       contact_account:
         predefined_labels:
           landline: Linea fissa
@@ -417,6 +423,7 @@ it:
         correspondence: Tessera soci e fatturazione
         confirmed_at: E-mail verificata
         family_id: ID famiglia
+        unconfirmed_email: E-Mail
         sac_family_main_person: Fatture a (famiglia)
         sac_remark_national_office: Osservazioni Segretariato centrale
         sac_remark_section_1: Osservazioni Sezione 1
@@ -1743,6 +1750,13 @@ it:
         alert_error: "I seguenti controlli di qualità dei dati impediscono la creazione di una fattura per Le Alpi:"
         create_invoice: Creare la fattura
 
+    account_completions:
+      show:
+        explain_confirmation_email: >-
+          Nachdem du das Formular abeschickt hast schicken wir eine E-Mail um deinen Account zu bestätigen. Erst dann ist dein Login aktiv.
+      update:
+        explain_confirmation_email: >-
+          Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
     membership:
       verify:
         member_details_sac_cas:

@@ -26,6 +26,7 @@ en:
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
+    token_invalid: Das verwendete Token ist nicht gültig.
 
   layouts:
     unauthorized:
@@ -199,6 +200,11 @@ en:
 
   activerecord:
     attributes:
+      account_completion:
+        email: E-Mail
+        password: Passwort
+        email_confirmation: E-Mail Bestätigung
+        password_confirmation: Passwort Bestätigung
       contact_account:
         predefined_labels:
           landline: Festnetz
@@ -415,6 +421,7 @@ en:
         correspondence: Membership card & invoicing
         confirmed_at: E-Mail bestätigt
         family_id: Family ID
+        unconfirmed_email: E-Mail
         sac_family_main_person: Bills to (family)
         sac_remark_national_office: Comments Office
         sac_remark_section_1: Remarks Section 1
@@ -1681,6 +1688,13 @@ en:
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Die Alpen Rechnung:"
         create_invoice: Rechnung erstellen
 
+    account_completions:
+      show:
+        explain_confirmation_email: >-
+          Nachdem du das Formular abeschickt hast schicken wir eine E-Mail um deinen Account zu bestätigen. Erst dann ist dein Login aktiv.
+      update:
+        explain_confirmation_email: >-
+          Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
     membership:
       verify:
         member_details_sac_cas:
