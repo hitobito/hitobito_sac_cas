@@ -7,6 +7,7 @@
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::Section
   include Export::Pdf::Participations::KeyDataSheet::LeaderRoles
+  include ActionView::Helpers::NumberHelper
 
   FIRST_COLUMN_WIDTH = 120
   COMPENSATION_SUBTABLE_COLUMN_WIDTHS = [20, 80, 50, 70]
@@ -23,7 +24,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
       [t("number"), event.number],
       [t("name"), event.name],
       [t("level"), event.kind.level.label],
-      [t("leaders"), leaders],
+      [t("leaders"), person.full_name],
       *compensation_table,
       [t("dates"), dates],
       [t("location"), event.location],
@@ -49,14 +50,9 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
 
   def table(data)
     pdf.table(data, header: false, width: bounds.width, column_widths: {0 => FIRST_COLUMN_WIDTH}, cell_style: {border_width: 0.5}) do
+      column(0).font_style = :bold
       # cells.padding = [7, 7, 7, 5] doesnt work well with subtables
     end
-  end
-
-  def leaders
-    event.participations.select do |p|
-      p.roles.any? { _1.class.leader? }
-    end.map { _1.person.full_name }.join(", ")
   end
 
   def dates
@@ -111,7 +107,7 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def compensation_rate(rate)
-    rate.send(:"rate_#{highest_leader_role_type(roles)}")
+    number_to_currency(rate.send(:"rate_#{highest_leader_role_type(roles)}"), unit: "")
   end
 
   def make_subtable(data, options = {})

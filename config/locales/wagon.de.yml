@@ -1614,7 +1614,7 @@ de:
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
         number: Veranstaltungs-Nr.
-        name: Bezeichungs / Titel
+        name: Bezeichnung / Titel
         level: Angebot / Stufe
         leaders: Leitung
         compensation: Tageshonorar
@@ -1634,7 +1634,7 @@ de:
           text: Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm
         participant_requirements:
           label: Teilnehmeranforderungen
-          text: Gemäss Ausschreibung SAC Kurse / Touren 2024
+          text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Detailprogramm Teilnehmer Kurse
           text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
