@@ -11,8 +11,8 @@ describe Event::ParticipantReminderJob do
   include ActiveJob::TestHelper
 
   let(:event) { Fabricate(:sac_open_course, dates: [Event::Date.new(start_at: 6.weeks.from_now)]) }
-  let!(:participation_1) { Fabricate(:event_participation, event:, person: people(:admin)) }
-  let!(:participation_2) { Fabricate(:event_participation, event:, person: people(:mitglied)) }
+  let!(:participation_1) { Fabricate(:event_participation, event:, participant: people(:admin)) }
+  let!(:participation_2) { Fabricate(:event_participation, event:, participant: people(:mitglied)) }
   let!(:question) { event.questions.create!(admin: true, question: "test", disclosure: :optional) }
 
   subject(:job) { described_class.new }

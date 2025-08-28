@@ -11,7 +11,7 @@ describe Event::Courses::InvoicesController do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course, price_member: 5, price_regular: 10) }
-  let(:participation) { Fabricate(:event_participation, event:, person: participant, price: 10, price_category: "price_regular", application_id: -1) }
+  let(:participation) { Fabricate(:event_participation, event:, participant: participant, price: 10, price_category: "price_regular", application_id: -1) }
   let(:params) { {group_id: event.group_ids.first, event_id: event.id, participation_id: participation.id} }
 
   describe "GET#new" do

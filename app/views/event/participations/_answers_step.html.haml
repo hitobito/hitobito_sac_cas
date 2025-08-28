@@ -19,4 +19,4 @@
 - if entry.application
   = render 'application_fields', f: f
 
-%p= t('event.participations.form.explain_required_checkmark') if @event.questions.any?(&:required?)
+%p= t('event.participations.fields.explain_required_checkmark') if @event.questions.any?(&:required?)

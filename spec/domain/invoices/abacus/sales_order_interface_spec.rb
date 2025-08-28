@@ -69,7 +69,7 @@ describe Invoices::Abacus::SalesOrderInterface do
 
   it "creates course participation sales order in abacus" do
     course = Fabricate(:sac_course, kind: event_kinds(:ski_course))
-    participation = Fabricate(:event_participation, event: course, person: person, price: 20, price_category: 1)
+    participation = Fabricate(:event_participation, event: course, participant: person, price: 20, price_category: 1)
     invoice = ExternalInvoice::CourseParticipation.create!(
       person: person,
       issued_at: "2020-01-15",

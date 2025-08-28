@@ -59,6 +59,11 @@ describe Event::ParticipationsController do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
+    before do
+      allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
+      allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
+    end
+
     it "does not render aside for event" do
       event = Fabricate(:event)
       get :new, params: {group_id: event.groups.first.id, event_id: event.id}
@@ -548,7 +553,7 @@ describe Event::ParticipationsController do
       let(:user) { people(:mitglied) }
 
       it "can edit actual_days" do
-        own_participation = Event::Participation.create!(event: event, person: user, application_id: -1)
+        own_participation = Event::Participation.create!(event: event, participant: user, application_id: -1)
         Event::Course::Role::Leader.create!(participation: own_participation)
         patch :update,
           params: {

@@ -124,8 +124,12 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
     @participations ||=
       course.participations
         .active
-        .includes(:roles, person: :phone_numbers, answers: :question)
+        .includes(:roles, answers: :question)
+        .with_person_participants
         .order("people.last_name, people.first_name")
+        .tap do |participations|
+          ::Event::Participation::PreloadParticipations.preload(participations, participant: [:phone_numbers])
+        end
         .group_by { |p| p.highest_leader_role_type || "participant" }
   end
 

@@ -139,7 +139,8 @@ module Events::Courses::State
   def all_leaders
     Person.where(id: participations.joins(:roles)
       .where(roles: {type: SacCas::Event::Course::LEADER_ROLES})
-      .select(:person_id))
+      .where(participant_type: Person.sti_name)
+      .select(:participant_id))
   end
 
   def send_application_paused_email

@@ -10,7 +10,7 @@ require "spec_helper"
 describe Event::Participation::InvoiceForm do
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course) }
-  let(:participation) { Fabricate(:event_participation, event:, person: participant) }
+  let(:participation) { Fabricate(:event_participation, event:, participant: participant) }
 
   subject(:form) { described_class.new(participation) }
 

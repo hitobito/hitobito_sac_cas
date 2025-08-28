@@ -52,7 +52,7 @@ module Migrations
 
     def flag_participation_qualified(person, event)
       Event::Participation
-        .find_by(person_id: person.id, event_id: event.id)
+        .find_by(participant_id: person.id, participant_type: Person.sti_name, event_id: event.id)
         .update_column(:qualified, true)
     end
 
@@ -90,8 +90,8 @@ module Migrations
 
     def fetch_person_course_ids(people)
       courses
-        .where(event_participations: {person_id: people.map(&:id)})
-        .pluck("event_participations.event_id", "event_participations.person_id")
+        .where(event_participations: {participant_id: people.map(&:id), participant_type: Person.sti_name})
+        .pluck("event_participations.event_id", "event_participations.participant_id")
         .each_with_object({}) do |(event_id, person_id), hash|
           hash[person_id] ||= []
           hash[person_id] << event_id

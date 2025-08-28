@@ -6,12 +6,14 @@
 
 top_mitglied:
   event: top_course
-  person_id: 600_001
+  participant_id: 600_001
+  participant_type: Person
   active: true
   state: assigned
 
 top_familienmitglied:
   event: top_course
-  person_id: 600_002
+  participant_id: 600_002
+  participant_type: Person
   active: true
   state: assigned

@@ -22,13 +22,6 @@ module SacCas::Event::ParticipationContactData
     class << self
       delegate :human_attribute_name, to: Wizards::Steps::Signup::PersonFields
     end
-
-    self.contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street,
-      :housenumber, :postbox, :zip_code, :town, :country, :gender, :birthday,
-      :phone_number_mobile, :phone_number_landline]
-
-    self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :street,
-      :housenumber, :zip_code, :town, :country]
   end
 
   def initialize(event, person, model_params = {})

@@ -1245,6 +1245,8 @@ de:
         title: Demnächst stattfindende Touren
         explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
     participations:
+      fields:
+        explain_required_checkmark: "* = Antwort obligatorisch"
       missing_information: >-
         Für die Teilnahme an diesem Kurs sind die folgenden Nachweise zu erbringen. Bitte reiche diese noch ein, falls du dies nicht schon getan hast.
       answers_step:
@@ -1975,6 +1977,9 @@ de:
       signup:
         main_email_field_title: E-Mail
         person_fields_title: Personendaten
+        person_fields:
+          next_button: Weiter
+          submit_button: Registrieren
         agreement_fields:
           adult_consent_caption: "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
           newsletter_caption: Ich möchte den SAC-Newsletter abonnieren.

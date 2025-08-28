@@ -87,7 +87,7 @@ describe Export::Tabular::People::WithSacAdditions do
     describe tabular_class do
       let(:tabular_class) { tabular_class }
       let(:tabular_entry) do
-        participation = Fabricate(:event_participation, person: Person.with_membership_years.find(person.id))
+        participation = Fabricate(:event_participation, participant: Person.with_membership_years.find(person.id))
         Event::Participation.where(id: participation.id)
       end
 

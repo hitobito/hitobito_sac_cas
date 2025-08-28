@@ -31,6 +31,9 @@ describe "Event Signup", :js do
     let(:event) { Fabricate(:event, groups: [group]) }
 
     it "has two step wizard" do
+      allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
+      allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
+
       visit group_event_path(group_id: group, id: event.id)
       click_on "Anmelden"
       expect(page).to have_css ".stepwizard-step", count: 2
