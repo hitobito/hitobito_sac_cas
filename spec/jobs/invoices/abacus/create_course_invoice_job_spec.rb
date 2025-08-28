@@ -11,7 +11,7 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
   let(:mitglied) { people(:mitglied) }
   let(:kind) { event_kinds(:ski_course) }
   let(:course) { Fabricate(:sac_course, kind: kind) }
-  let(:participation) { Fabricate(:event_participation, event: course, person: mitglied, price: 20, price_category: 1) }
+  let(:participation) { Fabricate(:event_participation, event: course, participant: mitglied, price: 20, price_category: 1) }
   let(:now) { Time.zone.local(2024, 8, 24, 1) }
   let(:external_invoice) {
     Fabricate(:external_invoice,

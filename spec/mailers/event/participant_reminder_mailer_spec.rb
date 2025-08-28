@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Event::ParticipantReminderMailer do
   let(:event) { Fabricate(:sac_open_course, groups: [groups(:bluemlisalp)]) }
-  let!(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied)) }
+  let!(:participation) { Fabricate(:event_participation, event:, participant: people(:mitglied)) }
   let(:mail) { described_class.reminder(participation) }
 
   before do

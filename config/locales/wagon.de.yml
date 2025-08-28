@@ -1948,6 +1948,9 @@ de:
       signup:
         main_email_field_title: E-Mail
         person_fields_title: Personendaten
+        person_fields:
+          next_button: Weiter
+          submit_button: Registrieren
         agreement_fields:
           adult_consent_caption: "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
           newsletter_caption: Ich möchte den SAC-Newsletter abonnieren.

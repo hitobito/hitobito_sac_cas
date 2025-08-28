@@ -13,7 +13,7 @@ describe Event::Participation, js: true do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course, price_regular: 20, price_member: 10) }
-  let(:participation) { Fabricate(:event_participation, event:, person: participant, price_category: "price_member", price: 10, application_id: -1) }
+  let(:participation) { Fabricate(:event_participation, event:, participant: participant, price_category: "price_member", price: 10, application_id: -1) }
 
   context "as participant" do
     before do

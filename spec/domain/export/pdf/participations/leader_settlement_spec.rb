@@ -43,7 +43,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
       course_compensation_category: course_compensation_categories(:budget))
   }
   let!(:participation) do
-    Fabricate(:event_participation, event: course, person: member, actual_days: course.total_event_days)
+    Fabricate(:event_participation, event: course, participant: member, actual_days: course.total_event_days)
   end
   let(:pdf) { described_class.new(participation, "CH93 0076 2011 6238 5295 7").render }
   let(:pdf_content) { PDF::Inspector::Text.analyze(pdf) }

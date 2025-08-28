@@ -16,7 +16,7 @@ describe Event::ParticipationConfirmationJob do
   let(:person) { people(:mitglied) }
 
   let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-  let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application) }
+  let(:participation) { Fabricate(:event_participation, event: event, participant: person, application: application) }
 
   before do
     SeedFu.quiet = true
