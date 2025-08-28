@@ -396,9 +396,9 @@ describe Event::Course do
 
     before do
       @participations = course.participations.create!([
-        {person: people(:admin)},
-        {person: people(:mitglied), state: :assigned, price: 10, price_category: "price_regular", application: application},
-        {person: people(:familienmitglied), state: :assigned, price: 10, price_category: "price_regular"}
+        {participant: people(:admin)},
+        {participant: people(:mitglied), state: :assigned, price: 10, price_category: "price_regular", application: application},
+        {participant: people(:familienmitglied), state: :assigned, price: 10, price_category: "price_regular"}
       ])
       @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
@@ -424,7 +424,7 @@ describe Event::Course do
       end
 
       it "doesn't enqueue a job if there already is an external invoice" do
-        ExternalInvoice::CourseParticipation.create!(person_id: participant.person_id, link: participant)
+        ExternalInvoice::CourseParticipation.create!(person_id: participant.participant_id, link: participant)
 
         expect { course.update!(state: :ready) }.to change(
           Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
@@ -455,7 +455,7 @@ describe Event::Course do
 
     context "from created" do
       before do
-        course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}, {person: people(:familienmitglied)}])
+        course.participations.create!([{participant: people(:admin)}, {participant: people(:mitglied)}, {participant: people(:familienmitglied)}])
         course.update!(state: :created)
       end
 
@@ -560,9 +560,9 @@ describe Event::Course do
       before do
         course.inform_participants = "1"
         course.participations.create!([
-          {person: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
-          {person: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
-          {person: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
+          {participant: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
+          {participant: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
+          {participant: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
         ])
       end
 
@@ -615,9 +615,9 @@ describe Event::Course do
 
     context "invoice" do
       before do
-        p1, p2 = course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}])
-        ExternalInvoice::CourseParticipation.create!(person_id: p1.person_id, link: p1)
-        ExternalInvoice::CourseParticipation.create!(person_id: p2.person_id, link: p2)
+        p1, p2 = course.participations.create!([{participant: people(:admin)}, {participant: people(:mitglied)}])
+        ExternalInvoice::CourseParticipation.create!(person_id: p1.participant_id, link: p1)
+        ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2)
       end
 
       it "queues job to cancel invoices for all participants" do
@@ -633,14 +633,14 @@ describe Event::Course do
 
     before do
       _p1, p2, p3, p4 = course.participations.create!([
-        {person: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
-        {person: people(:mitglied), state: :absent, price: 42, price_category: "price_regular"},
-        {person: people(:familienmitglied), state: :attended, price: 42, price_category: "price_regular"},
-        {person: people(:familienmitglied2), state: :absent, price: 42, price_category: "price_regular"}
+        {participant: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
+        {participant: people(:mitglied), state: :absent, price: 42, price_category: "price_regular"},
+        {participant: people(:familienmitglied), state: :attended, price: 42, price_category: "price_regular"},
+        {participant: people(:familienmitglied2), state: :absent, price: 42, price_category: "price_regular"}
       ])
-      ExternalInvoice::CourseParticipation.create!(person_id: p2.person_id, link: p2, total: p2.price)
-      ExternalInvoice::CourseParticipation.create!(person_id: p3.person_id, link: p3, total: p3.price)
-      ExternalInvoice::CourseAnnulation.create!(person_id: p4.person_id, link: p4, total: p4.price) # annulation invoice alredy exists
+      ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2, total: p2.price)
+      ExternalInvoice::CourseParticipation.create!(person_id: p3.participant_id, link: p3, total: p3.price)
+      ExternalInvoice::CourseAnnulation.create!(person_id: p4.participant_id, link: p4, total: p4.price) # annulation invoice alredy exists
     end
 
     it "does not set participation state for assigned participations" do
@@ -668,8 +668,8 @@ describe Event::Course do
 
     before do
       course.participations.create!([
-        {person: people(:admin), roles: [Event::Course::Role::Leader.new], state: :summoned},
-        {person: people(:mitglied), state: :summoned}
+        {participant: people(:admin), roles: [Event::Course::Role::Leader.new], state: :summoned},
+        {participant: people(:mitglied), state: :summoned}
       ])
     end
 

@@ -17,7 +17,7 @@ describe "event state transitions", js: true do
   end
 
   let!(:participation) do
-    Fabricate(:event_participation, event:, person:).tap do |participation|
+    Fabricate(:event_participation, event:, participant: person).tap do |participation|
       Fabricate(Event::Course::Role::Participant.sti_name, participation:)
     end.reload
   end

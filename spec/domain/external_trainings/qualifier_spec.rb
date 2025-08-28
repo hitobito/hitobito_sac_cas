@@ -328,7 +328,7 @@ describe ExternalTrainings::Qualifier do
     course = Fabricate.build(:sac_course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at - (training_days - 1).days, finish_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, person: mitglied, qualified: qualified, actual_days: actual_days)
+    Fabricate(:event_participation, event: course, participant: mitglied, qualified: qualified, actual_days: actual_days)
   end
 
   def create_qualification(start_at:, qualified_at: start_at, kind: ski_leader)

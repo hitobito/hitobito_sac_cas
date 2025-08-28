@@ -10,7 +10,7 @@ require "spec_helper"
 describe "participation edit page", :js do
   let(:person) { people(:admin) }
   let(:event) { Fabricate(:sac_open_course, state: nil) }
-  let(:participation) { Fabricate(:event_participation, event:, person: people(:mitglied), application_id: -1) }
+  let(:participation) { Fabricate(:event_participation, event:, participant: people(:mitglied), application_id: -1) }
   let(:participation_path) { edit_group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id) }
 
   before { sign_in(person) }

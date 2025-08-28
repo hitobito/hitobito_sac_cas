@@ -103,6 +103,6 @@ describe Event::TrainingDays::CoursesLoader do
     course = Fabricate.build(:course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, person: admin, qualified: qualified, actual_days: actual_days)
+    Fabricate(:event_participation, event: course, participant: admin, qualified: qualified, actual_days: actual_days)
   end
 end

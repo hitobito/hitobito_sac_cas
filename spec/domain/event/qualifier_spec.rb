@@ -95,6 +95,6 @@ describe Event::Qualifier do
     course = Fabricate.build(:course, kind: ski_course, training_days: training_days, number: "01-#{start_at}")
     course.dates.build(start_at: start_at - (training_days - 1).days, finish_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, person: person)
+    Fabricate(:event_participation, event: course, participant: person)
   end
 end
