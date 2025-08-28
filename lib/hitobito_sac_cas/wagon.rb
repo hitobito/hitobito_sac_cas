@@ -68,6 +68,7 @@ module HitobitoSacCas
 
       # extend application classes here
       CustomContent.prepend SacCas::CustomContent
+      Event.include SacCas::EventIncludes
       Event.prepend SacCas::Event
       Event::Kind.prepend SacCas::Event::Kind
       Event::Course.prepend SacCas::Event::Course
