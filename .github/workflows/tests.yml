@@ -33,8 +33,8 @@ jobs:
     with:
       wagon_repository: ${{ github.event.repository.name }}
       wagon_dependency_repository: hitobito_youth
-      core_ref: ${{ inputs.core_ref || 'master' }}
-      wagon_dependency_ref: ${{ inputs.wagon_dependency_ref || 'master' }}
+      core_ref: ${{ inputs.core_ref }}
+      wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
       main_branch: master
       distinct_id: ${{ inputs.distinct_id }}
     secrets:
