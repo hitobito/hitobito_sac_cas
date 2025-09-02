@@ -17,15 +17,15 @@ on:
       core_ref:
         description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
         type: string
-        default: ""
+        default: "master"
       wagon_dependency_ref:
         description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
         type: string
-        default: ""
+        default: "master"
       distinct_id:
         description: An optional identifier which is simply output again, in order to identify the workflow run when triggered from another repo
         type: string
-        default: ""
+        default: ''
 
 jobs:
   wagon_tests:
