@@ -15,9 +15,10 @@ module Invoices::SacMemberships
 
     BATCH_SIZE = 500
 
-    def initialize(prolongation_date, reference_date)
+    def initialize(prolongation_date, new_role_start_on)
       @prolongation_date = prolongation_date
-      @reference_date = reference_date
+      @new_role_start_on = new_role_start_on
+      @reference_date = new_role_start_on - 1.day
     end
 
     def extend_roles
@@ -56,7 +57,7 @@ module Invoices::SacMemberships
     end
 
     def leave_household(person)
-      Memberships::FamilyMutation.new(person, new_role_end_on: @prolongation_date, new_role_start_on: new_role_start_on, replaced_role_end_on: old_role_end_on).leave!
+      Memberships::FamilyMutation.new(person, new_role_end_on: @prolongation_date, new_role_start_on: @new_role_start_on, replaced_role_end_on: old_role_end_on).leave!
     end
 
     def roles_to_turn_youth
@@ -85,11 +86,11 @@ module Invoices::SacMemberships
     end
 
     def create_mitglied_role(person_id, group_id, beitragskategorie)
-      Group::SektionsMitglieder::Mitglied.create!(person_id:, group_id:, beitragskategorie:, start_on: new_role_start_on, end_on: @prolongation_date)
+      Group::SektionsMitglieder::Mitglied.create!(person_id:, group_id:, beitragskategorie:, start_on: @new_role_start_on, end_on: @prolongation_date)
     end
 
     def create_zusatzmitglied_role(person_id, group_id, beitragskategorie)
-      Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person_id:, group_id:, beitragskategorie:, start_on: new_role_start_on, end_on: @prolongation_date)
+      Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person_id:, group_id:, beitragskategorie:, start_on: @new_role_start_on, end_on: @prolongation_date)
     end
 
     def turned_adult_reference_age
@@ -103,9 +104,7 @@ module Invoices::SacMemberships
       first..last
     end
 
-    def new_role_start_on = @reference_date
-
-    def old_role_end_on = @reference_date - 1.day
+    def old_role_end_on = @reference_date
 
     def end_role(role) = role.update!(end_on: old_role_end_on)
   end
