@@ -1672,11 +1672,11 @@ it:
       leader_aspirant_file_prefix: Kursleitung_Aspirant
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Corsi / Escursioni CAS %{year}"
-      title: Scheda dei dati di riferimento direzione corso/escursioni
+      title: Eckdatenblatt
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
       table:
         number: Evento n.
-        name: Denominazione / Titolo
+        name: Bezeichnung / Titel
         level: Offerta / Livello
         leaders: Direzione
         compensation: Onorario giornaliero
@@ -1685,7 +1685,8 @@ it:
         accommodation: Alloggio
         accommodation_budget:
           label: Budget alloggio
-          text: per persona / notte con mezza pensione
+          text: >-
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: viene riservato tramite il CAS
           event_specific: viene riservato tramite la direzione del corso
@@ -1696,19 +1697,19 @@ it:
           text: In base al programma degli argomenti del corso (se disponibile) o dell’escursione
         participant_requirements:
           label: Requisiti di partecipazione
-          text: In base al bando corsi / escursioni CAS
+          text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Programma dettagliato partecipanti corsi
-          text: Viene richiesto alla Direzione dal Segretariato centrale 8 settimane prima dell’inizio tramite E-mail / Cloud CAS
+          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
         participant_program_tour:
           label: Programma dettagliato partecipanti escursioni
-          text: Viene creato dal Segretariato centrale e inserito nel Cloud CAS almeno 6 settimane prima dell’inizio
+          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
         application_closing_at: Chiusura registrazioni
         minimum_participants: Numero minimo di partecipanti
         maximum_participants: Numero massimo di partecipanti
         participation_yes_no:
           label: "Svolgimento - sì/no?"
-          text: La decizione viene presa congiuntamente in base al numero di registrazioni effettuate al momento della chiusura delle registrazioni
+          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
         participation_cancellation:
           label: Svolgimento – Cancellazione
           text: Si prega di informare il docente e l’alloggio

@@ -1674,11 +1674,11 @@ fr:
       leader_aspirant_file_prefix: Kursleitung_Aspirant
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Cours / randonnées du CAS %{year}"
-      title: Fiche technique – direction du cours / de la randonnée
+      title: Eckdatenblatt
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
       table:
         number: N° de la manifestation
-        name: Désignation / titre
+        name: Bezeichnung / Titel
         level: Offre / catégorie
         leaders: Responsabilité
         compensation: Tarif journalier
@@ -1687,7 +1687,8 @@ fr:
         accommodation: Hébergement
         accommodation_budget:
           label: Budget pour l’hébergement
-          text: "Cabanes 85 CHF\nPension/auberge de montagne 125 CHF\nPar personne/nuit en demi-pension"
+          text: >-
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: Réservation par le CAS
           event_specific: Réservation par le ou la responsable du cours
@@ -1698,19 +1699,19 @@ fr:
           text: Selon le programme du cours (si disponible) ou le programme des randonnées
         participant_requirements:
           label: Conditions requises pour les participant·es
-          text: Selon l’annonce des cours / randonnées du CAS
+          text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Programme détaillé des cours pour les participant·e·s
-          text: Est demandé par le secrétariat auprès de la direction 8 semaines avant le début par e-mail.
+          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
         participant_program_tour:
           label: Programme détaillé des randonnées pour les participant·e·s
-          text: Est créé par le secrétariat et déposé au plus tard 6 semaines avant le début.
+          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
         application_closing_at: Date limite d’inscription
         minimum_participants: Nombre minimal de participant·e·s
         maximum_participants: Nombre maximal de participant·e·s
         participation_yes_no:
           label: "Réalisation - oui/non?"
-          text: La décision est prise en commun sur la base du nombre d’inscriptions à la date limite d’inscription.
+          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
         participation_cancellation:
           label: Réalisation – annulation
           text: Veuillez informer l’enseignant·e et l’hébergement

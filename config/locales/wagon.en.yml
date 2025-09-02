@@ -1610,11 +1610,11 @@ en:
       leader_aspirant_file_prefix: Kursleitung_Aspirant
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "SAC Kurse / Touren %{year}"
-      title: Eckdatenblatt -Kurs-/Tourenleitung
+      title: Eckdatenblatt
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
         number: Veranstaltungs-Nr.
-        name: Bezeichungs / Titel
+        name: Bezeichnung / Titel
         level: Angebot / Stufe
         leaders: Leitung
         compensation: Tageshonorar
@@ -1623,7 +1623,8 @@ en:
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget
-          text: Pro Person / Nacht mit Halbpension
+          text: >-
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: Wird reserviert durch SAC
           event_specific: Wird reserviert durch Kursleitung
@@ -1634,19 +1635,19 @@ en:
           text: Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm
         participant_requirements:
           label: Teilnehmeranforderungen
-          text: Gemäss Ausschreibung SAC Kurse / Touren 2024
+          text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Detailprogramm Teilnehmer Kurse
-          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail / SAC Cloud bei der Leitung eingefordert
+          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
         participant_program_tour:
           label: Detailprogramm Teilnehmer Touren
-          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn in der SAC-Cloud hinterlegt
+          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
         application_closing_at: Anmeldeschluss
         minimum_participants: Minimale Teilnehmerzahl
         maximum_participants: Maximale Teilnehmerzahl
         participation_yes_no:
           label: "Durchführung - ja/nein?"
-          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt
+          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
         participation_cancellation:
           label: Durchführung – Absage
           text: Bitte Klassenlehrer und Unterkunft informieren

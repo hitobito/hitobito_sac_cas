@@ -1614,7 +1614,7 @@ de:
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
         number: Veranstaltungs-Nr.
-        name: Bezeichungs / Titel
+        name: Bezeichnung / Titel
         level: Angebot / Stufe
         leaders: Leitung
         compensation: Tageshonorar
@@ -1623,7 +1623,8 @@ de:
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget
-          text: "Hütten 85 CHF\nPension, Berggasthaus 125 CHF\nPro Person / Nacht mit Halbpension"
+          text: >-
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: Wird reserviert durch SAC
           event_specific: Wird reserviert durch Kursleitung
@@ -1634,7 +1635,7 @@ de:
           text: Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm
         participant_requirements:
           label: Teilnehmeranforderungen
-          text: Gemäss Ausschreibung SAC Kurse / Touren 2024
+          text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Detailprogramm Teilnehmer Kurse
           text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
@@ -1646,7 +1647,7 @@ de:
         maximum_participants: Maximale Teilnehmerzahl
         participation_yes_no:
           label: "Durchführung - ja/nein?"
-          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt
+          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
         participation_cancellation:
           label: Durchführung – Absage
           text: Bitte Klassenlehrer und Unterkunft informieren
