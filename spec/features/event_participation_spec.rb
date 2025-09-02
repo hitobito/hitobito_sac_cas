@@ -32,6 +32,9 @@ describe :event_participation, js: true do
   end
 
   it "creates an event participation" do
+    allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
+    allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
+
     visit group_event_path(group_id: group, id: event)
 
     click_link("Anmelden")
@@ -53,7 +56,7 @@ describe :event_participation, js: true do
     # Match exact text to check for absence of self_employed label
     is_expected.to have_selector("tr", text: /^Teilnehmer\/-in$/)
 
-    participation = Event::Participation.find_by(event: event, person: person)
+    participation = Event::Participation.find_by(event: event, participant: person)
 
     expect(participation).to be_present
   end
@@ -75,7 +78,7 @@ describe :event_participation, js: true do
   describe "canceling participation" do
     let(:group) { groups(:root) }
     let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-    let(:participation) { Fabricate(:event_participation, event: event, person: person, application: application, price: 20, price_category: 0) }
+    let(:participation) { Fabricate(:event_participation, event: event, participant: person, application: application, price: 20, price_category: 0) }
     let(:event) { Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
 
     before do

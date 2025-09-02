@@ -14,7 +14,7 @@ describe Event::ParticipationMailer do
       Fabricate(:event_date, start_at: 1.week.from_now)
     ])
   }
-  let(:participation) { Fabricate(:event_participation, event:, person:) }
+  let(:participation) { Fabricate(:event_participation, event:, participant: person) }
 
   before do
     Fabricate(:phone_number, contactable: person, public: true)

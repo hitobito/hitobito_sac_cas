@@ -54,6 +54,6 @@ module SacCas::Event::ParticipationButtons
   end
 
   def her_own?
-    @template.current_user.id == @participation.person_id
+    @template.current_user.id == @participation.participant_id && @participation.participant_type == Person.sti_name
   end
 end

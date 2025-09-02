@@ -15,7 +15,7 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
       Event::Date.new(start_at: "01.03.2024", finish_at: "31.03.2024")
     ])
   end
-  let(:participation) { Fabricate(:event_participation, event: course, person: member, price: 20, price_category: :price_regular) }
+  let(:participation) { Fabricate(:event_participation, event: course, participant: member, price: 20, price_category: :price_regular) }
 
   subject { described_class.new(participation) }
 
