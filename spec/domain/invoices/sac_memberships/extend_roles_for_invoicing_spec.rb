@@ -14,8 +14,9 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   let(:person) { people(:mitglied) }
   let(:person_mitglied_role) { roles(:mitglied) }
   let(:prolongation_date) { reference_date + 1.year }
-  let(:reference_date) { new_role_start_on - 1.day }
-  let(:new_role_start_on) { Time.zone.now.to_date }
+  let(:reference_date) { Time.zone.now.to_date }
+  let(:new_role_start_on) { reference_date - 1.year + 1.day }
+  let(:old_role_end_on) { new_role_start_on - 1.day }
   let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
 
   before { set_end_on_for_all_roles(person) }
@@ -71,7 +72,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   end
 
   it "doesnt extend role which ended before the previous years prolongation_date (reference_date - 1.day)" do
-    person_mitglied_role.update!(end_on: reference_date - 2.days)
+    person_mitglied_role.update!(end_on: new_role_start_on - 2.days)
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
   end
 
@@ -150,7 +151,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
       it "creates youth role for family with reference age equal 18" do
         expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
 
-        expect(previous_membership_role.reload.end_on).to eq(reference_date)
+        expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
         new_role = person_turned_youth.roles.active.reload.last
         expect(new_role.beitragskategorie).to eq("youth")
@@ -163,7 +164,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
 
-        expect(previous_membership_role.reload.end_on).to eq(reference_date)
+        expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
         new_role = person_turned_youth.roles.active.reload.last
         expect(new_role.beitragskategorie).to eq("youth")
@@ -203,7 +204,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         expect { extend_roles }.to change { person_turned_youth.sac_membership.zusatzsektion_roles.with_inactive.count }.by(1)
 
-        expect(previous_zusatzsektion_role.reload.end_on).to eq(reference_date)
+        expect(previous_zusatzsektion_role.reload.end_on).to eq(old_role_end_on)
 
         zusatzsektion_role = person_turned_youth.sac_membership.zusatzsektion_roles.active.last
         expect(zusatzsektion_role).to be_present
@@ -224,12 +225,13 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
     context "dissolving household" do
       let!(:person_turned_youth) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", beitragskategorie: :adult, email: "dad@hitobito.example.com", confirmed_at: Time.current, sac_family_main_person: true) }
-      let!(:other) { Fabricate(:person, birthday: 24.years.ago) }
+      let!(:other) { Fabricate(:person, birthday: reference_date - 24.years) }
 
       before do
         create_household(person_turned_youth, other)
         membership_roles = Group::SektionsMitglieder::Mitglied.where(person: [person_turned_youth, other], beitragskategorie: :family)
-        membership_roles.update_all(start_on: 1.month.ago, end_on: 1.month.from_now)
+        person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
+        membership_roles.update_all(start_on: new_role_start_on - 1.month, end_on: 1.month.from_now)
       end
 
       it "replaces family membership role for other with adult membership" do
@@ -254,7 +256,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
       it "creates adult role for youth with reference age equal 23" do
         expect { extend_roles }.to change { person_turned_adult.roles.with_inactive.count }.by(1)
 
-        expect(previous_membership_role.reload.end_on).to eq(reference_date)
+        expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
         new_role = person_turned_adult.roles.active.last
         expect(new_role.beitragskategorie).to eq("adult")
@@ -267,7 +269,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         expect { extend_roles }.to change { person_turned_adult.roles.with_inactive.count }.by(1)
 
-        expect(previous_membership_role.reload.end_on).to eq(reference_date)
+        expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
         new_role = person_turned_adult.roles.active.last
         expect(new_role.beitragskategorie).to eq("adult")
@@ -303,7 +305,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         expect { extend_roles }.to change { person_turned_adult.sac_membership.zusatzsektion_roles.with_inactive.count }.by(1)
 
-        expect(previous_zusatzsektion_role.reload.end_on).to eq(reference_date)
+        expect(previous_zusatzsektion_role.reload.end_on).to eq(old_role_end_on)
 
         zusatzsektion_role = person_turned_adult.roles.active.where(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, beitragskategorie: :adult).last
         expect(zusatzsektion_role).to be_present

@@ -18,7 +18,7 @@ module Invoices::SacMemberships
     def initialize(prolongation_date, new_role_start_on)
       @prolongation_date = prolongation_date
       @new_role_start_on = new_role_start_on
-      @reference_date = new_role_start_on - 1.day
+      @reference_date = new_role_start_on + 1.year - 1.day
     end
 
     def extend_roles
@@ -80,7 +80,7 @@ module Invoices::SacMemberships
       Person.joins(:roles_unscoped)
         .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false, end_on: old_role_end_on..@prolongation_date})
         .where.not(id: ExternalInvoice::SacMembership.where(year: @prolongation_date.year).select(:person_id))
-        .where.not("people.id IN (?)", Role.with_inactive.where(type: ROLES_TO_EXTEND, start_on: @reference_date..).select(:person_id))
+        .where.not("people.id IN (?)", Role.with_inactive.where(type: ROLES_TO_EXTEND, start_on: @new_role_start_on..).select(:person_id))
         .where.not(data_quality: :error)
         .select(:id)
     end
@@ -104,7 +104,7 @@ module Invoices::SacMemberships
       first..last
     end
 
-    def old_role_end_on = @reference_date
+    def old_role_end_on = @new_role_start_on - 1.day
 
     def end_role(role) = role.update!(end_on: old_role_end_on)
   end
