@@ -55,37 +55,36 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 512, "Unterkunft"],
       [195, 512, "Wird reserviert durch SAC"],
       [75, 491, "Unterkunft Budget"],
-      [195, 491, "Hütten 85 CHF"],
-      [195, 481, "Pension, Berggasthaus 125 CHF"],
-      [195, 470, "Pro Person / Nacht mit Halbpension"],
-      [75, 450, "Unterkunft Kategorie"],
-      [195, 450, "ohne Übernachtung"],
-      [75, 429, "Durchführungssprache"],
-      [195, 429, "Deutsch"],
-      [75, 408, "Inhalt / Programm"],
-      [195, 408, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
-      [75, 388, "Teilnehmeranforderungen"],
-      [195, 388, "Gemäss Ausschreibung SAC Kurse / Touren"],
-      [75, 367, "Detailprogramm"],
-      [75, 356, "Teilnehmer Kurse"],
-      [195, 367, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung"],
-      [195, 357, "eingefordert."],
-      [75, 335, "Detailprogramm"],
-      [75, 325, "Teilnehmer Touren"],
-      [195, 336, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
-      [75, 304, "Anmeldeschluss"],
-      [75, 283, "Minimale Teilnehmerzahl"],
-      [75, 263, "Maximale Teilnehmerzahl"],
-      [75, 242, "Durchführung - ja/nein?"],
-      [195, 242, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
-      [195, 232, "gefällt"],
-      [75, 211, "Durchführung – Absage"],
-      [195, 211, "Bitte Klassenlehrer und Unterkunft informieren"],
-      [75, 190, "Ideale Klassengrösse"],
-      [75, 170, "Maximale Klassengrösse"],
-      [75, 149, "Klassenlehrer"],
-      [195, 149, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 139, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
+      [75, 470, "Unterkunft Kategorie"],
+      [195, 470, "ohne Übernachtung"],
+      [75, 449, "Durchführungssprache"],
+      [195, 450, "Deutsch"],
+      [75, 429, "Inhalt / Programm"],
+      [195, 429, "Gemäss Stoffprogramm Kurse (falls vorhanden) oder Tourenprogramm"],
+      [75, 408, "Teilnehmeranforderungen"],
+      [195, 408, "Gemäss Ausschreibung SAC Kurse / Touren"],
+      [75, 387, "Detailprogramm"],
+      [75, 377, "Teilnehmer Kurse"],
+      [195, 387, "Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung"],
+      [195, 377, "eingefordert."],
+      [75, 356, "Detailprogramm"],
+      [75, 345, "Teilnehmer Touren"],
+      [195, 356, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
+      [75, 324, "Anmeldeschluss"],
+      [195, 325, "09.11.2025"],
+      [75, 304, "Minimale Teilnehmerzahl"],
+      [75, 283, "Maximale Teilnehmerzahl"],
+      [75, 262, "Durchführung - ja/nein?"],
+      [195, 263, "Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam"],
+      [195, 252, "gefällt."],
+      [75, 232, "Durchführung – Absage"],
+      [195, 232, "Bitte Klassenlehrer und Unterkunft informieren"],
+      [75, 211, "Ideale Klassengrösse"],
+      [75, 190, "Maximale Klassengrösse"],
+      [75, 169, "Klassenlehrer"],
+      [195, 170, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 159, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
       [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
     ]
   }
@@ -233,12 +232,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         find_matches([
           [75, 491, "Unterkunft Budget"],
-          [195, 491, "Hütten 85 CHF"],
-          [195, 481, "Pension, Berggasthaus 125 CHF"],
-          [195, 470, "Pro Person / Nacht mit Halbpension"],
-          [195, 450, "Anreise Kursleiter"],
-          [435, 450, "CHF"],
-          [485, 450, "30.00"]
+          [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
+          [195, 470, "Anreise Kursleiter"],
+          [435, 470, "CHF"],
+          [485, 470, "30.00"]
         ])
       end
 
@@ -253,12 +250,10 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         find_matches([
           [75, 491, "Unterkunft Budget"],
-          [195, 491, "Hütten 85 CHF"],
-          [195, 481, "Pension, Berggasthaus 125 CHF"],
-          [195, 470, "Pro Person / Nacht mit Halbpension"],
-          [195, 450, "Anreise Klassenleiter"],
-          [435, 450, "CHF"],
-          [485, 450, "50.00"]
+          [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
+          [195, 470, "Anreise Klassenleiter"],
+          [435, 470, "CHF"],
+          [485, 470, "50.00"]
         ])
       end
 
