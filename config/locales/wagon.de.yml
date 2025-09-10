@@ -1624,7 +1624,7 @@ de:
         accommodation_budget:
           label: Unterkunft Budget
           text: >-
-            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
+            Pro Person / Nacht mit Halbpension
         accommodations:
           sac: Wird reserviert durch SAC
           event_specific: Wird reserviert durch Kursleitung

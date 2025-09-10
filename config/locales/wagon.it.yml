@@ -1686,7 +1686,7 @@ it:
         accommodation_budget:
           label: Budget alloggio
           text: >-
-            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
+            per persona / notte con mezza pensione
         accommodations:
           sac: viene riservato tramite il CAS
           event_specific: viene riservato tramite la direzione del corso
