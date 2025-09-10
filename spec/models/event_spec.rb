@@ -8,9 +8,9 @@
 require "spec_helper"
 
 describe Event do
-  describe "::validations" do
-    let(:event) { Fabricate.build(:event, dates_attributes: [start_at: Time.zone.today]) }
+  let(:event) { Fabricate.build(:event, dates_attributes: [start_at: Time.zone.today]) }
 
+  describe "::validations" do
     it "is valid without training_days" do
       expect(event).to be_valid
     end
@@ -24,6 +24,22 @@ describe Event do
       event.training_days = 2
       expect(event).not_to be_valid
       expect(event.errors.full_messages).to eq ["Ausbildungstage muss kleiner oder gleich 1 sein"]
+    end
+  end
+
+  describe "admin_questions" do
+    it "sorts by question asc" do
+      Event::Question.create!(question: "B", disclosure: :optional, event: event, admin: true)
+      Event::Question.create!(question: "A", disclosure: :optional, event: event, admin: true)
+      expect(event.reload.admin_questions.map(&:question)).to eq ["A", "B"]
+    end
+  end
+
+  describe "application_questions" do
+    it "sorts by question asc" do
+      Event::Question.create!(question: "B", disclosure: :optional, event: event)
+      Event::Question.create!(question: "A", disclosure: :optional, event: event)
+      expect(event.reload.application_questions.map(&:question)).to eq ["A", "B"]
     end
   end
 end
