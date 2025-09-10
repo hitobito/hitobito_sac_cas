@@ -24,6 +24,8 @@ event:
   participations:
     delete_answers_after_months: 6
     delete_additional_information_after_months: 6
+  questions:
+    list_alphabetically: true
 
 groups:
   membership_statistics_download_url: https://stats.portal.sac-cas.ch/download

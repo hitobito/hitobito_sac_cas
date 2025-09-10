@@ -23,7 +23,7 @@
 
 = section(t('event.participations.step_wizard.answers_title')) do
   %dl
-    - entry.answers.reject(&:admin?).each do |answer|
+    - entry.answers.list.reject(&:admin?).each do |answer|
       %dt= sanitize(answer.question.question)
       %dd= answer.answer.presence || t('event.participations.no_answer_given')
 
