@@ -88,6 +88,26 @@ describe Event::Participation, js: true do
       expect(find("#event_participation_invoice_form_price").value).to eq "400"
     end
 
+    context "event questions" do
+      before do
+        # create some questions
+        Fabricate(:event_question, event: event, question: "Eine Frage?")
+        Fabricate(:event_question, event: event, question: "A question?")
+      end
+
+      it "orders event questions alphabetically on show page" do
+        visit group_event_participation_path(group_id: event.groups.first.id, event_id: event.id, id: participation.id)
+        expect(find_all("section > dl > dt")[0].text).to eq "A question?"
+        expect(find_all("section > dl > dt")[1].text).to eq "Eine Frage?"
+      end
+
+      it "orders event questions alphabetically on edit page" do
+        visit edit_group_event_participation_path(group_id: event.groups.first.id, event_id: event.id, id: participation.id)
+        expect(find_all("label.col-form-label")[0].text).to eq "A question?"
+        expect(find_all("label.col-form-label")[1].text).to eq "Eine Frage?"
+      end
+    end
+
     context "cancel" do
       before do
         visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id)
