@@ -47,6 +47,7 @@ describe ExternalTrainings::Qualifier do
       training = create_external_training(start_at: today, training_days: 1)
       expect { issue(training) }.to change { Qualification.count }
     end
+
     it "noops when earlier participation does not have enough actual days" do
       create_qualification(start_at: today - 2.years)
       create_course_participation(start_at: today, qualified: true, training_days: 1, actual_days: 0.5)
@@ -82,13 +83,18 @@ describe ExternalTrainings::Qualifier do
       end
 
       it "inserts new, deletes former obsolete and keps later supported qualification" do
-        create_external_training(start_at: today - 11.months, training_days: 2)
+        later = create_external_training(start_at: today - 11.months, training_days: 2)
 
         expect { issue(@training) }.not_to change { Qualification.count }
         expect(start_dates).to eq [
           today - 4.years,
           today - 2.years,
           today - 11.months
+        ]
+        expect(Qualification.order(:start_at).pluck(:origin)).to eq [
+          nil,
+          @training.to_s,
+          later.to_s
         ]
       end
 

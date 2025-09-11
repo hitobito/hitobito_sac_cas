@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::Event::TrainingDays::CoursesLoader
-  CourseRecord = Data.define(:id, :kind, :start_date, :qualification_date, :training_days)
+  CourseRecord = Data.define(:id, :to_s, :kind, :start_date, :qualification_date, :training_days)
 
   COURSE_COLUMNS = %w[
     events.id
@@ -23,6 +23,7 @@ module SacCas::Event::TrainingDays::CoursesLoader
     scope.select(COURSE_COLUMNS).map do |event|
       CourseRecord.new(
         event.id,
+        event.to_s,
         event.kind,
         event.start_date,
         event.qualification_date,
@@ -35,6 +36,7 @@ module SacCas::Event::TrainingDays::CoursesLoader
     fetch_external_trainings.map do |training|
       CourseRecord.new(
         training.id,
+        training.to_s,
         training.event_kind,
         training.start_at,
         training.qualification_date,
