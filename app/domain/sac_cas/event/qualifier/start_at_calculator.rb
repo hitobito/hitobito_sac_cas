@@ -9,6 +9,7 @@ module SacCas::Event::Qualifier::StartAtCalculator
     super
     @event = SacCas::Event::TrainingDays::CoursesLoader::CourseRecord.new(
       @event.id,
+      @event.to_s,
       @event.kind,
       @event.start_date,
       @event.qualification_date,
