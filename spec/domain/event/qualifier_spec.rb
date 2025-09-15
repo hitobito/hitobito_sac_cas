@@ -30,6 +30,9 @@ describe Event::Qualifier do
     it "does issue if event has sufficient training days" do
       expect { qualifier.issue }.to change { person.qualifications.count }.by(1)
       expect(start_dates).to eq [today - 1.year, today]
+      quali = person.qualifications.order(:start_at).last
+      expect(quali.qualification_kind).to eq ski_leader
+      expect(quali.origin).to eq participation.event.name
     end
 
     it "does issue if event combined with training has sufficient training days" do
