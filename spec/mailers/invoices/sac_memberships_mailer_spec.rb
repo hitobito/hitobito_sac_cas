@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Invoices::SacMembershipsMailer do
+  include Households::SpecHelper
+
   let(:mitglied) { roles(:mitglied) }
   let(:person) { mitglied.person }
   let(:mail) { described_class.confirmation(person, mitglied.group.parent, mitglied.beitragskategorie) }
@@ -47,6 +49,7 @@ describe Invoices::SacMembershipsMailer do
       {invoice-details}
       {faq-url}
       {profile-url}
+      {profile-links}
     TEXT
 
     expect(mail.body).to include("Edmund")
@@ -61,5 +64,18 @@ describe Invoices::SacMembershipsMailer do
     expect(mail.body).to include("Total erstmalig")
     expect(mail.body).to include("https://www.sac-cas.ch/de/meta/faq/mitgliedschaft")
     expect(mail.body).to include(person_path(person))
+    expect(mail.body).to include(person_url(person))
+    expect(mail.body).to include(person.full_name)
+  end
+
+  it "profile-links placeholder includes links to all household members" do
+    create_household(person, Fabricate(:person), Fabricate(:person, birthday: 12.years.ago))
+
+    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :de, label: "label", body: "{first-name} {profile-links}")
+
+    person.household.people.each do |household_person|
+      expect(mail.body).to include(person_url(household_person))
+      expect(mail.body).to include(household_person.full_name)
+    end
   end
 end

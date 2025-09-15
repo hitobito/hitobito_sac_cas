@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::NeuanmeldungenMailer < ApplicationMailer
+  include CommonMailerPlaceholders
+
   APPROVED = "people_registration_approved"
   REJECTED = "people_registration_rejected"
   REJECTED_PERSON_ATTRS = %w[first_name email language primary_group_id]

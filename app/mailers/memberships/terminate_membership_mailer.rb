@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Memberships::TerminateMembershipMailer < ApplicationMailer
+  include CommonMailerPlaceholders
+
   TERMINATE_MEMBERSHIP = "memberships_terminate_sac_membership_confirmation"
   LEAVE_ZUSATZSEKTION = "memberships_leave_zusatzsektion_confirmation"
 

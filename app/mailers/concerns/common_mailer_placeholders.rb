@@ -54,6 +54,10 @@ module CommonMailerPlaceholders
     person_url(@person.id)
   end
 
+  def placeholder_profile_links
+    safe_join(@person.household.people.map { link_to(_1.full_name, person_url(_1)) }, raw("<br />"))
+  end
+
   def placeholder_faq_url
     t("global.links.faq")
   end

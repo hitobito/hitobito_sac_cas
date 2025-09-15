@@ -7,6 +7,7 @@
 
 class Event::ParticipationCanceledMailer < ApplicationMailer
   include CourseMailer
+  include CommonMailerPlaceholders
   include MultilingualMailer
 
   CONFIRMATION = "event_participation_canceled"
