@@ -1242,6 +1242,9 @@ fr:
     recipients: Destinataire – personne individuelle
     recipient_households: Destinataire – familles
     course_data: Liste d'adresses et dates des cours
+    adress_list: Adressliste
+    list_for_participants: Liste für Teilnehmende
+    list_for_leaders: Liste für Kurskader
 
   dropdown/group_edit:
     sac_membership_configs: Paramètres pour les factures des membres
@@ -1721,6 +1724,29 @@ fr:
           label: Enseignant·e
           text: >-
             La direction est assurée par les enseignant·e·s en fonction du nombre maximal de participant·e·s. Merci de l’indiquer dans le programme détaillé des cours et de l’envoyer par e-mail au secrétariat pour les randonnées.
+    participant_list:
+      title: Teilnehmerliste
+      link: www.sac-cas.ch
+      url: "https://www.sac-cas.ch"
+      number: Kursnummer
+      name: Bezeichnung
+      location: Kursort
+      dates: Datum
+      participant_count: Anzahl Teilnehmende
+      teamer_count: Anzahl Kurskader
+      member_no: Mitglieder-Nr.
+      firstname: Vorname
+      lastname: Nachname
+      street: Strasse
+      town: Wohnort
+      email: E-Mail
+      phone: Telefonnummer
+      language: Sprache
+      gender: Geschlecht
+      section: Sektion
+      emergency_contact: Notfallkontakt
+      remarks: Bemerkungen
+
   passes:
     membership:
       file_name_prefix: SAC-CarteMembre

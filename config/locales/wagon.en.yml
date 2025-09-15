@@ -1183,6 +1183,9 @@ en:
     recipients: Empfänger Einzelpersonen
     recipient_households: Empfänger Familien
     course_data: Adressliste und Kursdaten
+    adress_list: Adressliste
+    list_for_participants: Liste für Teilnehmende
+    list_for_leaders: Liste für Kurskader
 
   dropdown/group_edit:
     sac_membership_configs: Parameters for membership invoices
@@ -1657,6 +1660,29 @@ en:
           label: Klassenlehrer
           text: >-
             Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
+    participant_list:
+      title: Teilnehmerliste
+      link: www.sac-cas.ch
+      url: "https://www.sac-cas.ch"
+      number: Kursnummer
+      name: Bezeichnung
+      location: Kursort
+      dates: Datum
+      participant_count: Anzahl Teilnehmende
+      teamer_count: Anzahl Kurskader
+      member_no: Mitglieder-Nr.
+      firstname: Vorname
+      lastname: Nachname
+      street: Strasse
+      town: Wohnort
+      email: E-Mail
+      phone: Telefonnummer
+      language: Sprache
+      gender: Geschlecht
+      section: Sektion
+      emergency_contact: Notfallkontakt
+      remarks: Bemerkungen
+
   passes:
     membership:
       file_name_prefix: SAC membership card
