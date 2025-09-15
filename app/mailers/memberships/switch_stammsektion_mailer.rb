@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Memberships::SwitchStammsektionMailer < ApplicationMailer
+  include CommonMailerPlaceholders
+
   CONFIRMATION = "memberships_switch_stammsektion_confirmation"
 
   def confirmation(person, section, previous_section)
