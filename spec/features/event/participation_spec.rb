@@ -103,8 +103,9 @@ describe Event::Participation, js: true do
 
       it "orders event questions alphabetically on edit page" do
         visit edit_group_event_participation_path(group_id: event.groups.first.id, event_id: event.id, id: participation.id)
-        expect(find_all("label.col-form-label")[0].text).to eq "A question?"
-        expect(find_all("label.col-form-label")[1].text).to eq "Eine Frage?"
+        expect(find_all("label.col-form-label")[0].text).to eq "Anmeldeangaben"
+        expect(find_all(".fields label")[0].text).to eq "A question?"
+        expect(find_all(".fields label")[1].text).to eq "Eine Frage?"
       end
     end
 
