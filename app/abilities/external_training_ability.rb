@@ -43,11 +43,10 @@ class ExternalTrainingAbility < AbilityDsl::Base
     in_same_group_or_below && permission_on_root_or_section_may_create(:group_and_below_full)
   end
 
-  # rubocop:todo Layout/LineLength
-  # always allow when permission is on root group, if not, check for section_may_create on event kind
-  # rubocop:enable Layout/LineLength
+  # always allow when permission is on root group, if not, check for section_may_create
+  # on event kind
   def permission_on_root_or_section_may_create(permission)
-    return true if user_context.layer_ids(permitted_groups).include?(Group.root.id)
+    return true if user_context.layer_ids(permitted_groups).include?(Group.root_id)
     return true unless subject.event_kind
 
     subject.event_kind.section_may_create?

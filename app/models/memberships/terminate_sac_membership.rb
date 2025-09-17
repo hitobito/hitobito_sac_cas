@@ -136,7 +136,7 @@ module Memberships
     def destroy_household = person.household.destroy
 
     def basic_login_group
-      @basic_login_group ||= Group::AboBasicLogin.find_by(layer_group_id: Group.root.id)
+      @basic_login_group ||= Group::AboBasicLogin.find_by(layer_group_id: Group.root_id)
     end
 
     def newsletter

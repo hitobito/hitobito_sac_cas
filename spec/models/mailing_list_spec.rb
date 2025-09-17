@@ -60,7 +60,7 @@ describe MailingList do
       MailingListSeeder.seed!
       expect(sac_inside.subscriptions).to contain_exactly(
         have_attributes(
-          subscriber_id: Group.root.id,
+          subscriber_id: Group.root_id,
           subscriber_type: Group.sti_name
         )
       )
@@ -136,7 +136,7 @@ describe MailingList do
       MailingListSeeder.seed!
       expect(tourenleiter.subscriptions).to contain_exactly(
         have_attributes(
-          subscriber_id: Group.root.id,
+          subscriber_id: Group.root_id,
           subscriber_type: Group.sti_name
         )
       )
@@ -158,7 +158,7 @@ describe MailingList do
       expect(die_alpen_papier.filter_chain.to_hash).to eq(
         "invoice_receiver" => {
           "stammsektion" => "true",
-          "group_id" => Group.root.id
+          "group_id" => Group.root_id
         }
       )
     end
@@ -167,7 +167,7 @@ describe MailingList do
       MailingListSeeder.seed!
       expect(die_alpen_papier.subscriptions).to contain_exactly(
         have_attributes(
-          subscriber_id: Group.root.id,
+          subscriber_id: Group.root_id,
           subscriber_type: Group.sti_name
         )
       )
@@ -191,7 +191,7 @@ describe MailingList do
       MailingListSeeder.seed!
       expect(die_alpen_digital.subscriptions).to contain_exactly(
         have_attributes(
-          subscriber_id: Group.root.id,
+          subscriber_id: Group.root_id,
           subscriber_type: Group.sti_name
         )
       )

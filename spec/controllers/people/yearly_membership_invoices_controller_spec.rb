@@ -14,7 +14,7 @@ describe People::YearlyMembershipInvoicesController do
 
   let(:params) do
     {
-      group_id: Group.root.id,
+      group_id: Group.root_id,
       people_yearly_membership_invoice_form: {
         invoice_year: today.year,
         invoice_date: today,
@@ -74,7 +74,7 @@ describe People::YearlyMembershipInvoicesController do
       Invoices::Abacus::CreateYearlyInvoicesJob.new(**params[:people_yearly_membership_invoice_form]).enqueue!(run_at: 10.seconds.from_now)
       # rubocop:enable Layout/LineLength
 
-      get :new, params: {group_id: Group.root.id}
+      get :new, params: {group_id: Group.root_id}
 
       expect(body).to_not have_selector(".content form")
       # rubocop:todo Layout/LineLength
