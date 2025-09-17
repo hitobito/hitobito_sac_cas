@@ -11,7 +11,7 @@ def seed_list(internal_key, name, subscribable_mode: "opt_in", **opts)
     :internal_key,
     internal_key:,
     **opts.reverse_merge(
-      group_id: Group.root.id,
+      group_id: Group.root_id,
       name:,
       subscribable_for: "configured",
       subscribable_mode:
@@ -104,7 +104,7 @@ die_alpen_paper_list = seed_list(
   SacCas::MAILING_LIST_DIE_ALPEN_PAPER_INTERNAL_KEY,
   "Die Alpen - Zeitschrift des SAC",
   subscribable_mode: "opt_out",
-  filter_chain: {"invoice_receiver" => {"stammsektion" => "true", "group_id" => Group.root.id}}
+  filter_chain: {"invoice_receiver" => {"stammsektion" => "true", "group_id" => Group.root_id}}
 )
 seed_subscription(die_alpen_paper_list,
   Group::SektionsMitglieder::Mitglied)

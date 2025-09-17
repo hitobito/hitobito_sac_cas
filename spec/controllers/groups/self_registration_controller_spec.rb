@@ -50,9 +50,9 @@ describe Groups::SelfRegistrationController do
       it "redirects to login" do
         post :create, params: required_params.merge(step: 4)
         expect(response).to redirect_to new_person_session_path
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du hast Dich erfolgreich registriert. " \
+        "Du erhältst in Kürze eine E-Mail mit der Anleitung, " \
+        "wie Du Deinen Account freischalten kannst."
       end
     end
 
@@ -103,9 +103,8 @@ describe Groups::SelfRegistrationController do
 
     context "for signup wizard" do
       it "shows the correct message" do
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. " \
+        "Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
 
@@ -118,9 +117,8 @@ describe Groups::SelfRegistrationController do
       end
 
       it "shows the correct message" do
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du bist bereits Empfänger von diesem Magazin. " \
+        "Daher kannst du das Magazin kein zweites mal bestellen."
       end
     end
 
@@ -134,9 +132,8 @@ describe Groups::SelfRegistrationController do
       end
 
       it "shows the correct message" do
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du bist bereits Mitglied im SAC-Tourenportal. " \
+        "Daher kannst du keine weitere Mitgliedschaft erstellen."
       end
     end
 
@@ -144,9 +141,8 @@ describe Groups::SelfRegistrationController do
       let(:group) { Group::AboBasicLogin.first }
 
       it "shows the correct message" do
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du hast bereits ein Login. " \
+        "Daher kannst du kein neues SAC/CAS Login erstellen."
       end
     end
   end
@@ -164,12 +160,12 @@ describe Groups::SelfRegistrationController do
 
     it "redirects to login page" do
       post :create, params: wizard_params(main_email_field: {email: admin.email})
-      # rubocop:todo Layout/LineLength
-      expect(response).to redirect_to(new_person_session_path(person: {login_identity: admin.email}))
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      expect(flash[:notice]).to eq "Es existiert bereits ein Login für diese E-Mail. Melde dich hier an."
-      # rubocop:enable Layout/LineLength
+      expect(response).to redirect_to(
+        new_person_session_path(person: {login_identity: admin.email})
+      )
+
+      expect(flash[:notice]).to eq "Es existiert bereits ein Login für diese E-Mail. " \
+      "Melde dich hier an."
     end
   end
 
@@ -185,9 +181,8 @@ describe Groups::SelfRegistrationController do
         expect(response).to redirect_to(history_group_person_path(
           group_id: person.primary_group_id, id: person.id
         ))
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. " \
+        "Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
 
@@ -202,9 +197,8 @@ describe Groups::SelfRegistrationController do
         expect(response).to redirect_to(history_group_person_path(
           group_id: person.primary_group_id, id: person.id
         ))
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice]).to eq "Du bist einer Familie zugeordnet. " \
+        "Kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
 
@@ -212,16 +206,15 @@ describe Groups::SelfRegistrationController do
       let(:person) { Fabricate(:person) }
 
       it "redirects to memberships tab layered under root group with a flash message" do
-        # rubocop:todo Layout/LineLength
-        allow_any_instance_of(Wizards::Signup::SektionWizard).to receive(:member_or_applied?).and_return(true)
-        # rubocop:enable Layout/LineLength
+        allow_any_instance_of(Wizards::Signup::SektionWizard)
+          .to receive(:member_or_applied?).and_return(true)
         get :show, params: wizard_params
 
-        expect(response).to redirect_to(history_group_person_path(group_id: Group.root.id,
-          id: person.id))
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
-        # rubocop:enable Layout/LineLength
+        expect(response).to redirect_to(
+          history_group_person_path(group_id: Group.root_id, id: person.id)
+        )
+        expect(flash[:notice]).to eq "Du besitzt bereits eine SAC-Mitgliedschaft. " \
+         "Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
       end
     end
   end

@@ -11,7 +11,7 @@ module SacCas::Dropdown::GroupEdit
     if group.root? && template.can?(:index, SacMembershipConfig)
       add_item(translate(:sac_membership_configs),
         template.group_sac_membership_configs_path(
-          group_id: Group.root.id
+          group_id: Group.root_id
         ))
     end
 

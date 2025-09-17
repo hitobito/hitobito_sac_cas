@@ -12,10 +12,10 @@ srand(42)
 seeder = SacEventSeeder.new
 
 8.times do
-  seeder.seed_event(Group.root.id, :course)
+  seeder.seed_event(Group.root_id, :course)
 end
 2.times do
-  seeder.seed_event(Group.root.id, :course).update_column(:state, :assignment_closed)
+  seeder.seed_event(Group.root_id, :course).update_column(:state, :assignment_closed)
 end
 
 Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)).find_each do |group|

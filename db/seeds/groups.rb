@@ -22,8 +22,8 @@ end
 
 Group::SacCas.seed_once(:id, id: 1, name: "SAC/CAS")
 
-Group::Abos.seed_once(:id, id: 2, parent_id: Group.root.id)
-abos = Group::Abos.find_by(parent_id: Group.root.id)
+Group::Abos.seed_once(:id, id: 2, parent_id: Group.root_id)
+abos = Group::Abos.find_by(parent_id: Group.root_id)
 
 Group::AboMagazine.seed_once(:id, id: 3, parent_id: abos.id)
 magazine = Group::AboMagazine.find_by(parent_id: abos.id)
@@ -66,5 +66,9 @@ Group::AboBasicLogin.seed_once(:id) do |a|
   ]
 end
 
-Group::ExterneKontakte.seed_once(:id, id: 9, parent_id: Group.root.id,
-  name: "SAC Mitglieder / ehemalig")
+Group::ExterneKontakte.seed_once(
+  :id,
+  id: 9,
+  parent_id: Group.root_id,
+  name: "SAC Mitglieder / ehemalig"
+)
