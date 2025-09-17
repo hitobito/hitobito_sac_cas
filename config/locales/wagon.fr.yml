@@ -422,7 +422,7 @@ fr:
         id: Numéro de personne
         advertising: Envoi de publicité
         address_care_of: Complément d’adresse
-        correspondence: Carte de membre et facturation
+        correspondence: Facturation
         confirmed_at: E-mail confirmé
         family_id: ID de la famille
         unconfirmed_email: E-Mail

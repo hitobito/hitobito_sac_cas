@@ -420,7 +420,7 @@ it:
         id: Numero personale
         advertising: Invio di pubblicità
         address_care_of: Complemento di indirizzo
-        correspondence: Tessera soci e fatturazione
+        correspondence: Fatturazione
         confirmed_at: E-mail verificata
         family_id: ID famiglia
         unconfirmed_email: E-Mail

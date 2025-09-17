@@ -418,7 +418,7 @@ de:
         id: Personennummer
         advertising: Werbesendungen
         address_care_of: Adresszusatz
-        correspondence: Mitgliederausweis & Rechnungsstellung
+        correspondence: Rechnungsstellung
         confirmed_at: E-Mail bestätigt
         family_id: Familien ID
         unconfirmed_email: E-Mail
