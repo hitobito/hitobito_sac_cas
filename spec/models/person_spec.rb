@@ -628,6 +628,20 @@ describe Person do
       expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
     end
 
+    it "enqueues the job for the family main person if other member is changed" do
+      person = people(:familienmitglied2)
+      expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
+      expect(people(:familienmitglied).town).to eq("Neuer Ort")
+      expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
+    end
+
+    it "enqueues the job for the family main person if it is changed" do
+      person = people(:familienmitglied)
+      expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
+      expect(people(:familienmitglied2).town).to eq("Neuer Ort")
+      expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
+    end
+
     it "doesn't enqueue the job if an irrelevant attribute changed" do
       expect { person.update!(additional_information: "Abacus") }.not_to change(job, :count)
     end
