@@ -14,7 +14,7 @@ describe People::YearlyMembershipInvoicesController do
 
   let(:params) do
     {
-      group_id: Group.root.id,
+      group_id: Group.root_id,
       people_yearly_membership_invoice_form: {
         invoice_year: today.year,
         invoice_date: today,
@@ -67,7 +67,7 @@ describe People::YearlyMembershipInvoicesController do
     it "does not show form but info flash if a job is already running" do
       Invoices::Abacus::CreateYearlyInvoicesJob.new(**params[:people_yearly_membership_invoice_form]).enqueue!(run_at: 10.seconds.from_now)
 
-      get :new, params: {group_id: Group.root.id}
+      get :new, params: {group_id: Group.root_id}
 
       expect(body).to_not have_selector(".content form")
       expect(body).to have_selector(".alert-warning", text: "Es läuft bereits ein Jahresinkassolauf. " \

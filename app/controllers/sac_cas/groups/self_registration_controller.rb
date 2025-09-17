@@ -67,7 +67,7 @@ module SacCas::Groups::SelfRegistrationController
 
   def history_path
     history_group_person_path(
-      group_id: current_user.primary_group_id || Group.root.id,
+      group_id: current_user.primary_group_id || Group.root_id,
       id: current_user.id
     )
   end

@@ -39,7 +39,7 @@ module SacCas::QualificationAbility
   end
 
   def permission_in_top_layer
-    permission_in_layer?(Group.root.id)
+    permission_in_layer?(Group.root_id)
   end
 
   def can_show_person?

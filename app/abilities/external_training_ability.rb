@@ -43,7 +43,7 @@ class ExternalTrainingAbility < AbilityDsl::Base
 
   # always allow when permission is on root group, if not, check for section_may_create on event kind
   def permisson_on_root_or_section_may_create(permission)
-    return true if user_context.layer_ids(permitted_groups).include?(Group.root.id)
+    return true if user_context.layer_ids(permitted_groups).include?(Group.root_id)
 
     subject.event_kind&.section_may_create?
   end
