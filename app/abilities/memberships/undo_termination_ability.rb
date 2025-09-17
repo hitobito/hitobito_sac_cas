@@ -10,7 +10,7 @@ module Memberships
     include Memberships::Constraints
 
     on(Memberships::UndoTermination) do
-      class_side(:manage).backoffice?
+      class_side(:manage).if_backoffice?
     end
   end
 end

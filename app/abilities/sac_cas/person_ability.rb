@@ -50,11 +50,11 @@ module SacCas::PersonAbility
   end
 
   def if_backoffice
-    SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
+    role_type?(*SacCas::SAC_BACKOFFICE_ROLES)
   end
 
   def if_section_functionary
-    SacCas::SAC_SECTION_FUNCTIONARY_ROLES.any? { |r| role_type?(r) }
+    role_type?(*SacCas::SAC_SECTION_FUNCTIONARY_ROLES)
   end
 
   def if_person_is_adult_and_has_email_and_all_household_members_writable
