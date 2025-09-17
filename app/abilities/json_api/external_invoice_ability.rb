@@ -21,6 +21,6 @@ class JsonApi::ExternalInvoiceAbility
   end
 
   def backoffice?
-    @user.roles.exists?(type: SacCas::SAC_BACKOFFICE_ROLES.map(&:sti_name))
+    @user.backoffice?
   end
 end
