@@ -10,13 +10,14 @@ module Memberships
     delegate :mitglied_termination_by_section_only?, to: :subject
 
     def for_self_if_active_member_or_backoffice
-      active_member? && (for_self? || backoffice?)
+      active_member? && (for_self? || if_backoffice?)
     end
 
     def for_self_when_not_terminated_if_active_member_or_backoffice
-      # rubocop:todo Layout/LineLength
-      active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
-      # rubocop:enable Layout/LineLength
+      active_member? &&
+        (for_self_and_not_terminated? ||
+        if_backoffice? ||
+        termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
     end
 
     def for_self_and_not_terminated?
@@ -27,8 +28,8 @@ module Memberships
       !mitglied_termination_by_section_only? && schreibrecht_role? && !terminated?
     end
 
-    def backoffice?
-      user_context.user.backoffice?
+    def if_backoffice?
+      role_type?(*SacCas::SAC_BACKOFFICE_ROLES)
     end
 
     def for_self?
@@ -44,9 +45,7 @@ module Memberships
     end
 
     def schreibrecht_role?
-      user_context.user.roles.any? { |role|
-        role.type == Group::SektionsMitglieder::Schreibrecht.sti_name
-      }
+      role_type?(Group::SektionsMitglieder::Schreibrecht)
     end
   end
 end
