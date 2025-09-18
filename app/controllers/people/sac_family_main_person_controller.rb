@@ -10,7 +10,7 @@ class People::SacFamilyMainPersonController < ApplicationController
     authorize!(:update, person)
     return if assert_person_household_member!
 
-    authorize!(:set_sac_family_main_person, person)
+    person.household_people.each { |p| authorize!(:update, p) }
     return if assert_already_main_family_person!
 
     person.household.set_family_main_person!
@@ -20,8 +20,9 @@ class People::SacFamilyMainPersonController < ApplicationController
   private
 
   def assert_person_household_member!
-    unless person.household.exists?
-      render plain: "Person is not associated with any household",
+    if !person.household.exists? || !person.adult? || person.email.blank?
+      render plain: "Person is not associated with any household, " \
+        "is not an adult or has no email address",
         status: :unprocessable_entity
     end
   end

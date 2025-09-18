@@ -25,9 +25,6 @@ module SacCas::PersonAbility
         # rubocop:enable Layout/LineLength
         .if_backoffice
       permission(:any).may(:index_invoices, :security).none
-      permission(:any)
-        .may(:set_sac_family_main_person)
-        .if_person_is_adult_and_has_email_and_all_household_members_writable
       permission(:any).may(:show_remarks).if_backoffice_or_functionary
       permission(:any).may(:manage_national_office_remark).if_backoffice
       permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
@@ -55,19 +52,5 @@ module SacCas::PersonAbility
 
   def if_section_functionary
     role_type?(*SacCas::SAC_SECTION_FUNCTIONARY_ROLES)
-  end
-
-  def if_person_is_adult_and_has_email_and_all_household_members_writable
-    return false unless person.household.exists?
-    return false unless person.adult?
-    return false if person.email.blank?
-
-    [person, *person.household_people].all? do |household_person|
-      can_update_household_person?(household_person)
-    end
-  end
-
-  def can_update_household_person?(household_person)
-    Ability.new(user).can?(:update, household_person)
   end
 end
