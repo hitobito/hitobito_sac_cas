@@ -37,7 +37,7 @@ module Memberships
     end
 
     def active_member?
-      People::SacMembership.new(subject.person).active?
+      subject.person.sac_membership.active?
     end
 
     def terminated?
