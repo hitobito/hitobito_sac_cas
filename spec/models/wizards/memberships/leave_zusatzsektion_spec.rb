@@ -19,6 +19,7 @@ describe Wizards::Memberships::LeaveZusatzsektion do
   let(:wizard) do
     described_class.new(current_step:, backoffice:, person:, role:, **params)
   end
+  let(:mail_mitglied) { true }
 
   context "with terminated primary role" do
     it "only has MembershipTerminatedInfo step" do
@@ -104,7 +105,7 @@ describe Wizards::Memberships::LeaveZusatzsektion do
       expect do
         wizard.save!
       end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion)
-        .with(person, matterhorn, end_of_year)
+        .with(person, matterhorn, end_of_year, mail_mitglied)
     end
 
     context "backoffice" do
@@ -121,14 +122,14 @@ describe Wizards::Memberships::LeaveZusatzsektion do
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
           .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion)
-          .with(person, matterhorn, Time.zone.yesterday)
+          .with(person, matterhorn, Time.zone.yesterday, mail_mitglied)
       end
 
-      it "skips TerminateSacMembership::leave_zusatzsektion email if inform_via_email is set to false" do
-        params[:summary][:inform_via_email] = false
+      it "still sends TerminateSacMembership::leave_zusatzsektion email even if inform_mitglied_via_email is set to false" do
+        params[:summary][:inform_mitglied_via_email] = false
         expect do
           expect(wizard.save!).to eq true
-        end.not_to have_enqueued_mail
+        end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion)
       end
     end
   end
