@@ -66,7 +66,8 @@ module Dropdown
     def build(wizard_class)
       wizard_class.new(
         person: @person,
-        backoffice: current_user.backoffice?
+        backoffice: current_user.backoffice?,
+        current_ability: current_ability
       )
     end
   end
