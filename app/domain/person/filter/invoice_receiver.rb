@@ -9,8 +9,6 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
   VISIBLE_ATTRS = [:stammsektion, :zusatzsektion].freeze
   self.permitted_args = [*VISIBLE_ATTRS, :group_id]
 
-  def self.root_group_id = @root_group_id ||= Group.root.id
-
   def apply(scope)
     return scope if blank?
 
@@ -47,5 +45,5 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
       .or(base_scope(scope).where(sac_family_main_person: true))
   end
 
-  def root_group? = group_id.to_i == self.class.root_group_id
+  def root_group? = group_id.to_i == Group.root_id
 end

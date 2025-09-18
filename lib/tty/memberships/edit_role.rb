@@ -123,7 +123,7 @@ module TTY
         url = history_group_person_url(
           host: "portal.sac-cas.ch",
           protocol: "https",
-          group_id: Group.root.id,
+          group_id: Group.root_id,
           id: person
         )
         system("xdg-open", url, out: "/dev/null")

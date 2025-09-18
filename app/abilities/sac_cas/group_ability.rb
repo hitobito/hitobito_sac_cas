@@ -32,6 +32,6 @@ module SacCas::GroupAbility
   end
 
   def if_backoffice
-    SacCas::SAC_BACKOFFICE_ROLES.any? { |r| role_type?(r) }
+    role_type?(*SacCas::SAC_BACKOFFICE_ROLES)
   end
 end

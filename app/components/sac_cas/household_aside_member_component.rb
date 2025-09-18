@@ -80,15 +80,25 @@ module SacCas
       end
 
       def can_set_main_person_and_email_present?(member)
-        member.email.present? && can?(:set_sac_family_main_person, member)
+        return false unless person.adult?
+        return false if person.email.blank?
+
+        can_set_main_person?
       end
 
       def cannot_set_main_person_but_email_present?(member)
-        member.email.present? && !can?(:set_sac_family_main_person, member)
+        member.email.present? && !can_set_main_person_and_email_present?(member)
       end
 
       def icon_path(member)
         sac_family_main_person_path(member)
+      end
+
+      def can_set_main_person?
+        return @can_set_main_person if defined?(@can_set_main_person)
+
+        @can_set_main_person = person.household.exists? &&
+          entries.all? { |member| can?(:update, member) }
       end
     end
   end

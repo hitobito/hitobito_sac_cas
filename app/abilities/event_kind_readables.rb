@@ -25,7 +25,7 @@ class EventKindReadables
   def user_has_permission_in_root_group?
     permissions_to_check.any? do |permission|
       permitted_groups = user.groups_with_permission(permission)
-      user_context.layer_ids(permitted_groups).include?(Group.root.id)
+      user_context.layer_ids(permitted_groups).include?(Group.root_id)
     end
   end
 
