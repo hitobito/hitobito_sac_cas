@@ -68,7 +68,7 @@ describe "people/_details_sac_cas.html.haml" do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
     it "renders membership info for active membership" do
-      expect(dom).to have_css "dl dt", text: "Mitgliederausweis & Rechnungsstellung"
+      expect(dom).to have_css "dl dt", text: "Rechnungsstellung"
       expect(dom).to have_css "dl dt", text: "E-Mail bestätigt"
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"
