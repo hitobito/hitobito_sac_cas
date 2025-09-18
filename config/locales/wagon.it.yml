@@ -2161,7 +2161,7 @@ it:
           family_warning: >-
             Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
-          inform_via_email: "Informare i soci e la sezione via e-mail?"
+          inform_mitglied_via_email: "Informare i soci e la sezione via e-mail?"
           next_button: "Richiedere disdetta"
       termination:
         summary:
@@ -2180,5 +2180,5 @@ it:
             Dichiaro di aver compreso che, in caso di futura riaffiliazione, la quota d’adesione sarà addebitata in ogni caso. (campo obbligatorio)
           subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
           subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
-          inform_via_email: "Informare i soci e la sezione via e-mail?"
+          inform_mitglied_via_email: "Informare i soci e la sezione via e-mail?"
           next_button: "Richiedere disdetta"

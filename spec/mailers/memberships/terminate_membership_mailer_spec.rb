@@ -11,11 +11,12 @@ describe Memberships::TerminateMembershipMailer do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:bluemlisalp) }
   let(:today) { Time.zone.today }
+  let(:mail_mitglied) { true }
 
   subject { mail.parts.first.body }
 
   describe "terminate membership" do
-    let(:mail) { described_class.terminate_membership(person, group, today) }
+    let(:mail) { described_class.terminate_membership(person, group, today, mail_mitglied) }
 
     it "sends confirmation email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
@@ -51,10 +52,18 @@ describe Memberships::TerminateMembershipMailer do
       groups(:geschaeftsstelle).update!(email: "geschaeftsstelle@example.com")
       expect(mail.cc).to eq ["geschaeftsstelle@example.com"]
     end
+
+    context "with mail_mitglied=false" do
+      let(:mail_mitglied) { false }
+
+      it "only sends email to sektion" do
+        expect(mail.to).to match_array(["bluemlisalp@sac.ch"])
+      end
+    end
   end
 
   describe "leave_zusatzsektion" do
-    let(:mail) { described_class.leave_zusatzsektion(person, group, today) }
+    let(:mail) { described_class.leave_zusatzsektion(person, group, today, mail_mitglied) }
 
     it "sends confirmation email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
@@ -68,6 +77,14 @@ describe Memberships::TerminateMembershipMailer do
     it "sends confirmation email to geschaefsstelle if configured" do
       groups(:geschaeftsstelle).update!(email: "geschaeftsstelle@example.com")
       expect(mail.cc).to eq ["geschaeftsstelle@example.com"]
+    end
+
+    context "with mail_mitglied=false" do
+      let(:mail_mitglied) { false }
+
+      it "only sends email to sektion" do
+        expect(mail.to).to match_array(["bluemlisalp@sac.ch"])
+      end
     end
   end
 end
