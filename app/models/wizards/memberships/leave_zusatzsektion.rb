@@ -68,7 +68,7 @@ module Wizards::Memberships
     private
 
     def send_confirmation_mail
-      return if backoffice? && !summary.inform_via_email
+      return if backoffice? && !summary.inform_mitglied_via_email
 
       Memberships::TerminateMembershipMailer.leave_zusatzsektion(
         person,

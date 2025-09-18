@@ -124,8 +124,8 @@ describe Wizards::Memberships::LeaveZusatzsektion do
           .with(person, matterhorn, Time.zone.yesterday)
       end
 
-      it "skips TerminateSacMembership::leave_zusatzsektion email if inform_via_email is set to false" do
-        params[:summary][:inform_via_email] = false
+      it "skips TerminateSacMembership::leave_zusatzsektion email if inform_mitglied_via_email is set to false" do
+        params[:summary][:inform_mitglied_via_email] = false
         expect do
           expect(wizard.save!).to eq true
         end.not_to have_enqueued_mail
