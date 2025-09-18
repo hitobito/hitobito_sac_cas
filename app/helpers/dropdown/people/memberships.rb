@@ -56,13 +56,15 @@ module Dropdown
         template.new_group_person_role_undo_termination_path(
           role_id: latest_membership.id,
           group_id: latest_membership.group_id,
-          person_id: person.id))
+          person_id: person.id
+        ))
     end
 
     def build(wizard_class)
       wizard_class.new(
         person: @person,
-        backoffice: current_user.backoffice?
+        backoffice: current_user.backoffice?,
+        current_ability: current_ability
       )
     end
   end
