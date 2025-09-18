@@ -19,9 +19,8 @@ module Dropdown
     ].freeze
 
     delegate :current_ability, :current_user, :group_person_join_zusatzsektion_path,
-      # rubocop:todo Layout/LineLength
-      :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path, to: :template
-    # rubocop:enable Layout/LineLength
+      :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path,
+      to: :template
 
     def initialize(template, person, group)
       @template = template
@@ -57,11 +56,11 @@ module Dropdown
       return unless latest_membership&.terminated?
 
       add_item(translate("undo_termination_link"),
-        # rubocop:todo Layout/LineLength
-        template.new_group_person_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
-          # rubocop:enable Layout/LineLength
-          group_id: person.sac_membership.latest_stammsektion_role.group_id,
-          person_id: person.id))
+        template.new_group_person_role_undo_termination_path(
+          role_id: latest_membership.id,
+          group_id: latest_membership.group_id,
+          person_id: person.id
+        ))
     end
 
     def build(wizard_class)

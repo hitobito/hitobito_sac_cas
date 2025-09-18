@@ -34,8 +34,10 @@ module SacCas::QualificationAbility
   end
 
   def tourenchef_layer_group_ids
-    user.roles.where(type: TOURENCHEF_ROLE_TYPES)
-      .includes(:group).collect { _1.group.layer_group_id }.uniq
+    user.roles
+      .select { |r| TOURENCHEF_ROLE_TYPES.include?(r.class.sti_name) }
+      .map { |r| r.group.layer_group_id }
+      .uniq
   end
 
   def permission_in_top_layer
@@ -43,6 +45,20 @@ module SacCas::QualificationAbility
   end
 
   def can_show_person?
-    Ability.new(user).can?(:show_full, subject.person)
+    can_show_full_in_group? || can_show_full_in_layer?
+  end
+
+  def can_show_full_in_group?
+    contains_any?(
+      user_context.permission_group_ids(:group_and_below_full),
+      subject.person.local_groups_hierachy_ids
+    )
+  end
+
+  def can_show_full_in_layer?
+    contains_any?(
+      user_context.permission_layer_ids(:layer_and_below_full),
+      subject.person.groups_hierarchy_ids
+    )
   end
 end

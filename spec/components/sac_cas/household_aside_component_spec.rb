@@ -19,7 +19,7 @@ describe HouseholdAsideComponent, type: :component do
   it "returns the humanized name of the Household model" do
     stub_can(:show, true)
     stub_can(:create_households, true)
-    stub_can(:set_sac_family_main_person, true)
+    stub_can(:update, true)
 
     rendered_component = render_inline(component)
     expect(rendered_component).to have_selector("h2", text: "Familie")

@@ -16,7 +16,7 @@ describe HouseholdAsideMemberComponent, type: :component do
 
   it "renders a person in the household with link" do
     stub_can(:show, true)
-    stub_can(:set_sac_family_main_person, true)
+    stub_can(:update, true)
     rendered_component = render_inline(component)
     expect(rendered_component).to have_selector(
       'a[data-turbo-frame="_top"][href="/de/people/600002"]', text: "Tenzing Norgay"
@@ -27,7 +27,7 @@ describe HouseholdAsideMemberComponent, type: :component do
 
   it "renders a person in the household without link" do
     stub_can(:show, false)
-    stub_can(:set_sac_family_main_person, false)
+    stub_can(:update, false)
     rendered_component = render_inline(component)
     expect(rendered_component).to have_selector("strong", text: "Frieda Norgay")
     expect(rendered_component).to have_selector("span", text: "(25)")
@@ -36,7 +36,7 @@ describe HouseholdAsideMemberComponent, type: :component do
 
   it "renders all people in the household with ages" do
     stub_can(:show, false)
-    stub_can(:set_sac_family_main_person, false)
+    stub_can(:update, false)
     rendered_component = render_inline(component)
     expect(rendered_component).to have_text("Tenzing Norgay (25)")
     expect(rendered_component).to have_text("Frieda Norgay (25)")
@@ -45,7 +45,7 @@ describe HouseholdAsideMemberComponent, type: :component do
 
   it "renders people with main person link" do
     stub_can(:show, true)
-    stub_can(:set_sac_family_main_person, true)
+    stub_can(:update, true)
     rendered_component = render_inline(component)
     expect(rendered_component).to have_selector("td", text: "Tenzing Norgay") do |a|
       expect(a.ancestor("tr")).to have_selector('span[title="Familienrechnungsempfänger"]')
@@ -67,7 +67,7 @@ describe HouseholdAsideMemberComponent, type: :component do
       familienmitglied2.destroy!
       familienmitglied_kind.destroy!
       stub_can(:show, true)
-      stub_can(:set_sac_family_main_person, true)
+      stub_can(:update, true)
       rendered_component = render_inline(component)
       expect(rendered_component).to have_css("#{css_selector}[title=\"#{title}\"]")
     end
@@ -112,7 +112,7 @@ describe HouseholdAsideMemberComponent, type: :component do
 
     it "renders people with main person link for neuanmeldung" do
       stub_can(:show, true)
-      stub_can(:set_sac_family_main_person, true)
+      stub_can(:update, true)
       expect(familienmitglied.household).to have(2).members
       rendered_component = render_inline(component)
       expect(rendered_component).to have_selector("td", text: "Tenzing Norgay") do |a|
