@@ -53,8 +53,9 @@ module Dropdown
       return unless latest_membership&.terminated?
 
       add_item(translate("undo_termination_link"),
-        template.new_group_person_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
-          group_id: person.sac_membership.latest_stammsektion_role.group_id,
+        template.new_group_person_role_undo_termination_path(
+          role_id: latest_membership.id,
+          group_id: latest_membership.group_id,
           person_id: person.id))
     end
 
