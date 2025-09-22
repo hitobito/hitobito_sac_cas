@@ -404,7 +404,7 @@ describe Household do
       adult.update_column(:street, nil)
 
       person.update!(street: "Langweilige Strasse")
-      expect { household.save!(context: :update_address) }.not_to raise_error
+      expect { household.update_address! }.not_to raise_error
       expect(household.members.map(&:person).map(&:street)).to all(eq("Langweilige Strasse"))
     end
   end
