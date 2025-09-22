@@ -14,4 +14,4 @@
     = form.select :termination_reason_id, c.model.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
 
   - if wizard.backoffice?
-    = render 'wizards/shared/inline_checkbox', label: t(".inform_via_email"), key: :inform_via_email, form:
+    = render 'wizards/shared/inline_checkbox', label: t(".inform_mitglied_via_email"), key: :inform_mitglied_via_email, form:
