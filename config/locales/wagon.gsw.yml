@@ -1779,6 +1779,7 @@ gsw:
         create_invoice: Rechnung erstellen
 
     account_completions:
+      email_already_present: Die Person hat bereits ein Login hinterlegt.
       show:
         explain_confirmation_email: >-
           Nachdem du das Formular abeschickt hast schicken wir eine E-Mail um

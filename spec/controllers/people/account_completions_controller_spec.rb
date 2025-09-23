@@ -35,6 +35,13 @@ describe People::AccountCompletionsController do
       hidden_token_field = dom.find("input[name=token]", visible: false)
       expect(hidden_token_field["value"]).to eq token
     end
+
+    it "redirects to sign_in page if confirmed email is already present" do
+      person.update!(email: "confirmed@example.com")
+      get :show, params: {token:}
+      expect(response).to redirect_to(new_person_session_path)
+      expect(flash[:notice]).to eq("Die Person hat bereits ein Login hinterlegt.")
+    end
   end
 
   describe "PUT#update" do
@@ -71,6 +78,19 @@ describe People::AccountCompletionsController do
         ]
       end.to change(ActionMailer::Base.deliveries, :count).by(1)
         .and change { person.reload.unconfirmed_email }.from(nil).to("test@example.com")
+    end
+
+    it "redirects to sign_in page if confirmed email is already present" do
+      person.update!(email: "confirmed@example.com")
+      expect do
+        patch :update, params: {token:, person: {
+          unconfirmed_email: "test@example.com",
+          password: "testtesttest",
+          password_confirmation: "testtesttest"
+        }}
+        expect(response).to redirect_to(new_person_session_path)
+        expect(flash[:notice]).to eq("Die Person hat bereits ein Login hinterlegt.")
+      end.to_not change { [person.reload.unconfirmed_email, person.reload.encrypted_password] }
     end
   end
 end
