@@ -1780,12 +1780,13 @@ fr:
         create_invoice: Créer une facture
 
     account_completions:
+      email_already_present: Cette personne a déjà un compte.
       show:
         explain_confirmation_email: >-
-          Nachdem du das Formular abeschickt hast schicken wir eine E-Mail um deinen Account zu bestätigen. Erst dann ist dein Login aktiv.
+          Une fois le formulaire envoyé, tu recevras un e-mail pour confirmer ton compte. Ton compte sera actif après la confirmation.
       update:
         explain_confirmation_email: >-
-          Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
+          Dès que tu as confirmé ton adresse e-mail, tu peux te connecter ici.
     membership:
       verify:
         member_details_sac_cas:
