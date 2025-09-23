@@ -414,6 +414,15 @@ describe Event::Course do
         expect(leader.reload.state).to eq("assigned")
       end
 
+      it "updates assigned participants to summoned without sending email" do
+        course.skip_emails = true
+        expect { course.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("summoned"))
+          .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(2)
+          .and not_have_enqueued_mail(Event::ParticipationMailer, :summon)
+        expect(leader.reload.state).to eq("assigned")
+      end
+
       it "doesn't enqueue a job if there already is an external invoice" do
         ExternalInvoice::CourseParticipation.create!(person_id: participant.person_id, link: participant)
 
@@ -559,7 +568,9 @@ describe Event::Course do
 
       it "changes participation states to canceled" do
         expect(course.participations.count).to eq(3)
-        course.update!(state: :canceled, canceled_reason: :minimum_participants)
+        expect do
+          course.update!(state: :canceled, canceled_reason: :minimum_participants)
+        end.to have_enqueued_mail.thrice
         participations = course.participations.order(:state, :previous_state)
         expect(participations.map(&:state)).to eq(%w[annulled annulled assigned])
         expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
