@@ -1778,6 +1778,7 @@ it:
         create_invoice: Creare la fattura
 
     account_completions:
+      email_already_present: Questa persona ha già un account.
       show:
         explain_confirmation_email: >-
           Dopo aver inviato il modulo, riceverai un’e-mail per confermare il tuo account. Il tuo account sarà attivo dopo la conferma.

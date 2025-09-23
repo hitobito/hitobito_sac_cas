@@ -1780,6 +1780,7 @@ fr:
         create_invoice: Créer une facture
 
     account_completions:
+      email_already_present: Cette personne a déjà un compte.
       show:
         explain_confirmation_email: >-
           Une fois le formulaire envoyé, tu recevras un e-mail pour confirmer ton compte. Ton compte sera actif après la confirmation.
