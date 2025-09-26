@@ -205,7 +205,7 @@ fr:
   activerecord:
     attributes:
       account_completion:
-        email: E-Mail
+        email: E-mail
         password: Passwort
         email_confirmation: E-Mail Bestätigung
         password_confirmation: Passwort Bestätigung
@@ -237,8 +237,8 @@ fr:
         description: Description
         name_leader: Désignation du ou de la responsable du cours
         name_assistant_leader: Désignation du ou de la chef·fe de classe
-        name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
-        name_assistant_leader_aspirant: Bezeichnung Klassenleitung (Aspirant)
+        name_leader_aspirant: Désignation du ou de la responsable du cours (aspirant)
+        name_assistant_leader_aspirant: Désignation du ou de la chef·fe de classe (aspirant)
         course_compensation_rates: Taux de rémunération # uses include CapitalizedDependentErrors
         updated_at: Modifié
         created_at: Créé
@@ -247,8 +247,8 @@ fr:
         valid_to: Valable jusqu’au
         rate_leader: Taux du ou de la responsable du cours
         rate_assistant_leader: Taux du ou de la chef·fe de classe
-        rate_leader_aspirant: Ansatz Kursleitung (Aspirant)
-        rate_assistant_leader_aspirant: Ansatz Klassenleitung (Aspirant)
+        rate_leader_aspirant: Taux du ou de la responsable du cours (aspirant)
+        rate_assistant_leader_aspirant: Taux du ou de la chef·fe de classe (aspirant)
         course_compensation_category_id: Catégorie de rémunération
         updated_at: Modifié
         created_at: Créé
@@ -425,7 +425,7 @@ fr:
         correspondence: Facturation
         confirmed_at: E-mail confirmé
         family_id: ID de la famille
-        unconfirmed_email: E-Mail
+        unconfirmed_email: E-mail
         sac_family_main_person: Factures à (famille)
         sac_remark_national_office: Remarques Secrétariat
         sac_remark_section_1: Remarques Section 1
@@ -1672,16 +1672,16 @@ fr:
   participations:
     key_data_sheet:
       file_name_prefix: Fiche technique
-      leader_file_prefix: Kursleitung
+      leader_file_prefix: Responsable du cours
       assistant_leader_file_prefix: Klassenleitung
-      leader_aspirant_file_prefix: Kursleitung_Aspirant
+      leader_aspirant_file_prefix: Responsable du cours (aspirant)
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Cours / randonnées du CAS %{year}"
       title: Eckdatenblatt
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
       table:
         number: N° de la manifestation
-        name: Bezeichnung / Titel
+        name: Désignation
         level: Offre / catégorie
         leaders: Responsabilité
         compensation: Tarif journalier
@@ -1725,27 +1725,27 @@ fr:
           text: >-
             La direction est assurée par les enseignant·e·s en fonction du nombre maximal de participant·e·s. Merci de l’indiquer dans le programme détaillé des cours et de l’envoyer par e-mail au secrétariat pour les randonnées.
     participant_list:
-      title: Teilnehmerliste
+      title: Liste des participants
       link: www.sac-cas.ch
       url: "https://www.sac-cas.ch"
-      number: Kursnummer
-      name: Bezeichnung
-      location: Kursort
-      dates: Datum
-      participant_count: Anzahl Teilnehmende
+      number: Numéro du cours
+      name: Désignation
+      location: Lieu du cours
+      dates: Date
+      participant_count: Nombre de participants
       teamer_count: Anzahl Kurskader
-      member_no: Mitglieder-Nr.
-      firstname: Vorname
-      lastname: Nachname
-      street: Strasse
-      town: Wohnort
-      email: E-Mail
-      phone: Telefonnummer
-      language: Sprache
-      gender: Geschlecht
-      section: Sektion
-      emergency_contact: Notfallkontakt
-      remarks: Bemerkungen
+      member_no: N° de membre
+      firstname: Prénom
+      lastname: Nom
+      street: Adresse
+      town: Domicile
+      email: E-mail
+      phone: Numéros de téléphone
+      language: Langue
+      gender: Sexe
+      section: Section
+      emergency_contact: Contact d’urgence
+      remarks: Remarques
 
   passes:
     membership:
