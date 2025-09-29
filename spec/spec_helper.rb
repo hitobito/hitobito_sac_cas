@@ -26,6 +26,7 @@ RSpec.configure do |config|
 
     # disable 2FA for admins in test env since login is used in feature specs
     allow(Group::Geschaeftsstelle::Admin).to receive(:two_factor_authentication_enforced).and_return(false)
+    default_url_options[:locale] = nil
   end
 end
 
