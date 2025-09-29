@@ -1,7 +1,3 @@
-application:
-  languages:
-    de: Deutsch
-
 invoicing:
   abo_magazin:
     automatic_invoice_enabled: true
