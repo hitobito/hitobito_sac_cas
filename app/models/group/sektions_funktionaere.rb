@@ -28,7 +28,6 @@ class Group::SektionsFunktionaere < ::Group
 
   class Mitgliederverwaltung < ::Role
     self.permissions = [:download_member_statistics]
-    self.basic_permissions_only = true
   end
 
   class Administration < ::Role
@@ -53,7 +52,6 @@ class Group::SektionsFunktionaere < ::Group
 
   class Redaktion < ::Role
     self.permissions = []
-    self.basic_permissions_only = true
   end
 
   class Huettenobmann < ::Role
