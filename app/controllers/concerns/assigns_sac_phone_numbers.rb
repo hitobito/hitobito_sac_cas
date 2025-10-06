@@ -12,7 +12,7 @@ module AssignsSacPhoneNumbers
 
   def assign_attributes
     super
-    mark_phone_numbers_for_destroy(entry) if action_name == "update"
+    mark_phone_numbers_for_destroy(entry)
   end
 
   # Mark phone numbers for destruction if they have an empty number field.
