@@ -12,6 +12,36 @@ describe GroupsController do
 
   let(:group) { groups(:bluemlisalp) }
 
+  context "POST#create" do
+    let(:attrs) {
+      {
+        parent_id: Group.root.id,
+        type: Group::Sektion.sti_name,
+        name: "Emmental",
+        foundation_year: "2000",
+        section_canton: "BE"
+      }
+    }
+
+    it "can create without phone_numbers" do
+      expect do
+        post :create, params: {group: attrs.merge({
+          phone_number_landline_attributes: {number: ""},
+          phone_number_mobile_attributes: {number: ""}
+        })}
+      end.to change { Group::Sektion.count }.by(1)
+    end
+
+    it "can create with phone_numbers" do
+      expect do
+        post :create, params: {group: attrs.merge({
+          phone_number_landline_attributes: {number: "0345678901"},
+          phone_number_mobile_attributes: {number: "0761234567"}
+        })}
+      end.to change { Group::Sektion.count }.by(1)
+    end
+  end
+
   context "PUT#update" do
     it "can update phone_numbers" do
       expect do
