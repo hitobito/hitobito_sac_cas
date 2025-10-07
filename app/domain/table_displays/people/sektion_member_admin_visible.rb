@@ -17,7 +17,7 @@ module TableDisplays::People
 
     # this required_model_includes could be removed if we relied solely on our abilities
     def required_model_includes(_attr)
-      super + ((@model_class == Person) ? [roles_unscoped: :group] : [person: {roles_unscoped: :group}])
+      super + ((@model_class == Person) ? [roles_unscoped: :group] : [])
     end
 
     private
