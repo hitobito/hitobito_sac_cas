@@ -1305,6 +1305,8 @@ fr:
         title: Courses ayant lieu prochainement
         explanation: Ici sont affichées les randonnées des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
     participations:
+      fields:
+        explain_required_checkmark: "* = Antwort obligatorisch"
       missing_information: >-
         Pour participer à ce cours, tu dois fournir les justificatifs suivants. Merci de les soumettre si ce n’est pas déjà fait.
       answers_step:
@@ -2043,6 +2045,9 @@ fr:
       signup:
         main_email_field_title: E-mail
         person_fields_title: Données personnelles
+        person_fields:
+          next_button: Weiter
+          submit_button: Registrieren
         agreement_fields:
           adult_consent_caption: Je confirme que j’ai au moins 18 ans ou que j’ai l’accord de mes parents ou représentants légaux.
           newsletter_caption: Je souhaite m’abonner à une newsletter
