@@ -27,7 +27,7 @@ describe People::NeuanmeldungenMailer do
 
     it "considers person's language when sending" do
       CustomContent.get(People::NeuanmeldungenMailer::APPROVED)
-        .update(locale: :fr, label: "lal", subject: "Acceptee", body: "Bonjour")
+        .update!(locale: :fr, label: "lal", subject: "Acceptee", body: "Bonjour {first-name} {sektion-name}")
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body.to_s).to include("Bonjour")
