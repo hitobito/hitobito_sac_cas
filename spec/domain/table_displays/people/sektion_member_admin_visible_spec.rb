@@ -127,7 +127,7 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
     end
   end
 
-  describe TableDisplays::ShowFullColumn do
+  describe TableDisplays::PolymorphicShowFullColumn do
     let(:column) { described_class.new(ability, model_class:) }
     let(:participation) { Fabricate(:event_participation) }
 
