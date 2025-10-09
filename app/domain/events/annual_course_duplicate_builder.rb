@@ -35,6 +35,7 @@ class Events::AnnualCourseDuplicateBuilder
     course.groups = @source_course.groups
 
     build_dates(course)
+    build_translations(course)
     build_questions(course)
 
     course
@@ -61,6 +62,12 @@ class Events::AnnualCourseDuplicateBuilder
 
       date.start_at = determine_next_datetime(source_date.start_at&.to_datetime)
       date.finish_at = determine_next_datetime(source_date.finish_at&.to_datetime)
+    end
+  end
+
+  def build_translations(course)
+    @source_course.translations.each do |source_translation|
+      course.translations.build(source_translation.attributes.except("id", "event_id"))
     end
   end
 

@@ -60,7 +60,7 @@ describe OidcClaimSetup do
       before { allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42") }
 
       it "membership_verify_url is present" do
-        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
+        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42?locale=de"
       end
     end
 
