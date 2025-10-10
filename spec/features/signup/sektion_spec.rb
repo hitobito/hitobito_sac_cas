@@ -181,7 +181,7 @@ describe "signup/sektion", :js do
 
       expect(person.roles.map(&:type)).to eq([self_registration_role.to_s])
       expect(person.roles.find { |r| r.type == self_registration_role.to_s }.end_on).to be_nil
-      expect(current_path).to eq("/de#{group_person_path(group_id: group, id: person)}.html")
+      expect(current_path).to eq("#{group_person_path(group_id: group, id: person)}.html")
     end
 
     it "can autocomplete address" do
