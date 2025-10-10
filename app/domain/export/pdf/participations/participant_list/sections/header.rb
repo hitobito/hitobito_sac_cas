@@ -31,8 +31,7 @@ class Export::Pdf::Participations::ParticipantList::Sections::Header < Export::P
 
   def info_data # rubocop:todo Metrics/AbcSize
     [
-      [t(:number),
-        {content: "<link href=\"#{course_url}\">#{course.number}</link>", inline_format: true}],
+      [t(:number), course_number_link],
       [t(:name), course.name],
       [t(:location), course.location.to_s.split("\n").join(", ")],
       [t(:dates), course.dates.map(&:duration).join(", ")],
@@ -43,6 +42,11 @@ class Export::Pdf::Participations::ParticipantList::Sections::Header < Export::P
 
   def course
     model
+  end
+
+  def course_number_link
+    {content: "<link href=\"#{course_url}\"><color rgb=\"#0000EE\">#{course.number}</color></link>",
+     inline_format: true}
   end
 
   def course_url

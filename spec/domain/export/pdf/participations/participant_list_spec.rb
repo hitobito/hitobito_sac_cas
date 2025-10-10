@@ -31,6 +31,10 @@ describe Export::Pdf::Participations::ParticipantList do
 
     @aspirant = Fabricate(Event::Course::Role::AssistantLeaderAspirant.name.to_sym,
       participation: Fabricate(:event_participation, event: event)).participation.person
+    Fabricate(:phone_number, contactable: people(:familienmitglied),
+      label: :mobile, number: "+41 77 360 75 63")
+    Fabricate(:phone_number, contactable: people(:mitglied),
+      label: :landline, number: "+41 77 484 21 96")
   end
 
   it "renders text" do
@@ -65,13 +69,14 @@ describe Export::Pdf::Participations::ParticipantList do
         "Sektion"]
     )
 
-    expect(text[24..41]).to eq(
+    expect(text[24..43]).to eq(
       ["600001",
         "Edmund",
         "Hillary",
         "Ophovenerstrasse 79a",
         "2843 Neu Carlscheid",
         "e.hillary@hitobito.example.com",
+        "+41 77 484 21 96",
         "Deutsch",
         "weiblich",
         "SAC Blüemlisalp",
@@ -81,12 +86,13 @@ describe Export::Pdf::Participations::ParticipantList do
         "Ophovenerstrasse 79a",
         "2843 Neu Carlscheid",
         "t.norgay@hitobito.example.com",
+        "+41 77 360 75 63",
         "Deutsch",
         "divers",
         "SAC Blüemlisalp"]
     )
 
-    expect(text[42..58]).to eq(
+    expect(text[44..60]).to eq(
       ["Kursleitung",
         @leaders.first.id.to_s,
         @leaders.first.first_name,
@@ -106,7 +112,7 @@ describe Export::Pdf::Participations::ParticipantList do
         "divers"]
     )
 
-    expect(text[59..67]).to eq(
+    expect(text[61..69]).to eq(
       ["Klassenleitung (Aspirant)",
         @aspirant.id.to_s,
         @aspirant.first_name,
