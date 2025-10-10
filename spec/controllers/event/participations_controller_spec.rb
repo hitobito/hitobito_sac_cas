@@ -26,23 +26,35 @@ describe Event::ParticipationsController do
     subject(:dom) { Capybara::Node::Simple.new(response.body) }
 
     before do
-      participation = Fabricate(:event_participation, event: event)
+      participation = Fabricate(:event_participation, event: event, invoice_state: :draft)
       Fabricate(Event::Role::Participant.sti_name, participation: participation)
     end
 
-    it "renders state column" do
-      get :index, params: params
-      expect(dom).to have_css "th a", text: "Status"
-      expect(dom).to have_css "td", text: "Bestätigt"
-    end
-
-    context "event without state" do
-      let(:event) { events(:top_event) }
-
-      it "hides state column" do
+    context "event state" do
+      it "renders state column" do
         get :index, params: params
-        expect(dom).not_to have_css "th a", text: "Status"
-        expect(dom).not_to have_css "td", text: "Bestätigt"
+        expect(dom).to have_css "th a", text: "Status"
+        expect(dom).to have_css "td", text: "Bestätigt"
+      end
+
+      context "event without state" do
+        let(:event) { events(:top_event) }
+
+        it "hides state column" do
+          get :index, params: params
+          expect(dom).not_to have_css "th a", text: "Status"
+          expect(dom).not_to have_css "td", text: "Bestätigt"
+        end
+      end
+
+      context "participation invoice_state" do
+        it "renders invoice_state column with values" do
+          TableDisplay.create!(person: user, selected: ["invoice_state"], table_model_class: Event::Participation.sti_name)
+
+          get :index, params: params
+          expect(dom).to have_css "th a", text: "Rechnung"
+          expect(dom).to have_css "td", text: "Entwurf"
+        end
       end
     end
 

@@ -339,7 +339,7 @@ module HitobitoSacCas
         [:termination_reason])
 
       TableDisplay.register_column(Event::Participation,
-        TableDisplays::ShowFullColumn,
+        TableDisplays::PolymorphicShowFullColumn,
         [:invoice_state])
 
       TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::People::LoginStatusColumn
