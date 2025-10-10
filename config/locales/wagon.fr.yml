@@ -956,8 +956,8 @@ fr:
         one: Responsable du cours
         description: Responsable du cours
       group/sac_cas_kurskader/klassenlehrer:
-        one: Enseignant·e
-        description: Enseignant·e
+        one: Chef·fe de classe
+        description: Chef·fe de classe
       group/sac_cas_kurskader/kursleiter_aspirant:
         one: Kursleiter*in (Aspirant)
         description: Kursleiter*in (Aspirant)
@@ -1679,16 +1679,16 @@ fr:
       leader_aspirant_file_prefix: Responsable du cours (aspirant)
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
       year_title: "Cours / randonnées du CAS %{year}"
-      title: Eckdatenblatt
+      title: Fiche technique
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
       table:
-        number: N° de la manifestation
-        name: Désignation
+        number: N° de l'évènement
+        name: Désignation / Titre
         level: Offre / catégorie
-        leaders: Responsabilité
+        leaders: Responsable
         compensation: Tarif journalier
-        dates: Date de mise en œuvre
-        location: Lieu de mise en œuvre
+        dates: Date
+        location: Lieu
         accommodation: Hébergement
         accommodation_budget:
           label: Budget pour l’hébergement
@@ -1704,45 +1704,45 @@ fr:
           text: Selon le programme du cours (si disponible) ou le programme des randonnées
         participant_requirements:
           label: Conditions requises pour les participant·es
-          text: Gemäss Ausschreibung SAC Kurse / Touren
+          text: Selon l'annonce des cours/courses du CAS
         participant_program_course:
-          label: Programme détaillé des cours pour les participant·e·s
-          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
+          label: Documents des cours pour les participant·e·s
+          text: Sera recléamé par l’administration des cours 8 semaines avant le début de l’évènement par courriel à la direction.
         participant_program_tour:
-          label: Programme détaillé des randonnées pour les participant·e·s
-          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
-        application_closing_at: Date limite d’inscription
+          label: Documents des courses pour les participant·e·s
+          text: Sera préparé par l’administration des cours et mis à disposition au plus tard 6 semaines avant le début de l’évènement.
+        application_closing_at: Date de clôture des inscriptions
         minimum_participants: Nombre minimal de participant·e·s
         maximum_participants: Nombre maximal de participant·e·s
         participation_yes_no:
           label: "Réalisation - oui/non?"
-          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
+          text: La décision sera prise ensemble en fonction du nombre d'inscriptions à la clôture des inscriptions.
         participation_cancellation:
           label: Réalisation – annulation
-          text: Veuillez informer l’enseignant·e et l’hébergement
+          text: Veuillez informer le / la chef·fe de classe et l’hébergement
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
         class_teacher:
-          label: Enseignant·e
+          label: Chef·fe de classe
           text: >-
-            La direction est assurée par les enseignant·e·s en fonction du nombre maximal de participant·e·s. Merci de l’indiquer dans le programme détaillé des cours et de l’envoyer par e-mail au secrétariat pour les randonnées.
+            La direction est assuré par les chef-fes de classe en fonction du nombre maximal de participant·e·s. Merci de l'indiquer dans la lettre d'information (pour les cours) ou de l'envoyer par courriel à l'administration (pour les courses).
     participant_list:
-      title: Liste des participants
+      title: Liste des participant-es-
       link: www.sac-cas.ch
       url: "https://www.sac-cas.ch"
       number: Numéro du cours
       name: Désignation
       location: Lieu du cours
       dates: Date
-      participant_count: Nombre de participants
+      participant_count: No de participant-e-s
       teamer_count: Anzahl Kurskader
-      member_no: N° de membre
+      member_no: No de membre
       firstname: Prénom
       lastname: Nom
-      street: Adresse
-      town: Domicile
+      street: Rue
+      town: Lieu
       email: E-mail
-      phone: Numéros de téléphone
+      phone: Téléphone
       language: Langue
       gender: Sexe
       section: Section
@@ -1756,7 +1756,7 @@ fr:
       member: Membre
       sac_partner: Partenaire CAS
       sponsor_url: "https://www.sac-cas.ch/fr/le-cas/nos-partenaires/"
-      emergency_number: "N° d’urgence"
+      emergency_number: "No d'urgence"
       emergency_contact: "Contact d’urgence"
 
   person:
