@@ -14,6 +14,6 @@ module SacCas::Event::RegisterController
   end
 
   def abo_basic_login_group
-    Group::AboBasicLogin.where(layer_group_id: Group.root.id).first
+    Group::AboBasicLogin.where(layer_group_id: Group.root_id).first
   end
 end

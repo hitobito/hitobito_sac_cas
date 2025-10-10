@@ -24,13 +24,13 @@ module Memberships
     # we have to check the instance to get the customization we want
     def on_active_member_if_backoffice?
       if subject.instance_of?(Wizards::Memberships::SwitchStammsektion)
-        backoffice? && sac_membership.stammsektion_role.present?
+        if_backoffice? && sac_membership.stammsektion_role.present?
       end
     end
 
     def on_main_active_member_with_zusatzsektion_if_backoffice?
       if subject.instance_of?(Wizards::Memberships::SwapStammZusatzsektion)
-        backoffice? && sac_membership.stammsektion_role.present? && sac_membership.zusatzsektion_roles.any? &&
+        if_backoffice? && sac_membership.stammsektion_role.present? && sac_membership.zusatzsektion_roles.any? &&
           (!sac_membership.family? || person.sac_family_main_person?)
       end
     end
