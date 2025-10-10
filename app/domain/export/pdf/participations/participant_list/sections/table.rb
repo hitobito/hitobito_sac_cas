@@ -90,7 +90,7 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
       person.address,
       "#{person.zip_code} #{person.town}",
       person.email,
-      phone_numbers(person, %w[Privat Mobil]),
+      phone_numbers(person, %w[landline mobile]),
       Person::LANGUAGES[person.language&.to_sym],
       person.gender_label,
       person.sac_membership.stammsektion.to_s
