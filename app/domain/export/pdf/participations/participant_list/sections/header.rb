@@ -25,7 +25,9 @@ class Export::Pdf::Participations::ParticipantList::Sections::Header < Export::P
 
   def render_info
     pdf.move_down 0.5.cm
-    pdf.table(info_data, cell_style: {borders: [], padding: [0, 0.5.cm, 0, 0], single_line: true})
+    pdf.table(info_data, cell_style: {borders: [], padding: [0, 0.5.cm, 0, 0], single_line: true}) do
+      row(0).last.text_color = "0000EE"
+    end
     pdf.move_down 0.5.cm
   end
 
