@@ -7,7 +7,7 @@
 - participant_answers = @answers.reject(&:admin?)
 
 - if participant_answers.present?
-  = f.labeled(t("event.participations.form.registration_details"), class: "mb-2 pt-2") do
+  = f.labeled(t("event.participations.fields.registration_details"), class: "mb-2 pt-2") do
     = f.fields_for(:answers, participant_answers) do |fans|
       = render 'event/answers/fields', f: fans
 

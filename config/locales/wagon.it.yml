@@ -1303,6 +1303,8 @@ it:
         title: Prossimi tour
         explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
+      fields:
+        explain_required_checkmark: "* = Antwort obligatorisch"
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
       answers_step:
@@ -2041,6 +2043,9 @@ it:
       signup:
         main_email_field_title: E-mail
         person_fields_title: Dati personali
+        person_fields:
+          next_button: Weiter
+          submit_button: Registrieren
         agreement_fields:
           adult_consent_caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
           newsletter_caption: Desidero iscrivermi alla newsletter del CAS.
