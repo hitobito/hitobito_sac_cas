@@ -26,26 +26,27 @@ class ExternalTrainingAbility < AbilityDsl::Base
   end
 
   def in_same_layer_if_section_may_create
-    in_same_layer && permisson_on_root_or_section_may_create(:layer_full)
+    in_same_layer && permission_on_root_or_section_may_create(:layer_full)
   end
 
   def in_same_layer_or_below_if_section_may_create
-    in_same_layer_or_below && permisson_on_root_or_section_may_create(:layer_and_below_full)
+    in_same_layer_or_below && permission_on_root_or_section_may_create(:layer_and_below_full)
   end
 
   def in_same_group_if_section_may_create
-    in_same_group && permisson_on_root_or_section_may_create(:group_full)
+    in_same_group && permission_on_root_or_section_may_create(:group_full)
   end
 
   def in_same_group_or_below_if_section_may_create
-    in_same_group_or_below && permisson_on_root_or_section_may_create(:group_and_below_full)
+    in_same_group_or_below && permission_on_root_or_section_may_create(:group_and_below_full)
   end
 
   # always allow when permission is on root group, if not, check for section_may_create on event kind
-  def permisson_on_root_or_section_may_create(permission)
+  def permission_on_root_or_section_may_create(permission)
     return true if user_context.layer_ids(permitted_groups).include?(Group.root.id)
+    return true unless subject.event_kind
 
-    subject.event_kind&.section_may_create?
+    subject.event_kind.section_may_create?
   end
 
   def permitted_groups = user.groups_with_permission(permission)
