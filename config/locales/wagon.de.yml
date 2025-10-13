@@ -487,6 +487,10 @@ de:
           FR: Français
           IT: Italiano
         tours_enabled: Touren-Angebot für diese Ortsgruppe aktivieren
+      group/phone_number_mobile:
+        number: Mobiltelefon
+      group/phone_number_landline:
+        number: Festnetztelefon
       role:
         membership_years: Mitglieder-Jahre
         class:

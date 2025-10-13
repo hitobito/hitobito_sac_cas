@@ -489,6 +489,10 @@ it:
           FR: Francese
           IT: Italiano
         tours_enabled: Attivare l'offerta di tour per questo gruppo locale
+      group/phone_number_mobile:
+        number: Mobiltelefon
+      group/phone_number_landline:
+        number: Festnetztelefon
       role:
         membership_years: Anni di affiliazione
         class:

@@ -491,6 +491,10 @@ fr:
           FR: Français
           IT: Italien
         tours_enabled: Activer l'offre de tours pour cette section locale
+      group/phone_number_mobile:
+        number: Mobiltelefon
+      group/phone_number_landline:
+        number: Festnetztelefon
       role:
         membership_years: Années-membres
         class:
