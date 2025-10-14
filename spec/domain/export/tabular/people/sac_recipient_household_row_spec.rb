@@ -84,7 +84,8 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
   describe "person with sac_family/household and other member in export" do
     let(:people) do
       in_export1 = person.tap { _1.household_key = "42" }
-      in_export2 = Fabricate.build(:person, first_name: "Max", last_name: "Muster", household_key: "42")
+      in_export2 = Fabricate.build(:person, first_name: "Max", last_name: "Muster",
+        household_key: "42")
 
       [in_export1, in_export2]
     end
@@ -112,7 +113,9 @@ describe Export::Tabular::People::SacRecipientHouseholdRow do
       end
 
       it("uses id from person with email") { expect(value(:id)).to eq 43 }
-      it("uses email from person with email") { expect(value(:email)).to eq "max.muster@example.com" }
+      it("uses email from person with email") {
+        expect(value(:email)).to eq "max.muster@example.com"
+      }
       it("uses address from person with email") { expect(value(:address)).to eq "Maxweg 12" }
       it("first_name") { expect(value(:first_name)).to eq "Familie" }
       it("last_name") { expect(value(:last_name)).to eq "Hans und Max Muster" }

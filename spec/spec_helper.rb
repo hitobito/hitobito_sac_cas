@@ -25,7 +25,9 @@ RSpec.configure do |config|
     PaperTrail.request.whodunnit = "rspec"
 
     # disable 2FA for admins in test env since login is used in feature specs
+    # rubocop:todo Layout/LineLength
     allow(Group::Geschaeftsstelle::Admin).to receive(:two_factor_authentication_enforced).and_return(false)
+    # rubocop:enable Layout/LineLength
   end
 end
 

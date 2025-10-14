@@ -15,6 +15,8 @@ module SacCas::Person::SubscriptionsController
   end
 
   def subscriptions_without_fundraising
+    # rubocop:todo Layout/LineLength
     subscriptions.subscribed.where.not(internal_key: SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY)
+    # rubocop:enable Layout/LineLength
   end
 end

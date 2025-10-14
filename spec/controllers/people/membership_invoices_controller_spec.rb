@@ -30,12 +30,15 @@ describe People::MembershipInvoicesController do
   describe "POST create" do
     it "creates external invoice and enqueues job" do
       expect do
-        post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
+        post :create,
+          params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
       end.to change { ExternalInvoice.count }.by(1)
         .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
       # todo validate job
-      expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
+      expect(response).to redirect_to(external_invoices_group_person_path(
+        groups(:bluemlisalp_mitglieder).id, person.id
+      ))
       expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
 
       job = Delayed::Job.last.payload_object
@@ -61,8 +64,12 @@ describe People::MembershipInvoicesController do
           .and change { HitobitoLogEntry.count }.by(1)
           .and not_change { Delayed::Job.count }
 
-        expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
+        expect(response).to redirect_to(external_invoices_group_person_path(
+          groups(:bluemlisalp_mitglieder).id, person.id
+        ))
+        # rubocop:todo Layout/LineLength
         expect(flash[:alert]).to eq "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -78,12 +85,20 @@ describe People::MembershipInvoicesController do
 
       it "creates external invoice and enqueues job" do
         expect do
-          post :create, params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true, dont_send: true})
+          post :create,
+            # rubocop:todo Layout/LineLength
+            params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true,
+                                                                       # rubocop:enable Layout/LineLength
+                                                                       dont_send: true})
         end.to change { ExternalInvoice.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
-        expect(response).to redirect_to(external_invoices_group_person_path(groups(:bluemlisalp_mitglieder).id, person.id))
+        expect(response).to redirect_to(external_invoices_group_person_path(
+          groups(:bluemlisalp_mitglieder).id, person.id
+        ))
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
+        # rubocop:enable Layout/LineLength
 
         job = Delayed::Job.last.payload_object
         expect(job.new_entry).to eq true

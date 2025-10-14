@@ -21,7 +21,8 @@ describe Person::HistoryController do
       participation.event.update!(training_days: 4)
       participation.update!(actual_days: 2.5)
 
-      get :index, params: {group_id: participation.person.groups.first.id, id: participation.participant_id}
+      get :index,
+        params: {group_id: participation.person.groups.first.id, id: participation.participant_id}
 
       quali = body.find("tr#event_participation_#{participation.id} td:last-child")
       expect(quali.text.strip).to eq("2.5 Ausbildungstage")

@@ -17,7 +17,8 @@ describe OidcClaimSetup do
 
   before do
     allow(ENV).to receive(:fetch).and_call_original
-    allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME", "localhost:3000").and_return("hitobito.example.com")
+    allow(ENV).to receive(:fetch).with("RAILS_HOST_NAME",
+      "localhost:3000").and_return("hitobito.example.com")
   end
 
   shared_examples "shared claims" do
@@ -57,7 +58,11 @@ describe OidcClaimSetup do
     context "mitglied" do
       let(:owner) { people(:mitglied) }
 
-      before { allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42") }
+      before {
+        # rubocop:todo Layout/LineLength
+        allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
+      }
+      # rubocop:enable Layout/LineLength
 
       it "membership_verify_url is present" do
         expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
@@ -167,14 +172,19 @@ describe OidcClaimSetup do
     end
 
     it "includes section_commission_member key when matching role exists" do
+      # rubocop:todo Layout/LineLength
       kommissionen = Group::SektionsKommissionen.find_or_create_by(parent: groups(:bluemlisalp_funktionaere))
-      group = Group::SektionsKommissionTouren.find_or_create_by(parent: kommissionen, name: "Foobar")
+      # rubocop:enable Layout/LineLength
+      group = Group::SektionsKommissionTouren.find_or_create_by(parent: kommissionen,
+        name: "Foobar")
       create_role(group, "Mitglied")
       expect(user_groups).to include "section_commission_member"
     end
 
     it "includes huts_functionary key when matching role exists" do
+      # rubocop:todo Layout/LineLength
       clubhuetten = Group::SektionsClubhuetten.find_or_create_by(parent: groups(:bluemlisalp_funktionaere))
+      # rubocop:enable Layout/LineLength
       group = Fabricate(Group::SektionsClubhuette.sti_name, parent: clubhuetten)
       create_role(group, "Huettenwart")
       expect(user_groups).to include "huts_functionary"

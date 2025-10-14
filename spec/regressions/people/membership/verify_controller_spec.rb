@@ -21,20 +21,29 @@ describe People::Membership::VerifyController, type: :controller do
       it "confirms active membership" do
         get :show, params: {verify_token: verify_token}
 
-        expect(dom).to have_selector("#membership-verify #details #member-name", text: "Edmund Hillary")
-        expect(dom).to have_selector("#membership-verify #details #member-info div", text: "Mitglied: 600001")
-        expect(dom).to have_selector("#membership-verify #details #member-info div", text: "Anzahl Mitgliedsjahre: #{Date.current.year - 2015}")
+        expect(dom).to have_selector("#membership-verify #details #member-name",
+          text: "Edmund Hillary")
+        expect(dom).to have_selector("#membership-verify #details #member-info div",
+          text: "Mitglied: 600001")
+        expect(dom).to have_selector("#membership-verify #details #member-info div",
+          text: "Anzahl Mitgliedsjahre: #{Date.current.year - 2015}")
 
-        expect(dom).to have_selector("#membership-verify #details .alert-success", text: "Mitgliedschaft gültig")
+        expect(dom).to have_selector("#membership-verify #details .alert-success",
+          text: "Mitgliedschaft gültig")
         expect(dom).to have_selector("#membership-verify #details .alert-success span.fa-check")
 
-        expect(dom).to have_selector("#membership-verify #details #sections strong", text: "Mitglied (Stammsektion) (Einzel)")
-        expect(dom).to have_selector("#membership-verify #details #sections strong", text: "SAC Blüemlisalp")
+        expect(dom).to have_selector("#membership-verify #details #sections strong",
+          text: "Mitglied (Stammsektion) (Einzel)")
+        expect(dom).to have_selector("#membership-verify #details #sections strong",
+          text: "SAC Blüemlisalp")
 
-        expect(dom).to have_selector("#membership-verify #details #sections div", text: "Mitglied (Zusatzsektion) (Einzel)")
-        expect(dom).to have_selector("#membership-verify #details #sections div", text: "SAC Matterhorn")
+        expect(dom).to have_selector("#membership-verify #details #sections div",
+          text: "Mitglied (Zusatzsektion) (Einzel)")
+        expect(dom).to have_selector("#membership-verify #details #sections div",
+          text: "SAC Matterhorn")
 
-        expect(dom).not_to have_selector("#membership-verify #details div", text: "Aktive/r Tourenleiter/in")
+        expect(dom).not_to have_selector("#membership-verify #details div",
+          text: "Aktive/r Tourenleiter/in")
       end
 
       it "confirms active tour guide" do
@@ -49,7 +58,8 @@ describe People::Membership::VerifyController, type: :controller do
 
         get :show, params: {verify_token: verify_token}
 
-        expect(dom).to have_selector("#membership-verify #details div", text: "Aktive/r Tourenleiter/in")
+        expect(dom).to have_selector("#membership-verify #details div",
+          text: "Aktive/r Tourenleiter/in")
       end
 
       it "confirms invalid membership" do
@@ -57,34 +67,52 @@ describe People::Membership::VerifyController, type: :controller do
 
         get :show, params: {verify_token: verify_token}
 
-        expect(dom).to have_selector("#membership-verify #details .alert-danger", text: "Mitgliedschaft ungültig")
+        expect(dom).to have_selector("#membership-verify #details .alert-danger",
+          text: "Mitgliedschaft ungültig")
+        # rubocop:todo Layout/LineLength
         expect(dom).to have_selector("#membership-verify #details .alert-danger span.fa-times-circle")
+        # rubocop:enable Layout/LineLength
 
-        expect(dom).to_not have_selector("#membership-verify #details #sections strong", text: "Mitglied (Stammsektion) (Einzel)")
-        expect(dom).to_not have_selector("#membership-verify #details #sections strong", text: "SAC Blüemlisalp")
+        expect(dom).to_not have_selector("#membership-verify #details #sections strong",
+          text: "Mitglied (Stammsektion) (Einzel)")
+        expect(dom).to_not have_selector("#membership-verify #details #sections strong",
+          text: "SAC Blüemlisalp")
 
-        expect(dom).to_not have_selector("#membership-verify #details #sections div", text: "Mitglied (Zusatzsektion) (Einzel)")
-        expect(dom).to_not have_selector("#membership-verify #details #sections div", text: "SAC Matterhorn")
+        expect(dom).to_not have_selector("#membership-verify #details #sections div",
+          text: "Mitglied (Zusatzsektion) (Einzel)")
+        expect(dom).to_not have_selector("#membership-verify #details #sections div",
+          text: "SAC Matterhorn")
       end
 
       it "returns invalid code message for non existent verify token" do
         get :show, params: {verify_token: "gits-nid"}
 
-        expect(dom).to_not have_selector("#membership-verify #details #member-name", text: "Edmund Hillary")
-        expect(dom).to_not have_selector("#membership-verify #details #member-info div", text: "Mitglied: 600001")
-        expect(dom).to_not have_selector("#membership-verify #details #member-info div", text: "Anzahl Mitgliedsjahre: 1")
+        expect(dom).to_not have_selector("#membership-verify #details #member-name",
+          text: "Edmund Hillary")
+        expect(dom).to_not have_selector("#membership-verify #details #member-info div",
+          text: "Mitglied: 600001")
+        expect(dom).to_not have_selector("#membership-verify #details #member-info div",
+          text: "Anzahl Mitgliedsjahre: 1")
 
-        expect(dom).to_not have_selector("#membership-verify #details .alert-success", text: "Mitgliedschaft gültig")
+        expect(dom).to_not have_selector("#membership-verify #details .alert-success",
+          text: "Mitgliedschaft gültig")
         expect(dom).to_not have_selector("#membership-verify #details .alert-success span.fa-check")
 
-        expect(dom).to_not have_selector("#membership-verify #details #sections strong", text: "Mitglied (Stammsektion) (Einzel)")
-        expect(dom).to_not have_selector("#membership-verify #details #sections strong", text: "SAC Blüemlisalp")
+        expect(dom).to_not have_selector("#membership-verify #details #sections strong",
+          text: "Mitglied (Stammsektion) (Einzel)")
+        expect(dom).to_not have_selector("#membership-verify #details #sections strong",
+          text: "SAC Blüemlisalp")
 
-        expect(dom).to_not have_selector("#membership-verify #details #sections div", text: "Mitglied (Zusatzsektion) (Einzel)")
-        expect(dom).to_not have_selector("#membership-verify #details #sections div", text: "SAC Matterhorn")
+        expect(dom).to_not have_selector("#membership-verify #details #sections div",
+          text: "Mitglied (Zusatzsektion) (Einzel)")
+        expect(dom).to_not have_selector("#membership-verify #details #sections div",
+          text: "SAC Matterhorn")
 
-        expect(dom).to have_selector("#membership-verify #details .alert-danger", text: "Ungültiger Verifikationscode")
+        expect(dom).to have_selector("#membership-verify #details .alert-danger",
+          text: "Ungültiger Verifikationscode")
+        # rubocop:todo Layout/LineLength
         expect(dom).to have_selector("#membership-verify #details .alert-danger span.fa-times-circle")
+        # rubocop:enable Layout/LineLength
       end
 
       it "renders the website logo in correct language" do
@@ -126,7 +154,9 @@ describe People::Membership::VerifyController, type: :controller do
         # In order to stub a method on the view_context we need to make sure our copy is used.
         allow(controller).to receive(:view_context).and_return(view_context)
 
-        logos = %i[de fr it].map { |locale| [locale, "membership_verify_partner_ad_#{locale.downcase}.jpg"] }.to_h
+        logos = %i[de fr it].map { |locale|
+          [locale, "membership_verify_partner_ad_#{locale.downcase}.jpg"]
+        }.to_h
 
         # Stub wagon_image_pack_tag to return logo or use original implementation for other images
         allow(view_context).to receive(:wagon_image_pack_tag) do |name, **options|

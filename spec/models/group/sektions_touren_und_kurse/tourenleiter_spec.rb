@@ -17,7 +17,8 @@ describe Group::SektionsTourenUndKurse::Tourenleiter do
     let(:role) do
       person.qualifications.create!(qualification_kind: qualification_kinds(:ski_leader),
         start_at: 1.year.ago, finish_at: 1.year.from_now)
-      described_class.new(group: tourenkommission, person: person, created_at: 1.year.ago, start_on: nil)
+      described_class.new(group: tourenkommission, person: person, created_at: 1.year.ago,
+        start_on: nil)
         .tap(&:save!)
     end
   end

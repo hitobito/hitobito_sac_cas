@@ -19,14 +19,18 @@ describe RoleDecorator, :draper_with_helpers do
       let(:role) { roles(:mitglied) }
 
       it "includes beitragskategorie" do
+        # rubocop:todo Layout/LineLength
         formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.#{today.year})"
+        # rubocop:enable Layout/LineLength
 
         expect(decorated_name).to eq(formatted_name)
       end
 
       it "includes label and beitragskategorie" do
         role.label = "test"
+        # rubocop:todo Layout/LineLength
         formatted_name = "<strong>Mitglied (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.#{today.year})"
+        # rubocop:enable Layout/LineLength
 
         expect(decorated_name).to eq(formatted_name)
       end
@@ -41,14 +45,18 @@ describe RoleDecorator, :draper_with_helpers do
       end
 
       it "includes beitragskategorie" do
+        # rubocop:todo Layout/LineLength
         formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(bis 31.12.#{today.year})"
+        # rubocop:enable Layout/LineLength
 
         expect(decorated_name).to eq(formatted_name)
       end
 
       it "includes label and beitragskategorie" do
         role.label = "test"
+        # rubocop:todo Layout/LineLength
         formatted_name = "<strong>Neuanmeldung (Stammsektion) (Einzel)</strong>&nbsp;(test)&nbsp;(bis 31.12.#{today.year})"
+        # rubocop:enable Layout/LineLength
 
         expect(decorated_name).to eq(formatted_name)
       end

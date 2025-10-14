@@ -31,7 +31,8 @@ class Event::Courses::MailDispatchesController < ApplicationController
   end
 
   def send_leader_reminder_mails
-    send_mails(leader_participations, Event::LeaderReminderMailer, :reminder, Event::LeaderReminderMailer::REMINDER_NEXT_WEEK)
+    send_mails(leader_participations, Event::LeaderReminderMailer, :reminder,
+      Event::LeaderReminderMailer::REMINDER_NEXT_WEEK)
     redirect_to_success(leader_participations.count)
   end
 

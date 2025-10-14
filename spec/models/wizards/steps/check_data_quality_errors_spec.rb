@@ -21,13 +21,17 @@ describe Wizards::Steps::CheckDataQualityErrors do
     it "is invalid if data quality errors exist" do
       person.update!(data_quality: :error)
       expect(step).not_to be_valid
+      # rubocop:todo Layout/LineLength
       expect(step.errors[:base].first).to match(/kann wegen ungültigen Daten nicht durchgeführt werden/)
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid if a household person has data quality errors" do
       person.household_people.last.update!(data_quality: :error)
       expect(step).not_to be_valid
+      # rubocop:todo Layout/LineLength
       expect(step.errors[:base].first).to match(/kann wegen ungültigen Daten nicht durchgeführt werden/)
+      # rubocop:enable Layout/LineLength
     end
   end
 end

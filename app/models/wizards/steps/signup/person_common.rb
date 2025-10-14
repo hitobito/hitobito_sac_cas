@@ -11,8 +11,10 @@ module Wizards::Steps::Signup::PersonCommon
   PHONE_NUMBER_LABEL = "mobile"
 
   included do
-    class_attribute :minimum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
-    class_attribute :maximum_age, default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.end
+    class_attribute :minimum_age,
+      default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
+    class_attribute :maximum_age,
+      default: SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.end
 
     validate :assert_valid_phone_number
     validate :assert_minimum_age
@@ -24,7 +26,8 @@ module Wizards::Steps::Signup::PersonCommon
 
     include I18nEnums
 
-    i18n_enum :gender, Person::GENDERS + [I18nEnums::NIL_KEY], i18n_prefix: "activerecord.attributes.person.genders"
+    i18n_enum :gender, Person::GENDERS + [I18nEnums::NIL_KEY],
+      i18n_prefix: "activerecord.attributes.person.genders"
   end
 
   module ClassMethods
@@ -45,11 +48,16 @@ module Wizards::Steps::Signup::PersonCommon
   private
 
   def phone_number_id
-    PhoneNumber.find_by(label: PHONE_NUMBER_LABEL, contactable_id: id, contactable_type: Person.sti_name)&.id if id
+    if id
+      PhoneNumber.find_by(label: PHONE_NUMBER_LABEL, contactable_id: id,
+        contactable_type: Person.sti_name)&.id
+    end
   end
 
   def assert_valid_phone_number
+    # rubocop:todo Layout/LineLength
     if phone_number.present? && PhoneNumber.new(number: phone_number).tap(&:valid?).errors.key?(:number)
+      # rubocop:enable Layout/LineLength
       errors.add(:phone_number, :invalid)
     end
   end

@@ -8,8 +8,10 @@
 module Invoices
   module Abacus
     class Subject < Entity
+      # rubocop:todo Layout/LineLength
       RELEVANT_ATTRIBUTES = %w[first_name last_name company_name company email language gender street
         housenumber postbox address_care_of zip_code town country].freeze
+      # rubocop:enable Layout/LineLength
 
       SALUTATION_IDS = {
         mister: 1,
@@ -55,9 +57,13 @@ module Invoices
       def assign_subject_key(data)
         # Raise an error if abacus did not use the person.id as subject key
         # (even though SubjectInterface checked that the person.id is not taken yet in Abacus)
+        # rubocop:todo Layout/LineLength
         raise "Abacus created subject with id=#{data[:id]} but person has id=#{entity.id}" if entity.id != data[:id].to_i
+        # rubocop:enable Layout/LineLength
 
+        # rubocop:todo Layout/LineLength
         entity.update_column(:abacus_subject_key, data[:id]) unless entity.abacus_subject_key == data[:id]  # rubocop:disable Rails/SkipsModelValidations
+        # rubocop:enable Layout/LineLength
       end
 
       def subject_attrs

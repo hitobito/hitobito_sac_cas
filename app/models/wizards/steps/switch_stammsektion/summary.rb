@@ -14,7 +14,9 @@ module Wizards
 
           I18n.t(key, scope: "wizards.steps.switch_stammsektion.summary",
             sektion: wizard.choose_sektion.group.name,
+            # rubocop:todo Layout/LineLength
             beitragskategorie: I18n.t("roles.beitragskategorie.#{wizard.person.sac_membership.stammsektion_role.beitragskategorie}"))
+          # rubocop:enable Layout/LineLength
         end
       end
     end

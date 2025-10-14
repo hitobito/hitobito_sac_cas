@@ -38,7 +38,8 @@ describe "person show page" do
         )
         visit group_person_path(group_id: geschaeftsstelle.id, id: admin.id)
         expect(page).to have_link "Hauptgruppe setzen"
-        expect(page).to have_css("section.roles", text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Einzel) (bis 31.12.2023)")
+        expect(page).to have_css("section.roles",
+          text: "SAC Blüemlisalp / Mitglieder\nMitglied (Stammsektion) (Einzel) (bis 31.12.2023)")
       end
     end
 

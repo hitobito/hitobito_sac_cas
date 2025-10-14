@@ -30,7 +30,7 @@ module Memberships
     # return the `mutation_id` for all entries changed by the termination
     # We find the mutation id by looking for the latest version of the role where the `terminated`
     # flag changed to `true`.
-    def mutation_id
+    def mutation_id # rubocop:todo Metrics/CyclomaticComplexity
       role&.versions&.reorder(created_at: :desc)&.find do |version|
         version.changeset.include?("terminated") && version.changeset.dig("terminated", 1)
       end&.mutation_id
@@ -161,7 +161,7 @@ module Memberships
     # might only be successful once the other roles are persisted. To solve this, we first
     # persist all roles without validations and validate them afterwards, finally we roll back
     # the transaction to revert all changes.
-    def validate_restored_roles
+    def validate_restored_roles # rubocop:todo Metrics/AbcSize
       Role.transaction(requires_new: true) do
         restored_people.each { _1.save(validate: false) }
         restored_roles.each { _1.save(validate: false) }

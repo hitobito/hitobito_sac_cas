@@ -29,7 +29,9 @@ class Event::Participation::InvoiceForm
   end
 
   def price_category_must_be_valid_participation_category
+    # rubocop:todo Layout/LineLength
     valid_categories = participation.class.price_categories.values + participation.class.price_categories.keys
+    # rubocop:enable Layout/LineLength
 
     unless valid_categories.include?(price_category)
       errors.add(:price_category, "is not a valid category for the participation")

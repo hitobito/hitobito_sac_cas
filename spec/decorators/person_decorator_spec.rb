@@ -65,7 +65,9 @@ describe PersonDecorator do
       person.wso2_legacy_password_hash = "123"
       person.wso2_legacy_password_salt = "456"
 
+      # rubocop:todo Layout/LineLength
       expect(login_status_icon).to eq '<i title="Altes SAC Passwort (WSO2)" class="text-warning fas fa-user-check"></i>'
+      # rubocop:enable Layout/LineLength
     end
 
     it "does not use any color classes for non legacy wso2 login status" do

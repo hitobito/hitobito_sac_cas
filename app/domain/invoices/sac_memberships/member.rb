@@ -35,7 +35,9 @@ module Invoices
       def membership_years
         return 0 if person.new_record? || person.roles.empty?
         # person must have been loaded with .with_membership_years(Date.new(date.year - 1, 12, 31))
+        # rubocop:todo Layout/LineLength
         # so membership years correspond to the value that will be reached at the end of the reference year,
+        # rubocop:enable Layout/LineLength
         # even if roles are not yet prolonged until the end of this year.
         # This value is off by one for the first year, but as it is only used for reductions that
         # are granted after many years, it does not matter.

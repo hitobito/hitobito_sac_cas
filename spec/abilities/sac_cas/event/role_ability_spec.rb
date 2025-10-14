@@ -15,7 +15,9 @@ describe Event::RoleAbility do
 
     context "on course" do
       let(:top_course) { events(:top_course) }
-      let(:participation) { Event::Participation.create!(event: top_course, person: person, application_id: -1) }
+      let(:participation) {
+        Event::Participation.create!(event: top_course, person: person, application_id: -1)
+      }
 
       context "as leader" do
         let(:role) { Fabricate("Event::Course::Role::Leader", participation: participation) }
@@ -28,7 +30,9 @@ describe Event::RoleAbility do
       end
 
       context "as assistant leader" do
-        let(:role) { Fabricate("Event::Course::Role::AssistantLeader", participation: participation) }
+        let(:role) {
+          Fabricate("Event::Course::Role::AssistantLeader", participation: participation)
+        }
 
         [:show, :create, :update, :destroy].each do |action|
           it "may not #{action}" do

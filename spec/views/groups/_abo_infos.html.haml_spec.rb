@@ -36,7 +36,9 @@ describe "groups/self_registration/_abo_infos.html.haml" do
 
     it "renders duration info" do
       expect(dom).to have_text "Dauer und Erneuerung des Abonnements"
+      # rubocop:todo Layout/LineLength
       expect(dom).to have_text "Das Abonnement kann jederzeit zum Ende der laufenden Periode gekündigt werden."
+      # rubocop:enable Layout/LineLength
     end
 
     context "international" do

@@ -14,7 +14,8 @@ module SacCas::Role::MitgliedZusatzsektion
     validate :assert_is_mitglied_during_validity_period, on: [:create, :update]
   end
 
-  def assert_is_mitglied_during_validity_period
+  # rubocop:todo Metrics/AbcSize
+  def assert_is_mitglied_during_validity_period # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     # validation can be skipped by setting this attribute to truthy
     # This is used by the import as we don't have the complete memberhip history of a person
     # but have to import MitgliedZusatzsektion roles anyway.
@@ -36,4 +37,5 @@ module SacCas::Role::MitgliedZusatzsektion
 
     errors.add(:person, :must_have_mitglied_role) if uncovered_days.any?
   end
+  # rubocop:enable Metrics/AbcSize
 end

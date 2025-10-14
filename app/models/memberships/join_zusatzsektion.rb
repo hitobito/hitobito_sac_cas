@@ -45,12 +45,14 @@ module Memberships
         sent_at: Date.current,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: false).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current,
+        new_entry: false).enqueue!
     end
 
     def enqueue_confirmation_mail(role)
       mail_type = confirmation_needed? ? :approval_pending_confirmation : :confirmation
-      Memberships::JoinZusatzsektionMailer.send(mail_type, role.person, role.layer_group, role.beitragskategorie).deliver_later
+      Memberships::JoinZusatzsektionMailer.send(mail_type, role.person, role.layer_group,
+        role.beitragskategorie).deliver_later
     end
 
     def prepare_roles(person)

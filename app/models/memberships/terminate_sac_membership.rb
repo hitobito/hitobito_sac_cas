@@ -125,7 +125,9 @@ module Memberships
     end
 
     def cancel_open_membership_invoices(person)
+      # rubocop:todo Layout/LineLength
       person.external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name).find_each do |invoice|
+        # rubocop:enable Layout/LineLength
         invoice.update!(state: "cancelled")
         Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
       end

@@ -13,7 +13,8 @@ magazine_list = MailingList.seed(:name, :group_id, {
 }).first
 
 unless magazine_list.subscriptions.exists?
-  magazine_list.subscriptions.create!(subscriber: root, role_types: [Group::SektionsMitglieder::Mitglied])
+  magazine_list.subscriptions.create!(subscriber: root,
+    role_types: [Group::SektionsMitglieder::Mitglied])
 end
 
 Group::Sektion.all.find_each do |sektion|
@@ -23,5 +24,6 @@ Group::Sektion.all.find_each do |sektion|
     internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY
   }).first
 
-  sektion_bulletin.subscriptions.create!(subscriber: sektion, role_types: [Group::SektionsMitglieder::Mitglied])
+  sektion_bulletin.subscriptions.create!(subscriber: sektion,
+    role_types: [Group::SektionsMitglieder::Mitglied])
 end

@@ -129,7 +129,9 @@ class EventsQualifactionsSeeder
     rows = EVENT_CATEGORIES_AND_KINDS.flat_map do |category_label, kinds|
       category = Event::KindCategory.find_by(label: category_label)
       options = (kinds.last.is_a?(::Hash) ? kinds.pop : {})
+        # rubocop:todo Layout/LineLength
         .merge(cost_center_id: category.cost_center_id, cost_unit_id: category.cost_unit_id, level_id: level.id)
+      # rubocop:enable Layout/LineLength
       kinds.map { |kind| options.merge(id: identify(kind), kind_category_id: category.id) }
     end
     Event::Kind.seed(:id, rows)
@@ -139,7 +141,8 @@ class EventsQualifactionsSeeder
     rows = EVENT_CATEGORIES_AND_KINDS.values.flat_map do |kinds|
       kinds.map do |kind|
         event_kind_id = identify(kind)
-        {locale: "de", label: kind, short_name: "S#{event_kind_id.to_s[0..3]}", event_kind_id: event_kind_id}
+        {locale: "de", label: kind, short_name: "S#{event_kind_id.to_s[0..3]}",
+         event_kind_id: event_kind_id}
       end
     end
     Event::Kind::Translation.seed(:event_kind_id, rows)

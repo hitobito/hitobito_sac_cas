@@ -25,7 +25,10 @@ describe Person::QueryHouseholdController do
     end
 
     context "without required sac mitarbeiter role" do
-      let(:person) { Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+      let(:person) {
+        Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
+          group: groups(:bluemlisalp_funktionaere)).person
+      }
 
       it "is unauthorized" do
         expect do

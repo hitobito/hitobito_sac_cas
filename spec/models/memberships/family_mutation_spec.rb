@@ -18,7 +18,9 @@ describe Memberships::FamilyMutation do
 
   let(:stammsektion_class) { Group::SektionsMitglieder::Mitglied }
   let(:zusatzsektion_class) { Group::SektionsMitglieder::MitgliedZusatzsektion }
-  let(:neuanmeldung_zusatzsektion_class) { Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion }
+  let(:neuanmeldung_zusatzsektion_class) {
+    Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+  }
 
   def stammsektion_role = person.sac_membership.stammsektion_role
 
@@ -72,7 +74,8 @@ describe Memberships::FamilyMutation do
     it "raises if role is terminated" do
       zusatzsektion_role = zusatzsektion_roles.first
 
-      Roles::Termination.new(role: zusatzsektion_role, terminate_on: Time.zone.yesterday, validate_terminate_on: false).call
+      Roles::Termination.new(role: zusatzsektion_role, terminate_on: Time.zone.yesterday,
+        validate_terminate_on: false).call
 
       expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
         .to raise_error("not able to change zusatzsektion to family")
@@ -131,7 +134,10 @@ describe Memberships::FamilyMutation do
       household.add(other)
       household.add(other2)
       household.save!
-      neuanmeldung_role = create_role!(neuanmeldung_zusatzsektion_class, groups(:matterhorn_neuanmeldungen_nv), beitragskategorie: :adult, person: other, start_on: other.roles.first.start_on)
+      neuanmeldung_role = create_role!(neuanmeldung_zusatzsektion_class,
+        # rubocop:todo Layout/LineLength
+        groups(:matterhorn_neuanmeldungen_nv), beitragskategorie: :adult, person: other, start_on: other.roles.first.start_on)
+      # rubocop:enable Layout/LineLength
 
       zusatzsektion_role = zusatzsektion_roles.first
       expect { mutation.change_zusatzsektion_to_family!(zusatzsektion_role) }
@@ -154,7 +160,9 @@ describe Memberships::FamilyMutation do
 
       it "ends existing neuanmeldung stammsektion role per end of yesterday" do
         person.roles.destroy_all
+        # rubocop:todo Layout/LineLength
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv),
+          # rubocop:enable Layout/LineLength
           person:,
           start_on: 10.days.ago,
           end_on: 10.days.from_now)
@@ -239,12 +247,16 @@ describe Memberships::FamilyMutation do
       end
 
       it "raises if reference person has terminated membership" do
+        # rubocop:todo Layout/LineLength
         Role.where(id: reference_person.sac_membership.stammsektion_role).update_all(terminated: true)
+        # rubocop:enable Layout/LineLength
         expect { mutation.join!(reference_person) }
           .to raise_error("not allowed with terminated sac membership")
       end
 
+      # rubocop:todo Layout/LineLength
       it "destroys new family stammsektion role when joining and leaving the family in the same day" do
+        # rubocop:enable Layout/LineLength
         expect { mutation.join!(reference_person) }
           .to change { stammsektion_role.id }
 
@@ -274,7 +286,9 @@ describe Memberships::FamilyMutation do
       end
 
       it "raises if reference person has terminated membership" do
+        # rubocop:todo Layout/LineLength
         Role.where(id: reference_person.sac_membership.stammsektion_role).update_all(terminated: true)
+        # rubocop:enable Layout/LineLength
         expect { mutation.join!(reference_person) }
           .to raise_error("not allowed with terminated sac membership")
       end
@@ -334,7 +348,8 @@ describe Memberships::FamilyMutation do
     end
 
     it "terminates family neuanmeldung zusatzsektion roles per end of yesterday" do
-      create_role!(neuanmeldung_zusatzsektion_class, groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
+      create_role!(neuanmeldung_zusatzsektion_class,
+        groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
       neuanmeldung_zusatzsektion_role = neuanmeldung_zusatzsektion_roles.first
       expect(neuanmeldung_zusatzsektion_role.beitragskategorie).to eq "family"
 

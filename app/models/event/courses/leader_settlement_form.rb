@@ -15,7 +15,9 @@ class Event::Courses::LeaderSettlementForm
   validates :iban, presence: true, iban: true
 
   validates :actual_days, presence: true
-  validates :actual_days, numericality: {greater_than_or_equal_to: 0}, if: -> { actual_days.present? }
+  validates :actual_days, numericality: {greater_than_or_equal_to: 0}, if: -> {
+    actual_days.present?
+  }
   validate :actual_days_cannot_exceed_course_days, if: -> { actual_days.present? }
 
   def actual_days_cannot_exceed_course_days

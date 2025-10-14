@@ -4,7 +4,10 @@ describe EventsHelper do
   include FormatHelper
 
   let(:kind_category) { Fabricate.build(:event_kind_category) }
-  let(:kind) { Fabricate.build(:event_kind, application_conditions: "kind conditions", kind_category: kind_category) }
+  let(:kind) {
+    Fabricate.build(:event_kind, application_conditions: "kind conditions",
+      kind_category: kind_category)
+  }
   let(:event) { Fabricate.build(:course, kind: kind, application_conditions: "event conditions") }
 
   describe "#format_event_application_conditions" do

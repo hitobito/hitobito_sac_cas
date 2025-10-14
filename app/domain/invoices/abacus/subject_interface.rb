@@ -27,10 +27,16 @@ module Invoices
       def transmit_batch(subjects)
         subjects.select!(&:valid?)
 
+        # rubocop:todo Layout/LineLength
         # Initial people imports to hitobito are run multiple times, but People always get the same Id.
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         # Each time, the database is cleared. Subjects persisted in Abacus, however, are not affected.
+        # rubocop:enable Layout/LineLength
         # Because we use the same Id in hitobito and in Abacus, we fetch by Person#id from Abacus
+        # rubocop:todo Layout/LineLength
         # if the abacus_subject_key is not set yet. If this Id already exists in Abacus, we assume it's
+        # rubocop:enable Layout/LineLength
         # the same person and set the abacus_subject_key accordingly.
         parts = fetch_batch(subjects)
         batch_assign_abacus_subject_keys(parts)

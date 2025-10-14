@@ -15,7 +15,9 @@ describe MailingListAbility do
     ).person
   end
   let(:mailing_list) { Fabricate(:mailing_list, group: groups(:bluemlisalp)) }
-  let(:mailing_list_in_other_sub_group) { Fabricate(:mailing_list, group: groups(:bluemlisalp_touren_und_kurse)) }
+  let(:mailing_list_in_other_sub_group) {
+    Fabricate(:mailing_list, group: groups(:bluemlisalp_touren_und_kurse))
+  }
   let(:mailing_list_in_foreign_group) { Fabricate(:mailing_list, group: groups(:matterhorn)) }
 
   subject(:ability) { Ability.new(person.reload) }
@@ -23,7 +25,8 @@ describe MailingListAbility do
   [[Group::SektionsFunktionaere::Redaktion, :bluemlisalp_funktionaere],
     [Group::SektionsFunktionaere::Mitgliederverwaltung, :bluemlisalp_funktionaere],
     [Group::SektionsMitglieder::Leserecht, :bluemlisalp_mitglieder],
-    [Group::SektionsMitglieder::Schreibrecht, :bluemlisalp_mitglieder]].each do |role_type, group_key|
+    [Group::SektionsMitglieder::Schreibrecht,
+      :bluemlisalp_mitglieder]].each do |role_type, group_key|
     context "mitglied with #{role_type}" do
       let(:person) { mitglied_with_schreibrecht }
       let(:mitglied_with_schreibrecht) do

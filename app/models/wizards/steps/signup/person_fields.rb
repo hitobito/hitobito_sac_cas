@@ -28,7 +28,9 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
 
   validates :zip_code, zipcode: {country_code_attribute: :country}
 
-  def initialize(...)
+  # rubocop:todo Metrics/MethodLength
+  # rubocop:todo Metrics/AbcSize
+  def initialize(...) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     super
 
     if current_user
@@ -45,11 +47,15 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
       self.zip_code ||= current_user.zip_code
       self.town ||= current_user.town
       self.country ||= current_user.country
+      # rubocop:todo Layout/LineLength
       self.phone_number ||= current_user.phone_numbers.find_by(label: Wizards::Steps::Signup::PersonCommon::PHONE_NUMBER_LABEL)&.number
+      # rubocop:enable Layout/LineLength
     else
       self.country ||= Settings.addresses.imported_countries.to_a.first
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   private
 

@@ -15,7 +15,10 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
       Event::Date.new(start_at: "01.03.2024", finish_at: "31.03.2024")
     ])
   end
-  let(:participation) { Fabricate(:event_participation, event: course, participant: member, price: 20, price_category: :price_regular) }
+  let(:participation) {
+    Fabricate(:event_participation, event: course, participant: member, price: 20,
+      price_category: :price_regular)
+  }
 
   subject { described_class.new(participation) }
 
@@ -120,12 +123,15 @@ describe Invoices::Abacus::CourseAnnulationInvoice do
 
       expect(additional_user_fields[:user_field8]).to eq(course.number)
       expect(additional_user_fields[:user_field9]).to eq("Eventus")
+      # rubocop:todo Layout/LineLength
       expect(additional_user_fields[:user_field10]).to eq("01.01.2024 - 31.01.2024, 01.03.2024 - 31.03.2024")
+      # rubocop:enable Layout/LineLength
       expect(additional_user_fields[:user_field22]).to be_nil
     end
 
     it "contains replaced abacus sales order key if one exists" do
-      ExternalInvoice::CourseParticipation.create!(person: participation.person, link: participation, abacus_sales_order_key: "1234")
+      ExternalInvoice::CourseParticipation.create!(person: participation.person,
+        link: participation, abacus_sales_order_key: "1234")
 
       expect(subject.additional_user_fields[:user_field22]).to eq(1234)
     end

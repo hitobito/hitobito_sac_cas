@@ -31,7 +31,8 @@ describe Group::SektionsMitglieder::Mitglied do
 
     [:adult, :youth].each do |beitragskategorie|
       it "does not set family_id for #{beitragskategorie}" do
-        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:, beitragskategorie: beitragskategorie)
+        role = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person:, group:,
+          beitragskategorie: beitragskategorie)
         expect(role.beitragskategorie).to eq beitragskategorie.to_s
         expect(role.family_id).to be_nil
         expect(role.reload.family_id).to be_nil
@@ -45,14 +46,22 @@ describe Group::SektionsMitglieder::Mitglied do
 
     context "as main person" do
       it "destroys household" do
-        expect { familienmitglied.destroy }.to change { familienmitglied.person.reload.sac_family_main_person }.from(true).to(false)
-          .and change { familienmitglied.person.reload.primary_group }.from(groups(:bluemlisalp_mitglieder)).to(groups(:matterhorn_mitglieder))
+        expect { familienmitglied.destroy }.to change {
+          familienmitglied.person.reload.sac_family_main_person
+        }.from(true).to(false)
+          .and change {
+                 # rubocop:todo Layout/LineLength
+                 familienmitglied.person.reload.primary_group
+               }.from(groups(:bluemlisalp_mitglieder)).to(groups(:matterhorn_mitglieder))
+        # rubocop:enable Layout/LineLength
       end
 
       it "does not destroy household when skip_destroy_household is set" do
         familienmitglied.skip_destroy_household = true
 
-        expect { familienmitglied.destroy }.to not_change { familienmitglied.person.reload.sac_family_main_person }
+        expect { familienmitglied.destroy }.to not_change {
+          familienmitglied.person.reload.sac_family_main_person
+        }
           .and not_change { familienmitglied.person.household_key }
       end
     end

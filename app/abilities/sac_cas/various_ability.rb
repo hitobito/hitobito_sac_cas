@@ -20,6 +20,7 @@ module SacCas::VariousAbility
   end
 
   def if_mitarbeiter_geschaeftsstelle
-    role_type?(Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::Admin)
+    role_type?(Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Mitarbeiter,
+      Group::Geschaeftsstelle::Admin)
   end
 end

@@ -16,7 +16,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Logo < Export::Pdf::S
   def render_logo
     float do
       # logo is algined right and the text is matched with the first line of the text
-      image(logo_path, at: [pdf.bounds.right - LOGO_WIDTH, pdf.bounds.top + 7], width: LOGO_WIDTH, height: LOGO_HEIGHT)
+      image(logo_path, at: [pdf.bounds.right - LOGO_WIDTH, pdf.bounds.top + 7], width: LOGO_WIDTH,
+        height: LOGO_HEIGHT)
     end
   end
 

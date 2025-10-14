@@ -62,7 +62,8 @@ describe Event::ParticipationContactDatasController do
           type: "Event::Role::Participant"
         }
       }
-      expect(entry).to have(0).errors, "Should not have errors, but has: #{entry.errors.full_messages.to_sentence}"
+      expect(entry).to have(0).errors,
+        "Should not have errors, but has: #{entry.errors.full_messages.to_sentence}"
       expect(person.reload.last_name).to eq "NewName"
     end
   end

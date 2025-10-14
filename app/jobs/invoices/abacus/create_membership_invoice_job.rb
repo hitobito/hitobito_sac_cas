@@ -10,7 +10,8 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
 
   attr_reader :reference_date, :discount, :new_entry, :dont_send
 
-  def initialize(external_invoice, reference_date, discount: nil, new_entry: false, dont_send: false)
+  def initialize(external_invoice, reference_date, discount: nil, new_entry: false,
+    dont_send: false)
     super(external_invoice)
     @reference_date = reference_date
     @discount = discount
@@ -22,7 +23,9 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
 
   def invoice_data
     @invoice_data ||= Invoices::Abacus::MembershipInvoiceGenerator
+      # rubocop:todo Layout/LineLength
       .new(external_invoice.person_id, external_invoice.link, reference_date, custom_discount: discount)
+      # rubocop:enable Layout/LineLength
       .build(new_entry: new_entry)
   end
 

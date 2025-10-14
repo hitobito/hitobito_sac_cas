@@ -57,7 +57,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     it "uses special process flow number if invoice should not be sent" do
       order = satisfy { |o| o.full_attrs[:process_flow_number] == 6 }
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
+      # rubocop:enable Layout/LineLength
       allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create).with(order)
       job.perform
     end
@@ -75,7 +77,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
+        # rubocop:todo Layout/LineLength
         expect(log_entry.message).to eq "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
+        # rubocop:enable Layout/LineLength
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -91,7 +95,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
+        # rubocop:todo Layout/LineLength
         expect(log_entry.message).to eq "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
+        # rubocop:enable Layout/LineLength
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -102,7 +108,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     it "raises without creating log or updating invoice state" do
       expect do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         job.perform
       end.to raise_error(StandardError, "ouch")
         .and not_change { HitobitoLogEntry.count }
@@ -111,7 +119,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     context "when running via worker" do
       it "creates log entry with error message" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         expect do
           Delayed::Worker.new.run(job.enqueue!)
         end.to change { HitobitoLogEntry.count }.by(1)
@@ -124,7 +134,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
       end
 
       it "updates invoice state to error when all attemps fail" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         allow(Delayed::Worker).to receive(:max_attempts).and_return(2)
         delayed_job = job.enqueue!
         expect do

@@ -51,7 +51,8 @@ describe Event::ParticipationButtons do
     end
   end
 
-  it_behaves_like "conditional action", "Abmelden", states: %w[unconfirmed applied assigned summoned], assert: :button do
+  it_behaves_like "conditional action", "Abmelden",
+    states: %w[unconfirmed applied assigned summoned], assert: :button do
     context "his own participation" do
       before do
         participation.person = person

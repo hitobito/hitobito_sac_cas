@@ -14,7 +14,9 @@ module Memberships
     end
 
     def for_self_when_not_terminated_if_active_member_or_backoffice
+      # rubocop:todo Layout/LineLength
       active_member? && (for_self_and_not_terminated? || backoffice? || termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
+      # rubocop:enable Layout/LineLength
     end
 
     def for_self_and_not_terminated?
@@ -42,7 +44,9 @@ module Memberships
     end
 
     def schreibrecht_role?
-      user_context.user.roles.any? { |role| role.type == Group::SektionsMitglieder::Schreibrecht.sti_name }
+      user_context.user.roles.any? { |role|
+        role.type == Group::SektionsMitglieder::Schreibrecht.sti_name
+      }
     end
   end
 end

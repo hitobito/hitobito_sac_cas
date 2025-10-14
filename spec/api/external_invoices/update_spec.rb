@@ -12,7 +12,10 @@ RSpec.describe "external_invoices#update", type: :request do
     let(:group) { groups(:bluemlisalp) }
     let(:token) { service_tokens(:permitted_root_layer_token).token }
     let!(:external_invoices) do
-      Array.new(3) { Fabricate(:external_invoice, person: people(:admin), link: group, state: "open", total: 50, sent_at: "2023-05-25") } +
+      Array.new(3) {
+        Fabricate(:external_invoice, person: people(:admin), link: group, state: "open", total: 50,
+          sent_at: "2023-05-25")
+      } +
         Array.new(4) { Fabricate(:external_invoice, person: people(:mitglied), link: group) }
     end
 

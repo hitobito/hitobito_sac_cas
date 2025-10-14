@@ -46,7 +46,8 @@ describe Event::ParticipantReminderJob do
 
     it "sends email to the participant" do
       expect { job.perform }
-        .to have_enqueued_mail(Event::ParticipantReminderMailer, :reminder).once.with(participation_2)
+        .to have_enqueued_mail(Event::ParticipantReminderMailer,
+          :reminder).once.with(participation_2)
     end
   end
 

@@ -9,6 +9,7 @@ module BasicAuth
   extend ActiveSupport::Concern
 
   included do
-    http_basic_authenticate_with(name: Settings.basic_auth.username, password: Settings.basic_auth.password)
+    http_basic_authenticate_with(name: Settings.basic_auth.username,
+      password: Settings.basic_auth.password)
   end
 end

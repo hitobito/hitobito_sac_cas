@@ -106,7 +106,7 @@ module Wizards::Memberships
       end
     end
 
-    def handle_start
+    def handle_start # rubocop:todo Metrics/CyclomaticComplexity
       if person.sac_membership.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif family_membership? && !family_main_person?

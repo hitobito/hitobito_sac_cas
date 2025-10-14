@@ -10,7 +10,9 @@ require "spec_helper"
 describe Memberships::UndoTerminationsController, versioning: true do
   before { PaperTrail.request.controller_info = {mutation_id: Random.uuid} }
 
-  let(:params) { {group_id: Group.root, person_id: terminated_role.person_id, role_id: terminated_role.id} }
+  let(:params) {
+    {group_id: Group.root, person_id: terminated_role.person_id, role_id: terminated_role.id}
+  }
   let(:role) { roles(:familienmitglied) }
 
   let(:terminated_role) do

@@ -34,7 +34,9 @@ class People::BirthdayValidator
 
   def add_error(error_type, date = nil)
     if date
-      entry.errors.add(:birthday, I18n.t("activerecord.errors.models.person.birthday.#{error_type}", date: date.strftime("%d.%m.%Y")))
+      entry.errors.add(:birthday,
+        I18n.t("activerecord.errors.models.person.birthday.#{error_type}",
+          date: date.strftime("%d.%m.%Y")))
     else
       entry.errors.add(:birthday, I18n.t("activerecord.errors.messages.#{error_type}"))
     end

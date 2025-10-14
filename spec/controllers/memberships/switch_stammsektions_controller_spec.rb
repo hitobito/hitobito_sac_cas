@@ -46,16 +46,22 @@ describe Memberships::SwitchStammsektionsController do
       end.to have_enqueued_mail(Memberships::SwitchStammsektionMailer, :confirmation)
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(response).to redirect_to(person_path(person, format: :html))
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Dein Sektionswechsel zu <i>SAC Matterhorn</i> wurde vorgenommen."
+      # rubocop:enable Layout/LineLength
     end
 
     it "switches stammsektion with zusatzsektion without sending email" do
       expect do
-        post :create, params: wizard_params(kind: :zusatzsektion, step: 1, choose_sektion: {group_id: matterhorn.id})
+        post :create,
+          params: wizard_params(kind: :zusatzsektion, step: 1,
+            choose_sektion: {group_id: matterhorn.id})
       end.not_to have_enqueued_mail
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(response).to redirect_to(person_path(person, format: :html))
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Dein Sektionswechsel zu <i>SAC Matterhorn</i> wurde vorgenommen."
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -73,7 +79,9 @@ describe Memberships::SwitchStammsektionsController do
         post :create, params: wizard_params(step: 1, choose_sektion: {group_id: matterhorn.id})
       end.to have_enqueued_mail(Memberships::SwitchStammsektionMailer, :confirmation)
       expect(response).to redirect_to(person_path(person, format: :html))
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Eure 3 Sektionswechsel zu <i>SAC Matterhorn</i> wurden vorgenommen."
+      # rubocop:enable Layout/LineLength
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(family_member.sac_membership.stammsektion_role.layer_group).to eq matterhorn
     end
@@ -82,10 +90,14 @@ describe Memberships::SwitchStammsektionsController do
       person.update_column(:data_quality, :ok)
 
       expect do
-        post :create, params: wizard_params(kind: :zusatzsektion, step: 1, choose_sektion: {group_id: matterhorn.id})
+        post :create,
+          params: wizard_params(kind: :zusatzsektion, step: 1,
+            choose_sektion: {group_id: matterhorn.id})
       end.not_to have_enqueued_mail(Memberships::SwitchStammsektionMailer, :confirmation)
       expect(response).to redirect_to(person_path(person, format: :html))
+      # rubocop:todo Layout/LineLength
       expect(flash[:notice]).to eq "Eure 3 Sektionswechsel zu <i>SAC Matterhorn</i> wurden vorgenommen."
+      # rubocop:enable Layout/LineLength
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(family_member.sac_membership.stammsektion_role.layer_group).to eq matterhorn
     end

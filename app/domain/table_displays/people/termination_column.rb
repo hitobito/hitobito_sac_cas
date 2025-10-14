@@ -23,14 +23,18 @@ module TableDisplays::People
 
     def render(attr)
       super do |person|
+        # rubocop:todo Layout/LineLength
         value(terminated_role(person)) if terminated_role(person).present? && membership_roles(person).select(&:active?).blank?
+        # rubocop:enable Layout/LineLength
       end
     end
 
     private
 
     def allowed_value_for(target, target_attr, &block)
+      # rubocop:todo Layout/LineLength
       value(terminated_role(target)) if terminated_role(target).present? && membership_roles(target).select(&:active?).blank?
+      # rubocop:enable Layout/LineLength
     end
 
     def value(terminated_role)
@@ -38,7 +42,9 @@ module TableDisplays::People
     end
 
     def membership_roles(person)
-      person.roles_with_ended_readable.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+      person.roles_with_ended_readable.select { |role|
+        SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type)
+      }
     end
 
     def terminated_role(person)

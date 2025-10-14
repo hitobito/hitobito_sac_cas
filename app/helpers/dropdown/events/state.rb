@@ -31,14 +31,15 @@ module Dropdown::Events
     private
 
     def optional_email_popover?(transition_to)
-      event.state_transition_emails_skippable.fetch(event.state.to_sym, []).include?(transition_to.to_sym)
+      event.state_transition_emails_skippable.fetch(event.state.to_sym,
+        []).include?(transition_to.to_sym)
     end
 
     def current_state_label
       t("activerecord.attributes.#{event.klass.model_name.i18n_key}.states.#{event.state}")
     end
 
-    def init_items
+    def init_items # rubocop:todo Metrics/AbcSize
       event.available_states.each do |state|
         link = template.state_group_event_path(template.params[:group_id], event, {state:})
         label = label_for(state)
@@ -46,7 +47,8 @@ module Dropdown::Events
         if respond_to?(custom_method, true)
           send(custom_method, label, link)
         elsif optional_email_popover?(state)
-          add_item_with_popover(label, template.render("events/popover_emails_optional", state:, label:))
+          add_item_with_popover(label,
+            template.render("events/popover_emails_optional", state:, label:))
         else
           add_item(label, link, method: :put, "data-confirm": confirm_text_for(state))
         end

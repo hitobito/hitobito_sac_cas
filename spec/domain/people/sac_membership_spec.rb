@@ -109,7 +109,9 @@ describe People::SacMembership do
         end_on: Time.zone.today.end_of_year
       )
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      # rubocop:todo Layout/LineLength
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))).to eq false
+      # rubocop:enable Layout/LineLength
       expect(membership.active_in?(groups(:bluemlisalp))).to eq false
       expect(membership.active_in?(groups(:matterhorn))).to eq false
     end
@@ -143,7 +145,9 @@ describe People::SacMembership do
         start_on: Time.zone.now.beginning_of_year,
         end_on: Time.zone.today.end_of_year
       )
+      # rubocop:todo Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      # rubocop:enable Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end
 
@@ -154,7 +158,9 @@ describe People::SacMembership do
         start_on: Time.zone.now.beginning_of_year,
         end_on: Time.zone.today.end_of_year
       )
+      # rubocop:todo Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
+      # rubocop:enable Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end
   end

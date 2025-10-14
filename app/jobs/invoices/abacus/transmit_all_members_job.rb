@@ -10,7 +10,8 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   SLICE_SIZE = 25  # number of people/invoices transmitted per abacus batch request
   PARALLEL_THREADS = 2 # number of threads sending abacus requests
 
-  RELEVANT_ATTRIBUTES = Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES + %w[id abacus_subject_key].freeze
+  RELEVANT_ATTRIBUTES = Invoices::Abacus::Subject::RELEVANT_ATTRIBUTES + %w[id
+    abacus_subject_key].freeze
 
   ROLES_TO_TRANSMIT = [
     Group::SektionsMitglieder::Mitglied,
@@ -58,7 +59,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
 
   private
 
-  def process_members
+  def process_members # rubocop:todo Metrics/MethodLength
     raise_exception = nil
     member_ids.in_batches(of: BATCH_SIZE) do |people|
       people_ids = people.pluck(:id)

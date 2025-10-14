@@ -15,7 +15,10 @@ describe Event::RolesController do
   before { sign_in(user) }
 
   describe "GET new" do
-    let(:request) { get new_group_event_role_path(group_id: group.id, event_id: event.id), params: {event_role: {type: event_role.sti_name}} }
+    let(:request) {
+      get new_group_event_role_path(group_id: group.id, event_id: event.id),
+        params: {event_role: {type: event_role.sti_name}}
+    }
 
     def expect_common_fields
       expect(response.body).to include("Person")

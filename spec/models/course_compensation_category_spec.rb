@@ -36,17 +36,26 @@ describe CourseCompensationCategory do
 
   context "destroy" do
     let!(:course_compensation_category) { Fabricate(:course_compensation_category) }
-    let!(:course_compensation_rate) { Fabricate(:course_compensation_rate, course_compensation_category: course_compensation_category) }
+    let!(:course_compensation_rate) {
+      Fabricate(:course_compensation_rate,
+        course_compensation_category: course_compensation_category)
+    }
 
     it "is prevented if associated course_compensation_rates exist" do
-      expect { course_compensation_category.destroy }.not_to change { CourseCompensationCategory.count }
+      expect { course_compensation_category.destroy }.not_to change {
+        CourseCompensationCategory.count
+      }
+      # rubocop:todo Layout/LineLength
       expect(course_compensation_category.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
         "da abhängige Vergütungsansätze existieren."
+      # rubocop:enable Layout/LineLength
     end
 
     it "succeeds if no associated course_compensation_rates exists" do
       course_compensation_rate.destroy!
-      expect { course_compensation_category.destroy }.to change { CourseCompensationCategory.count }.by(-1)
+      expect { course_compensation_category.destroy }.to change {
+        CourseCompensationCategory.count
+      }.by(-1)
     end
   end
 end

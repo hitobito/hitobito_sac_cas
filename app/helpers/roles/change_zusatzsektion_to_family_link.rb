@@ -17,7 +17,9 @@ module Roles
     def render
       return unless render?
 
+      # rubocop:todo Layout/LineLength
       link_to(safe_join([icon(:"exchange-alt"), t("roles/change_zusatzsektion_to_family.link")], " "),
+        # rubocop:enable Layout/LineLength
         @view.group_person_role_change_zusatzsektion_to_family_path(role_id: @role.id,
           group_id: params[:group_id],
           person_id: @role.person_id),

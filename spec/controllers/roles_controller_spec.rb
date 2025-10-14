@@ -20,19 +20,27 @@ describe RolesController do
     def build_depending_roles_and_family(beitragskategorie: :family)
       [
         [Group::SektionsNeuanmeldungenNv::Neuanmeldung, :bluemlisalp_neuanmeldungen_nv, false],
-        [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion, false],
-        [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_nv, true],
-        [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion, true]
+        [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion,
+          false],
+        [Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
+          :bluemlisalp_neuanmeldungen_nv, true],
+        [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
+          :bluemlisalp_neuanmeldungen_sektion, true]
       ].map do |role_class, group, add_membership_role|
-        build_depending_role_and_add_to_family(role_class, group, add_membership_role:, beitragskategorie:)
+        build_depending_role_and_add_to_family(role_class, group, add_membership_role:,
+          beitragskategorie:)
       end
     end
 
-    def build_depending_role_and_add_to_family(role_class, group, add_membership_role: false, beitragskategorie: :family)
+    def build_depending_role_and_add_to_family(role_class, group, add_membership_role: false,
+      beitragskategorie: :family)
       p = Fabricate(:person, birthday: 12.years.ago)
       household.add(p)
       household.save!
-      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder), person: p) if add_membership_role
+      if add_membership_role
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+          group: groups(:matterhorn_mitglieder), person: p)
+      end
       Fabricate(role_class.sti_name.to_sym, group: groups(group), beitragskategorie:, person: p)
     end
 
@@ -40,9 +48,11 @@ describe RolesController do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
       it "destroys household" do
-        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
+        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: group, beitragskategorie: :family, person: person)
 
-        other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder)).person
+        other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+          group: groups(:matterhorn_mitglieder)).person
         other2 = Fabricate(:person, birthday: 12.years.ago)
 
         household.add(other)
@@ -60,7 +70,8 @@ describe RolesController do
 
       it "destroys family neuanmeldung roles in same layer" do
         household.add(people(:mitglied))
-        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
+        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: group, beitragskategorie: :family, person: person)
 
         depending_roles = build_depending_roles_and_family
 
@@ -73,9 +84,12 @@ describe RolesController do
 
       it "replaces family neuanmeldung roles in other layer with new beitragskategorie" do
         household.add(people(:mitglied))
-        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :family, person: person)
+        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: group, beitragskategorie: :family, person: person)
 
-        depending_role = build_depending_role_and_add_to_family(Group::SektionsNeuanmeldungenNv::Neuanmeldung, :matterhorn_neuanmeldungen_nv)
+        depending_role = build_depending_role_and_add_to_family(
+          Group::SektionsNeuanmeldungenNv::Neuanmeldung, :matterhorn_neuanmeldungen_nv
+        )
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
@@ -92,14 +106,16 @@ describe RolesController do
 
       it "does not destroy depending adult neuanmeldung roles" do
         household.add(people(:mitglied))
-        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: group, beitragskategorie: :adult, person: person)
+        role = Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: group, beitragskategorie: :adult, person: person)
 
         depending_roles = build_depending_roles_and_family(beitragskategorie: :adult)
 
         delete :destroy, params: {group_id: group.id, id: role.id}
 
         depending_roles.each do |depending_role|
-          expect(Role.find_by(person_id: depending_role.person_id, group_id: depending_role.group_id)).to be_present
+          expect(Role.find_by(person_id: depending_role.person_id,
+            group_id: depending_role.group_id)).to be_present
         end
       end
     end
@@ -108,10 +124,12 @@ describe RolesController do
       let(:group) { groups(:abo_die_alpen) }
 
       it "does not destroy household" do
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :family, person: person)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :family, person: person)
         role = Fabricate(Group::AboMagazin::Andere.sti_name.to_sym, group: group)
 
-        other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym, group: groups(:matterhorn_mitglieder)).person
+        other = Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+          group: groups(:matterhorn_mitglieder)).person
         other2 = Fabricate(:person, birthday: 12.years.ago)
 
         household.add(other)
@@ -129,7 +147,8 @@ describe RolesController do
 
       it "does not destroy family neuanmeldung roles in same layer" do
         household.add(people(:mitglied))
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym, group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :adult, person: person)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          group: groups(:bluemlisalp_neuanmeldungen_nv), beitragskategorie: :adult, person: person)
         role = Fabricate(Group::AboMagazin::Andere.sti_name.to_sym, group: group)
 
         depending_roles = build_depending_roles_and_family

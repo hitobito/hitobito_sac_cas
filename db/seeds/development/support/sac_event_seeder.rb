@@ -17,7 +17,8 @@ class SacEventSeeder < EventSeeder
     end
   end
 
-  def seed_tour(values)
+  # rubocop:todo Metrics/MethodLength
+  def seed_tour(values) # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     attrs = tour_attributes(values)
     event = Event::Tour
       .joins(:groups)
@@ -38,6 +39,7 @@ class SacEventSeeder < EventSeeder
 
     event
   end
+  # rubocop:enable Metrics/MethodLength
 
   def tour_attributes(values)
     values.merge({

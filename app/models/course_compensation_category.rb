@@ -34,7 +34,8 @@ class CourseCompensationCategory < ApplicationRecord
   validates_by_schema
 
   has_many :course_compensation_rates, dependent: :restrict_with_error
-  has_and_belongs_to_many :event_kinds, association_foreign_key: :event_kind_id, class_name: "Event::Kind"
+  has_and_belongs_to_many :event_kinds, association_foreign_key: :event_kind_id,
+    class_name: "Event::Kind"
 
   scope :list, -> { includes([:translations]).order(:short_name) }
 

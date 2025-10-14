@@ -8,8 +8,13 @@
 require "spec_helper"
 
 describe Event::ApplicationConfirmationMailer do
-  let(:event) { Fabricate(:sac_open_course, number: 123, application_closing_at: Date.new(2038, 1, 19)) }
-  let(:participation) { event.participations.create!(person: people(:mitglied), price: 12.3, price_category: "price_regular") }
+  let(:event) {
+    Fabricate(:sac_open_course, number: 123, application_closing_at: Date.new(2038, 1, 19))
+  }
+  let(:participation) {
+    event.participations.create!(person: people(:mitglied), price: 12.3,
+      price_category: "price_regular")
+  }
   let(:mail) { described_class.confirmation(participation, described_class::APPLIED) }
 
   before { Group.root.update!(course_admin_email: "admin@example.com") }
@@ -37,7 +42,9 @@ describe Event::ApplicationConfirmationMailer do
       expect(mail.subject).to eq("Unbestätigte Kursanmeldung")
       expect(mail.body.to_s).to include(
         "Hallo Edmund,",
+        # rubocop:todo Layout/LineLength
         "Du wurdest für den Kurs Eventus (Nummer: #{event.number}) auf die unbestätigte Kursanmeldung gesetzt.",
+        # rubocop:enable Layout/LineLength
         "Preis: 12.30"
       )
     end

@@ -43,7 +43,8 @@ describe People::Neuanmeldungen::ApprovesController do
           person: family_person,
           start_on: 2.years.ago.beginning_of_year
         )
-        create_household(family_person, Fabricate(:person), Fabricate(:person, birthday: 15.years.ago))
+        create_household(family_person, Fabricate(:person),
+          Fabricate(:person, birthday: 15.years.ago))
         Fabricate(
           Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name.to_sym,
           group: group,

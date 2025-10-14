@@ -16,7 +16,7 @@ module SacCas::PeopleManager
 
   private
 
-  def assert_not_in_different_household
+  def assert_not_in_different_household # rubocop:todo Metrics/CyclomaticComplexity
     return if manager&.household_key == managed&.household_key ||
       manager&.household_key.nil? ||
       managed&.household_key.nil?

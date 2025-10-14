@@ -14,8 +14,10 @@ describe "people/external_invoices/_actions_index.html.haml" do
     before do
       assign(:group, groups(:bluemlisalp_mitglieder))
       assign(:person, people(:mitglied))
-      allow(view).to receive(:can?).with(:create_membership_invoice, people(:mitglied)).and_return(true)
-      allow(view).to receive(:can?).with(:create_abo_magazin_invoice, people(:mitglied)).and_return(true)
+      allow(view).to receive(:can?).with(:create_membership_invoice,
+        people(:mitglied)).and_return(true)
+      allow(view).to receive(:can?).with(:create_abo_magazin_invoice,
+        people(:mitglied)).and_return(true)
       allow(people(:mitglied)).to receive(:sac_membership_invoice?).and_return(true)
     end
 
@@ -24,7 +26,8 @@ describe "people/external_invoices/_actions_index.html.haml" do
     end
 
     it "does not render membership invoice button when no permission" do
-      allow(view).to receive(:can?).with(:create_membership_invoice, people(:mitglied)).and_return(false)
+      allow(view).to receive(:can?).with(:create_membership_invoice,
+        people(:mitglied)).and_return(false)
 
       expect(subject).to have_no_text "Mitgliedschaftsrechnung erstellen"
     end
@@ -49,18 +52,23 @@ describe "people/external_invoices/_actions_index.html.haml" do
       expect(subject).to have_text "Die Alpen Rechnung erstellen"
     end
 
+    # rubocop:todo Layout/LineLength
     it "renders abo magazin invoice button when person has inactive abonnent role with end on less than 11 months ago" do
+      # rubocop:enable Layout/LineLength
       person.roles.first.update_column(:end_on, 6.months.ago)
       expect(subject).to have_text "Die Alpen Rechnung erstellen"
     end
 
     it "renders abo magazin invoice button when person has neuanmeldung role" do
       person.roles.destroy_all
-      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, person: person, group: groups(:abo_die_alpen), start_on: 1.day.ago, end_on: 20.days.from_now)
+      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, person: person,
+        group: groups(:abo_die_alpen), start_on: 1.day.ago, end_on: 20.days.from_now)
       expect(subject).to have_text "Die Alpen Rechnung erstellen"
     end
 
+    # rubocop:todo Layout/LineLength
     it "does not render abo magazin when person has inactive abonnent role with end on over 11 months ago" do
+      # rubocop:enable Layout/LineLength
       person.roles.first.update_column(:end_on, 1.year.ago)
       expect(subject).to have_no_text "Die Alpen Rechnung erstellen"
     end

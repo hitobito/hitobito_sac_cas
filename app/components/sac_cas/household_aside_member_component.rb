@@ -9,7 +9,7 @@ module SacCas
   module HouseholdAsideMemberComponent
     extend ActiveSupport::Concern
 
-    prepended do
+    prepended do # rubocop:todo Metrics/BlockLength
       delegate :icon, :link_to, :sac_family_main_person_path, to: :helpers
 
       def call

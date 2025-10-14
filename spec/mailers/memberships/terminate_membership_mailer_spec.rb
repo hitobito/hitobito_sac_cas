@@ -71,7 +71,9 @@ describe Memberships::TerminateMembershipMailer do
       expect(mail.bcc).to include("bluemlisalp@sac.ch")
       expect(mail.subject).to eq "Bestätigung Austritt Zusatzsektion"
       expect(mail.body).to match("Hallo Edmund Hillary,")
+      # rubocop:todo Layout/LineLength
       expect(mail.body).to match("Der Austritt aus SAC Blüemlisalp wurde per #{I18n.l(today)} vorgenommen.")
+      # rubocop:enable Layout/LineLength
     end
 
     it "sends confirmation email to geschaefsstelle if configured" do

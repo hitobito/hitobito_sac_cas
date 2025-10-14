@@ -8,7 +8,9 @@
 require "spec_helper"
 
 describe EventKindReadables do
-  let!(:section_may_create_kinds) { event_kinds + [Fabricate(:sac_event_kind, section_may_create: true)] }
+  let!(:section_may_create_kinds) {
+    event_kinds + [Fabricate(:sac_event_kind, section_may_create: true)]
+  }
   let!(:section_may_not_create_kinds) { [Fabricate(:sac_event_kind, section_may_create: false)] }
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
@@ -27,7 +29,9 @@ describe EventKindReadables do
     end
 
     it "returns everything regardless of section_may_create for admin" do
+      # rubocop:todo Layout/LineLength
       expect(accessible_by(admin)).to match_array section_may_create_kinds + section_may_not_create_kinds
+      # rubocop:enable Layout/LineLength
     end
 
     it "returns only section_may_create=true kinds for andere" do

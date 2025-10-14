@@ -8,8 +8,13 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil) }
-  let(:family) { instance_double(Wizards::Steps::Signup::Sektion::FamilyFields, emails: %w[test@example.com]) }
+  let(:wizard) {
+    instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false,
+      requires_policy_acceptance?: false, current_user: nil)
+  }
+  let(:family) {
+    instance_double(Wizards::Steps::Signup::Sektion::FamilyFields, emails: %w[test@example.com])
+  }
   subject(:member) { described_class.new }
 
   let(:required_attrs) {
@@ -60,7 +65,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
       it "must not be taken by others" do
         member.email = "e.hillary@hitobito.example.com"
         expect(member).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(member.errors.full_messages).to include "E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."
+        # rubocop:enable Layout/LineLength
       end
 
       it "validates email using truemail", with_truemail_validation: true do
@@ -87,7 +94,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
       it "rejects birthday on last day 22 years ago but accepts on first day 23 years ago" do
         member.attributes = required_attrs.merge(birthday: 22.years.ago.end_of_year.to_date)
         expect(member).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(member.errors.full_messages).to eq ["Geburtsdatum Jugendliche im Alter von 18 bis 22 Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden."]
+        # rubocop:enable Layout/LineLength
 
         member.attributes = required_attrs.merge(birthday: 23.years.ago.beginning_of_year.to_date)
         expect(member).to be_valid

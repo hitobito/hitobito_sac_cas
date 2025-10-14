@@ -17,7 +17,9 @@ describe TableDisplays::PublicColumn, type: :helper do
 
   before do
     allow_any_instance_of(TableDisplays::PublicColumn).to receive(:sort_by).and_return(nil)
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
   end
 
   context "people id" do

@@ -13,7 +13,9 @@ describe People::DataQualityChecker do
 
   it "creates issues" do
     expect_query_count do
-      expect { checker.check_data_quality }.to change { person.reload.data_quality_issues.count }.by(1)
+      expect { checker.check_data_quality }.to change {
+        person.reload.data_quality_issues.count
+      }.by(1)
     end.to eq(11)
 
     issue = person.data_quality_issues.first
@@ -72,7 +74,9 @@ describe People::DataQualityChecker do
     person.data_quality_issues.create!(attr: :last_name, key: :empty, severity: "error")
     person.update_column(:data_quality, "error")
 
-    expect { checker.check_data_quality }.to change { person.reload.data_quality_issues.count }.by(-1)
+    expect { checker.check_data_quality }.to change {
+      person.reload.data_quality_issues.count
+    }.by(-1)
     expect(person.data_quality).to eq("warning")
     expect(person.data_quality_issues.first.attr).to eq("phone_numbers")
   end

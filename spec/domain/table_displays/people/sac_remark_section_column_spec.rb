@@ -16,7 +16,9 @@ describe TableDisplays::People::SacRemarkSectionColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
     people(:mitglied).update_column(:sac_remark_section_1, "Bemerkung von Sektion 1")
     people(:mitglied).update_column(:sac_remark_section_2, "Bemerkung von Sektion 2")
     people(:mitglied).update_column(:sac_remark_section_3, "Bemerkung von Sektion 3")

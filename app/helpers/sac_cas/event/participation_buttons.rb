@@ -54,6 +54,8 @@ module SacCas::Event::ParticipationButtons
   end
 
   def her_own?
+    # rubocop:todo Layout/LineLength
     @template.current_user.id == @participation.participant_id && @participation.participant_type == Person.sti_name
+    # rubocop:enable Layout/LineLength
   end
 end

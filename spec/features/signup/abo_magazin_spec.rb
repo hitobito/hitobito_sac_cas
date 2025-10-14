@@ -20,7 +20,8 @@ describe "self_registration_abo_magazin", js: true do
   def expect_active_step(step_name)
     expect(page)
       .to have_css(".step-headers li.active", text: step_name),
-        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
+        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active",
+          wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
@@ -203,6 +204,8 @@ describe "self_registration_abo_magazin", js: true do
     sign_in(people(:mitglied))
     Group::AboMagazin::Abonnent.create!(person: people(:mitglied), group: group)
     visit group_self_registration_path(group_id: group)
+    # rubocop:todo Layout/LineLength
     expect(page).to have_content("Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.")
+    # rubocop:enable Layout/LineLength
   end
 end

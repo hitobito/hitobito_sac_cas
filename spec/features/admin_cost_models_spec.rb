@@ -27,7 +27,8 @@ describe "code models", js: true do
       within("tbody tr:nth-child(#{row})") { click_on "Bearbeiten" }
       fill_in "Bezeichnung", with: "update"
       click_on "Speichern"
-      expect(page).to have_css(".alert-success", text: "code - update wurde erfolgreich aktualisiert.")
+      expect(page).to have_css(".alert-success",
+        text: "code - update wurde erfolgreich aktualisiert.")
 
       within("tbody tr:nth-child(#{row})") { click_on "Löschen" }
       accept_alert

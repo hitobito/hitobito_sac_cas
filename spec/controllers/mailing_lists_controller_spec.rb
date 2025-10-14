@@ -33,7 +33,8 @@ describe MailingListsController do
     end
 
     it "ignores params if user has no permission" do
-      allow(controller).to receive(:can?).with(:update, mailing_list, "description").and_return(false)
+      allow(controller).to receive(:can?).with(:update, mailing_list,
+        "description").and_return(false)
 
       expect { patch :update, params: params }
         .to change { mailing_list.reload.name }.to("new name")

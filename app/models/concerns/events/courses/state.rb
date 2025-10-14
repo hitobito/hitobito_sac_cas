@@ -17,7 +17,7 @@ module Events::Courses::State
     survey: [:ready, :closed]
   }
 
-  included do
+  included do # rubocop:todo Metrics/BlockLength
     attr_accessor :inform_participants, :skip_emails
 
     # key: current state
@@ -29,7 +29,9 @@ module Events::Courses::State
       application_closed: [:assignment_closed, :canceled],
       assignment_closed: [:ready, :application_closed, :canceled],
       ready: [:closed, :assignment_closed, :canceled],
+      # rubocop:todo Layout/LineLength
       canceled: [:application_open], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
+      # rubocop:enable Layout/LineLength
       closed: [:ready]
     }.freeze
 
@@ -43,16 +45,22 @@ module Events::Courses::State
 
     before_save :adjust_application_state
 
-    after_update :summon_assigned_participants, if: -> { saved_change_to_state?(from: :assignment_closed, to: :ready) }
+    after_update :summon_assigned_participants, if: -> {
+      saved_change_to_state?(from: :assignment_closed, to: :ready)
+    }
     after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
     after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
 
     with_options unless: :skip_emails do
-      after_update :send_application_published_email, if: -> { saved_change_to_state?(from: :created, to: :application_open) }
+      after_update :send_application_published_email, if: -> {
+        saved_change_to_state?(from: :created, to: :application_open)
+      }
       after_update :send_application_paused_email, if: -> { state_changed_to?(:application_paused) }
       after_update :send_application_closed_email, if: -> { state_changed_to?(:application_closed) }
       after_update :notify_rejected_participants, if: -> { state_changed_to?(:assignment_closed) }
-      after_update :send_canceled_email, if: -> { state_changed_to?(:canceled) && inform_participants? }
+      after_update :send_canceled_email, if: -> {
+        state_changed_to?(:canceled) && inform_participants?
+      }
     end
   end
 
@@ -126,7 +134,8 @@ module Events::Courses::State
       link_id: participations.select(:id),
       link_type: Event::Participation.sti_name,
       state: [:draft, :open, :payed],
-      type: [ExternalInvoice::CourseParticipation, ExternalInvoice::CourseAnnulation].map(&:sti_name)
+      type: [ExternalInvoice::CourseParticipation,
+        ExternalInvoice::CourseAnnulation].map(&:sti_name)
     )
   end
 
@@ -155,14 +164,15 @@ module Events::Courses::State
     return unless groups.first.root?
 
     participations.where(state: :absent).find_each do |participation|
-      unless ExternalInvoice::CourseAnnulation.exists?(link: participation, total: participation.price)
+      unless ExternalInvoice::CourseAnnulation.exists?(link: participation,
+        total: participation.price)
         cancel_invoices(participation.external_invoices)
         ExternalInvoice::CourseAnnulation.invoice!(participation)
       end
     end
   end
 
-  def adjust_application_state
+  def adjust_application_state # rubocop:todo Metrics/CyclomaticComplexity
     return unless application_closing_at_changed? || state_changed?
 
     if APPLICATION_OPEN_STATES.include?(state) && application_closing_at&.past?

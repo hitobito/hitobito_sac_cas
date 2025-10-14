@@ -21,7 +21,8 @@ describe GroupAbility do
 
   describe "create_yearly_membership_invoice" do
     it "as admin it is permitted" do
-      expect(Ability.new(people(:admin))).to be_able_to(:create_yearly_membership_invoice, groups(:bluemlisalp))
+      expect(Ability.new(people(:admin))).to be_able_to(:create_yearly_membership_invoice,
+        groups(:bluemlisalp))
     end
 
     it "as mitglied it is denied" do
@@ -45,7 +46,8 @@ describe GroupAbility do
       expect(ability.user_context.all_permissions).to be_empty
       expect(ability).not_to be_able_to(:download_statistics, groups(:bluemlisalp))
       expect(ability).not_to be_able_to(:download_statistics, groups(:root))
-      expect(ability).not_to be_able_to(:download_statistics, groups(:bluemlisalp_ortsgruppe_ausserberg))
+      expect(ability).not_to be_able_to(:download_statistics,
+        groups(:bluemlisalp_ortsgruppe_ausserberg))
     end
 
     [:layer_read, :layer_and_below_read, :download_member_statistics].each do |permission|
@@ -65,14 +67,16 @@ describe GroupAbility do
     [:layer_read, :download_member_statistics].each do |permission|
       it "permission #{permission} denies download_statistics on lower layer" do
         create_role_with_permission(permission)
-        expect(Ability.new(person)).not_to be_able_to(:download_statistics, groups(:bluemlisalp_ortsgruppe_ausserberg))
+        expect(Ability.new(person)).not_to be_able_to(:download_statistics,
+          groups(:bluemlisalp_ortsgruppe_ausserberg))
       end
     end
 
     [:layer_and_below_read].each do |permission|
       it "permission #{permission} allows download_statistics on lower layer" do
         create_role_with_permission(permission)
-        expect(Ability.new(person)).to be_able_to(:download_statistics, groups(:bluemlisalp_ortsgruppe_ausserberg))
+        expect(Ability.new(person)).to be_able_to(:download_statistics,
+          groups(:bluemlisalp_ortsgruppe_ausserberg))
       end
     end
   end

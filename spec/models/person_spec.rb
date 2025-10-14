@@ -119,10 +119,14 @@ describe Person do
 
       it "can be chained with other scopes" do
         expect(Person.where_login_matches(person.email).where(confirmed_at: nil)).to be_empty
+        # rubocop:todo Layout/LineLength
         expect(Person.where_login_matches(person.email).where.not(confirmed_at: nil)).to eq([person])
+        # rubocop:enable Layout/LineLength
 
         expect(Person.where(confirmed_at: nil).where_login_matches(person.email)).to be_empty
+        # rubocop:todo Layout/LineLength
         expect(Person.where.not(confirmed_at: nil).where_login_matches(person.email)).to eq([person])
+        # rubocop:enable Layout/LineLength
       end
     end
   end
@@ -255,8 +259,10 @@ describe Person do
 
     it "calculates membership years correctly for leap year when passing reporting date" do
       create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2023, 12, 31))
-      expect(Person.with_membership_years("people.*", Date.new(2020, 12, 31)).find(person.id).membership_years).to eq(0)
-      expect(Person.with_membership_years("people.*", Date.new(2021, 1, 1)).find(person.id).membership_years).to eq(1)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2020, 12, 31)).find(person.id).membership_years).to eq(0)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2021, 1, 1)).find(person.id).membership_years).to eq(1)
     end
 
     it "calculates membership years correctly for two years with one leap year" do
@@ -264,10 +270,14 @@ describe Person do
       expect(person_with_membership_years.membership_years).to eq 2
     end
 
+    # rubocop:todo Layout/LineLength
     it "calculates membership years correctly for two years with one leap year when passing reporting date" do
+      # rubocop:enable Layout/LineLength
       create_role(start_on: Date.new(2020, 1, 1), end_on: Date.new(2023, 12, 31))
-      expect(Person.with_membership_years("people.*", Date.new(2021, 12, 31)).find(person.id).membership_years).to eq(1)
-      expect(Person.with_membership_years("people.*", Date.new(2022, 1, 1)).find(person.id).membership_years).to eq(2)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2021, 12, 31)).find(person.id).membership_years).to eq(1)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2022, 1, 1)).find(person.id).membership_years).to eq(2)
     end
 
     it "calculates membership years correctly for the next 20 years" do
@@ -288,8 +298,10 @@ describe Person do
 
     it "calculates membership years correctly when passing reporting date" do
       create_role(end_on: start_on + 5.years)
-      expect(Person.with_membership_years("people.*", Date.new(2001, 12, 31)).find(person.id).membership_years).to eq(1)
-      expect(Person.with_membership_years("people.*", Date.new(2002, 1, 1)).find(person.id).membership_years).to eq(2)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2001, 12, 31)).find(person.id).membership_years).to eq(1)
+      expect(Person.with_membership_years("people.*",
+        Date.new(2002, 1, 1)).find(person.id).membership_years).to eq(2)
     end
 
     it "calculates membership years from roles starting and ending in overlapping years" do
@@ -310,13 +322,18 @@ describe Person do
       expected_years = Role.with_membership_years.find(roles(:mitglied).id).membership_years.to_i
 
       # the person has only one role, so the membership_years should be the same
+      # rubocop:todo Layout/LineLength
       expect(Person.with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
+      # rubocop:enable Layout/LineLength
 
       # add a non-membership role that does not count towards the membership_years
-      Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied), group: groups(:bluemlisalp_mitglieder))
+      Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied),
+        group: groups(:bluemlisalp_mitglieder))
       # the person has now two roles, so the membership_years should be the same.
       # this expectation makes sure we don't double the membership_years when joining the roles
+      # rubocop:todo Layout/LineLength
       expect(Person.joins(:roles).with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -589,7 +606,8 @@ describe Person do
 
         def phone_quality_issue_count(person) = [person.reload.data_quality_issues, :count]
 
-        def add_phone_number(person) = person.phone_numbers.create!(number: "+41791234567", label: "mobile")
+        def add_phone_number(person) = person.phone_numbers.create!(number: "+41791234567",
+          label: "mobile")
       end
     end
 
@@ -606,7 +624,13 @@ describe Person do
   end
 
   describe "#transmit_data_to_abacus" do
-    let(:person) { people(:mitglied).tap { |p| p.phone_numbers.create!(number: "+41791234567", label: "mobile") } }
+    let(:person) {
+      people(:mitglied).tap { |p|
+     # rubocop:todo Layout/IndentationWidth
+     p.phone_numbers.create!(number: "+41791234567", label: "mobile")
+        # rubocop:enable Layout/IndentationWidth
+      }
+    }
     let(:job) { Delayed::Job.where("handler like '%TransmitPersonJob%'") }
 
     it "enqueues the job" do
@@ -617,9 +641,13 @@ describe Person do
       expect { person.update!(email: "") }.to change(job, :count).by(1)
     end
 
+    # rubocop:todo Layout/LineLength
     it "enqueues the job with an existing abacus_subject_key but without an sac membership invoice" do
+      # rubocop:enable Layout/LineLength
       person.roles.destroy_all
-      expect { person.update!(first_name: "Abacus", abacus_subject_key: 42) }.to change(job, :count).by(1)
+      expect {
+        person.update!(first_name: "Abacus", abacus_subject_key: 42)
+      }.to change(job, :count).by(1)
     end
 
     it "enqueues the job with an abonnent role" do
@@ -632,14 +660,18 @@ describe Person do
       person = people(:familienmitglied2)
       expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
       expect(people(:familienmitglied).town).to eq("Neuer Ort")
+      # rubocop:todo Layout/LineLength
       expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
+      # rubocop:enable Layout/LineLength
     end
 
     it "enqueues the job for the family main person if it is changed" do
       person = people(:familienmitglied)
       expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
       expect(people(:familienmitglied2).town).to eq("Neuer Ort")
+      # rubocop:todo Layout/LineLength
       expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
+      # rubocop:enable Layout/LineLength
     end
 
     it "doesn't enqueue the job if an irrelevant attribute changed" do

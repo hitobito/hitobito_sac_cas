@@ -13,8 +13,12 @@ RSpec.describe "external_invoices#index", type: :request do
       service_tokens(:permitted_root_layer_token).token
     }
     let!(:external_invoices) do
-      Array.new(3) { Fabricate(:external_invoice, person: people(:admin), link: groups(:bluemlisalp)) } +
-        Array.new(4) { Fabricate(:external_invoice, person: people(:mitglied), link: groups(:bluemlisalp)) }
+      Array.new(3) {
+        Fabricate(:external_invoice, person: people(:admin), link: groups(:bluemlisalp))
+      } +
+        Array.new(4) {
+          Fabricate(:external_invoice, person: people(:mitglied), link: groups(:bluemlisalp))
+        }
     end
     let(:params) { {} }
 
@@ -47,7 +51,10 @@ RSpec.describe "external_invoices#index", type: :request do
 
     describe "check if other filters work" do
       let(:person) { people(:mitglied) }
-      let(:params) { {filter: {link_type: "", link_id: "", issued_at: "", year: "", abacus_sales_order_key: "", state: ""}} }
+      let(:params) {
+        {filter: {link_type: "", link_id: "", issued_at: "", year: "", abacus_sales_order_key: "",
+                  state: ""}}
+      }
 
       it "correctly" do
         expect(ExternalInvoiceResource).to receive(:all).and_call_original

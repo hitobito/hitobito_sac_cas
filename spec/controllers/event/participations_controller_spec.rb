@@ -49,7 +49,8 @@ describe Event::ParticipationsController do
 
       context "participation invoice_state" do
         it "renders invoice_state column with values" do
-          TableDisplay.create!(person: user, selected: ["invoice_state"], table_model_class: Event::Participation.sti_name)
+          TableDisplay.create!(person: user, selected: ["invoice_state"],
+            table_model_class: Event::Participation.sti_name)
 
           get :index, params: params
           expect(dom).to have_css "th a", text: "Rechnung"
@@ -166,7 +167,8 @@ describe Event::ParticipationsController do
             }
           expect(response).to redirect_to(participation_path)
         end.to change { Event::Participation.count }.by(1)
-          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"),
+            :count).by(1)
       end
     end
 
@@ -184,7 +186,8 @@ describe Event::ParticipationsController do
             }
           expect(response).to redirect_to(participation_path)
         end.to change { Event::Participation.count }.by(1)
-          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+          .and change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"),
+            :count).by(1)
       end
     end
 
@@ -205,7 +208,9 @@ describe Event::ParticipationsController do
 
     it "checks conditions for root courses" do
       expect do
-        post :create, params: {group_id: group.id, event_id: event.id, step: "summary", event_participation: {newsletter: "0"}}
+        post :create,
+          params: {group_id: group.id, event_id: event.id, step: "summary",
+                   event_participation: {newsletter: "0"}}
         expect(response).to render_template("new")
         expect(dom).to have_css "#error_explanation", text: "AGB muss akzeptiert werden"
       end.not_to change { Event::Participation.count }
@@ -216,7 +221,8 @@ describe Event::ParticipationsController do
       event.groups = [groups(:bluemlisalp)]
       event.update!(globally_visible: true)
       expect do
-        post :create, params: {group_id: groups(:bluemlisalp).id, event_id: event.id, step: "summary"}
+        post :create,
+          params: {group_id: groups(:bluemlisalp).id, event_id: event.id, step: "summary"}
         expect(response).to redirect_to(participation_path)
       end.to change { Event::Participation.count }.by(1)
     end
@@ -238,7 +244,8 @@ describe Event::ParticipationsController do
                 group_id: group.id,
                 event_id: event.id,
                 step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
+                event_participation: {terms_and_conditions: "1", adult_consent: "1",
+                                      newsletter: "1"}
               }
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
@@ -252,7 +259,8 @@ describe Event::ParticipationsController do
                 group_id: group.id,
                 event_id: event.id,
                 step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "0"}
+                event_participation: {terms_and_conditions: "1", adult_consent: "1",
+                                      newsletter: "0"}
               }
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
@@ -268,7 +276,8 @@ describe Event::ParticipationsController do
                 group_id: group.id,
                 event_id: event.id,
                 step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "1"}
+                event_participation: {terms_and_conditions: "1", adult_consent: "1",
+                                      newsletter: "1"}
               }
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
@@ -282,7 +291,8 @@ describe Event::ParticipationsController do
                 group_id: group.id,
                 event_id: event.id,
                 step: "summary",
-                event_participation: {terms_and_conditions: "1", adult_consent: "1", newsletter: "0"}
+                event_participation: {terms_and_conditions: "1", adult_consent: "1",
+                                      newsletter: "0"}
               }
             expect(response).to redirect_to(participation_path)
           end.to change { Event::Participation.count }.by(1)
@@ -317,7 +327,8 @@ describe Event::ParticipationsController do
         post :create, params: params.merge(
           step: "answers",
           event_participation: {answers_attributes: {
-            "0" => {"question_id" => event.application_questions.first.id, "answer" => "756.1234.5678.97"},
+            "0" => {"question_id" => event.application_questions.first.id,
+                    "answer" => "756.1234.5678.97"},
             "1" => {"question_id" => event.application_questions.second.id, "answer" => "Henä"},
             "2" => {"question_id" => event.application_questions.third.id, "answer" => "Fränä"}
           }}
@@ -337,7 +348,8 @@ describe Event::ParticipationsController do
                 person_id: people(:mitglied).id,
                 for_someone_else: true,
                 answers_attributes: {
-                  "0" => {"question_id" => event.application_questions.first.id, "answer" => "756.1234.5678.97"}
+                  "0" => {"question_id" => event.application_questions.first.id,
+                          "answer" => "756.1234.5678.97"}
                 }
               }
             )
@@ -462,7 +474,8 @@ describe Event::ParticipationsController do
 
         it "cannot set price or category itself" do
           expect do
-            post :create, params: params.merge(event_participation: {price_category: "price_member", price: 1})
+            post :create,
+              params: params.merge(event_participation: {price_category: "price_member", price: 1})
           end.to change { Event::Participation.count }.by(1)
           expect(participation.price).to eq 50
           expect(participation.price_category).to eq("price_regular")
@@ -474,7 +487,9 @@ describe Event::ParticipationsController do
 
         it "set arbitrary category for someone else" do
           expect do
-            post :create, params: params.merge(event_participation: {person_id: people(:abonnent).id, price_category: "price_member"})
+            post :create,
+              params: params.merge(event_participation: {person_id: people(:abonnent).id,
+                                                         price_category: "price_member"})
           end.to change { Event::Participation.count }.by(1)
           expect(participation.price).to eq 30
           expect(participation.price_category).to eq("price_member")
@@ -484,7 +499,10 @@ describe Event::ParticipationsController do
 
     context "as layer_events_full" do
       let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
-      let(:user) { Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: Fabricate(:person)).person }
+      let(:user) {
+        Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+          person: Fabricate(:person)).person
+      }
       let(:event) { events(:section_tour) }
 
       before do
@@ -565,7 +583,8 @@ describe Event::ParticipationsController do
       let(:user) { people(:mitglied) }
 
       it "can edit actual_days" do
-        own_participation = Event::Participation.create!(event: event, participant: user, application_id: -1)
+        own_participation = Event::Participation.create!(event: event, participant: user,
+          application_id: -1)
         Event::Course::Role::Leader.create!(participation: own_participation)
         patch :update,
           params: {
@@ -607,7 +626,9 @@ describe Event::ParticipationsController do
           .and change { participation.price_category }.from("price_regular").to(nil)
       end
 
+      # rubocop:todo Layout/LineLength
       it "doesn't update price when event#price changed if price_category should still use former price" do
+        # rubocop:enable Layout/LineLength
         event.update!(price_regular: 30)
         expect do
           put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
@@ -625,7 +646,8 @@ describe Event::ParticipationsController do
             group_id: event.groups.first.id,
             event_id: event.id,
             id: participation.id,
-            event_participation: {price_category: "price_special", additional_information: "Bla bla"}
+            event_participation: {price_category: "price_special",
+                                  additional_information: "Bla bla"}
           }
           expect(response).to redirect_to(participation_path)
 
@@ -660,7 +682,8 @@ describe Event::ParticipationsController do
       end
 
       it "doesn't enqueue same invoice twice" do
-        ExternalInvoice::CourseParticipation.create!(person: participation.person, total: 10, link: participation)
+        ExternalInvoice::CourseParticipation.create!(person: participation.person, total: 10,
+          link: participation)
         participation.update!(price: 10, price_category: :price_regular)
 
         expect(ExternalInvoice::CourseParticipation).not_to receive(:invoice!)
@@ -680,7 +703,10 @@ describe Event::ParticipationsController do
     end
 
     context "reactivate" do
-      before { participation.update!(state: :canceled, cancel_statement: "Keine Lust", canceled_at: Date.current) }
+      before {
+        participation.update!(state: :canceled, cancel_statement: "Keine Lust",
+          canceled_at: Date.current)
+      }
 
       it "PUT#reactivate sets participation to applied when maximum participants is reached" do
         allow_any_instance_of(Event).to receive(:maximum_participants_reached?).and_return(true)
@@ -697,7 +723,9 @@ describe Event::ParticipationsController do
         end.to change { event.reload.participant_count }.by(1)
       end
 
+      # rubocop:todo Layout/LineLength
       it "PUT#reactivate sets particpation to assigned when maximum participants has not been reached" do
+        # rubocop:enable Layout/LineLength
         put :reactivate, params: params
         expect(participation.reload.state).to eq "assigned"
         expect(participation.reload.cancel_statement).to be_nil
@@ -711,7 +739,9 @@ describe Event::ParticipationsController do
 
         it "sets default canceled_at and statement" do
           freeze_time
-          put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date, cancel_statement: "next time!"}})
+          put :cancel,
+            params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date,
+                                                        cancel_statement: "next time!"}})
           expect(participation.reload.state).to eq "canceled"
           expect(participation.canceled_at).to eq Time.zone.today
           expect(participation.cancel_statement).to eq("next time!")
@@ -730,8 +760,12 @@ describe Event::ParticipationsController do
             .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
         end
 
+        # rubocop:todo Layout/LineLength
         it "creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
-          invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
+          # rubocop:enable Layout/LineLength
+          invoice = participation.person.external_invoices.create!(
+            type: ExternalInvoice::SacMembership.sti_name, link: participation
+          )
           participation.update!(price: 10, price_category: :price_regular)
           freeze_time
 
@@ -742,7 +776,8 @@ describe Event::ParticipationsController do
             .and change { participation.reload.state }.to("canceled")
             .and change { ExternalInvoice::CourseAnnulation.count }.by(1)
 
-          invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation, person: participation.person)
+          invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation,
+            person: participation.person)
           expect(invoice).to be_present
           expect(invoice.issued_at).to eq(Date.current)
           expect(invoice.sent_at).to eq(Date.current)
@@ -768,7 +803,8 @@ describe Event::ParticipationsController do
 
         context "for tour" do
           let(:event) do
-            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)], applications_cancelable: true).tap do |c|
+            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)],
+              applications_cancelable: true).tap do |c|
               c.dates.first.update_columns(start_at: 1.day.from_now, finish_at: 1.week.from_now)
             end
           end
@@ -781,7 +817,8 @@ describe Event::ParticipationsController do
                 put :cancel, params: params
               end.to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
             end
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
+                :count).by(0)
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
 
@@ -808,12 +845,20 @@ describe Event::ParticipationsController do
         end
 
         it "sends application canceled email when send_email is true" do
-          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, send_email: true}) }
+          expect {
+            put :cancel,
+              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+send_email: true})
+          }
             .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
         end
 
         it "does not send application canceled email when send_email is false" do
-          expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, send_email: false}) }
+          expect {
+            put :cancel,
+              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+send_email: false})
+          }
             .not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
         end
 
@@ -827,10 +872,15 @@ describe Event::ParticipationsController do
 
             expect do
               expect do
-                put :cancel, params: params.merge({event_participation: {canceled_at: 5.days.ago.to_date}, send_email: false, invoice_option: "standard"})
+                put :cancel,
+                  # rubocop:todo Layout/LineLength
+                  params: params.merge({event_participation: {canceled_at: 5.days.ago.to_date}, send_email: false,
+# rubocop:enable Layout/LineLength
+invoice_option: "standard"})
               end.not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
             end
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
+                :count).by(0)
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
 
@@ -839,19 +889,29 @@ describe Event::ParticipationsController do
         end
 
         context "invoice_option standard" do
+          # rubocop:todo Layout/LineLength
           it "creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
-            invoice = participation.person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, link: participation)
+            # rubocop:enable Layout/LineLength
+            invoice = participation.person.external_invoices.create!(
+              type: ExternalInvoice::SacMembership.sti_name, link: participation
+            )
             participation.update!(price: 10, price_category: :price_regular)
             freeze_time
 
-            expect { put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "standard"}) }
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
+            expect {
+              put :cancel,
+                params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+            invoice_option: "standard"})
+            }
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
+                :count).by(1)
               .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
               .and change { invoice.reload.state }.to("cancelled")
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(1)
 
-            invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation, person: participation.person)
+            invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation,
+              person: participation.person)
             expect(invoice).to be_present
             expect(invoice.issued_at).to eq(Date.current)
             expect(invoice.sent_at).to eq(Date.current)
@@ -862,13 +922,19 @@ describe Event::ParticipationsController do
 
         context "invoice_option custom" do
           it "creates course annulation invoice with custom amount" do
-            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 400.50)
-            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "custom", custom_price: "400.50"})
+            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation,
+              custom_price: 400.50)
+            put :cancel,
+              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+invoice_option: "custom", custom_price: "400.50"})
           end
 
           it "custom amount is zero when no amount passed" do
-            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 0)
-            put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "custom", custom_price: ""})
+            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation,
+              custom_price: 0)
+            put :cancel,
+              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+invoice_option: "custom", custom_price: ""})
           end
         end
 
@@ -876,7 +942,9 @@ describe Event::ParticipationsController do
           it "creates course annulation invoice with custom amount" do
             expect(ExternalInvoice::CourseAnnulation).not_to receive(:invoice!)
             expect do
-              put :cancel, params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date}, invoice_option: "no_invoice"})
+              put :cancel,
+                params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
+invoice_option: "no_invoice"})
             end.not_to change { ExternalInvoice::CourseAnnulation.count }
           end
         end
@@ -894,7 +962,8 @@ describe Event::ParticipationsController do
               event_id: event.id,
               id: participation.id
             }
-        end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+        end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"),
+          :count).by(1)
 
         participation.reload
         expect(participation.active).to be true

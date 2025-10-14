@@ -22,7 +22,8 @@ describe Memberships::LeaveZusatzsektionsController do
 
   describe "#GET" do
     let(:request) do
-      get group_person_role_leave_zusatzsektion_path(group_id: bluemlisalp.id, person_id: person.id, role_id: role.id)
+      get group_person_role_leave_zusatzsektion_path(group_id: bluemlisalp.id,
+        person_id: person.id, role_id: role.id)
     end
     let(:person) { people(:mitglied) }
 
@@ -87,7 +88,9 @@ describe Memberships::LeaveZusatzsektionsController do
         it "shows the date select step with a warning" do
           request
           expect_date_select_step
+          # rubocop:todo Layout/LineLength
           expect(response.body).to include("Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist.")
+          # rubocop:enable Layout/LineLength
         end
       end
     end
@@ -98,7 +101,9 @@ describe Memberships::LeaveZusatzsektionsController do
       it "shows info about affecting the whole family" do
         request
         expect_summary_step
+        # rubocop:todo Layout/LineLength
         expect(response.body).to include "Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -132,7 +137,9 @@ describe Memberships::LeaveZusatzsektionsController do
   describe "#POST" do
     let(:termination_reason_id) { termination_reasons(:moved).id }
     let(:request) do
+      # rubocop:todo Layout/LineLength
       post group_person_role_leave_zusatzsektion_path(group_id: bluemlisalp.id, person_id: person.id, role_id: role.id),
+        # rubocop:enable Layout/LineLength
         params:
     end
     let(:person) { people(:mitglied) }
@@ -163,7 +170,10 @@ describe Memberships::LeaveZusatzsektionsController do
 
     context "as an admin" do
       let(:operator) { people(:admin) }
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
@@ -180,9 +190,13 @@ describe Memberships::LeaveZusatzsektionsController do
 
     context "as a section admin of zusatzsektion" do
       let(:operator) do
-        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:matterhorn_funktionaere)).person.reload
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person),
+          group: groups(:matterhorn_funktionaere)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
@@ -199,9 +213,13 @@ describe Memberships::LeaveZusatzsektionsController do
 
     context "as a section admin of main section" do
       let(:operator) do
-        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)).person.reload
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person),
+          group: groups(:bluemlisalp_funktionaere)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "returns not authorized" do
         expect { request }.to raise_error(CanCan::AccessDenied)

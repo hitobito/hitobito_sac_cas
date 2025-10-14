@@ -86,7 +86,8 @@ describe SacCas::Beitragskategorie::Calculator do
     it "respects reference_date" do
       person = person(15, false, Time.zone.today)
       expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
-      expect(described_class.new(person, reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
+      expect(described_class.new(person,
+        reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
       expect(described_class.new(person, reference_date: 8.years.from_now).calculate).to eq(:adult)
     end
 
@@ -127,8 +128,10 @@ describe SacCas::Beitragskategorie::Calculator do
       it "respects reference_date" do
         person = person(15, false)
         expect(described_class.new(person, reference_date: Date.current).calculate).to eq(:youth)
-        expect(described_class.new(person, reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
-        expect(described_class.new(person, reference_date: 8.years.from_now).calculate).to eq(:adult)
+        expect(described_class.new(person,
+          reference_date: 8.years.from_now - 1.day).calculate).to eq(:youth)
+        expect(described_class.new(person,
+          reference_date: 8.years.from_now).calculate).to eq(:adult)
       end
     end
   end

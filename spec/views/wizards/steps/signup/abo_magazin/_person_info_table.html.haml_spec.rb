@@ -8,7 +8,9 @@ require "spec_helper"
 describe "wizards/steps/signup/abo_magazin/_person_info_table.html.haml" do
   include FormatHelper
 
-  let(:wizard) { Wizards::Signup::AboMagazinWizard.new(group: groups(:bluemlisalp_neuanmeldungen_nv)) }
+  let(:wizard) {
+    Wizards::Signup::AboMagazinWizard.new(group: groups(:bluemlisalp_neuanmeldungen_nv))
+  }
   let(:person) { Wizards::Steps::Signup::AboMagazin::PersonFields.new(wizard) }
   let(:dom) {
     render

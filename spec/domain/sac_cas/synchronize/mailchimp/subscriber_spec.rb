@@ -8,7 +8,9 @@ require "spec_helper"
 describe Synchronize::Mailchimp::Subscriber do
   subject(:subscriber) { described_class.new(person, person.email) }
 
-  let(:person) { Person.new(id: 1, company: true, email: "company@example.com", company_name: "Example Ltd") }
+  let(:person) {
+    Person.new(id: 1, company: true, email: "company@example.com", company_name: "Example Ltd")
+  }
 
   it "uses first and last name if present" do
     person.first_name = "Jane"

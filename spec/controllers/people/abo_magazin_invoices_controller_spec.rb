@@ -39,8 +39,14 @@ describe People::AboMagazinInvoicesController do
     end
 
     it "creates external invoice and enqueues job with multiple mailing lists available" do
-      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
-      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name.to_sym, group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
+      Fabricate(Group::AboMagazin::Abonnent.sti_name.to_sym,
+        # rubocop:todo Layout/LineLength
+        group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
+      # rubocop:enable Layout/LineLength
+      Fabricate(Group::AboMagazin::Neuanmeldung.sti_name.to_sym,
+        # rubocop:todo Layout/LineLength
+        group: Fabricate(Group::AboMagazin.sti_name.to_sym, parent: groups(:abo_magazine)), person:, end_on: 2.years.ago, start_on: 3.years.ago)
+      # rubocop:enable Layout/LineLength
 
       expect do
         post :create, params: params
@@ -61,7 +67,9 @@ describe People::AboMagazinInvoicesController do
         .and not_change { Delayed::Job.count }
 
       expect(response).to redirect_to(external_invoices_group_person_path(group.id, person.id))
+      # rubocop:todo Layout/LineLength
       expect(flash[:alert]).to eq "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
+      # rubocop:enable Layout/LineLength
     end
   end
 end

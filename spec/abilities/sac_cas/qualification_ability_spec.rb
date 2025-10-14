@@ -8,8 +8,12 @@
 require "spec_helper"
 
 describe QualificationAbility do
-  let(:tourenchef_may_edit_qualification_kind) { Fabricate(:qualification_kind, tourenchef_may_edit: true) }
-  let(:tourenchef_may_not_edit_qualification_kind) { Fabricate(:qualification_kind, tourenchef_may_edit: false) }
+  let(:tourenchef_may_edit_qualification_kind) {
+    Fabricate(:qualification_kind, tourenchef_may_edit: true)
+  }
+  let(:tourenchef_may_not_edit_qualification_kind) {
+    Fabricate(:qualification_kind, tourenchef_may_edit: false)
+  }
 
   let(:ausserberg_funktionaere) { groups(:bluemlisalp_ortsgruppe_ausserberg_funktionaere) }
   let(:matterhorn_funktionaere) { groups(:matterhorn_funktionaere) }
@@ -36,7 +40,9 @@ describe QualificationAbility do
 
   describe "as tourenchef" do
     context "regarding qualification_kind with tourenchef_may_edit true" do
-      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind) }
+      let(:qualification) {
+        Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind)
+      }
 
       context "for readable person" do
         it "is permitted to create in same layer as tourenchef role" do
@@ -52,7 +58,10 @@ describe QualificationAbility do
         end
 
         context "with writing permission on Mitglieder" do
-          let!(:writing_permission) { Group::SektionsMitglieder::Schreibrecht.create(person: person, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)) }
+          let!(:writing_permission) {
+            Group::SektionsMitglieder::Schreibrecht.create(person: person,
+              group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))
+          }
 
           it "is permitted to create for member" do
             qualification.person = ausserberg_mitglied
@@ -61,9 +70,20 @@ describe QualificationAbility do
         end
 
         context "with tourenchef role in layer above" do
-          let(:bluemlisalp_sektionsfunktionaere) { Group::SektionsFunktionaere.find_by(parent: groups(:bluemlisalp)) }
-          let(:bluemlisalp_touren_und_kurse) { Group::SektionsTourenUndKurse.find_or_create_by(parent: bluemlisalp_sektionsfunktionaere) }
-          let(:bluemlisalp_touren_und_kurse_sommer) { Group::SektionsTourenUndKurseSommer.find_or_create_by(parent: bluemlisalp_touren_und_kurse, name: Group::SektionsTourenUndKurseSommer.label) }
+          let(:bluemlisalp_sektionsfunktionaere) {
+            Group::SektionsFunktionaere.find_by(parent: groups(:bluemlisalp))
+          }
+          let(:bluemlisalp_touren_und_kurse) {
+            # rubocop:todo Layout/LineLength
+            Group::SektionsTourenUndKurse.find_or_create_by(parent: bluemlisalp_sektionsfunktionaere)
+            # rubocop:enable Layout/LineLength
+          }
+          let(:bluemlisalp_touren_und_kurse_sommer) {
+            # rubocop:todo Layout/LineLength
+            Group::SektionsTourenUndKurseSommer.find_or_create_by(parent: bluemlisalp_touren_und_kurse,
+              # rubocop:enable Layout/LineLength
+              name: Group::SektionsTourenUndKurseSommer.label)
+          }
           let(:bluemlisalp_tourenchef) {
             Fabricate(Group::SektionsTourenUndKurseSommer::Tourenchef.sti_name.to_sym,
               group: bluemlisalp_touren_und_kurse_sommer).person
@@ -86,7 +106,9 @@ describe QualificationAbility do
     end
 
     context "regarding qualification_kind with tourenchef_may_edit false" do
-      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind) }
+      let(:qualification) {
+        Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind)
+      }
 
       context "for readable person" do
         it "is not permitted to create in same layer as tourenchef role" do
@@ -118,7 +140,10 @@ describe QualificationAbility do
 
   describe "with layer_and_below_full" do
     let(:qualification_kind) { qualification_kinds(:ski_leader) }
-    let(:qualification) { Fabricate(:qualification, qualification_kind: qualification_kind, person: bluemlisalp_mitglied) }
+    let(:qualification) {
+      Fabricate(:qualification, qualification_kind: qualification_kind,
+        person: bluemlisalp_mitglied)
+    }
 
     context "layer_and_below_full in top layer" do
       let(:person) { people(:admin) }
@@ -144,7 +169,9 @@ describe QualificationAbility do
     end
 
     describe Group::SektionsFunktionaere::Mitgliederverwaltung do
-      let(:person) { create_funktionaer(Group::SektionsFunktionaere::Mitgliederverwaltung).person.reload }
+      let(:person) {
+        create_funktionaer(Group::SektionsFunktionaere::Mitgliederverwaltung).person.reload
+      }
 
       it "is not permitted to create and destroy" do
         expect(ability).not_to be_able_to(:create, qualification)
@@ -152,7 +179,8 @@ describe QualificationAbility do
       end
 
       it "is permitted if has another role with layer_and_below_full" do
-        Fabricate(Group::Geschaeftsstelle::Admin.sti_name, group: groups(:geschaeftsstelle), person: person)
+        Fabricate(Group::Geschaeftsstelle::Admin.sti_name, group: groups(:geschaeftsstelle),
+          person: person)
 
         expect(ability).to be_able_to(:create, qualification)
         expect(ability).to be_able_to(:destroy, qualification)
@@ -164,7 +192,10 @@ describe QualificationAbility do
     let(:person) { create_funktionaer(Group::SektionsFunktionaere::Administration).person.reload }
 
     context "regarding qualification_kind with tourenchef_may_edit true" do
-      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind, person: bluemlisalp_mitglied) }
+      let(:qualification) {
+        Fabricate(:qualification, qualification_kind: tourenchef_may_edit_qualification_kind,
+          person: bluemlisalp_mitglied)
+      }
 
       it "is permitted to create in same layer as administrator role" do
         expect(ability).to be_able_to(:create, qualification)
@@ -178,7 +209,10 @@ describe QualificationAbility do
     end
 
     context "regarding qualification_kind with tourenchef_may_edit false" do
-      let(:qualification) { Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind, person: bluemlisalp_mitglied) }
+      let(:qualification) {
+        Fabricate(:qualification, qualification_kind: tourenchef_may_not_edit_qualification_kind,
+          person: bluemlisalp_mitglied)
+      }
 
       it "is not permitted to create in same layer as administrator role" do
         expect(ability).to_not be_able_to(:create, qualification)

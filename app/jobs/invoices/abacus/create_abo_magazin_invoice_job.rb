@@ -18,7 +18,8 @@ class Invoices::Abacus::CreateAboMagazinInvoiceJob < Invoices::Abacus::CreateInv
   private
 
   def invoice_data
-    @invoice_data ||= Invoices::Abacus::AboMagazinInvoice.new(abonnent_role, external_invoice.issued_at)
+    @invoice_data ||= Invoices::Abacus::AboMagazinInvoice.new(abonnent_role,
+      external_invoice.issued_at)
   end
 
   def abonnent_role = @abonnent_role ||= Role.find(abonnent_role_id)

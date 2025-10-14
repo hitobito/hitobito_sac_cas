@@ -11,7 +11,9 @@ module Memberships
 
     def prepare_roles(person)
       super do |previous_stammsektion_role|
+        # rubocop:todo Layout/LineLength
         prev_zusatzsektion_role = person.sac_membership.zusatzsektion_roles.find_by(group: membership_group)
+        # rubocop:enable Layout/LineLength
         mark_for_termination(prev_zusatzsektion_role) if prev_zusatzsektion_role
 
         if prev_zusatzsektion_role && previous_stammsektion_role

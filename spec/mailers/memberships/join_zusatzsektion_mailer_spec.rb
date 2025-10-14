@@ -34,7 +34,8 @@ describe Memberships::JoinZusatzsektionMailer do
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(person_path(person))
       expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 42.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 21.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)",
+        text: "CHF 21.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
       expect(fees).not_to have_css("tr:nth-of-type(3)")
       expect(fees).to have_css("tfoot tr", text: "CHF 21.00\r\nTotal erstmalig")
     end
@@ -45,18 +46,25 @@ describe Memberships::JoinZusatzsektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Memberships::JoinZusatzsektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour")
+      # rubocop:todo Layout/LineLength
+      CustomContent.get(Memberships::JoinZusatzsektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(
+        # rubocop:enable Layout/LineLength
+        locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour"
+      )
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
     end
 
     context "beitragskategorie family" do
       let(:person) { people(:familienmitglied) }
-      let(:mail) { described_class.approval_pending_confirmation(person, group.layer_group, "family") }
+      let(:mail) {
+        described_class.approval_pending_confirmation(person, group.layer_group, "family")
+      }
 
       it "includes person ids of entire family" do
         expect(mail.to).to eq(["t.norgay@hitobito.example.com"])
-        expect(body).to include("Mitgliedernummer: #{person.id} (#{people(:familienmitglied2, :familienmitglied_kind).map(&:id).join(", ")})")
+        expect(body).to include("Mitgliedernummer: #{person.id} (#{people(:familienmitglied2,
+          :familienmitglied_kind).map(&:id).join(", ")})")
       end
     end
   end
@@ -82,7 +90,8 @@ describe Memberships::JoinZusatzsektionMailer do
       expect(body).not_to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(person_path(person))
       expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 84.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 42.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)",
+        text: "CHF 42.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
       expect(fees).not_to have_css("tr:nth-of-type(3)")
       expect(fees).to have_css("tfoot tr", text: "CHF 42.00\r\nTotal erstmalig")
     end
@@ -93,7 +102,8 @@ describe Memberships::JoinZusatzsektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Memberships::JoinZusatzsektionMailer::CONFIRMATION).update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour")
+      CustomContent.get(Memberships::JoinZusatzsektionMailer::CONFIRMATION).update!(locale: :fr,
+        label: "fr", subject: "Acceptee", body: "Bonjour")
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body).to include("Bonjour")

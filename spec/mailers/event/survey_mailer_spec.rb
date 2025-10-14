@@ -14,7 +14,9 @@ describe Event::SurveyMailer do
       dates: [Fabricate(:event_date, start_at: 1.week.ago, finish_at: 3.days.ago)])
   end
 
-  let(:participation) { Fabricate(:event_participation, event:, participant: people(:mitglied), state: :attended) }
+  let(:participation) {
+    Fabricate(:event_participation, event:, participant: people(:mitglied), state: :attended)
+  }
   let(:mail) { described_class.survey(participation) }
 
   before { Group.root.update!(course_admin_email: "admin@example.com") }

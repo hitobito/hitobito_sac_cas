@@ -68,7 +68,9 @@ describe Wizards::Memberships::SwitchStammsektion do
       let(:person) { people(:familienmitglied) }
 
       it "has two steps" do
+        # rubocop:todo Layout/LineLength
         expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseSektion)
+        # rubocop:enable Layout/LineLength
         expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::SwitchStammsektion::Summary)
       end
 
@@ -90,7 +92,9 @@ describe Wizards::Memberships::SwitchStammsektion do
         let(:backoffice) { true }
 
         it "includes the backoffice steps" do
+          # rubocop:todo Layout/LineLength
           expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::SwitchStammsektion::ChooseSektion)
+          # rubocop:enable Layout/LineLength
         end
       end
     end

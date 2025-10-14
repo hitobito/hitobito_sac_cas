@@ -6,7 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::DataQualityChecker
-  ATTRIBUTES_TO_CHECK = %w[first_name last_name street zip_code postbox town email phone_numbers birthday].freeze
+  ATTRIBUTES_TO_CHECK = %w[first_name last_name street zip_code postbox town email phone_numbers
+    birthday].freeze
 
   attr_reader :person
 
@@ -14,7 +15,7 @@ class People::DataQualityChecker
     @person = person
   end
 
-  def check_data_quality
+  def check_data_quality # rubocop:todo Metrics/AbcSize
     check_blank(:first_name, !person.company?)
     check_blank(:last_name, !person.company?)
     check_blank(:street, abacus_transmittable? && check_street?)
@@ -45,8 +46,11 @@ class People::DataQualityChecker
 
     check_blank(:birthday, stammsektion.present?)
 
+    # rubocop:todo Layout/LineLength
     invalid = stammsektion.present? && person.birthday && person.birthday > stammsektion.created_at - 6.years
-    create_or_destroy(invalid, attr: :birthday, severity: :warning, key: :less_than_6_years_before_entry)
+    # rubocop:enable Layout/LineLength
+    create_or_destroy(invalid, attr: :birthday, severity: :warning,
+      key: :less_than_6_years_before_entry)
   end
 
   def check_blank(attr, precondition, severity = :error)
@@ -66,11 +70,16 @@ class People::DataQualityChecker
 
   def update_person_data_quality
     highest_severity = find_highest_severity
-    person.update_column(:data_quality, highest_severity) unless person.data_quality == highest_severity
+    unless person.data_quality == highest_severity
+      person.update_column(:data_quality,
+        highest_severity)
+    end
   end
 
   def find_highest_severity
-    issues.reject(&:destroyed?).max_by { |i| Person::DataQualityIssue.severities[i.severity] }&.severity || "ok"
+    issues.reject(&:destroyed?).max_by { |i|
+      Person::DataQualityIssue.severities[i.severity]
+    }&.severity || "ok"
   end
 
   def sac_membership

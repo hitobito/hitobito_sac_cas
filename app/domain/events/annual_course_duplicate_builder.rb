@@ -53,9 +53,13 @@ class Events::AnnualCourseDuplicateBuilder
     course.updated_at = nil
   end
 
-  def build_dates(course)
+  def build_dates(course) # rubocop:todo Metrics/AbcSize
+    # rubocop:todo Layout/LineLength
     course.application_opening_at = determine_next_datetime(@source_course.application_opening_at&.to_datetime)
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     course.application_closing_at = determine_next_datetime(@source_course.application_closing_at&.to_datetime)
+    # rubocop:enable Layout/LineLength
 
     @source_course.dates.each do |source_date|
       date = course.dates.build(source_date.attributes.except("id"))
@@ -76,7 +80,8 @@ class Events::AnnualCourseDuplicateBuilder
       question = course.questions.build(source_question.attributes.except("id"))
 
       source_question.translations.each do |source_translations|
-        question.translations.build(source_translations.attributes.except("id", "event_question_id"))
+        question.translations.build(source_translations.attributes.except("id",
+          "event_question_id"))
       end
     end
   end

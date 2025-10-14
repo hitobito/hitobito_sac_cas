@@ -21,7 +21,9 @@ describe Groups::SelfRegistrationController, type: :controller do
     context "GET#show" do
       context "when registration active" do
         before do
+          # rubocop:todo Layout/LineLength
           group.update(self_registration_role_type: Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
+          # rubocop:enable Layout/LineLength
           person.update(country: "CH")
           person.phone_numbers.create(label: "Mobil", number: "0791234567")
         end

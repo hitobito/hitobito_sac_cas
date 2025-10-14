@@ -8,7 +8,10 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::Sektion::FamilyFields do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, email: "max@example.com", requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil) }
+  let(:wizard) {
+    instance_double(Wizards::Signup::SektionWizard, email: "max@example.com",
+      requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil)
+  }
   subject(:form) { described_class.new(wizard) }
 
   let(:required_attrs) {
@@ -77,7 +80,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [i, required_attrs.merge(birthday: "1.1.2000")]
         end
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen."]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid if second member reuses existing email" do
@@ -86,7 +91,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [1, required_attrs.merge(email: "e.hillary@hitobito.example.com", birthday: "1.10.2014")]
         ]
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.members.second.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid if second member reuses main_email in members" do
@@ -95,7 +102,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [1, required_attrs.merge(email: "max@example.com", birthday: "1.10.2014")]
         ]
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.members.second.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid if second member reuses first member email" do
@@ -104,7 +113,9 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields do
           [1, required_attrs.merge(email: "acceptable@example.com", birthday: "1.10.2014")]
         ]
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.members.second.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
+        # rubocop:enable Layout/LineLength
       end
     end
   end

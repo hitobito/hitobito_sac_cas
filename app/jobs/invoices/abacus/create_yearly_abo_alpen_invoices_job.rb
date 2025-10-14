@@ -18,12 +18,16 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
   end
 
   def error(job, exception)
-    create_error_log_entry("stapelverarbeitung", "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. " \
-              "Es erfolgt ein weiterer Versuch.", exception.message)
+    create_error_log_entry("stapelverarbeitung",
+      "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. " \
+      "Es erfolgt ein weiterer Versuch.",
+      exception.message)
   end
 
   def failure(job)
-    create_error_log_entry("stapelverarbeitung", "Rollierender Inkassolauf Abo Magazin Die Alpen abgebrochen.", nil)
+    create_error_log_entry("stapelverarbeitung",
+      "Rollierender Inkassolauf Abo Magazin Die Alpen abgebrochen.",
+      nil)
   end
 
   private
@@ -102,12 +106,21 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
 
   def create_log_entry(part)
     part.context_object.entity.update!(state: :error)
-    create_error_log_entry("rechnungen", "Jahresrechnung Abo Magazin Die Alpen konnte nicht in Abacus erstellt werden", part.error_payload, part.context_object.entity)
+    create_error_log_entry("rechnungen",
+      "Jahresrechnung Abo Magazin Die Alpen konnte nicht in Abacus erstellt werden",
+      part.error_payload,
+      part.context_object.entity)
   end
 
-  def build_abo_magazin_invoice(abonnent_role) = Invoices::Abacus::AboMagazinInvoice.new(abonnent_role, abonnent_role.end_on + 1.day)
+  def build_abo_magazin_invoice(abonnent_role)
+    Invoices::Abacus::AboMagazinInvoice.new(abonnent_role, abonnent_role.end_on + 1.day)
+  end
 
-  def create_sales_order(invoice, abo_magazin_invoice) = Invoices::Abacus::SalesOrder.new(invoice, abo_magazin_invoice.positions)
+  def create_sales_order(invoice, abo_magazin_invoice)
+    Invoices::Abacus::SalesOrder.new(invoice, abo_magazin_invoice.positions)
+  end
 
-  def sales_order_interface = @sales_order_interface ||= Invoices::Abacus::SalesOrderInterface.new
+  def sales_order_interface
+    @sales_order_interface ||= Invoices::Abacus::SalesOrderInterface.new
+  end
 end

@@ -18,7 +18,8 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
     table(table_data)
   end
 
-  def table_data
+  # rubocop:todo Metrics/MethodLength
+  def table_data # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
     [
       [t("number"), event.number],
       [t("name"), event.name],
@@ -46,9 +47,11 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
       [t("class_teacher.label"), t("class_teacher.text")]
     ]
   end
+  # rubocop:enable Metrics/MethodLength
 
   def table(data)
-    pdf.table(data, header: false, width: bounds.width, column_widths: {0 => FIRST_COLUMN_WIDTH}, cell_style: {border_width: 0.5}) do
+    pdf.table(data, header: false, width: bounds.width, column_widths: {0 => FIRST_COLUMN_WIDTH},
+      cell_style: {border_width: 0.5}) do
       column(0).font_style = :bold
       # cells.padding = [7, 7, 7, 5] doesnt work well with subtables
     end
@@ -68,7 +71,9 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   def compensation_row(rate)
     table_width = bounds.width - FIRST_COLUMN_WIDTH
 
+    # rubocop:todo Layout/LineLength
     column_widths = [table_width - COMPENSATION_SUBTABLE_COLUMN_WIDTHS.sum] + COMPENSATION_SUBTABLE_COLUMN_WIDTHS
+    # rubocop:enable Layout/LineLength
     event_days = (rate.course_compensation_category.kind == :day) ? event.total_event_days : 1
     ["",
       make_subtable([[compensation_category_name(rate),
@@ -82,7 +87,9 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   def accommodation_budget_table
     table_width = bounds.width - FIRST_COLUMN_WIDTH
 
+    # rubocop:todo Layout/LineLength
     column_widths = [table_width - ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS.sum] + ACCOMMODATION_BUDGET_SUBTABLE_COLUMN_WIDTHS
+    # rubocop:enable Layout/LineLength
     event_compensation_rates(:budget).map do |rate|
       [
         "",
@@ -110,7 +117,9 @@ class Export::Pdf::Participations::KeyDataSheet::Sections::Table < Export::Pdf::
   end
 
   def make_subtable(data, options = {})
-    pdf.make_table(data, options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH, cell_style: {border_width: 0.5}))
+    pdf.make_table(data,
+      options.reverse_merge(width: bounds.width - FIRST_COLUMN_WIDTH,
+        cell_style: {border_width: 0.5}))
   end
 
   def accommodation

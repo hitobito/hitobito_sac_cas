@@ -6,7 +6,10 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
-  subject { Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp).id, params.merge(filename: filename)) }
+  subject {
+    Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp).id,
+      params.merge(filename: filename))
+  }
 
   let!(:participation) { event_participations(:top_mitglied) }
   let(:user) { participation.person }
@@ -34,10 +37,16 @@ describe Export::EventParticipationsExportJob do
 
       lines = file.read.lines
       expect(lines.size).to eq(3)
+      # rubocop:todo Layout/LineLength
       expect(lines[0]).to match(/Veranstaltungsnummer;Kursortname;Kursbezeichnung;Anfangsdatum;Enddatum;Teilnehmernummer;Geschlecht;Familienname;Vorname;Sprachcode;Adresse;PLZ;Ort;Sektionsname;Geburtsdatum;Haupt-E-Mail.*/)
+      # rubocop:enable Layout/LineLength
       expect(lines[1..]).to match_array([
+        # rubocop:todo Layout/LineLength
         /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600001;weiblich;Hillary;Edmund/,
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         /10;Bern, Zurich;Tourenleiter\/in 1 Sommer;01.03.2023 00:00;10.04.2023 00:00;600002;divers;Norgay;Tenzing/
+        # rubocop:enable Layout/LineLength
       ])
     end
 

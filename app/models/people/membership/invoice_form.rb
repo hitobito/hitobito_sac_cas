@@ -70,11 +70,13 @@ class People::Membership::InvoiceForm
 
   def today = @today ||= Time.zone.today
 
-  def ref_date_sac_membership = @ref_date_sac_membership ||= People::SacMembership.new(person, date: reference_date)
+  def ref_date_sac_membership = @ref_date_sac_membership ||= People::SacMembership.new(person,
+    date: reference_date)
 
   def active_membership_section_ids = ([ref_date_stammsektion] + zusatzsektionen).compact.map(&:id)
 
   def ref_date_stammsektion
-    select_paying([ref_date_sac_membership.stammsektion_role, ref_date_sac_membership.neuanmeldung_stammsektion_role]).first&.layer_group
+    select_paying([ref_date_sac_membership.stammsektion_role,
+      ref_date_sac_membership.neuanmeldung_stammsektion_role]).first&.layer_group
   end
 end

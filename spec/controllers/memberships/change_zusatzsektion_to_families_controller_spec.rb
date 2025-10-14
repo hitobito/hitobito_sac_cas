@@ -8,7 +8,10 @@
 require "spec_helper"
 
 describe Memberships::ChangeZusatzsektionToFamiliesController do
-  let(:params) { {group_id: zusatzsektion_role.group_id, person_id: zusatzsektion_role.person_id, role_id: zusatzsektion_role.id} }
+  let(:params) {
+    {group_id: zusatzsektion_role.group_id, person_id: zusatzsektion_role.person_id,
+     role_id: zusatzsektion_role.id}
+  }
 
   let(:person) { Fabricate(:person) }
   let(:household) { person.household }
@@ -20,7 +23,9 @@ describe Memberships::ChangeZusatzsektionToFamiliesController do
   let(:stammsektion_class) { Group::SektionsMitglieder::Mitglied }
   let(:zusatzsektion_class) { Group::SektionsMitglieder::MitgliedZusatzsektion }
   let!(:stammsektion_role) { create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder)) }
-  let!(:zusatzsektion_role) { create_role!(zusatzsektion_class, groups(:matterhorn_mitglieder), beitragskategorie: :adult) }
+  let!(:zusatzsektion_role) {
+    create_role!(zusatzsektion_class, groups(:matterhorn_mitglieder), beitragskategorie: :adult)
+  }
 
   def latest_zusatzsektion_role = person.roles.where(type: zusatzsektion_class.sti_name).last
 
@@ -52,7 +57,9 @@ describe Memberships::ChangeZusatzsektionToFamiliesController do
         expect(person.roles.last.beitragskategorie).to eq("family")
 
         expect(response).to have_http_status(302)
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Rolle wurde erfolgreich zu einer Familienmitgliedschaft geändert.")
+        # rubocop:enable Layout/LineLength
       end
     end
 

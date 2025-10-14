@@ -18,7 +18,9 @@ module SacCas::GroupDecorator
   def membership_admission_through_gs?
     return unless sektion_or_ortsgruppe?
 
-    object.children.without_deleted.none? { |group| group.is_a?(Group::SektionsNeuanmeldungenSektion) }
+    object.children.without_deleted.none? { |group|
+      group.is_a?(Group::SektionsNeuanmeldungenSektion)
+    }
   end
 
   def membership_self_registration_url

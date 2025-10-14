@@ -15,10 +15,12 @@ class ExternalTrainingAbility < AbilityDsl::Base
     permission(:group_and_below_full).may(:new).in_same_group_or_below
 
     permission(:layer_full).may(:create, :destroy).in_same_layer_if_section_may_create
-    permission(:layer_and_below_full).may(:create, :destroy).in_same_layer_or_below_if_section_may_create
+    permission(:layer_and_below_full).may(:create,
+      :destroy).in_same_layer_or_below_if_section_may_create
 
     permission(:group_full).may(:create, :destroy).in_same_group_if_section_may_create
-    permission(:group_and_below_full).may(:create, :destroy).in_same_group_or_below_if_section_may_create
+    permission(:group_and_below_full).may(:create,
+      :destroy).in_same_group_or_below_if_section_may_create
   end
 
   def person
@@ -41,7 +43,9 @@ class ExternalTrainingAbility < AbilityDsl::Base
     in_same_group_or_below && permission_on_root_or_section_may_create(:group_and_below_full)
   end
 
+  # rubocop:todo Layout/LineLength
   # always allow when permission is on root group, if not, check for section_may_create on event kind
+  # rubocop:enable Layout/LineLength
   def permission_on_root_or_section_may_create(permission)
     return true if user_context.layer_ids(permitted_groups).include?(Group.root.id)
     return true unless subject.event_kind

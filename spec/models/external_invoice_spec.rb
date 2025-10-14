@@ -16,8 +16,10 @@ describe ExternalInvoice do
 
       it "is prevented" do
         expect { participation.destroy }.not_to change { Event::Participation.count }
+        # rubocop:todo Layout/LineLength
         expect(participation.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
           "da abhängige Rechnungen existieren."
+        # rubocop:enable Layout/LineLength
       end
     end
 

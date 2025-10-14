@@ -23,7 +23,8 @@ describe Export::BackupMitgliederExportJob do
     def subscribe
       callback = lambda do |name, started, finished, unique_id, payload|
         notifications[name] <<
-          OpenStruct.new(name: name, started: started, finished: finished, unique_id: unique_id, payload: payload)
+          OpenStruct.new(name: name, started: started, finished: finished, unique_id: unique_id,
+            payload: payload)
       end
       ActiveSupport::Notifications.subscribed(callback, /\w+\.background_job/) do
         yield

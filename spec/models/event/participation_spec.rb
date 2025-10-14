@@ -74,7 +74,9 @@ describe Event::Participation do
   end
 
   describe "#subsidizable?" do
-    let(:course) { Fabricate.build(:sac_course, applications_cancelable: true, price_subsidized: 10) }
+    let(:course) {
+      Fabricate.build(:sac_course, applications_cancelable: true, price_subsidized: 10)
+    }
 
     subject(:participation) { Fabricate.build(:event_participation, event: course) }
 
@@ -101,13 +103,17 @@ describe Event::Participation do
       it "has to be a positive number" do
         participation.actual_days = -1
         expect(participation).to_not be_valid
+        # rubocop:todo Layout/LineLength
         expect(participation.errors.full_messages).to match_array(["Effektive Tage muss grösser oder gleich 0 sein"])
+        # rubocop:enable Layout/LineLength
       end
 
       it "must be not greater than event total_duration_days" do
         participation.actual_days = event.total_duration_days + 1
         expect(participation).to_not be_valid
+        # rubocop:todo Layout/LineLength
         expect(participation.errors.full_messages).to match_array(["Effektive Tage darf nicht länger als geplante Kursdauer sein."])
+        # rubocop:enable Layout/LineLength
       end
 
       it "is not validated if actual_days did not change" do

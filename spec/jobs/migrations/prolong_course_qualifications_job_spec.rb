@@ -34,7 +34,9 @@ describe Migrations::ProlongCourseQualificationsJob do
 
     @p1 = Fabricate(:person) # with external training
     @et1 = create_external_training(person: @p1)
+    # rubocop:todo Layout/LineLength
     pp = Event::Participation.create!(person: @p1, event: course, state: "attended") # leader participation does qualify
+    # rubocop:enable Layout/LineLength
     Event::Course::Role::Leader.create!(participation: pp)
     create_quali(@p1, "2020-11-03")
 

@@ -23,7 +23,8 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
   private
 
   def render_pdf_in_background
-    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}", redirection_target: group_event_participation_path(group, event, participation)) do |filename|
+    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}",
+      redirection_target: group_event_participation_path(group, event, participation)) do |filename|
       Export::LeaderSettlementExportJob.new(current_person.id,
         participation.id,
         entry.iban,

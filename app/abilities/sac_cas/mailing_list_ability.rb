@@ -27,7 +27,9 @@ module SacCas::MailingListAbility
       [Group::SektionsFunktionaere::Redaktion,
         Group::SektionsFunktionaere::Mitgliederverwaltung,
         Group::SektionsMitglieder::Leserecht,
+        # rubocop:todo Layout/LineLength
         Group::SektionsMitglieder::Schreibrecht].include?(r.class) && r.group.layer_group_id == group.layer_group_id
+      # rubocop:enable Layout/LineLength
     end
   end
 end

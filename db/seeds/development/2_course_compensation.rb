@@ -9,7 +9,9 @@ CourseCompensationCategory.seed_once(
   {id: 2,
    short_name: "KP-REISE/MATERIAL",
    kind: :flat,
+   # rubocop:todo Layout/LineLength
    description: "An- und Rückreise (unabhängig von Transportmittel und Strecke), Transportkosten während dem Kurs (Bergbahn, Alpentaxi etc.)",
+   # rubocop:enable Layout/LineLength
    name_leader: "Kurspauschale - Kursleitung/Reise & Material",
    name_assistant_leader: "Kurspauschale - Klassenleitung/Reise & Material"},
   {id: 3,
@@ -21,6 +23,9 @@ CourseCompensationCategory.seed_once(
 )
 
 CourseCompensationRate.seed_once(:course_compensation_category_id,
-  {course_compensation_category_id: 1, valid_from: "2023-01-01", rate_leader: 550, rate_assistant_leader: 540},
-  {course_compensation_category_id: 2, valid_from: "2023-01-01", rate_leader: 150, rate_assistant_leader: 0},
-  {course_compensation_category_id: 3, valid_from: "2023-01-01", rate_leader: 80, rate_assistant_leader: 80})
+  {course_compensation_category_id: 1, valid_from: "2023-01-01", rate_leader: 550,
+   rate_assistant_leader: 540},
+  {course_compensation_category_id: 2, valid_from: "2023-01-01", rate_leader: 150,
+   rate_assistant_leader: 0},
+  {course_compensation_category_id: 3, valid_from: "2023-01-01", rate_leader: 80,
+   rate_assistant_leader: 80})

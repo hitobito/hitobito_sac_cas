@@ -6,12 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::ExternalInvoicesController < ListController
-  def cancel
+  def cancel # rubocop:todo Metrics/AbcSize
     authorize!(:cancel_external_invoice, invoice)
     invoice.state = "cancelled"
     invoice.save!
     Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
-    flash[:notice] = t(".flash", invoice: invoice.title, abacus_sales_order_key: invoice.abacus_sales_order_key)
+    flash[:notice] =
+      t(".flash", invoice: invoice.title, abacus_sales_order_key: invoice.abacus_sales_order_key)
     redirect_to external_invoices_group_person_path(group, person)
   end
 

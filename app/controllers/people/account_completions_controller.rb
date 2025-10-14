@@ -44,7 +44,8 @@ module People
     end
 
     def model_params
-      params.key?(:person) ? params.require(:person).permit(:unconfirmed_email, :password, :password_confirmation) : {}
+      params.key?(:person) ? params.require(:person).permit(:unconfirmed_email, :password,
+        :password_confirmation) : {}
     end
   end
 end

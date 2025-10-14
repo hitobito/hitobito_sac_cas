@@ -15,7 +15,9 @@ describe Group::SektionsNeuanmeldungenNv do
 
     it_behaves_like "validates Neuanmeldung timestamps"
 
-    subject(:role) { Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago) }
+    subject(:role) {
+      Fabricate(described_class.sti_name, person: person, group: group, created_at: 10.days.ago)
+    }
 
     it "#destroy hard destroys role even though it is old enough to soft destroy" do
       expect(role.send(:old_enough_to_soft_destroy?)).to eq true
@@ -29,18 +31,26 @@ describe Group::SektionsNeuanmeldungenNv do
     it "self registration is disabled if neuanmeldungen sektion is present" do
       expect(neuanmeldungen_nv.self_registration_role_type).to be_nil
 
+      # rubocop:todo Layout/LineLength
       neuanmeldungen_nv.update!(self_registration_role_type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name)
+      # rubocop:enable Layout/LineLength
 
       expect(neuanmeldungen_nv.self_registration_role_type).to be_nil
     end
 
     it "self registration role type cannot be changed" do
       groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
+      # rubocop:todo Layout/LineLength
       expect(neuanmeldungen_nv.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
+      # rubocop:enable Layout/LineLength
 
+      # rubocop:todo Layout/LineLength
       neuanmeldungen_nv.update!(self_registration_role_type: Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name)
+      # rubocop:enable Layout/LineLength
 
+      # rubocop:todo Layout/LineLength
       expect(neuanmeldungen_nv.self_registration_role_type).to eq(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name)
+      # rubocop:enable Layout/LineLength
     end
 
     it "self registration require adult consent is always enabled" do

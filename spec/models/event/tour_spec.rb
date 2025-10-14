@@ -26,7 +26,9 @@ describe Event::Tour do
 
   describe "#default_participation_state" do
     let(:application) { Fabricate.build(:event_application) }
-    let(:participation) { Fabricate.build(:event_participation, event: tour, application: application) }
+    let(:participation) {
+      Fabricate.build(:event_participation, event: tour, application: application)
+    }
 
     subject(:state) { tour.default_participation_state(participation) }
 

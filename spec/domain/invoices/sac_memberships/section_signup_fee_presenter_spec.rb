@@ -30,7 +30,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     discount.new(range: Date.new(2024, 10, 1)..Date.new(2024, 12, 31), percent: 100)
   ]
 
+  # rubocop:todo Layout/LineLength
   shared_examples "signup_fee_presenter" do |beitragskategorie:, annual_fee:, entry_fee:, section_fee:, abroad_fees:|
+    # rubocop:enable Layout/LineLength
     let(:person) { Person.new }
     let(:presenter) { described_class.new(group, beitragskategorie.to_s, person) }
 
@@ -57,7 +59,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
         end
 
         context "not dealing with main membership" do
-          let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+          let(:presenter) {
+            described_class.new(group, beitragskategorie.to_s, person, main: false)
+          }
 
           it "includes only section fee" do
             expect(parts).to have(1).item
@@ -89,7 +93,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
         end
 
         context "not dealing with main membership" do
-          let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+          let(:presenter) {
+            described_class.new(group, beitragskategorie.to_s, person, main: false)
+          }
 
           it "only uses section fee of #{section_fee}" do
             expect(lines).to have(2).items
@@ -108,11 +114,15 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
 
           it "last line contains total of #{annual_fee + entry_fee + abroad_fees.values.sum}" do
             expect(lines.last.label).to eq "Total erstmalig"
+            # rubocop:todo Layout/LineLength
             expect(lines.last.amount).to eq formatted_amount(annual_fee + entry_fee + abroad_fees.values.sum)
+            # rubocop:enable Layout/LineLength
           end
 
           context "not dealing with main membership" do
-            let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+            let(:presenter) {
+              described_class.new(group, beitragskategorie.to_s, person, main: false)
+            }
 
             it "last line contains total of #{section_fee + abroad_fees[:section]}" do
               expect(lines.second.label).to eq "+ Gebühren Ausland"
@@ -132,7 +142,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
             before { travel_to(discount.day) }
 
             it "second line contains discount of #{discount.calc(annual_fee)}" do
+              # rubocop:todo Layout/LineLength
               expect(lines.second.label).to eq "- #{discount.percent}% Rabatt auf den jährlichen Beitrag"
+              # rubocop:enable Layout/LineLength
               expect(lines.second.amount).to eq formatted_amount(discount.calc(annual_fee))
             end
 
@@ -140,14 +152,20 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
               expect(lines[-2].label).to eq "+ einmalige Eintrittsgebühr"
               expect(lines[-2].amount).to eq formatted_amount(entry_fee)
               expect(lines.last.label).to eq "Total erstmalig"
+              # rubocop:todo Layout/LineLength
               expect(lines.last.amount).to eq formatted_amount(discount.apply(annual_fee) + entry_fee)
+              # rubocop:enable Layout/LineLength
             end
 
             context "not dealing with main membership" do
-              let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+              let(:presenter) {
+                described_class.new(group, beitragskategorie.to_s, person, main: false)
+              }
 
               it "second line contains discount of #{discount.calc(section_fee)}" do
+                # rubocop:todo Layout/LineLength
                 expect(lines.second.label).to eq "- #{discount.percent}% Rabatt auf den jährlichen Beitrag"
+                # rubocop:enable Layout/LineLength
                 expect(lines.second.amount).to eq formatted_amount(discount.calc(section_fee))
               end
             end
@@ -156,9 +174,13 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
               before { person.update(country: "DE") }
 
               if discount.factor < 1
+                # rubocop:todo Layout/LineLength
                 it "third line contains discounted abroad fees of #{discount.calc(abroad_fees.values.sum)} which is integrated in discount" do
+                  # rubocop:enable Layout/LineLength
                   expect(lines.fourth.label).to eq "+ Gebühren Ausland"
+                  # rubocop:todo Layout/LineLength
                   expect(lines.fourth.amount).to eq formatted_amount(discount.calc(abroad_fees.values.sum))
+                  # rubocop:enable Layout/LineLength
                 end
               else
 
@@ -167,18 +189,28 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
                 end
               end
 
+              # rubocop:todo Layout/LineLength
               it "last line contains total of #{discount.apply(annual_fee + abroad_fees.values.sum) + entry_fee}" do
+                # rubocop:enable Layout/LineLength
                 expect(lines.last.label).to eq "Total erstmalig"
+                # rubocop:todo Layout/LineLength
                 expect(lines.last.amount).to eq formatted_amount(discount.apply(annual_fee + abroad_fees.values.sum) + entry_fee)
+                # rubocop:enable Layout/LineLength
               end
 
               context "not dealing with main membership" do
-                let(:presenter) { described_class.new(group, beitragskategorie.to_s, person, main: false) }
+                let(:presenter) {
+                  described_class.new(group, beitragskategorie.to_s, person, main: false)
+                }
 
                 if discount.factor < 1
+                  # rubocop:todo Layout/LineLength
                   it "third line contains discounted abroad section fee of #{discount.calc(abroad_fees[:section])} which is integrated in discount" do
+                    # rubocop:enable Layout/LineLength
                     expect(lines.third.label).to eq "+ Gebühren Ausland"
+                    # rubocop:todo Layout/LineLength
                     expect(lines.third.amount).to eq formatted_amount(discount.calc(abroad_fees[:section]))
+                    # rubocop:enable Layout/LineLength
                   end
                 else
 
@@ -187,9 +219,13 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
                   end
                 end
 
+                # rubocop:todo Layout/LineLength
                 it "last line contains total of #{discount.apply(section_fee + abroad_fees[:section])}" do
+                  # rubocop:enable Layout/LineLength
                   expect(lines.last.label).to eq "Total erstmalig"
+                  # rubocop:todo Layout/LineLength
                   expect(lines.last.amount).to eq formatted_amount(discount.apply(section_fee + abroad_fees[:section]))
+                  # rubocop:enable Layout/LineLength
                 end
               end
             end
@@ -199,7 +235,8 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     end
   end
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127, entry_fee: 20, section_fee: 42, abroad_fees: {section: 13, magazin: 10}
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :adult, annual_fee: 127,
+    entry_fee: 20, section_fee: 42, abroad_fees: {section: 13, magazin: 10}
 
   context "existing person with membership" do
     let(:presenter) { described_class.new(group, :adult, people(:mitglied)) }
@@ -225,7 +262,9 @@ describe Invoices::SacMemberships::SectionSignupFeePresenter do
     end
   end
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179, entry_fee: 35, section_fee: 84, abroad_fees: {section: 13, magazin: 10}
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :family, annual_fee: 179,
+    entry_fee: 35, section_fee: 84, abroad_fees: {section: 13, magazin: 10}
 
-  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15, section_fee: 21, abroad_fees: {section: 13, magazin: 10}
+  it_behaves_like "signup_fee_presenter", beitragskategorie: :youth, annual_fee: 76, entry_fee: 15,
+    section_fee: 21, abroad_fees: {section: 13, magazin: 10}
 end

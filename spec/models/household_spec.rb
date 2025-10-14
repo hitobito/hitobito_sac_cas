@@ -15,11 +15,26 @@ describe Household do
   end
   let(:bluemlisalp_mitglieder) { groups(:bluemlisalp_mitglieder) }
 
-  let(:person) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1)) }
-  let(:adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1999, 10, 5)) }
-  let(:child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2012, 9, 23)) }
-  let(:second_child) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(2014, 4, 13)) }
-  let(:second_adult) { Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied", birthday: Date.new(1998, 11, 6)) }
+  let(:person) {
+    Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
+      email: "dad@hitobito.example.com", confirmed_at: Time.current, birthday: Date.new(2000, 1, 1))
+  }
+  let(:adult) {
+    Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
+      birthday: Date.new(1999, 10, 5))
+  }
+  let(:child) {
+    Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
+      birthday: Date.new(2012, 9, 23))
+  }
+  let(:second_child) {
+    Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
+      birthday: Date.new(2014, 4, 13))
+  }
+  let(:second_adult) {
+    Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
+      birthday: Date.new(1998, 11, 6))
+  }
 
   subject!(:household) { Household.new(person) }
 
@@ -44,7 +59,9 @@ describe Household do
       household.add(child)
       household.save!
     end.to change { Sequence.current_value(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE) }.by(1)
+    # rubocop:todo Layout/LineLength
     expect(adult.reload.household_key).to eq Sequence.current_value(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE).to_s
+    # rubocop:enable Layout/LineLength
   end
 
   describe "validations" do
@@ -52,7 +69,9 @@ describe Household do
       household = Household.new(child)
       household.add(second_child)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors[:base]).to match_array(["Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.",
+        # rubocop:enable Layout/LineLength
         "Eine Familie muss mindestens 1 erwachsene Person enthalten."])
     end
 
@@ -60,13 +79,17 @@ describe Household do
       household.add(adult)
       household.add(second_adult)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors[:base]).to match_array(["Eine Familie darf höchstens 2 erwachsene Personen enthalten."])
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid if it contains only one person" do
       household = Household.new(person)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors[:base]).to match_array(["Eine Familie muss mindestens 2 Personen enthalten."])
+      # rubocop:enable Layout/LineLength
     end
 
     it "is valid if pending removed person does not have a confirmed email" do
@@ -105,7 +128,9 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid if no person has a membership at all" do
@@ -114,7 +139,9 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid if a person has a terminated membership" do
@@ -128,11 +155,14 @@ describe Household do
         beitragskategorie: :adult,
         created_at: 1.year.ago,
         start_on: 1.year.ago).person
-      Roles::Termination.new(role: other_household_person.roles.first, terminate_on: 1.day.from_now).call
+      Roles::Termination.new(role: other_household_person.roles.first,
+        terminate_on: 1.day.from_now).call
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
+      # rubocop:todo Layout/LineLength
       expect(household.errors.full_messages.first).to include("#{other_household_person.full_name} hat einen Austritt geplant.")
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -144,8 +174,12 @@ describe Household do
         expect do
           Household.new(person, maintain_sac_family: true).add(adult).save!
         end
-          .to change { person.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
-          .and change { adult.sac_membership.stammsektion_role.beitragskategorie }.from("adult").to("family")
+          .to change {
+                person.sac_membership.stammsektion_role.beitragskategorie
+              }.from("adult").to("family")
+          .and change {
+                 adult.sac_membership.stammsektion_role.beitragskategorie
+               }.from("adult").to("family")
       end
 
       it "makes reference person main person for new household" do
@@ -176,7 +210,9 @@ describe Household do
         household.reload
 
         expect(Memberships::FamilyMutation).to receive(:new).with(adult) do
-          instance_double(Memberships::FamilyMutation).tap { expect(_1).to receive(:join!).with(household.reference_person) }
+          instance_double(Memberships::FamilyMutation).tap {
+            expect(_1).to receive(:join!).with(household.reference_person)
+          }
         end
 
         household.add(adult).save!

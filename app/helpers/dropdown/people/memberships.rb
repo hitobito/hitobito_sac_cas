@@ -12,12 +12,16 @@ module Dropdown
     WIZARDS = [
       [Wizards::Memberships::JoinZusatzsektion, :group_person_join_zusatzsektion_path],
       [Wizards::Memberships::SwitchStammsektion, :group_person_switch_stammsektion_path],
-      [Wizards::Memberships::SwapStammZusatzsektion, :group_person_switch_stammsektion_path, {kind: :zusatzsektion}],
-      [Wizards::Memberships::TerminateSacMembershipWizard, :group_person_terminate_sac_membership_path]
+      [Wizards::Memberships::SwapStammZusatzsektion, :group_person_switch_stammsektion_path,
+        {kind: :zusatzsektion}],
+      [Wizards::Memberships::TerminateSacMembershipWizard,
+        :group_person_terminate_sac_membership_path]
     ].freeze
 
     delegate :current_ability, :current_user, :group_person_join_zusatzsektion_path,
+      # rubocop:todo Layout/LineLength
       :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path, to: :template
+    # rubocop:enable Layout/LineLength
 
     def initialize(template, person, group)
       @template = template
@@ -47,13 +51,15 @@ module Dropdown
       add_item(link_name, target_url, method: :get)
     end
 
-    def add_undo_termination_link
+    def add_undo_termination_link # rubocop:todo Metrics/AbcSize
       latest_membership = person.sac_membership.stammsektion_role ||
         person.sac_membership.latest_stammsektion_role
       return unless latest_membership&.terminated?
 
       add_item(translate("undo_termination_link"),
+        # rubocop:todo Layout/LineLength
         template.new_group_person_role_undo_termination_path(role_id: person.sac_membership.latest_stammsektion_role.id,
+          # rubocop:enable Layout/LineLength
           group_id: person.sac_membership.latest_stammsektion_role.group_id,
           person_id: person.id))
     end

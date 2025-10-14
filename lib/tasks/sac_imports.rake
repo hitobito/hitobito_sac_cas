@@ -26,8 +26,10 @@ namespace :sac_imports do
     Person.skip_callback(:save, :after, :check_data_quality)
     Group::SektionsMitglieder::Mitglied.skip_callback(:create, :after, :check_data_quality)
     Group::SektionsMitglieder::Mitglied.skip_callback(:destroy, :after, :check_data_quality)
-    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:create, :after, :check_data_quality)
-    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:destroy, :after, :check_data_quality)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:create, :after,
+      :check_data_quality)
+    Group::SektionsMitglieder::MitgliedZusatzsektion.skip_callback(:destroy, :after,
+      :check_data_quality)
     PhoneNumber.skip_callback(:create, :after, :check_data_quality)
     PhoneNumber.skip_callback(:destroy, :after, :check_data_quality)
     PeopleManager.skip_callback(:create, :after, :create_paper_trail_versions_for_create_event)

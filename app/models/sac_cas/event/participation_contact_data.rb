@@ -32,7 +32,9 @@ module SacCas::Event::ParticipationContactData
   def mark_as_required?(attr)
     # We specify this specifically, since we want the phone number label to show the required mark
     # Adding the phone_numbers attribute to mandatory_contact_attrs doesnt work, because that also
+    # rubocop:todo Layout/LineLength
     # affects the backend validation, participation_contact_data doesnt have a phone_numbers attribute, just
+    # rubocop:enable Layout/LineLength
     # multiple different phone_number types
     attr == :phone_numbers
   end
@@ -43,7 +45,8 @@ module SacCas::Event::ParticipationContactData
     @participation ||= Event::Participation.new(event: @event, person: @person)
   end
 
-  def assert_required_contact_attrs_valid
+  # rubocop:todo Metrics/AbcSize
+  def assert_required_contact_attrs_valid # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
     super
 
     # Ensure that at least one phone number is present
@@ -52,14 +55,21 @@ module SacCas::Event::ParticipationContactData
       .select { |phone_number| !phone_number&.marked_for_destruction? }
       .any?
 
+    # rubocop:todo Layout/LineLength
     # We add the error message to the contact data object, this is used to display the error message on form submits
-    errors.add(:base, t("activerecord.errors.messages.at_least_one_present", model_name: PhoneNumber.model_name.human))
+    # rubocop:enable Layout/LineLength
+    errors.add(:base,
+      t("activerecord.errors.messages.at_least_one_present",
+        model_name: PhoneNumber.model_name.human))
 
     # We add an active record error on the phone number objects, to mark the form fields as invalid
-    PhoneNumber.predefined_labels.map { |label| person.send(:"phone_number_#{label}") }.each do |object|
+    PhoneNumber.predefined_labels.map { |label|
+      person.send(:"phone_number_#{label}")
+    }.each do |object|
       next if object.nil?
 
       object.errors.add(:number)
     end
   end
+  # rubocop:enable Metrics/AbcSize
 end

@@ -29,7 +29,8 @@ describe Memberships::LeaveZusatzsektion do
   describe "initialization exceptions" do
     it "raises if role type is invalid" do
       expect do
-        described_class.new(Role.new, :termination_date, termination_reason_id: termination_reason.id)
+        described_class.new(Role.new, :termination_date,
+          termination_reason_id: termination_reason.id)
       end.to raise_error("wrong type")
     end
 
@@ -44,7 +45,9 @@ describe Memberships::LeaveZusatzsektion do
     end
   end
 
-  subject(:leave) { described_class.new(role, terminate_on, termination_reason_id: termination_reason.id) }
+  subject(:leave) {
+    described_class.new(role, terminate_on, termination_reason_id: termination_reason.id)
+  }
 
   describe "validations" do
     let(:person) { Fabricate(:person) }
@@ -65,7 +68,8 @@ describe Memberships::LeaveZusatzsektion do
     end
 
     describe "validates date" do
-      def leave_on(date) = described_class.new(role, date, termination_reason_id: termination_reason.id)
+      def leave_on(date) = described_class.new(role, date,
+        termination_reason_id: termination_reason.id)
 
       it "is valid on yesterday and at the end of current year" do
         expect(leave_on(now.yesterday.to_date)).to be_valid
@@ -125,7 +129,10 @@ describe Memberships::LeaveZusatzsektion do
       let(:other) { Fabricate(:person) }
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
 
-      subject(:leave) { described_class.new(@matterhorn_zusatz, terminate_on, termination_reason_id: termination_reason.id) }
+      subject(:leave) {
+        described_class.new(@matterhorn_zusatz, terminate_on,
+          termination_reason_id: termination_reason.id)
+      }
 
       def create_sac_family(person, *others)
         person.update!(sac_family_main_person: true)
@@ -139,9 +146,11 @@ describe Memberships::LeaveZusatzsektion do
       before do
         person.update!(sac_family_main_person: true)
         @bluemlisalp_mitglied = create_role(:bluemlisalp_mitglieder, "Mitglied")
-        @bluemlisalp_mitglied_other = create_role(:bluemlisalp_mitglieder, "Mitglied", owner: other.reload)
+        @bluemlisalp_mitglied_other = create_role(:bluemlisalp_mitglieder, "Mitglied",
+          owner: other.reload)
         create_sac_family(person, other)
-        Role.where(id: [@bluemlisalp_mitglied.id, @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
+        Role.where(id: [@bluemlisalp_mitglied.id,
+          @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
 
         @matterhorn_zusatz = create_role(
           :matterhorn_mitglieder, "MitgliedZusatzsektion",

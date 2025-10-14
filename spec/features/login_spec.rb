@@ -26,7 +26,8 @@ describe :login, js: true do
   end
 
   it "has correct login field label" do
-    expect(page).to have_selector('label[for="person_login_identity"]', text: "Haupt‑E‑Mail / Mitglied‑Nr")
+    expect(page).to have_selector('label[for="person_login_identity"]',
+      text: "Haupt‑E‑Mail / Mitglied‑Nr")
   end
 
   it "allows login with email" do

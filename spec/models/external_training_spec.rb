@@ -14,7 +14,8 @@ describe ExternalTraining do
 
   describe "validations" do
     def build(start_at:, finish_at:)
-      Fabricate.build(:external_training, person: people(:mitglied), start_at: start_at, finish_at: finish_at)
+      Fabricate.build(:external_training, person: people(:mitglied), start_at: start_at,
+        finish_at: finish_at)
     end
 
     it "is invalid when finish_at is before start_at" do

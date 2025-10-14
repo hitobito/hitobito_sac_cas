@@ -16,7 +16,9 @@ describe TableDisplays::People::MembershipYearsColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
     people(:mitglied).update_column(:cached_membership_years, 10)
   end
 

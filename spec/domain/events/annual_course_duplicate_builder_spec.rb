@@ -11,8 +11,12 @@ describe Events::AnnualCourseDuplicateBuilder do
   let(:builder) { described_class.new(source_course, 2026, 1) }
   let(:duplicate) { builder.build }
 
-  let(:source_application_opening_at) { Date.new(2025, 5, 26) } # Monday of calendar week 22 (attribute is a date in db)
-  let(:source_application_closing_at) { Date.new(2025, 6, 6) } # Friday of calendar week 23 (attribute is a date in db)
+  let(:source_application_opening_at) {
+    Date.new(2025, 5, 26)
+  } # Monday of calendar week 22 (attribute is a date in db)
+  let(:source_application_closing_at) {
+    Date.new(2025, 6, 6)
+  } # Friday of calendar week 23 (attribute is a date in db)
   let(:source_start_at) { DateTime.new(2025, 7, 23, 10, 23) } # Wednesday of calendar week 30, 10:23
   let(:source_finish_at) { DateTime.new(2025, 8, 1, 23, 59) } # Friday of calendar week 31, 23:59
 
@@ -21,11 +25,14 @@ describe Events::AnnualCourseDuplicateBuilder do
       application_opening_at: source_application_opening_at,
       application_closing_at: source_application_closing_at)
 
-    Event::Date.where(event: course).first.update!(start_at: source_start_at, finish_at: source_finish_at)
+    Event::Date.where(event: course).first.update!(start_at: source_start_at,
+      finish_at: source_finish_at)
 
     [:de, :fr, :it].each do |locale|
       translation = Event::Translation.find_or_initialize_by(event_id: course.id, locale:)
-      translation.attributes = translated_attributes.index_with { [Faker::Lorem.words.join, locale].join(" ") }
+      translation.attributes = translated_attributes.index_with {
+        [Faker::Lorem.words.join, locale].join(" ")
+      }
       translation.save!
     end
 
@@ -39,9 +46,12 @@ describe Events::AnnualCourseDuplicateBuilder do
       end
     end
 
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation, event: course))
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation, event: course))
-    Event::Course::Role::Leader.create!(participation: Fabricate(:event_participation, event: course))
+    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
+      event: course))
+    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
+      event: course))
+    Event::Course::Role::Leader.create!(participation: Fabricate(:event_participation,
+      event: course))
 
     course.refresh_participant_counts!
     course.reload
@@ -67,11 +77,19 @@ describe Events::AnnualCourseDuplicateBuilder do
       expect(duplicate.participant_count).to eq(0)
       expect(duplicate.teamer_count).to eq(0)
 
+      # rubocop:todo Layout/LineLength
       expect(duplicate.application_opening_at).to eq(Date.new(2026, 5, 25)) # Monday of calendar week 22
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(duplicate.application_closing_at).to eq(Date.new(2026, 6, 5)) # Friday of calendar week 23
+      # rubocop:enable Layout/LineLength
 
+      # rubocop:todo Layout/LineLength
       expect(duplicate.dates.first.start_at).to eq(DateTime.new(2026, 7, 22, 10, 23)) # Wednesday of calendar week 30, 10:23
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(duplicate.dates.first.finish_at).to eq(DateTime.new(2026, 7, 31, 23, 59)) # Friday of calendar week 31, 23:59
+      # rubocop:enable Layout/LineLength
 
       expect(duplicate.translations.size).to eq(3)
       [:de, :fr, :it].each do |locale|

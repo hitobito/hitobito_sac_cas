@@ -58,10 +58,13 @@ describe Dropdown::Events::State do
     end
 
     it "renders email skipping popover only for one of two state transitions" do
-      expect(dom).to have_css "a.dropdown-item:not([data-bs-toggle])", text: "Zurück zur abgeschlossenen Anmeldung"
+      expect(dom).to have_css "a.dropdown-item:not([data-bs-toggle])",
+        text: "Zurück zur abgeschlossenen Anmeldung"
       expect(dom).to have_css "a.dropdown-item[data-bs-toggle]", text: "Bereit zur Durchführung"
 
+      # rubocop:todo Layout/LineLength
       content = Capybara::Node::Simple.new(dom.find_link("Bereit zur Durchführung")["data-bs-content"])
+      # rubocop:enable Layout/LineLength
       expect(content).to have_button "E-Mails verschicken", name: "button"
       expect(content).to have_button "Keine E-Mails verschicken", name: "skip_emails", value: "true"
     end

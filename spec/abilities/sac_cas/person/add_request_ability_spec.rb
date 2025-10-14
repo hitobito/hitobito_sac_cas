@@ -17,7 +17,8 @@ describe Person::AddRequestAbility do
     let(:event) { events(:section_tour) }
 
     before do
-      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: user)
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+        person: user)
     end
 
     it "is able to add without request from same layer" do

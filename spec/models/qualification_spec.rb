@@ -16,7 +16,8 @@ describe Qualification do
   end
 
   it "is valid when finish_at is after start_at" do
-    qualification = Fabricate.build(:qualification, start_at: 1.day.ago, finish_at: 1.month.from_now)
+    qualification = Fabricate.build(:qualification, start_at: 1.day.ago,
+      finish_at: 1.month.from_now)
 
     expect(qualification).to be_valid
     expect(qualification.errors.full_messages).to be_empty

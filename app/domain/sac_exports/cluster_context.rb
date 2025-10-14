@@ -19,11 +19,15 @@ module SacExports
     end
 
     def credentials
+      # rubocop:todo Layout/LineLength
       @credentials ||= Credentials.new(**JSON.parse(`oc get --namespace #{namespace} secret pg-database-credentials -o json | jq '.data'`))
+      # rubocop:enable Layout/LineLength
     end
 
     def dbconfig
+      # rubocop:todo Layout/LineLength
       @dbconfig ||= ActiveRecord::Base.configurations.find_db_config(:development).configuration_hash.merge(
+        # rubocop:enable Layout/LineLength
         host: host,
         database: namespace,
         username: Base64.decode64(credentials.username),

@@ -18,7 +18,9 @@ describe Invoices::Abacus::CancelInvoiceJob do
       sales_order = double
       allow(Invoices::Abacus::SalesOrder).to receive(:new).with(any_args)
         .and_return(sales_order)
+      # rubocop:todo Layout/LineLength
       allow(Invoices::Abacus::SalesOrderInterface).to receive(:new).and_return(sales_order_interface)
+      # rubocop:enable Layout/LineLength
     end
 
     it "cancels the invoice in the abacus system" do

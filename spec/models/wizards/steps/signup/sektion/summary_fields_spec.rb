@@ -78,7 +78,9 @@ describe Wizards::Steps::Signup::Sektion::SummaryFields do
         fields.adult_consent = "0"
         expect(fields).not_to be_valid
         expect(fields).to have(1).error_on(:adult_consent)
+        # rubocop:todo Layout/LineLength
         expect(fields.errors.full_messages).to eq ["Einverständniserklärung der Erziehungsberechtigten muss akzeptiert werden"]
+        # rubocop:enable Layout/LineLength
       end
     end
   end
@@ -88,8 +90,12 @@ describe Wizards::Steps::Signup::Sektion::SummaryFields do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
 
       it "has expected text" do
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
         expect(fields.info_alert_text).to eq "Dein verbindlicher Antrag wird an die Sektion SAC Blüemlisalp weitergeleitet. " \
           "Über die Aufnahme neuer Mitglieder entscheidet die Sektion. Du wirst per E-Mail informiert, sobald der Entscheid gefällt ist."
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -97,7 +103,9 @@ describe Wizards::Steps::Signup::Sektion::SummaryFields do
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
       it "has expected text" do
+        # rubocop:todo Layout/LineLength
         expect(fields.info_alert_text).to eq "Nachdem du deine Mitgliedschaft verbindlich beantragt hast, wird dir die Rechnung per E-Mail zugestellt."
+        # rubocop:enable Layout/LineLength
       end
     end
   end

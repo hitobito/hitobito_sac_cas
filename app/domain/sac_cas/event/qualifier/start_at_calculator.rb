@@ -19,7 +19,8 @@ module SacCas::Event::Qualifier::StartAtCalculator
 
   def event_training_days
     if @event.is_a?(Event::Course)
-      @event.participations.find_by(participant_id: @person.id, participant_type: Person.sti_name).actual_days || @event.training_days
+      @event.participations.find_by(participant_id: @person.id,
+        participant_type: Person.sti_name).actual_days || @event.training_days
     else
       @event.training_days
     end

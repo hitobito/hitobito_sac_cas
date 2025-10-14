@@ -40,7 +40,8 @@ describe Event::RegisterController do
         expect(Devise::Mailer).to receive(:reset_password_instructions).and_call_original
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: attrs}
+          put :register,
+            params: {group_id: group.id, id: event.id, event_participation_contact_data: attrs}
         end.to change { Person.count }.by(1)
           .and change { Group::AboBasicLogin::BasicLogin.count }.by(1)
 
@@ -49,7 +50,9 @@ describe Event::RegisterController do
         expect(person.roles.size).to eq(1)
         expect(person.roles.first.type).to eq(Group::AboBasicLogin::BasicLogin.sti_name)
         is_expected.to redirect_to(new_group_event_participation_path(group, event))
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to include "Deine persönlichen Daten wurden aufgenommen. Bitte ergänze nun noch die Angaben"
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -58,7 +61,8 @@ describe Event::RegisterController do
         attrs.delete(:phone_number_mobile_attributes)
 
         expect do
-          put :register, params: {group_id: group.id, id: event.id, event_participation_contact_data: attrs}
+          put :register,
+            params: {group_id: group.id, id: event.id, event_participation_contact_data: attrs}
         end.not_to change { Person.count }
       end
     end

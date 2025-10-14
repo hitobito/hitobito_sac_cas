@@ -113,7 +113,13 @@ class People::SacMembership
   end
 
   def recent_abonnent_magazin_roles
-    @person.roles.with_inactive.where(type: [Group::AboMagazin::Abonnent.sti_name, Group::AboMagazin::Neuanmeldung.sti_name]).where("end_on >= ? OR end_on IS NULL", 11.months.ago.to_date).joins(:group).order("roles.end_on, groups.name DESC")
+    # rubocop:todo Layout/LineLength
+    @person.roles.with_inactive.where(type: [Group::AboMagazin::Abonnent.sti_name, Group::AboMagazin::Neuanmeldung.sti_name]).where(
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
+      "end_on >= ? OR end_on IS NULL", 11.months.ago.to_date
+    ).joins(:group).order("roles.end_on, groups.name DESC")
+    # rubocop:enable Layout/LineLength
   end
 
   def abonnent_magazin?
@@ -130,7 +136,9 @@ class People::SacMembership
   def family_id
     return unless family?
 
+    # rubocop:todo Layout/LineLength
     @person.household_key.to_s.start_with?("F") ? @person.household_key : "F#{@person.household_key}"
+    # rubocop:enable Layout/LineLength
   end
 
   def paying_person?(beitragskategorie)
@@ -200,11 +208,15 @@ class People::SacMembership
 
   def neuanmeldung_stammsektion_types = SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES.map(&:sti_name)
 
+  # rubocop:todo Layout/LineLength
   def neuanmeldung_nv_stammsektion_types = SacCas::NEUANMELDUNG_NV_STAMMSEKTION_ROLES.map(&:sti_name)
+  # rubocop:enable Layout/LineLength
 
   def neuanmeldung_zusatzsektion_types = SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.map(&:sti_name)
 
+  # rubocop:todo Layout/LineLength
   def neuanmeldung_nv_zusatzsektion_types = SacCas::NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES.map(&:sti_name)
+  # rubocop:enable Layout/LineLength
 
   def abonnent_magazin_types = SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
 

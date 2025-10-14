@@ -18,7 +18,9 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
   let!(:abonnent_2) { Fabricate(:person, abacus_subject_key: "124", country: "CH") }
   let!(:abonnent_role_2) { create_role(abonnent_2) }
 
-  let!(:abonnent_3) { Fabricate(:person, abacus_subject_key: "125", country: "DE", zip_code: "12345") }
+  let!(:abonnent_3) {
+    Fabricate(:person, abacus_subject_key: "125", country: "DE", zip_code: "12345")
+  }
   let!(:abonnent_role_3) { create_role(abonnent_3) }
 
   let!(:abonnent_4) { Fabricate(:person, abacus_subject_key: "126", country: "CH") }
@@ -46,18 +48,26 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
 
   describe "#error" do
     it "creates log entry when job crashes" do
-      expect { subject.error(subject, exception) }.to change { HitobitoLogEntry.where(level: :error).count }.by(1)
+      expect { subject.error(subject, exception) }.to change {
+        HitobitoLogEntry.where(level: :error).count
+      }.by(1)
 
+      # rubocop:todo Layout/LineLength
       expect(HitobitoLogEntry.last.message).to eq "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. " \
               "Es erfolgt ein weiterer Versuch."
+      # rubocop:enable Layout/LineLength
     end
   end
 
   describe "#failure" do
     it "creates log entry when job fails" do
-      expect { subject.failure(subject) }.to change { HitobitoLogEntry.where(level: :error).count }.by(1)
+      expect { subject.failure(subject) }.to change {
+        HitobitoLogEntry.where(level: :error).count
+      }.by(1)
 
+      # rubocop:todo Layout/LineLength
       expect(HitobitoLogEntry.last.message).to eq "Rollierender Inkassolauf Abo Magazin Die Alpen abgebrochen."
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -72,47 +82,60 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
 
   describe "#active_abonnenten" do
     it "includes every abonnent role where role end in next 62 days" do
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2,
+        abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include abonnent where role ends in more than 62 days" do
       abonnent_role.update_column(:end_on, 70.days.from_now)
       expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3,
+        abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include roles when role is terminated" do
       abonnent_role.update_column(:terminated, true)
       expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3,
+        abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does not include roles where person does not have a abacus subject key" do
       abonnent.update_column(:abacus_subject_key, nil)
       expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3,
+        abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
+    # rubocop:todo Layout/LineLength
     it "does not include roles with person who already has external invoice abo magazin in this year" do
-      ExternalInvoice::AboMagazin.create!(person: abonnent, year: (abonnent_role.end_on + 1.day).year)
+      # rubocop:enable Layout/LineLength
+      ExternalInvoice::AboMagazin.create!(person: abonnent,
+        year: (abonnent_role.end_on + 1.day).year)
       expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3,
+        abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "does include roles with person who already has external invoice but not in this year" do
       ExternalInvoice::AboMagazin.create!(person: abonnent, year: 3.years.ago.year)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2,
+        abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
 
     it "only checks for external invoice with abo magazin type" do
       ExternalInvoice::AboMagazin.create!(person: abonnent, year: 1.year.ago.year)
-      ExternalInvoice::SacMembership.create!(person: abonnent, year: (abonnent_role.end_on + 1.day).year)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      ExternalInvoice::SacMembership.create!(person: abonnent,
+        year: (abonnent_role.end_on + 1.day).year)
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role, abonnent_role_2,
+        abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
 
       # add abo magazin invoice for this year, now abonnent should not be included anymore
-      ExternalInvoice::AboMagazin.create!(person: abonnent, year: (abonnent_role.end_on + 1.day).year)
+      ExternalInvoice::AboMagazin.create!(person: abonnent,
+        year: (abonnent_role.end_on + 1.day).year)
       expect(subject.send(:active_abonnenten)).not_to include(abonnent_role)
-      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3, abonnent_role_4, abonnent_role_5, abonnent_role_6]
+      expect(subject.send(:active_abonnenten)).to match_array [abonnent_role_2, abonnent_role_3,
+        abonnent_role_4, abonnent_role_5, abonnent_role_6]
     end
   end
 
@@ -127,10 +150,15 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
     end
 
     before do
-      Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
+      Invoices::Abacus::Config.instance_variable_set(:@config,
+        {host: host, mandant: mandant}.stringify_keys)
+      # rubocop:todo Layout/LineLength
       allow(Invoices::Abacus::SalesOrderInterface).to receive(:new).and_return(sales_order_interface)
+      # rubocop:enable Layout/LineLength
       allow(abacus_client).to receive(:token).and_return("42")
+      # rubocop:todo Layout/LineLength
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
+      # rubocop:enable Layout/LineLength
 
       stub_const("Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob::SLICE_SIZE", 2)
 
@@ -156,13 +184,17 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
           /xm,
           headers: {
             "Authorization" => "Bearer 42",
+            # rubocop:todo Layout/LineLength
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            # rubocop:enable Layout/LineLength
           }
         )
         .to_return(
           status: 202,
           body: batch_response_sales_orders,
+          # rubocop:todo Layout/LineLength
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+          # rubocop:enable Layout/LineLength
         )
 
       stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
@@ -187,17 +219,21 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
           /xm,
           headers: {
             "Authorization" => "Bearer 42",
+            # rubocop:todo Layout/LineLength
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            # rubocop:enable Layout/LineLength
           }
         )
         .to_return(
           status: 202,
           body: batch_response_sales_orders,
+          # rubocop:todo Layout/LineLength
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+          # rubocop:enable Layout/LineLength
         )
     end
 
-    def expect_external_invoice_values_for(abonnent, abonnent_role)
+    def expect_external_invoice_values_for(abonnent, abonnent_role) # rubocop:todo Metrics/AbcSize
       external_invoice = abonnent.external_invoices.first
 
       expect(external_invoice.person_id).to eq abonnent.id
@@ -233,13 +269,17 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
             /xm,
             headers: {
               "Authorization" => "Bearer 42",
+              # rubocop:todo Layout/LineLength
               "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+              # rubocop:enable Layout/LineLength
             }
           )
           .to_return(
             status: 202,
             body: batch_response_sales_orders,
+            # rubocop:todo Layout/LineLength
             headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+            # rubocop:enable Layout/LineLength
           )
       end
 
@@ -253,12 +293,18 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
       end
 
       it "Creates the invoices" do
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role, abonnent_role.end_on + 1.day).and_call_original
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_2, abonnent_role_2.end_on + 1.day).and_call_original
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_3, abonnent_role_3.end_on + 1.day).and_call_original
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_4, abonnent_role_4.end_on + 1.day).and_call_original
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_5, abonnent_role_5.end_on + 1.day).and_call_original
-        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_6, abonnent_role_6.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role,
+          abonnent_role.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_2,
+          abonnent_role_2.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_3,
+          abonnent_role_3.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_4,
+          abonnent_role_4.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_5,
+          abonnent_role_5.end_on + 1.day).and_call_original
+        expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(abonnent_role_6,
+          abonnent_role_6.end_on + 1.day).and_call_original
 
         expect { subject.perform }
           .to change(ExternalInvoice, :count).by(6)
@@ -296,12 +342,16 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
             /xm,
             headers: {
               "Authorization" => "Bearer 42",
+              # rubocop:todo Layout/LineLength
               "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+              # rubocop:enable Layout/LineLength
             }
           ).to_return(
             status: 202,
             body: batch_response_sales_orders_with_error,
+            # rubocop:todo Layout/LineLength
             headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+            # rubocop:enable Layout/LineLength
           )
       end
 
@@ -338,7 +388,9 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
             /xm,
             headers: {
               "Authorization" => "Bearer 42",
+              # rubocop:todo Layout/LineLength
               "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+              # rubocop:enable Layout/LineLength
             }
           )
           .to_return(
@@ -353,7 +405,9 @@ describe Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob do
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
 
         expect(HitobitoLogEntry.where(level: :error).last.message).to eq(
+          # rubocop:todo Layout/LineLength
           "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. Es erfolgt ein weiterer Versuch."
+          # rubocop:enable Layout/LineLength
         )
       end
     end

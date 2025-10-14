@@ -40,7 +40,9 @@ describe People::ExternalInvoicesController do
 
       it "redirects to the person's external invoice page" do
         get :show, params: {invoice_id: invoice.id}
-        expect(response).to redirect_to external_invoices_group_person_path(person.primary_group.id, person.id)
+        expect(response).to redirect_to external_invoices_group_person_path(
+          person.primary_group.id, person.id
+        )
       end
     end
   end
@@ -96,8 +98,10 @@ describe People::ExternalInvoicesController do
             expect(page).to have_selector("td", text: invoice.abacus_sales_order_key.to_s)
             expect(page).to have_selector("td", text: invoice.total.to_s)
             expect(page).to have_selector("td", text: I18n.l(invoice.issued_at, format: "%d.%m.%Y"))
-            expect(page).to have_selector("td", text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
-            expect(page).to have_selector("td", text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
+            expect(page).to have_selector("td",
+              text: I18n.l(invoice.created_at, format: "%d.%m.%Y %H:%M"))
+            expect(page).to have_selector("td",
+              text: I18n.l(invoice.updated_at, format: "%d.%m.%Y %H:%M"))
           end
         end
       end
@@ -126,7 +130,9 @@ describe People::ExternalInvoicesController do
 
           get :index, params: {group_id: group_id, id: person.id}
 
+          # rubocop:todo Layout/LineLength
           expect(response.body).to have_selector("a[data-method='post'][href='/de/groups/#{group_id}/people/#{person.id}/external_invoices/#{invoice.id}/cancel']") do |button|
+            # rubocop:enable Layout/LineLength
             expect(button).to have_text("Stornieren")
           end
         end
@@ -172,7 +178,9 @@ describe People::ExternalInvoicesController do
         expect(invoice.reload.state).to eq("open")
         post :cancel, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
         expect(invoice.reload.state).to eq("cancelled")
+        # rubocop:todo Layout/LineLength
         expect(flash[:notice]).to eq("Die Rechnung #{invoice.id} (Auftrags-Nr. #{invoice.abacus_sales_order_key}) wird storniert")
+        # rubocop:enable Layout/LineLength
         expect(response).to redirect_to(external_invoices_group_person_path(group_id, person.id))
       end
     end

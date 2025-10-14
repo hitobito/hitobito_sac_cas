@@ -47,7 +47,9 @@ module Wizards::Steps::Signup::Sektion
 
     def assert_family_age
       calculator = SacCas::Beitragskategorie::Calculator.new(Person.new(birthday:))
+      # rubocop:todo Layout/LineLength
       return if calculator.family_age? || !calculator.youth? # everything in order, no need to check further
+      # rubocop:enable Layout/LineLength
 
       errors.add(:birthday, :youth_not_allowed_in_family,
         from_age: SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.end.next,

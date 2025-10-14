@@ -56,6 +56,8 @@ module SacCas::People::Wso2LegacyPassword
   end
 
   def can_clear_legacy_password_attributes?
+    # rubocop:todo Layout/LineLength
     wso2_legacy_password_hash.present? && wso2_legacy_password_salt.present? && encrypted_password.present?
+    # rubocop:enable Layout/LineLength
   end
 end

@@ -41,7 +41,8 @@ module Wizards::Steps::Signup::Sektion
 
     def assert_adult_count
       if members.count(&:adult?) >= MAX_ADULT_COUNT
-        message = I18n.t("activerecord.errors.messages.too_many_adults_in_family", max_adults: MAX_ADULT_COUNT)
+        message = I18n.t("activerecord.errors.messages.too_many_adults_in_family",
+          max_adults: MAX_ADULT_COUNT)
         errors.add(:base, message)
       end
     end

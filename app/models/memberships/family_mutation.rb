@@ -13,7 +13,8 @@ module Memberships
 
     delegate :sac_membership, to: :person
 
-    def initialize(person, new_role_end_on: nil, new_role_start_on: Date.current, replaced_role_end_on: Date.current.yesterday)
+    def initialize(person, new_role_end_on: nil, new_role_start_on: Date.current,
+      replaced_role_end_on: Date.current.yesterday)
       @person = person
       @new_role_start_on = new_role_start_on
       @new_role_end_on = new_role_end_on
@@ -52,7 +53,8 @@ module Memberships
       ensure_can_change_zusatzsektion_to_family(role)
 
       person.household.people.each do |family_member|
-        conflicting_role = find_zusatzsektion_role(role.group.layer_group_id, person: family_member) ||
+        conflicting_role = find_zusatzsektion_role(role.group.layer_group_id,
+          person: family_member) ||
           find_neuanmeldung_zusatzsektion_role(role.group.layer_group_id, person: family_member)
         if conflicting_role
           replace_role!(conflicting_role, role, beitragskategorie: category_family)
@@ -64,7 +66,7 @@ module Memberships
 
     private
 
-    def ensure_can_change_zusatzsektion_to_family(role)
+    def ensure_can_change_zusatzsektion_to_family(role) # rubocop:todo Metrics/CyclomaticComplexity
       person.roles.include?(role) &&
         person.sac_family_main_person &&
         role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
@@ -140,8 +142,12 @@ module Memberships
     end
 
     def find_neuanmeldung_zusatzsektion_role(layer_group_id, person: @person)
+      # rubocop:todo Layout/LineLength
       person.sac_membership.neuanmeldung_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:}) ||
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         person.sac_membership.neuanmeldung_nv_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
+      # rubocop:enable Layout/LineLength
     end
 
     def raise_if_terminated(*roles)

@@ -74,7 +74,8 @@ describe Event::ParticipationAbility do
     end
 
     context "assistant leader aspirant" do
-      it_behaves_like "leader role", role_type: Event::Course::Role::AssistantLeaderAspirant.sti_name
+      it_behaves_like "leader role",
+        role_type: Event::Course::Role::AssistantLeaderAspirant.sti_name
     end
 
     context "participant" do
@@ -209,7 +210,9 @@ describe Event::ParticipationAbility do
 
     describe "update_full" do
       context "with participations_full event role" do
-        let(:own_participation) { build(:bluemlisalp_funktionaere, event: top_course, person: role.person) }
+        let(:own_participation) {
+          build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
+        }
 
         before do
           Event::Course::Role::Leader.create!(participation: own_participation)

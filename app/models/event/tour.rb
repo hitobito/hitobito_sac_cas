@@ -28,7 +28,9 @@ class Event::Tour < Event
     draft: [:approved, :canceled],
     approved: [:draft, :published, :canceled],
     published: [:approved, :canceled, :closed],
+    # rubocop:todo Layout/LineLength
     canceled: [:draft, :approved, :published], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
+    # rubocop:enable Layout/LineLength
     closed: [:published]
   }.freeze
 

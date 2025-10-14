@@ -50,7 +50,9 @@ module Events::State
   end
 
   def set_default_state
+    # rubocop:todo Layout/LineLength
     # Explicitly call self[:state].blank? because self.state is overridden in youth wagon to return first possible state if nil.
+    # rubocop:enable Layout/LineLength
     self.state = possible_states.first if self[:state].blank?
   end
 

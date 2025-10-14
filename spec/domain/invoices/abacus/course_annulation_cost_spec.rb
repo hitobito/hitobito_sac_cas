@@ -15,7 +15,10 @@ describe Invoices::Abacus::CourseAnnulationCost do
       Event::Date.new(start_at: "01.03.2024", finish_at: "31.03.2024")
     ])
   end
-  let(:participation) { Fabricate(:event_participation, event: course, participant: member, price: 200, price_category: :price_regular) }
+  let(:participation) {
+    Fabricate(:event_participation, event: course, participant: member, price: 200,
+      price_category: :price_regular)
+  }
 
   subject { described_class.new(participation) }
 
@@ -44,7 +47,8 @@ describe Invoices::Abacus::CourseAnnulationCost do
   context "#position_description_and_amount_cancelled" do
     it "returns description and correct amount" do
       allow(participation).to receive(:canceled_at).and_return(Date.new(2023, 12, 15))
-      expect(subject.position_description_and_amount_cancelled).to eq(["75% Annullationskosten", 150])
+      expect(subject.position_description_and_amount_cancelled).to eq(["75% Annullationskosten",
+        150])
     end
   end
 

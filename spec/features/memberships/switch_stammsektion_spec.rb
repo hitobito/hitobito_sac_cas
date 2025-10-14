@@ -44,15 +44,23 @@ describe "switching stammsektion", js: true do
     end
 
     it "displays correct info text when group needs confirmation" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(false)
+      # rubocop:enable Layout/LineLength
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       select "SAC Matterhorn"
       click_on "Weiter"
 
+      # rubocop:todo Layout/LineLength
+      # rubocop:todo Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(page).to have_text("Die Stammmitgliedschaft bei SAC Matterhorn wird als Einzel beantragt. Die Sektion umfasst einen manuellen Freigabeprozess. " \
         "Kläre bitte vorgängig die Mitgliederaufnahme mit SAC Matterhorn ab. Nimm die Fakturierung bitte nach nach dem Bestellen vor, " \
         "sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist per sofort gültigt.")
+      # rubocop:enable Layout/LineLength
+      # rubocop:enable Layout/LineLength
+      # rubocop:enable Layout/LineLength
     end
 
     it "displays correct info text when group doesn't need confirmation" do
@@ -61,9 +69,13 @@ describe "switching stammsektion", js: true do
       select "SAC Matterhorn"
       click_on "Weiter"
 
+      # rubocop:todo Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(page).to have_text("Die Stammmitgliedschaft bei SAC Matterhorn wird als Einzel beantragt. Hiermit wird keine Rechnung ausgelöst. Nimm die Fakturierung " \
         "bitte nach nach dem Bestellen vor, sofern eine neue Rechnung ausgestellt werden muss. Die Mitgliedschaft in der neuen Stammsektion ist " \
         "per sofort gültig.")
+      # rubocop:enable Layout/LineLength
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -82,15 +94,20 @@ describe "switching stammsektion", js: true do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
       expect(page).to have_css "li.active", text: "Sektion wählen"
+      # rubocop:todo Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(find(".alert-info").text).to include("Achtung: Der Stammsektionsektionswechsel wird für die gesamte " \
         "Familienmitgliedschaft beantragt. Davon betroffen sind: ", "Tenzing Norgay", "Frieda Norgay", "Nima Norgay")
+      # rubocop:enable Layout/LineLength
+      # rubocop:enable Layout/LineLength
       select "SAC Matterhorn"
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
       expect(page).to have_content "Beitragskategorien SAC Matterhorn"
       expect do
         click_on "Kostenpflichtig bestellen"
-        expect(page).to have_css "#flash .alert-success", text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
+        expect(page).to have_css "#flash .alert-success",
+          text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
       end.to change(Delayed::Job.where(queue: :mailers), :count).by(1)
     end
   end
@@ -104,7 +121,9 @@ describe "switching stammsektion", js: true do
     it "shows an alert info message" do
       click_link "Mitgliedschaft anpassen"
       click_link "Sektionswechsel beantragen"
+      # rubocop:todo Layout/LineLength
       expect(find(".alert-info").text).to include("kann wegen ungültigen Daten nicht durchgeführt werden")
+      # rubocop:enable Layout/LineLength
       expect(page).to have_text("Geburtsdatum ist leer")
     end
   end

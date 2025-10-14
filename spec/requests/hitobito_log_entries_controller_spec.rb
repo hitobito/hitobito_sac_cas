@@ -14,7 +14,12 @@ describe HitobitoLogEntriesController, type: :request do
 
   describe "GET hitobito_log_entries/rechnungen" do
     let(:invoice) { Fabricate(:external_invoice) }
-    let!(:log_entry) { HitobitoLogEntry.create!(category: "rechnungen", level: :error, message: "something went wrong", subject: invoice) }
+    let!(:log_entry) {
+      # rubocop:todo Layout/LineLength
+      HitobitoLogEntry.create!(category: "rechnungen", level: :error, message: "something went wrong",
+        # rubocop:enable Layout/LineLength
+        subject: invoice)
+    }
 
     it "renders ExternalInvoices with a correct link" do
       get "/de/hitobito_log_entries/rechnungen"

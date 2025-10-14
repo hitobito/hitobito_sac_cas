@@ -28,7 +28,10 @@ describe Person::SubscriptionsController do
     end
 
     describe "fundraising" do
-      let(:list) { Fabricate(:mailing_list, group: groups(:root), internal_key: SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY) }
+      let(:list) {
+        Fabricate(:mailing_list, group: groups(:root),
+          internal_key: SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY)
+      }
 
       it "hides list from subscribable" do
         get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}

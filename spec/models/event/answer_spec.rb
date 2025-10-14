@@ -9,9 +9,18 @@ require "spec_helper"
 
 describe Event::Answer do
   let(:event) { events(:top_course) }
-  let!(:question1) { Event::Question::Default.create(event:, question: "Ich bin Vegetarier", disclosure: "optional") }
-  let!(:question2) { Event::Question::Default.create(event:, question: "Sonst noch was?", disclosure: "optional") }
-  let!(:question3) { Event::Question::Default.create(event:, question: "GA oder Halbtax?", choices: "GA, Halbtax, nix", disclosure: "optional") }
+  let!(:question1) {
+    Event::Question::Default.create(event:, question: "Ich bin Vegetarier", disclosure: "optional")
+  }
+  let!(:question2) {
+    Event::Question::Default.create(event:, question: "Sonst noch was?", disclosure: "optional")
+  }
+  let!(:question3) {
+    # rubocop:todo Layout/LineLength
+    Event::Question::Default.create(event:, question: "GA oder Halbtax?", choices: "GA, Halbtax, nix",
+      # rubocop:enable Layout/LineLength
+      disclosure: "optional")
+  }
   let(:participation) { event.participations.first }
 
   context ".list" do

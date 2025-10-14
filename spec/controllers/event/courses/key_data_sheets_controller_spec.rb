@@ -64,7 +64,8 @@ describe Event::Courses::KeyDataSheetsController do
         expect(event.attachments.count).to eq(0)
 
         expect do
-          post :create, params: {group_id: group, event_id: event, participation_ids: participation.id.to_s}
+          post :create,
+            params: {group_id: group, event_id: event, participation_ids: participation.id.to_s}
         end.to change { Event::Attachment.count }.by(1)
 
         expect(event.attachments.count).to eq(1)
@@ -82,7 +83,8 @@ describe Event::Courses::KeyDataSheetsController do
         expect(event.attachments.count).to eq(0)
 
         expect do
-          post :create, params: {group_id: group, event_id: event, participation_ids: participation.id.to_s}
+          post :create,
+            params: {group_id: group, event_id: event, participation_ids: participation.id.to_s}
         end.to_not change { Event::Attachment.count }
 
         expect(event.attachments.count).to eq(0)

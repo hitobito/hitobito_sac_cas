@@ -13,7 +13,9 @@ describe Migrations::AdjustQualificationRecordsJob do
   let(:quali_kind) { qualification_kinds(:ski_leader) }
   let(:person) { Fabricate(:person) }
   let(:latest_quali) { person.qualifications.order(start_at: :desc).first }
-  let(:open_training_days) { Qualifications::List.new(person).qualifications.first.open_training_days }
+  let(:open_training_days) {
+    Qualifications::List.new(person).qualifications.first.open_training_days
+  }
 
   before do
     travel_to("2025-05-01")
@@ -26,11 +28,15 @@ describe Migrations::AdjustQualificationRecordsJob do
   end
 
   it "includes people with active qualifications" do
-    p1 = create_quali(person: Fabricate(:person), start_at: "2012-10-12", finish_at: "2028-12-31").person
-    _p2 = create_quali(person: Fabricate(:person), start_at: "2010-10-12", finish_at: "2024-12-31").person
+    p1 = create_quali(person: Fabricate(:person), start_at: "2012-10-12",
+      finish_at: "2028-12-31").person
+    _p2 = create_quali(person: Fabricate(:person), start_at: "2010-10-12",
+      finish_at: "2024-12-31").person
     infinite_kind = QualificationKind.create!(validity: nil, label: "Infinite")
-    _p3 = create_quali(person: Fabricate(:person), qualification_kind: infinite_kind, start_at: "2010-10-12").person
-    p4 = create_quali(person: Fabricate(:person), start_at: "2019-10-12", finish_at: "2025-12-31").person
+    _p3 = create_quali(person: Fabricate(:person), qualification_kind: infinite_kind,
+      start_at: "2010-10-12").person
+    p4 = create_quali(person: Fabricate(:person), start_at: "2019-10-12",
+      finish_at: "2025-12-31").person
     create_quali(person: p4, qualification_kind: infinite_kind, start_at: "2012-10-12").person
     expect(job.people_with_active_qualifications).to match_array([p1, p4])
   end
@@ -52,7 +58,9 @@ describe Migrations::AdjustQualificationRecordsJob do
     expect(quali2.reload.finish_at.to_s).to eq("2028-12-31")
   end
 
+  # rubocop:todo Layout/LineLength
   it "will have 2 open training days if qualification finishes correctly and latest training is after quali start year" do
+    # rubocop:enable Layout/LineLength
     create_external_training(start_at: "2025-01-15", finish_at: "2025-01-16", training_days: 1)
     create_external_training(start_at: "2023-08-12", finish_at: "2023-08-13", training_days: 3)
     create_quali(start_at: "2010-03-05", finish_at: "2029-12-31")
@@ -64,7 +72,9 @@ describe Migrations::AdjustQualificationRecordsJob do
     expect(open_training_days).to eq(2)
   end
 
+  # rubocop:todo Layout/LineLength
   it "will have 3 open training days if qualification finishes correctly and latest training is in quali start year" do
+    # rubocop:enable Layout/LineLength
     create_external_training(start_at: "2023-11-15", finish_at: "2023-11-16", training_days: 1)
     create_external_training(start_at: "2023-08-12", finish_at: "2023-08-13", training_days: 3)
     create_quali(start_at: "2010-03-05", finish_at: "2029-12-31")
@@ -89,7 +99,9 @@ describe Migrations::AdjustQualificationRecordsJob do
     expect(open_training_days).to eq(0)
   end
 
+  # rubocop:todo Layout/LineLength
   it "will have 3 open training days if qualification finishes too late and latest training is in quali start year" do
+    # rubocop:enable Layout/LineLength
     create_external_training(start_at: "2024-01-15", finish_at: "2024-01-16", training_days: 2)
     create_external_training(start_at: "2023-08-12", finish_at: "2023-08-13", training_days: 2)
     create_quali(start_at: "2010-03-05", finish_at: "2030-12-31")
@@ -101,7 +113,9 @@ describe Migrations::AdjustQualificationRecordsJob do
     expect(open_training_days).to eq(3)
   end
 
+  # rubocop:todo Layout/LineLength
   it "will have 1 open training days if qualification finishes too late and latest training is after quali start year" do
+    # rubocop:enable Layout/LineLength
     create_external_training(start_at: "2024-01-15", finish_at: "2024-01-16", training_days: 1)
     create_external_training(start_at: "2023-08-12", finish_at: "2023-08-13", training_days: 1)
     create_external_training(start_at: "2020-01-12", finish_at: "2020-01-13", training_days: 1)

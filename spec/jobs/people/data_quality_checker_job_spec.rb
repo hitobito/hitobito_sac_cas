@@ -20,7 +20,9 @@ describe People::DataQualityCheckerJob do
       affected_people = 4 # update data_quality
 
       expect do
-        expect_query_count { job.perform }.to eq(batch_selects + issues_created * 2 + affected_people)
+        expect_query_count {
+          job.perform
+        }.to eq(batch_selects + issues_created * 2 + affected_people)
       end.to change { person.data_quality_issues.count }.by(1)
         .and change { Person::DataQualityIssue.count }.by(issues_created)
     end

@@ -33,7 +33,9 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_person_ids
+    # rubocop:todo Layout/LineLength
     if @person.sac_family_main_person && @beitragskategorie.to_s == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
+      # rubocop:enable Layout/LineLength
       family_ids = @person.household_people.distinct.order(:id).pluck(:id)
       family_ids.present? ? "#{@person.id} (#{family_ids.join(", ")})" : @person.id
     else
@@ -56,6 +58,7 @@ class Signup::SektionMailer < ApplicationMailer
       @person,
       main: true
     )
-    ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false, locals: {active: true, group: @section, presenter:}).html_safe
+    ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false,
+      locals: {active: true, group: @section, presenter:}).html_safe
   end
 end

@@ -25,7 +25,8 @@ describe Export::Pdf::Passes::Membership do
   subject { described_class.new(member) }
 
   before do
-    member.update!(first_name: "Bob", last_name: "Muster", street: "Bergstrasse", housenumber: "42", zip_code: "4242", town: "Matterhorn")
+    member.update!(first_name: "Bob", last_name: "Muster", street: "Bergstrasse",
+      housenumber: "42", zip_code: "4242", town: "Matterhorn")
   end
 
   it "sanitizes filename" do
@@ -74,11 +75,17 @@ describe Export::Pdf::Passes::Membership do
     }
 
     let(:expected_image_positions) {
+      # rubocop:todo Layout/LineLength
       [{x: 141.208, y: 130.585, width: 721, height: 301, displayed_width: 103520.459, displayed_height: 18047.057},
-        {x: 47.0, y: 37.0, width: 70, height: 70, displayed_width: 7000.0, displayed_height: 7700.0},
-        {x: 14.0, y: 193.3, width: 640, height: 384, displayed_width: 12800.0, displayed_height: 4608.0},
-        {x: 496.714, y: 157.55607, width: 458, height: 375, displayed_width: 18267.329999999998, displayed_height: 12246.348750000001},
-        {x: 499.0, y: 33.126, width: 70, height: 70, displayed_width: 3850.0, displayed_height: 3850.0}]
+        # rubocop:enable Layout/LineLength
+        {x: 47.0, y: 37.0, width: 70, height: 70, displayed_width: 7000.0,
+         displayed_height: 7700.0},
+        {x: 14.0, y: 193.3, width: 640, height: 384, displayed_width: 12800.0,
+         displayed_height: 4608.0},
+        {x: 496.714, y: 157.55607, width: 458, height: 375, displayed_width: 18267.329999999998,
+         displayed_height: 12246.348750000001},
+        {x: 499.0, y: 33.126, width: 70, height: 70, displayed_width: 3850.0,
+         displayed_height: 3850.0}]
     }
 
     it "renders membership pass" do
@@ -151,8 +158,10 @@ describe Export::Pdf::Passes::Membership do
     }
 
     before do
+      # rubocop:todo Layout/LineLength
       member.first_name = %w[Jugemu Jugemu Goko-no Surikire Kaijarisuigyo-no
         Suigyomatsu Unraimatsu Furaimatsu Kuunerutokoro-ni Sumutokoro Yaburakoji-no Burakoji Paipopaipo].join(" ")
+      # rubocop:enable Layout/LineLength
       member.last_name = %w[Paipo-no Shuringan Shuringan-no Gurindai Gurindai-no Ponpokopii-no
         Ponpokona-no Chokyumei-no Chosuke].join(" ")
       member.save

@@ -13,7 +13,10 @@ describe VariousAbility do
   let(:ability) { Ability.new(role.person.reload) }
 
   context "as mitglied" do
-    let(:role) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)) }
+    let(:role) {
+      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+        group: groups(:bluemlisalp_mitglieder))
+    }
 
     it "may not index ChangelogEntry" do
       is_expected.not_to be_able_to(:index, ChangelogEntry)
@@ -21,7 +24,9 @@ describe VariousAbility do
   end
 
   context "as andere" do
-    let(:role) { Fabricate(Group::Geschaeftsstelle::Andere.name.to_sym, group: groups(:geschaeftsstelle)) }
+    let(:role) {
+      Fabricate(Group::Geschaeftsstelle::Andere.name.to_sym, group: groups(:geschaeftsstelle))
+    }
 
     it "may not view HitobitoLogEntry records" do
       is_expected.not_to be_able_to(:index, HitobitoLogEntry)
@@ -30,7 +35,9 @@ describe VariousAbility do
   end
 
   context "as mitarbeiter geschäftsstelle" do
-    let(:role) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle)) }
+    let(:role) {
+      Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle))
+    }
 
     it "may view HitobitoLogEntry records" do
       is_expected.to be_able_to(:index, HitobitoLogEntry)
@@ -43,7 +50,10 @@ describe VariousAbility do
   end
 
   context "as mitarbeiter lesend geschäftsstelle" do
-    let(:role) { Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym, group: groups(:geschaeftsstelle)) }
+    let(:role) {
+      Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym,
+        group: groups(:geschaeftsstelle))
+    }
 
     it "may view HitobitoLogEntry records" do
       is_expected.to be_able_to(:index, HitobitoLogEntry)

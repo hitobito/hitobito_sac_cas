@@ -32,18 +32,22 @@ module Migrations
 
     private
 
-    def create_last_qualifications(person)
+    # rubocop:todo Metrics/AbcSize
+    def create_last_qualifications(person) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
       person.qualifications.group_by(&:qualification_kind).each do |quali_kind, qualifications|
         next unless quali_kind.validity
 
         last_qualification = qualifications.max_by { |q| [q.finish_at, q.start_at] }
         finish_at = last_qualification.finish_at
+        # rubocop:todo Layout/LineLength
         if finish_at.year >= 2025 && finish_at.year - last_qualification.start_at.year > quali_kind.validity
+          # rubocop:enable Layout/LineLength
           create_qualification(last_qualification)
           @stats[quali_kind.label] << person.id
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def create_qualification(qualification)
       start_year = qualification.finish_at.year - qualification.qualification_kind.validity

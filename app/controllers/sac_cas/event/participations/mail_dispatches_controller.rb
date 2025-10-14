@@ -20,33 +20,63 @@ module SacCas::Event::Participations::MailDispatchesController
 
   private
 
+  # rubocop:todo Layout/LineLength
   def send_event_participation_canceled_mail = Event::ParticipationCanceledMailer.confirmation(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
+  # rubocop:todo Layout/LineLength
   def send_event_canceled_no_leader_mail = Event::CanceledMailer.no_leader(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
+  # rubocop:todo Layout/LineLength
   def send_event_canceled_minimum_participants_mail = Event::CanceledMailer.minimum_participants(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
   def send_event_canceled_weather_mail = Event::CanceledMailer.weather(participation).deliver_later
 
+  # rubocop:todo Layout/LineLength
   def send_event_participation_summon_mail = Event::ParticipationMailer.summon(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
-  def send_course_application_confirmation_assigned_mail = Event::ApplicationConfirmationMailer.confirmation(participation, mail_type).deliver_later
+  # rubocop:todo Layout/LineLength
+  def send_course_application_confirmation_assigned_mail = Event::ApplicationConfirmationMailer.confirmation(
+    # rubocop:enable Layout/LineLength
+    participation, mail_type
+  ).deliver_later
 
+  # rubocop:todo Layout/LineLength
   def send_event_participation_reject_rejected_mail = Event::ParticipationMailer.reject_rejected(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
+  # rubocop:todo Layout/LineLength
   def send_event_participation_reject_applied_mail = Event::ParticipationMailer.reject_applied(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
   def send_event_survey_mail = Event::SurveyMailer.survey(participation).deliver_later
 
-  def send_course_application_confirmation_unconfirmed_mail = Event::ApplicationConfirmationMailer.confirmation(participation, mail_type).deliver_later
+  # rubocop:todo Layout/LineLength
+  def send_course_application_confirmation_unconfirmed_mail = Event::ApplicationConfirmationMailer.confirmation(
+    # rubocop:enable Layout/LineLength
+    participation, mail_type
+  ).deliver_later
 
-  def send_course_application_confirmation_applied_mail = Event::ApplicationConfirmationMailer.confirmation(participation, mail_type).deliver_later
+  # rubocop:todo Layout/LineLength
+  def send_course_application_confirmation_applied_mail = Event::ApplicationConfirmationMailer.confirmation(
+    # rubocop:enable Layout/LineLength
+    participation, mail_type
+  ).deliver_later
 
+  # rubocop:todo Layout/LineLength
   def send_event_participant_reminder_mail = Event::ParticipantReminderMailer.reminder(participation).deliver_later
+  # rubocop:enable Layout/LineLength
 
-  def send_event_published_notice_mail = Event::PublishedMailer.notice(event, participation.person).deliver_later
+  def send_event_published_notice_mail = Event::PublishedMailer.notice(event,
+    participation.person).deliver_later
 
-  def send_event_leader_reminder_next_week_mail = Event::LeaderReminderMailer.reminder(participation, mail_type).deliver_later
+  def send_event_leader_reminder_next_week_mail = Event::LeaderReminderMailer.reminder(
+    participation, mail_type
+  ).deliver_later
 
-  def send_event_leader_reminder_8_weeks_mail = Event::LeaderReminderMailer.reminder(participation, mail_type).deliver_later
+  def send_event_leader_reminder_8_weeks_mail = Event::LeaderReminderMailer.reminder(participation,
+    mail_type).deliver_later
 end

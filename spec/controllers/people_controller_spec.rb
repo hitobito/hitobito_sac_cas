@@ -111,8 +111,12 @@ describe PeopleController do
     it "cannot update sac remarks" do
       expect do
         put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                              # rubocop:todo Layout/LineLength
                               person: {sac_remark_national_office: "example", sac_remark_section_1: "example"}}
-      end.not_to change { [admin.reload.sac_remark_national_office, admin.reload.sac_remark_section_1] }
+        # rubocop:enable Layout/LineLength
+      end.not_to change {
+                   [admin.reload.sac_remark_national_office, admin.reload.sac_remark_section_1]
+                 }
     end
 
     it "runs data quality check only once" do
@@ -162,7 +166,9 @@ describe PeopleController do
                                 person: {birthday: 5.years.ago}}
         end.not_to change { member.reload.birthday }
 
+        # rubocop:todo Layout/LineLength
         expect(response.body).to include("Geburtsdatum muss vor dem #{6.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
+        # rubocop:enable Layout/LineLength
       end
 
       it "cannot update birthday to before 120 years ago" do
@@ -171,7 +177,9 @@ describe PeopleController do
                                 person: {birthday: 121.years.ago}}
         end.not_to change { member.reload.birthday }
 
+        # rubocop:todo Layout/LineLength
         expect(response.body).to include("Geburtsdatum muss nach dem #{120.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
+        # rubocop:enable Layout/LineLength
       end
 
       it "does not validate if birthday was not changed" do
@@ -185,7 +193,9 @@ describe PeopleController do
         member.reload
 
         expect(member.first_name).to eq("changed")
+        # rubocop:todo Layout/LineLength
         expect(response.body).to_not include("Geburtsdatum muss nach dem 31.12.#{Date.current.year - 120} liegen.")
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -245,7 +255,8 @@ describe PeopleController do
 
     it "can update advertising" do
       expect do
-        put :update, params: {id: admin.id, group_id: admin.groups.first.id, person: {advertising: false}}
+        put :update,
+          params: {id: admin.id, group_id: admin.groups.first.id, person: {advertising: false}}
       end.to change { admin.reload.advertising }.from(true).to(false)
     end
   end

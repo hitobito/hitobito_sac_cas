@@ -21,7 +21,9 @@ module SacCas::Export::Tabular::People::PersonRow
   private
 
   def membership_roles
-    entry.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+    entry.roles_unscoped.select { |role|
+      SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type)
+    }
   end
 
   def terminated_role

@@ -122,7 +122,8 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
 
   context "when performing job" do
     it "calls household destroy for each family" do
-      allow(job).to receive(:affected_family_people).and_return([family_member, people(:familienmitglied2)])
+      allow(job).to receive(:affected_family_people).and_return([family_member,
+        people(:familienmitglied2)])
       expect(family_member.household).to receive(:destroy).exactly(:once)
       expect(people(:familienmitglied2).household).to receive(:destroy).exactly(:once)
       job.perform

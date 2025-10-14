@@ -50,7 +50,9 @@ module Invoices
         return @huts if defined?(@huts)
 
         section = group.is_a?(Group::Ortsgruppe) ? group.parent : group
+        # rubocop:todo Layout/LineLength
         @huts = section.descendants.without_deleted.exists?(type: Group::SektionsClubhuette.sti_name)
+        # rubocop:enable Layout/LineLength
       end
 
       def config

@@ -54,10 +54,13 @@ describe Wizards::Memberships::SwapStammZusatzsektion do
             group: ausserberg_mitglieder,
             person: person
           )
-          expect(wizard.groups.map(&:name)).to match_array ["SAC Blüemlisalp Ausserberg", "SAC Matterhorn"]
+          expect(wizard.groups.map(&:name)).to match_array ["SAC Blüemlisalp Ausserberg",
+            "SAC Matterhorn"]
         end
 
+        # rubocop:todo Layout/LineLength
         it "exludes zusatzsektion if beitragkategorie does not match stammsektion beitragskategorie" do
+          # rubocop:enable Layout/LineLength
           role = Fabricate(
             Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
             group: ausserberg_mitglieder,
@@ -78,8 +81,14 @@ describe Wizards::Memberships::SwapStammZusatzsektion do
         expect { expect(wizard.save!).to eq true }
           .to change { stammsektion.name }.from("SAC Blüemlisalp").to("SAC Matterhorn")
           .and change { zusatzsektion.name }.from("SAC Matterhorn").to("SAC Blüemlisalp")
-          .and change { familienmitglied2.sac_membership.stammsektion.name }.from("SAC Blüemlisalp").to("SAC Matterhorn")
-          .and change { familienmitglied2.sac_membership.zusatzsektion_roles.first.group.parent.name }.from("SAC Matterhorn").to("SAC Blüemlisalp")
+          .and change {
+                 familienmitglied2.sac_membership.stammsektion.name
+               }.from("SAC Blüemlisalp").to("SAC Matterhorn")
+          .and change {
+                 # rubocop:todo Layout/LineLength
+                 familienmitglied2.sac_membership.zusatzsektion_roles.first.group.parent.name
+               }.from("SAC Matterhorn").to("SAC Blüemlisalp")
+          # rubocop:enable Layout/LineLength
           .and not_change { Role.count }
       end
 

@@ -11,7 +11,9 @@ describe People::Membership::VerifyController do
   let(:person) { people(:mitglied) }
   let!(:token) { person.membership_verify_token }
 
+  # rubocop:todo Layout/LineLength
   # Do not raise server errors to avoid "No route matches [GET] /favicon.ico" in requests without user
+  # rubocop:enable Layout/LineLength
   before { Capybara.raise_server_errors = false }
 
   it "shows invalid token information" do
@@ -48,7 +50,9 @@ describe People::Membership::VerifyController do
       it "has name and member info before the alert" do
         visit "/verify_membership/#{person.membership_verify_token}"
         expect(page.body.index(full_name)).to be < page.body.index("Mitgliedschaft gültig")
+        # rubocop:todo Layout/LineLength
         expect(page.body.index("Mitglied (Stammsektion) (Einzel")).to be > page.body.index("Mitgliedschaft gültig")
+        # rubocop:enable Layout/LineLength
       end
     end
 

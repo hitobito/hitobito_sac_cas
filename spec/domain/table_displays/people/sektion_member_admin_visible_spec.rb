@@ -22,9 +22,14 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
     roles(:mitglied).update!(end_on: Date.new(2025, 3, 10))
   end
 
-  [[Person, [:roles_with_ended_readable, {roles_unscoped: :group}]], [Event::Participation, [:roles_with_ended_readable, {person: {roles_unscoped: :group}}]]].each do |model_class, expected_includes|
+  [[Person, [:roles_with_ended_readable, {roles_unscoped: :group}]],
+    [Event::Participation,
+      [:roles_with_ended_readable,
+        {person: {roles_unscoped: :group}}]]].each do |model_class, expected_includes|
     context "table display on #{model_class}" do
-      subject(:column) { TableDisplays::People::TerminateOnColumn.new(ability, model_class: model_class) }
+      subject(:column) {
+        TableDisplays::People::TerminateOnColumn.new(ability, model_class: model_class)
+      }
 
       context "as admin" do
         it "shows value" do
@@ -34,7 +39,10 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
 
       context "in section" do
         context "with schreibrecht" do
-          let(:current_user) { Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name, group: sektion_mitglieder).person }
+          let(:current_user) {
+            Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name,
+              group: sektion_mitglieder).person
+          }
 
           it "shows value" do
             expect(column.value_for(mitglied, :terminated_on)).to eq "10.03.2025"
@@ -42,7 +50,10 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
         end
 
         context "with mitgliederverwaltung" do
-          let(:current_user) { Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+          let(:current_user) {
+            Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
+              group: groups(:bluemlisalp_funktionaere)).person
+          }
 
           it "shows value" do
             expect(column.value_for(mitglied, :terminated_on)).to eq "10.03.2025"
@@ -51,7 +62,10 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
       end
 
       context "from outside of sektion" do
-        let(:current_user) { Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name, group: groups(:matterhorn_mitglieder)).person }
+        let(:current_user) {
+          Fabricate(Group::SektionsMitglieder::Schreibrecht.sti_name,
+            group: groups(:matterhorn_mitglieder)).person
+        }
 
         it "shows value because we have show_full via zusatzsektion " do
           expect(column.value_for(mitglied, :terminated_on)).to eq "10.03.2025"
@@ -138,7 +152,8 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
         let(:ability) { Ability.new(people(:admin)) }
 
         it "returns values as permission check succeeds" do
-          expect(column.value_for(participation, :invoice_state)).to eq [participation, :invoice_state]
+          expect(column.value_for(participation,
+            :invoice_state)).to eq [participation, :invoice_state]
         end
       end
 

@@ -11,8 +11,13 @@ describe Event::Courses::InvoicesController do
   let(:admin) { people(:admin) }
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course, price_member: 5, price_regular: 10) }
-  let(:participation) { Fabricate(:event_participation, event:, participant: participant, price: 10, price_category: "price_regular", application_id: -1) }
-  let(:params) { {group_id: event.group_ids.first, event_id: event.id, participation_id: participation.id} }
+  let(:participation) {
+    Fabricate(:event_participation, event:, participant: participant, price: 10,
+      price_category: "price_regular", application_id: -1)
+  }
+  let(:params) {
+    {group_id: event.group_ids.first, event_id: event.id, participation_id: participation.id}
+  }
 
   describe "GET#new" do
     context "as participant" do
@@ -64,7 +69,8 @@ describe Event::Courses::InvoicesController do
       end
 
       it "returns unprocessable_entity when invalid price_category is passed" do
-        params[:event_participation_invoice_form] = {price_category: "this_price_category_doesnt_exist"}
+        params[:event_participation_invoice_form] =
+          {price_category: "this_price_category_doesnt_exist"}
         get :recalculate, params: params
         expect(response.status).to eq 422
       end
@@ -126,8 +132,11 @@ describe Event::Courses::InvoicesController do
         expect(ExternalInvoice.last.sent_at).to eq Date.new(2025, 12, 12)
       end
 
+      # rubocop:todo Layout/LineLength
       it "does not update price and price_category when participation state is absent but enqueses job with passed price" do
-        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, hash_including(custom_price: 4000))
+        # rubocop:enable Layout/LineLength
+        expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation,
+          hash_including(custom_price: 4000))
         participation.update_column(:state, "absent")
         post :create, params: params
         expect(participation.reload.price_category).not_to eq "price_member"

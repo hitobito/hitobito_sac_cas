@@ -18,7 +18,9 @@ describe SearchStrategies::SqlConditionBuilder do
 
   it "builds query for multiple fields" do
     conditions = build("test", %w[people.first_name people.last_name])
+    # rubocop:todo Layout/LineLength
     expect(conditions).to eq "(\"people\".\"first_name\" ILIKE '%test%' OR \"people\".\"last_name\" ILIKE '%test%')"
+    # rubocop:enable Layout/LineLength
     expect(Person.where(conditions)).to be_empty
   end
 
@@ -26,10 +28,18 @@ describe SearchStrategies::SqlConditionBuilder do
     let(:person) { people(:admin) }
 
     it "uses custom matcher for birthday" do
-      expect(build("1.10.2014", %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
-      expect(build("01.10.2014", %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
-      expect(build("01.10", %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10%'"
-      expect(build("2014", %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%2014%'"
+      expect(build("1.10.2014",
+        # rubocop:todo Layout/LineLength
+        %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
+      # rubocop:enable Layout/LineLength
+      expect(build("01.10.2014",
+        # rubocop:todo Layout/LineLength
+        %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10.2014%'"
+      # rubocop:enable Layout/LineLength
+      expect(build("01.10",
+        %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%01.10%'"
+      expect(build("2014",
+        %w[people.birthday])).to eq "TO_CHAR(\"people\".\"birthday\", 'DD.MM.YYYY') ILIKE '%2014%'"
     end
 
     it "finds person by birthday" do

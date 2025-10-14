@@ -33,7 +33,8 @@ describe :self_registration, js: true do
   def expect_active_step(step_name)
     expect(page)
       .to have_css(".step-headers li.active", text: step_name),
-        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
+        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active",
+          wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
@@ -100,6 +101,8 @@ describe :self_registration, js: true do
   it "redirects if logged in" do
     sign_in(people(:admin))
     visit group_self_registration_path(group_id: group)
+    # rubocop:todo Layout/LineLength
     expect(page).to have_content("Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen.")
+    # rubocop:enable Layout/LineLength
   end
 end

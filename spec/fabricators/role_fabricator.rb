@@ -6,7 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 # Mitglied roles in SAC are required to have a start_on and a end_on
+# rubocop:todo Layout/LineLength
 # We set these attributes here in the factory to a default value, so we don't have to do it all the time
+# rubocop:enable Layout/LineLength
 # in the specs.
 Role.all_types.select { |role| role < SacCas::Role::MitgliedCommon }.each do |role|
   name = role.name.to_sym

@@ -32,7 +32,8 @@ describe EventAbility do
     let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
 
     before do
-      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: person)
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+        person: person)
     end
 
     it "is able to create tours in section" do
@@ -44,7 +45,8 @@ describe EventAbility do
     end
 
     it "is not able to create tours in ortsgruppe" do
-      expect(ability).not_to be_able_to(:create, Event::Tour.new(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)]))
+      expect(ability).not_to be_able_to(:create,
+        Event::Tour.new(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)]))
     end
 
     it "is not able to create tours in other section" do

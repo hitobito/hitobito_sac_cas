@@ -29,9 +29,13 @@ module TableDisplays::People
       wiedereintritt(target)
     end
 
-    def wiedereintritt(person)
-      membership_roles = person.roles_unscoped.select { |role| SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type) }
+    def wiedereintritt(person) # rubocop:todo Metrics/CyclomaticComplexity
+      membership_roles = person.roles_unscoped.select { |role|
+        SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(role.type)
+      }
+      # rubocop:todo Layout/LineLength
       (membership_roles.select(&:active?).blank? && membership_roles.select(&:ended?).present?) ? I18n.t(:"global.yes") : I18n.t(:"global.no")
+      # rubocop:enable Layout/LineLength
     end
   end
 end

@@ -33,6 +33,7 @@ describe "event_level model", js: true do
 
     within("tbody tr:last-child") { click_on "Löschen" }
     accept_alert
-    expect(page).to have_css(".alert-success", text: "Kursstufe Z - update wurde erfolgreich gelöscht.")
+    expect(page).to have_css(".alert-success",
+      text: "Kursstufe Z - update wurde erfolgreich gelöscht.")
   end
 end
