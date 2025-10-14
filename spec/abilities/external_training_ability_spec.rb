@@ -56,6 +56,13 @@ describe ExternalTrainingAbility do
         expect(ability).to be_able_to(:destroy, external_training)
       end
 
+      it "can create and destroy if no event_kind present" do
+        external_training.event_kind = nil
+
+        expect(ability).to be_able_to(:create, external_training)
+        expect(ability).to be_able_to(:destroy, external_training)
+      end
+
       it "cannot create and destroy if section may not create" do
         Event::Kind.first.update!(section_may_create: false)
 
@@ -74,8 +81,15 @@ describe ExternalTrainingAbility do
       }
 
       it "can create and destroy" do
-        is_expected.to be_able_to(:create, external_training)
-        is_expected.to be_able_to(:destroy, external_training)
+        expect(ability).to be_able_to(:create, external_training)
+        expect(ability).to be_able_to(:destroy, external_training)
+      end
+
+      it "can create and destroy if no event_kind present" do
+        external_training.event_kind = nil
+
+        expect(ability).to be_able_to(:create, external_training)
+        expect(ability).to be_able_to(:destroy, external_training)
       end
 
       it "cannot create and destroy if section may not create" do

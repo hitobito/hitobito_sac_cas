@@ -48,6 +48,14 @@ describe ExternalTrainingsController do
       end.to change { ski_leader_qualis.count }.by(1)
     end
 
+    it "authorize request even when not assigning event_kind" do
+      expect do
+        post :create, params: params.deep_merge({external_training: {event_kind_id: nil}})
+      end.to_not raise_error
+
+      expect(response).to have_http_status(422)
+    end
+
     context "with other people" do
       let(:admin) { people(:admin) }
       let(:tourenchef) { people(:tourenchef) }
