@@ -22,6 +22,7 @@ describe MailingListAbility do
 
   [[Group::SektionsFunktionaere::Redaktion, :bluemlisalp_funktionaere],
     [Group::SektionsFunktionaere::Mitgliederverwaltung, :bluemlisalp_funktionaere],
+    [Group::SektionsMitglieder::Leserecht, :bluemlisalp_mitglieder],
     [Group::SektionsMitglieder::Schreibrecht, :bluemlisalp_mitglieder]].each do |role_type, group_key|
     context "mitglied with #{role_type}" do
       let(:person) { mitglied_with_schreibrecht }

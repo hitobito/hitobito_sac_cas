@@ -26,6 +26,7 @@ module SacCas::MailingListAbility
     user.roles.any? do |r|
       [Group::SektionsFunktionaere::Redaktion,
         Group::SektionsFunktionaere::Mitgliederverwaltung,
+        Group::SektionsMitglieder::Leserecht,
         Group::SektionsMitglieder::Schreibrecht].include?(r.class) && r.group.layer_group_id == group.layer_group_id
     end
   end
