@@ -12,9 +12,9 @@ module SacCas::MailingListAbility
 
   prepended do
     on(MailingList) do
-      permission(:group_and_below_full)
-        .may(:show, :index_subscriptions, :create, :update, :destroy, :export_subscriptions)
-        .schreibrecht_in_main_group?
+      permission(:any)
+        .may(:show, :index_subscriptions, :export_subscriptions)
+        .read_role_in_layer?
     end
   end
 
@@ -22,9 +22,12 @@ module SacCas::MailingListAbility
   #
   # For example if users are members of SAC Hitobito and have Schreibrecht, they
   # can manage the mailing list of SAC Hitobito.
-  def schreibrecht_in_main_group?
+  def read_role_in_layer?
     user.roles.any? do |r|
-      r.is_a?(Group::SektionsMitglieder::Schreibrecht) && r.group.layer_group_id == group.layer_group_id
+      [Group::SektionsFunktionaere::Redaktion,
+        Group::SektionsFunktionaere::Mitgliederverwaltung,
+        Group::SektionsMitglieder::Leserecht,
+        Group::SektionsMitglieder::Schreibrecht].include?(r.class) && r.group.layer_group_id == group.layer_group_id
     end
   end
 end
