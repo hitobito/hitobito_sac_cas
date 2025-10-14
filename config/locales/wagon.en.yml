@@ -2095,7 +2095,7 @@ en:
           family_warning: >-
             Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}.
           info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_mitglied_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Request resignation"
       termination:
         summary:
@@ -2114,5 +2114,5 @@ en:
             Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "I would like to stay informed about news from the SAC and continue to receive the SAC newsletter."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
-          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
+          inform_mitglied_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Request resignation"

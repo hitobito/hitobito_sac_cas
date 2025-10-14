@@ -83,12 +83,11 @@ module Wizards::Memberships
     def sektion = @sektion ||= role&.layer_group
 
     def send_confirmation_mail
-      return if backoffice? && !summary.inform_via_email
-
       Memberships::TerminateMembershipMailer.terminate_membership(
         person,
         sektion,
-        terminate_on
+        terminate_on,
+        summary.inform_mitglied_via_email
       ).deliver_later
     end
 

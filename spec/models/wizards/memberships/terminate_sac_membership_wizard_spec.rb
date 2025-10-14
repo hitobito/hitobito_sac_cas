@@ -17,6 +17,7 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
   let(:wizard) do
     described_class.new(current_step:, backoffice:, person:, **params)
   end
+  let(:mail_mitglied) { true }
 
   context "with terminated primary role" do
     it "only has MembershipTerminatedInfo step" do
@@ -102,7 +103,7 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
       expect do
         wizard.save!
       end.to have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
-        .with(person, bluemlisalp, end_of_year)
+        .with(person, bluemlisalp, end_of_year, mail_mitglied)
     end
 
     context "backoffice" do
@@ -119,15 +120,15 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
         end.to change { role.reload.terminated }.from(false).to(true)
           .and change { role.end_on }.from(end_of_year).to(Date.yesterday)
           .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
-          .with(person, bluemlisalp, Date.yesterday)
+          .with(person, bluemlisalp, Date.yesterday, mail_mitglied)
       end
 
-      it "skips TerminateSacMembership::terminate_membership email if inform_via_email is set to false" do
-        params[:summary][:inform_via_email] = false
+      it "still sends TerminateSacMembership::terminate_membership email even if inform_mitglied_via_email is set to false" do
+        params[:summary][:inform_mitglied_via_email] = false
         expect do
           wizard.save!
         end.to change { role.reload.terminated }.from(false).to(true)
-          .and not_have_enqueued_mail
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership)
       end
     end
   end

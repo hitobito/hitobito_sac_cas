@@ -11,25 +11,32 @@ class Memberships::TerminateMembershipMailer < ApplicationMailer
   TERMINATE_MEMBERSHIP = "memberships_terminate_sac_membership_confirmation"
   LEAVE_ZUSATZSEKTION = "memberships_leave_zusatzsektion_confirmation"
 
-  def terminate_membership(person, sektion, terminate_on)
-    send_confirmation(TERMINATE_MEMBERSHIP, person, sektion, terminate_on)
+  def terminate_membership(person, sektion, terminate_on, mail_mitglied)
+    send_confirmation(TERMINATE_MEMBERSHIP, person, sektion, terminate_on, mail_mitglied)
   end
 
-  def leave_zusatzsektion(person, sektion, terminate_on)
-    send_confirmation(LEAVE_ZUSATZSEKTION, person, sektion, terminate_on)
+  def leave_zusatzsektion(person, sektion, terminate_on, mail_mitglied)
+    send_confirmation(LEAVE_ZUSATZSEKTION, person, sektion, terminate_on, mail_mitglied)
   end
 
   private
 
-  def send_confirmation(key, person, sektion, terminate_on)
+  def send_confirmation(key, person, sektion, terminate_on, mail_mitglied)
     @person = person
     @sektion = sektion
+
+    if mail_mitglied
+      recipient = person
+      headers[:bcc] = [sektion.email, SacCas::MV_EMAIL].compact_blank
+    else
+      recipient = sektion.email
+      headers[:bcc] = [SacCas::MV_EMAIL]
+    end
     headers[:cc] = Group::Geschaeftsstelle.first.email
-    headers[:bcc] = [sektion.email, SacCas::MV_EMAIL].compact_blank
 
     I18n.with_locale(person.language) do
       @terminate_on = I18n.l(terminate_on)
-      compose(person, key)
+      compose(recipient, key)
     end
   end
 
