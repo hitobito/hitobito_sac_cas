@@ -9,7 +9,9 @@ describe Invoices::SacMemberships::Member do
   let(:context) { Invoices::SacMemberships::Context.new(date) }
 
   subject do
+    # rubocop:todo Layout/LineLength
     # member expects preloaded roles (without them it would not respect the date in the default roles scope)
+    # rubocop:enable Layout/LineLength
     person_with_roles = context.people_with_membership_years.find(person.id)
     described_class.new(person_with_roles, context)
   end
@@ -75,7 +77,9 @@ describe Invoices::SacMemberships::Member do
     context "for family member" do
       let(:person) { people(:familienmitglied2) }
 
-      it { expect(subject.paying_person?(subject.stammsektion_role.beitragskategorie)).to be(false) }
+      it {
+        expect(subject.paying_person?(subject.stammsektion_role.beitragskategorie)).to be(false)
+      }
 
       it "is true for additional section" do
         role = Group::SektionsMitglieder::MitgliedZusatzsektion.create!(

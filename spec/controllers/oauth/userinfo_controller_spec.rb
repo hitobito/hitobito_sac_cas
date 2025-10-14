@@ -14,7 +14,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
   let(:data) { JSON.parse(response.body) }
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
+    # rubocop:enable Layout/LineLength
   end
 
   describe "GET#show" do

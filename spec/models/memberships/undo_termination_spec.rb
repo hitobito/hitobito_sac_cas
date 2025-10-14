@@ -112,7 +112,9 @@ describe Memberships::UndoTermination, versioning: true do
       # make sure our setup is correct and mutation_id returns the expected value
       expect(subject.mutation_id).to eq("relevant mutations")
 
+      # rubocop:todo Layout/LineLength
       expect(subject.updated_roles_versions).to all have_attributes(mutation_id: "relevant mutations")
+      # rubocop:enable Layout/LineLength
       expect(subject.updated_roles_versions.map(&:reify)).to match_array [
         role, roles(:familienmitglied_kind), roles(:abonnent_alpen)
       ]
@@ -189,7 +191,9 @@ describe Memberships::UndoTermination, versioning: true do
         .to eq original_attributes.except("updated_at", "start_on")
     end
 
+    # rubocop:todo Layout/LineLength
     it "returns the role with its original values when role was updated multiple times in the same mutation" do
+      # rubocop:enable Layout/LineLength
       role.update!(label: "original label")
       expect(role.versions).to have(2).item
 
@@ -385,7 +389,9 @@ describe Memberships::UndoTermination, versioning: true do
         expect(role.versions.last.changeset.keys).not_to include("terminated")
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
+          # rubocop:todo Layout/LineLength
           .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von #{role.person} wurde seit der Kündigung verändert"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -410,7 +416,9 @@ describe Memberships::UndoTermination, versioning: true do
 
         expect(subject).not_to be_valid
         expect(subject.errors.full_messages)
+          # rubocop:todo Layout/LineLength
           .to eq ["SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Einzel) von #{role.person}: Person hat bereits eine Neuanmeldung (von #{I18n.l(new_role.start_on)} bis )."]
+        # rubocop:enable Layout/LineLength
       end
     end
 

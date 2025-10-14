@@ -16,7 +16,8 @@ describe People::Neuanmeldungen::Reject do
   let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
   let(:neuanmeldung) { create_role(:adult) }
   let(:person) do
-    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen), created_at: 1.year.ago, person: neuanmeldung.person)
+    Fabricate(Group::AboMagazin::Abonnent.sti_name, group: groups(:abo_die_alpen),
+      created_at: 1.year.ago, person: neuanmeldung.person)
     neuanmeldung.person.reload
   end
 
@@ -52,9 +53,13 @@ describe People::Neuanmeldungen::Reject do
     rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
 
+    # rubocop:todo Layout/LineLength
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+      # rubocop:enable Layout/LineLength
       start_on: 1.year.ago, person: neuanmeldung.person)
+    # rubocop:todo Layout/LineLength
     neuanmeldung_zusatzsektion = Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.sti_name,
+      # rubocop:enable Layout/LineLength
       group: group, start_on: 1.month.ago, person: neuanmeldung.person)
 
     rejector.call
@@ -62,14 +67,18 @@ describe People::Neuanmeldungen::Reject do
   end
 
   it "deletes rejected Roles, if it has other deleted roles" do
-    person.roles.each { |role| role.update!(end_on: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name }
+    person.roles.each { |role|
+      role.update!(end_on: 1.day.ago) if role.type != neuanmeldung_role_class.sti_name
+    }
 
     rejector.call
     expect(person.reload.roles).not_to include(neuanmeldung)
   end
 
   it "deletes the Person, if it has no other roles" do
-    person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+    person.roles.each { |role|
+      role.really_destroy! if role.type != neuanmeldung_role_class.sti_name
+    }
 
     rejector.call
     expect { Person.find(person.id) }.to raise_error(ActiveRecord::RecordNotFound)
@@ -94,14 +103,21 @@ describe People::Neuanmeldungen::Reject do
   end
 
   describe "email" do
-    let(:person_attrs) { person.attributes.slice("first_name", "email", "language", "primary_group_id") }
+    let(:person_attrs) {
+      person.attributes.slice("first_name", "email", "language", "primary_group_id")
+    }
 
     it "send an email to the person" do
-      expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs, sektion)
+      expect {
+        rejector.call
+      }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs,
+        sektion)
     end
 
     it "send an email to deleted person" do
-      person.roles.each { |role| role.really_destroy! if role.type != neuanmeldung_role_class.sti_name }
+      person.roles.each { |role|
+        role.really_destroy! if role.type != neuanmeldung_role_class.sti_name
+      }
       expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject)
     end
 
@@ -110,7 +126,10 @@ describe People::Neuanmeldungen::Reject do
 
       it "send an email to main person of family" do
         person.update_columns(sac_family_main_person: true)
-        expect { rejector.call }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs, sektion)
+        expect {
+          rejector.call
+        }.to have_enqueued_mail(People::NeuanmeldungenMailer, :reject).with(person_attrs,
+          sektion)
       end
 
       it "does not send email to other family member" do

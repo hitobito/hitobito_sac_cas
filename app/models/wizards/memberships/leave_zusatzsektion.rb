@@ -36,7 +36,8 @@ module Wizards::Memberships
     end
 
     def leave_operation
-      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on, termination_reason_id: termination_reason_id)
+      @leave_operation ||= Memberships::LeaveZusatzsektion.new(role, terminate_on,
+        termination_reason_id: termination_reason_id)
     end
 
     def backoffice?
@@ -99,7 +100,7 @@ module Wizards::Memberships
       end
     end
 
-    def handle_start
+    def handle_start # rubocop:todo Metrics/CyclomaticComplexity
       if person.sac_membership.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name
       elsif mitglied_termination_by_section_only? && !backoffice?

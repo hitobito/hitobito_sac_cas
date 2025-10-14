@@ -26,7 +26,8 @@ describe "group show page" do
     before { sign_in(admin) }
 
     it "shows section offers" do
-      sektion.section_offerings = [SectionOffering.create!(title: "Offer 1"), SectionOffering.create!(title: "Offer 2")]
+      sektion.section_offerings = [SectionOffering.create!(title: "Offer 1"),
+        SectionOffering.create!(title: "Offer 2")]
       visit group_path(id: sektion.id)
 
       expect(page).to have_css("dt", text: "Sektionsangebote")

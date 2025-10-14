@@ -29,7 +29,9 @@ describe Devise::Hitobito::SessionsController do
           post :create, params: {person: {login_identity: person.email, password:}}
         end.to change { ActionMailer::Base.deliveries.count }.by(1)
         expect(response).to redirect_to new_person_session_path
+        # rubocop:todo Layout/LineLength
         expect(ActionMailer::Base.deliveries.last.subject).to eq "Anleitung zur Bestätigung Deiner E-Mail-Adresse"
+        # rubocop:enable Layout/LineLength
         expect(flash.alert.strip).to eq <<~TEXT.tr("\n", " ").strip
           Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/>
           Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast:

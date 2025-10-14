@@ -59,7 +59,8 @@ describe "people/_details_sac_cas.html.haml" do
         expect(person.household.main_person).to eq people(:familienmitglied) # check assumption
         expect(view).to receive(:can?).with(:show, person.household.main_person).and_return(true)
 
-        expect(value_node).to have_link(person.household.main_person.to_s, href: person_path(person.household.main_person))
+        expect(value_node).to have_link(person.household.main_person.to_s,
+          href: person_path(person.household.main_person))
       end
     end
   end
@@ -103,7 +104,8 @@ describe "people/_details_sac_cas.html.haml" do
 
     it "hides family info" do
       expect(dom).not_to have_css "dl dt", text: I18n.t("activerecord.attributes.person.family_id")
-      expect(dom).not_to have_css "dl dt", text: I18n.t("activerecord.attributes.person.sac_family_main_person")
+      expect(dom).not_to have_css "dl dt",
+        text: I18n.t("activerecord.attributes.person.sac_family_main_person")
     end
   end
 end

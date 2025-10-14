@@ -22,7 +22,9 @@ module People::Neuanmeldungen
     end
 
     def applicable_people
+      # rubocop:todo Layout/LineLength
       @applicable_people ||= Person.order_by_name.where(id: people_ids).includes(:roles).select("*").flat_map do |person|
+        # rubocop:enable Layout/LineLength
         if family_neuanmeldungs_role?(person)
           person.household.people
         else
@@ -51,7 +53,9 @@ module People::Neuanmeldungen
     end
 
     def non_applicable_roles
+      # rubocop:todo Layout/LineLength
       Role.with_inactive.where(person_id: people_ids).where.not(type: NEUANMELDUNGEN_ROLES.map(&:sti_name))
+      # rubocop:enable Layout/LineLength
     end
   end
 end

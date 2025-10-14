@@ -12,15 +12,19 @@ describe Invoices::SacMembershipsMailer do
 
   let(:mitglied) { roles(:mitglied) }
   let(:person) { mitglied.person }
-  let(:mail) { described_class.confirmation(person, mitglied.group.parent, mitglied.beitragskategorie) }
+  let(:mail) {
+    described_class.confirmation(person, mitglied.group.parent, mitglied.beitragskategorie)
+  }
 
   it "sends confirmation email to person" do
-    expect(mail.body.to_s).to include("Hallo Edmund,", "Vielen Dank für deine Zahlung, welche bei uns eingegangen ist.")
+    expect(mail.body.to_s).to include("Hallo Edmund,",
+      "Vielen Dank für deine Zahlung, welche bei uns eingegangen ist.")
     expect(mail.body.to_s).to include(person_path(person))
   end
 
   it "considers person's language when sending" do
-    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :fr, label: "label", subject: "Acceptee", body: "Bonjour")
+    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :fr,
+      label: "label", subject: "Acceptee", body: "Bonjour")
     person.update!(language: :fr)
     expect(mail.subject).to eq("Acceptee")
     expect(mail.body.to_s).to include("Bonjour")
@@ -31,26 +35,27 @@ describe Invoices::SacMembershipsMailer do
   end
 
   it "includes additional placeholders" do
-    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :de, label: "label", body: <<~TEXT)
-      {first-name}
-      {person-ids}
-      {last-name}
-      {birthday}
-      {email}
-      {phone-number}
-      {address-care-of}
-      {street-with-number}
-      {postbox}
-      {zip-code}
-      {town}
-      {country}
-      {section-name}
-      {membership-category}
-      {invoice-details}
-      {faq-url}
-      {profile-url}
-      {profile-links}
-    TEXT
+    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :de,
+      label: "label", body: <<~TEXT)
+        {first-name}
+        {person-ids}
+        {last-name}
+        {birthday}
+        {email}
+        {phone-number}
+        {address-care-of}
+        {street-with-number}
+        {postbox}
+        {zip-code}
+        {town}
+        {country}
+        {section-name}
+        {membership-category}
+        {invoice-details}
+        {faq-url}
+        {profile-url}
+        {profile-links}
+      TEXT
 
     expect(mail.body).to include("Edmund")
     expect(mail.body).to include("600001")
@@ -71,7 +76,8 @@ describe Invoices::SacMembershipsMailer do
   it "profile-links placeholder includes links to all household members" do
     create_household(person, Fabricate(:person), Fabricate(:person, birthday: 12.years.ago))
 
-    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :de, label: "label", body: "{first-name} {profile-links}")
+    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :de,
+      label: "label", body: "{first-name} {profile-links}")
 
     person.household.people.each do |household_person|
       expect(mail.body).to include(person_url(household_person))

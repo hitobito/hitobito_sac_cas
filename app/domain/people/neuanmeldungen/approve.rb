@@ -63,7 +63,8 @@ module People::Neuanmeldungen
         sent_at: Date.current,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current, new_entry: new_entry?(role)).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current,
+        new_entry: new_entry?(role)).enqueue!
     end
 
     def new_entry?(role)

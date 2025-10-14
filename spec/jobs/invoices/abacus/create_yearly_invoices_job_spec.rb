@@ -22,8 +22,10 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
     # People that should show up
     people(:mitglied).update!(abacus_subject_key: "123")
     people(:familienmitglied).update!(abacus_subject_key: "124")
-    valid_person = create_person(params: {abacus_subject_key: "128", first_name: "Joe", last_name: "Doe"})
-    valid_person.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year, state: :open)
+    valid_person = create_person(params: {abacus_subject_key: "128", first_name: "Joe",
+                                          last_name: "Doe"})
+    valid_person.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year,
+      state: :open)
     [
       people(:mitglied),
       people(:familienmitglied),
@@ -36,15 +38,19 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
 
   let(:unexpected_people) do
     people(:familienmitglied2).update!(abacus_subject_key: "125", data_quality: :error)
-    person_1 = create_person(role_start_on: Date.new(invoice_year, 8, 16), params: {abacus_subject_key: "126"})
+    person_1 = create_person(role_start_on: Date.new(invoice_year, 8, 16),
+      params: {abacus_subject_key: "126"})
     person_2 = create_person(params: {abacus_subject_key: "127"})
-    person_2.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year, state: :open)
+    person_2.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year,
+      state: :open)
 
     # reproduction case where the query returned people which had a different
     # invoice additionally to the SacMembership invoice
     person_3 = create_person(params: {abacus_subject_key: "301"})
-    person_3.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year, state: :open)
-    person_3.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year, state: :open)
+    person_3.external_invoices.create!(type: ExternalInvoice::SacMembership, year: invoice_year,
+      state: :open)
+    person_3.external_invoices.create!(type: ExternalInvoice::DummyInvoice, year: invoice_year,
+      state: :open)
     [
       people(:familienmitglied2),
       person_1,
@@ -68,7 +74,8 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
   def create_person(role_start_on: Date.new(invoice_year, 1, 1), params: {})
     group = groups(:bluemlisalp_mitglieder)
     person = Fabricate.create(:person_with_address, **params)
-    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, start_on: role_start_on, group:, person:)
+    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, start_on: role_start_on, group:,
+      person:)
     person
   end
 
@@ -102,10 +109,15 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
 
     before do
       create_mix_of_people
-      Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
+      Invoices::Abacus::Config.instance_variable_set(:@config,
+        {host: host, mandant: mandant}.stringify_keys)
+      # rubocop:todo Layout/LineLength
       allow(Invoices::Abacus::SalesOrderInterface).to receive(:new).and_return(sales_order_interface)
+      # rubocop:enable Layout/LineLength
       allow(abacus_client).to receive(:token).and_return("42")
+      # rubocop:todo Layout/LineLength
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
+      # rubocop:enable Layout/LineLength
 
       stub_const("Invoices::Abacus::CreateYearlyInvoicesJob::BATCH_SIZE", 4)
       stub_const("Invoices::Abacus::CreateYearlyInvoicesJob::SLICE_SIZE", 2)
@@ -116,25 +128,33 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           body: /"CustomerId":123.*"ProcessFlowNumber":1,.*"CustomerId":124/m,
           headers: {
             "Authorization" => "Bearer 42",
+            # rubocop:todo Layout/LineLength
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            # rubocop:enable Layout/LineLength
           }
         )
         .to_return(
           status: 202,
           body: batch_response_sales_orders,
+          # rubocop:todo Layout/LineLength
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+          # rubocop:enable Layout/LineLength
         )
       stub_request(:post, "#{host}/api/entity/v1/mandants/1234/$batch")
         .with(
           body: /"CustomerId":130.*"ProcessFlowNumber":1,.*"CustomerId":131/m,
           headers: {
             "Authorization" => "Bearer 42",
+            # rubocop:todo Layout/LineLength
             "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+            # rubocop:enable Layout/LineLength
           }
         ).to_return(
           status: 202,
           body: batch_response_sales_orders,
+          # rubocop:todo Layout/LineLength
           headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+          # rubocop:enable Layout/LineLength
         )
     end
 
@@ -145,12 +165,16 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
             body: /"CustomerId":128.*"CustomerId":129/m,
             headers: {
               "Authorization" => "Bearer 42",
+              # rubocop:todo Layout/LineLength
               "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+              # rubocop:enable Layout/LineLength
             }
           ).to_return(
             status: 202,
             body: batch_response_sales_orders_with_error,
+            # rubocop:todo Layout/LineLength
             headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+            # rubocop:enable Layout/LineLength
           )
       end
 
@@ -160,11 +184,12 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
         expect(ExternalInvoice.where(state: :error).count).to eq 1
-        expect(HitobitoLogEntry.where(category: :stapelverarbeitung, level: :info)).to contain_exactly(
-          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
-          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
-          have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
-        )
+        expect(HitobitoLogEntry.where(category: :stapelverarbeitung,
+          level: :info)).to contain_exactly(
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
+            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
+          )
       end
 
       context "when a spurious ExternalInvoice exists" do
@@ -190,11 +215,12 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
             .and change { HitobitoLogEntry.where(level: :error).count }.by(1)
             .and change { HitobitoLogEntry.where(level: :info).count }.by(3)
           expect(ExternalInvoice.where(state: :error).count).to eq 1
-          expect(HitobitoLogEntry.where(category: :stapelverarbeitung, level: :info)).to contain_exactly(
-            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
-            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
-            have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
-          )
+          expect(HitobitoLogEntry.where(category: :stapelverarbeitung,
+            level: :info)).to contain_exactly(
+              have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 0%"),
+              have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 60%"),
+              have_attributes(message: "MV-Jahresinkassolauf: Fortschritt 100%")
+            )
           expect(ExternalInvoice.where(state: :draft).count).to be_zero
         end
       end
@@ -208,7 +234,9 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
             body: /"CustomerId":128.*"CustomerId":129/m,
             headers: {
               "Authorization" => "Bearer 42",
+              # rubocop:todo Layout/LineLength
               "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+              # rubocop:enable Layout/LineLength
             }
           ).to_return(
             status: 500,
@@ -226,9 +254,13 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           .and change { HitobitoLogEntry.where(level: :info).count }.by(1)
         expect(ExternalInvoice.where(state: :draft).count).to be_zero # no left-over drafts
         expect(ExternalInvoice.last.state).to eq("open")
+        # rubocop:todo Layout/LineLength
         expect(HitobitoLogEntry.where(level: :info).last.message).to eq("MV-Jahresinkassolauf: Fortschritt 0%")
+        # rubocop:enable Layout/LineLength
         expect(HitobitoLogEntry.where(level: :error).last.message).to eq(
+          # rubocop:todo Layout/LineLength
           "Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. Es erfolgt ein weiterer Versuch."
+          # rubocop:enable Layout/LineLength
         )
 
         # retry job to trigger failure: We get an error on the first slice of
@@ -237,7 +269,9 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           .to change(ExternalInvoice, :count).by(2)
           .and change { HitobitoLogEntry.where(level: :info).count }.by(1)
           .and change { HitobitoLogEntry.where(level: :error).count }.by(2)
+        # rubocop:todo Layout/LineLength
         expect(HitobitoLogEntry.where(level: :error).last.message).to eq("MV-Jahresinkassolauf abgebrochen")
+        # rubocop:enable Layout/LineLength
         expect(ExternalInvoice.where(state: :draft).count).to be_zero
       end
     end

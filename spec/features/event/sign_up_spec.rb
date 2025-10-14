@@ -78,14 +78,17 @@ describe "Event Signup", :js do
       expect(page).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
       expect(page).to have_checked_field("event_participation[newsletter]")
       check "Ja, ich erkläre mich mit den AGB einverstanden"
+      # rubocop:todo Layout/LineLength
       check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
+      # rubocop:enable Layout/LineLength
       click_on "Anmelden"
       expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
     end
 
     context "with role Mitglied" do
       before do
-        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:bluemlisalp_mitglieder), person: admin)
+        Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
+          group: groups(:bluemlisalp_mitglieder), person: admin)
         admin.update!(birthday: nil)
       end
 
@@ -121,7 +124,9 @@ describe "Event Signup", :js do
           check "Ja, ich erkläre mich mit den AGB einverstanden"
           expect(page).to have_checked_field "Ja, ich erkläre mich mit den AGB einverstanden"
         end
+        # rubocop:todo Layout/LineLength
         check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
+        # rubocop:enable Layout/LineLength
         click_on "Anmelden"
         expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
       end

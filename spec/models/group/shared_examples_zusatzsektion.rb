@@ -17,7 +17,9 @@ shared_examples "requires a concurrently active mitglied role" do |zusatzsektion
     )
 
     expect(zusatz_role).not_to be_valid
+    # rubocop:todo Layout/LineLength
     expect(zusatz_role.errors[:person]).to eq ["muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."]
+    # rubocop:enable Layout/LineLength
 
     mitglied_role = Fabricate(
       Group::SektionsMitglieder::Mitglied.name,

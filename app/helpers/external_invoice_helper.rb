@@ -7,6 +7,8 @@
 
 module ExternalInvoiceHelper
   def abo_magazin_invoice_possible?(person)
-    person.sac_membership.recent_abonnent_magazin_roles.exists? && can?(:create_abo_magazin_invoice, person)
+    person.sac_membership.recent_abonnent_magazin_roles.exists? && can?(
+      :create_abo_magazin_invoice, person
+    )
   end
 end

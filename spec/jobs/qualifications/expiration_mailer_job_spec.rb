@@ -39,7 +39,8 @@ describe Qualifications::ExpirationMailerJob do
     before { travel_to "2000-01-01".to_date }
 
     it "mails a reminder" do
-      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:today, person.id).and_call_original
+      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:today,
+        person.id).and_call_original
       expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once
     end
 
@@ -67,7 +68,8 @@ describe Qualifications::ExpirationMailerJob do
         finish_at: finish_at
       )
 
-      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year, person.id).and_call_original
+      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:next_year,
+        person.id).and_call_original
       expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once
     end
   end
@@ -78,7 +80,8 @@ describe Qualifications::ExpirationMailerJob do
     before { travel_to "2000-12-31".to_date }
 
     it "mails a reminder" do
-      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:year_after_next_year, person.id).and_call_original
+      expect(Qualifications::ExpirationMailer).to receive(:reminder).with(:year_after_next_year,
+        person.id).and_call_original
       travel_to "2000-12-31".to_date
 
       expect { job.perform }.to have_enqueued_mail(Qualifications::ExpirationMailer).once

@@ -42,7 +42,9 @@ module SacCas::Role::MitgliedCommon
   def dependant_roles
     person
       .roles.joins(:group)
+      # rubocop:todo Layout/LineLength
       .where(type: ROLES_TO_DESTROY_ON_MEMBERSHIP_TERMINATION, groups: {layer_group_id: group.layer_group_id})
+    # rubocop:enable Layout/LineLength
   end
 
   private

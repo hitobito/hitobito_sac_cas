@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Export::Pdf::Participations::KeyDataSheet::Sections::Title < Export::Pdf::Section
-  def render
+  def render # rubocop:todo Metrics/AbcSize
     pdf.move_down(5.mm)
 
     text(t("year_title", year: Time.zone.now.year), style: :bold)

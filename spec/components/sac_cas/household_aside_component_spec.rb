@@ -29,6 +29,7 @@ describe HouseholdAsideComponent, type: :component do
 
   def stub_can(permission, result)
     allow(component).to receive(:can?).with(permission, anything).and_return(result)
-    allow_any_instance_of(HouseholdAsideMemberComponent).to receive(:can?).with(permission, anything).and_return(result)
+    allow_any_instance_of(HouseholdAsideMemberComponent).to receive(:can?).with(permission,
+      anything).and_return(result)
   end
 end

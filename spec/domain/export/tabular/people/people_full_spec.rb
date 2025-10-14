@@ -19,7 +19,9 @@ describe Export::Tabular::People::PeopleFull do
     end
 
     it "has value from person#membership_years" do
+      # rubocop:todo Layout/LineLength
       expect(row[:membership_years]).to eq Person.with_membership_years.find(person.id).membership_years
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -54,7 +56,9 @@ describe Export::Tabular::People::PeopleFull do
   end
 
   def create_membership_role(start_on, end_on)
+    # rubocop:todo Layout/LineLength
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder),
+      # rubocop:enable Layout/LineLength
       person: people(:mitglied),
       start_on: start_on,
       end_on: end_on,

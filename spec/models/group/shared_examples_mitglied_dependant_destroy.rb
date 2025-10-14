@@ -14,7 +14,10 @@ shared_examples "Mitglied dependant destroy" do
   end
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:other_group) { groups(:matterhorn_mitglieder) }
-  let!(:role) { described_class.new(person:, group:, start_on: 1.year.ago, end_on: mitglied_role.end_on).tap(&:save!) }
+  let!(:role) {
+    described_class.new(person:, group:, start_on: 1.year.ago,
+      end_on: mitglied_role.end_on).tap(&:save!)
+  }
 
   let(:old_enough) { Settings.role.minimum_days_to_archive.days.ago - 1.second }
   let(:not_old_enough) { Settings.role.minimum_days_to_archive.days.ago + 1.second }
@@ -57,8 +60,10 @@ shared_examples "Mitglied dependant destroy" do
 
   context "with MitgliedZusatzsektion role" do
     let!(:mitglied_role) do
-      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person:, start_on: 1.year.ago)
-      Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group:, person:, start_on: 1.year.ago)
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: other_group, person:,
+        start_on: 1.year.ago)
+      Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, group:, person:,
+        start_on: 1.year.ago)
     end
 
     it "gets ended if it is old enough" do

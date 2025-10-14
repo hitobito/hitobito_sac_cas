@@ -8,7 +8,9 @@
 module SacCas::Role
   module ClassMethods
     def select_with_membership_years(date = Time.zone.today)
+      # rubocop:todo Layout/LineLength
       # Because the parameter passed in the query is CET, we make sure to convert all database dates from UTC to CET.
+      # rubocop:enable Layout/LineLength
       <<~SQL
         CASE
           -- membership_years is only calculated for 'Group::SektionsMitglieder::Mitglied' roles

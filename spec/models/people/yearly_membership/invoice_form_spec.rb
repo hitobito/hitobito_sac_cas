@@ -65,7 +65,9 @@ describe People::YearlyMembership::InvoiceForm do
       it "is invalid when exceeds max date" do
         form.invoice_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Buchungsdatum muss 31.12.2025 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -73,19 +75,25 @@ describe People::YearlyMembership::InvoiceForm do
       it "is invalid when blank" do
         form.send_date = nil
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss ausgefüllt werden"]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid when short of min date" do
         form.send_date = 1.year.ago.end_of_year
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss 01.01.2024 oder danach sein"]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid when exceeds max date" do
         form.send_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Versand- und Rechnungsdatum muss 31.12.2025 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -98,13 +106,17 @@ describe People::YearlyMembership::InvoiceForm do
       it "is invalid when short of min date" do
         form.role_finish_date = 1.year.ago.end_of_year
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["Rollen verlängern bis muss 01.01.2024 oder danach sein"]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid when exceeds max date" do
         form.role_finish_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Rollen verlängern bis muss 31.12.2025 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
   end

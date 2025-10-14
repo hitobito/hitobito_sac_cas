@@ -11,7 +11,9 @@ describe CourseCompensationRatesController do
   before { sign_in(person) }
 
   let!(:category) { Fabricate(:course_compensation_category) }
-  let!(:entry) { Fabricate(:course_compensation_rate, course_compensation_category_id: category.id) }
+  let!(:entry) {
+    Fabricate(:course_compensation_rate, course_compensation_category_id: category.id)
+  }
 
   describe "with necessary permissions" do
     let(:person) { people(:admin) }
@@ -19,7 +21,11 @@ describe CourseCompensationRatesController do
     context "POST #create" do
       it "creates entry" do
         expect do
-          post :create, params: {course_compensation_rate: {rate_assistant_leader: 1337, rate_leader: 1337, valid_from: 10.days.from_now, valid_to: 20.days.from_now, course_compensation_category_id: category.id}}
+          post :create,
+            params: {course_compensation_rate: {rate_assistant_leader: 1337, rate_leader: 1337,
+                                                # rubocop:todo Layout/LineLength
+                                                valid_from: 10.days.from_now, valid_to: 20.days.from_now, course_compensation_category_id: category.id}}
+          # rubocop:enable Layout/LineLength
         end.to change { CourseCompensationRate.count }.by(1)
       end
     end
@@ -27,7 +33,8 @@ describe CourseCompensationRatesController do
     context "PATCH #update" do
       it "updates entry" do
         expect do
-          patch :update, params: {id: entry.id, course_compensation_rate: {rate_assistant_leader: 42}}
+          patch :update,
+            params: {id: entry.id, course_compensation_rate: {rate_assistant_leader: 42}}
         end.to change { entry.reload.rate_assistant_leader }.to(42)
       end
     end
@@ -55,7 +62,8 @@ describe CourseCompensationRatesController do
     context "PATCH #update" do
       it "updates entry" do
         expect do
-          patch :update, params: {id: entry.id, course_compensation_rate: {rate_assistant_leader: "foo"}}
+          patch :update,
+            params: {id: entry.id, course_compensation_rate: {rate_assistant_leader: "foo"}}
         end.to raise_error CanCan::AccessDenied
       end
     end

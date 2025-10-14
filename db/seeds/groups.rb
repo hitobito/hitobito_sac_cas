@@ -55,11 +55,16 @@ Group::AboBasicLogin.seed_once(:id) do |a|
   a.parent_id = abos.id
   a.self_registration_role_type = "Group::AboBasicLogin::BasicLogin"
   a.translations = [
-    Group::Translation.new(locale: "de", custom_self_registration_title: "Kostenloses SAC-Konto erstellen"),
-    Group::Translation.new(locale: "fr", custom_self_registration_title: "Créer un compte CAS gratuit"),
-    Group::Translation.new(locale: "it", custom_self_registration_title: "Creare un account CAS gratuito"),
-    Group::Translation.new(locale: "en", custom_self_registration_title: "Create a free SAC account")
+    Group::Translation.new(locale: "de",
+      custom_self_registration_title: "Kostenloses SAC-Konto erstellen"),
+    Group::Translation.new(locale: "fr",
+      custom_self_registration_title: "Créer un compte CAS gratuit"),
+    Group::Translation.new(locale: "it",
+      custom_self_registration_title: "Creare un account CAS gratuito"),
+    Group::Translation.new(locale: "en",
+      custom_self_registration_title: "Create a free SAC account")
   ]
 end
 
-Group::ExterneKontakte.seed_once(:id, id: 9, parent_id: Group.root.id, name: "SAC Mitglieder / ehemalig")
+Group::ExterneKontakte.seed_once(:id, id: 9, parent_id: Group.root.id,
+  name: "SAC Mitglieder / ehemalig")

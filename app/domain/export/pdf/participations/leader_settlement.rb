@@ -20,7 +20,7 @@ module Export::Pdf::Participations
     attr_reader :participation, :iban, :options
     delegate :event, :person, to: :participation
 
-    def invoice
+    def invoice # rubocop:todo Metrics/MethodLength
       @invoice ||= Invoice.new(
         iban: iban,
         currency: "CHF",

@@ -14,7 +14,9 @@ describe Group::SektionsTourenUndKurse do
     let(:person) { people(:tourenchef) }
     let(:kind) { qualification_kinds(:snowboard_leader) }
 
-    subject(:role) { Fabricate.build(described_class.sti_name, group: group, person: person, start_on: nil) }
+    subject(:role) {
+      Fabricate.build(described_class.sti_name, group: group, person: person, start_on: nil)
+    }
 
     it "is invalid without qualifications" do
       expect(role).not_to be_valid
@@ -24,7 +26,8 @@ describe Group::SektionsTourenUndKurse do
     end
 
     it "is invalid with expired qualification" do
-      person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago, finish_at: Time.zone.yesterday)
+      person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago,
+        finish_at: Time.zone.yesterday)
       expect(role).not_to be_valid
       expect(role.errors.full_messages).to eq [
         "Person muss mindestens eine aktive Qualifikation besitzen."
@@ -39,12 +42,14 @@ describe Group::SektionsTourenUndKurse do
     end
 
     it "is valid with active expiring qualification" do
-      person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago, finish_at: 1.day.from_now)
+      person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago,
+        finish_at: 1.day.from_now)
       expect(role).to be_valid
     end
 
     it "is valid without qualification if only end_on changes" do
-      quali = person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago, finish_at: 1.day.from_now)
+      quali = person.qualifications.create!(qualification_kind: kind, start_at: 2.years.ago,
+        finish_at: 1.day.from_now)
       role.save!
       quali.destroy!
       role.reload

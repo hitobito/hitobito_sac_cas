@@ -29,7 +29,9 @@ module Invoices
       end
 
       def sac_magazine_mailing_list
+        # rubocop:todo Layout/LineLength
         @sac_magazine_mailing_list ||= MailingList.find_by(internal_key: SacCas::MAILING_LIST_DIE_ALPEN_PAPER_INTERNAL_KEY)
+        # rubocop:enable Layout/LineLength
       end
 
       def people_with_membership_years

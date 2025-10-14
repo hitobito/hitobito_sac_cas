@@ -172,7 +172,9 @@ describe Event::Kind do
             kind.application_conditions = l
           end
           kind.save!
-          expect { kind.push_down_inherited_attributes! }.not_to change { course.translations.count }
+          expect { kind.push_down_inherited_attributes! }.not_to change {
+            course.translations.count
+          }
           I18n.with_locale("de") { expect(course.application_conditions).to be_blank }
           I18n.with_locale("fr") { expect(course.application_conditions).to be_blank }
         end
@@ -243,7 +245,9 @@ describe Event::Kind do
         kind.application_conditions = l
       end
       kind.save!
-      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change { course.translations.count }.by(1)
+      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change {
+        course.translations.count
+      }.by(1)
       I18n.with_locale("de") { expect(course.application_conditions).to eq "de" }
       I18n.with_locale("fr") { expect(course.application_conditions).to eq "fr" }
     end
@@ -254,7 +258,9 @@ describe Event::Kind do
         kind.application_conditions = nil
       end
       kind.save!
-      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change { course.translations.count }.by(1)
+      expect { kind.push_down_inherited_attribute!("application_conditions") }.to change {
+        course.translations.count
+      }.by(1)
       I18n.with_locale("de") { expect(course.application_conditions).to be_nil }
       I18n.with_locale("fr") { expect(course.application_conditions).to be_nil }
     end
@@ -265,7 +271,9 @@ describe Event::Kind do
         kind.general_information = l
       end
       kind.save!
-      expect { kind.push_down_inherited_attribute!("general_information") }.to change { course.translations.count }.by(1)
+      expect { kind.push_down_inherited_attribute!("general_information") }.to change {
+        course.translations.count
+      }.by(1)
       I18n.with_locale("de") { expect(course.description).to eq "de" }
       I18n.with_locale("fr") { expect(course.description).to eq "fr" }
     end

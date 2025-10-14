@@ -125,7 +125,9 @@ describe Wizards::Memberships::LeaveZusatzsektion do
           .with(person, matterhorn, Time.zone.yesterday, mail_mitglied)
       end
 
+      # rubocop:todo Layout/LineLength
       it "still sends TerminateSacMembership::leave_zusatzsektion email even if inform_mitglied_via_email is set to false" do
+        # rubocop:enable Layout/LineLength
         params[:summary][:inform_mitglied_via_email] = false
         expect do
           expect(wizard.save!).to eq true

@@ -8,7 +8,7 @@
 module SacCas::GroupResource
   extend ActiveSupport::Concern
 
-  included do
+  included do # rubocop:todo Metrics/BlockLength
     with_options writable: false do
       attribute :offerings, :array_of_strings do
         next unless @object.type == Group::Sektion.sti_name
@@ -53,13 +53,15 @@ module SacCas::GroupResource
     end
     on_extra_attribute(:membership_self_registration_url) { |scope| scope.includes(:children) }
 
-    %w[section_fee section_entry_fee].product(SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN).each do |prefix, suffix|
-      attr = [prefix, suffix].join("_")
+    %w[section_fee section_entry_fee]
+      .product(SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN)
+      .each do |prefix, suffix|
+        attr = [prefix, suffix].join("_")
 
-      extra_attribute attr.to_sym, :big_decimal, writable: false, sortable: false do
-        next unless @object.respond_to?(:active_sac_section_membership_config)
-        @object.active_sac_section_membership_config&.send(attr)
+        extra_attribute attr.to_sym, :big_decimal, writable: false, sortable: false do
+          next unless @object.respond_to?(:active_sac_section_membership_config)
+          @object.active_sac_section_membership_config&.send(attr)
+        end
       end
-    end
   end
 end

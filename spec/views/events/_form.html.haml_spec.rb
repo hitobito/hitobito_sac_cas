@@ -17,7 +17,8 @@ describe "events/_form.html.haml" do
   before do
     assign(:group, group)
     assign(:kinds, [])
-    allow(view).to receive_messages(path_args: [group, event], entry: event.decorate, model_class: Event)
+    allow(view).to receive_messages(path_args: [group, event], entry: event.decorate,
+      model_class: Event)
   end
 
   context "event" do

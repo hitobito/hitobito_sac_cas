@@ -25,7 +25,7 @@ module Invoices
         @positions ||= [build_course_position]
       end
 
-      def build_course_position
+      def build_course_position # rubocop:todo Metrics/AbcSize
         I18n.with_locale(participation.person.language) do
           description, amount = position_description_and_amount
           name = [description, event.kind.level].compact_blank.join(" - ")
@@ -67,7 +67,9 @@ module Invoices
       end
 
       def event_dates_label
-        event.dates.map { |date| Duration.new(date.start_at, date.finish_at).to_s(:short) }.join(", ")
+        event.dates.map { |date|
+          Duration.new(date.start_at, date.finish_at).to_s(:short)
+        }.join(", ")
       end
 
       def article_number
@@ -76,7 +78,8 @@ module Invoices
       end
 
       def position_description_and_amount
-        description = participation.price_category? ? price_category_label(event, participation.price_category) : nil
+        description = participation.price_category? ? price_category_label(event,
+          participation.price_category) : nil
         [description, participation.price]
       end
     end

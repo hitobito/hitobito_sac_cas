@@ -86,13 +86,16 @@ describe :mitglied_no_overlap_validation do
       let(:other_sektion_group) { groups(:matterhorn_mitglieder) }
       let(:other_mitglied_types_map) do
         {
+          # rubocop:todo Layout/LineLength
           Group::SektionsNeuanmeldungenSektion::Neuanmeldung => groups(:bluemlisalp_neuanmeldungen_sektion),
+          # rubocop:enable Layout/LineLength
           Group::SektionsNeuanmeldungenNv::Neuanmeldung => groups(:bluemlisalp_neuanmeldungen_nv)
         }
       end
     end
 
-    it_behaves_like "allows only one active role at a time", Group::SektionsNeuanmeldungenSektion::Neuanmeldung do
+    it_behaves_like "allows only one active role at a time",
+      Group::SektionsNeuanmeldungenSektion::Neuanmeldung do
       let(:error_message) { "hat bereits eine Neuanmeldung (von 01.01.2019 bis 31.12.2019)." }
       let(:group) { groups(:bluemlisalp_neuanmeldungen_sektion) }
       let(:other_sektion_group) { groups(:matterhorn_neuanmeldungen_sektion) }
@@ -104,14 +107,17 @@ describe :mitglied_no_overlap_validation do
       end
     end
 
-    it_behaves_like "allows only one active role at a time", Group::SektionsNeuanmeldungenNv::Neuanmeldung do
+    it_behaves_like "allows only one active role at a time",
+      Group::SektionsNeuanmeldungenNv::Neuanmeldung do
       let(:error_message) { "hat bereits eine Neuanmeldung (von 01.01.2019 bis 31.12.2019)." }
       let(:group) { groups(:bluemlisalp_neuanmeldungen_nv) }
       let(:other_sektion_group) { groups(:matterhorn_neuanmeldungen_nv) }
       let(:other_mitglied_types_map) do
         {
           Group::SektionsMitglieder::Mitglied => groups(:bluemlisalp_mitglieder),
+          # rubocop:todo Layout/LineLength
           Group::SektionsNeuanmeldungenSektion::Neuanmeldung => groups(:bluemlisalp_neuanmeldungen_sektion)
+          # rubocop:enable Layout/LineLength
         }
       end
     end
@@ -225,23 +231,29 @@ describe :mitglied_no_overlap_validation do
 
     it_behaves_like "deny concurrent role in lower layer",
       existing: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder],
-      new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+      new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
 
     it_behaves_like "deny concurrent role in same layer",
-      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_neuanmeldungen_sektion],
       new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_mitglieder]
 
     it_behaves_like "deny concurrent role in lower layer",
-      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_neuanmeldungen_sektion],
       new: [Group::SektionsMitglieder::Mitglied, :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
 
     it_behaves_like "deny concurrent role in same layer",
-      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
+      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_neuanmeldungen_sektion],
       new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion]
 
     it_behaves_like "deny concurrent role in lower layer",
-      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_neuanmeldungen_sektion],
-      new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+      existing: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_neuanmeldungen_sektion],
+      new: [Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
+        :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
 
     # Zusatzsektion Mitgliedschaften/Neuanmeldungen
 
@@ -251,15 +263,18 @@ describe :mitglied_no_overlap_validation do
 
     it_behaves_like "allow concurrent role in lower layer",
       existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
-      new: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
+      new: [Group::SektionsMitglieder::MitgliedZusatzsektion,
+        :bluemlisalp_ortsgruppe_ausserberg_mitglieder]
 
     it_behaves_like "deny concurrent role in same layer",
       existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
-      new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_neuanmeldungen_sektion]
+      new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
+        :bluemlisalp_neuanmeldungen_sektion]
 
     it_behaves_like "allow concurrent role in lower layer",
       existing: [Group::SektionsMitglieder::MitgliedZusatzsektion, :bluemlisalp_mitglieder],
-      new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
+      new: [Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
+        :bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv]
 
     # Stammsektion + Zusatzsektion
 

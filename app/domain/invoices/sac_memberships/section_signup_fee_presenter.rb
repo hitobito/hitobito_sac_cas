@@ -38,12 +38,17 @@ module Invoices
 
       def lines
         @lines ||= [:annual_fee, :discount, :entry_fee, :abroad_fee].collect do |position|
-          Line.new(translate_position_text(position), format_position_amount(position)) if send(position).positive?
-        end.compact + [Line.new(translate_position_text(:total_amount), format_position_amount(:total_amount))]
+          if send(position).positive?
+            Line.new(translate_position_text(position),
+              format_position_amount(position))
+          end
+        end.compact + [Line.new(translate_position_text(:total_amount),
+          format_position_amount(:total_amount))]
       end
 
       def summary
-        @summary ||= Line.new(translate_position_text("beitragskategorien.#{beitragskategorie}"), build_summary_amount)
+        @summary ||= Line.new(translate_position_text("beitragskategorien.#{beitragskategorie}"),
+          build_summary_amount)
       end
 
       def annual_fee = summed_positions(ANNUAL_POSITIONS, :gross_amount)
@@ -104,7 +109,9 @@ module Invoices
 
       def i18n_scope = @i18n_scope ||= self.class.to_s.underscore.tr("/", ".")
 
-      def summed_positions(relevant_positions, method) = positions.select { |p| relevant_positions.include?(p.class) }.sum(&method)
+      def summed_positions(relevant_positions, method) = positions.select { |p|
+        relevant_positions.include?(p.class)
+      }.sum(&method)
     end
   end
 end

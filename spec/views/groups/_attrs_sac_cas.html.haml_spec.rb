@@ -41,7 +41,10 @@ describe "groups/_attrs_sac_cas.html.haml" do
   end
 
   context "ortsgruppe" do
-    let(:group) { Fabricate(Group::Ortsgruppe.sti_name, parent: groups(:bluemlisalp), navision_id: 123, foundation_year: 2000) }
+    let(:group) {
+      Fabricate(Group::Ortsgruppe.sti_name, parent: groups(:bluemlisalp), navision_id: 123,
+        foundation_year: 2000)
+    }
 
     it "renders sektions and nav sektions id fields" do
       expect(dom).to have_css "dl dt", text: "Gruppentyp technisch"

@@ -22,7 +22,8 @@ module SacCas::Export::SubscriptionsJob
 
   def recipient_table_display
     table_display = TableDisplay.for(@user_id, Person)
-    Export::Tabular::People::TableDisplays.export(@format, entries, table_display, mailing_list.group)
+    Export::Tabular::People::TableDisplays.export(@format, entries, table_display,
+      mailing_list.group)
   end
 
   def recipients_data

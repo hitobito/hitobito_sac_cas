@@ -24,7 +24,8 @@ describe Export::SubscriptionsJob do
 
   context "with recipient_households param" do
     subject(:job) do
-      described_class.new(:csv, user.id, mailing_list.id, recipient_households: true, filename: "dummy")
+      described_class.new(:csv, user.id, mailing_list.id, recipient_households: true,
+        filename: "dummy")
     end
 
     it "uses SacRecipients tabular export" do
@@ -57,7 +58,8 @@ describe Export::SubscriptionsJob do
     end
 
     it "exports row including membership_years" do
-      TableDisplay.create!(person_id: user.id, selected: %w[language membership_years], table_model_class: "Person")
+      TableDisplay.create!(person_id: user.id, selected: %w[language membership_years],
+        table_model_class: "Person")
       export_table_display_as_csv do |csv|
         expect(csv.headers).to include "Sprache"
         expect(csv.pluck("Sprache").compact.uniq).to eq %w[de]

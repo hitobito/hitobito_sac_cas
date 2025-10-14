@@ -20,11 +20,16 @@ describe Roles::TerminateTourenleiterJob do
 
   context "with role" do
     let(:group) { groups(:matterhorn_touren_und_kurse) }
-    let(:qualification) { Fabricate(:qualification, qualification_kind: qualification_kinds(:ski_leader)) }
+    let(:qualification) {
+      Fabricate(:qualification, qualification_kind: qualification_kinds(:ski_leader))
+    }
     let(:yesterday) { Date.current.yesterday }
 
     let(:person) { qualification.person }
-    let!(:role) { Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.sti_name, person: person, group: group, start_on: nil) }
+    let!(:role) {
+      Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.sti_name, person: person, group: group,
+        start_on: nil)
+    }
 
     it "noops if qualification is active" do
       expect { job.perform }.to not_change { person.roles.count }
@@ -41,7 +46,10 @@ describe Roles::TerminateTourenleiterJob do
     end
 
     it "noops if at least one active qualification exists" do
-      Fabricate(:qualification, person: person, qualification_kind: qualification_kinds(:snowboard_leader), start_at: 2.years.ago, finish_at: 1.year.ago)
+      Fabricate(:qualification, person: person,
+        # rubocop:todo Layout/LineLength
+        qualification_kind: qualification_kinds(:snowboard_leader), start_at: 2.years.ago, finish_at: 1.year.ago)
+      # rubocop:enable Layout/LineLength
       qualification.update!(finish_at: 1.week.from_now)
       expect { job.perform }.to not_change { person.roles.count }
     end

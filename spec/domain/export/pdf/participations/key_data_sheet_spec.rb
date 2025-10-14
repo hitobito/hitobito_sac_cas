@@ -70,7 +70,8 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [195, 377, "eingefordert."],
       [75, 356, "Detailprogramm"],
       [75, 345, "Teilnehmer Touren"],
-      [195, 356, "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
+      [195, 356,
+        "Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt."],
       [75, 324, "Anmeldeschluss"],
       [195, 325, event.application_closing_at.to_date.strftime("%d.%m.%Y")],
       [75, 304, "Minimale Teilnehmerzahl"],
@@ -83,14 +84,20 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 211, "Ideale Klassengrösse"],
       [75, 190, "Maximale Klassengrösse"],
       [75, 169, "Klassenlehrer"],
-      [195, 170, "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
-      [195, 159, "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
-      [70, 40, "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
+      [195, 170,
+        "Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenlehrer - bitte im"],
+      [195, 159,
+        "Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden."],
+      [70, 40,
+        # rubocop:todo Layout/LineLength
+        "Schweizer Alpen-Club SAC, Monbijoustrasse 61, Postfach, CH-3000 Bern 14, +41 31 370 18 43/44, alpin@sac-cas.ch"]
+      # rubocop:enable Layout/LineLength
     ]
   }
 
   let(:expected_logo_position) {
-    {x: 380.28, y: 732.89, width: 721, height: 301, displayed_width: 122570.0, displayed_height: 21371.0}
+    {x: 380.28, y: 732.89, width: 721, height: 301, displayed_width: 122570.0,
+     displayed_height: 21371.0}
   }
 
   context "course compensation categories of kind day and flat" do
@@ -267,7 +274,9 @@ describe Export::Pdf::Participations::KeyDataSheet do
     let(:event_role_type) { Event::Course::Role::Leader }
 
     it "sanitizes filename" do
+      # rubocop:todo Layout/LineLength
       expect(subject.filename).to eq "Eckdatenblatt_Kursleitung_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
+      # rubocop:enable Layout/LineLength
     end
 
     context "text" do
@@ -288,7 +297,8 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
     context "with multiple leaders" do
       let!(:additional_leaders) do
-        [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
+        [people(:familienmitglied), people(:familienmitglied2),
+          people(:familienmitglied_kind)].map do
           participation = event.participations.where(participant: _1).first
           participation ||= Fabricate(:event_participation, event: event)
           Fabricate(Event::Course::Role::Leader.name.to_sym,
@@ -323,7 +333,9 @@ describe Export::Pdf::Participations::KeyDataSheet do
     let(:event_role_type) { Event::Course::Role::AssistantLeader }
 
     it "sanitizes filename" do
+      # rubocop:todo Layout/LineLength
       expect(subject.filename).to eq "Eckdatenblatt_Klassenleitung_Edmund_Hillary_#{now.strftime("%Y_%m_%d_%H%M")}.pdf"
+      # rubocop:enable Layout/LineLength
     end
 
     context "text" do
@@ -344,7 +356,8 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
     context "with multiple leaders" do
       let!(:additional_leaders) do
-        [people(:familienmitglied), people(:familienmitglied2), people(:familienmitglied_kind)].map do
+        [people(:familienmitglied), people(:familienmitglied2),
+          people(:familienmitglied_kind)].map do
           participation = event.participations.where(participant: _1).first
           participation ||= Fabricate(:event_participation, event: event)
           Fabricate(Event::Course::Role::Leader.name.to_sym,

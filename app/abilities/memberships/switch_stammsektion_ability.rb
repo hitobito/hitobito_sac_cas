@@ -20,7 +20,9 @@ module Memberships
       permission(:any).may(:create).on_main_active_member_with_zusatzsektion_if_backoffice?
     end
 
+    # rubocop:todo Layout/LineLength
     # NOTE: as inheritance is respected by cancancan (SwitchStammZusatzsektion.is_a?(SwitchStammsektion))
+    # rubocop:enable Layout/LineLength
     # we have to check the instance to get the customization we want
     def on_active_member_if_backoffice?
       if subject.instance_of?(Wizards::Memberships::SwitchStammsektion)
@@ -30,7 +32,9 @@ module Memberships
 
     def on_main_active_member_with_zusatzsektion_if_backoffice?
       if subject.instance_of?(Wizards::Memberships::SwapStammZusatzsektion)
+        # rubocop:todo Layout/LineLength
         backoffice? && sac_membership.stammsektion_role.present? && sac_membership.zusatzsektion_roles.any? &&
+          # rubocop:enable Layout/LineLength
           (!sac_membership.family? || person.sac_family_main_person?)
       end
     end

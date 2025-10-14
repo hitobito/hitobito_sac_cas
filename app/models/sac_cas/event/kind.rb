@@ -59,7 +59,8 @@ module SacCas::Event::Kind
 
   prepended do
     include I18nEnums
-    has_and_belongs_to_many :course_compensation_categories, foreign_key: :event_kind_id, inverse_of: :course_compensation_category_id
+    has_and_belongs_to_many :course_compensation_categories, foreign_key: :event_kind_id,
+      inverse_of: :course_compensation_category_id
     belongs_to :cost_center
     belongs_to :cost_unit
     belongs_to :level
@@ -101,14 +102,17 @@ module SacCas::Event::Kind
 
   private
 
-  def push_down_translated_attributes!(attr = nil)
+  def push_down_translated_attributes!(attr = nil) # rubocop:todo Metrics/MethodLength
     event_ids = push_down_events.pluck(:id)
     return if event_ids.blank?
 
     translations.each do |t|
       fields = attr ? [attr] : INHERITABLE_TRANSLATED_ATTRIBUTES
       attrs = t.attributes.slice("locale", *fields)
-      attrs["description"] = attrs.delete("general_information") if attrs.key?("general_information")
+      if attrs.key?("general_information")
+        attrs["description"] =
+          attrs.delete("general_information")
+      end
 
       translation_attrs = event_ids.map { |id| attrs.merge(event_id: id) }
       Event::Translation.upsert_all(

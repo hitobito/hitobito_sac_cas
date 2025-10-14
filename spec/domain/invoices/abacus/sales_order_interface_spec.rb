@@ -27,7 +27,8 @@ describe Invoices::Abacus::SalesOrderInterface do
   before do
     person.abacus_subject_key = 7
 
-    Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
+    Invoices::Abacus::Config.instance_variable_set(:@config,
+      {host: host, mandant: mandant}.stringify_keys)
 
     stub_login_requests
   end
@@ -69,7 +70,8 @@ describe Invoices::Abacus::SalesOrderInterface do
 
   it "creates course participation sales order in abacus" do
     course = Fabricate(:sac_course, kind: event_kinds(:ski_course))
-    participation = Fabricate(:event_participation, event: course, participant: person, price: 20, price_category: 1)
+    participation = Fabricate(:event_participation, event: course, participant: person, price: 20,
+      price_category: 1)
     invoice = ExternalInvoice::CourseParticipation.create!(
       person: person,
       issued_at: "2020-01-15",
@@ -131,7 +133,9 @@ describe Invoices::Abacus::SalesOrderInterface do
       Role.update_all(end_on: date.end_of_year)
       Person.update_all(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
 
+      # rubocop:todo Layout/LineLength
       allow(interface.send(:client)).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
+      # rubocop:enable Layout/LineLength
     end
 
     it "creates invoices in batch" do
@@ -199,12 +203,24 @@ describe Invoices::Abacus::SalesOrderInterface do
           "Content-Type" => "application/x-www-form-urlencoded"
         }
       )
-      .to_return(status: 200, body: {access_token: "eyJhbGciOi...", token_type: "Bearer", expires_in: 600}.to_json)
+      .to_return(status: 200, body: {access_token: "eyJhbGciOi...", token_type: "Bearer",
+                                     expires_in: 600}.to_json)
   end
 
-  def stub_create_sales_order_request
+  def stub_create_sales_order_request # rubocop:todo Metrics/MethodLength
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders")
       .with(
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
               "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"R\",\"ProcessFlowNumber\":3,\"UserFields\":" \
@@ -218,39 +234,70 @@ describe Invoices::Abacus::SalesOrderInterface do
               "{\"PositionNumber\":3,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":0.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Beitrag Zentralverband\",\"ProductNumber\":\"237\"},\"Accounts\":{}," \
               "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\",\"UserField2\":#{groups(:bluemlisalp).id},\"UserField3\":20.0}}]}",
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(
         status: 200,
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
         body: "{\"SalesOrderId\":19,\"SalesOrderBacklogId\":0,\"CustomerId\":7,\"OrderDate\":\"#{today_string}\"," \
               "\"DeliveryDate\":\"2020-01-05\",\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"UserFields\":" \
               "{\"UserField1\":#{invoice.id},\"UserField2\":\"hitobito\"}}"
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
       )
   end
 
-  def stub_create_course_sales_order_request(invoice_id)
+  def stub_create_course_sales_order_request(invoice_id) # rubocop:todo Metrics/MethodLength
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders")
       .with(
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
               "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"RK\",\"ProcessFlowNumber\":2,\"UserFields\":" \
               "{\"UserField1\":\"#{invoice_id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
               "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":20.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Kursname (234)\",\"ProductNumber\":\"234\"},\"Accounts\":{},\"UserFields\":{\"UserField1\":\"Kursname (234)\"}}]}",
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(
         status: 200,
+        # rubocop:todo Layout/LineLength
+        # rubocop:todo Layout/LineLength
         body: "{\"SalesOrderId\":20,\"SalesOrderBacklogId\":0,\"CustomerId\":7,\"OrderDate\":\"#{today_string}\"," \
               "\"DeliveryDate\":\"2020-01-05\",\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"UserFields\":" \
               "{\"UserField1\":#{invoice_id},\"UserField2\":\"hitobito\"}}"
+        # rubocop:enable Layout/LineLength
+        # rubocop:enable Layout/LineLength
       )
   end
 
   def stub_trigger_sales_order_request(id)
+    # rubocop:todo Layout/LineLength
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=#{id},SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
+      # rubocop:enable Layout/LineLength
       .with(
         body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
@@ -259,7 +306,9 @@ describe Invoices::Abacus::SalesOrderInterface do
   end
 
   def stub_update_sales_order_request
+    # rubocop:todo Layout/LineLength
     stub_request(:patch, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)")
+      # rubocop:enable Layout/LineLength
       .with(
         body: "{\"UserFields\":{\"UserField21\":true}}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
@@ -273,17 +322,21 @@ describe Invoices::Abacus::SalesOrderInterface do
         body: batch_body_sales_orders,
         headers: {
           "Authorization" => "Bearer eyJhbGciOi...",
+          # rubocop:todo Layout/LineLength
           "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+          # rubocop:enable Layout/LineLength
         }
       )
       .to_return(
         status: 202,
         body: batch_response_sales_orders,
+        # rubocop:todo Layout/LineLength
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+        # rubocop:enable Layout/LineLength
       )
   end
 
-  def batch_body_sales_orders
+  def batch_body_sales_orders # rubocop:todo Metrics/AbcSize
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r

@@ -14,7 +14,9 @@ describe Invoices::AboMagazin::InvoicePayedJob do
   subject(:job) { described_class.new(person.id, group.id) }
 
   it "executes membership manager update membership status" do
+    # rubocop:todo Layout/LineLength
     expect_any_instance_of(Invoices::AboMagazin::AbonnentManager).to receive(:update_abonnent_status)
+    # rubocop:enable Layout/LineLength
 
     job.perform
   end

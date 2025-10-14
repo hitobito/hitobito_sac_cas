@@ -14,7 +14,8 @@ describe Invoices::Abacus::TransmitAllMembersJob do
     # People that should show up
     people(:mitglied).update!(abacus_subject_key: "123")
     people(:familienmitglied).update!(abacus_subject_key: "124")
-    valid_person = create_person(params: {abacus_subject_key: "128", first_name: "Joe", last_name: "Doe"})
+    valid_person = create_person(params: {abacus_subject_key: "128", first_name: "Joe",
+                                          last_name: "Doe"})
     [
       people(:mitglied),
       people(:familienmitglied),
@@ -30,9 +31,15 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
   let(:unexpected_people) do
     Fabricate(:person) # no role
+    # rubocop:todo Layout/LineLength
     Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)) # other role
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     Group::SektionsMitglieder::Mitglied.create!(person: Fabricate(:person), group: groups(:bluemlisalp_mitglieder), start_on: 60.years.ago, end_on: 5.years.ago) # old member
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     Group::AboMagazin::Abonnent.create!(person: Fabricate(:person), group: groups(:abo_die_alpen), start_on: 5.years.ago, end_on: 2.years.ago) # old abonnent
+    # rubocop:enable Layout/LineLength
     Group::AboMagazin::Andere.create!(person: Fabricate(:person), group: groups(:abo_die_alpen))
   end
 
@@ -94,7 +101,9 @@ describe Invoices::Abacus::TransmitAllMembersJob do
     end
 
     it "re-raises the error if an error occurs" do
+      # rubocop:todo Layout/LineLength
       allow(subject_interface).to receive(:transmit_batch).and_raise(StandardError.new("Test error"))
+      # rubocop:enable Layout/LineLength
       expect { job.send(:transmit_slice, slice) }.to raise_error(StandardError)
     end
 
@@ -106,7 +115,9 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
         if @call_count == 1
           slice_size = Invoices::Abacus::TransmitAllMembersJob::SLICE_SIZE
-          subjects = expected_people.first(slice_size).map { |person| Invoices::Abacus::Subject.new(person) }
+          subjects = expected_people.first(slice_size).map { |person|
+            Invoices::Abacus::Subject.new(person)
+          }
           mock_parts(subjects)
         else
           raise StandardError, "Simulated error on second call"
@@ -117,7 +128,9 @@ describe Invoices::Abacus::TransmitAllMembersJob do
         .to change { HitobitoLogEntry.where(level: :error).count }.by(1)
 
       # test that error is logged through error method
+      # rubocop:todo Layout/LineLength
       expect(HitobitoLogEntry.where(level: :error).last.message).to eq("Simulated error on second call")
+      # rubocop:enable Layout/LineLength
     end
 
     it "runs the job correctly if there is no error" do
@@ -136,7 +149,9 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
                       if @call_count == 1
                         slice_size = Invoices::Abacus::TransmitAllMembersJob::SLICE_SIZE
-                        subjects = expected_people.first(slice_size).map { |person| Invoices::Abacus::Subject.new(person) }
+                        subjects = expected_people.first(slice_size).map { |person|
+                          Invoices::Abacus::Subject.new(person)
+                        }
                         mock_parts(subjects)
                       else
                         mock_parts(subjects, error_payload: "Simulated error on second call")
@@ -147,7 +162,9 @@ describe Invoices::Abacus::TransmitAllMembersJob do
         .to change { HitobitoLogEntry.where(level: :error).count }.by(7)
 
       # test that error is logged through error method
+      # rubocop:todo Layout/LineLength
       expect(HitobitoLogEntry.where(level: :error).last.message).to eq("Die Personendaten konnten nicht an Abacus übermittelt werden")
+      # rubocop:enable Layout/LineLength
     end
 
     it "finishes all threads cleanly" do
@@ -160,8 +177,11 @@ describe Invoices::Abacus::TransmitAllMembersJob do
 
     it "finishes correct number of threads in error case" do
       create_mix_of_people
-      expect(subject_interface).to receive(:transmit_batch).and_return([mock_part(people(:mitglied)), mock_part(people(:familienmitglied), success: false)])
-      expect(subject_interface).to receive(:transmit_batch).and_raise(StandardError, "Simulated error on second call")
+      expect(subject_interface).to receive(:transmit_batch).and_return([
+        mock_part(people(:mitglied)), mock_part(people(:familienmitglied), success: false)
+      ])
+      expect(subject_interface).to receive(:transmit_batch).and_raise(StandardError,
+        "Simulated error on second call")
 
       expect do
         expect { job.perform }.to raise_error(StandardError, "Simulated error on second call")
@@ -222,7 +242,8 @@ describe Invoices::Abacus::TransmitAllMembersJob do
     double(
       "Part",
       success?: success,
-      context_object: double("Subject", to_s: [person.first_name, person.last_name].join(" "), entity: person),
+      context_object: double("Subject", to_s: [person.first_name, person.last_name].join(" "),
+        entity: person),
       error_payload: "error payload"
     )
   end
@@ -230,7 +251,8 @@ describe Invoices::Abacus::TransmitAllMembersJob do
   def create_person(role_created_at: Date.new(2024, 1, 1), params: {})
     group = groups(:bluemlisalp_mitglieder)
     person = Fabricate.create(:person, **params)
-    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, created_at: role_created_at, group:, person:)
+    Fabricate.create(Group::SektionsMitglieder::Mitglied.sti_name, created_at: role_created_at,
+      group:, person:)
     person
   end
 end

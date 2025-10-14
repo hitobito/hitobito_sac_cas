@@ -34,7 +34,8 @@ describe Signup::SektionMailer do
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(person_path(person))
       expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 127.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 63.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)",
+        text: "CHF 63.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
       expect(fees).not_to have_css("tr:nth-of-type(3)")
       expect(fees).to have_css("tfoot tr", text: "CHF 63.50\r\nTotal erstmalig")
     end
@@ -45,7 +46,8 @@ describe Signup::SektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour")
+      CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(locale: :fr,
+        label: "fr", subject: "Acceptee", body: "Bonjour")
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
     end
@@ -61,7 +63,8 @@ describe Signup::SektionMailer do
       expect(mail.bcc).to include(SacCas::MV_EMAIL)
       expect(mail.bcc).to include("bluemlisalp@sac.ch")
       expect(mail.subject).to eq("SAC Eintritt Bestellbestätigung")
-      expect(body).to include("Mitgliedernummer: #{person.id} (#{people(:familienmitglied2, :familienmitglied_kind).map(&:id).join(", ")})")
+      expect(body).to include("Mitgliedernummer: #{person.id} (#{people(:familienmitglied2,
+        :familienmitglied_kind).map(&:id).join(", ")})")
       expect(body).to include("Vorname: #{person.first_name}")
       expect(body).to include("Name: #{person.last_name}")
       expect(body).to include("Geburtsdatum: #{I18n.l(person.birthday)}")
@@ -78,7 +81,8 @@ describe Signup::SektionMailer do
         "Viel Spass beim SAC!"
       )
       expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 179.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 89.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)",
+        text: "CHF 89.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
       expect(fees).not_to have_css("tr:nth-of-type(3)")
       expect(fees).to have_css("tfoot tr", text: "CHF 89.50\r\nTotal erstmalig")
     end
@@ -87,13 +91,15 @@ describe Signup::SektionMailer do
       person.update!(country: "BE")
 
       expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 179.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)", text: "CHF 89.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(2)",
+        text: "CHF 89.50\r\n- 50% Rabatt auf den jährlichen Beitrag")
       expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 11.50\r\n+ Gebühren Ausland")
       expect(fees).not_to have_css("tr:nth-of-type(4)")
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Signup::SektionMailer::CONFIRMATION).update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour")
+      CustomContent.get(Signup::SektionMailer::CONFIRMATION).update!(locale: :fr, label: "fr",
+        subject: "Acceptee", body: "Bonjour")
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body).to include("Bonjour")

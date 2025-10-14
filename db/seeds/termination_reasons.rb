@@ -15,7 +15,9 @@ unless TerminationReason.exists?
     {termination_reason_id: 4, locale: "de", text: "Aus gesundheitlichen Gründen"},
     {termination_reason_id: 5, locale: "de", text: "Altersbedingt"},
     {termination_reason_id: 6, locale: "de", text: "Weil es zu teuer ist"},
+    # rubocop:todo Layout/LineLength
     {termination_reason_id: 7, locale: "de", text: "Weil ich mich nicht mehr mit dem SAC identifizieren kann"},
+    # rubocop:enable Layout/LineLength
     {termination_reason_id: 8, locale: "de", text: "Weitere"},
     {termination_reason_id: 1, locale: "fr", text: "Aucune indication"},
     {termination_reason_id: 2, locale: "fr", text: "Décédé*e"},

@@ -112,7 +112,9 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       end
 
       it "returns the count of Mitglied and MitgliedZusatzsektion on ortsgruppe" do
+        # rubocop:todo Layout/LineLength
         mitglieder_counts = groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder).roles.group(:type).count
+        # rubocop:enable Layout/LineLength
         expect(mitglieder_counts).to match(
           Group::SektionsMitglieder::MitgliedZusatzsektion.name => 1
         )
@@ -183,7 +185,8 @@ describe GroupResource, :draper_with_helpers, type: :resource do
 
     describe "membership config" do
       let(:extra_fields) do
-        %i[section_fee_adult section_fee_youth section_fee_family section_entry_fee_adult section_entry_fee_youth section_entry_fee_family]
+        %i[section_fee_adult section_fee_youth section_fee_family section_entry_fee_adult
+          section_entry_fee_youth section_entry_fee_family]
       end
 
       before do

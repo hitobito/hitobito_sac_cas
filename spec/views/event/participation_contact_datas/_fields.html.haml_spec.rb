@@ -8,13 +8,18 @@ require "spec_helper"
 describe "event/participation_contact_datas/_fields.html.haml" do
   include FormatHelper
 
-  let(:participation_contact_data) { Event::ParticipationContactData.new(events(:top_course), people(:mitglied)) }
+  let(:participation_contact_data) {
+    Event::ParticipationContactData.new(events(:top_course), people(:mitglied))
+  }
   let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
-  let(:form_builder) { StandardFormBuilder.new(:participation_contact_data, participation_contact_data, view, {}) }
+  let(:form_builder) {
+    StandardFormBuilder.new(:participation_contact_data, participation_contact_data, view, {})
+  }
 
   before do
     allow(form_builder).to receive(:fields_for).and_return([])
-    allow(view).to receive_messages(f: form_builder, entry: participation_contact_data, phone_numbers: [])
+    allow(view).to receive_messages(f: form_builder, entry: participation_contact_data,
+      phone_numbers: [])
     assign(:policy_finder, policy_finder)
   end
 
@@ -26,7 +31,8 @@ describe "event/participation_contact_datas/_fields.html.haml" do
   context "required fields" do
     [:email, :first_name, :last_name, :birthday, :zip_code, :town, :country].each do |field|
       it "#{field} is rendered with required mark" do
-        expect(dom).to have_css "label.required", text: participation_contact_data.class.human_attribute_name(field)
+        expect(dom).to have_css "label.required",
+          text: participation_contact_data.class.human_attribute_name(field)
       end
     end
 

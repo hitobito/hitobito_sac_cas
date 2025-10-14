@@ -28,7 +28,9 @@ module TableDisplays::People
     end
 
     def address_valid(person)
-      invalid_tags = person.tags.select { |tag| tag.name == PersonTags::Validation::ADDRESS_INVALID }
+      invalid_tags = person.tags.select { |tag|
+        tag.name == PersonTags::Validation::ADDRESS_INVALID
+      }
       invalid_tags.empty? ? I18n.t(:"global.yes") : I18n.t(:"global.no")
     end
   end

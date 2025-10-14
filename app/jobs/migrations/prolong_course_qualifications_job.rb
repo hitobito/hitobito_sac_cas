@@ -8,7 +8,7 @@
 module Migrations
   # A one-off job to prolong qualifications of certain course participants.
   # Implements https://saccas.atlassian.net/browse/HIT-1172
-  class ProlongCourseQualificationsJob < BaseJob
+  class ProlongCourseQualificationsJob < BaseJob # rubocop:todo Metrics/ClassLength
     PARTICIPANT_ROLE = "participant"
 
     def perform
@@ -45,7 +45,8 @@ module Migrations
 
     def prolong_all_qualifications(person, quali_events)
       quali_events.each do |event|
-        Event::Qualifier::ProlongAction.new(person, event, qualification_kinds, PARTICIPANT_ROLE).run
+        Event::Qualifier::ProlongAction.new(person, event, qualification_kinds,
+          PARTICIPANT_ROLE).run
         flag_participation_qualified(person, event) if event.is_a?(Event::Course)
       end
     end
@@ -90,7 +91,8 @@ module Migrations
 
     def fetch_person_course_ids(people)
       courses
-        .where(event_participations: {participant_id: people.map(&:id), participant_type: Person.sti_name})
+        .where(event_participations: {participant_id: people.map(&:id),
+                                      participant_type: Person.sti_name})
         .pluck("event_participations.event_id", "event_participations.participant_id")
         .each_with_object({}) do |(event_id, person_id), hash|
           hash[person_id] ||= []
@@ -139,7 +141,7 @@ module Migrations
       Event::Kind.where(short_name: event_kind_short_names)
     end
 
-    def event_kind_short_names
+    def event_kind_short_names # rubocop:todo Metrics/MethodLength
       %w[
         S6530
         S6585

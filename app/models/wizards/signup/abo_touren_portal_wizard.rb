@@ -23,7 +23,9 @@ module Wizards::Signup
       current_user&.roles&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
     end
 
+    # rubocop:todo Layout/LineLength
     def redirection_message = I18n.t("groups.self_registration.create.already_member_of_tourenportal")
+    # rubocop:enable Layout/LineLength
 
     def calculated_costs = Group.root.abo_touren_portal_fee
 

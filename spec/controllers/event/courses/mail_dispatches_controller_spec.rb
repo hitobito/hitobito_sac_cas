@@ -27,7 +27,8 @@ describe Event::Courses::MailDispatchesController do
   end
 
   let(:course) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course), link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
+    Fabricate(:sac_course, kind: event_kinds(:ski_course),
+      link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
   end
   let(:group) { course.groups.first }
 
@@ -52,7 +53,8 @@ describe Event::Courses::MailDispatchesController do
         expect(flash[:notice]).to eq("Es wurden 2 E-Mails verschickt.")
       end
 
-      [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :closed, :canceled].each do |state|
+      [:created, :application_open, :application_paused, :application_closed, :assignment_closed,
+        :closed, :canceled].each do |state|
         it "unauthorized leader reminder mail for state #{state}" do
           course.update_column(:state, state)
           expect do
@@ -73,10 +75,13 @@ describe Event::Courses::MailDispatchesController do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
         end.not_to have_enqueued_mail(Event::SurveyMailer, :survey)
+        # rubocop:todo Layout/LineLength
         expect(flash[:alert]).to eq("Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.")
+        # rubocop:enable Layout/LineLength
       end
 
-      [:created, :application_open, :application_paused, :application_closed, :assignment_closed, :canceled].each do |state|
+      [:created, :application_open, :application_paused, :application_closed, :assignment_closed,
+        :canceled].each do |state|
         it "unauthorized survey mail for state #{state}" do
           course.update_column(:state, state)
           expect do

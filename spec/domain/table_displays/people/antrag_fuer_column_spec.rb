@@ -37,9 +37,12 @@ describe TableDisplays::People::AntragFuerColumn, type: :helper do
 
   context "stammsektion" do
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_neuanmeldungen_nv))
+      # rubocop:enable Layout/LineLength
       people(:mitglied).roles.destroy_all
-      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied), group: groups(:bluemlisalp_neuanmeldungen_nv))
+      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied),
+        group: groups(:bluemlisalp_neuanmeldungen_nv))
     end
 
     it_behaves_like "table display", {
@@ -52,9 +55,14 @@ describe TableDisplays::People::AntragFuerColumn, type: :helper do
 
   context "zusatzsektion" do
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:matterhorn_neuanmeldungen_nv))
+      # rubocop:enable Layout/LineLength
       people(:mitglied).sac_membership.zusatzsektion_roles.destroy_all
-      Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name, person: people(:mitglied), group: groups(:matterhorn_neuanmeldungen_nv), end_on: 2.days.from_now)
+      Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name,
+        # rubocop:todo Layout/LineLength
+        person: people(:mitglied), group: groups(:matterhorn_neuanmeldungen_nv), end_on: 2.days.from_now)
+      # rubocop:enable Layout/LineLength
     end
 
     it_behaves_like "table display", {

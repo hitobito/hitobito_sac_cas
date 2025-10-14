@@ -133,7 +133,9 @@ describe Invoices::AboMagazin::AbonnentManager do
       expect(abonnent_person.roles.count).to eq(2)
       expect(abonnent_person.roles.first.group).to eq die_alpen
       expect(abonnent_person.roles.second.group).to eq die_alpen_fr
+      # rubocop:todo Layout/LineLength
       expect(abonnent_person.roles.map(&:type).all?(Group::AboMagazin::Abonnent.sti_name)).to be_truthy
+      # rubocop:enable Layout/LineLength
     end
   end
 end

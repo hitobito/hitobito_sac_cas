@@ -4,7 +4,9 @@ module SacExports
       new(CustomContent, keys: [:key]).generate
       new(CustomContent::Translation, keys: [:custom_content_id, :locale]).generate
 
+      # rubocop:todo Layout/LineLength
       action_text_scope = ActionText::RichText.where(record_type: CustomContent::Translation.sti_name)
+      # rubocop:enable Layout/LineLength
       new(ActionText::RichText, scope: action_text_scope, keys: [:record_id, :record_type]).generate
 
       new(ServiceToken, keys: [:token]).generate

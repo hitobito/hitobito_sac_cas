@@ -43,7 +43,9 @@ describe Event::Qualifier do
       expect(start_dates).to eq [today - 1.year, today - 5.months]
     end
 
+    # rubocop:todo Layout/LineLength
     it "does not issue if current and previous courses combined do not have sufficient training days" do
+      # rubocop:enable Layout/LineLength
       create_external_training(today - 5.months, training_days: 1)
       participation.event.update!(training_days: 0.5)
       participation.update!(actual_days: nil)
@@ -57,7 +59,8 @@ describe Event::Qualifier do
     end
 
     it "does not issue if previous participation does not have sufficient actual days" do
-      create_course_participation(start_at: today - 5.months, training_days: 1).update!(actual_days: 0.5)
+      create_course_participation(start_at: today - 5.months,
+        training_days: 1).update!(actual_days: 0.5)
       participation.update!(actual_days: 1)
       expect { qualifier.issue }.not_to change { person.qualifications.count }
     end
@@ -78,7 +81,8 @@ describe Event::Qualifier do
   end
 
   def create_qualification(start_at, qualified_at = start_at)
-    Fabricate(:qualification, person: person, qualification_kind: ski_leader, start_at: start_at, qualified_at: qualified_at)
+    Fabricate(:qualification, person: person, qualification_kind: ski_leader, start_at: start_at,
+      qualified_at: qualified_at)
   end
 
   def create_external_training(start_at, training_days:)
@@ -92,7 +96,8 @@ describe Event::Qualifier do
   end
 
   def create_course_participation(start_at:, training_days: nil)
-    course = Fabricate.build(:course, kind: ski_course, training_days: training_days, number: "01-#{start_at}")
+    course = Fabricate.build(:course, kind: ski_course, training_days: training_days,
+      number: "01-#{start_at}")
     course.dates.build(start_at: start_at - (training_days - 1).days, finish_at: start_at)
     course.save!
     Fabricate(:event_participation, event: course, participant: person)

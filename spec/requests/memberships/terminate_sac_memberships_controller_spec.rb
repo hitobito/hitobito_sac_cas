@@ -86,7 +86,9 @@ describe Memberships::TerminateSacMembershipsController do
         it "shows the date select step with a warning" do
           request
           expect_date_select_step
+          # rubocop:todo Layout/LineLength
           expect(response.body).to include("Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist.")
+          # rubocop:enable Layout/LineLength
         end
       end
     end
@@ -97,7 +99,9 @@ describe Memberships::TerminateSacMembershipsController do
       it "shows info about affecting the whole family" do
         request
         expect_summary_step
+        # rubocop:todo Layout/LineLength
         expect(response.body).to include "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -131,7 +135,9 @@ describe Memberships::TerminateSacMembershipsController do
   describe "#POST" do
     let(:termination_reason_id) { termination_reasons(:deceased).id }
     let(:request) do
+      # rubocop:todo Layout/LineLength
       post group_person_terminate_sac_membership_path(group_id: bluemlisalp.id, person_id: person.id),
+        # rubocop:enable Layout/LineLength
         params:
     end
     let(:person) { people(:mitglied) }
@@ -161,7 +167,10 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as an admin" do
       let(:operator) { people(:admin) }
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
@@ -177,9 +186,13 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as a section admin" do
       let(:operator) do
-        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)).person.reload
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person),
+          group: groups(:bluemlisalp_funktionaere)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
@@ -195,9 +208,13 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as a section member editor" do
       let(:operator) do
-        Group::SektionsMitglieder::Schreibrecht.create!(person: Fabricate(:person), group: groups(:bluemlisalp_mitglieder)).person.reload
+        Group::SektionsMitglieder::Schreibrecht.create!(person: Fabricate(:person),
+          group: groups(:bluemlisalp_mitglieder)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
@@ -213,9 +230,13 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as a section arbitrary group editor" do
       let(:operator) do
-        Group::SektionsFunktionaere::Schreibrecht.create!(person: Fabricate(:person), group: groups(:bluemlisalp_funktionaere)).person.reload
+        Group::SektionsFunktionaere::Schreibrecht.create!(person: Fabricate(:person),
+          group: groups(:bluemlisalp_funktionaere)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "returns not authorized" do
         expect { request }.to raise_error(CanCan::AccessDenied)
@@ -224,9 +245,13 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as a section admin of another section" do
       let(:operator) do
-        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person), group: groups(:matterhorn_funktionaere)).person.reload
+        Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person),
+          group: groups(:matterhorn_funktionaere)).person.reload
       end
-      let(:params) { build_params(step: 1, termination_choose_date: {terminate_on: "now"}, summary: {termination_reason_id:}) }
+      let(:params) {
+        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
+          summary: {termination_reason_id:})
+      }
 
       it "returns not authorized" do
         expect { request }.to raise_error(CanCan::AccessDenied)

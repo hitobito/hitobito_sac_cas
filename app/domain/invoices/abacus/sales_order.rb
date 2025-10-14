@@ -21,7 +21,9 @@ module Invoices
       PROCESS_FLOW_NUMBERS = {
         sac_membership_yearly: 1, # membership invoice created by the yearly batch job
         sac_membership: 3, # membership invoice created individually
+        # rubocop:todo Layout/LineLength
         sac_membership_not_sent: 6, # membership invoice created individually, without sending it to member
+        # rubocop:enable Layout/LineLength
         course: 2,
         sac_magazine: 4
       }.with_indifferent_access.freeze
@@ -60,7 +62,7 @@ module Invoices
         )
       end
 
-      def sales_order_attrs
+      def sales_order_attrs # rubocop:todo Metrics/AbcSize
         {
           # customer id is defined to be the same as subject id
           customer_id: entity.person.abacus_subject_key,
@@ -84,7 +86,7 @@ module Invoices
         }.merge(additional_user_fields)
       end
 
-      def sales_order_position_attrs(position, index)
+      def sales_order_position_attrs(position, index) # rubocop:todo Metrics/MethodLength
         {
           # not required if positions are nested in sales order
           # sales_order_id: entity.abacus_sales_order_key,

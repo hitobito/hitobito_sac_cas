@@ -8,7 +8,7 @@
 require Rails.root.join("db", "seeds", "support", "person_seeder")
 
 class SacPersonSeeder < PersonSeeder
-  def amount(role_type)
+  def amount(role_type) # rubocop:todo Metrics/CyclomaticComplexity
     case role_type.name.demodulize
     when "Mitglied" then 12
     when "Neuanmeldung" then 3

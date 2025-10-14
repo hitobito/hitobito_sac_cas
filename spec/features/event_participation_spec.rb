@@ -78,8 +78,14 @@ describe :event_participation, js: true do
   describe "canceling participation" do
     let(:group) { groups(:root) }
     let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-    let(:participation) { Fabricate(:event_participation, event: event, participant: person, application: application, price: 20, price_category: 0) }
-    let(:event) { Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
+    let(:participation) {
+      Fabricate(:event_participation, event: event, participant: person, application: application,
+        price: 20, price_category: 0)
+    }
+    let(:event) {
+      Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group],
+        applications_cancelable: true)
+    }
 
     before do
       participation.update!(state: :assigned)
@@ -92,7 +98,9 @@ describe :event_participation, js: true do
         visit group_event_path(group_id: group, id: event)
         click_button "Abmelden"
         within(".popover-body") { click_on "Abmelden" }
+        # rubocop:todo Layout/LineLength
         expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
+        # rubocop:enable Layout/LineLength
       end
 
       it "can cancel with reason" do
@@ -110,16 +118,22 @@ describe :event_participation, js: true do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") { click_on "Abmelden" }
+        # rubocop:todo Layout/LineLength
         expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
+        # rubocop:enable Layout/LineLength
       end
 
       it "shows cancellation cost in hint text" do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
+          # rubocop:todo Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
                                     "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
                                     "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF 20.0 in Rechnung gestellt.")
+          # rubocop:enable Layout/LineLength
+          # rubocop:enable Layout/LineLength
         end
       end
 
@@ -128,18 +142,26 @@ describe :event_participation, js: true do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
+          # rubocop:todo Layout/LineLength
           expect(page).to have_no_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest?")
+          # rubocop:enable Layout/LineLength
         end
       end
 
+      # rubocop:todo Layout/LineLength
       it "shows cancellation cost of zero in hint text if participation does not have a price associated" do
+        # rubocop:enable Layout/LineLength
         participation.update!(price: 0)
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
+          # rubocop:todo Layout/LineLength
+          # rubocop:todo Layout/LineLength
           expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
                                     "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
                                     "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF 0.0 in Rechnung gestellt.")
+          # rubocop:enable Layout/LineLength
+          # rubocop:enable Layout/LineLength
         end
       end
 

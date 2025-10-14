@@ -8,7 +8,11 @@
 require "spec_helper"
 
 describe Event::CanceledMailer do
-  let(:event) { Fabricate(:sac_open_course, number: 123).tap { |c| c.update_attribute(:state, :canceled) } }
+  let(:event) {
+    Fabricate(:sac_open_course, number: 123).tap { |c|
+   c.update_attribute(:state, :canceled) # rubocop:todo Layout/IndentationWidth
+    }
+  }
   let(:participation) { event.participations.create!(person: people(:mitglied)) }
 
   before { Group.root.update!(course_admin_email: "admin@example.com") }

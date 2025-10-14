@@ -14,7 +14,8 @@ describe Invoices::Abacus::AboMagazinInvoice do
   subject { described_class.new(abonnent_alpen, Date.new(2026, 1, 1)) }
 
   before do
-    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16, abo_alpen_fee_article_number: "APG")
+    Group.root.update!(abo_alpen_fee: 60, abo_alpen_postage_abroad: 16,
+      abo_alpen_fee_article_number: "APG")
   end
 
   describe "#positions" do
@@ -37,10 +38,14 @@ describe Invoices::Abacus::AboMagazinInvoice do
         abonnent.update_column(:language, :it)
         allow(I18n).to receive(:t).and_call_original
         allow(I18n).to receive(:t)
+          # rubocop:todo Layout/LineLength
           .with("invoices.abo_magazin.positions.abo_fee", group: abonnent_alpen.group, time_period: subject.send(:new_role_period), locale: "it")
+          # rubocop:enable Layout/LineLength
           .and_return("Abbonamento Die Alpen DE 01.01.2026 - 31.12.2026")
 
+        # rubocop:todo Layout/LineLength
         expect(subject.positions.first.name).to eq "Abbonamento Die Alpen DE 01.01.2026 - 31.12.2026"
+        # rubocop:enable Layout/LineLength
       end
     end
 

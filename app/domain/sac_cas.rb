@@ -16,7 +16,9 @@ module SacCas
   ].freeze
 
   MITGLIED_ZUSATZSEKTION_ROLES = [::Group::SektionsMitglieder::MitgliedZusatzsektion].freeze
+  # rubocop:todo Layout/LineLength
   NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES = [::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion].freeze
+  # rubocop:enable Layout/LineLength
   NEUANMELDUNG_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion

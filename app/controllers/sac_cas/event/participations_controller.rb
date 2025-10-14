@@ -18,11 +18,13 @@ module SacCas::Event::ParticipationsController
     around_create :proceed_wizard
     after_create :subscribe_newsletter
     after_summon :enqueue_invoice_job
+    # rubocop:todo Layout/LineLength
     after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
+    # rubocop:enable Layout/LineLength
     before_cancel :assert_participant_cancelable?
   end
 
-  def cancel
+  def cancel # rubocop:todo Metrics/AbcSize
     invoice_cancelled
     entry.cancel_statement = params.dig(:event_participation, :cancel_statement)
     entry.canceled_at = params.dig(:event_participation, :canceled_at) || Time.zone.today
@@ -44,7 +46,8 @@ module SacCas::Event::ParticipationsController
     )
 
     refresh_participant_counts
-    redirect_to group_event_participation_path(group, event, entry), notice: t("event.participations.reactivated_notice", participant: entry.person)
+    redirect_to group_event_participation_path(group, event, entry),
+      notice: t("event.participations.reactivated_notice", participant: entry.person)
   end
 
   def new
@@ -230,7 +233,8 @@ module SacCas::Event::ParticipationsController
   def generate_pdf(people, group)
     if params[:list_kind].present?
       authorize!(:index_full_participations, event)
-      Export::Pdf::Participations::ParticipantList.new(event, params[:list_kind], request.host).render
+      Export::Pdf::Participations::ParticipantList.new(event, params[:list_kind],
+        request.host).render
     else
       super
     end

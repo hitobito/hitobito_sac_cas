@@ -29,7 +29,9 @@ describe ExternalTrainings::Qualifier do
       expect { issue(training) }.not_to change { Qualification.count }
     end
 
+    # rubocop:todo Layout/LineLength
     it "creates a new qualification when existing qualification is from last day of prolongation period" do
+      # rubocop:enable Layout/LineLength
       create_qualification(start_at: today - 6.years)
       training = create_external_training(start_at: today)
       expect { issue(training) }.to change { Qualification.count }.by(1)
@@ -50,7 +52,8 @@ describe ExternalTrainings::Qualifier do
 
     it "noops when earlier participation does not have enough actual days" do
       create_qualification(start_at: today - 2.years)
-      create_course_participation(start_at: today, qualified: true, training_days: 1, actual_days: 0.5)
+      create_course_participation(start_at: today, qualified: true, training_days: 1,
+        actual_days: 0.5)
       training = create_external_training(start_at: today, training_days: 1)
       expect { issue(training) }.not_to change { Qualification.count }
     end
@@ -130,7 +133,9 @@ describe ExternalTrainings::Qualifier do
         expect(snowboard_qualis).to have(2).items
       end
 
+      # rubocop:todo Layout/LineLength
       it "creates a new snowboard leader when issuing after quali date if category is qualification" do
+        # rubocop:enable Layout/LineLength
         @snow_pro.update!(category: :qualification)
 
         training = create_external_training(start_at: today - 5.months, training_days: 0)
@@ -153,13 +158,17 @@ describe ExternalTrainings::Qualifier do
         expect(snowboard_qualis).to have(2).items
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes all obsolete qualifications and hence has nothing to prolong when issuing before snowboard" do
+        # rubocop:enable Layout/LineLength
         training = create_external_training(start_at: today - 20.months, training_days: 1)
         expect { issue(training) }.to change { Qualification.count }.by(-2)
         expect(start_dates).to eq []
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes all obsolete qualifications and keeps snowboard if not associated with event_kind" do
+        # rubocop:enable Layout/LineLength
         @snow_pro.destroy!
         training = create_external_training(start_at: today - 20.months, training_days: 1)
         expect { issue(training) }.to change { Qualification.count }.by(-1)
@@ -217,14 +226,18 @@ describe ExternalTrainings::Qualifier do
         expect(start_dates).to eq [today - 2.years]
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes earlier training qualification and keeps other when support quali and event exists" do
+        # rubocop:enable Layout/LineLength
         create_external_training(start_at: today - 10.months)
 
         expect { revoke(@training) }.to change { Qualification.count }.by(-1)
         expect(start_dates).to eq [today - 2.years, today - 10.months]
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes earlier training qualification and removes other when event has not enough days" do
+        # rubocop:enable Layout/LineLength
         create_external_training(start_at: today - 10.months, training_days: 1)
 
         @training.update(training_days: 0.5)
@@ -265,7 +278,9 @@ describe ExternalTrainings::Qualifier do
         expect(snowboard_qualis).to be_empty
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes earlier qualification and keeps only ski if supporting events exist as snowboard has nothing to prolong" do
+        # rubocop:enable Layout/LineLength
         training = create_external_training(start_at: today - 20.months)
         create_qualification(start_at: today - 20.months)
 
@@ -286,11 +301,14 @@ describe ExternalTrainings::Qualifier do
         @snow_pro.update!(category: :qualification)
 
         expect { revoke(training) }.to change { Qualification.count }.by(1)
-        expect(start_dates).to eq [today - 2.years, today - 18.months, today - 18.months, today - 11.months, today - 11.months]
+        expect(start_dates).to eq [today - 2.years, today - 18.months, today - 18.months,
+          today - 11.months, today - 11.months]
         expect(snowboard_qualis).to have(2).item
       end
 
+      # rubocop:todo Layout/LineLength
       it "deletes earlier qualification and keeps snowboard in place if not related with event_kind" do
+        # rubocop:enable Layout/LineLength
         training = create_external_training(start_at: today - 20.months)
         create_qualification(start_at: today - 20.months)
         @snow_pro.destroy!
@@ -305,7 +323,8 @@ describe ExternalTrainings::Qualifier do
     end
   end
 
-  def create_external_training(start_at:, finish_at: start_at, kind: nil, training_days: 2, qualification: false)
+  def create_external_training(start_at:, finish_at: start_at, kind: nil, training_days: 2,
+    qualification: false)
     Fabricate(:external_training_skip_issue_qualifications, {
       person: mitglied,
       event_kind: kind || ski_course,
@@ -324,14 +343,17 @@ describe ExternalTrainings::Qualifier do
     )
   end
 
-  def create_course_participation(start_at:, kind: ski_course, training_days: 2, qualified: true, actual_days: nil)
+  def create_course_participation(start_at:, kind: ski_course, training_days: 2, qualified: true,
+    actual_days: nil)
     course = Fabricate.build(:sac_course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at - (training_days - 1).days, finish_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, participant: mitglied, qualified: qualified, actual_days: actual_days)
+    Fabricate(:event_participation, event: course, participant: mitglied, qualified: qualified,
+      actual_days: actual_days)
   end
 
   def create_qualification(start_at:, qualified_at: start_at, kind: ski_leader)
-    Fabricate(:qualification, qualification_kind: kind, person: mitglied, start_at: start_at, qualified_at: qualified_at)
+    Fabricate(:qualification, qualification_kind: kind, person: mitglied, start_at: start_at,
+      qualified_at: qualified_at)
   end
 end

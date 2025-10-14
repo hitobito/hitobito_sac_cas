@@ -36,7 +36,7 @@ class ExternalInvoice < ActiveRecord::Base
 
   belongs_to :person
   belongs_to :link, polymorphic: true, optional: true
-  has_many :hitobito_log_entries, as: :subject, dependent: :nullify
+  has_many :hitobito_log_entries, as: :subject, dependent: :nullify # rubocop:todo Rails/InverseOf
 
   i18n_enum :state, STATES, scopes: true, queries: true
 

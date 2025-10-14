@@ -41,8 +41,10 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
   def error(job, exception)
     super
+    # rubocop:todo Layout/LineLength
     create_error_log_entry("Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. " \
               "Es erfolgt ein weiterer Versuch.", exception.message)
+    # rubocop:enable Layout/LineLength
   end
 
   def failure(job)
@@ -153,7 +155,8 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   def extend_roles_for_invoicing
     return if @role_finish_date.nil?
 
-    Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date, reference_date).extend_roles
+    Invoices::SacMemberships::ExtendRolesForInvoicing.new(@role_finish_date,
+      reference_date).extend_roles
   end
 
   def start_progress

@@ -79,7 +79,9 @@ describe MailingLists::Subscribers do
       end
 
       context "with both invoice_receiver filters stammsektion and zusatzsektion" do
-        before { set_filter(invoice_receiver: {stammsektion: true, zusatzsektion: true, group_id:}) }
+        before {
+          set_filter(invoice_receiver: {stammsektion: true, zusatzsektion: true, group_id:})
+        }
 
         it "includes member in a sektion" do
           create_role(mitglied, :bluemlisalp_mitglieder)
@@ -144,7 +146,9 @@ describe MailingLists::Subscribers do
       end
 
       context "with both invoice_receiver filters stammsektion and zusatzsektion" do
-        before { set_filter(invoice_receiver: {stammsektion: true, zusatzsektion: true, group_id:}) }
+        before {
+          set_filter(invoice_receiver: {stammsektion: true, zusatzsektion: true, group_id:})
+        }
 
         it "includes member in same layer" do
           create_role(mitglied, :bluemlisalp_mitglieder)

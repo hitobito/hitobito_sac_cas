@@ -77,7 +77,9 @@ describe Wizards::Signup::AboMagazinWizard do
       it "is invalid if birthday is in the future" do
         required_attrs[:person_fields][:birthday] = 1.day.from_now.to_date
         expect(wizard).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(wizard.person_fields.errors.full_messages).to eq ["Person muss 0 Jahre oder älter sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -88,7 +90,8 @@ describe Wizards::Signup::AboMagazinWizard do
         required_attrs[:summary][:agb] = "0"
         required_attrs[:summary][:data_protection] = "0"
         expect(wizard).not_to be_valid
-        expect(wizard.summary.errors.full_messages).to eq ["Agb muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
+        expect(wizard.summary.errors.full_messages).to eq ["Agb muss akzeptiert werden",
+          "Datenschutzerklärung muss akzeptiert werden"]
       end
     end
   end
@@ -106,8 +109,14 @@ describe Wizards::Signup::AboMagazinWizard do
       expect { wizard.save! }
         .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
-        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count }.by(0)
+        .and change {
+               # rubocop:todo Layout/LineLength
+               Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count
+               # rubocop:enable Layout/LineLength
+             }.by(1)
+        .and change {
+               Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count
+             }.by(0)
         .and change { ExternalInvoice::AboMagazin.count }.by(1)
       expect(max.roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
       expect(max.roles.last.start_on).to eq Date.current
@@ -120,8 +129,14 @@ describe Wizards::Signup::AboMagazinWizard do
       expect { ApplicationRecord.transaction { wizard.save! } }
         .to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
-        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count }.by(1)
-        .and change { Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count }.by(0)
+        .and change {
+               # rubocop:todo Layout/LineLength
+               Delayed::Job.where("handler LIKE '%Invoices::Abacus::CreateAboMagazinInvoiceJob%'").count
+               # rubocop:enable Layout/LineLength
+             }.by(1)
+        .and change {
+               Delayed::Job.where("handler LIKE '%Invoices::Abacus::TransmitPersonJob%'").count
+             }.by(0)
         .and change { ExternalInvoice::AboMagazin.count }.by(1)
     end
 
@@ -160,7 +175,9 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     it "saves role for current_user when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
       expect(wizard).to be_valid
       expect { wizard.save! }.not_to change { Person.count }
       expect(people(:admin).roles.last.type).to eq Group::AboMagazin::Neuanmeldung.sti_name
@@ -168,7 +185,9 @@ describe Wizards::Signup::AboMagazinWizard do
 
     context "automatic_invoice_enabled is false" do
       it "does nothing" do
+        # rubocop:todo Layout/LineLength
         allow(Settings.invoicing.abo_magazin).to receive(:automatic_invoice_enabled).and_return(false)
+        # rubocop:enable Layout/LineLength
 
         expect(wizard).not_to receive(:generate_invoice)
         wizard.save!
@@ -199,7 +218,9 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     it "starts at person fields step when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::PersonFields)
       expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboMagazin::Summary)
     end
@@ -210,7 +231,9 @@ describe Wizards::Signup::AboMagazinWizard do
     let(:person) { people(:mitglied) }
 
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(person)
+      # rubocop:enable Layout/LineLength
     end
 
     context "role in same abo group" do
@@ -231,7 +254,9 @@ describe Wizards::Signup::AboMagazinWizard do
     end
 
     context "role in different abo group" do
-      let(:different_abo_group) { Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine), name: "Les Alpes FR") }
+      let(:different_abo_group) {
+        Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine), name: "Les Alpes FR")
+      }
 
       it "returns false when user has abonnent role" do
         Group::AboMagazin::Abonnent.create!(person:, group: different_abo_group)

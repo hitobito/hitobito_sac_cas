@@ -63,7 +63,8 @@ class Invoices::Abacus::MembershipInvoiceGenerator
 
   def member = @member ||= Invoices::SacMemberships::Member.new(person, context)
 
-  def context = @context ||= Invoices::SacMemberships::Context.new(reference_date, custom_discount: custom_discount)
+  def context = @context ||= Invoices::SacMemberships::Context.new(reference_date,
+    custom_discount: custom_discount)
 
   def person = context.people_with_membership_years.find(person_id)
 end

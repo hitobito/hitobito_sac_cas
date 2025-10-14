@@ -38,7 +38,9 @@ module Memberships
 
     # NOTE: format: :html is required otherwise it is redirect as turbo_stream
     def redirect_target
+      # rubocop:todo Layout/LineLength
       # if the current_user does not have the ability to show the person in other groups the person has (or will have) roles
+      # rubocop:enable Layout/LineLength
       # in, we redirect to the member list and display the flash message there
       if can?(:show, person)
         person_path(person, format: :html)

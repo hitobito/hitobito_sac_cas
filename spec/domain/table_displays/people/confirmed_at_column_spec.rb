@@ -16,7 +16,9 @@ describe TableDisplays::People::ConfirmedAtColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
     people(:mitglied).update_column(:confirmed_at, Time.zone.local(2015, 1, 1))
   end
 

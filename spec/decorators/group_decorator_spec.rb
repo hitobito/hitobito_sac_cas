@@ -91,7 +91,9 @@ describe GroupDecorator do
         Fabricate(mitglied, group: groups(:matterhorn_mitglieder),
           person: neuanmeldung_sektion_zusatzsektion_person)
         Fabricate(neuanmeldung_sektion_zusatzsektion,
+          # rubocop:todo Layout/LineLength
           group: groups(:bluemlisalp_neuanmeldungen_sektion), person: neuanmeldung_sektion_zusatzsektion_person)
+        # rubocop:enable Layout/LineLength
 
         expect(count_roles(mitglied, mitglied_zusatzsektion)).to eq(4)
 
@@ -107,7 +109,9 @@ describe GroupDecorator do
         Fabricate(mitglied, group: groups(:matterhorn_mitglieder),
           person: mitglied_zusatzsektion_person)
         Fabricate(mitglied_zusatzsektion,
+          # rubocop:todo Layout/LineLength
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder), person: mitglied_zusatzsektion_person)
+        # rubocop:enable Layout/LineLength
 
         expect(count_roles(mitglied, mitglied_zusatzsektion)).to eq(4)
 
@@ -145,15 +149,21 @@ describe GroupDecorator do
           Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name,
             parent: groups(:bluemlisalp_ortsgruppe_ausserberg))
 
+        # rubocop:todo Layout/LineLength
         neuanmeldung_nv_person = make_person(groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
+        # rubocop:enable Layout/LineLength
         Fabricate(neuanmeldung_nv,
+          # rubocop:todo Layout/LineLength
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv), person: neuanmeldung_nv_person)
+        # rubocop:enable Layout/LineLength
 
         neuanmeldung_nv_zusatzsektion_person = make_person(groups(:matterhorn_mitglieder))
         Fabricate(mitglied, group: groups(:matterhorn_mitglieder),
           person: neuanmeldung_nv_zusatzsektion_person)
         Fabricate(neuanmeldung_nv_zusatzsektion,
+          # rubocop:todo Layout/LineLength
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv), person: neuanmeldung_nv_zusatzsektion_person)
+        # rubocop:enable Layout/LineLength
 
         neuanmeldung_sektion_person = make_person(ausserberg_neuanmeldungen_sektion)
         Fabricate(neuanmeldung_sektion, group: ausserberg_neuanmeldungen_sektion,
@@ -191,7 +201,9 @@ describe GroupDecorator do
       end
 
       it "returns false with child SektionsNeuanmeldungenSektion" do
+        # rubocop:todo Layout/LineLength
         expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).to be_exists
+        # rubocop:enable Layout/LineLength
 
         expect(decorator.membership_admission_through_gs?).to eq false
       end
@@ -201,7 +213,9 @@ describe GroupDecorator do
       let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
 
       it "returns true without child SektionsNeuanmeldungenSektion" do
+        # rubocop:todo Layout/LineLength
         expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).not_to be_exists
+        # rubocop:enable Layout/LineLength
 
         expect(decorator.membership_admission_through_gs?).to eq true
       end
@@ -210,7 +224,9 @@ describe GroupDecorator do
         Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name,
           parent: groups(:bluemlisalp_ortsgruppe_ausserberg))
 
+        # rubocop:todo Layout/LineLength
         expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).to be_exists
+        # rubocop:enable Layout/LineLength
 
         expect(decorator.membership_admission_through_gs?).to eq false
       end

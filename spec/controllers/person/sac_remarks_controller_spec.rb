@@ -55,7 +55,8 @@ describe Person::SacRemarksController do
     context "as member" do
       it "cannot edit national office remark" do
         expect do
-          get :edit, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
+          get :edit,
+            params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
         end.to raise_error(CanCan::AccessDenied)
       end
 
@@ -75,7 +76,8 @@ describe Person::SacRemarksController do
       end
 
       it "can edit national office remark" do
-        get :edit, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
+        get :edit,
+          params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
         expect(response).to have_http_status(:success)
       end
 
@@ -100,7 +102,8 @@ describe Person::SacRemarksController do
 
       it "cannot edit national office remark" do
         expect do
-          get :edit, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
+          get :edit,
+            params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -110,7 +113,9 @@ describe Person::SacRemarksController do
     context "as member" do
       it "cannot manage national office remark" do
         expect do
+          # rubocop:todo Layout/LineLength
           put :update, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office,
+                                # rubocop:enable Layout/LineLength
                                 person: {sac_remark_national_office: "example"}}
         end.to raise_error(CanCan::AccessDenied)
       end
@@ -133,7 +138,9 @@ describe Person::SacRemarksController do
 
       it "can manage national office remark" do
         expect do
+          # rubocop:todo Layout/LineLength
           put :update, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office,
+                                # rubocop:enable Layout/LineLength
                                 person: {sac_remark_national_office: "example"}}
         end.to change { person.reload.sac_remark_national_office }.from(nil).to("example")
       end
@@ -163,7 +170,9 @@ describe Person::SacRemarksController do
 
       it "cannot manage national office remark" do
         expect do
+          # rubocop:todo Layout/LineLength
           put :update, params: {group_id: group_id, person_id: person.id, id: :sac_remark_national_office,
+                                # rubocop:enable Layout/LineLength
                                 person: {sac_remark_national_office: "example"}}
         end.to raise_error(CanCan::AccessDenied)
       end

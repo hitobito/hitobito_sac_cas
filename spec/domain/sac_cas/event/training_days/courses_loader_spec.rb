@@ -37,7 +37,8 @@ describe Event::TrainingDays::CoursesLoader do
   end
 
   it "includes actual_days from participation" do
-    create_course_participation(training_days: 1, start_at: start_date + 1.day, qualified: true, actual_days: 0.5)
+    create_course_participation(training_days: 1, start_at: start_date + 1.day, qualified: true,
+      actual_days: 0.5)
     expect(courses).to have(1).item
     expect(courses.first.training_days).to eq 0.5
   end
@@ -52,7 +53,8 @@ describe Event::TrainingDays::CoursesLoader do
       first = create_external_training(start_date - 2.day, end_date)
       second = create_external_training(start_date, end_date)
       third = create_external_training(start_date + 1.day, end_date)
-      expect(courses.map(&:qualification_date)).to eq [third, second, first].map(&:qualification_date)
+      expect(courses.map(&:qualification_date)).to eq [third, second,
+        first].map(&:qualification_date)
     end
 
     it "includes training starting outside but finishing inside validity period" do
@@ -99,10 +101,12 @@ describe Event::TrainingDays::CoursesLoader do
     })
   end
 
-  def create_course_participation(qualified:, start_at:, kind: ski_course, training_days: nil, actual_days: nil)
+  def create_course_participation(qualified:, start_at:, kind: ski_course, training_days: nil,
+    actual_days: nil)
     course = Fabricate.build(:course, kind: kind, training_days: training_days)
     course.dates.build(start_at: start_at)
     course.save!
-    Fabricate(:event_participation, event: course, participant: admin, qualified: qualified, actual_days: actual_days)
+    Fabricate(:event_participation, event: course, participant: admin, qualified: qualified,
+      actual_days: actual_days)
   end
 end

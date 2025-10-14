@@ -42,7 +42,8 @@ module Wizards::Steps::Signup::Sektion
     def info_alert_text
       wizard.group.is_a?(Group::SektionsNeuanmeldungenNv) ?
             I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_nv") :
-            I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_sektion", name: wizard.group.layer_group.name)
+            I18n.t("wizards.steps.signup.sektion.summary_fields.info_alert_neuanmeldungen_sektion",
+              name: wizard.group.layer_group.name)
     end
 
     private

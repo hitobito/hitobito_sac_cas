@@ -12,7 +12,8 @@ module RenderMarkdownTables
 
   def self.replace_markdown_tables(body)
     body.gsub(MARKDOWN_TABLE_PATTERN) do |markdown|
-      Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true).render(markdown.gsub("<br>", "\n"))
+      Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+        tables: true).render(markdown.gsub("<br>", "\n"))
     end.delete("\n").html_safe
   end
 end

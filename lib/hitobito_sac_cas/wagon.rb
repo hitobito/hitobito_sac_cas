@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 module HitobitoSacCas
-  class Wagon < Rails::Engine
+  class Wagon < Rails::Engine # rubocop:todo Metrics/ClassLength
     include Wagons::Wagon
 
     # Set the required application version.
@@ -55,7 +55,9 @@ module HitobitoSacCas
       ]
 
       # only schedule BackupMitgliederScheduleJob if sftp config is present
+      # rubocop:todo Layout/LineLength
       JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
+      # rubocop:enable Layout/LineLength
 
       Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
 
@@ -113,8 +115,12 @@ module HitobitoSacCas
       Role::Types::PermissionImplicationsForGroups[:layer_touren_und_kurse_full] =
         {group_and_below_full: Group::SektionsTourenUndKurse}
 
+      # rubocop:todo Layout/LineLength
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full << :download_member_statistics
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full << :download_member_statistics
+      # rubocop:enable Layout/LineLength
 
       Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
@@ -187,7 +193,9 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
+      # rubocop:todo Layout/LineLength
       Dropdown::Event::Participation::MailDispatch.prepend SacCas::Dropdown::Event::Participation::MailDispatch
+      # rubocop:enable Layout/LineLength
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
@@ -202,7 +210,8 @@ module HitobitoSacCas
         url: :list_tours_path,
         active_for: %w[list_tours],
         if: lambda do |_|
-          MountedAttribute.exists?(key: "tours_enabled", value: true) && can?(:list_available, Event::Tour)
+          MountedAttribute.exists?(key: "tours_enabled",
+            value: true) && can?(:list_available, Event::Tour)
         end
       )
 
@@ -229,7 +238,9 @@ module HitobitoSacCas
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ListsController.prepend SacCas::Event::ListsController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
+      # rubocop:todo Layout/LineLength
       Event::Participations::MailDispatchesController.prepend SacCas::Event::Participations::MailDispatchesController
+      # rubocop:enable Layout/LineLength
       Event::RegisterController.prepend SacCas::Event::RegisterController
       Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.permitted_attrs << :mitglied_termination_by_section_only
@@ -342,7 +353,9 @@ module HitobitoSacCas
         TableDisplays::PolymorphicShowFullColumn,
         [:invoice_state])
 
+      # rubocop:todo Layout/LineLength
       TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::People::LoginStatusColumn
+      # rubocop:enable Layout/LineLength
       TableDisplays::ShowDetailsColumn.prepend(TableDisplays::People::SektionMemberAdminVisible)
       TableDisplays::PublicColumn.prepend(TableDisplays::People::SektionMemberAdminVisible)
 

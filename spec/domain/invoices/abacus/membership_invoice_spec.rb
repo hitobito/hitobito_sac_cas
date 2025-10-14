@@ -13,7 +13,9 @@ describe Invoices::Abacus::MembershipInvoice do
   let(:date) { Date.new(2023, 1, 1) }
   let(:context) { Invoices::SacMemberships::Context.new(date) }
   let(:member) {
+    # rubocop:todo Layout/LineLength
     # member expects preloaded roles (without them it would not respect the date in the default roles scope)
+    # rubocop:enable Layout/LineLength
     person_with_roles = Person.preload_roles_unscoped.find(person.id)
     Invoices::SacMemberships::Member.new(person_with_roles, context)
   }

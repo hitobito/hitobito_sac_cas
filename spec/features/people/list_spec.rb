@@ -29,8 +29,10 @@ describe "people list page", :js do
     click_link("Spalten")
     check("Beitragskategorie")
     click_link("Spalten")
-    expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Einzel", count: 1)
-    expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Familie", count: 3)
+    expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Einzel",
+      count: 1)
+    expect(page).to have_css('td[data-attribute-name="beitragskategorie"]', text: "Familie",
+      count: 3)
   end
 
   it "allows showing login column" do
@@ -88,10 +90,12 @@ describe "people list page", :js do
     end
 
     check("Bemerkungen Sektion 1")
-    expect(page).to have_css("td[data-attribute-name=sac_remark_section_1]", text: "Bemerkung 1 für Sektion")
+    expect(page).to have_css("td[data-attribute-name=sac_remark_section_1]",
+      text: "Bemerkung 1 für Sektion")
 
     check("Bemerkungen Geschäftsstelle")
-    expect(page).to have_css("td[data-attribute-name=sac_remark_national_office]", text: "fehlende Berechtigung")
+    expect(page).to have_css("td[data-attribute-name=sac_remark_national_office]",
+      text: "fehlende Berechtigung")
 
     expect(page).to have_no_text("Bemerkung für Geschäftsstelle")
   end

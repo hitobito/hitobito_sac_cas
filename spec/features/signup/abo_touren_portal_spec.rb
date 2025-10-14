@@ -34,7 +34,8 @@ describe "signup/abo_touren_portal_wizard" do
   def expect_active_step(step_name)
     expect(page)
       .to have_css(".step-headers li.active", text: step_name),
-        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active", wait: 0).text}' is active"
+        "expected step '#{step_name}' to be active, but step '#{find(".step-headers li.active",
+          wait: 0).text}' is active"
   end
 
   def expect_validation_error(message)
@@ -127,6 +128,8 @@ describe "signup/abo_touren_portal_wizard" do
     sign_in(people(:mitglied))
     Group::AboTourenPortal::Abonnent.create!(person: people(:mitglied), group: group)
     visit group_self_registration_path(group_id: group)
+    # rubocop:todo Layout/LineLength
     expect(page).to have_content("Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.")
+    # rubocop:enable Layout/LineLength
   end
 end

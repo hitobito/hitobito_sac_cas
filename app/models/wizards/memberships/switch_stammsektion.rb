@@ -56,7 +56,9 @@ module Wizards::Memberships
     end
 
     def groups
+      # rubocop:todo Layout/LineLength
       membership_roles = person.roles.where(type: SacCas::MITGLIED_AND_NEUANMELDUNG_ROLES.map(&:sti_name))
+      # rubocop:enable Layout/LineLength
       Group
         .where(type: SacCas::MEMBERSHIP_OPERATIONS_GROUP_TYPES)
         .where.not(id: SacCas::MEMBERSHIP_OPERATIONS_EXCLUDED_IDS)
@@ -67,7 +69,8 @@ module Wizards::Memberships
     private
 
     def send_confirmation_mail(previous_sektion)
-      Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group, previous_sektion).deliver_later
+      Memberships::SwitchStammsektionMailer.confirmation(person, choose_sektion.group,
+        previous_sektion).deliver_later
     end
 
     def operation_valid?
@@ -93,7 +96,7 @@ module Wizards::Memberships
       end
     end
 
-    def handle_start
+    def handle_start # rubocop:todo Metrics/CyclomaticComplexity
       membership_role = Group::SektionsMitglieder::Mitglied.find_by(person: person)
       if membership_role&.terminated?
         Wizards::Steps::MembershipTerminatedInfo.step_name

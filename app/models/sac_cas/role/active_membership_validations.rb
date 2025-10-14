@@ -12,11 +12,12 @@ module SacCas::Role::ActiveMembershipValidations
     validate :assert_has_active_membership_role
   end
 
-  def assert_has_active_membership_role
+  def assert_has_active_membership_role # rubocop:todo Metrics/CyclomaticComplexity
     # Only validate if both dates are set (otherwise the role will be invalid anyway)
     return unless start_on && end_on
 
-    memberships = Role.with_inactive.where(type: SacCas::MITGLIED_ROLES.map(&:sti_name), person_id:, group_id:)
+    memberships = Role.with_inactive.where(type: SacCas::MITGLIED_ROLES.map(&:sti_name),
+      person_id:, group_id:)
 
     uncovered_days = memberships.reduce(active_period.to_a) do |days, mitglied_role|
       days.reject { |day| mitglied_role.active_period.cover?(day) }

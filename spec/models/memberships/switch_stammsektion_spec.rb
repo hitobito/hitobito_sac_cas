@@ -57,7 +57,9 @@ describe Memberships::SwitchStammsektion do
         create_role(other_section, "Mitglied", start_on: Time.zone.today)
 
         # This recreates a bug that occured when the valid? method was run twice, resulting in the
+        # rubocop:todo Layout/LineLength
         # @destroyed variable of of the roles_to_destroy roles being true on the second call and thus showing an unexpected error
+        # rubocop:enable Layout/LineLength
         # because that variable impacted the role.delete call
         expect(switch).to be_valid
         expect(switch).to be_valid

@@ -71,14 +71,17 @@ describe Wizards::Signup::AboTourenPortalWizard do
         required_attrs[:person_fields][:statutes] = "0"
         required_attrs[:person_fields][:data_protection] = "0"
         expect(wizard).not_to be_valid
-        expect(wizard.person_fields.errors.full_messages).to eq ["Statuten muss akzeptiert werden", "Datenschutzerklärung muss akzeptiert werden"]
+        expect(wizard.person_fields.errors.full_messages).to eq ["Statuten muss akzeptiert werden",
+          "Datenschutzerklärung muss akzeptiert werden"]
       end
 
       it "is invalid if less than 18 years old" do
         @current_step = 1
         required_attrs[:person_fields][:birthday] = 17.years.ago
         expect(wizard).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(wizard.person_fields.errors.full_messages).to eq ["Person muss 18 Jahre oder älter sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
   end
@@ -122,7 +125,9 @@ describe Wizards::Signup::AboTourenPortalWizard do
     end
 
     it "saves role for current_user when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
       expect(wizard).to be_valid
       expect { wizard.save! }.not_to change { Person.count }
       expect(people(:admin).roles.last.type).to eq Group::AboTourenPortal::Abonnent.sti_name
@@ -132,12 +137,18 @@ describe Wizards::Signup::AboTourenPortalWizard do
   describe "steps" do
     it "starts at main email field step when not logged in" do
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+      # rubocop:todo Layout/LineLength
       expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboTourenPortal::PersonFields)
+      # rubocop:enable Layout/LineLength
     end
 
     it "starts at person fields step when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboTourenPortal::PersonFields)
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -145,7 +156,9 @@ describe Wizards::Signup::AboTourenPortalWizard do
     let(:person) { people(:mitglied) }
 
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(person)
+      # rubocop:enable Layout/LineLength
     end
 
     it "returns true when user has abonnent role" do

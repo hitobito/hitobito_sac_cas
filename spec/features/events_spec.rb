@@ -80,7 +80,8 @@ describe :events, js: true do
 
     it "displays j_s price labels in show when course is a j_s course" do
       event.kind.kind_category.update_column(:j_s_course, true)
-      event.update_columns(price_member: 10, price_regular: 20, price_subsidized: 5, price_special: 3)
+      event.update_columns(price_member: 10, price_regular: 20, price_subsidized: 5,
+        price_special: 3)
       visit group_event_path(group_id: group.id, id: event.id)
 
       expect(page).to have_content "J&S P-Mitgliederpreis"
@@ -110,7 +111,9 @@ describe :events, js: true do
         .to change(Event::Participation, :count).by(1)
       expect(page).to have_content("Anmeldung von Anna Admin bearbeiten")
       click_on "Speichern"
+      # rubocop:todo Layout/LineLength
       expect(page).to have_content("Teilnahme von Anna Admin in Tourenleiter/in 1 Sommer wurde erfolgreich aktualisiert.")
+      # rubocop:enable Layout/LineLength
       expect(page).to have_content("Kursleitung selbständig erwerbend")
     end
   end

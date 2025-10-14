@@ -8,7 +8,9 @@
 require "spec_helper"
 
 describe ExternalInvoiceAbility do
-  let(:invoice) { Fabricate(:external_invoice, link: groups(:bluemlisalp), person: people(:mitglied)) }
+  let(:invoice) {
+    Fabricate(:external_invoice, link: groups(:bluemlisalp), person: people(:mitglied))
+  }
   let(:admin) { people(:admin) }
   let(:mitglied) { people(:mitglied) }
   let(:andere) do

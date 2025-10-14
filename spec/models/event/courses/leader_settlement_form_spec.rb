@@ -15,7 +15,9 @@ describe Event::Courses::LeaderSettlementForm do
       course
     end
 
-    subject(:leader_settlement_invoice) { described_class.new(iban: "CH93 0076 2011 6238 5295 7", actual_days: 1, course: course) }
+    subject(:leader_settlement_invoice) {
+      described_class.new(iban: "CH93 0076 2011 6238 5295 7", actual_days: 1, course: course)
+    }
 
     it "is valid with correct attributes" do
       expect(leader_settlement_invoice).to be_valid
@@ -36,19 +38,25 @@ describe Event::Courses::LeaderSettlementForm do
     it "is invalid without actual_days" do
       leader_settlement_invoice.actual_days = nil
       expect(leader_settlement_invoice).not_to be_valid
+      # rubocop:todo Layout/LineLength
       expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage muss ausgefüllt werden"]
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid when actual_days is negative" do
       leader_settlement_invoice.actual_days = -1
       expect(leader_settlement_invoice).not_to be_valid
+      # rubocop:todo Layout/LineLength
       expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage muss größer oder gleich 0 sein"]
+      # rubocop:enable Layout/LineLength
     end
 
     it "is invalid when actual_days exceeds course total days" do
       leader_settlement_invoice.actual_days = 2
       expect(leader_settlement_invoice).not_to be_valid
+      # rubocop:todo Layout/LineLength
       expect(leader_settlement_invoice.errors.full_messages).to eq ["Effektive Tage darf die totalen Tage des Kurses nicht überschreiten"]
+      # rubocop:enable Layout/LineLength
     end
   end
 end

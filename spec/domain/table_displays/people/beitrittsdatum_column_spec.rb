@@ -17,7 +17,9 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
 
   before do
     allow(table).to receive(:template).at_least(:once).and_return(view)
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
   end
 
   it_behaves_like "table display", {
@@ -27,7 +29,9 @@ describe TableDisplays::People::BeitrittsdatumColumn, type: :helper do
     permission: :show
   } do
     it "reads value from MitgliedZusatzsektion role" do
+      # rubocop:todo Layout/LineLength
       Role.where(id: roles(:mitglied).id).update_all(type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name)
+      # rubocop:enable Layout/LineLength
       display.render(:beitrittsdatum)
       expect(node).to have_css "td", text: "01.01.2015"
     end

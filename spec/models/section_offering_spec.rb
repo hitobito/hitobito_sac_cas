@@ -35,14 +35,18 @@ describe SectionOffering do
 
     it "does not destroy when having one associated section" do
       expect { section_offering.destroy }.not_to change(described_class, :count)
+      # rubocop:todo Layout/LineLength
       expect(section_offering.errors.full_messages).to include("Datensatz kann nicht gelöscht werden, da ein abhängiger Sektion-Datensatz existiert.")
+      # rubocop:enable Layout/LineLength
     end
 
     it "does not destroy when having many associated sections" do
       Group::Sektion.second.section_offerings << section_offering
 
       expect { section_offering.destroy }.not_to change(described_class, :count)
+      # rubocop:todo Layout/LineLength
       expect(section_offering.errors.full_messages).to include("Datensatz kann nicht gelöscht werden, da abhängige Sektionen existieren.")
+      # rubocop:enable Layout/LineLength
     end
   end
 end

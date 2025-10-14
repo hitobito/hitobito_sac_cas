@@ -29,9 +29,10 @@ class Export::Pdf::Participations::ParticipantList::Sections::Header < Export::P
     pdf.move_down 0.5.cm
   end
 
-  def info_data
+  def info_data # rubocop:todo Metrics/AbcSize
     [
-      [t(:number), {content: "<link href=\"#{course_url}\">#{course.number}</link>", inline_format: true}],
+      [t(:number),
+        {content: "<link href=\"#{course_url}\">#{course.number}</link>", inline_format: true}],
       [t(:name), course.name],
       [t(:location), course.location.to_s.split("\n").join(", ")],
       [t(:dates), course.dates.map(&:duration).join(", ")],

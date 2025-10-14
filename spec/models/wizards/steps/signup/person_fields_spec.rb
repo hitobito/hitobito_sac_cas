@@ -8,7 +8,10 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::PersonFields do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: nil) }
+  let(:wizard) {
+    instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false,
+      requires_policy_acceptance?: false, current_user: nil)
+  }
   subject(:form) { described_class.new(wizard) }
 
   let(:required_attrs) {
@@ -115,7 +118,10 @@ describe Wizards::Steps::Signup::PersonFields do
   context "with current user" do
     let(:params) { {} }
     let(:person) { people(:abonnent) }
-    let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false, current_user: person) }
+    let(:wizard) {
+      instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false,
+        requires_policy_acceptance?: false, current_user: person)
+    }
 
     subject(:form) { described_class.new(wizard, **params) }
 

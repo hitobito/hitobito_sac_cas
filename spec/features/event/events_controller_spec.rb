@@ -22,7 +22,9 @@ describe EventsController, js: true do
       sign_in(admin)
       visit edit_group_event_path(group_id: event.groups.first.id, id: event.id)
       click_on "Anmeldeangaben"
+      # rubocop:todo Layout/LineLength
       expect(find("#event_application_questions_attributes_0_question+p").text).to eq "Aaa question?"
+      # rubocop:enable Layout/LineLength
       expect(find("#event_application_questions_attributes_1_question+p").text).to eq "AHV-Nummer?"
     end
   end

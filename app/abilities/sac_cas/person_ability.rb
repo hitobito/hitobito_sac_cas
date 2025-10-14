@@ -20,7 +20,9 @@ module SacCas::PersonAbility
         .if_backoffice
 
       permission(:layer_and_below_full)
+        # rubocop:todo Layout/LineLength
         .may(:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security)
+        # rubocop:enable Layout/LineLength
         .if_backoffice
       permission(:any).may(:index_invoices, :security).none
       permission(:any)

@@ -64,7 +64,9 @@ describe Wizards::Signup::AboBasicLoginWizard do
       it "is invalid agreements are not checked" do
         required_attrs[:person_fields][:data_protection] = "0"
         expect(wizard).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(wizard.person_fields.errors.full_messages).to eq ["Datenschutzerklärung muss akzeptiert werden"]
+        # rubocop:enable Layout/LineLength
       end
     end
   end
@@ -108,7 +110,9 @@ describe Wizards::Signup::AboBasicLoginWizard do
     end
 
     it "saves role for current_user when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
       expect(wizard).to be_valid
       expect { wizard.save! }.not_to change { Person.count }
       expect(people(:admin).roles.last.type).to eq Group::AboBasicLogin::BasicLogin.sti_name
@@ -118,18 +122,26 @@ describe Wizards::Signup::AboBasicLoginWizard do
   describe "steps" do
     it "starts at main email field step when not logged in" do
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::MainEmailField)
+      # rubocop:todo Layout/LineLength
       expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::AboBasicLogin::PersonFields)
+      # rubocop:enable Layout/LineLength
     end
 
     it "starts at person fields step when logged in" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:admin))
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(wizard.step_at(0)).to be_instance_of(Wizards::Steps::Signup::AboBasicLogin::PersonFields)
+      # rubocop:enable Layout/LineLength
     end
   end
 
   describe "#member_or_applied?" do
     before do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(Wizards::Signup::AboBasicLoginWizard).to receive(:current_user).and_return(people(:mitglied))
+      # rubocop:enable Layout/LineLength
     end
 
     it "returns true when user has an active role" do

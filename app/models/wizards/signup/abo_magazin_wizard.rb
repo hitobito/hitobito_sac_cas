@@ -23,8 +23,10 @@ module Wizards::Signup
 
     delegate :newsletter, to: :summary
 
-    def member_or_applied?
-      current_user&.roles&.where(group: group)&.map(&:type)&.any? { |type| RESTRICTED_ROLES.include?(type) }
+    def member_or_applied? # rubocop:todo Metrics/CyclomaticComplexity
+      current_user&.roles&.where(group: group)&.map(&:type)&.any? { |type|
+        RESTRICTED_ROLES.include?(type)
+      }
     end
 
     def save!

@@ -17,9 +17,12 @@ describe TableDisplays::People::AntragsdatumColumn, type: :helper do
 
   before do
     allow(table).to receive(:template).at_least(:once).and_return(view)
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_neuanmeldungen_nv))
+    # rubocop:enable Layout/LineLength
     people(:mitglied).roles.destroy_all
-    Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied), group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: Time.zone.today)
+    Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied),
+      group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: Time.zone.today)
   end
 
   describe "#exclude_attr?" do

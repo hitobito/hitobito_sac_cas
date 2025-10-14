@@ -6,7 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::StandardFormBuilder
+  # rubocop:todo Layout/LineLength
   # Add address dynamically to required attrs to render label as required, but not trigger the validation for required attrs
+  # rubocop:enable Layout/LineLength
   # Event::ParticipationContactData#assert_required_contact_attrs_valid
   def required?(attr)
     (attr.to_s == "address") ? super(:street) && super(:housenumber) : super
@@ -31,7 +33,7 @@ module SacCas::StandardFormBuilder
 
   private
 
-  def build_adult_label(attr, optional: false)
+  def build_adult_label(attr, optional: false) # rubocop:todo Metrics/CyclomaticComplexity
     classes = "col-md-3 col-xl-2 pb-1 col-form-label text-md-end"
     classes += " required" unless optional
     classes += " d-none" if (!optional && !object.adult?) || (optional && object.adult?)

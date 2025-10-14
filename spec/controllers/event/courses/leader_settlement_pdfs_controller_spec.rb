@@ -21,7 +21,9 @@ describe Event::Courses::LeaderSettlementPdfsController do
   let!(:leader_participations) do
     [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
       Fabricate(event_role.name.to_sym,
+        # rubocop:todo Layout/LineLength
         participation: Fabricate(:event_participation, event: course), self_employed: true).participation
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -31,7 +33,9 @@ describe Event::Courses::LeaderSettlementPdfsController do
 
       it "unauthorized" do
         expect do
-          post :create, params: {group_id: group, event_id: course, participation_id: leader_participations.first.id}
+          post :create,
+            params: {group_id: group, event_id: course,
+                     participation_id: leader_participations.first.id}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
@@ -41,12 +45,16 @@ describe Event::Courses::LeaderSettlementPdfsController do
 
       it "unauthorized if not his own participation" do
         expect do
-          post :create, params: {group_id: group, event_id: course, participation_id: leader_participations.second.id}
+          post :create,
+            params: {group_id: group, event_id: course,
+                     participation_id: leader_participations.second.id}
         end.to raise_error(CanCan::AccessDenied)
       end
 
       it "returns turbo frame when form is invalid" do
+        # rubocop:todo Layout/LineLength
         expect_any_instance_of(Event::Courses::LeaderSettlementForm).to receive(:valid?).and_return(false)
+        # rubocop:enable Layout/LineLength
         post :create, params: {group_id: group,
                                event_id: course,
                                participation_id: leader_participations.first.id,
@@ -59,8 +67,12 @@ describe Event::Courses::LeaderSettlementPdfsController do
           post :create, params: {group_id: group,
                                  event_id: course,
                                  participation_id: leader_participations.first.id,
-                                 event_courses_leader_settlement_form: {iban: "CH66 0076 2011 6238 5295 8", actual_days: 2}}
-        end.to change { Delayed::Job.where("handler like '%LeaderSettlementExportJob%'").count }.by(1)
+                                 event_courses_leader_settlement_form: {
+                                   iban: "CH66 0076 2011 6238 5295 8", actual_days: 2
+                                 }}
+        end.to change {
+                 Delayed::Job.where("handler like '%LeaderSettlementExportJob%'").count
+               }.by(1)
       end
     end
   end

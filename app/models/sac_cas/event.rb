@@ -88,7 +88,8 @@ module SacCas::Event
 
     translates :brief_description, :specialities, :similar_tours, :program
 
-    validates :training_days, numericality: {less_than_or_equal_to: :total_duration_days, allow_nil: true}
+    validates :training_days,
+      numericality: {less_than_or_equal_to: :total_duration_days, allow_nil: true}
   end
 
   module ClassMethods

@@ -44,14 +44,18 @@ describe "joining zusatzsektion", js: true do
 
     it "fills out form and redirects" do
       fill_out_form
+      # rubocop:todo Layout/LineLength
       expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Einzelmitglied beantragt."
+      # rubocop:enable Layout/LineLength
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
     end
 
     it "can handle membership admission through gs" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(true)
+      # rubocop:enable Layout/LineLength
       fill_out_form
       expect(page).to have_content "Hiermit wird eine Rechnung ausgelöst."
       click_on "Kostenpflichtig bestellen"
@@ -60,9 +64,13 @@ describe "joining zusatzsektion", js: true do
     end
 
     it "can handle membership admission through sektion" do
+      # rubocop:todo Layout/LineLength
       allow_any_instance_of(SacCas::GroupDecorator).to receive(:membership_admission_through_gs?).and_return(false)
+      # rubocop:enable Layout/LineLength
       fill_out_form
+      # rubocop:todo Layout/LineLength
       expect(page).to have_content "Hiermit wird noch keine Rechnung ausgelöst, erst mit erteilter Freigabe."
+      # rubocop:enable Layout/LineLength
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."
@@ -71,7 +79,9 @@ describe "joining zusatzsektion", js: true do
     it "can apply as youth member" do
       person.update!(birthday: 20.years.ago)
       fill_out_form "Jugendmitgliedschaft"
+      # rubocop:todo Layout/LineLength
       expect(page).to have_content "Die Zusatzmitgliedschaft bei SAC Matterhorn wird als Jugendmitglied beantragt."
+      # rubocop:enable Layout/LineLength
       click_on "Kostenpflichtig bestellen"
       expect(page).to have_css "#flash .alert-success",
         text: "Deine Zusatzmitgliedschaft in SAC Matterhorn wurde erstellt."

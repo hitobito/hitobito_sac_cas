@@ -13,7 +13,9 @@ describe ExternalInvoice::AboMagazin do
   let(:group) { groups(:abo_die_alpen) }
 
   describe "after_update callback" do
-    let(:external_invoice) { ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group) }
+    let(:external_invoice) {
+      ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group)
+    }
 
     context "state changes to payed" do
       it "enques job" do
@@ -33,7 +35,9 @@ describe ExternalInvoice::AboMagazin do
     end
 
     context "when state is already payed" do
-      let(:payed_external_invoice) { ExternalInvoice::AboMagazin.create!(state: :payed, person: person, link: group) }
+      let(:payed_external_invoice) {
+        ExternalInvoice::AboMagazin.create!(state: :payed, person: person, link: group)
+      }
 
       it "does not queue the job" do
         expect_no_enqueued_job do
@@ -46,18 +50,26 @@ describe ExternalInvoice::AboMagazin do
     def expect_no_enqueued_job
       expect do
         yield
-      end.not_to change { Delayed::Job.where("handler like '%Invoices::AboMagazin::InvoicePayedJob%'").count }
+      end.not_to change {
+                   # rubocop:todo Layout/LineLength
+                   Delayed::Job.where("handler like '%Invoices::AboMagazin::InvoicePayedJob%'").count
+                   # rubocop:enable Layout/LineLength
+                 }
     end
 
     def expect_enqueued_job
       expect do
         yield
-      end.to change { Delayed::Job.where("handler like '%Invoices::AboMagazin::InvoicePayedJob%'").count }
+      end.to change {
+               Delayed::Job.where("handler like '%Invoices::AboMagazin::InvoicePayedJob%'").count
+             }
     end
   end
 
   describe "title" do
-    let(:external_invoice) { ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group, year: 2025) }
+    let(:external_invoice) {
+      ExternalInvoice::AboMagazin.create!(state: :draft, person: person, link: group, year: 2025)
+    }
 
     it "shows title with invoice year" do
       expect(external_invoice.title).to eq "Rechnung Die Alpen DE 2025"

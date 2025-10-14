@@ -71,9 +71,14 @@ describe "terminate sac membership wizard", js: true do
     end
 
     describe "data retention checkboxes" do
-      let(:data_retention_checkbox) { find(:checkbox, "Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben") }
+      let(:data_retention_checkbox) {
+        find(:checkbox,
+          "Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben")
+      }
       let(:newsletter_checkbox) { find(:checkbox, "SAC-Newsletter weiterhin erhalten") }
-      let(:fundraising_checkbox) { find(:checkbox, "über Spendenaktionen vom SAC informiert werden") }
+      let(:fundraising_checkbox) {
+        find(:checkbox, "über Spendenaktionen vom SAC informiert werden")
+      }
 
       before do
         visit history_group_person_path(group_id: group.id, id: person.id)
@@ -150,8 +155,10 @@ describe "terminate sac membership wizard", js: true do
       select termination_reason.text
       expect do
         click_button "Austritt beantragen"
+        # rubocop:todo Layout/LineLength
         expect(page).to have_css ".alert-danger-alert", text: "Edmund Hillary: Person muss Mitglied sein während der ganzen " \
           "Gültigkeitsdauer der Zusatzsektion."
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -169,7 +176,9 @@ describe "terminate sac membership wizard", js: true do
       it "shows an info text" do
         visit history_group_person_path(group_id: group.id, id: person.id)
         within("#role_#{role.id}") do |content|
+          # rubocop:todo Layout/LineLength
           expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+          # rubocop:enable Layout/LineLength
         end
       end
     end
@@ -188,7 +197,9 @@ describe "terminate sac membership wizard", js: true do
       it "shows an info text" do
         visit history_group_person_path(group_id: group.id, id: person.id)
         within("#role_#{role.id}") do |content|
+          # rubocop:todo Layout/LineLength
           expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+          # rubocop:enable Layout/LineLength
         end
       end
     end
@@ -207,7 +218,9 @@ describe "terminate sac membership wizard", js: true do
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
       select termination_reason.text
       expect do
+        # rubocop:todo Layout/LineLength
         expect(page).to have_content "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt"
+        # rubocop:enable Layout/LineLength
         check "Wiedereintritt die Eintrittsgebühr"
         click_button "Austritt beantragen"
         expect(page).to have_content "Eure 3 SAC-Mitgliedschaften wurden gekündet."
@@ -218,14 +231,18 @@ describe "terminate sac membership wizard", js: true do
         .and change { role.termination_reason }.from(nil).to(termination_reason)
     end
 
+    # rubocop:todo Layout/LineLength
     context "when additional section of familymember has mitglied_termination_by_section_only=true" do
+      # rubocop:enable Layout/LineLength
       it "shows an info text" do
         additional_section.update!(mitglied_termination_by_section_only: true)
 
         visit history_group_person_path(group_id: group.id, id: person.id)
 
         within("#role_#{role.id}") do |content|
+          # rubocop:todo Layout/LineLength
           expect(content).to have_selector("[title='Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden']")
+          # rubocop:enable Layout/LineLength
         end
       end
     end

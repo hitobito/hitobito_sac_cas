@@ -64,7 +64,8 @@ describe Event::StateController do
 
       describe "skipping emails" do
         before do
-          course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)}, {person: people(:familienmitglied)}])
+          course.participations.create!([{person: people(:admin)}, {person: people(:mitglied)},
+            {person: people(:familienmitglied)}])
           course.participations.first.roles.create!(type: Event::Course::Role::Leader)
           course.participations.second.roles.create!(type: Event::Course::Role::AssistantLeader)
           course.participations.third.roles.create!(type: Event::Course::Role::Participant)
@@ -80,7 +81,9 @@ describe Event::StateController do
 
         it "skips sending emails when told to do so" do
           expect do
-            put :update, params: {group_id: group.id, id: course.id, state: :application_open, skip_emails: true}
+            put :update,
+              params: {group_id: group.id, id: course.id, state: :application_open,
+                       skip_emails: true}
           end.to change { course.reload.state }.from("created").to("application_open")
             .and not_have_enqueued_mail
         end

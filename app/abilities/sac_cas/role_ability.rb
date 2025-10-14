@@ -43,7 +43,9 @@ module SacCas::RoleAbility
   def subject_with_admin_permission? = subject.type&.safe_constantize&.permissions&.include?(:admin)
 
   def modify_admin_permission_only_of_admin_themself
+    # rubocop:todo Layout/LineLength
     # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
+    # rubocop:enable Layout/LineLength
     # other permission checks will handle it
     subject_with_admin_permission? ? if_admin : true
   end

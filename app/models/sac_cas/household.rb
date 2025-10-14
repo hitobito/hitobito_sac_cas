@@ -107,6 +107,7 @@ module SacCas::Household
     removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
   end
 
+  # rubocop:todo Metrics/CyclomaticComplexity
   def update_main_person!(person = nil, new_household: false)
     raise "invalid main person" if person && people.exclude?(person)
     new_main_person = person ||
@@ -122,6 +123,7 @@ module SacCas::Household
       new_main_person&.update!(sac_family_main_person: true)
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def next_key
     Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s # rubocop:disable Rails/SkipsModelValidations

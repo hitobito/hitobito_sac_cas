@@ -17,11 +17,15 @@ describe TableDisplays::People::TerminationReasonColumn, type: :helper do
 
   before do
     people(:mitglied).roles_unscoped.destroy_all
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
   end
 
   def create_membership_role(start_on, end_on)
+    # rubocop:todo Layout/LineLength
     Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder),
+      # rubocop:enable Layout/LineLength
       person: people(:mitglied),
       start_on: start_on,
       end_on: end_on,

@@ -65,7 +65,8 @@ module Invoices
 
       def request(method, path, params = nil)
         if in_batch?
-          thread_local_get(:batch_request_parts) << BatchRequestPart.new(method, path, params, batch_context_object)
+          thread_local_get(:batch_request_parts) << BatchRequestPart.new(method, path, params,
+            batch_context_object)
           nil
         else
           json_request(method, path, params)

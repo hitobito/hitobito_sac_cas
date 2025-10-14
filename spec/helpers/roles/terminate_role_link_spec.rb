@@ -20,7 +20,9 @@ describe Roles::TerminateRoleLink do
           expect(view).to receive(:can?).with(:terminate, role).and_return(false)
 
           expect(described_class.new(role, view).render)
+            # rubocop:todo Layout/LineLength
             .to match(/title="Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden"/)
+          # rubocop:enable Layout/LineLength
         end
       end
     end

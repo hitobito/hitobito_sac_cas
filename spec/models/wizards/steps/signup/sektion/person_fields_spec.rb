@@ -8,7 +8,10 @@
 require "spec_helper"
 
 describe Wizards::Steps::Signup::Sektion::PersonFields do
-  let(:wizard) { instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false, requires_policy_acceptance?: false) }
+  let(:wizard) {
+    instance_double(Wizards::Signup::SektionWizard, requires_adult_consent?: false,
+      requires_policy_acceptance?: false)
+  }
   subject(:form) { described_class.new(wizard) }
 
   let(:required_attrs) {

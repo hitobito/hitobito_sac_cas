@@ -8,7 +8,10 @@ describe Invoices::SacMemberships::PositionGenerator do
   let(:date) { Date.new(2023, 1, 1) }
   let(:custom_discount) { nil }
   let(:context) { Invoices::SacMemberships::Context.new(date, custom_discount: custom_discount) }
-  let(:member) { Invoices::SacMemberships::Member.new(context.people_with_membership_years.find(person.id), context) }
+  let(:member) {
+    Invoices::SacMemberships::Member.new(context.people_with_membership_years.find(person.id),
+      context)
+  }
   let(:config) { context.config }
   let(:main_section) { groups(:bluemlisalp) }
   let(:additional_section) { groups(:matterhorn) }
@@ -364,7 +367,11 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "with huts" do
-    let(:funktionaere) { main_section.children.find { |child| child.type == "Group::SektionsFunktionaere" } }
+    let(:funktionaere) {
+      main_section.children.find { |child|
+     child.type == "Group::SektionsFunktionaere" # rubocop:todo Layout/IndentationWidth
+      }
+    }
 
     before do
       huetten = Group::SektionsClubhuetten.create!(parent: funktionaere)
@@ -752,7 +759,9 @@ describe Invoices::SacMemberships::PositionGenerator do
   end
 
   context "new entry" do
-    let(:memberships) { [member.membership_from_role(member.neuanmeldung_nv_stammsektion_roles.first, main: true)] }
+    let(:memberships) {
+      [member.membership_from_role(member.neuanmeldung_nv_stammsektion_roles.first, main: true)]
+    }
     let(:new_entry) { true }
 
     context "without neuanmeldung" do
@@ -917,7 +926,9 @@ describe Invoices::SacMemberships::PositionGenerator do
 
   context "new additional section" do
     let(:memberships) do
-      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.find { |r| r.layer_group.id == group.layer_group.id })]
+      [member.membership_from_role(member.neuanmeldung_nv_zusatzsektion_roles.find { |r|
+        r.layer_group.id == group.layer_group.id
+      })]
     end
 
     let(:person) { Fabricate(:person) }
@@ -947,7 +958,8 @@ describe Invoices::SacMemberships::PositionGenerator do
       let(:beitragskategorie) { :youth }
 
       before do
-        Group::SektionsMitglieder::MitgliedZusatzsektion.with_inactive.where(person: person, beitragskategorie: :youth).delete_all
+        Group::SektionsMitglieder::MitgliedZusatzsektion.with_inactive.where(person: person,
+          beitragskategorie: :youth).delete_all
         create_neuanmeldung_zusatzsektion
       end
 

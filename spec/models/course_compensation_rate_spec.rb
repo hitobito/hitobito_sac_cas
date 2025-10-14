@@ -30,36 +30,48 @@ describe CourseCompensationRate do
           rate.valid_from = 2.weeks.ago
           rate.valid_to = 1.week.ago
           expect(rate).to_not be_valid
+          # rubocop:todo Layout/LineLength
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+          # rubocop:enable Layout/LineLength
         end
 
         it "is invalid with validity end inside present validity period" do
           rate.valid_from = 2.months.ago
           rate.valid_to = 2.weeks.ago
           expect(rate).to_not be_valid
+          # rubocop:todo Layout/LineLength
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+          # rubocop:enable Layout/LineLength
         end
 
         it "is invalid with validity start inside present validity period" do
           rate.valid_from = 1.week.ago
           rate.valid_to = 1.month.from_now
           expect(rate).to_not be_valid
+          # rubocop:todo Layout/LineLength
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+          # rubocop:enable Layout/LineLength
         end
 
         it "is invalid with endless validity period that overlaps present validity period" do
           rate.valid_from = 2.months.ago
           rate.valid_to = nil
           expect(rate).to_not be_valid
+          # rubocop:todo Layout/LineLength
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+          # rubocop:enable Layout/LineLength
         end
 
+        # rubocop:todo Layout/LineLength
         it "is invalid with endless validity period that overlaps present endless validity period" do
+          # rubocop:enable Layout/LineLength
           present.update!(valid_to: nil)
           rate.valid_from = 2.weeks.ago
           rate.valid_to = nil
           expect(rate).to_not be_valid
+          # rubocop:todo Layout/LineLength
           expect(rate.errors.full_messages).to match_array(["Vergütungskategorie darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren."])
+          # rubocop:enable Layout/LineLength
         end
 
         it "is valid with validity period outside present validity period" do
@@ -68,7 +80,9 @@ describe CourseCompensationRate do
           expect(rate).to be_valid
         end
 
+        # rubocop:todo Layout/LineLength
         it "is valid with validity period outside present validity period, when present validity is endless" do
+          # rubocop:enable Layout/LineLength
           present.update!(valid_to: nil)
           rate.valid_from = 3.month.ago
           rate.valid_to = 2.month.ago

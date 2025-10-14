@@ -30,7 +30,9 @@ module SacCas::Event::ParticipationAbility
       permission(:layer_and_below_full).may(:update_full).in_same_layer_or_below
       permission(:layer_and_below_full).may(:summon).in_same_layer
       permission(:layer_and_below_full).may(:reactivate).in_same_layer_or_below_if_active
+      # rubocop:todo Layout/LineLength
       permission(:layer_and_below_full).may(:leader_settlement).in_same_layer_for_self_employed_leader
+      # rubocop:enable Layout/LineLength
 
       permission(:layer_events_full)
         .may(:show, :show_details, :show_full, :print, :create, :update, :destroy, :update_full)
@@ -60,6 +62,7 @@ module SacCas::Event::ParticipationAbility
   private
 
   def self_employed_leader
-    contains_any?(Event::Course::LEADER_ROLES, participation.roles.select(&:self_employed).map(&:type))
+    contains_any?(Event::Course::LEADER_ROLES,
+      participation.roles.select(&:self_employed).map(&:type))
   end
 end

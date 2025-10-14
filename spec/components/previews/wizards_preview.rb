@@ -7,6 +7,7 @@
 
 class WizardsPreview < ViewComponent::Preview
   ## step and next param are old steps component api
+  # rubocop:todo Metrics/MethodLength
   def join_zusatzsektion_wizard(current_step: 0, step: 0, next: nil,
     person_id: Group::SektionsMitglieder::Mitglied.first.person.id,
     wizards_memberships_join_zusatzsektion: {})
@@ -37,7 +38,9 @@ class WizardsPreview < ViewComponent::Preview
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
+  # rubocop:todo Metrics/MethodLength
   def leave_zusatzsektion_wizard(current_step: 0, step: 0, next: nil,
     person_id: Group::SektionsMitglieder::MitgliedZusatzsektion.first.person.id,
     wizards_memberships_leave_zusatzsektion: {})
@@ -71,6 +74,7 @@ class WizardsPreview < ViewComponent::Preview
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def choose_sektion_step(wizards_preview_wizard: {})
     wizard = build_wizard(Wizards::Steps::ChooseSektion, wizards_preview_wizard)

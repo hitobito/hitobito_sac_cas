@@ -7,7 +7,8 @@
 
 shared_examples "validates Mitglied active period" do
   it "start_on is required" do
-    role = described_class.new(person: people(:mitglied), group: groups(:matterhorn_mitglieder), start_on: nil)
+    role = described_class.new(person: people(:mitglied), group: groups(:matterhorn_mitglieder),
+      start_on: nil)
     role.validate
     expect(role.errors[:start_on]).to include("muss ausgefüllt werden")
 

@@ -22,13 +22,16 @@ module Roles
 
       link_to(safe_join([icon(:undo), t("roles/terminations.global.undo")], " "),
         @view.new_group_person_role_undo_termination_path(role_id: @role.id,
+          # rubocop:todo Layout/LineLength
           group_id: params[:group_id], # ansonsten wird man bei einer Person ohne Rollen auf die Gruppe der damaligen Mitgliedsrolle redirected. Dadurch werden dann die anderen Personenlinks (Info, Bemerkungen, etc.) mit der falschen group id gebaut und es entsteht ein 404
+          # rubocop:enable Layout/LineLength
           person_id: @role.person_id),
         class: "btn btn-sm btn-outline-primary")
     end
 
     def latest_role_in_group?
-      Role.with_inactive.where(group: @role.group, person: @role.person).reorder(end_on: :desc).first.id == @role.id
+      Role.with_inactive.where(group: @role.group,
+        person: @role.person).reorder(end_on: :desc).first.id == @role.id
     end
   end
 end

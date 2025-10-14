@@ -20,7 +20,8 @@ module Wizards::Signup
       [person, role].all? { |model| validate(model) }
     end
 
-    def save!
+    # rubocop:todo Metrics/AbcSize
+    def save! # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
       raise "cannot save invalid model: \n#{errors.full_messages}" unless valid?
 
       save_person_and_role
@@ -40,6 +41,7 @@ module Wizards::Signup
       send_password_reset_email if new_record?
       true
     end
+    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -67,7 +69,9 @@ module Wizards::Signup
       end
     end
 
+    # rubocop:todo Layout/LineLength
     def build_or_find_person = new_record? ? Person.new(language: I18n.locale) : Person.find(person_attrs[:id])
+    # rubocop:enable Layout/LineLength
 
     def role
       @role ||= build_role
@@ -96,11 +100,13 @@ module Wizards::Signup
     end
 
     def enqueue_confirmation_mail
-      Signup::SektionMailer.confirmation(person, group.layer_group, role.beitragskategorie).deliver_later
+      Signup::SektionMailer.confirmation(person, group.layer_group,
+        role.beitragskategorie).deliver_later
     end
 
     def enqueue_approval_pending_confirmation_mail
-      Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group, role.beitragskategorie).deliver_later
+      Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group,
+        role.beitragskategorie).deliver_later
     end
 
     def neuanmeldung?
@@ -112,7 +118,9 @@ module Wizards::Signup
 
     def role_type = group.self_registration_role_type
 
+    # rubocop:todo Layout/LineLength
     def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
+    # rubocop:enable Layout/LineLength
 
     def new_record? = person_attrs[:id].blank?
 

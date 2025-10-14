@@ -46,11 +46,13 @@ class People::YearlyMembershipInvoicesController < ApplicationController
   end
 
   def success_redirect
-    redirect_to group_path(group), notice: t("people.yearly_membership_invoices.job_scheduling_info")
+    redirect_to group_path(group),
+      notice: t("people.yearly_membership_invoices.job_scheduling_info")
   end
 
   def invoice_form_params
-    params.require(:people_yearly_membership_invoice_form).permit(:invoice_year, :invoice_date, :send_date, :role_finish_date)
+    params.require(:people_yearly_membership_invoice_form).permit(:invoice_year, :invoice_date,
+      :send_date, :role_finish_date)
   end
 
   def yearly_membership_invoice_job_running?

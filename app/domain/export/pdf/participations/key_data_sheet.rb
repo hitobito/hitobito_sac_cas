@@ -7,7 +7,9 @@
 
 class Export::Pdf::Participations::KeyDataSheet
   FONT_SIZE = 9
+  # rubocop:todo Layout/LineLength
   # Explicitely use the default values of prawn for margin and font to keep the current layout after changing the code
+  # rubocop:enable Layout/LineLength
   # to use `Export::Pdf::Document` which sets those values to something else.
   FONT = "Helvetica"
   MARGIN = [45, 45, 55, 70].freeze

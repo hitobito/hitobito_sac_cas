@@ -12,7 +12,10 @@ describe ExternalInvoice::CourseParticipation do
   let(:mitglied) { people(:mitglied) }
   let(:kind) { event_kinds(:ski_course) }
   let(:course) { Fabricate(:sac_course, kind: kind) }
-  let(:participation) { Fabricate(:event_participation, event: course, participant: mitglied, price: 20, price_category: 1) }
+  let(:participation) {
+    Fabricate(:event_participation, event: course, participant: mitglied, price: 20,
+      price_category: 1)
+  }
   let(:external_invoice) {
     Fabricate(:external_invoice,
       person: mitglied,
@@ -32,7 +35,10 @@ describe ExternalInvoice::CourseParticipation do
     end
 
     context "multiple invoices" do
-      let(:old_external_invoice) { ExternalInvoice::CourseParticipation.create!(person: mitglied, link: participation, created_at: external_invoice.created_at - 2.days) }
+      let(:old_external_invoice) {
+        ExternalInvoice::CourseParticipation.create!(person: mitglied, link: participation,
+          created_at: external_invoice.created_at - 2.days)
+      }
 
       it "updates state if newest invoice" do
         external_invoice.update!(state: :payed)

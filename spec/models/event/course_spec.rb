@@ -248,7 +248,10 @@ describe Event::Course do
   describe "#default_participation_state" do
     let(:course) { Fabricate.build(:sac_course, participant_count: 1, maximum_participants: 2) }
     let(:application) { Fabricate.build(:event_application) }
-    let(:participation) { Fabricate.build(:event_participation, event: course, application: application, state: "assigned") }
+    let(:participation) {
+      Fabricate.build(:event_participation, event: course, application: application,
+        state: "assigned")
+    }
 
     subject(:state) { course.default_participation_state(participation) }
 
@@ -358,7 +361,9 @@ describe Event::Course do
 
       expect(course).not_to be_valid
       expect(course.errors.attribute_names).to include(:state)
+      # rubocop:todo Layout/LineLength
       expect(course.errors[:state].first).to eq("State cannot be changed from application_closed to created")
+      # rubocop:enable Layout/LineLength
     end
 
     it "state can be changed from application_closed to canceled" do
@@ -374,9 +379,15 @@ describe Event::Course do
 
     # set up participants who have been rejected
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
-    let!(:applied_participation) { Fabricate(:event_participation, event: course, application:, state: :applied) }
-    let!(:rejected_participation) { Fabricate(:event_participation, event: course, application:, state: :rejected) }
-    let!(:unconfirmed_participation) { Fabricate(:event_participation, event: course, application:, state: :unconfirmed) }
+    let!(:applied_participation) {
+      Fabricate(:event_participation, event: course, application:, state: :applied)
+    }
+    let!(:rejected_participation) {
+      Fabricate(:event_participation, event: course, application:, state: :rejected)
+    }
+    let!(:unconfirmed_participation) {
+      Fabricate(:event_participation, event: course, application:, state: :unconfirmed)
+    }
 
     it "queues job to notify rejected and applied participants" do
       expect { course.update!(state: :assignment_closed) }
@@ -397,8 +408,10 @@ describe Event::Course do
     before do
       @participations = course.participations.create!([
         {participant: people(:admin)},
-        {participant: people(:mitglied), state: :assigned, price: 10, price_category: "price_regular", application: application},
-        {participant: people(:familienmitglied), state: :assigned, price: 10, price_category: "price_regular"}
+        {participant: people(:mitglied), state: :assigned, price: 10,
+         price_category: "price_regular", application: application},
+        {participant: people(:familienmitglied), state: :assigned, price: 10,
+         price_category: "price_regular"}
       ])
       @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
@@ -424,7 +437,8 @@ describe Event::Course do
       end
 
       it "doesn't enqueue a job if there already is an external invoice" do
-        ExternalInvoice::CourseParticipation.create!(person_id: participant.participant_id, link: participant)
+        ExternalInvoice::CourseParticipation.create!(person_id: participant.participant_id,
+          link: participant)
 
         expect { course.update!(state: :ready) }.to change(
           Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
@@ -455,7 +469,8 @@ describe Event::Course do
 
     context "from created" do
       before do
-        course.participations.create!([{participant: people(:admin)}, {participant: people(:mitglied)}, {participant: people(:familienmitglied)}])
+        course.participations.create!([{participant: people(:admin)},
+          {participant: people(:mitglied)}, {participant: people(:familienmitglied)}])
         course.update!(state: :created)
       end
 
@@ -478,7 +493,9 @@ describe Event::Course do
       end
 
       context "with course assistant leader" do
-        before { course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader) }
+        before {
+          course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader)
+        }
 
         it "sends an email to the course admin and assistant leader" do
           expect { course.update!(state: :application_open) }
@@ -560,9 +577,12 @@ describe Event::Course do
       before do
         course.inform_participants = "1"
         course.participations.create!([
-          {participant: people(:admin), state: :assigned, active: true, roles: [Event::Course::Role::Leader.new]},
-          {participant: people(:mitglied), state: :assigned, active: true, roles: [Event::Course::Role::Participant.new]},
-          {participant: people(:familienmitglied), state: :rejected, active: false, roles: [Event::Course::Role::Participant.new]}
+          {participant: people(:admin), state: :assigned, active: true,
+           roles: [Event::Course::Role::Leader.new]},
+          {participant: people(:mitglied), state: :assigned, active: true,
+           roles: [Event::Course::Role::Participant.new]},
+          {participant: people(:familienmitglied), state: :rejected, active: false,
+           roles: [Event::Course::Role::Participant.new]}
         ])
       end
 
@@ -576,7 +596,9 @@ describe Event::Course do
         expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
       end
 
+      # rubocop:todo Layout/LineLength
       it "sends an email to all leaders and participants if canceled because of minimum participants" do
+        # rubocop:enable Layout/LineLength
         expect { course.update!(state: :canceled, canceled_reason: :minimum_participants) }
           .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).thrice
       end
@@ -594,7 +616,9 @@ describe Event::Course do
       it "does not send email to cancele when participant is canceled" do
         course.participations.joins(:roles)
           .where(event_roles: {type: course.participant_types.collect(&:sti_name)})
+          # rubocop:todo Layout/LineLength
           .first.update!(state: :canceled, canceled_at: Time.zone.today) # cancel one of the participants
+        # rubocop:enable Layout/LineLength
 
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
           .to have_enqueued_mail.twice
@@ -615,7 +639,8 @@ describe Event::Course do
 
     context "invoice" do
       before do
-        p1, p2 = course.participations.create!([{participant: people(:admin)}, {participant: people(:mitglied)}])
+        p1, p2 = course.participations.create!([{participant: people(:admin)},
+          {participant: people(:mitglied)}])
         ExternalInvoice::CourseParticipation.create!(person_id: p1.participant_id, link: p1)
         ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2)
       end
@@ -634,13 +659,20 @@ describe Event::Course do
     before do
       _p1, p2, p3, p4 = course.participations.create!([
         {participant: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
-        {participant: people(:mitglied), state: :absent, price: 42, price_category: "price_regular"},
-        {participant: people(:familienmitglied), state: :attended, price: 42, price_category: "price_regular"},
-        {participant: people(:familienmitglied2), state: :absent, price: 42, price_category: "price_regular"}
+        {participant: people(:mitglied), state: :absent, price: 42,
+         price_category: "price_regular"},
+        {participant: people(:familienmitglied), state: :attended, price: 42,
+         price_category: "price_regular"},
+        {participant: people(:familienmitglied2), state: :absent, price: 42,
+         price_category: "price_regular"}
       ])
-      ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2, total: p2.price)
-      ExternalInvoice::CourseParticipation.create!(person_id: p3.participant_id, link: p3, total: p3.price)
+      ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2,
+        total: p2.price)
+      ExternalInvoice::CourseParticipation.create!(person_id: p3.participant_id, link: p3,
+        total: p3.price)
+      # rubocop:todo Layout/LineLength
       ExternalInvoice::CourseAnnulation.create!(person_id: p4.participant_id, link: p4, total: p4.price) # annulation invoice alredy exists
+      # rubocop:enable Layout/LineLength
     end
 
     it "does not set participation state for assigned participations" do
@@ -652,14 +684,17 @@ describe Event::Course do
       course.participations.update_all(state: :summoned)
       course.update!(state: :closed)
 
-      expect(course.participations.order(:state).pluck(:state)).to eq(["attended", "attended", "attended", "attended"])
+      expect(course.participations.order(:state).pluck(:state)).to eq(["attended", "attended",
+        "attended", "attended"])
     end
 
     it "queues job for absent invoices for absent participants" do
       expect do
         course.update!(state: :closed)
-      end.to change { Delayed::Job.where("handler like '%CreateCourseInvoiceJob%'").count }.by(1).and \
-        change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(1)
+      end.to change {
+               Delayed::Job.where("handler like '%CreateCourseInvoiceJob%'").count
+             }.by(1).and \
+               change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(1)
     end
   end
 
@@ -706,43 +741,52 @@ describe Event::Course do
 
     describe "single date with start and finish at" do
       it "returns 1 if they are on the sem date" do
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 23:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-01 23:00"))
         expect(course.total_event_days).to eq(1)
       end
 
       it "returns still 1 if they they finish in the morning" do
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-01 12:00"))
         expect(course.total_event_days).to eq(1)
       end
 
       it "returns 0.5 if event starts in the evening" do
         course.start_point_of_time = :evening
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-01 12:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-01 12:00"))
         expect(course.total_event_days).to eq(0.5)
       end
 
       it "counts days ignoring start and end times on each day" do
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-03 10:00"))
         expect(course.total_event_days).to eq(3)
       end
 
       it "still subtracts 0.5 if starting in the evening" do
         course.start_point_of_time = :evening
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-03 10:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-03 10:00"))
         expect(course.total_event_days).to eq(2.5)
       end
     end
 
     describe "multiple dates" do
       it "returns the total days across all dates" do
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
-        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-02 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"),
+          finish_at: Time.zone.parse("2024-01-07 08:00"))
         expect(course.total_event_days).to eq(5)
       end
       it "still subtracts 0.5 if starting in the evening" do
         course.start_point_of_time = :evening
-        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"), finish_at: Time.zone.parse("2024-01-02 08:00"))
-        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"), finish_at: Time.zone.parse("2024-01-07 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-01 10:00"),
+          finish_at: Time.zone.parse("2024-01-02 08:00"))
+        course.dates.build(start_at: Time.zone.parse("2024-01-05 10:00"),
+          finish_at: Time.zone.parse("2024-01-07 08:00"))
         expect(course.total_event_days).to eq(4.5)
       end
     end

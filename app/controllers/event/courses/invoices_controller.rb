@@ -8,7 +8,7 @@
 class Event::Courses::InvoicesController < ApplicationController
   before_action :authorize_action
 
-  def create
+  def create # rubocop:todo Metrics/MethodLength
     assign_attributes
 
     if invoice_form.valid?

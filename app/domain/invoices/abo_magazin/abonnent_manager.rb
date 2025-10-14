@@ -33,13 +33,22 @@ class Invoices::AboMagazin::AbonnentManager
 
   private
 
-  def abonnent_role = @abonnent_role ||= person.roles.where(type: ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  def abonnent_role = @abonnent_role ||= person.roles.where(type: ABONNENT_ROLE_TYPE.sti_name,
+    group: group).first
 
-  def expired_abonnent_role = @expired_abonnent_role ||= person.roles.with_inactive.where(type: ABONNENT_ROLE_TYPE.sti_name, group: group, end_on: 1.year.ago..Time.zone.today).first
+  def expired_abonnent_role = @expired_abonnent_role ||= person.roles.with_inactive.where(
+    type: ABONNENT_ROLE_TYPE.sti_name, group: group, end_on: 1.year.ago..Time.zone.today
+  ).first
 
-  def neuanmeldung_abonnent_role = @neuanmeldung_abonnent_role ||= person.roles.where(type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  def neuanmeldung_abonnent_role = @neuanmeldung_abonnent_role ||= person.roles.where(
+    type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group
+  ).first
 
-  def expired_neuanmeldung_abonnent_role = @expired_neuanmeldung_abonnent_role ||= person.roles.with_inactive.where(type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group).first
+  # rubocop:todo Layout/LineLength
+  def expired_neuanmeldung_abonnent_role = @expired_neuanmeldung_abonnent_role ||= person.roles.with_inactive.where(
+    # rubocop:enable Layout/LineLength
+    type: NEUANMELDUNG_ABONNENT_ROLE_TYPE.sti_name, group: group
+  ).first
 
   def extend_role_by_one_year(role)
     role.update!(end_on: role.end_on + 1.year)

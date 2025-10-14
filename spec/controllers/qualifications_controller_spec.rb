@@ -27,13 +27,18 @@ describe QualificationsController do
   end
 
   context "POST create" do
-    let(:qualification_params) { {qualification: {start_at: "01.03.2024", finish_at: "31.03.2024"}} }
+    let(:qualification_params) {
+      {qualification: {start_at: "01.03.2024", finish_at: "31.03.2024"}}
+    }
 
     it "ignores finish_at for qualification kinds with validity" do
       qualification_kind_id = Fabricate(:qualification_kind, validity: 2).id
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        post :create,
+          # rubocop:todo Layout/LineLength
+          params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        # rubocop:enable Layout/LineLength
       end.to change { Qualification.count }.by(1)
 
       qualification = person.qualifications.last
@@ -45,7 +50,10 @@ describe QualificationsController do
       qualification_kind_id = Fabricate(:qualification_kind, validity: nil).id
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        post :create,
+          # rubocop:todo Layout/LineLength
+          params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        # rubocop:enable Layout/LineLength
       end.to change { Qualification.count }.by(1)
 
       qualification = person.qualifications.last
@@ -58,7 +66,10 @@ describe QualificationsController do
       travel_to Date.new(2024, 1, 1)
 
       expect do
-        post :create, params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        post :create,
+          # rubocop:todo Layout/LineLength
+          params: params.merge(qualification_params.deep_merge(qualification: {qualification_kind_id: qualification_kind_id}))
+        # rubocop:enable Layout/LineLength
       end.not_to change { Qualification.count }
 
       expect(response).not_to be_successful

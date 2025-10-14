@@ -28,7 +28,8 @@ describe Invoices::Abacus::SubjectInterface do
       gender: "w"
     )
 
-    Invoices::Abacus::Config.instance_variable_set(:@config, {host: host, mandant: mandant}.stringify_keys)
+    Invoices::Abacus::Config.instance_variable_set(:@config,
+      {host: host, mandant: mandant}.stringify_keys)
 
     stub_login_requests
   end
@@ -94,11 +95,19 @@ describe Invoices::Abacus::SubjectInterface do
 
   it "fails if abacus assigns a different subject key" do
     stub_get_non_existing_subject_request
+    # rubocop:todo Layout/LineLength
     body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"SalutationId\":2,\"Language\":\"de\"}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:post, "Subjects", body, response)
 
-    expect { interface.transmit(subject) }.to raise_error("Abacus created subject with id=1234 but person has id=#{person.id}")
+    expect {
+      # rubocop:todo Layout/LineLength
+      interface.transmit(subject)
+    }.to raise_error("Abacus created subject with id=1234 but person has id=#{person.id}")
+    # rubocop:enable Layout/LineLength
   end
 
   it "does nothing if attrs are unchanged" do
@@ -151,13 +160,20 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   context "#batch_transmit" do
-    let(:subjects) { people(:mitglied, :familienmitglied, :familienmitglied_kind).map { |p| Invoices::Abacus::Subject.new(p) } }
+    let(:subjects) {
+      people(:mitglied, :familienmitglied, :familienmitglied_kind).map { |p|
+     Invoices::Abacus::Subject.new(p) # rubocop:todo Layout/IndentationWidth
+      }
+    }
 
     before do
       people(:familienmitglied, :familienmitglied_kind).each do |person|
-        person.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil, gender: "w")
+        person.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun",
+          country: nil, gender: "w")
       end
+      # rubocop:todo Layout/LineLength
       allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
+      # rubocop:enable Layout/LineLength
     end
 
     it "transmits batch of non-exising people to abacus" do
@@ -208,8 +224,10 @@ describe Invoices::Abacus::SubjectInterface do
 
     it "transmits batch of people to abacus, containing errors" do
       stub_batch_request(fetch_batch_body, fetch_batch_various_response)
-      stub_batch_request(create_batch_subjects_partition_body, create_batch_subjects_partition_response)
-      stub_batch_request(create_batch_associations_partition_body, create_batch_associations_partition_response)
+      stub_batch_request(create_batch_subjects_partition_body,
+        create_batch_subjects_partition_response)
+      stub_batch_request(create_batch_associations_partition_body,
+        create_batch_associations_partition_response)
       stub_batch_request(update_batch_partition_body, update_batch_partition_response)
 
       parts = interface.transmit_batch(subjects)
@@ -244,7 +262,8 @@ describe Invoices::Abacus::SubjectInterface do
         request: {
           method: :post,
           path: "Communications",
-          params: {category: "Private", subject_id: 600004, type: "EMail", value: "n.norgay@hitobito.example.com"}
+          params: {category: "Private", subject_id: 600004, type: "EMail",
+                   value: "n.norgay@hitobito.example.com"}
         }
       )
 
@@ -301,39 +320,58 @@ describe Invoices::Abacus::SubjectInterface do
           "Content-Type" => "application/x-www-form-urlencoded"
         }
       )
-      .to_return(status: 200, body: {access_token: "eyJhbGciOi...", token_type: "Bearer", expires_in: 600}.to_json)
+      .to_return(status: 200, body: {access_token: "eyJhbGciOi...", token_type: "Bearer",
+                                     expires_in: 600}.to_json)
   end
 
   def stub_create_subject_request
+    # rubocop:todo Layout/LineLength
     body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_create_organisation_subject_request
+    # rubocop:todo Layout/LineLength
     body = "{\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\",\"Id\":#{person.id}}"
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     response = "{\"Id\":#{person.id},\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\"}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_update_subject_request
+    # rubocop:todo Layout/LineLength
     body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\"}"
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     response = "{\"Id\":#{person.id},\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:patch, "Subjects(Id=#{person.id})", body, response)
   end
 
   def stub_create_address_request
+    # rubocop:todo Layout/LineLength
     body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostOfficeBoxText\":\"Postfach 23\",\"AddressSupplement\":\"c/o Frau Müller\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:post, "Addresses", body)
   end
 
   def stub_create_communication_request
+    # rubocop:todo Layout/LineLength
     body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:post, "Communications", body)
   end
 
   def stub_update_communication_request(id)
+    # rubocop:todo Layout/LineLength
     body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
+    # rubocop:enable Layout/LineLength
     stub_simple_request(:patch, "Communications(Id=#{id})", body)
   end
 
@@ -371,48 +409,90 @@ describe Invoices::Abacus::SubjectInterface do
         body: request_body,
         headers: {
           "Authorization" => "Bearer eyJhbGciOi...",
+          # rubocop:todo Layout/LineLength
           "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
+          # rubocop:enable Layout/LineLength
         }
       )
       .to_return(
         status: 202,
         body: response_body,
+        # rubocop:todo Layout/LineLength
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
+        # rubocop:enable Layout/LineLength
       )
   end
 
-  def get_subject_response
+  def get_subject_response # rubocop:todo Metrics/MethodLength
     {
+      # rubocop:todo Layout/LineLength
       "@odata.context" => "#{host}/api/entity/v1/mandants/#{mandant}/$metadata#Subjects(Addresses,Communications,Customers)/$entity",
+      # rubocop:enable Layout/LineLength
       "@odata.etag" => "W/\"2fdc485e7234e20bd9df6f58270f957ca5ca9d44507b20b9ffeac5dd58d29962\"",
+      # rubocop:todo Layout/LineLength
       "Id" => person.id, "FirstName" => "Edmund", "Name" => "Hillary", "Title" => "", "NameSupplement" => "", "Language" => "de",
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       "ChangeInformation" => {"CreatedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "CreatedOn" => "2024-05-08T16:31:08.669+02:00",
+                              # rubocop:enable Layout/LineLength
+                              # rubocop:todo Layout/LineLength
                               "ChangedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "ChangedOn" => "2024-05-08T16:31:08.669+02:00"},
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       "Status" => "Active", "Remark" => "", "Key" => "6c4b3c5c-91c2-c212-9538-a6a253da66c8", "RegisteredCompanyUid" => "",
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       "Type" => "Person", "TaxIdSwitzerland" => "", "TaxIdEuropeanUnion" => "", "NogaCodeId" => "", "DateOfBirth" => nil,
+      # rubocop:enable Layout/LineLength
+      # rubocop:todo Layout/LineLength
       "Source" => "", "NamePrefix" => "", "NameSuffix" => "", "Salutation" => "Sehr geehrte Frau", "SalutationId" => 2,
+      # rubocop:enable Layout/LineLength
       "UserFields" => {"UserField1" => ""},
       "Addresses" => [{
         "@odata.etag" => "W/\"ea2246585da92c0f2789e718fea4dfb29d56005e7d51c6e27cb5994b8838b5b0\"",
+        # rubocop:todo Layout/LineLength
         "Id" => "e65440b5-eb47-9482-21b0-a647a3972e0b", "SubjectId" => person.id, "ValidFrom" => "2024-05-08", "Street" => "Belpstrasse",
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "HouseNumber" => "37", "City" => "Bern", "PostCode" => "3007", "PostCodeSupplement" => 0, "CountryId" => "CH", "State" => "BE",
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "DwellingNumber" => "", "MunicipalityCode" => "351", "BuildingNumber" => 0, "AddressSupplement" => "c/o Frau Müller", "StreetSupplement" => "",
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "PostOfficeBoxText" => "Postfach 23", "PostOfficeBoxNumber" => "", "OpenLocationCode" => "", "Coordinates" => nil
+        # rubocop:enable Layout/LineLength
       }],
       "Communications" => [{
         "@odata.etag" => "W/\"f86b82e3bbf253df0eb29c2406cb3619d611d9300d1cd7daa8a3f0403857ad90\"",
+        # rubocop:todo Layout/LineLength
         "Id" => "ef83129d-470d-ef01-1ff3-001dd8b72ba4", "SubjectId" => person.id, "LinkId" => nil, "Type" => "EMail",
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "Value" => "e.hillary@hitobito.example.com", "Standard" => true, "Category" => "Private", "Note" => "", "Purpose" => []
+        # rubocop:enable Layout/LineLength
       }],
       "Customers" => [{
         "@odata.etag" => "W/\"2046f721492e448539278c6392cf450242ba80e3077f8b701dcbcfab8a06207c\"",
+        # rubocop:todo Layout/LineLength
         "Id" => person.id, "SubjectId" => person.id, "DefaultCurrencyId" => "CHF", "Status" => "Active", "InactiveFrom" => nil,
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "MultipleCurrenciesActive" => false, "DivisionId" => 0, "DisabledForPayout" => false, "ResponsiblePersonId" => 0,
+        # rubocop:enable Layout/LineLength
+        # rubocop:todo Layout/LineLength
         "CustomerCondition" => {"PaymentConditionId" => 1, "DiscountToleranceDays" => 0, "DiscountTolerancePercent" => 0.0},
+        # rubocop:enable Layout/LineLength
         "CustomerCreditLimit" => {"CheckCreditRating" => false},
+        # rubocop:todo Layout/LineLength
         "CustomerReminder" => {"ProcedureId" => "NORM", "SubjectId" => 0, "ContactId" => nil, "Mode" => "Remind",
+                               # rubocop:enable Layout/LineLength
+                               # rubocop:todo Layout/LineLength
                                "ViewOrSendActive" => false, "ViewWithNoReminder" => false, "ViewBlocked" => false, "BlockedUntil" => nil,
+                               # rubocop:enable Layout/LineLength
+                               # rubocop:todo Layout/LineLength
                                "SendAccountStatement" => false, "BlockedReasonId" => 0, "DispatchType" => "Letter", "GracePeriodDays" => 0},
+        # rubocop:enable Layout/LineLength
         "CustomerNote" => []
       }]
     }

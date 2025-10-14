@@ -11,7 +11,10 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
   let(:mitglied) { people(:mitglied) }
   let(:kind) { event_kinds(:ski_course) }
   let(:course) { Fabricate(:sac_course, kind: kind) }
-  let(:participation) { Fabricate(:event_participation, event: course, participant: mitglied, price: 20, price_category: 1) }
+  let(:participation) {
+    Fabricate(:event_participation, event: course, participant: mitglied, price: 20,
+      price_category: 1)
+  }
   let(:now) { Time.zone.local(2024, 8, 24, 1) }
   let(:external_invoice) {
     Fabricate(:external_invoice,
@@ -80,7 +83,9 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
 
     context "with subject errors" do
       it "logs error message and terminates" do
+        # rubocop:todo Layout/LineLength
         expect_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_wrap_original do |original, subject|
+          # rubocop:enable Layout/LineLength
           subject.errors[:abacus_subject_key] = :taken
           false
         end
@@ -106,7 +111,9 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
 
     it "raises without creating log or updating invoice state" do
       expect do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         job.perform
       end.to raise_error(StandardError, "ouch")
         .and not_change { HitobitoLogEntry.count }
@@ -115,7 +122,9 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
 
     context "when running via worker" do
       it "creates log entry with error message" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         expect do
           Delayed::Worker.new.run(job.enqueue!)
         end.to change { HitobitoLogEntry.count }.by(1)
@@ -128,7 +137,9 @@ describe Invoices::Abacus::CreateCourseInvoiceJob do
       end
 
       it "updates invoice state to error when all attemps fail" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         allow(Delayed::Worker).to receive(:max_attempts).and_return(2)
         delayed_job = job.enqueue!
         expect do

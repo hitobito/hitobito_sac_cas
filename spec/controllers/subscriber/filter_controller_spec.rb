@@ -16,7 +16,8 @@ describe Subscriber::FilterController do
     let(:filters) do
       {
         language: {"allowed_values" => %w[de fr]},
-        attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years", "value" => "16"}}
+        attributes: {"1699698452786" => {"constraint" => "greater", "key" => "years",
+                                         "value" => "16"}}
       }
     end
 
@@ -55,7 +56,9 @@ describe Subscriber::FilterController do
 
       put :update, params: params
 
+      # rubocop:todo Layout/LineLength
       expect(response).to redirect_to(group_mailing_list_subscriptions_path(group_id: mailing_list.group.id,
+        # rubocop:enable Layout/LineLength
         id: mailing_list.id))
 
       filter_chain = mailing_list.reload.filter_chain

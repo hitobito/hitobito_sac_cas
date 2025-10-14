@@ -31,8 +31,16 @@ describe Export::Tabular::Event::Participations::CourseDataRow do
 
   it("event_number") { expect(value(:event_number)).to eq "10" }
   it("event_dates_locations") { expect(value(:event_dates_locations)).to eq "Bern, Zurich" }
-  it("event_first_date") { expect(value(:event_first_date)).to eq event_dates(:top_course_first).start_at.strftime("%d.%m.%Y %H:%M") }
-  it("event_last_date") { expect(value(:event_last_date)).to eq event_dates(:top_course_second).finish_at.strftime("%d.%m.%Y %H:%M") }
+  it("event_first_date") {
+    # rubocop:todo Layout/LineLength
+    expect(value(:event_first_date)).to eq event_dates(:top_course_first).start_at.strftime("%d.%m.%Y %H:%M")
+  }
+  # rubocop:enable Layout/LineLength
+  it("event_last_date") {
+    # rubocop:todo Layout/LineLength
+    expect(value(:event_last_date)).to eq event_dates(:top_course_second).finish_at.strftime("%d.%m.%Y %H:%M")
+  }
+  # rubocop:enable Layout/LineLength
   it("person_id") { expect(value(:person_id)).to eq 600001 }
   it("person_gender") { expect(value(:person_gender)).to eq "weiblich" }
   it("person_last_name") { expect(value(:person_last_name)).to eq "Hillary" }
@@ -40,9 +48,13 @@ describe Export::Tabular::Event::Participations::CourseDataRow do
   it("person_address") { expect(value(:person_address)).to eq "Ophovenerstrasse 79a" }
   it("person_zip_code") { expect(value(:person_zip_code)).to eq "2843" }
   it("person_town") { expect(value(:person_town)).to eq "Neu Carlscheid" }
-  it("person_birthday") { expect(value(:person_birthday)).to eq Date.new(2000, 1, 1).strftime("%d.%m.%Y") }
+  it("person_birthday") {
+    expect(value(:person_birthday)).to eq Date.new(2000, 1, 1).strftime("%d.%m.%Y")
+  }
   it("person_email") { expect(value(:person_email)).to eq "e.hillary@hitobito.example.com" }
-  it("person_stammsektion") { expect(value(:person_stammsektion)).to eq "#{stammsektion.id} #{stammsektion.name}" }
+  it("person_stammsektion") {
+    expect(value(:person_stammsektion)).to eq "#{stammsektion.id} #{stammsektion.name}"
+  }
 
   context "with german person language" do
     before { participation.person.update!(language: :de) }

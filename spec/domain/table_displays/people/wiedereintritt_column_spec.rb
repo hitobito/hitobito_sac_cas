@@ -16,7 +16,9 @@ describe TableDisplays::People::WiedereintrittColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
+    # rubocop:enable Layout/LineLength
   end
 
   context "without wiedereintritt" do
@@ -33,7 +35,9 @@ describe TableDisplays::People::WiedereintrittColumn, type: :helper do
       people(:mitglied).roles.destroy_all
       Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: people(:mitglied),
         group: groups(:bluemlisalp_neuanmeldungen_nv))
+      # rubocop:todo Layout/LineLength
       Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder),
+        # rubocop:enable Layout/LineLength
         person: people(:mitglied),
         start_on: Time.zone.local(1990, 1, 1),
         end_on: Time.zone.local(1995, 12, 31))

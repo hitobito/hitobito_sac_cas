@@ -27,7 +27,7 @@ module TableDisplays::People
       antrag_fuer(target)
     end
 
-    def antrag_fuer(person)
+    def antrag_fuer(person) # rubocop:todo Metrics/CyclomaticComplexity
       group_roles = person.roles.select { |r| r.group_id == template&.parent&.id }
       if group_roles.any? { |r| SacCas::NEUANMELDUNG_ZUSATZSEKTION_ROLES.include?(r.class) }
         I18n.t("groups.sektion_secondary")

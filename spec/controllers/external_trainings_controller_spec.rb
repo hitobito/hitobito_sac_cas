@@ -105,7 +105,8 @@ describe ExternalTrainingsController do
 
     context "existing qualification" do
       let!(:quali) do
-        Fabricate(:qualification, qualification_kind: ski_leader, person: person, start_at: 3.years.ago, qualified_at: 3.years.ago)
+        Fabricate(:qualification, qualification_kind: ski_leader, person: person,
+          start_at: 3.years.ago, qualified_at: 3.years.ago)
       end
 
       it "prolongs qualification if criteria matches" do
@@ -153,7 +154,8 @@ describe ExternalTrainingsController do
     end
 
     it "removes training and corresponding  qualification" do
-      Fabricate(:qualification, qualification_kind: ski_leader, person: person, qualified_at: training.finish_at)
+      Fabricate(:qualification, qualification_kind: ski_leader, person: person,
+        qualified_at: training.finish_at)
 
       expect do
         delete :destroy, params: params

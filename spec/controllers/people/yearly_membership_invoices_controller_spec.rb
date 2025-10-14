@@ -42,13 +42,18 @@ describe People::YearlyMembershipInvoicesController do
 
     it "does not schedule job when invoice form is invalid" do
       expect do
-        post :create, params: params.deep_merge(people_yearly_membership_invoice_form: {invoice_year: today + 3.years})
+        post :create,
+          # rubocop:todo Layout/LineLength
+          params: params.deep_merge(people_yearly_membership_invoice_form: {invoice_year: today + 3.years})
+        # rubocop:enable Layout/LineLength
       end.not_to change { Delayed::Job.count }
       expect(response).to have_http_status(422)
     end
 
     it "does not schedule a second job if one is already running" do
+      # rubocop:todo Layout/LineLength
       Invoices::Abacus::CreateYearlyInvoicesJob.new(**params[:people_yearly_membership_invoice_form]).enqueue!(run_at: 10.seconds.from_now)
+      # rubocop:enable Layout/LineLength
 
       expect do
         post :create, params: params
@@ -65,13 +70,19 @@ describe People::YearlyMembershipInvoicesController do
     let(:body) { Capybara::Node::Simple.new(response.body) }
 
     it "does not show form but info flash if a job is already running" do
+      # rubocop:todo Layout/LineLength
       Invoices::Abacus::CreateYearlyInvoicesJob.new(**params[:people_yearly_membership_invoice_form]).enqueue!(run_at: 10.seconds.from_now)
+      # rubocop:enable Layout/LineLength
 
       get :new, params: {group_id: Group.root.id}
 
       expect(body).to_not have_selector(".content form")
+      # rubocop:todo Layout/LineLength
+      # rubocop:todo Layout/LineLength
       expect(body).to have_selector(".alert-warning", text: "Es läuft bereits ein Jahresinkassolauf. " \
                                     "Erst wenn dieser Lauf abgeschlossen ist, kann ein neuer gestartet werden.")
+      # rubocop:enable Layout/LineLength
+      # rubocop:enable Layout/LineLength
     end
   end
 end

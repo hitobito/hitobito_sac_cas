@@ -28,7 +28,8 @@ describe SacSectionMembershipConfigsController do
       get :index, params: {group_id: sektion.id}
 
       expect(response)
-        .to redirect_to(edit_group_sac_section_membership_config_path(group_id: sektion.id, id: latest_config.id))
+        .to redirect_to(edit_group_sac_section_membership_config_path(group_id: sektion.id,
+          id: latest_config.id))
     end
 
     it "redirects to new if no previous config present" do
@@ -60,7 +61,8 @@ describe SacSectionMembershipConfigsController do
       get :show, params: {group_id: sektion.id, id: older_config.id}
 
       expect(response)
-        .to redirect_to(edit_group_sac_section_membership_config_path(group_id: sektion.id, id: older_config.id))
+        .to redirect_to(edit_group_sac_section_membership_config_path(group_id: sektion.id,
+          id: older_config.id))
     end
 
     it "cannot be accessed by non admin" do
@@ -81,7 +83,8 @@ describe SacSectionMembershipConfigsController do
 
     it "is not found for wrong group id" do
       expect do
-        get :edit, params: {group_id: groups(:bluemlisalp_ortsgruppe_ausserberg).id, id: latest_config.id}
+        get :edit,
+          params: {group_id: groups(:bluemlisalp_ortsgruppe_ausserberg).id, id: latest_config.id}
       end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
@@ -100,10 +103,12 @@ describe SacSectionMembershipConfigsController do
     end
 
     it "updates config and redirects to show/edit form" do
-      patch :update, params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
+      patch :update,
+        params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
 
       expect(response)
-        .to redirect_to(group_sac_section_membership_config_path(group_id: sektion.id, id: latest_config.id))
+        .to redirect_to(group_sac_section_membership_config_path(group_id: sektion.id,
+          id: latest_config.id))
 
       latest_config.reload
       expect(latest_config.section_fee_adult).to eq(52)
@@ -111,10 +116,12 @@ describe SacSectionMembershipConfigsController do
 
     it "cannot update valid_from" do
       updated_model_params[:sac_section_membership_config][:valid_from] = 2020
-      patch :update, params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
+      patch :update,
+        params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
 
       expect(response)
-        .to redirect_to(group_sac_section_membership_config_path(group_id: sektion.id, id: latest_config.id))
+        .to redirect_to(group_sac_section_membership_config_path(group_id: sektion.id,
+          id: latest_config.id))
 
       latest_config.reload
       expect(latest_config.valid_from).to eq(2024)
@@ -124,7 +131,8 @@ describe SacSectionMembershipConfigsController do
       sign_in(people(:mitglied))
 
       expect do
-        patch :update, params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
+        patch :update,
+          params: {group_id: sektion.id, id: latest_config.id}.merge(updated_model_params)
       end.to raise_error(CanCan::AccessDenied)
     end
   end

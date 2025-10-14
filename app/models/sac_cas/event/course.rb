@@ -158,8 +158,11 @@ module SacCas::Event::Course
       Event::Kind::ACCOMMODATIONS,
       i18n_prefix: "#{I18N_KIND}.accommodations"
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
-    i18n_enum :canceled_reason, CANCELED_REASONS, i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
+    i18n_enum :canceled_reason, CANCELED_REASONS,
+      i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
+    # rubocop:todo Layout/LineLength
     enum :canceled_reason, CANCELED_REASONS # TODO convert column to string and remove this line for consistent enum handling
+    # rubocop:enable Layout/LineLength
 
     attribute :waiting_list, default: false
 
@@ -176,7 +179,9 @@ module SacCas::Event::Course
     delegate :level, to: :kind, allow_nil: true
   end
 
+  # rubocop:todo Layout/LineLength
   # This would be defined in Events::State, but is required again here because this module is prepended.
+  # rubocop:enable Layout/LineLength
   module ClassMethods
     def possible_states
       @possible_states ||= state_transitions.keys.map(&:to_s)

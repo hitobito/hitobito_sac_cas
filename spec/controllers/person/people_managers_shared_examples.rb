@@ -14,7 +14,9 @@ shared_examples "people_managers#create" do
   def create_person(**opts)
     Fabricate(:person, primary_group: groups(:bluemlisalp_mitglieder), **opts).tap do |person|
       # add a role to make the person findable
+      # rubocop:todo Layout/LineLength
       Group::SektionsMitglieder::Mitglied.create!(person: person, group: groups(:bluemlisalp_mitglieder),
+        # rubocop:enable Layout/LineLength
         start_on: 1.year.ago, delete_on: 2.years.from_now)
     end
   end
@@ -88,7 +90,9 @@ shared_examples "people_managers#destroy" do
   def create_person(**opts)
     Fabricate(:person, primary_group: groups(:bluemlisalp_mitglieder), **opts).tap do |person|
       # add a role to make the person findable
+      # rubocop:todo Layout/LineLength
       Group::SektionsMitglieder::Mitglied.create!(person: person, group: groups(:bluemlisalp_mitglieder),
+        # rubocop:enable Layout/LineLength
         created_at: 1.year.ago, delete_on: 2.years.from_now)
     end
   end

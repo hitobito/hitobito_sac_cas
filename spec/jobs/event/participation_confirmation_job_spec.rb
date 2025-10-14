@@ -16,7 +16,9 @@ describe Event::ParticipationConfirmationJob do
   let(:person) { people(:mitglied) }
 
   let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-  let(:participation) { Fabricate(:event_participation, event: event, participant: person, application: application) }
+  let(:participation) {
+    Fabricate(:event_participation, event: event, participant: person, application: application)
+  }
 
   before do
     SeedFu.quiet = true
@@ -26,10 +28,15 @@ describe Event::ParticipationConfirmationJob do
   subject { Event::ParticipationConfirmationJob.new(participation) }
 
   describe "Event sends directly" do
-    let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
+    let(:event) {
+      Fabricate(:event, application_opening_at: 5.days.ago, groups: [group],
+        applications_cancelable: true)
+    }
 
     it "sends event via coure unconfirmed email" do
+      # rubocop:todo Layout/LineLength
       expect(Event::ParticipationMailer).to receive(:confirmation).with(participation).and_call_original
+      # rubocop:enable Layout/LineLength
       expect do
         subject.perform
       end.to change { ActionMailer::Base.deliveries.size }.by(1)
@@ -38,7 +45,10 @@ describe Event::ParticipationConfirmationJob do
   end
 
   describe "Event::Course uses Event::ApplicationConfirmationMailer" do
-    let(:event) { Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group], applications_cancelable: true) }
+    let(:event) {
+      Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group],
+        applications_cancelable: true)
+    }
 
     before do
       expect(Event::ParticipationMailer).not_to receive(:confirmation)
@@ -47,7 +57,9 @@ describe Event::ParticipationConfirmationJob do
     it "sends course specific unconfirmed email" do
       expect do
         subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(participation, "course_application_confirmation_unconfirmed")
+      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
+        participation, "course_application_confirmation_unconfirmed"
+      )
         .and not_change { ActionMailer::Base.deliveries.size }
     end
 
@@ -55,7 +67,9 @@ describe Event::ParticipationConfirmationJob do
       participation.update!(state: :assigned)
       expect do
         subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(participation, "course_application_confirmation_assigned")
+      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
+        participation, "course_application_confirmation_assigned"
+      )
         .and not_change { ActionMailer::Base.deliveries.size }
     end
 
@@ -63,7 +77,9 @@ describe Event::ParticipationConfirmationJob do
       participation.update!(state: :applied)
       expect do
         subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(participation, "course_application_confirmation_applied")
+      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
+        participation, "course_application_confirmation_applied"
+      )
         .and not_change { ActionMailer::Base.deliveries.size }
     end
   end

@@ -21,7 +21,10 @@ describe ExternalInvoice::SacMembership do
   }
 
   describe "after_update callback" do
-    let(:external_invoice) { ExternalInvoice::SacMembership.create!(state: :draft, person: people(:mitglied), link: groups(:bluemlisalp_mitglieder)) }
+    let(:external_invoice) {
+      ExternalInvoice::SacMembership.create!(state: :draft, person: people(:mitglied),
+        link: groups(:bluemlisalp_mitglieder))
+    }
 
     context "state changes to payed" do
       it "enques job" do
@@ -41,7 +44,10 @@ describe ExternalInvoice::SacMembership do
     end
 
     context "when state is already payed" do
-      let(:payed_external_invoice) { ExternalInvoice::SacMembership.create!(state: :payed, person: people(:mitglied), link: groups(:bluemlisalp_mitglieder)) }
+      let(:payed_external_invoice) {
+        ExternalInvoice::SacMembership.create!(state: :payed, person: people(:mitglied),
+          link: groups(:bluemlisalp_mitglieder))
+      }
 
       it "does not queue the job" do
         expect_no_enqueued_job do
@@ -54,13 +60,21 @@ describe ExternalInvoice::SacMembership do
     def expect_no_enqueued_job
       expect do
         yield
-      end.not_to change { Delayed::Job.where("handler like '%Invoices::SacMemberships::InvoicePayedJob%'").count }
+      end.not_to change {
+                   # rubocop:todo Layout/LineLength
+                   Delayed::Job.where("handler like '%Invoices::SacMemberships::InvoicePayedJob%'").count
+                   # rubocop:enable Layout/LineLength
+                 }
     end
 
     def expect_enqueued_job
       expect do
         yield
-      end.to change { Delayed::Job.where("handler like '%Invoices::SacMemberships::InvoicePayedJob%'").count }
+      end.to change {
+               # rubocop:todo Layout/LineLength
+               Delayed::Job.where("handler like '%Invoices::SacMemberships::InvoicePayedJob%'").count
+               # rubocop:enable Layout/LineLength
+             }
     end
   end
 end

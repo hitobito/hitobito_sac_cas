@@ -10,8 +10,13 @@ require "spec_helper"
 describe "participation edit page", :js do
   let(:person) { people(:admin) }
   let(:event) { Fabricate(:sac_open_course, state: nil) }
-  let(:participation) { Fabricate(:event_participation, event:, participant: people(:mitglied), application_id: -1) }
-  let(:participation_path) { edit_group_event_participation_path(group_id: event.group_ids.first, event_id: event.id, id: participation.id) }
+  let(:participation) {
+    Fabricate(:event_participation, event:, participant: people(:mitglied), application_id: -1)
+  }
+  let(:participation_path) {
+    edit_group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
+      id: participation.id)
+  }
 
   before { sign_in(person) }
 
@@ -39,7 +44,8 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert",
+          text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(nil)
     end
 
@@ -53,7 +59,8 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert",
+          text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(20)
     end
 
@@ -68,7 +75,8 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert",
+          text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.not_to change { participation.reload.price }
     end
 
@@ -82,7 +90,8 @@ describe "participation edit page", :js do
       end
       expect do
         click_on("Speichern")
-        expect(page).to have_css(".alert", text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
+        expect(page).to have_css(".alert",
+          text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
       end.to change { participation.reload.price }.from(10).to(15)
     end
 

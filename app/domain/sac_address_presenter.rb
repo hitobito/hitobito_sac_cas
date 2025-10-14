@@ -29,7 +29,9 @@ class SacAddressPresenter
   end
 
   def key_data_sheet_format
+    # rubocop:todo Layout/LineLength
     "#{@data[:name]}, #{@data[:address]}, #{@data[:postbox]}, CH-#{@data[:town]}, #{@data[:phone_self_registration]}, #{@data[:email]}"
+    # rubocop:enable Layout/LineLength
   end
 
   def mail_format

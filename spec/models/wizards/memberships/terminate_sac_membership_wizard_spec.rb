@@ -123,7 +123,9 @@ describe Wizards::Memberships::TerminateSacMembershipWizard do
           .with(person, bluemlisalp, Date.yesterday, mail_mitglied)
       end
 
+      # rubocop:todo Layout/LineLength
       it "still sends TerminateSacMembership::terminate_membership email even if inform_mitglied_via_email is set to false" do
+        # rubocop:enable Layout/LineLength
         params[:summary][:inform_mitglied_via_email] = false
         expect do
           wizard.save!

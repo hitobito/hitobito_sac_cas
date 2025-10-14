@@ -26,7 +26,8 @@ describe FullTextController, type: :controller do
       get :index, params: {q: Person.first.first_name}
 
       expect(dom.all(:css, ".table thead th:last")[0].text).to include "Mitglied-Nr"
-      expect(dom.all(:css, ".table tr td:last")[0].text).to include Person.first.membership_number.to_s
+      expect(dom.all(:css,
+        ".table tr td:last")[0].text).to include Person.first.membership_number.to_s
     end
   end
 end

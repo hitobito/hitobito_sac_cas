@@ -102,10 +102,16 @@ describe Event::ApplicationMarketController do
 
     it "sends confirmation email" do
       expect do
-        put :add_participant, params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: true}, format: :js
-      end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
+        put :add_participant,
+          # rubocop:todo Layout/LineLength
+          params: {group_id: group.id, event_id: event.id, id: appl_prio_1.id, send_email: true}, format: :js
+        # rubocop:enable Layout/LineLength
+      end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"),
+        :count).by(1)
 
+      # rubocop:todo Layout/LineLength
       expect(appl_prio_1.reload.roles.collect(&:type)).to eq([event.participant_types.first.sti_name])
+      # rubocop:enable Layout/LineLength
       expect(appl_prio_1).to be_active
     end
   end

@@ -68,7 +68,8 @@ describe SacCas::People::Wso2LegacyPassword do
       let(:hash) { generate_wso2_legacy_password_hash(valid_password, salt) }
 
       it "does set the password and correspondence if valid" do
-        person.update!(wso2_legacy_password_hash: hash, wso2_legacy_password_salt: salt, correspondence: "print")
+        person.update!(wso2_legacy_password_hash: hash, wso2_legacy_password_salt: salt,
+          correspondence: "print")
 
         expect {
           person.valid_password?(valid_password)

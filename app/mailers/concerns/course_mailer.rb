@@ -75,7 +75,7 @@ module CourseMailer
   end
 
   # See https://github.com/hitobito/hitobito/blob/master/app/mailers/event/participation_mailer.rb#L112
-  def placeholder_event_details
+  def placeholder_event_details # rubocop:todo Metrics/AbcSize
     info = []
     info << @course.name
     info << labeled(:dates) { join_lines(@course.dates.map(&:to_s)) }
@@ -104,7 +104,8 @@ module CourseMailer
 
     return "" if missing_questions.blank?
 
-    escape_html(t("event.participations.missing_information")) + br_tag + content_tag(:ul, missing_questions)
+    escape_html(t("event.participations.missing_information")) + br_tag + content_tag(:ul,
+      missing_questions)
   end
 
   def content_tag(name, content = nil)

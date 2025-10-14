@@ -23,7 +23,9 @@ module SacCas::Role::MitgliedFamilyValidations
 
   private
 
+  # rubocop:todo Layout/LineLength
   # Returns all family mitglieder from DB including the current person even if it is not persisted yet.
+  # rubocop:enable Layout/LineLength
   def family_mitglieder
     people = Household.new(person).people
     people << person unless people.include?(person)

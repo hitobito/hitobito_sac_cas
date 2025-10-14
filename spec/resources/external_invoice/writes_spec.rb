@@ -9,7 +9,10 @@ require "spec_helper"
 
 describe ExternalInvoiceResource, type: :resource do
   let(:person) { admin }
-  let!(:invoice) { Fabricate(:external_invoice, person: admin, total: 15, sent_at: "2024-08-01", link: groups(:bluemlisalp)) }
+  let!(:invoice) {
+    Fabricate(:external_invoice, person: admin, total: 15, sent_at: "2024-08-01",
+      link: groups(:bluemlisalp))
+  }
   let(:admin) { people(:admin) }
 
   describe "updating" do
@@ -44,7 +47,8 @@ describe ExternalInvoiceResource, type: :resource do
       }.to change { invoice.reload.sent_at.to_s }.from("2024-08-01").to("2024-08-02")
     end
 
-    [:person_id, :type, :link_id, :link_type, :issued_at, :year, :abacus_sales_order_key].each do |attr|
+    [:person_id, :type, :link_id, :link_type, :issued_at, :year,
+      :abacus_sales_order_key].each do |attr|
       it "cannot update #{attr}" do
         data = {}
         data[attr] = 1

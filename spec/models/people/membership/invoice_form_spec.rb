@@ -52,7 +52,8 @@ describe People::Membership::InvoiceForm do
 
       it "is valid if person has neuanmeldung for stammsektion in chose section" do
         person.roles.destroy_all
-        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person, group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person,
+          group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
         form.section_id = groups(:bluemlisalp_neuanmeldungen_nv).layer_group.id.to_s
         expect(form).to be_valid
       end
@@ -62,19 +63,25 @@ describe People::Membership::InvoiceForm do
       it "is invalid when blank" do
         form.send_date = nil
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss ausgefüllt werden"]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid when short of min date" do
         form.send_date = 1.year.ago.end_of_year
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to eq ["Versand- und Rechnungsdatum muss 01.01.2024 oder danach sein"]
+        # rubocop:enable Layout/LineLength
       end
 
       it "is invalid when exceeds max date" do
         form.send_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Versand- und Rechnungsdatum muss 31.12.2024 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -94,7 +101,9 @@ describe People::Membership::InvoiceForm do
       it "is invalid when exceeds max date" do
         form.invoice_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Buchungsdatum muss 31.12.2025 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -114,7 +123,9 @@ describe People::Membership::InvoiceForm do
       it "is invalid when exceeds max date" do
         form.reference_date = 2.years.from_now.beginning_of_year.to_date
         expect(form).not_to be_valid
+        # rubocop:todo Layout/LineLength
         expect(form.errors.full_messages).to match_array ["Stichtag muss 31.12.2025 oder davor sein"]
+        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -152,7 +163,8 @@ describe People::Membership::InvoiceForm do
 
     it "uses end of this year for max_send_date for people with neuanmeldung roles" do
       person.roles.destroy_all
-      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person, group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
+      Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name, person: person,
+        group: groups(:bluemlisalp_neuanmeldungen_nv), start_on: 1.year.ago)
       expect(form.max_send_date).to eq Date.new(2024, 12, 31)
     end
 

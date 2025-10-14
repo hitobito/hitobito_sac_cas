@@ -27,7 +27,8 @@ describe SacSectionMembershipConfigAbility do
 
     it "is not permitted as mitgliederverwaltung sektion on ortsgruppe" do
       ortsgruppen_config = sac_section_membership_configs(:ausserberg_2024)
-      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, ortsgruppen_config)
+      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage,
+        ortsgruppen_config)
     end
 
     it "is not permitted for mitglied" do
@@ -36,7 +37,8 @@ describe SacSectionMembershipConfigAbility do
 
     it "is not permitted for mitgliederverwaltung sektion for other sektion" do
       other_sac_section_config = sac_section_membership_configs(:matterhorn_2024)
-      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, other_sac_section_config)
+      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage,
+        other_sac_section_config)
     end
   end
 end

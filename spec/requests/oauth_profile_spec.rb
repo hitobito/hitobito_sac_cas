@@ -17,7 +17,9 @@ RSpec.describe "GET oauth/profile", type: :request do
   end
 
   before do
+    # rubocop:todo Layout/LineLength
     allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
+    # rubocop:enable Layout/LineLength
   end
 
   def make_request(skip_checks: true)

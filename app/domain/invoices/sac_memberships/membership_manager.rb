@@ -50,8 +50,11 @@ class Invoices::SacMemberships::MembershipManager
     end
   end
 
-  def relevant_roles_for(stammsektion_role)
-    membership = People::SacMembership.new(person, date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
+  # rubocop:todo Metrics/MethodLength
+  # rubocop:todo Metrics/AbcSize
+  def relevant_roles_for(stammsektion_role) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
+    membership = People::SacMembership.new(person,
+      date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
 
     relevant_roles = []
     relevant_roles << membership.stammsektion_role
@@ -60,7 +63,8 @@ class Invoices::SacMemberships::MembershipManager
 
     if family_main_person?
       person.household_people.each do |family_member|
-        family_member_membership = People::SacMembership.new(family_member, date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
+        family_member_membership = People::SacMembership.new(family_member,
+          date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
 
         relevant_roles << family_member_membership.stammsektion_role
         relevant_roles.concat(family_member_membership.zusatzsektion_roles.reject(&:terminated?)
@@ -71,6 +75,8 @@ class Invoices::SacMemberships::MembershipManager
 
     relevant_roles
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def create_stammsektion_membership_from_neuanmeldung
     set_confirmed_at
@@ -81,7 +87,8 @@ class Invoices::SacMemberships::MembershipManager
   def update_role_to_stammsektion_mitglied(person)
     neuanmeldung_role = person.sac_membership.neuanmeldung_stammsektion_role
     neuanmeldung_role.destroy
-    new_role = create_new_role(person, Group::SektionsMitglieder::Mitglied, beitragskategorie: neuanmeldung_role.beitragskategorie)
+    new_role = create_new_role(person, Group::SektionsMitglieder::Mitglied,
+      beitragskategorie: neuanmeldung_role.beitragskategorie)
     send_confirmation_mail(person, new_role)
   end
 
@@ -91,40 +98,56 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def update_roles_to_zusatzsektion_mitglied(person)
-    role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role| role.layer_group == group.layer_group }
+    role = person.sac_membership.neuanmeldung_zusatzsektion_roles.find { |role|
+      role.layer_group == group.layer_group
+    }
     if role
       role.destroy
       end_on = [person.sac_membership.latest_stammsektion_role.end_on, end_of_year].min
       start_on = end_on.past? ? end_on : today
-      new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion, start_on: start_on, end_on: end_on, beitragskategorie: role.beitragskategorie)
+      new_role = create_new_role(person, Group::SektionsMitglieder::MitgliedZusatzsektion,
+        start_on: start_on, end_on: end_on, beitragskategorie: role.beitragskategorie)
 
       send_confirmation_mail(person, new_role)
     end
   end
 
   def send_confirmation_mail(person, role)
-    Invoices::SacMembershipsMailer.confirmation(person, role.group.parent, role.beitragskategorie).deliver_later if person.email.present?
+    if person.email.present?
+      Invoices::SacMembershipsMailer.confirmation(person, role.group.parent,
+        role.beitragskategorie).deliver_later
+    end
   end
 
   def update_family_roles_to_stammsektion_mitglied
-    person.household_people.each { |family_member| update_role_to_stammsektion_mitglied(family_member) }
+    person.household_people.each { |family_member|
+      update_role_to_stammsektion_mitglied(family_member)
+    }
   end
 
   def update_family_roles_to_zusatzsektion_mitglied
-    person.household_people.each { |family_member| update_roles_to_zusatzsektion_mitglied(family_member) }
+    person.household_people.each { |family_member|
+      update_roles_to_zusatzsektion_mitglied(family_member)
+    }
   end
 
-  def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today, end_on: end_of_year, beitragskategorie: nil)
-    attributes = {group: group, person: person, end_on: end_on, start_on: start_on, beitragskategorie: beitragskategorie}.compact
+  def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today,
+    end_on: end_of_year, beitragskategorie: nil)
+    attributes = {group: group, person: person, end_on: end_on, start_on: start_on,
+                  beitragskategorie: beitragskategorie}.compact
     role_type.create!(attributes)
   end
 
   def mitglieder_sektion
+    # rubocop:todo Layout/LineLength
     @mitglieder_sektion ||= group.layer_group.children.where(type: Group::SektionsMitglieder.sti_name).first
+    # rubocop:enable Layout/LineLength
   end
 
   def member_already?
+    # rubocop:todo Layout/LineLength
     person.sac_membership.active? && person.sac_membership.stammsektion_role.layer_group == group.layer_group
+    # rubocop:enable Layout/LineLength
   end
 
   def member_in_past_year?
@@ -136,7 +159,9 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def neuanmeldung_zusatzsektion?
-    person.sac_membership.neuanmeldung_zusatzsektion_roles.any? { |role| role.layer_group == group.layer_group }
+    person.sac_membership.neuanmeldung_zusatzsektion_roles.any? { |role|
+      role.layer_group == group.layer_group
+    }
   end
 
   def family_main_person?
@@ -147,7 +172,9 @@ class Invoices::SacMemberships::MembershipManager
     person.update_column(:confirmed_at, Time.zone.now) if person.confirmed_at.blank?
   end
 
+  # rubocop:todo Layout/LineLength
   # used to get non active stammsektion role of last year, in case a invoice is payed too late, this case can occur
+  # rubocop:enable Layout/LineLength
   def expired_stammsektion_role
     @person.roles.with_inactive
       .where(type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name), end_on: [Date.new(year)..])

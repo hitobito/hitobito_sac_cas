@@ -43,7 +43,9 @@ describe Event::ParticipationMailer do
       expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
       expect(mail.subject).to eq "Kursablehnung"
       expect(mail.body.to_s).to include("Hallo Edmund,")
+      # rubocop:todo Layout/LineLength
       expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs (Nummer: #{event.number}) abgelehnt")
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -55,7 +57,9 @@ describe Event::ParticipationMailer do
       expect(mail.bcc).to match_array(["kurse@sac-cas.ch"])
       expect(mail.subject).to eq "Kursablehnung"
       expect(mail.body.to_s).to include("Hallo Edmund,")
+      # rubocop:todo Layout/LineLength
       expect(mail.body.to_s).to include("Du wurdest leider für den Kurs Test Kurs (Nummer: #{event.number}) abgelehnt")
+      # rubocop:enable Layout/LineLength
     end
   end
 
@@ -68,14 +72,18 @@ describe Event::ParticipationMailer do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
       expect(mail.subject).to eq "Kurs: E-Mail Aufgebot"
       expect(mail.body.to_s).to include("Hallo Edmund,")
+      # rubocop:todo Layout/LineLength
       expect(mail.body.to_s).to include("Du wurdest für den Kurs Test Kurs (Nummer: #{event.number}) aufgeboten")
+      # rubocop:enable Layout/LineLength
     end
 
     it "includes the parameters" do
       expect(mail.body).to include(event.to_s)
       expect(mail.body).to include(event.number)
       expect(mail.body).to include("<a href=\"http://test.host/groups/385153371/people/600001\">http://test.host/groups/385153371/people/600001</a>")
+      # rubocop:todo Layout/LineLength
       expect(mail.body).to include("<a href=\"http://test.host/groups/385153371/events/#{event.id}\">Test Kurs (#{event.number})</a>")
+      # rubocop:enable Layout/LineLength
       expect(mail.body).to include(event.book_discount_code.to_s)
     end
 
@@ -90,7 +98,9 @@ describe Event::ParticipationMailer do
       it "is used for email" do
         expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
         expect(mail.subject).to eq("Convocation au cours")
+        # rubocop:todo Layout/LineLength
         is_expected.to match(/Vous avez été convoqué\(e\) pour le cours Course test \(Numéro: .*\).<br><br>/)
+        # rubocop:enable Layout/LineLength
         is_expected.to include("Détails du cours")
         # placeholders are also translated
         is_expected.to include("Course test")
@@ -109,7 +119,9 @@ describe Event::ParticipationMailer do
         expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
         expect(mail.subject).to eq("Kurs: E-Mail Aufgebot / Convocation au cours")
         is_expected.to match(/Du wurdest für den Kurs Test Kurs \(Nummer: .*\) aufgeboten.<br><br>/)
+        # rubocop:todo Layout/LineLength
         is_expected.to match(/Vous avez été convoqué\(e\) pour le cours Course test \(Numéro: .*\).<br><br>/)
+        # rubocop:enable Layout/LineLength
         is_expected.to include("Kursdetails", "Détails du cours")
         is_expected.to include(MultilingualMailer::LANGUAGE_SEPARATOR)
         # placeholders are also translated

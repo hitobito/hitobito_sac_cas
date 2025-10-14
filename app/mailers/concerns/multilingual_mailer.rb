@@ -11,7 +11,9 @@
 module MultilingualMailer
   extend ActiveSupport::Concern
 
+  # rubocop:todo Layout/LineLength
   LANGUAGE_SEPARATOR = ("<br/>".html_safe * 2 + "--------------------" + "<br/>".html_safe * 2).freeze
+  # rubocop:enable Layout/LineLength
 
   private
 

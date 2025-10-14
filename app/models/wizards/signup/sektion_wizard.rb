@@ -48,13 +48,16 @@ module Wizards::Signup
     end
 
     def fees_for(beitragskategorie)
-      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie, person)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie,
+        person)
     end
 
     private
 
     # As we might save multiple people we delegate validation to operations
+    # rubocop:todo Layout/LineLength
     # person itself can be invalid as operation handles aspects (e.g role start_on and gender I18nEnum::NIL_KEY)
+    # rubocop:enable Layout/LineLength
     def person_valid? = operations_valid?
 
     def beitragskategorie
@@ -88,7 +91,9 @@ module Wizards::Signup
     def people_attrs
       main_person_attrs = main_person_attributes.merge(common_person_attrs)
       merge_attrs = main_person_attrs.slice(*ADDRESS_KEYS, *common_person_attrs.keys)
-      members.map { |member| member.person_attributes.merge(merge_attrs) }.unshift(main_person_attrs)
+      members.map { |member|
+        member.person_attributes.merge(merge_attrs)
+      }.unshift(main_person_attrs)
     end
 
     def main_person_attributes
@@ -110,13 +115,17 @@ module Wizards::Signup
     end
 
     def read_birthdays
-      members.map(&:birthday).unshift(birthday).compact_blank.map { |birthday| I18n.l(birthday) }.shuffle
+      members.map(&:birthday).unshift(birthday).compact_blank.map { |birthday|
+        I18n.l(birthday)
+      }.shuffle
     end
 
     def step_after(step_name_or_class)
       if step_name_or_class == :_start && current_user
         Wizards::Steps::Signup::Sektion::PersonFields.step_name
+      # rubocop:todo Layout/LineLength
       elsif step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
+        # rubocop:enable Layout/LineLength
         Wizards::Steps::Signup::Sektion::VariousFields.step_name
       else
         super
@@ -124,7 +133,8 @@ module Wizards::Signup
     end
 
     def too_young_for_household?
-      birthday = params.with_indifferent_access.dig(:person_fields, :birthday) || current_user&.birthday
+      birthday = params.with_indifferent_access.dig(:person_fields,
+        :birthday) || current_user&.birthday
       if birthday
         years = ::Person.new(birthday: birthday).years
         years && years <= MIN_ADULT_YEARS

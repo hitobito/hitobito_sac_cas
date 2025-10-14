@@ -42,17 +42,22 @@ describe Signup::AboMagazinMailer do
     expect(body).to include("<td>Ort</td><td>Neu Carlscheid</td>")
     expect(body).to include("<td>Land</td><td>CH</td>")
     expect(body).to include("<td>Geburtsdatum</td><td>01.01.2000</td>")
+    # rubocop:todo Layout/LineLength
     expect(body).to include('Ich habe die <a href="https://www.sac-cas.ch/de/meta/agb/die-alpen/">AGB</a> ' \
       "gelesen und stimme diesen zu.<br>")
+    # rubocop:enable Layout/LineLength
+    # rubocop:todo Layout/LineLength
     expect(body).to include('Ich habe die <a href="https://www.sac-cas.ch/de/meta/datenschutz">Datenschutzerklärung</a> ' \
       "gelesen und stimme diesen zu.<br>")
+    # rubocop:enable Layout/LineLength
     expect(body).to include("Die Rechnung wird dir in einer separaten E-Mail zugestellt.")
     expect(body).not_to include "Ich möchte den SAC-Newsletter abonnieren."
   end
 
   it "uses person language to localize message" do
     person.update(language: :fr)
-    custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee", body: custom_content.body.to_s)
+    custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee",
+      body: custom_content.body.to_s)
     expect(mail.subject).to eq("Acceptee")
   end
 

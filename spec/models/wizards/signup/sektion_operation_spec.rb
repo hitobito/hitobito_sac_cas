@@ -124,7 +124,9 @@ describe Wizards::Signup::SektionOperation do
         group.update!(self_registration_notification_email: "hello@example.com")
 
         expect { operation.save! }.to have_enqueued_job.on_queue("mailers").with(
+          # rubocop:todo Layout/LineLength
           "Groups::SelfRegistrationNotificationMailer", "self_registration_notification", "deliver_now",
+          # rubocop:enable Layout/LineLength
           args: ["hello@example.com", anything]
         )
       end
@@ -134,13 +136,19 @@ describe Wizards::Signup::SektionOperation do
       it "does not create invoice but enqueues confirmation email" do
         expect { operation.save! }
           .to not_change { ExternalInvoice::SacMembership.count }
-          .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
+          .and not_change {
+                 Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count
+               }
+          # rubocop:todo Layout/LineLength
           .and have_enqueued_mail(Signup::SektionMailer, :approval_pending_confirmation).exactly(:once)
+          # rubocop:enable Layout/LineLength
           .with(operation.send(:person), group.layer_group, "adult")
       end
 
       it "does not enqueue confirmation email if not main person" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Wizards::Signup::SektionOperation).to receive(:paying_person?).and_return(false)
+        # rubocop:enable Layout/LineLength
         expect { operation.save! }.not_to have_enqueued_mail(Signup::SektionMailer)
       end
     end
@@ -153,7 +161,9 @@ describe Wizards::Signup::SektionOperation do
         groups(:bluemlisalp_neuanmeldungen_sektion).really_destroy!
         expect { operation.save! }
           .to change { ExternalInvoice::SacMembership.count }.by(1)
-          .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }.by(1)
+          .and change {
+                 Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count
+               }.by(1)
           .and have_enqueued_mail(Signup::SektionMailer, :confirmation).exactly(:once)
           .with(operation.send(:person), group.layer_group, "adult")
 
@@ -199,8 +209,12 @@ describe Wizards::Signup::SektionOperation do
           .and change { person.roles.count }.by(1)
           .and change { Subscription.count }.by(1)
           .and change { Delayed::Job.count }.by(2)
-          .and change { Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count }.by(1)
-          .and change { Delayed::Job.where("handler like '%Invoices::Abacus::TransmitPersonJob%'").count }.by(1)
+          .and change {
+                 Delayed::Job.where("handler like '%Person::DuplicateLocatorJob%'").count
+               }.by(1)
+          .and change {
+                 Delayed::Job.where("handler like '%Invoices::Abacus::TransmitPersonJob%'").count
+               }.by(1)
           .and not_change { ExternalInvoice::SacMembership.count }
           .and not_change { ActionMailer::Base.deliveries.count }
 

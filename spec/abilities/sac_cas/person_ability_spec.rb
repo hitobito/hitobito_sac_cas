@@ -43,9 +43,12 @@ describe PersonAbility do
       end
     end
 
-    [Group::SektionsFunktionaere::Mitgliederverwaltung, Group::SektionsFunktionaere::Administration].each do |role_type|
+    [Group::SektionsFunktionaere::Mitgliederverwaltung,
+      Group::SektionsFunktionaere::Administration].each do |role_type|
       context role_type do
-        let(:person) { Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+        let(:person) {
+          Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person
+        }
 
         it "is not permitted" do
           expect(ability).not_to be_able_to(:create_households, mitglied)
@@ -87,7 +90,9 @@ describe PersonAbility do
 
       [Group::SektionsFunktionaere::Administration].each do |role_type|
         context role_type do
-          let(:person) { Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person }
+          let(:person) {
+            Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person
+          }
 
           it "is permitted" do
             expect(ability).to be_able_to(:set_sac_family_main_person, familienmitglied)
@@ -166,7 +171,10 @@ describe PersonAbility do
       let(:person_without_roles) { Fabricate(:person) }
 
       context "backoffice role with read_all_people" do
-        let(:person) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.sti_name, group: groups(:geschaeftsstelle)).person }
+        let(:person) {
+          Fabricate(Group::Geschaeftsstelle::Mitarbeiter.sti_name,
+            group: groups(:geschaeftsstelle)).person
+        }
 
         it "may #{action}" do
           expect(ability).to be_able_to(action, person_without_roles)
@@ -175,7 +183,9 @@ describe PersonAbility do
 
       context "other role with read_all_people" do
         let(:group) { Fabricate(Group::Geschaeftsleitung.sti_name, parent: groups(:root)) }
-        let(:person) { Fabricate(Group::Geschaeftsleitung::Geschaeftsfuehrung.sti_name, group: group).person }
+        let(:person) {
+          Fabricate(Group::Geschaeftsleitung::Geschaeftsfuehrung.sti_name, group: group).person
+        }
 
         it "may not #{action}" do
           expect(ability).not_to be_able_to(action, person_without_roles)
@@ -193,12 +203,14 @@ describe PersonAbility do
       end
 
       it "may view his own log if he has a backoffice role" do
-        Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.sti_name, group: groups(:geschaeftsstelle), person: mitglied)
+        Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.sti_name,
+          group: groups(:geschaeftsstelle), person: mitglied)
         expect(ability).to be_able_to(:log, person)
       end
     end
 
-    [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::MitarbeiterLesend, Group::Geschaeftsstelle::Admin].each do |role_type|
+    [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::MitarbeiterLesend,
+      Group::Geschaeftsstelle::Admin].each do |role_type|
       context role_type do
         let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
 
@@ -209,7 +221,8 @@ describe PersonAbility do
     end
   end
 
-  [:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security].each do |action|
+  [:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice,
+    :cancel_external_invoice, :security].each do |action|
     describe action do
       let(:person) { people(:mitglied) }
 
@@ -261,7 +274,8 @@ describe PersonAbility do
     end
 
     it "is allowed with layer_events_full permission" do
-      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group, person: person)
+      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+        person: person)
       expect(ability).to be_able_to(:query, Person)
     end
   end

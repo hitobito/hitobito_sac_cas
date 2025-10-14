@@ -22,7 +22,9 @@ module SacCas::PhoneNumber
 
   def check_data_quality
     # prevent running the check twice
+    # rubocop:todo Layout/LineLength
     return if !contactable.is_a?(Person) || People::DataQualityChecker.attributes_to_check_changed?(contactable)
+    # rubocop:enable Layout/LineLength
 
     contactable.phone_numbers.reload
     People::DataQualityChecker.new(contactable).check_data_quality

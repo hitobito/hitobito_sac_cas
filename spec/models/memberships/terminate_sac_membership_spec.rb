@@ -267,9 +267,15 @@ describe Memberships::TerminateSacMembership do
 
       describe "external invoices" do
         it "cancels open membership invoices" do
+          # rubocop:todo Layout/LineLength
           invoice = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "open", year: 2022) # matching
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           other_status = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "payed", year: 2020) # other status
+          # rubocop:enable Layout/LineLength
+          # rubocop:todo Layout/LineLength
           other_type = person.external_invoices.create!(type: ExternalInvoice.sti_name, state: "open", year: 2020) # other type
+          # rubocop:enable Layout/LineLength
 
           expect do
             expect(termination.save!).to eq true

@@ -24,7 +24,8 @@ describe SacMembershipConfigsController do
       get :index, params: {group_id: Group.root.id}
 
       expect(response)
-        .to redirect_to(edit_group_sac_membership_config_path(group_id: Group.root.id, id: latest_config.id))
+        .to redirect_to(edit_group_sac_membership_config_path(group_id: Group.root.id,
+          id: latest_config.id))
     end
 
     it "redirects to new if no previous config present" do
@@ -56,7 +57,8 @@ describe SacMembershipConfigsController do
       get :show, params: {group_id: Group.root.id, id: older_config.id}
 
       expect(response)
-        .to redirect_to(edit_group_sac_membership_config_path(group_id: Group.root.id, id: older_config.id))
+        .to redirect_to(edit_group_sac_membership_config_path(group_id: Group.root.id,
+          id: older_config.id))
     end
 
     it "cannot be accessed by non admin" do
@@ -90,10 +92,12 @@ describe SacMembershipConfigsController do
     end
 
     it "updates config and redirects to show/edit form" do
-      patch :update, params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
+      patch :update,
+        params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
 
       expect(response)
-        .to redirect_to(group_sac_membership_config_path(group_id: Group.root.id, id: latest_config.id))
+        .to redirect_to(group_sac_membership_config_path(group_id: Group.root.id,
+          id: latest_config.id))
 
       latest_config.reload
       expect(latest_config.sac_fee_adult).to eq(42)
@@ -101,10 +105,12 @@ describe SacMembershipConfigsController do
 
     it "cannot update valid_from" do
       updated_model_params[:sac_membership_config][:valid_from] = 2020
-      patch :update, params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
+      patch :update,
+        params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
 
       expect(response)
-        .to redirect_to(group_sac_membership_config_path(group_id: Group.root.id, id: latest_config.id))
+        .to redirect_to(group_sac_membership_config_path(group_id: Group.root.id,
+          id: latest_config.id))
 
       latest_config.reload
       expect(latest_config.valid_from).to eq(2024)
@@ -114,7 +120,8 @@ describe SacMembershipConfigsController do
       sign_in(people(:mitglied))
 
       expect do
-        patch :update, params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
+        patch :update,
+          params: {group_id: Group.root.id, id: latest_config.id}.merge(updated_model_params)
       end.to raise_error(CanCan::AccessDenied)
     end
   end

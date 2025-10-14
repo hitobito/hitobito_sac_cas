@@ -8,7 +8,7 @@
 module SacCas::Roles::TerminateRoleLink
   private
 
-  def render_link
+  def render_link # rubocop:todo Metrics/CyclomaticComplexity
     if @role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion)
       link_to(t("roles/terminations.global.title"),
         @view.group_person_role_leave_zusatzsektion_path(

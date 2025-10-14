@@ -17,10 +17,16 @@ describe ExternalTrainingAbility do
 
   context "root layer" do
     context "with layer_and_below_full" do
-      let(:role) { Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym, group: groups(:geschaeftsstelle)) }
+      let(:role) {
+        Fabricate(Group::Geschaeftsstelle::Mitarbeiter.name.to_sym,
+          group: groups(:geschaeftsstelle))
+      }
 
       context "in same layer" do
-        let(:person) { Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym, group: groups(:geschaeftsstelle)).person }
+        let(:person) {
+          Fabricate(Group::Geschaeftsstelle::MitarbeiterLesend.name.to_sym,
+            group: groups(:geschaeftsstelle)).person
+        }
 
         it "can create and destroy" do
           expect(ability).to be_able_to(:create, external_training)
@@ -36,7 +42,10 @@ describe ExternalTrainingAbility do
       end
 
       context "in layer below" do
-        let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)).person }
+        let(:person) {
+          Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+            group: groups(:bluemlisalp_mitglieder)).person
+        }
 
         it "can create and destroy in layer below" do
           expect(ability).to be_able_to(:create, external_training)
@@ -48,8 +57,14 @@ describe ExternalTrainingAbility do
 
   context "non root layer" do
     context "with_layer_and_below_full" do
-      let(:role) { Fabricate(Group::SektionsFunktionaere::Administration.name.to_sym, group: groups(:bluemlisalp_funktionaere)) }
-      let(:person) { Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder)).person }
+      let(:role) {
+        Fabricate(Group::SektionsFunktionaere::Administration.name.to_sym,
+          group: groups(:bluemlisalp_funktionaere))
+      }
+      let(:person) {
+        Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+          group: groups(:bluemlisalp_mitglieder)).person
+      }
 
       it "can create and destroy" do
         expect(ability).to be_able_to(:create, external_training)
@@ -72,7 +87,10 @@ describe ExternalTrainingAbility do
     end
 
     context "with group_and_below_full" do
-      let(:role) { Fabricate(Group::SektionsTourenUndKurse::Schreibrecht.name.to_sym, group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse)) }
+      let(:role) {
+        Fabricate(Group::SektionsTourenUndKurse::Schreibrecht.name.to_sym,
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse))
+      }
       let(:person) {
         Fabricate(Group::SektionsTourenUndKurse::Tourenleiter.name.to_sym,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse),

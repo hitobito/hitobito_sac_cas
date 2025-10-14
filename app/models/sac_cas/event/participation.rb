@@ -14,7 +14,7 @@ module SacCas::Event::Participation
     Event::LeaderReminderMailer::REMINDER_8_WEEKS
   ]
 
-  prepended do
+  prepended do # rubocop:todo Metrics/BlockLength
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.clear
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.concat([
       Event::ParticipationCanceledMailer::CONFIRMATION,
@@ -49,7 +49,9 @@ module SacCas::Event::Participation
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
+    # rubocop:todo Rails/InverseOf
     has_many :external_invoices, as: :link, dependent: :restrict_with_error
+    # rubocop:enable Rails/InverseOf
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}

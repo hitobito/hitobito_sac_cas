@@ -30,7 +30,9 @@ describe Export::BackupMitgliederScheduleJob do
 
       expect do
         job.perform
-      end.to change { Delayed::Job.where("handler like '%BackupMitgliederExportJob%'").count }.by(relevant_groups.length)
+      end.to change {
+               Delayed::Job.where("handler like '%BackupMitgliederExportJob%'").count
+             }.by(relevant_groups.length)
 
       relevant_groups.each do |group|
         expect(Delayed::Job.where("handler like '%group_id: 935587148%'")).to be_present

@@ -73,7 +73,9 @@ describe People::AccountCompletionsController do
         }}
         expect(response).to redirect_to(new_person_session_path)
         expect(flash[:notice]).to eq [
+          # rubocop:todo Layout/LineLength
           "Du erhältst in wenigen Minuten eine E-Mail, mit der Du Deine E-Mail-Adresse bestätigen kannst.",
+          # rubocop:enable Layout/LineLength
           "Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden."
         ]
       end.to change(ActionMailer::Base.deliveries, :count).by(1)

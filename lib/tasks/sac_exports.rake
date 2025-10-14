@@ -15,8 +15,10 @@ namespace :sac_exports do
 
     SacExports::ClusterContext.new(:int).with_database do
       code = SacExports::SeedGenerator.new(CustomContent, keys: [:key]).generate_code
-      code += SacExports::SeedGenerator.new(CustomContent::Translation, keys: [:custom_content_id, :locale]).generate_code
-      code += SacExports::SeedGenerator.new(ActionText::RichText, scope: action_text_scope, keys: [:record_id, :record_type]).generate_code
+      code += SacExports::SeedGenerator.new(CustomContent::Translation,
+        keys: [:custom_content_id, :locale]).generate_code
+      code += SacExports::SeedGenerator.new(ActionText::RichText, scope: action_text_scope,
+        keys: [:record_id, :record_type]).generate_code
 
       write(:custom_contents, code)
     end

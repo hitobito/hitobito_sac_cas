@@ -19,7 +19,8 @@ describe "roles/_modal.html.haml" do
     assign(:group_selection, group.siblings)
     allow(view).to receive(:can?).and_return(true)
     allow(view).to receive(:action_name).and_return("new")
-    allow(view).to receive_messages(path_args: [group, role], group: group.decorate, entry: role.decorate, model_class: Role)
+    allow(view).to receive_messages(path_args: [group, role], group: group.decorate,
+      entry: role.decorate, model_class: Role)
   end
 
   describe "normal role" do

@@ -10,7 +10,8 @@ module Export::Tabular::Event::Participations
     self.model_class = ::Event::Participation
     self.row_class = CourseDataRow
 
-    def build_attribute_labels
+    # rubocop:todo Metrics/MethodLength
+    def build_attribute_labels # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
       {}.tap do |labels|
         labels[:event_number] = "Veranstaltungsnummer"
         labels[:event_dates_locations] = "Kursortname"
@@ -30,5 +31,6 @@ module Export::Tabular::Event::Participations
         labels[:person_email] = "Haupt-E-Mail"
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end

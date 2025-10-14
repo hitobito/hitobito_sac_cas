@@ -10,7 +10,10 @@ require "spec_helper"
 describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
   let(:person) { people(:mitglied) }
   let(:abo_die_alpen) { groups(:abo_die_alpen) }
-  let(:neuanmeldung_abonnent_role) { Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, person: person, group: abo_die_alpen, start_on: 1.day.ago, end_on: 20.days.from_now) }
+  let(:neuanmeldung_abonnent_role) {
+    Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, person: person, group: abo_die_alpen,
+      start_on: 1.day.ago, end_on: 20.days.from_now)
+  }
   let(:now) { Time.zone.now }
   let(:external_invoice) {
     Fabricate(:external_invoice, person: person,
@@ -29,13 +32,15 @@ describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
 
   before do
     allow(job).to receive(:client).and_return(client)
-    Group.root.update!(abo_alpen_fee_article_number: "APG", abo_alpen_fee: 20, abo_alpen_postage_abroad: 6)
+    Group.root.update!(abo_alpen_fee_article_number: "APG", abo_alpen_fee: 20,
+      abo_alpen_postage_abroad: 6)
   end
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
     allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
     allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create)
-    expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(neuanmeldung_abonnent_role, external_invoice.issued_at).and_call_original
+    expect(Invoices::Abacus::AboMagazinInvoice).to receive(:new).with(neuanmeldung_abonnent_role,
+      external_invoice.issued_at).and_call_original
     expect do
       job.perform
     end.to change { external_invoice.reload.total }
@@ -46,7 +51,9 @@ describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
 
     it "raises without creating log or updating invoice state" do
       expect do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         job.perform
       end.to raise_error(StandardError, "ouch")
         .and not_change { HitobitoLogEntry.count }
@@ -55,7 +62,9 @@ describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
 
     context "when running via worker" do
       it "creates log entry with error message" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         expect do
           Delayed::Worker.new.run(job.enqueue!)
         end.to change { HitobitoLogEntry.count }.by(1)
@@ -68,7 +77,9 @@ describe Invoices::Abacus::CreateAboMagazinInvoiceJob do
       end
 
       it "updates invoice state to error when all attemps fail" do
+        # rubocop:todo Layout/LineLength
         allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
+        # rubocop:enable Layout/LineLength
         allow(Delayed::Worker).to receive(:max_attempts).and_return(2)
         delayed_job = job.enqueue!
         expect do

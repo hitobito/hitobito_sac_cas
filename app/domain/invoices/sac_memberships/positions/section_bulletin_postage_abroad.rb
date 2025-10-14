@@ -27,9 +27,16 @@ module Invoices
 
         def positive_porto_amount? = section.bulletin_postage_abroad.to_i.positive?
 
-        def section_bulletin? = section_bulletin_mailing_list && !section_bulletin_mailing_list&.subscriptions&.exists?(subscriber: member.person, excluded: true)
+        # rubocop:todo Layout/LineLength
+        def section_bulletin? = section_bulletin_mailing_list && !section_bulletin_mailing_list&.subscriptions&.exists?(
+          # rubocop:enable Layout/LineLength
+          subscriber: member.person, excluded: true)
 
-        def section_bulletin_mailing_list = MailingList.find_by(internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY, group_id: section.id)
+        def section_bulletin_mailing_list = MailingList.find_by(
+          # rubocop:todo Layout/LineLength
+          internal_key: SacCas::MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY, group_id: section.id
+          # rubocop:enable Layout/LineLength
+        )
       end
     end
   end

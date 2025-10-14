@@ -165,7 +165,9 @@ describe Role do
               third_adult = build_role
               expect(third_adult).not_to be_valid
               expect(third_adult.errors[:base])
+                # rubocop:todo Layout/LineLength
                 .to include("In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen.")
+              # rubocop:enable Layout/LineLength
             end
 
             it "accepts third adult person in same household with non-default context" do
@@ -230,12 +232,16 @@ describe Role do
             it "is invalid if no other family member is main person" do
               role = build_role(family_main_person: false)
               expect(role).to be_invalid
-              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+              expect(role.errors.errors).to include(have_attributes(attribute: :base,
+                type: :must_have_one_family_main_person_in_family))
 
+              # rubocop:todo Layout/LineLength
               build_role(family_main_person: false).save(validate: false) # skip validations as it would be invalid
+              # rubocop:enable Layout/LineLength
 
               expect(role).to be_invalid
-              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+              expect(role.errors.errors).to include(have_attributes(attribute: :base,
+                type: :must_have_one_family_main_person_in_family))
             end
 
             it "is invalid when main person if other family member is also main person" do
@@ -243,29 +249,37 @@ describe Role do
 
               role = build_role(family_main_person: true)
               expect(role).to be_invalid
-              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+              expect(role.errors.errors).to include(have_attributes(attribute: :base,
+                type: :must_have_one_family_main_person_in_family))
             end
 
             it "is invalid if more than one other family member are main person" do
               build_role(family_main_person: true).save!
+              # rubocop:todo Layout/LineLength
               build_role(family_main_person: true).save(validate: false) # skip validations as it would be invalid
+              # rubocop:enable Layout/LineLength
 
               role = build_role(family_main_person: false)
               expect(role).to be_invalid
-              expect(role.errors.errors).to include(have_attributes(attribute: :base, type: :must_have_one_family_main_person_in_family))
+              expect(role.errors.errors).to include(have_attributes(attribute: :base,
+                type: :must_have_one_family_main_person_in_family))
             end
 
             context "does not validate when role has ended" do
               it "without any main person" do
-                role = build_role(family_main_person: false, start_on: 1.year.ago, end_on: Date.yesterday).tap(&:save!)
-                _other_role = build_role(family_main_person: false, start_on: 1.year.ago, end_on: Date.yesterday).save!
+                role = build_role(family_main_person: false, start_on: 1.year.ago,
+                  end_on: Date.yesterday).tap(&:save!)
+                _other_role = build_role(family_main_person: false, start_on: 1.year.ago,
+                  end_on: Date.yesterday).save!
 
                 expect(role).to be_valid
               end
 
               it "with multiple main people" do
-                role = build_role(family_main_person: true, start_on: 1.year.ago, end_on: Date.yesterday).tap(&:save!)
-                _other_role = build_role(family_main_person: true, start_on: 1.year.ago, end_on: Date.yesterday).save!
+                role = build_role(family_main_person: true, start_on: 1.year.ago,
+                  end_on: Date.yesterday).tap(&:save!)
+                _other_role = build_role(family_main_person: true, start_on: 1.year.ago,
+                  end_on: Date.yesterday).save!
 
                 expect(role).to be_valid
               end

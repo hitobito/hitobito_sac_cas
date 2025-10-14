@@ -17,13 +17,16 @@ class People::AboMagazinInvoicesController < CrudController
     super
   end
 
-  def create
+  def create # rubocop:todo Metrics/AbcSize
     if person.data_quality != "error"
       entry.link_type = Group
-      entry.issued_at = role_of_selected_magazin.then { (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day }
+      entry.issued_at = role_of_selected_magazin.then {
+        (_1.type == Group::AboMagazin::Neuanmeldung.sti_name) ? _1.start_on : _1.end_on&.next_day
+      }
       entry.year = entry.issued_at&.year
       super.then do
-        Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry, role_of_selected_magazin.id).enqueue!
+        Invoices::Abacus::CreateAboMagazinInvoiceJob.new(entry,
+          role_of_selected_magazin.id).enqueue!
       end
     else
       mark_with_error_and_redirect
@@ -52,14 +55,17 @@ class People::AboMagazinInvoicesController < CrudController
       category: model_class::ERROR_CATEGORY,
       subject: entry
     )
-    redirect_to external_invoices_group_person_path(group, person), alert: t("invoices.errors.data_quality_error")
+    redirect_to external_invoices_group_person_path(group, person),
+      alert: t("invoices.errors.data_quality_error")
   end
 
   def person = @person ||= Person.find(params[:person_id])
 
   def group = @group ||= Group.find(params[:group_id])
 
+  # rubocop:todo Layout/LineLength
   def role_of_selected_magazin = @role_of_selected_magazin ||= abo_magazin_roles.where(group_id: permitted_params[:link_id]).first
+  # rubocop:enable Layout/LineLength
 
   def abo_magazin_roles
     @abo_magazin_roles ||= person.sac_membership.recent_abonnent_magazin_roles
