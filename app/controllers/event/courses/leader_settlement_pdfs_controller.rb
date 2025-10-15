@@ -16,7 +16,7 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
     if entry.valid?
       participation.update!(actual_days: entry.actual_days) && render_pdf_in_background
     else
-      rerender_form(:unprocessable_entity)
+      rerender_form(:unprocessable_content)
     end
   end
 
