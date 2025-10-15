@@ -2095,7 +2095,7 @@ de:
           family_warning: >-
             Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}.
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
-          inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Austritt beantragen"
       termination:
         summary:
@@ -2114,5 +2114,5 @@ de:
             Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
           subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
-          inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
+          inform_via_email: "Mitglied und Sektion via E-Mail informieren?"
           next_button: "Austritt beantragen"
