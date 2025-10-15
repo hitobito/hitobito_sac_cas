@@ -12,9 +12,10 @@ module SacCas::MailingListAbility
 
   prepended do
     on(MailingList) do
+      permission(:any).may(:show).subscribable_or_read_role_in_layer
       permission(:any)
-        .may(:show, :index_subscriptions, :export_subscriptions)
-        .read_role_in_layer?
+        .may(:index_subscriptions, :export_subscriptions)
+        .read_role_in_layer
     end
   end
 
@@ -22,14 +23,17 @@ module SacCas::MailingListAbility
   #
   # For example if users are members of SAC Hitobito and have Schreibrecht, they
   # can manage the mailing list of SAC Hitobito.
-  def read_role_in_layer?
+  def read_role_in_layer
     user.roles.any? do |r|
       [Group::SektionsFunktionaere::Redaktion,
         Group::SektionsFunktionaere::Mitgliederverwaltung,
         Group::SektionsMitglieder::Leserecht,
-        # rubocop:todo Layout/LineLength
-        Group::SektionsMitglieder::Schreibrecht].include?(r.class) && r.group.layer_group_id == group.layer_group_id
-      # rubocop:enable Layout/LineLength
+        Group::SektionsMitglieder::Schreibrecht].include?(r.class) &&
+        r.group.layer_group_id == group.layer_group_id
     end
+  end
+
+  def subscribable_or_read_role_in_layer
+    subscribable || read_role_in_layer
   end
 end

@@ -11,12 +11,9 @@ module SacCas::Person::SubscriptionsController
   private
 
   def subscribed
-    @subscribed ||= grouped_by_layer(subscriptions_without_fundraising)
-  end
-
-  def subscriptions_without_fundraising
-    # rubocop:todo Layout/LineLength
-    subscriptions.subscribed.where.not(internal_key: SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY)
-    # rubocop:enable Layout/LineLength
+    @subscribed ||= subscriptions.subscribed.where(
+      "internal_key IS NULL OR internal_key != ?",
+      SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY
+    ).includes(group: :layer_group).list.to_a
   end
 end
