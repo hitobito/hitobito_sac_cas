@@ -12,30 +12,45 @@ describe Person::SubscriptionsController do
 
   before { sign_in(mitglied) }
 
+  render_views  # gives access to `assigns`
+
   describe "subscribable_for: :nobody" do
-    render_views  # trigger helper methods
-    let(:list) { Fabricate(:mailing_list, group: groups(:root)) }
+    let!(:list) { Fabricate(:mailing_list, group: groups(:root), subscribable_for: :nobody) }
 
     it "hides list from subscribable" do
       get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}
       expect(assigns(:subscribable)).not_to include(list)
     end
 
-    it "lists list when subscribed" do
+    it "shows list when subscribed" do
       mitglied.subscriptions.create!(mailing_list: list)
       get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}
-      expect(assigns(:subscribed)).not_to include(list)
+      expect(assigns(:subscribed)).to include(list)
+    end
+  end
+
+  describe "subscribable_for: :anyone" do
+    let!(:list) { Fabricate(:mailing_list, group: groups(:root), subscribable_for: :anyone) }
+
+    it "shows list in subscribable" do
+      get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}
+      expect(assigns(:subscribable)).to include(list)
+    end
+
+    it "shows list when subscribed" do
+      mitglied.subscriptions.create!(mailing_list: list)
+      get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}
+      expect(assigns(:subscribed)).to include(list)
     end
 
     describe "fundraising" do
-      let(:list) {
-        Fabricate(:mailing_list, group: groups(:root),
-          internal_key: SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY)
-      }
+      before do
+        list.update_column(:internal_key, SacCas::MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY)
+      end
 
-      it "hides list from subscribable" do
+      it "shows list in subscribable" do
         get :index, params: {group_id: mitglied.roles.first.group_id, person_id: mitglied.id}
-        expect(assigns(:subscribable)).not_to include(list)
+        expect(assigns(:subscribable)).to include(list)
       end
 
       it "hides list when subscribed" do
