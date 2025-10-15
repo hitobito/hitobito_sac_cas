@@ -23,7 +23,7 @@ class Group::SacCas < Group
     Group::SacCasVerbaende
 
   mounted_attr :course_admin_email, :string
-  mounted_attr :sac_newsletter_mailing_list_id, :integer
+  mounted_attr :sac_newsletter_mailing_list_id, :integer, readonly: true
   mounted_attr :sac_fundraising_mailing_list_id, :integer
   mounted_attr :abo_alpen_fee, :decimal, precision: 10, scale: 2
   mounted_attr :abo_alpen_postage_abroad, :decimal, precision: 10, scale: 2

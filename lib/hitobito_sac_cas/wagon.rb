@@ -122,7 +122,6 @@ module HitobitoSacCas
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full << :download_member_statistics
       # rubocop:enable Layout/LineLength
 
-      Ability.prepend SacCas::Ability
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
@@ -149,6 +148,7 @@ module HitobitoSacCas
       Person::AddRequestAbility.prepend SacCas::Person::AddRequestAbility
       QualificationAbility.include SacCas::QualificationAbility
       RoleAbility.prepend SacCas::RoleAbility
+      SubscriptionAbility.prepend SacCas::SubscriptionAbility
       TokenAbility.prepend SacCas::TokenAbility
       VariousAbility.include SacCas::VariousAbility
 
@@ -250,7 +250,6 @@ module HitobitoSacCas
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController
       JsonApi::PeopleController.prepend SacCas::JsonApi::PeopleController
-      MailingListsController.prepend SacCas::MailingListsController
 
       PeopleController.permitted_attrs << :correspondence << :advertising
       PeopleController.prepend SacCas::PeopleController
@@ -259,7 +258,6 @@ module HitobitoSacCas
       Person::QueryController.prepend SacCas::Person::QueryController
       Person::QueryHouseholdController.prepend SacCas::Person::QueryHouseholdController
       RolesController.prepend SacCas::RolesController
-      Subscriber::FilterController.prepend SacCas::Subscriber::FilterController
 
       QualificationKindsController.permitted_attrs += [:tourenchef_may_edit]
       QualificationsController.prepend SacCas::QualificationsController

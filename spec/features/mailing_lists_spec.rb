@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe "Mailing list edit page", js: true do
-  let(:user) { people(:root) }
   let(:mailing_list) { Fabricate(:mailing_list, group: groups(:root)) }
   let(:newsletter) do
     MailingListSeeder.seed!
@@ -22,6 +21,8 @@ describe "Mailing list edit page", js: true do
   def edit_mailing_list(mailing_list)
     visit edit_group_mailing_list_path(group_id: mailing_list.group_id, id: mailing_list.id)
   end
+
+  before { sign_in(people(:admin)) }
 
   context "configuring subscription" do
     it "filters has global invoice receiver option" do
@@ -44,59 +45,49 @@ describe "Mailing list edit page", js: true do
     end
   end
 
-  [:root, :admin].each do |person_key|
-    context "as #{person_key}" do
-      let(:user) { people(person_key) }
+  context "permissions" do
+    context "with regular mailing list" do
+      it "can update mailing list subscribable_for and subscribable_mode" do
+        edit_mailing_list(mailing_list)
+        fill_in "mailing_list_name", with: "New label"
+        expect(page).to have_selector("input#mailing_list_subscribable_for_configured")
+        choose "Nur konfigurierte Abonnenten"
+        expect(page).to have_selector("input#mailing_list_subscribable_mode_opt_out")
+        choose "Angemeldet (opt-out)"
 
-      before { sign_in(user) }
-
-      context "with regular mailing list" do
-        it "can update mailing list subscribable_for and subscribable_mode" do
-          edit_mailing_list(mailing_list)
-          fill_in "mailing_list_name", with: "New label"
-          expect(page).to have_selector("input#mailing_list_subscribable_for_configured")
-          choose "Nur konfigurierte Abonnenten"
-          expect(page).to have_selector("input#mailing_list_subscribable_mode_opt_out")
-          choose "Angemeldet (opt-out)"
-
-          expect do
-            click_button "Speichern"
-            expect(page).to have_selector("#flash .alert-success", text: "erfolgreich aktualisiert")
-          end.to change { mailing_list.reload.name }.to("New label")
-            .and change { mailing_list.reload.subscribable_for }.to("configured")
-            .and change { mailing_list.reload.subscribable_mode }.to("opt_out")
-        end
-
-        it "can destroy mailing list" do
-          show_mailing_list(mailing_list)
-          accept_confirm { click_link "Löschen" }
-          expect(page).to have_selector("#flash .alert-success", text: "erfolgreich gelöscht")
-          expect { mailing_list.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        end
+        expect do
+          click_button "Speichern"
+          expect(page).to have_selector("#flash .alert-success", text: "erfolgreich aktualisiert")
+        end.to change { mailing_list.reload.name }.to("New label")
+          .and change { mailing_list.reload.subscribable_for }.to("configured")
+          .and change { mailing_list.reload.subscribable_mode }.to("opt_out")
       end
 
-      context "with newsletter mailing list" do
-        it "can update mailing list" do
-          edit_mailing_list(newsletter)
-          fill_in "mailing_list_name", with: "New label"
+      it "can destroy mailing list" do
+        show_mailing_list(mailing_list)
+        accept_confirm { click_link "Löschen" }
+        expect(page).to have_selector("#flash .alert-success", text: "erfolgreich gelöscht")
+        expect { mailing_list.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
 
-          expect do
-            click_button "Speichern"
-            expect(page).to have_selector("#flash .alert-success", text: "erfolgreich aktualisiert")
-          end.to change { newsletter.reload.name }.to("New label")
-        end
+    context "with newsletter mailing list" do
+      it "can update mailing list" do
+        edit_mailing_list(newsletter)
+        fill_in "mailing_list_name", with: "New label"
 
-        it "cannot update mailing list subscribable_for and subscribable_mode" do
-          edit_mailing_list(newsletter)
+        expect(page).to have_no_selector("input#mailing_list_subscribable_for_configured")
+        expect(page).to have_no_selector("input#mailing_list_subscribable_mode_opt_out")
 
-          expect(page).to have_no_selector("input#mailing_list_subscribable_for_configured")
-          expect(page).to have_no_selector("input#mailing_list_subscribable_mode_opt_out")
-        end
+        expect do
+          click_button "Speichern"
+          expect(page).to have_selector("#flash .alert-success", text: "erfolgreich aktualisiert")
+        end.to change { newsletter.reload.name }.to("New label")
+      end
 
-        it "cannot destroy newsletter mailing list" do
-          show_mailing_list(newsletter)
-          expect(page).to have_no_link "Löschen"
-        end
+      it "cannot destroy newsletter mailing list" do
+        show_mailing_list(newsletter)
+        expect(page).to have_no_link "Löschen"
       end
     end
   end
