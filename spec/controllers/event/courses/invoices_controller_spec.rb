@@ -68,7 +68,7 @@ describe Event::Courses::InvoicesController do
         expect(JSON.parse(response.body)["value"]).to eq "5.0"
       end
 
-      it "returns unprocessable_entity when invalid price_category is passed" do
+      it "returns unprocessable_content when invalid price_category is passed" do
         params[:event_participation_invoice_form] =
           {price_category: "this_price_category_doesnt_exist"}
         get :recalculate, params: params
@@ -81,7 +81,7 @@ describe Event::Courses::InvoicesController do
         expect(JSON.parse(response.body)["value"]).to eq "10.0"
       end
 
-      it "returns unprocessable_entity when invalid reference_date is passed" do
+      it "returns unprocessable_content when invalid reference_date is passed" do
         params[:event_participation_invoice_form] = {reference_date: "12.12"}
         get :recalculate, params: params
         expect(response.status).to eq 422

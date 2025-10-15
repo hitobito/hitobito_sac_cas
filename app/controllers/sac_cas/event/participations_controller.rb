@@ -123,7 +123,7 @@ module SacCas::Event::ParticipationsController
       options[:event_role] = {type: params_role_type} if params_role_type
       redirect_to contact_data_group_event_participations_path(group, event, options)
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
     false
   end
