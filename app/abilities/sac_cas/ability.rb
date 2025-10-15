@@ -24,9 +24,7 @@ module SacCas::Ability
         cannot [:destroy], MailingList
         cannot [:update], MailingList, [:subscribable_for, :subscribable_mode, :filter_chain]
       end
-      cannot [:manage], Subscription, mailing_list: {
-        internal_key:
-      }
+      cannot [:manage], Subscription, mailing_list: {internal_key:}
     end
 
     cannot [:update], Group, [:sac_newsletter_mailing_list_id]
