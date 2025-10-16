@@ -47,7 +47,7 @@ describe Wizards::Memberships::SwitchStammsektion do
         roles(:mitglied_zweitsektion).destroy
       end
 
-      it "switches stammsektion and sends email" do
+      it "switches stammsektion and sends email", :dj_queue do
         expect(wizard).to be_last_step
         expect { expect(wizard.save!).to eq true }
           .to change { person.sac_membership.stammsektion_role.group.parent.name }
@@ -114,7 +114,7 @@ describe Wizards::Memberships::SwitchStammsektion do
       context "for main person" do
         let(:person) { people(:familienmitglied) }
 
-        it "switches stammsektion and sends email" do
+        it "switches stammsektion and sends email", :dj_queue do
           expect { expect(wizard.save!).to eq true }
             .to change { person.sac_membership.stammsektion_role.group.parent.name }
             .from("SAC Blüemlisalp").to("SAC Matterhorn")
