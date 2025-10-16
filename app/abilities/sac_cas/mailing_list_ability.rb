@@ -15,6 +15,8 @@ module SacCas::MailingListAbility
       permission(:any)
         .may(:show, :index_subscriptions, :export_subscriptions)
         .read_role_in_layer?
+
+      general(:update_subscriptions, :destroy).except_protected_lists
     end
   end
 
@@ -31,5 +33,9 @@ module SacCas::MailingListAbility
         Group::SektionsMitglieder::Schreibrecht].include?(r.class) && r.group.layer_group_id == group.layer_group_id
       # rubocop:enable Layout/LineLength
     end
+  end
+
+  def except_protected_lists
+    SacCas::PROTECTED_MAILING_LISTS_INTERNAL_KEYS.exclude?(subject.internal_key)
   end
 end

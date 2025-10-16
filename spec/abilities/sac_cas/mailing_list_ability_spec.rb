@@ -63,4 +63,54 @@ describe MailingListAbility do
       expect(ability).not_to be_able_to(:create, mailing_list)
     end
   end
+
+  context "admin" do
+    before { MailingListSeeder.seed! }
+
+    let(:person) { people(:admin) }
+    let(:a_mailing_list) { Fabricate(:mailing_list, group: groups(:root)) }
+    let(:newsletter) do
+      MailingList.find_by(internal_key: SacCas::MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY)
+    end
+
+    it "can update mailing list" do
+      expect(ability).to be_able_to(:update, a_mailing_list)
+    end
+
+    it "can destroy mailing list" do
+      expect(ability).to be_able_to(:destroy, a_mailing_list)
+    end
+
+    it "can update newsletter mailing list" do
+      expect(ability).to be_able_to(:update, newsletter)
+    end
+
+    it "cannot update_subscriptions newsletter mailing list" do
+      expect(ability).not_to be_able_to(:update_subscriptions, newsletter)
+    end
+
+    it "cannot destroy newsletter mailing list" do
+      expect(ability).not_to be_able_to(:destroy, newsletter)
+    end
+
+    it "can update mailing list subscription" do
+      expect(ability).to be_able_to(:update, Subscription.new(mailing_list: a_mailing_list))
+    end
+
+    it "can destroy mailing list subscription" do
+      expect(ability).to be_able_to(:destroy, Subscription.new(mailing_list: a_mailing_list))
+    end
+
+    it "cannot create newsletter mailing list subscription" do
+      expect(ability).not_to be_able_to(:create, Subscription.new(mailing_list: newsletter))
+    end
+
+    it "cannot update newsletter mailing list subscription" do
+      expect(ability).not_to be_able_to(:update, Subscription.new(mailing_list: newsletter))
+    end
+
+    it "cannot destroy newsletter mailing list subscription" do
+      expect(ability).not_to be_able_to(:destroy, Subscription.new(mailing_list: newsletter))
+    end
+  end
 end
