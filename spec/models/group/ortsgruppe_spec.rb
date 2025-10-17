@@ -35,7 +35,7 @@ describe Group::Ortsgruppe do
     let(:url) { ortsgruppe.sac_cas_self_registration_url("db.sac-cas.ch") }
 
     it "gets url from neuanmeldungen nv group" do
-      expect(url).to eq("http://db.sac-cas.ch/groups/#{neuanmeldungen_nv.id}/self_registration")
+      expect(url).to eq("http://db.sac-cas.ch/de/groups/#{neuanmeldungen_nv.id}/self_registration")
     end
   end
 end

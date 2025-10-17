@@ -77,12 +77,7 @@ class Events::AnnualCourseDuplicateBuilder
 
   def build_questions(course)
     @source_course.questions.each do |source_question|
-      question = course.questions.build(source_question.attributes.except("id"))
-
-      source_question.translations.each do |source_translations|
-        question.translations.build(source_translations.attributes.except("id",
-          "event_question_id"))
-      end
+      course.questions.build(source_question.attributes.except("id"))
     end
   end
 
