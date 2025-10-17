@@ -33,7 +33,7 @@ RSpec.describe "groups#show", type: :request do
 
       it "includes the hostname" do
         expected_url = group.sac_cas_self_registration_url("www.example.com")
-        expect(expected_url).to start_with("http://www.example.com/groups/")
+        expect(expected_url).to start_with("http://www.example.com/de/groups/")
         make_request
         expect(d.attributes["membership_self_registration_url"]).to eq expected_url
       end
