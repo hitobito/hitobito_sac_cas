@@ -19,7 +19,7 @@ module HitobitoSacCas
     ]
 
     if Rails.env.development?
-      config.action_mailer.preview_path = config.root.join("spec", "mailers", "previews").to_s
+      config.action_mailer.preview_paths = [config.root.join("spec", "mailers", "previews").to_s]
 
       if config.respond_to?(:view_component)
         config.view_component.preview_paths << "#{config.root}/spec/components/previews"
