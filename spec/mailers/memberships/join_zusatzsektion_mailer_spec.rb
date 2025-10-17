@@ -46,11 +46,9 @@ describe Memberships::JoinZusatzsektionMailer do
     end
 
     it "uses person language to localize message" do
-      # rubocop:todo Layout/LineLength
-      CustomContent.get(Memberships::JoinZusatzsektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(
-        # rubocop:enable Layout/LineLength
-        locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour"
-      )
+      custom_content = CustomContent.get(Memberships::JoinZusatzsektionMailer::APPROVAL_PENDING_CONFIRMATION)
+      required_placeholders = custom_content.placeholders_required_list.map { |p| custom_content.placeholder_token(p) }.join
+      custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour" + required_placeholders)
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
     end
@@ -102,8 +100,9 @@ describe Memberships::JoinZusatzsektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Memberships::JoinZusatzsektionMailer::CONFIRMATION).update!(locale: :fr,
-        label: "fr", subject: "Acceptee", body: "Bonjour")
+      custom_content = CustomContent.get(Memberships::JoinZusatzsektionMailer::CONFIRMATION)
+      required_placeholders = custom_content.placeholders_required_list.map { |p| custom_content.placeholder_token(p) }.join
+      custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee", body: "Bonjour" + required_placeholders)
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body).to include("Bonjour")

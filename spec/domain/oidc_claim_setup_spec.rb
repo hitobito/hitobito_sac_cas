@@ -65,7 +65,7 @@ describe OidcClaimSetup do
       # rubocop:enable Layout/LineLength
 
       it "membership_verify_url is present" do
-        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
+        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42?locale=de"
       end
     end
 
