@@ -46,6 +46,7 @@ sftp:
 oidc:
   use_refresh_token: true
   use_jwt_access_token: true
+  jwt_id_token_expires_in: <%= 2.hours %>
 
 delayed_jobs:
   concurrency:
