@@ -23,11 +23,8 @@ describe "OauthWorkflow" do
 
       it "redirects to oauth authorization path without prompt" do
         user.update!(password: password)
-        oauth_params = {client_id: @app.uid, client_secret: @app.secret,
-                        # rubocop:todo Layout/LineLength
-                        redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
-        # rubocop:enable Layout/LineLength
-        get oauth_authorization_path, params: oauth_params
+        oauth_params = {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
+        get oauth_authorization_path(locale: nil), params: oauth_params
 
         post person_session_path, params: {person: {login_identity: user.email, password: password}}
 
@@ -46,11 +43,8 @@ describe "OauthWorkflow" do
       it "redirects to wizard for roleless person which redirects to auth authorization path without prompt" do
         # rubocop:enable Layout/LineLength
         user.update!(password: password)
-        oauth_params = {client_id: @app.uid, client_secret: @app.secret,
-                        # rubocop:todo Layout/LineLength
-                        redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
-        # rubocop:enable Layout/LineLength
-        get oauth_authorization_path, params: oauth_params
+        oauth_params = {client_id: @app.uid, client_secret: @app.secret, redirect_uri: redirect_uri, response_type: :code, scope: :openid, prompt: :login}
+        get oauth_authorization_path(locale: nil), params: oauth_params
 
         post person_session_path, params: {person: {login_identity: user.email, password: password}}
 
