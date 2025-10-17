@@ -50,7 +50,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         town: user.town,
         country: user.country,
         picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
-        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
+        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42?locale=de",
         phone_number_landline: nil,
         phone_number_mobile: nil
       }.deep_stringify_keys)
@@ -83,7 +83,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         primary_group_id: user.primary_group_id,
         language: user.language,
         picture_url: "http://www.example.com/packs-test/media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg",
-        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42",
+        membership_verify_url: "http://localhost:3000/verify_membership/aSuperSweetToken42?locale=de",
         phone_number_landline: nil,
         phone_number_mobile: nil,
         membership_years: user.membership_years,
