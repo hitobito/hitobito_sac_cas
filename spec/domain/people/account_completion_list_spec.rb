@@ -24,8 +24,8 @@ describe People::AccountCompletionList do
     expect(csv.entries).to have(2).items
     expect(csv[0]["person_id"]).to eq "600000"
     expect(csv[1]["person_id"]).to eq "600001"
-    expect(csv[0]["url"]).to start_with("http://localhost:3000/account_completion?token=")
-    expect(csv[1]["url"]).to start_with("http://localhost:3000/account_completion?token=")
+    expect(csv[0]["url"]).to start_with("http://localhost:3000/de/account_completion?token=")
+    expect(csv[1]["url"]).to start_with("http://localhost:3000/de/account_completion?token=")
     expect(find_by_token(csv[0]["url"])).to eq admin
     expect(find_by_token(csv[1]["url"])).to eq mitglied
   end

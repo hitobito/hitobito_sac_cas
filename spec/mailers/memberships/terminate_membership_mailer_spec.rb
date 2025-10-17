@@ -38,7 +38,7 @@ describe Memberships::TerminateMembershipMailer do
       TEXT
       I18n.with_locale(:fr) do
         CustomContent.get(Memberships::TerminateMembershipMailer::TERMINATE_MEMBERSHIP)
-          .update!(label: subject, subject: subject, body: body)
+          .update!(label: subject, subject: subject, body: body, body_de: "{person-name}{sektion-name}")
       end
       person.update!(language: :fr)
 
