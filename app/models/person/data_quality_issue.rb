@@ -25,7 +25,7 @@
 class Person::DataQualityIssue < ApplicationRecord
   belongs_to :person
 
-  enum severity: {info: 1, warning: 2, error: 3}
+  enum :severity, {info: 1, warning: 2, error: 3}
 
   validate :person_attribute_to_check
   validates :attr, :severity, presence: true

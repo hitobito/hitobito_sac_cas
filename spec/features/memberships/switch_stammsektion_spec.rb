@@ -104,11 +104,12 @@ describe "switching stammsektion", js: true do
       click_on "Weiter"
       expect(page).to have_css "li.active", text: "Bestätigung"
       expect(page).to have_content "Beitragskategorien SAC Matterhorn"
-      expect do
+
+      expect_enqueued_mail_jobs(count: 1) do
         click_on "Kostenpflichtig bestellen"
         expect(page).to have_css "#flash .alert-success",
           text: "Eure 3 Sektionswechsel zu SAC Matterhorn wurden vorgenommen."
-      end.to change(Delayed::Job.where(queue: :mailers), :count).by(1)
+      end
     end
   end
 

@@ -18,8 +18,6 @@ module Export::Tabular
       row_class.new(entry, group, format)
     end
 
-    private
-
     def model_class
       Person
     end

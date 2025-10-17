@@ -34,12 +34,7 @@ module SacCas::Event::Participation
     include I18nEnums
     include CapitalizedDependentErrors
 
-    enum price_category: {
-      price_member: 0,
-      price_regular: 1,
-      price_subsidized: 2,
-      price_special: 3
-    }
+    enum :price_category, [:price_member, :price_regular, :price_subsidized, :price_special]
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 

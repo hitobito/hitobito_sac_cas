@@ -27,7 +27,7 @@ module People
           t(".explain_confirmation_email")
         ]
       else
-        render :show, status: :unprocessable_entity
+        render :show, status: :unprocessable_content
       end
     end
 

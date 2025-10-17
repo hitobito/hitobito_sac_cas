@@ -40,7 +40,7 @@ module SacCas::Person
     i18n_enum :correspondence, CORRESPONDENCES
     i18n_setter :correspondence, CORRESPONDENCES
 
-    enum data_quality: {ok: 0, info: 1, warning: 2, error: 3}, _default: 0, _prefix: :data_quality
+    enum :data_quality, [:ok, :info, :warning, :error], default: 0, prefix: :data_quality
 
     reflect_on_attachment(:picture).variant(:profile, resize_to_fill: [200, 200])
 

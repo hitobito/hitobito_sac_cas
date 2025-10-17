@@ -25,7 +25,7 @@ class Event::Courses::InvoicesController < ApplicationController
         params[:participation_id]
       )
     else
-      render_invoice_form(response_status: :unprocessable_entity)
+      render_invoice_form(response_status: :unprocessable_content)
     end
   end
 
@@ -57,7 +57,7 @@ class Event::Courses::InvoicesController < ApplicationController
 
   def render_validation_error(attribute)
     render json: {errors: {attribute => invoice_form.errors[attribute].first}},
-      status: :unprocessable_entity
+      status: :unprocessable_content
   end
 
   def render_invoice_form(response_status: :ok)

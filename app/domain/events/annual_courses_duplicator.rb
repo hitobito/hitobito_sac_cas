@@ -25,7 +25,7 @@ class Events::AnnualCoursesDuplicator
 
   def courses_to_duplicate
     Event::Course.includes(:dates)
-      .where("number LIKE '?-%'", @source_year)
+      .where("number LIKE ?", "#{@source_year}-%")
       .where(annual: true)
   end
 end

@@ -43,9 +43,7 @@ class CourseCompensationRate < ApplicationRecord
     if scope
         .where.not(id: id)
         .where(
-          # rubocop:todo Layout/LineLength
-          "(:valid_to IS NULL OR valid_from <= :valid_to) AND (valid_to IS NULL OR valid_to >= :valid_from)",
-          # rubocop:enable Layout/LineLength
+          "daterange(valid_from, valid_to) && daterange(:valid_from, :valid_to, '[]')",
           valid_from: valid_from,
           valid_to: valid_to
         )

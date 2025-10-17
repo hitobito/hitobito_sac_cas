@@ -23,7 +23,7 @@ class People::SacFamilyMainPersonController < ApplicationController
     if !person.household.exists? || !person.adult? || person.email.blank?
       render plain: "Person is not associated with any household, " \
         "is not an adult or has no email address",
-        status: :unprocessable_entity
+        status: :unprocessable_content
     end
   end
 

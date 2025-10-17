@@ -26,7 +26,7 @@ class People::MembershipInvoicesController < ApplicationController
       end
     else
       @group = group
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 

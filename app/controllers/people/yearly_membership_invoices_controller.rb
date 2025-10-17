@@ -24,7 +24,7 @@ class People::YearlyMembershipInvoicesController < ApplicationController
     if invoice_form.valid?
       enqueue_job_and_redirect
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
