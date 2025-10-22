@@ -18,6 +18,7 @@ module TTY
       },
       "m" => TTY::ManageMemberships,
       "l" => TTY::ManageMailingLists,
+      "p" => TTY::People,
       "q" => {description: "Quit", action: -> { quit }, style: :dim}
     }.freeze
 
