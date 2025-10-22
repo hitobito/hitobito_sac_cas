@@ -269,5 +269,46 @@ describe Person::Filter::InvoiceReceiver do
         expect(entries).not_to include(test_person)
       end
     end
+
+    context "with deep" do
+      let(:filter_args) { {deep: true, stammsektion: true, zusatzsektion: true, group_id:} }
+
+      it "includes member of layer" do
+        create_role(mitglied, :bluemlisalp_mitglieder)
+        expect(entries).to include(test_person)
+      end
+
+      it "includes zusatzsektion member of layer" do
+        create_role(mitglied, :matterhorn_mitglieder)
+        create_role(mitglied_zusatzsektion, :bluemlisalp_mitglieder)
+        expect(entries).to include(test_person)
+      end
+
+      it "includes member of sublayer" do
+        create_role(mitglied, :bluemlisalp_ortsgruppe_ausserberg_mitglieder)
+        expect(entries).to include(test_person)
+      end
+
+      it "excludes member of sibling layer" do
+        create_role(mitglied, :matterhorn_mitglieder)
+        expect(entries).not_to include(test_person)
+      end
+
+      it "includes member of sibling layer with zusatzsektion in sublayer" do
+        create_role(mitglied, :matterhorn_mitglieder)
+        create_role(mitglied_zusatzsektion, :bluemlisalp_ortsgruppe_ausserberg_mitglieder)
+        expect(entries).to include(test_person)
+      end
+
+      it "excludes non-main person family member" do
+        person = create_person(30, sac_family_main_person: true) # create as main person first
+        role = create_role(mitglied, :bluemlisalp_mitglieder,
+          person: person,
+          beitragskategorie: "family")
+        person.update!(sac_family_main_person: false) # change to non-main person
+        expect(role.beitragskategorie).to eq "family"
+        expect(entries).not_to include(person)
+      end
+    end
   end
 end

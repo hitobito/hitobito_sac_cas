@@ -158,7 +158,8 @@ describe MailingList do
       expect(die_alpen_papier.filter_chain.to_hash).to eq(
         "invoice_receiver" => {
           "stammsektion" => "true",
-          "group_id" => Group.root_id
+          "group_id" => Group.root_id,
+          "deep" => true
         }
       )
     end

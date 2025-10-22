@@ -25,6 +25,9 @@ module HitobitoSacCas
         config.view_component.preview_paths << "#{config.root}/spec/components/previews"
         config.view_component.preview_controller = "WizardsPreviewsController"
       end
+
+      ActiveSupport::Inflector.inflections { |i| i.acronym("TTY") }
+      config.autoload_paths << "#{config.root}/lib"
     end
 
     config.before_initialize do |app|

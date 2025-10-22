@@ -6,8 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Person::Filter::InvoiceReceiver < Person::Filter::Base
-  VISIBLE_ATTRS = [:stammsektion, :zusatzsektion].freeze
+  VISIBLE_ATTRS = [:stammsektion, :zusatzsektion, :deep].freeze
   self.permitted_args = [*VISIBLE_ATTRS, :group_id]
+
+  def initialize(...)
+    super
+    @args[:deep] = true if root?
+  end
 
   def apply(scope)
     return scope if blank?
@@ -23,6 +28,8 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
 
   def zusatzsektion = ActiveModel::Type::Boolean.new.cast(args[:zusatzsektion])
 
+  def deep = ActiveModel::Type::Boolean.new.cast(args[:deep])
+
   def group_id = args[:group_id].presence
 
   def role_types
@@ -36,7 +43,15 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
     scope
       .joins(roles: :group)
       .where(roles: {type: role_types})
-      .then { |scope| root_group? ? scope : scope.where(groups: {layer_group_id: group_id}) }
+      .then { |scope| filter_by_layers(scope) }
+  end
+
+  def filter_by_layers(scope)
+    return scope if root?
+    return scope.where(groups: {layer_group_id: group_id}) unless deep
+
+    layers = Group.find(group_id).self_and_descendants.where("groups.id = groups.layer_group_id")
+    scope.where(groups: {layer_group_id: layers.select(:id)})
   end
 
   def invoice_receiver_scope(scope)
@@ -45,5 +60,5 @@ class Person::Filter::InvoiceReceiver < Person::Filter::Base
       .or(base_scope(scope).where(sac_family_main_person: true))
   end
 
-  def root_group? = group_id.to_i == Group.root_id
+  def root? = group_id.to_i == Group.root_id
 end

@@ -20,6 +20,7 @@ module TTY
       "3" => TTY::MailingLists::CleanupPaperBulletinSubscribers,
       "4" => TTY::MailingLists::DigitalBulletinSubscribersWithoutEmail,
       "5" => TTY::MailingLists::CleanupPaperBulletinSubscribersKirchberg,
+      "6" => MailingLists::CleanupPilatusBulletins,
     }.freeze
 
     def run
