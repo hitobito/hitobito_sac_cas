@@ -16,6 +16,8 @@ module SacCas::MailingListAbility
       permission(:any)
         .may(:index_subscriptions, :export_subscriptions)
         .read_role_in_layer
+
+      general(:update_subscriptions, :destroy).except_protected_lists
     end
   end
 
@@ -35,5 +37,9 @@ module SacCas::MailingListAbility
 
   def subscribable_or_read_role_in_layer
     subscribable || read_role_in_layer
+  end
+
+  def except_protected_lists
+    SacCas::PROTECTED_MAILING_LISTS_INTERNAL_KEYS.exclude?(subject.internal_key)
   end
 end
