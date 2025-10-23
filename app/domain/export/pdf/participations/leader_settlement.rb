@@ -77,6 +77,8 @@ module Export::Pdf::Participations
     def compensations_by_kind
       @compensations_by_kind ||=
         event.compensation_rates
+          .joins(:course_compensation_category)
+          .where(course_compensation_categories: {leader_settlement: true})
           .includes(:course_compensation_category)
           .group_by { |rate| rate.course_compensation_category.kind.to_sym }
     end
