@@ -1834,6 +1834,7 @@ de:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
         zusatzsektion: Rechnungsempfänger Zusatzsektion
+        deep: Untergruppen miteinbeziehen
 
   public_events:
     show:
