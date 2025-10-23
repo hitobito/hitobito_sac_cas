@@ -238,6 +238,7 @@ gsw:
           flat: Pauschale
           budget: Budget
         description: Beschreibung
+        leader_settlement: Kurskaderabrechnung
         name_leader: Bezeichnung Kursleitung
         name_assistant_leader: Bezeichnung Klassenleitung
         name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
@@ -1154,6 +1155,10 @@ gsw:
   contactable:
     address_fields:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
+
+  course_compensation_categories:
+    form:
+      leader_settlement_caption: In Kurskaderabrechnung berücksichtigen
 
   devise:
     failure:

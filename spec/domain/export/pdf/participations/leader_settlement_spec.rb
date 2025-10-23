@@ -10,15 +10,15 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
   let(:member) { people(:mitglied) }
   let(:course) do
-    # rubocop:todo Layout/LineLength
-    Fabricate(:sac_course, kind: event_kinds(:ski_course), start_point_of_time: :day, number: "2021-00202", dates: [
-      # rubocop:enable Layout/LineLength
-      Event::Date.new(start_at: "01.06.2021", finish_at: "02.06.2021"),
-      Event::Date.new(start_at: "07.06.2021", finish_at: "08.06.2021")
-    ])
+    Fabricate(:sac_course,
+      kind: event_kinds(:ski_course), start_point_of_time: :day, number: "2021-00202", dates: [
+        Event::Date.new(start_at: "01.06.2021", finish_at: "02.06.2021"),
+        Event::Date.new(start_at: "07.06.2021", finish_at: "08.06.2021")
+      ])
   end
   let!(:rate_day) {
-    Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 1),
+    Fabricate.create(:course_compensation_rate,
+      valid_from: Date.new(2021, 5, 1),
       valid_to: Date.new(2022, 5, 1),
       rate_leader: 20,
       rate_assistant_leader: 10,
@@ -27,7 +27,8 @@ describe Export::Pdf::Participations::LeaderSettlement do
       course_compensation_category: course_compensation_categories(:day))
   }
   let!(:rate_flat) {
-    Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 24),
+    Fabricate.create(:course_compensation_rate,
+      valid_from: Date.new(2021, 5, 24),
       valid_to: Date.new(2022, 5, 24),
       rate_leader: 50,
       rate_assistant_leader: 25,
@@ -36,7 +37,8 @@ describe Export::Pdf::Participations::LeaderSettlement do
       course_compensation_category: course_compensation_categories(:flat))
   }
   let!(:rate_budget) {
-    Fabricate.create(:course_compensation_rate, valid_from: Date.new(2021, 5, 24),
+    Fabricate.create(:course_compensation_rate,
+      valid_from: Date.new(2021, 5, 24),
       valid_to: Date.new(2022, 5, 24),
       rate_leader: 13,
       rate_assistant_leader: 13,
@@ -45,7 +47,9 @@ describe Export::Pdf::Participations::LeaderSettlement do
       course_compensation_category: course_compensation_categories(:budget))
   }
   let!(:participation) do
-    Fabricate(:event_participation, event: course, participant: member,
+    Fabricate(:event_participation,
+      event: course,
+      participant: member,
       actual_days: course.total_event_days)
   end
   let(:pdf) { described_class.new(participation, "CH93 0076 2011 6238 5295 7").render }
@@ -85,8 +89,10 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
   context "leader" do
     before do
-      Fabricate.create(:event_role, participation: participation,
-        type: Event::Course::Role::Leader, self_employed: true)
+      Fabricate.create(:event_role,
+        participation: participation,
+        type: Event::Course::Role::Leader,
+        self_employed: true)
       participation.roles.reload
     end
 
@@ -161,67 +167,106 @@ describe Export::Pdf::Participations::LeaderSettlement do
       end
     end
 
+    it "excludes compensation rates for non-leader-settlement categories" do
+      course_compensation_categories(:budget).update!(leader_settlement: false)
+
+      strings = pdf_content.strings
+      expect(strings).not_to include("SAC Hütte")
+      expect(strings).to include("130.00")
+    end
+
     context "total_amount" do
       it "calculates correct total amount when kind has each compensation category once" do
         expect(pdf_content.strings).to include("143.00")
       end
 
       it "calculates correct total amount when kind has only day and budget category" do
-        course.kind.course_compensation_categories = [course_compensation_categories(:day),
-          course_compensation_categories(:budget)]
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:day),
+          course_compensation_categories(:budget)
+        ]
+
         expect(pdf_content.strings).to include("93.00")
       end
 
       it "calculates correct total amount when kind has only day and flat category" do
-        course.kind.course_compensation_categories = [course_compensation_categories(:day),
-          course_compensation_categories(:flat)]
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:day),
+          course_compensation_categories(:flat)
+        ]
+
         expect(pdf_content.strings).to include("130.00")
       end
 
       it "calculates correct total amount when kind has only budget and flat category" do
-        course.kind.course_compensation_categories = [course_compensation_categories(:budget),
-          course_compensation_categories(:flat)]
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:budget),
+          course_compensation_categories(:flat)
+        ]
+
         expect(pdf_content.strings).to include("63.00")
       end
 
       it "calculates correct total_amount when having multiple day categories" do
-        second_day_category = create_course_compensation(kind: "day", rate_leader: 20,
-          rate_assistant_leader: 10)
-        course.kind.course_compensation_categories = [course_compensation_categories(:day),
-          # rubocop:todo Layout/LineLength
-          second_day_category, course_compensation_categories(:budget), course_compensation_categories(:flat)]
-        # rubocop:enable Layout/LineLength
+        second_day_category = create_course_compensation(
+          kind: "day",
+          rate_leader: 20,
+          rate_assistant_leader: 10
+        )
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:day),
+          second_day_category,
+          course_compensation_categories(:budget),
+          course_compensation_categories(:flat)
+        ]
+
         expect(pdf_content.strings).to include("223.00")
       end
 
       it "calculates correct total_amount when having multiple budget categories" do
-        second_budget_category = create_course_compensation(kind: "budget", rate_leader: 30,
-          rate_assistant_leader: 20)
-        course.kind.course_compensation_categories = [course_compensation_categories(:day),
-          # rubocop:todo Layout/LineLength
-          second_budget_category, course_compensation_categories(:budget), course_compensation_categories(:flat)]
-        # rubocop:enable Layout/LineLength
+        second_budget_category = create_course_compensation(
+          kind: "budget",
+          rate_leader: 30,
+          rate_assistant_leader: 20
+        )
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:day),
+          second_budget_category,
+          course_compensation_categories(:budget),
+          course_compensation_categories(:flat)
+        ]
+
         expect(pdf_content.strings).to include("173.00")
       end
 
       it "calculates correct total_amount when having multiple flat categories" do
-        second_flat_category = create_course_compensation(kind: "flat", rate_leader: 50,
-          rate_assistant_leader: 40)
-        course.kind.course_compensation_categories = [course_compensation_categories(:day),
-          # rubocop:todo Layout/LineLength
-          second_flat_category, course_compensation_categories(:budget), course_compensation_categories(:flat)]
-        # rubocop:enable Layout/LineLength
+        second_flat_category = create_course_compensation(
+          kind: "flat",
+          rate_leader: 50,
+          rate_assistant_leader: 40
+        )
+        course.kind.course_compensation_categories = [
+          course_compensation_categories(:day),
+          second_flat_category,
+          course_compensation_categories(:budget),
+          course_compensation_categories(:flat)
+        ]
+
         expect(pdf_content.strings).to include("193.00")
       end
 
       it "calculates correct total_amount when having no categories" do
         course.kind.course_compensation_categories = []
+
         expect(pdf_content.strings).to include("0.00 CHF")
       end
 
       it "calculates total_amount for highest role if multiple exist" do
-        Fabricate.create(:event_role, participation: participation,
-          type: Event::Course::Role::AssistantLeaderAspirant, self_employed: true)
+        Fabricate.create(:event_role,
+          participation: participation,
+          type: Event::Course::Role::AssistantLeaderAspirant,
+          self_employed: true)
+
         expect(pdf_content.strings).to include("143.00")
       end
     end
@@ -229,8 +274,10 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
   context "assistant leader" do
     before do
-      Fabricate.create(:event_role, participation: participation,
-        type: Event::Course::Role::AssistantLeader, self_employed: true)
+      Fabricate.create(:event_role,
+        participation: participation,
+        type: Event::Course::Role::AssistantLeader,
+        self_employed: true)
       participation.roles.reload
     end
 
@@ -242,8 +289,10 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
   context "leader aspirant" do
     before do
-      Fabricate.create(:event_role, participation: participation,
-        type: Event::Course::Role::LeaderAspirant, self_employed: true)
+      Fabricate.create(:event_role,
+        participation: participation,
+        type: Event::Course::Role::LeaderAspirant,
+        self_employed: true)
       participation.roles.reload
     end
 
@@ -255,12 +304,14 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
   context "assistant leader aspirant" do
     before do
-      Fabricate.create(:event_role, participation: participation,
-        type: Event::Course::Role::AssistantLeaderAspirant, self_employed: true)
+      Fabricate.create(:event_role,
+        participation: participation,
+        type: Event::Course::Role::AssistantLeaderAspirant,
+        self_employed: true)
       participation.roles.reload
-      # rubocop:todo Layout/LineLength
-      course_compensation_categories(:day).update!(name_assistant_leader_aspirant: "Tageshonorar - Klassenleitung Aspirant")
-      # rubocop:enable Layout/LineLength
+      course_compensation_categories(:day).update!(
+        name_assistant_leader_aspirant: "Tageshonorar - Klassenleitung Aspirant"
+      )
     end
 
     it "calculates correct total amount when kind has each compensation category once" do

@@ -15,6 +15,7 @@
 #  name_assistant_leader :string(255)      not null
 #  name_leader           :string(255)      not null
 #  short_name            :string(255)      not null
+#  leader_settlement     :boolean          default(TRUE), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #
