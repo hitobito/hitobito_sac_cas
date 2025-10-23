@@ -95,19 +95,16 @@ describe Invoices::Abacus::SubjectInterface do
 
   it "fails if abacus assigns a different subject key" do
     stub_get_non_existing_subject_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Type\":\"Person\",\"SalutationId\":2,\"Language\":\"de\"}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\"," \
+      "\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
+    response = "{\"Id\":1234,\"Name\":\"Hillary\",\"FirstName\":\"Edmund\"," \
+      "\"Type\":\"Person\",\"SalutationId\":2,\"Language\":\"de\"}"
     stub_simple_request(:post, "Subjects", body, response)
 
     expect {
-      # rubocop:todo Layout/LineLength
       interface.transmit(subject)
-    }.to raise_error("Abacus created subject with id=1234 but person has id=#{person.id}")
-    # rubocop:enable Layout/LineLength
+    }.to raise_error("Abacus created subject with id=1234 but person" \
+      " has id=#{person.id}")
   end
 
   it "does nothing if attrs are unchanged" do
@@ -143,9 +140,10 @@ describe Invoices::Abacus::SubjectInterface do
     interface.transmit(subject)
   end
 
-  it "updates address and deletes email" do
+  it "updates address, customer and deletes email" do
     person.abacus_subject_key = person.id
     person.email = ""
+    person.correspondence = "analog"
 
     subject_response = get_subject_response
     subject_response["Addresses"].first["City"] = "Thun"
@@ -154,6 +152,7 @@ describe Invoices::Abacus::SubjectInterface do
     path = "Subjects(Id=#{person.id})?$expand=Addresses,Communications,Customers"
     stub_simple_request(:get, path, nil, subject_response.to_json)
     stub_create_address_request
+    stub_update_customer_request
     stub_simple_request(:delete, "Communications(Id=ef83129d-470d-ef01-1ff3-001dd8b72ba4)", nil)
 
     interface.transmit(subject)
@@ -171,9 +170,8 @@ describe Invoices::Abacus::SubjectInterface do
         person.update_columns(zip_code: 3600, street: nil, housenumber: nil, town: "Thun",
           country: nil, gender: "w")
       end
-      # rubocop:todo Layout/LineLength
-      allow(abacus_client).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
-      # rubocop:enable Layout/LineLength
+      allow(abacus_client).to receive(:generate_batch_boundary)
+        .and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
     end
 
     it "transmits batch of non-exising people to abacus" do
@@ -325,59 +323,57 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def stub_create_subject_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\"," \
+      "\"SalutationId\":2,\"Language\":\"de\",\"Id\":#{person.id}}"
+    response = "{\"Id\":#{person.id},\"Name\":\"Hillary\",\"FirstName\":\"Edmund\"," \
+      "\"Language\":\"de\",\"SalutationId\":2}"
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_create_organisation_subject_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\",\"Id\":#{person.id}}"
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    response = "{\"Id\":#{person.id},\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3,\"Language\":\"de\"}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\",\"SalutationId\":3," \
+      "\"Language\":\"de\",\"Id\":#{person.id}}"
+    response = "{\"Id\":#{person.id},\"Type\":\"Organisation\",\"Name\":\"Puzzle ITC\"," \
+      "\"SalutationId\":3,\"Language\":\"de\"}"
     stub_simple_request(:post, "Subjects", body, response)
   end
 
   def stub_update_subject_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"SalutationId\":2,\"Language\":\"de\"}"
-    # rubocop:enable Layout/LineLength
-    # rubocop:todo Layout/LineLength
-    response = "{\"Id\":#{person.id},\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"Type\":\"Person\",\"Name\":\"Hillary\",\"FirstName\":\"Edmund\"," \
+      "\"SalutationId\":2,\"Language\":\"de\"}"
+    response = "{\"Id\":#{person.id},\"Type\":\"Person\",\"Name\":\"Hillary\"," \
+      "\"FirstName\":\"Edmund\",\"Language\":\"de\",\"SalutationId\":2}"
     stub_simple_request(:patch, "Subjects(Id=#{person.id})", body, response)
   end
 
   def stub_create_address_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\",\"PostOfficeBoxText\":\"Postfach 23\",\"AddressSupplement\":\"c/o Frau Müller\",\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\",\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"SubjectId\":#{person.id},\"Street\":\"Belpstrasse\",\"HouseNumber\":\"37\"," \
+      "\"PostOfficeBoxText\":\"Postfach 23\",\"AddressSupplement\":\"c/o Frau Müller\"," \
+      "\"PostCode\":\"3007\",\"City\":\"Bern\",\"CountryId\":\"CH\"," \
+      "\"ValidFrom\":\"#{today.strftime("%Y-%m-%d")}\"}"
     stub_simple_request(:post, "Addresses", body)
   end
 
   def stub_create_communication_request
-    # rubocop:todo Layout/LineLength
-    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\"," \
+      "\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
     stub_simple_request(:post, "Communications", body)
   end
 
   def stub_update_communication_request(id)
-    # rubocop:todo Layout/LineLength
-    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\",\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
-    # rubocop:enable Layout/LineLength
+    body = "{\"SubjectId\":#{person.id},\"Type\":\"EMail\"," \
+      "\"Value\":\"e.hillary@hitobito.example.com\",\"Category\":\"Private\"}"
     stub_simple_request(:patch, "Communications(Id=#{id})", body)
   end
 
   def stub_create_customer_request
-    body = "{\"SubjectId\":#{person.id}}"
+    body = "{\"SubjectId\":#{person.id},\"CustomerReminder\":{\"DispatchType\":\"Mail\"}}"
     stub_simple_request(:post, "Customers", body)
+  end
+
+  def stub_update_customer_request
+    body = "{\"SubjectId\":#{person.id},\"CustomerReminder\":{\"DispatchType\":\"Letter\"}}"
+    stub_simple_request(:patch, "Customers(Id=#{person.id})", body)
   end
 
   def stub_get_subject_request
@@ -409,90 +405,61 @@ describe Invoices::Abacus::SubjectInterface do
         body: request_body,
         headers: {
           "Authorization" => "Bearer eyJhbGciOi...",
-          # rubocop:todo Layout/LineLength
-          "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-          # rubocop:enable Layout/LineLength
+          "Content-Type" => "multipart/mixed;boundary=batch-boundary-" \
+            "3f8b206b-4aec-4616-bd28-c1ccbe572649"
         }
       )
       .to_return(
         status: 202,
         body: response_body,
-        # rubocop:todo Layout/LineLength
-        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-        # rubocop:enable Layout/LineLength
+        headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-" \
+          "3f8b206b-4aec-4616-bd28-asdasdfasdf"}
       )
   end
 
   def get_subject_response # rubocop:todo Metrics/MethodLength
     {
-      # rubocop:todo Layout/LineLength
-      "@odata.context" => "#{host}/api/entity/v1/mandants/#{mandant}/$metadata#Subjects(Addresses,Communications,Customers)/$entity",
-      # rubocop:enable Layout/LineLength
+      "@odata.context" => "#{host}/api/entity/v1/mandants/#{mandant}/$metadata#Subjects" \
+        "(Addresses,Communications,Customers)/$entity",
       "@odata.etag" => "W/\"2fdc485e7234e20bd9df6f58270f957ca5ca9d44507b20b9ffeac5dd58d29962\"",
-      # rubocop:todo Layout/LineLength
-      "Id" => person.id, "FirstName" => "Edmund", "Name" => "Hillary", "Title" => "", "NameSupplement" => "", "Language" => "de",
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      "ChangeInformation" => {"CreatedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "CreatedOn" => "2024-05-08T16:31:08.669+02:00",
-                              # rubocop:enable Layout/LineLength
-                              # rubocop:todo Layout/LineLength
-                              "ChangedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "ChangedOn" => "2024-05-08T16:31:08.669+02:00"},
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      "Status" => "Active", "Remark" => "", "Key" => "6c4b3c5c-91c2-c212-9538-a6a253da66c8", "RegisteredCompanyUid" => "",
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      "Type" => "Person", "TaxIdSwitzerland" => "", "TaxIdEuropeanUnion" => "", "NogaCodeId" => "", "DateOfBirth" => nil,
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      "Source" => "", "NamePrefix" => "", "NameSuffix" => "", "Salutation" => "Sehr geehrte Frau", "SalutationId" => 2,
-      # rubocop:enable Layout/LineLength
+      "Id" => person.id, "FirstName" => "Edmund", "Name" => "Hillary", "Title" => "",
+      "NameSupplement" => "", "Language" => "de",
+      "ChangeInformation" => {
+        "CreatedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "CreatedOn" => "2024-05-08T16:31:08.669+02:00",
+        "ChangedBy" => "223bfa10-514c-8a52-3378-55224270acf5", "ChangedOn" => "2024-05-08T16:31:08.669+02:00"
+      },
+      "Status" => "Active", "Remark" => "", "Key" => "6c4b3c5c-91c2-c212-9538-a6a253da66c8",
+      "RegisteredCompanyUid" => "", "Type" => "Person", "TaxIdSwitzerland" => "", "TaxIdEuropeanUnion" => "",
+      "NogaCodeId" => "", "DateOfBirth" => nil, "Source" => "", "NamePrefix" => "", "NameSuffix" => "",
+      "Salutation" => "Sehr geehrte Frau", "SalutationId" => 2,
       "UserFields" => {"UserField1" => ""},
       "Addresses" => [{
         "@odata.etag" => "W/\"ea2246585da92c0f2789e718fea4dfb29d56005e7d51c6e27cb5994b8838b5b0\"",
-        # rubocop:todo Layout/LineLength
-        "Id" => "e65440b5-eb47-9482-21b0-a647a3972e0b", "SubjectId" => person.id, "ValidFrom" => "2024-05-08", "Street" => "Belpstrasse",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "HouseNumber" => "37", "City" => "Bern", "PostCode" => "3007", "PostCodeSupplement" => 0, "CountryId" => "CH", "State" => "BE",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "DwellingNumber" => "", "MunicipalityCode" => "351", "BuildingNumber" => 0, "AddressSupplement" => "c/o Frau Müller", "StreetSupplement" => "",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "PostOfficeBoxText" => "Postfach 23", "PostOfficeBoxNumber" => "", "OpenLocationCode" => "", "Coordinates" => nil
-        # rubocop:enable Layout/LineLength
+        "Id" => "e65440b5-eb47-9482-21b0-a647a3972e0b", "SubjectId" => person.id, "ValidFrom" => "2024-05-08",
+        "Street" => "Belpstrasse", "HouseNumber" => "37", "City" => "Bern", "PostCode" => "3007",
+        "PostCodeSupplement" => 0, "CountryId" => "CH", "State" => "BE", "DwellingNumber" => "",
+        "MunicipalityCode" => "351", "BuildingNumber" => 0, "AddressSupplement" => "c/o Frau Müller",
+        "StreetSupplement" => "", "PostOfficeBoxText" => "Postfach 23", "PostOfficeBoxNumber" => "",
+        "OpenLocationCode" => "", "Coordinates" => nil
       }],
       "Communications" => [{
         "@odata.etag" => "W/\"f86b82e3bbf253df0eb29c2406cb3619d611d9300d1cd7daa8a3f0403857ad90\"",
-        # rubocop:todo Layout/LineLength
-        "Id" => "ef83129d-470d-ef01-1ff3-001dd8b72ba4", "SubjectId" => person.id, "LinkId" => nil, "Type" => "EMail",
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "Value" => "e.hillary@hitobito.example.com", "Standard" => true, "Category" => "Private", "Note" => "", "Purpose" => []
-        # rubocop:enable Layout/LineLength
+        "Id" => "ef83129d-470d-ef01-1ff3-001dd8b72ba4", "SubjectId" => person.id, "LinkId" => nil,
+        "Type" => "EMail", "Value" => "e.hillary@hitobito.example.com", "Standard" => true,
+        "Category" => "Private", "Note" => "", "Purpose" => []
       }],
       "Customers" => [{
         "@odata.etag" => "W/\"2046f721492e448539278c6392cf450242ba80e3077f8b701dcbcfab8a06207c\"",
-        # rubocop:todo Layout/LineLength
-        "Id" => person.id, "SubjectId" => person.id, "DefaultCurrencyId" => "CHF", "Status" => "Active", "InactiveFrom" => nil,
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "MultipleCurrenciesActive" => false, "DivisionId" => 0, "DisabledForPayout" => false, "ResponsiblePersonId" => 0,
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        "CustomerCondition" => {"PaymentConditionId" => 1, "DiscountToleranceDays" => 0, "DiscountTolerancePercent" => 0.0},
-        # rubocop:enable Layout/LineLength
+        "Id" => person.id, "SubjectId" => person.id, "DefaultCurrencyId" => "CHF", "Status" => "Active",
+        "InactiveFrom" => nil, "MultipleCurrenciesActive" => false, "DivisionId" => 0, "DisabledForPayout" => false,
+        "ResponsiblePersonId" => 0,
+        "CustomerCondition" => {"PaymentConditionId" => 1, "DiscountToleranceDays" => 0,
+                                "DiscountTolerancePercent" => 0.0},
         "CustomerCreditLimit" => {"CheckCreditRating" => false},
-        # rubocop:todo Layout/LineLength
         "CustomerReminder" => {"ProcedureId" => "NORM", "SubjectId" => 0, "ContactId" => nil, "Mode" => "Remind",
-                               # rubocop:enable Layout/LineLength
-                               # rubocop:todo Layout/LineLength
-                               "ViewOrSendActive" => false, "ViewWithNoReminder" => false, "ViewBlocked" => false, "BlockedUntil" => nil,
-                               # rubocop:enable Layout/LineLength
-                               # rubocop:todo Layout/LineLength
-                               "SendAccountStatement" => false, "BlockedReasonId" => 0, "DispatchType" => "Letter", "GracePeriodDays" => 0},
-        # rubocop:enable Layout/LineLength
+                               "ViewOrSendActive" => false, "ViewWithNoReminder" => false, "ViewBlocked" => false,
+                               "BlockedUntil" => nil, "SendAccountStatement" => false, "BlockedReasonId" => 0,
+                               "DispatchType" => "Mail", "GracePeriodDays" => 0},
         "CustomerNote" => []
       }]
     }
@@ -571,9 +538,13 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Type":"Person","Name":"Hillary","FirstName":"Edmund","Language":"de","SalutationId":2,"Id":600001,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600001,"ValidFrom":"2024-05-08","Street":"Belpstrasse","HouseNumber":"37","PostOfficeBoxText":"Postfach 23","PostOfficeBoxNumber":"23","StreetSupplement":"","AddressSupplement":"c/o Frau Müller","City":"Bern","PostCode":"3007","CountryId":"CH","State":"BE"}],\r
-       "Communications":[{"Id":"ef83129d","SubjectId":600001,"Type":"EMail","Value":"e.hillary@hitobito.example.com","Category":"Private"}],
-       "Customers":[{"Id":600001,"SubjectId":600001,"Status":"Active"}]}\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600001,"ValidFrom":"2024-05-08","Street":"Belpstrasse",\r
+       "HouseNumber":"37","PostOfficeBoxText":"Postfach 23","PostOfficeBoxNumber":"23","StreetSupplement":"",\r
+       "AddressSupplement":"c/o Frau Müller","City":"Bern","PostCode":"3007","CountryId":"CH","State":"BE"}],\r
+       "Communications":[{"Id":"ef83129d","SubjectId":600001,"Type":"EMail",\r
+         "Value":"e.hillary@hitobito.example.com","Category":"Private"}],
+       "Customers":[{"Id":600001,"SubjectId":600001,"Status":"Active",\r
+         "CustomerReminder":{"ProcedureId":"NORM","DispatchType":"Mail"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -583,9 +554,13 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
-       "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
-       "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse",\r
+       "HouseNumber":"1","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"",\r
+       "AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail",\r
+         "Value":"tenzing@hitobito.example.com","Category":"Private"}],
+       "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active",\r
+         "CustomerReminder":{"ProcedureId":"NORM","DispatchType":"Mail"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -595,8 +570,11 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Type":"Person","Name":"Norgay","FirstName":"Nima","Language":"de","SalutationId":1,"Id":600004,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600004,"ValidFrom":"2024-05-08","Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
-       "Communications":[{"Id":"ef83129d","SubjectId":600004,"Type":"EMail","Value":"n.norgay@hitobito.example.com","Category":"Private"}]}\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600004,"ValidFrom":"2024-05-08","Street":"","HouseNumber":"",\r
+       "PostOfficeBoxText":"","PostOfficeBoxNumber":"","StreetSupplement":"","AddressSupplement":"",\r
+       "City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Communications":[{"Id":"ef83129d","SubjectId":600004,"Type":"EMail",\r
+         "Value":"n.norgay@hitobito.example.com","Category":"Private"}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf--\r
     HTTP
   end
@@ -620,9 +598,13 @@ describe Invoices::Abacus::SubjectInterface do
       Accept: application/json\r
       \r
       {"Type":"Person","Name":"Norgay","FirstName":"Tenzing","Language":"de","SalutationId":2,"Id":600002,\r
-       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse","HouseNumber":"1","PostOfficeBoxText":"Postfach 23","AddressSupplement":"c/o Frau Müller","City":"Thun","PostCode":"3600","CountryId":"CH","State":"BE"}],\r
-       "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail","Value":"tenzing@hitobito.example.com","Category":"Private"}],
-       "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active"}]}\r
+       "Addresses":[{"Id":"e65440b","SubjectId":600002,"ValidFrom":"2024-05-08","Street":"Hauptstrasse",\r
+       "HouseNumber":"1","PostOfficeBoxText":"Postfach 23","AddressSupplement":"c/o Frau Müller","City":"Thun",\r
+       "PostCode":"3600","CountryId":"CH","State":"BE"}],\r
+       "Communications":[{"Id":"ef83129d","SubjectId":600002,"Type":"EMail",\r
+         "Value":"tenzing@hitobito.example.com","Category":"Private"}],
+       "Customers":[{"Id":600002,"SubjectId":600002,"Status":"Active",\r
+         "CustomerReminder":{"ProcedureId":"NORM","DispatchType":"Mail"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -750,6 +732,7 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def create_batch_associations_body
+    # rubocop:disable Layout/LineLength
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
@@ -777,7 +760,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600001}\r
+      {"SubjectId":600001,"CustomerReminder":{"DispatchType":"Mail"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -804,7 +787,7 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002}\r
+      {"SubjectId":600002,"CustomerReminder":{"DispatchType":"Mail"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -831,9 +814,10 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004}\r
+      {"SubjectId":600004,"CustomerReminder":{"DispatchType":"Mail"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
+    # rubocop:enable Layout/LineLength
   end
 
   def create_batch_associations_response
@@ -846,7 +830,8 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600001,"Street":"Belpstrasse","HouseNumber":"37","PostCode":"3007","City":"Bern","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600001,"Street":"Belpstrasse","HouseNumber":"37","PostCode":"3007","City":"Bern",\r
+       "CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -873,7 +858,8 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600002,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"",\r
+       "PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -900,7 +886,8 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","AddressSupplement":"",\r
+       "PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
            --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -924,6 +911,7 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def create_batch_associations_partition_body
+    # rubocop:disable Layout/LineLength
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
@@ -951,9 +939,10 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004}\r
+      {"SubjectId":600004,"CustomerReminder":{"DispatchType":"Mail"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
+    # rubocop:enable Layout/LineLength
   end
 
   def create_batch_associations_partition_response
@@ -966,7 +955,9 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"","AddressSupplement":"","StreetSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH","ValidFrom":"#{today}"}\r
+      {"SubjectId":600004,"Street":"","HouseNumber":"","PostOfficeBoxText":"","PostOfficeBoxNumber":"",\r
+       "AddressSupplement":"","StreetSupplement":"","PostCode":"3600","City":"Thun","CountryId":"CH",\r
+       "ValidFrom":"#{today}"}\r
           --batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -990,6 +981,7 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def update_batch_body
+    # rubocop:disable Layout/LineLength
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
@@ -1026,9 +1018,10 @@ describe Invoices::Abacus::SubjectInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"SubjectId":600004}\r
+      {"SubjectId":600004,"CustomerReminder":{"DispatchType":"Mail"}}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
+    # rubocop:enable Layout/LineLength
   end
 
   def update_batch_response
@@ -1070,6 +1063,7 @@ describe Invoices::Abacus::SubjectInterface do
   end
 
   def update_batch_partition_body
+    # rubocop:disable Layout/LineLength
     <<~HTTP
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
@@ -1091,6 +1085,7 @@ describe Invoices::Abacus::SubjectInterface do
       {"SubjectId":600002,"Type":"EMail","Value":"t.norgay@hitobito.example.com","Category":"Private"}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
+    # rubocop:enable Layout/LineLength
   end
 
   def update_batch_partition_response
