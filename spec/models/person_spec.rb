@@ -370,6 +370,18 @@ describe Person do
   end
 
   describe "correspondence" do
+    subject(:person) { people(:mitglied) }
+
+    describe "reset to print" do
+      it "occurs when clearing email" do
+        expect { person.update!(email: nil) }.to change { person.reload.correspondence }.from("digital").to("print")
+      end
+
+      it "does not occur when existing email is changed" do
+        expect { person.update!(email: "test@example.com") }.not_to change { person.reload.correspondence }
+      end
+    end
+
     it "gets set to digital when password is first set" do
       password = "verysafepasswordfortesting"
       person = Fabricate(:person, correspondence: "print")

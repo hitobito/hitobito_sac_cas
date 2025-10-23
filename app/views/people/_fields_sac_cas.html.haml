@@ -5,5 +5,9 @@
 
 = f.labeled(:correspondence) do
   - SacCas::Person::CORRESPONDENCES.each do |key|
-    = f.inline_radio_button(:correspondence, key, t("activerecord.attributes.person.correspondences.#{key}") )
+    = f.inline_radio_button(:correspondence,
+        key,
+        t("activerecord.attributes.person.correspondences.#{key}"),
+        true,
+        (key == "digital" && (entry.email.blank? || !entry.confirmed?) ? {disabled: :disabled} : {}))
 = f.labeled_input_field(:advertising)
