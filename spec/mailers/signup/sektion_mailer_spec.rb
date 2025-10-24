@@ -46,8 +46,9 @@ describe Signup::SektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION).update!(locale: :fr,
-        label: "fr", subject: "Acceptee", body: "Bonjour")
+      custom_content = CustomContent.get(Signup::SektionMailer::APPROVAL_PENDING_CONFIRMATION)
+      custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee",
+        body: "Bonjour" + required_placeholders(custom_content))
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
     end
@@ -98,11 +99,16 @@ describe Signup::SektionMailer do
     end
 
     it "uses person language to localize message" do
-      CustomContent.get(Signup::SektionMailer::CONFIRMATION).update!(locale: :fr, label: "fr",
-        subject: "Acceptee", body: "Bonjour")
+      custom_content = CustomContent.get(Signup::SektionMailer::CONFIRMATION)
+      custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee",
+        body: "Bonjour" + required_placeholders(custom_content))
       person.update!(language: :fr)
       expect(mail.subject).to eq("Acceptee")
       expect(mail.body).to include("Bonjour")
     end
+  end
+
+  def required_placeholders(custom_content)
+    custom_content.placeholders_required_list.map { |p| custom_content.placeholder_token(p) }.join
   end
 end
