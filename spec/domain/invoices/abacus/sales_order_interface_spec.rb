@@ -133,9 +133,8 @@ describe Invoices::Abacus::SalesOrderInterface do
       Role.update_all(end_on: date.end_of_year)
       Person.update_all(zip_code: 3600, street: nil, housenumber: nil, town: "Thun", country: nil)
 
-      # rubocop:todo Layout/LineLength
-      allow(interface.send(:client)).to receive(:generate_batch_boundary).and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
-      # rubocop:enable Layout/LineLength
+      allow(interface.send(:client)).to receive(:generate_batch_boundary)
+        .and_return("batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649")
     end
 
     it "creates invoices in batch" do
@@ -210,109 +209,77 @@ describe Invoices::Abacus::SalesOrderInterface do
   def stub_create_sales_order_request # rubocop:todo Metrics/MethodLength
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders")
       .with(
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
               "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
-              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"R\",\"ProcessFlowNumber\":3,\"UserFields\":" \
-              "{\"UserField1\":\"#{invoice.id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
-              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":40.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"R\",\"ProcessFlowNumber\":3," \
+              "\"UserFields\":{\"UserField1\":\"#{invoice.id}\",\"UserField2\":\"hitobito\",\"UserField3\":\"Mail\"}," \
+              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":40.0}," \
+              "\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Abo Die Alpen\",\"ProductNumber\":\"234\"},\"Accounts\":{}," \
               "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\"}}," \
-              "{\"PositionNumber\":2,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":79.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "{\"PositionNumber\":2,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":79.0},\"Quantity\":" \
+              "{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Sektionsbeitrag\",\"ProductNumber\":\"236\"},\"Accounts\":{}," \
-              "\"UserFields\":{\"UserField1\":\"Sektionsbeitrag SAC Bluemlisalp\",\"UserField2\":#{groups(:bluemlisalp).id}}}," \
-              "{\"PositionNumber\":3,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":0.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"UserFields\":{\"UserField1\":\"Sektionsbeitrag SAC Bluemlisalp\"," \
+              "\"UserField2\":#{groups(:bluemlisalp).id}}}," \
+              "{\"PositionNumber\":3,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":0.0},\"Quantity\":" \
+              "{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
               "\"Product\":{\"Description\":\"Beitrag Zentralverband\",\"ProductNumber\":\"237\"},\"Accounts\":{}," \
-              "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\",\"UserField2\":#{groups(:bluemlisalp).id},\"UserField3\":20.0}}]}",
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
+              "\"UserFields\":{\"UserField1\":\"Beitrag Zentralverband\"," \
+              "\"UserField2\":#{groups(:bluemlisalp).id},\"UserField3\":20.0}}]}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(
         status: 200,
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
         body: "{\"SalesOrderId\":19,\"SalesOrderBacklogId\":0,\"CustomerId\":7,\"OrderDate\":\"#{today_string}\"," \
               "\"DeliveryDate\":\"2020-01-05\",\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"UserFields\":" \
               "{\"UserField1\":#{invoice.id},\"UserField2\":\"hitobito\"}}"
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
       )
   end
 
-  def stub_create_course_sales_order_request(invoice_id) # rubocop:todo Metrics/MethodLength
+  def stub_create_course_sales_order_request(invoice_id)
     stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders")
       .with(
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
         body: "{\"CustomerId\":7,\"OrderDate\":\"#{today_string}\",\"DeliveryDate\":\"2020-01-05\"," \
               "\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
-              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"RK\",\"ProcessFlowNumber\":2,\"UserFields\":" \
-              "{\"UserField1\":\"#{invoice_id}\",\"UserField2\":\"hitobito\",\"UserField3\":true}," \
-              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":20.0},\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
-              "\"Product\":{\"Description\":\"Kursname (234)\",\"ProductNumber\":\"234\"},\"Accounts\":{},\"UserFields\":{\"UserField1\":\"Kursname (234)\"}}]}",
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
+              "\"TotalAmount\":0.0,\"Language\":\"de\",\"DocumentCodeInvoice\":\"RK\",\"ProcessFlowNumber\":2," \
+              "\"UserFields\":{\"UserField1\":\"#{invoice_id}\",\"UserField2\":\"hitobito\",\"UserField3\":\"Mail\"}," \
+              "\"Positions\":[{\"PositionNumber\":1,\"Type\":\"Product\",\"Pricing\":{\"PriceAfterFinding\":20.0}," \
+              "\"Quantity\":{\"Ordered\":1,\"Charged\":1,\"Delivered\":1}," \
+              "\"Product\":{\"Description\":\"Kursname (234)\",\"ProductNumber\":\"234\"},\"Accounts\":{}," \
+              "\"UserFields\":{\"UserField1\":\"Kursname (234)\"}}]}",
         headers: {"Authorization" => "Bearer eyJhbGciOi..."}
       )
       .to_return(
         status: 200,
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
         body: "{\"SalesOrderId\":20,\"SalesOrderBacklogId\":0,\"CustomerId\":7,\"OrderDate\":\"#{today_string}\"," \
               "\"DeliveryDate\":\"2020-01-05\",\"InvoiceDate\":\"2020-01-05\",\"InvoiceValueDate\":\"2020-01-15\"," \
               "\"TotalAmount\":0.0,\"UserFields\":" \
               "{\"UserField1\":#{invoice_id},\"UserField2\":\"hitobito\"}}"
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
       )
   end
 
   def stub_trigger_sales_order_request(id)
-    # rubocop:todo Layout/LineLength
-    stub_request(:post, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=#{id},SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep")
-      # rubocop:enable Layout/LineLength
-      .with(
-        body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
+    stub_request(
+      :post,
+      "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=#{id}," \
+      "SalesOrderBacklogId=0)/ch.abacus.orde.TriggerSalesOrderNextStep"
+    ).with(
+      body: "{\"TypeOfPrinting\":\"AccToSequentialControl\"}",
+      headers: {"Authorization" => "Bearer eyJhbGciOi..."}
+    )
       .to_return(status: 200, body: "{}")
   end
 
   def stub_update_sales_order_request
-    # rubocop:todo Layout/LineLength
-    stub_request(:patch, "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)")
-      # rubocop:enable Layout/LineLength
-      .with(
-        body: "{\"UserFields\":{\"UserField21\":true}}",
-        headers: {"Authorization" => "Bearer eyJhbGciOi..."}
-      )
+    stub_request(
+      :patch,
+      "#{host}/api/entity/v1/mandants/#{mandant}/SalesOrders(SalesOrderId=19,SalesOrderBacklogId=0)"
+    ).with(
+      body: "{\"UserFields\":{\"UserField21\":true}}",
+      headers: {"Authorization" => "Bearer eyJhbGciOi..."}
+    )
       .to_return(status: 200, body: "{}")
   end
 
@@ -322,17 +289,13 @@ describe Invoices::Abacus::SalesOrderInterface do
         body: batch_body_sales_orders,
         headers: {
           "Authorization" => "Bearer eyJhbGciOi...",
-          # rubocop:todo Layout/LineLength
           "Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649"
-          # rubocop:enable Layout/LineLength
         }
       )
       .to_return(
         status: 202,
         body: batch_response_sales_orders,
-        # rubocop:todo Layout/LineLength
         headers: {"Content-Type" => "multipart/mixed;boundary=batch-boundary-3f8b206b-4aec-4616-bd28-asdasdfasdf"}
-        # rubocop:enable Layout/LineLength
       )
   end
 
@@ -346,7 +309,7 @@ describe Invoices::Abacus::SalesOrderInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"CustomerId":10,"OrderDate":"#{today_string}","DeliveryDate":"2023-01-01","InvoiceDate":"2023-01-01","InvoiceValueDate":"2023-01-01","TotalAmount":183.0,"Language":"de","DocumentCodeInvoice":"R","ProcessFlowNumber":3,"UserFields":{"UserField1":"#{next_invoice_id}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600001;Hillary;Edmund;#{members[0].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":40.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":42.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Einzelmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":56.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Einzelmitglied"}}]}\r
+      {"CustomerId":10,"OrderDate":"#{today_string}","DeliveryDate":"2023-01-01","InvoiceDate":"2023-01-01","InvoiceValueDate":"2023-01-01","TotalAmount":183.0,"Language":"de","DocumentCodeInvoice":"R","ProcessFlowNumber":3,"UserFields":{"UserField1":"#{next_invoice_id}","UserField2":"hitobito","UserField3":"Mail","UserField4":1.0,"UserField11":"600001;Hillary;Edmund;#{members[0].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":40.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Einzelmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":42.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Einzelmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":56.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Einzelmitglied"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649\r
       Content-Type: application/http\r
       Content-Transfer-Encoding: binary\r
@@ -355,7 +318,7 @@ describe Invoices::Abacus::SalesOrderInterface do
       Content-Type: application/json\r
       Accept: application/json\r
       \r
-      {"CustomerId":13,"OrderDate":"#{today_string}","DeliveryDate":"2023-01-01","InvoiceDate":"2023-01-01","InvoiceValueDate":"2023-01-01","TotalAmount":267.0,"Language":"de","DocumentCodeInvoice":"R","ProcessFlowNumber":3,"UserFields":{"UserField1":"#{next_invoice_id + 1}","UserField2":"hitobito","UserField3":true,"UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{members[3].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{members[1].membership_verify_token}","UserField13":"600004;Norgay;Nima;#{members[2].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
+      {"CustomerId":13,"OrderDate":"#{today_string}","DeliveryDate":"2023-01-01","InvoiceDate":"2023-01-01","InvoiceValueDate":"2023-01-01","TotalAmount":267.0,"Language":"de","DocumentCodeInvoice":"R","ProcessFlowNumber":3,"UserFields":{"UserField1":"#{next_invoice_id + 1}","UserField2":"hitobito","UserField3":"Mail","UserField4":1.0,"UserField11":"600002;Norgay;Tenzing;#{members[3].membership_verify_token}","UserField12":"600003;Norgay;Frieda;#{members[1].membership_verify_token}","UserField13":"600004;Norgay;Nima;#{members[2].membership_verify_token}"},"Positions":[{"PositionNumber":1,"Type":"Product","Pricing":{"PriceAfterFinding":50.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Zentralverband","ProductNumber":"42"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":2,"Type":"Product","Pricing":{"PriceAfterFinding":20.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Hütten Solidaritätsbeitrag","ProductNumber":"44"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":3,"Type":"Product","Pricing":{"PriceAfterFinding":25.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Alpengebühren","ProductNumber":"45"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Zentralverband","UserField4":"Familienmitglied"}},{"PositionNumber":4,"Type":"Product","Pricing":{"PriceAfterFinding":84.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Blüemlisalp","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Blüemlisalp","UserField2":#{groups(:bluemlisalp).id},"UserField4":"Familienmitglied"}},{"PositionNumber":5,"Type":"Product","Pricing":{"PriceAfterFinding":88.0},"Quantity":{"Ordered":1,"Charged":1,"Delivered":1},"Product":{"Description":"Beitrag Sektion SAC Matterhorn","ProductNumber":"98"},"Accounts":{},"UserFields":{"UserField1":"Beitrag Sektion SAC Matterhorn","UserField2":#{groups(:matterhorn).id},"UserField4":"Familienmitglied"}}]}\r
       --batch-boundary-3f8b206b-4aec-4616-bd28-c1ccbe572649--\r
     HTTP
   end

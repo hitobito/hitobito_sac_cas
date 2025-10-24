@@ -57,13 +57,13 @@ module Invoices
       def assign_subject_key(data)
         # Raise an error if abacus did not use the person.id as subject key
         # (even though SubjectInterface checked that the person.id is not taken yet in Abacus)
-        # rubocop:todo Layout/LineLength
-        raise "Abacus created subject with id=#{data[:id]} but person has id=#{entity.id}" if entity.id != data[:id].to_i
-        # rubocop:enable Layout/LineLength
+        if entity.id != data[:id].to_i
+          raise "Abacus created subject with id=#{data[:id]} but person has id=#{entity.id}"
+        end
 
-        # rubocop:todo Layout/LineLength
-        entity.update_column(:abacus_subject_key, data[:id]) unless entity.abacus_subject_key == data[:id]  # rubocop:disable Rails/SkipsModelValidations
-        # rubocop:enable Layout/LineLength
+        unless entity.abacus_subject_key == data[:id]
+          entity.update_column(:abacus_subject_key, data[:id]) # rubocop:disable Rails/SkipsModelValidations
+        end
       end
 
       def subject_attrs
@@ -122,8 +122,12 @@ module Invoices
       end
 
       def customer_attrs
+        # adjust change condition in SubjectInterface#update_customer if more keys are added here
         {
-          subject_id: subject_id
+          subject_id: subject_id,
+          customer_reminder: {
+            dispatch_type: (entity.correspondence == "digital") ? "Mail" : "Letter"
+          }
         }
       end
     end

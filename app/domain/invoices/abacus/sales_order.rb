@@ -82,7 +82,7 @@ module Invoices
         {
           user_field1: entity.id.to_s,
           user_field2: SOURCE_SYSTEM,
-          user_field3: entity.person.correspondence == "digital"
+          user_field3: (entity.person.correspondence == "digital") ? "Mail" : "Letter"
         }.merge(additional_user_fields)
       end
 
