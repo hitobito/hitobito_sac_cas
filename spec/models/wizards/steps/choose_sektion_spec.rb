@@ -65,11 +65,13 @@ describe Wizards::Steps::ChooseSektion do
 
       it "is invalid when triggered by normal user" do
         allow(wizard).to receive(:backoffice?).and_return(false)
-        expect(step).not_to be_valid
-        expect(step.errors[:base]).to eq [
-          "Wir bitten dich den gewünschten Sektionswechsel telefonisch oder per " \
-          "E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
-        ]
+        aggregate_failures do
+          expect(step).to be_invalid
+          expect(step.errors[:base]).to eq [
+            "Wir bitten dich den gewünschten Sektionswechsel telefonisch oder per " \
+            "E-Mail* zu beantragen. Nimm dazu bitte Kontakt mit uns auf."
+          ]
+        end
       end
 
       it "is valid when triggered by backoffice user" do
@@ -79,7 +81,7 @@ describe Wizards::Steps::ChooseSektion do
 
       it "is valid when triggered by normal user but self service is allowed" do
         Group::SektionsNeuanmeldungenSektion.destroy_all
-        expect(step).not_to be_valid
+        expect(step).to be_valid
       end
     end
   end
