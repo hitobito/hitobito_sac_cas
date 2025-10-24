@@ -9,11 +9,15 @@ class MitgliederExportsController < ApplicationController
   include AsyncDownload
 
   def create
-    authorize!(:export_mitglieder, group)
+    authorize!(:index_people, group)
 
-    with_async_download_cookie(:csv, filename, redirection_target: group) do |filename|
-      SacCas::Export::MitgliederExportJob.new(current_person.id, group.id,
-        filename: filename).enqueue!
+    with_async_download_cookie(:csv, filename,
+      redirection_target: group_people_path(group, returning: true)) do |filename|
+      SacCas::Export::MitgliederExportJob.new(
+        current_person.id,
+        group.layer_group_id,
+        filename: filename
+      ).enqueue!
     end
   end
 
@@ -24,6 +28,6 @@ class MitgliederExportsController < ApplicationController
   end
 
   def filename
-    "Adressen_#{group.id_padded}"
+    "Adressen_#{group.layer_group.id_padded}"
   end
 end

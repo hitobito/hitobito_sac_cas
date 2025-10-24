@@ -19,10 +19,6 @@ describe "groups/_actions_show_sac_cas.html.haml" do
     assign(:group, group)
   end
 
-  it "renders export link" do
-    expect(dom).to have_link "CSV Mitglieder", href: "/de/groups/578575972/mitglieder_exports"
-  end
-
   it "renders statistics download button" do
     expect(dom).to have_button "Mitgliederstatistik"
   end

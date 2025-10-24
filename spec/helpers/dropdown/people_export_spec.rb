@@ -14,15 +14,11 @@ describe Dropdown::PeopleExport do
   include UtilityHelper
 
   let(:user) { people(:admin) }
-  let(:params) { {controller: "people", group_id: groups(:bluemlisalp_mitglieder).id} }
+  let(:group) { groups(:bluemlisalp_mitglieder) }
+  let(:params) { {controller: "people", action: "index", group_id: group.id} }
   let(:options) { {} }
   let(:dropdown) do
-    Dropdown::PeopleExport.new(
-      self,
-      user,
-      params,
-      options
-    )
+    Dropdown::PeopleExport.new(self, user, params, options)
   end
 
   subject { Capybara.string(dropdown.to_s) }
@@ -36,16 +32,19 @@ describe Dropdown::PeopleExport do
   end
 
   context "people" do
+    let(:parent) { group }
+
     it "renders dropdown for people" do
       is_expected.to have_content "Export"
 
-      expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
+      expect(top_menu_entries).to match_array ["CSV", "Excel", "SAC Exporte", "vCard", "PDF"]
       expect(submenu_entries("CSV")).to match_array([
         "Spaltenauswahl",
         "Adressliste",
         "Empfänger Einzelpersonen",
         "Empfänger Familien"
       ])
+      expect(submenu_entries("SAC Exporte")).to match_array ["CSV Mitglieder"]
       expect(submenu_entries("PDF")).to match_array []
     end
   end

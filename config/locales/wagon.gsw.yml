@@ -1206,6 +1206,8 @@ gsw:
     adress_list: Adressliste
     list_for_participants: Liste für Teilnehmende
     list_for_leaders: Liste für Kurskader
+    sac: SAC Exporte
+    csv_mitglieder: CSV Mitglieder
 
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
@@ -1481,7 +1483,6 @@ gsw:
 
   groups:
     actions_show_sac_cas:
-      export_mitglieder: CSV Mitglieder
       create_yearly_membership_invoice: MV Jahresinkasso
       download_statistics_button: Mitgliederstatistik
     sektion_primary: Stammsektion

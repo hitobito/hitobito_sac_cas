@@ -17,6 +17,37 @@ module SacCas::Dropdown::PeopleExport
     end
   end
 
+  def init_items
+    super
+
+    sac_links if sektions_mitglieder?
+  end
+
+  def sac_links
+    item = Dropdown::Item.new(translate(:sac), "#")
+
+    previous = @items.index { |i| i.label == translate(:xlsx) }
+    @items.insert(previous + 1, item)
+    sac_sub_items.sort_by(&:label).each do |sub_item|
+      item.sub_items << sub_item
+    end
+    item
+  end
+
+  def sac_sub_items
+    [
+      csv_mitglieder_item
+    ]
+  end
+
+  def csv_mitglieder_item
+    Dropdown::Item.new(
+      translate(:csv_mitglieder),
+      template.group_mitglieder_exports_path(params[:group_id], format: :csv),
+      method: :post
+    )
+  end
+
   # original method in youth wagon
   def is_course?(event)
     event.course?
@@ -69,5 +100,11 @@ module SacCas::Dropdown::PeopleExport
     @details &&
       params[:controller] == "event/participations" &&
       template.entry.event.course?
+  end
+
+  def sektions_mitglieder?
+    params[:controller] == "people" &&
+      params[:action] == "index" &&
+      template.parent.is_a?(Group::SektionsMitglieder)
   end
 end
