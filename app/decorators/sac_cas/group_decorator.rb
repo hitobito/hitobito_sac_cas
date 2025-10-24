@@ -18,10 +18,12 @@ module SacCas::GroupDecorator
   def membership_admission_through_gs?
     return unless sektion_or_ortsgruppe?
 
-    object.children.without_deleted.none? { |group|
-      group.is_a?(Group::SektionsNeuanmeldungenSektion)
-    }
+    object
+      .children.without_deleted
+      .none? { |group| group.is_a?(Group::SektionsNeuanmeldungenSektion) }
   end
+  alias_method :membership_admission_self_service?,
+    :membership_admission_through_gs?
 
   def membership_self_registration_url
     return unless sektion_or_ortsgruppe?

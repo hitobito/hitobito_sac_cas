@@ -26,8 +26,7 @@ module Wizards
       end
 
       def self_service?
-        @self_service ||= Group::SektionsNeuanmeldungenSektion
-          .where(layer_group_id: group&.id).none?
+        @self_service ||= group&.decorate&.membership_admission_self_service?
       end
 
       private

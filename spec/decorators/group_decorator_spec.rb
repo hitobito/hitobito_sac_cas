@@ -196,14 +196,21 @@ describe GroupDecorator do
 
       it "returns true without child SektionsNeuanmeldungenSektion" do
         group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name).delete_all
+        expect(Group::SektionsNeuanmeldungenSektion.with_deleted.where(parent: group)).to be_empty
+
+        expect(decorator.membership_admission_through_gs?).to eq true
+      end
+
+      it "returns true with destroyed child SektionsNeuanmeldungenSektion" do
+        group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name).destroy_all
+        expect(Group::SektionsNeuanmeldungenSektion.deleted.where(parent: group)).to be_exists
 
         expect(decorator.membership_admission_through_gs?).to eq true
       end
 
       it "returns false with child SektionsNeuanmeldungenSektion" do
-        # rubocop:todo Layout/LineLength
-        expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).to be_exists
-        # rubocop:enable Layout/LineLength
+        expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name))
+          .to be_exists
 
         expect(decorator.membership_admission_through_gs?).to eq false
       end
@@ -213,9 +220,7 @@ describe GroupDecorator do
       let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
 
       it "returns true without child SektionsNeuanmeldungenSektion" do
-        # rubocop:todo Layout/LineLength
-        expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).not_to be_exists
-        # rubocop:enable Layout/LineLength
+        expect(Group::SektionsNeuanmeldungenSektion.with_deleted.where(parent: group)).to be_empty
 
         expect(decorator.membership_admission_through_gs?).to eq true
       end
@@ -224,9 +229,8 @@ describe GroupDecorator do
         Fabricate(Group::SektionsNeuanmeldungenSektion.sti_name,
           parent: groups(:bluemlisalp_ortsgruppe_ausserberg))
 
-        # rubocop:todo Layout/LineLength
-        expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name)).to be_exists
-        # rubocop:enable Layout/LineLength
+        expect(group.children.where(type: Group::SektionsNeuanmeldungenSektion.sti_name))
+          .to be_exists
 
         expect(decorator.membership_admission_through_gs?).to eq false
       end
