@@ -300,6 +300,30 @@ describe Invoices::SacMemberships::MembershipManager do
           :confirmation)
         expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
       end
+
+      describe "member in past year with neuanmeldung" do
+        let(:now) { Time.zone.now }
+
+        subject {
+          described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), now.year)
+        }
+
+        it "creates stammsektion role and enqueues SacMembershipsMailer with membership role from last year" do
+          Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
+            person: new_member,
+            beitragskategorie: :adult,
+            group: groups(:bluemlisalp_mitglieder),
+            start_on: Time.zone.now.change(month: 1, day: 1),
+            end_on: Time.zone.now.change(month: 3, day: 31))
+          expect {
+            subject.update_membership_status
+          }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
+          expect(new_member.confirmed_at).to be_within(2.seconds).of(now)
+          expect(new_member.sac_membership.active?).to eq(true)
+          expect(new_member.roles.count).to eq(1)
+          expect(new_member.sac_membership.stammsektion_role.end_on).to eq(now.end_of_year.to_date)
+        end
+      end
     end
 
     context "family" do

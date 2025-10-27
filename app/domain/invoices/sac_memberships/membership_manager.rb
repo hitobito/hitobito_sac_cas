@@ -24,10 +24,10 @@ class Invoices::SacMemberships::MembershipManager
     ActiveRecord::Base.transaction do
       if member_already?
         extend_membership_duration
-      elsif member_in_past_year?
-        create_new_membership_roles
       elsif neuanmeldung_for_stammsektion?
         create_stammsektion_membership_from_neuanmeldung
+      elsif member_in_past_year?
+        create_new_membership_roles
       elsif neuanmeldung_zusatzsektion?
         create_zusatzsektion_membership_from_neuanmeldung
       else
