@@ -68,7 +68,7 @@ module Memberships
       role.termination_reason_id = termination_reason_id
 
       role_end_on = end_on(role)
-      return role.mark_for_destruction if role_end_on < role.start_on
+      return role.mark_for_destruction if role.start_on&.>= terminate_on
 
       role.end_on = role_end_on
       role.write_attribute(:terminated, true)

@@ -103,6 +103,15 @@ describe Memberships::LeaveZusatzsektion do
         expect { Role.find(role.id) }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
+      it "deletes existing role when it has no start_on" do
+        role = create_role(:bluemlisalp_touren_und_kurse, "TourenleiterOhneQualifikation", owner: person)
+        role.update_columns(start_on: nil)
+        expect do
+          expect(leave.save).to eq true
+        end.to change { person.roles.count }.by(-2)
+        expect { Role.find(role.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
       context "with terminate_on at the end of year" do
         let(:terminate_on) { now.end_of_year.to_date }
 
