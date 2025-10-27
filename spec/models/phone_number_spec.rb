@@ -49,6 +49,20 @@ describe PhoneNumber do
         phone_number.label = "mobile"
         expect(phone_number).to be_valid
       end
+
+      it "does not normalize label" do
+        I18n.with_locale(:fr) do
+          label_translations = I18n.t(PhoneNumber.labels_translations_key)
+          expect(label_translations[:mobile]).to eq "Mobile"
+
+          phone_number.label = "mobile"
+
+          expect { phone_number.send(:normalize_label) }.not_to change { phone_number.label }
+
+          phone_number.save!
+          expect(phone_number.label).to eq "mobile"
+        end
+      end
     end
   end
 end

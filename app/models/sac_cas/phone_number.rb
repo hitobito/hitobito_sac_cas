@@ -20,6 +20,12 @@ module SacCas::PhoneNumber
 
   private
 
+  def normalize_label
+    # NOOP
+    # We do not normalize phone number labels as they are predefined and the user
+    # cannot enter arbitrary labels.
+  end
+
   def check_data_quality
     # prevent running the check twice
     # rubocop:todo Layout/LineLength
