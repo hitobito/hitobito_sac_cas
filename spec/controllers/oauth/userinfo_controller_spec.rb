@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Doorkeeper::OpenidConnect::UserinfoController do
+describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope do
   let(:user) { people(:admin) }
   let(:app) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
@@ -56,14 +56,14 @@ describe Doorkeeper::OpenidConnect::UserinfoController do
         it "includes membership_verify_url" do
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42?locale=de"
+          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
         end
 
         it "includes membership_verify_url even if expired" do
           mitglied.update!(end_on: 1.year.ago)
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42?locale=de"
+          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
         end
       end
     end
