@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe OidcClaimSetup do
+describe OidcClaimSetup, :outside_language_scope do
   let(:owner) { people(:admin) }
   let(:response) { :user_info }
   let(:token) { Doorkeeper::AccessToken.new(resource_owner_id: owner.id, scopes: scope) }
@@ -65,7 +65,7 @@ describe OidcClaimSetup do
       # rubocop:enable Layout/LineLength
 
       it "membership_verify_url is present" do
-        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42?locale=de"
+        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
       end
     end
 
