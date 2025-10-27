@@ -233,6 +233,7 @@ it:
           flat: Tariffa forfettaria
           budget: Budget
         description: Descrizione
+        leader_settlement: Kurskaderabrechnung
         name_leader: Denominazione Direzione del corso
         name_assistant_leader: Denominazione Direzione della classe
         name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
@@ -1204,6 +1205,10 @@ it:
     address_fields:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
 
+  course_compensation_categories:
+    form:
+      leader_settlement_caption: In Kurskaderabrechnung berücksichtigen
+
   devise:
     failure:
       signin_not_allowed: "Se l’indirizzo e-mail indicato coincide con quello a noi noto, nei prossimi minuti dovresti ricevere un’e-mail con cui poter ripristinare la tua password (controllare anche nella cartella spam)"
@@ -1900,6 +1905,7 @@ it:
       invoice_receiver:
         stammsektion: Destinatario fatture affiliazione CAS
         zusatzsektion: Destinatario fatture sezione aggiuntiva
+        deep: darunterliegende Ebenen miteinbeziehen
 
   public_events:
     show:

@@ -235,6 +235,7 @@ fr:
           flat: Forfait
           budget: Budget
         description: Description
+        leader_settlement: Kurskaderabrechnung
         name_leader: Désignation du ou de la responsable du cours
         name_assistant_leader: Désignation du ou de la chef·fe de classe
         name_leader_aspirant: Désignation du ou de la responsable du cours (aspirant)
@@ -1206,6 +1207,10 @@ fr:
     address_fields:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
 
+  course_compensation_categories:
+    form:
+      leader_settlement_caption: In Kurskaderabrechnung berücksichtigen
+
   devise:
     failure:
       signin_not_allowed: "Si nous connaissons l’adresse e-mail que tu as indiquée, tu devrais recevoir dans les prochaines minutes un e-mail te permettant de réinitialiser ton mot de passe (vérifie aussi dans ton dossier spam)."
@@ -1902,6 +1907,7 @@ fr:
       invoice_receiver:
         stammsektion: Destinataire de la facture Membre du CAS
         zusatzsektion: Destinataire de la facture Section complémentaire
+        deep: darunterliegende Ebenen miteinbeziehen
 
   public_events:
     show:

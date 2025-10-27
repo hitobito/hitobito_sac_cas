@@ -231,6 +231,7 @@ de:
           flat: Pauschale
           budget: Budget
         description: Beschreibung
+        leader_settlement: Kurskaderabrechnung
         name_leader: Bezeichnung Kursleitung
         name_assistant_leader: Bezeichnung Klassenleitung
         name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
@@ -1147,6 +1148,10 @@ de:
     address_fields:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert
 
+  course_compensation_categories:
+    form:
+      leader_settlement_caption: In Kurskaderabrechnung berücksichtigen
+
   devise:
     failure:
       signin_not_allowed: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
@@ -1834,6 +1839,7 @@ de:
       invoice_receiver:
         stammsektion: Rechnungsempfänger SAC Mitgliedschaft
         zusatzsektion: Rechnungsempfänger Zusatzsektion
+        deep: darunterliegende Ebenen miteinbeziehen
 
   public_events:
     show:
