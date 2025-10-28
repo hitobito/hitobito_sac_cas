@@ -1687,7 +1687,7 @@ fr:
       assistant_leader_file_prefix: Klassenleitung
       leader_aspirant_file_prefix: Responsable du cours (aspirant)
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
-      year_title: "Cours / randonnées du CAS %{year}"
+      year_title: Cours / courses du CAS
       title: Fiche technique
       greeting: "Bonjour %{name},\nTu trouveras ci-dessous les principales informations:"
       table:

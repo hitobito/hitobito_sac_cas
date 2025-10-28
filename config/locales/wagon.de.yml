@@ -1623,7 +1623,7 @@ de:
       assistant_leader_file_prefix: Klassenleitung
       leader_aspirant_file_prefix: Kursleitung_Aspirant
       assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
-      year_title: "SAC Kurse / Touren %{year}"
+      year_title: SAC Kurse / Touren
       title: Eckdatenblatt
       greeting: "Hallo %{name}\nNachfolgend senden wir dir die wichtigsten Informationen:"
       table:
