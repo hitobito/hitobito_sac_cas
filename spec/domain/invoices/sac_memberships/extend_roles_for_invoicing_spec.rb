@@ -301,6 +301,38 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect(person_turned_youth.reload.household_key).to be_present
         expect(other.reload.household_key).to be_present
       end
+
+      context "with multiple turned youth members" do
+        let!(:second_person_turned_youth) {
+          Fabricate(:person_with_role, group: bluemlisalp_mitglieder,
+            role: "Mitglied", beitragskategorie: :adult,
+            email: "sister@hitobito.example.com", confirmed_at: Time.current,
+            birthday: reference_date - 14.years)
+        }
+
+        before do
+          create_household(person_turned_youth, second_person_turned_youth, other)
+          membership_roles = Group::SektionsMitglieder::Mitglied.where(person: [person_turned_youth,
+            second_person_turned_youth, other],
+            beitragskategorie: :family)
+          person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
+          second_person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
+          membership_roles.update_all(start_on: new_role_start_on - 1.month, end_on: 1.month.from_now)
+        end
+
+        it "replaces family membership role for other with adult membership" do
+          person_turned_youth.update!(birthday: reference_date - 18.years)
+          second_person_turned_youth.update!(birthday: reference_date - 18.years)
+
+          expect { extend_roles }.to change { other.roles.with_inactive.count }.by(1)
+
+          # household keys should still be present since the household should only be completely
+          # dissolved on the reference_date. At that point the
+          # DestroyHouseholdsForInactiveMembershipsJob will take care of that.
+          expect(person_turned_youth.reload.household_key).to be_present
+          expect(other.reload.household_key).to be_present
+        end
+      end
     end
   end
 

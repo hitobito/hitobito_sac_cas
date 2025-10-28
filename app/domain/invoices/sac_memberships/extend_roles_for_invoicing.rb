@@ -33,11 +33,15 @@ module Invoices::SacMemberships
     private
 
     def convert_roles_to_youth
+      amount_turned_youth_per_household = Hash.new(0)
+
       roles_to_turn_youth.includes(:group, :person).find_each do |role|
-        if role.person.household.members.count == 2
-          role.person.household.people.each { leave_household(_1) }
+        person = role.person
+        amount_turned_youth_per_household[person.household_key] += 1
+        if dissolve_household?(person, amount_turned_youth_per_household)
+          person.household.people.each { leave_household(_1) }
         else
-          leave_household(role.person)
+          leave_household(person)
         end
       end
     end
@@ -60,18 +64,24 @@ module Invoices::SacMemberships
       end
     end
 
+    def dissolve_household?(person, amount_turned_youth_per_household)
+      remaining_household_people = person.household.members.count -
+        amount_turned_youth_per_household[person.household_key]
+      remaining_household_people <= 1
+    end
+
     def leave_household(person)
       Memberships::FamilyMutation.new(person, new_role_end_on: @prolongation_date,
         new_role_start_on: @new_role_start_on, replaced_role_end_on: old_role_end_on).leave!
     end
 
     def roles_to_turn_youth
-      roles_for_beitragskategorie_change(beitragskategorie: :family,
+      @roles_to_turn_youth ||= roles_for_beitragskategorie_change(beitragskategorie: :family,
         birthday_range: turned_youth_reference_age)
     end
 
     def roles_to_turn_adult
-      roles_for_beitragskategorie_change(beitragskategorie: :youth,
+      @roles_to_turn_adult ||= roles_for_beitragskategorie_change(beitragskategorie: :youth,
         birthday_range: turned_adult_reference_age)
     end
 
