@@ -258,9 +258,9 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect(zusatzsektion_role.end_on).to eq(prolongation_date)
       end
 
-      it "does not create role for adult zusatzsektion role" do
+      it "does not create role for adult zusatzsektion role but extends it" do
         person_turned_youth.update!(birthday: reference_date - 23.years)
-        Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+        zusatzsektion_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
           # rubocop:todo Layout/LineLength
           person: person_turned_youth, start_on: 1.year.ago, end_on: 1.month.from_now, beitragskategorie: :adult)
@@ -269,6 +269,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect { extend_roles }.to_not change {
           person_turned_youth.sac_membership.zusatzsektion_roles.count
         }
+        expect(zusatzsektion_role.reload.end_on).to eq(prolongation_date)
       end
     end
 

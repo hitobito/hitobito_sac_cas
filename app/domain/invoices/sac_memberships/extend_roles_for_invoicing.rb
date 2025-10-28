@@ -94,8 +94,17 @@ module Invoices::SacMemberships
     end
 
     def roles_to_extend
+      future_roles_of_the_same_type_join_sql = ApplicationRecord.sanitize_sql(["
+           LEFT JOIN roles AS future_roles_of_the_same_type ON
+        future_roles_of_the_same_type.person_id = roles.person_id AND
+        future_roles_of_the_same_type.type = roles.type AND
+        future_roles_of_the_same_type.start_on >= :new_role_start_on",
+        new_role_start_on: @new_role_start_on])
+
       Role.with_inactive.where(type: ROLES_TO_EXTEND, terminated: false,
         end_on: old_role_end_on...@prolongation_date, person_id: person_ids)
+        .joins(future_roles_of_the_same_type_join_sql)
+        .where(future_roles_of_the_same_type: {id: nil})
     end
 
     def person_ids
