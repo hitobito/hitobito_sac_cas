@@ -26,7 +26,7 @@ class Export::BackupMitgliederExportJob < BaseJob
   def csv
     @csv ||= begin
       user_id = nil
-      SacCas::Export::MitgliederExportJob.new(user_id, @group_id).data
+      Export::MitgliederCsvExportJob.new(user_id, @group_id).data
     end
   end
 

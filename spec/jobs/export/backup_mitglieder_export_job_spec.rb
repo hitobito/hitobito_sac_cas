@@ -80,7 +80,7 @@ describe Export::BackupMitgliederExportJob do
 
   context "perform" do
     it "tries to upload csv for group" do
-      csv_data = SacCas::Export::MitgliederExportJob.new(nil, group.id).data
+      csv_data = Export::MitgliederCsvExportJob.new(nil, group.id).data
       file_path_expectation = "1650/Adressen_578575972.csv"
 
       expect(sftp).to receive(:upload_file).with(csv_data, file_path_expectation)
