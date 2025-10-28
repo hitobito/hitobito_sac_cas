@@ -29,9 +29,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   context "with multiple people and roles" do
     let!(:person_ehrenmitglied_role) do
-      # rubocop:todo Layout/LineLength
-      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago, end_on: 1.month.from_now, start_on: nil,
-        # rubocop:enable Layout/LineLength
+      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago,
+        end_on: 1.month.from_now, start_on: nil,
         type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
     end
     let(:other_person) { people(:familienmitglied) }
@@ -49,10 +48,9 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
     it "only makes 5 database queries" do
       expect_query_count {
-        # rubocop:todo Layout/LineLength
         extend_roles
-      }.to eq(5) # SELECT in batches (2x) and SELECT for beitragskategorie change (2x) and UPDATE all (1x)
-      # rubocop:enable Layout/LineLength
+        # SELECT in batches (2x) and SELECT for beitragskategorie change (2x) and UPDATE all (1x)
+      }.to eq(5)
     end
 
     context "with multiple batches and various roles" do
@@ -78,9 +76,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   end
 
   it "doesnt extend terminated role" do
-    # rubocop:todo Layout/LineLength
-    person_mitglied_role.update!(end_on: prolongation_date - 1.month) # role can't be ended to be allowed to terminate
-    # rubocop:enable Layout/LineLength
+    # role can't be ended to be allowed to terminate
+    person_mitglied_role.update!(end_on: prolongation_date - 1.month)
     expect(Roles::Termination.new(role: person_mitglied_role,
       terminate_on: 1.day.from_now).call).to be_truthy
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
@@ -171,9 +168,9 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   describe "convert roles to youth" do
     let!(:person_turned_youth) {
       Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-        # rubocop:todo Layout/LineLength
-        beitragskategorie: :family, email: "dad@hitobito.example.com", birthday: reference_date - 18.years, confirmed_at: Time.current, sac_family_main_person: true, end_on: 1.month.from_now)
-      # rubocop:enable Layout/LineLength
+        beitragskategorie: :family, email: "dad@hitobito.example.com",
+        birthday: reference_date - 18.years, confirmed_at: Time.current,
+        sac_family_main_person: true, end_on: 1.month.from_now)
     }
     let!(:previous_membership_role) { person_turned_youth.roles.first }
 
@@ -212,9 +209,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
       it "does not create youth role for family if they already have a future extendable role after reference date" do
         # rubocop:enable Layout/LineLength
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person: person_turned_youth,
-          # rubocop:todo Layout/LineLength
-          group: bluemlisalp_mitglieder, start_on: reference_date + 2.months, end_on: 1.year.from_now)
-        # rubocop:enable Layout/LineLength
+          group: bluemlisalp_mitglieder, start_on: reference_date + 2.months,
+          end_on: 1.year.from_now)
 
         expect { extend_roles }.to_not change { person_turned_youth.roles.count }
       end
@@ -235,13 +231,12 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     context "zusatzsektion role" do
       it "creates role for family zusatzsektion role" do
         person_turned_youth.update!(birthday: reference_date - 23.years)
-        # rubocop:todo Layout/LineLength
-        previous_zusatzsektion_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
-          # rubocop:enable Layout/LineLength
+        previous_zusatzsektion_role = Fabricate(
+          Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          # rubocop:todo Layout/LineLength
-          person: person_turned_youth, start_on: 1.year.ago, end_on: 1.month.from_now, beitragskategorie: :family)
-        # rubocop:enable Layout/LineLength
+          person: person_turned_youth, start_on: 1.year.ago,
+          end_on: 1.month.from_now, beitragskategorie: :family
+        )
 
         expect { extend_roles }.to change {
           person_turned_youth.sac_membership.zusatzsektion_roles.with_inactive.count
@@ -251,9 +246,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         zusatzsektion_role = person_turned_youth.sac_membership.zusatzsektion_roles.active.last
         expect(zusatzsektion_role).to be_present
-        # rubocop:todo Layout/LineLength
-        expect(zusatzsektion_role.beitragskategorie).to eq("adult") # stimmt das? Kommt von FamilyMutation
-        # rubocop:enable Layout/LineLength
+        expect(zusatzsektion_role.beitragskategorie).to eq("adult")
         expect(zusatzsektion_role.start_on).to eq(new_role_start_on)
         expect(zusatzsektion_role.end_on).to eq(prolongation_date)
       end
@@ -262,9 +255,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         person_turned_youth.update!(birthday: reference_date - 23.years)
         zusatzsektion_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          # rubocop:todo Layout/LineLength
-          person: person_turned_youth, start_on: 1.year.ago, end_on: 1.month.from_now, beitragskategorie: :adult)
-        # rubocop:enable Layout/LineLength
+          person: person_turned_youth, start_on: 1.year.ago,
+          end_on: 1.month.from_now, beitragskategorie: :adult)
 
         expect { extend_roles }.to_not change {
           person_turned_youth.sac_membership.zusatzsektion_roles.count
@@ -276,9 +268,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     context "dissolving household" do
       let!(:person_turned_youth) {
         Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-          # rubocop:todo Layout/LineLength
-          beitragskategorie: :adult, email: "dad@hitobito.example.com", confirmed_at: Time.current, sac_family_main_person: true)
-        # rubocop:enable Layout/LineLength
+          beitragskategorie: :adult, email: "dad@hitobito.example.com",
+          confirmed_at: Time.current, sac_family_main_person: true)
       }
       let!(:other) { Fabricate(:person, birthday: reference_date - 24.years) }
 
@@ -340,9 +331,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   describe "convert roles to adult" do
     let!(:person_turned_adult) {
       Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-        # rubocop:todo Layout/LineLength
-        beitragskategorie: :youth, email: "dad@hitobito.example.com", birthday: reference_date - 23.years, confirmed_at: Time.current, end_on: 1.month.from_now)
-      # rubocop:enable Layout/LineLength
+        beitragskategorie: :youth, email: "dad@hitobito.example.com",
+        birthday: reference_date - 23.years, confirmed_at: Time.current, end_on: 1.month.from_now)
     }
     let!(:previous_membership_role) { person_turned_adult.roles.first }
 
@@ -379,9 +369,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
       it "does not create adult role for youth with future extendable role" do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person: person_turned_adult,
-          # rubocop:todo Layout/LineLength
-          group: bluemlisalp_mitglieder, start_on: reference_date + 2.months, end_on: 1.year.from_now)
-        # rubocop:enable Layout/LineLength
+          group: bluemlisalp_mitglieder, start_on: reference_date + 2.months,
+          end_on: 1.year.from_now)
 
         expect { extend_roles }.to_not change { person_turned_adult.roles.count }
       end
@@ -398,13 +387,12 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     context "zusatzsektion role" do
       it "creates role for youth zusatzsektion role" do
         person_turned_adult.update!(birthday: reference_date - 23.years)
-        # rubocop:todo Layout/LineLength
-        previous_zusatzsektion_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
-          # rubocop:enable Layout/LineLength
+        previous_zusatzsektion_role = Fabricate(
+          Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          # rubocop:todo Layout/LineLength
-          person: person_turned_adult, start_on: 1.year.ago, end_on: 1.month.from_now, beitragskategorie: :youth)
-        # rubocop:enable Layout/LineLength
+          person: person_turned_adult, start_on: 1.year.ago,
+          end_on: 1.month.from_now, beitragskategorie: :youth
+        )
 
         expect { extend_roles }.to change {
           person_turned_adult.sac_membership.zusatzsektion_roles.with_inactive.count
@@ -413,9 +401,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect(previous_zusatzsektion_role.reload.end_on).to eq(old_role_end_on)
 
         zusatzsektion_role = person_turned_adult.roles.active.where(
-          # rubocop:todo Layout/LineLength
-          type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name, beitragskategorie: :adult
-          # rubocop:enable Layout/LineLength
+          type: Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+          beitragskategorie: :adult
         ).last
         expect(zusatzsektion_role).to be_present
         expect(zusatzsektion_role.beitragskategorie).to eq("adult")
@@ -427,9 +414,8 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         person_turned_adult.update!(birthday: reference_date - 23.years)
         Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          # rubocop:todo Layout/LineLength
-          person: person_turned_adult, start_on: 1.year.ago, end_on: 1.month.from_now, beitragskategorie: :adult)
-        # rubocop:enable Layout/LineLength
+          person: person_turned_adult, start_on: 1.year.ago,
+          end_on: 1.month.from_now, beitragskategorie: :adult)
 
         expect { extend_roles }.to_not change {
           person_turned_adult.sac_membership.zusatzsektion_roles.count
