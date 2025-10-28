@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe SacCas::Export::MitgliederExportJob do
+describe Export::MitgliederCsvExportJob do
   let(:user) { people(:admin) }
   let(:group) { groups(:bluemlisalp) }
   subject(:job) { described_class.new(user.id, group.id) }
