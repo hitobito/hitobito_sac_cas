@@ -1,32 +1,24 @@
-name: "Lint and test"
+name: 'Lint and test'
 
 on:
-  push:
-    branches: # for all other branches, create a pull request to run the tests
-      - master
-      - sac-master
-    paths-ignore:
-      - "doc/**"
-      - "**.md"
   pull_request:
     paths-ignore:
-      - "doc/**"
-      - "**.md"
+      - 'doc/**'
+      - '**.md'
   workflow_dispatch: # Allow triggering manually
     inputs:
       core_ref:
-        description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
+        description: Use a specific version of the core for the workflow run. Defaults to master.
         type: string
         default: ''
       wagon_dependency_ref:
-        description: Use a specific version of the core for the workflow run. Defaults to the main branch (master, or sac-master during a merge freeze).
+        description: Use a specific version of the wagon dependency for the workflow run. Defaults to master.
         type: string
         default: ''
       distinct_id:
         description: An optional identifier which is simply output again, in order to identify the workflow run when triggered from another repo
         type: string
         default: ''
-
 jobs:
   wagon_tests:
     uses: hitobito/hitobito/.github/workflows/wagon-tests.yml@master
@@ -35,7 +27,6 @@ jobs:
       wagon_dependency_repository: hitobito_youth
       core_ref: ${{ inputs.core_ref }}
       wagon_dependency_ref: ${{ inputs.wagon_dependency_ref }}
-      main_branch: master
       distinct_id: ${{ inputs.distinct_id }}
     secrets:
       HEARTBEAT_URL: ${{ secrets.HEARTBEAT_URL }}
