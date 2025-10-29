@@ -12,9 +12,6 @@ module SacCas::GroupAbility
     on(Group) do
       permission(:any).may(:"index_event/tours").all
 
-      permission(:layer_and_below_read)
-        .may(:export_mitglieder)
-        .in_same_layer_or_below
       permission(:layer_and_below_full)
         .may(:create_yearly_membership_invoice)
         .if_backoffice

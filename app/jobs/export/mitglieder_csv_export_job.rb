@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class SacCas::Export::MitgliederExportJob < Export::ExportBaseJob
+class Export::MitgliederCsvExportJob < Export::ExportBaseJob
   ENCODING = "ISO-8859-1"
 
   self.parameters = PARAMETERS + [:group_id]

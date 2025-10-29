@@ -82,11 +82,10 @@ Rails.application.routes.draw do
           resource :approves, only: [:new, :create]
           resource :rejects, only: [:new, :create]
         end
+        namespace :export do
+          post :mitglieder_csv, to: "mitglieder_csv#create", format: "csv"
+        end
       end
-
-      resources :mitglieder_exports, only: [:create],
-        constraints: {format: "csv"},
-        defaults: {format: "csv"}
     end
 
     resources :termination_reasons, except: [:show]
