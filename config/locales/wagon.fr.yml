@@ -1710,7 +1710,7 @@ fr:
         language: Langue
         content:
           label: Contenu / Programme
-          text: Selon le programme du cours (si disponible) ou le programme des randonnées
+          text: Selon le programme du cours (si disponible) ou le programme des courses
         participant_requirements:
           label: Conditions requises pour les participant·es
           text: Selon l'annonce des cours/courses du CAS
