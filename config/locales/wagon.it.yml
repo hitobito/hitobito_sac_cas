@@ -1201,6 +1201,11 @@ it:
 
   # sort top level keys alphabetically from here on
 
+  abo_magazin_invoices:
+    create:
+      flash:
+        success: "La fattura desiderata viene creata e inviata ad Abacus"
+
   contactable:
     address_fields:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
@@ -1245,9 +1250,13 @@ it:
     terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
     undo_termination_link: Riattivare l’affiliazione al CAS
 
+  dropdown/people/sac_exports:
+    button: CAS Esportazioni
+    csv_mitglieder: CSV Membri
+
   dropdown/people_export:
-    recipients: Destinatari individuali
-    recipient_households: Destinatari famiglie
+    recipients: Per l’invio elettronico (via e-mail)
+    recipient_households: Per l’invio postale
     course_data: Elenco indirizzi e dati del corso
     adress_list: Adressliste
     list_for_participants: Liste für Teilnehmende
@@ -1494,7 +1503,6 @@ it:
 
   groups:
     actions_show_sac_cas:
-      export_mitglieder: Soci CSV
       create_yearly_membership_invoice: Incasso annuale AS
       download_statistics_button: Statistiche dei membri
     sektion_primary: Sezione base
@@ -1663,9 +1671,6 @@ it:
         info_text: "I seguenti ruoli e attributi sono stati ripristinati allo stato precedente alla disdetta:"
         family_number: "Numero di famiglie: %{number}"
 
-  mitglieder_exports:
-    export_enqueued: "L’esportazione viene avviata in background e scaricata una volta pronta."
-
   mounted_attributes:
     form_tabs:
       group/sac_cas:
@@ -1766,16 +1771,6 @@ it:
       emergency_number: "Numero di emergenza"
       emergency_contact: "Contatto di emergenza"
 
-  person:
-    history:
-      index_notice_sac_cas:
-        sections_info_html: >-
-          Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
-  abo_magazin_invoices:
-    create:
-      flash:
-        success: "La fattura desiderata viene creata e inviata ad Abacus"
-
   people:
     abo_magazin_invoices:
       new:
@@ -1871,6 +1866,9 @@ it:
         create_invoice: "Iniziare"
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
+  people/export/mitglieder_csv:
+    export_enqueued: "L’esportazione viene avviata in background e verrà scaricata al termine."
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1907,6 +1905,11 @@ it:
         zusatzsektion: Destinatario fatture sezione aggiuntiva
         deep: darunterliegende Ebenen miteinbeziehen
 
+  person:
+    history:
+      index_notice_sac_cas:
+        sections_info_html: >-
+          Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
   public_events:
     show:
       login_to_participate: Registrati per partecipare al corso

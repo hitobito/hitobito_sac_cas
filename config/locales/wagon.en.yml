@@ -1144,6 +1144,11 @@ en:
 
   # sort top level keys alphabetically from here on
 
+  abo_magazin_invoices:
+    create:
+      flash:
+        success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
+
   contactable:
     address_fields:
       updates_household_address: Address is updated for all family members
@@ -1187,6 +1192,10 @@ en:
     swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
     terminate_sac_membership_wizard_link: Terminate SAC membership
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
+
+  dropdown/people/sac_exports:
+    button: SAC Exporte
+    csv_mitglieder: CSV Mitglieder
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1436,7 +1445,6 @@ en:
 
   groups:
     actions_show_sac_cas:
-      export_mitglieder: CSV members
       create_yearly_membership_invoice: MV Annual collection
       download_statistics_button: Mitgliederstatistik
     sektion_primary: Core section
@@ -1601,9 +1609,6 @@ en:
         info_text: "Folgende Rollen und Attribute werden auf den Stand vor der Kündigung zurückgestellt:"
         family_number: "Familiennummer: %{number}"
 
-  mitglieder_exports:
-    export_enqueued: "Export is started in the background and downloaded after completion."
-
   mounted_attributes:
     form_tabs:
       group/sac_cas:
@@ -1704,16 +1709,6 @@ en:
       emergency_number: "Emergency number"
       emergency_contact: "Emergency contact"
 
-  person:
-    history:
-      index_notice_sac_cas:
-        sections_info_html: >-
-          Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
-  abo_magazin_invoices:
-    create:
-      flash:
-        success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
-
   people:
     abo_magazin_invoices:
       new:
@@ -1809,6 +1804,9 @@ en:
         create_invoice: "Start"
         submit_confirmation: >-
           Do you really want to start the annual collection run for all members? This run cannot be canceled.
+  people/export/mitglieder_csv:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+
   people/neuanmeldungen/approves:
     new:
       text:
@@ -1841,6 +1839,11 @@ en:
         zusatzsektion: Rechnungsempfänger Zusatzsektion
         deep: darunterliegende Ebenen miteinbeziehen
 
+  person:
+    history:
+      index_notice_sac_cas:
+        sections_info_html: >-
+          Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
   public_events:
     show:
       login_to_participate: "Melde dich an, um an diesem Kurs teilzunehmen"
