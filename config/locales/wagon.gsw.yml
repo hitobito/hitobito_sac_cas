@@ -1765,6 +1765,12 @@ gsw:
       emergency_number: "Notfallnummer"
       emergency_contact: "Notfallkontakt"
 
+  person:
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+
   people:
     abo_magazin_invoices:
       new:
@@ -1837,6 +1843,7 @@ gsw:
     tabs:
       history: Mitgliedschaften / Verlauf
       sac_remarks: Bemerkungen
+      subscriptions: Abos
       external_invoices: Rechnungen
 
     data_quality:
