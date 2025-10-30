@@ -41,8 +41,8 @@ describe Dropdown::PeopleExport do
       expect(submenu_entries("CSV")).to match_array([
         "Spaltenauswahl",
         "Adressliste",
-        "Empfänger Einzelpersonen",
-        "Empfänger Familien"
+        "Für den elektronischen Versand (E-Mail)",
+        "Für den postalischen Versand"
       ])
       expect(submenu_entries("PDF")).to match_array []
     end
@@ -66,8 +66,8 @@ describe Dropdown::PeopleExport do
       expect(submenu_entries("CSV")).to match_array([
         "Adressliste",
         "Alle Angaben",
-        "Empfänger Einzelpersonen",
-        "Empfänger Familien",
+        "Für den elektronischen Versand (E-Mail)",
+        "Für den postalischen Versand",
         "NDS-Lager",
         "Spaltenauswahl"
       ])
@@ -88,8 +88,8 @@ describe Dropdown::PeopleExport do
           ["Adressliste",
             "Adressliste und Kursdaten",
             "Alle Angaben",
-            "Empfänger Einzelpersonen",
-            "Empfänger Familien",
+            "Für den elektronischen Versand (E-Mail)",
+            "Für den postalischen Versand",
             "NDS-Kurs",
             "NDS-Lager",
             "SLRG-Kurs",
@@ -112,8 +112,8 @@ describe Dropdown::PeopleExport do
           expect(top_menu_entries).to match_array %w[CSV Excel vCard PDF]
           expect(submenu_entries("CSV")).to match_array(
             ["Adressliste",
-              "Empfänger Einzelpersonen",
-              "Empfänger Familien",
+              "Für den elektronischen Versand (E-Mail)",
+              "Für den postalischen Versand",
               "Spaltenauswahl"]
           )
           expect(submenu_entries("PDF")).to match_array([])
