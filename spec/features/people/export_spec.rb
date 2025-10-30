@@ -17,7 +17,7 @@ describe "people export", :js do
     visit group_people_path(group_id: group.id)
     click_link("Export")
     find_link("CSV").hover
-    click_link("Empfänger Einzelpersonen")
+    click_link("Für den elektronischen Versand (E-Mail)")
 
     expect(page).to have_selector(".info-bar .alert-info",
       text: "Die Downloads werden vorbereitet, bitte warten.")
@@ -27,7 +27,7 @@ describe "people export", :js do
     visit group_people_path(group_id: group.id)
     click_link("Export")
     find_link("CSV").hover
-    click_link("Empfänger Familien")
+    click_link("Für den postalischen Versand")
 
     expect(page).to have_selector(".info-bar .alert-info",
       text: "Die Downloads werden vorbereitet, bitte warten.")
