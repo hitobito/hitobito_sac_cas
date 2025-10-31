@@ -819,8 +819,8 @@ de:
         one: Andere
         description: Andere
       group/kommission/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/kommission/mitglied:
         one: Mitglied
         description: Mitglied
@@ -925,8 +925,8 @@ de:
         huettenwartspartner: Hüttenwartspartner*in
         schluesseldepot: Schlüsseldepot
       group/sac_cas_verband/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sac_cas_verband/mitglied:
         one: Mitglied
         description: Mitglied
@@ -1012,8 +1012,8 @@ de:
         one: Schreibrecht
         description: Schreibrecht
       group/sektions_vorstand/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sektions_vorstand/mitglied:
         one: Mitglied
         description: Mitglied
@@ -1106,8 +1106,8 @@ de:
         one: Schreibrecht
         description: Schreibrecht
       group/sektions_kommission/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sektions_kommission/mitglied:
         one: Mitglied
         description: Mitglied
@@ -1118,8 +1118,8 @@ de:
         one: Mitglied
         description: Mitglied
       group/sektions_kommission_huetten/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sektions_kommission_huetten/andere:
         one: Andere
         description: Andere
@@ -1127,8 +1127,8 @@ de:
         one: Mitglied
         description: Mitglied
       group/sektions_kommission_touren/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sektions_kommission_touren/andere:
         one: Andere
         description: Andere
@@ -1136,8 +1136,8 @@ de:
         one: Mitglied
         description: Mitglied
       group/sektions_kommission_umwelt_und_kultur/praesidium:
-        one: Präsidium
-        description: Präsidium
+        one: Leitung
+        description: Leitung
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Andere
         description: Andere

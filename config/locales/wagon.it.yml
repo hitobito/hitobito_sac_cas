@@ -876,8 +876,8 @@ it:
         one: Altro
         description: Altro
       group/kommission/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/kommission/mitglied:
         one: Socio
         description: Socio
@@ -982,8 +982,8 @@ it:
         huettenwartspartner: Partner del custode
         schluesseldepot: Deposito chiavi
       group/sac_cas_verband/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sac_cas_verband/mitglied:
         one: Socio
         description: Socio
@@ -1069,8 +1069,8 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_vorstand/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sektions_vorstand/mitglied:
         one: Socio
         description: Socio
@@ -1163,8 +1163,8 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_kommission/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sektions_kommission/mitglied:
         one: Socio
         description: Socio
@@ -1175,8 +1175,8 @@ it:
         one: Socio
         description: Socio
       group/sektions_kommission_huetten/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sektions_kommission_huetten/andere:
         one: Altro
         description: Altro
@@ -1184,8 +1184,8 @@ it:
         one: Socio
         description: Socio
       group/sektions_kommission_touren/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sektions_kommission_touren/andere:
         one: Altro
         description: Altro
@@ -1193,8 +1193,8 @@ it:
         one: Socio
         description: Socio
       group/sektions_kommission_umwelt_und_kultur/praesidium:
-        one: Presidenza
-        description: Presidenza
+        one: Direzione
+        description: Direzione
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Altro
         description: Altro

@@ -878,8 +878,8 @@ fr:
         one: Autres
         description: Autres
       group/kommission/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/kommission/mitglied:
         one: Membre
         description: Membre
@@ -984,8 +984,8 @@ fr:
         huettenwartspartner: Partenaire gardien·ne de cabane
         schluesseldepot: Dépôt de clés
       group/sac_cas_verband/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sac_cas_verband/mitglied:
         one: Membre
         description: Membre
@@ -1071,8 +1071,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_vorstand/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sektions_vorstand/mitglied:
         one: Membre
         description: Membre
@@ -1165,8 +1165,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_kommission/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sektions_kommission/mitglied:
         one: Membre
         description: Membre
@@ -1177,8 +1177,8 @@ fr:
         one: Membre
         description: Membre
       group/sektions_kommission_huetten/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sektions_kommission_huetten/andere:
         one: Autres
         description: Autres
@@ -1186,8 +1186,8 @@ fr:
         one: Membre
         description: Membre
       group/sektions_kommission_touren/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sektions_kommission_touren/andere:
         one: Autres
         description: Autres
@@ -1195,8 +1195,8 @@ fr:
         one: Membre
         description: Membre
       group/sektions_kommission_umwelt_und_kultur/praesidium:
-        one: Présidence
-        description: Présidence
+        one: Direction
+        description: Direction
       group/sektions_kommission_umwelt_und_kultur/andere:
         one: Autres
         description: Autres
