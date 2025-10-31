@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Doorkeeper::OpenidConnect::UserinfoController do
+describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope do
   let(:user) { people(:admin) }
   let(:app) { Oauth::Application.create!(name: "MyApp", redirect_uri: redirect_uri) }
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
