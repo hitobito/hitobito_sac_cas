@@ -1,0 +1,16 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+#jubilare_form
+  %p.muted
+
+  = standard_form(model, url: group_people_export_jubilare_path(model.group), method: :post) do |f|
+    = f.error_messages
+
+    = f.labeled_date_field(:reference_date, label_class: "col-3")
+
+    = f.labeled_number_field(:membership_years, label_class: "col-3", help_inline: t('.membership_years_help'))
+
+    = form_buttons(f, submit_label: t('.download'), cancel_url: "#", toolbar_class: "offset-3")

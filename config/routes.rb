@@ -83,6 +83,7 @@ Rails.application.routes.draw do
           resource :rejects, only: [:new, :create]
         end
         namespace :export do
+          post :jubilare, to: "jubilare#create"
           post :mitglieder_csv, to: "mitglieder_csv#create", format: "csv"
         end
       end

@@ -17,8 +17,19 @@ class Dropdown::People::SacExports < Dropdown::Base
   private
 
   def init_items
+    add_jubilare_item
     add_csv_mitglieder_item
     @items.sort_by!(&:label)
+  end
+
+  def add_jubilare_item
+    add_item_with_popover(
+      translate(:jubilare),
+      template.render(
+        "people/export/popover_jubilare",
+        model: People::Export::JubilareForm.new(group: group)
+      )
+    )
   end
 
   def add_csv_mitglieder_item
@@ -27,5 +38,14 @@ class Dropdown::People::SacExports < Dropdown::Base
       template.group_people_export_mitglieder_csv_path(group.id, format: :csv),
       method: :post
     )
+  end
+
+  def add_item_with_popover(label, content)
+    add_item(label, "javascript:void(0)",
+      "data-bs-toggle": "popover",
+      "data-anchor": "##{id}",
+      "data-bs-title": label,
+      "data-bs-placement": :bottom,
+      "data-bs-content": content)
   end
 end
