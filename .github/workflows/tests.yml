@@ -2,7 +2,7 @@ name: 'Lint and test'
 
 on:
   push:
-    - master
+    branches: [ master ]
   pull_request:
     paths-ignore:
       - 'doc/**'
