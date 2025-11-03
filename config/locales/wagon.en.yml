@@ -1769,6 +1769,7 @@ en:
     tabs:
       history: Memberships / History
       sac_remarks: Remarks
+      subscriptions: Abos
       external_invoices: Invoices
 
     data_quality:
@@ -1844,6 +1845,11 @@ en:
       index_notice_sac_cas:
         sections_info_html: >-
           Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+
   public_events:
     show:
       login_to_participate: "Melde dich an, um an diesem Kurs teilzunehmen"

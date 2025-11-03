@@ -1833,6 +1833,7 @@ fr:
     tabs:
       history: Adhésions / Historique
       sac_remarks: Remarques
+      subscriptions: Abos
       external_invoices: Factures
 
     data_quality:
@@ -1912,6 +1913,11 @@ fr:
       index_notice_sac_cas:
         sections_info_html: >-
           Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+
   public_events:
     show:
       login_to_participate: Connecte-toi pour participer à ce cours

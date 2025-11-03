@@ -1831,6 +1831,7 @@ it:
     tabs:
       history: Affiliazioni / Cronologia
       sac_remarks: Osservazioni
+      subscriptions: Abos
       external_invoices: Fatture
 
     data_quality:
@@ -1910,6 +1911,11 @@ it:
       index_notice_sac_cas:
         sections_info_html: >-
           Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
+
   public_events:
     show:
       login_to_participate: Registrati per partecipare al corso
