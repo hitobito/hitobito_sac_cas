@@ -19,6 +19,7 @@ class Dropdown::People::SacExports < Dropdown::Base
   def init_items
     add_jubilare_item
     add_csv_mitglieder_item
+    add_eintritte_item
     @items.sort_by!(&:label)
   end
 
@@ -28,6 +29,16 @@ class Dropdown::People::SacExports < Dropdown::Base
       template.render(
         "people/export/popover_jubilare",
         model: People::Export::JubilareForm.new(group: group)
+      )
+    )
+  end
+
+  def add_eintritte_item
+    add_item_with_popover(
+      translate(:eintritte),
+      template.render(
+        "people/export/popover_eintritte",
+        model: People::Export::EintritteForm.new(group: group)
       )
     )
   end
