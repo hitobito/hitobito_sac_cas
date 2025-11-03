@@ -1765,12 +1765,6 @@ gsw:
       emergency_number: "Notfallnummer"
       emergency_contact: "Notfallkontakt"
 
-  person:
-    subscriptions:
-      index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
-
   people:
     abo_magazin_invoices:
       new:
@@ -1927,6 +1921,10 @@ gsw:
           Hier kannst du deine Mitgliedschaften verwalten.
           Informationen zu den verschiedenen SAC Sektionen findest du unter
           <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
+    subscriptions:
+      index:
+        my_subscriptions: Meine Abos
+        available_subscriptions: Verfügbare Abos
 
   public_events:
     show:
