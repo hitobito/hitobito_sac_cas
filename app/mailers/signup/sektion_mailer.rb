@@ -33,14 +33,17 @@ class Signup::SektionMailer < ApplicationMailer
   end
 
   def placeholder_person_ids
-    # rubocop:todo Layout/LineLength
-    if @person.sac_family_main_person && @beitragskategorie.to_s == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
-      # rubocop:enable Layout/LineLength
+    if family_main_person?
       family_ids = @person.household_people.distinct.order(:id).pluck(:id)
       family_ids.present? ? "#{@person.id} (#{family_ids.join(", ")})" : @person.id
     else
       @person.id
     end
+  end
+
+  def family_main_person?
+    @person.sac_family_main_person &&
+      @beitragskategorie.to_s == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
   end
 
   def placeholder_section_name
