@@ -31,9 +31,6 @@ describe "Event Signup", :js do
     let(:event) { Fabricate(:event, groups: [group]) }
 
     it "has two step wizard" do
-      allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
-      allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
-
       visit group_event_path(group_id: group, id: event.id)
       click_on "Anmelden"
       expect(page).to have_css ".stepwizard-step", count: 2
@@ -78,9 +75,8 @@ describe "Event Signup", :js do
       expect(page).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
       expect(page).to have_checked_field("event_participation[newsletter]")
       check "Ja, ich erkläre mich mit den AGB einverstanden"
-      # rubocop:todo Layout/LineLength
-      check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
-      # rubocop:enable Layout/LineLength
+      check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis " \
+            "meiner Erziehungsberechtigten habe"
       click_on "Anmelden"
       expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
     end
@@ -124,9 +120,8 @@ describe "Event Signup", :js do
           check "Ja, ich erkläre mich mit den AGB einverstanden"
           expect(page).to have_checked_field "Ja, ich erkläre mich mit den AGB einverstanden"
         end
-        # rubocop:todo Layout/LineLength
-        check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis meiner Erziehungsberechtigten habe"
-        # rubocop:enable Layout/LineLength
+        check "Ich bestätige, dass ich mindestens 18 Jahre alt bin oder das Einverständnis " \
+              "meiner Erziehungsberechtigten habe"
         click_on "Anmelden"
         expect(page).to have_content "Es wurde eine Voranmeldung erstellt"
       end

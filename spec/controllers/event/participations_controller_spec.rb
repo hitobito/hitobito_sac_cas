@@ -72,11 +72,6 @@ describe Event::ParticipationsController do
     render_views
     let(:dom) { Capybara::Node::Simple.new(response.body) }
 
-    before do
-      allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
-      allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
-    end
-
     it "does not render aside for event" do
       event = Fabricate(:event)
       get :new, params: {group_id: event.groups.first.id, event_id: event.id}
