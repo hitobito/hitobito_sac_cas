@@ -48,7 +48,7 @@ module Dropdown::Events
           send(custom_method, label, link)
         elsif optional_email_popover?(state)
           add_item_with_popover(label,
-            template.render("events/popover_emails_optional", state:, label:))
+            template.render("events/popover_emails_optional", state:))
         else
           add_item(label, link, method: :put, "data-confirm": confirm_text_for(state))
         end
@@ -78,7 +78,8 @@ module Dropdown::Events
         "data-bs-toggle": "popover",
         "data-anchor": "##{ID}",
         "data-bs-placement": :bottom,
-        "data-bs-content": content)
+        "data-bs-content": content,
+        "data-bs-title": label)
     end
 
     def i18n_base_key
