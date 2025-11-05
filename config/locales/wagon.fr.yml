@@ -1071,8 +1071,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_vorstand/praesidium:
-        one: Direction
-        description: Direction
+        one: Présidence
+        description: Présidence
       group/sektions_vorstand/mitglied:
         one: Membre
         description: Membre
@@ -1833,7 +1833,7 @@ fr:
     tabs:
       history: Adhésions / Historique
       sac_remarks: Remarques
-      subscriptions: Abos
+      subscriptions: Services & Abonnements
       external_invoices: Factures
 
     data_quality:
@@ -1915,8 +1915,8 @@ fr:
           Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
     subscriptions:
       index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
+        my_subscriptions: Services & Abonnements Souscrits
+        available_subscriptions: Pas encore abonné Services & Abonnements
 
   public_events:
     show:

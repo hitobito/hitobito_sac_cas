@@ -1012,8 +1012,8 @@ de:
         one: Schreibrecht
         description: Schreibrecht
       group/sektions_vorstand/praesidium:
-        one: Leitung
-        description: Leitung
+        one: Präsidium
+        description: Präsidium
       group/sektions_vorstand/mitglied:
         one: Mitglied
         description: Mitglied
@@ -1769,7 +1769,7 @@ de:
     tabs:
       history: Mitgliedschaften / Verlauf
       sac_remarks: Bemerkungen
-      subscriptions: Abos
+      subscriptions: Services & Abos
       external_invoices: Rechnungen
 
     data_quality:
@@ -1847,8 +1847,8 @@ de:
           Hier kannst du deine Mitgliedschaften verwalten. Informationen zu den verschiedenen SAC Sektionen findest du unter <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/de/der-sac/sektionen</a>-
     subscriptions:
       index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
+        my_subscriptions: Abonnierte Services & Abos
+        available_subscriptions: Noch nicht abonnierte Services & Abos
 
   public_events:
     show:

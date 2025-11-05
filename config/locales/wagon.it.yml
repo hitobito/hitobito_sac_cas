@@ -1069,8 +1069,8 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_vorstand/praesidium:
-        one: Direzione
-        description: Direzione
+        one: Presidenza
+        description: Presidenza
       group/sektions_vorstand/mitglied:
         one: Socio
         description: Socio
@@ -1831,7 +1831,7 @@ it:
     tabs:
       history: Affiliazioni / Cronologia
       sac_remarks: Osservazioni
-      subscriptions: Abos
+      subscriptions: Servizi & Abbonamenti
       external_invoices: Fatture
 
     data_quality:
@@ -1913,8 +1913,8 @@ it:
           Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
     subscriptions:
       index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
+        my_subscriptions: Servizi in abbonamento & abbonamenti
+        available_subscriptions: Non ancora abbonato Servizi & abbonamenti
 
   public_events:
     show:
