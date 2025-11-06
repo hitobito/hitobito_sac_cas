@@ -104,8 +104,13 @@ module Export::Tabular::People
     end
 
     def values(entry, format = nil)
-      entry.membership_years += membership_years_offset
-      super
+      return super unless membership_years_offset.positive?
+
+      super.tap { _1[membership_years_attr_index] += membership_years_offset }
+    end
+
+    def membership_years_attr_index
+      @membership_years_attr_index ||= attributes.find_index(:membership_years)
     end
 
     def attribute_label(attr)

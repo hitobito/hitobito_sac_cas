@@ -31,7 +31,7 @@ module Export::Tabular::People
     end
 
     def sektion_entry_on
-      roles_in_layer(*SacCas::MITGLIED_ROLES).map(&:start_on).min
+      roles_in_group(*SacCas::MITGLIED_ROLES).map(&:start_on).min
     end
 
     def terminate_on
@@ -48,11 +48,11 @@ module Export::Tabular::People
     end
 
     def ehrenmitglied
-      yes_or_no(active_role_in_layer?(Group::SektionsMitglieder::Ehrenmitglied))
+      yes_or_no(active_role_in_group?(Group::SektionsMitglieder::Ehrenmitglied))
     end
 
     def beguenstigt
-      yes_or_no(active_role_in_layer?(Group::SektionsMitglieder::Beguenstigt))
+      yes_or_no(active_role_in_group?(Group::SektionsMitglieder::Beguenstigt))
     end
 
     def birthday
@@ -81,20 +81,20 @@ module Export::Tabular::People
       entry.roles_unscoped.select { |role| role_classes.include?(role.class) }
     end
 
-    def roles_in_layer(*role_classes)
+    def roles_in_group(*role_classes)
       roles(*role_classes).select { |role| role.group_id == group.id }
     end
 
-    def active_role_in_layer(*role_classes)
-      roles_in_layer(*role_classes).find(&:active?)
+    def active_role_in_group(*role_classes)
+      roles_in_group(*role_classes).find(&:active?)
     end
 
-    def active_role_in_layer?(*role_classes)
-      active_role_in_layer(*role_classes).present?
+    def active_role_in_group?(*role_classes)
+      active_role_in_group(*role_classes).present?
     end
 
     def membership_role
-      @membership_role ||= active_role_in_layer(*SacCas::MITGLIED_ROLES)
+      @membership_role ||= active_role_in_group(*SacCas::MITGLIED_ROLES)
     end
 
     def yes_or_no(boolean)

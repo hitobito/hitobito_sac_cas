@@ -11,7 +11,6 @@ class People::Export::JubilareController < ApplicationController
   def create
     authorize!(:index_people, group)
 
-    entry.attributes = model_params
     if entry.valid?
       export_in_background
     else
