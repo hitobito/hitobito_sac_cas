@@ -6,37 +6,37 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module People::Export
-  class JubilareController < ApplicationController
+  class EintritteController < ApplicationController
     include AsyncDownload
     include PopoverExportable
 
     private
 
     def entry
-      @entry ||= People::Export::JubilareForm.new(model_params)
+      @entry ||= People::Export::EintritteForm.new(model_params)
     end
 
     def model_params
       params
-        .require(:people_export_jubilare_form)
-        .permit(:reference_date, :membership_years)
+        .require(:people_export_eintritte_form)
+        .permit(:from, :to)
         .merge(group: group)
     end
 
     def enqueue_job(filename)
-      Export::JubilareExportJob.new(
+      Export::EintritteExportJob.new(
         current_person.id,
         group.id,
         filename,
-        entry.reference_date,
-        entry.membership_years
+        entry.from,
+        entry.to
       ).enqueue!
     end
 
     def rerender_form(status)
       render turbo_stream: turbo_stream.replace(
-        "jubilare_form",
-        partial: "people/export/popover_jubilare",
+        "eintritte_form",
+        partial: "people/export/popover_eintritte",
         locals: {model: entry}
       ), status: status
     end
@@ -46,7 +46,8 @@ module People::Export
         sektion.id,
         sektion.name,
         translate("filename"),
-        entry.reference_date.strftime("%Y%m%d")
+        entry.from.strftime("%Y%m%d"),
+        entry.to.strftime("%Y%m%d")
       ]
       "#{config.join("_")}-#{Date.current.strftime("%Y%m%d")}"
     end
