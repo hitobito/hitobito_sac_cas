@@ -32,9 +32,6 @@ describe :event_participation, js: true do
   end
 
   it "creates an event participation" do
-    allow_any_instance_of(ActionView::Base).to receive_messages(add_another: false)
-    allow_any_instance_of(ActionView::Base).to receive_messages(add_another_label: "")
-
     visit group_event_path(group_id: group, id: event)
 
     click_link("Anmelden")
@@ -98,9 +95,8 @@ describe :event_participation, js: true do
         visit group_event_path(group_id: group, id: event)
         click_button "Abmelden"
         within(".popover-body") { click_on "Abmelden" }
-        # rubocop:todo Layout/LineLength
-        expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
-        # rubocop:enable Layout/LineLength
+        expect(find_field("Begründung").native.attribute("validationMessage"))
+          .to match(/Please fill (out|in) this field./)
       end
 
       it "can cancel with reason" do
@@ -118,22 +114,20 @@ describe :event_participation, js: true do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") { click_on "Abmelden" }
-        # rubocop:todo Layout/LineLength
-        expect(find_field("Begründung").native.attribute("validationMessage")).to match(/Please fill (out|in) this field./)
-        # rubocop:enable Layout/LineLength
+        expect(find_field("Begründung").native.attribute("validationMessage"))
+          .to match(/Please fill (out|in) this field./)
       end
 
       it "shows cancellation cost in hint text" do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
-          # rubocop:todo Layout/LineLength
-          # rubocop:todo Layout/LineLength
-          expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
-                                    "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
-                                    "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF 20.0 in Rechnung gestellt.")
-          # rubocop:enable Layout/LineLength
-          # rubocop:enable Layout/LineLength
+          expect(page).to have_text(
+            "Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
+            "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
+            "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von " \
+            "CHF 20.0 in Rechnung gestellt."
+          )
         end
       end
 
@@ -142,26 +136,23 @@ describe :event_participation, js: true do
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
-          # rubocop:todo Layout/LineLength
-          expect(page).to have_no_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest?")
-          # rubocop:enable Layout/LineLength
+          expect(page).to have_no_text(
+            "Bist du sicher, dass du mit der Abmeldung fortfahren möchtest?"
+          )
         end
       end
 
-      # rubocop:todo Layout/LineLength
-      it "shows cancellation cost of zero in hint text if participation does not have a price associated" do
-        # rubocop:enable Layout/LineLength
+      it "shows cancellation cost of zero in hint text if participation does not have a price associated" do # rubocop:disable Layout/LineLength
         participation.update!(price: 0)
         visit group_event_participation_path(group_id: group, event_id: event, id: participation.id)
         click_button "Abmelden"
         within(".popover-body") do
-          # rubocop:todo Layout/LineLength
-          # rubocop:todo Layout/LineLength
-          expect(page).to have_text("Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
-                                    "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
-                                    "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF 0.0 in Rechnung gestellt.")
-          # rubocop:enable Layout/LineLength
-          # rubocop:enable Layout/LineLength
+          expect(page).to have_text(
+            "Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? " \
+            "Eine Abmeldung kann nicht rückgängig gemacht werden. " \
+            "Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von " \
+            "CHF 0.0 in Rechnung gestellt."
+          )
         end
       end
 
