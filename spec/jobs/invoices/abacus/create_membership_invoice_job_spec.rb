@@ -30,6 +30,7 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
   let(:discount) { nil }
   let(:new_entry) { false }
   let(:dont_send) { false }
+  let(:dispatch_type) { nil }
 
   subject(:job) do
     described_class.new(
@@ -37,16 +38,22 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
       reference_date,
       discount: discount,
       new_entry: new_entry,
-      dont_send: dont_send
+      dont_send: dont_send,
+      dispatch_type: dispatch_type
     )
   end
 
   before { allow(job).to receive(:client).and_return(client) }
 
   it "transmits subject, updates invoice total and transmit_sales_order" do
-    order = satisfy { |o| o.full_attrs[:process_flow_number] == 3 }
-    allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
-    allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create).with(order)
+    order = satisfy do |o|
+      o.full_attrs[:process_flow_number] == 3 &&
+        o.full_attrs[:user_fields][:user_field3] == "Mail"
+    end
+    allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+      .to receive(:transmit).and_return(true)
+    allow_any_instance_of(Invoices::Abacus::SalesOrderInterface)
+      .to receive(:create).with(order)
     expect do
       job.perform
     end.to change { external_invoice.reload.total }
@@ -57,10 +64,27 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     it "uses special process flow number if invoice should not be sent" do
       order = satisfy { |o| o.full_attrs[:process_flow_number] == 6 }
-      # rubocop:todo Layout/LineLength
-      allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_return(true)
-      # rubocop:enable Layout/LineLength
-      allow_any_instance_of(Invoices::Abacus::SalesOrderInterface).to receive(:create).with(order)
+      allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+        .to receive(:transmit).and_return(true)
+      allow_any_instance_of(Invoices::Abacus::SalesOrderInterface)
+        .to receive(:create).with(order)
+      job.perform
+    end
+  end
+
+  context "with custom dispatch type" do
+    let(:dispatch_type) { :print }
+
+    it "is used in user field" do
+      order = satisfy do |o|
+        o.full_attrs[:process_flow_number] == 3 &&
+          o.full_attrs[:user_fields][:user_field3] == "Letter"
+      end
+      allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+        .to receive(:transmit).and_return(true)
+      allow_any_instance_of(Invoices::Abacus::SalesOrderInterface)
+        .to receive(:create).with(order)
+
       job.perform
     end
   end
@@ -77,9 +101,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        # rubocop:todo Layout/LineLength
-        expect(log_entry.message).to eq "Für die gewünschte Sektion besteht am gewählten Datum keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
-        # rubocop:enable Layout/LineLength
+        expect(log_entry.message).to eq "Für die gewünschte Sektion besteht am gewählten Datum " \
+          "keine Mitgliedschaft. Es wurde entsprechend keine Rechnung erstellt."
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -95,9 +118,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
           .and change { external_invoice.reload.state }.to("error")
         expect(log_entry.level).to eq "error"
         expect(log_entry.category).to eq "rechnungen"
-        # rubocop:todo Layout/LineLength
-        expect(log_entry.message).to eq "Für die gewünschte Person und Sektion fallen keine Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
-        # rubocop:enable Layout/LineLength
+        expect(log_entry.message).to eq "Für die gewünschte Person und Sektion fallen keine " \
+         "Mitgliedschaftsgebühren an, oder diese sind bereits über andere Rechnungen abgedeckt."
         expect(log_entry.subject).to eq external_invoice
       end
     end
@@ -108,9 +130,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     it "raises without creating log or updating invoice state" do
       expect do
-        # rubocop:todo Layout/LineLength
-        allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
-        # rubocop:enable Layout/LineLength
+        allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+          .to receive(:transmit).and_raise("ouch")
         job.perform
       end.to raise_error(StandardError, "ouch")
         .and not_change { HitobitoLogEntry.count }
@@ -119,9 +140,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
 
     context "when running via worker" do
       it "creates log entry with error message" do
-        # rubocop:todo Layout/LineLength
-        allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
-        # rubocop:enable Layout/LineLength
+        allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+          .to receive(:transmit).and_raise("ouch")
+
         expect do
           Delayed::Worker.new.run(job.enqueue!)
         end.to change { HitobitoLogEntry.count }.by(1)
@@ -134,9 +155,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
       end
 
       it "updates invoice state to error when all attemps fail" do
-        # rubocop:todo Layout/LineLength
-        allow_any_instance_of(Invoices::Abacus::SubjectInterface).to receive(:transmit).and_raise("ouch")
-        # rubocop:enable Layout/LineLength
+        allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+          .to receive(:transmit).and_raise("ouch")
         allow(Delayed::Worker).to receive(:max_attempts).and_return(2)
         delayed_job = job.enqueue!
         expect do

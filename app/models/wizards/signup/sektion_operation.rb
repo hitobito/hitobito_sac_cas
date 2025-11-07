@@ -20,8 +20,7 @@ module Wizards::Signup
       [person, role].all? { |model| validate(model) }
     end
 
-    # rubocop:todo Metrics/AbcSize
-    def save! # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
+    def save! # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
       raise "cannot save invalid model: \n#{errors.full_messages}" unless valid?
 
       save_person_and_role
@@ -41,7 +40,6 @@ module Wizards::Signup
       send_password_reset_email if new_record?
       true
     end
-    # rubocop:enable Metrics/AbcSize
 
     private
 
@@ -69,9 +67,9 @@ module Wizards::Signup
       end
     end
 
-    # rubocop:todo Layout/LineLength
-    def build_or_find_person = new_record? ? Person.new(language: I18n.locale) : Person.find(person_attrs[:id])
-    # rubocop:enable Layout/LineLength
+    def build_or_find_person
+      new_record? ? Person.new(language: I18n.locale) : Person.find(person_attrs[:id])
+    end
 
     def role
       @role ||= build_role
@@ -96,17 +94,21 @@ module Wizards::Signup
         sent_at: today,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, today, new_entry: true).enqueue!
+      Invoices::Abacus::CreateMembershipInvoiceJob
+        .new(invoice, today, new_entry: true, dispatch_type: :digital)
+        .enqueue!
     end
 
     def enqueue_confirmation_mail
-      Signup::SektionMailer.confirmation(person, group.layer_group,
-        role.beitragskategorie).deliver_later
+      Signup::SektionMailer
+        .confirmation(person, group.layer_group, role.beitragskategorie)
+        .deliver_later
     end
 
     def enqueue_approval_pending_confirmation_mail
-      Signup::SektionMailer.approval_pending_confirmation(person, group.layer_group,
-        role.beitragskategorie).deliver_later
+      Signup::SektionMailer
+        .approval_pending_confirmation(person, group.layer_group, role.beitragskategorie)
+        .deliver_later
     end
 
     def neuanmeldung?
@@ -118,13 +120,15 @@ module Wizards::Signup
 
     def role_type = group.self_registration_role_type
 
-    # rubocop:todo Layout/LineLength
-    def mailing_list = @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
-    # rubocop:enable Layout/LineLength
+    def mailing_list
+      @mailing_list ||= MailingList.find_by(id: Group.root.sac_newsletter_mailing_list_id)
+    end
 
     def new_record? = person_attrs[:id].blank?
 
-    def no_approval_needed? = role.group.layer_group.decorate.membership_admission_through_gs?
+    def no_approval_needed?
+      role.group.layer_group.decorate.membership_admission_through_gs?
+    end
 
     def enqueue_duplicate_locator_job
       Person::DuplicateLocatorJob.new(person.id).enqueue!
