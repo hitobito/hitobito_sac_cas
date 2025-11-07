@@ -57,6 +57,9 @@ fr:
         send_date: "Date d’envoi et de facturation"
         price_category: "Catégorie de prix"
         price: "Prix"
+      people/export/jubilare_form:
+        reference_date: "Stichtag"
+        membership_years: "Anzahl Mitgliedsjahre"
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -1255,6 +1258,7 @@ fr:
   dropdown/people/sac_exports:
     button: CAS Exportations
     csv_mitglieder: CSV Membres
+    jubilare: Jubilare
 
   dropdown/people_export:
     recipients: Pour l’envoi électronique (par e-mail)
@@ -1495,6 +1499,41 @@ fr:
 
   event/participations:
     pending: "Une notification préalable a été établie. Celle-ci n'est pas encore définitive et doit être confirmée par l'administration du cours."
+
+  export/tabular/people:
+    attributes:
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      terminate_on: Austritt geplant
+      type: Typ
+      types:
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
+  export/tabular/people/jubilare:
+    sheet_name: "Mitglieder per %{reference_date}"
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de course
@@ -1793,6 +1832,12 @@ fr:
       update:
         explain_confirmation_email: >-
           Dès que tu as confirmé ton adresse e-mail, tu peux te connecter ici.
+    export:
+      popover_jubilare:
+        title: "Jubliare exportieren"
+        download: Herunterladen
+        membership_years_help: "leer = beliebige Anzahl"
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1822,6 +1867,7 @@ fr:
       multiselect_actions:
         accept: Reprendre
         reject: Refuser
+
     login_status:
       wso2_legacy_password: "Ancien mot de passe du CAS (WSO2)"
 
@@ -1869,6 +1915,10 @@ fr:
         create_invoice: "Démarrer"
         submit_confirmation: >-
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
+  people/export/jubilare:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Jubilare_per
+
   people/export/mitglieder_csv:
     export_enqueued: "L’exportation est lancée en arrière-plan et sera téléchargée une fois terminée."
 
