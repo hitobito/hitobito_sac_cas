@@ -11,7 +11,6 @@ module SacCas::PeopleManager
   prepended do
     validate :assert_not_in_different_household
     validate :manager_is_adult
-    validate :managed_is_child
   end
 
   private
@@ -21,23 +20,13 @@ module SacCas::PeopleManager
       manager&.household_key.nil? ||
       managed&.household_key.nil?
 
-    errors
-      .add(:managed_id, :in_different_household, name: managed_name)
+    errors.add(:managed_id, :in_different_household, name: managed_name)
   end
 
   def manager_is_adult
     return if manager.nil? || SacCas::Beitragskategorie::Calculator.new(manager).adult?
 
     errors.add(:manager_id, :manager_is_not_adult, name: manager_name, age: manager.years)
-  end
-
-  def managed_is_child
-    return if managed.nil?
-
-    calculator = SacCas::Beitragskategorie::Calculator.new(managed)
-    return if calculator.child? || calculator.pre_school_child?
-
-    errors.add(:managed_id, :managed_is_not_child, name: managed_name, age: managed.years)
   end
 
   def managed_name

@@ -126,8 +126,18 @@ describe People::SacFamilyMainPersonController, type: :controller do
       end
     end
 
-    context "when the user does not have permissions" do
+    context "when the user is the family main person" do
       before { sign_in adult }
+
+      it "prevents changing it to the other adult" do
+        put :update, params: {id: adult2.id}
+        expect(response).to have_http_status(422)
+        expect(response.body).to eq("You cannot transfer the main family person yourself")
+      end
+    end
+
+    context "when the user does not have permissions" do
+      before { sign_in adult2 }
 
       it "denies access" do
         expect do

@@ -3,10 +3,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-child_first_parent:
+main_child:
   manager_id: 600_002 # familienmitglied
   managed_id: 600_004 # familienmitglied_kind
 
-child_second_parent:
-  manager_id: 600_003 # familienmitglied2
-  managed_id: 600_004 # familienmitglied_kind
+main_other_parent:
+  manager_id: 600_002 # familienmitglied
+  managed_id: 600_003 # familienmitglied2

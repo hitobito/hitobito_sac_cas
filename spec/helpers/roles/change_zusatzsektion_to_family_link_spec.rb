@@ -45,8 +45,9 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
   context "#render" do
     context "for zusatzsektion role" do
       it "renders" do
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
         expect(view).to receive(:params).and_return({group_id: zusatzsektion_role.group_id})
 
         expect(described_class.new(zusatzsektion_role, view).render)
@@ -54,67 +55,67 @@ describe Roles::ChangeZusatzsektionToFamilyLink do
       end
 
       it "does not render for ended role" do
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
 
         role = zusatzsektion_role
         role.end_on = Date.current.yesterday
 
-        expect(described_class.new(role, view).render)
-          .to be_nil
+        expect(described_class.new(role, view).render).to be_nil
       end
 
       it "does not render for non-Zusatzsektion role" do
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
 
         role = Group::SektionsMitglieder::Ehrenmitglied.create!(
           person: person,
           group: groups(:bluemlisalp_mitglieder)
         )
 
-        expect(described_class.new(role, view).render)
-          .to be_nil
+        expect(described_class.new(role, view).render).to be_nil
       end
 
       it "does not render if cannot manage ChangeZusatzsektionToFamily" do
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(false)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(false)
 
-        expect(described_class.new(zusatzsektion_role, view).render)
-          .to be_nil
+        expect(described_class.new(zusatzsektion_role, view).render).to be_nil
       end
 
       it "does not render if role is family" do
         zusatzsektion_role.delete
         create_role!(zusatzsektion_class, groups(:matterhorn_mitglieder),
           beitragskategorie: :family)
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
 
-        expect(described_class.new(zusatzsektion_role, view).render)
-          .to be_nil
+        expect(described_class.new(zusatzsektion_role, view).render).to be_nil
       end
 
       it "does not render if sac membership is adult" do
         stammsektion_role.delete
         create_role!(stammsektion_class, groups(:bluemlisalp_mitglieder), beitragskategorie: :adult)
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
 
-        expect(described_class.new(zusatzsektion_role, view).render)
-          .to be_nil
+        expect(described_class.new(zusatzsektion_role, view).render).to be_nil
       end
 
       it "does not render if person is not family main person" do
-        other = Fabricate(:person, birthday: 13.years.ago)
+        other = Fabricate(:person, birthday: 23.years.ago)
         household.add(other).save!
         household.set_family_main_person!(other)
-        expect(view).to receive(:can?).with(:manage,
-          Memberships::ChangeZusatzsektionToFamily).and_return(true)
+        expect(view).to receive(:can?)
+          .with(:manage, Memberships::ChangeZusatzsektionToFamily)
+          .and_return(true)
 
-        expect(described_class.new(zusatzsektion_role, view).render)
-          .to be_nil
+        expect(described_class.new(zusatzsektion_role, view).render).to be_nil
       end
     end
   end

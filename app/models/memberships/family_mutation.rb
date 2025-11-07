@@ -39,8 +39,8 @@ module Memberships
     def leave!
       raise_if_terminated(currently_relevant_role)
 
-      beitragskategorie = SacCas::Beitragskategorie::Calculator
-        .new(person).calculate(for_sac_family: false)
+      beitragskategorie =
+        SacCas::Beitragskategorie::Calculator.new(person).calculate(for_sac_family: false)
 
       if currently_relevant_role
         replace_role!(currently_relevant_role, beitragskategorie:)
@@ -53,8 +53,8 @@ module Memberships
       ensure_can_change_zusatzsektion_to_family(role)
 
       person.household.people.each do |family_member|
-        conflicting_role = find_zusatzsektion_role(role.group.layer_group_id,
-          person: family_member) ||
+        conflicting_role =
+          find_zusatzsektion_role(role.group.layer_group_id, person: family_member) ||
           find_neuanmeldung_zusatzsektion_role(role.group.layer_group_id, person: family_member)
         if conflicting_role
           replace_role!(conflicting_role, role, beitragskategorie: category_family)
@@ -79,17 +79,16 @@ module Memberships
 
     def join_stammsektion!(reference_person)
       if currently_relevant_role
-        replace_role!(currently_relevant_role,
-          reference_person.sac_membership.stammsektion_role)
+        replace_role!(currently_relevant_role, reference_person.sac_membership.stammsektion_role)
       else
-        create_role!(person,
-          reference_person.sac_membership.stammsektion_role)
+        create_role!(person, reference_person.sac_membership.stammsektion_role)
       end
     end
 
     def join_zusatzsektion!(reference_person)
       reference_person.sac_membership.zusatzsektion_roles.family.each do |role|
-        if (conflicting_role = find_zusatzsektion_role(role.group.layer_group_id))
+        conflicting_role = find_zusatzsektion_role(role.group.layer_group_id)
+        if conflicting_role
           replace_role!(conflicting_role, role)
         else
           create_role!(person, role)
@@ -111,8 +110,7 @@ module Memberships
       end_role(role)
 
       # create new role with beitragskategorie
-      create_role!(role.person,
-        blueprint_role, beitragskategorie:)
+      create_role!(role.person, blueprint_role, beitragskategorie:)
     end
 
     # Create a new role in the same group as the blueprint role with a created_at timestamp at the
@@ -142,12 +140,16 @@ module Memberships
     end
 
     def find_neuanmeldung_zusatzsektion_role(layer_group_id, person: @person)
-      # rubocop:todo Layout/LineLength
-      person.sac_membership.neuanmeldung_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:}) ||
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        person.sac_membership.neuanmeldung_nv_zusatzsektion_roles.joins(:group).find_by(group: {layer_group_id:})
-      # rubocop:enable Layout/LineLength
+      person
+        .sac_membership
+        .neuanmeldung_zusatzsektion_roles
+        .joins(:group)
+        .find_by(group: {layer_group_id:}) ||
+        person
+          .sac_membership
+          .neuanmeldung_nv_zusatzsektion_roles
+          .joins(:group)
+          .find_by(group: {layer_group_id:})
     end
 
     def raise_if_terminated(*roles)

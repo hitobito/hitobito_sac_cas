@@ -30,10 +30,11 @@ module SacCas::Household
       super do |new_people, removed_people|
         yield new_people, removed_people if block_given?
         clear_people_managers(removed_people)
-        create_missing_people_managers
 
         if maintain_sac_family?
-          update_main_person!(new_household:)
+          new_main_person = determine_new_main_person(new_household:)
+          update_main_person!(new_main_person)
+          create_missing_people_managers(new_main_person)
           mutate_memberships!(new_people, removed_people)
         end
       end
@@ -49,9 +50,13 @@ module SacCas::Household
     self
   end
 
-  # Sets the reference_person as the main person of the family.
   def set_family_main_person!(person = reference_person)
-    update_main_person!(person)
+    raise "invalid main person" if people.exclude?(person)
+
+    Person.transaction do
+      update_main_person!(person)
+      create_missing_people_managers(person)
+    end
     reload
   end
 
@@ -63,70 +68,52 @@ module SacCas::Household
     @maintain_sac_family
   end
 
+  def create_missing_people_managers(manager)
+    return if manager.nil?
+
+    change_manageds = people - [manager] - manager.manageds
+    clear_people_managers(change_manageds)
+    change_manageds.each do |managed|
+      PeopleManager.create!(manager:, managed:)
+    end
+  end
+
   private
 
-  def clear_people_managers(removed_people)
-    removed_people.each do |person|
+  def clear_people_managers(people)
+    people.each do |person|
       person.manageds.clear
       person.managers.clear
     end
   end
 
-  def create_missing_people_managers
-    adults = people_by_agegroup(:adult)
-    children = people_by_agegroup(:child)
-
-    adults.each do |adult|
-      children.each do |child|
-        next if adult.manageds.include?(child)
-
-        PeopleManager.create!(manager: adult, managed: child)
-      end
-    end
-  end
-
-  # Find all people in the household that are in the given age category.
-  # @param [Symbol] age_category One of :adult, :child
-  def people_by_agegroup(age_category)
-    unless [:adult, :child].include?(age_category)
-      raise ArgumentError,
-        "Invalid age category #{age_category}"
-    end
-
-    people.select do |person|
-      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
-    end
-  end
-
   def mutate_memberships!(new_people, removed_people)
     # main person must be processed first
-    with_main, without_main = new_people.partition(&:sac_family_main_person)
-    (with_main + without_main).each do |p|
+    sorted = new_people.sort_by { |p| p.sac_family_main_person ? 0 : 1 }
+    sorted.each do |p|
       Memberships::FamilyMutation.new(p.reload).join!(reference_person)
     end
-    removed_people.each { |p| Memberships::FamilyMutation.new(p.reload).leave! }
-  end
-
-  # rubocop:todo Metrics/CyclomaticComplexity
-  def update_main_person!(person = nil, new_household: false)
-    raise "invalid main person" if person && people.exclude?(person)
-    new_main_person = person ||
-      main_person ||
-      reference_person_as_main_in_new_household(new_household) ||
-      oldest_person # may be nil when destroying
-    others = people - [new_main_person]
-
-    ActiveRecord::Base.transaction do
-      (others + removed_people).select(&:sac_family_main_person).each do |person|
-        person.update!(sac_family_main_person: false)
-      end
-      new_main_person&.update!(sac_family_main_person: true)
+    removed_people.each do |p|
+      Memberships::FamilyMutation.new(p.reload).leave!
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
+
+  def update_main_person!(new_main_person)
+    others = people - [new_main_person]
+    (others + removed_people).select(&:sac_family_main_person).each do |person|
+      person.update!(sac_family_main_person: false)
+    end
+    new_main_person&.update!(sac_family_main_person: true)
+  end
+
+  def determine_new_main_person(new_household: false)
+    main_person ||
+      reference_person_as_main_in_new_household(new_household) ||
+      oldest_person # may be nil when destroying
+  end
 
   def next_key
-    Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s # rubocop:disable Rails/SkipsModelValidations
+    Sequence.increment!(HOUSEHOLD_KEY_SEQUENCE).to_s
   end
 
   def assert_adult_member
@@ -174,9 +161,14 @@ module SacCas::Household
 
   def adults = people_by_agegroup(:adult)
 
+  def people_by_agegroup(age_category)
+    people.select do |person|
+      SacCas::Beitragskategorie::Calculator.new(person).send(:"#{age_category}?")
+    end
+  end
+
   def validate_members
     # do not validate members for sac imports
-    return unless @validate_members
-    super
+    super if @validate_members
   end
 end

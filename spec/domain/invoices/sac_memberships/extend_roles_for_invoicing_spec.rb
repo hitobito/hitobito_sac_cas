@@ -75,7 +75,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
   end
 
-  it "doesnt extend terminated role" do
+  it "doesn't extend terminated role" do
     # role can't be ended to be allowed to terminate
     person_mitglied_role.update!(end_on: prolongation_date - 1.month)
     expect(Roles::Termination.new(role: person_mitglied_role,
@@ -83,19 +83,17 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
   end
 
-  # rubocop:todo Layout/LineLength
-  it "doesnt extend role which ended before the previous years prolongation_date (reference_date - 1.day)" do
-    # rubocop:enable Layout/LineLength
+  it "doesn't extend role which ended before the previous years prolongation_date (reference_date - 1.day)" do # rubocop:disable Layout/LineLength
     person_mitglied_role.update!(end_on: new_role_start_on - 2.days)
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
   end
 
-  it "doesnt extend role which ended before after prolongation_date" do
+  it "doesn't extend role which ended before after prolongation_date" do
     person_mitglied_role.update!(end_on: prolongation_date + 1.day)
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
   end
 
-  it "doesnt extend role if person has a future extendable role after reference date" do
+  it "doesn't extend role if person has a future extendable role after reference date" do
     Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person: person,
       group: bluemlisalp_mitglieder, start_on: reference_date + 2.months, end_on: prolongation_date)
     expect { extend_roles }.not_to change { person_mitglied_role.reload.end_on }
@@ -166,13 +164,25 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   end
 
   describe "convert roles to youth" do
-    let!(:person_turned_youth) {
+    let(:adult) do
       Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-        beitragskategorie: :family, email: "dad@hitobito.example.com",
-        birthday: reference_date - 18.years, confirmed_at: Time.current,
+        beitragskategorie: :family, email: "parent@hitobito.example.com",
+        birthday: reference_date - 40.years, confirmed_at: Time.current,
         sac_family_main_person: true, end_on: 1.month.from_now)
-    }
-    let!(:previous_membership_role) { person_turned_youth.roles.first }
+    end
+    let(:child) { Fabricate(:person, birthday: reference_date - 10.years) }
+    let(:person_turned_youth) { Fabricate(:person, birthday: reference_date - 17.years) }
+    let(:previous_membership_role) { person_turned_youth.roles.first }
+
+    before do
+      create_household(adult, person_turned_youth, child)
+      Group::SektionsMitglieder::Mitglied
+        .where(person: [adult, person_turned_youth, child], beitragskategorie: :family)
+        .update_all(start_on: new_role_start_on - 1.year, end_on: 1.month.from_now)
+      adult.roles_unscoped.find_by(end_on: Date.current.yesterday).delete
+      # turn 18 after household creation
+      person_turned_youth.update!(birthday: reference_date - 18.years)
+    end
 
     context "stammsektion role" do
       it "creates youth role for family with reference age equal 18" do
@@ -184,6 +194,12 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect(new_role.beitragskategorie).to eq("youth")
         expect(new_role.start_on).to eq(new_role_start_on)
         expect(new_role.end_on).to eq(prolongation_date)
+
+        # household keys should still be present since the household should only be completely
+        # dissolved on the reference_date. At that point the
+        # DestroyHouseholdsForInactiveMembershipsJob will take care of that.
+        expect(person_turned_youth.reload.household_key).to eq(adult.household_key)
+        expect(person_turned_youth.managers).to eq([adult])
       end
 
       it "creates youth role for family with reference age above 18" do
@@ -203,11 +219,11 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         person_turned_youth.update!(birthday: reference_date - 18.years + 1.day)
 
         expect { extend_roles }.to_not change { person_turned_youth.roles.count }
+        expect(person_turned_youth.managers.count).to eq(1)
+        expect(person_turned_youth.household_key).to eq(adult.household_key)
       end
 
-      # rubocop:todo Layout/LineLength
-      it "does not create youth role for family if they already have a future extendable role after reference date" do
-        # rubocop:enable Layout/LineLength
+      it "does not create youth role for family if they already have a future extendable role after reference date" do # rubocop:disable Layout/LineLength
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, person: person_turned_youth,
           group: bluemlisalp_mitglieder, start_on: reference_date + 2.months,
           end_on: 1.year.from_now)
@@ -219,9 +235,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
       end
 
-      # rubocop:todo Layout/LineLength
-      it "does not create youth role for family if their membership is longer than the prolongation date" do
-        # rubocop:enable Layout/LineLength
+      it "does not create youth role for family if their membership is longer than the prolongation date" do # rubocop:disable Layout/LineLength
         person_turned_youth.roles.first.update!(end_on: prolongation_date + 1.day)
 
         expect { extend_roles }.to_not change { person_turned_youth.roles.count }
@@ -230,13 +244,16 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
     context "zusatzsektion role" do
       it "creates role for family zusatzsektion role" do
-        person_turned_youth.update!(birthday: reference_date - 23.years)
-        previous_zusatzsektion_role = Fabricate(
-          Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
-          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          person: person_turned_youth, start_on: 1.year.ago,
-          end_on: 1.month.from_now, beitragskategorie: :family
-        )
+        adult.household.people.each do |person|
+          Fabricate(
+            Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
+            group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+            person: person, start_on: new_role_start_on - 3.months,
+            end_on: 1.month.from_now, beitragskategorie: :family
+          )
+        end
+
+        previous_zusatzsektion_role = person_turned_youth.sac_membership.zusatzsektion_roles.first
 
         expect { extend_roles }.to change {
           person_turned_youth.sac_membership.zusatzsektion_roles.with_inactive.count
@@ -246,17 +263,22 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         zusatzsektion_role = person_turned_youth.sac_membership.zusatzsektion_roles.active.last
         expect(zusatzsektion_role).to be_present
-        expect(zusatzsektion_role.beitragskategorie).to eq("adult")
+        expect(zusatzsektion_role.beitragskategorie).to eq("youth")
         expect(zusatzsektion_role.start_on).to eq(new_role_start_on)
         expect(zusatzsektion_role.end_on).to eq(prolongation_date)
+
+        adult_zusatzsektion_role = adult.sac_membership.zusatzsektion_roles.active.last
+        expect(adult_zusatzsektion_role).to be_present
+        expect(adult_zusatzsektion_role.beitragskategorie).to eq("family")
+        expect(adult_zusatzsektion_role.start_on).to eq(previous_zusatzsektion_role.start_on)
+        expect(adult_zusatzsektion_role.end_on).to eq(prolongation_date)
       end
 
-      it "does not create role for adult zusatzsektion role but extends it" do
-        person_turned_youth.update!(birthday: reference_date - 23.years)
+      it "does not create role for youth zusatzsektion role but extends it" do
         zusatzsektion_role = Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-          person: person_turned_youth, start_on: 1.year.ago,
-          end_on: 1.month.from_now, beitragskategorie: :adult)
+          person: person_turned_youth, start_on: new_role_start_on - 3.months,
+          end_on: 1.month.from_now, beitragskategorie: :youth)
 
         expect { extend_roles }.to_not change {
           person_turned_youth.sac_membership.zusatzsektion_roles.count
@@ -266,64 +288,58 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
 
     context "dissolving household" do
-      let!(:person_turned_youth) {
-        Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-          beitragskategorie: :adult, email: "dad@hitobito.example.com",
-          confirmed_at: Time.current, sac_family_main_person: true)
-      }
-      let!(:other) { Fabricate(:person, birthday: reference_date - 24.years) }
-
-      before do
-        create_household(person_turned_youth, other)
-        membership_roles = Group::SektionsMitglieder::Mitglied.where(
-          person: [person_turned_youth, other], beitragskategorie: :family
-        )
-        person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
-        membership_roles.update_all(start_on: new_role_start_on - 1.month, end_on: 1.month.from_now)
-      end
-
-      it "replaces family membership role for other with adult membership" do
+      it "with only two people replaces family membership roles with adult and youth" do
+        person_turned_youth.update!(birthday: reference_date - 17.years)
+        adult.household.remove(child).save!
         person_turned_youth.update!(birthday: reference_date - 18.years)
 
-        expect { extend_roles }.to change { other.roles.with_inactive.count }.by(1)
+        expect { extend_roles }.to change { adult.roles.with_inactive.count }.by(1)
+
+        new_role = person_turned_youth.roles.active.reload.last
+        expect(new_role.beitragskategorie).to eq("youth")
+        expect(new_role.start_on).to eq(new_role_start_on)
+        expect(new_role.end_on).to eq(prolongation_date)
+
+        new_adult_role = adult.roles.active.reload.last
+        expect(new_adult_role.beitragskategorie).to eq("adult")
+        expect(new_adult_role.start_on).to eq(new_role_start_on)
+        expect(new_adult_role.end_on).to eq(prolongation_date)
 
         # household keys should still be present since the household should only be completely
         # dissolved on the reference_date. At that point the
         # DestroyHouseholdsForInactiveMembershipsJob will take care of that.
         expect(person_turned_youth.reload.household_key).to be_present
-        expect(other.reload.household_key).to be_present
+        expect(adult.reload.household_key).to be_present
+        expect(person_turned_youth.managers).to eq([adult])
       end
 
-      context "with multiple turned youth members" do
-        let!(:second_person_turned_youth) {
-          Fabricate(:person_with_role, group: bluemlisalp_mitglieder,
-            role: "Mitglied", beitragskategorie: :adult,
-            email: "sister@hitobito.example.com", confirmed_at: Time.current,
-            birthday: reference_date - 14.years)
-        }
+      it "with two children turning youth replaces family membership role with adult membership" do
+        child.update!(birthday: reference_date - 18.years)
 
-        before do
-          create_household(person_turned_youth, second_person_turned_youth, other)
-          membership_roles = Group::SektionsMitglieder::Mitglied.where(person: [person_turned_youth,
-            second_person_turned_youth, other],
-            beitragskategorie: :family)
-          person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
-          second_person_turned_youth.roles.ended.update_all(end_on: new_role_start_on - 1.month)
-          membership_roles.update_all(start_on: new_role_start_on - 1.month, end_on: 1.month.from_now)
-        end
+        expect { extend_roles }.to change { adult.roles.with_inactive.count }.by(1)
 
-        it "replaces family membership role for other with adult membership" do
-          person_turned_youth.update!(birthday: reference_date - 18.years)
-          second_person_turned_youth.update!(birthday: reference_date - 18.years)
+        new_role = person_turned_youth.roles.active.reload.last
+        expect(new_role.beitragskategorie).to eq("youth")
+        expect(new_role.start_on).to eq(new_role_start_on)
+        expect(new_role.end_on).to eq(prolongation_date)
 
-          expect { extend_roles }.to change { other.roles.with_inactive.count }.by(1)
+        new_child_role = child.roles.active.reload.last
+        expect(new_child_role.beitragskategorie).to eq("youth")
+        expect(new_child_role.start_on).to eq(new_role_start_on)
+        expect(new_child_role.end_on).to eq(prolongation_date)
 
-          # household keys should still be present since the household should only be completely
-          # dissolved on the reference_date. At that point the
-          # DestroyHouseholdsForInactiveMembershipsJob will take care of that.
-          expect(person_turned_youth.reload.household_key).to be_present
-          expect(other.reload.household_key).to be_present
-        end
+        new_adult_role = adult.roles.active.reload.last
+        expect(new_adult_role.beitragskategorie).to eq("adult")
+        expect(new_adult_role.start_on).to eq(new_role_start_on)
+        expect(new_adult_role.end_on).to eq(prolongation_date)
+
+        # household keys should still be present since the household should only be completely
+        # dissolved on the reference_date. At that point the
+        # DestroyHouseholdsForInactiveMembershipsJob will take care of that.
+        expect(person_turned_youth.reload.household_key).to be_present
+        expect(child.reload.household_key).to be_present
+        expect(adult.reload.household_key).to be_present
+        expect(person_turned_youth.managers).to eq([adult])
       end
     end
   end
@@ -331,7 +347,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
   describe "convert roles to adult" do
     let!(:person_turned_adult) {
       Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-        beitragskategorie: :youth, email: "dad@hitobito.example.com",
+        beitragskategorie: :youth, email: "youth@hitobito.example.com",
         birthday: reference_date - 23.years, confirmed_at: Time.current, end_on: 1.month.from_now)
     }
     let!(:previous_membership_role) { person_turned_adult.roles.first }
@@ -375,9 +391,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect { extend_roles }.to_not change { person_turned_adult.roles.count }
       end
 
-      # rubocop:todo Layout/LineLength
-      it "does not create adult role for youth if their membership is longer than the prolongation date" do
-        # rubocop:enable Layout/LineLength
+      it "does not create adult role for youth if their membership is longer than the prolongation date" do # rubocop:disable Layout/LineLength
         person_turned_adult.roles.first.update!(end_on: prolongation_date + 1.day)
 
         expect { extend_roles }.to_not change { person_turned_adult.roles.count }

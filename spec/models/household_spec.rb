@@ -59,9 +59,9 @@ describe Household do
       household.add(child)
       household.save!
     end.to change { Sequence.current_value(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE) }.by(1)
-    # rubocop:todo Layout/LineLength
-    expect(adult.reload.household_key).to eq Sequence.current_value(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE).to_s
-    # rubocop:enable Layout/LineLength
+    expect(adult.reload.household_key).to eq(
+      Sequence.current_value(SacCas::Household::HOUSEHOLD_KEY_SEQUENCE).to_s
+    )
   end
 
   describe "validations" do
@@ -69,27 +69,27 @@ describe Household do
       household = Household.new(child)
       household.add(second_child)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors[:base]).to match_array(["Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.",
-        # rubocop:enable Layout/LineLength
-        "Eine Familie muss mindestens 1 erwachsene Person enthalten."])
+      expect(household.errors[:base]).to match_array([
+        "Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.",
+        "Eine Familie muss mindestens 1 erwachsene Person enthalten."
+      ])
     end
 
     it "is invalid if it contains more than two adult people" do
       household.add(adult)
       household.add(second_adult)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors[:base]).to match_array(["Eine Familie darf höchstens 2 erwachsene Personen enthalten."])
-      # rubocop:enable Layout/LineLength
+      expect(household.errors[:base]).to match_array([
+        "Eine Familie darf höchstens 2 erwachsene Personen enthalten."
+      ])
     end
 
     it "is invalid if it contains only one person" do
       household = Household.new(person)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors[:base]).to match_array(["Eine Familie muss mindestens 2 Personen enthalten."])
-      # rubocop:enable Layout/LineLength
+      expect(household.errors[:base]).to match_array([
+        "Eine Familie muss mindestens 2 Personen enthalten."
+      ])
     end
 
     it "is valid if pending removed person does not have a confirmed email" do
@@ -128,9 +128,9 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
-      # rubocop:enable Layout/LineLength
+      expect(household.errors[:members]).to match_array([
+        "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."
+      ])
     end
 
     it "is invalid if no person has a membership at all" do
@@ -139,9 +139,9 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors[:members]).to match_array(["Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."])
-      # rubocop:enable Layout/LineLength
+      expect(household.errors[:members]).to match_array([
+        "Mindestens eine Person in der Familie muss bereits SAC Mitglied sein."
+      ])
     end
 
     it "is invalid if a person has a terminated membership" do
@@ -160,9 +160,9 @@ describe Household do
       household = Household.new(new_person)
       household.add(other_household_person)
       expect(household.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household.errors.full_messages.first).to include("#{other_household_person.full_name} hat einen Austritt geplant.")
-      # rubocop:enable Layout/LineLength
+      expect(household.errors.full_messages.first).to include(
+        "#{other_household_person.full_name} hat einen Austritt geplant."
+      )
     end
   end
 
@@ -238,23 +238,13 @@ describe Household do
         expect(household.main_person).to be_present
         original_main_person = household.main_person
 
-        expect do
-          household.remove(original_main_person).save!
-        end
+        expect { household.remove(original_main_person).save! }
           .to change { household.main_person }.from(original_main_person)
-      end
+          .and change { original_main_person.reload.sac_family_main_person }.from(true).to(false)
+          .and change { second_adult.reload.sac_family_main_person }.from(false).to(true)
 
-      it "clears family main person flag from removed person" do
-        # prepare a family
-        household.add(child).add(second_adult).save!
-        household.reload
-
-        original_main_person = household.main_person
-
-        expect do
-          household.remove(original_main_person).save!
-        end
-          .to change { original_main_person.reload.sac_family_main_person }.from(true).to(false)
+        expect(original_main_person.manageds.count).to eq(0)
+        expect(second_adult.manageds.count).to eq(1)
       end
 
       it "can create and dissolve family on the same day repeatedly" do
@@ -278,7 +268,8 @@ describe Household do
       end
 
       context "creates papertrail versions for changes of main person flag", versioning: true do
-        # count the versions of the person where the main person flag was changed to the given value
+        # count the versions of the person where the main person flag was changed
+        # to the given value
         def main_person_versions_count(person, target_value = true)
           person.versions.count do |v|
             v.object_changes&.start_with?("---") &&
@@ -340,16 +331,18 @@ describe Household do
 
   describe "people manager relations" do
     context "adding people" do
-      it "noops when adding adult" do
-        expect { add_and_save(adult) }.not_to(change { PeopleManager.count })
+      it "creates relation when adding adult" do
+        expect { add_and_save(adult) }.to change { PeopleManager.count }.by(1)
+        expect(person.manageds).to eq [adult]
+        expect(adult.managers).to eq [person]
       end
 
       it "noops if relation exists" do
         person.people_manageds.create!(managed: child)
-        expect { add_and_save(child) }.not_to(change { PeopleManager.count })
+        expect { add_and_save(child) }.not_to change { PeopleManager.count }
       end
 
-      it "creates relation" do
+      it "creates relation when adding child" do
         expect { add_and_save(child) }.to change { PeopleManager.count }.by(1)
         expect(person.manageds).to eq [child]
         expect(child.managers).to eq [person]
@@ -366,7 +359,8 @@ describe Household do
       it "creates multiple relations for child" do
         person.people_manageds.create!(managed: child)
         expect { add_and_save(child, adult) }.to change { PeopleManager.count }.by(1)
-        expect(child.managers).to match_array([person, adult])
+        expect(child.managers).to eq([person])
+        expect(adult.managers).to eq([person])
       end
 
       it "noops and raises if error occurs" do
@@ -374,7 +368,7 @@ describe Household do
         expect(PeopleManager).to receive(:create!).and_raise("ouch")
         expect do
           add_and_save(child, second_child)
-        end.to raise_error("ouch").and(not_change { PeopleManager.count })
+        end.to raise_error("ouch").and not_change { PeopleManager.count }
       end
     end
 
@@ -386,10 +380,10 @@ describe Household do
 
       it "removes multiple relations" do
         add_and_save(adult, child, second_child)
-        expect { remove_and_save(adult, child) }.to change { PeopleManager.count }.by(-3)
+        expect { remove_and_save(adult, child) }.to change { PeopleManager.count }.by(-2)
         expect(person.manageds).to eq [second_child]
         expect(second_child.managers).to eq [person]
-        expect(adult.reload.manageds).to be_empty
+        expect(adult.reload.managers).to be_empty
         expect(child.reload.managers).to be_empty
       end
     end
@@ -402,7 +396,7 @@ describe Household do
 
       it "removes relations" do
         add_and_save(adult, child, second_child)
-        expect { household.destroy }.to change { PeopleManager.count }.by(-4)
+        expect { household.destroy }.to change { PeopleManager.count }.by(-3)
       end
 
       it "noops and raises when error occurs" do
@@ -455,12 +449,15 @@ describe Household do
         .to change { Household.new(person).main_person }.from(person).to(adult)
         .and change { person.reload.sac_family_main_person }.from(true).to(false)
         .and change { adult.reload.sac_family_main_person }.from(false).to(true)
+
+      expect(person.manageds.size).to eq(0)
+      expect(adult.manageds.size).to eq(2)
     end
 
     context "paper trail", versioning: true do
       it "is recorded" do
         expect { household.set_family_main_person!(adult) }
-          .to change { PaperTrail::Version.count }.by(2)
+          .to change { PaperTrail::Version.count }.by(6)
           .and change { person.reload.versions.count }.by(1)
           .and change { adult.reload.versions.count }.by(1)
           .and not_change { child.reload.versions.count }

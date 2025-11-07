@@ -8,11 +8,16 @@
 require "spec_helper"
 
 describe HouseholdAsideMemberComponent, type: :component do
+  let(:user) { people(:admin) }
   let(:familienmitglied) { people(:familienmitglied) }
   let(:familienmitglied2) { people(:familienmitglied2) }
   let(:familienmitglied_kind) { people(:familienmitglied_kind) }
 
   subject(:component) { described_class.new(person: familienmitglied) }
+
+  before do
+    allow(component).to receive(:current_person).and_return(user)
+  end
 
   it "renders a person in the household with link" do
     stub_can(:show, true)
@@ -21,17 +26,23 @@ describe HouseholdAsideMemberComponent, type: :component do
     expect(rendered_component).to have_selector(
       'a[data-turbo-frame="_top"][href="/de/people/600002"]', text: "Tenzing Norgay"
     )
-    expect(rendered_component).to have_selector("span", text: "(25)")
-    expect(rendered_component).to have_text "Tenzing Norgay"
+    expect(rendered_component).to have_selector(
+      'a[data-turbo-frame="_top"][href="/de/people/600003"]', text: "Frieda Norgay"
+    )
   end
 
   it "renders a person in the household without link" do
     stub_can(:show, false)
     stub_can(:update, false)
     rendered_component = render_inline(component)
+    expect(rendered_component).not_to have_selector(
+      'a[data-turbo-frame="_top"][href="/de/people/600002"]', text: "Tenzing Norgay"
+    )
+    expect(rendered_component).not_to have_selector(
+      'a[data-turbo-frame="_top"][href="/de/people/600003"]', text: "Frieda Norgay"
+    )
     expect(rendered_component).to have_selector("strong", text: "Frieda Norgay")
     expect(rendered_component).to have_selector("span", text: "(25)")
-    expect(rendered_component).to have_text("Frieda Norgay (25)")
   end
 
   it "renders all people in the household with ages" do
@@ -56,9 +67,25 @@ describe HouseholdAsideMemberComponent, type: :component do
 
     expect(rendered_component).to have_selector("td a", text: "Nima Norgay") do |a|
       expect(a.ancestor("tr")).not_to have_selector('span[title="Familienrechnungsempfänger"]')
-      # rubocop:todo Layout/LineLength
-      expect(a.ancestor("tr")).not_to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
-      # rubocop:enable Layout/LineLength
+      expect(a.ancestor("tr"))
+        .not_to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
+    end
+  end
+
+  context "as family main person" do
+    let(:user) { familienmitglied }
+
+    it "renders a person in the household without main person link" do
+      stub_can(:show, true)
+      stub_can(:update, true)
+      rendered_component = render_inline(component)
+      expect(rendered_component).to have_selector("td", text: "Tenzing Norgay") do |a|
+        expect(a.ancestor("tr")).to have_selector('span[title="Familienrechnungsempfänger"]')
+      end
+      expect(rendered_component).to have_selector("td a", text: "Frieda Norgay") do |a|
+        expect(a.ancestor("tr")).to have_selector('span[title="Melde dich bei der ' \
+          'Geschäftsstelle um den Familienrechnungsempfänger ändern zu lassen"]')
+      end
     end
   end
 
@@ -87,9 +114,8 @@ describe HouseholdAsideMemberComponent, type: :component do
       before { familienmitglied.update!(email: nil, sac_family_main_person: false) }
 
       it_behaves_like "renders correct icon", "span.text-muted",
-        # rubocop:todo Layout/LineLength
-        "Die Person hat keine E-Mail Adresse und kann daher nicht zum Familienrechnungsempfänger gemacht werden."
-      # rubocop:enable Layout/LineLength
+        "Die Person hat keine E-Mail Adresse und kann daher nicht zum " \
+        "Familienrechnungsempfänger gemacht werden."
     end
   end
 
@@ -119,9 +145,8 @@ describe HouseholdAsideMemberComponent, type: :component do
         expect(a.ancestor("tr")).to have_selector('span[title="Familienrechnungsempfänger"]')
       end
       expect(rendered_component).to have_selector("td a", text: "Frieda Norgay") do |a|
-        # rubocop:todo Layout/LineLength
-        expect(a.ancestor("tr")).to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
-        # rubocop:enable Layout/LineLength
+        expect(a.ancestor("tr"))
+          .to have_selector('a[title="Zum Familienrechnungsempfänger machen"]')
       end
     end
   end
