@@ -11,6 +11,12 @@ module Invoices
       SOURCE_SYSTEM = "hitobito"
       BACKLOG_ID = 0
       TYPE = "Product"
+
+      DISPATCH_TYPES = {
+        print: "Letter",
+        digital: "Mail"
+      }.with_indifferent_access.tap { |h| h.default = "Letter" }.freeze
+
       DOCUMENT_CODES = {
         sac_membership_yearly: "R",
         sac_membership: "R",
@@ -18,12 +24,14 @@ module Invoices
         course: "RK",
         sac_magazine: "RA"
       }.with_indifferent_access.freeze
+
       PROCESS_FLOW_NUMBERS = {
-        sac_membership_yearly: 1, # membership invoice created by the yearly batch job
-        sac_membership: 3, # membership invoice created individually
-        # rubocop:todo Layout/LineLength
-        sac_membership_not_sent: 6, # membership invoice created individually, without sending it to member
-        # rubocop:enable Layout/LineLength
+        # membership invoice created by the yearly batch job
+        sac_membership_yearly: 1,
+        # membership invoice created individually
+        sac_membership: 3,
+        # membership invoice created individually, without sending it to member
+        sac_membership_not_sent: 6,
         course: 2,
         sac_magazine: 4
       }.with_indifferent_access.freeze
@@ -82,7 +90,7 @@ module Invoices
         {
           user_field1: entity.id.to_s,
           user_field2: SOURCE_SYSTEM,
-          user_field3: (entity.person.correspondence == "digital") ? "Mail" : "Letter"
+          user_field3: DISPATCH_TYPES.fetch(entity.person.correspondence)
         }.merge(additional_user_fields)
       end
 

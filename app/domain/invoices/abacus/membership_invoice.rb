@@ -11,15 +11,16 @@ module Invoices
       MEMBERSHIP_CARD_FIELD_INDEX = 11
 
       # member is an Invoices::SacMembership::Member object
-      attr_reader :member, :memberships, :new_entry
+      attr_reader :member, :memberships, :new_entry, :dispatch_type
 
       delegate :context, to: :member
       delegate :date, :sac, :config, to: :context
 
-      def initialize(member, memberships, new_entry: false)
+      def initialize(member, memberships, new_entry: false, dispatch_type: nil)
         @member = member
         @memberships = memberships
         @new_entry = new_entry
+        @dispatch_type = dispatch_type
       end
 
       def positions
@@ -38,6 +39,7 @@ module Invoices
 
       def additional_user_fields
         fields = {}
+        fields[:user_field3] = SalesOrder::DISPATCH_TYPES.fetch(dispatch_type) if dispatch_type
         fields[:user_field4] = config.service_fee.to_f if invoice?
         compose_membership_card_user_fields(fields)
         fields

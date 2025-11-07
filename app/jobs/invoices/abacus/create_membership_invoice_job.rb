@@ -6,27 +6,30 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInvoiceJob
-  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry, :dont_send]
+  self.parameters = [:external_invoice_id, :reference_date, :discount, :new_entry,
+    :dont_send, :dispatch_type]
 
-  attr_reader :reference_date, :discount, :new_entry, :dont_send
+  attr_reader :reference_date, :discount, :new_entry, :dont_send, :dispatch_type
 
   def initialize(external_invoice, reference_date, discount: nil, new_entry: false,
-    dont_send: false)
+    dont_send: false, dispatch_type: nil)
     super(external_invoice)
     @reference_date = reference_date
     @discount = discount
     @new_entry = new_entry
     @dont_send = dont_send
+    @dispatch_type = dispatch_type
   end
 
   private
 
   def invoice_data
     @invoice_data ||= Invoices::Abacus::MembershipInvoiceGenerator
-      # rubocop:todo Layout/LineLength
-      .new(external_invoice.person_id, external_invoice.link, reference_date, custom_discount: discount)
-      # rubocop:enable Layout/LineLength
-      .build(new_entry: new_entry)
+      .new(external_invoice.person_id,
+        external_invoice.link,
+        reference_date,
+        custom_discount: discount)
+      .build(new_entry: new_entry, dispatch_type: dispatch_type)
   end
 
   def transmit_sales_order
