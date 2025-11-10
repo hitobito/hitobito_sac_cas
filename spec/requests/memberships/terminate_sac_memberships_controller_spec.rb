@@ -15,8 +15,18 @@ describe Memberships::TerminateSacMembershipsController do
   let(:matterhorn) { groups(:matterhorn) }
   let(:role) { person.roles.find_by!(type: "Group::SektionsMitglieder::Mitglied") }
 
-  def build_params(step:, **attrs)
-    {step:, wizards_memberships_terminate_sac_membership_wizard: attrs}
+  subject(:page) { Capybara::Node::Simple.new(response.body) }
+
+  def build_params(**attrs)
+    {memberships_terminate_sac_membership_form: attrs}
+  end
+
+  def create_invoice(attrs = {})
+    person.external_invoices.create!(attrs.merge(type: ExternalInvoice::SacMembership.sti_name))
+  end
+
+  def expect_alert(text, css: ".alert-info")
+    expect(page).to have_css(css, text:)
   end
 
   describe "#GET" do
@@ -25,48 +35,73 @@ describe Memberships::TerminateSacMembershipsController do
     end
     let(:person) { people(:mitglied) }
 
-    def expect_summary_step
-      expect(response).to be_successful
-      expect(response.body).to include "SAC-Mitgliedschaft beenden"
-      expect(response.body).to include "Austritt beantragen"
-    end
-
-    def expect_date_select_step
-      expect(response).to be_successful
-      expect(response.body).to include "SAC-Mitgliedschaft beenden"
-      expect(response.body).to include "Austrittsdatum"
+    def expect_form(dates: %w[now end_of_year]) # rubocop:disable Metrics/AbcSize
+      expect(page).to have_css "h1", text: "SAC-Mitgliedschaft beenden"
+      expect(page).to have_css "label.required", text: "Austrittsgrund"
+      if dates.any?
+        expect(page).to have_css "label.required", text: "Austrittsdatum"
+        expect(page).to have_field "Sofort" if dates.include?("now")
+        expect(page).to have_field "Auf 31.12.#{Date.current.year}" if dates.include?("end_of_year")
+      else
+        expect(page).not_to have_css "label", text: "Austrittsdatum"
+      end
+      expect(page).to have_button "Austritt beantragen", disabled: true
     end
 
     context "as normal user" do
-      it "renders the form" do
+      it "renders the complete" do
         request
-        expect_summary_step
+        expect_form
+      end
+
+      context "with payed invoice" do
+        it "renders the complete form without invoice" do
+          create_invoice(state: :payed)
+          request
+          expect_form
+        end
+      end
+
+      context "with open invoice" do
+        it "renders form but without terminate_on options in january" do
+          travel_to(Time.zone.local(2025, 1, 31)) do
+            create_invoice(state: :open)
+            request
+            expect_form(dates: [])
+          end
+        end
+
+        it "renders open invoice info abort screen" do
+          travel_to(Time.zone.local(2025, 2, 1)) do
+            create_invoice(state: :open)
+            request
+            expect_alert "Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde."
+            expect(page).not_to have_css "form"
+          end
+        end
       end
     end
 
     context "with a terminated membership" do
       before do
         role.write_attribute(:terminated, true)
+        role.end_on = Date.new(2024, 12, 31)
         role.save!
       end
 
-      def expect_terminated_page
-        expect(response).to be_successful
-        expect(response.body).to include "Deine Mitgliedschaft ist gekündigt per"
-        expect(response.body).not_to include "Weiter"
-      end
-
-      it "renders a notice" do
-        request
-        expect_terminated_page
+      it "renders terminated membership info screen notice" do
+        travel_to(Time.zone.local(2024, 8, 1)) { request }
+        expect_alert "Deine Mitgliedschaft ist gekündigt per 31.12.2024"
+        expect(page).not_to have_css "form"
       end
 
       context "as an admin" do
         let(:operator) { people(:admin) }
 
-        it "renders a notice" do
-          request
-          expect_terminated_page
+        it "renders terminated membership info screen notice but also form" do
+          travel_to(Time.zone.local(2024, 8, 1)) { request }
+          expect_alert "Deine Mitgliedschaft ist gekündigt per 31.12.2024"
+          expect(page).not_to have_css("#content form") # does get search form
         end
       end
     end
@@ -85,66 +120,68 @@ describe Memberships::TerminateSacMembershipsController do
 
         it "shows the date select step with a warning" do
           request
-          expect_date_select_step
-          # rubocop:todo Layout/LineLength
-          expect(response.body).to include("Achtung: der Austritt findet bei einer Sektion statt, bei der die Austrittsfunktion für das Mitglied deaktiviert ist.")
-          # rubocop:enable Layout/LineLength
+          expect_alert "Achtung: der Austritt findet bei einer Sektion statt, " \
+            "bei der die Austrittsfunktion für das Mitglied deaktiviert ist.", css: ".alert-warning"
+          expect_form
         end
       end
     end
 
-    context "with a family main person" do
-      let(:person) { people(:familienmitglied) }
+    describe "family" do
+      context "with family main person" do
+        let(:person) { people(:familienmitglied) }
 
-      it "shows info about affecting the whole family" do
-        request
-        expect_summary_step
-        # rubocop:todo Layout/LineLength
-        expect(response.body).to include "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt."
-        # rubocop:enable Layout/LineLength
+        it "shows info about affecting the whole family" do
+          request
+          expect_alert "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt.",
+            css: ".alert-warning"
+          expect_form
+        end
       end
-    end
 
-    context "with a family regular person" do
-      let(:person) { people(:familienmitglied2) }
+      context "with family regular person" do
+        let(:person) { people(:familienmitglied2) }
 
-      it "shows info about the main family person" do
-        request
-        expect(response.body).to include "Bitte wende dich an #{people(:familienmitglied)}"
+        it "shows info about the main family person" do
+          request
+          expect_alert "Bitte wende dich an #{people(:familienmitglied)}"
+          expect(page).not_to have_css "form"
+        end
       end
-    end
 
-    context "as a different user" do
-      let(:operator) { people(:familienmitglied) }
+      context "as a different user" do
+        let(:operator) { people(:familienmitglied) }
 
-      it "returns not authorized" do
-        expect { request }.to raise_error(CanCan::AccessDenied)
+        it "returns not authorized" do
+          expect { request }.to raise_error(CanCan::AccessDenied)
+        end
       end
-    end
 
-    context "as an admin" do
-      let(:operator) { people(:admin) }
+      context "as an admin" do
+        let(:operator) { people(:admin) }
 
-      it "shows me the select date step" do
-        request
-        expect_date_select_step
+        it "shows me the select date step" do
+          request
+          expect_form
+        end
       end
     end
   end
 
   describe "#POST" do
-    let(:termination_reason_id) { termination_reasons(:deceased).id }
-    let(:request) do
-      # rubocop:todo Layout/LineLength
-      post group_person_terminate_sac_membership_path(group_id: bluemlisalp.id, person_id: person.id),
-        # rubocop:enable Layout/LineLength
-        params:
+    let(:termination_reason_id) { termination_reasons(:moved).id }
+
+    def request(params = {})
+      defaults = {termination_reason_id:, terminate_on: :end_of_year}
+      post(
+        group_person_terminate_sac_membership_path(group_id: bluemlisalp.id, person_id: person.id),
+        params: build_params(**defaults.merge(params))
+      )
     end
     let(:person) { people(:mitglied) }
-    let(:params) { build_params(step: 0, summary: {termination_reason_id:}) }
 
     context "as normal user" do
-      it "marks single role as destroyed and redirects" do
+      it "marks single role as terminated and redirects" do
         expect do
           request
           role.reload
@@ -155,6 +192,57 @@ describe Memberships::TerminateSacMembershipsController do
         expect(response).to redirect_to person_path(person, format: :html)
         expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
       end
+
+      it "validates inputs" do
+        expect do
+          request(termination_reason_id: nil, terminate_on: :non_existing)
+        end.not_to change { role.reload }
+        expect(page).to have_css ".alert-danger", text: "Austrittsdatum ist kein gültiger Wert"
+        expect(page).to have_css ".alert-danger", text: "Austrittsgrund muss ausgefüllt werden"
+      end
+
+      context "with payed invoice" do
+        it "marks role as terminated, redirects does not touch invoice" do
+          invoice = create_invoice(state: :payed)
+          expect do
+            request
+          end.to change { role.reload.terminated }.to(true)
+            .and not_change { invoice.reload }
+          expect(response).to redirect_to person_path(person, format: :html)
+          expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+        end
+      end
+
+      context "with open invoice" do
+        context "in january" do
+          around { |example| travel_to(Time.zone.local(2025, 1, 31)) { example.run } }
+
+          it "marks role as terminated and cancels invoice" do
+            invoice = create_invoice(state: :open)
+            expect do
+              request(terminate_on: :now)
+            end.to change { role.reload.terminated }.to(true)
+              .and change { invoice.reload.state }.from("open").to("cancelled")
+          end
+
+          it "does not accept end_of_year as terminate_on" do
+            create_invoice(state: :open)
+            request(terminate_on: :end_of_year)
+            expect(response).to be_unprocessable
+          end
+        end
+
+        it "renders abort info" do
+          travel_to(Time.zone.local(2025, 2, 1)) do
+            invoice = create_invoice(state: :open)
+            expect do
+              request(terminate_on: :now)
+            end.not_to change { role.terminated }
+            expect(invoice.reload).to be_open
+            expect_alert "Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde."
+          end
+        end
+      end
     end
 
     context "as a different user" do
@@ -167,14 +255,10 @@ describe Memberships::TerminateSacMembershipsController do
 
     context "as an admin" do
       let(:operator) { people(:admin) }
-      let(:params) {
-        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
-          summary: {termination_reason_id:})
-      }
 
-      it "can choose immediate termination, destroy single role and redirects" do
+      it "can choose immediate termination, terminate single role and redirects" do
         expect do
-          request
+          request(terminate_on: :now)
           role.reload
         end
           .to change(Role, :count).by(-2)
@@ -189,14 +273,10 @@ describe Memberships::TerminateSacMembershipsController do
         Group::SektionsFunktionaere::Administration.create!(person: Fabricate(:person),
           group: groups(:bluemlisalp_funktionaere)).person.reload
       end
-      let(:params) {
-        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
-          summary: {termination_reason_id:})
-      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
-          request
+          request(terminate_on: :now)
           role.reload
         end
           .to change(Role, :count).by(-2)
@@ -211,14 +291,10 @@ describe Memberships::TerminateSacMembershipsController do
         Group::SektionsMitglieder::Schreibrecht.create!(person: Fabricate(:person),
           group: groups(:bluemlisalp_mitglieder)).person.reload
       end
-      let(:params) {
-        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
-          summary: {termination_reason_id:})
-      }
 
       it "can choose immediate termination, destroy single role and redirects" do
         expect do
-          request
+          request(terminate_on: :now)
           role.reload
         end
           .to change(Role, :count).by(-2)
@@ -233,10 +309,7 @@ describe Memberships::TerminateSacMembershipsController do
         Group::SektionsFunktionaere::Schreibrecht.create!(person: Fabricate(:person),
           group: groups(:bluemlisalp_funktionaere)).person.reload
       end
-      let(:params) {
-        build_params(step: 1, termination_choose_date: {terminate_on: "now"},
-          summary: {termination_reason_id:})
-      }
+      let(:params) { build_params(terminate_on: :now) }
 
       it "returns not authorized" do
         expect { request }.to raise_error(CanCan::AccessDenied)

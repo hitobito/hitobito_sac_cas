@@ -28,7 +28,6 @@ describe "terminate sac membership wizard", js: true do
         click_link "Austritt"
       end
       choose "Sofort"
-      click_button "Weiter"
       select termination_reason.text
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben"
@@ -54,7 +53,6 @@ describe "terminate sac membership wizard", js: true do
       end
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
       choose "Auf 31.12.#{Date.current.year}"
-      click_button "Weiter"
       select termination_reason.text
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben"
@@ -86,7 +84,6 @@ describe "terminate sac membership wizard", js: true do
           click_link "Austritt"
         end
         choose "Sofort"
-        click_button "Weiter"
       end
 
       it "checks data_retention_consent when subscribe_newsletter is checked" do
@@ -130,6 +127,7 @@ describe "terminate sac membership wizard", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
+      choose "Auf 31.12.#{Date.current.year}"
       select termination_reason.text
       check "SAC-Newsletter weiterhin erhalten"
       check "Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben"
@@ -215,6 +213,7 @@ describe "terminate sac membership wizard", js: true do
       within("#role_#{role.id}") do
         click_link "Austritt"
       end
+      choose "Auf 31.12.#{Date.current.year}"
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
       select termination_reason.text
       expect do

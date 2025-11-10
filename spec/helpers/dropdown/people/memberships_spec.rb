@@ -16,6 +16,7 @@ describe Dropdown::People::Memberships do
   let(:person) { people(:mitglied) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:current_user) { person }
+  let(:stammsektion_role) { person.sac_membership.stammsektion_role }
 
   let(:dropdown) { described_class.new(self, person, group) }
   let(:ability) { instance_double(Ability) }
@@ -37,9 +38,8 @@ describe Dropdown::People::Memberships do
   context "JoinZusatzsektion" do
     before do
       stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
-      expect(ability).to receive(:can?).with(:create,
-        Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -56,9 +56,8 @@ describe Dropdown::People::Memberships do
   context "SwitchStammsektion" do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
-      expect(ability).to receive(:can?).with(:create,
-        Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -75,10 +74,9 @@ describe Dropdown::People::Memberships do
   context "SwapStammZusatzsektion" do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
       stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
-      expect(ability).to receive(:can?).with(:create,
-        Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(false)
     end
 
     it "is empty when person is not permitted" do
@@ -96,17 +94,33 @@ describe Dropdown::People::Memberships do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
       stub_can_create(Wizards::Memberships::SwitchStammsektion, false)
-      expect(ability).to receive(:can?).with(:create,
-        Memberships::UndoTermination).and_return(false)
+      expect(ability).to receive(:can?).with(:create, Memberships::UndoTermination).and_return(false)
     end
 
     it "is empty when person is not permitted" do
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(false)
       expect(dropdown.to_s).to be_blank
     end
 
-    it "is contains links if person is permitted" do
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, true)
+    it "is contains link if person is permitted and sektion allows" do
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(true)
+      stammsektion_role.layer_group.mitglied_termination_by_section_only = false
+      stammsektion_role.layer_group.save!
+      expect(menu).to have_link "SAC-Mitgliedschaft beenden"
+    end
+
+    it "is hides link if person is permitted but sektion denies" do
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(true)
+      stammsektion_role.layer_group.mitglied_termination_by_section_only = true
+      stammsektion_role.layer_group.save!
+      expect(dropdown.to_s).to be_blank
+    end
+
+    it "is contains link even if is sektion disallows" do
+      allow(self).to receive(:current_user).and_return(people(:admin))
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(true)
+      stammsektion_role.layer_group.mitglied_termination_by_section_only = true
+      stammsektion_role.layer_group.save!
       expect(menu).to have_link "SAC-Mitgliedschaft beenden"
     end
   end
@@ -115,7 +129,7 @@ describe Dropdown::People::Memberships do
     before do
       stub_can_create(Wizards::Memberships::JoinZusatzsektion, false)
       stub_can_create(Wizards::Memberships::SwitchStammsektion, true)
-      stub_can_create(Wizards::Memberships::TerminateSacMembershipWizard, false)
+      expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(false)
     end
 
     it "does not contain link if person is not permitted" do

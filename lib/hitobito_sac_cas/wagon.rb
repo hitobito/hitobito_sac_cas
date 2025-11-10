@@ -130,7 +130,6 @@ module HitobitoSacCas
       Ability.store.register SectionOfferingAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
-      Ability.store.register Memberships::TerminateSacMembershipWizardAbility
       Ability.store.register Memberships::UndoTerminationAbility
       Ability.store.register Memberships::ChangeZusatzsektionToFamilyAbility
       Event::RoleAbility.prepend SacCas::Event::RoleAbility

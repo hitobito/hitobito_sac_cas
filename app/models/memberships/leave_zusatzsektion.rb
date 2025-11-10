@@ -12,8 +12,6 @@ module Memberships
     include ActiveModel::Validations
     include CommonApi
 
-    validate :assert_terminate_on
-
     ROLE_TYPES = [
       Group::SektionsMitglieder::MitgliedZusatzsektion,
       Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
@@ -21,15 +19,16 @@ module Memberships
     ]
 
     attribute :termination_reason_id, :integer
+    attribute :terminate_on, :date
 
     validates :termination_reason_id, presence: true
+    validate :assert_terminate_on
 
     delegate :person, :group, to: :role
 
-    def initialize(role, terminate_on, **params)
+    def initialize(role, **params)
       super(params)
       @role = role
-      @terminate_on = terminate_on
       @now = Time.zone.now
 
       raise "wrong type" if bad_role_type?
@@ -89,6 +88,6 @@ module Memberships
       end
     end
 
-    attr_reader :terminate_on, :role, :now
+    attr_reader :role, :now
   end
 end

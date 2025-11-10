@@ -1,7 +1,7 @@
--#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 .alert.alert-info
-  = t('.info_text')
+  = t('wizards.steps.membership_terminated_info.info', date: l(sac_membership.stammsektion_role.end_on))

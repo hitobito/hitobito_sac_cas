@@ -14,7 +14,7 @@ describe "memberships/undo_terminations/new.html.haml", versioning: true do
   def terminate(role, terminate_on: Date.current.yesterday, **opts)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on, termination_reason_id: termination_reasons(:deceased).id, **opts
+      role, terminate_on:, termination_reason_id: termination_reasons(:deceased).id, **opts
     )
     expect(termination).to be_valid
     termination.save!

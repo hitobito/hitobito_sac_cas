@@ -1,0 +1,25 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if mitglied_termination_by_section_only?
+  .alert.alert-warning
+    = t('wizards.steps.termination_choose_date.warning_termination_by_section_only')
+
+= f.error_messages
+
+- if person.sac_membership.family?
+  .alert.alert-warning
+    %p= t('wizards.steps.termination.summary.family_warning', family_member_names: household.members.map { |m| m.person.full_name }.to_sentence)
+
+- if f.object.terminate_on_options.many?
+  .alert.alert-info
+    = t('wizards.steps.termination_choose_date.info_text')
+
+  = f.labeled(:terminate_on, nil, nil, mark_as_required: true) do
+    - f.object.terminate_on_options.each do |key, label|
+      = f.inline_radio_button :terminate_on, key, label
+
+= f.labeled(:termination_reason_id) do
+  = f.select :termination_reason_id, f.object.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
