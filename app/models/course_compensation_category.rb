@@ -27,8 +27,8 @@ class CourseCompensationCategory < ApplicationRecord
   include I18nEnums
   include CapitalizedDependentErrors
 
-  translates :name_leader, :name_assistant_leader
-
+  translates :name_leader, :name_assistant_leader,
+    :name_leader_aspirant, :name_assistant_leader_aspirant
   KINDS = %w[day flat budget]
   i18n_enum :kind, KINDS
 
