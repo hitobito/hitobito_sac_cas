@@ -21,7 +21,7 @@ describe "subscribers export", :js do
 
     click_link("Export")
     find_link("CSV").hover
-    click_link("Für den elektronischen Versand (E-Mail)")
+    click_link("Empfänger Einzelpersonen")
 
     expect(page).to have_selector(".info-bar .alert-info",
       text: "Die Downloads werden vorbereitet, bitte warten.")
@@ -35,7 +35,7 @@ describe "subscribers export", :js do
 
     click_link("Export")
     find_link("CSV").hover
-    click_link("Für den postalischen Versand")
+    click_link("Empfänger Familien")
 
     expect(page).to have_selector(".info-bar .alert-info",
       text: "Die Downloads werden vorbereitet, bitte warten.")

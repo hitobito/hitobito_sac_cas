@@ -23,6 +23,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
   let(:pdf) { subject.render }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf) }
   let(:page_analysis) { PDF::Inspector::Page.analyze(pdf) }
+  let(:year) { Time.zone.now.year }
 
   subject { described_class.new(participation) }
 
@@ -33,7 +34,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
 
   let(:texts) {
     [
-      [70, 776, "SAC Kurse / Touren"],
+      [70, 776, "SAC Kurse / Touren #{year}"],
       [70, 737, "Eckdatenblatt"],
       [70, 712, "Hallo Edmund"],
       [70, 688, "Nachfolgend senden wir dir die wichtigsten Informationen:"],

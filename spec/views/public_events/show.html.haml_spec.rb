@@ -20,7 +20,7 @@ describe "public_events/show.html.haml" do
     expect(dom).to have_link "Passwort vergessen", href: new_person_password_path
     expect(dom).to have_link "Keine Bestätigungs-E-Mail bekommen?",
       href: new_person_confirmation_path
-    expect(dom).to have_link "Kein SAC-Mitglied? Jetzt dein kostenloses SAC-Konto erstellen",
+    expect(dom).to have_link "Kein SAC-Mitglied? Kostenloses SAC-Konto eröffnen",
       href: group_self_registration_path(group)
     expect(dom).to have_link "SAC Mitgliedschaft beantragen", href: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
   end
