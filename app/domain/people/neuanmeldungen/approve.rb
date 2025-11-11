@@ -50,21 +50,29 @@ module People::Neuanmeldungen
         group: approved_roles_group,
         person: role.person,
         beitragskategorie: role.beitragskategorie,
-        start_on: Date.current
+        start_on: today
       )
     end
 
     def generate_invoice(role)
-      invoice = ExternalInvoice::SacMembership.create!(
+      new_entry = new_entry?(role)
+      Invoices::Abacus::CreateMembershipInvoiceJob.new(
+        create_external_invoice(role),
+        today,
+        new_entry: new_entry,
+        dispatch_type: new_entry ? :digital : nil
+      ).enqueue!
+    end
+
+    def create_external_invoice(role)
+      ExternalInvoice::SacMembership.create!(
         person: role.person,
         state: :draft,
-        year: Date.current.year,
-        issued_at: Date.current,
-        sent_at: Date.current,
+        year: today.year,
+        issued_at: today,
+        sent_at: today,
         link: role.layer_group
       )
-      Invoices::Abacus::CreateMembershipInvoiceJob.new(invoice, Date.current,
-        new_entry: new_entry?(role)).enqueue!
     end
 
     def new_entry?(role)
@@ -74,5 +82,7 @@ module People::Neuanmeldungen
     def send_confirmation_mail(person)
       People::NeuanmeldungenMailer.approve(person, group.layer_group).deliver_later
     end
+
+    def today = @today ||= Date.current
   end
 end

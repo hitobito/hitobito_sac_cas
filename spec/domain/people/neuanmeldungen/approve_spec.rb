@@ -19,8 +19,8 @@ describe People::Neuanmeldungen::Approve do
   let(:neuanmeldungen_nv) { groups(:bluemlisalp_neuanmeldungen_nv) }
 
   def create_role(beitragskategorie,
-    person: Fabricate(:person, birthday: 20.years.ago,
-      sac_family_main_person: true), type: neuanmeldung_role_class)
+    person: Fabricate(:person, birthday: 20.years.ago, sac_family_main_person: true),
+    type: neuanmeldung_role_class)
     Fabricate(
       type.sti_name,
       group: neuanmeldungen_sektion,
@@ -39,6 +39,10 @@ describe People::Neuanmeldungen::Approve do
     expect(actual_role.beitragskategorie).to eq role.beitragskategorie
   end
 
+  def job_count(attrs = nil)
+    Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%#{attrs}'").count
+  end
+
   it "replaces the neuanmeldungen_sektion roles with neuanmeldungen_nv roles" do
     neuanmeldungen = [:adult, :adult, :youth, :family].map { |cat| create_role(cat) }
 
@@ -55,9 +59,7 @@ describe People::Neuanmeldungen::Approve do
       .to change { neuanmeldung_role_class.count }.by(-3)
       .and change { neuanmeldung_approved_role_class.count }.by(3)
       .and change { ExternalInvoice::SacMembership.count }.by(3)
-      .and change {
-             Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%new_entry: true%'").count
-           }.by(3)
+      .and change { job_count("new_entry: true%dispatch_type: :digital%") }.by(3)
       .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(
         neuanmeldungen.first.person, sektion
       )
@@ -77,16 +79,14 @@ describe People::Neuanmeldungen::Approve do
   end
 
   context "Zusatzsektion" do
-    let(:neuanmeldung_role_class) {
+    let(:neuanmeldung_role_class) do
       Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
-    }
-    let(:neuanmeldung_approved_role_class) {
+    end
+    let(:neuanmeldung_approved_role_class) do
       Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
-    }
+    end
 
-    # rubocop:todo Layout/LineLength
-    it "replaces the neuanmeldungen_zusatzsektion roles with neuanmeldungen_zusatzsektion_nv roles" do
-      # rubocop:enable Layout/LineLength
+    it "replaces the neuanmeldungen_zusatzsektion roles with neuanmeldungen_zusatzsektion_nv roles" do # rubocop:disable Layout/LineLength
       neuanmeldungen = [:adult, :adult, :youth, :family].map do |cat|
         person = Fabricate(:person, sac_family_main_person: true)
         Fabricate(
@@ -111,11 +111,7 @@ describe People::Neuanmeldungen::Approve do
         .to change { neuanmeldung_role_class.count }.by(-3)
         .and change { neuanmeldung_approved_role_class.count }.by(3)
         .and change { ExternalInvoice::SacMembership.count }.by(3)
-        .and change {
-               # rubocop:todo Layout/LineLength
-               Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%new_entry: false%'").count
-               # rubocop:enable Layout/LineLength
-             }.by(3)
+        .and change { job_count("new_entry: false%dispatch_type:%") }.by(3)
         .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(
           neuanmeldungen.first.person, sektion
         )
@@ -148,9 +144,7 @@ describe People::Neuanmeldungen::Approve do
 
         approver = described_class.new(
           group: neuanmeldungen_sektion,
-          people_ids: [
-            person.id
-          ]
+          people_ids: [person.id]
         )
 
         expect(approver.applicable_people).to match_array([person])
@@ -169,9 +163,7 @@ describe People::Neuanmeldungen::Approve do
 
         approver = described_class.new(
           group: neuanmeldungen_sektion,
-          people_ids: [
-            person.id
-          ]
+          people_ids: [person.id]
         )
 
         expect(approver.applicable_people.size).to eq(2)
@@ -184,11 +176,11 @@ describe People::Neuanmeldungen::Approve do
     people(:familienmitglied2).roles.destroy_all
     neuanmeldung = create_role(:family, person: people(:familienmitglied2))
 
-    expect {
+    expect do
       described_class.new(group: neuanmeldungen_sektion, people_ids: [neuanmeldung.person.id]).call
-    }
+    end
       .to not_change { ExternalInvoice::SacMembership.count }
-      .and not_change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
+      .and not_change { job_count }
       .and not_have_enqueued_mail(People::NeuanmeldungenMailer)
   end
 
@@ -213,10 +205,9 @@ describe People::Neuanmeldungen::Approve do
     let(:approver) { described_class.new(group: neuanmeldungen_sektion, people_ids: [person.id]) }
 
     it "send an email and invoice to person" do
-      expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
-        .and change {
-               Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count
-             }.by(1)
+      expect { approver.call }
+        .to change { ExternalInvoice::SacMembership.count }.by(1)
+        .and change { job_count }.by(1)
         .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
     end
 
@@ -225,10 +216,9 @@ describe People::Neuanmeldungen::Approve do
 
       it "send an email to main person of family" do
         person.update_columns(sac_family_main_person: true)
-        expect { approver.call }.to change { ExternalInvoice::SacMembership.count }.by(1)
-          .and change {
-                 Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count
-               }.by(1)
+        expect { approver.call }
+          .to change { ExternalInvoice::SacMembership.count }.by(1)
+          .and change { job_count }.by(1)
           .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(person, sektion)
       end
 
@@ -236,12 +226,9 @@ describe People::Neuanmeldungen::Approve do
         other = create_role(:family).person
         Person.where(id: [person.id, other.id]).update_all(household_key: "test")
         person.update_columns(sac_family_main_person: false)
-        expect { approver.call }.to change {
-          Group::SektionsNeuanmeldungenNv::Neuanmeldung.count
-        }.by(2)
-          .and change {
-                 Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count
-               }.by(1)
+        expect { approver.call }
+          .to change { Group::SektionsNeuanmeldungenNv::Neuanmeldung.count }.by(2)
+          .and change { job_count }.by(1)
           .and have_enqueued_mail(People::NeuanmeldungenMailer, :approve).with(other, sektion)
       end
     end
