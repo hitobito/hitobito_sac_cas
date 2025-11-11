@@ -85,6 +85,7 @@ Rails.application.routes.draw do
         namespace :export do
           post :jubilare, to: "jubilare#create"
           post :mitglieder_csv, to: "mitglieder_csv#create", format: "csv"
+          post :terminated_mitglieder, to: "terminated_mitglieder#create", format: "csv"
         end
       end
     end

@@ -19,6 +19,7 @@ class Dropdown::People::SacExports < Dropdown::Base
   def init_items
     add_jubilare_item
     add_csv_mitglieder_item
+    add_terminated_mitglieder_item
     @items.sort_by!(&:label)
   end
 
@@ -37,6 +38,16 @@ class Dropdown::People::SacExports < Dropdown::Base
       translate(:csv_mitglieder),
       template.group_people_export_mitglieder_csv_path(group.id, format: :csv),
       method: :post
+    )
+  end
+
+  def add_terminated_mitglieder_item
+    add_item_with_popover(
+      translate(:terminated_mitglieder),
+      template.render(
+        "people/export/popover_terminated_mitglieder",
+        model: People::Export::TerminatedMitgliederForm.new(group: group)
+      )
     )
   end
 
