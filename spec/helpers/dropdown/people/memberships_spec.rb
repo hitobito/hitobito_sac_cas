@@ -116,7 +116,7 @@ describe Dropdown::People::Memberships do
       expect(dropdown.to_s).to be_blank
     end
 
-    it "is contains link even if is sektion disallows" do
+    it "is contains link if person is permitted for other even if sektion disallows" do
       allow(self).to receive(:current_user).and_return(people(:admin))
       expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(true)
       stammsektion_role.layer_group.mitglied_termination_by_section_only = true
