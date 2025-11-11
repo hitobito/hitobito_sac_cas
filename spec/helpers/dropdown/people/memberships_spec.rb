@@ -109,7 +109,7 @@ describe Dropdown::People::Memberships do
       expect(menu).to have_link "SAC-Mitgliedschaft beenden"
     end
 
-    it "is hides link if person is permitted but sektion denies" do
+    it "is hides link if person is permitted for self but sektion denies" do
       expect(ability).to receive(:can?).with(:terminate, stammsektion_role).and_return(true)
       stammsektion_role.layer_group.mitglied_termination_by_section_only = true
       stammsektion_role.layer_group.save!
