@@ -87,6 +87,7 @@ Rails.application.routes.draw do
           post :jubilare, to: "jubilare#create"
           post :mitglieder_csv, to: "mitglieder_csv#create", format: "csv"
           post :mitglieder_statistics, to: "mitglieder_statistics#create"
+          post :terminated_mitglieder, to: "terminated_mitglieder#create", format: "csv"
         end
       end
     end
