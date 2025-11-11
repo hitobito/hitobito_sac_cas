@@ -55,7 +55,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
       [75, 512, "Unterkunft"],
       [195, 512, "Wird reserviert durch SAC"],
       [75, 491, "Unterkunft Budget"],
-      [195, 491, "Pro Person / Nacht mit Halbpension"],
+      [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
       [75, 470, "Unterkunft Kategorie"],
       [195, 470, "ohne Übernachtung"],
       [75, 449, "Durchführungssprache"],
@@ -239,7 +239,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         find_matches([
           [75, 491, "Unterkunft Budget"],
-          [195, 491, "Pro Person / Nacht mit Halbpension"],
+          [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
           [195, 470, "Anreise Kursleiter"],
           [435, 470, "CHF"],
           [485, 470, "30.00"]
@@ -257,7 +257,7 @@ describe Export::Pdf::Participations::KeyDataSheet do
       it "renders" do
         find_matches([
           [75, 491, "Unterkunft Budget"],
-          [195, 491, "Pro Person / Nacht mit Halbpension"],
+          [195, 491, "Hütten 85.-\\n Pension, Berggasthaus 125.-\\n Pro Person / Nacht mit Halbpension"],
           [195, 470, "Anreise Klassenleiter"],
           [435, 470, "CHF"],
           [485, 470, "50.00"]
