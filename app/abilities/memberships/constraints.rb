@@ -13,19 +13,8 @@ module Memberships
       active_member? && (for_self? || if_backoffice?)
     end
 
-    def for_self_when_not_terminated_if_active_member_or_backoffice
-      active_member? &&
-        (for_self_and_not_terminated? ||
-        if_backoffice? ||
-        termination_by_section_only_false_and_schreibrecht_and_not_terminated?)
-    end
-
     def for_self_and_not_terminated?
       for_self? && !terminated?
-    end
-
-    def termination_by_section_only_false_and_schreibrecht_and_not_terminated?
-      !mitglied_termination_by_section_only? && schreibrecht_role? && !terminated?
     end
 
     def if_backoffice?

@@ -18,7 +18,8 @@ describe Memberships::UndoTermination, versioning: true do
   def terminate(role, terminate_on: Date.current.yesterday, **opts)
     role = roles(role) if role.is_a?(Symbol)
     termination = Memberships::TerminateSacMembership.new(
-      role, terminate_on,
+      role,
+      terminate_on:,
       termination_reason_id: termination_reasons(:deceased).id,
       **opts
     )

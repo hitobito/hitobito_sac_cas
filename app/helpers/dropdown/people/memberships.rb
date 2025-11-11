@@ -13,19 +13,21 @@ module Dropdown
       [Wizards::Memberships::JoinZusatzsektion, :group_person_join_zusatzsektion_path],
       [Wizards::Memberships::SwitchStammsektion, :group_person_switch_stammsektion_path],
       [Wizards::Memberships::SwapStammZusatzsektion, :group_person_switch_stammsektion_path,
-        {kind: :zusatzsektion}],
-      [Wizards::Memberships::TerminateSacMembershipWizard,
-        :group_person_terminate_sac_membership_path]
+        {kind: :zusatzsektion}]
     ].freeze
 
     delegate :current_ability, :current_user, :group_person_join_zusatzsektion_path,
       :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path,
       to: :template
 
+    delegate :can?, to: :current_ability
+    delegate :sac_membership, to: "@person"
+
     def initialize(template, person, group)
       @template = template
       @person = person
       @group = group
+      @stammsektion = person.sac_membership.stammsektion
       super(template, translate(:title), :edit)
       init_items
     end
@@ -38,9 +40,10 @@ module Dropdown
 
     def init_items
       WIZARDS.each do |wizard_class, path, params|
-        add_wizard(wizard_class, path, params) if current_ability.can?(:create, build(wizard_class))
+        add_wizard(wizard_class, path, params) if can?(:create, build(wizard_class))
       end
-      add_undo_termination_link if current_ability.can?(:create, ::Memberships::UndoTermination)
+      add_terminate_sac_membership_link if can?(:terminate, sac_membership.stammsektion_role)
+      add_undo_termination_link if can?(:create, ::Memberships::UndoTermination)
     end
 
     def add_wizard(wizard_class, path, params)
@@ -51,16 +54,30 @@ module Dropdown
     end
 
     def add_undo_termination_link # rubocop:todo Metrics/AbcSize
-      latest_membership = person.sac_membership.stammsektion_role ||
-        person.sac_membership.latest_stammsektion_role
+      latest_membership = sac_membership.stammsektion_role ||
+        sac_membership.latest_stammsektion_role
       return unless latest_membership&.terminated?
 
-      add_item(translate("undo_termination_link"),
+      add_item(translate(:undo_termination_link),
         template.new_group_person_role_undo_termination_path(
           role_id: latest_membership.id,
           group_id: latest_membership.group_id,
           person_id: person.id
         ))
+    end
+
+    def add_terminate_sac_membership_link
+      return unless sac_membership.active?
+      return if current_user == person &&
+        sac_membership.stammsektion.mitglied_termination_by_section_only
+
+      add_item(
+        translate(:terminate_sac_membership_link),
+        group_person_terminate_sac_membership_path(
+          group_id: sac_membership.stammsektion_role.group_id,
+          person_id: person.id
+        )
+      )
     end
 
     def build(wizard_class)

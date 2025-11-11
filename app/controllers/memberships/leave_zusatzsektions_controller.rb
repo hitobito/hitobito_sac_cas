@@ -6,52 +6,22 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Memberships
-  class LeaveZusatzsektionsController < Wizards::BaseController
-    before_action :wizard, :person, :group, :role, :authorize
-
-    helper_method :group, :person
-    alias_method :entry, :wizard
-
+  class LeaveZusatzsektionsController < TerminationController
     private
-
-    def authorize
-      authorize!(:terminate, wizard.role)
-    end
-
-    def wizard
-      @wizard ||= model_class.new(
-        person: person,
-        role: role,
-        current_step: params[:step].to_i,
-        backoffice: current_user != person,
-        **model_params.to_unsafe_h
-      )
-    end
-
-    def model_class
-      Wizards::Memberships::LeaveZusatzsektion
-    end
-
-    def success_message
-      roles_count = wizard.leave_operation.affected_people.count
-      t(".success", group_name: wizard.sektion_name, count: roles_count)
-    end
-
-    # NOTE: format: :html is required otherwise it is redirect as turbo_stream
-    def redirect_target
-      person_path(person, format: :html)
-    end
-
-    def person
-      @person ||= Person.find(params[:person_id])
-    end
 
     def role
       @role ||= person.roles.find(params[:role_id])
     end
 
-    def group
-      @group ||= Group.find(params[:group_id])
+    def model_params
+      params
+        .require(:memberships_leave_zusatzsektion_form)
+        .permit(:terminate_on, :termination_reason_id)
+    end
+
+    def render_abort_views
+      return render :open_invoice_exists if open_invoice?
+      super
     end
   end
 end

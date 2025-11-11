@@ -14,32 +14,32 @@ describe Memberships::TerminateSacMembership do
 
   let(:params) { {terminate_on: Time.zone.yesterday, termination_reason_id: reason.id} }
 
-  subject(:termination) { described_class.new(role, params.delete(:terminate_on), **params) }
+  subject(:termination) { described_class.new(role, **params) }
 
   describe "exceptions" do
     it "raises when role is not a mitglied role" do
       expect do
-        described_class.new(roles(:mitglied_zweitsektion), Time.zone.yesterday)
+        described_class.new(roles(:mitglied_zweitsektion))
       end.to raise_error("not a member")
     end
 
     it "raises when role is already terminated" do
       role.update_columns(terminated: true)
       expect do
-        described_class.new(role, Time.zone.yesterday)
+        described_class.new(role)
       end.to raise_error("already terminated")
     end
 
     it "raises when role is already ended" do
       role.update_columns(end_on: Date.current.yesterday)
       expect do
-        described_class.new(role, Time.zone.yesterday)
+        described_class.new(role)
       end.to raise_error("already deleted")
     end
 
     it "raises if not main family person" do
       expect do
-        described_class.new(roles(:familienmitglied2), Time.zone.yesterday)
+        described_class.new(roles(:familienmitglied2))
       end.to raise_error("not family main person")
     end
   end
@@ -266,16 +266,14 @@ describe Memberships::TerminateSacMembership do
       end
 
       describe "external invoices" do
+        def create_invoice(attrs = {})
+          person.external_invoices.create!({type: ExternalInvoice::SacMembership.sti_name}.merge(attrs))
+        end
+
         it "cancels open membership invoices" do
-          # rubocop:todo Layout/LineLength
-          invoice = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "open", year: 2022) # matching
-          # rubocop:enable Layout/LineLength
-          # rubocop:todo Layout/LineLength
-          other_status = person.external_invoices.create!(type: ExternalInvoice::SacMembership.sti_name, state: "payed", year: 2020) # other status
-          # rubocop:enable Layout/LineLength
-          # rubocop:todo Layout/LineLength
-          other_type = person.external_invoices.create!(type: ExternalInvoice.sti_name, state: "open", year: 2020) # other type
-          # rubocop:enable Layout/LineLength
+          invoice = create_invoice(state: "open", year: 2022) # matching
+          other_status = create_invoice(state: "payed", year: 2020) # other status
+          other_type = create_invoice(type: ExternalInvoice.sti_name, state: "open", year: 2020) # other type
 
           expect do
             expect(termination.save!).to eq true

@@ -45,9 +45,9 @@ module Memberships
       [Time.zone.yesterday, Time.zone.now.end_of_year.to_date]
     end
 
-    def initialize(role, terminate_on, **params)
+    def initialize(role, **params)
       @role = role
-      super(params.merge(terminate_on: terminate_on))
+      super(params)
 
       assert_sektions_mitglied
       assert_main_person_if_family
@@ -125,12 +125,12 @@ module Memberships
     end
 
     def cancel_open_membership_invoices(person)
-      # rubocop:todo Layout/LineLength
-      person.external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name).find_each do |invoice|
-        # rubocop:enable Layout/LineLength
-        invoice.update!(state: "cancelled")
-        Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
-      end
+      person
+        .external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name)
+        .find_each do |invoice|
+          invoice.update!(state: "cancelled")
+          Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+        end
     end
 
     def destroy_household = person.household.destroy

@@ -29,7 +29,7 @@ describe Memberships::LeaveZusatzsektion do
   describe "initialization exceptions" do
     it "raises if role type is invalid" do
       expect do
-        described_class.new(Role.new, :termination_date,
+        described_class.new(Role.new, terminate_on:,
           termination_reason_id: termination_reason.id)
       end.to raise_error("wrong type")
     end
@@ -40,13 +40,13 @@ describe Memberships::LeaveZusatzsektion do
           beitragskategorie: "family",
           person: Person.new
         )
-        described_class.new(role, :termination_date, termination_reason_id: termination_reason.id)
+        described_class.new(role, terminate_on:, termination_reason_id: termination_reason.id)
       end.to raise_error("not main family person")
     end
   end
 
   subject(:leave) {
-    described_class.new(role, terminate_on, termination_reason_id: termination_reason.id)
+    described_class.new(role, terminate_on: terminate_on, termination_reason_id: termination_reason.id)
   }
 
   describe "validations" do
@@ -59,7 +59,7 @@ describe Memberships::LeaveZusatzsektion do
     end
 
     context "without termination_reason_id" do
-      subject(:leave) { described_class.new(role, terminate_on) }
+      subject(:leave) { described_class.new(role, terminate_on: terminate_on) }
 
       it "is invalid" do
         expect(leave).not_to be_valid
@@ -68,7 +68,7 @@ describe Memberships::LeaveZusatzsektion do
     end
 
     describe "validates date" do
-      def leave_on(date) = described_class.new(role, date,
+      def leave_on(date) = described_class.new(role, terminate_on: date,
         termination_reason_id: termination_reason.id)
 
       it "is valid on yesterday and at the end of current year" do
@@ -139,7 +139,7 @@ describe Memberships::LeaveZusatzsektion do
       let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
 
       subject(:leave) {
-        described_class.new(@matterhorn_zusatz, terminate_on,
+        described_class.new(@matterhorn_zusatz, terminate_on:,
           termination_reason_id: termination_reason.id)
       }
 

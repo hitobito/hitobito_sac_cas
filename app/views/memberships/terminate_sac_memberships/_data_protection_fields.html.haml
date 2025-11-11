@@ -1,0 +1,25 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.row.mb-2
+  .col-md-3.col-xl-2.pb-1
+  .col-md-9.col-xl-7.col-xxl6
+    .alert.alert-info
+      %strong=t('wizards.steps.termination.summary.data_retention_info_title')
+      %p=t('wizards.steps.termination.summary.data_retention_info_text')
+      %p=t('wizards.steps.termination.summary.entry_fee_info_text')
+      = f.label(:data_retention_consent, class: 'row mb-2') do
+        .col
+          = f.check_box :data_retention_consent, {class: 'align-middle', data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" }}
+          = t('wizards.steps.termination.summary.data_retention_consent')
+      = f.label(:entry_fee_consent, class: 'row mb-2') do
+        .col
+          = f.check_box :entry_fee_consent, class: 'align-middle', data: { action: "disable-toggle#toggle" }
+          = f.label(:entry_fee_consent, class: 'required') do
+            = t('wizards.steps.termination.summary.entry_fee_consent')
+= render 'wizards/shared/inline_checkbox', label: t("wizards.steps.termination.summary.subscribe_newsletter"), key: :subscribe_newsletter, form: f, stimulus_ctrl:
+= render 'wizards/shared/inline_checkbox', label: t("wizards.steps.termination.summary.subscribe_fundraising_list"), key: :subscribe_fundraising_list, form: f, stimulus_ctrl:
+- if for_someone_else?
+  = render 'wizards/shared/inline_checkbox', label: t("wizards.steps.termination.summary.inform_mitglied_via_email"), key: :inform_mitglied_via_email, form: f

@@ -30,7 +30,6 @@ describe "leave zusatzsektion", js: true do
       end
       expect(page).to have_title "Zusatzsektion verlassen"
       choose "Sofort"
-      click_button "Weiter"
       select termination_reason.text
       expect do
         click_button "Austritt beantragen"
@@ -55,12 +54,11 @@ describe "leave zusatzsektion", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "Zusatzsektion verlassen"
+      choose "Auf 31.12.#{Date.current.year}"
       select termination_reason.text
       expect do
         click_button "Austritt beantragen"
-        # rubocop:todo Layout/LineLength
         expect(page).to have_content "Deine Zusatzmitgliedschaft in #{role.group.parent.name} wurde gelöscht."
-        # rubocop:enable Layout/LineLength
         role.reload
       end
         .to not_change { person.roles.count }
@@ -79,16 +77,13 @@ describe "leave zusatzsektion", js: true do
       within("#role_#{role.id}") do
         click_link "Austritt"
       end
+      choose "Auf 31.12.#{Date.current.year}"
       expect(page).to have_title "Zusatzsektion verlassen"
       select termination_reason.text
+      expect(page).to have_content "Austritt wird für die gesamte Familienmitgliedschaft beantragt"
       expect do
-        # rubocop:todo Layout/LineLength
-        expect(page).to have_content "Der Austritt aus der Zusatzsektion wird für die gesamte Familienmitgliedschaft beantragt"
-        # rubocop:enable Layout/LineLength
         click_button "Austritt beantragen"
-        # rubocop:todo Layout/LineLength
         expect(page).to have_content "Eure 3 Zusatzmitgliedschaften in #{role.group.parent.name} wurden gelöscht."
-        # rubocop:enable Layout/LineLength
         role.reload
       end
         .to not_change { person.roles.count }
