@@ -28,6 +28,24 @@ describe CourseCompensationCategory do
     I18n.with_locale(:it) { expect(model.name_assistant_leader).to eq "it" }
   end
 
+  it "#name_leader_aspirant uses values from translation" do
+    Settings.application.languages.keys.each do |lang|
+      I18n.with_locale(lang) { model.name_leader_aspirant = lang.to_s }
+    end
+    I18n.with_locale(:de) { expect(model.name_leader_aspirant).to eq "de" }
+    I18n.with_locale(:fr) { expect(model.name_leader_aspirant).to eq "fr" }
+    I18n.with_locale(:it) { expect(model.name_leader_aspirant).to eq "it" }
+  end
+
+  it "#name_assistant_leader_aspirant uses values from translation" do
+    Settings.application.languages.keys.each do |lang|
+      I18n.with_locale(lang) { model.name_assistant_leader_aspirant = lang.to_s }
+    end
+    I18n.with_locale(:de) { expect(model.name_assistant_leader_aspirant).to eq "de" }
+    I18n.with_locale(:fr) { expect(model.name_assistant_leader_aspirant).to eq "fr" }
+    I18n.with_locale(:it) { expect(model.name_assistant_leader_aspirant).to eq "it" }
+  end
+
   it "#to_s shows short name and translated kind" do
     model.short_name = "dummy"
     model.kind = :flat
