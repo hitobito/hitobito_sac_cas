@@ -67,6 +67,7 @@ module Dropdown
     end
 
     def add_terminate_sac_membership_link
+      return unless sac_membership.active?
       return if current_user == person &&
         sac_membership.stammsektion.mitglied_termination_by_section_only
 
