@@ -41,6 +41,12 @@ module Wizards::Signup
       true
     end
 
+    def person
+      @person ||= build_or_find_person.tap do |p|
+        p.attributes = person_attrs
+      end
+    end
+
     private
 
     attr_reader :group, :person_attrs, :newsletter
@@ -59,12 +65,6 @@ module Wizards::Signup
 
     def paying_person?
       role.person.sac_membership.paying_person?(role.beitragskategorie)
-    end
-
-    def person
-      @person ||= build_or_find_person.tap do |p|
-        p.attributes = person_attrs
-      end
     end
 
     def build_or_find_person

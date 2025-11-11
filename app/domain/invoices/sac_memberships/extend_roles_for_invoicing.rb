@@ -52,15 +52,20 @@ module Invoices::SacMemberships
           end_role(role)
           create_mitglied_role(role.person_id, role.group_id, :adult)
 
-          role.person.sac_membership.zusatzsektion_roles.where(terminated: false,
-            end_on: ...@prolongation_date,
-            beitragskategorie: :youth).find_each do |zusatzsektion_role|
-            end_role(zusatzsektion_role)
-            create_zusatzmitglied_role(zusatzsektion_role.person_id, zusatzsektion_role.group_id,
-              :adult)
+          zusatzsektion_roles_to_turn_adult(role.person).find_each do |zusatz_role|
+            end_role(zusatz_role)
+            create_zusatzmitglied_role(zusatz_role.person_id, zusatz_role.group_id, :adult)
           end
         end
       end
+    end
+
+    def zusatzsektion_roles_to_turn_adult(person)
+      person.sac_membership.zusatzsektion_roles.where(
+        terminated: false,
+        end_on: ...@prolongation_date,
+        beitragskategorie: :youth
+      )
     end
 
     def dissolve_household?(person, amount_turned_youth_per_household)
@@ -70,18 +75,26 @@ module Invoices::SacMemberships
     end
 
     def leave_household(person)
-      Memberships::FamilyMutation.new(person, new_role_end_on: @prolongation_date,
-        new_role_start_on: @new_role_start_on, replaced_role_end_on: old_role_end_on).leave!
+      Memberships::FamilyMutation.new(
+        person,
+        new_role_end_on: @prolongation_date,
+        new_role_start_on: @new_role_start_on,
+        replaced_role_end_on: old_role_end_on
+      ).leave!
     end
 
     def roles_to_turn_youth
-      @roles_to_turn_youth ||= roles_for_beitragskategorie_change(beitragskategorie: :family,
-        birthday_range: turned_youth_reference_age)
+      @roles_to_turn_youth ||= roles_for_beitragskategorie_change(
+        beitragskategorie: :family,
+        birthday_range: turned_youth_reference_age
+      )
     end
 
     def roles_to_turn_adult
-      @roles_to_turn_adult ||= roles_for_beitragskategorie_change(beitragskategorie: :youth,
-        birthday_range: turned_adult_reference_age)
+      @roles_to_turn_adult ||= roles_for_beitragskategorie_change(
+        beitragskategorie: :youth,
+        birthday_range: turned_adult_reference_age
+      )
     end
 
     def roles_for_beitragskategorie_change(beitragskategorie:, birthday_range:)
@@ -93,22 +106,31 @@ module Invoices::SacMemberships
     end
 
     def roles_to_extend
-      future_roles_of_the_same_type_join_sql = ApplicationRecord.sanitize_sql(["
+      Role
+        .with_inactive
+        .where(
+          type: ROLES_TO_EXTEND,
+          terminated: false,
+          end_on: old_role_end_on...@prolongation_date,
+          person_id: person_ids
+        )
+        .joins(future_roles_of_the_same_type_join_sql)
+        .where(future_roles_of_the_same_type: {id: nil})
+    end
+
+    def future_roles_of_the_same_type_join_sql
+      ApplicationRecord.sanitize_sql(["
            LEFT JOIN roles AS future_roles_of_the_same_type ON
         future_roles_of_the_same_type.person_id = roles.person_id AND
         future_roles_of_the_same_type.type = roles.type AND
         future_roles_of_the_same_type.start_on >= :new_role_start_on",
         new_role_start_on: @new_role_start_on])
-
-      Role.with_inactive.where(type: ROLES_TO_EXTEND, terminated: false,
-        end_on: old_role_end_on...@prolongation_date, person_id: person_ids)
-        .joins(future_roles_of_the_same_type_join_sql)
-        .where(future_roles_of_the_same_type: {id: nil})
     end
 
     def person_ids
       Person.joins(:roles_unscoped)
-        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name, terminated: false,
+        .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name,
+                       terminated: false,
                        end_on: old_role_end_on..@prolongation_date})
         .where.not(id: ExternalInvoice::SacMembership.where(year: @prolongation_date.year)
         .select(:person_id))
@@ -117,13 +139,23 @@ module Invoices::SacMemberships
     end
 
     def create_mitglied_role(person_id, group_id, beitragskategorie)
-      Group::SektionsMitglieder::Mitglied.create!(person_id:, group_id:, beitragskategorie:,
-        start_on: @new_role_start_on, end_on: @prolongation_date)
+      Group::SektionsMitglieder::Mitglied.create!(
+        person_id:,
+        group_id:,
+        beitragskategorie:,
+        start_on: @new_role_start_on,
+        end_on: @prolongation_date
+      )
     end
 
     def create_zusatzmitglied_role(person_id, group_id, beitragskategorie)
-      Group::SektionsMitglieder::MitgliedZusatzsektion.create!(person_id:, group_id:,
-        beitragskategorie:, start_on: @new_role_start_on, end_on: @prolongation_date)
+      Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+        person_id:,
+        group_id:,
+        beitragskategorie:,
+        start_on: @new_role_start_on,
+        end_on: @prolongation_date
+      )
     end
 
     def turned_adult_reference_age

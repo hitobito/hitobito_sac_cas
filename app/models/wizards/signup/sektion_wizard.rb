@@ -33,10 +33,12 @@ module Wizards::Signup
         current_user&.sac_membership&.neuanmeldung_stammsektion_role
     end
 
-    def redirection_message = I18n.t("groups.self_registration.create.existing_membership_notice")
+    def redirection_message
+      I18n.t("groups.self_registration.create.existing_membership_notice")
+    end
 
     def save!
-      valid? && operations.all?(&:save!)
+      valid? && operations.all?(&:save!) && create_people_managers
     end
 
     def birthdays
@@ -48,8 +50,11 @@ module Wizards::Signup
     end
 
     def fees_for(beitragskategorie)
-      Invoices::SacMemberships::SectionSignupFeePresenter.new(group.layer_group, beitragskategorie,
-        person)
+      Invoices::SacMemberships::SectionSignupFeePresenter.new(
+        group.layer_group,
+        beitragskategorie,
+        person
+      )
     end
 
     private
@@ -72,7 +77,7 @@ module Wizards::Signup
     end
 
     def operations
-      @operation ||= people_attrs.map do |person_attrs|
+      @operations ||= people_attrs.map do |person_attrs|
         SektionOperation.new(person_attrs:, group:, newsletter:)
       end
     end
@@ -86,6 +91,14 @@ module Wizards::Signup
           errors.add(:base, msg)
         end
       end
+    end
+
+    def create_people_managers
+      return unless household_key
+
+      main_person = operations.find { |o| o.person.sac_family_main_person }.person
+      main_person.household.create_missing_people_managers(main_person)
+      true
     end
 
     def people_attrs

@@ -8,6 +8,7 @@
 require "spec_helper"
 
 describe HouseholdAsideComponent, type: :component do
+  let(:user) { people(:admin) }
   let(:familienmitglied) { people(:familienmitglied) }
   let(:familienmitglied2) { people(:familienmitglied2) }
   let(:familienmitglied_kind) { people(:familienmitglied_kind) }
@@ -15,6 +16,11 @@ describe HouseholdAsideComponent, type: :component do
   let(:member_component) { HouseholdAsideMemberComponent.new(person: familienmitglied) }
 
   subject(:component) { described_class.new(person: familienmitglied, group: group) }
+
+  before do
+    allow_any_instance_of(HouseholdAsideMemberComponent)
+      .to receive(:current_person).and_return(user)
+  end
 
   it "returns the humanized name of the Household model" do
     stub_can(:show, true)

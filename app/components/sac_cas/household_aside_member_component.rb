@@ -10,7 +10,7 @@ module SacCas
     extend ActiveSupport::Concern
 
     prepended do # rubocop:todo Metrics/BlockLength
-      delegate :icon, :link_to, :sac_family_main_person_path, to: :helpers
+      delegate :icon, :link_to, :sac_family_main_person_path, :current_person, to: :helpers
 
       def call
         safe_join(entry_rows)
@@ -98,7 +98,7 @@ module SacCas
         return @can_set_main_person if defined?(@can_set_main_person)
 
         @can_set_main_person = person.household.exists? &&
-          entries.all? { |member| can?(:update, member) }
+          entries.all? { |member| member != current_person && can?(:update, member) }
       end
     end
   end

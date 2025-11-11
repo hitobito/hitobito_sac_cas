@@ -55,17 +55,12 @@ describe PeopleManager do
       ))
     end
 
-    it "does not allow managed to be an adult" do
+    it "allows managed to be an adult" do
       manager = Fabricate(:person, birthday: 25.years.ago)
       managed = Fabricate(:person, birthday: 25.years.ago)
       pm = PeopleManager.new(manager: manager, managed: managed)
 
-      expect(pm).to_not be_valid
-      expect(pm.errors.errors).to include(have_attributes(
-        attribute: :managed_id,
-        type: :managed_is_not_child,
-        options: {name: managed.full_name.to_s, age: managed.years}
-      ))
+      expect(pm).to be_valid
     end
 
     it "allows managed to be a baby" do

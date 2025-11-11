@@ -25,16 +25,17 @@ module SacCas::Role::MitgliedNoOverlapValidation
   end
 
   def assert_no_overlapping_primary_memberships
-    overlapping_roles(active_period, SacCas::STAMMSEKTION_ROLES).tap do |conflicting_roles|
-      conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
+    overlapping_roles(active_period, SacCas::STAMMSEKTION_ROLES).each do |conflicting_role|
+      add_overlap_error(conflicting_role)
     end
   end
 
   def assert_no_overlapping_memberships_per_layer
     overlapping_roles(active_period, SacCas::MITGLIED_ROLES)
-      .select { |role| role.layer_group == layer_group }.tap do |conflicting_roles|
-      conflicting_roles.each { |conflicting_role| add_overlap_error(conflicting_role) }
-    end
+      .select { |role| role.layer_group == layer_group }
+      .each do |conflicting_role|
+        add_overlap_error(conflicting_role)
+      end
   end
 
   def overlapping_roles(period, role_types)

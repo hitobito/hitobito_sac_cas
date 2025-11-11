@@ -87,34 +87,30 @@ describe Wizards::Signup::SektionWizard do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          # rubocop:todo Layout/LineLength
-          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "max.muster@example.com", phone_number: "0791234567"}]
-          # rubocop:enable Layout/LineLength
+          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000",
+               email: "max.muster@example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      # rubocop:todo Layout/LineLength
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
-      # rubocop:enable Layout/LineLength
+      expect(wizard.family_fields.members.first.errors.full_messages)
+        .to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
     it "is invalid when on family_fields step and uses existing email" do
       @current_step = 2
       required_attrs[:family_fields] = {
         members_attributes: [
-          # rubocop:todo Layout/LineLength
-          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000", email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
-          # rubocop:enable Layout/LineLength
+          [0, {gender: "w", first_name: "Maxine", last_name: "Muster", birthday: "1.1.2000",
+               email: "e.hillary@hitobito.example.com", phone_number: "0791234567"}]
         ]
       }
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
       expect(wizard.family_fields).not_to be_valid
-      # rubocop:todo Layout/LineLength
-      expect(wizard.family_fields.members.first.errors.full_messages).to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
-      # rubocop:enable Layout/LineLength
+      expect(wizard.family_fields.members.first.errors.full_messages)
+        .to eq ["E-Mail ist bereits vergeben. Die E-Mail muss eindeutig sein pro Person."]
     end
 
     it "is invalid when on summary_fields step and data_protection is blank" do
@@ -171,17 +167,18 @@ describe Wizards::Signup::SektionWizard do
         members_attributes: [
           [0,
             {gender: "w", first_name: "Maxine", last_name: "Muster",
-             # rubocop:todo Layout/LineLength
-             birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com", phone_number: "0791234567"}],
-          # rubocop:enable Layout/LineLength
+             birthday: 42.years.ago.beginning_of_year.to_s, email: "maxine@example.com",
+             phone_number: "0791234567"}],
           [1,
             {gender: "m", first_name: "Maxi", last_name: "Muster",
              birthday: 12.years.ago.beginning_of_year.to_s}]
         ]
       }
       expect(wizard).to be_valid
-      expect { wizard.save! }.to change { Person.count }.by(3)
+      expect { wizard.save! }
+        .to change { Person.count }.by(3)
         .and change { Role.count }.by(3)
+        .and change { PeopleManager.count }.by(2)
       expect(max.roles.last.beitragskategorie).to eq "family"
       expect(max.household_key).to be_present
       expect(maxi.household_key).to eq(max.household_key)
@@ -190,6 +187,8 @@ describe Wizards::Signup::SektionWizard do
       expect(maxine.roles.last.beitragskategorie).to eq "family"
       expect(maxi.address).to eq(max.address)
       expect(maxine.address).to eq(max.address)
+      expect(max.sac_family_main_person).to be(true)
+      expect(max.manageds).to match_array([maxi, maxine])
     end
 
     context "various fields" do
@@ -291,30 +290,33 @@ describe Wizards::Signup::SektionWizard do
           .and change { person.reload.country }.from(nil).to("CH")
           .and not_change { Person.count }
           .and not_change {
-                 # rubocop:todo Layout/LineLength
-                 person.reload.attributes.compact_blank.except(*%w[primary_group_id country first_name updated_at
-                   data_quality])
-                 # rubocop:enable Layout/LineLength
+                 person.reload.attributes.compact_blank.except(
+                   *%w[primary_group_id country first_name updated_at data_quality]
+                 )
                }
       end
 
       describe "family fields" do
         it "shows fields if person is old enough" do
           person.birthday = 30.years.ago.to_date
-          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
+          expect(wizard.step_at(1)).to be_instance_of(
+            Wizards::Steps::Signup::Sektion::FamilyFields
+          )
         end
 
         it "skips fields if person is too young" do
           person.birthday = 20.years.ago.to_date
-          # rubocop:todo Layout/LineLength
-          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
-          # rubocop:enable Layout/LineLength
+          expect(wizard.step_at(1)).to be_instance_of(
+            Wizards::Steps::Signup::Sektion::VariousFields
+          )
         end
 
         it "shows fields if person is too young but birthday has been corrected to old enough" do
           person.birthday = 20.years.ago.to_date
           required_attrs[:person_fields][:birthday] = 30.years.ago.to_date
-          expect(wizard.step_at(1)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
+          expect(wizard.step_at(1)).to be_instance_of(
+            Wizards::Steps::Signup::Sektion::FamilyFields
+          )
         end
       end
     end

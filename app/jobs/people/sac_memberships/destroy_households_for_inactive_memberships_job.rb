@@ -13,23 +13,22 @@ module People
       end
 
       def perform_internal
-        affected_family_people.each { _1.household.destroy }
+        affected_family_people.find_each(batch_size: 100) do
+          _1.household.destroy
+        end
       end
 
       def affected_family_people
-        # rubocop:todo Layout/LineLength
-        family_role_types = (SacCas::MITGLIED_STAMMSEKTION_ROLES + SacCas::NEUANMELDUNG_STAMMSEKTION_ROLES).map(&:sti_name)
-        # rubocop:enable Layout/LineLength
+        Person.where.not(household_key: ["", nil])
+          .where("id NOT IN (?)", people_with_active_family_roles_ids) # rubocop:disable Rails/WhereNot
+          .where(sac_family_main_person: true)
+      end
 
-        people_with_active_family_roles_ids = Role.select(:person_id).where(
-          type: family_role_types,
+      def people_with_active_family_roles_ids
+        Role.select(:person_id).where(
+          type: SacCas::STAMMSEKTION_ROLES.map(&:sti_name),
           beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY
         )
-
-        Person.where.not(household_key: "")
-          .where("id NOT IN (:people_ids)", # rubocop:disable Rails/WhereNot
-            people_ids: people_with_active_family_roles_ids)
-          .distinct_on(:household_key)
       end
     end
   end

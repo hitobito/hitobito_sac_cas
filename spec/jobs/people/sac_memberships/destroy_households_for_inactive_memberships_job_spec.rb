@@ -121,12 +121,18 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
   end
 
   context "when performing job" do
+    before do
+      family_member.household.people.each do |person|
+        person.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
+        person.sac_membership.zusatzsektion_roles.each { |r| r.update!(end_on: 10.days.ago) }
+      end
+    end
+
     it "calls household destroy for each family" do
-      allow(job).to receive(:affected_family_people).and_return([family_member,
-        people(:familienmitglied2)])
-      expect(family_member.household).to receive(:destroy).exactly(:once)
-      expect(people(:familienmitglied2).household).to receive(:destroy).exactly(:once)
-      job.perform
+      expect { job.perform }
+        .to change { PeopleManager.count }.by(-2)
+
+      expect(family_member.reload.household_key).to be_nil
     end
   end
 end
