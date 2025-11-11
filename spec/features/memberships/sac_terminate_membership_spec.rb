@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe "terminate sac membership wizard", js: true do
+describe "terminate sac membership", js: true do
   let(:person) { people(:mitglied) }
   let(:role) { person.roles.first }
   let(:operator) { person }
