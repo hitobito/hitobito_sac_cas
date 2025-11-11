@@ -74,7 +74,7 @@ module Dropdown
       add_item(
         translate(:terminate_sac_membership_link),
         group_person_terminate_sac_membership_path(
-          group_id: sac_membership.stammsektion.id,
+          group_id: sac_membership.stammsektion_role.group_id,
           person_id: person.id
         )
       )
