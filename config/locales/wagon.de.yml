@@ -65,6 +65,9 @@ de:
       people/export/period_form:
         from: "Von"
         to: "Bis"
+      people/export/terminated_mitglieder_form:
+        from: Von
+        to: Bis
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -193,6 +196,12 @@ de:
         person:
           data_quality_issue:
             message: "%{attr} %{key}"
+        people/export/terminated_mitglieder_form:
+          attributes:
+            base:
+              date_range_too_long: Von und Bis dürfen maximal 1 Jahr entfernt voneinander sein
+            to:
+              must_be_later_than_from: muss nach Von sein
         data_quality_issue:
           messages:
             empty: ist leer
@@ -1245,6 +1254,7 @@ de:
     jubilare: Jubilare
     mitglieder_statistics: Mitgliederstatistik
     beitragskategorie_wechsel: Wechsel Beitragskategorie
+    terminated_mitglieder: Ausgetretene Mitglieder
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1531,6 +1541,9 @@ de:
       sac_is_re_entry: Ist SAC Wiedereintritt
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      data_protection_agreement: Datenschutzerklärung
       start_on: Eintrittsdatum
       changed_on: Mutationsdatum
       changed_youth_adult: Ist Wechsel Jugend-Einzel
@@ -1913,6 +1926,9 @@ de:
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
 
     export:
+      popover_terminated_mitglieder:
+        title: "Ausgetretene Mitglieder exportieren"
+        download: Herunterladen
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
@@ -2022,6 +2038,10 @@ de:
 
   people/export/mitglieder_statistics:
     filename: Mitgliederstatistik
+
+  people/export/terminated_mitglieder:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Austritte
 
   people/neuanmeldungen/approves:
     new:
