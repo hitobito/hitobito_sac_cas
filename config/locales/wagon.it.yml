@@ -57,6 +57,9 @@ it:
         send_date: "Data di spedizione e fatturazione"
         price_category: "Categoria di prezzo"
         price: "Prezzo"
+      people/export/jubilare_form:
+        reference_date: "Stichtag"
+        membership_years: "Anzahl Mitgliedsjahre"
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di prenotazione"
@@ -101,8 +104,9 @@ it:
         myself: per me stesso
       wizards/steps/switch_stammsektion:
         now: subito
-      memberships/leave_zusatzsektion:
-        terminate_on: Data di disdetta
+      memberships/termination_form:
+        terminate_on: Austrittsdatum
+        termination_reason_id: Austrittsgrund
       people/neuanmeldungen/reject:
         note: Osservazione
       self_inscription:
@@ -1069,8 +1073,8 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_vorstand/praesidium:
-        one: Direzione
-        description: Direzione
+        one: Presidenza
+        description: Presidenza
       group/sektions_vorstand/mitglied:
         one: Socio
         description: Socio
@@ -1247,12 +1251,13 @@ it:
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
     swap_stamm_zusatzsektion_link: Scambiare la sezione principale e quella aggiuntiva
-    terminate_sac_membership_wizard_link: Disdire l’affiliazione al CAS
+    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
     undo_termination_link: Riattivare l’affiliazione al CAS
 
   dropdown/people/sac_exports:
     button: CAS Esportazioni
     csv_mitglieder: CSV Membri
+    jubilare: Jubilare
 
   dropdown/people_export:
     recipients: Per l’invio elettronico (via e-mail)
@@ -1494,6 +1499,41 @@ it:
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
 
+  export/tabular/people:
+    attributes:
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      terminate_on: Austritt geplant
+      type: Typ
+      types:
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
+  export/tabular/people/jubilare:
+    sheet_name: "Mitglieder per %{reference_date}"
+
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
     tour_guides_active: Guide escursionistiche attive
@@ -1534,7 +1574,7 @@ it:
         already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
         already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
-        existing_family_notice: Sei assegnato a una famiglia. Contatta il Segretariato centrale del CAS.
+        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
         signed_up_notice: La tua registrazione è stata salvata con successo.
 
       agreement_link:
@@ -1658,6 +1698,9 @@ it:
           one: "La modifica della sezione a <i>%{group_name}</i> è stata effettuata."
           many: "%{count} Le modifiche alla sezione in<i>%{group_name}</i> sono state effettuate."
           other: "I vostri %{count} cambi di sezione a %{group_name}</i> sono stati effettuati."
+    termination:
+      open_invoice_exists:
+        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       create:
         success:
@@ -1791,6 +1834,12 @@ it:
       update:
         explain_confirmation_email: >-
           Non appena avrai confermato il tuo indirizzo e-mail, potrai accedere qui.
+    export:
+      popover_jubilare:
+        title: "Jubliare exportieren"
+        download: Herunterladen
+        membership_years_help: "leer = beliebige Anzahl"
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1820,6 +1869,7 @@ it:
       multiselect_actions:
         accept: Trasferire
         reject: Rifiutare
+
     login_status:
       wso2_legacy_password: "Vecchia password CAS (WSO2)"
 
@@ -1831,7 +1881,7 @@ it:
     tabs:
       history: Affiliazioni / Cronologia
       sac_remarks: Osservazioni
-      subscriptions: Abos
+      subscriptions: Servizi & Abbonamenti
       external_invoices: Fatture
 
     data_quality:
@@ -1867,6 +1917,10 @@ it:
         create_invoice: "Iniziare"
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
+  people/export/jubilare:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Jubilare_per
+
   people/export/mitglieder_csv:
     export_enqueued: "L’esportazione viene avviata in background e verrà scaricata al termine."
 
@@ -1913,8 +1967,8 @@ it:
           Qui puoi gestire le tue affiliazioni. Per informazioni sulle varie sezioni del CAS, consulta il sito <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/it/il-cas/sezioni/</a>-
     subscriptions:
       index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
+        my_subscriptions: Servizi in abbonamento & abbonamenti
+        available_subscriptions: Non ancora abbonato Servizi & abbonamenti
 
   public_events:
     show:

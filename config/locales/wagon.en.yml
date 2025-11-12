@@ -57,6 +57,9 @@ en:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
+      people/export/jubilare_form:
+        reference_date: "Stichtag"
+        membership_years: "Anzahl Mitgliedsjahre"
       people/membership/invoice_form:
         reference_date: "Deadline"
         invoice_date: "Buchungsdatum"
@@ -101,8 +104,9 @@ en:
         myself: for myself
       wizards/steps/switch_stammsektion:
         now: immediately
-      memberships/leave_zusatzsektion:
-        terminate_on: Leaving date
+      memberships/termination_form:
+        terminate_on: Austrittsdatum
+        termination_reason_id: Austrittsgrund
       people/neuanmeldungen/reject:
         note: Remark
       self_inscription:
@@ -1190,12 +1194,13 @@ en:
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
     swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
-    terminate_sac_membership_wizard_link: Terminate SAC membership
+    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
   dropdown/people/sac_exports:
     button: SAC Exporte
     csv_mitglieder: CSV Mitglieder
+    jubilare: Jubilare
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1436,6 +1441,41 @@ en:
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
 
+  export/tabular/people:
+    attributes:
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      terminate_on: Austritt geplant
+      type: Typ
+      types:
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
+  export/tabular/people/jubilare:
+    sheet_name: "Mitglieder per %{reference_date}"
+
   filter_navigation/people:
     tour_guides_none: No tour leader
     tour_guides_active: Active tour leaders
@@ -1476,7 +1516,7 @@ en:
         already_subscribed_to_abo: Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.
         already_member_of_tourenportal: Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.
 
-        existing_family_notice: Du ist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
+        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
         signed_up_notice: Deine Anmeldung wurde erfolgreich gespeichert.
 
       agreement_link:
@@ -1597,6 +1637,9 @@ en:
         success:
           one: "Your section change to <i>%{group_name}</i> has been made."
           other: "Your %{count} section changes to <i>%{group_name}</i> were made."
+    termination:
+      open_invoice_exists:
+        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       create:
         success:
@@ -1729,6 +1772,12 @@ en:
       update:
         explain_confirmation_email: >-
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
+    export:
+      popover_jubilare:
+        title: "Jubliare exportieren"
+        download: Herunterladen
+        membership_years_help: "leer = beliebige Anzahl"
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1758,6 +1807,7 @@ en:
       multiselect_actions:
         accept: Take over
         reject: Reject
+
     login_status:
       wso2_legacy_password: "Old SAC password (WSO2)"
 
@@ -1805,6 +1855,10 @@ en:
         create_invoice: "Start"
         submit_confirmation: >-
           Do you really want to start the annual collection run for all members? This run cannot be canceled.
+  people/export/jubilare:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Jubilare_per
+
   people/export/mitglieder_csv:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
 

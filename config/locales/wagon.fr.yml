@@ -57,6 +57,9 @@ fr:
         send_date: "Date d’envoi et de facturation"
         price_category: "Catégorie de prix"
         price: "Prix"
+      people/export/jubilare_form:
+        reference_date: "Stichtag"
+        membership_years: "Anzahl Mitgliedsjahre"
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -101,8 +104,9 @@ fr:
         myself: à moi-même
       wizards/steps/switch_stammsektion:
         now: immédiatement
-      memberships/leave_zusatzsektion:
-        terminate_on: Date de sortie
+      memberships/termination_form:
+        terminate_on: Austrittsdatum
+        termination_reason_id: Austrittsgrund
       people/neuanmeldungen/reject:
         note: Remarque
       self_inscription:
@@ -1071,8 +1075,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_vorstand/praesidium:
-        one: Direction
-        description: Direction
+        one: Présidence
+        description: Présidence
       group/sektions_vorstand/mitglied:
         one: Membre
         description: Membre
@@ -1249,12 +1253,13 @@ fr:
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
     swap_stamm_zusatzsektion_link: Echanger la section principale et la section supplémentaire
-    terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
+    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
     undo_termination_link: Réactiver l’adhésion au CAS
 
   dropdown/people/sac_exports:
     button: CAS Exportations
     csv_mitglieder: CSV Membres
+    jubilare: Jubilare
 
   dropdown/people_export:
     recipients: Pour l’envoi électronique (par e-mail)
@@ -1496,6 +1501,41 @@ fr:
   event/participations:
     pending: "Une notification préalable a été établie. Celle-ci n'est pas encore définitive et doit être confirmée par l'administration du cours."
 
+  export/tabular/people:
+    attributes:
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      terminate_on: Austritt geplant
+      type: Typ
+      types:
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
+  export/tabular/people/jubilare:
+    sheet_name: "Mitglieder per %{reference_date}"
+
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de course
     tour_guides_active: Chef·fe de course actif·ves
@@ -1536,7 +1576,7 @@ fr:
         already_subscribed_to_abo: Tu es déjà destinataire de ce magazine. Tu ne peux donc pas commander le magazine une deuxième fois.
         already_member_of_tourenportal: Tu es déjà membre du Portail des courses du CAS. Tu ne peux donc pas créer une autre adhésion.
 
-        existing_family_notice: Tu es affecté à une famille. Contacte le secrétariat du CAS.
+        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
         signed_up_notice: Ton inscription a été enregistrée avec succès.
 
       agreement_link:
@@ -1660,6 +1700,9 @@ fr:
           one: "Ton changement de section vers <i>%{group_name}</i> a été effectué."
           many: "Vos %{count} changements de section à <i>%{group_name}</i> ont été effectués."
           other: "Vos %{count} changements de section à <i>%{group_name}</i> ont été effectués."
+    termination:
+      open_invoice_exists:
+        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       create:
         success:
@@ -1793,6 +1836,12 @@ fr:
       update:
         explain_confirmation_email: >-
           Dès que tu as confirmé ton adresse e-mail, tu peux te connecter ici.
+    export:
+      popover_jubilare:
+        title: "Jubliare exportieren"
+        download: Herunterladen
+        membership_years_help: "leer = beliebige Anzahl"
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1822,6 +1871,7 @@ fr:
       multiselect_actions:
         accept: Reprendre
         reject: Refuser
+
     login_status:
       wso2_legacy_password: "Ancien mot de passe du CAS (WSO2)"
 
@@ -1833,7 +1883,7 @@ fr:
     tabs:
       history: Adhésions / Historique
       sac_remarks: Remarques
-      subscriptions: Abos
+      subscriptions: Services & Abonnements
       external_invoices: Factures
 
     data_quality:
@@ -1869,6 +1919,10 @@ fr:
         create_invoice: "Démarrer"
         submit_confirmation: >-
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
+  people/export/jubilare:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Jubilare_per
+
   people/export/mitglieder_csv:
     export_enqueued: "L’exportation est lancée en arrière-plan et sera téléchargée une fois terminée."
 
@@ -1915,8 +1969,8 @@ fr:
           Tu peux gérer tes adhésions ici. Tu trouveras des informations sur les différentes sections du CAS sur <a target="blank" href="https://www.sac-cas.ch/de/der-sac/sektionen">https://www.sac-cas.ch/fr/le-cas/sections/</a>
     subscriptions:
       index:
-        my_subscriptions: Meine Abos
-        available_subscriptions: Verfügbare Abos
+        my_subscriptions: Services & Abonnements Souscrits
+        available_subscriptions: Pas encore abonné Services & Abonnements
 
   public_events:
     show:
