@@ -104,8 +104,9 @@ en:
         myself: for myself
       wizards/steps/switch_stammsektion:
         now: immediately
-      memberships/leave_zusatzsektion:
-        terminate_on: Leaving date
+      memberships/termination_form:
+        terminate_on: Austrittsdatum
+        termination_reason_id: Austrittsgrund
       people/neuanmeldungen/reject:
         note: Remark
       self_inscription:
@@ -1193,7 +1194,7 @@ en:
     join_zusatzsektion_link: Apply for additional section
     switch_stammsektion_link: Request section change
     swap_stamm_zusatzsektion_link: Stamm- und Zusatzsektion tauschen
-    terminate_sac_membership_wizard_link: Terminate SAC membership
+    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
     undo_termination_link: SAC-Mitgliedschaft reaktivieren
 
   dropdown/people/sac_exports:
@@ -1636,6 +1637,9 @@ en:
         success:
           one: "Your section change to <i>%{group_name}</i> has been made."
           other: "Your %{count} section changes to <i>%{group_name}</i> were made."
+    termination:
+      open_invoice_exists:
+        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       create:
         success:

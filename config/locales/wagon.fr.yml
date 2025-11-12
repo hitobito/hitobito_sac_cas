@@ -104,8 +104,9 @@ fr:
         myself: à moi-même
       wizards/steps/switch_stammsektion:
         now: immédiatement
-      memberships/leave_zusatzsektion:
-        terminate_on: Date de sortie
+      memberships/termination_form:
+        terminate_on: Austrittsdatum
+        termination_reason_id: Austrittsgrund
       people/neuanmeldungen/reject:
         note: Remarque
       self_inscription:
@@ -1252,7 +1253,7 @@ fr:
     join_zusatzsektion_link: Demander une section supplémentaire
     switch_stammsektion_link: Demander un changement de section
     swap_stamm_zusatzsektion_link: Echanger la section principale et la section supplémentaire
-    terminate_sac_membership_wizard_link: Mettre fin à l’adhésion au CAS
+    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
     undo_termination_link: Réactiver l’adhésion au CAS
 
   dropdown/people/sac_exports:
@@ -1699,6 +1700,9 @@ fr:
           one: "Ton changement de section vers <i>%{group_name}</i> a été effectué."
           many: "Vos %{count} changements de section à <i>%{group_name}</i> ont été effectués."
           other: "Vos %{count} changements de section à <i>%{group_name}</i> ont été effectués."
+    termination:
+      open_invoice_exists:
+        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       create:
         success:
