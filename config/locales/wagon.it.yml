@@ -1700,7 +1700,7 @@ it:
           other: "I vostri %{count} cambi di sezione a %{group_name}</i> sono stati effettuati."
     termination:
       open_invoice_exists:
-        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
+        info: Il recesso può essere effettuato solo dopo il pagamento della fattura in sospeso.
     terminate_sac_memberships:
       create:
         success:

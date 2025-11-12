@@ -1702,7 +1702,7 @@ fr:
           other: "Vos %{count} changements de section à <i>%{group_name}</i> ont été effectués."
     termination:
       open_invoice_exists:
-        info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
+        info: La résiliation ne peut être effectuée qu'après paiement de la facture en suspens.
     terminate_sac_memberships:
       create:
         success:
