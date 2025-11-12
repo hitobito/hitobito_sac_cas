@@ -189,8 +189,26 @@ describe Memberships::TerminateSacMembershipsController do
           .to not_change(Role, :count)
           .and change { role.terminated }.to(true)
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(
+            person,
+            bluemlisalp,
+            Date.current.end_of_year,
+            true
+          )
         expect(response).to redirect_to person_path(person, format: :html)
         expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+      end
+
+      it "terminates without sending email to member" do
+        expect do
+          request(inform_mitglied_via_email: false)
+        end.to change { role.reload.terminated }.to(true)
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(
+            person,
+            bluemlisalp,
+            Date.current.end_of_year,
+            false
+          )
       end
 
       it "validates inputs" do

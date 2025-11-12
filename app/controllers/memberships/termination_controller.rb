@@ -65,7 +65,7 @@ module Memberships
       Memberships::TerminateMembershipMailer.terminate_membership(
         person,
         role.layer_group,
-        form_object.terminate_on,
+        form_object.terminate_on_date_value,
         form_object.inform_mitglied_via_email
       ).deliver_later
     end
