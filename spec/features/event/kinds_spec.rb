@@ -76,7 +76,7 @@ describe :"event/kinds", js: true do
       visit edit_event_kind_path(id: kind.id)
       fill_in "event_kind_application_conditions", with: "Skifahren"
       accept_alert(/nicht gespeichert/) do
-        find("#event_kind_application_conditions + .form-text a").click
+        find("#event_kind_application_conditions").ancestor(".labeled").find(".form-text a").click
       end
     end
 
