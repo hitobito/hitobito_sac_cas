@@ -24,8 +24,7 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
 
   [[Person, [:roles_with_ended_readable, {roles_unscoped: :group}]],
     [Event::Participation,
-      [:roles_with_ended_readable,
-        {person: {roles_unscoped: :group}}]]].each do |model_class, expected_includes|
+      [:roles_with_ended_readable]]].each do |model_class, expected_includes|
     context "table display on #{model_class}" do
       subject(:column) {
         TableDisplays::People::TerminateOnColumn.new(ability, model_class: model_class)

@@ -18,7 +18,7 @@ module TableDisplays::People
     # this required_model_includes could be removed if we relied solely on our abilities
     def required_model_includes(_attr)
       # rubocop:todo Layout/LineLength
-      super + ((@model_class == Person) ? [roles_unscoped: :group] : [person: {roles_unscoped: :group}])
+      super + ((@model_class == Person) ? [roles_unscoped: :group] : [])
       # rubocop:enable Layout/LineLength
     end
 
@@ -43,7 +43,7 @@ module TableDisplays::People
     def roles_unscoped(object)
       case object
       when Person then object.roles_unscoped
-      when Event::Participation then object.person.roles_unscoped
+      when Event::Participation then object.participant.roles_unscoped
       else []
       end
     end
