@@ -2,6 +2,7 @@ require "csv"
 
 class FixMembershipEndOn
   FILE = Wagons.find("sac_cas").root.join("tmp", "Bereinigung_Austrittsdatum.csv")
+  RELEVANT_ROLE_TYPES = [Group::MitgliederSektion::Mitglied, Group::MitgliederSektion::MitgliedZusatzsektion].map(&:sti_name)
 
   attr_reader :logger, :data
 
@@ -41,7 +42,9 @@ whodunnit_type: "script"}
   private
 
   def process_end_on_correction
-    rows.each do |row|
+    csv.each do |csv_row|
+      row = Row.new(csv_row)
+
       if active_membership_exists?(row)
         log(row, "has an active membership")
 
@@ -58,7 +61,7 @@ whodunnit_type: "script"}
 
   def correct_end_on(row)
     Role.transaction do
-      role = Role.with_inactive.find(row.role_id)
+      role = Role.with_inactive.find_by(type: RELEVANT_ROLE_TYPES, id: row.role_id)
 
       role.update!(end_on: row.corrected_end_on)
     rescue ActiveRecord::RecordInvalid => e
@@ -68,18 +71,9 @@ whodunnit_type: "script"}
     end
   end
 
-  def rows
-    @rows ||= @data.map { Row.new(_1) }
-  end
-
   def active_membership_exists?(row)
-    people[row.person_id].sac_membership.active?
-  end
-
-  def people
-    @people ||= rows.each_with_object({}) do |row, obj|
-      obj[row.person_id] = Person.find(row.person_id)
-    end
+    person = Person.find(row.person_id)
+    person.sac_membership.active?
   end
 
   def log(row, line, level = :info)
