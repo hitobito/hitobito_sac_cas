@@ -16,12 +16,6 @@ module SacCas::GroupAbility
         .may(:create_yearly_membership_invoice)
         .if_backoffice
 
-      permission(:layer_read)
-        .may(:download_statistics)
-        .in_same_layer
-      permission(:download_member_statistics)
-        .may(:download_statistics)
-        .in_same_layer
       permission(:layer_and_below_read)
         .may(:download_statistics)
         .in_same_layer_or_below
