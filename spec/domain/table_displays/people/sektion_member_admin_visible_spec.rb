@@ -22,9 +22,10 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
     roles(:mitglied).update!(end_on: Date.new(2025, 3, 10))
   end
 
-  [[Person, [:roles_with_ended_readable, {roles_unscoped: :group}]],
-    [Event::Participation,
-      [:roles_with_ended_readable]]].each do |model_class, expected_includes|
+  [
+    [Person, [:roles_with_ended_readable, {roles_unscoped: :group}]],
+    [Event::Participation, [:roles_with_ended_readable, participant: [{roles_unscoped: :group}]]]
+  ].each do |model_class, expected_includes|
     context "table display on #{model_class}" do
       subject(:column) {
         TableDisplays::People::TerminateOnColumn.new(ability, model_class: model_class)
