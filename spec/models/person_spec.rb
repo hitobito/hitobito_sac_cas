@@ -709,4 +709,15 @@ describe Person do
       expect(person.login_status).to eq :wso2_legacy_password
     end
   end
+
+  describe "confirming person" do
+    let(:person) { Fabricate(:person, confirmed_at: nil) }
+
+    it "sets correspondence to digital" do
+      expect do
+        person.confirm
+      end.to change { person.reload.confirmed? }.from(false).to(true)
+        .and change { person.correspondence }.from("print").to("digital")
+    end
+  end
 end
