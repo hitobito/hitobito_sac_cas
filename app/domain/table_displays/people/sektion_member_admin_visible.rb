@@ -17,19 +17,21 @@ module TableDisplays::People
 
     # this required_model_includes could be removed if we relied solely on our abilities
     def required_model_includes(_attr)
-      # rubocop:todo Layout/LineLength
-      super + ((@model_class == Person) ? [roles_unscoped: :group] : [person: {roles_unscoped: :group}])
-      # rubocop:enable Layout/LineLength
+      super + unscoped_person_roles_includes
     end
 
     private
+
+    def unscoped_person_roles_includes
+      (@model_class == Person) ? [roles_unscoped: :group] : [participant: [roles_unscoped: :group]]
+    end
 
     def allowed?(object, attr, _original_object, _original_attr)
       super || (section_admin_layer_ids & object_membership_layer_ids(object)).any?
     end
 
     def object_membership_layer_ids(object)
-      roles_unscoped(object).select do |role|
+      roles_unscoped(object).to_a.select do |role|
         SacCas::MITGLIED_ROLES.include?(role.class)
       end.map { |role| role.group.layer_group_id }
     end
@@ -43,8 +45,7 @@ module TableDisplays::People
     def roles_unscoped(object)
       case object
       when Person then object.roles_unscoped
-      when Event::Participation then object.person.roles_unscoped
-      else []
+      when Event::Participation then object.participant.try(:roles_unscoped)
       end
     end
   end
