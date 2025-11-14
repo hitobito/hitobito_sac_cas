@@ -152,6 +152,12 @@ module SacCas::Person
     super
   end
 
+  protected
+
+  def after_confirmation # Devise::Models::Confirmable
+    update_column(:correspondence, :digital)
+  end
+
   private
 
   def reset_correspondence_to_print
