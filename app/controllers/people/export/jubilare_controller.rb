@@ -6,10 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module People::Export
-  class JubilareController < ApplicationController
-    include AsyncDownload
-    include PopoverExportable
-
+  class JubilareController < PopoverExportableController
     private
 
     def entry
@@ -33,12 +30,12 @@ module People::Export
       ).enqueue!
     end
 
-    def rerender_form(status)
+    def render_unprocessable
       render turbo_stream: turbo_stream.replace(
         "jubilare_form",
         partial: "people/export/popover_jubilare",
         locals: {model: entry}
-      ), status: status
+      ), status: :unprocessable_content
     end
 
     def filename
