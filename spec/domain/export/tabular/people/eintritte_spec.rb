@@ -165,10 +165,11 @@ describe Export::Tabular::People::Eintritte do
       started_and_ended_inside_range = create_role("Mitglied", start_on: "1.7.2024", end_on: "1.8.2024").person
 
       travel_to(Time.zone.local(2024, 10, 10)) do
-        expect(people_scope).to match_array [started_and_ended_inside_range]
+        expect(build.people_scope).to match_array [started_and_ended_inside_range]
       end
+
       travel_to(Time.zone.local(2026, 10, 10)) do
-        expect(people_scope).to match_array [started_and_ended_inside_range]
+        expect(build.people_scope).to be_empty # missing as ended role no longer readable
       end
     end
 
