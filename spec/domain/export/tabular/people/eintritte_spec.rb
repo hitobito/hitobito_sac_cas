@@ -295,20 +295,42 @@ describe Export::Tabular::People::Eintritte do
         person = create_role("Mitglied", matterhorn, start_on: "10.10.2024").person
         create_role("MitgliedZusatzsektion", bluemlisalp, start_on: "10.10.2025", person:)
 
-        expect(row_for(person).sac_is_new_entry).to eq "nein"
-        expect(row_for(person).sac_is_re_entry).to eq "nein"
-        expect(row_for(person).sac_is_section_new_entry).to eq "ja"
-        expect(row_for(person).sac_is_section_change).to eq "nein"
+        matterhorn_stamm = row_for(person, matterhorn, "1.1.2024-31.12.2024")
+        expect(matterhorn_stamm.type).to eq "Stammsektion"
+        expect(matterhorn_stamm.sac_is_new_entry).to eq "ja"
+        expect(matterhorn_stamm.sac_is_re_entry).to eq "nein"
+        expect(matterhorn_stamm.sac_is_section_new_entry).to eq "ja"
+        expect(matterhorn_stamm.sac_is_section_change).to eq "nein"
+
+        bluemlisalp_zusatz = row_for(person, bluemlisalp, "1.1.2025-31.12.2025")
+        expect(bluemlisalp_zusatz.type).to eq "Zusatzsektion"
+        expect(bluemlisalp_zusatz.sac_is_new_entry).to eq "nein"
+        expect(bluemlisalp_zusatz.sac_is_re_entry).to eq "nein"
+        expect(bluemlisalp_zusatz.sac_is_section_new_entry).to eq "ja"
+        expect(bluemlisalp_zusatz.sac_is_section_change).to eq "nein"
+
+        expect(row_for(person, bluemlisalp, "1.1.2024-31.12.2024")).to be_nil
+        expect(row_for(person, matterhorn, "1.1.2025-31.12.2025")).to be_nil
       end
 
       it "marks reactivated Zusatzmitgliedschaft" do
         person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2025").person
-        create_role("Mitglied", start_on: "1.1.2005", end_on: "31.12.2015").person
+        create_role("MitgliedZusatzsektion", start_on: "1.1.2005", end_on: "31.12.2015", person:)
         create_role("MitgliedZusatzsektion", start_on: "1.1.2025", end_on: "31.12.2025", person:)
-        expect(row_for(person).sac_is_re_entry).to eq "nein"
-        expect(row_for(person).sac_is_new_entry).to eq "nein"
-        expect(row_for(person).sac_is_section_new_entry).to eq "ja"
-        expect(row_for(person).sac_is_section_change).to eq "nein"
+
+        zusatz_1 = row_for(person, bluemlisalp, "1.1.2005-31.12.2005")
+        expect(zusatz_1.type).to eq "Zusatzsektion"
+        expect(zusatz_1.sac_is_re_entry).to eq "nein"
+        expect(zusatz_1.sac_is_new_entry).to eq "nein"
+        expect(zusatz_1.sac_is_section_new_entry).to eq "ja"
+        expect(zusatz_1.sac_is_section_change).to eq "nein"
+
+        zusatz_2 = row_for(person, bluemlisalp, "1.1.2025-31.12.2025")
+        expect(zusatz_2.type).to eq "Zusatzsektion"
+        expect(zusatz_2.sac_is_re_entry).to eq "nein"
+        expect(zusatz_2.sac_is_new_entry).to eq "nein"
+        expect(zusatz_2.sac_is_section_new_entry).to eq "nein"
+        expect(zusatz_2.sac_is_section_change).to eq "nein"
       end
 
       it "marks Sektionswechsel" do
@@ -335,10 +357,13 @@ describe Export::Tabular::People::Eintritte do
           person = create_role("Mitglied", start_on: "1.1.2000", end_on: "31.12.2000").person
           create_role("Mitglied", start_on: "1.1.2025", end_on: "31.12.2025", person:)
 
+          expect(row_for(person).type).to eq "Stammsektion"
           expect(row_for(person).sac_is_re_entry).to eq "ja"
           expect(row_for(person).sac_is_new_entry).to eq "nein"
           expect(row_for(person).sac_is_section_new_entry).to eq "nein"
           expect(row_for(person).sac_is_section_change).to eq "nein"
+
+          expect(row_for(person, bluemlisalp, "1.1.2001-31.12.2024")).to be_nil
         end
 
         it "does mark if role outside and multiple roles inside range exist" do
@@ -346,9 +371,19 @@ describe Export::Tabular::People::Eintritte do
           create_role("Mitglied", start_on: "1.1.2025", end_on: "1.3.2025", person:)
           create_role("Mitglied", start_on: "2.3.2025", end_on: "31.12.2025", person:)
           expect(row_for(person).sac_is_re_entry).to eq "ja"
+
+          reentry_1 = row_for(person, bluemlisalp, "1.1.2025-1.2.2025")
+          expect(reentry_1.type).to eq "Stammsektion"
+          expect(reentry_1.sac_is_re_entry).to eq "ja"
+          expect(reentry_1.sac_is_new_entry).to eq "nein"
+          expect(reentry_1.sac_is_section_new_entry).to eq "nein"
+          expect(reentry_1.sac_is_section_change).to eq "nein"
+
+          reentry_2 = row_for(person, bluemlisalp, "1.3.2025-1.12.2025")
+          expect(reentry_2).to be_nil # TODO is excluded because of query, needs a fix?
         end
 
-        it "does mark mark if all roles are in range" do
+        it "does mark if all roles are in range" do
           person = create_role("Mitglied", start_on: "1.1.2025", end_on: "1.3.2025").person
           create_role("Mitglied", start_on: "2.3.2025", end_on: "30.9.2025", person:)
           create_role("Mitglied", start_on: "1.10.2025", end_on: "31.12.2025", person:)

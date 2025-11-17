@@ -29,8 +29,9 @@ module Export::Tabular::People
     end
 
     def sac_is_section_new_entry
-      roles_in_group(*SacCas::MITGLIED_ROLES) == [membership_role] ||
-        all_covered?(SacCas::MITGLIED_ROLES)
+      roles_in_group(*SacCas::MITGLIED_ROLES)
+        .select { |r| r.start_on < @range.begin }
+        .none?
     end
 
     def sac_is_section_change
@@ -40,10 +41,6 @@ module Export::Tabular::People
     end
 
     private
-
-    def all_covered?(role_types)
-      roles(*role_types).all? { |r| @range.cover?(r.start_on) }
-    end
 
     # NOTE: TBD in case of multiple matches use first or last one? Currently first
     def membership_role
