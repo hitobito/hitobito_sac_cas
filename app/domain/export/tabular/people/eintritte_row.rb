@@ -15,8 +15,7 @@ module Export::Tabular::People
     end
 
     def sac_is_new_entry
-      roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES) == [membership_role] ||
-        all_covered?(SacCas::MITGLIED_STAMMSEKTION_ROLES)
+      membership_role == roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).first
     end
 
     def sac_is_re_entry
@@ -35,13 +34,22 @@ module Export::Tabular::People
     end
 
     def sac_is_section_change
-      !roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).last(2).map(&:group_id).uniq.one?
+      !roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES)
+        .select { |r| r.start_on < @range.end }
+        .last(2).map(&:group_id).uniq.one?
     end
 
     private
 
     def all_covered?(role_types)
       roles(*role_types).all? { |r| @range.cover?(r.start_on) }
+    end
+
+    # NOTE: TBD in case of multiple matches use first or last one? Currently first
+    def membership_role
+      @membership_role ||= roles_in_group(*SacCas::MITGLIED_ROLES).find do |r|
+        @range.cover?(r.start_on)
+      end
     end
   end
 end

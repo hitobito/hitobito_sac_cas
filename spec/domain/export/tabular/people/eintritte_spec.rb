@@ -16,9 +16,9 @@ describe Export::Tabular::People::Eintritte do
     Fabricate("Group::SektionsMitglieder::#{type}", group:, **attrs)
   end
 
-  def build(range_string = "1.7.2024-30.6.2025")
+  def build(range_string = "1.7.2024-30.6.2025", group = nil)
     from, to = range_string.split("-").map { |s| Date.parse(s) }
-    described_class.new(bluemlisalp, user.id, from..to)
+    described_class.new(group || bluemlisalp, user.id, from..to)
   end
 
   it "has expected attributes" do
@@ -200,10 +200,16 @@ describe Export::Tabular::People::Eintritte do
     let(:row_class) { Data.define(*described_class::ATTRIBUTES) { def to_s = [first_name, last_name].join(" ") } }
     let(:rows) { build.data_rows.map { |r| row_class.new(*r) } }
 
-    def row_for(person) = rows.index_by(&:id).fetch(person.id)
+    def row_for(person, group = nil, range_string = nil)
+      if group
+        build_rows(range_string, group)
+      else
+        rows
+      end.index_by(&:id)[person.id]
+    end
 
-    def build_rows(range_string)
-      build(range_string).data_rows.map { |r| row_class.new(*r) }
+    def build_rows(range_string, group = nil)
+      build(range_string, group).data_rows.map { |r| row_class.new(*r) }
     end
 
     it "does not do N+1 queries" do
@@ -313,6 +319,15 @@ describe Export::Tabular::People::Eintritte do
         expect(row_for(person).sac_is_re_entry).to eq "nein"
         expect(row_for(person).sac_is_section_new_entry).to eq "ja"
         expect(row_for(person).sac_is_section_change).to eq "ja"
+
+        matterhorn_entry = row_for(person, matterhorn, "1.1.2000-31.12.2001")
+        expect(matterhorn_entry.sac_is_new_entry).to eq "ja"
+        expect(matterhorn_entry.sac_is_re_entry).to eq "nein"
+        expect(matterhorn_entry.sac_is_section_new_entry).to eq "ja"
+        expect(matterhorn_entry.sac_is_section_change).to eq "nein"
+
+        expect(row_for(person, bluemlisalp, "1.1.2000-31.12.2000")).to be_nil
+        expect(row_for(person, matterhorn, "1.1.2025-31.12.2024")).to be_nil
       end
 
       describe "reentry" do
