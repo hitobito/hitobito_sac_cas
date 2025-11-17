@@ -20,8 +20,8 @@ class FixMembershipEndOn
     def initialize(csv_data)
       @role_id = csv_data[0]
       @person_id = csv_data[1]
-      @previous_end_on = csv_data[4]
-      @corrected_end_on = csv_data[7]
+      @previous_end_on = Date.strptime(csv_data[4], "%m/%d/%Y")
+      @corrected_end_on = Date.strptime(csv_data[7], "%m/%d/%Y")
     end
 
     def to_s
@@ -41,7 +41,7 @@ whodunnit_type: "script"}
   private
 
   def process_end_on_correction
-    csv.each do |csv_row|
+    data.each do |csv_row|
       row = Row.new(csv_row)
 
       if active_membership_exists?(row)
@@ -73,6 +73,8 @@ whodunnit_type: "script"}
   def active_membership_exists?(row)
     person = Person.find(row.person_id)
     person.sac_membership.active?
+  rescue ActiveRecord::RecordNotFound => e
+    log(row, "person not found: #{e}")
   end
 
   def log(row, line, level = :info)
