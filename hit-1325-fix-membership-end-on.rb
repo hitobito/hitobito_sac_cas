@@ -8,7 +8,7 @@ class FixMembershipEndOn
   def initialize
     @logger = ActiveSupport::TaggedLogging.new(Logger.new(
       Wagons.find("sac_cas").root.join("tmp",
-        "hit-1325-#{Time.zone.now.strftime("%Y%m%d%H%M")}.log"),
+        "hit-1325-fix-membership-end-on-#{Time.zone.now.strftime("%Y%m%d%H%M")}.log"),
       level: :info
     ))
     @data = CSV.read(FILE, col_sep: ",", headers: true)
@@ -62,9 +62,17 @@ whodunnit_type: "script"}
     Role.transaction do
       role = Role.with_inactive.find_by(type: SacCas::MITGLIED_ROLES, id: row.role_id)
 
-      role.update!(end_on: row.corrected_end_on)
+      membership_period = role.end_on - role.start_on
+      role.start_on = row.corrected_end_on - membership_period
+      role.end_on = row.corrected_end_on
+      role.save!
     rescue ActiveRecord::RecordInvalid => e
-      log(row, "role invalid on update: #{e}")
+      if e.record.errors.one? && e.record.errors.first.type == :assert_old_enough
+        log(row, "person birthday invalid. Role was still updated: #{e}")
+        role.save!(validate: false)
+      else
+        log(row, "role invalid on update: #{e}")
+      end
     rescue ActiveRecord::RecordNotFound => e
       log(row, "role not found: #{e}")
     end

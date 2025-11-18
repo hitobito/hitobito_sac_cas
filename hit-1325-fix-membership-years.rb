@@ -43,7 +43,7 @@ class FixMembershipYears
   end
 
   def corrected_membership_end_on_person_ids
-    CSV.read(CORRECT_MEMBERSHIP_END_ON_FILE, col_sep: ",", headers: true).map { _1["person_id"] }
+    CSV.read(CORRECT_MEMBERSHIP_END_ON_FILE, col_sep: ",", headers: true).map { _1["person_id"].to_i }
   end
 
   def log(person, line, level = :info)
