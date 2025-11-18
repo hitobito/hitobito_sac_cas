@@ -29,7 +29,7 @@ module Wizards::Memberships
 
     def save!
       super
-      previous_sektion = person.sac_membership.stammsektion_role.group
+      previous_sektion = person.sac_membership.stammsektion_role.group.layer_group
 
       operation.save!.tap do
         send_confirmation_mail(previous_sektion)

@@ -57,6 +57,8 @@ describe Wizards::Memberships::SwitchStammsektion do
         expect(email.subject).to eq("Bestätigung Sektionswechsel")
         expect(email.body).to match(/Hallo Edmund Hillary/)
         expect(email.body).to match(/Sektionswechsel zu SAC Matterhorn wurde/)
+        expect(email.to).to eq(["e.hillary@hitobito.example.com"])
+        expect(email.bcc).to match_array(["bluemlisalp@sac.ch", "matterhorn@sac.ch", "mv@sac-cas.ch"])
       end
     end
   end
