@@ -11,7 +11,7 @@ describe Roles::TerminateTourenleiterJob do
   subject(:job) { described_class.new }
 
   context "rescheduling" do
-    it "reschedules for tomorrow  at 5 minutes past midnight" do
+    it "reschedules for tomorrow at 5 minutes past midnight" do
       job.perform
       next_job = Delayed::Job.find_by("handler like '%TerminateTourenleiterJob%'")
       expect(next_job.run_at).to eq Time.zone.tomorrow + 5.minutes

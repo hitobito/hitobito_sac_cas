@@ -5,6 +5,7 @@
 * Excel Export Jubilare (HIT-1191 / hitobito_sac_cas#2014)
 * Neuer Gruppentyp Ressort (HIT-1011 / hitobito_sac_cas#2044)
 * Rechnungsempfänger*in kann neu alle Familienmitglieder verwalten (HIT-1297 / hitobito_sac_cas#2002)
+* Nächtliches Aufräumen von veralteten NV Neuanmeldungsrollen und Rechnungen (HIT-1337 / hitobito_sac_cas#2062)
 
 ## Version 2.6
 
