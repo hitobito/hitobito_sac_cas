@@ -18,20 +18,8 @@ module Export::Tabular::People
       membership_role == roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).first
     end
 
-    def sac_is_re_entry
-      return false unless membership_role.is_a?(Group::SektionsMitglieder::Mitglied)
-
-      prior_roles =
-        (roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES) - [membership_role])
-          .select { |r| r.start_on < @range.begin }
-
-      prior_roles.any? && prior_roles.none? { |r| r.active?(membership_role.start_on - 1.day) }
-    end
-
     def sac_is_section_new_entry
-      roles_in_group(*SacCas::MITGLIED_ROLES)
-        .select { |r| r.start_on < @range.begin }
-        .none?
+      membership_role == roles_in_group(*SacCas::MITGLIED_ROLES).first
     end
 
     def sac_is_section_change
@@ -40,13 +28,16 @@ module Export::Tabular::People
         .last(2).map(&:group_id).uniq.one?
     end
 
+    def sac_is_re_entry
+      prior_roles =
+        (roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES) - [membership_role])
+          .select { |r| r.start_on < @range.begin }
+
+      prior_roles.any? && prior_roles.none? { |r| r.active?(membership_role.start_on - 1.day) }
+    end
+
     private
 
     # NOTE: TBD in case of multiple matches use first or last one? Currently first
-    def membership_role
-      @membership_role ||= roles_in_group(*SacCas::MITGLIED_ROLES).find do |r|
-        @range.cover?(r.start_on)
-      end
-    end
   end
 end

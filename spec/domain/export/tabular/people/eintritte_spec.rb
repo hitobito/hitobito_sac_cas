@@ -284,7 +284,6 @@ describe Export::Tabular::People::Eintritte do
 
       it "marks Stammmitgliedschaft" do
         person = create_role("Mitglied", bluemlisalp, start_on: "10.10.2025").person
-
         expect(row_for(person).sac_is_new_entry).to eq "ja"
         expect(row_for(person).sac_is_re_entry).to eq "nein"
         expect(row_for(person).sac_is_section_new_entry).to eq "ja"
@@ -333,23 +332,67 @@ describe Export::Tabular::People::Eintritte do
         expect(zusatz_2.sac_is_section_change).to eq "nein"
       end
 
-      it "marks Sektionswechsel" do
-        person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2024").person
-        create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
+      describe "Sektionswechsel" do
+        it "marks Sektionswechsel for Stammsektion only" do
+          person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2024").person
+          create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
 
-        expect(row_for(person).sac_is_new_entry).to eq "nein"
-        expect(row_for(person).sac_is_re_entry).to eq "nein"
-        expect(row_for(person).sac_is_section_new_entry).to eq "ja"
-        expect(row_for(person).sac_is_section_change).to eq "ja"
+          expect(row_for(person).sac_is_new_entry).to eq "nein"
+          expect(row_for(person).sac_is_re_entry).to eq "nein"
+          expect(row_for(person).sac_is_section_new_entry).to eq "ja"
+          expect(row_for(person).sac_is_section_change).to eq "ja"
 
-        matterhorn_entry = row_for(person, matterhorn, "1.1.2000-31.12.2001")
-        expect(matterhorn_entry.sac_is_new_entry).to eq "ja"
-        expect(matterhorn_entry.sac_is_re_entry).to eq "nein"
-        expect(matterhorn_entry.sac_is_section_new_entry).to eq "ja"
-        expect(matterhorn_entry.sac_is_section_change).to eq "nein"
+          matterhorn_entry = row_for(person, matterhorn, "1.1.2000-31.12.2001")
+          expect(matterhorn_entry.sac_is_new_entry).to eq "ja"
+          expect(matterhorn_entry.sac_is_re_entry).to eq "nein"
+          expect(matterhorn_entry.sac_is_section_new_entry).to eq "ja"
+          expect(matterhorn_entry.sac_is_section_change).to eq "nein"
 
-        expect(row_for(person, bluemlisalp, "1.1.2000-31.12.2000")).to be_nil
-        expect(row_for(person, matterhorn, "1.1.2025-31.12.2024")).to be_nil
+          expect(row_for(person, bluemlisalp, "1.1.2000-31.12.2000")).to be_nil
+          expect(row_for(person, matterhorn, "1.1.2025-31.12.2025")).to be_nil
+
+          bluemlisalp_row = row_for(person, bluemlisalp, "1.10.2024-1.10.2025")
+
+          expect(bluemlisalp_row.sac_is_new_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_re_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_section_new_entry).to eq "ja"
+          expect(bluemlisalp_row.sac_is_section_change).to eq "ja"
+        end
+
+        it "marks Sektionswechsel in combination with new Zusatsektion" do
+          person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2024").person
+
+          create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
+          create_role("MitgliedZusatzsektion", matterhorn, start_on: "1.1.2025", end_on: "31.12.2025", person:)
+
+          bluemlisalp_row = row_for(person, bluemlisalp, "1.10.2024-1.10.2025")
+          expect(bluemlisalp_row.sac_is_new_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_re_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_section_new_entry).to eq "ja"
+          expect(bluemlisalp_row.sac_is_section_change).to eq "ja"
+
+          expect(row_for(person, matterhorn, "1.10.2024-1.10.2025")).to be_nil
+        end
+
+        it "marks Sektionswechsel in combination with Zusatzsektionswechsel" do
+          person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.8.2024").person
+          create_role("MitgliedZusatzsektion", bluemlisalp, start_on: "1.1.2000", end_on: "31.8.2024", person:)
+
+          create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
+          create_role("MitgliedZusatzsektion", matterhorn, start_on: "1.1.2025", end_on: "31.12.2025", person:)
+
+          bluemlisalp_row = row_for(person, bluemlisalp, "1.10.2024-1.10.2025")
+          expect(bluemlisalp_row.sac_is_new_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_re_entry).to eq "ja"
+          expect(bluemlisalp_row.sac_is_section_new_entry).to eq "nein"
+          expect(bluemlisalp_row.sac_is_section_change).to eq "ja"
+
+          matterhorn_row = row_for(person, matterhorn, "1.10.2024-1.10.2025")
+          expect(matterhorn_row.sac_is_new_entry).to eq "nein"
+          expect(matterhorn_row.sac_is_re_entry).to eq "ja"
+          expect(matterhorn_row.sac_is_section_new_entry).to eq "nein"
+          expect(matterhorn_row.sac_is_section_change).to eq "ja"
+        end
       end
 
       describe "reentry" do
