@@ -21,3 +21,7 @@ Fabricator(:external_invoice) do
   created_at { DateTime.parse("2024-07-26T14:41:08.713027+02:00") }
   updated_at { DateTime.parse("2024-08-01T17:43:55.822004+02:00") }
 end
+
+Fabricator(:sac_membership_invoice, from: :external_invoice) do
+  type "ExternalInvoice::SacMembership"
+end
