@@ -11,7 +11,7 @@ describe "event/participation_contact_datas/_fields.html.haml" do
   let(:participation_contact_data) {
     Event::ParticipationContactData.new(events(:top_course), people(:mitglied))
   }
-  let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, groups: []) }
+  let(:policy_finder) { double(:policy_finder, acceptance_needed?: true, all: []) }
   let(:form_builder) {
     StandardFormBuilder.new(:participation_contact_data, participation_contact_data, view, {})
   }
