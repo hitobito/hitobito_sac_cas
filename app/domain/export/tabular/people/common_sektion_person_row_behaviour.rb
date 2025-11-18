@@ -89,6 +89,12 @@ module Export::Tabular::People
       @membership_role ||= active_role_in_group(*SacCas::MITGLIED_ROLES)
     end
 
+    def membership_role
+      @membership_role ||= roles_in_group(*SacCas::MITGLIED_ROLES).find do |r|
+        @range.cover?(r.start_on)
+      end
+    end
+
     def yes_or_no(boolean)
       I18n.t("global.#{boolean ? "yes" : "no"}")
     end

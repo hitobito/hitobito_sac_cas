@@ -8,5 +8,11 @@
 module Export::Tabular::People
   class JubilareRow < Export::Tabular::Row
     include CommonSektionPersonRowBehaviour
+
+    private
+
+    def membership_role
+      @membership_role ||= active_role_in_group(*SacCas::MITGLIED_ROLES)
+    end
   end
 end
