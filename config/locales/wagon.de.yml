@@ -786,6 +786,12 @@ de:
       group/sektions_neuanmeldungen_sektion:
         one: Neuanmeldungen (zur Freigabe)
         other: Neuanmeldungen (zur Freigabe)
+      group/sektions_ressorts:
+        one: Ressorts
+        other: Ressorts
+      group/sektions_ressort:
+        one: Ressort
+        other: Ressorts
       group/sektions_touren_und_kurse:
         one: Touren und Kurse
         other: Touren und Kurse
@@ -1026,6 +1032,21 @@ de:
       group/sektions_neuanmeldungen_nv/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
+      group/sektions_ressorts/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_ressorts/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_ressort/leitung:
+        one: Leitung
+        description: Leitung
+      group/sektions_ressort/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_ressort/andere:
+        one: Andere
+        description: Andere
       group/sektions_vorstand/praesidium:
         one: Präsidium
         description: Präsidium
