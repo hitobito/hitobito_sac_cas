@@ -86,10 +86,6 @@ module Export::Tabular::People
     end
 
     def membership_role
-      @membership_role ||= active_role_in_group(*SacCas::MITGLIED_ROLES)
-    end
-
-    def membership_role
       @membership_role ||= roles_in_group(*SacCas::MITGLIED_ROLES).find do |r|
         @range.cover?(r.start_on)
       end
