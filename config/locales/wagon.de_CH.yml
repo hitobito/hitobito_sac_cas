@@ -57,9 +57,6 @@ de_CH:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
-      people/export/eintritte_form:
-        from: "Von"
-        to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
@@ -1204,7 +1201,6 @@ de_CH:
     button: SAC Exporte
     csv_mitglieder: CSV Mitglieder
     jubilare: Jubilare
-    eintritte: Eintritte
 
   dropdown/people_export:
     recipients: Für den elektronischen Versand (E-Mail)
@@ -1452,10 +1448,6 @@ de_CH:
       sektion: Sektion
       membership_years: Anzahl Mitgliedsjahre
       sac_entry_on: Frühestes Beitrittsdatum beim SAC
-      sac_is_new_entry: Ist SAC Neueintritt
-      sac_is_re_entry: Ist SAC Wiedereintritt
-      sac_is_section_new_entry: Ist Sektion Ersteintritt
-      sac_is_section_change: Ist Sektionswechsel
       sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
       terminate_on: Austritt geplant
       type: Typ
