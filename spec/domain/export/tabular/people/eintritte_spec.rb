@@ -411,8 +411,9 @@ describe Export::Tabular::People::Eintritte do
 
         it "does mark if role outside and multiple roles inside range exist" do
           person = create_role("Mitglied", start_on: "1.1.2000", end_on: "31.12.2000").person
-          create_role("Mitglied", start_on: "1.1.2025", end_on: "1.3.2025", person:)
-          create_role("Mitglied", start_on: "2.3.2025", end_on: "31.12.2025", person:)
+          create_role("Mitglied", start_on: "1.1.2025", end_on: "25.2.2025", person:)
+          create_role("Mitglied", start_on: "2.3.2025", end_on: "31.3.2025", person:)
+          create_role("Mitglied", start_on: "1.4.2025", end_on: "31.12.2025", person:)
           expect(row_for(person).sac_is_re_entry).to eq "ja"
 
           reentry_1 = row_for(person, bluemlisalp, "1.1.2025-1.2.2025")
@@ -422,8 +423,16 @@ describe Export::Tabular::People::Eintritte do
           expect(reentry_1.sac_is_section_new_entry).to eq "nein"
           expect(reentry_1.sac_is_section_change).to eq "nein"
 
-          reentry_2 = row_for(person, bluemlisalp, "1.3.2025-1.12.2025")
-          expect(reentry_2).to be_nil # TODO is excluded because of query, needs a fix?
+          expect(row_for(person, bluemlisalp, "1.2.2025-15.3.2025")).to be_nil # reentry but inside range
+
+          reentry_2 = row_for(person, bluemlisalp, "1.3.2025-1.4.2025")
+          expect(reentry_2.type).to eq "Stammsektion"
+          expect(reentry_2.sac_is_re_entry).to eq "ja"
+          expect(reentry_2.sac_is_new_entry).to eq "nein"
+          expect(reentry_2.sac_is_section_new_entry).to eq "nein"
+          expect(reentry_2.sac_is_section_change).to eq "nein"
+
+          expect(row_for(person, bluemlisalp, "1.4.2025-1.12.2025")).to be_nil # consecutive roles
         end
 
         it "does mark if all roles are in range" do

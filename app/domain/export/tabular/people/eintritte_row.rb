@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class EintritteRow < Export::Tabular::Row
-    include CommonSektionPersonRowBehaviour
-
+  class EintritteRow < SektionPersonRow
     def initialize(entry, group, range, format = nil)
       @range = range
       super(entry, group, format)
@@ -35,9 +33,5 @@ module Export::Tabular::People
 
       prior_roles.any? && prior_roles.none? { |r| r.active?(membership_role.start_on - 1.day) }
     end
-
-    private
-
-    # NOTE: TBD in case of multiple matches use first or last one? Currently first
   end
 end

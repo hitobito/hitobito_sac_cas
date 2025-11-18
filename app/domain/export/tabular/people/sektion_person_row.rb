@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  module CommonSektionPersonRowBehaviour
+  class SektionPersonRow < Export::Tabular::Row
     def initialize(entry, group, format = nil)
       @group = group
       super(entry, format)

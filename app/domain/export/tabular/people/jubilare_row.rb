@@ -6,9 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class JubilareRow < Export::Tabular::Row
-    include CommonSektionPersonRowBehaviour
-
+  class JubilareRow < SektionPersonRow
     private
 
     def membership_role
