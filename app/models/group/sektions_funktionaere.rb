@@ -12,7 +12,8 @@ class Group::SektionsFunktionaere < ::Group
     Group::SektionsTourenUndKurse,
     Group::SektionsClubhuetten,
     Group::Sektionshuetten,
-    Group::SektionsKommissionen
+    Group::SektionsKommissionen,
+    Group::SektionsRessorts
 
   self.default_children = [
     Group::SektionsVorstand,

@@ -80,15 +80,15 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Präsidium: []  --  (Group::SacCasVerband::Praesidium)
         * Mitglied: []  --  (Group::SacCasVerband::Mitglied)
         * Andere: []  --  (Group::SacCasVerband::Andere)
-    * Sektion
-    * Ortsgruppe
+    * Sektion < Schweizer Alpen-Club SAC
+    * Ortsgruppe < Sektion
     * Global
       * Sektionsfunktionäre
-        * Präsidium: []  --  (Group::SektionsFunktionaere::Praesidium)
-        * Mitgliederverwaltung: []  --  (Group::SektionsFunktionaere::Mitgliederverwaltung)
+        * Präsidium: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Praesidium)
+        * Mitgliederverwaltung: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Mitgliederverwaltung)
         * Administration: 2FA [:layer_and_below_full]  --  (Group::SektionsFunktionaere::Administration)
         * Administration (nur lesend): 2FA [:layer_and_below_read]  --  (Group::SektionsFunktionaere::AdministrationReadOnly)
-        * Finanzen: []  --  (Group::SektionsFunktionaere::Finanzen)
+        * Finanzen: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Finanzen)
         * Redaktion: []  --  (Group::SektionsFunktionaere::Redaktion)
         * Hüttenobmann*frau: []  --  (Group::SektionsFunktionaere::Huettenobmann)
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsFunktionaere::Leserecht)
@@ -103,8 +103,8 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsVorstand::Schreibrecht)
         * Andere: [:group_read]  --  (Group::SektionsVorstand::Andere)
       * Touren und Kurse
-        * Tourenleiter*in (mit Qualifikation): []  --  (Group::SektionsTourenUndKurse::Tourenleiter)
-        * Tourenleiter*in (ohne Qualifikation): []  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
+        * Tourenleiter*in (mit Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::Tourenleiter)
+        * Tourenleiter*in (ohne Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
         * KiBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::KibeChef)
         * FaBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::FabeChef)
         * JO-Chef*in: []  --  (Group::SektionsTourenUndKurse::JoChef)
@@ -112,11 +112,11 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsTourenUndKurse::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsTourenUndKurse::Schreibrecht)
       * Touren und Kurse Sommer
-        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseSommer::Tourenchef)
+        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseSommer::Tourenchef)
       * Touren und Kurse Winter
-        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseWinter::Tourenchef)
+        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseWinter::Tourenchef)
       * Touren und Kurse Allgemein
-        * Tourenchef*in: [:layer_and_below_read]  --  (Group::SektionsTourenUndKurseAllgemein::Tourenchef)
+        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseAllgemein::Tourenchef)
       * Clubhütten
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsClubhuetten::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsClubhuetten::Schreibrecht)
@@ -139,8 +139,8 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Präsidium: [:group_read]  --  (Group::SektionsKommissionHuetten::Praesidium)
         * Andere: [:group_read]  --  (Group::SektionsKommissionHuetten::Andere)
       * Kommission Touren
-        * Mitglied: [:group_read]  --  (Group::SektionsKommissionTouren::Mitglied)
-        * Präsidium: [:group_read]  --  (Group::SektionsKommissionTouren::Praesidium)
+        * Mitglied: [:group_read, :layer_events_full]  --  (Group::SektionsKommissionTouren::Mitglied)
+        * Präsidium: [:group_read, :layer_events_full]  --  (Group::SektionsKommissionTouren::Praesidium)
         * Andere: [:group_read]  --  (Group::SektionsKommissionTouren::Andere)
       * Kommission Umwelt und Kultur
         * Mitglied: [:group_read]  --  (Group::SektionsKommissionUmweltUndKultur::Mitglied)
@@ -152,6 +152,13 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Mitglied: []  --  (Group::SektionsKommission::Mitglied)
         * Präsidium: []  --  (Group::SektionsKommission::Praesidium)
         * Andere: []  --  (Group::SektionsKommission::Andere)
+      * Ressorts
+        * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsRessorts::Leserecht)
+        * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsRessorts::Schreibrecht)
+      * Ressort
+        * Mitglied: []  --  (Group::SektionsRessort::Mitglied)
+        * Leitung: []  --  (Group::SektionsRessort::Leitung)
+        * Andere: []  --  (Group::SektionsRessort::Andere)
       * Mitglieder
         * Mitglied (Stammsektion): []  --  (Group::SektionsMitglieder::Mitglied)
         * Mitglied (Zusatzsektion): []  --  (Group::SektionsMitglieder::MitgliedZusatzsektion)
@@ -170,5 +177,5 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsNeuanmeldungenNv::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsNeuanmeldungenNv::Schreibrecht)
 
-(Output of rake app:hitobito:roles)
+(Output of rake app:hitobito:roles[true])
 <!-- roles:end -->
