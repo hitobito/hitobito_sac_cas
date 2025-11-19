@@ -369,18 +369,50 @@ describe Person do
     end
   end
 
+  describe "modifying email" do
+    let(:confirmed_at) { Date.current.yesterday.to_datetime }
+
+    subject(:person) { Fabricate(:person, confirmed_at:, correspondence: :digital) }
+
+    it "clearing resets confirmed_at and correspondence" do
+      expect do
+        person.update!(email: nil)
+      end.to change { person.reload.confirmed_at }.from(confirmed_at).to(nil)
+        .and change { person.correspondence }.from("digital").to("print")
+    end
+
+    it "updating does not affect confirmed_at or correspondence" do
+      expect do
+        person.update!(email: "test@example.com")
+      end.to not_change { person.reload.confirmed_at }
+        .and not_change { person.correspondence }
+    end
+  end
+
+  describe "confirming", versioning: true do
+    subject(:person) { Fabricate(:person, confirmed_at: nil, correspondence: :print) }
+
+    it "sets correspondence to digital" do
+      expect do
+        person.confirm
+      end.to change { person.reload.confirmed? }.from(false).to(true)
+        .and change { person.correspondence }.from("print").to("digital")
+    end
+
+    it "reconfirming does not reset changed correspondence value" do
+      person.confirm
+      person.update!(correspondence: :digital)
+      person.update!(correspondence: :print, unconfirmed_email: "test@example.com")
+      expect do
+        person.confirm
+      end.to change { person.reload.email }
+        .and change { person.confirmed_at }
+        .and not_change { person.correspondence }
+    end
+  end
+
   describe "correspondence" do
     subject(:person) { people(:mitglied) }
-
-    describe "reset to print" do
-      it "occurs when clearing email" do
-        expect { person.update!(email: nil) }.to change { person.reload.correspondence }.from("digital").to("print")
-      end
-
-      it "does not occur when existing email is changed" do
-        expect { person.update!(email: "test@example.com") }.not_to change { person.reload.correspondence }
-      end
-    end
 
     it "gets set to digital when password is first set" do
       password = "verysafepasswordfortesting"
@@ -707,17 +739,6 @@ describe Person do
       person.wso2_legacy_password_hash = "hfg76sdgfg689gsdf"
       person.wso2_legacy_password_salt = "fklsdf71k12123kj9"
       expect(person.login_status).to eq :wso2_legacy_password
-    end
-  end
-
-  describe "confirming person" do
-    let(:person) { Fabricate(:person, confirmed_at: nil) }
-
-    it "sets correspondence to digital" do
-      expect do
-        person.confirm
-      end.to change { person.reload.confirmed? }.from(false).to(true)
-        .and change { person.correspondence }.from("print").to("digital")
     end
   end
 end
