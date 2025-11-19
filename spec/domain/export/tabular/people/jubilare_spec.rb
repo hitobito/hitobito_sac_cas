@@ -84,7 +84,7 @@ describe Export::Tabular::People::Jubilare do
         "Magazina",
         "weiblich",
         "12.06.1993",
-        "Physisch",
+        "Digital",
         "magazina.l@hitobito.example.com",
         nil,
         nil,
