@@ -5,6 +5,7 @@
 
 root:
   email: <%= Settings.root_email %>
+  correspondence: digital
 
 admin:
   id: 600_000
@@ -102,6 +103,7 @@ abonnent:
   birthday: <%= Date.new(1993, 6, 12) %>
   language: de
   cached_membership_years: 0
+  correspondence: digital
 
 tourenchef:
   id: 600_006
@@ -124,3 +126,4 @@ roleless:
   first_name: John
   last_name: Doe
   language: de
+  correspondence: digital
