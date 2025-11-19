@@ -64,37 +64,17 @@ module Export::Tabular::People
       readable_people
         .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped)
         .joins(:roles_unscoped)
-        .where(id: new_entry_ids)
+        .where("people.id IN (?)", new_entries.select(:person_id)) # rubocop:disable Rails/WhereEquals
         .where(roles: {start_on: ..Time.zone.today})
         .order_by_name
-        .select("people.*") # NOTE: should order_by_name really clear selected columns?
+        .select("people.*") # order_by_name clears selected columns
         .distinct
     end
 
     private
 
-    def new_entry_ids
-      excluded = people_with_multiple_roles_in_range
-      roles_scope
-        .where(start_on: @range)
-        .where.not(person_id: excluded.pluck(:person_id))
-        .pluck(:person_id)
-    end
-
-    def people_with_multiple_roles_in_range
-      range_with_offset = (@range.begin - 1.day)..(@range.end)
-      roles_scope
-        .where(start_on: range_with_offset)
-        .or(roles_scope.where(end_on: range_with_offset))
-        .group(:person_id)
-        .having("count(person_id) > 1 AND MIN(start_on) < ?", @range.begin)
-    end
-
-    def roles_scope
-      Role.unscoped.where(
-        group_id: @group.id,
-        type: SacCas::MITGLIED_ROLES.map(&:sti_name)
-      )
+    def new_entries
+      EintritteScope.new(@group, @range).roles
     end
 
     def readable_people

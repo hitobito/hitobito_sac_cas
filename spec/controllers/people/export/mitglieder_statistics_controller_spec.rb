@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::Export::EintritteController do
+describe People::Export::MitgliederStatisticsController do
   let(:user) { people(:admin) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
@@ -15,21 +15,21 @@ describe People::Export::EintritteController do
 
   describe "POST #create" do
     it "starts export job when form is valid" do
-      jobs = Delayed::Job.where("handler like '%EintritteExportJob%'")
+      jobs = Delayed::Job.where("handler like '%MitgliederStatisticsExportJob%'")
       expect do
         post :create,
           params: {
             group_id: group,
             people_export_period_form: {
-              from: "1.1.2015", to: "31.12.2015"
+              from: "1.4.2015", to: "31.12.2015"
             }
           }
       end.to change { jobs.count }.by(1)
 
       job = jobs.first
-      expect(job.handler).to match("from: 2015-01-01")
+      expect(job.handler).to match("from: 2015-04-01")
       expect(job.handler).to match("to: 2015-12-31")
-      expect(job.handler).to match("filename: 578575972_SAC-Blueemlisalp_Eintritte_20150101_20151231-")
+      expect(job.handler).to match("filename: 578575972_SAC-Blueemlisalp_Mitgliederstatistik_20150401_20151231-")
     end
 
     it "returns turbo frame when form is invalid" do

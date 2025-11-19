@@ -29,6 +29,7 @@ describe HouseholdAsideMemberComponent, type: :component do
     expect(rendered_component).to have_selector(
       'a[data-turbo-frame="_top"][href="/de/people/600003"]', text: "Frieda Norgay"
     )
+    expect(rendered_component).to have_selector("span", text: "(#{familienmitglied.years})")
   end
 
   it "renders a person in the household without link" do
@@ -42,15 +43,15 @@ describe HouseholdAsideMemberComponent, type: :component do
       'a[data-turbo-frame="_top"][href="/de/people/600003"]', text: "Frieda Norgay"
     )
     expect(rendered_component).to have_selector("strong", text: "Frieda Norgay")
-    expect(rendered_component).to have_selector("span", text: "(25)")
+    expect(rendered_component).to have_text("Frieda Norgay (#{familienmitglied2.years})")
   end
 
   it "renders all people in the household with ages" do
     stub_can(:show, false)
     stub_can(:update, false)
     rendered_component = render_inline(component)
-    expect(rendered_component).to have_text("Tenzing Norgay (25)")
-    expect(rendered_component).to have_text("Frieda Norgay (25)")
+    expect(rendered_component).to have_text("Tenzing Norgay (#{familienmitglied.years})")
+    expect(rendered_component).to have_text("Frieda Norgay (#{familienmitglied2.years})")
     expect(rendered_component).to have_text("Nima Norgay (10)")
   end
 
