@@ -57,6 +57,9 @@ it:
         send_date: "Data di spedizione e fatturazione"
         price_category: "Categoria di prezzo"
         price: "Prezzo"
+      people/export/eintritte_form:
+        from: "Von"
+        to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
@@ -1257,6 +1260,7 @@ it:
   dropdown/people/sac_exports:
     button: CAS Esportazioni
     csv_mitglieder: CSV Membri
+    eintritte: Eintritte
     jubilare: Jubilare
 
   dropdown/people_export:
@@ -1507,6 +1511,10 @@ it:
       membership_years: Anzahl Mitgliedsjahre
       sac_entry_on: Frühestes Beitrittsdatum beim SAC
       sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      sac_is_new_entry: Ist SAC Neueintritt
+      sac_is_re_entry: Ist SAC Wiedereintritt
+      sac_is_section_new_entry: Ist Sektion Ersteintritt
+      sac_is_section_change: Ist Sektionswechsel
       terminate_on: Austritt geplant
       type: Typ
       types:
@@ -1835,6 +1843,10 @@ it:
         explain_confirmation_email: >-
           Non appena avrai confermato il tuo indirizzo e-mail, potrai accedere qui.
     export:
+      popover_eintritte:
+        title: "Eintritte exportieren"
+        download: Herunterladen
+
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
@@ -1917,6 +1929,10 @@ it:
         create_invoice: "Iniziare"
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
+  people/export/eintritte:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Eintritte
+
   people/export/jubilare:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Jubilare_per

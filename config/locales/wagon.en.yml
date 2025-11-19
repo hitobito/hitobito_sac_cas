@@ -57,6 +57,9 @@ en:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
+      people/export/eintritte_form:
+        from: "Von"
+        to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
@@ -1200,6 +1203,7 @@ en:
   dropdown/people/sac_exports:
     button: SAC Exporte
     csv_mitglieder: CSV Mitglieder
+    eintritte: Eintritte
     jubilare: Jubilare
 
   dropdown/people_export:
@@ -1449,6 +1453,10 @@ en:
       membership_years: Anzahl Mitgliedsjahre
       sac_entry_on: Frühestes Beitrittsdatum beim SAC
       sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      sac_is_new_entry: Ist SAC Neueintritt
+      sac_is_re_entry: Ist SAC Wiedereintritt
+      sac_is_section_new_entry: Ist Sektion Ersteintritt
+      sac_is_section_change: Ist Sektionswechsel
       terminate_on: Austritt geplant
       type: Typ
       types:
@@ -1773,6 +1781,10 @@ en:
         explain_confirmation_email: >-
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
     export:
+      popover_eintritte:
+        title: "Eintritte exportieren"
+        download: Herunterladen
+
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
@@ -1855,6 +1867,10 @@ en:
         create_invoice: "Start"
         submit_confirmation: >-
           Do you really want to start the annual collection run for all members? This run cannot be canceled.
+  people/export/eintritte:
+    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+    filename: Eintritte
+
   people/export/jubilare:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Jubilare_per
