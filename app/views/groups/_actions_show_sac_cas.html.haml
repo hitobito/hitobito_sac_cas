@@ -9,5 +9,5 @@
                   :envelope,
                   method: :get)
 
-- if can?(:download_statistics, entry) && entry.layer?
+- if can?(:download_statistics, entry) && entry.root?
   = build_download_statistics_button(entry)

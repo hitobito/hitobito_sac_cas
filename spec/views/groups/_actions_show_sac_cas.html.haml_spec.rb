@@ -6,12 +6,12 @@
 require "spec_helper"
 describe "groups/_actions_show_sac_cas.html.haml" do
   let(:person) { people(:admin) }
-  let(:group) { groups(:bluemlisalp) }
+  let(:group) { groups(:root) }
 
-  let(:dom) {
+  let(:dom) do
     render
     Capybara::Node::Simple.new(@rendered)
-  }
+  end
 
   before do
     allow(view).to receive_messages(entry: group)
@@ -26,19 +26,15 @@ describe "groups/_actions_show_sac_cas.html.haml" do
   context "member" do
     let(:person) { people(:mitglied) }
 
-    it "hides export link" do
-      expect(dom).not_to have_link "CSV Mitglieder"
-    end
-
     it "hides statistics download button" do
       expect(dom).not_to have_button "Mitgliederstatistik"
     end
   end
 
-  context "Mitglieder group" do
-    let(:group) { groups(:bluemlisalp_mitglieder) }
+  context "sektion group" do
+    let(:group) { groups(:bluemlisalp) }
 
-    it "hides statistics download button" do
+    it "has no statistics download button" do
       expect(dom).not_to have_button "Mitgliederstatistik"
     end
   end

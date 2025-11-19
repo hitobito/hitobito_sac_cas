@@ -140,7 +140,7 @@ describe Export::Tabular::People::Eintritte do
       create_role("Mitglied", start_on: "1.1.2025", end_on: "28.2.2025", person:)
       create_role("Mitglied", start_on: "1.3.2025", person:)
 
-      older = create_role("Mitglied", start_on: "1.7.2022", end_on: "30.6.2024").person
+      older = create_role("Mitglied", start_on: "1.7.2022", end_on: "1.7.2024").person
       create_role("Mitglied", start_on: "1.1.2025", end_on: "28.2.2025", person: older)
       create_role("Mitglied", start_on: "1.3.2025", person: older)
 

@@ -39,33 +39,11 @@ describe GroupAbility do
         groups(:bluemlisalp_ortsgruppe_ausserberg))
     end
 
-    [:layer_read, :layer_and_below_read, :download_member_statistics].each do |permission|
-      context "permission #{permission}" do
-        before { create_role_with_permission(permission) }
+    context "as admin" do
+      let(:person) { people(:admin) }
 
-        it "allows download_statistics on same layer" do
-          expect(Ability.new(person)).to be_able_to(:download_statistics, groups(:bluemlisalp))
-        end
-
-        it "denies download_statistics on higher layer" do
-          expect(Ability.new(person)).not_to be_able_to(:download_statistics, groups(:root))
-        end
-      end
-    end
-
-    [:layer_read, :download_member_statistics].each do |permission|
-      it "permission #{permission} denies download_statistics on lower layer" do
-        create_role_with_permission(permission)
-        expect(Ability.new(person)).not_to be_able_to(:download_statistics,
-          groups(:bluemlisalp_ortsgruppe_ausserberg))
-      end
-    end
-
-    [:layer_and_below_read].each do |permission|
-      it "permission #{permission} allows download_statistics on lower layer" do
-        create_role_with_permission(permission)
-        expect(Ability.new(person)).to be_able_to(:download_statistics,
-          groups(:bluemlisalp_ortsgruppe_ausserberg))
+      it "allows download_statistics on root layer" do
+        expect(Ability.new(person)).to be_able_to(:download_statistics, groups(:root))
       end
     end
   end

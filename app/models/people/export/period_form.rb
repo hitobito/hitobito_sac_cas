@@ -3,7 +3,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito
 
-class People::Export::EintritteForm
+class People::Export::PeriodForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
@@ -13,5 +13,5 @@ class People::Export::EintritteForm
   attribute :to, :date, default: -> { Date.current.end_of_year }
 
   validates_date :to, after: :from
-  validates_date :to, on_or_before: ->(m) { m.from + 1.year }
+  validates_date :to, before: ->(m) { m.from + 1.year }
 end
