@@ -6,11 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module People::Export
-  class EintritteController < PopoverExportableController
+  class MitgliederStatisticsController < PopoverExportableController
     private
 
     def enqueue_job(filename)
-      Export::EintritteExportJob.new(
+      Export::MitgliederStatisticsExportJob.new(
         current_person.id,
         group.id,
         filename,
@@ -20,7 +20,7 @@ module People::Export
     end
 
     def export_url
-      group_people_export_eintritte_path(group)
+      group_people_export_mitglieder_statistics_path(group)
     end
   end
 end

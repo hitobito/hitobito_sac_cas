@@ -18,7 +18,7 @@ admin:
   email: support@hitobito.example.com
   gender: m
   primary_group: geschaeftsstelle
-  birthday: <%= Date.new(2000, 1,1) %>
+  birthday: 2000-01-01
   language: de
   cached_membership_years: 0
   correspondence: digital
@@ -35,7 +35,7 @@ mitglied:
   email: e.hillary@hitobito.example.com
   gender: w
   primary_group: bluemlisalp_mitglieder
-  birthday: <%= Date.new(2000, 1, 1) %>
+  birthday: 2000-01-01
   language: de
   cached_membership_years: <%= Date.current.year - 2015 %>
   correspondence: digital
@@ -50,7 +50,7 @@ familienmitglied:
   town: Neu Carlscheid
   email: t.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
-  birthday: <%= 25.years.ago %>
+  birthday: 1995-10-10
   language: de
   household_key: 4242
   sac_family_main_person: true
@@ -67,7 +67,7 @@ familienmitglied2:
   town: Neu Carlscheid
   email: f.norgay@hitobito.example.com
   primary_group: bluemlisalp_mitglieder
-  birthday: <%= 25.years.ago %>
+  birthday: 1998-05-05
   language: de
   household_key: 4242
   cached_membership_years: <%= Date.current.year - 2015 %>
@@ -100,7 +100,7 @@ abonnent:
   email: magazina.l@hitobito.example.com
   gender: w
   primary_group: abo_die_alpen
-  birthday: <%= Date.new(1993, 6, 12) %>
+  birthday: 1993-06-12
   language: de
   cached_membership_years: 0
   correspondence: digital
@@ -116,7 +116,7 @@ tourenchef:
   email: paschke-ida@hitobito.example.com
   gender: w
   primary_group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
-  birthday: <%= Date.new(1993, 6, 12) %>
+  birthday: 1993-06-12
   language: de
   cached_membership_years: 0
   correspondence: digital

@@ -11,5 +11,11 @@
   .col-6
     = direct_filter_date(:download_statistics_to, t(".to"), mindate: "01.01.2025")
 .mt-3
-  = action_button t(".download"), "#{Settings.groups.membership_statistics_download_url}?section_id=#{@group.id}", nil, id: "download_statistics_link", target: "_blank"
+  -# additional javascript in assets/javascripts/download_statistics.js
+  = action_button(t(".download"),
+      "#{Settings.groups.membership_statistics_download_url}?section_id=#{@group.id}",
+      nil,
+      id: "download_statistics_link",
+      class: "btn-primary",
+      target: "_blank")
   = cancel_link("#")

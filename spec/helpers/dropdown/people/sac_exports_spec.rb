@@ -40,4 +40,14 @@ describe Dropdown::People::SacExports do
     expect(form).to have_field "Von"
     expect(form).to have_field "Bis"
   end
+
+  it "has mitglieder statistics popover link" do
+    jubilare = dom.find_link "Mitgliederstatistik"
+    expect(jubilare["data-anchor"]).to eq "#dropdown_people_sac_exports"
+    expect(jubilare["data-bs-toggle"]).to eq "popover"
+    expect(jubilare["data-bs-title"]).to eq "Mitgliederstatistik"
+    form = Capybara::Node::Simple.new(jubilare["data-bs-content"])
+    expect(form).to have_field "Von"
+    expect(form).to have_field "Bis"
+  end
 end

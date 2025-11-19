@@ -104,18 +104,14 @@ module HitobitoSacCas
 
       ## Abilities
       Role::Types::Permissions << :read_all_people << :layer_events_full <<
-        :layer_mitglieder_full << :layer_touren_und_kurse_full << :download_member_statistics
+        :layer_mitglieder_full << :layer_touren_und_kurse_full
       Role::Types::PermissionImplicationsForGroups[:layer_mitglieder_full] =
         {group_and_below_full: Group::SektionsMitglieder}
       Role::Types::PermissionImplicationsForGroups[:layer_touren_und_kurse_full] =
         {group_and_below_full: Group::SektionsTourenUndKurse}
 
-      # rubocop:todo Layout/LineLength
-      AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full << :download_member_statistics
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full << :download_member_statistics
-      # rubocop:enable Layout/LineLength
+      AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
+      AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
 
       Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility

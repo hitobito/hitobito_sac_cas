@@ -58,12 +58,12 @@ de:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
-      people/export/eintritte_form:
-        from: "Von"
-        to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
+      people/export/period_form:
+        from: "Von"
+        to: "Bis"
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -515,7 +515,6 @@ de:
               other: Neuanmeldungen
           permission:
             description:
-              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
               read_all_people: Lesen von allen Personen.
               layer_events_full: Verwalten von Events auf der Sektion.
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
@@ -1237,6 +1236,7 @@ de:
     csv_mitglieder: CSV Mitglieder
     eintritte: Eintritte
     jubilare: Jubilare
+    mitglieder_statistics: Mitgliederstatistik
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1549,6 +1549,36 @@ de:
 
   export/tabular/people/jubilare:
     sheet_name: Mitglieder per %{reference_date}
+
+  export/xlsx/mitglieder_statistics:
+    sheet_name: Mitglieder
+    total: Anzahl Total
+    thereof: Davon
+    gender:
+      label: Geschlecht
+      m: m
+      w: w
+      nil: d
+    language:
+      label: Sprache
+    age:
+      label: Altersgruppe
+    beitragskategorie:
+      label: Beitragskategorie
+      adult: Einzel
+      family_main: Familie
+      family_adult: FreiFam
+      family_child: FreiKind
+      youth: Jugend
+    self_registration_reason:
+      label: Eintrittsgrund
+      nil: Keine Angabe
+    termination_reason:
+      label: Austrittsgrund
+      nil: Keine Angabe
+    section_active: Aktive Mitglieder am %{to}
+    section_eintritte: Eintritte %{from} - %{to}
+    section_austritte: Austritte %{from} - %{to}
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
@@ -1864,14 +1894,13 @@ de:
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
 
     export:
-      popover_eintritte:
-        title: "Eintritte exportieren"
-        download: Herunterladen
-
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
         membership_years_help: "leer = beliebige Anzahl"
+
+      popover_period:
+        download: Herunterladen
 
     membership:
       verify:
@@ -1964,15 +1993,13 @@ de:
           Dieser Lauf kann nicht abgebrochen werden.
 
   people/export/eintritte:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Eintritte
 
   people/export/jubilare:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Jubilare_per
 
-  people/export/mitglieder_csv:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+  people/export/mitglieder_statistics:
+    filename: Mitgliederstatistik
 
   people/neuanmeldungen/approves:
     new:

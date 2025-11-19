@@ -5,7 +5,7 @@
 
 require "spec_helper"
 
-describe People::Export::EintritteForm do
+describe People::Export::PeriodForm do
   let(:sektion) { groups(:bluemlisalp) }
   let(:today) { Time.zone.today }
 
@@ -26,8 +26,8 @@ describe People::Export::EintritteForm do
       expect(form).to be_valid
     end
 
-    it "is valid if until is exactly one year after from" do
-      form.to = form.from + 1.year
+    it "is valid if until is exactly one year" do
+      form.to = form.from + 1.year - 1.day
       expect(form).to be_valid
     end
 
@@ -35,7 +35,7 @@ describe People::Export::EintritteForm do
       travel_to(Time.zone.local(2025, 11, 3)) do
         form.to = form.from + 1.year + 1.day
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Bis muss 01.01.2026 oder davor sein"]
+        expect(form.errors.full_messages).to eq ["Bis muss vor 01.01.2026 sein"]
       end
     end
 

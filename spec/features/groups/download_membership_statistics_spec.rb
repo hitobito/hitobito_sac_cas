@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe "download membership statistics", js: true do
   let(:admin) { people(:admin) }
-  let(:group) { groups(:bluemlisalp) }
+  let(:group) { groups(:root) }
 
   before { sign_in(admin) }
 
@@ -29,6 +29,7 @@ describe "download membership statistics", js: true do
     find(".ui-datepicker-calendar").click_on("30")
     expect(page).to have_field("Bis", with: "30.06.2025")
 
-    expect(page).to have_link("Herunterladen", href: "https://stats.portal.sac-cas.ch/download?section_id=#{group.id}&from_date=01.03.2025&to_date=30.06.2025")
+    expect(page).to have_link("Herunterladen", href: "https://stats.portal.sac-cas.ch/download?" \
+      "section_id=#{group.id}&from_date=01.03.2025&to_date=30.06.2025")
   end
 end
