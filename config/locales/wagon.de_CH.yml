@@ -1773,14 +1773,11 @@ de_CH:
         explain_confirmation_email: >-
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
     export:
-      popover_eintritte:
-        title: "Eintritte exportieren"
-        download: Herunterladen
-
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
         membership_years_help: "leer = beliebige Anzahl"
+
     membership:
       verify:
         member_details_sac_cas:
@@ -1858,11 +1855,6 @@ de_CH:
         create_invoice: "Starten"
         submit_confirmation: >-
           Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden.
-
-  people/export/eintritte:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    filename: Eintritte
-
   people/export/jubilare:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Jubilare_per
