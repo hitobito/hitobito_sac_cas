@@ -48,7 +48,7 @@ module SacCas::Person
     has_many :external_invoices, dependent: :destroy
     has_many :external_trainings, dependent: :destroy
 
-    before_validation :reset_correspondence_to_print, if: -> { email.blank? }
+    before_validation :reset_confirmed_at_and_correspondence, if: -> { email.blank? }
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
     with_options if: :roles_require_name_and_address?, on: [:create, :update] do
@@ -155,13 +155,18 @@ module SacCas::Person
   protected
 
   def after_confirmation # Devise::Models::Confirmable
+    return if versions
+      .where("object_changes LIKE '%correspondence:\n- digital\n- print\n%'")
+      .exists?
+
     update_column(:correspondence, :digital)
   end
 
   private
 
-  def reset_correspondence_to_print
+  def reset_confirmed_at_and_correspondence
     self.correspondence = "print"
+    self.confirmed_at = nil
   end
 
   def set_digital_correspondence
