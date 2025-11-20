@@ -286,7 +286,7 @@ describe Invoices::SacMemberships::MembershipManager do
           subject.update_membership_status
         }.to have_enqueued_mail(Invoices::SacMembershipsMailer,
           :confirmation).once
-        expect(new_member.confirmed_at).to be_within(2.seconds).of(Time.zone.now)
+        expect(new_member.confirmed_at).to be_nil
         expect(new_member.sac_membership.active?).to eq(true)
         expect(new_member.roles.count).to eq(1)
         expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
@@ -318,7 +318,7 @@ describe Invoices::SacMemberships::MembershipManager do
           expect {
             subject.update_membership_status
           }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
-          expect(new_member.confirmed_at).to be_within(2.seconds).of(now)
+          expect(new_member.confirmed_at).to be_nil
           expect(new_member.sac_membership.active?).to eq(true)
           expect(new_member.roles.count).to eq(1)
           expect(new_member.sac_membership.stammsektion_role.end_on).to eq(now.end_of_year.to_date)
