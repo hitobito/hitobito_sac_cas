@@ -79,7 +79,6 @@ class Invoices::SacMemberships::MembershipManager
   # rubocop:enable Metrics/MethodLength
 
   def create_stammsektion_membership_from_neuanmeldung
-    set_confirmed_at
     update_role_to_stammsektion_mitglied(person)
     update_family_roles_to_stammsektion_mitglied if family_main_person?
   end
@@ -166,10 +165,6 @@ class Invoices::SacMemberships::MembershipManager
 
   def family_main_person?
     person.sac_family_main_person?
-  end
-
-  def set_confirmed_at
-    person.update_column(:confirmed_at, Time.zone.now) if person.confirmed_at.blank?
   end
 
   # rubocop:todo Layout/LineLength
