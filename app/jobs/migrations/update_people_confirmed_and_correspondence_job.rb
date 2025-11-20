@@ -121,7 +121,7 @@ module Migrations
     def migrated_at = Time.zone.local(2024, 12, 21, 21)
 
     def info(msg)
-      Rails.logger.info(msg) unless Rails.env.test?
+      Rails.logger.info([self.class.to_s.demodulize, msg].join(": "))
     end
   end
 end
