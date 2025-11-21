@@ -13,6 +13,7 @@ module Migrations
         update_unconfirmed_people
         update_confirmed_at_for_people_with_valid_email
         update_correspondence_to_digital_for_confirmed_people
+        update_confirmed_at_for_people_with_invalid_email
       end
     end
 
@@ -65,6 +66,10 @@ module Migrations
       info "Updated #{updated} unconfirmed, new unconfirmed count: #{unconfirmed.count}"
     end
 
+    def update_confirmed_at_for_people_with_invalid_email
+      Person.where(email: nil).where.not(confirmed_at: nil).update_all(confirmed_at: nil)
+    end
+
     def update_correspondence_to_digital_for_confirmed_people
       people_ids = Person
         .where.not(email: nil)
@@ -84,12 +89,10 @@ module Migrations
     end
 
     def abacus_sync(scope)
-      errors = []
       processed = 0
       total = scope.count
       scope.in_batches(of: 25) do |people|
-        res = process_batch(people)
-        errors.push(*res.reject(&:success?))
+        process_batch(people)
         processed += people.count
         info "#{(processed / total.to_f * 100).to_i} % \r"
       end

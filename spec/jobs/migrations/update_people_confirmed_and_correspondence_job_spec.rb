@@ -88,5 +88,11 @@ describe Migrations::UpdatePeopleConfirmedAndCorrespondenceJob do
       end.to change { linked.reload.correspondence }
         .and change { not_linked.reload.correspondence }
     end
+
+    it "resets confirmed_at to nil if email is blank" do
+      person = Fabricate(:person, confirmed_at: migrated_at)
+      person.update_column(:email, nil)
+      expect { job.perform }.to change { person.reload.confirmed_at }.from(migrated_at).to(nil)
+    end
   end
 end
