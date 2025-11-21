@@ -22,7 +22,7 @@ describe Roles::TerminateStaleNeuanmeldungenNvJob do
 
   it "reschedules for tomorrow at 5 minutes past midnight" do
     job.perform
-    next_job = Delayed::Job.find_by("handler like '%TerminateNeuanmeldungenNvJob%'")
+    next_job = Delayed::Job.find_by("handler like '%TerminateStaleNeuanmeldungenNvJob%'")
     expect(next_job.run_at).to eq Time.zone.tomorrow + 5.minutes
   end
 
@@ -42,5 +42,45 @@ describe Roles::TerminateStaleNeuanmeldungenNvJob do
     create_role("Neuanmeldung", neuanmeldungen_sektion, 5.months.ago)
     create_role("NeuanmeldungZusatzsektion", neuanmeldungen_sektion, 5.months.ago, person)
     expect { job.perform }.to not_change { Role.count }
+  end
+
+  describe "cancelling invoices" do
+    let!(:person) { create_role("Neuanmeldung", neuanmeldungen_nv, 5.months.ago).person }
+
+    def create_invoice(person, state: :open, link: groups(:bluemlisalp))
+      Fabricate(:sac_membership_invoice, person:, link:, state:)
+    end
+
+    it "cancels open invoice" do
+      invoice = create_invoice(person)
+      expect { job.perform }.to change { Role.count }.by(-1)
+        .and change { invoice.reload.state }.from("open").to("cancelled")
+    end
+
+    it "cancels all open invoice" do
+      invoice = create_invoice(person)
+      second_invoice = create_invoice(person)
+      expect { job.perform }.to change { Role.count }.by(-1)
+        .and change { invoice.reload.state }.from("open").to("cancelled")
+        .and change { second_invoice.reload.state }.from("open").to("cancelled")
+    end
+
+    it "cancels payed invoice" do
+      invoice = create_invoice(person, state: :payed)
+      expect { job.perform }.to change { Role.count }.by(-1)
+        .and change { invoice.reload.state }.from("payed").to("cancelled")
+    end
+
+    it "does not cancel invoice in another group" do
+      invoice = create_invoice(person, link: groups(:matterhorn))
+      expect { job.perform }.to change { Role.count }.by(-1)
+        .and not_change { invoice.reload.state }
+    end
+
+    it "does not cancel invoice in error state" do
+      invoice = create_invoice(person, state: :error)
+      expect { job.perform }.to change { Role.count }.by(-1)
+        .and not_change { invoice.reload.state }
+    end
   end
 end

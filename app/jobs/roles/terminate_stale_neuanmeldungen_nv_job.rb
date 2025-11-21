@@ -16,23 +16,26 @@ class Roles::TerminateStaleNeuanmeldungenNvJob < RecurringJob
   def perform_internal
     stale_roles.in_batches(of: 25) do |roles|
       Role.transaction do
-        roles.each do |role|
-          cancel_invoice(role)
-        end
-        roles.update_all(end_on: Time.zone.yesterday)
+        terminate_roles_and_cancel_invoices(roles)
       end
     end
   end
 
-  def cancel_invoice(role)
-    ExternalInvoice::SacMembership
-      .where(person_id: role.person_id)
-      .where(link: role.layer_group)
-      .select(&:cancellable?)
+  def terminate_roles_and_cancel_invoices(roles)
+    cancellable_invoices_for(roles).each do |invoice|
+      invoice.update!(state: :cancelled)
+      Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+    end
+    roles.update_all(end_on: Time.zone.yesterday)
   end
 
-  def cancel_invoices
-    roles_to_terminate.select(:person_id)
+  def cancellable_invoices_for(roles)
+    roles.flat_map do |role|
+      ExternalInvoice::SacMembership
+        .where(person_id: role.person_id)
+        .where(link: role.layer_group)
+        .select(&:cancellable?)
+    end
   end
 
   def stale_roles
