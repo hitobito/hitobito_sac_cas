@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Roles::TerminateNeuanmeldungenNvJob do
+describe Roles::TerminateStaleNeuanmeldungenNvJob do
   subject(:job) { described_class.new }
 
   let(:matterhorn) { groups(:matterhorn_mitglieder) }
@@ -32,7 +32,7 @@ describe Roles::TerminateNeuanmeldungenNvJob do
     expect { job.perform }.to not_change { Role.count }
   end
 
-  it "terminates neuanmeldungen nv roles starting more than 4 months ago" do
+  it "terminates neuanmeldungen nv roles starting more than 4 months ago and deletes open invoices" do
     create_role("Neuanmeldung", neuanmeldungen_nv, 5.months.ago)
     create_role("NeuanmeldungZusatzsektion", neuanmeldungen_nv, 5.months.ago, person)
     expect { job.perform }.to change { Role.count }.by(-2)
