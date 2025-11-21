@@ -46,6 +46,7 @@ module HitobitoSacCas
         People::CacheMembershipYearsJob,
         People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob,
         Roles::TerminateTourenleiterJob,
+        Roles::TerminateStaleNeuanmeldungenNvJob,
         Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob
       ]
 
