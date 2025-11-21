@@ -57,7 +57,7 @@ describe Signup::AboMagazinMailer do
   it "uses person language to localize message" do
     person.update(language: :fr)
     custom_content.update!(locale: :fr, label: "fr", subject: "Acceptee",
-      body: custom_content.body.to_s)
+      body: custom_content.body.to_s + "{abo-name}")
     expect(mail.subject).to eq("Acceptee")
   end
 
