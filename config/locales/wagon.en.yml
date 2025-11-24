@@ -45,6 +45,7 @@ en:
       conflicting_family_membership: >-
         %{name} already has a family membership and therefore cannot be added to a family household.
       total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
+      must_be_no_more_than_12_months: Der Zeitraum darf maximimal 12 Monate betragen.
 
   activemodel:
     attributes:
