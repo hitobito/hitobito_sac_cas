@@ -57,12 +57,12 @@ de_CH:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
-      people/export/eintritte_form:
-        from: "Von"
-        to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
+      people/export/period_form:
+        from: "Von"
+        to: "Bis"
       people/membership/invoice_form:
         reference_date: "Stichtag"
         invoice_date: "Buchungsdatum"
@@ -508,7 +508,6 @@ de_CH:
               other: Neuanmeldungen
           permission:
             description:
-              download_member_statistics: Herunterladen von Mitglieder-Statistiken.
               read_all_people: Lesen von allen Personen.
               layer_events_full: Verwalten von Events auf der Sektion.
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
@@ -778,6 +777,12 @@ de_CH:
       group/sektions_neuanmeldungen_sektion:
         one: Neuanmeldungen (zur Freigabe)
         other: Neuanmeldungen (zur Freigabe)
+      group/sektions_ressorts:
+        one: Ressorts
+        other: Ressorts
+      group/sektions_ressort:
+        one: Ressort
+        other: Ressorts
       group/sektions_touren_und_kurse:
         one: Touren und Kurse
         other: Touren und Kurse
@@ -1018,6 +1023,21 @@ de_CH:
       group/sektions_neuanmeldungen_nv/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
+      group/sektions_ressorts/leserecht:
+        one: Leserecht
+        description: Leserecht
+      group/sektions_ressorts/schreibrecht:
+        one: Schreibrecht
+        description: Schreibrecht
+      group/sektions_ressort/leitung:
+        one: Leitung
+        description: Leitung
+      group/sektions_ressort/mitglied:
+        one: Mitglied
+        description: Mitglied
+      group/sektions_ressort/andere:
+        one: Andere
+        description: Andere
       group/sektions_vorstand/praesidium:
         one: Präsidium
         description: Präsidium
@@ -1205,6 +1225,7 @@ de_CH:
     csv_mitglieder: CSV Mitglieder
     eintritte: Eintritte
     jubilare: Jubilare
+    mitglieder_statistics: Mitgliederstatistik
 
   dropdown/people_export:
     recipients: Für den elektronischen Versand (E-Mail)
@@ -1483,6 +1504,36 @@ de_CH:
 
   export/tabular/people/jubilare:
     sheet_name: "Mitglieder per %{reference_date}"
+
+  export/xlsx/mitglieder_statistics:
+    sheet_name: Mitglieder
+    total: Anzahl Total
+    thereof: Davon
+    gender:
+      label: Geschlecht
+      m: m
+      w: w
+      nil: d
+    language:
+      label: Sprache
+    age:
+      label: Altersgruppe
+    beitragskategorie:
+      label: Beitragskategorie
+      adult: Einzel
+      family_main: Familie
+      family_adult: FreiFam
+      family_child: FreiKind
+      youth: Jugend
+    self_registration_reason:
+      label: Eintrittsgrund
+      nil: Keine Angabe
+    termination_reason:
+      label: Austrittsgrund
+      nil: Keine Angabe
+    section_active: "Aktive Mitglieder am %{to}"
+    section_eintritte: "Eintritte %{from} - %{to}"
+    section_austritte: "Austritte %{from} - %{to}"
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
@@ -1781,14 +1832,13 @@ de_CH:
         explain_confirmation_email: >-
           Sobald du deine E-Mail Adresse bestätigt hast, kannst du dich hier anmelden.
     export:
-      popover_eintritte:
-        title: "Eintritte exportieren"
-        download: Herunterladen
-
       popover_jubilare:
         title: "Jubliare exportieren"
         download: Herunterladen
         membership_years_help: "leer = beliebige Anzahl"
+
+      popover_period:
+        download: Herunterladen
 
     membership:
       verify:
@@ -1868,15 +1918,13 @@ de_CH:
         submit_confirmation: >-
           Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden.
   people/export/eintritte:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Eintritte
 
   people/export/jubilare:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
     filename: Jubilare_per
 
-  people/export/mitglieder_csv:
-    export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
+  people/export/mitglieder_statistics:
+    filename: Mitgliederstatistik
 
   people/neuanmeldungen/approves:
     new:
