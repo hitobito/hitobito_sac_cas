@@ -13,5 +13,13 @@ class People::Export::PeriodForm
   attribute :to, :date, default: -> { Date.current.end_of_year }
 
   validates_date :to, after: :from
-  validates_date :to, before: ->(m) { m.from + 1.year }
+  validate :assert_range_no_more_than_12_months
+
+  private
+
+  def assert_range_no_more_than_12_months
+    if from && to && from < to && from.advance(years: 1) < to
+      errors.add(:base, :must_be_no_more_than_12_months)
+    end
+  end
 end

@@ -35,7 +35,7 @@ describe People::Export::PeriodForm do
       travel_to(Time.zone.local(2025, 11, 3)) do
         form.to = form.from + 1.year + 1.day
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Bis muss vor 01.01.2026 sein"]
+        expect(form.errors.full_messages).to eq ["Der Zeitraum darf maximimal 12 Monate betragen."]
       end
     end
 
