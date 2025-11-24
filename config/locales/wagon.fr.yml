@@ -19,7 +19,7 @@ fr:
       zentralverband: "Association centrale"
       address: "Monbijoustrasse 61"
       town: "3000 Bern 14"
-      postbox: "Postfach"
+      postbox: "Boîte postale"
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 43/44"
       email: "alpin@sac-cas.ch"
@@ -62,7 +62,7 @@ fr:
         to: "Bis"
       people/export/jubilare_form:
         reference_date: "Stichtag"
-        membership_years: "Anzahl Mitgliedsjahre"
+        membership_years: "Nombre d'années d'adhésion"
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -213,9 +213,9 @@ fr:
     attributes:
       account_completion:
         email: E-mail
-        password: Passwort
+        password: Mot de passe
         email_confirmation: E-Mail Bestätigung
-        password_confirmation: Passwort Bestätigung
+        password_confirmation: Confirmation du mot de passe
       contact_account:
         predefined_labels:
           landline: Ligne fixe
@@ -502,7 +502,7 @@ fr:
       group/phone_number_mobile:
         number: Mobiltelefon
       group/phone_number_landline:
-        number: Festnetztelefon
+        number: Téléphone fixe
       role:
         membership_years: Années-membres
         class:
@@ -1262,7 +1262,7 @@ fr:
   dropdown/people/sac_exports:
     button: CAS Exportations
     csv_mitglieder: CSV Membres
-    eintritte: Eintritte
+    eintritte: Entrées
     jubilare: Jubilare
 
   dropdown/people_export:
@@ -1507,39 +1507,39 @@ fr:
 
   export/tabular/people:
     attributes:
-      id: Mitgliedernummer
-      url: Mitgliedschaften
-      sektion: Sektion
-      membership_years: Anzahl Mitgliedsjahre
-      sac_entry_on: Frühestes Beitrittsdatum beim SAC
-      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
-      sac_is_new_entry: Ist SAC Neueintritt
-      sac_is_re_entry: Ist SAC Wiedereintritt
-      sac_is_section_new_entry: Ist Sektion Ersteintritt
-      sac_is_section_change: Ist Sektionswechsel
-      terminate_on: Austritt geplant
-      type: Typ
+      id: Numéro de membre
+      url: Adhésions
+      sektion: Section
+      membership_years: Nombre d'années d'adhésion
+      sac_entry_on: Date d'adhésion au plus tôt au CAS
+      sektion_entry_on: Date d'adhésion au plus tôt à la section
+      sac_is_new_entry: Est CAS nouvelle adhésion
+      sac_is_re_entry: Est la rentrée du CAS
+      sac_is_section_new_entry: Section réelle Première entrée
+      sac_is_section_change: Est Changement de section
+      terminate_on: Départ prévu
+      type: Type
       types:
-        mitglied: Stammsektion
-        mitglied_zusatzsektion: Zusatzsektion
-      beitragskategorie: Beitragskategorie
-      ehrenmitglied: Ist Ehrenmitglied
-      beguenstigt: Ist Begünstigt
-      last_name: Nachname
-      first_name: Vorname
-      gender: Geschlecht
-      birthday: Geburtsdatum
-      correspondence: Korrespondenz
+        mitglied: Section de base
+        mitglied_zusatzsektion: Section supplémentaire
+      beitragskategorie: "Catégories de cotisation "
+      ehrenmitglied: Est membre honoraire
+      beguenstigt: Est bénéficiaire
+      last_name: Nom de famille
+      first_name: Prénom
+      gender: Sexe
+      birthday: Date de naissance
+      correspondence: Correspondance
       email: E-Mail
       phone_number_mobile: Mobil
-      phone_number_landline: Festnetz
-      postbox: Postfach
-      street: Strasse
-      housenumber: Hausnummer
-      address_care_of: Adresszusatz
-      zip_code: PLZ
-      town: Ort
-      country: Land
+      phone_number_landline: Ligne fixe
+      postbox: Boîte postale
+      street: Rue
+      housenumber: Numéro de maison
+      address_care_of: Complément d'adresse
+      zip_code: CODE POSTAL
+      town: Lieu
+      country: Pays
 
   export/tabular/people/jubilare:
     sheet_name: "Mitglieder per %{reference_date}"
@@ -1846,7 +1846,7 @@ fr:
           Dès que tu as confirmé ton adresse e-mail, tu peux te connecter ici.
     export:
       popover_eintritte:
-        title: "Eintritte exportieren"
+        title: "Exporter les entrées"
         download: Herunterladen
 
       popover_jubilare:
@@ -1933,7 +1933,7 @@ fr:
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
   people/export/eintritte:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
-    filename: Eintritte
+    filename: Entrées
 
   people/export/jubilare:
     export_enqueued: "Export wird im Hintergrund gestartet und nach Fertigstellung heruntergeladen."
