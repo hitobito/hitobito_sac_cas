@@ -11,10 +11,6 @@ describe :self_registration, js: true do
   let(:group) { Group::AboBasicLogin.first }
   let(:newsletter) { mailing_lists(:newsletter) }
 
-  before do
-    allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-  end
-
   def complete_main_person_form
     choose "männlich"
     fill_in "Vorname", with: "Max"

@@ -15,8 +15,6 @@ describe "signup/sektion", :js do
   before do
     group.self_registration_role_type = self_registration_role
     group.save!
-
-    allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
   end
 
   def expect_active_step(step_name)
