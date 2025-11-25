@@ -65,7 +65,7 @@ class Export::Xlsx::MitgliederStatistics::Section
   def count_by_age
     counts = scope.group(age_sql).count
     AGE_GROUPS.each_with_object({}) do |range, hash|
-      label = "#{range.begin}-#{range.end}"
+      label = range.end ? "#{range.begin}-#{range.end}" : "#{range.begin}+"
       hash[label] = counts.select { |k, v| range.include?(k) }.values.sum
     end
   end

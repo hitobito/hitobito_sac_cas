@@ -122,7 +122,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       )
 
       expect(section.counts(:age)).to eq(
-        {"6-17" => 0, "18-22" => 0, "23-35" => 6, "36-50" => 0, "51-60" => 0, "61-" => 0}
+        {"6-17" => 0, "18-22" => 0, "23-35" => 6, "36-50" => 0, "51-60" => 0, "61+" => 0}
       )
 
       expect(section.counts(:beitragskategorie)).to eq(
