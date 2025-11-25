@@ -44,7 +44,7 @@ describe People::Export::PeriodForm do
         form.from = 20.days.from_now
         form.to = 20.days.ago
         expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Bis muss nach 23.11.2025 sein"]
+        expect(form.errors.full_messages).to eq ["Bis muss 23.11.2025 oder danach sein"]
       end
     end
   end
