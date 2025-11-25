@@ -27,6 +27,10 @@ class FixMembershipEndOn
     def to_s
       "<Row role_id: #{role_id}, person_id: #{person_id}, previous_end_on: #{previous_end_on}, corrected_end_on: #{corrected_end_on}>"
     end
+
+    def person
+      @person ||= Person.find(@person_id)
+    end
   end
 
   def run
@@ -62,14 +66,22 @@ whodunnit_type: "script"}
     Role.transaction do
       role = Role.with_inactive.find_by(type: SacCas::MITGLIED_ROLES, id: row.role_id)
 
-      membership_period = role.end_on - role.start_on
-      role.start_on = row.corrected_end_on - membership_period
+      start_on_adjustment_needed = row.corrected_end_on < role.start_on
+
       role.end_on = row.corrected_end_on
+
+      if start_on_adjustment_needed
+        membership_period = role.end_on - role.start_on
+        role.start_on = row.corrected_end_on - membership_period
+      end
+
       role.save!
+      correct_other_roles_start_on(role, row) if start_on_adjustment_needed
     rescue ActiveRecord::RecordInvalid => e
       if e.record.errors.one? && e.record.errors.first.type == :assert_old_enough
         log(row, "person birthday invalid. Role was still updated: #{e}")
         role.save!(validate: false)
+        correct_other_roles_start_on(role, row) if start_on_adjustment_needed
       else
         log(row, "role invalid on update: #{e}")
       end
@@ -78,9 +90,22 @@ whodunnit_type: "script"}
     end
   end
 
+  def correct_other_roles_start_on(role, row)
+    row.person.roles.with_inactive.select { |r| SacCas::MITGLIED_ROLES.include?(r.type) && r != role }.each do |other_role|
+      next if other_role.valid?
+
+      if other_role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
+          other_role.active?(role.start_on) && other_role.start_on < role.start_on
+        other_role.start_on = role.start_on
+        other_role.save! && next if other_role.valid?
+      end
+
+      log(row, "other role #{other_role.id} is invalid after correcting years: #{other_role.errors.full_messages}")
+    end
+  end
+
   def active_membership_exists?(row)
-    person = Person.find(row.person_id)
-    person.sac_membership.active?
+    row.person.sac_membership.active?
   rescue ActiveRecord::RecordNotFound => e
     log(row, "person not found: #{e}")
   end
