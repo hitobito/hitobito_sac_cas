@@ -61,9 +61,16 @@ class FixMembershipYears
 
     Role.transaction do
       role.start_on += amount.years
-      role.valid? ||
-        log(person,
-            "role #{role.id} is invalid after changing start_on to #{role.start_on}") && raise(ActiveRecord::Rollback)
+
+      if role.invalid?
+        if role.errors.one? && role.errors.first.type == :assert_old_enough
+          log(person,
+              "person birthday invalid. Role was still updated: #{role.errors.full_messages}")
+        else
+          log(person,
+              "role #{role.id} is invalid after changing start_on to #{role.start_on}: #{role.errors.full_messages}") && raise(ActiveRecord::Rollback)
+        end
+      end
 
       role.save!(validate: false)
       person.roles.select { |r| SacCas::MITGLIED_ROLES.include?(r.type) && r != role }.each do |other_role|
