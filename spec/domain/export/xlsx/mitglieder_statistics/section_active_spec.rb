@@ -64,7 +64,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
 
   it "groups by age" do
     expect(section.counts(:age)).to eq(
-      {"6-17" => 2, "18-22" => 1, "23-35" => 3, "36-50" => 1, "51-60" => 0, "61-" => 0}
+      {"6-17" => 2, "18-22" => 1, "23-35" => 3, "36-50" => 1, "51-60" => 0, "61+" => 0}
     )
   end
 
@@ -79,7 +79,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
 
     it "groups by age" do
       expect(section.counts(:age)).to eq(
-        {"6-17" => 2, "18-22" => 2, "23-35" => 2, "36-50" => 1, "51-60" => 0, "61-" => 0}
+        {"6-17" => 2, "18-22" => 2, "23-35" => 2, "36-50" => 1, "51-60" => 0, "61+" => 0}
       )
     end
 
@@ -95,7 +95,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
 
     it "groups by age" do
       expect(section.counts(:age)).to eq(
-        {"6-17" => 2, "18-22" => 1, "23-35" => 3, "36-50" => 1, "51-60" => 0, "61-" => 0}
+        {"6-17" => 2, "18-22" => 1, "23-35" => 3, "36-50" => 1, "51-60" => 0, "61+" => 0}
       )
     end
 
