@@ -84,11 +84,11 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
     * Ortsgruppe < Sektion
     * Global
       * Sektionsfunktionäre
-        * Präsidium: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Praesidium)
-        * Mitgliederverwaltung: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Mitgliederverwaltung)
+        * Präsidium: []  --  (Group::SektionsFunktionaere::Praesidium)
+        * Mitgliederverwaltung: []  --  (Group::SektionsFunktionaere::Mitgliederverwaltung)
         * Administration: 2FA [:layer_and_below_full]  --  (Group::SektionsFunktionaere::Administration)
         * Administration (nur lesend): 2FA [:layer_and_below_read]  --  (Group::SektionsFunktionaere::AdministrationReadOnly)
-        * Finanzen: [:download_member_statistics]  --  (Group::SektionsFunktionaere::Finanzen)
+        * Finanzen: []  --  (Group::SektionsFunktionaere::Finanzen)
         * Redaktion: []  --  (Group::SektionsFunktionaere::Redaktion)
         * Hüttenobmann*frau: []  --  (Group::SektionsFunktionaere::Huettenobmann)
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsFunktionaere::Leserecht)
@@ -176,6 +176,5 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Neuanmeldung (Zusatzsektion): []  --  (Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion)
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsNeuanmeldungenNv::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsNeuanmeldungenNv::Schreibrecht)
-
 (Output of rake app:hitobito:roles[true])
 <!-- roles:end -->

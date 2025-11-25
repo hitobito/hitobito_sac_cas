@@ -6,8 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsRessorts < ::Group
-  self.static_name = true
-
   ### ROLES
   class Leserecht < ::Role
     self.permissions = [:group_and_below_read]
@@ -19,7 +17,7 @@ class Group::SektionsRessorts < ::Group
     self.two_factor_authentication_enforced = true
   end
 
-  children Group::SektionsRessort
+  children Group::SektionsRessorts, Group::SektionsRessort
 
   roles Leserecht, Schreibrecht
 end
